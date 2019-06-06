@@ -31,14 +31,13 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import RegionAPI from "@/services/regionAPI";
 import {
     RegionTreeItem,
     ERegionType,
     IRegionItem,
     IRegionTreeSelected
-} from "@/components/RegionTree";
-import ServerConfig from "@/services/serverConfig";
-import RegionAPI from "@/services/regionAPI";
+} from "@/components/RegionTree/models";
 
 enum EPageStep {
     showResult,

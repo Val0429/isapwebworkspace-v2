@@ -152,8 +152,8 @@ import {
 } from "@/../core/server/parser/meta-parser";
 import { IServerTree } from "@/../components/interfaces";
 import { Tree, ITreeUnit } from "@/../components/trees/tree/tree.vue.ts";
-import { ERegionType } from "@/components/RegionTree";
-import IconBase64 from "@/components/RegionTree/IconBase64";
+import { ERegionType } from "./models";
+import IconBase64 from "./models/IconBase64";
 
 @Component({
     components: { Tree }

@@ -162,7 +162,7 @@
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from "vue-property-decorator";
 import { Card } from "@/../components/cards/card/card.vue.ts";
-import { RegionTree } from "@/components/RegionTree/RegionTree.vue";
+import { RegionTree } from "./RegionTree.vue";
 import {
     ERegionType,
     ETreeEventType,
@@ -173,7 +173,7 @@ import {
     IRegionTreeTag,
     IRegionItem,
     RegionTreeItem
-} from "@/components/RegionTree";
+} from "./models";
 
 enum EPageStep {
     none,

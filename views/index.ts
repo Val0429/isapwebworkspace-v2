@@ -13,6 +13,9 @@ import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 
+// Demo
+import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
+
 // Regions
 import Region from './Regions/Region.vue';
 
@@ -35,5 +38,8 @@ $({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
 $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
 $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
+// Demo
+
 // Regions
 $({ path: '/login', name: 'Regions', icon: 'fa-twitter', permission: false })(Region);
+$({ path: '/login', name: 'DemoRegionTreeSelect', icon: 'fa-twitter', permission: false })(DemoRegionTreeSelect);
