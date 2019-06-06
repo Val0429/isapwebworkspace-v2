@@ -13,7 +13,7 @@
                         <div class="card p-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h1>{{ _('') }}</h1>
+                                    <h1>{{ _('w_Login_LoginTitle') }}</h1>
 
                                     <p class="text-muted">{{ version }}</p>
 
@@ -45,11 +45,14 @@
                                             v-model="password"
                                             :placeholder="_('wb_Password')"
                                         >
+
                                     </div>
 
+                                    <!-- language -->
                                     <!-- <div class="input-group mb-4">
                                         <iv-language-button class="mb-4" />
                                     </div> -->
+                                    <!--== language ==-->
 
                                     <b-row>
                                         <b-col cols="6">
@@ -65,34 +68,41 @@
                                             cols="6"
                                             class="text-right"
                                         >
+                                            <!-- language -->
                                             <iv-language-button />
-                                            <!-- <b-button
+                                            <!--== language ==-->
+
+                                            <!-- forgot password -->
+                                            <b-button
                                                 variant="link"
                                                 class="px-0"
-                                            >Forgot password?</b-button> -->
+                                            >
+                                                {{ _('w_Login_ForgotPassword') }}
+                                            </b-button>
+                                            <!--== forgot password ==-->
                                         </b-col>
                                     </b-row>
                                 </div>
                             </div>
                         </div>
-                        <!-- 
-                        <div
+
+                        <!-- Signup -->
+                        <!-- <div
                             class="card text-white bg-primary py-5 d-md-down-none"
                             style="width:44%"
                         >
                             <div class="card-body text-center">
                                 <div>
-                                    <h2>Sign up</h2>
-
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
+                                    <h2>{{ _('w_Login_SignUpTitle') }}</h2>
+                                    <p>{{ _('w_Login_SignUpContent') }}</p>
                                     <b-button
                                         variant="primary"
                                         class="active mt-3"
-                                    >Register Now!</b-button>
+                                    >{{ _('Register Now') }}!</b-button>
                                 </div>
                             </div>
                         </div> -->
+                        <!--== Signup ==-->
                     </div>
                 </b-col>
             </b-row>

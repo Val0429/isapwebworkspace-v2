@@ -27,4 +27,8 @@ export default class LangObject {
 
     // Login
     w_Login_LoginTitle = 'Login';
+    w_Login_ForgotPassword = 'Forgot password';
+    w_Login_SignUpTitle = 'Sign up';
+    w_Login_SignUpContent = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    w_Login_Register = 'Register Now';
 }
