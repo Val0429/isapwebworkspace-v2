@@ -36,4 +36,4 @@ $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Util
 $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
 // Regions
-$({ path: '/regions/region', name: 'Regions', icon: 'fa-twitter', permission: false })(Region);
+$({ path: '/login', name: 'Regions', icon: 'fa-twitter', permission: false })(Region);
