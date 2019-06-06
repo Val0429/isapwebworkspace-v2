@@ -1,13 +1,19 @@
 <template>
-    <div id="app" class="app flex-row align-items-center">
+    <div
+        id="app"
+        class="app flex-row align-items-center"
+    >
         <div class="container">
             <b-row class="justify-content-center">
-                <b-col xl="6" md="8">
+                <b-col
+                    xl="6"
+                    md="8"
+                >
                     <div class="card-group">
                         <div class="card p-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h1>{{ '自訂' }}</h1>
+                                    <h1>{{ _('') }}</h1>
 
                                     <p class="text-muted">{{ version }}</p>
 
@@ -69,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-<!-- 
+                        <!-- 
                         <div
                             class="card text-white bg-primary py-5 d-md-down-none"
                             style="width:44%"

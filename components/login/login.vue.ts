@@ -1,12 +1,12 @@
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component } from 'vue-property-decorator';
 import { RegisterLogin } from '@/../core';
 import { ServerName, ServerVersion } from '@/../core/server';
 import { ModalResponse } from '@/../components/modal';
 
 @RegisterLogin({
-    name: "_('wb_Login')",
-    path: "/login",
-    disableContainer: true
+    name: "_('w_Login_LoginTitle')",
+    path: '/login',
+    disableContainer: true,
 })
 @Component
 export default class Login extends Vue {
@@ -17,8 +17,8 @@ export default class Login extends Vue {
     async Login() {
         await this.$login({
             username: this.username,
-            password: this.password
+            password: this.password,
         });
-        this.$router.push("/");
+        this.$router.push('/');
     }
 }
