@@ -1,14 +1,22 @@
 <template>
     <div key="main">
-        <p><iv-language-button /></p>
+        <p>
+            <iv-language-button />
+        </p>
 
         <iv-form-selection
             :options="[{ id: 'iv-direction-slide', text: 'Direction' }, { id: 'iv-fade-slide', text: 'Fade' }]"
             v-model="type"
-            />
+        />
 
-        <iv-auto-transition :step="step" :type="type">
-            <iv-card key="1" v-if="step === 1">
+        <iv-auto-transition
+            :step="step"
+            :type="type"
+        >
+            <iv-card
+                key="1"
+                v-if="step === 1"
+            >
                 <template #toolbox>
                     <iv-toolbox-add @click="step = 2" />
                 </template>
@@ -31,21 +39,22 @@
                         updatedAt: Date;
                     }
                     "
-                    />
+                />
             </iv-card>
 
-            <iv-auto-card key="2" v-if="step === 2">
+            <iv-auto-card
+                key="2"
+                v-if="step === 2"
+            >
                 <template #toolbox>
                     <iv-toolbox-add @click="step = 1" />
                 </template>
-                <iv-form
-                    interface="
+                <iv-form interface="
                     interface {
                         account: string;
                         password: string;
                     }
-                    "
-                    />
+                    " />
             </iv-auto-card>
 
         </iv-auto-transition>
@@ -53,9 +62,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
 
 @Component
 export default class Transition extends Vue {

@@ -1,9 +1,9 @@
 <template>
     <div>
-    <p><iv-language-button /></p>
-        <iv-card
-            label="Normal Toolbox"
-        >
+        <p>
+            <iv-language-button />
+        </p>
+        <iv-card label="Normal Toolbox">
             <iv-toolbox-add />
             <iv-toolbox-delete />
             <iv-toolbox-edit />
@@ -20,9 +20,7 @@
             </iv-toolbox-more>
         </iv-card>
 
-        <iv-card
-            label="Dropdown"
-        >
+        <iv-card label="Dropdown">
             <iv-toolbox-more>
                 <iv-toolbox-add />
                 <iv-toolbox-delete />
@@ -33,9 +31,7 @@
             </iv-toolbox-more>
         </iv-card>
 
-        <iv-card
-            label="Card Header"
-        >
+        <iv-card label="Card Header">
             <template #toolbox>
                 <iv-toolbox-add />
                 <iv-toolbox-delete />
@@ -57,9 +53,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
 
 @Component
 export default class Toolbox extends Vue {

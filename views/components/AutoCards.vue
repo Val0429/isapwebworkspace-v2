@@ -1,22 +1,18 @@
 <template>
     <div>
-    <p><iv-language-button /></p>
-        <iv-auto-card
-            label="Auto Card - Form"
-        >
-            <iv-form
-                interface="
+        <p>
+            <iv-language-button />
+        </p>
+        <iv-auto-card label="Auto Card - Form">
+            <iv-form interface="
                 interface {
                     account: string;
                     password: string;
                 }
-                "
-                />
+                " />
         </iv-auto-card>
 
-        <iv-auto-card
-            label="Auto Card - Step"
-        >
+        <iv-auto-card label="Auto Card - Step">
             <iv-step-progress
                 ref="step"
                 @mounted="doMounted"
@@ -42,15 +38,15 @@
                 </template>
                 <template #4-title>選擇樓層</template>
 
-            </iv-step-progress>        
+            </iv-step-progress>
         </iv-auto-card>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
 
 @Component
 export default class AutoCards extends Vue {
@@ -109,16 +105,22 @@ export default class AutoCards extends Vue {
     private inf4() {
         return `
         interface {
-            selection: ${toEnumInterface({
-                '0': 'Admin',
-                '1': 'User'
-            }, false)};
-            multiple: ${toEnumInterface({
-                '0': 'VIP',
-                '1': 'Guard',
-                '2': 'Blacklist',
-                '3': 'Visitor'
-            }, true)};
+            selection: ${toEnumInterface(
+                {
+                    "0": "Admin",
+                    "1": "User"
+                },
+                false
+            )};
+            multiple: ${toEnumInterface(
+                {
+                    "0": "VIP",
+                    "1": "Guard",
+                    "2": "Blacklist",
+                    "3": "Visitor"
+                },
+                true
+            )};
         }
         `;
     }

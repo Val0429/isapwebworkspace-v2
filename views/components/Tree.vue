@@ -1,13 +1,16 @@
 <template>
     <div key="main">
-        <p><iv-language-button /></p>
+        <p>
+            <iv-language-button />
+        </p>
 
-        <iv-region-tree
-            :server="{ path: '/test/region', groupBy: null }"
-        >
+        <iv-region-tree :server="{ path: '/test/region', groupBy: null }">
             <template #title="{$attrs, $listeners}">
                 {{ $attrs.name }}
-                <b-badge pill class="ml-2">{{ $attrs.objectId }}</b-badge>
+                <b-badge
+                    pill
+                    class="ml-2"
+                >{{ $attrs.objectId }}</b-badge>
             </template>
 
             <template #toolbox>
@@ -31,9 +34,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
 
 @Component
 export default class Table extends Vue {

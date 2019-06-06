@@ -1,6 +1,8 @@
 <template>
     <div key="main">
-        <p><iv-language-button /></p>
+        <p>
+            <iv-language-button />
+        </p>
 
         <iv-table
             :server="{ path: '/test/me' }"
@@ -21,14 +23,14 @@
                 updatedAt: Date;
             }
             "
-            />
+        />
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
 
 @Component
 export default class Table extends Vue {

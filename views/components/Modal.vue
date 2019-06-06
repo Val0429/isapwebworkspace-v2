@@ -1,14 +1,26 @@
 <template>
     <div key="main">
-        <p><iv-language-button /></p>
+        <p>
+            <iv-language-button />
+        </p>
 
-        <p><b-button @click="visible = true">Open Normal Modal</b-button></p>
-        <iv-modal label="Modal Title" :visible.sync="visible">
+        <p>
+            <b-button @click="visible = true">Open Normal Modal</b-button>
+        </p>
+        <iv-modal
+            label="Modal Title"
+            :visible.sync="visible"
+        >
             Normal Modal
         </iv-modal>
 
-        <p><b-button @click="visible2 = true">Open Form Modal</b-button></p>
-        <iv-modal label="Modal Form" :visible.sync="visible2">
+        <p>
+            <b-button @click="visible2 = true">Open Form Modal</b-button>
+        </p>
+        <iv-modal
+            label="Modal Form"
+            :visible.sync="visible2"
+        >
             <iv-form
                 ref="form"
                 :interface="inf()"
@@ -18,13 +30,18 @@
                         v-bind="$attrs"
                         v-on="$listeners"
                         :server="{ path: '/announcements' }"
-                        />
+                    />
                 </template>
-            </iv-form>            
+            </iv-form>
         </iv-modal>
 
-        <p><b-button @click="visible3 = true">Open Step Modal</b-button></p>
-        <iv-modal label="Modal Step" :visible.sync="visible3">
+        <p>
+            <b-button @click="visible3 = true">Open Step Modal</b-button>
+        </p>
+        <iv-modal
+            label="Modal Step"
+            :visible.sync="visible3"
+        >
             <iv-step-progress
                 style="min-width: 60vw"
                 ref="step"
@@ -54,16 +71,18 @@
             </iv-step-progress>
         </iv-modal>
 
-        <p><b-button @click="showModal()">Open Dynamic Modal</b-button></p>
+        <p>
+            <b-button @click="showModal()">Open Dynamic Modal</b-button>
+        </p>
 
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
-import { AlertResponse } from '@/../components/modal/alert-response';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
+import { AlertResponse } from "@/../components/modal/alert-response";
 
 @Component
 export default class Modal extends Vue {
@@ -76,8 +95,8 @@ export default class Modal extends Vue {
     private showModal() {
         new AlertResponse({
             propsData: {
-                label: '123',
-                value: 'this is content'
+                label: "123",
+                value: "this is content"
             }
         }).$modal();
     }
@@ -115,16 +134,22 @@ export default class Modal extends Vue {
             endtime: Date;
             enable: boolean;
             object: any;
-            selection: ${toEnumInterface({
-                '0': 'Admin',
-                '1': 'User'
-            }, false)};
-            multiple: ${toEnumInterface({
-                '0': 'VIP',
-                '1': 'Guard',
-                '2': 'Blacklist',
-                '3': 'Visitor'
-            }, true)};
+            selection: ${toEnumInterface(
+                {
+                    "0": "Admin",
+                    "1": "User"
+                },
+                false
+            )};
+            multiple: ${toEnumInterface(
+                {
+                    "0": "VIP",
+                    "1": "Guard",
+                    "2": "Blacklist",
+                    "3": "Visitor"
+                },
+                true
+            )};
         }
         `;
     }
@@ -184,16 +209,22 @@ export default class Modal extends Vue {
     private inf4() {
         return `
         interface {
-            selection: ${toEnumInterface({
-                '0': 'Admin',
-                '1': 'User'
-            }, false)};
-            multiple: ${toEnumInterface({
-                '0': 'VIP',
-                '1': 'Guard',
-                '2': 'Blacklist',
-                '3': 'Visitor'
-            }, true)};
+            selection: ${toEnumInterface(
+                {
+                    "0": "Admin",
+                    "1": "User"
+                },
+                false
+            )};
+            multiple: ${toEnumInterface(
+                {
+                    "0": "VIP",
+                    "1": "Guard",
+                    "2": "Blacklist",
+                    "3": "Visitor"
+                },
+                true
+            )};
         }
         `;
     }

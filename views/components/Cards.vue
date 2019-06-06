@@ -1,10 +1,10 @@
 <template>
     <iv-route-transition>
         <div key="main">
-        <p><iv-language-button /></p>
-            <iv-card
-                label="Simple Card"
-            >
+            <p>
+                <iv-language-button />
+            </p>
+            <iv-card label="Simple Card">
                 <template #toolbox>
                     <iv-toolbox-add />
                     <iv-toolbox-delete />
@@ -33,9 +33,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
 
 @Component
 export default class Cards extends Vue {
