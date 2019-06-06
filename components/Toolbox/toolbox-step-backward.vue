@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_StepBackward')"
         icon="fa fa-step-backward isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class ToolboxStepBackward extends Vue {
     }
 }
 export default ToolboxStepBackward;
-Vue.component("toolbox-step-backward", ToolboxStepBackward);
+Vue.component("iv-toolbox-step-backward", ToolboxStepBackward);
 </script>
 
 

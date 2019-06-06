@@ -15,9 +15,10 @@ import Test from './components/Utilities.vue';
 
 // Demo
 import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
+import DemoImageMap from './Demos/DemoImageMap.vue';
 
 // Regions
-import Region from './Regions/Region.vue';
+// import Region from './Regions/Region.vue';
 
 // ============================================================= //
 
@@ -39,7 +40,8 @@ $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Util
 $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
 // Demo
+$({ path: '/demos/region-tree-select', name: 'DemoRegionTreeSelect', icon: 'fa-twitter', permission: false })(DemoRegionTreeSelect);
+$({ path: '/demos/image-map', name: 'DemoImageMap', icon: 'fa-twitter', permission: false })(DemoImageMap);
 
 // Regions
-$({ path: '/login', name: 'Regions', icon: 'fa-twitter', permission: false })(Region);
-$({ path: '/login', name: 'DemoRegionTreeSelect', icon: 'fa-twitter', permission: false })(DemoRegionTreeSelect);
+// $({ path: '/regions/region', name: 'Regions', icon: 'fa-twitter', permission: false })(Region);

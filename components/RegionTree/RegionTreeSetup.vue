@@ -1,47 +1,47 @@
 <template>
 
     <!-- region tree -->
-    <Card
+    <iv-card
         :visible="true"
-        :data="{ label: regionTreeItem.titleItem.card == '' ? '{titleItem.card}' : regionTreeItem.titleItem.card }"
+        :label="regionTreeItem.titleItem.card == '' ? '{titleItem.card}' : regionTreeItem.titleItem.card"
     >
         <template #toolbox>
-            <toolbox-search @keyup="cardSearch"></toolbox-search>
-            <toolbox-divider />
-            <toolbox-binding-site
+            <iv-toolbox-search @keyup="cardSearch" />
+            <iv-toolbox-divider />
+            <iv-toolbox-binding-site
                 :visible="toolboxVisibled(eRegionTreeToolboxType.bindingSite)"
                 :disabled="toolboxDisable(eRegionTreeToolboxType.bindingSite)"
                 @click="bindingSiteCard"
             />
-            <toolbox-add-next-layer-region
+            <iv-toolbox-add-next-layer-region
                 :visible="toolboxVisibled(eRegionTreeToolboxType.addNextLayerRegion)"
                 :disabled="toolboxDisable(eRegionTreeToolboxType.addNextLayerRegion)"
                 @click="addNextLayerRegionCard"
             />
-            <toolbox-add-same-layer-region
+            <iv-toolbox-add-same-layer-region
                 :visible="toolboxVisibled(eRegionTreeToolboxType.addSameLayerRegion)"
                 :disabled="toolboxDisable(eRegionTreeToolboxType.addSameLayerRegion)"
                 @click="addSameLayerRegionCard"
             />
-            <toolbox-edit
+            <iv-toolbox-edit
                 :visible="toolboxVisibled(eRegionTreeToolboxType.editRoot)"
                 :disabled="toolboxDisable(eRegionTreeToolboxType.editRoot)"
                 @click="editRootCard"
             />
-            <toolbox-edit
+            <iv-toolbox-edit
                 :visible="toolboxVisibled(eRegionTreeToolboxType.editRegion)"
                 :disabled="toolboxDisable(eRegionTreeToolboxType.editRegion)"
                 @click="editRegionCard"
             />
-            <toolbox-delete
+            <iv-toolbox-delete
                 :visible="toolboxVisibled(eRegionTreeToolboxType.deleteRegion)"
                 :disabled="toolboxDisable(eRegionTreeToolboxType.deleteRegion)"
                 @click="deleteRegionCard"
             />
-            <toolbox-divider :visible="toolboxVisibled(eRegionTreeToolboxType.divider)" />
-            <toolbox-toggle-region @click="toggleOpenRegion" />
-            <toolbox-toggle-site @click="toggleOpenSite" />
-            <toolbox-toggle-area @click="toggleOpenArea" />
+            <iv-toolbox-divider :visible="toolboxVisibled(eRegionTreeToolboxType.divider)" />
+            <iv-toolbox-toggle-region @click="toggleOpenRegion" />
+            <iv-toolbox-toggle-site @click="toggleOpenSite" />
+            <iv-toolbox-toggle-area @click="toggleOpenArea" />
         </template>
 
         <div class="row">
@@ -61,39 +61,39 @@
                     >{{ tag.name }}</b-badge>
                 </template>
                 <template #toolbox="{$attrs}">
-                    <toolbox-more v-if="toolboxMore($attrs)">
+                    <iv-toolbox-more v-if="toolboxMore($attrs)">
 
-                        <toolbox-binding-site
+                        <iv-toolbox-binding-site
                             @click="bindingSiteTree($event, $attrs)"
                             :visible="toolboxVisibled(eRegionTreeToolboxType.bindingSite, $attrs)"
                             :disabled="toolboxDisable(eRegionTreeToolboxType.bindingSite, $attrs)"
                         />
-                        <toolbox-add-next-layer-region
+                        <iv-toolbox-add-next-layer-region
                             @click="addNextLayerRegionTree($event, $attrs)"
                             :visible="toolboxVisibled(eRegionTreeToolboxType.addNextLayerRegion, $attrs)"
                             :disabled="toolboxDisable(eRegionTreeToolboxType.addNextLayerRegion, $attrs)"
                         />
-                        <toolbox-add-same-layer-region
+                        <iv-toolbox-add-same-layer-region
                             @click="addSameLayerRegionTree($event,$attrs)"
                             :visible="toolboxVisibled(eRegionTreeToolboxType.addSameLayerRegion, $attrs)"
                             :disabled="toolboxDisable(eRegionTreeToolboxType.addSameLayerRegion, $attrs)"
                         />
-                        <toolbox-edit
+                        <iv-toolbox-edit
                             @click="editRootTree($event, $attrs)"
                             :visible="toolboxVisibled(eRegionTreeToolboxType.editRoot, $attrs)"
                             :disabled="toolboxDisable(eRegionTreeToolboxType.editRoot, $attrs)"
                         />
-                        <toolbox-edit
+                        <iv-toolbox-edit
                             @click="editRegionTree($event, $attrs)"
                             :visible="toolboxVisibled(eRegionTreeToolboxType.editRegion, $attrs)"
                             :disabled="toolboxDisable(eRegionTreeToolboxType.editRegion, $attrs)"
                         />
-                        <toolbox-delete
+                        <iv-toolbox-delete
                             @click="deleteRegionTree($event, $attrs)"
                             :visible="toolboxVisibled(eRegionTreeToolboxType.deleteRegion, $attrs)"
                             :disabled="toolboxDisable(eRegionTreeToolboxType.deleteRegion, $attrs)"
                         />
-                    </toolbox-more>
+                    </iv-toolbox-more>
                 </template>
             </region-tree>
 
@@ -155,7 +155,7 @@
             </div>
 
         </div>
-    </Card>
+    </iv-card>
 
 </template>
 

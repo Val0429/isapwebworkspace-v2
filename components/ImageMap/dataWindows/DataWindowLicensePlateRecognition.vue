@@ -15,7 +15,7 @@
         }"
         >
             <b-col>{{ dataWindow.title }}</b-col>
-            <toolbox-close
+            <iv-toolbox-close
                 variant="transparent"
                 class="mr-1"
                 @click="showOrNot"

@@ -57,6 +57,7 @@ interface IRegionTreeTitle {
     address: string;
     map: string;
     edit: string;
+    backButton: string;
 }
 
 interface IRegionTreeSelected {

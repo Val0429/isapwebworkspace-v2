@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Area')"
         icon="fa fa-area-chart isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -83,7 +83,7 @@ export class ToolboxArea extends Vue {
     }
 }
 export default ToolboxArea;
-Vue.component("toolbox-area", ToolboxArea);
+Vue.component("iv-toolbox-area", ToolboxArea);
 </script>
 
 

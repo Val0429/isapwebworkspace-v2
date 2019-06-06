@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Map')"
         icon="fa fa-map-o isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -83,7 +83,7 @@ export class ToolboxMap extends Vue {
     }
 }
 export default ToolboxMap;
-Vue.component("toolbox-map", ToolboxMap);
+Vue.component("iv-toolbox-map", ToolboxMap);
 </script>
 
 

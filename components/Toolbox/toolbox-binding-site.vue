@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         v-show="visible"
         icon="fa fa-link isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -83,7 +83,7 @@ export class ToolboxBindingSite extends Vue {
     }
 }
 export default ToolboxBindingSite;
-Vue.component("toolbox-binding-site", ToolboxBindingSite);
+Vue.component("iv-toolbox-binding-site", ToolboxBindingSite);
 </script>
 
 

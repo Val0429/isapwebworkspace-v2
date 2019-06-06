@@ -1,5 +1,5 @@
 <template>
-    <Tree
+    <iv-tree
         ref="tree"
         :server="server"
         :data="data"
@@ -129,7 +129,7 @@
                 </div>
             </b-card-header>
         </template>
-    </Tree>
+    </iv-tree>
 </template>
 
 

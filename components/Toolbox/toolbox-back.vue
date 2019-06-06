@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Back')"
         icon="fa fa-arrow-left isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class ToolboxBack extends Vue {
     }
 }
 export default ToolboxBack;
-Vue.component("toolbox-back", ToolboxBack);
+Vue.component("iv-toolbox-back", ToolboxBack);
 </script>
 
 

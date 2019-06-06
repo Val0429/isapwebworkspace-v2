@@ -26,6 +26,7 @@ class RegionTreeItem {
         address: '',
         map: '',
         edit: '',
+        backButton: '',
     };
     region: IRegionItem = JSON.parse(JSON.stringify(this._regionItem));
     tree: IRegionItem = JSON.parse(JSON.stringify(this._regionItem));

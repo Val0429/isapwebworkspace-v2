@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_ROIClear')"
         icon="fa  fa-object-ungroup isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class ToolboxROIClear extends Vue {
     }
 }
 export default ToolboxROIClear;
-Vue.component("toolbox-roiclear", ToolboxROIClear);
+Vue.component("iv-toolbox-roiclear", ToolboxROIClear);
 </script>
 
 

@@ -12,7 +12,7 @@
                 aria-hidden="true"
             ></i>
             {{ deviceGroup.name}}
-            <toolbox-edit
+            <iv-toolbox-edit
                 class="float-right"
                 @click="clickEdit"
             />

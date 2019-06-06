@@ -1,7 +1,7 @@
 
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         v-show="visible"
         icon="fa fa-home isap-toolbox-icon"
@@ -30,7 +30,7 @@
                 :name="slot"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -84,7 +84,7 @@ export class ToolboxToggleSite extends Vue {
     }
 }
 export default ToolboxToggleSite;
-Vue.component("toolbox-toggle-site", ToolboxToggleSite);
+Vue.component("iv-toolbox-toggle-site", ToolboxToggleSite);
 </script>
 
 

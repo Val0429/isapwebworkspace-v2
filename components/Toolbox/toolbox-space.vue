@@ -18,7 +18,7 @@ export class ToolboxSpace extends Vue {
     visible!: boolean;
 }
 export default ToolboxSpace;
-Vue.component("toolbox-space", ToolboxSpace);
+Vue.component("iv-toolbox-space", ToolboxSpace);
 </script>
 
 

@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Sliders')"
         icon="fa fa-sliders isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class ToolboxSliders extends Vue {
     }
 }
 export default ToolboxSliders;
-Vue.component("toolbox-sliders", ToolboxSliders);
+Vue.component("iv-toolbox-sliders", ToolboxSliders);
 </script>
 
 

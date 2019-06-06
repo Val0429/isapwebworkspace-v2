@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         icon="fa fa-times isap-toolbox-icon"
         v-bind="$attrs"
         v-show="visible"
@@ -29,7 +29,7 @@
                 :name="slot" 
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class ToolboxClose extends Vue {
     }
 }
 export default ToolboxClose;
-Vue.component("toolbox-close", ToolboxClose);
+Vue.component("iv-toolbox-close", ToolboxClose);
 </script>
 <style lang="css" scoped>
 </style>

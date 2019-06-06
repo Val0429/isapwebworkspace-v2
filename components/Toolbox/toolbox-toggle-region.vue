@@ -1,7 +1,7 @@
 
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         v-show="visible"
         icon="fa fa-globe isap-toolbox-icon"
@@ -30,7 +30,7 @@
                 :name="slot"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -84,7 +84,7 @@ export class ToolboxToggleRegion extends Vue {
     }
 }
 export default ToolboxToggleRegion;
-Vue.component("toolbox-toggle-region", ToolboxToggleRegion);
+Vue.component("iv-toolbox-toggle-region", ToolboxToggleRegion);
 </script>
 
 

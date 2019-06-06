@@ -13,7 +13,7 @@
     >
         <b-row class='data-window-title'>
             <b-col>{{ dataWindow.title }}</b-col>
-            <toolbox-close
+            <iv-toolbox-close
                 variant="transparent"
                 class="mr-1"
                 @click="showOrNot"
@@ -26,11 +26,11 @@
         >
             <hr class="data-window-hr">
             <b-row class='data-window-column'>
-                <b-col cols="8">{{ _('m_ImageMap_DataWindowHrAgoTitle') }}</b-col>
+                <b-col cols="8">{{ _('w_ImageMap_DataWindowHrAgoTitle') }}</b-col>
                 <b-col cols="4">{{ dataWindow.hrAgoPerson }}</b-col>
             </b-row>
             <b-row class='data-window-value'>
-                <b-col cols="8">{{ _('m_ImageMap_DataWindowNowTitle') }}</b-col>
+                <b-col cols="8">{{ _('w_ImageMap_DataWindowNowTitle') }}</b-col>
                 <b-col cols="4">{{ dataWindow.nowPerson }}</b-col>
             </b-row>
         </div>

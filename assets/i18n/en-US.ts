@@ -25,6 +25,22 @@ export default class LangObject {
 
     m_PasswordShouldBeSame = 'Password should be same';
 
+    // button
+    w_Save = 'Save';
+    w_Back = 'Back';
+
+    // image map
+    w_ImageMap_DataWindowMainTitle = 'Data Window';
+    w_ImageMap_DataWindowInTitle = 'Traffic In';
+    w_ImageMap_DataWindowOutTitle = 'Traffic Out';
+    w_ImageMap_DataWindowInMOutTitle = 'Net Traffic';
+    w_ImageMap_DataWindowTotalTitle = 'Accumulated Traffic';
+    w_ImageMap_DataWindowHrAgoTitle = '1 Hr Ago';
+    w_ImageMap_DataWindowNowTitle = 'Now';
+    w_ImageMap_CardTitle = 'Setup Dashboard';
+    w_ImageMap_DeviceTagLabelTitle = 'Device group';
+    w_ImageMap_DeviceGroupTagLabelTitle = 'Device';
+
     // Login
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot password';

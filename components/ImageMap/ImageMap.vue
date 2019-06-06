@@ -12,10 +12,10 @@
                     v-if="imageMap.draw.deviceGroupInTagLabel"
                 >
                     <div class="tag-label-title-view">
-                        <div>{{ _('wb_SetupImageMap_DeviceGroupTagLabelTitle') }}</div>
+                        <div>{{ _('w_ImageMap_DeviceGroupTagLabelTitle') }}</div>
                         <div>
                             <template>
-                                <toolbox-add
+                                <iv-toolbox-add
                                     class="button-add"
                                     @click="clickAddTagLabel"
                                 />
@@ -40,7 +40,7 @@
                     v-if="imageMap.draw.deviceInTagLabel"
                 >
                     <div class="tag-label-title-view">
-                        {{ _('wb_SetupImageMap_DeviceTagLabelTitle') }}
+                        {{ _('w_ImageMap_DeviceTagLabelTitle') }}
                     </div>
 
                     <tag-label-view

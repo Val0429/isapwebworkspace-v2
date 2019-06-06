@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Region_AddNextLayerRegion')"
         icon="fa isap-icon isap-icon-add isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -83,7 +83,7 @@ export class ToolboxAddNextLayerRegion extends Vue {
     }
 }
 export default ToolboxAddNextLayerRegion;
-Vue.component("toolbox-add-next-layer-region", ToolboxAddNextLayerRegion);
+Vue.component("iv-toolbox-add-next-layer-region", ToolboxAddNextLayerRegion);
 </script>
 
 

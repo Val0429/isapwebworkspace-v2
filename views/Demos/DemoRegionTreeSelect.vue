@@ -86,6 +86,7 @@ export default class DemoRegionTreeSelect extends Vue {
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();
         this.regionTreeItem.titleItem.card = "Demo Region Tree Select";
+        this.regionTreeItem.titleItem.backButton = this._("wb_Back");
         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(this.apiDemo);
     }
 

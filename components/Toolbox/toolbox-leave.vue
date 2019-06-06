@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Leave')"
         icon="fa fa-reply isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class ToolboxLeave extends Vue {
     }
 }
 export default ToolboxLeave;
-Vue.component("toolbox-leave", ToolboxLeave);
+Vue.component("iv-toolbox-leave", ToolboxLeave);
 </script>
 
 

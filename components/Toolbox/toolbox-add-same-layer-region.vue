@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Region_AddSameLayerRegion')"
         icon="fa isap-icon isap-icon-add isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-iv-toolbox-element-base>
 
 </template>
     
@@ -83,7 +83,7 @@ export class ToolboxAddSameLayerRegion extends Vue {
     }
 }
 export default ToolboxAddSameLayerRegion;
-Vue.component("toolbox-add-same-layer-region", ToolboxAddSameLayerRegion);
+Vue.component("iv-toolbox-add-same-layer-region", ToolboxAddSameLayerRegion);
 </script>
 
 

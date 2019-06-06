@@ -76,7 +76,7 @@ export class ToolboxSearch extends Vue {
     }
 }
 export default ToolboxSearch;
-Vue.component("toolbox-search", ToolboxSearch);
+Vue.component("iv-toolbox-search", ToolboxSearch);
 </script>
 
 

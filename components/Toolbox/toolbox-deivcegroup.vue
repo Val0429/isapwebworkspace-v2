@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_DeviceGroup')"
         icon="fa fa-video-camera isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -83,7 +83,7 @@ export class ToolboxDeviceGroup extends Vue {
     }
 }
 export default ToolboxDeviceGroup;
-Vue.component("toolbox-device-group", ToolboxDeviceGroup);
+Vue.component("iv-toolbox-device-group", ToolboxDeviceGroup);
 </script>
 
 

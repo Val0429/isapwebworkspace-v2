@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_ChangePassword')"
         icon="fa fa-key isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class ToolboxChangePassword extends Vue {
     }
 }
 export default ToolboxChangePassword;
-Vue.component("toolbox-changepassword", ToolboxChangePassword);
+Vue.component("iv-toolbox-changepassword", ToolboxChangePassword);
 </script>
 
 

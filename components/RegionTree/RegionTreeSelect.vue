@@ -1,14 +1,14 @@
 <template>
 
     <!-- region tree -->
-    <Card
+    <iv-card
         :visible="true"
-        :data="{ label: regionTreeItem.titleItem.card == '' ? '{titleItem.card}' : regionTreeItem.titleItem.card }"
+        :label="regionTreeItem.titleItem.card == '' ? '{titleItem.card}' : regionTreeItem.titleItem.card"
     >
         <template #toolbox>
-            <toolbox-search @keyup="cardSearch"></toolbox-search>
-            <toolbox-divider />
-            <toolbox-back @click="clickBack" />
+            <iv-toolbox-search @keyup="cardSearch" />
+            <iv-toolbox-divider />
+            <iv-toolbox-back @click="clickBack" />
         </template>
 
         <div class="row">
@@ -36,10 +36,10 @@
                 variant="secondary"
                 size="lg"
                 @click="clickBack"
-            >{{ _('w_Back') }}
+            >{{ regionTreeItem.titleItem.backButton == "" ? "{titleItem.backButton}" : regionTreeItem.titleItem.backButton }}
             </b-button>
         </template>
-    </Card>
+    </iv-card>
 
 </template>
 
@@ -118,13 +118,39 @@ export class RegionTreeSelect extends Vue {
         // 是否被 focus
         if (regionItem.event.clickBar && itemType == wantType) {
             regionItem.status.focusBar = !regionItem.status.focusBar;
-            if (regionItem.status.focusBar) {
+        }
+
+        // 是否加入選單或移除
+        if (regionItem.status.focusBar) {
+            let inSelect = false;
+            for (let i in this.selecteds) {
+                let selectItem = this.selecteds[i];
+                if (
+                    selectItem.type == itemType &&
+                    selectItem.objectId == regionItem.objectId
+                ) {
+                    inSelect = true;
+                    break;
+                }
+            }
+            if (!inSelect) {
                 let selectItem: IRegionTreeSelected = {
                     objectId: regionItem.objectId,
                     type: regionItem.type,
                     name: regionItem.name
                 };
                 this.selecteds.push(selectItem);
+            }
+        } else {
+            for (let i in this.selecteds) {
+                let selectItem = this.selecteds[i];
+                if (
+                    selectItem.type == itemType &&
+                    selectItem.objectId == regionItem.objectId
+                ) {
+                    this.selecteds.splice(parseInt(i), 1);
+                    break;
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_EditMyProfile')"
         icon="fa fa-address-card-o isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
 
@@ -83,7 +83,7 @@ export class EditMyProfile extends Vue {
     }
 }
 export default EditMyProfile;
-Vue.component("toolbox-editmyprofile", EditMyProfile);
+Vue.component("iv-toolbox-editmyprofile", EditMyProfile);
 </script>
 
 

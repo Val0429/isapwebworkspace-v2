@@ -14,7 +14,7 @@
         ></i>
         {{ device.name}}
 
-        <toolbox-sliders
+        <iv-toolbox-sliders
             v-show="device.dragType != eDragType.deviceInTagLabel"
             class="float-right card-collapse-button"
             @click="showSliders($event)"

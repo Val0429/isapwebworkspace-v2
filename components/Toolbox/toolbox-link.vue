@@ -1,6 +1,6 @@
 <template>
 
-    <toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Unlink')"
         icon="fa  fa-link isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
@@ -83,7 +83,7 @@ export class ToolboxLink extends Vue {
     }
 }
 export default ToolboxLink;
-Vue.component("toolbox-link", ToolboxLink);
+Vue.component("iv-toolbox-link", ToolboxLink);
 </script>
 
 
