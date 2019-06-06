@@ -7,8 +7,8 @@ module.exports = {
     autoOpen: false,
     historyApiFallback: true,
 
-    showNonePermissionBlock: true
-}
+    showNonePermissionBlock: true,
+};
 
 // export interface Config {
 //     prodMode: boolean;

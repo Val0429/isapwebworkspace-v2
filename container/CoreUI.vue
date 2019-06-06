@@ -51,18 +51,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { CoreUI as CoreUIBase,
-    SidebarHeader, SidebarNav, SidebarNavTitle, SidebarNavDivider, SidebarNavItem
-} from '@/../containers/CoreUI';
+import { Component, Vue } from "vue-property-decorator";
+import {
+    CoreUI as CoreUIBase,
+    SidebarHeader,
+    SidebarNav,
+    SidebarNavTitle,
+    SidebarNavDivider,
+    SidebarNavItem
+} from "@/../containers/CoreUI";
 
 @Component({
     components: {
         CoreUIBase,
-        SidebarHeader, SidebarNav, SidebarNavTitle, SidebarNavDivider, SidebarNavItem
+        SidebarHeader,
+        SidebarNav,
+        SidebarNavTitle,
+        SidebarNavDivider,
+        SidebarNavItem
     }
 })
-export default class CoreUI extends Vue {
-
-}
+export default class CoreUI extends Vue {}
 </script>

@@ -4,8 +4,8 @@ import { Basic } from '@/../containers/Basic';
 import CoreUI from '@/container/CoreUI.vue';
 
 var config: Config = {
-    container: CoreUI
-}
+    container: CoreUI,
+};
 export default config;
 
 export interface Config {
