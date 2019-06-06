@@ -13,8 +13,15 @@ import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 
+// Regions
+import Region from './Regions/Region.vue';
+
+// ============================================================= //
+
+// Home
 $({ path: '/', name: 'Home', redirect: '/components' })();
 
+// Components
 $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
 $({ path: '/components/forms', name: 'Forms', icon: 'fa-facebook', permission: '/announcements' })(Forms);
 $({ path: '/components/step-progress', name: 'Step Progress', icon: 'fa-twitter' })(StepProgress);
@@ -26,5 +33,7 @@ $({ path: '/components/tree', name: 'Tree', icon: 'fa-twitter' })(Tree);
 $({ path: '/components/transition', name: 'Transition', icon: 'fa-twitter' })(Transition);
 $({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
 $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
-
 $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
+
+// Regions
+$({ path: '/regions/region', name: 'Regions', icon: 'fa-twitter', permission: false })(Region);
