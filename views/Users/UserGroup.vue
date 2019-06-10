@@ -189,6 +189,7 @@
     import RegionAPI from "@/services/RegionAPI";
     import ServerConfig from "@/services/ServerConfig";
     import ResponseFilter from "@/services/ResponseFilter";
+    import Dialog from "@/services/Dialog.vue";
 
     interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit{
         users: any;
@@ -278,7 +279,7 @@
                 type: "all"
             };
 
-            await Server.R("/location/site/all", readAllSiteParam)
+            await this.$server.R("/location/site/all", readAllSiteParam)
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
@@ -300,7 +301,7 @@
                 });
 
             // 取得 tree
-            await Server.R("/location/tree")
+            await this.$server.R("/location/tree")
                 .then((response: any) => {
                     if (response != undefined) {
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -318,7 +319,7 @@
                 });
 
             // 取得UserGroup
-            await Server.R("/user/group/all")
+            await this.$server.R("/user/group/all")
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
@@ -498,15 +499,20 @@
                 datas
             };
 
-            await Server.C("/user/group", addUserParam)
+            await this.$server.C("/user/group", addUserParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.Success(this._("w_UserGroup_AddUserGroupSuccess"));
+                            //Dialog.Success(this._("w_UserGroup_AddUserGroupSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.Error(this._("w_UserGroup_AddUserGroupFailed"));
+                            new Dialog({
+                                propsData: {
+                                    label: this._("w_Error"),
+                                    value: this._("w_UserGroup_AddUserGroupFailed")
+                                }
+                            }).$modal();
                             return false;
                         }
                     }
@@ -516,7 +522,12 @@
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.Error(this._("w_UserGroup_AddUserGroupFailed"));
+                        new Dialog({
+                            propsData: {
+                                label: this._("w_Error"),
+                                value: this._("w_UserGroup_AddUserGroupFailed")
+                            }
+                        }).$modal();
                         return false;
                     }
                     console.log(e);
@@ -539,15 +550,20 @@
                 datas
             };
 
-            await Server.U("/user/group", editUserParam)
+            await this.$server.U("/user/group", editUserParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.Success(this._("w_UserGroup_EditUserGroupSuccess"));
+                            // Dialog.Success(this._("w_UserGroup_EditUserGroupSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.Error(this._("w_UserGroup_EditUserGroupFailed"));
+                            new Dialog({
+                                propsData: {
+                                    label: this._("w_Error"),
+                                    value: this._("w_UserGroup_EditUserGroupFailed")
+                                }
+                            }).$modal();
                             return false;
                         }
                     }
@@ -557,7 +573,12 @@
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.Error(this._("w_UserGroup_EditUserGroupFailed"));
+                        new Dialog({
+                            propsData: {
+                                label: this._("w_Error"),
+                                value: this._("w_UserGroup_EditUserGroupFailed")
+                            }
+                        }).$modal();
                         return false;
                     }
                     console.log(e);
@@ -576,15 +597,20 @@
                                 objectId: param.objectId
                             };
 
-                            Server.D("/user/group", deleteUserParam)
+                            await this.$server.D("/user/group", deleteUserParam)
                                 .then((response: any) => {
                                     for (const returnValue of response) {
                                         if (returnValue.statusCode === 200) {
-                                            Dialog.Success(this._("w_Success"));
+                                            // Dialog.Success(this._("w_Success"));
                                             this.pageToList();
                                         }
                                         if (returnValue.statusCode === 500) {
-                                            Dialog.Error(this._("w_DeleteFailed"));
+                                            new Dialog({
+                                                propsData: {
+                                                    label: this._("w_Error"),
+                                                    value: this._("w_DeleteFailed")
+                                                }
+                                            }).$modal();
                                             return false;
                                         }
                                     }

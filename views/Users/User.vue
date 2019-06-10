@@ -259,6 +259,7 @@ import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog.vue";
 
 interface InputUserData extends IUserAddData, IUserEditData {
     siteIdsText: string;
@@ -672,7 +673,12 @@ export default class User extends Vue {
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        // Dialog.Error(this._("w_User_AddUserFailed"));
+                        new Dialog({
+                            propsData: {
+                                label: this._("w_Error"),
+                                value: this._("w_User_AddUserFailed")
+                            }
+                        }).$modal();
                         return false;
                     }
                 }
@@ -682,7 +688,12 @@ export default class User extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                    // Dialog.Error(this._("w_User_AddUserFailed"));
+                    new Dialog({
+                        propsData: {
+                            label: this._("w_Error"),
+                            value: this._("w_User_AddUserFailed")
+                        }
+                    }).$modal();
                     return false;
                 }
                 console.log(e);
@@ -717,7 +728,12 @@ export default class User extends Vue {
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        // Dialog.Error(this._("w_User_EditUserFailed"));
+                        new Dialog({
+                            propsData: {
+                                label: this._("w_Error"),
+                                value: this._("w_User_EditUserFailed")
+                            }
+                        }).$modal();
                         return false;
                     }
                 }
@@ -727,7 +743,12 @@ export default class User extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                   // Dialog.Error(this._("w_User_EditUserFailed"));
+                    new Dialog({
+                        propsData: {
+                            label: this._("w_Error"),
+                            value: this._("w_User_EditUserFailed")
+                        }
+                    }).$modal();
                     return false;
                 }
                 console.log(e);
@@ -755,7 +776,12 @@ export default class User extends Vue {
                                         this.pageToList();
                                     }
                                     if (returnValue.statusCode === 500) {
-                                        // Dialog.Error(this._("w_DeleteFailed"));
+                                        new Dialog({
+                                            propsData: {
+                                                label: this._("w_Error"),
+                                                value: this._("w_DeleteFailed")
+                                            }
+                                        }).$modal();
                                         return false;
                                     }
                                 }
@@ -766,9 +792,7 @@ export default class User extends Vue {
                                     e.res.statusCode &&
                                     e.res.statusCode == 401
                                 ) {
-                                    // Dialog.Error(this._("w_UserSession_Empty"));
-                                    // Users.clearUser();
-                                    this.$router.push({ path: "/" });
+                                    return ResponseFilter.base(this, e);
                                 }
 
                                 console.log(e);
