@@ -170,7 +170,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import ImageBase64 from "@/services/imageBase64";
+import ImageBase64 from "@/services/ImageBase64";
 
 import {
     ERegionType,
@@ -178,7 +178,7 @@ import {
     RegionTreeItem
 } from "@/components/RegionTree/models";
 import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
-import RegionAPI from "@/services/regionAPI";
+import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 
 enum EPageStep {
