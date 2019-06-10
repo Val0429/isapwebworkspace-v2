@@ -8,7 +8,6 @@
 
                 <iv-toolbox-search @keyup="cardSearch"></iv-toolbox-search>
 
-
                 <iv-toolbox-view
                     :disabled="isSelected.length !== 1"
                     @click="pageToView"
@@ -81,8 +80,7 @@
                 <template #test="{ $attrs, $listeners }">
 
                     <div class="mt-2 ml-3 mb-3">
-                        <b-button @click="pageToEmailTest($event)"
-                        >{{ _('w_User_TestEmail') }}
+                        <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
                         </b-button>
                     </div>
 
@@ -115,7 +113,7 @@
             v-show="pageStep === ePageStep.edit"
             :visible="true"
             :label="_('w_User_EditUser') "
-            >
+        >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
             </template>
@@ -137,7 +135,6 @@
 
                 </template>
             </iv-form>
-
 
             <template #footer-before>
                 <b-button
@@ -270,13 +267,13 @@ interface InputUserData extends IUserAddData, IUserEditData {
 }
 
 enum EPageStep {
-    list = 'list',
-    add = 'add',
-    edit = 'edit',
-    view = 'view',
-    none = 'none',
-    showResult = 'showResult',
-    chooseTree = 'chooseTree',
+    list = "list",
+    add = "add",
+    edit = "edit",
+    view = "view",
+    none = "none",
+    showResult = "showResult",
+    chooseTree = "chooseTree"
 }
 
 enum EType {
@@ -288,7 +285,6 @@ enum EType {
     components: {}
 })
 export default class User extends Vue {
-
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -437,11 +433,11 @@ export default class User extends Vue {
             const accountText = this.inputUserData.account.toLocaleLowerCase();
             const nameText = this.inputUserData.name.toLocaleLowerCase();
             const searchText = search.toLowerCase();
-            const searchResult = accountText.match(searchText) || nameText.match(searchText);
+            const searchResult =
+                accountText.match(searchText) || nameText.match(searchText);
 
             return searchResult;
         }
-
     }
 
     selectedItem(data) {
@@ -600,7 +596,6 @@ export default class User extends Vue {
     }
 
     pageToChooseTree() {
-
         this.pageStep = EPageStep.chooseTree;
         this.selecteds = [];
         for (const id of this.inputUserData.siteIds) {
@@ -666,7 +661,6 @@ export default class User extends Vue {
         await this.$server
             .C("/user/user", addUserParam)
             .then((response: any) => {
-
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
                         // Dialog.Success(this._("w_User_AddUserSuccess"));
@@ -760,47 +754,43 @@ export default class User extends Vue {
         // await Dialog.Question(this._("w_DeleteConfirm"))
         //     .then(result => {
         //         if (result.value) {
-                    for (const param of this.userDetail) {
-                        const deleteUserParam: {
-                            objectId: string;
-                        } = {
-                            objectId: param.objectId
-                        };
+        for (const param of this.userDetail) {
+            const deleteUserParam: {
+                objectId: string;
+            } = {
+                objectId: param.objectId
+            };
 
-                        await this.$server
-                            .D("/user/user", deleteUserParam)
-                            .then((response: any) => {
-                                for (const returnValue of response) {
-                                    if (returnValue.statusCode === 200) {
-                                        // Dialog.Success(this._("w_Success"));
-                                        this.pageToList();
-                                    }
-                                    if (returnValue.statusCode === 500) {
-                                        new Dialog({
-                                            propsData: {
-                                                label: this._("w_Error"),
-                                                value: this._("w_DeleteFailed")
-                                            }
-                                        }).$modal();
-                                        return false;
-                                    }
+            await this.$server
+                .D("/user/user", deleteUserParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            // Dialog.Success(this._("w_Success"));
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            new Dialog({
+                                propsData: {
+                                    label: this._("w_Error"),
+                                    value: this._("w_DeleteFailed")
                                 }
-                            })
-                            .catch((e: any) => {
-                                if (
-                                    e.res &&
-                                    e.res.statusCode &&
-                                    e.res.statusCode == 401
-                                ) {
-                                    return ResponseFilter.base(this, e);
-                                }
-
-                                console.log(e);
-                            });
+                            }).$modal();
+                            return false;
+                        }
                     }
-            //     }
-            // })
-            // .catch((e: any) => console.log(e));
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+
+                    console.log(e);
+                });
+        }
+        //     }
+        // })
+        // .catch((e: any) => console.log(e));
     }
 
     showFirst(value) {

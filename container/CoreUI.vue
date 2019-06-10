@@ -9,14 +9,14 @@
         </template>
 
         <template #nav>
-            <SidebarHeader label="iSAP Web Framework" />
+            <SidebarHeader :label="_('w_Navigation_Label')" />
             <SidebarNav>
                 <!-- <SidebarNavTitle label="Components" /> -->
                 <!-- <SidebarNavItem url="/components">
                     <SidebarNavItem url="/components/forms" />
                 </SidebarNavItem> -->
 
-                <SidebarNavTitle label="基本元件" />
+                <!-- <SidebarNavTitle label="基本元件" />
                 <SidebarNavItem url="/components" />
                 <SidebarNavItem url="/components/forms" />
                 <SidebarNavItem url="/components/step-progress" />
@@ -33,14 +33,7 @@
                 <SidebarNavItem url="/menu-style/1" />
                 <SidebarNavItem url="/menu-style/2" />
 
-                <!-- Users -->
-                <SidebarNavItem url="/users/user">
-                    <SidebarNavItem url="/users/user"></SidebarNavItem>
-                    <SidebarNavItem url="/users/user_group"></SidebarNavItem>
-                </SidebarNavItem>
-
-
-                 <SidebarNavItem url="/home">
+                <SidebarNavItem url="/home">
                     <SidebarNavItem url="/home">
                         <SidebarNavItem url="/home/about" />
                         <SidebarNavItem url="/home" />
@@ -50,10 +43,30 @@
                     <SidebarNavItem url="/home" />
                     <SidebarNavItem url="/home/about" />
                 </SidebarNavItem>
-                <SidebarNavItem url="/home/about" />
+                <SidebarNavItem url="/home/about" /> -->
+
+                <!-- Region -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Region')"
+                    url="/region"
+                />
+
+                <!-- Users -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Users')"
+                    url="/users/user"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_User')"
+                        url="/users/user"
+                    ></SidebarNavItem>
+                    <SidebarNavItem
+                        :label="_('w_Navigation_UserGroup')"
+                        url="/users/user_group"
+                    ></SidebarNavItem>
+                </SidebarNavItem>
 
             </SidebarNav>
-
 
         </template>
     </CoreUIBase>
