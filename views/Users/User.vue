@@ -126,6 +126,16 @@
                 @update:*="tempSaveInputData($event)"
                 @submit="saveEdit($event)"
             >
+                <template #test="{ $attrs, $listeners }">
+
+                    <div class="mt-2 ml-3 mb-3">
+                        <b-button @click="pageToEmailTest($event)"
+                        >{{ _('w_User_TestEmail') }}
+                        </b-button>
+                    </div>
+
+                </template>
+
                 <template #selectTree="{ $atrs, $listeners }">
 
                     <div class="m-3">
@@ -1002,6 +1012,8 @@ export default class User extends Vue {
                              * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
                              */
                             email: string;
+
+                            test?: any;
 
 
                             /**
