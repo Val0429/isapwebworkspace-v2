@@ -31,7 +31,6 @@ export default class LangObject implements ILang {
     w_Error = 'Error';
     w_NextPage = 'Next';
     w_PreviousPage = 'Prev';
-    w_Clear = 'Clear';
     w_Unlink = 'Unlink';
     w_Search = 'Search';
     w_No = 'No';
@@ -113,6 +112,7 @@ export default class LangObject implements ILang {
 
     // button
     w_Save = 'Save';
+    w_Clear = 'Clear';
     w_Back = 'Back';
     w_Cancel = 'Cancel';
     w_Send = 'Send';
