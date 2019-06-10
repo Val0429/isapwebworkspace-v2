@@ -25,6 +25,9 @@ export default class LangObject implements ILang {
 
     m_PasswordShouldBeSame = '兩個密碼必須相同';
 
+    // common
+    w_Error = 'Error';
+
     // button
     w_Save = 'Save';
     w_Back = 'Back';

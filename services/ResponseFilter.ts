@@ -6,16 +6,13 @@ export class ResponseFilter {
         if (!e.res) {
             return false;
         }
-
         if (!e.res.statusCode) {
             return false;
         }
-
         if (e.res.statusCode == 401) {
             viewItem.$router.push({ path: '/' });
             return true;
         }
-
         return true;
     }
 }

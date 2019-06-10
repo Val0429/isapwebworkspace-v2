@@ -164,14 +164,6 @@
 
         </b-modal>
 
-        <!-- error dialog -->
-        <iv-modal
-            :label="modalTitle"
-            :visible.sync="visible"
-        >
-            Normal Modal
-        </iv-modal>
-
     </div>
 </template>
 
@@ -189,6 +181,7 @@ import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog.vue";
 
 enum EPageStep {
     none,
@@ -450,7 +443,12 @@ export default class Region extends Vue {
             saveRegion.latitude > 90 ||
             saveRegion.latitude < -90
         ) {
-            // Dialog.Error(this._("w_Region_ErrorLatitude"));
+            new Dialog({
+                propsData: {
+                    label: this._("w_Error"),
+                    value: this._("w_Region_ErrorFileToLarge")
+                }
+            }).$modal();
             return false;
         }
 
@@ -459,7 +457,12 @@ export default class Region extends Vue {
             saveRegion.longitude > 180 ||
             saveRegion.longitude < -180
         ) {
-            // Dialog.Error(this._("w_Region_ErrorLongitude"));
+            new Dialog({
+                propsData: {
+                    label: this._("w_Error"),
+                    value: this._("w_Region_ErrorLongitude")
+                }
+            }).$modal();
             return false;
         }
         param.datas.push(saveRegion);
@@ -559,7 +562,12 @@ export default class Region extends Vue {
                 if (base64 != "") {
                     this.newImgSrc = base64;
                 } else {
-                    // Dialog.Error(this._("w_Region_ErrorFileToLarge"));
+                    new Dialog({
+                        propsData: {
+                            label: this._("w_Error"),
+                            value: this._("w_Region_ErrorFileToLarge")
+                        }
+                    }).$modal();
                 }
             });
         }

@@ -25,6 +25,9 @@ export default class LangObject {
 
     m_PasswordShouldBeSame = 'Password should be same';
 
+    // common
+    w_Error = 'Error';
+
     // button
     w_Save = 'Save';
     w_Back = 'Back';
