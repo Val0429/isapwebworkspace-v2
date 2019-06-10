@@ -113,7 +113,6 @@ export default class LangObject implements ILang {
 
     // button
     w_Save = 'Save';
-    w_Clear = 'Clear';
     w_Back = 'Back';
     w_Cancel = 'Cancel';
     w_Send = 'Send';
