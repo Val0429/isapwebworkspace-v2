@@ -1,5 +1,5 @@
 <template>
-    <div class="input-group md-form form-sm form-2 pl-0">
+    <div class="input-group md-form form-sm form-2 pl-0 rounded">
         <b-input
             v-show="visible"
             v-model="search"
@@ -22,7 +22,7 @@
     </div>
 
 </template>
-    
+
 <script lang="ts">
 import {
     Vue,
