@@ -503,7 +503,6 @@
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            //Dialog.Success(this._("w_UserGroup_AddUserGroupSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
@@ -554,7 +553,6 @@
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            // Dialog.Success(this._("w_UserGroup_EditUserGroupSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
@@ -601,7 +599,6 @@
                                 .then((response: any) => {
                                     for (const returnValue of response) {
                                         if (returnValue.statusCode === 200) {
-                                            // Dialog.Success(this._("w_Success"));
                                             this.pageToList();
                                         }
                                         if (returnValue.statusCode === 500) {
