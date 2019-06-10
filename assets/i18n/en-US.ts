@@ -27,6 +27,7 @@ export default class LangObject {
 
     // button
     w_Save = 'Save';
+    w_Clear = 'Clear';
     w_Back = 'Back';
     w_Cancel = 'Cancel';
 

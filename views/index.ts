@@ -16,6 +16,7 @@ import Test from './components/Utilities.vue';
 // Demo
 import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
 import DemoImageMap from './Demos/DemoImageMap.vue';
+import DemoROI from './Demos/DemoROI.vue';
 
 // Regions
 import Region from './Regions/Region.vue';
@@ -42,6 +43,7 @@ $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission
 // Demo
 $({ path: '/demos/region-tree-select', name: 'DemoRegionTreeSelect', icon: 'fa-twitter', permission: false })(DemoRegionTreeSelect);
 $({ path: '/demos/image-map', name: 'DemoImageMap', icon: 'fa-twitter', permission: false })(DemoImageMap);
+$({ path: '/demos/roi', name: 'DemoROI', icon: 'fa-twitter', permission: false })(DemoROI);
 
 // Regions
 $({ path: '/region', name: 'Region', icon: 'fa-twitter' })(Region);
