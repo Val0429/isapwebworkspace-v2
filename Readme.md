@@ -1,9 +1,9 @@
 # Install step
 
 ```bash
-cd containers/CoreUI/ 
+cd containers/CoreUI/
 npm install
 npm audit fix --force
-cd ../../..
+cd ../..
 npm install
 ```
