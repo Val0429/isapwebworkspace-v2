@@ -31,7 +31,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import RegionAPI from "@/services/regionAPI";
+import RegionAPI from "@/services/RegionAPI";
 import {
     RegionTreeItem,
     ERegionType,

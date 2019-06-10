@@ -30,7 +30,7 @@
                 @update:*="updateRegionFrom($event)"
                 @submit="clickSaveModifyRegion($event)"
             >
-               <template #photoImg="{ $attrs, $listeners }">
+                <template #photoImg="{ $attrs, $listeners }">
                     <img
                         v-if="newImgSrc != ''"
                         class="region-form-image"
@@ -61,7 +61,7 @@
             <template #toolbox>
                 <iv-toolbox-back @click="pageToTree($event)" />
             </template>
-        
+
             <iv-form
                 :interface="IRegionForm()"
                 :value="regionTreeItem.region"
@@ -77,7 +77,7 @@
                 </template>
             </iv-form>
 
-             <template #footer-before>
+            <template #footer-before>
                 <b-button
                     variant="dark"
                     size="lg"
@@ -159,10 +159,18 @@
                     >{{ _('w_Cancel') }}
                     </b-button>
                 </b-col>
-                
+
             </b-row>
 
         </b-modal>
+
+        <!-- error dialog -->
+        <iv-modal
+            :label="modalTitle"
+            :visible.sync="visible"
+        >
+            Normal Modal
+        </iv-modal>
 
     </div>
 </template>
@@ -170,7 +178,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import ImageBase64 from "@/services/imageBase64";
+import ImageBase64 from "@/services/ImageBase64";
 
 import {
     ERegionType,
@@ -178,8 +186,9 @@ import {
     RegionTreeItem
 } from "@/components/RegionTree/models";
 import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
-import RegionAPI from "@/services/regionAPI";
+import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
+import ResponseFilter from "@/services/ResponseFilter";
 
 enum EPageStep {
     none,
@@ -253,13 +262,7 @@ export default class Region extends Vue {
                 this.noSiteBeBinding = siteCount < 1;
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
         this.pageStep = EPageStep.bindingSite;
     }
@@ -291,7 +294,6 @@ export default class Region extends Vue {
         await this.$server
             .R("/location/tree", param)
             .then((response: any) => {
-                console.log("!!! initRegionTreeItem, response", response);
                 if (response != undefined) {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
@@ -301,13 +303,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -481,13 +477,7 @@ export default class Region extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        // Dialog.Error(this._("w_UserSession_Empty"));
-                        // User.clearUser();
-                        this.$router.push({ path: "/" });
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else {
             await this.$server
@@ -498,13 +488,7 @@ export default class Region extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        // Dialog.Error(this._("w_UserSession_Empty"));
-                        // User.clearUser();
-                        this.$router.push({ path: "/" });
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -544,13 +528,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -565,13 +543,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
