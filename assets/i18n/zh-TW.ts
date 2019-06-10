@@ -121,6 +121,13 @@ export default class LangObject implements ILang {
     w_Check = 'Check';
     w_Submit = 'Submit';
 
+    // Navigation
+    w_Navigation_Label = 'iSAP Solution';
+    w_Navigation_Users = 'Users';
+    w_Navigation_User = 'User';
+    w_Navigation_UserGroup = 'User Group';
+    w_Navigation_Region = 'Region';
+
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
 
