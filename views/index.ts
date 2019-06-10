@@ -44,4 +44,4 @@ $({ path: '/demos/region-tree-select', name: 'DemoRegionTreeSelect', icon: 'fa-t
 $({ path: '/demos/image-map', name: 'DemoImageMap', icon: 'fa-twitter', permission: false })(DemoImageMap);
 
 // Regions
-$({ path: '/regions/region', name: 'Regions', icon: 'fa-twitter' })(Region);
+$({ path: '/region', name: 'Region', icon: 'fa-twitter' })(Region);

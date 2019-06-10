@@ -60,6 +60,7 @@
                         :key="'region-badge-'+index"
                     >{{ tag.name }}</b-badge>
                 </template>
+
                 <template #toolbox="{$attrs}">
                     <iv-toolbox-more v-if="toolboxMore($attrs)">
 
@@ -174,14 +175,6 @@ import {
     IRegionItem,
     RegionTreeItem
 } from "./models";
-
-enum EPageStep {
-    none,
-    list,
-    editRoot,
-    editRegion,
-    bindingSite
-}
 
 interface IGoogleMap {
     src: string;

@@ -1,9 +1,9 @@
 import { Vue, Component } from 'vue-property-decorator';
-import { RegisterLogin } from '@/../core';
+import { RegisterLoginRouter } from '@/../core';
 import { ServerName, ServerVersion } from '@/../core/server';
 import { ModalResponse } from '@/../components/modal';
 
-@RegisterLogin({
+@RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
     path: '/login',
     disableContainer: true,

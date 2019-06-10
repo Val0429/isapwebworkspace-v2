@@ -28,6 +28,7 @@ export default class LangObject {
     // button
     w_Save = 'Save';
     w_Back = 'Back';
+    w_Cancel = 'Cancel';
 
     // image map
     w_ImageMap_DataWindowMainTitle = 'Data Window';

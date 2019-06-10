@@ -28,6 +28,7 @@ export default class LangObject implements ILang {
     // button
     w_Save = 'Save';
     w_Back = 'Back';
+    w_Cancel = 'Cancel';
 
     // image map
     w_ImageMap_DataWindowMainTitle = 'Data Window';
