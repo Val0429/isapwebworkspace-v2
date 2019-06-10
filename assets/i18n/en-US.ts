@@ -27,6 +27,8 @@ export default class LangObject {
 
     /////////////////////////////////////////////
 
+    // common
+    w_Error = 'Error';
     w_NextPage = 'Next';
     w_PreviousPage = 'Prev';
     w_Clear = 'Clear';
