@@ -1,6 +1,6 @@
 <template>
 
-    <iv-iv-toolbox-element-base
+    <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_Region_AddSameLayerRegion')"
         icon="fa isap-icon isap-icon-add isap-toolbox-icon"
@@ -29,7 +29,7 @@
                 v-bind="scope"
             /></template>
 
-    </iv-iv-toolbox-element-base>
+    </iv-toolbox-element-base>
 
 </template>
     
