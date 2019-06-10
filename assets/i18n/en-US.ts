@@ -25,11 +25,105 @@ export default class LangObject {
 
     m_PasswordShouldBeSame = 'Password should be same';
 
+    /////////////////////////////////////////////
+
+    // common
+    w_Error = 'Error';
+    w_NextPage = 'Next';
+    w_PreviousPage = 'Prev';
+    w_Clear = 'Clear';
+    w_Unlink = 'Unlink';
+    w_Search = 'Search';
+    w_No = 'No';
+    w_Add = 'Add';
+    w_Edit = 'Edit';
+    w_View = 'View';
+    w_Sliders = 'Sliders';
+    w_Map = 'Map';
+    w_Area = 'Area';
+    w_Device = 'Device';
+    w_DeviceGroup = 'Device Group';
+    w_EditMyProfile = 'Edit My Profile';
+    w_ChangePassword = 'Change Password';
+    w_ForgetPassword = 'Forget Password Step';
+    w_DeleteConfirm = 'Delete Confirm';
+    w_UnlinkConfirm = 'Unlink Confirm';
+    m_PermanentlyDeleteSelectedItem = 'Permanently delete {count} selected Item?';
+    w_RemoveConfirm = 'Remove Confirm';
+    m_PermanentlyRemoveSelectedItem = 'Permanently remove {count} selected Item?';
+    w_NoItemSelected = 'No item selected';
+    w_Success = 'Success';
+    w_DeleteFailed = 'Delete Failed';
+    w_LogoutSuccess = 'Sign out Success';
+    w_Id = 'Id';
+    w_Switch = 'Switch';
+    w_Logout = 'Sign out';
+    w_To = 'To';
+    w_StepBackward = 'Step Backward';
+    w_ROIClear = 'ROI Clear';
+    w_Upload_Fail = 'Upload Filed';
+
+    // date
+    w_Week_0 = 'Sunday';
+    w_Week_1 = 'Monday';
+    w_Week_2 = 'Tuesday';
+    w_Week_3 = 'Wednesday';
+    w_Week_4 = 'Thursday';
+    w_Week_5 = 'Friday';
+    w_Week_6 = 'Saturday';
+    w_Week_7 = 'Sunday';
+    w_Week_Unknow = 'Unknow';
+
+    // many page
+    w_Account = 'Account';
+    w_PasswordConfirm = 'PasswordConfirm';
+    w_Protocol = 'Protocol';
+    w_Ip = 'Ip';
+    w_Port = 'Port';
+    w_URL = 'URL';
+    w_Host = 'Host';
+    w_Phone = 'Phone';
+    w_ManagedSites = 'Managed sites';
+    w_Description = 'Description';
+    w_Sites = 'Site(s)';
+    w_Regions = 'Region(s)';
+    w_PreviousPassword = 'Previous Password';
+    w_CurrentPassword = 'Current Password';
+    w_CurrentPasswordConfirm = 'Current PasswordConfirm';
+    w_Longitude = 'Longitude';
+    w_Latitude = 'Latitude';
+    w_DeviceID = 'Device ID';
+    w_ServerName = 'Server Name';
+    w_IPAddress = 'IP Address';
+    w_Selected = 'Selected';
+    w_RegionTreeSelect = 'Region Tree Select';
+    w_SiteTreeSelect = 'Site Tree Select';
+
+    w_Port_PlaceHolder = 'Port , 1~65535';
+    w_Email_Placeholder = 'ex : admin@isap.com';
+    w_Phone_Placeholder = 'ex : +xxxxxxxxxx';
+
+    w_Error_Port = 'Port should be in 1~65535';
+    w_Error_Password = 'Password and PasswordConfirm should be same';
+    w_ErrorLongitude = 'Longitude only -180~180';
+    w_ErrorLatitude = 'Latitude only -90~90';
+
+    w_SelectSiteTree = 'Select site tree';
+    w_SelectRegionTree = 'Select region tree';
+
     // button
     w_Save = 'Save';
     w_Clear = 'Clear';
     w_Back = 'Back';
     w_Cancel = 'Cancel';
+    w_Send = 'Send';
+    w_Leave = 'Leave';
+    w_Test = 'Test';
+    w_Check = 'Check';
+    w_Submit = 'Submit';
+
+    // 401
+    w_UserSession_Empty = 'Not find User, Please login again';
 
     // image map
     w_ImageMap_DataWindowMainTitle = 'Data Window';
@@ -93,4 +187,35 @@ export default class LangObject {
     w_Region_ErrorLatitude = 'Latitude only -90~90';
     w_Region_ErrorNoSiteBeBinding = 'No site can be binding';
     w_Region_ErrorFileToLarge = 'Image max size is 7MB';
+
+    // User
+    w_User_UserList = 'User List';
+    w_User_AddUser = 'Add User';
+    w_User_EditUser = 'Edit User';
+    w_User_ViewUser = 'View User';
+    w_User_ID = 'User ID';
+    w_User_FullName = 'Full Name';
+    w_User_Group = 'Group';
+    w_User_UserGroup = 'User Group';
+    w_User_UserGroup_Admin = 'Admin';
+    w_User_UserGroup_User = 'User';
+    w_User_Role = 'Role';
+    w_User_AppInstalled = 'App Installed';
+    w_User_TestEmail = 'Test Email';
+    w_User_AddUserSuccess = 'Add User Success.';
+    w_User_AddUserFailed = 'Add User Failed';
+    w_User_EditUserSuccess = 'Edit User Success';
+    w_User_EditUserFailed = 'Edit User Failed';
+
+    // UserGroup
+    w_UserGroup_UserGroupList = 'Group List';
+    w_UserGroup_AddGroup = 'Add Group';
+    w_UserGroup_EditGroup = 'Edit Group';
+    w_UserGroup_ViewGroup = 'View Group';
+    w_UserGroup_GroupName = 'Group Name';
+    w_UserGroup_Users = 'Users';
+    w_UserGroup_AddUserGroupSuccess = 'Add User Group Success.';
+    w_UserGroup_AddUserGroupFailed = 'Add User Group Failed';
+    w_UserGroup_EditUserGroupSuccess = 'Edit User Group Success';
+    w_UserGroup_EditUserGroupFailed = 'Edit User Group Failed';
 }
