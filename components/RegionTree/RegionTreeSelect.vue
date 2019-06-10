@@ -100,11 +100,44 @@ export class RegionTreeSelect extends Vue {
 
     @Watch("selecteds", {})
     private onSelectedsChanged(newval: any, oldval: any) {
-        if (newval.length == 0) {
-            this.focusTreeClear(this.regionTreeItem.tree);
+        this.focusTreeClear(this.regionTreeItem.tree);
+        this.focusTree(this.regionTreeItem.tree);
+    }
+
+    created() {
+        this.initRegionTreeItem();
+    }
+
+    mounted() {}
+
+    initRegionTreeItem() {
+        this.focusTree(this.regionTreeItem.tree);
+    }
+
+    cardSearch(search: string) {
+        this.searchTreeBar(this.regionTreeItem.tree, search);
+    }
+
+    searchTreeBar(regionItem: IRegionItem, search: string) {
+        if (search != "") {
+            let itemText = regionItem.name.toLowerCase();
+            let searchText = search.toLowerCase();
+            let serachResult = itemText.match(searchText);
+            if (serachResult == null) {
+                regionItem.status.searchBar = false;
+            } else {
+                regionItem.status.searchBar = true;
+            }
         } else {
-            this.focusTree(this.regionTreeItem.tree);
+            regionItem.status.searchBar = true;
         }
+        for (let childrenItem of regionItem.children) {
+            this.searchTreeBar(childrenItem, search);
+        }
+    }
+
+    clickBack() {
+        this.$emit("click-back", this.selecteds);
     }
 
     watchToggleTreeEvent(regionItem: IRegionItem) {
@@ -119,6 +152,9 @@ export class RegionTreeSelect extends Vue {
         if (regionItem.event.clickBar && itemType == wantType) {
             regionItem.status.focusBar = !regionItem.status.focusBar;
         }
+
+        // 判斷完成就移除事件
+        regionItem.event.clickBar = false;
 
         // 是否加入選單或移除
         if (regionItem.status.focusBar) {
@@ -194,46 +230,10 @@ export class RegionTreeSelect extends Vue {
             default:
                 break;
         }
-        regionItem.event.clickBar = false;
+
         for (let tempRegionItem of regionItem.children) {
             this.watchToggleTreeEvent(tempRegionItem);
         }
-    }
-
-    created() {
-        this.initRegionTreeItem();
-    }
-
-    mounted() {}
-
-    initRegionTreeItem() {
-        this.focusTree(this.regionTreeItem.tree);
-    }
-
-    cardSearch(search: string) {
-        this.searchTreeBar(this.regionTreeItem.tree, search);
-    }
-
-    searchTreeBar(regionItem: IRegionItem, search: string) {
-        if (search != "") {
-            let itemText = regionItem.name.toLowerCase();
-            let searchText = search.toLowerCase();
-            let serachResult = itemText.match(searchText);
-            if (serachResult == null) {
-                regionItem.status.searchBar = false;
-            } else {
-                regionItem.status.searchBar = true;
-            }
-        } else {
-            regionItem.status.searchBar = true;
-        }
-        for (let childrenItem of regionItem.children) {
-            this.searchTreeBar(childrenItem, search);
-        }
-    }
-
-    clickBack() {
-        this.$emit("click-back", this.selecteds);
     }
 
     focusTree(regionItem: IRegionItem) {
@@ -243,7 +243,7 @@ export class RegionTreeSelect extends Vue {
         let itemType: ERegionType = this.regionTreeItem.changeType(
             regionItem.type
         );
-        regionItem.status.showToggle = false;
+
         for (let i in this.selecteds) {
             let selectItem = this.selecteds[i];
             let selectType = this.regionTreeItem.changeType(selectItem.type);
@@ -251,16 +251,26 @@ export class RegionTreeSelect extends Vue {
                 this.selecteds.splice(parseInt(i), 1);
                 continue;
             }
+
             if (
                 regionItem.objectId == selectItem.objectId &&
-                itemType == selectType &&
-                itemType == wantType
+                itemType == selectType
             ) {
                 regionItem.status.focusBar = true;
             }
         }
-        for (let tempRegionItem of regionItem.children) {
-            this.focusTree(tempRegionItem);
+
+        // 選單不出現 toggle 按鈕
+        regionItem.status.showToggle = false;
+
+        // 不顯示的
+        if (itemType != wantType) {
+            regionItem.status.focusBar = false;
+        }
+
+        // 子目錄遞迴
+        for (let childrenRegionItem of regionItem.children) {
+            this.focusTree(childrenRegionItem);
         }
     }
 

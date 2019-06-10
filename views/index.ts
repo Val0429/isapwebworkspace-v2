@@ -18,7 +18,7 @@ import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
 import DemoImageMap from './Demos/DemoImageMap.vue';
 
 // Regions
-// import Region from './Regions/Region.vue';
+import Region from './Regions/Region.vue';
 
 // ============================================================= //
 
@@ -44,4 +44,4 @@ $({ path: '/demos/region-tree-select', name: 'DemoRegionTreeSelect', icon: 'fa-t
 $({ path: '/demos/image-map', name: 'DemoImageMap', icon: 'fa-twitter', permission: false })(DemoImageMap);
 
 // Regions
-// $({ path: '/regions/region', name: 'Regions', icon: 'fa-twitter', permission: false })(Region);
+$({ path: '/regions/region', name: 'Regions', icon: 'fa-twitter' })(Region);
