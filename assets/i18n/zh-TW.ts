@@ -217,4 +217,233 @@ export default class LangObject implements ILang {
     w_UserGroup_AddUserGroupFailed = 'Add User Group Failed';
     w_UserGroup_EditUserGroupSuccess = 'Edit User Group Success';
     w_UserGroup_EditUserGroupFailed = 'Edit User Group Failed';
+
+    // License
+    w_License_List = 'License List';
+    w_License_Add = 'Add License';
+    w_License_LicenseKey = 'LicenseKey';
+    w_License_Mac = 'Mac';
+    w_License_productName = 'ProductName';
+    w_License_Quantity = 'Quantity';
+    w_License_Trial = 'Trial';
+    w_License_RegisterDate = 'RegisterDate';
+    w_License_ExpireDate = 'ExpireDate';
+    w_License_License_Key = 'License Key';
+    w_License_UploadOfflineKey = 'Upload offline key';
+    w_License_UploadOfflineKey1 = '* Upload offline key';
+
+    w_License_License_KeyPlaceholder = 'License Key. Input 25 digits.  English alphabet or number only.  Format: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx';
+
+    w_License_Setting_Success = 'License set success.';
+    w_License_Setting_Fail = 'License set failed.';
+
+    w_License_Step1_mac = 'Add by license key and mac';
+    w_License_Step1_offline = 'Add by upload offline key';
+
+    // Mail Server
+    w_MailServer_Email = 'Email Account';
+    w_MailServer_Enable = 'Mail Server Enable';
+    w_MailServer_Setting = 'Set Mail Server';
+    w_MailServer_Test = 'Test Email';
+
+    w_MailServer_Setting_Success = 'Email Server set success.';
+    w_MailServer_Setting_Fail = 'Email Server set failed.';
+    w_MailServer_Test_Success = 'Email Server test success.';
+    w_MailServer_Test_Fail = 'Email Server test failed.';
+
+    // Site
+    w_Site_SiteID = 'Site ID';
+    w_Site_SiteName = 'Site Name';
+    w_Site_AreaName = 'Area Name';
+    w_Site_GroupName = 'Device Group Name';
+    w_Site_DeviceName = 'Device Name';
+    w_Site_DeviceType = 'Device Type';
+    w_Site_Address = 'Address';
+    w_Site_Establishment = 'Establishment';
+    w_Site_PhoneNumber = 'Phone Number';
+    w_Site_SquareMeter = 'Square Meter';
+    w_Site_Manager = 'Manager';
+    w_Site_StaffNumber = 'Staff Number';
+    w_Site_OfficeHour = 'Office Hour';
+    w_Site_Area = 'Area';
+    w_Site_Tag = 'Tag';
+    w_Site_Devices = 'Devices';
+    w_Site_DeviceGroup = 'Device Group';
+    w_Site_Photo = 'Photo';
+    w_Site_MapPhoto = 'Map Photo';
+    w_Site_Longitude = 'Longitude';
+    w_Site_Latitude = 'Latitude';
+    w_Site_Longitude_Range = 'Longitude range from 180° to -180°';
+    w_Site_Latitude_Range = 'Latitude range from 90° to -90°';
+    w_Site_Mapping = 'Mapping';
+    w_Site_SiteList = 'Site List';
+    w_Site_ViewSite = 'View Site';
+    w_Site_AddSite = 'Add Site';
+    w_Site_EditSite = 'Edit Site';
+    w_Site_AreaList = 'Area List';
+    w_Site_ViewArea = 'View Area';
+    w_Site_AddArea = 'Add Area';
+    w_Site_EditArea = 'Edit Area';
+    w_Site_DeviceList = 'Device List';
+    w_Site_ViewDevice = 'View Device';
+    w_Site_AddDevice = 'Add Device';
+    w_Site_EditDevice = 'Edit Device';
+    w_Site_AddSiteSuccess = 'Add Site Success';
+    w_Site_AddSiteFailed = 'Add Site Failed';
+    w_Site_EditSiteSuccess = 'Edit Site Success';
+    w_Site_EditSiteFailed = 'Edit Site Failed';
+    w_Site_AddAreaSuccess = 'Add Area Success';
+    w_Site_AddAreaFailed = 'Add Area Failed';
+    w_Site_EditAreaSuccess = 'Edit Area Success';
+    w_Site_EditAreaFailed = 'Edit Area Failed';
+
+
+    // Backup
+    w_Backup_List = 'Function List';
+    w_Backup_Backup = 'Backup';
+
+    // Restore
+    w_Restore_SelectFile = 'Select file(s)';
+    w_Restore_SettingFiles = 'Setting Files';
+
+
+    // Tag
+    w_Tag_TagList = 'Tag List';
+    w_Tag_AddTag = 'Add Tag';
+    w_Tag_EditTag = 'Edit Tag';
+    w_Tag_ViewTag = 'View Tag';
+    w_Tag_TagName = 'Tag Name';
+    w_Tag_AppliedSites = 'Applied Sites';
+
+    w_Tag_AddTagSuccess = 'Add Tag Success';
+    w_Tag_AddTagFailed = 'Add Tag Failed';
+    w_Tag_EditTagSuccess = 'Edit Tag Success';
+    w_Tag_EditTagFailed = 'Edit Tag Failed';
+
+    // MyProfile
+    w_MyProfile_EditMyProfile = 'Edit My Profile';
+    w_MyProfile_ViewMyProfile = 'View My Profile';
+
+    w_MyProfile_EditSuccess = 'Edit My Profile Success';
+    w_MyProfile_EditFailed = 'Edit My Profile Failed';
+    w_MyProfile_ChangePasswordSuccess = 'Change Password Success';
+    w_MyProfile_ChangePasswordFailed = 'Change Password Failed';
+
+    // Forget Password
+    w_ForgetPassword_Step1 = 'Input basic info';
+    w_ForgetPassword_Step1_info = 'Please input account and SettingEmail then submit to get a verification code.';
+    w_ForgetPassword_Step1_GetVerificationCode = 'Get Verification Code';
+    w_ForgetPassword_Step1Success = 'Submit success. Please receiving letter.';
+    w_ForgetPassword_Step1Failed = 'Submit failed. Please try again.';
+
+    w_ForgetPassword_Step2 = 'Input verification code';
+    w_ForgetPassword_Step2_info = 'Please input verification code and check it right or not.';
+    w_ForgetPassword_Step2Success = 'Verification code.';
+    w_ForgetPassword_Step2Failed = 'Verification code check failed. Please try again.';
+
+    w_ForgetPassword_Step3 = 'Update Password';
+    w_ForgetPassword_Step3_info = 'Please update your password.';
+    w_ForgetPassword_Step3Success = 'Update password success.';
+    w_ForgetPassword_Step3Failed = 'Update password failed. Please try again.';
+
+    w_ForgetPassword_VerificationCode = 'Verification code';
+
+    // SmsServer
+    w_SmsServer_Enable = 'SMS Enable';
+    w_SmsServer_Setting = 'Set SMS Server';
+    w_SmsServer_Test = 'Test SMS';
+    w_SmsServer_Phone = 'Phone Number';
+    w_SmsServer_Setting_Success = 'SMS Server set success.';
+    w_SmsServer_Setting_Fail = 'SMS Server set failed.';
+    w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
+    w_SmsServer_Setting_Test_Success = 'SMS Server test success.';
+
+    // Office Hour
+    w_OfficeHour_List = 'Office Hour List';
+    w_OfficeHour_Add = 'Add Office Hour';
+    w_OfficeHour_Edit = 'Edit Office Hour';
+    w_OfficeHour_View = 'View Office Hour';
+    w_OfficeHour_Name = 'Office Hour Name';
+    w_OfficeHour = '* Office Hour';
+
+    // Weather
+    w_Weather_Add = 'Add Weather';
+    w_Weather_Test = 'Test Weather';
+    w_Weather_secretKey = 'SecretKey';
+    w_Weather_timezone = 'Time Zone';
+    w_Weather_icon = 'Icon';
+    w_Weather_precipProbability = 'Precip Probability';
+    w_Weather_temperature = 'Temperature';
+    w_Weather_humidity = 'Humidity';
+    w_Weather_cloudCover = 'Cloud Cover';
+    w_Weather_uvIndex = 'UV Index';
+    w_Weather_visibility = 'Visibility';
+    w_Weather_ShowDetail = 'Weather Detail';
+    w_Weather_Data = 'Weather Information';
+
+    w_Weather_Step1_info = 'Please register at Dark Sky API ( https://darksky.net/dev ) and will get a SecretKey.';
+    w_Weather_Setting_Success = 'Weather set success.';
+    w_Weather_Setting_Fail = 'Weather set failed.';
+
+    w_WeatherTest_Success = 'Weather test success.';
+    w_WeatherTest_Fail = 'Weather test failed.';
+
+    // Server CMS
+    w_ServerCMS_List = 'CMS Server List';
+    w_ServerCMS_Add = 'Add CMS Server';
+    w_ServerCMS_Edit = 'Edit CMS Server';
+    w_ServerCMS_View = 'View CMS Server';
+    w_ServerCMS_AddSuccess = 'CMS Server add success.';
+    w_ServerCMS_ADDFailed = 'Add failed! Can not found the CMS Server, please try again.';
+    w_ServerCMS_EditSuccess = 'CMS Server edit success.';
+    w_ServerCMS_EditFailed = 'Edit failed! Can not found the CMS Server, please try again.';
+
+    // Demographic Server
+    w_DemographicServer_List = 'Demographic Server List';
+    w_DemographicServer_View = 'Demographic Server View';
+    w_DemographicServer_Add = 'Demographic Server Add';
+    w_DemographicServer_Edit = 'Demographic Server Edit';
+    w_DemographicServer_DeviceID = 'Device ID';
+    w_DemographicServer_DeviceName = 'Device Name';
+    w_DemographicServer_IP = 'IP';
+    w_DemographicServer_Port = 'Port';
+    w_DemographicServer_Scale = 'Scale';
+    w_DemographicServer_AddSuccess = 'Demographic Server Add Success';
+    w_DemographicServer_EditSuccess = 'Demographic Server Edit Success';
+    w_DemographicServer_TestSuccess = 'Server Human Detection Test Success';
+    w_DemographicServer_AddFailed = 'Demographic Server Add Failed';
+    w_DemographicServer_EditFailed = 'Demographic Server Edit Failed';
+    w_DemographicServer_TestFailed = 'Server Human Detection Test Failed';
+
+    // Server Human Detection
+    w_ServerHD_List = 'Server Human Detection List';
+    w_ServerHD_View = 'Server Human Detection View';
+    w_ServerHD_Add = 'Server Human Detection Add';
+    w_ServerHD_Edit = 'Server Human Detection Edit';
+    w_ServerHD_DemographicServerList = 'Server Human Detection List';
+    w_ServerHD_DemographicServerView = 'Server Human Detection View';
+    w_ServerHD_DemographicServerAdd = 'Server Human Detection Add';
+    w_ServerHD_DemographicServerEdit = 'Server Human Detection Edit';
+    w_ServerHD_DeviceID = 'Device ID';
+    w_ServerHD_DeviceName = 'Device Name';
+    w_ServerHD_IP = 'IP';
+    w_ServerHD_Port = 'Port';
+    w_ServerHD_Scale = 'Scale';
+    w_ServerHD_AddSuccess = 'Server Human Detection Add Success';
+    w_ServerHD_EditSuccess = 'Server Human Detection Edit Success';
+    w_ServerHD_TestSuccess = 'Server Human Detection Test Success';
+    w_ServerHD_AddFailed = 'Server Human Detection Add Failed';
+    w_ServerHD_EditFailed = 'Server Human Detection Edit Failed';
+    w_ServerHD_TestFailed = 'Server Human Detection Test Failed';
+
+    // Server FRS
+    w_ServerFRS_List = 'FRS Server List';
+    w_ServerFRS_Add = 'Add FRS Server';
+    w_ServerFRS_Edit = 'Edit FRS Server';
+    w_ServerFRS_View = 'View FRS Server';
+    w_ServerFRS_AddSuccess = 'FRS Server add success.';
+    w_ServerFRS_ADDFailed = 'Add failed! Can not found the FRS Server, please try again.';
+    w_ServerFRS_EditSuccess = 'CMS Server edit success.';
+    w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
 }
+
