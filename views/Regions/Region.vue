@@ -164,6 +164,14 @@
 
         </b-modal>
 
+        <!-- error dialog -->
+        <iv-modal
+            :label="modalTitle"
+            :visible.sync="visible"
+        >
+            Normal Modal
+        </iv-modal>
+
     </div>
 </template>
 
@@ -180,6 +188,7 @@ import {
 import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
+import ResponseFilter from "@/services/ResponseFilter";
 
 enum EPageStep {
     none,
@@ -213,9 +222,7 @@ export default class Region extends Vue {
     newImg = new Image();
     newImgSrc = "";
 
-    created() {
-        console.log(this.$permissions);
-    }
+    created() {}
 
     mounted() {
         this.pageToTree();
@@ -255,13 +262,7 @@ export default class Region extends Vue {
                 this.noSiteBeBinding = siteCount < 1;
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
         this.pageStep = EPageStep.bindingSite;
     }
@@ -302,13 +303,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -482,13 +477,7 @@ export default class Region extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        // Dialog.Error(this._("w_UserSession_Empty"));
-                        // User.clearUser();
-                        this.$router.push({ path: "/" });
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else {
             await this.$server
@@ -499,12 +488,7 @@ export default class Region extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    console.log(e);
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        this.$router.push({ path: "/" });
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -544,13 +528,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -565,13 +543,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // User.clearUser();
-                    this.$router.push({ path: "/" });
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
