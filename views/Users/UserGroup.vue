@@ -176,13 +176,7 @@
 
 <script lang="ts">
     import { Vue, Component, Watch } from "vue-property-decorator";
-    // import { iSAPFormCard } from "../../../components/cards/isap-form-card";
-    // import { Card } from "../../../components/cards/card";
-    // import { Table } from "../../../components/table";
-    // import { Form } from "../../../components/form";
     import { toEnumInterface } from "@/../core";
-    import ServerConfig from "@/services/ServerConfig";
-
     import {
         ERegionType,
         IRegionItem,
@@ -190,9 +184,11 @@
         IRegionTreeSelected
     } from "@/components/RegionTree/models";
     import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-    import RegionAPI from "@/services/regionAPI";
-
     import { IUserGroupAdd, IUserGroupEdit } from '@/config/default/api/interfaces'
+
+    import RegionAPI from "@/services/RegionAPI";
+    import ServerConfig from "@/services/ServerConfig";
+    import ResponseFilter from "@/services/ResponseFilter";
 
     interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit{
         users: any;
@@ -297,9 +293,7 @@
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        Dialog.Error(this._("w_UserSession_Empty"));
-                        Users.clearUser();
-                        this.$router.push({ path: "/" });
+                        return ResponseFilter.base(this, e);
                     }
                     console.log(e);
                     return false;
@@ -317,9 +311,7 @@
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        Dialog.Error(this._("w_UserSession_Empty"));
-                        Users.clearUser();
-                        this.$router.push({ path: "/" });
+                        return ResponseFilter.base(this, e);
                     }
                     console.log(e);
                     return false;
@@ -338,9 +330,7 @@
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        Dialog.Error(this._("w_UserSession_Empty"));
-                        Users.clearUser();
-                        this.$router.push({ path: "/" });
+                        return ResponseFilter.base(this, e);
                     }
                     console.log(e);
                     return false;
@@ -523,9 +513,7 @@
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        Dialog.Error(this._("w_UserSession_Empty"));
-                        Users.clearUser();
-                        this.$router.push({ path: "/" });
+                        return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
                         Dialog.Error(this._("w_UserGroup_AddUserGroupFailed"));
@@ -566,9 +554,7 @@
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        Dialog.Error(this._("w_UserSession_Empty"));
-                        Users.clearUser();
-                        this.$router.push({ path: "/" });
+                        return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
                         Dialog.Error(this._("w_UserGroup_EditUserGroupFailed"));
@@ -580,9 +566,9 @@
         }
 
         async doDelete() {
-            await Dialog.Question(this._("w_DeleteConfirm"))
-                .then(result => {
-                    if (result.value) {
+            // await Dialog.Question(this._("w_DeleteConfirm"))
+            //     .then(result => {
+            //         if (result.value) {
                         for (const param of this.userGroupDetail) {
                             const deleteUserParam: {
                                 objectId: string;
@@ -609,17 +595,15 @@
                                         e.res.statusCode &&
                                         e.res.statusCode == 401
                                     ) {
-                                        Dialog.Error(this._("w_UserSession_Empty"));
-                                        Users.clearUser();
-                                        this.$router.push({ path: "/" });
+                                        return ResponseFilter.base(this, e);
                                     }
 
                                     console.log(e);
                                 });
                         }
-                    }
-                })
-                .catch((e: any) => console.log(e));
+                //     }
+                // })
+                // .catch((e: any) => console.log(e));
         }
 
         showFirst(value) {

@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :data="{ label: _('w_User_UserList') }"
+            :label="_('w_User_UserList')"
         >
             <template #toolbox>
 
@@ -64,11 +64,7 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.add"
             :visible="true"
-            :data="{ label: _('w_User_AddUser') }"
-            :interface="IAddForm()"
-            :value="inputUserData"
-            @update:*="tempSaveInputData($event)"
-            @submit="saveAdd($event)"
+            :label="_('w_User_AddUser')"
         >
             <template #toolbox>
 
@@ -76,32 +72,32 @@
 
             </template>
 
-            <template #test="{ $attrs, $listeners }">
+            <iv-form
+                :interface="IAddForm()"
+                :value="inputUserData"
+                @update:*="tempSaveInputData($event)"
+                @submit="saveAdd($event)"
+            >
+                <template #test="{ $attrs, $listeners }">
 
-                <div
-                    class="button-right button-group right mt-2"
-                    v-bind="$attrs"
-                >
-                    <b-button
-                        v-bind="{ ...$attrs, class: undefined }"
-                        v-on="$listeners"
-                        class="button"
-                        variant="success"
-                        type="button"
-                        @click="pageToEmailTest($event)"
-                    >{{ _('w_User_TestEmail') }}
-                    </b-button>
-                </div>
-            </template>
+                    <div class="mt-2 ml-3 mb-3">
+                        <b-button @click="pageToEmailTest($event)"
+                        >{{ _('w_User_TestEmail') }}
+                        </b-button>
+                    </div>
 
-            <template #selectTree="{ $attrs, $listeners }">
+                </template>
 
-                <div class="m-3">
-                    <b-button @click="pageToChooseTree">
-                        {{ _('w_SelectSiteTree') }}
-                    </b-button>
-                </div>
-            </template>
+                <template #selectTree="{ $attrs, $listeners }">
+
+                    <div class="mt-2 ml-3">
+                        <b-button @click="pageToChooseTree">
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
+                    </div>
+                </template>
+
+            </iv-form>
 
             <template #footer-before>
                 <b-button
@@ -118,26 +114,30 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.edit"
             :visible="true"
-            :data="{ label: _('w_User_EditUser') }"
-            :interface="IEditForm()"
-            :value="inputUserData"
-            @update:*="tempSaveInputData($event)"
-            @submit="saveEdit($event)"
-        >
+            :label="_('w_User_EditUser') "
+            >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
             </template>
 
-            <template #selectTree="{ $atrs, $listeners }">
+            <iv-form
+                :interface="IEditForm()"
+                :value="inputUserData"
+                @update:*="tempSaveInputData($event)"
+                @submit="saveEdit($event)"
+            >
+                <template #selectTree="{ $atrs, $listeners }">
 
-                <div class="m-3">
+                    <div class="m-3">
 
-                    <b-button @click="pageToChooseTree">
-                        {{ _('w_SelectSiteTree') }}
-                    </b-button>
-                </div>
+                        <b-button @click="pageToChooseTree">
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
+                    </div>
 
-            </template>
+                </template>
+            </iv-form>
+
 
             <template #footer-before>
                 <b-button
@@ -154,7 +154,7 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.view"
             :visible="true"
-            :data="{ label: _('w_User_ViewUser') }"
+            :label="_('w_User_ViewUser') "
         >
             <template #toolbox>
                 <toolbox-back @click="pageToList()" />
@@ -246,13 +246,8 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-// import { iSAPFormCard } from "../../../components/cards/isap-form-card";
-// import { Card } from "../../../components/cards/card";
-import { Table } from "../../../components/table";
-import { Form } from "../../../components/form";
 import { toEnumInterface } from "@/../core";
 import { IUserAddData, IUserEditData } from "@/config/default/api/interfaces";
-
 import {
     ERegionType,
     IRegionItem,
@@ -260,8 +255,10 @@ import {
     IRegionTreeSelected
 } from "@/components/RegionTree/models";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import RegionAPI from "@/services/regionAPI";
+
+import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
+import ResponseFilter from "@/services/ResponseFilter";
 
 interface InputUserData extends IUserAddData, IUserEditData {
     siteIdsText: string;
@@ -381,9 +378,7 @@ export default class User extends Vue {
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // Users.clearUser();
-                    this.$router.push({ path: "/" });
+                    return ResponseFilter.base(this, e);
                 }
                 console.log(e);
                 return false;
@@ -402,9 +397,7 @@ export default class User extends Vue {
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // Users.clearUser();
-                    this.$router.push({ path: "/" });
+                    return ResponseFilter.base(this, e);
                 }
                 console.log(e);
                 return false;
@@ -424,9 +417,7 @@ export default class User extends Vue {
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // Users.clearUser();
-                    this.$router.push({ path: "/" });
+                    return ResponseFilter.base(this, e);
                 }
                 console.log(e);
                 return false;
@@ -642,9 +633,7 @@ export default class User extends Vue {
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // Users.clearUser();
-                    this.$router.push({ path: "/" });
+                    return ResponseFilter.base(this, e);
                 }
                 console.log(e);
                 this.modalShow = !this.modalShow;
@@ -690,9 +679,7 @@ export default class User extends Vue {
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    // Dialog.Error(this._("w_UserSession_Empty"));
-                    // Users.clearUser();
-                    this.$router.push({ path: "/" });
+                    return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
                     // Dialog.Error(this._("w_User_AddUserFailed"));
@@ -737,9 +724,7 @@ export default class User extends Vue {
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                   // Dialog.Error(this._("w_UserSession_Empty"));
-                    Users.clearUser();
-                    this.$router.push({ path: "/" });
+                    return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
                    // Dialog.Error(this._("w_User_EditUserFailed"));
@@ -822,7 +807,7 @@ export default class User extends Vue {
 
                             /**
                              * @uiLabel - ${this._("w_No")}
-                             * @uiType - cell-auto-index
+                             * @uiType - iv-cell-auto-index
                              */
                             no: string;
 
@@ -889,7 +874,7 @@ export default class User extends Vue {
                             /**
                              * @uiLabel - ${this._("w_Password")}
                              * @uiPlaceHolder - ${this._("w_Password")}
-                             * @uiType - form-password
+                             * @uiType - iv-form-password
                              * @uiColumnGroup - password
                              */
                             password: string;
@@ -898,7 +883,7 @@ export default class User extends Vue {
                             /**
                              * @uiLabel - ${this._("w_PasswordConfirm")}
                              * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
-                             * @uiType - form-password
+                             * @uiType - iv-form-password
                              * @uiColumnGroup - password
                              * @uiValidation - (value, all) => value === all.password
                              * @uiInvalidMessage - ${this._("w_Error_Password")}
@@ -973,7 +958,7 @@ export default class User extends Vue {
 
                             /**
                              * @uiLabel - ${this._("w_Account")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             account: string;
 
@@ -987,7 +972,7 @@ export default class User extends Vue {
 
                             /**
                              * @uiLabel - ${this._("w_User_ID")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             employeeId: string;
 
@@ -1045,56 +1030,56 @@ export default class User extends Vue {
 
                             /**
                              * @uiLabel - ${this._("w_Account")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             account?: string;
 
 
                             /**
                              * @uiLabel - ${this._("w_Name")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             name?: string;
 
 
                             /**
                              * @uiLabel - ${this._("w_User_ID")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             employeeId?: string;
 
 
                             /**
                              * @uiLabel - ${this._("w_Email")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             email?: string;
 
 
                             /**
                              * @uiLabel - ${this._("w_Phone")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             phone?: string;
 
 
                             /**
                              * @uiLabel - ${this._("w_User_Role")}
-                             * @uiType - form-label
+                             * @uiType - iv-form-label
                              */
                             role?: string;
 
 
                              /**
                               * @uiLabel - ${this._("w_User_UserGroup")}
-                              * @uiType - form-label
+                              * @uiType - iv-form-label
                               */
                             groupIdsText?: string;
 
 
                              /**
                               * @uiLabel - ${this._("w_Sites")}
-                              * @uiType - form-label
+                              * @uiType - iv-form-label
                               */
                             siteIdsText: string;
 
