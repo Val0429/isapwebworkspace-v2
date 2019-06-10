@@ -30,7 +30,7 @@
                 @update:*="updateRegionFrom($event)"
                 @submit="clickSaveModifyRegion($event)"
             >
-               <template #photoImg="{ $attrs, $listeners }">
+                <template #photoImg="{ $attrs, $listeners }">
                     <img
                         v-if="newImgSrc != ''"
                         class="region-form-image"
@@ -61,7 +61,7 @@
             <template #toolbox>
                 <iv-toolbox-back @click="pageToTree($event)" />
             </template>
-        
+
             <iv-form
                 :interface="IRegionForm()"
                 :value="regionTreeItem.region"
@@ -77,7 +77,7 @@
                 </template>
             </iv-form>
 
-             <template #footer-before>
+            <template #footer-before>
                 <b-button
                     variant="dark"
                     size="lg"
@@ -159,7 +159,7 @@
                     >{{ _('w_Cancel') }}
                     </b-button>
                 </b-col>
-                
+
             </b-row>
 
         </b-modal>
@@ -213,7 +213,9 @@ export default class Region extends Vue {
     newImg = new Image();
     newImgSrc = "";
 
-    created() {}
+    created() {
+        console.log(this.$permissions);
+    }
 
     mounted() {
         this.pageToTree();
@@ -291,7 +293,6 @@ export default class Region extends Vue {
         await this.$server
             .R("/location/tree", param)
             .then((response: any) => {
-                console.log("!!! initRegionTreeItem, response", response);
                 if (response != undefined) {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
@@ -498,9 +499,8 @@ export default class Region extends Vue {
                     }
                 })
                 .catch((e: any) => {
+                    console.log(e);
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        // Dialog.Error(this._("w_UserSession_Empty"));
-                        // User.clearUser();
                         this.$router.push({ path: "/" });
                     }
                     console.log(e);
