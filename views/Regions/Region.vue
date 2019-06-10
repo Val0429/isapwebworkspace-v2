@@ -215,7 +215,8 @@ export default class Region extends Vue {
     newImg = new Image();
     newImgSrc = "";
 
-    created() {}
+    created() {
+    }
 
     mounted() {
         this.pageToTree();
