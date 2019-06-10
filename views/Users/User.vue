@@ -628,7 +628,6 @@ export default class User extends Vue {
             .C("/setting/smtp/test", mailServerObject)
             .then((response: any) => {
                 if (response != undefined) {
-                    //Dialog.Success(this._("w_MailServer_Test_Success"));
                     this.modalShow = !this.modalShow;
                 }
             })
@@ -669,7 +668,6 @@ export default class User extends Vue {
 
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
-                        // Dialog.Success(this._("w_User_AddUserSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
@@ -724,7 +722,6 @@ export default class User extends Vue {
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
-                        // Dialog.Success(this._("w_User_EditUserSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
@@ -772,7 +769,6 @@ export default class User extends Vue {
                             .then((response: any) => {
                                 for (const returnValue of response) {
                                     if (returnValue.statusCode === 200) {
-                                        // Dialog.Success(this._("w_Success"));
                                         this.pageToList();
                                     }
                                     if (returnValue.statusCode === 500) {
