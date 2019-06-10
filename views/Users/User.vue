@@ -30,7 +30,7 @@
                 ref="userTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ server, path: '/user/user' }"
+                :server="{ path: '/user/user' }"
                 @selected="selectedItem($event)"
             >
                 <template #email="{$attrs}">
