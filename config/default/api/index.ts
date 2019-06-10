@@ -1,80 +1,80 @@
-import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '@/../core/server';
+// import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '../../../helpers/server/restful';
+// export class SmartCommunityServer extends iSAPServerBase<RestfulRequest> {}
+
+// server config
+import ServerConfig from '@/services/ServerConfig';
 
 // import User
-import { UserCreate, UserRead, UserUpdate, UserDelete, UserReadAll } from '@/config/default/api/User';
-import { UserLoginPost, UserLogoutPost, UserPasswordUpdate } from '@/config/default/api/User';
+import { UserCreate, UserRead, UserUpdate, UserDelete, UserReadAll } from './User';
+import { UserLoginPost, UserLogoutPost, UserPasswordUpdate } from './User';
 
 // import UserGroup
-import { UserGroupCreate, UserGroupDelete, UserGroupRead, UserGroupReadAll, UserGroupUpdate } from '@/config/default/api/UserGroup';
+import { UserGroupCreate, UserGroupDelete, UserGroupRead, UserGroupReadAll, UserGroupUpdate } from './UserGroup';
 
 // import Forget Password
-import { Step1, Step2, Step3 } from '@/config/default/api/ForgetPassword';
+import { Step1, Step2, Step3 } from './ForgetPassword';
 
 // import camera
-import { CameraReadAllList, CameraLocationRead } from '@/config/default/api/BeforeUse/camera';
+import { CameraReadAllList, CameraLocationRead } from './BeforeUse/camera';
 
 // import Location treeRead
-import { TreeRead } from '@/config/default/api/LocationTree';
+import { TreeRead } from './LocationTree';
 
 // import Location Region
-import { RegionCreate, RegionRead, RegionUpdate, RegionDelete, RegionReadAll } from '@/config/default/api/LocationRegion';
+import { RegionCreate, RegionRead, RegionUpdate, RegionDelete, RegionReadAll } from './LocationRegion';
 
 // import Location Site
-import { SiteCreate, SiteRead, SiteUpdate, SiteDelete, SiteReadAll, SiteBindingRegion } from '@/config/default/api/LocationSite';
+import { SiteCreate, SiteRead, SiteUpdate, SiteDelete, SiteReadAll, SiteBindingRegion } from './LocationSite';
 
 // import location area
-import { LocationAreaCreate, LocationAreaDelete, LocationAreaRead, LocationAreaUpdate } from '@/config/default/api/BeforeUse/locationArea';
+import { LocationAreaCreate, LocationAreaDelete, LocationAreaRead, LocationAreaUpdate } from './BeforeUse/locationArea';
 
 // import location device
-import { LocationDeviceCreate, LocationDeviceDelete, LocationDeviceRead, LocationDeviceUpdate } from '@/config/default/api/BeforeUse/locationDevice';
+import { LocationDeviceCreate, LocationDeviceDelete, LocationDeviceRead, LocationDeviceUpdate } from './BeforeUse/locationDevice';
 
 // import location floor
-import { LocationFloorCreate, LocationFloorDelete, LocationFloorRead, LocationFloorUpdate } from '@/config/default/api/BeforeUse/locationFloor';
+import { LocationFloorCreate, LocationFloorDelete, LocationFloorRead, LocationFloorUpdate } from './BeforeUse/locationFloor';
 
 // import Setting License
-import { LicenseCreate, LicenseRead } from '@/config/default/api/SettingLicense';
+import { LicenseCreate, LicenseRead } from './SettingLicense';
 
 // import network read mac
-import { LicenseMacRead } from '@/config/default/api/SettingLicense';
+import { LicenseMacRead } from './SettingLicense';
 
 // import Setting SMS
-import { SMSTest, SMSUpdate, SMSRead } from '@/config/default/api/SettingSMS';
+import { SMSTest, SMSUpdate, SMSRead } from './SettingSMS';
 
 // import Setting mail
-import { MailUpdate, MailTest, MailRead } from '@/config/default/api/SettingEmail';
+import { MailUpdate, MailTest, MailRead } from './SettingEmail';
 
 // import Setting Tag
-import { TagCreate, TagDelete, TagRead, TagUpdate, TagReadAll } from '@/config/default/api/SettingTag';
+import { TagCreate, TagDelete, TagRead, TagUpdate, TagReadAll } from './SettingTag';
 
 // import Setting Weather
-import { WeatherRead, WeatherTest, WeatherUpdate } from '@/config/default/api/SettingWeather';
+import { WeatherRead, WeatherTest, WeatherUpdate } from './SettingWeather';
 
 // import VideoSource human-detection
-import { HumanDetectionCheck, HumanDetectionRead, HumanDetectionUpdate } from '@/config/default/api/VideoSource/humanDetection';
+import { HumanDetectionCheck, HumanDetectionRead, HumanDetectionUpdate } from './VideoSource/humanDetection';
 
 // import Server CMS
-import { CMSRead, CMSUpdate, CMSDelete, CMSCreate } from '@/config/default/api/ServerCMS';
+import { CMSRead, CMSUpdate, CMSDelete, CMSCreate } from './ServerCMS';
 
 // import Server CMS
-import { FRSUpdate, FRSCreate, FRSDelete, FRSRead } from '@/config/default/api/ServerFRS';
+import { FRSUpdate, FRSCreate, FRSDelete, FRSRead } from './ServerFRS';
 
 // import Business Operation Office Hour
-import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, OfficeHourUpdate } from '@/config/default/api/BusinessOperationOfficeHour';
+import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, OfficeHourUpdate } from './BusinessOperationOfficeHour';
 
+// export default new SmartCommunityServer({
+//     ip: ServerConfig.host,
+//     port: parseInt(ServerConfig.port),
+// });
 
-
-
-interface RestfulRequest extends ApisRequestBase {
-
-    // create
+interface RestfulRequest  {
+    // C => Post
     Post: {
-        '/users/login': [UsersLoginAll.Input, UsersLoginAll.Output, false];
-        '/user/user/login': [UsersLoginAll.Input, UsersLoginAll.Output, false];
-        '/users/logout': [UsersLogoutPost.Input, any, true];
-        '/users': [any, any, true];
-
         // User
-        // '/user/user/login': [UserLoginPost.Input, UserLoginPost.Output, false];
+        '/user/user/login': [UserLoginPost.Input, UserLoginPost.Output, false];
         '/user/base/logout': [UserLogoutPost.Input, UserLogoutPost.Output, false];
         '/user/user': [UserCreate.Input, UserCreate.Output, false];
 
@@ -139,12 +139,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/office-hour': [OfficeHourCreate.Input, OfficeHourCreate.Output, false];
     };
 
-    // read
+    // R => Get
     Get: {
-        '/users/login': [UsersLoginAll.Input, UsersLoginAll.Output, false];
-        '/users': [any, any, true];
-        '/announcements': [AnnouncementsGet.Input, AnnouncementsGet.Output, true];
-
         // User
         '/user/base/password': [UserPasswordUpdate.Input, UserPasswordUpdate.Output, false];
         '/user/user': [UserRead.Input, UserRead.Output, false];
@@ -232,10 +228,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/office-hour/all': [OfficeHourReadAll.Input, OfficeHourReadAll.Output, false];
     };
 
-    // update
+    // U => Put
     Put: {
-        '/users': [any, any, true];
-
         // User
         '/user/user': [UserUpdate.Input, UserUpdate.Output, false];
         '/user/base/password': [UserPasswordUpdate.Input, UserPasswordUpdate.Output, false];
@@ -295,11 +289,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/office-hour': [OfficeHourUpdate.Input, OfficeHourUpdate.Output, false];
     };
 
-    // delete
+    // D => Delete
     Delete: {
-        '/users': [any, any, true];
-
-        // User
         // User
         '/user/user': [UserDelete.Input, UserDelete.Output, false];
 
@@ -341,51 +332,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/partner/human-detection': [any, any, false];
     };
 
-    // web socket
     Ws: {
-        '/users/alive': [any, any, true];
-        '/agents/connect': [any, any, true];
+        '/server/alive': [any, any, false];
+        '/data-window': [any, any, false];
     };
 }
-
-export class SmartCommunityServer extends iSAPServerBase<RestfulRequest> {}
-export default SmartCommunityServer;
-
-/// /users/login - All /////////////////////////////////////
-declare namespace UsersLoginAll {
-    export interface Input {
-        username: string;
-        password: string;
-    }
-
-    export interface Output {
-        sessionId: string;
-        serverTime: Date;
-        user: string;
-    }
-}
-//////////////////////////////////////////////////////////////
-/// /users/logout - Post /////////////////////////////////////
-declare namespace UsersLogoutPost {
-    export interface Input {
-        sessionId: string;
-    }
-}
-//////////////////////////////////////////////////////////////
-/// /announcements - Get /////////////////////////////////////
-export declare namespace AnnouncementsGet {
-    export interface IAnnouncements {
-        /**
-         * Title of announcements.
-         */
-        title: string;
-
-        /**
-         * Content of announcements.
-         */
-        content?: string;
-    }
-    export type Input = InputR<IAnnouncements>;
-    export type Output = OutputR<IAnnouncements>;
-}
-//////////////////////////////////////////////////////////////

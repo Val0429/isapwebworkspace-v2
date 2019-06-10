@@ -33,18 +33,27 @@
                 <SidebarNavItem url="/menu-style/1" />
                 <SidebarNavItem url="/menu-style/2" />
 
-                <!-- <SidebarNavItem url="/home">
+                <!-- Users -->
+                <SidebarNavItem url="/users/user">
+                    <SidebarNavItem url="/users/user"></SidebarNavItem>
+                    <SidebarNavItem url="/users/user_group"></SidebarNavItem>
+                </SidebarNavItem>
+
+
+                 <SidebarNavItem url="/home">
                     <SidebarNavItem url="/home">
-                        <SidebarNavItem url="/home/about" />                
+                        <SidebarNavItem url="/home/about" />
                         <SidebarNavItem url="/home" />
-                        <SidebarNavItem url="/home/about" />                
+                        <SidebarNavItem url="/home/about" />
                     </SidebarNavItem>
                     <SidebarNavItem url="/home/about" />
                     <SidebarNavItem url="/home" />
                     <SidebarNavItem url="/home/about" />
                 </SidebarNavItem>
-                <SidebarNavItem url="/home/about" /> -->
+                <SidebarNavItem url="/home/about" />
+
             </SidebarNav>
+
 
         </template>
     </CoreUIBase>
