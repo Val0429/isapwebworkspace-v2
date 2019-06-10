@@ -27,7 +27,7 @@
                 ref="userGroupTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ path: '/user/group' }"
+                :server="{ path: '/office-hour' }"
                 @selected="selectedItem($event)"
             >
                 <template #description="{$attrs}">
@@ -220,7 +220,7 @@
     @Component({
         components: { }
     })
-    export default class UserGroup extends Vue {
+    export default class GeneralOfficeHour extends Vue {
 
         ePageStep = EPageStep;
         pageStep: EPageStep = EPageStep.list;
@@ -591,45 +591,45 @@
             // await Dialog.Question(this._("w_DeleteConfirm"))
             //     .then(result => {
             //         if (result.value) {
-                        for (const param of this.userGroupDetail) {
-                            const deleteUserParam: {
-                                objectId: string;
-                            } = {
-                                objectId: param.objectId
-                            };
+            for (const param of this.userGroupDetail) {
+                const deleteUserParam: {
+                    objectId: string;
+                } = {
+                    objectId: param.objectId
+                };
 
-                            await this.$server.D("/user/group", deleteUserParam)
-                                .then((response: any) => {
-                                    for (const returnValue of response) {
-                                        if (returnValue.statusCode === 200) {
-                                            this.pageToList();
-                                        }
-                                        if (returnValue.statusCode === 500) {
-                                            new Dialog({
-                                                propsData: {
-                                                    label: this._("w_Error"),
-                                                    value: this._("w_DeleteFailed")
-                                                }
-                                            }).$modal();
-                                            return false;
-                                        }
+                await this.$server.D("/user/group", deleteUserParam)
+                    .then((response: any) => {
+                        for (const returnValue of response) {
+                            if (returnValue.statusCode === 200) {
+                                this.pageToList();
+                            }
+                            if (returnValue.statusCode === 500) {
+                                new Dialog({
+                                    propsData: {
+                                        label: this._("w_Error"),
+                                        value: this._("w_DeleteFailed")
                                     }
-                                })
-                                .catch((e: any) => {
-                                    if (
-                                        e.res &&
-                                        e.res.statusCode &&
-                                        e.res.statusCode == 401
-                                    ) {
-                                        return ResponseFilter.base(this, e);
-                                    }
-
-                                    console.log(e);
-                                });
+                                }).$modal();
+                                return false;
+                            }
                         }
-                //     }
-                // })
-                // .catch((e: any) => console.log(e));
+                    })
+                    .catch((e: any) => {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
+                            return ResponseFilter.base(this, e);
+                        }
+
+                        console.log(e);
+                    });
+            }
+            //     }
+            // })
+            // .catch((e: any) => console.log(e));
         }
 
         showFirst(value) {

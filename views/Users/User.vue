@@ -167,7 +167,7 @@
             :label="_('w_User_ViewUser') "
         >
             <template #toolbox>
-                <toolbox-back @click="pageToList()" />
+                <iv-toolbox-back @click="pageToList()" />
             </template>
 
             <iv-form
@@ -267,7 +267,6 @@ import {
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import RegionAPI from "@/services/RegionAPI";
-import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog.vue";
 
