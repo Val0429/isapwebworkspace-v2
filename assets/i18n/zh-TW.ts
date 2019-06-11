@@ -135,6 +135,8 @@ export default class LangObject implements ILang {
 
     w_Navigation_Region = 'Region';
 
+    w_Navigation_Site = 'Site';
+
     w_Navigation_BusinessOperation = 'Business Operation';
     w_Navigation_BO_CampaignSetting = 'Campaign Setting';
     w_Navigation_BO_SalesRecords = 'Sales Records';

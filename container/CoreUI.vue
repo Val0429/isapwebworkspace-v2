@@ -51,6 +51,12 @@
                     url="/region"
                 />
 
+                <!-- Site -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Site')"
+                    url="/site"
+                />
+
                 <!-- Users -->
                 <SidebarNavItem
                     :label="_('w_Navigation_Users')"
@@ -65,7 +71,6 @@
                         url="/users/user_group"
                     />
                 </SidebarNavItem>
-
 
                 <!-- Business Operation -->
                 <SidebarNavItem
