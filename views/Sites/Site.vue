@@ -692,6 +692,7 @@ export default class Site extends Vue {
     //area datas
     isSelectArea = false;
     areaPhotoSrc = "";
+    areaMapSrc = "";
     areas = {};
     area = {};
     areaParams = {};
@@ -747,10 +748,10 @@ export default class Site extends Vue {
         this.imageMap.draw.viewerInDevice = true;
 
         // image box
-        this.imageMap.imageBox = new ImageBoxItem(
-            "https://online.visual-paradigm.com/images/features/floor-plan-designer/01-online-floor-plan-maker.png",
-            { width: 1170, height: 665 }
-        );
+        this.imageMap.imageBox = new ImageBoxItem(this.areaMapSrc, {
+            width: 1170,
+            height: 665
+        });
 
         ////////////////////////////////////////////////////////////////////
 
@@ -944,6 +945,7 @@ export default class Site extends Vue {
     pageToAreaView() {
         console.log("pageToAreaView", this.area);
         this.areaPhotoSrc = this.serverUrl + this.area["imageSrc"];
+        this.areaMapSrc = this.serverUrl + this.area["mapSrc"];
         this.initImageMap();
         this.imageMap.setupMode = ESetupMode.preview;
         this.pageStep = EPageStep.areaView;
@@ -951,12 +953,14 @@ export default class Site extends Vue {
 
     pageToAreaAdd() {
         this.clearAreaData();
+        this.areaMapSrc = ImageBase64.pngEmpty;
         this.initImageMap();
         this.imageMap.setupMode = ESetupMode.setup;
         this.pageStep = EPageStep.areaAdd;
     }
 
     pageToAreaEdit() {
+        this.areaMapSrc = this.serverUrl + this.area["mapSrc"];
         this.initImageMap();
         this.pageStep = EPageStep.areaEdit;
     }
@@ -1047,16 +1051,20 @@ export default class Site extends Vue {
     }
 
     pageAddDeviceGroup() {
-        console.log("!!! pageAddDeviceGroup");
+        this.pageToDeviceList();
+        console.log("pageAddDeviceGroup", this.deviceGroup);
+        this.pageToDeviceAdd();
     }
 
     pageEditDeviceGroup(event: any, data: any) {
-        console.log("!!! pageEditDeviceGroup", event, data);
-        for (let tempData of this.imageMap.deviceGroups) {
-            if (data == tempData) {
-                console.log("Edit - deviceGroupId: ", data.deviceGroupId);
-            }
-        }
+        this.pageToDeviceList();
+        console.log("pageEditDeviceGroup", this.imageMap.deviceGroups, data);
+        //this.pageToDeviceEdit();
+        //for (let tempData of this.imageMap.deviceGroups) {
+        //    if (data == tempData) {
+        //        console.log("Edit - deviceGroupId: ", data.deviceGroupId);
+        //    }
+        //}
     }
 
     async initDeviceNameItem() {
