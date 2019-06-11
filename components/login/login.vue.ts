@@ -1,7 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { RegisterLoginRouter } from '@/../core';
 import { ServerName, ServerVersion } from '@/../core/server';
-import { ModalResponse } from '@/../components/modal';
 
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",

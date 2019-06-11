@@ -122,48 +122,6 @@
 
         </iv-auto-card>
 
-        <!-- 刪除 confirm dialog -->
-        <b-modal
-            hide-footer
-            size="md"
-            :title="_('w_Region_DeleteConfrimTitle')"
-            v-model="deleteModalShow"
-        >
-            <div class="card-content">
-                {{ _('w_Region_DeleteConfrimContent')}}
-            </div>
-            <hr>
-            <b-row>
-
-                <!-- 確認 -->
-                <b-col
-                    cols="3"
-                    offset="6"
-                >
-                    <b-button
-                        class="button button-full"
-                        variant="success"
-                        type="button"
-                        @click="deleteRegionConfirm"
-                    >{{ _('w_Region_ButtonDeleteConfirm') }}
-                    </b-button>
-                </b-col>
-
-                <!-- 取消 -->
-                <b-col cols="3">
-                    <b-button
-                        class="button button-full"
-                        variant="secondary"
-                        type="button"
-                        @click="deleteRegionCancel"
-                    >{{ _('w_Cancel') }}
-                    </b-button>
-                </b-col>
-
-            </b-row>
-
-        </b-modal>
-
     </div>
 </template>
 
@@ -203,7 +161,6 @@ export default class Region extends Vue {
     regionTreeItem: RegionTreeItem = new RegionTreeItem();
 
     noSiteBeBinding = false;
-    deleteModalShow: boolean = false;
     cardModifyTitle = "";
     cardBindingTitle = "";
     deleteRegionIdList: string[] = [];
@@ -223,7 +180,6 @@ export default class Region extends Vue {
 
     pageToTree() {
         this.initRegionTreeItem();
-        this.deleteModalShow = false;
         this.newImgSrc = "";
         this.pageStep = EPageStep.tree;
     }
@@ -389,7 +345,13 @@ export default class Region extends Vue {
     // tree function
     treeDelete(idList: string[]) {
         this.deleteRegionIdList = idList;
-        this.deleteModalShow = true;
+        Dialog.confirm(
+            this._("w_Region_DeleteConfrimContent"),
+            this._("w_Region_DeleteConfrimTitle"),
+            () => {
+                this.deleteRegionConfirm();
+            }
+        );
     }
 
     // form function
@@ -538,11 +500,6 @@ export default class Region extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.base(this, e);
             });
-    }
-
-    deleteRegionCancel() {
-        this.deleteModalShow = false;
-        this.pageToTree();
     }
 
     // image function

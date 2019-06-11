@@ -41,7 +41,7 @@ import MailServer from './Setting/MailServer.vue';
 // ============================================================= //
 
 // Home
-$({ path: '/', name: 'Home', redirect: '/components' })();
+$({ path: '/', name: 'Home', redirect: '/region' })();
 
 // Components
 // $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
@@ -53,7 +53,7 @@ $({ path: '/', name: 'Home', redirect: '/components' })();
 // $({ path: '/components/table', name: 'Table', icon: 'fa-twitter' })(Table);
 // $({ path: '/components/tree', name: 'Tree', icon: 'fa-twitter' })(Tree);
 // $({ path: '/components/transition', name: 'Transition', icon: 'fa-twitter' })(Transition);
-$({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
+// $({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
 // $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
 // $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
