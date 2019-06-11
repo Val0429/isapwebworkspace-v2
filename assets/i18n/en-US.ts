@@ -146,6 +146,8 @@ export default class LangObject {
     w_Navigation_Setting_MailServer = 'Mail Server';
     w_Navigation_Setting_SMS = 'SMS';
     w_Navigation_Setting_Weather = 'Weather';
+    w_Navigation_Setting_Backup = 'Backup';
+    w_Navigation_Setting_Restore = 'Restore';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';

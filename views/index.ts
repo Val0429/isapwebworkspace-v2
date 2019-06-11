@@ -38,6 +38,8 @@ import Site from './Sites/Site.vue';
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
 import Weather from './Setting/Weather.vue';
+import Backup from './Setting/Backup.vue';
+import Restore from './Setting/Restore.vue';
 
 
 // ============================================================= //
@@ -87,3 +89,5 @@ $({ path: '/setting', name: 'Setting', icon: 'fa-twitter', redirect: '/setting/m
 $({ path: '/setting/mail_server', name: 'Mail Server', icon: 'fa-twitter' })(MailServer);
 $({ path: '/setting/sms', name: 'SMS', icon: 'fa-twitter' })(SMS);
 $({ path: '/setting/weather', name: 'Weather', icon: 'fa-twitter' })(Weather);
+$({ path: '/setting/backup', name: 'Backup', icon: 'fa-twitter' })(Backup);
+$({ path: '/setting/restore', name: 'Restore', icon: 'fa-twitter' })(Restore);

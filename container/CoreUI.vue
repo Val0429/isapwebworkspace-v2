@@ -108,6 +108,14 @@
                         :label="_('w_Navigation_Setting_Weather')"
                         url="/setting/weather"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Backup')"
+                        url="/setting/backup"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Restore')"
+                        url="/setting/restore"
+                    />
                 </SidebarNavItem>
 
             </SidebarNav>
