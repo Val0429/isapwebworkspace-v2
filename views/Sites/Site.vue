@@ -28,7 +28,7 @@
                     ref="siteTable"
                     :interface="ISiteList()"
                     @selected="selectedSite($event)"
-                    :server="{ server, path: '/location/site' }"
+                    :server="{ path: '/location/site' }"
                     :multiple="tableMultiple"
                 >
 
@@ -266,7 +266,7 @@
                     :interface="IAreaList()"
                     @selected="selectedArea($event)"
                     :multiple="tableMultiple"
-                    :server="{ server, path: '/location/area' }"
+                    :server="{  path: '/location/area' }"
                     :params="areaParams"
                 >
 
@@ -428,7 +428,7 @@
                     :interface="IDeviceList()"
                     @selected="selectedDevice($event)"
                     :multiple="tableMultiple"
-                    :server="{ server, path: '/device/group' }"
+                    :server="{path: '/device/group' }"
                     :params="deviceGroupParams"
                 >
                     <template #siteName="{$attrs, $listeners}">

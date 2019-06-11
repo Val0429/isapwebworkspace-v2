@@ -1,4 +1,5 @@
 import Alert from './Alert.vue';
+import Confirm from './Confirm.vue';
 import Success from './Success.vue';
 import Error from './Error.vue';
 
@@ -8,6 +9,18 @@ export class Dialog {
             propsData: {
                 label: label,
                 content: content,
+            },
+        }).$modal();
+    }
+
+    confirm(content: string, label: string, callback: any) {
+        new Confirm({
+            propsData: {
+                label: label,
+                content: content,
+            },
+            methods: {
+                callback: callback,
             },
         }).$modal();
     }
@@ -27,7 +40,5 @@ export class Dialog {
             },
         }).$modal();
     }
-
-    confirm() {}
 }
 export default new Dialog();
