@@ -17,6 +17,7 @@ import Test from './components/Utilities.vue';
 import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
 import DemoImageMap from './Demos/DemoImageMap.vue';
 import DemoROI from './Demos/DemoROI.vue';
+import DemoDialog from './Demos/DemoDialog.vue';
 
 // Users
 import User from './Users/User.vue';
@@ -40,7 +41,7 @@ $({ path: '/', name: 'Home', redirect: '/components' })();
 // $({ path: '/components/table', name: 'Table', icon: 'fa-twitter' })(Table);
 // $({ path: '/components/tree', name: 'Tree', icon: 'fa-twitter' })(Tree);
 // $({ path: '/components/transition', name: 'Transition', icon: 'fa-twitter' })(Transition);
-// $({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
+$({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
 // $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
 // $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
@@ -48,9 +49,10 @@ $({ path: '/', name: 'Home', redirect: '/components' })();
 $({ path: '/demos/region-tree-select', name: 'DemoRegionTreeSelect', icon: 'fa-twitter', permission: false })(DemoRegionTreeSelect);
 $({ path: '/demos/image-map', name: 'DemoImageMap', icon: 'fa-twitter', permission: false })(DemoImageMap);
 $({ path: '/demos/roi', name: 'DemoROI', icon: 'fa-twitter', permission: false })(DemoROI);
+$({ path: '/demos/dialog', name: 'DemoDialog', icon: 'fa-twitter', permission: false })(DemoDialog);
 
 // Users
-// $({ path: '/users', name: 'User', icon: 'fa-twitter' })(User);
+$({ path: '/users', name: 'Users', icon: 'fa-twitter' })(User);
 $({ path: '/users/user', name: 'User', icon: 'fa-twitter' })(User);
 $({ path: '/users/user_group', name: 'UserGroup', icon: 'fa-twitter' })(UserGroup);
 
