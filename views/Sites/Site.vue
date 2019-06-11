@@ -496,6 +496,7 @@
                             :options="areaNameItem"
                         >
                         </iv-form-selection>
+
                         <iv-form-label
                             v-if="pageStep === ePageStep.deviceAdd && !isEmptyObject(area)"
                             v-bind="$attrs"
@@ -1475,6 +1476,29 @@ export default class Site extends Vue {
         }
     }
 
+    async updateDevicePosition() {
+        const datas: IAreaEditData[] = [
+            {
+                objectId: "data.objectId",
+                name: "data.name"
+            }
+        ];
+
+        const editAreaParam = { datas };
+
+        await this.$server
+            .U("/location/area", editAreaParam)
+            .then((response: any) => {
+                if (response != undefined) {
+                    Dialog.success(this._("w_Site_EditAreaSuccess"));
+                    this.pageToAreaList();
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
+    }
+
     async deleteSite() {
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
             var body: {
@@ -2139,7 +2163,7 @@ export default class Site extends Vue {
                  * @uiPlaceHolder - ${this._("w_Site_GroupName")}
                  * @uiType - iv-form-string
                  */
-                deviceGroupName?: string;
+                name?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Site_DeviceType")}
