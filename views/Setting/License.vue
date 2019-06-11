@@ -34,9 +34,7 @@
                 />
             </template>
 
-            <iv-form
-                :interface="IAddFromSelect()"
-            >
+            <iv-form :interface="IAddFromSelect()">
 
                 <template #licensemac="{$attrs, $listeners}">
                     <b-button
@@ -51,7 +49,7 @@
 
                 </template>
 
-                <template #offline="{$attrs, $listeners}" >
+                <template #offline="{$attrs, $listeners}">
                     <b-button
                         class="button mb-3 mt-2"
                         size="md"
@@ -65,7 +63,6 @@
                 </template>
 
             </iv-form>
-
 
             <template #footer-before>
                 <b-button
@@ -90,7 +87,6 @@
         <iv-auto-card
             v-show="addStep === eAddStep.macLicense"
             :label="_('w_License_Add') "
-
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList" />
@@ -106,14 +102,14 @@
                 @submit="saveAddLicenseMac($event)"
             >
 
-                <template #key="{$attrs, $listeners}" >
+                <template #key="{$attrs, $listeners}">
                     <iv-form-license
                         v-bind="$attrs"
                         v-on="$listeners"
                     ></iv-form-license>
                 </template>
 
-                <template #mac="{$attrs, $listeners}" >
+                <template #mac="{$attrs, $listeners}">
                     <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
@@ -164,7 +160,7 @@
                     <div class="ml-3 mb-2 w-100">{{ _('w_License_UploadOfflineKey1') }}</div>
                 </template>
 
-                <template #data="{$attrs, $listeners}" >
+                <template #data="{$attrs, $listeners}">
                     <div class="upload_file">
                         <b-form-file
                             v-bind="$attrs"
@@ -220,17 +216,16 @@ interface ILicenseInputDataOffline {
     data: any;
 }
 
-
 enum EPageStep {
-    list = 'list',
-    none = 'none'
+    list = "list",
+    none = "none"
 }
 
 enum EAddStep {
-    select = 'select',
-    macLicense = 'macLicense',
-    offline = 'offline',
-    none = 'none'
+    select = "select",
+    macLicense = "macLicense",
+    offline = "offline",
+    none = "none"
 }
 
 @Component({
@@ -246,14 +241,13 @@ export default class License extends Vue {
     addStep: EAddStep = EAddStep.none;
 
     licenseInputDataMac: ILicenseInputDataMac = {
-        key: '',
-        mac: '',
+        key: "",
+        mac: ""
     };
 
     licenseInputDataOffline: ILicenseInputDataOffline = {
-        data: '',
+        data: ""
     };
-
 
     mounted() {
         this.initMacSelectItem();
@@ -261,21 +255,19 @@ export default class License extends Vue {
 
     clearInputData() {
         this.licenseInputDataMac = {
-            key: '',
-            mac: '',
+            key: "",
+            mac: ""
         };
 
         this.licenseInputDataOffline = {
-            data: '',
+            data: ""
         };
-
     }
 
     pageToAdd() {
         this.pageStep = EPageStep.none;
         this.addStep = EAddStep.select;
         this.clearInputData();
-
     }
 
     pageToList() {
@@ -304,16 +296,15 @@ export default class License extends Vue {
 
         // reader.onload = (e: any) => console.log('219', e.target.result);
         reader.onload = (e: any) => {
-            console.log('e.target.result', e.target.result)
-            this.licenseInputDataOffline.data = e.target.result
-
+            console.log("e.target.result", e.target.result);
+            this.licenseInputDataOffline.data = e.target.result;
         };
         reader.readAsText(file);
-
     }
 
     async initMacSelectItem() {
-        await this.$server.R("/server/network")
+        await this.$server
+            .R("/server/network")
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response) {
@@ -334,7 +325,6 @@ export default class License extends Vue {
     }
 
     async saveAddLicenseMac(data) {
-
         const licenseParam: {
             key: string;
             mac: string;
@@ -343,7 +333,8 @@ export default class License extends Vue {
             mac: data.mac
         };
 
-        await this.$server.C("/license", licenseParam)
+        await this.$server
+            .C("/license", licenseParam)
             .then((response: any) => {
                 if (response != undefined) {
                     Dialog.success(this._("w_License_Setting_Success"));
@@ -365,14 +356,14 @@ export default class License extends Vue {
     }
 
     async saveAddLicenseOffLine(data) {
-
         const licenseParam: {
             data: string;
         } = {
             data: data.data
         };
 
-        await this.$server.C("/license", licenseParam)
+        await this.$server
+            .C("/license", licenseParam)
             .then((response: any) => {
                 if (response != undefined) {
                     Dialog.success(this._("w_License_Setting_Success"));
@@ -453,59 +444,60 @@ export default class License extends Vue {
 
     IAddFromSelect() {
         return `
-                interface {
-                   licensemac: any;
-                   offline: any;
-                }
-                `;
+            interface {
+                licensemac: any;
+                offline: any;
+            }
+         `;
     }
 
     IAddFromMac() {
         return `
-                interface {
+            interface {
 
-                    /**
-                     * @uiLabel - ${this._("w_License_License_Key")}
-                     * @uiPlaceHolder - ${this._("w_License_License_KeyPlaceholder" )}
-                     * @uiAttrs - { maxlength: 29}
-                     * @uiType - iv-form-license
-                     */
-                    key: string;
+                /**
+                 * @uiLabel - ${this._("w_License_License_Key")}
+                 * @uiPlaceHolder - ${this._(
+                     "w_License_License_KeyPlaceholder"
+                 )}
+                 * @uiAttrs - { maxlength: 29}
+                 * @uiType - iv-form-license
+                 */
+                key: string;
 
 
-                    /**
-                     * @uiLabel - ${this._("w_License_Mac")}
-                     * @uiPlaceHolder - ${this._("w_License_Mac")}
-                     */
-                    mac: ${toEnumInterface(this.macSelectItem as any)};
-
-                }
-                `;
+                /**
+                 * @uiLabel - ${this._("w_License_Mac")}
+                 * @uiPlaceHolder - ${this._("w_License_Mac")}
+                 */
+                mac: ${toEnumInterface(this.macSelectItem as any)};
+            }
+        `;
     }
 
     IAddFromOffline() {
         return `
-                interface {
+            interface {
 
-                    title?: any;
+                title?: any;
 
-                    /**
-                    * @uiLabel - ${this._("w_License_UploadOfflineKey")}
-                    * @uiPlaceHolder - ${this._("w_License_UploadOfflineKey")}
-                    */
-                    data: string;
+                /**
+                * @uiLabel - ${this._("w_License_UploadOfflineKey")}
+                * @uiPlaceHolder - ${this._("w_License_UploadOfflineKey")}
+                */
+                data: string;
 
-                }
-                `;
+            }
+        `;
     }
 }
 </script>
 
 
 <style lang="scss" scoped>
-    .upload_file {
-        margin-left: 20px;
-        width: 97%;
-    }
+.upload_file {
+    margin-left: 20px;
+    width: 97%;
+}
 </style>
 

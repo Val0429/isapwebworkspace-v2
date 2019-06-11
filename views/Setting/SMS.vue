@@ -6,9 +6,10 @@
             :label="_('w_SmsServer_Setting')"
         >
 
-            <iv-form :interface="ISmsServerComponent()"
-                     :value="inputSmsServerData"
-                     @submit="saveSmsServer($event)"
+            <iv-form
+                :interface="ISmsServerComponent()"
+                :value="inputSmsServerData"
+                @submit="saveSmsServer($event)"
             ></iv-form>
             <template #footer-before>
                 <b-button
@@ -137,14 +138,14 @@ export default class SMS extends Vue {
 
     // 送出測試
     async sendSmsTest() {
-
         const smsObject: {
             phone: string;
         } = {
             phone: this.inputTestSmsPhone
         };
 
-        await this.$server.C("/setting/sgsms/test", smsObject)
+        await this.$server
+            .C("/setting/sgsms/test", smsObject)
             .then((response: any) => {
                 if (response != undefined) {
                     this.modalShow = !this.modalShow;
@@ -163,8 +164,8 @@ export default class SMS extends Vue {
     }
 
     async readSmsServer() {
-
-        await this.$server.R("/setting/sgsms")
+        await this.$server
+            .R("/setting/sgsms")
             .then((response: any) => {
                 if (response != undefined) {
                     this.inputSmsServerData.enable = response.enable;
@@ -197,7 +198,8 @@ export default class SMS extends Vue {
             password: data.password
         };
 
-        await this.$server.U("/setting/sgsms", smsObject)
+        await this.$server
+            .U("/setting/sgsms", smsObject)
             .then((response: any) => {
                 if (response != undefined) {
                     Dialog.success(this._("w_SmsServer_Setting_Success"));
@@ -217,7 +219,7 @@ export default class SMS extends Vue {
 
     ISmsServerComponent() {
         return `
-        interface ISmsServerComponent {
+            interface ISmsServerComponent {
 
                 /**
                  * @uiLabel - ${this._("w_SmsServer_Enable")}
@@ -246,6 +248,7 @@ export default class SMS extends Vue {
                  * @uiPlaceHolder - ${this._("w_URL")}
                  */
                 url: string;
+            }
         `;
     }
 }

@@ -519,7 +519,6 @@ export default class GeneralOfficeHour extends Vue {
             );
         }
         this.dayRangesToText();
-
     }
 
     pageToAdd(type: string) {
@@ -542,7 +541,6 @@ export default class GeneralOfficeHour extends Vue {
             this.inputOfficeHourData.type = type;
         }
         this.dayRangesToText();
-
     }
 
     pageToList() {
@@ -687,42 +685,45 @@ export default class GeneralOfficeHour extends Vue {
         }
     }
 
-
     async doDelete() {
+        await Dialog.confirm(
+            this._("w_OfficeHour_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.officeHourDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
 
-        await Dialog.confirm(this._("w_OfficeHour_DeleteConfirm"), this._("w_DeleteConfirm"), () => {
-            for (const param of this.officeHourDetail) {
-                const deleteParam: {
-                    objectId: string;
-                } = {
-                    objectId: param.objectId
-                };
-
-                this.$server
-                    .D("/office-hour", deleteParam)
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                this.pageToList();
+                    this.$server
+                        .D("/office-hour", deleteParam)
+                        .then((response: any) => {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500) {
+                                    Dialog.error(this._("w_DeleteFailed"));
+                                    return false;
+                                }
                             }
-                            if (returnValue.statusCode === 500) {
-                                Dialog.error(this._("w_DeleteFailed"));
-                                return false;
+                        })
+                        .catch((e: any) => {
+                            if (
+                                e.res &&
+                                e.res.statusCode &&
+                                e.res.statusCode == 401
+                            ) {
+                                return ResponseFilter.base(this, e);
                             }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                            return ResponseFilter.base(this, e);
-                        }
 
-                        console.log(e);
-                    });
+                            console.log(e);
+                        });
+                }
             }
-        });
-
-
-
+        );
     }
 
     showFirst(value) {
@@ -817,63 +818,63 @@ export default class GeneralOfficeHour extends Vue {
 
     ITableList() {
         return `
-                        interface {
+            interface {
 
-                        /**
-                         * @uiLabel - ${this._("w_No")}
-                         * @uiType - iv-cell-auto-index
-                         */
-                        no: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_OfficeHour_Name")}
-                         */
-                        name: string;
+            /**
+             * @uiLabel - ${this._("w_No")}
+             * @uiType - iv-cell-auto-index
+             */
+            no: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         */
-                        dayRanges: string;
+            /**
+             * @uiLabel - ${this._("w_OfficeHour_Name")}
+             */
+            name: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         */
-                        sites: string;
+            /**
+             * @uiLabel - ${this._("w_Description")}
+             */
+            dayRanges: string;
 
-                        Actions?: any;
 
-                    }
-                `;
+            /**
+             * @uiLabel - ${this._("w_Sites")}
+             */
+            sites: string;
+
+            Actions?: any;
+
+            }
+        `;
     }
 
     IAddAndEditForm() {
         return `
-                        interface {
+            interface {
 
-                        /**
-                         * @uiLabel - ${this._("w_OfficeHour_Name")}
-                         * @uiPlaceHolder - ${this._("w_OfficeHour_Name")}
-                         * @uiType - ${
-                             this.inputOfficeHourData.type === EPageStep.add
-                                 ? "iv-form-string"
-                                 : "iv-form-label"
-                         }
-                         */
-                        name: string;
+                /**
+                 * @uiLabel - ${this._("w_OfficeHour_Name")}
+                 * @uiPlaceHolder - ${this._("w_OfficeHour_Name")}
+                 * @uiType - ${
+                     this.inputOfficeHourData.type === EPageStep.add
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                */
+                name: string;
 
-                        title?: any;
+                title?: any;
 
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         * @uiPlaceHolder - ${this._("w_Description")}
-                         */
-                        dayRanges?: any;
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiPlaceHolder - ${this._("w_Description")}
+                 */
+                dayRanges?: any;
 
-                    }
-                `;
+            }
+        `;
     }
 
     IViewForm() {

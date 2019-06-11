@@ -127,8 +127,7 @@
                 <template #test="{ $attrs, $listeners }">
 
                     <div class="mt-2 ml-3 mb-3">
-                        <b-button @click="pageToEmailTest($event)"
-                        >{{ _('w_User_TestEmail') }}
+                        <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
                         </b-button>
                     </div>
 
@@ -735,38 +734,44 @@ export default class User extends Vue {
     }
 
     async doDelete() {
+        await Dialog.confirm(
+            this._("w_User_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.userDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
 
-        await Dialog.confirm(this._("w_User_DeleteConfirm"), this._("w_DeleteConfirm"),  () => {
-            for (const param of this.userDetail) {
-                const deleteParam: {
-                    objectId: string;
-                } = {
-                    objectId: param.objectId
-                };
-
-                 this.$server
-                    .D("/user/user", deleteParam)
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                this.pageToList();
+                    this.$server
+                        .D("/user/user", deleteParam)
+                        .then((response: any) => {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500) {
+                                    Dialog.error(this._("w_DeleteFailed"));
+                                    return false;
+                                }
                             }
-                            if (returnValue.statusCode === 500) {
-                                Dialog.error(this._("w_DeleteFailed"));
-                                return false;
+                        })
+                        .catch((e: any) => {
+                            if (
+                                e.res &&
+                                e.res.statusCode &&
+                                e.res.statusCode == 401
+                            ) {
+                                return ResponseFilter.base(this, e);
                             }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                            return ResponseFilter.base(this, e);
-                        }
 
-                        console.log(e);
-                    });
+                            console.log(e);
+                        });
+                }
             }
-        });
-
+        );
     }
 
     showFirst(value) {
@@ -793,58 +798,57 @@ export default class User extends Vue {
 
     ITableList() {
         return `
-                        interface {
+            interface {
 
-                            /**
-                             * @uiLabel - ${this._("w_No")}
-                             * @uiType - iv-cell-auto-index
-                             */
-                            no: string;
-
-
-                            /**
-                             * @uiLabel - ${this._("w_Account")}
-                             */
-                            account: string;
+                /**
+                 * @uiLabel - ${this._("w_No")}
+                 * @uiType - iv-cell-auto-index
+                 */
+                no: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_FullName")}
-                             */
-                            name: string;
+                /**
+                 * @uiLabel - ${this._("w_Account")}
+                 */
+                account: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_Role")}
-                             */
-                            role: string;
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 */
+                name: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_Email")}
-                             */
-                            email: string;
+                /**
+                 * @uiLabel - ${this._("w_User_Role")}
+                 */
+                role: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_Group")}
-                             */
-                            groups: string;
+                /**
+                 * @uiLabel - ${this._("w_Email")}
+                 */
+                email: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_ManagedSites")}
-                             */
-                            sites: string;
+                /**
+                 * @uiLabel - ${this._("w_User_Group")}
+                 */
+                groups: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_AppInstalled")}
-                             */
-                            isAppBinding: string;
+                /**
+                 * @uiLabel - ${this._("w_ManagedSites")}
+                 */
+                sites: string;
 
-                            Actions?: any;
 
+                /**
+                 * @uiLabel - ${this._("w_User_AppInstalled")}
+                 */
+                isAppBinding: string;
+
+                Actions?: any;
 
             }
         `;
@@ -852,231 +856,225 @@ export default class User extends Vue {
 
     IAddForm() {
         return `
-                        interface {
+            interface {
 
-                            /**
-                             * @uiLabel - ${this._("w_Account")}
-                             * @uiPlaceHolder - ${this._("w_Account")}
-                             */
-                            account: string;
-
-
-                            /**
-                             * @uiLabel - ${this._("w_Password")}
-                             * @uiPlaceHolder - ${this._("w_Password")}
-                             * @uiType - iv-form-password
-                             * @uiColumnGroup - password
-                             */
-                            password: string;
+                /**
+                 * @uiLabel - ${this._("w_Account")}
+                 * @uiPlaceHolder - ${this._("w_Account")}
+                 */
+                account: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_PasswordConfirm")}
-                             * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
-                             * @uiType - iv-form-password
-                             * @uiColumnGroup - password
-                             * @uiValidation - (value, all) => value === all.password
-                             * @uiInvalidMessage - ${this._("w_Error_Password")}
-                             */
-                            confirmPassword: string;
+                /**
+                 * @uiLabel - ${this._("w_Password")}
+                 * @uiPlaceHolder - ${this._("w_Password")}
+                 * @uiType - iv-form-password
+                 * @uiColumnGroup - password
+                 */
+                password: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_FullName")}
-                             * @uiPlaceHolder - ${this._("w_User_FullName")}
-                             */
-                            name: string;
+                /**
+                 * @uiLabel - ${this._("w_PasswordConfirm")}
+                 * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
+                 * @uiType - iv-form-password
+                 * @uiColumnGroup - password
+                 * @uiValidation - (value, all) => value === all.password
+                 * @uiInvalidMessage - ${this._("w_Error_Password")}
+                 */
+                confirmPassword: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_ID")}
-                             * @uiPlaceHolder - ${this._("w_User_ID")}
-                             */
-                            employeeId: string;
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_Email")}
-                             * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
-                             */
-                            email: string;
-
-                            test?: any;
-
-                            /**
-                             * @uiLabel - ${this._("w_Phone")}
-                             * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                             */
-                            phone?: string;
+                /**
+                 * @uiLabel - ${this._("w_User_ID")}
+                 * @uiPlaceHolder - ${this._("w_User_ID")}
+                 */
+                employeeId: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_Role")}
-                             */
-                            role: ${toEnumInterface({
-                                Admin: this._("w_User_UserGroup_Admin"),
-                                User: this._("w_User_UserGroup_User")
-                            })};
+                /**
+                 * @uiLabel - ${this._("w_Email")}
+                 * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
+                 */
+                email: string;
+
+                test?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Phone")}
+                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
+                 */
+                 phone?: string;
 
 
-                             /**
-                              * @uiLabel - ${this._("w_User_UserGroup")}
-                              */
-                            groupIds?: ${toEnumInterface(
-                                this.userGroupSelectItem as any,
-                                true
-                            )};
+                /**
+                 * @uiLabel - ${this._("w_User_Role")}
+                 */
+                role: ${toEnumInterface({
+                    Admin: this._("w_User_UserGroup_Admin"),
+                    User: this._("w_User_UserGroup_User")
+                })};
 
 
-                             /**
-                              * @uiLabel - ${this._("w_Sites")}
-                              */
-                            siteIds?: ${toEnumInterface(
-                                this.sitesSelectItem as any,
-                                true
-                            )};
+                /**
+                 * @uiLabel - ${this._("w_User_UserGroup")}
+                 */
+                groupIds?: ${toEnumInterface(
+                    this.userGroupSelectItem as any,
+                    true
+                )};
 
-                            selectTree?: any;
 
-                }
-                `;
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+
+                selectTree?: any;
+
+            }
+        `;
     }
 
     IEditForm() {
         return `
-                        interface {
+            interface {
 
-                            /**
-                             * @uiLabel - ${this._("w_Account")}
-                             * @uiType - iv-form-label
-                             */
-                            account: string;
-
-
-                            /**
-                             * @uiLabel - ${this._("w_User_FullName")}
-                             * @uiPlaceHolder - ${this._("w_User_FullName")}
-                             */
-                            name: string;
+                /**
+                 * @uiLabel - ${this._("w_Account")}
+                 * @uiPlaceHolder - ${this._("w_Account")}
+                 * @uiType - iv-form-label
+                 */
+                account: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_ID")}
-                             * @uiType - iv-form-label
-                             */
-                            employeeId: string;
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_Email")}
-                             * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
-                             */
-                            email: string;
-
-                            test?: any;
-
-
-                            /**
-                             * @uiLabel - ${this._("w_Phone")}
-                             * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                             */
-                            phone?: string;
+                /**
+                 * @uiLabel - ${this._("w_User_ID")}
+                 * @uiPlaceHolder - ${this._("w_User_ID")}
+                 * @uiType - iv-form-label
+                 */
+                employeeId: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_Role")}
-                             */
-                            role: ${toEnumInterface({
-                                Admin: this._("w_User_UserGroup_Admin"),
-                                User: this._("w_User_UserGroup_User")
-                            })};
+                /**
+                 * @uiLabel - ${this._("w_Email")}
+                 * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
+                 */
+                email: string;
+
+                test?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Phone")}
+                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
+                 */
+                 phone?: string;
 
 
-                             /**
-                              * @uiLabel - ${this._("w_User_UserGroup")}
-                              */
-                            groupIds?: ${toEnumInterface(
-                                this.userGroupSelectItem as any,
-                                true
-                            )};
+                /**
+                 * @uiLabel - ${this._("w_User_Role")}
+                 */
+                role: ${toEnumInterface({
+                    Admin: this._("w_User_UserGroup_Admin"),
+                    User: this._("w_User_UserGroup_User")
+                })};
 
 
-                             /**
-                              * @uiLabel - ${this._("w_Sites")}
-                              */
-                            siteIds?: ${toEnumInterface(
-                                this.sitesSelectItem as any,
-                                true
-                            )};
+                /**
+                 * @uiLabel - ${this._("w_User_UserGroup")}
+                 */
+                groupIds?: ${toEnumInterface(
+                    this.userGroupSelectItem as any,
+                    true
+                )};
 
-                            selectTree?: any;
 
-                }
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
-                `;
+                selectTree?: any;
+
+            }
+        `;
     }
 
     IViewForm() {
         return `
-                        interface {
+            interface {
 
-                            /**
-                             * @uiLabel - ${this._("w_Account")}
-                             * @uiType - iv-form-label
-                             */
-                            account?: string;
-
-
-                            /**
-                             * @uiLabel - ${this._("w_Name")}
-                             * @uiType - iv-form-label
-                             */
-                            name?: string;
+                /**
+                 * @uiLabel - ${this._("w_Account")}
+                 * @uiType - iv-form-label
+                 */
+                account?: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_ID")}
-                             * @uiType - iv-form-label
-                             */
-                            employeeId?: string;
+                /**
+                 * @uiLabel - ${this._("w_Name")}
+                 * @uiType - iv-form-label
+                 */
+                name?: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_Email")}
-                             * @uiType - iv-form-label
-                             */
-                            email?: string;
+                /**
+                 * @uiLabel - ${this._("w_User_ID")}
+                 * @uiType - iv-form-label
+                 */
+                employeeId?: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_Phone")}
-                             * @uiType - iv-form-label
-                             */
-                            phone?: string;
+                /**
+                 * @uiLabel - ${this._("w_Email")}
+                 * @uiType - iv-form-label
+                 */
+                email?: string;
 
 
-                            /**
-                             * @uiLabel - ${this._("w_User_Role")}
-                             * @uiType - iv-form-label
-                             */
-                            role?: string;
+                /**
+                 * @uiLabel - ${this._("w_Phone")}
+                 * @uiType - iv-form-label
+                 */
+                phone?: string;
 
 
-                             /**
-                              * @uiLabel - ${this._("w_User_UserGroup")}
-                              * @uiType - iv-form-label
-                              */
-                            groupIdsText?: string;
+                /**
+                 * @uiLabel - ${this._("w_User_Role")}
+                 * @uiType - iv-form-label
+                 */
+                role?: string;
 
 
-                             /**
-                              * @uiLabel - ${this._("w_Sites")}
-                              * @uiType - iv-form-label
-                              */
-                            siteIdsText: string;
+                /**
+                 * @uiLabel - ${this._("w_User_UserGroup")}
+                 * @uiType - iv-form-label
+                 */
+                groupIdsText?: string;
 
-                }
-                `;
+
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiType - iv-form-label
+                 */
+                siteIdsText: string;
+
+            }
+        `;
     }
 }
 </script>

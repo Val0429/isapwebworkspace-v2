@@ -57,11 +57,11 @@
             </iv-table>
         </iv-card>
 
-        <!-- add -->
+        <!--From (Add and Edit)-->
         <iv-auto-card
-            v-show="pageStep === ePageStep.add"
+            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
             :visible="true"
-            :label="_('w_UserGroup_AddGroup')"
+            :label="pageStep === ePageStep.add ? _('w_UserGroup_AddGroup') :  _('w_UserGroup_EditGroup')"
         >
             <template #toolbox>
 
@@ -70,54 +70,14 @@
             </template>
 
             <iv-form
-                :interface="IAddForm()"
+                :interface="IAddAndEditForm()"
                 :value="inputUserGroupData"
                 @update:*="tempSaveInputData($event)"
-                @submit="saveAdd($event)"
+                @submit="saveAddOrEdit($event)"
             >
                 <template #selectTree="{ $attrs, $listeners }">
 
                     <div class="m-3">
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-
-                    </div>
-
-                </template>
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- edit -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.edit"
-            :visible="true"
-            :label="_('w_UserGroup_EditGroup')"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IEditForm()"
-                :value="inputUserGroupData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveEdit($event)"
-            >
-                <template #selectTree="{ $atrs, $listeners }">
-
-                    <div class="m-3">
-
                         <b-button @click="pageToChooseTree">
                             {{ _('w_SelectSiteTree') }}
                         </b-button>
@@ -479,122 +439,137 @@ export default class UserGroup extends Vue {
         }
     }
 
-    async saveAdd(data) {
-        const datas: IUserGroupAdd[] = [
-            {
-                name: data.name,
-                description: data.description,
-                siteIds: data.siteIds !== undefined ? data.siteIds : []
-            }
-        ];
+    async saveAddOrEdit(data) {
+        if (this.inputUserGroupData.type === EPageStep.add) {
+            const datas: IUserGroupAdd[] = [
+                {
+                    name: data.name,
+                    description: data.description,
+                    siteIds: data.siteIds !== undefined ? data.siteIds : []
+                }
+            ];
 
-        const addUParam = {
-            datas
-        };
+            const addUParam = {
+                datas
+            };
 
-        await this.$server
-            .C("/user/group", addUParam)
-            .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_UserGroup_AddUserGroupSuccess"));
-                        this.pageToList();
+            await this.$server
+                .C("/user/group", addUParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_UserGroup_AddUserGroupSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            Dialog.error(
+                                this._("w_UserGroup_AddUserGroupFailed")
+                            );
+                            return false;
+                        }
                     }
-                    if (returnValue.statusCode === 500) {
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
                         Dialog.error(this._("w_UserGroup_AddUserGroupFailed"));
                         return false;
                     }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_UserGroup_AddUserGroupFailed"));
+                    console.log(e);
                     return false;
+                });
+        }
+
+        if (this.inputUserGroupData.type === EPageStep.edit) {
+            const datas: IUserGroupEdit[] = [
+                {
+                    // siteIds: data.siteIds,
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    description: data.description,
+                    objectId: data.objectId
                 }
-                console.log(e);
-                return false;
-            });
-    }
+            ];
 
-    async saveEdit(data) {
-        const datas: IUserGroupEdit[] = [
-            {
-                // siteIds: data.siteIds,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                description: data.description,
-                objectId: data.objectId
-            }
-        ];
+            const editUserParam = {
+                datas
+            };
 
-        const editUserParam = {
-            datas
-        };
-
-        await this.$server
-            .U("/user/group", editUserParam)
-            .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_UserGroup_EditUserGroupSuccess"));
-                        this.pageToList();
+            await this.$server
+                .U("/user/group", editUserParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_UserGroup_EditUserGroupSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            Dialog.error(
+                                this._("w_UserGroup_EditUserGroupFailed")
+                            );
+                            return false;
+                        }
                     }
-                    if (returnValue.statusCode === 500) {
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
                         Dialog.error(this._("w_UserGroup_EditUserGroupFailed"));
                         return false;
                     }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_UserGroup_EditUserGroupFailed"));
+                    console.log(e);
                     return false;
-                }
-                console.log(e);
-                return false;
-            });
+                });
+        }
     }
 
     async doDelete() {
+        await Dialog.confirm(
+            this._("w_UserGroup_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.userGroupDetail) {
+                    const deleteUserParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
 
-        await Dialog.confirm(this._("w_UserGroup_DeleteConfirm"), this._("w_DeleteConfirm"), () => {
-            for (const param of this.userGroupDetail) {
-                const deleteUserParam: {
-                    objectId: string;
-                } = {
-                    objectId: param.objectId
-                };
+                    this.$server
+                        .D("/user/group", deleteUserParam)
 
-                this.$server
-                    .D("/user/group", deleteUserParam)
-
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                this.pageToList();
+                        .then((response: any) => {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500) {
+                                    Dialog.error(this._("w_DeleteFailed"));
+                                    return false;
+                                }
                             }
-                            if (returnValue.statusCode === 500) {
-                                Dialog.error(this._("w_DeleteFailed"));
-                                return false;
+                        })
+                        .catch((e: any) => {
+                            if (
+                                e.res &&
+                                e.res.statusCode &&
+                                e.res.statusCode == 401
+                            ) {
+                                return ResponseFilter.base(this, e);
                             }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                            return ResponseFilter.base(this, e);
-                        }
 
-                        console.log(e);
-                    });
+                            console.log(e);
+                        });
+                }
             }
-        });
-
-
+        );
     }
 
     showFirst(value) {
@@ -621,142 +596,110 @@ export default class UserGroup extends Vue {
 
     ITableList() {
         return `
-                        interface {
+            interface {
 
-                        /**
-                         * @uiLabel - ${this._("w_No")}
-                         * @uiType - iv-cell-auto-index
-                         */
-                        no: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         */
-                        name: string;
+                /**
+                 * @uiLabel - ${this._("w_No")}
+                 * @uiType - iv-cell-auto-index
+                 */
+                no: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         */
-                        description: string;
+                /**
+                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
+                 */
+                name: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         */
-                        sites: string;
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 */
+                description: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_Users")}
-                         */
-                        users: string;
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                sites: string;
 
-                        Actions?: any;
- }
-                `;
+
+                /**
+                 * @uiLabel - ${this._("w_UserGroup_Users")}
+                 */
+                users: string;
+
+                Actions?: any;
+            }
+        `;
     }
 
-    IAddForm() {
+    IAddAndEditForm() {
         return `
-                        interface {
+            interface {
 
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * @uiPlaceHolder - ${this._("w_UserGroup_GroupName")}
-                         */
-                        name: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         * @uiPlaceHolder - ${this._("w_Description")}
-                         */
-                        description: string;
+                /**
+                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
+                 * @uiPlaceHolder - ${this._("w_UserGroup_GroupName")}
+                 * @uiType - ${
+                     this.inputUserGroupData.type === EPageStep.add
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                 */
+                name: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         */
-                        siteIds?: ${toEnumInterface(
-                            this.sitesSelectItem as any,
-                            true
-                        )};
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiPlaceHolder - ${this._("w_Description")}
+                 */
+                description: string;
 
 
-                        selectTree?: any;
-
-                    }
-                `;
-    }
-
-    IEditForm() {
-        return `
-                        interface {
-
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * @uiType - iv-form-label
-                         */
-                        name?: string;
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         * @uiPlaceHolder - ${this._("w_Description")}
-                         */
-                        description?: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         */
-                        siteIds?: ${toEnumInterface(
-                            this.sitesSelectItem as any,
-                            true
-                        )};
-
-                        selectTree?: any;
-
-                    }
-                `;
+                selectTree?: any;
+            }
+        `;
     }
 
     IViewForm() {
         return `
-                        interface {
+            interface {
 
 
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * @uiType - iv-form-label
-                         */
-                        name?: string;
+                /**
+                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
+                 * @uiType - iv-form-label
+                 */
+                name?: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         * @uiType - iv-form-label
-                         */
-                        description?: string;
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiType - iv-form-label
+                 */
+                description?: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         * @uiType - iv-form-label
-                         */
-                        siteIdsText?: string;
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiType - iv-form-label
+                 */
+                siteIdsText?: string;
 
 
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_Users")}
-                         * @uiType - iv-form-label
-                         */
-                        groupIdsText?: string;
-
-                    }
-                `;
+                /**
+                 * @uiLabel - ${this._("w_UserGroup_Users")}
+                 * @uiType - iv-form-label
+                 */
+                groupIdsText?: string;
+            }
+        `;
     }
 }
 </script>
