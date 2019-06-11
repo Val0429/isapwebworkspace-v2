@@ -144,6 +144,11 @@ export default class LangObject {
 
     w_Navigation_Setting = 'Setting';
     w_Navigation_Setting_MailServer = 'Mail Server';
+    w_Navigation_Setting_SMS = 'SMS';
+    w_Navigation_Setting_Weather = 'Weather';
+    w_Navigation_Setting_Backup = 'Backup';
+    w_Navigation_Setting_Restore = 'Restore';
+    w_Navigation_Setting_License = 'License';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -277,6 +282,7 @@ export default class LangObject {
     w_MailServer_Setting_Fail = 'Email Server set failed.';
     w_MailServer_Test_Success = 'Email Server test success.';
     w_MailServer_Test_Fail = 'Email Server test failed.';
+    w_MailServer_Read_Fail = 'Mail Server read failed.';
 
     // Site
     w_Site_SiteID = 'Site ID';
@@ -382,6 +388,7 @@ export default class LangObject {
     w_SmsServer_Setting_Fail = 'SMS Server set failed.';
     w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
     w_SmsServer_Setting_Test_Success = 'SMS Server test success.';
+    w_SmsServer_Read_Fail = 'SMS Server read failed.';
 
     // Office Hour
     w_OfficeHour_List = 'Office Hour List';
@@ -412,6 +419,7 @@ export default class LangObject {
     w_Weather_Step1_info = 'Please register at Dark Sky API ( https://darksky.net/dev ) and will get a SecretKey.';
     w_Weather_Setting_Success = 'Weather set success.';
     w_Weather_Setting_Fail = 'Weather set failed.';
+    w_Weather_Read_Fail = 'Weather read failed.';
 
     w_WeatherTest_Success = 'Weather test success.';
     w_WeatherTest_Fail = 'Weather test failed.';

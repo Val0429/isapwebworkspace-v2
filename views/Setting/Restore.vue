@@ -1,6 +1,27 @@
 <template>
     <div class="animated fadeIn">
-	    SalesRecords
+	    <iv-card
+		    :label="_('w_Restore_SettingFiles')"
+	    >
+
+			    <b-form-file
+				    :label="_('w_Restore_SelectFile')"
+				    :placeholder="_('w_Restore_SelectFile')"
+				    :drop-placeholder="_('w_Restore_SelectFile')"
+				    multiple="multiple"
+			    />
+
+
+		    <template #footer>
+			    <b-button
+				    variant="primary"
+				    size="lg"
+				    @click="saveRestore()"
+			    >{{ _('w_Submit') }}
+			    </b-button>
+		    </template>
+
+	    </iv-card>
 
     </div>
 </template>
@@ -23,7 +44,7 @@ enum EPageStep {
 @Component({
     components: {}
 })
-export default class SalesRecords extends Vue {
+export default class Restore extends Vue {
 
 	ePageStep = EPageStep;
 	pageStep: EPageStep = EPageStep.list;
@@ -43,7 +64,6 @@ export default class SalesRecords extends Vue {
 	saveRestore() {
 		alert('saveRestore')
 	}
-
 }
 </script>
 

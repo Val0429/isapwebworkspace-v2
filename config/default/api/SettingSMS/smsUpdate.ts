@@ -2,7 +2,7 @@ declare namespace SMSUpdate {
     export interface Input {
         enable: boolean;
         url: string;
-        username: string;
+        account: string;
         password: string;
     }
 

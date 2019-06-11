@@ -100,6 +100,26 @@
                         :label="_('w_Navigation_Setting_MailServer')"
                         url="/setting/mail_server"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_SMS')"
+                        url="/setting/sms"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Weather')"
+                        url="/setting/weather"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Backup')"
+                        url="/setting/backup"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Restore')"
+                        url="/setting/restore"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_License')"
+                        url="/setting/license"
+                    />
                 </SidebarNavItem>
 
             </SidebarNav>
