@@ -31,6 +31,7 @@ export default class LangObject implements ILang {
     w_Error = 'Error';
     w_NextPage = 'Next';
     w_PreviousPage = 'Prev';
+    w_Clear = 'Clear';
     w_Unlink = 'Unlink';
     w_Search = 'Search';
     w_No = 'No';
@@ -112,7 +113,6 @@ export default class LangObject implements ILang {
 
     // button
     w_Save = 'Save';
-    w_Clear = 'Clear';
     w_Back = 'Back';
     w_Cancel = 'Cancel';
     w_Send = 'Send';
@@ -227,6 +227,8 @@ export default class LangObject implements ILang {
     w_User_AddUserFailed = 'Add User Failed';
     w_User_EditUserSuccess = 'Edit User Success';
     w_User_EditUserFailed = 'Edit User Failed';
+    w_User_DeleteConfirm = 'Are you sure to delete selected user(s)?';
+
 
     // UserGroup
     w_UserGroup_UserGroupList = 'Group List';
@@ -239,6 +241,7 @@ export default class LangObject implements ILang {
     w_UserGroup_AddUserGroupFailed = 'Add User Group Failed';
     w_UserGroup_EditUserGroupSuccess = 'Edit User Group Success';
     w_UserGroup_EditUserGroupFailed = 'Edit User Group Failed';
+    w_UserGroup_DeleteConfirm = 'Are you sure to delete selected usergroup(s)?';
 
     // License
     w_License_List = 'License List';
@@ -387,6 +390,7 @@ export default class LangObject implements ILang {
     w_OfficeHour = '* Office Hour';
     w_OfficeHour_AddFailed = 'Add office hour failed.';
     w_OfficeHour_EditFailed = 'Edit office hour failed.';
+    w_OfficeHour_DeleteConfirm = 'Are you sure to delete selected office hour(s)?';
 
     // Weather
     w_Weather_Add = 'Add Weather';

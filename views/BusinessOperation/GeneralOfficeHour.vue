@@ -692,40 +692,40 @@ export default class GeneralOfficeHour extends Vue {
     async saveEdit(data) {}
 
     async doDelete() {
-        // await Dialog.Question(this._("w_DeleteConfirm"))
-        //     .then(result => {
-        //         if (result.value) {
-        for (const param of this.officeHourDetail) {
-            const deleteParam: {
-                objectId: string;
-            } = {
-                objectId: param.objectId
-            };
 
-            await this.$server
-                .D("/office-hour", deleteParam)
-                .then((response: any) => {
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_DeleteFailed"));
-                            return false;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
+        await Dialog.confirm(this._("w_OfficeHour_DeleteConfirm"), this._("w_DeleteConfirm"), () => {
+            for (const param of this.officeHourDetail) {
+                const deleteParam: {
+                    objectId: string;
+                } = {
+                    objectId: param.objectId
+                };
 
-                    console.log(e);
-                });
-        }
-        //     }
-        // })
-        // .catch((e: any) => console.log(e));
+                this.$server
+                    .D("/office-hour", deleteParam)
+                    .then((response: any) => {
+                        for (const returnValue of response) {
+                            if (returnValue.statusCode === 200) {
+                                this.pageToList();
+                            }
+                            if (returnValue.statusCode === 500) {
+                                Dialog.error(this._("w_DeleteFailed"));
+                                return false;
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                            return ResponseFilter.base(this, e);
+                        }
+
+                        console.log(e);
+                    });
+            }
+        });
+
+
+
     }
 
     showFirst(value) {

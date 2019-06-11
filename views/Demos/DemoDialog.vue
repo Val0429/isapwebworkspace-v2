@@ -59,7 +59,7 @@ export default class DemoDialog extends Vue {
     } = {
         title: "Confirm title",
         content: "Confirm Content<br>Confirm Content2",
-        alertTitle: "Confrim finish",
+        alertTitle: "Confirm finish",
         alertContent: "You click confirm"
     };
 

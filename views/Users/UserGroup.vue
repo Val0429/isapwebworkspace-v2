@@ -497,6 +497,7 @@ export default class UserGroup extends Vue {
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
+                        Dialog.success(this._("w_UserGroup_AddUserGroupSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
@@ -537,6 +538,7 @@ export default class UserGroup extends Vue {
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
+                        Dialog.success(this._("w_UserGroup_EditUserGroupSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
@@ -559,35 +561,40 @@ export default class UserGroup extends Vue {
     }
 
     async doDelete() {
-        for (const param of this.userGroupDetail) {
-            const deleteUserParam: {
-                objectId: string;
-            } = {
-                objectId: param.objectId
-            };
 
-            await this.$server
-                .D("/user/group", deleteUserParam)
+        await Dialog.confirm(this._("w_UserGroup_DeleteConfirm"), this._("w_DeleteConfirm"), () => {
+            for (const param of this.userGroupDetail) {
+                const deleteUserParam: {
+                    objectId: string;
+                } = {
+                    objectId: param.objectId
+                };
 
-                .then((response: any) => {
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            this.pageToList();
+                this.$server
+                    .D("/user/group", deleteUserParam)
+
+                    .then((response: any) => {
+                        for (const returnValue of response) {
+                            if (returnValue.statusCode === 200) {
+                                this.pageToList();
+                            }
+                            if (returnValue.statusCode === 500) {
+                                Dialog.error(this._("w_DeleteFailed"));
+                                return false;
+                            }
                         }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_DeleteFailed"));
-                            return false;
+                    })
+                    .catch((e: any) => {
+                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                            return ResponseFilter.base(this, e);
                         }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
 
-                    console.log(e);
-                });
-        }
+                        console.log(e);
+                    });
+            }
+        });
+
+
     }
 
     showFirst(value) {

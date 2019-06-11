@@ -1,13 +1,17 @@
 <template>
     <div class="animated fadeIn">
 
-        <iSAPFormCard
+        <iv-auto-card
             :visible="true"
-            :data="{ label: _('w_MailServer_Setting') }"
-            :interface="IMailServerComponent()"
-            :value="inputMailData"
-            @submit="saveMailServer($event)"
+            :label="_('w_MailServer_Setting')"
+
         >
+
+            <iv-form
+                :interface="IMailServerComponent()"
+                :value="inputMailData"
+                @submit="saveMailServer($event)"
+            ></iv-form>
 
             <template #footer-before>
                 <b-button
@@ -18,7 +22,7 @@
                 </b-button>
             </template>
 
-        </iSAPFormCard>
+        </iv-auto-card>
 
 
         <!-- 點擊彈出測試輸入框 -->
@@ -79,7 +83,6 @@
 <script lang="ts">
     import { Vue, Component, Watch } from "vue-property-decorator";
     import { toEnumInterface } from "@/../core";
-    import { DateTime2String } from "@/services/Datetime.ts";
 
     import ResponseFilter from "@/services/ResponseFilter";
     import Dialog from "@/services/Dialog/Dialog";
@@ -270,7 +273,7 @@
                 /**
                  * @uiLabel - ${this._("w_Password")}
                  * @uiPlaceHolder - ${this._("w_Password")}
-                 * @uiType - form-password
+                 * @uiType - iv-form-password
                  */
                 password: string;
 
