@@ -627,6 +627,7 @@ export default class User extends Vue {
             .C("/setting/smtp/test", mailServerObject)
             .then((response: any) => {
                 if (response != undefined) {
+                    Dialog.success(this._("w_MailServer_Setting_Success"));
                     this.modalShow = !this.modalShow;
                 }
             })
@@ -636,7 +637,7 @@ export default class User extends Vue {
                 }
                 console.log(e);
                 this.modalShow = !this.modalShow;
-                // Dialog.Error(this._("w_MailServer_Test_Fail"));
+                Dialog.error(this._("w_MailServer_Test_Fail"));
                 return false;
             });
     }

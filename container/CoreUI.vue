@@ -86,6 +86,17 @@
                     />
                 </SidebarNavItem>
 
+                <!-- Setting -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Setting')"
+                    url="/setting/mail_server"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_MailServer')"
+                        url="/setting/mail_server"
+                    />
+                </SidebarNavItem>
+
             </SidebarNav>
 
         </template>

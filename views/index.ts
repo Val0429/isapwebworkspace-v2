@@ -34,6 +34,10 @@ import Region from './Regions/Region.vue';
 // Sites
 import Site from './Sites/Site.vue';
 
+// Setting
+import MailServer from './Setting/MailServer.vue';
+
+
 // ============================================================= //
 
 // Home
@@ -75,3 +79,7 @@ $({ path: '/region', name: 'Region', icon: 'fa-twitter' })(Region);
 
 // Sites
 $({ path: '/site', name: 'Site', icon: 'fa-twitter' })(Site);
+
+// Setting
+$({ path: '/setting', name: 'Setting', icon: 'fa-twitter', redirect: '/setting/mail_server' })();
+$({ path: '/setting/mail_server', name: 'Mail Server', icon: 'fa-twitter' })(MailServer);
