@@ -61,11 +61,7 @@ import { FRSUpdate, FRSCreate, FRSDelete, FRSRead } from '@/config/default/api/S
 // import Business Operation Office Hour
 import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, OfficeHourUpdate } from '@/config/default/api/BusinessOperationOfficeHour';
 
-
-
-
 interface RestfulRequest extends ApisRequestBase {
-
     // create
     Post: {
         '/users/login': [UsersLoginAll.Input, UsersLoginAll.Output, false];
@@ -184,6 +180,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // location device
         '/location/device': [LocationDeviceRead.Input, LocationDeviceRead.Output, false];
+
+        //device
+        '/device': [any, any, false];
 
         //device group
         '/device/group': [any, any, false];
