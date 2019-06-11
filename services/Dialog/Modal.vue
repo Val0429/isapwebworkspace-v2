@@ -20,20 +20,6 @@
                             @click="doUpdateVisible(false)"
                         />
                     </template>
-
-                    <template name="default">
-                        <VuePerfectScrollbar
-                            class="scroll-area"
-                            :settings="psSettings"
-                        >
-                            <iv-v-node
-                                @mounted="doMounted"
-                                ref="node"
-                                :node="$slots.default || $scopedSlots.default"
-                            />
-                        </VuePerfectScrollbar>
-                    </template>
-
                     <template #footer>
                         <slot name="footer"></slot>
                     </template>

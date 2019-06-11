@@ -12,6 +12,9 @@
                 <b-col :cols="buttonCols">
                     <b-button @click="showError">Show Error</b-button>
                 </b-col>
+                <b-col :cols="buttonCols">
+                    <b-button @click="showConfirm">Show Confirm</b-button>
+                </b-col>
             </b-row>
 
         </div>
@@ -28,7 +31,7 @@ import Dialog from "@/services/Dialog/Dialog";
 export default class DemoDialog extends Vue {
     buttonCols = "3";
 
-    alert: {
+    alertText: {
         title: string;
         content: string;
     } = {
@@ -36,19 +39,19 @@ export default class DemoDialog extends Vue {
         content: "Error Content<br>Error Content2"
     };
 
-    success: {
+    successText: {
         content: string;
     } = {
         content: "Success Content<br>Success Content2"
     };
 
-    error: {
+    errorText: {
         content: string;
     } = {
         content: "Error Content<br>Error Content2"
     };
 
-    confirm: {
+    confirmText: {
         title: string;
         content: string;
         alertTitle: string;
@@ -64,21 +67,28 @@ export default class DemoDialog extends Vue {
     mounted() {}
 
     showAlert() {
-        Dialog.alert(this.alert.content, this.alert.title);
+        Dialog.alert(this.alertText.content, this.alertText.title);
     }
 
     showSuccess() {
-        Dialog.success(this.success.content);
+        Dialog.success(this.successText.content);
     }
 
     showError() {
-        Dialog.error(this.error.content);
+        Dialog.error(this.errorText.content);
     }
 
-    showConfirm() {}
+    showConfirm() {
+        Dialog.confirm(this.confirmText.content, this.confirmText.title, () => {
+            this.clickConfirm();
+        });
+    }
 
     clickConfirm() {
-        Dialog.alert(this.confirm.alertContent, this.confirm.alertTitle);
+        Dialog.alert(
+            this.confirmText.alertContent,
+            this.confirmText.alertTitle
+        );
     }
 }
 </script>
