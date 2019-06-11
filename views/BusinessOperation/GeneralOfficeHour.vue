@@ -687,9 +687,6 @@ export default class GeneralOfficeHour extends Vue {
         }
     }
 
-    async saveAdd(data) {}
-
-    async saveEdit(data) {}
 
     async doDelete() {
 

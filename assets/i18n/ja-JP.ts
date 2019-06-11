@@ -149,6 +149,7 @@ export default class LangObject implements ILang {
     w_Navigation_Setting_Backup = 'Backup';
     w_Navigation_Setting_Restore = 'Restore';
     w_Navigation_Setting_License = 'License';
+    w_Navigation_Setting_Tag = 'Tag';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -350,6 +351,7 @@ export default class LangObject implements ILang {
     w_Tag_AddTagFailed = 'Add Tag Failed';
     w_Tag_EditTagSuccess = 'Edit Tag Success';
     w_Tag_EditTagFailed = 'Edit Tag Failed';
+    w_Tag_DeleteConfirm = 'Are you sure to delete selected tag(s)?';
 
     // MyProfile
     w_MyProfile_EditMyProfile = 'Edit My Profile';

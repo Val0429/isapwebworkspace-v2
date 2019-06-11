@@ -241,7 +241,7 @@
 
                 /**
                  * @uiLabel - ${this._("w_MailServer_Enable")}
-                 * @uiType - form-switch
+                 * @uiType - iv-form-switch
                  */
                 enable: boolean;
 

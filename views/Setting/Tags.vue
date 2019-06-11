@@ -1,0 +1,798 @@
+<template>
+    <div class="animated fadeIn">
+        <iv-card
+            v-show="pageStep === ePageStep.list"
+            :data="{ label: _('w_Tag_TagList') }"
+        >
+            <template #toolbox>
+
+                <iv-toolbox-view
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToView"
+                />
+                <iv-toolbox-edit
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToEdit(ePageStep.edit)"
+                />
+                <iv-toolbox-delete
+                    :disabled="isSelected.length === 0"
+                    @click="doDelete"
+                />
+                <iv-toolbox-divider />
+                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+
+            </template>
+
+            <iv-table
+                ref="tagTable"
+                :interface="ITableList()"
+                :multiple="tableMultiple"
+                :server="{ path: '/tag' }"
+                @selected="selectedItem($event)"
+            >
+
+                <template #Actions="{$attrs, $listeners}">
+
+                    <iv-toolbox-more :disabled="isSelected.length !== 1">
+                        <iv-toolbox-view @click="pageToView" />
+                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                        <iv-toolbox-delete @click="doDelete" />
+                    </iv-toolbox-more>
+                </template>
+
+                <template #description="{$attrs}">
+                    {{ show30Words($attrs.value) }}
+                </template>
+
+                <template #regions="{$attrs}">
+                    {{ showFirst($attrs.value) }}
+                </template>
+
+                <template #sites="{$attrs}">
+                    {{ showFirst($attrs.value) }}
+                </template>
+
+            </iv-table>
+        </iv-card>
+
+        <!--From (Add and Edit)-->
+        <iv-auto-card
+            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
+            :visible="true"
+            :label=" _('w_Tag_AddTag') "
+        >
+
+            <iv-form
+                :interface="IAddAndEditForm()"
+                :value="inputTagData"
+                @update:*="tempSaveInputData($event)"
+                @submit="saveAddOrEdit($event)"
+            >
+                <template #selectTreeRegion="{ $attrs, $listeners }">
+
+                    <div class="m-3">
+                        <b-button @click="pageToChooseRegionTree">
+                            {{ _('w_SelectRegionTree') }}
+                        </b-button>
+                    </div>
+                </template>
+
+                <template #selectTreeSite="{ $attrs, $listeners }">
+
+                    <div class="m-3">
+                        <b-button @click="pageToChooseSiteTree">
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
+                    </div>
+                </template>
+            </iv-form>
+
+            <template #footer-before>
+                <b-button
+                    variant="dark"
+                    size="lg"
+                    @click="pageToList()"
+                >{{ _('w_Back') }}
+                </b-button>
+            </template>
+
+        </iv-auto-card>
+
+        <!-- view -->
+        <iv-card
+            v-show="pageStep === ePageStep.view"
+            :visible="true"
+            :label=" _('w_Tag_ViewTag') "
+        >
+            <template #toolbox>
+                <iv-toolbox-back @click="pageToList()" />
+            </template>
+
+            <iv-form
+                :interface="IViewForm()"
+                :value="inputTagData"
+            >
+            </iv-form>
+
+            <template #footer>
+                <b-button
+                    variant="dark"
+                    size="lg"
+                    @click="pageToList()"
+                >{{ _('w_Back') }}
+                </b-button>
+            </template>
+
+        </iv-card>
+
+        <region-tree-select
+            v-show="pageStep === ePageStep.chooseRegionTree"
+            :regionTreeItem="regionTreeItem"
+            :selectType="selectTypeRegion"
+            :selecteds="selectedsRegions"
+            v-on:click-back="pageToShowResult"
+        >
+        </region-tree-select>
+
+        <region-tree-select
+            v-show="pageStep === ePageStep.chooseSiteTree"
+            :regionTreeItem="siteTreeItem"
+            :selectType="selectTypeSite"
+            :selecteds="selectedsSites"
+            v-on:click-back="pageToShowResult"
+        >
+        </region-tree-select>
+
+    </div>
+</template>
+
+<script lang="ts">
+    import { Vue, Component, Watch } from "vue-property-decorator";
+    import { toEnumInterface } from "@/../core";
+    import { ITag, ITagReadUpdate } from "@/config/default/api/interfaces";
+    import {
+        ERegionType,
+        IRegionItem,
+        RegionTreeItem,
+        IRegionTreeSelected
+    } from "@/components/RegionTree/models";
+    import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+
+    import RegionAPI from "@/services/RegionAPI";
+    import ResponseFilter from "@/services/ResponseFilter";
+    import Dialog from "@/services/Dialog/Dialog";
+
+
+interface IInputTagData extends ITag, ITagReadUpdate {
+	siteIdsText?: string;
+	regionIdsText?: string;
+	type?: string;
+	tempSiteIds?: any;
+	tempRegionIds?: any;
+}
+
+
+enum EPageStep {
+    list = 'list',
+    add = 'add',
+    edit = 'edit',
+    view = 'view',
+    none = 'none',
+    showResult = 'showResult',
+    chooseRegionTree = 'chooseRegionTree',
+    chooseSiteTree = 'chooseSiteTree'
+}
+
+enum EType {
+	add = "add",
+	edit = "edit"
+}
+
+@Component({
+    components: {}
+})
+export default class Tags extends Vue {
+
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
+
+    isSelected: any = [];
+    tableMultiple: boolean = true;
+
+    tagDetail: any = [];
+
+    regionsSelectItem: any = {};
+    sitesSelectItem: any = {};
+
+    // tree 相關
+    selectTypeSite = ERegionType.site;
+    selectedsSites: IRegionTreeSelected[] = [];
+    siteTreeItem = new RegionTreeItem();
+
+    selectTypeRegion = ERegionType.region;
+    selectedsRegions: IRegionTreeSelected[] = [];
+    regionTreeItem = new RegionTreeItem();
+
+    inputTagData: IInputTagData = {
+        objectId: "",
+        name: "",
+        description: "",
+	    siteIds: [],
+	    regionIds: [],
+	    siteIdsText: "",
+		regionIdsText: "",
+		type: "",
+		tempSiteIds: "",
+	    tempRegionIds: "",
+    };
+
+    created() {}
+
+    mounted() {
+        this.initSelectItem();
+        this.initRegionTreeSelect();
+    }
+    clearInputData() {
+        this.inputTagData = {
+	        objectId: "",
+	        name: "",
+	        description: "",
+	        siteIds: [],
+	        regionIds: [],
+	        siteIdsText: "",
+	        regionIdsText: "",
+	        type: "",
+	        tempSiteIds: "",
+	        tempRegionIds: "",
+        };
+    }
+
+    async initSelectItem() {
+        // 取得sites
+        const readAllSiteParam: {
+            type: string;
+        } = {
+            type: "all"
+        };
+
+        await this.$server.R("/location/site/all", readAllSiteParam)
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        // 取得regions
+        await this.$server.R("/location/region/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.regionsSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        // 取得 tree
+        await this.$server.R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+
+                    this.siteTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                    this.siteTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.siteTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_RegionTreeSelect");
+        this.siteTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
+
+	selectedItem(data) {
+		this.isSelected = data;
+		this.tagDetail = [];
+		this.tagDetail = data;
+	}
+
+	getInputData() {
+		this.clearInputData();
+		for (const param of this.tagDetail) {
+			this.inputTagData = {
+				objectId: param.objectId,
+				name: param.name,
+				description: param.description,
+				siteIds: param.sites,
+				regionIds: param.regions,
+				siteIdsText: this.idsToText(param.sites),
+				regionIdsText: this.idsToText(param.regions),
+				type: "",
+			};
+		}
+	}
+
+	tempSaveInputData(data) {
+		switch (data.key) {
+			case "name":
+				this.inputTagData.name = data.value;
+				break;
+			case "description":
+				this.inputTagData.description = data.value;
+				break;
+			case "siteIds":
+				this.inputTagData.siteIds = data.value;
+				break;
+			case "regionIds":
+				this.inputTagData.regionIds = data.value;
+				break;
+		}
+
+		for (const id of this.inputTagData.siteIds) {
+			for (const detail in this.sitesSelectItem) {
+				if (id === detail) {
+					let selectedsObject: IRegionTreeSelected = {
+						objectId: detail,
+						type: ERegionType.site,
+						name: this.sitesSelectItem[detail]
+					};
+					this.selectedsSites.push(selectedsObject);
+				}
+			}
+		}
+
+		for (const id of this.inputTagData.regionIds) {
+			for (const detail in this.regionsSelectItem) {
+				if (id === detail) {
+					let selectedsObject: IRegionTreeSelected = {
+						objectId: detail,
+						type: ERegionType.region,
+						name: this.regionsSelectItem[detail]
+					};
+					this.selectedsRegions.push(selectedsObject);
+				}
+			}
+		}
+
+	}
+
+	idsToText(value: any): string {
+		let result = "";
+		for (let val of value) {
+			result += val.name + ", ";
+		}
+		result = result.substring(0, result.length - 2);
+		return result;
+	}
+
+    pageToShowResult() {
+
+        if (this.inputTagData.type === EPageStep.edit) {
+            this.pageStep = EPageStep.edit;
+
+            // siteIds clear
+            this.inputTagData.siteIds = [];
+            this.inputTagData.regionIds = [];
+
+            // from selecteds push siteIds / regionIds
+            for (const item of this.selectedsSites) {
+                this.inputTagData.siteIds.push(item.objectId);
+            }
+
+            for (const item of this.selectedsRegions) {
+                this.inputTagData.regionIds.push(item.objectId);
+            }
+
+        }
+
+
+        if (this.inputTagData.type === EPageStep.add) {
+            this.pageStep = EPageStep.add;
+
+            // siteIds clear
+            this.inputTagData.siteIds = [];
+            this.inputTagData.regionIds = [];
+
+            // from selecteds push siteIds / regionIds
+            for (const item of this.selectedsSites) {
+                this.inputTagData.siteIds.push(item.objectId);
+            }
+
+            for (const item of this.selectedsRegions) {
+                this.inputTagData.regionIds.push(item.objectId);
+            }
+
+
+        }
+    }
+
+    pageToChooseRegionTree() {
+        this.pageStep = EPageStep.chooseRegionTree;
+
+        this.selectedsRegions = [];
+        for (const id of this.inputTagData.regionIds) {
+            for (const detail in this.regionsSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.region,
+                        name: this.regionsSelectItem[detail]
+                    };
+                    this.selectedsRegions.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    pageToChooseSiteTree() {
+        this.pageStep = EPageStep.chooseSiteTree;
+
+        this.selectedsSites = [];
+        for (const id of this.inputTagData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selectedsSites.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
+    }
+
+    pageToEdit(type: string) {
+        this.pageStep = EPageStep.edit;
+        this.getInputData();
+	    this.selectedsSites = [];
+	    this.selectedsRegions = [];
+	    this.inputTagData.type = type;
+
+	    this.inputTagData.tempSiteIds = JSON.parse(
+		    JSON.stringify(this.inputTagData.siteIds)
+	    );
+
+	    this.inputTagData.tempRegionIds = JSON.parse(
+		    JSON.stringify(this.inputTagData.regionIds)
+	    );
+
+
+	    this.inputTagData.siteIds = JSON.parse(
+		    JSON.stringify(
+			    this.inputTagData.siteIds.map(item => item.objectId)
+		    )
+	    );
+	    this.inputTagData.regionIds = JSON.parse(
+		    JSON.stringify(
+			    this.inputTagData.regionIds.map(item => item.objectId)
+		    )
+	    );
+
+    }
+
+	pageToAdd(type: string) {
+		this.pageStep = EPageStep.add;
+		if (type === EPageStep.add) {
+			this.clearInputData();
+			this.selectedsSites = [];
+			this.selectedsRegions = [];
+			this.inputTagData.type = type;
+		}
+	}
+
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        (this.$refs.tagTable as any).reload();
+        this.selectedsSites = [];
+        this.selectedsRegions = [];
+    }
+
+    async saveAddOrEdit(data) {
+        if (this.inputTagData.type === EPageStep.add) {
+            const datas: ITag[] = [
+                {
+                    name: data.name,
+                    description: data.description,
+                    regionIds: data.regionIds !== undefined ? data.regionIds : [],
+                    siteIds: data.siteIds !== undefined ? data.siteIds : []
+                }
+            ];
+
+            const addParam = {
+                datas
+            };
+
+            await this.$server.C("/tag", addParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(this._("w_Tag_AddTagSuccess"));
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            Dialog.error(this._("w_Tag_AddTagFailed"));
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_Tag_AddTagFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+        if (this.inputTagData.type === EPageStep.edit) {
+            const datas: ITagReadUpdate[] = [
+                {
+                    description: data.description,
+                    regionIds: data.regionIds !== undefined ? data.regionIds : [],
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    objectId: data.objectId
+                }
+            ];
+
+            const editgParam = {
+                datas
+            };
+
+            await this.$server.U("/tag", editgParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(this._("w_Tag_EditTagSuccess"));
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            Dialog.error(this._("w_Tag_EditTagFailed"));
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_Tag_EditTagFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+    }
+
+    async saveAdd(data) {
+
+    }
+
+    async saveEdit(data) {
+    }
+
+	async doDelete() {
+        Dialog.confirm(this._("w_Tag_DeleteConfirm"), this._("w_DeleteConfirm"), () => {
+            for (const param of this.tagDetail) {
+                const deleteUserParam: {
+                    objectId: string;
+                } = {
+                    objectId: param.objectId
+                };
+
+                this.$server.D("/tag", deleteUserParam)
+                    .then((response: any) => {
+                        for (const returnValue of response) {
+                            if (returnValue.statusCode === 200) {
+                                this.pageToList();
+                            }
+                            if (returnValue.statusCode === 500) {
+                                Dialog.error(this._("w_DeleteFailed"));
+                                return false;
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
+                            return ResponseFilter.base(this, e);
+                        }
+
+                        console.log(e);
+                    });
+            }        });
+
+	}
+
+    showFirst(value: any): string {
+        if (value.length >= 2) {
+            return value.map(item => item.name)[0] + "...";
+        }
+        if (value.length === 1) {
+            return value.map(item => item.name)[0];
+        }
+        if (value.length == 0) {
+            return "";
+        }
+    }
+
+    show30Words(
+        value: any,
+        startWord: number = 0,
+        endWord: number = 30
+    ): string {
+        return value.length < endWord
+            ? value.substring(startWord, endWord)
+            : value.substring(startWord, endWord) + "...";
+    }
+
+    ITableList() {
+        return `
+                    interface {
+
+                        /**
+                         * @uiLabel - ${this._("w_No")}
+                         * @uiType - iv-cell-auto-index
+                         */
+                        no: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Tag_TagName")}
+                          */
+                        name: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Description")}
+                          */
+                        description: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Regions")}
+                          */
+                        regions: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Sites")}
+                          */
+                        sites: string;
+
+                        Actions?: any;
+
+                    }`;
+    }
+
+    IAddAndEditForm() {
+        return `
+                    interface {
+
+                         /**
+                          * @uiLabel - ${this._("w_Tag_TagName")}
+                          * @uiPlaceHolder - ${this._("w_Tag_TagName")}
+                          * @uiType - ${
+                                this.inputTagData.type === EPageStep.add
+                                ? "iv-form-string"
+                                : "iv-form-label"
+                            }
+                        */
+                        name: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Description")}
+                          * @uiPlaceHolder - ${this._("w_Description")}
+                          */
+                        description: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Regions")}
+                          */
+                        regionIds?: ${toEnumInterface(
+                            this.regionsSelectItem as any,
+                            true
+                        )};
+
+                        selectTreeRegion?: any;
+
+                         /**
+                          * @uiLabel - ${this._("w_Sites")}
+                          */
+                        siteIds?: ${toEnumInterface(
+                            this.sitesSelectItem as any,
+                            true
+                        )};
+
+                        selectTreeSite?: any;
+
+                    }`;
+    }
+    
+    IViewForm() {
+        return `
+                    interface {
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Tag_TagName")}
+                          * @uiType - iv-form-label
+                          */
+                        name?: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Description")}
+                          * @uiType - iv-form-label
+                          */
+                        description?: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Regions")}
+                          * @uiType - iv-form-label
+                          */
+                        regionIdsText?: string;
+
+
+                         /**
+                          * @uiLabel - ${this._("w_Sites")}
+                          * @uiType - iv-form-label
+                          */
+                        siteIdsText?: string;
+
+                    }`;
+    }
+}
+</script>
+

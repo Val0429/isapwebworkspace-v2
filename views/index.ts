@@ -41,7 +41,7 @@ import Weather from './Setting/Weather.vue';
 import Backup from './Setting/Backup.vue';
 import Restore from './Setting/Restore.vue';
 import License from './Setting/License.vue';
-
+import Tag from './Setting/Tags.vue';
 
 // ============================================================= //
 
@@ -93,3 +93,4 @@ $({ path: '/setting/weather', name: 'Weather', icon: 'fa-twitter' })(Weather);
 $({ path: '/setting/backup', name: 'Backup', icon: 'fa-twitter' })(Backup);
 $({ path: '/setting/restore', name: 'Restore', icon: 'fa-twitter' })(Restore);
 $({ path: '/setting/license', name: 'License', icon: 'fa-twitter' })(License);
+$({ path: '/setting/tag', name: 'Tag', icon: 'fa-twitter' })(Tag);
