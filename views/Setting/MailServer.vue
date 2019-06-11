@@ -23,7 +23,6 @@
 
         </iv-auto-card>
 
-
         <!-- 點擊彈出測試輸入框 -->
         <b-modal
             hide-footer
@@ -52,7 +51,10 @@
 
             <b-row>
                 <!-- 送出email按鈕 -->
-                <b-col cols="3" offset="6">
+                <b-col
+                    cols="3"
+                    offset="6"
+                >
                     <b-button
                         class="button button-full"
                         variant="success"
@@ -75,173 +77,168 @@
 
         </b-modal>
 
-
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog/Dialog";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog/Dialog";
 
-    interface IInputMailData {
-        id: string;
-        enable: boolean;
-        host: string;
-        port: number;
-        email: string;
-        password: string;
+interface IInputMailData {
+    id: string;
+    enable: boolean;
+    host: string;
+    port: number;
+    email: string;
+    password: string;
+}
+
+@Component({
+    components: {}
+})
+export default class MailServer extends Vue {
+    modalShow: boolean = false;
+
+    // input框綁定model資料
+    inputMailData: IInputMailData = {
+        id: "",
+        host: "",
+        password: "",
+        email: "",
+        port: null,
+        enable: true
+    };
+
+    inputTestEmail: string = "";
+
+    created() {
+        this.clearMailServerData();
     }
 
-    @Component({
-        components: {}
-    })
-    export default class MailServer extends Vue {
+    mounted() {
+        this.readMailServer();
+    }
 
-        modalShow: boolean = false;
-
-        // input框綁定model資料
-        inputMailData: IInputMailData = {
+    clearMailServerData() {
+        this.inputMailData = {
             id: "",
             host: "",
             password: "",
             email: "",
             port: null,
-            enable: true,
+            enable: true
         };
 
-        inputTestEmail: string = '';
+        this.inputTestEmail = "";
+    }
 
-        created() {
-            this.clearMailServerData();
+    pageToEmailTest() {
+        this.inputTestEmail = "";
+        this.modalShow = !this.modalShow;
+    }
+
+    // 送出測試
+    async sendEmailTest() {
+        const mailServerObject: {
+            email: string;
+        } = {
+            email: this.inputTestEmail
+        };
+
+        await this.$server
+            .C("/setting/smtp/test", mailServerObject)
+            .then((response: any) => {
+                if (response != undefined) {
+                    Dialog.success(this._("w_MailServer_Test_Success"));
+                    this.modalShow = !this.modalShow;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                this.modalShow = !this.modalShow;
+                Dialog.error(this._("w_MailServer_Test_Fail"));
+                return false;
+            });
+    }
+
+    async readMailServer() {
+        await this.$server
+            .R("/setting/smtp")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.inputMailData.enable = response.enable;
+                    this.inputMailData.host = response.host;
+                    this.inputMailData.port = response.port;
+                    this.inputMailData.email = response.email;
+                    this.inputMailData.password = response.password;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                Dialog.error(this._("w_MailServer_Read_Fail"));
+                return false;
+            });
+    }
+
+    // 新增MailServer
+    async saveMailServer(data) {
+        // port正則
+        const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
+
+        if (!portRegex.test(data.port)) {
+            Dialog.error(this._("w_Error_Port"));
+            return false;
         }
 
-        mounted() {
-            this.readMailServer();
-        }
+        const mailServerObject: {
+            enable: boolean;
+            host: string;
+            port: number;
+            email: string;
+            password: string;
+        } = {
+            enable: data.enable,
+            host: data.host,
+            port: data.port,
+            email: data.email,
+            password: data.password
+        };
 
-        clearMailServerData() {
-            this.inputMailData = {
-                id: "",
-                host: "",
-                password: "",
-                email: "",
-                port: null,
-                enable: true,
-            };
+        await this.$server
+            .U("/setting/smtp", mailServerObject)
+            .then((response: any) => {
+                if (response != undefined) {
+                    Dialog.success(this._("w_MailServer_Setting_Success"));
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                if (e.res.statusCode == 500) {
+                    Dialog.error(this._("w_MailServer_Setting_Fail"));
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
-            this.inputTestEmail = '';
-
-        }
-
-        pageToEmailTest() {
-            this.inputTestEmail = '';
-            this.modalShow = !this.modalShow;
-        }
-
-        // 送出測試
-        async sendEmailTest() {
-
-            const mailServerObject: {
-                email: string;
-            } = {
-                email: this.inputTestEmail
-            };
-
-            await this.$server.C("/setting/smtp/test", mailServerObject)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        Dialog.success(this._("w_MailServer_Test_Success"));
-                        this.modalShow = !this.modalShow;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-	                this.modalShow = !this.modalShow;
-	                Dialog.error(this._("w_MailServer_Test_Fail"));
-                    return false;
-                });
-        }
-
-        async readMailServer() {
-
-            await this.$server.R("/setting/smtp")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        this.inputMailData.enable = response.enable;
-                        this.inputMailData.host = response.host;
-                        this.inputMailData.port = response.port;
-                        this.inputMailData.email = response.email;
-                        this.inputMailData.password = response.password;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    Dialog.error(this._("w_MailServer_Read_Fail"));
-                    return false;
-                });
-        }
-
-        // 新增MailServer
-        async saveMailServer(data) {
-
-            // port正則
-            const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
-
-            if (!portRegex.test(data.port)) {
-                Dialog.error(this._("w_Error_Port"));
-                return  false;
-            }
-
-            const mailServerObject: {
-                enable: boolean;
-                host: string;
-                port: number;
-                email: string;
-                password: string;
-            } = {
-                enable: data.enable,
-                host: data.host,
-                port: data.port,
-                email: data.email,
-                password: data.password,
-            };
-
-            await this.$server.U("/setting/smtp", mailServerObject)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        Dialog.success(
-                            this._("w_MailServer_Setting_Success")
-                        );
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_MailServer_Setting_Fail"));
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
-
-        IMailServerComponent() {
-            return `
+    IMailServerComponent() {
+        return `
              interface IMailServerComponent {
 
 
                 /**
                  * @uiLabel - ${this._("w_MailServer_Enable")}
-                 * @uiType - form-switch
+                 * @uiType - iv-form-switch
                  */
                 enable: boolean;
 
@@ -274,9 +271,9 @@
                  * @uiType - iv-form-password
                  */
                 password: string;
-
+            }
         `;
-        }
     }
+}
 </script>
 

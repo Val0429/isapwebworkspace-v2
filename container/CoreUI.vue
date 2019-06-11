@@ -120,6 +120,10 @@
                         :label="_('w_Navigation_Setting_License')"
                         url="/setting/license"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Tag')"
+                        url="/setting/tag"
+                    />
                 </SidebarNavItem>
 
             </SidebarNav>
