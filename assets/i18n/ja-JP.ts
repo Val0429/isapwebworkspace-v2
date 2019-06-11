@@ -120,6 +120,11 @@ export default class LangObject implements ILang {
     w_Test = 'Test';
     w_Check = 'Check';
     w_Submit = 'Submit';
+    w_Confirm = 'Confirm';
+
+    // Dialog
+    w_Dialog_ErrorTitle = 'Something wrong';
+    w_Dialog_SuccessTitle = 'Success';
 
     // Navigation
     w_Navigation_Label = 'iSAP Solution';
