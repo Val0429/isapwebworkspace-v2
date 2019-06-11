@@ -73,31 +73,31 @@
                 </template>
 
                 <template #officeHour="{$attrs, $listeners}">
-                    <form-selection
+                    <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
                         :options="officeHourItem"
                     >
-                    </form-selection>
+                    </iv-form-selection>
                 </template>
 
                 <template #managerId="{$attrs, $listeners}">
-                    <form-selection
+                    <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
                         :options="managerItem"
                     >
-                    </form-selection>
+                    </iv-form-selection>
                 </template>
 
                 <template #tag="{$attrs, $listeners}">
-                    <form-selection
+                    <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
                         :options="tagItem"
                         :multiple="true"
                     >
-                    </form-selection>
+                    </iv-form-selection>
                 </template>
 
                 <template #imageSrc="{ $attrs, $listeners}">
@@ -163,7 +163,7 @@
                 >
 
                     <template #establishment="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="$attrs.value ? showTime($attrs.value) : ''"
@@ -171,7 +171,7 @@
                     </template>
 
                     <template #officeHour="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="$attrs.value ? showOfficeHour($attrs.value) : ''"
@@ -179,7 +179,7 @@
                     </template>
 
                     <template #managerId="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="$attrs.value ? showManager($attrs.value) : ''"
@@ -187,7 +187,7 @@
                     </template>
 
                     <template #tag="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="site.tag ? showTags(site.tag) : ''"
@@ -312,7 +312,7 @@
                 </template>
 
                 <template #imageMap="{ $attrs, $listeners}">
-                    <div class="card-content form-group col-md-12">
+                    <div class="card-content iv-form-group col-md-12">
                         <image-map
                             ref="imageMap"
                             v-on:click-add-tag-label="pageAddDeviceGroup"
@@ -351,7 +351,7 @@
                 >
 
                     <template #siteName="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="area.site ? area.site.name  : ''"
@@ -372,7 +372,7 @@
                     </template>
 
                     <template #imageMap="{ $attrs, $listeners}">
-                        <div class="card-content form-group col-md-12">
+                        <div class="card-content iv-form-group col-md-12">
                             <image-map
                                 ref="imageMap"
                                 v-on:click-add-tag-label="pageAddDeviceGroup"
@@ -467,13 +467,13 @@
                 </template>
 
                 <template #siteName="{$attrs, $listeners}">
-                    <form-label
+                    <iv-form-label
                         v-if="pageStep === ePageStep.deviceAdd"
                         v-bind="$attrs"
                         v-on="$listeners"
                         :value="site.name ? site.name : '' "
                     />
-                    <form-label
+                    <iv-form-label
                         v-if="pageStep === ePageStep.deviceEdit"
                         v-bind="$attrs"
                         v-on="$listeners"
@@ -482,7 +482,7 @@
                 </template>
 
                 <template #areaName="{$attrs, $listeners}">
-                    <form-selection
+                    <iv-form-selection
                         v-if="pageStep === ePageStep.deviceAdd && isEmptyObject(area)"
                         v-bind="$attrs"
                         :value="$attrs.value ? $attrs.value : ''"
@@ -490,14 +490,14 @@
                         :multiple="false"
                         :options="areaNameItem"
                     >
-                    </form-selection>
-                    <form-label
+                    </iv-form-selection>
+                    <iv-form-label
                         v-if="pageStep === ePageStep.deviceAdd && !isEmptyObject(area)"
                         v-bind="$attrs"
                         v-on="$listeners"
                         :value="area ? area.name : '' "
                     />
-                    <form-label
+                    <iv-form-label
                         v-if="pageStep === ePageStep.deviceEdit"
                         v-bind="$attrs"
                         v-on="$listeners"
@@ -506,14 +506,14 @@
                 </template>
 
                 <template #deviceName="{$attrs, $listeners}">
-                    <form-selection
+                    <iv-form-selection
                         v-bind="$attrs"
                         :value="$attrs.value ? $attrs.value.join(',') : ''"
                         v-on="$listeners"
                         :multiple="true"
                         :options="deviceNameItem"
                     >
-                    </form-selection>
+                    </iv-form-selection>
                 </template>
 
                 <template #footer-before>
@@ -542,7 +542,7 @@
                 >
 
                     <template #siteName="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="deviceGroup.site ? deviceGroup.site.name : '' "
@@ -550,7 +550,7 @@
                     </template>
 
                     <template #areaName="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="deviceGroup.area ? deviceGroup.area.name : '' "
@@ -558,7 +558,7 @@
                     </template>
 
                     <template #deviceGroupName="{$attrs, $listeners}">
-                        <form-label
+                        <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="deviceGroup ? deviceGroup.name : '' "
@@ -1783,42 +1783,42 @@ export default class Site extends Vue {
                 /**
                 * @uiLabel - ${this._("w_Site_SiteID")}
                 * @uiPlaceHolder - ${this._("w_Site_SiteID")}
-                * @uiType - form-string
+                * @uiType - iv-form-string
                 */
                 customId: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_SiteName")}
                 * @uiPlaceHolder - ${this._("w_Site_SiteName")}
-                * @uiType - form-string
+                * @uiType - iv-form-string
                 */
                 name: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Address")}
                 * @uiPlaceHolder - ${this._("w_Site_Address")}
-                * @uiType - form-string
+                * @uiType - iv-form-string
                 */
                 address?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_PhoneNumber")}
                 * @uiPlaceHolder - ${this._("w_Site_PhoneNumber")}
-                * @uiType - form-string
+                * @uiType - iv-form-string
                 */
                 phone?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Establishment")}
                 * @uiPlaceHolder - ${this._("w_Site_Establishment")}
-                * @uiType - form-date
+                * @uiType - iv-form-date
                 */
                 establishment?: any;
 
                 /**
                 * @uiLabel - ${this._("w_Site_StaffNumber")}
                 * @uiPlaceHolder - ${this._("w_Site_StaffNumber")}
-                * @uiType - form-number
+                * @uiType - iv-form-number
                 */
                 staffNumber: number;
 
@@ -1843,7 +1843,7 @@ export default class Site extends Vue {
                 /**
                 * @uiLabel - ${this._("w_Site_Photo")}
                 * @uiPlaceHolder - ${this._("w_Site_Photo")}
-                * @uiType - form-file
+                * @uiType - iv-form-file
                 */
                 sitePhoto?: string;
 
@@ -1852,7 +1852,7 @@ export default class Site extends Vue {
                 /**
                 * @uiLabel - ${this._("w_Site_Latitude")}
                 * @uiPlaceHolder - ${this._("w_Site_Latitude")}
-                * @uiType - form-number
+                * @uiType - iv-form-number
                 * @uiColumnGroup - location
                 */
                 latitude?: number;
@@ -1860,7 +1860,7 @@ export default class Site extends Vue {
                 /**
                 * @uiLabel - ${this._("w_Site_Longitude")}
                 * @uiPlaceHolder - ${this._("w_Site_Longitude")}
-                * @uiType - form-number
+                * @uiType - iv-form-number
                 * @uiColumnGroup - location
                 */
                 longitude?: number;
@@ -1879,25 +1879,25 @@ export default class Site extends Vue {
         return `interface {
                 /**
                 * @uiLabel - ${this._("w_Site_SiteID")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                 */
                 customId?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_SiteName")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 */
                 name?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Address")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 */
                 address?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_PhoneNumber")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 */
                 phone?: string;
 
@@ -1908,25 +1908,25 @@ export default class Site extends Vue {
 
                 /**
                 * @uiLabel - ${this._("w_Site_StaffNumber")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 */
                 staffNumber?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_OfficeHour")}
-               * @uiType - form-label
+               * @uiType - iv-form-label
                 */
                 officeHour?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Manager")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 */
                 managerId?: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Tag")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 */
                 tag?: string;
 
@@ -1934,14 +1934,14 @@ export default class Site extends Vue {
 
                 /**
                 * @uiLabel - ${this._("w_Site_Latitude")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 * @uiColumnGroup - location
                 */
                 latitude?: number;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Longitude")}
-                * @uiType - form-label
+                * @uiType - iv-form-label
                 * @uiColumnGroup - location
                 */
                 longitude?: number;
@@ -1989,7 +1989,7 @@ export default class Site extends Vue {
                 /**
                 * @uiLabel - ${this._("w_Site_Photo")}
                 * @uiPlaceHolder - ${this._("w_Site_Photo")}
-                * @uiType - form-file
+                * @uiType - iv-form-file
                 */
                 areaPhoto?: string;
 
@@ -1998,7 +1998,7 @@ export default class Site extends Vue {
                  /**
                 * @uiLabel - ${this._("w_Site_MapPhoto")}
                 * @uiPlaceHolder - ${this._("w_Site_MapPhoto")}
-                * @uiType - form-file
+                * @uiType - iv-form-file
                 */
                 mapPhoto?: string;
 
@@ -2011,13 +2011,13 @@ export default class Site extends Vue {
 
                  /**
                  * @uiLabel - ${this._("w_Site_SiteName")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                  */
                 siteName: any;
 
                  /**
                  * @uiLabel - ${this._("w_Site_AreaName")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                  */
                 name?: string;
 
@@ -2075,14 +2075,14 @@ export default class Site extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Site_GroupName")}
                  * @uiPlaceHolder - ${this._("w_Site_GroupName")}
-                 * @uiType - form-string
+                 * @uiType - iv-form-string
                  */
                 deviceGroupName?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Site_DeviceType")}
                  * @uiPlaceHolder - ${this._("w_Site_DeviceType")}
-                 * @uiType - form-selection
+                 * @uiType - iv-form-selection
                  */
                 deviceType?: ${toEnumInterface(
                     this.deviceTypeItem as any,
@@ -2103,31 +2103,31 @@ export default class Site extends Vue {
 
                  /**
                  * @uiLabel - ${this._("w_Site_SiteName")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                  */
                 siteName?: string;
 
                  /**
                  * @uiLabel - ${this._("w_Site_AreaName")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                  */
                 areaName?: string;
 
                   /**
                  * @uiLabel - ${this._("w_Site_GroupName")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                  */
                 deviceGroupName?: string;
 
                  /**
                  * @uiLabel - ${this._("w_Site_DeviceType")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                  */
                 deviceType?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Site_DeviceName")}
-                 * @uiType - form-label
+                 * @uiType - iv-form-label
                  */
                 deviceName?: string;
 
