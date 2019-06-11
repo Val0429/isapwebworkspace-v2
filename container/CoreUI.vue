@@ -59,11 +59,31 @@
                     <SidebarNavItem
                         :label="_('w_Navigation_User')"
                         url="/users/user"
-                    ></SidebarNavItem>
+                    />
                     <SidebarNavItem
                         :label="_('w_Navigation_UserGroup')"
                         url="/users/user_group"
-                    ></SidebarNavItem>
+                    />
+                </SidebarNavItem>
+
+
+                <!-- Business Operation -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_BusinessOperation')"
+                    url="/business_operations/campaign_setting"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_BO_CampaignSetting')"
+                        url="/business_operations/campaign_setting"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_BO_SalesRecords')"
+                        url="/business_operations/sales_records"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_BO_GeneralOfficeHour')"
+                        url="/business_operations/general_office_hour"
+                    />
                 </SidebarNavItem>
 
             </SidebarNav>
