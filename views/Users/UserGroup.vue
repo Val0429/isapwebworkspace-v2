@@ -1,33 +1,33 @@
 <template>
     <div class="animated fadeIn">
-        <Card
+        <iv-card
             v-show="pageStep === ePageStep.list"
-            :data="{ label: _('w_UserGroup_UserGroupList') }"
+            :label="_('w_UserGroup_UserGroupList')"
         >
             <template #toolbox>
 
-                <toolbox-view
+                <iv-toolbox-view
                     :disabled="isSelected.length !== 1"
                     @click="pageToView"
                 />
-                <toolbox-edit
+                <iv-toolbox-edit
                     :disabled="isSelected.length !== 1"
                     @click="pageToEdit(ePageStep.edit)"
                 />
-                <toolbox-delete
+                <iv-toolbox-delete
                     :disabled="isSelected.length === 0"
                     @click="doDelete"
                 />
-                <toolbox-divider />
-                <toolbox-add @click="pageToAdd(ePageStep.add)" />
+                <iv-toolbox-divider />
+                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
 
             </template>
 
-            <Table
+            <iv-table
                 ref="userGroupTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ server, path: '/user/group' }"
+                :server="{ path: '/user/group' }"
                 @selected="selectedItem($event)"
             >
                 <template #description="{$attrs}">
@@ -47,42 +47,45 @@
 
                 <template #Actions="{$attrs, $listeners}">
 
-                    <toolbox-more :disabled="isSelected.length !== 1">
-                        <toolbox-view @click="pageToView" />
-                        <toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <toolbox-delete @click="doDelete" />
-                    </toolbox-more>
+                    <iv-toolbox-more :disabled="isSelected.length !== 1">
+                        <iv-toolbox-view @click="pageToView" />
+                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                        <iv-toolbox-delete @click="doDelete" />
+                    </iv-toolbox-more>
                 </template>
 
-            </Table>
-        </Card>
+            </iv-table>
+        </iv-card>
 
         <!-- add -->
-        <iSAPFormCard
+        <iv-auto-card
             v-show="pageStep === ePageStep.add"
             :visible="true"
-            :data="{ label: _('w_UserGroup_AddGroup') }"
-            :interface="IAddForm()"
-            :value="inputUserGroupData"
-            @update:*="tempSaveInputData($event)"
-            @submit="saveAdd($event)"
+            :label="_('w_UserGroup_AddGroup')"
         >
             <template #toolbox>
 
-                <toolbox-back @click="pageToList()" />
+                <iv-toolbox-back @click="pageToList()" />
 
             </template>
 
-            <template #selectTree="{ $attrs, $listeners }">
+            <iv-form
+                :interface="IAddForm()"
+                :value="inputUserGroupData"
+                @update:*="tempSaveInputData($event)"
+                @submit="saveAdd($event)"
+            >
+                <template #selectTree="{ $attrs, $listeners }">
 
-                <div class="m-3">
-                    <b-button @click="pageToChooseTree">
-                        {{ _('w_SelectSiteTree') }}
-                    </b-button>
+                    <div class="m-3">
+                        <b-button @click="pageToChooseTree">
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
 
-                </div>
+                    </div>
 
-            </template>
+                </template>
+            </iv-form>
 
             <template #footer-before>
                 <b-button
@@ -93,33 +96,36 @@
                 </b-button>
             </template>
 
-        </iSAPFormCard>
+        </iv-auto-card>
 
         <!-- edit -->
-        <iSAPFormCard
+        <iv-auto-card
             v-show="pageStep === ePageStep.edit"
             :visible="true"
-            :data="{ label: _('w_UserGroup_EditGroup') }"
-            :interface="IEditForm()"
-            :value="inputUserGroupData"
-            @update:*="tempSaveInputData($event)"
-            @submit="saveEdit($event)"
+            :label="_('w_UserGroup_EditGroup')"
         >
             <template #toolbox>
-                <toolbox-back @click="pageToList()" />
+                <iv-toolbox-back @click="pageToList()" />
             </template>
 
-            <template #selectTree="{ $atrs, $listeners }">
+            <iv-form
+                :interface="IEditForm()"
+                :value="inputUserGroupData"
+                @update:*="tempSaveInputData($event)"
+                @submit="saveEdit($event)"
+            >
+                <template #selectTree="{ $atrs, $listeners }">
 
-                <div class="m-3">
+                    <div class="m-3">
 
-                    <b-button @click="pageToChooseTree">
-                        {{ _('w_SelectSiteTree') }}
-                    </b-button>
+                        <b-button @click="pageToChooseTree">
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
 
-                </div>
+                    </div>
 
-            </template>
+                </template>
+            </iv-form>
 
             <template #footer-before>
                 <b-button
@@ -130,24 +136,24 @@
                 </b-button>
             </template>
 
-        </iSAPFormCard>
+        </iv-auto-card>
 
         <!-- view -->
-        <Card
+        <iv-card
             v-show="pageStep === ePageStep.view"
             :visible="true"
-            :data="{ label: _('w_UserGroup_ViewGroup') }"
+            :label="_('w_UserGroup_ViewGroup')"
         >
             <template #toolbox>
-                <toolbox-back @click="pageToList()" />
+                <iv-toolbox-back @click="pageToList()" />
             </template>
 
-            <Form
+            <iv-form
                 :interface="IViewForm()"
                 :value="inputUserGroupData"
             >
 
-            </Form>
+            </iv-form>
 
             <template #footer>
                 <b-button
@@ -158,7 +164,7 @@
                 </b-button>
             </template>
 
-        </Card>
+        </iv-card>
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
@@ -185,7 +191,6 @@ import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 import { IUserGroupAdd, IUserGroupEdit } from "@/config/default/api/interfaces";
 
 import RegionAPI from "@/services/RegionAPI";
-import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
@@ -205,11 +210,6 @@ enum EPageStep {
     none = "none",
     showResult = "showResult",
     chooseTree = "chooseTree"
-}
-
-enum EType {
-    add = "add",
-    edit = "edit"
 }
 
 @Component({
@@ -424,7 +424,7 @@ export default class UserGroup extends Vue {
 
     pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
-        if (type === EType.add) {
+        if (type === EPageStep.add) {
             this.clearInputData();
             this.selecteds = [];
             this.inputUserGroupData.type = type;
@@ -438,7 +438,7 @@ export default class UserGroup extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputUserGroupData.type === EType.edit) {
+        if (this.inputUserGroupData.type === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteIds clear
             this.inputUserGroupData.siteIds = [];
@@ -449,7 +449,7 @@ export default class UserGroup extends Vue {
             }
         }
 
-        if (this.inputUserGroupData.type === EType.add) {
+        if (this.inputUserGroupData.type === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteIds clear
@@ -488,12 +488,12 @@ export default class UserGroup extends Vue {
             }
         ];
 
-        const addUserParam = {
+        const addUParam = {
             datas
         };
 
         await this.$server
-            .C("/user/group", addUserParam)
+            .C("/user/group", addUParam)
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
@@ -559,9 +559,6 @@ export default class UserGroup extends Vue {
     }
 
     async doDelete() {
-        // await Dialog.Question(this._("w_DeleteConfirm"))
-        //     .then(result => {
-        //         if (result.value) {
         for (const param of this.userGroupDetail) {
             const deleteUserParam: {
                 objectId: string;
@@ -571,6 +568,7 @@ export default class UserGroup extends Vue {
 
             await this.$server
                 .D("/user/group", deleteUserParam)
+
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
@@ -590,9 +588,6 @@ export default class UserGroup extends Vue {
                     console.log(e);
                 });
         }
-        //     }
-        // })
-        // .catch((e: any) => console.log(e));
     }
 
     showFirst(value) {
@@ -623,7 +618,7 @@ export default class UserGroup extends Vue {
 
                         /**
                          * @uiLabel - ${this._("w_No")}
-                         * @uiType - cell-auto-index
+                         * @uiType - iv-cell-auto-index
                          */
                         no: string;
 
@@ -695,7 +690,7 @@ export default class UserGroup extends Vue {
 
                         /**
                          * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * * @uiType - form-label
+                         * @uiType - iv-form-label
                          */
                         name?: string;
 
@@ -728,28 +723,28 @@ export default class UserGroup extends Vue {
 
                         /**
                          * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * @uiType - form-label
+                         * @uiType - iv-form-label
                          */
                         name?: string;
 
 
                         /**
                          * @uiLabel - ${this._("w_Description")}
-                         * @uiType - form-label
+                         * @uiType - iv-form-label
                          */
                         description?: string;
 
 
                         /**
                          * @uiLabel - ${this._("w_Sites")}
-                         * @uiType - form-label
+                         * @uiType - iv-form-label
                          */
                         siteIdsText?: string;
 
 
                         /**
                          * @uiLabel - ${this._("w_UserGroup_Users")}
-                         * @uiType - form-label
+                         * @uiType - iv-form-label
                          */
                         groupIdsText?: string;
 
