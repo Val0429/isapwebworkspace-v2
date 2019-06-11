@@ -227,6 +227,7 @@ interface IAreaAddData {
 
 interface IAreaEditData {
     objectId: string;
+    name: string;
     imageBase64?: string;
     mapBase64?: string;
 }
@@ -276,7 +277,7 @@ interface IWeatherResults {
     visibility: number;
 }
 
-export { IWeatherResults }
+export { IWeatherResults };
 
 // CMS Server
 interface IAddCMSServer extends IConfig {
@@ -293,32 +294,32 @@ interface ICMSServerResults extends IEditCMSServer {
     customId: string;
 }
 
-export { IAddCMSServer, IEditCMSServer, ICMSServerResults }
+export { IAddCMSServer, IEditCMSServer, ICMSServerResults };
 
 // FRS Server
 interface IAddFRSServer extends IConfig, IAnalysis {
     customId?: string;
     name: string;
-    analysis: IAnalysis,
-    manage: IConfig,
+    analysis: IAnalysis;
+    manage: IConfig;
 }
 
 interface IEditFRSServer extends IConfig, IAnalysis {
     objectId?: string;
     name: string;
-    analysis: IAnalysis,
-    manage: IConfig,
+    analysis: IAnalysis;
+    manage: IConfig;
 }
 
 interface IFRSServerResults extends IConfig, IAnalysis {
     objectId: string;
     customId: string;
     name: string;
-    analysis: IAnalysis,
-    manage: IConfig,
+    analysis: IAnalysis;
+    manage: IConfig;
 }
 
-export { IAddFRSServer, IEditFRSServer, IFRSServerResults }
+export { IAddFRSServer, IEditFRSServer, IFRSServerResults };
 
 ////////////////////// 以上為確定使用 //////////////////////
 
@@ -462,6 +463,5 @@ interface ISendMsg {
     triggerMax: number;
     triggerMin: number;
 }
-
 
 export { IAction };

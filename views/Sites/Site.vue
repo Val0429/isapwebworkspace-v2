@@ -61,90 +61,93 @@
 
         <!--Site From (Add and Edit)-->
         <div v-if="pageStep === ePageStep.siteAdd || pageStep === ePageStep.siteEdit">
-            <iv-auto-card
-                :label="pageStep == ePageStep.siteAdd ? _('w_Site_AddSite') :  _('w_Site_EditSite')"
-                :interface="ISiteFrom()"
-                :value="site"
-                @update:*="updateSiteFrom($event)"
-                @submit="saveSite($event)"
-            >
+            <iv-auto-card :label="pageStep == ePageStep.siteAdd ? _('w_Site_AddSite') :  _('w_Site_EditSite')">
+
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToSiteList()" />
                 </template>
 
-                <template #officeHour="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :options="officeHourItem"
-                    >
-                    </iv-form-selection>
-                </template>
+                <iv-form
+                    :interface="ISiteFrom()"
+                    :value="site"
+                    @update:*="updateSiteFrom($event)"
+                    @submit="saveSite($event)"
+                >
 
-                <template #managerId="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :options="managerItem"
-                    >
-                    </iv-form-selection>
-                </template>
+                    <template #officeHour="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="officeHourItem"
+                        >
+                        </iv-form-selection>
+                    </template>
 
-                <template #tag="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :options="tagItem"
-                        :multiple="true"
-                    >
-                    </iv-form-selection>
-                </template>
+                    <template #managerId="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="managerItem"
+                        >
+                        </iv-form-selection>
+                    </template>
 
-                <template #imageSrc="{ $attrs, $listeners}">
-                    <img
-                        class="imgSide"
-                        v-if="newImgSrc"
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :src="newImgSrc"
-                    />
-                </template>
+                    <template #tag="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="tagItem"
+                            :multiple="true"
+                        >
+                        </iv-form-selection>
+                    </template>
 
-                <template #mapping="{ $attrs, $listeners }">
-                    <div class="googleMap">
+                    <template #imageSrc="{ $attrs, $listeners}">
+                        <img
+                            class="imgSide"
+                            v-if="newImgSrc"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :src="newImgSrc"
+                        />
+                    </template>
+
+                    <template #mapping="{ $attrs, $listeners }">
+                        <div class="googleMap">
+                            <b-button
+                                variant="secondary"
+                                size="md"
+                                @click="googleMapMapping()"
+                            >{{ _('w_Site_Mapping') }}
+                            </b-button>
+                        </div>
+                    </template>
+
+                    <template #googleMap="{ $attrs, $listeners, index }">
+                        <iframe
+                            v-if="gooleMapSrc != ''"
+                            class="googleMap"
+                            allowfullscreen=""
+                            width="800"
+                            height="600"
+                            frameborder="0"
+                            scrolling="no"
+                            marginheight="0"
+                            marginwidth="0"
+                            :src="gooleMapSrc"
+                        >
+                        </iframe>
+                    </template>
+
+                    <template #footer-before>
                         <b-button
                             variant="secondary"
-                            size="md"
-                            @click="googleMapMapping()"
-                        >{{ _('w_Site_Mapping') }}
+                            size="lg"
+                            @click="pageToSiteList()"
+                        >{{ _('w_Back') }}
                         </b-button>
-                    </div>
-                </template>
-
-                <template #googleMap="{ $attrs, $listeners, index }">
-                    <iframe
-                        v-if="gooleMapSrc != ''"
-                        class="googleMap"
-                        allowfullscreen=""
-                        width="800"
-                        height="600"
-                        frameborder="0"
-                        scrolling="no"
-                        marginheight="0"
-                        marginwidth="0"
-                        :src="gooleMapSrc"
-                    >
-                    </iframe>
-                </template>
-
-                <template #footer-before>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="pageToSiteList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
+                    </template>
+                </iv-form>
 
             </iv-auto-card>
         </div>
@@ -290,50 +293,51 @@
 
         <!--Area From (Add and Edit)-->
         <div v-if="pageStep === ePageStep.areaAdd || pageStep === ePageStep.areaEdit">
-            <iv-auto-card
-                :label="pageStep == ePageStep.areaAdd ? _('w_Site_AddArea') :  _('w_Site_EditArea')"
-                :interface="IAreaFrom()"
-                :value="area"
-                @update:*="updateAreaFrom($event)"
-                @submit="saveArea($event)"
-            >
+            <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_Site_AddArea') :  _('w_Site_EditArea')">
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToAreaList()" />
                 </template>
 
-                <template #imageSrc="{ $attrs, $listeners}">
-                    <img
-                        class="imgSide"
-                        v-if="areaPhotoSrc"
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :src="areaPhotoSrc"
-                    />
-                </template>
+                <iv-form
+                    :interface="IAreaFrom()"
+                    :value="area"
+                    @update:*="updateAreaFrom($event)"
+                    @submit="saveArea($event)"
+                >
 
-                <template #imageMap="{ $attrs, $listeners}">
-                    <div class="card-content iv-form-group col-md-12">
-                        <image-map
-                            ref="imageMap"
-                            v-on:click-add-tag-label="pageAddDeviceGroup"
-                            v-on:click-edit-tag-label="pageEditDeviceGroup"
-                            v-on:click-device="clickDevice"
-                            v-on:drop="drop"
-                            :imageMap="imageMap"
-                        >
-                        </image-map>
-                    </div>
-                </template>
+                    <template #imageSrc="{ $attrs, $listeners}">
+                        <img
+                            class="imgSide"
+                            v-if="areaPhotoSrc"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :src="areaPhotoSrc"
+                        />
+                    </template>
 
-                <template #footer-before>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="pageToAreaList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
+                    <template #imageMap="{ $attrs, $listeners}">
+                        <div class="card-content iv-form-group col-md-12">
+                            <image-map
+                                ref="imageMap"
+                                v-on:click-add-tag-label="pageAddDeviceGroup"
+                                v-on:click-edit-tag-label="pageEditDeviceGroup"
+                                v-on:click-device="clickDevice"
+                                v-on:drop="drop"
+                                :imageMap="imageMap"
+                            >
+                            </image-map>
+                        </div>
+                    </template>
 
+                    <template #footer-before>
+                        <b-button
+                            variant="secondary"
+                            size="lg"
+                            @click="pageToAreaList()"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
+                </iv-form>
             </iv-auto-card>
         </div>
 
@@ -455,76 +459,77 @@
 
         <!--Device From (Add and Edit)-->
         <div v-if="pageStep === ePageStep.deviceAdd || pageStep === ePageStep.deviceEdit">
-            <iv-auto-card
-                :label="pageStep == ePageStep.deviceAdd ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')"
-                :interface="IDeviceFrom()"
-                :value="deviceGroup"
-                @update:*="updateDeviceFrom($event)"
-                @submit="saveDevice($event)"
-            >
+            <iv-auto-card :label="pageStep == ePageStep.deviceAdd ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')">
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToDeviceList()" />
                 </template>
 
-                <template #siteName="{$attrs, $listeners}">
-                    <iv-form-label
-                        v-if="pageStep === ePageStep.deviceAdd"
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :value="site.name ? site.name : '' "
-                    />
-                    <iv-form-label
-                        v-if="pageStep === ePageStep.deviceEdit"
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :value="deviceGroup.site ? deviceGroup.site.name : '' "
-                    />
-                </template>
+                <iv-form
+                    :interface="IDeviceFrom()"
+                    :value="deviceGroup"
+                    @update:*="updateDeviceFrom($event)"
+                    @submit="saveDevice($event)"
+                >
 
-                <template #areaName="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-if="pageStep === ePageStep.deviceAdd && isEmptyObject(area)"
-                        v-bind="$attrs"
-                        :value="$attrs.value ? $attrs.value : ''"
-                        v-on="$listeners"
-                        :multiple="false"
-                        :options="areaNameItem"
-                    >
-                    </iv-form-selection>
-                    <iv-form-label
-                        v-if="pageStep === ePageStep.deviceAdd && !isEmptyObject(area)"
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :value="area ? area.name : '' "
-                    />
-                    <iv-form-label
-                        v-if="pageStep === ePageStep.deviceEdit"
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :value="deviceGroup.area ? deviceGroup.area.name : '' "
-                    />
-                </template>
+                    <template #siteName="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-if="pageStep === ePageStep.deviceAdd"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="site.name ? site.name : '' "
+                        />
+                        <iv-form-label
+                            v-if="pageStep === ePageStep.deviceEdit"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="deviceGroup.site ? deviceGroup.site.name : '' "
+                        />
+                    </template>
 
-                <template #deviceName="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        :value="$attrs.value ? $attrs.value.join(',') : ''"
-                        v-on="$listeners"
-                        :multiple="true"
-                        :options="deviceNameItem"
-                    >
-                    </iv-form-selection>
-                </template>
+                    <template #areaName="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-if="pageStep === ePageStep.deviceAdd && isEmptyObject(area)"
+                            v-bind="$attrs"
+                            :value="$attrs.value ? $attrs.value : ''"
+                            v-on="$listeners"
+                            :multiple="false"
+                            :options="areaNameItem"
+                        >
+                        </iv-form-selection>
+                        <iv-form-label
+                            v-if="pageStep === ePageStep.deviceAdd && !isEmptyObject(area)"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="area ? area.name : '' "
+                        />
+                        <iv-form-label
+                            v-if="pageStep === ePageStep.deviceEdit"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="deviceGroup.area ? deviceGroup.area.name : '' "
+                        />
+                    </template>
 
-                <template #footer-before>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="pageToDeviceList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
+                    <template #deviceName="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            :value="$attrs.value ? $attrs.value.join(',') : ''"
+                            v-on="$listeners"
+                            :multiple="true"
+                            :options="deviceNameItem"
+                        >
+                        </iv-form-selection>
+                    </template>
 
+                    <template #footer-before>
+                        <b-button
+                            variant="secondary"
+                            size="lg"
+                            @click="pageToDeviceList()"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
+                </iv-form>
             </iv-auto-card>
         </div>
 
@@ -1395,7 +1400,8 @@ export default class Site extends Vue {
         } else if (this.pageStep == EPageStep.areaEdit) {
             const datas: IAreaEditData[] = [
                 {
-                    objectId: data.objectId
+                    objectId: data.objectId,
+                    name: data.name
                 }
             ];
 
