@@ -516,7 +516,7 @@
                             :value="$attrs.value ? $attrs.value.join(',') : ''"
                             v-on="$listeners"
                             :multiple="true"
-                            :options="deviceNameItem"
+                            :options="ShowDeviceItem(deviceNameItem)"
                         >
                         </iv-form-selection>
                     </template>
@@ -590,7 +590,9 @@
             :title="_('w_DeviceGroup')"
             v-model="modalShow"
         >
-            {{this.modalContext}}
+            <template v-for="(value, index) in modalContext">
+                <p>{{value.mode + " : " + value.count}}</p>
+            </template>
 
         </b-modal>
 
@@ -673,7 +675,7 @@ export default class Site extends Vue {
     imageMap = new ImageMapItem();
     isMounted = false;
     modalShow = false;
-    modalContext = "";
+    modalContext = [];
 
     //google map
     googleMap: IGoogleMap = {
@@ -1059,36 +1061,39 @@ export default class Site extends Vue {
 
     async initDeviceNameItem() {
         this.deviceNameItem = [
-            { id: "1", text: "device1" },
-            { id: "2", text: "device2" },
-            { id: "3", text: "device3" }
+            // { id: "1", text: "device1", type: "peopleCounting" },
+            // { id: "2", text: "device2", type: "dwellTime" },
+            // { id: "3", text: "device3", type: "humanDetection" }
         ];
 
-        // let body: {
-        //     paging: {
-        //         page: number;
-        //         pageSize: number;
-        //     };
-        //     mode: string;
-        // } = {
-        //     paging: {
-        //         page: 1,
-        //         pageSize: 999
-        //     },
-        //     mode: this.deviceGroup.mode
-        // };
+        let body: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
 
-        // await this.$server.R("/device", body)
-        //     .then((response: any) => {
-        //         for (let item of response) {
-        //             let area = { id: item.objectId, text: item.name };
-        //             this.areaNameItem.push(area);
-        //         }
-        //     })
-        //     .catch((e: any) => {
-        //          return ResponseFilter.base(this, e);
-        //         }
-        //     });
+        await this.$server
+            .R("/device", body)
+            .then((response: any) => {
+                console.log("initDeviceNameItem", response);
+                for (let item of response) {
+                    let device = {
+                        id: item.objectId,
+                        text: item.name,
+                        type: item.mode
+                    };
+                    this.deviceNameItem.push(device);
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
     }
 
     async initDeviceTypeItem() {
@@ -1098,7 +1103,7 @@ export default class Site extends Vue {
             demographic: "Demographic",
             heatmap: "Heatmap",
             visitor: "Visitor",
-            humanDetection: "Demographic"
+            humanDetection: "Human Detection"
         };
 
         this.initDeviceNameItem();
@@ -1567,6 +1572,7 @@ export default class Site extends Vue {
     updateDeviceFrom(data) {
         console.log("updateDeviceFrom", data);
         if (data) {
+            this.deviceGroup[data.key] = data.value;
         }
     }
 
@@ -1646,6 +1652,11 @@ export default class Site extends Vue {
         this.site = {};
     }
 
+    ShowDeviceItem(value) {
+        console.log("ShowDeviceItem", value, this.deviceGroup);
+        return value.filter(v => v.type == this.deviceGroup["deviceType"]);
+    }
+
     showFirst(value): string {
         if (value.length >= 2) {
             return value.map(item => item)[0] + "...";
@@ -1699,6 +1710,7 @@ export default class Site extends Vue {
 
     showDeviceDetialShow(values) {
         if (values && values.length > 0) {
+            this.modalContext = [];
             this.modalShow = true;
             this.modalContext = values;
         }
