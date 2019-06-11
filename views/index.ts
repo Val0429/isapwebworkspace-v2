@@ -34,6 +34,10 @@ import Region from './Regions/Region.vue';
 // Sites
 import Site from './Sites/Site.vue';
 
+// Server
+import CMSServer from './Server/CMSServer.vue';
+
+
 // Setting
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
@@ -94,3 +98,7 @@ $({ path: '/setting/backup', name: 'Backup', icon: 'fa-twitter' })(Backup);
 $({ path: '/setting/restore', name: 'Restore', icon: 'fa-twitter' })(Restore);
 $({ path: '/setting/license', name: 'License', icon: 'fa-twitter' })(License);
 $({ path: '/setting/tag', name: 'Tag', icon: 'fa-twitter' })(Tag);
+
+// Server
+$({ path: '/server', name: 'Server', icon: 'fa-twitter', redirect: '/server/cms_server' })();
+$({ path: '/server/cms_server', name: 'CMS Server', icon: 'fa-twitter' })(CMSServer);

@@ -91,6 +91,18 @@
                     />
                 </SidebarNavItem>
 
+                <!-- Server -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Server')"
+                    url="/server/cms_server"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_CMSServer')"
+                        url="/server/cms_server"
+                    />
+
+                </SidebarNavItem>
+
                 <!-- Setting -->
                 <SidebarNavItem
                     :label="_('w_Navigation_Setting')"

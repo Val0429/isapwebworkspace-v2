@@ -151,6 +151,9 @@ export default class LangObject implements ILang {
     w_Navigation_Setting_License = 'License';
     w_Navigation_Setting_Tag = 'Tag';
 
+    w_Navigation_Server = 'Server';
+    w_Navigation_Server_CMSServer = 'CMS Server';
+
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
 
@@ -433,8 +436,11 @@ export default class LangObject implements ILang {
     w_ServerCMS_View = 'View CMS Server';
     w_ServerCMS_AddSuccess = 'CMS Server add success.';
     w_ServerCMS_ADDFailed = 'Add failed! Can not found the CMS Server, please try again.';
+    w_ServerCMS_ADDDuplicate = 'Add failed! CMS Server is duplicate, please try again.';
     w_ServerCMS_EditSuccess = 'CMS Server edit success.';
     w_ServerCMS_EditFailed = 'Edit failed! Can not found the CMS Server, please try again.';
+    w_ServerCMS_EditDuplicate = 'Edit failed! CMS Server is duplicate, please try again.';
+    w_ServerCMSDeleteConfirm = 'Are you sure to delete selected CMS Server(s)?';
 
     // Demographic Server
     w_DemographicServer_List = 'Demographic Server List';
