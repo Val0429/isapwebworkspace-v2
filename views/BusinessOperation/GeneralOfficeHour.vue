@@ -324,10 +324,13 @@ export default class GeneralOfficeHour extends Vue {
         name: "",
         dayRanges: [],
         type: "",
-        siteIdsText: ""
+        siteIdsText: "",
+        dayRangesText: ""
     };
 
-    created() {}
+    created() {
+        this.dayRangesToText();
+    }
 
     mounted() {
         this.initDayRanges();
@@ -404,10 +407,7 @@ export default class GeneralOfficeHour extends Vue {
         return result;
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-
+    dayRangesToText(): string {
         let showData = "";
 
         if (this.inputOfficeHourData && this.inputOfficeHourData.dayRanges) {
@@ -467,6 +467,12 @@ export default class GeneralOfficeHour extends Vue {
         return this.inputOfficeHourData.dayRanges;
     }
 
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
+        this.dayRangesToText();
+    }
+
     pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
@@ -516,14 +522,31 @@ export default class GeneralOfficeHour extends Vue {
                 JSON.stringify(this.officeHourTime)
             );
         }
+        this.dayRangesToText();
+
     }
 
     pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
         if (type === EPageStep.add) {
+            this.officeHourTime = [
+                {
+                    startDay: "1",
+                    endDay: "0",
+                    startHour: "9",
+                    startMinute: "0",
+                    endHour: "21",
+                    endMinute: "30",
+                    startDate: new Date(2000, 1, 1, 9, 0),
+                    endDate: new Date(2000, 1, 1, 21, 30)
+                }
+            ];
+
             this.clearInputData();
             this.inputOfficeHourData.type = type;
         }
+        this.dayRangesToText();
+
     }
 
     pageToList() {
