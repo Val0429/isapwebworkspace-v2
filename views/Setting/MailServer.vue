@@ -4,7 +4,6 @@
         <iv-auto-card
             :visible="true"
             :label="_('w_MailServer_Setting')"
-
         >
 
             <iv-form
@@ -82,7 +81,6 @@
 
 <script lang="ts">
     import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
 
     import ResponseFilter from "@/services/ResponseFilter";
     import Dialog from "@/services/Dialog/Dialog";
@@ -186,7 +184,7 @@
                         return ResponseFilter.base(this, e);
                     }
                     console.log(e);
-                    // Dialog.Error(this._("w_SmsServer_Setting_Fail"));
+                    Dialog.error(this._("w_MailServer_Read_Fail"));
                     return false;
                 });
         }

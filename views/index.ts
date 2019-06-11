@@ -36,6 +36,7 @@ import Site from './Sites/Site.vue';
 
 // Setting
 import MailServer from './Setting/MailServer.vue';
+import SMS from './Setting/SMS.vue';
 
 
 // ============================================================= //
@@ -83,3 +84,4 @@ $({ path: '/site', name: 'Site', icon: 'fa-twitter' })(Site);
 // Setting
 $({ path: '/setting', name: 'Setting', icon: 'fa-twitter', redirect: '/setting/mail_server' })();
 $({ path: '/setting/mail_server', name: 'Mail Server', icon: 'fa-twitter' })(MailServer);
+$({ path: '/setting/sms', name: 'SMS', icon: 'fa-twitter' })(SMS);

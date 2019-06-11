@@ -100,6 +100,10 @@
                         :label="_('w_Navigation_Setting_MailServer')"
                         url="/setting/mail_server"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_SMS')"
+                        url="/setting/sms"
+                    />
                 </SidebarNavItem>
 
             </SidebarNav>

@@ -144,6 +144,7 @@ export default class LangObject {
 
     w_Navigation_Setting = 'Setting';
     w_Navigation_Setting_MailServer = 'Mail Server';
+    w_Navigation_Setting_SMS = 'SMS';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -277,6 +278,7 @@ export default class LangObject {
     w_MailServer_Setting_Fail = 'Email Server set failed.';
     w_MailServer_Test_Success = 'Email Server test success.';
     w_MailServer_Test_Fail = 'Email Server test failed.';
+    w_MailServer_Read_Fail = 'Mail Server read failed.';
 
     // Site
     w_Site_SiteID = 'Site ID';
@@ -382,6 +384,7 @@ export default class LangObject {
     w_SmsServer_Setting_Fail = 'SMS Server set failed.';
     w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
     w_SmsServer_Setting_Test_Success = 'SMS Server test success.';
+    w_SmsServer_Read_Fail = 'SMS Server read failed.';
 
     // Office Hour
     w_OfficeHour_List = 'Office Hour List';
