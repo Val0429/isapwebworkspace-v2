@@ -104,6 +104,10 @@
                         :label="_('w_Navigation_Setting_SMS')"
                         url="/setting/sms"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Weather')"
+                        url="/setting/weather"
+                    />
                 </SidebarNavItem>
 
             </SidebarNav>

@@ -145,6 +145,7 @@ export default class LangObject implements ILang {
     w_Navigation_Setting = 'Setting';
     w_Navigation_Setting_MailServer = 'Mail Server';
     w_Navigation_Setting_SMS = 'SMS';
+    w_Navigation_Setting_Weather = 'Weather';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -415,6 +416,7 @@ export default class LangObject implements ILang {
     w_Weather_Step1_info = 'Please register at Dark Sky API ( https://darksky.net/dev ) and will get a SecretKey.';
     w_Weather_Setting_Success = 'Weather set success.';
     w_Weather_Setting_Fail = 'Weather set failed.';
+    w_Weather_Read_Fail = 'Weather read failed.';
 
     w_WeatherTest_Success = 'Weather test success.';
     w_WeatherTest_Fail = 'Weather test failed.';
