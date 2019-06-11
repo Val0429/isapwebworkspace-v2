@@ -20,4 +20,8 @@ export default class Login extends Vue {
         });
         this.$router.push('/');
     }
+
+    forgotPassword() {
+        this.$router.push('/forgot_password');
+    }
 }
