@@ -60,12 +60,12 @@ $({ path: '/demos/roi', name: 'DemoROI', icon: 'fa-twitter', permission: false }
 $({ path: '/demos/dialog', name: 'DemoDialog', icon: 'fa-twitter', permission: false })(DemoDialog);
 
 // Users
-$({ path: '/users', name: 'Users', icon: 'fa-twitter' })(User);
+$({ path: '/users', name: 'Users', icon: 'fa-twitter', redirect: '/users/user' })();
 $({ path: '/users/user', name: 'User', icon: 'fa-twitter' })(User);
-$({ path: '/users/user_group', name: 'UserGroup', icon: 'fa-twitter' })(UserGroup);
+$({ path: '/users/user_group', name: 'User Group', icon: 'fa-twitter' })(UserGroup);
 
 // Business Operation
-// $({ path: '/business_operations', name: 'Business Operation', icon: 'fa-twitter' })(Business Operation);
+$({ path: '/business_operations', name: 'Business Operation', icon: 'fa-twitter', redirect: '/business_operations/campaign_setting' })();
 $({ path: '/business_operations/campaign_setting', name: 'Campaign Setting', icon: 'fa-twitter' })(CampaignSetting);
 $({ path: '/business_operations/sales_records', name: 'Sales Records', icon: 'fa-twitter' })(SalesRecords);
 $({ path: '/business_operations/general_office_hour', name: 'General Office Hour', icon: 'fa-twitter' })(GeneralOfficeHour);
