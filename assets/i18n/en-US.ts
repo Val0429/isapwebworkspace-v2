@@ -148,6 +148,7 @@ export default class LangObject {
     w_Navigation_Setting_Weather = 'Weather';
     w_Navigation_Setting_Backup = 'Backup';
     w_Navigation_Setting_Restore = 'Restore';
+    w_Navigation_Setting_License = 'License';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';

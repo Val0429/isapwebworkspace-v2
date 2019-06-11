@@ -97,7 +97,7 @@
 
 <script lang="ts">
     import { Vue, Component, Watch } from "vue-property-decorator";
-    import {IWeatherResults} from '@/config/default/api/interfaces';
+    import { IWeatherResults } from '@/config/default/api/interfaces';
 
     import ResponseFilter from "@/services/ResponseFilter";
     import Dialog from "@/services/Dialog/Dialog";

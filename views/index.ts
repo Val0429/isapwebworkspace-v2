@@ -40,6 +40,7 @@ import SMS from './Setting/SMS.vue';
 import Weather from './Setting/Weather.vue';
 import Backup from './Setting/Backup.vue';
 import Restore from './Setting/Restore.vue';
+import License from './Setting/License.vue';
 
 
 // ============================================================= //
@@ -91,3 +92,4 @@ $({ path: '/setting/sms', name: 'SMS', icon: 'fa-twitter' })(SMS);
 $({ path: '/setting/weather', name: 'Weather', icon: 'fa-twitter' })(Weather);
 $({ path: '/setting/backup', name: 'Backup', icon: 'fa-twitter' })(Backup);
 $({ path: '/setting/restore', name: 'Restore', icon: 'fa-twitter' })(Restore);
+$({ path: '/setting/license', name: 'License', icon: 'fa-twitter' })(License);

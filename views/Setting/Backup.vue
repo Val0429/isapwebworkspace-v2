@@ -50,6 +50,8 @@ export default class Backup extends Vue {
 	ePageStep = EPageStep;
 	pageStep: EPageStep = EPageStep.list;
 
+	selected: any = {};
+
 	options: any = [
 		{ text: 'User setting', value: 'UserSetting' },
 		{ text: 'Sites setting', value: 'SitesSetting' },

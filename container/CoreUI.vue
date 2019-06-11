@@ -116,6 +116,10 @@
                         :label="_('w_Navigation_Setting_Restore')"
                         url="/setting/restore"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_License')"
+                        url="/setting/license"
+                    />
                 </SidebarNavItem>
 
             </SidebarNav>
