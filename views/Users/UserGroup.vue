@@ -179,338 +179,403 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
-    import {
-        ERegionType,
-        IRegionItem,
-        RegionTreeItem,
-        IRegionTreeSelected
-    } from "@/components/RegionTree/models";
-    import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-    import { IUserGroupAdd, IUserGroupEdit } from '@/config/default/api/interfaces'
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import {
+    ERegionType,
+    IRegionItem,
+    RegionTreeItem,
+    IRegionTreeSelected
+} from "@/components/RegionTree/models";
+import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import { IUserGroupAdd, IUserGroupEdit } from "@/config/default/api/interfaces";
 
-    import RegionAPI from "@/services/RegionAPI";
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog.vue";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog/Dialog";
 
-    interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit{
-        users: any;
-        siteIdsText?: string;
-        groupIdsText?: string;
-        tempSiteIds?: any;
-        type?: string;
+interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit {
+    users: any;
+    siteIdsText?: string;
+    groupIdsText?: string;
+    tempSiteIds?: any;
+    type?: string;
+}
+
+enum EPageStep {
+    list = "list",
+    add = "add",
+    edit = "edit",
+    view = "view",
+    none = "none",
+    showResult = "showResult",
+    chooseTree = "chooseTree"
+}
+
+@Component({
+    components: {}
+})
+export default class UserGroup extends Vue {
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
+
+    isSelected: any = [];
+    tableMultiple: boolean = true;
+
+    userGroupDetail: any = [];
+
+    sitesSelectItem: any = {};
+    userGroupSelectItem: any = {};
+
+    // tree 相關
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
+
+    inputUserGroupData: InputUserGroupData = {
+        objectId: "",
+        name: "",
+        description: "",
+        siteIdsText: "",
+        groupIdsText: "",
+        type: "",
+        siteIds: [],
+        users: []
+    };
+
+    created() {}
+
+    mounted() {
+        this.initSelectItem();
+        this.initRegionTreeSelect();
     }
 
-    enum EPageStep {
-        list = 'list',
-        add = 'add',
-        edit = 'edit',
-        view = 'view',
-        none = 'none',
-        showResult = 'showResult',
-        chooseTree = 'chooseTree',
-    }
-
-
-    @Component({
-        components: { }
-    })
-    export default class UserGroup extends Vue {
-
-        ePageStep = EPageStep;
-        pageStep: EPageStep = EPageStep.list;
-
-        isSelected: any = [];
-        tableMultiple: boolean = true;
-
-        userGroupDetail: any = [];
-
-        sitesSelectItem: any = {};
-        userGroupSelectItem: any = {};
-
-        // tree 相關
-        selectType = ERegionType.site;
-        regionTreeItem = new RegionTreeItem();
-        selecteds: IRegionTreeSelected[] = [];
-
-        inputUserGroupData: InputUserGroupData = {
+    clearInputData() {
+        this.inputUserGroupData = {
             objectId: "",
             name: "",
             description: "",
             siteIdsText: "",
             groupIdsText: "",
-            type: "",
             siteIds: [],
             users: [],
+            type: ""
+        };
+    }
+
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
+
+    async initSelectItem() {
+        // 取得sites
+        const readAllSiteParam: {
+            type: string;
+        } = {
+            type: "all"
         };
 
-        created() {}
-
-        mounted() {
-            this.initSelectItem();
-            this.initRegionTreeSelect();
-        }
-
-        clearInputData() {
-            this.inputUserGroupData = {
-                objectId: "",
-                name: "",
-                description: "",
-                siteIdsText: "",
-                groupIdsText: "",
-                siteIds: [],
-                users: [],
-                type: "",
-            };
-        }
-
-        initRegionTreeSelect() {
-            this.regionTreeItem = new RegionTreeItem();
-            this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
-        }
-
-        async initSelectItem() {
-            // 取得sites
-            const readAllSiteParam: {
-                type: string;
-            } = {
-                type: "all"
-            };
-
-            await this.$server.R("/location/site/all", readAllSiteParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 sitesSelectItem 的 key 的方式
-                            this.sitesSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                            this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                                returnValue
-                            );
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 取得 tree
-            await this.$server.R("/location/tree")
-                .then((response: any) => {
-                    if (response != undefined) {
+        await this.$server
+            .R("/location/site/all", readAllSiteParam)
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            response
+                            returnValue
                         );
-                        this.regionTreeItem.region = this.regionTreeItem.tree;
                     }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
 
-            // 取得UserGroup
-            await this.$server.R("/user/group/all")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 userGroupSelectItem 的 key 的方式
-                            this.userGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
+        // 取得 tree
+        await this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        // 取得UserGroup
+        await this.$server
+            .R("/user/group/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 userGroupSelectItem 的 key 的方式
+                        this.userGroupSelectItem[returnValue.objectId] =
+                            returnValue.name;
                     }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.userGroupDetail = [];
+        this.userGroupDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.userGroupDetail) {
+            this.inputUserGroupData = {
+                objectId: param.objectId,
+                name: param.name,
+                description: param.description,
+                siteIdsText: this.idsToText(param.sites),
+                groupIdsText: this.idsToText(param.users),
+                siteIds: param.sites,
+                users: param.users,
+                type: ""
+            };
+        }
+    }
+
+    tempSaveInputData(data) {
+        switch (data.key) {
+            case "name":
+                this.inputUserGroupData.name = data.value;
+                break;
+            case "description":
+                this.inputUserGroupData.description = data.value;
+                break;
+            case "siteIds":
+                this.inputUserGroupData.siteIds = data.value;
+                break;
         }
 
-        selectedItem(data) {
-            this.isSelected = data;
-            this.userGroupDetail = [];
-            this.userGroupDetail = data;
+        for (const id of this.inputUserGroupData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
         }
 
-        getInputData() {
+        // console.log('this.selecteds - ', this.selecteds)
+        // this.tempSaveData = JSON.parse(JSON.stringify(this.inputUserGroupData));
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (const val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
+    }
+
+    pageToEdit(type: string) {
+        this.pageStep = EPageStep.edit;
+        this.getInputData();
+        this.selecteds = [];
+
+        this.inputUserGroupData.type = type;
+
+        this.inputUserGroupData.tempSiteIds = JSON.parse(
+            JSON.stringify(this.inputUserGroupData.siteIds)
+        );
+
+        this.inputUserGroupData.siteIds = JSON.parse(
+            JSON.stringify(
+                this.inputUserGroupData.siteIds.map(item => item.objectId)
+            )
+        );
+    }
+
+    pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        if (type === EPageStep.add) {
             this.clearInputData();
-            for (const param of this.userGroupDetail) {
-                this.inputUserGroupData = {
-                    objectId: param.objectId,
-                    name: param.name,
-                    description: param.description,
-                    siteIdsText: this.idsToText(param.sites),
-                    groupIdsText: this.idsToText(param.users),
-                    siteIds: param.sites,
-                    users: param.users,
-                    type: "",
-                };
-            }
-        }
-
-        tempSaveInputData(data) {
-            switch (data.key) {
-                case "name":
-                    this.inputUserGroupData.name = data.value;
-                    break;
-                case "description":
-                    this.inputUserGroupData.description = data.value;
-                    break;
-                case "siteIds":
-                    this.inputUserGroupData.siteIds = data.value;
-                    break;
-
-            }
-
-
-            for (const id of this.inputUserGroupData.siteIds) {
-                for (const detail in this.sitesSelectItem) {
-                    if (id === detail) {
-                        let selectedsObject: IRegionTreeSelected = {
-                            objectId: detail,
-                            type: ERegionType.site,
-                            name: this.sitesSelectItem[detail]
-                        };
-                        this.selecteds.push(selectedsObject);
-                    }
-                }
-            }
-
-            // console.log('this.selecteds - ', this.selecteds)
-            // this.tempSaveData = JSON.parse(JSON.stringify(this.inputUserGroupData));
-        }
-
-        idsToText(value: any): string {
-            let result = "";
-            for (const val of value) {
-                result += val.name + ", ";
-            }
-            result = result.substring(0, result.length - 2);
-            return result;
-        }
-
-        pageToView() {
-            this.pageStep = EPageStep.view;
-            this.getInputData();
-        }
-
-        pageToEdit(type: string) {
-            this.pageStep = EPageStep.edit;
-            this.getInputData();
             this.selecteds = [];
-
             this.inputUserGroupData.type = type;
+        }
+    }
 
-            this.inputUserGroupData.tempSiteIds = JSON.parse(
-                JSON.stringify(this.inputUserGroupData.siteIds)
-            );
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        (this.$refs.userGroupTable as any).reload();
+        this.selecteds = [];
+    }
 
-            this.inputUserGroupData.siteIds = JSON.parse(
-                JSON.stringify(
-                    this.inputUserGroupData.siteIds.map(item => item.objectId)
-                )
-            );
+    pageToShowResult() {
+        if (this.inputUserGroupData.type === EPageStep.edit) {
+            this.pageStep = EPageStep.edit;
+            // siteIds clear
+            this.inputUserGroupData.siteIds = [];
 
+            // from selecteds push siteIds
+            for (const item of this.selecteds) {
+                this.inputUserGroupData.siteIds.push(item.objectId);
+            }
         }
 
-        pageToAdd(type: string) {
+        if (this.inputUserGroupData.type === EPageStep.add) {
             this.pageStep = EPageStep.add;
-            if (type === EPageStep.add) {
-                this.clearInputData();
-                this.selecteds = [];
-                this.inputUserGroupData.type = type;
+
+            // siteIds clear
+            this.inputUserGroupData.siteIds = [];
+
+            // from selecteds push siteIds
+            for (const item of this.selecteds) {
+                this.inputUserGroupData.siteIds.push(item.objectId);
             }
         }
+    }
 
-        pageToList() {
-            this.pageStep = EPageStep.list;
-            (this.$refs.userGroupTable as any).reload();
-            this.selecteds = [];
-        }
-
-
-        pageToShowResult() {
-            if (this.inputUserGroupData.type === EPageStep.edit) {
-                this.pageStep = EPageStep.edit;
-                // siteIds clear
-                this.inputUserGroupData.siteIds = [];
-
-                // from selecteds push siteIds
-                for (const item of this.selecteds) {
-                    this.inputUserGroupData.siteIds.push(item.objectId);
+    pageToChooseTree() {
+        this.pageStep = EPageStep.chooseTree;
+        this.selecteds = [];
+        for (const id of this.inputUserGroupData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
                 }
-
-            }
-
-            if (this.inputUserGroupData.type === EPageStep.add) {
-                this.pageStep = EPageStep.add;
-
-                // siteIds clear
-                this.inputUserGroupData.siteIds = [];
-
-                // from selecteds push siteIds
-                for (const item of this.selecteds) {
-                    this.inputUserGroupData.siteIds.push(item.objectId);
-                }
-
             }
         }
+    }
 
-        pageToChooseTree() {
-            this.pageStep = EPageStep.chooseTree;
-            this.selecteds = [];
-            for (const id of this.inputUserGroupData.siteIds) {
-                for (const detail in this.sitesSelectItem) {
-                    if (id === detail) {
-                        let selectedsObject: IRegionTreeSelected = {
-                            objectId: detail,
-                            type: ERegionType.site,
-                            name: this.sitesSelectItem[detail]
-                        };
-                        this.selecteds.push(selectedsObject);
+    async saveAdd(data) {
+        const datas: IUserGroupAdd[] = [
+            {
+                name: data.name,
+                description: data.description,
+                siteIds: data.siteIds !== undefined ? data.siteIds : []
+            }
+        ];
+
+        const addUParam = {
+            datas
+        };
+
+        await this.$server
+            .C("/user/group", addUParam)
+            .then((response: any) => {
+                for (const returnValue of response) {
+                    if (returnValue.statusCode === 200) {
+                        this.pageToList();
+                    }
+                    if (returnValue.statusCode === 500) {
+                        Dialog.error(this._("w_UserGroup_AddUserGroupFailed"));
+                        return false;
                     }
                 }
-            }
-        }
-
-        async saveAdd(data) {
-
-            const datas: IUserGroupAdd[] = [
-                {
-                    name: data.name,
-                    description: data.description,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
                 }
-            ];
+                if (e.res.statusCode == 500) {
+                    Dialog.error(this._("w_UserGroup_AddUserGroupFailed"));
+                    return false;
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
-            const addUParam = {
-                datas
+    async saveEdit(data) {
+        const datas: IUserGroupEdit[] = [
+            {
+                // siteIds: data.siteIds,
+                siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                description: data.description,
+                objectId: data.objectId
+            }
+        ];
+
+        const editUserParam = {
+            datas
+        };
+
+        await this.$server
+            .U("/user/group", editUserParam)
+            .then((response: any) => {
+                for (const returnValue of response) {
+                    if (returnValue.statusCode === 200) {
+                        this.pageToList();
+                    }
+                    if (returnValue.statusCode === 500) {
+                        Dialog.error(this._("w_UserGroup_EditUserGroupFailed"));
+                        return false;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                if (e.res.statusCode == 500) {
+                    Dialog.error(this._("w_UserGroup_EditUserGroupFailed"));
+                    return false;
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async doDelete() {
+        for (const param of this.userGroupDetail) {
+            const deleteUserParam: {
+                objectId: string;
+            } = {
+                objectId: param.objectId
             };
 
-            await this.$server.C("/user/group", addUParam)
+            await this.$server
+                .D("/user/group", deleteUserParam)
+
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            new Dialog({
-                                propsData: {
-                                    label: this._("w_Error"),
-                                    value: this._("w_UserGroup_AddUserGroupFailed")
-                                }
-                            }).$modal();
+                            Dialog.error(this._("w_DeleteFailed"));
                             return false;
                         }
                     }
@@ -519,139 +584,36 @@
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-                    if (e.res.statusCode == 500) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Error"),
-                                value: this._("w_UserGroup_AddUserGroupFailed")
-                            }
-                        }).$modal();
-                        return false;
-                    }
+
                     console.log(e);
-                    return false;
                 });
         }
+    }
 
-        async saveEdit(data) {
-            const datas: IUserGroupEdit[] = [
-                {
-
-                    // siteIds: data.siteIds,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    description: data.description,
-                    objectId: data.objectId
-                }
-            ];
-
-            const editParam = {
-                datas
-            };
-
-            await this.$server.U("/user/group", editParam)
-                .then((response: any) => {
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            new Dialog({
-                                propsData: {
-                                    label: this._("w_Error"),
-                                    value: this._("w_UserGroup_EditUserGroupFailed")
-                                }
-                            }).$modal();
-                            return false;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Error"),
-                                value: this._("w_UserGroup_EditUserGroupFailed")
-                            }
-                        }).$modal();
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
-                });
+    showFirst(value) {
+        if (value.length >= 2) {
+            return value.map(item => item.name)[0] + "...";
         }
-
-        async doDelete() {
-            // await Dialog.Question(this._("w_DeleteConfirm"))
-            //     .then(result => {
-            //         if (result.value) {
-                        for (const param of this.userGroupDetail) {
-                            const deleteParam: {
-                                objectId: string;
-                            } = {
-                                objectId: param.objectId
-                            };
-
-                            await this.$server.D("/user/group", deleteParam)
-                                .then((response: any) => {
-                                    for (const returnValue of response) {
-                                        if (returnValue.statusCode === 200) {
-                                            this.pageToList();
-                                        }
-                                        if (returnValue.statusCode === 500) {
-                                            new Dialog({
-                                                propsData: {
-                                                    label: this._("w_Error"),
-                                                    value: this._("w_DeleteFailed")
-                                                }
-                                            }).$modal();
-                                            return false;
-                                        }
-                                    }
-                                })
-                                .catch((e: any) => {
-                                    if (
-                                        e.res &&
-                                        e.res.statusCode &&
-                                        e.res.statusCode == 401
-                                    ) {
-                                        return ResponseFilter.base(this, e);
-                                    }
-
-                                    console.log(e);
-                                });
-                        }
-                //     }
-                // })
-                // .catch((e: any) => console.log(e));
+        if (value.length === 1) {
+            return value.map(item => item.name)[0];
         }
-
-        showFirst(value) {
-            if (value.length >= 2) {
-                return value.map(item => item.name)[0] + "...";
-            }
-            if (value.length === 1) {
-                return value.map(item => item.name)[0];
-            }
-            if (value.length == 0) {
-                return "";
-            }
+        if (value.length == 0) {
+            return "";
         }
+    }
 
-        show30Words(
-            value: any,
-            startWord: number = 0,
-            endWord: number = 30
-        ): string {
-            return value.length < endWord
-                ? value.substring(startWord, endWord)
-                : value.substring(startWord, endWord) + "...";
-        }
+    show30Words(
+        value: any,
+        startWord: number = 0,
+        endWord: number = 30
+    ): string {
+        return value.length < endWord
+            ? value.substring(startWord, endWord)
+            : value.substring(startWord, endWord) + "...";
+    }
 
-        ITableList() {
-            return `
+    ITableList() {
+        return `
                         interface {
 
                         /**
@@ -687,10 +649,10 @@
                         Actions?: any;
  }
                 `;
-        }
+    }
 
-        IAddForm() {
-            return `
+    IAddForm() {
+        return `
                         interface {
 
                         /**
@@ -710,17 +672,20 @@
                         /**
                          * @uiLabel - ${this._("w_Sites")}
                          */
-                        siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                        siteIds?: ${toEnumInterface(
+                            this.sitesSelectItem as any,
+                            true
+                        )};
 
 
                         selectTree?: any;
 
                     }
                 `;
-        }
+    }
 
-        IEditForm() {
-            return `
+    IEditForm() {
+        return `
                         interface {
 
                         /**
@@ -740,16 +705,19 @@
                         /**
                          * @uiLabel - ${this._("w_Sites")}
                          */
-                        siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                        siteIds?: ${toEnumInterface(
+                            this.sitesSelectItem as any,
+                            true
+                        )};
 
                         selectTree?: any;
 
                     }
                 `;
-        }
+    }
 
-        IViewForm() {
-            return `
+    IViewForm() {
+        return `
                         interface {
 
 
@@ -782,8 +750,8 @@
 
                     }
                 `;
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>

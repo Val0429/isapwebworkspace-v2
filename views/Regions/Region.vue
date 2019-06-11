@@ -181,7 +181,7 @@ import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog.vue";
+import Dialog from "@/services/Dialog/Dialog";
 
 enum EPageStep {
     none,
@@ -215,8 +215,7 @@ export default class Region extends Vue {
     newImg = new Image();
     newImgSrc = "";
 
-    created() {
-    }
+    created() {}
 
     mounted() {
         this.pageToTree();
@@ -444,12 +443,7 @@ export default class Region extends Vue {
             saveRegion.latitude > 90 ||
             saveRegion.latitude < -90
         ) {
-            new Dialog({
-                propsData: {
-                    label: this._("w_Error"),
-                    value: this._("w_Region_ErrorFileToLarge")
-                }
-            }).$modal();
+            Dialog.error(this._("w_Region_ErrorLatitude"));
             return false;
         }
 
@@ -458,12 +452,7 @@ export default class Region extends Vue {
             saveRegion.longitude > 180 ||
             saveRegion.longitude < -180
         ) {
-            new Dialog({
-                propsData: {
-                    label: this._("w_Error"),
-                    value: this._("w_Region_ErrorLongitude")
-                }
-            }).$modal();
+            Dialog.error(this._("w_Region_ErrorLongitude"));
             return false;
         }
         param.datas.push(saveRegion);
@@ -563,12 +552,7 @@ export default class Region extends Vue {
                 if (base64 != "") {
                     this.newImgSrc = base64;
                 } else {
-                    new Dialog({
-                        propsData: {
-                            label: this._("w_Error"),
-                            value: this._("w_Region_ErrorFileToLarge")
-                        }
-                    }).$modal();
+                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
                 }
             });
         }

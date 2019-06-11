@@ -265,7 +265,7 @@ import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog.vue";
+import Dialog from "@/services/Dialog/Dialog";
 
 interface InputUserData extends IUserAddData, IUserEditData {
     siteIdsText: string;
@@ -669,12 +669,7 @@ export default class User extends Vue {
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Error"),
-                                value: this._("w_User_AddUserFailed")
-                            }
-                        }).$modal();
+                        Dialog.error(this._("w_User_AddUserFailed"));
                         return false;
                     }
                 }
@@ -684,12 +679,7 @@ export default class User extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                    new Dialog({
-                        propsData: {
-                            label: this._("w_Error"),
-                            value: this._("w_User_AddUserFailed")
-                        }
-                    }).$modal();
+                    Dialog.error(this._("w_User_AddUserFailed"));
                     return false;
                 }
                 console.log(e);
@@ -723,12 +713,7 @@ export default class User extends Vue {
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Error"),
-                                value: this._("w_User_EditUserFailed")
-                            }
-                        }).$modal();
+                        Dialog.error(this._("w_User_EditUserFailed"));
                         return false;
                     }
                 }
@@ -738,12 +723,7 @@ export default class User extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                    new Dialog({
-                        propsData: {
-                            label: this._("w_Error"),
-                            value: this._("w_User_EditUserFailed")
-                        }
-                    }).$modal();
+                    Dialog.error(this._("w_User_EditUserFailed"));
                     return false;
                 }
                 console.log(e);
@@ -771,12 +751,7 @@ export default class User extends Vue {
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            new Dialog({
-                                propsData: {
-                                    label: this._("w_Error"),
-                                    value: this._("w_DeleteFailed")
-                                }
-                            }).$modal();
+                            Dialog.error(this._("w_DeleteFailed"));
                             return false;
                         }
                     }

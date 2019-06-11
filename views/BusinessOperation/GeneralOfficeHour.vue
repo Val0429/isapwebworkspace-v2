@@ -257,7 +257,7 @@ import {
 import { DateTime2String } from "@/services/Datetime.ts";
 
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog.vue";
+import Dialog from "@/services/Dialog/Dialog";
 
 const timeItem = {
     startDay: "1",
@@ -580,12 +580,7 @@ export default class GeneralOfficeHour extends Vue {
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            new Dialog({
-                                propsData: {
-                                    label: this._("w_Error"),
-                                    value: this._("w_OfficeHour_AddFailed")
-                                }
-                            }).$modal();
+                            Dialog.error(this._("w_OfficeHour_AddFailed"));
                             return false;
                         }
                     }
@@ -595,12 +590,7 @@ export default class GeneralOfficeHour extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Error"),
-                                value: this._("w_OfficeHour_AddFailed")
-                            }
-                        }).$modal();
+                        Dialog.error(this._("w_OfficeHour_AddFailed"));
                         return false;
                     }
                     console.log(e);
@@ -659,12 +649,7 @@ export default class GeneralOfficeHour extends Vue {
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            new Dialog({
-                                propsData: {
-                                    label: this._("w_Error"),
-                                    value: this._("w_OfficeHour_EditFailed")
-                                }
-                            }).$modal();
+                            Dialog.error(this._("w_OfficeHour_EditFailed"));
                             return false;
                         }
                     }
@@ -674,12 +659,7 @@ export default class GeneralOfficeHour extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Error"),
-                                value: this._("w_OfficeHour_EditFailed")
-                            }
-                        }).$modal();
+                        Dialog.error(this._("w_OfficeHour_EditFailed"));
                         return false;
                     }
                     console.log(e);
@@ -711,12 +691,7 @@ export default class GeneralOfficeHour extends Vue {
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            new Dialog({
-                                propsData: {
-                                    label: this._("w_Error"),
-                                    value: this._("w_DeleteFailed")
-                                }
-                            }).$modal();
+                            Dialog.error(this._("w_DeleteFailed"));
                             return false;
                         }
                     }

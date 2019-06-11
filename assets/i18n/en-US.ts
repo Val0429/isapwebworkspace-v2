@@ -120,6 +120,11 @@ export default class LangObject {
     w_Test = 'Test';
     w_Check = 'Check';
     w_Submit = 'Submit';
+    w_Confirm = 'Confirm';
+
+    // Dialog
+    w_Dialog_ErrorTitle = 'Something wrong';
+    w_Dialog_SuccessTitle = 'Success';
 
     // Navigation
     w_Navigation_Label = 'iSAP Solution';
@@ -311,7 +316,6 @@ export default class LangObject {
     w_Site_EditAreaSuccess = 'Edit Area Success';
     w_Site_EditAreaFailed = 'Edit Area Failed';
 
-
     // Backup
     w_Backup_List = 'Function List';
     w_Backup_Backup = 'Backup';
@@ -319,7 +323,6 @@ export default class LangObject {
     // Restore
     w_Restore_SelectFile = 'Select file(s)';
     w_Restore_SettingFiles = 'Setting Files';
-
 
     // Tag
     w_Tag_TagList = 'Tag List';
