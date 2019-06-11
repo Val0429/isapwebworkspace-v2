@@ -250,10 +250,6 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import {
-    IOfficeHourAddData,
-    IOfficeHourEditData
-} from "@/config/default/api/interfaces";
 import { DateTime2String } from "@/services/Datetime.ts";
 
 import ResponseFilter from "@/services/ResponseFilter";
