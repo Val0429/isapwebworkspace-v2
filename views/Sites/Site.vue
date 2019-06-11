@@ -605,7 +605,7 @@ import {
 } from "../../../core";
 import ImageBase64 from "@/services/ImageBase64";
 import ServerConfig from "@/services/ServerConfig";
-import Dialog from "@/services/Dialog/Dialog.ts";
+import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime.vue";
 import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
 import {
@@ -1421,50 +1421,46 @@ export default class Site extends Vue {
     }
 
     async deleteSite() {
-        //await Dialog.confirm(this._("w_DeleteConfirm")).then(result => {
-        //if (result.value) {
-        var body: {
-            objectId: string;
-        } = {
-            objectId: this.site["objectId"]
-        };
-        this.$server
-            .D("/location/site", body)
-            .then((response: any) => {
-                if (response) {
-                    Dialog.success(this._("w_Success"));
-                    (this.$refs.siteTable as any).reload();
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
-        //}
-        //});
+        Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
+            var body: {
+                objectId: string;
+            } = {
+                objectId: this.site["objectId"]
+            };
+            this.$server
+                .D("/location/site", body)
+                .then((response: any) => {
+                    if (response) {
+                        Dialog.success(this._("w_Success"));
+                        (this.$refs.siteTable as any).reload();
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+        });
     }
 
     async deleteArea() {
-        //await Dialog.Question(this._("w_DeleteConfirm")).then(result => {
-        //if (result.value) {
-        var body: {
-            objectId: string;
-        } = {
-            objectId: this.area["objectId"]
-        };
-        this.$server
-            .D("/location/area", body)
-            .then((response: any) => {
-                if (response) {
-                    Dialog.success(this._("w_Success"));
+        Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
+            var body: {
+                objectId: string;
+            } = {
+                objectId: this.area["objectId"]
+            };
+            this.$server
+                .D("/location/area", body)
+                .then((response: any) => {
+                    if (response) {
+                        Dialog.success(this._("w_Success"));
 
-                    (this.$refs.areaTable as any).reload();
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
-        //}
-        //});
+                        (this.$refs.areaTable as any).reload();
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+        });
     }
 
     async saveDevice(data) {
@@ -1478,26 +1474,24 @@ export default class Site extends Vue {
     }
 
     async deleteDevice() {
-        // await Dialog.Question(this._("w_DeleteConfirm")).then(result => {
-        //if (result.value) {
-        var body: {
-            objectId: string;
-        } = {
-            objectId: this.site["objectId"]
-        };
-        this.$server
-            .D("/location/device", body)
-            .then((response: any) => {
-                if (response) {
-                    Dialog.success(this._("w_Success"));
-                    (this.$refs.deviceTable as any).reload();
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
-        //}
-        // });
+        Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
+            var body: {
+                objectId: string;
+            } = {
+                objectId: this.site["objectId"]
+            };
+            this.$server
+                .D("/location/device", body)
+                .then((response: any) => {
+                    if (response) {
+                        Dialog.success(this._("w_Success"));
+                        (this.$refs.deviceTable as any).reload();
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+        });
     }
 
     googleMapMapping() {
@@ -1698,7 +1692,7 @@ export default class Site extends Vue {
     }
 
     showDeviceDetialShow(values) {
-        if (values.length > 0) {
+        if (values && values.length > 0) {
             this.modalShow = true;
             this.modalContext = values;
         }
@@ -1961,7 +1955,7 @@ export default class Site extends Vue {
         return `interface {
                  /**
                  * @uiLabel - ${this._("w_No")}
-                 * @uiType - cell-auto-index
+                 * @uiType - iv-cell-auto-index
                  */
                 no: string;
 
@@ -2039,7 +2033,7 @@ export default class Site extends Vue {
         return `interface {
                  /**
                  * @uiLabel - ${this._("w_No")}
-                 * @uiType - cell-auto-index
+                 * @uiType - iv-cell-auto-index
                  */
                 no: string;
 
