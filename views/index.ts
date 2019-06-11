@@ -37,7 +37,6 @@ import Site from './Sites/Site.vue';
 // Server
 import CMSServer from './Server/CMSServer.vue';
 
-
 // Setting
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
@@ -46,6 +45,10 @@ import Backup from './Setting/Backup.vue';
 import Restore from './Setting/Restore.vue';
 import License from './Setting/License.vue';
 import Tag from './Setting/Tags.vue';
+
+// MyProfile
+import MyProfile from './MyProfile/MyProfile.vue';
+
 
 // ============================================================= //
 
@@ -102,3 +105,6 @@ $({ path: '/setting/tag', name: 'Tag', icon: 'fa-twitter' })(Tag);
 // Server
 $({ path: '/server', name: 'Server', icon: 'fa-twitter', redirect: '/server/cms_server' })();
 $({ path: '/server/cms_server', name: 'CMS Server', icon: 'fa-twitter' })(CMSServer);
+
+// MyProfile
+$({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
