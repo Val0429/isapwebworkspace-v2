@@ -605,7 +605,7 @@ import {
 } from "../../../core";
 import ImageBase64 from "@/services/ImageBase64";
 import ServerConfig from "@/services/ServerConfig";
-import Dialog from "@/services/Dialog.vue";
+import Dialog from "@/services/Dialog/Dialog.ts";
 import Datetime from "@/services/Datetime.vue";
 import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
 import {
@@ -1267,12 +1267,7 @@ export default class Site extends Vue {
                 .C("/location/site", addSiteParam)
                 .then((response: any) => {
                     if (response != undefined) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Success"),
-                                value: this._("w_Site_AddSiteSuccess")
-                            }
-                        }).$modal();
+                        Dialog.success(this._("w_Site_AddSiteSuccess"));
                         this.pageToSiteList();
                     }
                 })
@@ -1308,12 +1303,7 @@ export default class Site extends Vue {
                 .U("/location/site", editSiteParam)
                 .then((response: any) => {
                     if (response != undefined) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Success"),
-                                value: this._("w_Site_EditSiteSuccess")
-                            }
-                        }).$modal();
+                        Dialog.success(this._("w_Site_EditSiteSuccess"));
                         this.pageToSiteList();
                     }
                 })
@@ -1395,12 +1385,7 @@ export default class Site extends Vue {
                 .C("/location/area", addAreaParam)
                 .then((response: any) => {
                     if (response != undefined) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Success"),
-                                value: this._("w_Site_AddAreaSuccess")
-                            }
-                        }).$modal();
+                        Dialog.success(this._("w_Site_AddAreaSuccess"));
                         this.pageToAreaList();
                     }
                 })
@@ -1425,12 +1410,7 @@ export default class Site extends Vue {
                 .U("/location/area", editAreaParam)
                 .then((response: any) => {
                     if (response != undefined) {
-                        new Dialog({
-                            propsData: {
-                                label: this._("w_Success"),
-                                value: this._("w_Site_EditAreaSuccess")
-                            }
-                        }).$modal();
+                        Dialog.success(this._("w_Site_EditAreaSuccess"));
                         this.pageToAreaList();
                     }
                 })
@@ -1441,7 +1421,7 @@ export default class Site extends Vue {
     }
 
     async deleteSite() {
-        //await Dialog.Question(this._("w_DeleteConfirm")).then(result => {
+        //await Dialog.confirm(this._("w_DeleteConfirm")).then(result => {
         //if (result.value) {
         var body: {
             objectId: string;
@@ -1452,12 +1432,7 @@ export default class Site extends Vue {
             .D("/location/site", body)
             .then((response: any) => {
                 if (response) {
-                    new Dialog({
-                        propsData: {
-                            label: this._("w_Success"),
-                            value: this._("w_Success")
-                        }
-                    }).$modal();
+                    Dialog.success(this._("w_Success"));
                     (this.$refs.siteTable as any).reload();
                 }
             })
@@ -1480,12 +1455,7 @@ export default class Site extends Vue {
             .D("/location/area", body)
             .then((response: any) => {
                 if (response) {
-                    new Dialog({
-                        propsData: {
-                            label: this._("w_Success"),
-                            value: this._("w_Success")
-                        }
-                    }).$modal();
+                    Dialog.success(this._("w_Success"));
 
                     (this.$refs.areaTable as any).reload();
                 }
@@ -1519,12 +1489,7 @@ export default class Site extends Vue {
             .D("/location/device", body)
             .then((response: any) => {
                 if (response) {
-                    new Dialog({
-                        propsData: {
-                            label: this._("w_Success"),
-                            value: this._("w_Success")
-                        }
-                    }).$modal();
+                    Dialog.success(this._("w_Success"));
                     (this.$refs.deviceTable as any).reload();
                 }
             })
@@ -1543,12 +1508,7 @@ export default class Site extends Vue {
                 parseFloat(this.site["longitude"]) < -180
             ) {
                 console.log("ING", parseFloat(this.site["longitude"]));
-                new Dialog({
-                    propsData: {
-                        label: this._("w_Error"),
-                        value: this._("w_Site_Longitude_Range")
-                    }
-                }).$modal();
+                Dialog.error(this._("w_Site_Longitude_Range"));
                 return;
             }
 
@@ -1556,12 +1516,7 @@ export default class Site extends Vue {
                 parseFloat(this.site["latitude"]) > 90 ||
                 parseFloat(this.site["latitude"]) < -90
             ) {
-                new Dialog({
-                    propsData: {
-                        label: this._("w_Error"),
-                        value: this._("w_Site_Latitude_Range")
-                    }
-                }).$modal();
+                Dialog.error(this._("w_Site_Latitude_Range"));
                 return;
             }
             this.gooleMapSrc =
@@ -2197,12 +2152,7 @@ export default class Site extends Vue {
                         return;
                     };
                 } else {
-                    new Dialog({
-                        propsData: {
-                            label: this._("w_Error"),
-                            value: this._("w_Region_ErrorFileToLarge")
-                        }
-                    }).$modal();
+                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
                 }
             });
         }
