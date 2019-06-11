@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :label="_('w_UserGroup_UserGroupList')"
+            :data="{ label: _('w_Tag_TagList') }"
         >
             <template #toolbox>
 
@@ -24,26 +24,12 @@
             </template>
 
             <iv-table
-                ref="userGroupTable"
+                ref="tagTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ path: '/user/group' }"
+                :server="{ path: '/tag' }"
                 @selected="selectedItem($event)"
             >
-                <template #description="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ show30Words($attrs.value) }}
-                </template>
-
-                <template #sites="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #users="{$attrs}">
-                    <!--                {{ $attrs.value.map(item => item.name).join(', ')}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
 
                 <template #Actions="{$attrs, $listeners}">
 
@@ -54,6 +40,18 @@
                     </iv-toolbox-more>
                 </template>
 
+                <template #description="{$attrs}">
+                    {{ show30Words($attrs.value) }}
+                </template>
+
+                <template #regions="{$attrs}">
+                    {{ showFirst($attrs.value) }}
+                </template>
+
+                <template #sites="{$attrs}">
+                    {{ showFirst($attrs.value) }}
+                </template>
+
             </iv-table>
         </iv-card>
 
@@ -61,29 +59,31 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
             :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_UserGroup_AddGroup') :  _('w_UserGroup_EditGroup')"
+            :label="pageStep === ePageStep.add ? _('w_Tag_AddTag') :  _('w_Tag_EditTag')"
         >
-            <template #toolbox>
-
-                <iv-toolbox-back @click="pageToList()" />
-
-            </template>
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputUserGroupData"
+                :value="inputTagData"
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEdit($event)"
             >
-                <template #selectTree="{ $attrs, $listeners }">
+                <template #selectTreeRegion="{ $attrs, $listeners }">
 
                     <div class="m-3">
-                        <b-button @click="pageToChooseTree">
+                        <b-button @click="pageToChooseRegionTree">
+                            {{ _('w_SelectRegionTree') }}
+                        </b-button>
+                    </div>
+                </template>
+
+                <template #selectTreeSite="{ $attrs, $listeners }">
+
+                    <div class="m-3">
+                        <b-button @click="pageToChooseSiteTree">
                             {{ _('w_SelectSiteTree') }}
                         </b-button>
-
                     </div>
-
                 </template>
             </iv-form>
 
@@ -102,7 +102,7 @@
         <iv-card
             v-show="pageStep === ePageStep.view"
             :visible="true"
-            :label="_('w_UserGroup_ViewGroup')"
+            :label=" _('w_Tag_ViewTag') "
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -110,9 +110,8 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputUserGroupData"
+                :value="inputTagData"
             >
-
             </iv-form>
 
             <template #footer>
@@ -127,10 +126,19 @@
         </iv-card>
 
         <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
+            v-show="pageStep === ePageStep.chooseRegionTree"
             :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
+            :selectType="selectTypeRegion"
+            :selecteds="selectedsRegions"
+            v-on:click-back="pageToShowResult"
+        >
+        </region-tree-select>
+
+        <region-tree-select
+            v-show="pageStep === ePageStep.chooseSiteTree"
+            :regionTreeItem="siteTreeItem"
+            :selectType="selectTypeSite"
+            :selecteds="selectedsSites"
             v-on:click-back="pageToShowResult"
         >
         </region-tree-select>
@@ -141,6 +149,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+import { ITag, ITagReadUpdate } from "@/config/default/api/interfaces";
 import {
     ERegionType,
     IRegionItem,
@@ -148,18 +157,17 @@ import {
     IRegionTreeSelected
 } from "@/components/RegionTree/models";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import { IUserGroupAdd, IUserGroupEdit } from "@/config/default/api/interfaces";
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit {
-    users: any;
+interface IInputTagData extends ITag, ITagReadUpdate {
     siteIdsText?: string;
-    groupIdsText?: string;
-    tempSiteIds?: any;
+    regionIdsText?: string;
     type?: string;
+    tempSiteIds?: any;
+    tempRegionIds?: any;
 }
 
 enum EPageStep {
@@ -169,38 +177,50 @@ enum EPageStep {
     view = "view",
     none = "none",
     showResult = "showResult",
-    chooseTree = "chooseTree"
+    chooseRegionTree = "chooseRegionTree",
+    chooseSiteTree = "chooseSiteTree"
+}
+
+enum EType {
+    add = "add",
+    edit = "edit"
 }
 
 @Component({
     components: {}
 })
-export default class UserGroup extends Vue {
+export default class Tags extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
     isSelected: any = [];
     tableMultiple: boolean = true;
 
-    userGroupDetail: any = [];
+    tagDetail: any = [];
 
+    regionsSelectItem: any = {};
     sitesSelectItem: any = {};
-    userGroupSelectItem: any = {};
 
     // tree 相關
-    selectType = ERegionType.site;
-    regionTreeItem = new RegionTreeItem();
-    selecteds: IRegionTreeSelected[] = [];
+    selectTypeSite = ERegionType.site;
+    selectedsSites: IRegionTreeSelected[] = [];
+    siteTreeItem = new RegionTreeItem();
 
-    inputUserGroupData: InputUserGroupData = {
+    selectTypeRegion = ERegionType.region;
+    selectedsRegions: IRegionTreeSelected[] = [];
+    regionTreeItem = new RegionTreeItem();
+
+    inputTagData: IInputTagData = {
         objectId: "",
         name: "",
         description: "",
-        siteIdsText: "",
-        groupIdsText: "",
-        type: "",
         siteIds: [],
-        users: []
+        regionIds: [],
+        siteIdsText: "",
+        regionIdsText: "",
+        type: "",
+        tempSiteIds: "",
+        tempRegionIds: ""
     };
 
     created() {}
@@ -209,23 +229,19 @@ export default class UserGroup extends Vue {
         this.initSelectItem();
         this.initRegionTreeSelect();
     }
-
     clearInputData() {
-        this.inputUserGroupData = {
+        this.inputTagData = {
             objectId: "",
             name: "",
             description: "",
-            siteIdsText: "",
-            groupIdsText: "",
             siteIds: [],
-            users: [],
-            type: ""
+            regionIds: [],
+            siteIdsText: "",
+            regionIdsText: "",
+            type: "",
+            tempSiteIds: "",
+            tempRegionIds: ""
         };
-    }
-
-    initRegionTreeSelect() {
-        this.regionTreeItem = new RegionTreeItem();
-        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
     async initSelectItem() {
@@ -244,9 +260,26 @@ export default class UserGroup extends Vue {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
-                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            returnValue
-                        );
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        // 取得regions
+        await this.$server
+            .R("/location/region/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.regionsSelectItem[returnValue.objectId] =
+                            returnValue.name;
                     }
                 }
             })
@@ -266,27 +299,13 @@ export default class UserGroup extends Vue {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
 
-        // 取得UserGroup
-        await this.$server
-            .R("/user/group/all")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 userGroupSelectItem 的 key 的方式
-                        this.userGroupSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
+                    this.siteTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                    this.siteTreeItem.region = this.regionTreeItem.tree;
                 }
             })
             .catch((e: any) => {
@@ -296,25 +315,32 @@ export default class UserGroup extends Vue {
                 console.log(e);
                 return false;
             });
+    }
+
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.siteTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_RegionTreeSelect");
+        this.siteTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
     selectedItem(data) {
         this.isSelected = data;
-        this.userGroupDetail = [];
-        this.userGroupDetail = data;
+        this.tagDetail = [];
+        this.tagDetail = data;
     }
 
     getInputData() {
         this.clearInputData();
-        for (const param of this.userGroupDetail) {
-            this.inputUserGroupData = {
+        for (const param of this.tagDetail) {
+            this.inputTagData = {
                 objectId: param.objectId,
                 name: param.name,
                 description: param.description,
-                siteIdsText: this.idsToText(param.sites),
-                groupIdsText: this.idsToText(param.users),
                 siteIds: param.sites,
-                users: param.users,
+                regionIds: param.regions,
+                siteIdsText: this.idsToText(param.sites),
+                regionIdsText: this.idsToText(param.regions),
                 type: ""
             };
         }
@@ -323,17 +349,20 @@ export default class UserGroup extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputUserGroupData.name = data.value;
+                this.inputTagData.name = data.value;
                 break;
             case "description":
-                this.inputUserGroupData.description = data.value;
+                this.inputTagData.description = data.value;
                 break;
             case "siteIds":
-                this.inputUserGroupData.siteIds = data.value;
+                this.inputTagData.siteIds = data.value;
+                break;
+            case "regionIds":
+                this.inputTagData.regionIds = data.value;
                 break;
         }
 
-        for (const id of this.inputUserGroupData.siteIds) {
+        for (const id of this.inputTagData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -341,22 +370,104 @@ export default class UserGroup extends Vue {
                         type: ERegionType.site,
                         name: this.sitesSelectItem[detail]
                     };
-                    this.selecteds.push(selectedsObject);
+                    this.selectedsSites.push(selectedsObject);
                 }
             }
         }
 
-        // console.log('this.selecteds - ', this.selecteds)
-        // this.tempSaveData = JSON.parse(JSON.stringify(this.inputUserGroupData));
+        for (const id of this.inputTagData.regionIds) {
+            for (const detail in this.regionsSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.region,
+                        name: this.regionsSelectItem[detail]
+                    };
+                    this.selectedsRegions.push(selectedsObject);
+                }
+            }
+        }
     }
 
     idsToText(value: any): string {
         let result = "";
-        for (const val of value) {
+        for (let val of value) {
             result += val.name + ", ";
         }
         result = result.substring(0, result.length - 2);
         return result;
+    }
+
+    pageToShowResult() {
+        if (this.inputTagData.type === EPageStep.edit) {
+            this.pageStep = EPageStep.edit;
+
+            // siteIds clear
+            this.inputTagData.siteIds = [];
+            this.inputTagData.regionIds = [];
+
+            // from selecteds push siteIds / regionIds
+            for (const item of this.selectedsSites) {
+                this.inputTagData.siteIds.push(item.objectId);
+            }
+
+            for (const item of this.selectedsRegions) {
+                this.inputTagData.regionIds.push(item.objectId);
+            }
+        }
+
+        if (this.inputTagData.type === EPageStep.add) {
+            this.pageStep = EPageStep.add;
+
+            // siteIds clear
+            this.inputTagData.siteIds = [];
+            this.inputTagData.regionIds = [];
+
+            // from selecteds push siteIds / regionIds
+            for (const item of this.selectedsSites) {
+                this.inputTagData.siteIds.push(item.objectId);
+            }
+
+            for (const item of this.selectedsRegions) {
+                this.inputTagData.regionIds.push(item.objectId);
+            }
+        }
+    }
+
+    pageToChooseRegionTree() {
+        this.pageStep = EPageStep.chooseRegionTree;
+
+        this.selectedsRegions = [];
+        for (const id of this.inputTagData.regionIds) {
+            for (const detail in this.regionsSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.region,
+                        name: this.regionsSelectItem[detail]
+                    };
+                    this.selectedsRegions.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    pageToChooseSiteTree() {
+        this.pageStep = EPageStep.chooseSiteTree;
+
+        this.selectedsSites = [];
+        for (const id of this.inputTagData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selectedsSites.push(selectedsObject);
+                }
+            }
+        }
     }
 
     pageToView() {
@@ -367,17 +478,24 @@ export default class UserGroup extends Vue {
     pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
-        this.selecteds = [];
+        this.selectedsSites = [];
+        this.selectedsRegions = [];
+        this.inputTagData.type = type;
 
-        this.inputUserGroupData.type = type;
-
-        this.inputUserGroupData.tempSiteIds = JSON.parse(
-            JSON.stringify(this.inputUserGroupData.siteIds)
+        this.inputTagData.tempSiteIds = JSON.parse(
+            JSON.stringify(this.inputTagData.siteIds)
         );
 
-        this.inputUserGroupData.siteIds = JSON.parse(
+        this.inputTagData.tempRegionIds = JSON.parse(
+            JSON.stringify(this.inputTagData.regionIds)
+        );
+
+        this.inputTagData.siteIds = JSON.parse(
+            JSON.stringify(this.inputTagData.siteIds.map(item => item.objectId))
+        );
+        this.inputTagData.regionIds = JSON.parse(
             JSON.stringify(
-                this.inputUserGroupData.siteIds.map(item => item.objectId)
+                this.inputTagData.regionIds.map(item => item.objectId)
             )
         );
     }
@@ -386,87 +504,45 @@ export default class UserGroup extends Vue {
         this.pageStep = EPageStep.add;
         if (type === EPageStep.add) {
             this.clearInputData();
-            this.selecteds = [];
-            this.inputUserGroupData.type = type;
+            this.selectedsSites = [];
+            this.selectedsRegions = [];
+            this.inputTagData.type = type;
         }
     }
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.userGroupTable as any).reload();
-        this.selecteds = [];
-    }
-
-    pageToShowResult() {
-        if (this.inputUserGroupData.type === EPageStep.edit) {
-            this.pageStep = EPageStep.edit;
-            // siteIds clear
-            this.inputUserGroupData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputUserGroupData.siteIds.push(item.objectId);
-            }
-        }
-
-        if (this.inputUserGroupData.type === EPageStep.add) {
-            this.pageStep = EPageStep.add;
-
-            // siteIds clear
-            this.inputUserGroupData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputUserGroupData.siteIds.push(item.objectId);
-            }
-        }
-    }
-
-    pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.selecteds = [];
-        for (const id of this.inputUserGroupData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
+        (this.$refs.tagTable as any).reload();
+        this.selectedsSites = [];
+        this.selectedsRegions = [];
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputUserGroupData.type === EPageStep.add) {
-            const datas: IUserGroupAdd[] = [
+        if (this.inputTagData.type === EPageStep.add) {
+            const datas: ITag[] = [
                 {
                     name: data.name,
                     description: data.description,
+                    regionIds:
+                        data.regionIds !== undefined ? data.regionIds : [],
                     siteIds: data.siteIds !== undefined ? data.siteIds : []
                 }
             ];
 
-            const addUParam = {
+            const addParam = {
                 datas
             };
 
             await this.$server
-                .C("/user/group", addUParam)
+                .C("/tag", addParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.success(
-                                this._("w_UserGroup_AddUserGroupSuccess")
-                            );
+                            Dialog.success(this._("w_Tag_AddTagSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(
-                                this._("w_UserGroup_AddUserGroupFailed")
-                            );
+                            Dialog.error(this._("w_Tag_AddTagFailed"));
                             return false;
                         }
                     }
@@ -476,42 +552,38 @@ export default class UserGroup extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_UserGroup_AddUserGroupFailed"));
+                        Dialog.error(this._("w_Tag_AddTagFailed"));
                         return false;
                     }
                     console.log(e);
                     return false;
                 });
         }
-
-        if (this.inputUserGroupData.type === EPageStep.edit) {
-            const datas: IUserGroupEdit[] = [
+        if (this.inputTagData.type === EPageStep.edit) {
+            const datas: ITagReadUpdate[] = [
                 {
-                    // siteIds: data.siteIds,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
                     description: data.description,
+                    regionIds:
+                        data.regionIds !== undefined ? data.regionIds : [],
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
                     objectId: data.objectId
                 }
             ];
 
-            const editUserParam = {
+            const editgParam = {
                 datas
             };
 
             await this.$server
-                .U("/user/group", editUserParam)
+                .U("/tag", editgParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.success(
-                                this._("w_UserGroup_EditUserGroupSuccess")
-                            );
+                            Dialog.success(this._("w_Tag_EditTagSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(
-                                this._("w_UserGroup_EditUserGroupFailed")
-                            );
+                            Dialog.error(this._("w_Tag_EditTagFailed"));
                             return false;
                         }
                     }
@@ -521,7 +593,7 @@ export default class UserGroup extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_UserGroup_EditUserGroupFailed"));
+                        Dialog.error(this._("w_Tag_EditTagFailed"));
                         return false;
                     }
                     console.log(e);
@@ -531,11 +603,11 @@ export default class UserGroup extends Vue {
     }
 
     async doDelete() {
-        await Dialog.confirm(
-            this._("w_UserGroup_DeleteConfirm"),
+        Dialog.confirm(
+            this._("w_Tag_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.userGroupDetail) {
+                for (const param of this.tagDetail) {
                     const deleteUserParam: {
                         objectId: string;
                     } = {
@@ -543,8 +615,7 @@ export default class UserGroup extends Vue {
                     };
 
                     this.$server
-                        .D("/user/group", deleteUserParam)
-
+                        .D("/tag", deleteUserParam)
                         .then((response: any) => {
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
@@ -572,7 +643,7 @@ export default class UserGroup extends Vue {
         );
     }
 
-    showFirst(value) {
+    showFirst(value: any): string {
         if (value.length >= 2) {
             return value.map(item => item.name)[0] + "...";
         }
@@ -606,7 +677,7 @@ export default class UserGroup extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
+                 * @uiLabel - ${this._("w_Tag_TagName")}
                  */
                 name: string;
 
@@ -617,18 +688,19 @@ export default class UserGroup extends Vue {
                 description: string;
 
 
+                 /**
+                  * @uiLabel - ${this._("w_Regions")}
+                  */
+                regions: string;
+
+
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
                 sites: string;
 
-
-                /**
-                 * @uiLabel - ${this._("w_UserGroup_Users")}
-                 */
-                users: string;
-
                 Actions?: any;
+
             }
         `;
     }
@@ -638,31 +710,41 @@ export default class UserGroup extends Vue {
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                 * @uiPlaceHolder - ${this._("w_UserGroup_GroupName")}
+                 * @uiLabel - ${this._("w_Tag_TagName")}
+                 * @uiPlaceHolder - ${this._("w_Tag_TagName")}
                  * @uiType - ${
-                     this.inputUserGroupData.type === EPageStep.add
+                     this.inputTagData.type === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
-                 */
+                */
                 name: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Description")}
                  * @uiPlaceHolder - ${this._("w_Description")}
-                 */
+                */
                 description: string;
 
+
+                /**
+                 * @uiLabel - ${this._("w_Regions")}
+                 */
+                regionIds?: ${toEnumInterface(
+                    this.regionsSelectItem as any,
+                    true
+                )};
+
+                selectTreeRegion?: any;
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
+                selectTreeSite?: any;
 
-                selectTree?: any;
             }
         `;
     }
@@ -671,9 +753,8 @@ export default class UserGroup extends Vue {
         return `
             interface {
 
-
                 /**
-                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
+                 * @uiLabel - ${this._("w_Tag_TagName")}
                  * @uiType - iv-form-label
                  */
                 name?: string;
@@ -687,22 +768,21 @@ export default class UserGroup extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiLabel - ${this._("w_Regions")}
                  * @uiType - iv-form-label
                  */
-                siteIdsText?: string;
+                regionIdsText?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_UserGroup_Users")}
+                 * @uiLabel - ${this._("w_Sites")}
                  * @uiType - iv-form-label
-                 */
-                groupIdsText?: string;
+                */
+                siteIdsText?: string;
+
             }
         `;
     }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>

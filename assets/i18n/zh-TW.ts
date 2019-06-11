@@ -31,6 +31,7 @@ export default class LangObject implements ILang {
     w_Error = 'Error';
     w_NextPage = 'Next';
     w_PreviousPage = 'Prev';
+    w_Clear = 'Clear';
     w_Unlink = 'Unlink';
     w_Search = 'Search';
     w_No = 'No';
@@ -112,7 +113,6 @@ export default class LangObject implements ILang {
 
     // button
     w_Save = 'Save';
-    w_Clear = 'Clear';
     w_Back = 'Back';
     w_Cancel = 'Cancel';
     w_Send = 'Send';
@@ -141,6 +141,15 @@ export default class LangObject implements ILang {
     w_Navigation_BO_CampaignSetting = 'Campaign Setting';
     w_Navigation_BO_SalesRecords = 'Sales Records';
     w_Navigation_BO_GeneralOfficeHour = 'General Office Hour';
+
+    w_Navigation_Setting = 'Setting';
+    w_Navigation_Setting_MailServer = 'Mail Server';
+    w_Navigation_Setting_SMS = 'SMS';
+    w_Navigation_Setting_Weather = 'Weather';
+    w_Navigation_Setting_Backup = 'Backup';
+    w_Navigation_Setting_Restore = 'Restore';
+    w_Navigation_Setting_License = 'License';
+    w_Navigation_Setting_Tag = 'Tag';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -226,6 +235,8 @@ export default class LangObject implements ILang {
     w_User_AddUserFailed = 'Add User Failed';
     w_User_EditUserSuccess = 'Edit User Success';
     w_User_EditUserFailed = 'Edit User Failed';
+    w_User_DeleteConfirm = 'Are you sure to delete selected user(s)?';
+
 
     // UserGroup
     w_UserGroup_UserGroupList = 'Group List';
@@ -238,6 +249,7 @@ export default class LangObject implements ILang {
     w_UserGroup_AddUserGroupFailed = 'Add User Group Failed';
     w_UserGroup_EditUserGroupSuccess = 'Edit User Group Success';
     w_UserGroup_EditUserGroupFailed = 'Edit User Group Failed';
+    w_UserGroup_DeleteConfirm = 'Are you sure to delete selected usergroup(s)?';
 
     // License
     w_License_List = 'License List';
@@ -271,6 +283,7 @@ export default class LangObject implements ILang {
     w_MailServer_Setting_Fail = 'Email Server set failed.';
     w_MailServer_Test_Success = 'Email Server test success.';
     w_MailServer_Test_Fail = 'Email Server test failed.';
+    w_MailServer_Read_Fail = 'Mail Server read failed.';
 
     // Site
     w_Site_SiteID = 'Site ID';
@@ -338,6 +351,7 @@ export default class LangObject implements ILang {
     w_Tag_AddTagFailed = 'Add Tag Failed';
     w_Tag_EditTagSuccess = 'Edit Tag Success';
     w_Tag_EditTagFailed = 'Edit Tag Failed';
+    w_Tag_DeleteConfirm = 'Are you sure to delete selected tag(s)?';
 
     // MyProfile
     w_MyProfile_EditMyProfile = 'Edit My Profile';
@@ -376,6 +390,7 @@ export default class LangObject implements ILang {
     w_SmsServer_Setting_Fail = 'SMS Server set failed.';
     w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
     w_SmsServer_Setting_Test_Success = 'SMS Server test success.';
+    w_SmsServer_Read_Fail = 'SMS Server read failed.';
 
     // Office Hour
     w_OfficeHour_List = 'Office Hour List';
@@ -386,6 +401,7 @@ export default class LangObject implements ILang {
     w_OfficeHour = '* Office Hour';
     w_OfficeHour_AddFailed = 'Add office hour failed.';
     w_OfficeHour_EditFailed = 'Edit office hour failed.';
+    w_OfficeHour_DeleteConfirm = 'Are you sure to delete selected office hour(s)?';
 
     // Weather
     w_Weather_Add = 'Add Weather';
@@ -405,6 +421,7 @@ export default class LangObject implements ILang {
     w_Weather_Step1_info = 'Please register at Dark Sky API ( https://darksky.net/dev ) and will get a SecretKey.';
     w_Weather_Setting_Success = 'Weather set success.';
     w_Weather_Setting_Fail = 'Weather set failed.';
+    w_Weather_Read_Fail = 'Weather read failed.';
 
     w_WeatherTest_Success = 'Weather test success.';
     w_WeatherTest_Fail = 'Weather test failed.';
