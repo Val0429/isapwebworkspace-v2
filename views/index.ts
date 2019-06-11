@@ -26,6 +26,9 @@ import UserGroup from './Users/UserGroup.vue';
 // Regions
 import Region from './Regions/Region.vue';
 
+// Sites
+import Site from './Sites/Site.vue';
+
 // ============================================================= //
 
 // Home
@@ -58,3 +61,6 @@ $({ path: '/users/user_group', name: 'UserGroup', icon: 'fa-twitter' })(UserGrou
 
 // Regions
 $({ path: '/region', name: 'Region', icon: 'fa-twitter' })(Region);
+
+// Sites
+$({ path: '/site', name: 'Site', icon: 'fa-twitter' })(Site);
