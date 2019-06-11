@@ -123,10 +123,17 @@ export default class LangObject {
 
     // Navigation
     w_Navigation_Label = 'iSAP Solution';
+
     w_Navigation_Users = 'Users';
     w_Navigation_User = 'User';
     w_Navigation_UserGroup = 'User Group';
+
     w_Navigation_Region = 'Region';
+
+    w_Navigation_BusinessOperation = 'Business Operation';
+    w_Navigation_BO_CampaignSetting = 'Campaign Setting';
+    w_Navigation_BO_SalesRecords = 'Sales Records';
+    w_Navigation_BO_GeneralOfficeHour = 'General Office Hour';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -372,6 +379,8 @@ export default class LangObject {
     w_OfficeHour_View = 'View Office Hour';
     w_OfficeHour_Name = 'Office Hour Name';
     w_OfficeHour = '* Office Hour';
+    w_OfficeHour_AddFailed = 'Add office hour failed.';
+    w_OfficeHour_EditFailed = 'Edit office hour failed.';
 
     // Weather
     w_Weather_Add = 'Add Weather';

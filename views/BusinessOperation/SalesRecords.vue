@@ -26,8 +26,6 @@ enum EPageStep {
 })
 export default class SalesRecords extends Vue {
 
-	server = Server;
-
 	ePageStep = EPageStep;
 	pageStep: EPageStep = EPageStep.list;
 

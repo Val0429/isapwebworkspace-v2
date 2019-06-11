@@ -23,17 +23,13 @@ enum EPageStep {
 }
 
 @Component({
-    components: {
-        iSAPFormCard,
-        Card
-    }
+    components: {}
 })
 export default class CampaignSetting extends Vue {
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
-    server = Server;
 
 
     created() {

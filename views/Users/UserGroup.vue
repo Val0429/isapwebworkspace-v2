@@ -212,10 +212,6 @@
         chooseTree = 'chooseTree',
     }
 
-    enum EType {
-        add = "add",
-        edit = "edit"
-    }
 
     @Component({
         components: { }
@@ -430,7 +426,7 @@
 
         pageToAdd(type: string) {
             this.pageStep = EPageStep.add;
-            if (type === EType.add) {
+            if (type === EPageStep.add) {
                 this.clearInputData();
                 this.selecteds = [];
                 this.inputUserGroupData.type = type;
@@ -445,7 +441,7 @@
 
 
         pageToShowResult() {
-            if (this.inputUserGroupData.type === EType.edit) {
+            if (this.inputUserGroupData.type === EPageStep.edit) {
                 this.pageStep = EPageStep.edit;
                 // siteIds clear
                 this.inputUserGroupData.siteIds = [];
@@ -457,7 +453,7 @@
 
             }
 
-            if (this.inputUserGroupData.type === EType.add) {
+            if (this.inputUserGroupData.type === EPageStep.add) {
                 this.pageStep = EPageStep.add;
 
                 // siteIds clear
@@ -498,11 +494,11 @@
                 }
             ];
 
-            const addUserParam = {
+            const addUParam = {
                 datas
             };
 
-            await this.$server.C("/user/group", addUserParam)
+            await this.$server.C("/user/group", addUParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
@@ -548,11 +544,11 @@
                 }
             ];
 
-            const editUserParam = {
+            const editParam = {
                 datas
             };
 
-            await this.$server.U("/user/group", editUserParam)
+            await this.$server.U("/user/group", editParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
@@ -592,13 +588,13 @@
             //     .then(result => {
             //         if (result.value) {
                         for (const param of this.userGroupDetail) {
-                            const deleteUserParam: {
+                            const deleteParam: {
                                 objectId: string;
                             } = {
                                 objectId: param.objectId
                             };
 
-                            await this.$server.D("/user/group", deleteUserParam)
+                            await this.$server.D("/user/group", deleteParam)
                                 .then((response: any) => {
                                     for (const returnValue of response) {
                                         if (returnValue.statusCode === 200) {

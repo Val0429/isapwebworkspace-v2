@@ -285,11 +285,6 @@ enum EPageStep {
     chooseTree = "chooseTree"
 }
 
-enum EType {
-    add = "add",
-    edit = "edit"
-}
-
 @Component({
     components: {}
 })
@@ -561,7 +556,7 @@ export default class User extends Vue {
 
     pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
-        if (type === EType.add) {
+        if (type === EPageStep.add) {
             this.clearInputData();
             this.selecteds = [];
             this.inputUserData.type = type;
@@ -580,7 +575,7 @@ export default class User extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputUserData.type === EType.edit) {
+        if (this.inputUserData.type === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteIds clear
             this.inputUserData.siteIds = [];
@@ -591,7 +586,7 @@ export default class User extends Vue {
             }
         }
 
-        if (this.inputUserData.type === EType.add) {
+        if (this.inputUserData.type === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteIds clear
@@ -662,12 +657,12 @@ export default class User extends Vue {
             }
         ];
 
-        const addUserParam = {
+        const addParam = {
             datas
         };
 
         await this.$server
-            .C("/user/user", addUserParam)
+            .C("/user/user", addParam)
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
@@ -716,12 +711,12 @@ export default class User extends Vue {
             }
         ];
 
-        const editUserParam = {
+        const editParam = {
             datas
         };
 
         await this.$server
-            .U("/user/user", editUserParam)
+            .U("/user/user", editParam)
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
@@ -761,14 +756,14 @@ export default class User extends Vue {
         //     .then(result => {
         //         if (result.value) {
         for (const param of this.userDetail) {
-            const deleteUserParam: {
+            const deleteParam: {
                 objectId: string;
             } = {
                 objectId: param.objectId
             };
 
             await this.$server
-                .D("/user/user", deleteUserParam)
+                .D("/user/user", deleteParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {

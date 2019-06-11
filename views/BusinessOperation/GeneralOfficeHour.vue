@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :label="_('w_UserGroup_UserGroupList')"
+            :label="_('w_OfficeHour_List')"
         >
             <template #toolbox>
 
@@ -24,15 +24,14 @@
             </template>
 
             <iv-table
-                ref="userGroupTable"
+                ref="officeHourTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/office-hour' }"
                 @selected="selectedItem($event)"
             >
-                <template #description="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ show30Words($attrs.value) }}
+                <template #dayRanges="{$attrs}">
+                    <div v-html="sortOutTableDataFromApi($attrs)"></div>
                 </template>
 
                 <template #sites="{$attrs}">
@@ -40,13 +39,7 @@
                     {{ showFirst($attrs.value) }}
                 </template>
 
-                <template #users="{$attrs}">
-                    <!--                {{ $attrs.value.map(item => item.name).join(', ')}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
-
                 <template #Actions="{$attrs, $listeners}">
-
                     <iv-toolbox-more :disabled="isSelected.length !== 1">
                         <iv-toolbox-view @click="pageToView" />
                         <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
@@ -57,11 +50,11 @@
             </iv-table>
         </iv-card>
 
-        <!-- add -->
+        <!--From (Add and Edit)-->
         <iv-auto-card
-            v-show="pageStep === ePageStep.add"
+            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
             :visible="true"
-            :label="_('w_UserGroup_AddGroup')"
+            :label="pageStep === ePageStep.add ? _('w_OfficeHour_Add') :  _('w_OfficeHour_Edit')"
         >
             <template #toolbox>
 
@@ -70,61 +63,133 @@
             </template>
 
             <iv-form
-                :interface="IAddForm()"
-                :value="inputUserGroupData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAdd($event)"
+                :interface="IAddAndEditForm()"
+                :value="inputOfficeHourData"
+                @submit="saveAddOrEdit($event)"
             >
-                <template #selectTree="{ $attrs, $listeners }">
+                <template #title="{ $attrs, $listeners }">
+                    <div class="ml-3 mb-2 w-100">{{ _('w_OfficeHour') }}</div>
+                </template>
 
-                    <div class="m-3">
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
+                <template #dayRanges="{$attrs, $listeners}">
+                    <b-form-group class="ml-3">
+                        <b-row
+                            v-for="(value, index) in officeHourTime"
+                            :key="'officeHourTime__' + index"
+                        >
+                            <b-col>
+                                <b-form-select
+                                    class="selectWeekWidth mb-2"
+                                    v-model="officeHourTime[index].startDay"
+                                    :plain="true"
+                                    :options="dayRanges.weeks"
+                                ></b-form-select>
+                            </b-col>
 
-                    </div>
+                            <b-col>
+                                <span>{{ _('w_To') }}</span>
+                            </b-col>
+
+                            <b-col>
+                                <b-form-select
+                                    class="selectWeekWidth"
+                                    v-model="officeHourTime[index].endDay"
+                                    :plain="true"
+                                    :options="dayRanges.weeks"
+                                ></b-form-select>
+                            </b-col>
+
+                            <b-col>
+                                <b-form-select
+                                    class="selectHourWidth"
+                                    v-model="officeHourTime[index].startHour"
+                                    :plain="true"
+                                    :options="dayRanges.hours"
+                                ></b-form-select>
+                            </b-col>
+
+                            <b-col>
+                                <span> ： </span>
+                            </b-col>
+
+                            <b-col>
+                                <b-form-select
+                                    class="selectMinuteWidth"
+                                    v-model="officeHourTime[index].startMinute"
+                                    :plain="true"
+                                    :options="dayRanges.minutes"
+                                ></b-form-select>
+                            </b-col>
+
+                            <b-col>
+                                <span>{{ _('w_To') }}</span>
+                            </b-col>
+
+                            <b-col>
+                                <b-form-select
+                                    class="selectHourWidth"
+                                    v-model="officeHourTime[index].endHour"
+                                    :plain="true"
+                                    :options="dayRanges.hours"
+                                ></b-form-select>
+                            </b-col>
+
+                            <b-col>
+                                <span> ： </span>
+                            </b-col>
+
+                            <b-col>
+                                <b-form-select
+                                    class="selectMinuteWidth"
+                                    v-model="officeHourTime[index].endMinute"
+                                    :plain="true"
+                                    :options="dayRanges.minutes"
+                                ></b-form-select>
+                            </b-col>
+
+                            <b-col>
+                                <b-button
+                                    class="button addButton"
+                                    variant="success"
+                                    type="button"
+                                    @click="addOfficeHour()"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                </b-button>
+                            </b-col>
+
+                            <b-col>
+                                <b-button
+                                    v-show="index === 0"
+                                    class="button"
+                                    variant="danger"
+                                    type="button"
+                                    style="visibility:hidden"
+                                    @click="removeOfficeHour(index)"
+                                >
+                                    <i class="fa fa-minus"></i>
+
+                                </b-button>
+                            </b-col>
+
+                            <b-col>
+                                <b-button
+                                    v-show="index !== 0"
+                                    class="button"
+                                    variant="danger"
+                                    type="button"
+                                    @click="removeOfficeHour(index)"
+                                >
+                                    <i class="fa fa-minus"></i>
+
+                                </b-button>
+                            </b-col>
+
+                        </b-row>
+                    </b-form-group>
 
                 </template>
-            </iv-form>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- edit -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.edit"
-            :visible="true"
-            :label="_('w_UserGroup_EditGroup')"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IEditForm()"
-                :value="inputUserGroupData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveEdit($event)"
-            >
-                <template #selectTree="{ $atrs, $listeners }">
-
-                    <div class="m-3">
-
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-
-                    </div>
-
-                </template>
             </iv-form>
 
             <template #footer-before>
@@ -142,7 +207,7 @@
         <iv-card
             v-show="pageStep === ePageStep.view"
             :visible="true"
-            :label="_('w_UserGroup_ViewGroup')"
+            :label="_('w_OfficeHour_View')"
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -150,8 +215,21 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputUserGroupData"
+                :value="inputOfficeHourData"
             >
+                <!--                <template #sites="{$attrs, $listeners}">-->
+                <!--                    <form-label-->
+                <!--                        v-bind="$attrs"-->
+                <!--                        :value="$attrs.value.map(item => item.name).join(', ')"-->
+                <!--                    />-->
+                <!--                </template>-->
+
+                <template #dayRanges="{$attrs, $listeners}">
+                    <iv-form-label
+                        v-bind="$attrs"
+                        :value="$attrs.value"
+                    />
+                </template>
 
             </iv-form>
 
@@ -166,343 +244,336 @@
 
         </iv-card>
 
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
-
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
-    import {
-        ERegionType,
-        IRegionItem,
-        RegionTreeItem,
-        IRegionTreeSelected
-    } from "@/components/RegionTree/models";
-    import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-    import { IUserGroupAdd, IUserGroupEdit } from '@/config/default/api/interfaces'
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import {
+    IOfficeHourAddData,
+    IOfficeHourEditData
+} from "@/config/default/api/interfaces";
+import { DateTime2String } from "@/services/Datetime.ts";
 
-    import RegionAPI from "@/services/RegionAPI";
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog.vue";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog.vue";
 
-    interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit{
-        users: any;
-        siteIdsText?: string;
-        groupIdsText?: string;
-        tempSiteIds?: any;
-        type?: string;
+const timeItem = {
+    startDay: "1",
+    endDay: "0",
+    startHour: "9",
+    startMinute: "0",
+    endHour: "21",
+    endMinute: "30",
+    startDate: new Date(2000, 1, 1, 9, 0),
+    endDate: new Date(2000, 1, 1, 21, 30)
+};
+
+enum EPageStep {
+    list = "list",
+    add = "add",
+    edit = "edit",
+    view = "view",
+    none = "none",
+    showResult = "showResult",
+    chooseTree = "chooseTree"
+}
+
+@Component({
+    components: {}
+})
+export default class GeneralOfficeHour extends Vue {
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
+
+    isSelected: any = [];
+    tableMultiple: boolean = true;
+
+    officeHourDetail: any = [];
+
+    dayRanges: any = {
+        weeks: [
+            { value: "0", text: "Sunday" },
+            { value: "1", text: "Monday" },
+            { value: "2", text: "Tuesday" },
+            { value: "3", text: "Wednesday" },
+            { value: "4", text: "Thursday" },
+            { value: "5", text: "Friday" },
+            { value: "6", text: "Saturday" }
+        ],
+        hours: [],
+        minutes: []
+    };
+
+    officeHourTime: any = [
+        {
+            startDay: "1",
+            endDay: "0",
+            startHour: "9",
+            startMinute: "0",
+            endHour: "21",
+            endMinute: "30",
+            startDate: new Date(2000, 1, 1, 9, 0),
+            endDate: new Date(2000, 1, 1, 21, 30)
+        }
+    ];
+
+    inputOfficeHourData: any = {
+        objectId: "",
+        name: "",
+        dayRanges: [],
+        type: "",
+        siteIdsText: ""
+    };
+
+    created() {}
+
+    mounted() {
+        this.initDayRanges();
     }
 
-    enum EPageStep {
-        list = 'list',
-        add = 'add',
-        edit = 'edit',
-        view = 'view',
-        none = 'none',
-        showResult = 'showResult',
-        chooseTree = 'chooseTree',
-    }
-
-    enum EType {
-        add = "add",
-        edit = "edit"
-    }
-
-    @Component({
-        components: { }
-    })
-    export default class GeneralOfficeHour extends Vue {
-
-        ePageStep = EPageStep;
-        pageStep: EPageStep = EPageStep.list;
-
-        isSelected: any = [];
-        tableMultiple: boolean = true;
-
-        userGroupDetail: any = [];
-
-        sitesSelectItem: any = {};
-        userGroupSelectItem: any = {};
-
-        // tree 相關
-        selectType = ERegionType.site;
-        regionTreeItem = new RegionTreeItem();
-        selecteds: IRegionTreeSelected[] = [];
-
-        inputUserGroupData: InputUserGroupData = {
+    clearInputData() {
+        this.inputOfficeHourData = {
             objectId: "",
             name: "",
-            description: "",
-            siteIdsText: "",
-            groupIdsText: "",
-            type: "",
-            siteIds: [],
-            users: [],
+            dayRanges: [
+                {
+                    startDay: "1",
+                    endDay: "0",
+                    startDate: new Date(2000, 1, 1, 9, 0),
+                    endDate: new Date(2000, 1, 1, 21, 30)
+                }
+            ]
         };
+    }
 
-        created() {}
-
-        mounted() {
-            this.initSelectItem();
-            this.initRegionTreeSelect();
+    initDayRanges() {
+        for (let i = 0; i < 25; i++) {
+            const tempHour =
+                i === 24 ? "00" : i < 10 ? "0" + i.toString() : i.toString();
+            const tempValue =
+                tempHour + ":00" + (i < 12 || i > 23 ? " am" : " pm");
+            const tempObject = { value: i.toString(), text: tempValue };
+            this.dayRanges.hours.push(tempObject);
         }
 
-        clearInputData() {
-            this.inputUserGroupData = {
-                objectId: "",
-                name: "",
-                description: "",
-                siteIdsText: "",
-                groupIdsText: "",
-                siteIds: [],
-                users: [],
-                type: "",
+        for (let i = 0; i < 60; i++) {
+            const tempMinute =
+                i === 60 ? "00" : i < 10 ? "0" + i.toString() : i.toString();
+            const tempObject = { value: i.toString(), text: tempMinute };
+            this.dayRanges.minutes.push(tempObject);
+        }
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.officeHourDetail = [];
+        this.officeHourDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.officeHourDetail) {
+            this.inputOfficeHourData = {
+                objectId: param.objectId,
+                name: param.name,
+                dayRanges: param.dayRanges,
+                siteIdsText: this.idsToText(param.sites),
+                // sites: param.sites,
+                type: ""
             };
         }
+    }
 
-        initRegionTreeSelect() {
-            this.regionTreeItem = new RegionTreeItem();
-            this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    addOfficeHour() {
+        var tempTimeItem = JSON.parse(JSON.stringify(timeItem));
+        this.officeHourTime.push(tempTimeItem);
+    }
+
+    removeOfficeHour(index: number) {
+        this.officeHourTime.splice(index, 1);
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (const val of value) {
+            result += val.name + ", ";
         }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
 
-        async initSelectItem() {
-            // 取得sites
-            const readAllSiteParam: {
-                type: string;
-            } = {
-                type: "all"
-            };
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
 
-            await this.$server.R("/location/site/all", readAllSiteParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 sitesSelectItem 的 key 的方式
-                            this.sitesSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                            this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                                returnValue
-                            );
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
+        let showData = "";
 
-            // 取得 tree
-            await this.$server.R("/location/tree")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            response
-                        );
-                        this.regionTreeItem.region = this.regionTreeItem.tree;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 取得UserGroup
-            await this.$server.R("/user/group/all")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 userGroupSelectItem 的 key 的方式
-                            this.userGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
-
-        selectedItem(data) {
-            this.isSelected = data;
-            this.userGroupDetail = [];
-            this.userGroupDetail = data;
-        }
-
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.userGroupDetail) {
-                this.inputUserGroupData = {
-                    objectId: param.objectId,
-                    name: param.name,
-                    description: param.description,
-                    siteIdsText: this.idsToText(param.sites),
-                    groupIdsText: this.idsToText(param.users),
-                    siteIds: param.sites,
-                    users: param.users,
-                    type: "",
+        if (this.inputOfficeHourData && this.inputOfficeHourData.dayRanges) {
+            for (let dayRange of this.inputOfficeHourData.dayRanges) {
+                let tempDateTimeNumber = {
+                    startDay: parseInt(dayRange.startDay),
+                    startHour: parseInt(
+                        DateTime2String(new Date(dayRange.startDate), "HH")
+                    ),
+                    startMinute: parseInt(
+                        DateTime2String(new Date(dayRange.startDate), "mm")
+                    ),
+                    endDay: parseInt(dayRange.endDay),
+                    endHour: parseInt(
+                        DateTime2String(new Date(dayRange.endDate), "HH")
+                    ),
+                    endMinute: parseInt(
+                        DateTime2String(new Date(dayRange.endDate), "mm")
+                    )
                 };
+
+                let tempDateTime = {
+                    startDay: this.getWeekText(tempDateTimeNumber.startDay),
+                    startHour: this.getNumber10plus0(
+                        tempDateTimeNumber.startHour
+                    ),
+                    startMinute: this.getNumber10plus0(
+                        tempDateTimeNumber.startMinute
+                    ),
+                    endDay: this.getWeekText(tempDateTimeNumber.endDay),
+                    endHour: this.getNumber10plus0(tempDateTimeNumber.endHour),
+                    endMinute: this.getNumber10plus0(
+                        tempDateTimeNumber.endMinute
+                    )
+                };
+
+                showData += `${tempDateTime.startDay}`;
+                showData += `~`;
+                showData += `${tempDateTime.endDay}`;
+                showData += ` `;
+                showData += `${tempDateTime.startHour}`;
+                showData += `:`;
+                showData += `${tempDateTime.startMinute}`;
+                showData += ` ~ `;
+                showData += `${tempDateTime.endHour}`;
+                showData += `:`;
+                showData += `${tempDateTime.endMinute}`;
+                showData += ` , `;
             }
         }
 
-        tempSaveInputData(data) {
-            switch (data.key) {
-                case "name":
-                    this.inputUserGroupData.name = data.value;
-                    break;
-                case "description":
-                    this.inputUserGroupData.description = data.value;
-                    break;
-                case "siteIds":
-                    this.inputUserGroupData.siteIds = data.value;
-                    break;
+        // 去掉結尾,
+        this.inputOfficeHourData.dayRanges = showData.substring(
+            0,
+            showData.lastIndexOf(",")
+        );
+        return this.inputOfficeHourData.dayRanges;
+    }
 
-            }
+    pageToEdit(type: string) {
+        this.pageStep = EPageStep.edit;
+        this.getInputData();
 
+        this.inputOfficeHourData.type = type;
 
-            for (const id of this.inputUserGroupData.siteIds) {
-                for (const detail in this.sitesSelectItem) {
-                    if (id === detail) {
-                        let selectedsObject: IRegionTreeSelected = {
-                            objectId: detail,
-                            type: ERegionType.site,
-                            name: this.sitesSelectItem[detail]
-                        };
-                        this.selecteds.push(selectedsObject);
-                    }
-                }
-            }
+        this.officeHourTime = [];
 
-            // console.log('this.selecteds - ', this.selecteds)
-            // this.tempSaveData = JSON.parse(JSON.stringify(this.inputUserGroupData));
-        }
-
-        idsToText(value: any): string {
-            let result = "";
-            for (const val of value) {
-                result += val.name + ", ";
-            }
-            result = result.substring(0, result.length - 2);
-            return result;
-        }
-
-        pageToView() {
-            this.pageStep = EPageStep.view;
-            this.getInputData();
-        }
-
-        pageToEdit(type: string) {
-            this.pageStep = EPageStep.edit;
-            this.getInputData();
-            this.selecteds = [];
-
-            this.inputUserGroupData.type = type;
-
-            this.inputUserGroupData.tempSiteIds = JSON.parse(
-                JSON.stringify(this.inputUserGroupData.siteIds)
+        for (const item of this.inputOfficeHourData.dayRanges) {
+            let startHour = parseInt(
+                DateTime2String(new Date(item.startDate), "HH")
+            );
+            let startMinute = parseInt(
+                DateTime2String(new Date(item.startDate), "mm")
+            );
+            let endHour = parseInt(
+                DateTime2String(new Date(item.endDate), "HH")
+            );
+            let endMinute = parseInt(
+                DateTime2String(new Date(item.endDate), "mm")
             );
 
-            this.inputUserGroupData.siteIds = JSON.parse(
-                JSON.stringify(
-                    this.inputUserGroupData.siteIds.map(item => item.objectId)
+            const tempOfficeHourTime = {
+                startDay: item.startDay,
+                endDay: item.endDay,
+                startHour: startHour.toString(),
+                startMinute: startMinute.toString(),
+                endHour: endHour.toString(),
+                endMinute: endMinute.toString(),
+                startDate: new Date(
+                    2000,
+                    1,
+                    1,
+                    Number(startHour),
+                    Number(startMinute)
+                ),
+                endDate: new Date(
+                    2000,
+                    1,
+                    1,
+                    Number(endHour),
+                    Number(endMinute)
                 )
+            };
+            this.officeHourTime.push(tempOfficeHourTime);
+            this.inputOfficeHourData.dayRanges = JSON.parse(
+                JSON.stringify(this.officeHourTime)
             );
-
         }
+    }
 
-        pageToAdd(type: string) {
-            this.pageStep = EPageStep.add;
-            if (type === EType.add) {
-                this.clearInputData();
-                this.selecteds = [];
-                this.inputUserGroupData.type = type;
+    pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        if (type === EPageStep.add) {
+            this.clearInputData();
+            this.inputOfficeHourData.type = type;
+        }
+    }
+
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        (this.$refs.officeHourTable as any).reload();
+    }
+
+    async saveAddOrEdit(data) {
+        if (this.inputOfficeHourData.type === EPageStep.add) {
+            data.dayRanges = [];
+
+            for (const item of this.officeHourTime) {
+                const startDate = new Date(
+                    2000,
+                    1,
+                    1,
+                    item.startHour,
+                    item.startMinute
+                );
+                const endDate = new Date(
+                    2000,
+                    1,
+                    1,
+                    item.endHour,
+                    item.endMinute
+                );
+
+                const dayRanges = {
+                    startDay: item.startDay,
+                    endDay: item.endDay,
+                    startDate: startDate,
+                    endDate: endDate
+                };
+
+                data.dayRanges.push(dayRanges);
             }
-        }
 
-        pageToList() {
-            this.pageStep = EPageStep.list;
-            (this.$refs.userGroupTable as any).reload();
-            this.selecteds = [];
-        }
-
-
-        pageToShowResult() {
-            if (this.inputUserGroupData.type === EType.edit) {
-                this.pageStep = EPageStep.edit;
-                // siteIds clear
-                this.inputUserGroupData.siteIds = [];
-
-                // from selecteds push siteIds
-                for (const item of this.selecteds) {
-                    this.inputUserGroupData.siteIds.push(item.objectId);
-                }
-
-            }
-
-            if (this.inputUserGroupData.type === EType.add) {
-                this.pageStep = EPageStep.add;
-
-                // siteIds clear
-                this.inputUserGroupData.siteIds = [];
-
-                // from selecteds push siteIds
-                for (const item of this.selecteds) {
-                    this.inputUserGroupData.siteIds.push(item.objectId);
-                }
-
-            }
-        }
-
-        pageToChooseTree() {
-            this.pageStep = EPageStep.chooseTree;
-            this.selecteds = [];
-            for (const id of this.inputUserGroupData.siteIds) {
-                for (const detail in this.sitesSelectItem) {
-                    if (id === detail) {
-                        let selectedsObject: IRegionTreeSelected = {
-                            objectId: detail,
-                            type: ERegionType.site,
-                            name: this.sitesSelectItem[detail]
-                        };
-                        this.selecteds.push(selectedsObject);
-                    }
-                }
-            }
-        }
-
-        async saveAdd(data) {
-
-            const datas: IUserGroupAdd[] = [
+            const datas: any = [
                 {
                     name: data.name,
-                    description: data.description,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    dayRanges: data.dayRanges
                 }
             ];
 
-            const addUserParam = {
+            const addParam = {
                 datas
             };
 
-            await this.$server.C("/user/group", addUserParam)
+            await this.$server
+                .C("/office-hour", addParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
@@ -512,7 +583,7 @@
                             new Dialog({
                                 propsData: {
                                     label: this._("w_Error"),
-                                    value: this._("w_UserGroup_AddUserGroupFailed")
+                                    value: this._("w_OfficeHour_AddFailed")
                                 }
                             }).$modal();
                             return false;
@@ -527,7 +598,7 @@
                         new Dialog({
                             propsData: {
                                 label: this._("w_Error"),
-                                value: this._("w_UserGroup_AddUserGroupFailed")
+                                value: this._("w_OfficeHour_AddFailed")
                             }
                         }).$modal();
                         return false;
@@ -537,22 +608,51 @@
                 });
         }
 
-        async saveEdit(data) {
-            const datas: IUserGroupEdit[] = [
-                {
+        // edit
+        if (this.inputOfficeHourData.type === EPageStep.edit) {
+            data.dayRanges = [];
 
+            for (const item of this.officeHourTime) {
+                const startDate = new Date(
+                    2000,
+                    1,
+                    1,
+                    item.startHour,
+                    item.startMinute
+                );
+                const endDate = new Date(
+                    2000,
+                    1,
+                    1,
+                    item.endHour,
+                    item.endMinute
+                );
+
+                const dayRanges = {
+                    startDay: item.startDay,
+                    endDay: item.endDay,
+                    startDate: startDate,
+                    endDate: endDate
+                };
+
+                data.dayRanges.push(dayRanges);
+            }
+
+            const datas: any = [
+                {
                     // siteIds: data.siteIds,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    description: data.description,
+                    name: data.name,
+                    dayRanges: data.dayRanges,
                     objectId: data.objectId
                 }
             ];
 
-            const editUserParam = {
+            const editParam = {
                 datas
             };
 
-            await this.$server.U("/user/group", editUserParam)
+            await this.$server
+                .U("/office-hour", editParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
@@ -562,7 +662,7 @@
                             new Dialog({
                                 propsData: {
                                     label: this._("w_Error"),
-                                    value: this._("w_UserGroup_EditUserGroupFailed")
+                                    value: this._("w_OfficeHour_EditFailed")
                                 }
                             }).$modal();
                             return false;
@@ -577,7 +677,7 @@
                         new Dialog({
                             propsData: {
                                 label: this._("w_Error"),
-                                value: this._("w_UserGroup_EditUserGroupFailed")
+                                value: this._("w_OfficeHour_EditFailed")
                             }
                         }).$modal();
                         return false;
@@ -586,76 +686,146 @@
                     return false;
                 });
         }
+    }
 
-        async doDelete() {
-            // await Dialog.Question(this._("w_DeleteConfirm"))
-            //     .then(result => {
-            //         if (result.value) {
-            for (const param of this.userGroupDetail) {
-                const deleteUserParam: {
-                    objectId: string;
-                } = {
-                    objectId: param.objectId
+    async saveAdd(data) {}
+
+    async saveEdit(data) {}
+
+    async doDelete() {
+        // await Dialog.Question(this._("w_DeleteConfirm"))
+        //     .then(result => {
+        //         if (result.value) {
+        for (const param of this.officeHourDetail) {
+            const deleteParam: {
+                objectId: string;
+            } = {
+                objectId: param.objectId
+            };
+
+            await this.$server
+                .D("/office-hour", deleteParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            new Dialog({
+                                propsData: {
+                                    label: this._("w_Error"),
+                                    value: this._("w_DeleteFailed")
+                                }
+                            }).$modal();
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+
+                    console.log(e);
+                });
+        }
+        //     }
+        // })
+        // .catch((e: any) => console.log(e));
+    }
+
+    showFirst(value) {
+        if (value.length >= 2) {
+            return value.map(item => item.name)[0] + "...";
+        }
+        if (value.length === 1) {
+            return value.map(item => item.name)[0];
+        }
+        if (value.length == 0) {
+            return "";
+        }
+    }
+
+    show30Words(
+        value: any,
+        startWord: number = 0,
+        endWord: number = 30
+    ): string {
+        return value.length < endWord
+            ? value.substring(startWord, endWord)
+            : value.substring(startWord, endWord) + "...";
+    }
+
+    getWeekText(value: any): string {
+        return !isNaN(value) && value > -1 && value < 7
+            ? this._(`w_Week_${value.toString()}` as any)
+            : this._("w_Week_Unknow");
+    }
+
+    getNumber10plus0(value: any): string {
+        let result = "00";
+        if (!isNaN(value)) {
+            result = value < 10 ? "0" + value.toString() : value.toString();
+        }
+        return result;
+    }
+
+    sortOutTableDataFromApi(data: any) {
+        let showData = "";
+        if (data && data.row && data.row.dayRanges) {
+            for (let dayRange of data.row.dayRanges) {
+                let tempDateTimeNumber = {
+                    startDay: parseInt(dayRange.startDay),
+                    startHour: parseInt(
+                        DateTime2String(new Date(dayRange.startDate), "HH")
+                    ),
+                    startMinute: parseInt(
+                        DateTime2String(new Date(dayRange.startDate), "mm")
+                    ),
+                    endDay: parseInt(dayRange.endDay),
+                    endHour: parseInt(
+                        DateTime2String(new Date(dayRange.endDate), "HH")
+                    ),
+                    endMinute: parseInt(
+                        DateTime2String(new Date(dayRange.endDate), "mm")
+                    )
                 };
 
-                await this.$server.D("/user/group", deleteUserParam)
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                this.pageToList();
-                            }
-                            if (returnValue.statusCode === 500) {
-                                new Dialog({
-                                    propsData: {
-                                        label: this._("w_Error"),
-                                        value: this._("w_DeleteFailed")
-                                    }
-                                }).$modal();
-                                return false;
-                            }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (
-                            e.res &&
-                            e.res.statusCode &&
-                            e.res.statusCode == 401
-                        ) {
-                            return ResponseFilter.base(this, e);
-                        }
+                let tempDateTime = {
+                    startDay: this.getWeekText(tempDateTimeNumber.startDay),
+                    startHour: this.getNumber10plus0(
+                        tempDateTimeNumber.startHour
+                    ),
+                    startMinute: this.getNumber10plus0(
+                        tempDateTimeNumber.startMinute
+                    ),
+                    endDay: this.getWeekText(tempDateTimeNumber.endDay),
+                    endHour: this.getNumber10plus0(tempDateTimeNumber.endHour),
+                    endMinute: this.getNumber10plus0(
+                        tempDateTimeNumber.endMinute
+                    )
+                };
 
-                        console.log(e);
-                    });
-            }
-            //     }
-            // })
-            // .catch((e: any) => console.log(e));
-        }
-
-        showFirst(value) {
-            if (value.length >= 2) {
-                return value.map(item => item.name)[0] + "...";
-            }
-            if (value.length === 1) {
-                return value.map(item => item.name)[0];
-            }
-            if (value.length == 0) {
-                return "";
+                showData += `${tempDateTime.startDay}`;
+                showData += `~`;
+                showData += `${tempDateTime.endDay}`;
+                showData += ` `;
+                showData += `${tempDateTime.startHour}`;
+                showData += `:`;
+                showData += `${tempDateTime.startMinute}`;
+                showData += ` ~ `;
+                showData += `${tempDateTime.endHour}`;
+                showData += `:`;
+                showData += `${tempDateTime.endMinute}`;
+                showData += `<br>`;
             }
         }
 
-        show30Words(
-            value: any,
-            startWord: number = 0,
-            endWord: number = 30
-        ): string {
-            return value.length < endWord
-                ? value.substring(startWord, endWord)
-                : value.substring(startWord, endWord) + "...";
-        }
+        return showData;
+    }
 
-        ITableList() {
-            return `
+    ITableList() {
+        return `
                         interface {
 
                         /**
@@ -666,7 +836,7 @@
 
 
                         /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
+                         * @uiLabel - ${this._("w_OfficeHour_Name")}
                          */
                         name: string;
 
@@ -674,7 +844,7 @@
                         /**
                          * @uiLabel - ${this._("w_Description")}
                          */
-                        description: string;
+                        dayRanges: string;
 
 
                         /**
@@ -682,113 +852,75 @@
                          */
                         sites: string;
 
-
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_Users")}
-                         */
-                        users: string;
-
                         Actions?: any;
- }
-                `;
-        }
 
-        IAddForm() {
-            return `
+                    }
+                `;
+    }
+
+    IAddAndEditForm() {
+        return `
                         interface {
 
                         /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * @uiPlaceHolder - ${this._("w_UserGroup_GroupName")}
+                         * @uiLabel - ${this._("w_OfficeHour_Name")}
+                         * @uiPlaceHolder - ${this._("w_OfficeHour_Name")}
+                         * @uiType - ${
+                             this.inputOfficeHourData.type === EPageStep.add
+                                 ? "iv-form-string"
+                                 : "iv-form-label"
+                         }
                          */
                         name: string;
 
+                        title?: any;
 
                         /**
                          * @uiLabel - ${this._("w_Description")}
                          * @uiPlaceHolder - ${this._("w_Description")}
                          */
-                        description: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         */
-                        siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-
-                        selectTree?: any;
+                        dayRanges?: any;
 
                     }
                 `;
-        }
-
-        IEditForm() {
-            return `
-                        interface {
-
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * @uiType - iv-form-label
-                         */
-                        name?: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         * @uiPlaceHolder - ${this._("w_Description")}
-                         */
-                        description?: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         */
-                        siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                        selectTree?: any;
-
-                    }
-                `;
-        }
-
-        IViewForm() {
-            return `
-                        interface {
-
-
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                         * @uiType - iv-form-label
-                         */
-                        name?: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_Description")}
-                         * @uiType - iv-form-label
-                         */
-                        description?: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_Sites")}
-                         * @uiType - iv-form-label
-                         */
-                        siteIdsText?: string;
-
-
-                        /**
-                         * @uiLabel - ${this._("w_UserGroup_Users")}
-                         * @uiType - iv-form-label
-                         */
-                        groupIdsText?: string;
-
-                    }
-                `;
-        }
     }
+
+    IViewForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_OfficeHour_Name")}
+                 * @uiType - iv-form-label
+                 */
+                name: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiType - iv-form-label
+                 */
+                dayRanges: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiType - iv-form-label
+                 */
+                siteIdsText: string;
+                `;
+    }
+}
 </script>
 
 <style lang="scss" scoped>
+.selectWeekWidth {
+    width: 130px;
+}
+
+.selectHourWidth {
+    width: 130px;
+}
+
+.selectMinuteWidth {
+    width: 80px;
+}
 </style>
