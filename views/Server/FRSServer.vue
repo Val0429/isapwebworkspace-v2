@@ -106,7 +106,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { IFRSServerResults } from "@/config/default/api/interfaces";
+import { IFRSServerResults, IAddFRSServer, IEditFRSServer } from "@/config/default/api/interfaces";
 
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
@@ -215,7 +215,7 @@ export default class FRSServer extends Vue {
     async saveAddOrEdit(data) {
         // add
         if (this.inputFRSData.type === EPageStep.add) {
-            const datas: IInputFRSData[] = [
+            const datas: IAddFRSServer[] = [
                 {
                     customId: data.customId,
                     name: data.name,
@@ -233,7 +233,7 @@ export default class FRSServer extends Vue {
             };
 
             await this.$server
-                .C("/partner/cms", addParam)
+                .C("/partner/frs", addParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
@@ -245,7 +245,7 @@ export default class FRSServer extends Vue {
                             return false;
                         }
                         if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerFRS_ADDFailed"));
+                            Dialog.error(this._("w_ServerFRS_ADDDuplicate"));
                             return false;
                         }
                     }
@@ -265,7 +265,7 @@ export default class FRSServer extends Vue {
 
         // edit
         if (this.inputFRSData.type === EPageStep.edit) {
-            const datas: IInputFRSData[] = [
+            const datas: IEditFRSServer[] = [
                 {
                     name: data.name,
                     protocol: data.protocol,
@@ -283,7 +283,7 @@ export default class FRSServer extends Vue {
             };
 
             await this.$server
-                .U("/partner/cms", editParam)
+                .U("/partner/frs", editParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
@@ -295,7 +295,7 @@ export default class FRSServer extends Vue {
                             return false;
                         }
                         if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerFRS_EditFailed"));
+                            Dialog.error(this._("w_ServerFRS_EditDuplicate"));
                             return false;
                         }
                     }
@@ -327,7 +327,7 @@ export default class FRSServer extends Vue {
                     };
 
                     this.$server
-                        .D("/partner/cms", deleteUserParam)
+                        .D("/partner/frs", deleteUserParam)
                         .then((response: any) => {
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
