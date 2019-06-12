@@ -137,7 +137,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import { DateTime2String } from "@/services/Datetime.ts";
+import Datetime from "@/services/Datetime";
 import { toEnumInterface } from "@/../core";
 import { IAddBusinessOperationCampaign, IEditBusinessOperationCampaign } from "@/config/default/api/interfaces";
 
@@ -589,7 +589,7 @@ export default class CampaignSetting extends Vue {
     }
 
     dateToYYYY_MM_DD(value) {
-        return DateTime2String(new Date(value), "YYYY-MM-DD");
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
 
