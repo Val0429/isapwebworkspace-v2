@@ -510,7 +510,7 @@ export default class LangObject {
 
     w_BOCampaign_AddSuccess = 'Campaign add success.';
     w_BOCampaign_ADDFailed = 'Campaign add failed, please try again.';
-    w_BOCampaign_EditSuccess = 'Campaign success.';
+    w_BOCampaign_EditSuccess = 'Campaign edit success.';
     w_BOCampaign_EditFailed = 'Campaign edit failed, please try again.';
     w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
 }
