@@ -492,8 +492,10 @@ export default class LangObject implements ILang {
 
     w_ServerFRS_AddSuccess = 'FRS Server add success.';
     w_ServerFRS_ADDFailed = 'Add failed! Can not found the FRS Server, please try again.';
+    w_ServerFRS_ADDDuplicate = 'Add failed! FRS Server is duplicate, please try again.';
     w_ServerFRS_EditSuccess = 'CMS Server edit success.';
     w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
+    w_ServerFRS_EditDuplicate = 'Edit failed! FRS Server is duplicate, please try again.';
     w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
 
     // Business Operation Campaign
