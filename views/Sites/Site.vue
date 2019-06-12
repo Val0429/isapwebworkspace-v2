@@ -448,12 +448,7 @@
                     </template>
 
                     <template #devices="{$attrs, $listeners}">
-
-                        <iv-from-label
-                            title="abctest&#10;<br>sagdsg&#13;gg \n gg"
-                            :title="modalContext"
-                            @mouseover="showDeviceDetialShow($attrs.row.devices)"
-                        >{{showDevices($attrs.row.devices)}}</iv-from-label>
+                        <iv-from-label :title="showDeviceDetialShow($attrs.row.devices)">{{showDevices($attrs.row.devices)}}</iv-from-label>
                     </template>
 
                 </iv-table>
@@ -1763,7 +1758,7 @@ export default class Site extends Vue {
     showDeviceDetialShow(values) {
         if (values && values.length > 0) {
             this.modalShow = true;
-            this.showDeviceDtail(values);
+            return this.showDeviceDtail(values);
         }
     }
 
@@ -1772,7 +1767,7 @@ export default class Site extends Vue {
         for (let value of values) {
             this.modalContext += value.mode + " : " + value.count + ",";
         }
-        return (this.modalContext = this.modalContext.slice(0, -1));
+        return this.modalContext.slice(0, -1);
     }
 
     showTags(values) {
