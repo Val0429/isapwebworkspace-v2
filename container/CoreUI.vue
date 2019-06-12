@@ -20,6 +20,7 @@
                 <SidebarNavItem url="/components" />
                 <SidebarNavItem url="/components/forms" />
                 <SidebarNavItem url="/components/step-progress" />
+                <SidebarNavItem url="/components/tab" />
                 <SidebarNavItem url="/components/toolbox" />
                 <SidebarNavItem url="/components/cards" />
                 <SidebarNavItem url="/components/cards/auto" />
