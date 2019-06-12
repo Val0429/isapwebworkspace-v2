@@ -1,22 +1,22 @@
-import * as Utility from './Utility';
+import Utility from './Utility';
 
-const _formats: string[] = ['dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'];
-const _days: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const _months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const _timeNames: string[] = ['am', 'pm', 'AM', 'PM'];
-
-export enum Format {
+enum DatetimeFormat {
     'default' = 'YYYY/MM/DD HH:mm:ss',
 }
 
-export class Datetime {
+class Datetime {
+
+    private _formats: string[] = ['dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'];
+    private _days: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    private _months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    private _timeNames: string[] = ['am', 'pm', 'AM', 'PM'];
 
     /**
      * Convert date to format string like C#
      * @param dateTime
      * @param format 'dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'
      */
-    DateTime2String(dateTime: Date, format: Format | string = Format.default): string {
+    DateTime2String(dateTime: Date, format: DatetimeFormat | string = DatetimeFormat.default): string {
         return this.ToString(dateTime, format);
     }
 
@@ -25,8 +25,8 @@ export class Datetime {
      * @param dateTime
      * @param format 'dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'
      */
-    ToString(dateTime: Date, format: Format | string = Format.default): string {
-        let regex: RegExp = Utility.Array2RegExp(_formats);
+    ToString(dateTime: Date, format: DatetimeFormat | string = DatetimeFormat.default): string {
+        let regex: RegExp = Utility.Array2RegExp(this._formats);
 
         let formats: string[] = format.match(regex) || [];
         let spaces: string[] = format.split(regex);
@@ -44,10 +44,10 @@ export class Datetime {
         for (let i: number = 0; i < spaces.length; i++) {
             switch (formats[i - 1]) {
                 case 'dddd':
-                    dateStr += _days[day + 7];
+                    dateStr += this._days[day + 7];
                     break;
                 case 'ddd':
-                    dateStr += _days[day];
+                    dateStr += this._days[day];
                     break;
                 case 'DD':
                     dateStr += Utility.PadLeft(date.toString(), '0', 2);
@@ -74,10 +74,10 @@ export class Datetime {
                     dateStr += minute.toString();
                     break;
                 case 'MMMM':
-                    dateStr += _months[month + 12];
+                    dateStr += this._months[month + 12];
                     break;
                 case 'MMM':
-                    dateStr += _months[month];
+                    dateStr += this._months[month];
                     break;
                 case 'MM':
                     dateStr += Utility.PadLeft((month + 1).toString(), '0', 2);
@@ -92,10 +92,10 @@ export class Datetime {
                     dateStr += second.toString();
                     break;
                 case 'A':
-                    dateStr += hour < 12 ? _timeNames[2] : _timeNames[3];
+                    dateStr += hour < 12 ? this._timeNames[2] : this._timeNames[3];
                     break;
                 case 'a':
-                    dateStr += hour < 12 ? _timeNames[0] : _timeNames[1];
+                    dateStr += hour < 12 ? this._timeNames[0] : this._timeNames[1];
                     break;
                 case 'YYYY':
                     dateStr += year.toString();
@@ -122,7 +122,7 @@ export class Datetime {
      * @param str
      * @param format 'dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'
      */
-    String2DateTime(str: string, format: Format | string): Date {
+    String2DateTime(str: string, format: DatetimeFormat | string): Date {
         return this.ToDate(str, format);
     }
 
@@ -131,12 +131,12 @@ export class Datetime {
      * @param str
      * @param format 'dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'
      */
-    ToDate(str: string, format: Format | string): Date {
-        let regex: RegExp = Utility.Array2RegExp(_formats);
+    ToDate(str: string, format: DatetimeFormat | string): Date {
+        let regex: RegExp = Utility.Array2RegExp(this._formats);
 
         let formats: string[] = format.match(regex) || [];
         let strs: string[] = formats.reduce((prev, curr, index, array) => {
-            let count: number = prev.filter((n) => _timeNames.indexOf(n) > -1).length;
+            let count: number = prev.filter((n) => this._timeNames.indexOf(n) > -1).length;
             prev.push(str.substr(format.indexOf(curr) + count, curr === 'A' || curr === 'a' ? 2 : curr.length));
             return prev;
         }, []);
@@ -151,10 +151,10 @@ export class Datetime {
         for (let i: number = 0; i < formats.length; i++) {
             switch (formats[i]) {
                 case 'dddd':
-                    day = _days.indexOf(strs[i]) - 7;
+                    day = this._days.indexOf(strs[i]) - 7;
                     break;
                 case 'ddd':
-                    day = _days.indexOf(strs[i]);
+                    day = this._days.indexOf(strs[i]);
                     break;
                 case 'DD':
                 case 'D':
@@ -173,10 +173,10 @@ export class Datetime {
                     minute = parseInt(strs[i]);
                     break;
                 case 'MMMM':
-                    month = _months.indexOf(strs[i]) - 7;
+                    month = this._months.indexOf(strs[i]) - 7;
                     break;
                 case 'MMM':
-                    month = _months.indexOf(strs[i]);
+                    month = this._months.indexOf(strs[i]);
                     break;
                 case 'MM':
                 case 'M':

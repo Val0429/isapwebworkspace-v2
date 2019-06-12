@@ -1802,9 +1802,7 @@ export default class Site extends Vue {
     }
 
     showTime(value) {
-        return value
-            ? "YYYY-MM-DD" //Datetime.DateTime2String(new Date(value), "YYYY-MM-DD") //TODO fix it
-            : "";
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
     ISiteList() {

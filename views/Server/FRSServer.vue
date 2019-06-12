@@ -190,9 +190,10 @@ export default class FRSServer extends Vue {
         }
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
+    pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        this.clearInputData();
+        this.inputFRSData.type = type;
     }
 
     pageToEdit(type: string) {
@@ -201,10 +202,9 @@ export default class FRSServer extends Vue {
         this.inputFRSData.type = type;
     }
 
-    pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
-        this.clearInputData();
-        this.inputFRSData.type = type;
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
     }
 
     pageToList() {
