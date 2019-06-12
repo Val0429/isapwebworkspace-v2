@@ -158,7 +158,6 @@ interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit {
     users: any;
     siteIdsText?: string;
     groupIdsText?: string;
-    tempSiteIds?: any;
     type?: string;
 }
 
@@ -371,9 +370,6 @@ export default class UserGroup extends Vue {
 
         this.inputUserGroupData.type = type;
 
-        this.inputUserGroupData.tempSiteIds = JSON.parse(
-            JSON.stringify(this.inputUserGroupData.siteIds)
-        );
 
         this.inputUserGroupData.siteIds = JSON.parse(
             JSON.stringify(

@@ -166,8 +166,6 @@ interface IInputTagData extends ITag, ITagReadUpdate {
     siteIdsText?: string;
     regionIdsText?: string;
     type?: string;
-    tempSiteIds?: any;
-    tempRegionIds?: any;
 }
 
 enum EPageStep {
@@ -214,8 +212,6 @@ export default class Tags extends Vue {
         siteIdsText: "",
         regionIdsText: "",
         type: "",
-        tempSiteIds: "",
-        tempRegionIds: ""
     };
 
     created() {}
@@ -234,8 +230,6 @@ export default class Tags extends Vue {
             siteIdsText: "",
             regionIdsText: "",
             type: "",
-            tempSiteIds: "",
-            tempRegionIds: ""
         };
     }
 
@@ -477,13 +471,6 @@ export default class Tags extends Vue {
         this.selectedsRegions = [];
         this.inputTagData.type = type;
 
-        this.inputTagData.tempSiteIds = JSON.parse(
-            JSON.stringify(this.inputTagData.siteIds)
-        );
-
-        this.inputTagData.tempRegionIds = JSON.parse(
-            JSON.stringify(this.inputTagData.regionIds)
-        );
 
         this.inputTagData.siteIds = JSON.parse(
             JSON.stringify(this.inputTagData.siteIds.map(item => item.objectId))

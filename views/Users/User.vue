@@ -271,7 +271,6 @@ interface InputUserData extends IUserAddData, IUserEditData {
     groupIdsText: string;
     confirmPassword?: string;
     type?: string;
-    tempSiteIds?: any;
 }
 
 enum EPageStep {
@@ -536,10 +535,6 @@ export default class User extends Vue {
         this.selecteds = [];
 
         this.inputUserData.type = type;
-
-        this.inputUserData.tempSiteIds = JSON.parse(
-            JSON.stringify(this.inputUserData.siteIds)
-        );
 
         this.inputUserData.siteIds = JSON.parse(
             JSON.stringify(
