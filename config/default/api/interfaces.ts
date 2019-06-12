@@ -303,7 +303,7 @@ interface IAddFRSServer extends IAnalysis {
     protocol: string;
 }
 
-interface IEditFRSServer {
+interface IEditFRSServer extends IAnalysis {
     objectId: string;
     name: string;
     protocol: string;

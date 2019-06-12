@@ -40,6 +40,7 @@ import Site from './Sites/Site.vue';
 // Server
 import CMSServer from './Server/CMSServer.vue';
 import FRSServer from './Server/FRSServer.vue';
+import DemographicServer from './Server/DemographicServer.vue';
 import HumanDetectionServer from './Server/HumanDetectionServer.vue';
 
 // Setting
@@ -138,4 +139,6 @@ $({ path: '/server', name: 'Server', icon: 'fa-close', redirect: '/server/cms_se
 $({ path: '/server/cms_server', name: 'Server_CMSServer', icon: 'fa-check' })(CMSServer);
 $({ path: '/server/frs_manager_server', name: 'Server_FRSManagerServer', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/server/frs_server', name: 'Server_FRSServer', icon: 'fa-check' })(FRSServer);
+$({ path: '/server/demographicServer', name: 'Server_DemographicServer', icon: 'fa-twitter' })(DemographicServer);
 $({ path: '/server/hd_server', name: 'Server_HDServer', icon: 'fa-check' })(HumanDetectionServer);
+

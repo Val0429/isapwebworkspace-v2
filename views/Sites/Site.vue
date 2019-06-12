@@ -404,7 +404,7 @@
 
         <!--Device List-->
         <div v-if="pageStep === ePageStep.deviceList">
-            <iv-card :label=" _('w_Site_DeviceList')">
+            <iv-card :label=" _('w_Site_DeviceGroupList')">
 
                 <template #toolbox>
 
@@ -448,8 +448,7 @@
                     </template>
 
                     <template #devices="{$attrs, $listeners}">
-
-                        <div @mouseover="showDeviceDetialShow($attrs.row.devices)">{{showDevices($attrs.row.devices)}}</div>
+                        <iv-from-label :title="showDeviceDetialShow($attrs.row.devices)">{{showDevices($attrs.row.devices)}}</iv-from-label>
                     </template>
 
                 </iv-table>
@@ -511,15 +510,12 @@
                         />
                     </template>
 
-                    <template #deviceName="{$attrs, $listeners}">
-                        <iv-form-selection
+                    <template #devices="{$attrs, $listeners}">
+                        <iv-form-label
                             v-bind="$attrs"
-                            :value="$attrs.value ? $attrs.value.join(',') : ''"
                             v-on="$listeners"
-                            :multiple="true"
-                            :options="ShowDeviceItem(deviceNameItem)"
-                        >
-                        </iv-form-selection>
+                            :value="$attrs.value ? showDeviceDtail($attrs.value) : ''"
+                        />
                     </template>
 
                     <template #footer-before>
@@ -571,6 +567,14 @@
                         />
                     </template>
 
+                    <template #devices="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="$attrs.value ? showDeviceDtail($attrs.value) : ''"
+                        />
+                    </template>
+
                 </iv-form>
 
                 <template #footer-before>
@@ -583,19 +587,6 @@
                 </template>
             </iv-card>
         </div>
-
-        <b-modal
-            hide-footer
-            hide-header
-            size="md"
-            :title="_('w_DeviceGroup')"
-            v-model="modalShow"
-        >
-            <template v-for="(value, index) in modalContext">
-                <p>{{value.mode + " : " + value.count}}</p>
-            </template>
-
-        </b-modal>
 
     </div>
 
@@ -669,7 +660,7 @@ export default class Site extends Vue {
     imageMap = new ImageMapItem();
     isMounted = false;
     modalShow = false;
-    modalContext = [];
+    modalContext = "";
 
     //google map
     googleMap: IGoogleMap = {
@@ -1713,11 +1704,6 @@ export default class Site extends Vue {
         this.site = {};
     }
 
-    ShowDeviceItem(value) {
-        console.log("ShowDeviceItem", value, this.deviceGroup);
-        return value.filter(v => v.type == this.deviceGroup["deviceType"]);
-    }
-
     showFirst(value): string {
         if (value.length >= 2) {
             return value.map(item => item)[0] + "...";
@@ -1771,10 +1757,17 @@ export default class Site extends Vue {
 
     showDeviceDetialShow(values) {
         if (values && values.length > 0) {
-            this.modalContext = [];
             this.modalShow = true;
-            this.modalContext = values;
+            return this.showDeviceDtail(values);
         }
+    }
+
+    showDeviceDtail(values) {
+        this.modalContext = "";
+        for (let value of values) {
+            this.modalContext += value.mode + " : " + value.count + ",";
+        }
+        return this.modalContext.slice(0, -1);
     }
 
     showTags(values) {
@@ -2156,21 +2149,11 @@ export default class Site extends Vue {
                  */
                 name?: string;
 
-                /**
-                 * @uiLabel - ${this._("w_Site_DeviceType")}
-                 * @uiPlaceHolder - ${this._("w_Site_DeviceType")}
-                 * @uiType - iv-form-selection
-                 */
-                deviceType?: ${toEnumInterface(
-                    this.deviceTypeItem as any,
-                    false
-                )};
-
-                /**
-                * @uiLabel - ${this._("w_Site_DeviceName")}
-                * @uiPlaceHolder - ${this._("w_Site_DeviceName")}
+                 /**
+                * @uiLabel - ${this._("w_Site_Devices")}
+                * @uiType - iv-form-label
                 */
-                deviceName?: any;
+                devices?: string;
 
             }`;
     }
@@ -2196,17 +2179,13 @@ export default class Site extends Vue {
                  */
                 deviceGroupName?: string;
 
-                 /**
-                 * @uiLabel - ${this._("w_Site_DeviceType")}
-                 * @uiType - iv-form-label
-                 */
-                deviceType?: string;
-
                 /**
-                 * @uiLabel - ${this._("w_Site_DeviceName")}
-                 * @uiType - iv-form-label
-                 */
-                deviceName?: string;
+                * @uiLabel - ${this._("w_Site_Devices")}
+                * @uiType - iv-form-label
+                */
+                devices?: string;
+
+                
 
             }`;
     }

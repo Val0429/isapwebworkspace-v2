@@ -172,6 +172,7 @@ export default class LangObject implements ILang {
     w_Navigation_Server_CMSServer = 'CMS Server';
     w_Navigation_Server_FRSManagerServer = 'FRS Manager Server';
     w_Navigation_Server_FRSServer = 'FRS Server';
+    w_Navigation_Server_DemographicServer = 'Demographic Server';
     w_Navigation_Server_HDServer = 'HD Server';
 
     // 401
@@ -340,7 +341,7 @@ export default class LangObject implements ILang {
     w_Site_ViewArea = 'View Area';
     w_Site_AddArea = 'Add Area';
     w_Site_EditArea = 'Edit Area';
-    w_Site_DeviceList = 'Device List';
+    w_Site_DeviceGroupList = 'Device Group List';
     w_Site_ViewDevice = 'View Device';
     w_Site_AddDevice = 'Add Device';
     w_Site_EditDevice = 'Edit Device';
@@ -509,8 +510,10 @@ export default class LangObject implements ILang {
 
     w_ServerFRS_AddSuccess = 'FRS Server add success.';
     w_ServerFRS_ADDFailed = 'Add failed! Can not found the FRS Server, please try again.';
+    w_ServerFRS_ADDDuplicate = 'Add failed! FRS Server is duplicate, please try again.';
     w_ServerFRS_EditSuccess = 'CMS Server edit success.';
     w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
+    w_ServerFRS_EditDuplicate = 'Edit failed! FRS Server is duplicate, please try again.';
     w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
 
     // Business Operation Campaign

@@ -15,7 +15,10 @@
 
         <template #footer>
             <div class="footer-copy">
-                <a href="http://www.isapsolution.com/" target="_blank">www.isapsolution.com</a>&copy;2019
+                <a
+                    href="http://www.isapsolution.com/"
+                    target="_blank"
+                >www.isapsolution.com</a>&copy;2019
             </div>
         </template>
 
@@ -140,6 +143,10 @@
                     <SidebarNavItem
                         :label="_('w_Navigation_Server_FRSManagerServer')"
                         url="/server/frs_manager_server"
+                        />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_DemographicServer')"
+                        url="/server/demographicServer"
                     />
                     <SidebarNavItem
                         :label="_('w_Navigation_Server_HDServer')"
@@ -237,7 +244,7 @@ export default class CoreUI extends Vue {
         }
     }
 }
-.footer-copy{
+.footer-copy {
     padding: 10px;
 }
 </style>
