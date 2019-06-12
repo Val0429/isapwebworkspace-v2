@@ -40,6 +40,7 @@ import Site from './Sites/Site.vue';
 // Server
 import CMSServer from './Server/CMSServer.vue';
 import FRSServer from './Server/FRSServer.vue';
+import HumanDetectionServer from './Server/HumanDetectionServer.vue';
 
 // Setting
 import MailServer from './Setting/MailServer.vue';
@@ -53,14 +54,12 @@ import Tag from './Setting/Tags.vue';
 // MyProfile
 import MyProfile from './MyProfile/MyProfile.vue';
 
-
 // ============================================================= //
 
 // Home
 $({ path: '/', name: 'Home', redirect: '/region' })();
 
 $({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(ForgotPassword);
-
 
 // MyProfile
 $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
@@ -116,4 +115,4 @@ $({ path: '/setting/tag', name: 'Tag', icon: 'fa-twitter' })(Tag);
 $({ path: '/server', name: 'Server', icon: 'fa-twitter', redirect: '/server/cms_server' })();
 $({ path: '/server/cms_server', name: 'CMS Server', icon: 'fa-twitter' })(CMSServer);
 $({ path: '/server/frs_server', name: 'FRS Server', icon: 'fa-twitter' })(FRSServer);
-
+$({ path: '/server/hd_server', name: 'HD Server', icon: 'fa-twitter' })(HumanDetectionServer);

@@ -121,6 +121,7 @@ export default class LangObject implements ILang {
     w_Check = 'Check';
     w_Submit = 'Submit';
     w_Confirm = 'Confirm';
+    w_Upload = 'Upload';
 
     // Dialog
     w_Dialog_ErrorTitle = 'Something wrong';
@@ -154,6 +155,7 @@ export default class LangObject implements ILang {
     w_Navigation_Server = 'Server';
     w_Navigation_Server_CMSServer = 'CMS Server';
     w_Navigation_Server_FRSServer = 'FRS Server';
+    w_Navigation_Server_HDServer = 'HD Server';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -240,7 +242,6 @@ export default class LangObject implements ILang {
     w_User_EditUserSuccess = 'Edit User Success';
     w_User_EditUserFailed = 'Edit User Failed';
     w_User_DeleteConfirm = 'Are you sure to delete selected user(s)?';
-
 
     // UserGroup
     w_UserGroup_UserGroupList = 'Group List';
@@ -474,6 +475,7 @@ export default class LangObject implements ILang {
     w_ServerHD_IP = 'IP';
     w_ServerHD_Port = 'Port';
     w_ServerHD_Scale = 'Scale';
+    w_ServerHD_Test = 'Server Human Detection Test';
     w_ServerHD_AddSuccess = 'Server Human Detection Add Success';
     w_ServerHD_EditSuccess = 'Server Human Detection Edit Success';
     w_ServerHD_TestSuccess = 'Server Human Detection Test Success';
@@ -494,23 +496,23 @@ export default class LangObject implements ILang {
     w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
     w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
 
-	// Business Operation Campaign
-	w_BOCampaign_List = 'Campaign List';
-	w_BOCampaign_Add = 'Campaign Server';
-	w_BOCampaign_Edit = 'Campaign Server';
-	w_BOCampaign_View = 'Campaign Server';
+    // Business Operation Campaign
+    w_BOCampaign_List = 'Campaign List';
+    w_BOCampaign_Add = 'Campaign Server';
+    w_BOCampaign_Edit = 'Campaign Server';
+    w_BOCampaign_View = 'Campaign Server';
 
-	w_BOCampaign_EventList = 'Event List';
-	w_BOCampaign_EventType = 'Event Type';
-	w_BOCampaign_Period = 'Period';
-	w_BOCampaign_EventName = 'Event Name';
-	w_BOCampaign_StartDate = 'Start Date';
-	w_BOCampaign_FinishDate = 'Finish Date';
-	w_BOCampaign_Budget = 'Budget';
+    w_BOCampaign_EventList = 'Event List';
+    w_BOCampaign_EventType = 'Event Type';
+    w_BOCampaign_Period = 'Period';
+    w_BOCampaign_EventName = 'Event Name';
+    w_BOCampaign_StartDate = 'Start Date';
+    w_BOCampaign_FinishDate = 'Finish Date';
+    w_BOCampaign_Budget = 'Budget';
 
-	w_BOCampaign_AddSuccess = 'Campaign add success.';
-	w_BOCampaign_ADDFailed = 'Campaign add failed, please try again.';
-	w_BOCampaign_EditSuccess = 'Campaign success.';
-	w_BOCampaign_EditFailed = 'Campaign edit failed, please try again.';
-	w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
+    w_BOCampaign_AddSuccess = 'Campaign add success.';
+    w_BOCampaign_ADDFailed = 'Campaign add failed, please try again.';
+    w_BOCampaign_EditSuccess = 'Campaign success.';
+    w_BOCampaign_EditFailed = 'Campaign edit failed, please try again.';
+    w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
 }
