@@ -541,6 +541,9 @@ export default class LangObject implements ILang {
     w_BOCampaign_EditFailed = 'Campaign edit failed, please try again.';
     w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
 
+    // Business Operation Sales Records
+    w_BOSalesRecords_CardTitle = 'Import Excel (.xlsx)';
+    
     // People Counting Device
     w_VSPeopleCounting_List = 'People Counting Device List';
     w_VSPeopleCounting_Add = 'People Counting Device Add';
@@ -555,4 +558,5 @@ export default class LangObject implements ILang {
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
     w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
+
 }

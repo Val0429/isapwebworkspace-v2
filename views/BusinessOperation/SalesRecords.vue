@@ -1,6 +1,41 @@
 <template>
     <div class="animated fadeIn">
-	    SalesRecords
+
+        <iv-card
+            :label="_('w_BOSalesRecords_CardTitle')"
+        >
+
+            <iv-step-progress
+                ref="step"
+                @mounted="doMounted"
+            >
+                <template #1-title>{{ _('w_ForgetPassword_Step1') }}</template>
+                <template #1>
+                    test 1
+                </template>
+
+                <template #2-title>{{ _('w_ForgetPassword_Step2') }}</template>
+                <template #2>
+                    test 2
+                </template>
+
+                <template #3-title>{{ _('w_ForgetPassword_Step3') }}</template>
+                <template #3>
+                    test 3
+                </template>
+
+            </iv-step-progress>
+
+             <template #footer-before>
+                <b-button
+                    variant="dark"
+                    size="lg"
+                    @click="saveRestore"
+                >{{ _('w_Leave') }}
+                </b-button>
+            </template>
+
+        </iv-card>
 
     </div>
 </template>
@@ -26,7 +61,12 @@ enum EPageStep {
 export default class SalesRecords extends Vue {
 
 	ePageStep = EPageStep;
-	pageStep: EPageStep = EPageStep.list;
+    pageStep: EPageStep = EPageStep.list;
+    
+    isMounted: boolean = false;
+    doMounted() {
+        this.isMounted = true;
+    }
 
 	created() {
 
@@ -42,7 +82,8 @@ export default class SalesRecords extends Vue {
 
 	saveRestore() {
 		alert('saveRestore')
-	}
+    }
+    
 
 }
 </script>

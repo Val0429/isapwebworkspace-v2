@@ -8,16 +8,27 @@
             ref="step"
             @mounted="doMounted"
         >
+        <template #1>
+            <iv-form :interface="inf1()" />
+        </template>
+        <template #1-title>註冊帳號</template>
+        <template #1-footer-before>
+            <div>test</div>
+        </template>
 
-            <template #1>
-                <iv-form :interface="inf1()" />
-            </template>
-            <template #1-title>註冊帳號</template>
+        <template #2>
+            <iv-form :interface="inf2()">
+                <template #object="{$attrs, $listeners}">
+                    <iv-form-server-object
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        :server="{ path: '/announcements' }"
+                        />
+                </template>
+            </iv-form>
+        </template>
+        <template #2-title>註冊License</template>
 
-            <template #2>
-                <iv-form :interface="inf2()" />
-            </template>
-            <template #2-title>註冊License</template>
 
             <template #3>
                 <iv-form :interface="inf3()" />
@@ -77,18 +88,26 @@ export default class StepProgress extends Vue {
     private inf2() {
         return `
         interface {
-            /**
-             * @uiType - iv-form-ip
-             */
-            ip: string;
-            port: number;
-            /**
-             * @uiType - iv-form-license
-             */
-            license: string;
+            object: any;
         }
-        `;
+        `
     }
+
+    // private inf2() {
+    //     return `
+    //     interface {
+    //         /**
+    //          * @uiType - iv-form-ip
+    //          */
+    //         ip: string;
+    //         port: number;
+    //         /**
+    //          * @uiType - iv-form-license
+    //          */
+    //         license: string;
+    //     }
+    //     `;
+    // }
 
     private inf3() {
         return `

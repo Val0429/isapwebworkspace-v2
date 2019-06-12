@@ -3,6 +3,7 @@ import { RegisterRouter as $ } from '@/../core';
 import Components from './components/index.vue';
 import Forms from './components/Forms.vue';
 import StepProgress from './components/StepProgress.vue';
+import Tab from './components/Tab.vue';
 import Toolbox from './components/Toolbox.vue';
 import Cards from './components/Cards.vue';
 import AutoCards from './components/AutoCards.vue';
