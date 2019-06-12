@@ -542,10 +542,13 @@ export default class LangObject implements ILang {
     w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
 
     // People Counting Device
-    w_VSPeopleCounting_List = 'People Counting Device List List';
+    w_VSPeopleCounting_List = 'People Counting Device List';
     w_VSPeopleCounting_Add = 'People Counting Device Add';
     w_VSPeopleCounting_Edit = 'People Counting Device Edit';
     w_VSPeopleCounting_View = 'People Counting Device View';
+
+    w_VSPeopleCounting_Addhanwha = 'Add by Hanwha';
+    w_VSPeopleCounting_isap = 'Add by iSap';
 
     w_VSPeopleCounting_AddSuccess = 'People Counting Device List add success.';
     w_VSPeopleCounting_ADDFailed = 'People Counting Device add failed, please try again.';
