@@ -187,9 +187,10 @@ export default class CMSServer extends Vue {
         }
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
+    pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        this.clearInputData();
+        this.inputCMSData.type = type;
     }
 
     pageToEdit(type: string) {
@@ -198,10 +199,9 @@ export default class CMSServer extends Vue {
         this.inputCMSData.type = type;
     }
 
-    pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
-        this.clearInputData();
-        this.inputCMSData.type = type;
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
     }
 
     pageToList() {

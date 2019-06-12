@@ -122,7 +122,6 @@
 
         </iv-card>
 
-
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
             :regionTreeItem="regionTreeItem"
@@ -139,7 +138,10 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import Datetime from "@/services/Datetime";
 import { toEnumInterface } from "@/../core";
-import { IAddBusinessOperationCampaign, IEditBusinessOperationCampaign } from "@/config/default/api/interfaces";
+import {
+    IAddBusinessOperationCampaign,
+    IEditBusinessOperationCampaign
+} from "@/config/default/api/interfaces";
 
 import {
     ERegionType,
@@ -153,14 +155,16 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 import RegionAPI from "@/services/RegionAPI";
 
-interface IInputCampaignData extends IAddBusinessOperationCampaign, IEditBusinessOperationCampaign {
+interface IInputCampaignData
+    extends IAddBusinessOperationCampaign,
+        IEditBusinessOperationCampaign {
     siteIdsText?: string;
     tempSiteIds?: any;
     stepType?: string;
     startDateText?: string;
     endDateText?: string;
+    sites?: any;
 }
-
 
 enum EPageStep {
     list = "list",
@@ -203,16 +207,12 @@ export default class CampaignSetting extends Vue {
         stepType: "",
         siteIdsText: "",
         startDateText: "",
-        endDateText: "",
+        endDateText: ""
     };
 
-    created() {
-    }
+    created() {}
 
-    mounted() {
-        this.initSelectItem();
-        this.initRegionTreeSelect();
-    }
+    mounted() {}
 
     clearInputData() {
         this.inputCampaignData = {
@@ -227,7 +227,7 @@ export default class CampaignSetting extends Vue {
             stepType: "",
             siteIdsText: "",
             startDateText: "",
-            endDateText: "",
+            endDateText: ""
         };
     }
 
@@ -236,9 +236,7 @@ export default class CampaignSetting extends Vue {
         this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
-    async initSelectItem() {
-
-        // 取得sites
+    async initSelectItemSite() {
         const readAllSiteParam: {
             type: string;
         } = {
@@ -266,8 +264,9 @@ export default class CampaignSetting extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        // 取得 tree
+    async initSelectItemTree() {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
@@ -285,7 +284,6 @@ export default class CampaignSetting extends Vue {
                 console.log(e);
                 return false;
             });
-
     }
 
     selectedItem(data) {
@@ -302,13 +300,13 @@ export default class CampaignSetting extends Vue {
                 name: param.name,
                 budget: param.budget,
                 description: param.description,
-                endDate: param.endDate,
-                startDate: param.startDate,
+                endDate: new Date(param.endDate),
+                startDate: new Date(param.startDate),
                 startDateText: this.dateToYYYY_MM_DD(param.startDate),
                 endDateText: this.dateToYYYY_MM_DD(param.endDate),
                 type: param.type,
                 siteIdsText: this.idsToText(param.sites),
-                // sites: param.sites,
+                sites: param.sites,
                 stepType: ""
             };
         }
@@ -337,7 +335,6 @@ export default class CampaignSetting extends Vue {
             case "siteIds":
                 this.inputCampaignData.siteIds = data.value;
                 break;
-
         }
 
         this.selecteds = [];
@@ -356,36 +353,55 @@ export default class CampaignSetting extends Vue {
         }
     }
 
-    idsToText(value: any): string {
-        let result = "";
-        for (const val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
+    async pageToAdd(stepType: string) {
+        this.pageStep = EPageStep.add;
+        this.clearInputData();
+        await this.initSelectItemSite();
+
+        this.selecteds = [];
+        this.inputCampaignData.stepType = stepType;
     }
 
+    async pageToEdit(stepType: string) {
+        this.pageStep = EPageStep.edit;
+        this.getInputData();
+        await this.initSelectItemSite();
 
+        this.inputCampaignData.stepType = stepType;
+
+        this.inputCampaignData.siteIds = JSON.parse(
+            JSON.stringify(
+                this.inputCampaignData.sites.map(item => item.objectId)
+            )
+        );
+    }
 
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
     }
 
-    pageToEdit(stepType: string) {
-        this.pageStep = EPageStep.edit;
-        this.getInputData();
-
-        this.inputCampaignData.stepType = stepType;
-
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        (this.$refs.campaignTable as any).reload();
     }
 
-    pageToAdd(stepType: string) {
-        this.pageStep = EPageStep.add;
-        if (stepType === EPageStep.add) {
-            this.clearInputData();
-            this.selecteds = [];
-            this.inputCampaignData.stepType = stepType;
+    async pageToChooseTree() {
+        this.pageStep = EPageStep.chooseTree;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selecteds = [];
+        for (const id of this.inputCampaignData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
         }
     }
 
@@ -414,32 +430,8 @@ export default class CampaignSetting extends Vue {
         }
     }
 
-    pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.selecteds = [];
-        for (const id of this.inputCampaignData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.campaignTable as any).reload();
-    }
-
     async saveAddOrEdit(data) {
-        console.log('data - ', data)
         if (this.inputCampaignData.stepType === EPageStep.add) {
-
             const datas: any = [
                 {
                     name: data.name,
@@ -448,7 +440,7 @@ export default class CampaignSetting extends Vue {
                     description: data.description,
                     startDate: data.startDate,
                     endDate: data.endDate,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    siteIds: data.siteIds !== undefined ? data.siteIds : []
                 }
             ];
 
@@ -461,10 +453,11 @@ export default class CampaignSetting extends Vue {
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
+                            Dialog.success(this._("w_BOCampaign_AddSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_OfficeHour_AddFailed"));
+                            Dialog.error(this._("w_BOCampaign_ADDFailed"));
                             return false;
                         }
                     }
@@ -474,7 +467,7 @@ export default class CampaignSetting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_OfficeHour_AddFailed"));
+                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -484,13 +477,15 @@ export default class CampaignSetting extends Vue {
 
         // edit
         if (this.inputCampaignData.stepType === EPageStep.edit) {
-
             const datas: any = [
                 {
-                    // siteIds: data.siteIds,
-                    name: data.name,
-                    dayRanges: data.dayRanges,
-                    objectId: data.objectId
+                    objectId: data.objectId,
+                    type: data.type,
+                    budget: data.budget,
+                    description: data.description,
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    siteIds: data.siteIds !== undefined ? data.siteIds : []
                 }
             ];
 
@@ -503,10 +498,11 @@ export default class CampaignSetting extends Vue {
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
+                            Dialog.success(this._("w_BOCampaign_EditSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_OfficeHour_EditFailed"));
+                            Dialog.error(this._("w_BOCampaign_EditFailed"));
                             return false;
                         }
                     }
@@ -516,7 +512,7 @@ export default class CampaignSetting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_OfficeHour_EditFailed"));
+                        Dialog.error(this._("w_BOCampaign_EditFailed"));
                         return false;
                     }
                     console.log(e);
@@ -588,10 +584,18 @@ export default class CampaignSetting extends Vue {
             : value.substring(startWord, endWord) + "...";
     }
 
+    idsToText(value: any): string {
+        let result = "";
+        for (const val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
-
 
     ITableList() {
         return `
@@ -698,7 +702,7 @@ export default class CampaignSetting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
                 selectTree?: any;
 

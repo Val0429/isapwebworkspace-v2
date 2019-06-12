@@ -249,9 +249,7 @@ export default class License extends Vue {
         data: ""
     };
 
-    mounted() {
-        this.initMacSelectItem();
-    }
+    mounted() {}
 
     clearInputData() {
         this.licenseInputDataMac = {
@@ -275,19 +273,20 @@ export default class License extends Vue {
         this.addStep = EAddStep.none;
     }
 
-    pageStepBackward() {
-        this.clearInputData();
-        this.addStep = EAddStep.select;
-    }
-
-    pageToAddByMac() {
-        this.clearInputData();
+    async pageToAddByMac() {
         this.addStep = EAddStep.macLicense;
+        this.clearInputData();
+        await this.initMacSelectItem();
     }
 
     pageToAddByOffline() {
         this.clearInputData();
         this.addStep = EAddStep.offline;
+    }
+
+    pageStepBackward() {
+        this.clearInputData();
+        this.addStep = EAddStep.select;
     }
 
     loadTextFromFile(e: any) {

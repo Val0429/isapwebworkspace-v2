@@ -384,87 +384,25 @@ export default class GeneralOfficeHour extends Vue {
         }
     }
 
-    addOfficeHour() {
-        var tempTimeItem = JSON.parse(JSON.stringify(timeItem));
-        this.officeHourTime.push(tempTimeItem);
-    }
+    pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        if (type === EPageStep.add) {
+            this.officeHourTime = [
+                {
+                    startDay: "1",
+                    endDay: "0",
+                    startHour: "9",
+                    startMinute: "0",
+                    endHour: "21",
+                    endMinute: "30",
+                    startDate: new Date(2000, 1, 1, 9, 0),
+                    endDate: new Date(2000, 1, 1, 21, 30)
+                }
+            ];
 
-    removeOfficeHour(index: number) {
-        this.officeHourTime.splice(index, 1);
-    }
-
-    idsToText(value: any): string {
-        let result = "";
-        for (const val of value) {
-            result += val.name + ", ";
+            this.clearInputData();
+            this.inputOfficeHourData.type = type;
         }
-        result = result.substring(0, result.length - 2);
-        return result;
-    }
-
-    dayRangesToText(): string {
-        let showData = "";
-
-        if (this.inputOfficeHourData && this.inputOfficeHourData.dayRanges) {
-            for (let dayRange of this.inputOfficeHourData.dayRanges) {
-                let tempDateTimeNumber = {
-                    startDay: parseInt(dayRange.startDay),
-                    startHour: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.startDate), "HH")
-                    ),
-                    startMinute: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.startDate), "mm")
-                    ),
-                    endDay: parseInt(dayRange.endDay),
-                    endHour: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.endDate), "HH")
-                    ),
-                    endMinute: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.endDate), "mm")
-                    )
-                };
-
-                let tempDateTime = {
-                    startDay: this.getWeekText(tempDateTimeNumber.startDay),
-                    startHour: this.getNumber10plus0(
-                        tempDateTimeNumber.startHour
-                    ),
-                    startMinute: this.getNumber10plus0(
-                        tempDateTimeNumber.startMinute
-                    ),
-                    endDay: this.getWeekText(tempDateTimeNumber.endDay),
-                    endHour: this.getNumber10plus0(tempDateTimeNumber.endHour),
-                    endMinute: this.getNumber10plus0(
-                        tempDateTimeNumber.endMinute
-                    )
-                };
-
-                showData += `${tempDateTime.startDay}`;
-                showData += `~`;
-                showData += `${tempDateTime.endDay}`;
-                showData += ` `;
-                showData += `${tempDateTime.startHour}`;
-                showData += `:`;
-                showData += `${tempDateTime.startMinute}`;
-                showData += ` ~ `;
-                showData += `${tempDateTime.endHour}`;
-                showData += `:`;
-                showData += `${tempDateTime.endMinute}`;
-                showData += ` , `;
-            }
-        }
-
-        // 去掉結尾,
-        this.inputOfficeHourData.dayRanges = showData.substring(
-            0,
-            showData.lastIndexOf(",")
-        );
-        return this.inputOfficeHourData.dayRanges;
-    }
-
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
         this.dayRangesToText();
     }
 
@@ -520,31 +458,24 @@ export default class GeneralOfficeHour extends Vue {
         this.dayRangesToText();
     }
 
-    pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
-        if (type === EPageStep.add) {
-            this.officeHourTime = [
-                {
-                    startDay: "1",
-                    endDay: "0",
-                    startHour: "9",
-                    startMinute: "0",
-                    endHour: "21",
-                    endMinute: "30",
-                    startDate: new Date(2000, 1, 1, 9, 0),
-                    endDate: new Date(2000, 1, 1, 21, 30)
-                }
-            ];
-
-            this.clearInputData();
-            this.inputOfficeHourData.type = type;
-        }
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
         this.dayRangesToText();
     }
 
     pageToList() {
         this.pageStep = EPageStep.list;
         (this.$refs.officeHourTable as any).reload();
+    }
+
+    addOfficeHour() {
+        var tempTimeItem = JSON.parse(JSON.stringify(timeItem));
+        this.officeHourTime.push(tempTimeItem);
+    }
+
+    removeOfficeHour(index: number) {
+        this.officeHourTime.splice(index, 1);
     }
 
     async saveAddOrEdit(data) {
@@ -747,6 +678,87 @@ export default class GeneralOfficeHour extends Vue {
             : value.substring(startWord, endWord) + "...";
     }
 
+    idsToText(value: any): string {
+        let result = "";
+        for (const val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
+    dayRangesToText(): string {
+        let showData = "";
+
+        if (this.inputOfficeHourData && this.inputOfficeHourData.dayRanges) {
+            for (let dayRange of this.inputOfficeHourData.dayRanges) {
+                let tempDateTimeNumber = {
+                    startDay: parseInt(dayRange.startDay),
+                    startHour: parseInt(
+                        Datetime.DateTime2String(
+                            new Date(dayRange.startDate),
+                            "HH"
+                        )
+                    ),
+                    startMinute: parseInt(
+                        Datetime.DateTime2String(
+                            new Date(dayRange.startDate),
+                            "mm"
+                        )
+                    ),
+                    endDay: parseInt(dayRange.endDay),
+                    endHour: parseInt(
+                        Datetime.DateTime2String(
+                            new Date(dayRange.endDate),
+                            "HH"
+                        )
+                    ),
+                    endMinute: parseInt(
+                        Datetime.DateTime2String(
+                            new Date(dayRange.endDate),
+                            "mm"
+                        )
+                    )
+                };
+
+                let tempDateTime = {
+                    startDay: this.getWeekText(tempDateTimeNumber.startDay),
+                    startHour: this.getNumber10plus0(
+                        tempDateTimeNumber.startHour
+                    ),
+                    startMinute: this.getNumber10plus0(
+                        tempDateTimeNumber.startMinute
+                    ),
+                    endDay: this.getWeekText(tempDateTimeNumber.endDay),
+                    endHour: this.getNumber10plus0(tempDateTimeNumber.endHour),
+                    endMinute: this.getNumber10plus0(
+                        tempDateTimeNumber.endMinute
+                    )
+                };
+
+                showData += `${tempDateTime.startDay}`;
+                showData += `~`;
+                showData += `${tempDateTime.endDay}`;
+                showData += ` `;
+                showData += `${tempDateTime.startHour}`;
+                showData += `:`;
+                showData += `${tempDateTime.startMinute}`;
+                showData += ` ~ `;
+                showData += `${tempDateTime.endHour}`;
+                showData += `:`;
+                showData += `${tempDateTime.endMinute}`;
+                showData += ` , `;
+            }
+        }
+
+        // 去掉結尾,
+        this.inputOfficeHourData.dayRanges = showData.substring(
+            0,
+            showData.lastIndexOf(",")
+        );
+        return this.inputOfficeHourData.dayRanges;
+    }
+
     getWeekText(value: any): string {
         return !isNaN(value) && value > -1 && value < 7
             ? this._(`w_Week_${value.toString()}` as any)
@@ -768,17 +780,29 @@ export default class GeneralOfficeHour extends Vue {
                 let tempDateTimeNumber = {
                     startDay: parseInt(dayRange.startDay),
                     startHour: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.startDate), "HH")
+                        Datetime.DateTime2String(
+                            new Date(dayRange.startDate),
+                            "HH"
+                        )
                     ),
                     startMinute: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.startDate), "mm")
+                        Datetime.DateTime2String(
+                            new Date(dayRange.startDate),
+                            "mm"
+                        )
                     ),
                     endDay: parseInt(dayRange.endDay),
                     endHour: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.endDate), "HH")
+                        Datetime.DateTime2String(
+                            new Date(dayRange.endDate),
+                            "HH"
+                        )
                     ),
                     endMinute: parseInt(
-                        Datetime.DateTime2String(new Date(dayRange.endDate), "mm")
+                        Datetime.DateTime2String(
+                            new Date(dayRange.endDate),
+                            "mm"
+                        )
                     )
                 };
 
