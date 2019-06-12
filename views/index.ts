@@ -19,6 +19,9 @@ import DemoImageMap from './Demos/DemoImageMap.vue';
 import DemoROI from './Demos/DemoROI.vue';
 import DemoDialog from './Demos/DemoDialog.vue';
 
+// Guest
+import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
+
 // Users
 import User from './Users/User.vue';
 import UserGroup from './Users/UserGroup.vue';
@@ -55,6 +58,8 @@ import MyProfile from './MyProfile/MyProfile.vue';
 
 // Home
 $({ path: '/', name: 'Home', redirect: '/region' })();
+
+$({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(ForgotPassword);
 
 // Components
 // $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);

@@ -496,6 +496,7 @@
                             :options="areaNameItem"
                         >
                         </iv-form-selection>
+
                         <iv-form-label
                             v-if="pageStep === ePageStep.deviceAdd && !isEmptyObject(area)"
                             v-bind="$attrs"
@@ -698,12 +699,16 @@ export default class Site extends Vue {
     areaParams = {};
     areaAll = [];
 
-    //device datas
+    //device Group datas
     isSelectDevice = false;
     deviceGroups = {};
     deviceGroup = {};
     deviceGroupParams = {};
     deviceGroupAll = [];
+
+    //device datas
+    devices = [];
+    device = {};
 
     //options
     managerItem = [];
@@ -728,8 +733,37 @@ export default class Site extends Vue {
         console.log("!!! clickDevice", event, data);
     }
 
+    async initMap() {
+        let body: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
+
+        await this.$server
+            .R("/device", body)
+            .then((response: any) => {
+                this.devices = [];
+                for (let item of response.results) {
+                    if (item.area.objectId == this.area["objectId"]) {
+                        this.devices.push(item);
+                    }
+                }
+                this.initImageMap();
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
+    }
+
     initImageMap() {
-        console.log("initImageMap", this.imageMap);
+        console.log("initImageMap", this.imageMap, this.devices);
 
         let imageMapRef: any = this.$refs.imageMap;
 
@@ -756,163 +790,166 @@ export default class Site extends Vue {
         ////////////////////////////////////////////////////////////////////
 
         // dataWindow in map
-        let dataWindow_license_map_1 = new DataWindowLicensePlateRecognitionItem(
-            "License",
-            EDragType.dataWindowInMap
-        );
-        let dataWindow_occupancy_map_1 = new DataWindowOccupancyItem(
-            "Occupancy",
-            EDragType.dataWindowInMap
-        );
-        let dataWindow_people_map_1 = new DataWindowPeopleCountingItem(
-            "PeopleCounting",
-            EDragType.dataWindowInMap
-        );
+        // let dataWindow_license_map_1 = new DataWindowLicensePlateRecognitionItem(
+        //     "License",
+        //     EDragType.dataWindowInMap
+        // );
+        // let dataWindow_occupancy_map_1 = new DataWindowOccupancyItem(
+        //     "Occupancy",
+        //     EDragType.dataWindowInMap
+        // );
+        // let dataWindow_people_map_1 = new DataWindowPeopleCountingItem(
+        //     "PeopleCounting",
+        //     EDragType.dataWindowInMap
+        // );
 
-        dataWindow_license_map_1.originalPosition = { x: 250, y: 100 };
-        dataWindow_occupancy_map_1.originalPosition = { x: 250, y: 250 };
-        dataWindow_people_map_1.originalPosition = { x: 250, y: 400 };
+        // dataWindow_license_map_1.originalPosition = { x: 250, y: 100 };
+        // dataWindow_occupancy_map_1.originalPosition = { x: 250, y: 250 };
+        // dataWindow_people_map_1.originalPosition = { x: 250, y: 400 };
 
-        this.imageMap.imageBox.dataWindows = [];
-        this.imageMap.imageBox.dataWindows.push(dataWindow_license_map_1);
-        this.imageMap.imageBox.dataWindows.push(dataWindow_occupancy_map_1);
-        this.imageMap.imageBox.dataWindows.push(dataWindow_people_map_1);
+        // this.imageMap.imageBox.dataWindows = [];
+        // this.imageMap.imageBox.dataWindows.push(dataWindow_license_map_1);
+        // this.imageMap.imageBox.dataWindows.push(dataWindow_occupancy_map_1);
+        // this.imageMap.imageBox.dataWindows.push(dataWindow_people_map_1);
 
         ////////////////////////////////////////////////////////////////////
 
         // device group
-        let deviceGroup_licensePlateRecognition_1 = new DeviceGroupItem(
-            "lic gro 1",
-            EDragType.dataWindowInDeviceGroup,
-            EVideoSource.licensePlateRecognition
-        );
-
-        let deviceGroup_occupancy_1 = new DeviceGroupItem(
-            "occ gro 1",
-            EDragType.dataWindowInDeviceGroup,
-            EVideoSource.occupancy
-        );
-
-        let deviceGroup_peopleCounting_1 = new DeviceGroupItem(
-            "peo gro 1",
-            EDragType.dataWindowInDeviceGroup,
-            EVideoSource.peopleCounting
-        );
-
-        deviceGroup_licensePlateRecognition_1.dataWindow.mode =
-            ESetupMode.setup;
-        deviceGroup_occupancy_1.dataWindow.mode = ESetupMode.setup;
-        deviceGroup_peopleCounting_1.dataWindow.mode = ESetupMode.setup;
-
-        deviceGroup_licensePlateRecognition_1.dataWindow.originalPosition = {
-            x: 500,
-            y: 100
-        };
-
-        deviceGroup_occupancy_1.dataWindow.originalPosition = {
-            x: 500,
-            y: 250
-        };
-
-        deviceGroup_peopleCounting_1.dataWindow.originalPosition = {
-            x: 500,
-            y: 400
-        };
-
         this.imageMap.deviceGroups = [];
-        this.imageMap.deviceGroups.push(deviceGroup_licensePlateRecognition_1);
-        this.imageMap.deviceGroups.push(deviceGroup_occupancy_1);
-        this.imageMap.deviceGroups.push(deviceGroup_peopleCounting_1);
+        for (let device of this.devices) {
+            if (
+                this.imageMap.deviceGroups.some(
+                    i => i.name === device.group.name //TODO this.imageMap.deviceGroups 可能要追加objectId來判斷
+                )
+            ) {
+                continue;
+            }
+
+            let deviceGroup = new DeviceGroupItem(
+                device.group.name,
+                EDragType.dataWindowInDeviceGroup,
+                device.mode
+            );
+
+            deviceGroup.dataWindow.mode = ESetupMode.setup;
+            deviceGroup.dataWindow.originalPosition = {
+                x: device.dataWindowX,
+                y: device.dataWindowY
+            };
+
+            this.imageMap.deviceGroups.push(deviceGroup);
+        }
 
         ////////////////////////////////////////////////////////////////////
 
         // device
-        let deviceNormalCamera_1 = new DeviceFisheyeCameraItem(
-            "Fisheye1",
-            EDragType.deviceInTagLabel,
-            EVideoSource.licensePlateRecognition
-        );
-
-        let deviceNormalCamera_2 = new DeviceFisheyeCameraItem(
-            "Fisheye 2",
-            EDragType.deviceInTagLabel,
-            EVideoSource.occupancy
-        );
-
-        let deviceNormalCamera_3 = new DeviceNormalCameraItem(
-            "Normal 3",
-            EDragType.deviceInTagLabel,
-            EVideoSource.peopleCounting
-        );
-
         this.imageMap.devices = [];
-        this.imageMap.devices.push(deviceNormalCamera_1);
-        this.imageMap.devices.push(deviceNormalCamera_2);
-        this.imageMap.devices.push(deviceNormalCamera_3);
+        for (let device of this.devices) {
+            let deviceCamera = new DeviceNormalCameraItem(
+                device.name,
+                EDragType.deviceInTagLabel,
+                device.mode
+            );
 
-        let deviceNormalCamera_4 = new DeviceFisheyeCameraItem(
-            "Fisheye 4",
-            EDragType.deviceInMap,
-            EVideoSource.licensePlateRecognition
-        );
+            deviceCamera.dataWindow.mode = ESetupMode.setup;
+            deviceCamera.originalPosition = {
+                x: device.x,
+                y: device.y
+            };
 
-        let deviceNormalCamera_5 = new DeviceNormalCameraItem(
-            "Normal 5",
-            EDragType.deviceInMap,
-            EVideoSource.occupancy
-        );
+            deviceCamera.rotate = device.visibleAngle;
+            deviceCamera.viewerAngle = device.angle;
+            //deviceCamera.visibleDistance = device.visibleDistance;
 
-        let deviceNormalCamera_6 = new DeviceNormalCameraItem(
-            "Normal 6",
-            EDragType.deviceInMap,
-            EVideoSource.peopleCounting
-        );
+            this.imageMap.devices.push(deviceCamera);
+        }
 
-        deviceNormalCamera_5.rotate = "0";
-        deviceNormalCamera_6.rotate = "150";
+        // let deviceNormalCamera_1 = new DeviceFisheyeCameraItem(
+        //     "Fisheye1",
+        //     EDragType.deviceInTagLabel,
+        //     EVideoSource.licensePlateRecognition
+        // );
 
-        deviceNormalCamera_5.viewerAngle = "160";
-        deviceNormalCamera_6.viewerAngle = "45";
+        // let deviceNormalCamera_2 = new DeviceFisheyeCameraItem(
+        //     "Fisheye 2",
+        //     EDragType.deviceInTagLabel,
+        //     EVideoSource.occupancy
+        // );
 
-        deviceNormalCamera_4.originalPosition = {
-            x: 100,
-            y: 100
-        };
+        // let deviceNormalCamera_3 = new DeviceNormalCameraItem(
+        //     "Normal 3",
+        //     EDragType.deviceInTagLabel,
+        //     EVideoSource.peopleCounting
+        // );
 
-        deviceNormalCamera_5.originalPosition = {
-            x: 300,
-            y: 250
-        };
+        // this.imageMap.devices = [];
+        // this.imageMap.devices.push(deviceNormalCamera_1);
+        // this.imageMap.devices.push(deviceNormalCamera_2);
+        // this.imageMap.devices.push(deviceNormalCamera_3);
 
-        deviceNormalCamera_6.originalPosition = {
-            x: 100,
-            y: 500
-        };
+        // let deviceNormalCamera_4 = new DeviceFisheyeCameraItem(
+        //     "Fisheye 4",
+        //     EDragType.deviceInMap,
+        //     EVideoSource.licensePlateRecognition
+        // );
 
-        deviceNormalCamera_4.dataWindow.originalPosition = {
-            x: 800,
-            y: 100
-        };
+        // let deviceNormalCamera_5 = new DeviceNormalCameraItem(
+        //     "Normal 5",
+        //     EDragType.deviceInMap,
+        //     EVideoSource.occupancy
+        // );
 
-        deviceNormalCamera_5.dataWindow.originalPosition = {
-            x: 800,
-            y: 250
-        };
+        // let deviceNormalCamera_6 = new DeviceNormalCameraItem(
+        //     "Normal 6",
+        //     EDragType.deviceInMap,
+        //     EVideoSource.peopleCounting
+        // );
 
-        deviceNormalCamera_6.dataWindow.originalPosition = {
-            x: 800,
-            y: 400
-        };
+        // deviceNormalCamera_5.rotate = "0";
+        // deviceNormalCamera_6.rotate = "150";
 
-        this.imageMap.devices.push(deviceNormalCamera_4);
-        this.imageMap.devices.push(deviceNormalCamera_5);
-        this.imageMap.devices.push(deviceNormalCamera_6);
+        // deviceNormalCamera_5.viewerAngle = "160";
+        // deviceNormalCamera_6.viewerAngle = "45";
 
-        deviceNormalCamera_6.dataWindow.inPerson = 10;
-        deviceNormalCamera_6.dataWindow.outPerson = 30;
+        // deviceNormalCamera_4.originalPosition = {
+        //     x: 100,
+        //     y: 100
+        // };
 
-        deviceNormalCamera_6.dataWindow.inToday = 100;
-        deviceNormalCamera_6.dataWindow.outToday = 297;
+        // deviceNormalCamera_5.originalPosition = {
+        //     x: 300,
+        //     y: 250
+        // };
+
+        // deviceNormalCamera_6.originalPosition = {
+        //     x: 100,
+        //     y: 500
+        // };
+
+        // deviceNormalCamera_4.dataWindow.originalPosition = {
+        //     x: 800,
+        //     y: 100
+        // };
+
+        // deviceNormalCamera_5.dataWindow.originalPosition = {
+        //     x: 800,
+        //     y: 250
+        // };
+
+        // deviceNormalCamera_6.dataWindow.originalPosition = {
+        //     x: 800,
+        //     y: 400
+        // };
+
+        // this.imageMap.devices.push(deviceNormalCamera_4);
+        // this.imageMap.devices.push(deviceNormalCamera_5);
+        // this.imageMap.devices.push(deviceNormalCamera_6);
+
+        // deviceNormalCamera_6.dataWindow.inPerson = 10;
+        // deviceNormalCamera_6.dataWindow.outPerson = 30;
+
+        // deviceNormalCamera_6.dataWindow.inToday = 100;
+        // deviceNormalCamera_6.dataWindow.outToday = 297;
 
         ////////////////////////////////////////////////////////////////////
         if (imageMapRef != undefined) {
@@ -946,7 +983,7 @@ export default class Site extends Vue {
         console.log("pageToAreaView", this.area);
         this.areaPhotoSrc = this.serverUrl + this.area["imageSrc"];
         this.areaMapSrc = this.serverUrl + this.area["mapSrc"];
-        this.initImageMap();
+        this.initMap();
         this.imageMap.setupMode = ESetupMode.preview;
         this.pageStep = EPageStep.areaView;
     }
@@ -954,14 +991,14 @@ export default class Site extends Vue {
     pageToAreaAdd() {
         this.clearAreaData();
         this.areaMapSrc = ImageBase64.pngEmpty;
-        this.initImageMap();
+        this.initMap();
         this.imageMap.setupMode = ESetupMode.setup;
         this.pageStep = EPageStep.areaAdd;
     }
 
     pageToAreaEdit() {
         this.areaMapSrc = this.serverUrl + this.area["mapSrc"];
-        this.initImageMap();
+        this.initMap();
         this.pageStep = EPageStep.areaEdit;
     }
 
@@ -1090,7 +1127,7 @@ export default class Site extends Vue {
             .R("/device", body)
             .then((response: any) => {
                 console.log("initDeviceNameItem", response);
-                for (let item of response) {
+                for (let item of response.results) {
                     let device = {
                         id: item.objectId,
                         text: item.name,
@@ -1437,6 +1474,29 @@ export default class Site extends Vue {
                     return ResponseFilter.base(this, e);
                 });
         }
+    }
+
+    async updateDevicePosition() {
+        const datas: IAreaEditData[] = [
+            {
+                objectId: "data.objectId",
+                name: "data.name"
+            }
+        ];
+
+        const editAreaParam = { datas };
+
+        await this.$server
+            .U("/location/area", editAreaParam)
+            .then((response: any) => {
+                if (response != undefined) {
+                    Dialog.success(this._("w_Site_EditAreaSuccess"));
+                    this.pageToAreaList();
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
     }
 
     async deleteSite() {
@@ -2103,7 +2163,7 @@ export default class Site extends Vue {
                  * @uiPlaceHolder - ${this._("w_Site_GroupName")}
                  * @uiType - iv-form-string
                  */
-                deviceGroupName?: string;
+                name?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Site_DeviceType")}

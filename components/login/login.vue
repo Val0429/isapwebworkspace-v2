@@ -76,6 +76,7 @@
                                             <b-button
                                                 variant="link"
                                                 class="px-0"
+                                                @click="forgotPassword"
                                             >
                                                 {{ _('w_Login_ForgotPassword') }}
                                             </b-button>
