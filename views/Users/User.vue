@@ -325,10 +325,7 @@ export default class User extends Vue {
 
     created() {}
 
-    mounted() {
-        this.initSelectItem();
-        this.initRegionTreeSelect();
-    }
+    mounted() {}
 
     clearInputData() {
         this.inputUserData = {
@@ -353,8 +350,7 @@ export default class User extends Vue {
         this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
-    async initSelectItem() {
-        // 取得sites
+    async initSelectItemSite() {
         const readAllSiteParam: {
             type: string;
         } = {
@@ -382,8 +378,9 @@ export default class User extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        // 取得 tree
+    async initSelectItemTree() {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
@@ -401,8 +398,10 @@ export default class User extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        // 取得UserGroup
+    async initSelectItemUserGroup() {
+
         await this.$server
             .R("/user/group/all")
             .then((response: any) => {
@@ -421,25 +420,6 @@ export default class User extends Vue {
                 console.log(e);
                 return false;
             });
-    }
-
-    cardSearch(search: string) {
-        // TODO: finished search
-        // console.log('search - ', search)
-        this.searchKeywords(search);
-    }
-
-    searchKeywords(search: string) {
-        // TODO: finished search
-        if (search != "") {
-            const accountText = this.inputUserData.account.toLocaleLowerCase();
-            const nameText = this.inputUserData.name.toLocaleLowerCase();
-            const searchText = search.toLowerCase();
-            const searchResult =
-                accountText.match(searchText) || nameText.match(searchText);
-
-            return searchResult;
-        }
     }
 
     selectedItem(data) {
@@ -515,23 +495,20 @@ export default class User extends Vue {
         }
     }
 
-    idsToText(value: any): string {
-        let result = "";
-        for (let val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
+    async pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        await this.initSelectItemSite();
+        await this.initSelectItemUserGroup();
+        this.selecteds = [];
+        this.inputUserData.type = type;
+
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToEdit(type: string) {
+    async pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
+        await this.initSelectItemSite();
+        await this.initSelectItemUserGroup();
         this.selecteds = [];
 
         this.inputUserData.type = type;
@@ -548,13 +525,9 @@ export default class User extends Vue {
         );
     }
 
-    pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
-        if (type === EPageStep.add) {
-            this.clearInputData();
-            this.selecteds = [];
-            this.inputUserData.type = type;
-        }
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
     }
 
     pageToList() {
@@ -563,9 +536,23 @@ export default class User extends Vue {
         this.selecteds = [];
     }
 
-    pageToEmailTest() {
-        this.inputTestEmail = "";
-        this.modalShow = !this.modalShow;
+    async pageToChooseTree() {
+        this.pageStep = EPageStep.chooseTree;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selecteds = [];
+        for (const id of this.inputUserData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
     }
 
     pageToShowResult() {
@@ -593,21 +580,9 @@ export default class User extends Vue {
         }
     }
 
-    pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.selecteds = [];
-        for (const id of this.inputUserData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
+    pageToEmailTest() {
+        this.inputTestEmail = "";
+        this.modalShow = !this.modalShow;
     }
 
     async sendEmailTest() {
@@ -787,6 +762,35 @@ export default class User extends Vue {
         return value.length < endWord
             ? value.substring(startWord, endWord)
             : value.substring(startWord, endWord) + "...";
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (let val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
+
+    cardSearch(search: string) {
+        // TODO: finished search
+        // console.log('search - ', search)
+        this.searchKeywords(search);
+    }
+
+    searchKeywords(search: string) {
+        // TODO: finished search
+        if (search != "") {
+            const accountText = this.inputUserData.account.toLocaleLowerCase();
+            const nameText = this.inputUserData.name.toLocaleLowerCase();
+            const searchText = search.toLowerCase();
+            const searchResult =
+                accountText.match(searchText) || nameText.match(searchText);
+
+            return searchResult;
+        }
     }
 
     ITableList() {

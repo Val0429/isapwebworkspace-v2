@@ -236,7 +236,7 @@ export default class CampaignSetting extends Vue {
         this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
-    async initSelectSiteItem() {
+    async initSelectItemSite() {
         const readAllSiteParam: {
             type: string;
         } = {
@@ -266,7 +266,7 @@ export default class CampaignSetting extends Vue {
             });
     }
 
-    async initSelectTreeItem() {
+    async initSelectItemTree() {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
@@ -353,24 +353,19 @@ export default class CampaignSetting extends Vue {
         }
     }
 
-    idsToText(value: any): string {
-        let result = "";
-        for (const val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
-    }
+    async pageToAdd(stepType: string) {
+        this.pageStep = EPageStep.add;
+        this.clearInputData();
+        await this.initSelectItemSite();
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
+        this.selecteds = [];
+        this.inputCampaignData.stepType = stepType;
     }
 
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
-        await this.initSelectSiteItem();
+        await this.initSelectItemSite();
 
         this.inputCampaignData.stepType = stepType;
 
@@ -381,13 +376,33 @@ export default class CampaignSetting extends Vue {
         );
     }
 
-    async pageToAdd(stepType: string) {
-        this.pageStep = EPageStep.add;
-        this.clearInputData();
-        await this.initSelectSiteItem();
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
+    }
 
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        (this.$refs.campaignTable as any).reload();
+    }
+
+    async pageToChooseTree() {
+        this.pageStep = EPageStep.chooseTree;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
         this.selecteds = [];
-        this.inputCampaignData.stepType = stepType;
+        for (const id of this.inputCampaignData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
     }
 
     pageToShowResult() {
@@ -413,30 +428,6 @@ export default class CampaignSetting extends Vue {
                 this.inputCampaignData.siteIds.push(item.objectId);
             }
         }
-    }
-
-    async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.initRegionTreeSelect();
-        await this.initSelectTreeItem();
-        this.selecteds = [];
-        for (const id of this.inputCampaignData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.campaignTable as any).reload();
     }
 
     async saveAddOrEdit(data) {
@@ -591,6 +582,15 @@ export default class CampaignSetting extends Vue {
         return value.length < endWord
             ? value.substring(startWord, endWord)
             : value.substring(startWord, endWord) + "...";
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (const val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
     }
 
     dateToYYYY_MM_DD(value) {

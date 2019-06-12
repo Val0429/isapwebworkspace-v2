@@ -204,10 +204,7 @@ export default class UserGroup extends Vue {
 
     created() {}
 
-    mounted() {
-        this.initSelectItem();
-        this.initRegionTreeSelect();
-    }
+    mounted() {}
 
     clearInputData() {
         this.inputUserGroupData = {
@@ -227,8 +224,7 @@ export default class UserGroup extends Vue {
         this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
-    async initSelectItem() {
-        // 取得sites
+    async initSelectItemSite() {
         const readAllSiteParam: {
             type: string;
         } = {
@@ -256,8 +252,9 @@ export default class UserGroup extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        // 取得 tree
+    async initSelectItemTree() {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
@@ -266,26 +263,6 @@ export default class UserGroup extends Vue {
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-
-        // 取得UserGroup
-        await this.$server
-            .R("/user/group/all")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 userGroupSelectItem 的 key 的方式
-                        this.userGroupSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
                 }
             })
             .catch((e: any) => {
@@ -345,27 +322,21 @@ export default class UserGroup extends Vue {
             }
         }
 
-        // console.log('this.selecteds - ', this.selecteds)
-        // this.tempSaveData = JSON.parse(JSON.stringify(this.inputUserGroupData));
     }
 
-    idsToText(value: any): string {
-        let result = "";
-        for (const val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
+    async pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        await this.initSelectItemSite();
+        this.clearInputData();
+        this.selecteds = [];
+        this.inputUserGroupData.type = type;
+
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToEdit(type: string) {
+    async pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
+        await this.initSelectItemSite();
         this.selecteds = [];
 
         this.inputUserGroupData.type = type;
@@ -378,19 +349,34 @@ export default class UserGroup extends Vue {
         );
     }
 
-    pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
-        if (type === EPageStep.add) {
-            this.clearInputData();
-            this.selecteds = [];
-            this.inputUserGroupData.type = type;
-        }
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
     }
 
     pageToList() {
         this.pageStep = EPageStep.list;
         (this.$refs.userGroupTable as any).reload();
         this.selecteds = [];
+    }
+
+    async pageToChooseTree() {
+        this.pageStep = EPageStep.chooseTree;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selecteds = [];
+        for (const id of this.inputUserGroupData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
     }
 
     pageToShowResult() {
@@ -414,23 +400,6 @@ export default class UserGroup extends Vue {
             // from selecteds push siteIds
             for (const item of this.selecteds) {
                 this.inputUserGroupData.siteIds.push(item.objectId);
-            }
-        }
-    }
-
-    pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.selecteds = [];
-        for (const id of this.inputUserGroupData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
             }
         }
     }
@@ -589,6 +558,16 @@ export default class UserGroup extends Vue {
             ? value.substring(startWord, endWord)
             : value.substring(startWord, endWord) + "...";
     }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (const val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
 
     ITableList() {
         return `

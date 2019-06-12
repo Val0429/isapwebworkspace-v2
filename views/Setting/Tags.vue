@@ -130,7 +130,7 @@
             :regionTreeItem="regionTreeItem"
             :selectType="selectTypeRegion"
             :selecteds="selectedsRegions"
-            v-on:click-back="pageToShowResult"
+            v-on:click-back="pageToShowResultRegionTree"
         >
         </region-tree-select>
 
@@ -139,7 +139,7 @@
             :regionTreeItem="siteTreeItem"
             :selectType="selectTypeSite"
             :selecteds="selectedsSites"
-            v-on:click-back="pageToShowResult"
+            v-on:click-back="pageToShowResultSiteTree"
         >
         </region-tree-select>
 
@@ -216,10 +216,8 @@ export default class Tags extends Vue {
 
     created() {}
 
-    mounted() {
-        this.initSelectItem();
-        this.initRegionTreeSelect();
-    }
+    mounted() {}
+
     clearInputData() {
         this.inputTagData = {
             objectId: "",
@@ -233,8 +231,7 @@ export default class Tags extends Vue {
         };
     }
 
-    async initSelectItem() {
-        // 取得sites
+    async initSelectItemSite() {
         const readAllSiteParam: {
             type: string;
         } = {
@@ -249,6 +246,9 @@ export default class Tags extends Vue {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            returnValue
+                        );
                     }
                 }
             })
@@ -259,8 +259,35 @@ export default class Tags extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        // 取得regions
+    async initSelectItemTree() {
+        await this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+
+                    this.siteTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.siteTreeItem.region = this.siteTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemRegion() {
+
         await this.$server
             .R("/location/region/all")
             .then((response: any) => {
@@ -270,31 +297,6 @@ export default class Tags extends Vue {
                         this.regionsSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-
-        // 取得 tree
-        await this.$server
-            .R("/location/tree")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-
-                    this.siteTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                    this.siteTreeItem.region = this.regionTreeItem.tree;
                 }
             })
             .catch((e: any) => {
@@ -378,95 +380,22 @@ export default class Tags extends Vue {
         }
     }
 
-    idsToText(value: any): string {
-        let result = "";
-        for (let val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
-    }
-
-    pageToShowResult() {
-        if (this.inputTagData.type === EPageStep.edit) {
-            this.pageStep = EPageStep.edit;
-
-            // siteIds clear
-            this.inputTagData.siteIds = [];
-            this.inputTagData.regionIds = [];
-
-            // from selecteds push siteIds / regionIds
-            for (const item of this.selectedsSites) {
-                this.inputTagData.siteIds.push(item.objectId);
-            }
-
-            for (const item of this.selectedsRegions) {
-                this.inputTagData.regionIds.push(item.objectId);
-            }
-        }
-
-        if (this.inputTagData.type === EPageStep.add) {
-            this.pageStep = EPageStep.add;
-
-            // siteIds clear
-            this.inputTagData.siteIds = [];
-            this.inputTagData.regionIds = [];
-
-            // from selecteds push siteIds / regionIds
-            for (const item of this.selectedsSites) {
-                this.inputTagData.siteIds.push(item.objectId);
-            }
-
-            for (const item of this.selectedsRegions) {
-                this.inputTagData.regionIds.push(item.objectId);
-            }
-        }
-    }
-
-    pageToChooseRegionTree() {
-        this.pageStep = EPageStep.chooseRegionTree;
-
-        this.selectedsRegions = [];
-        for (const id of this.inputTagData.regionIds) {
-            for (const detail in this.regionsSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.region,
-                        name: this.regionsSelectItem[detail]
-                    };
-                    this.selectedsRegions.push(selectedsObject);
-                }
-            }
-        }
-    }
-
-    pageToChooseSiteTree() {
-        this.pageStep = EPageStep.chooseSiteTree;
-
+    async pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        await this.initSelectItemSite();
+        await this.initSelectItemRegion();
+        this.clearInputData();
         this.selectedsSites = [];
-        for (const id of this.inputTagData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selectedsSites.push(selectedsObject);
-                }
-            }
-        }
+        this.selectedsRegions = [];
+        this.inputTagData.type = type;
+
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToEdit(type: string) {
+    async pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
+        await this.initSelectItemSite();
+        await this.initSelectItemRegion();
         this.selectedsSites = [];
         this.selectedsRegions = [];
         this.inputTagData.type = type;
@@ -482,14 +411,9 @@ export default class Tags extends Vue {
         );
     }
 
-    pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
-        if (type === EPageStep.add) {
-            this.clearInputData();
-            this.selectedsSites = [];
-            this.selectedsRegions = [];
-            this.inputTagData.type = type;
-        }
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
     }
 
     pageToList() {
@@ -497,6 +421,99 @@ export default class Tags extends Vue {
         (this.$refs.tagTable as any).reload();
         this.selectedsSites = [];
         this.selectedsRegions = [];
+    }
+
+    async pageToChooseRegionTree() {
+        this.pageStep = EPageStep.chooseRegionTree;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selectedsRegions = [];
+        for (const id of this.inputTagData.regionIds) {
+            for (const detail in this.regionsSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.region,
+                        name: this.regionsSelectItem[detail]
+                    };
+                    this.selectedsRegions.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    async pageToChooseSiteTree() {
+        this.pageStep = EPageStep.chooseSiteTree;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selectedsSites = [];
+        for (const id of this.inputTagData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selectedsSites.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    pageToShowResultRegionTree() {
+        if (this.inputTagData.type === EPageStep.edit) {
+            this.pageStep = EPageStep.edit;
+
+            // siteIds clear
+            this.inputTagData.regionIds = [];
+
+            // from selecteds push siteIds / regionIds
+
+            for (const item of this.selectedsRegions) {
+                this.inputTagData.regionIds.push(item.objectId);
+            }
+        }
+
+        if (this.inputTagData.type === EPageStep.add) {
+            this.pageStep = EPageStep.add;
+
+            // siteIds clear
+            this.inputTagData.regionIds = [];
+
+            // from selecteds push siteIds / regionIds
+
+            for (const item of this.selectedsRegions) {
+                this.inputTagData.regionIds.push(item.objectId);
+            }
+        }
+    }
+
+    pageToShowResultSiteTree() {
+        if (this.inputTagData.type === EPageStep.edit) {
+            this.pageStep = EPageStep.edit;
+
+            // siteIds clear
+            this.inputTagData.siteIds = [];
+
+            // from selecteds push siteIds / regionIds
+            for (const item of this.selectedsSites) {
+                this.inputTagData.siteIds.push(item.objectId);
+            }
+
+        }
+
+        if (this.inputTagData.type === EPageStep.add) {
+            this.pageStep = EPageStep.add;
+
+            // siteIds clear
+            this.inputTagData.siteIds = [];
+
+            // from selecteds push siteIds / regionIds
+            for (const item of this.selectedsSites) {
+                this.inputTagData.siteIds.push(item.objectId);
+            }
+        }
     }
 
     async saveAddOrEdit(data) {
@@ -645,6 +662,15 @@ export default class Tags extends Vue {
         return value.length < endWord
             ? value.substring(startWord, endWord)
             : value.substring(startWord, endWord) + "...";
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (let val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
     }
 
     ITableList() {
