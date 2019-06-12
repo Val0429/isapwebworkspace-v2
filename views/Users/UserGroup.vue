@@ -182,7 +182,7 @@ export default class UserGroup extends Vue {
     isSelected: any = [];
     tableMultiple: boolean = true;
 
-    userGroupDetail: any = [];
+    selectedDetail: any = [];
 
     sitesSelectItem: any = {};
     userGroupSelectItem: any = {};
@@ -300,13 +300,13 @@ export default class UserGroup extends Vue {
 
     selectedItem(data) {
         this.isSelected = data;
-        this.userGroupDetail = [];
-        this.userGroupDetail = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
     }
 
     getInputData() {
         this.clearInputData();
-        for (const param of this.userGroupDetail) {
+        for (const param of this.selectedDetail) {
             this.inputUserGroupData = {
                 objectId: param.objectId,
                 name: param.name,
@@ -535,7 +535,7 @@ export default class UserGroup extends Vue {
             this._("w_UserGroup_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.userGroupDetail) {
+                for (const param of this.selectedDetail) {
                     const deleteUserParam: {
                         objectId: string;
                     } = {

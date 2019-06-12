@@ -61,6 +61,10 @@ $({ path: '/', name: 'Home', redirect: '/region' })();
 
 $({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(ForgotPassword);
 
+
+// MyProfile
+$({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
+
 // Components
 // $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
 // $({ path: '/components/forms', name: 'Forms', icon: 'fa-facebook', permission: '/announcements' })(Forms);
@@ -113,5 +117,3 @@ $({ path: '/server', name: 'Server', icon: 'fa-twitter', redirect: '/server/cms_
 $({ path: '/server/cms_server', name: 'CMS Server', icon: 'fa-twitter' })(CMSServer);
 $({ path: '/server/frs_server', name: 'FRS Server', icon: 'fa-twitter' })(FRSServer);
 
-// MyProfile
-$({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);

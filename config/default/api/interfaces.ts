@@ -318,6 +318,29 @@ interface IFRSServerResults extends IAnalysis {
 
 export { IAddFRSServer, IEditFRSServer, IFRSServerResults };
 
+// Business Operation Campaign
+interface IBusinessOperationCampaign {
+    type: string;
+    budget: number;
+    description: string;
+    siteIds?: string[];
+    startDate: string | Date;
+    endDate: string | Date;
+}
+interface IAddBusinessOperationCampaign extends IBusinessOperationCampaign {
+    name?: string;
+}
+
+interface IEditBusinessOperationCampaign extends IBusinessOperationCampaign {
+    objectId?: string;
+}
+
+interface IBusinessOperationCampaignResults extends IBusinessOperationCampaign {
+    sites: IObjectIdAndName[];
+}
+
+export { IAddBusinessOperationCampaign, IEditBusinessOperationCampaign, IBusinessOperationCampaignResults }
+
 ////////////////////// 以上為確定使用 //////////////////////
 
 // Location/Site

@@ -118,7 +118,6 @@ enum EPageStep {
     components: {}
 })
 export default class MyProfile extends Vue {
-    havePermissionPath: string = "/dashboards/Dashboard";
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.view;
@@ -182,7 +181,7 @@ export default class MyProfile extends Vue {
     }
 
     pageToLeave() {
-        this.$router.push({ path: this.havePermissionPath });
+        this.$router.push({ path: "/" });
     }
 
     pageToView() {
@@ -274,7 +273,7 @@ export default class MyProfile extends Vue {
 
     logoutAlways() {
         //User.clearUser();
-        this.$router.push({ path: "/" });
+        this.$router.push({ path: "/login" });
     }
 
     IEditFormPassword() {

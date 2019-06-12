@@ -286,7 +286,7 @@ export default class GeneralOfficeHour extends Vue {
     isSelected: any = [];
     tableMultiple: boolean = true;
 
-    officeHourDetail: any = [];
+    selectedDetail: any = [];
 
     dayRanges: any = {
         weeks: [
@@ -367,13 +367,13 @@ export default class GeneralOfficeHour extends Vue {
 
     selectedItem(data) {
         this.isSelected = data;
-        this.officeHourDetail = [];
-        this.officeHourDetail = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
     }
 
     getInputData() {
         this.clearInputData();
-        for (const param of this.officeHourDetail) {
+        for (const param of this.selectedDetail) {
             this.inputOfficeHourData = {
                 objectId: param.objectId,
                 name: param.name,
@@ -690,7 +690,7 @@ export default class GeneralOfficeHour extends Vue {
             this._("w_OfficeHour_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.officeHourDetail) {
+                for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
                     } = {
@@ -898,7 +898,9 @@ export default class GeneralOfficeHour extends Vue {
                  * @uiType - iv-form-label
                  */
                 siteIdsText: string;
-                `;
+
+            }
+        `;
     }
 }
 </script>
