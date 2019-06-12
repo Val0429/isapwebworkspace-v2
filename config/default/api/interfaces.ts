@@ -14,6 +14,12 @@ interface IConfig {
     password: string;
 }
 
+interface IConfigiSap {
+    serverId: string;
+    sourceid: string;
+    location: number;
+}
+
 interface IAnalysis {
     wsport: number;
     ip: string;
@@ -340,6 +346,40 @@ interface IBusinessOperationCampaignResults extends IBusinessOperationCampaign {
 }
 
 export { IAddBusinessOperationCampaign, IEditBusinessOperationCampaign, IBusinessOperationCampaignResults }
+
+// Video Source People Counting
+interface IVSPeopleCounting extends IConfig {
+    areaId: string;
+    groupIds: string[];
+    name: string;
+    brand: string;
+
+}
+
+interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
+    customId: string;
+    model: string;
+    config: IConfig;
+}
+
+interface IAddVSPeopleCountingiSap extends IVSPeopleCounting {
+    customId: string;
+    config: IConfigiSap;
+    direction: string;
+}
+
+interface IEditVSPeopleCountingHanwha extends IVSPeopleCounting {
+    objectId: string;
+    model: string;
+    config: IConfig;}
+
+interface IEditVSPeopleCountingiSap extends IVSPeopleCounting {
+    objectId: string;
+    config: IConfigiSap;
+    direction: string;
+}
+
+export { IAddVSPeopleCountingHanwha, IAddVSPeopleCountingiSap, IEditVSPeopleCountingHanwha, IEditVSPeopleCountingiSap }
 
 ////////////////////// 以上為確定使用 //////////////////////
 

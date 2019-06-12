@@ -152,6 +152,7 @@
                         :label="_('w_Navigation_Server_HDServer')"
                         url="/server/hd_server"
                     />
+                   
                 </SidebarNavItem>
 
                 <!-- Setting -->

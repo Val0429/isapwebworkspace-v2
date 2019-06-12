@@ -3,6 +3,7 @@ import { RegisterRouter as $ } from '@/../core';
 import Components from './components/index.vue';
 import Forms from './components/Forms.vue';
 import StepProgress from './components/StepProgress.vue';
+import Tab from './components/Tab.vue';
 import Toolbox from './components/Toolbox.vue';
 import Cards from './components/Cards.vue';
 import AutoCards from './components/AutoCards.vue';
@@ -43,6 +44,9 @@ import FRSServer from './Server/FRSServer.vue';
 import DemographicServer from './Server/DemographicServer.vue';
 import HumanDetectionServer from './Server/HumanDetectionServer.vue';
 
+// Video Source
+import PeopleCounting from './VideoSource/PeopleCounting.vue';
+
 // Setting
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
@@ -81,7 +85,7 @@ $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
 // $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
 // Demo
-$({ path: '/demos', name: "Demo", icon: 'fa-check', redirect: '/demos/region-tree-select' })();
+$({ path: '/demos', name: 'Demo', icon: 'fa-check', redirect: '/demos/region-tree-select' })();
 $({ path: '/demos/region-tree-select', name: 'Region Tree Select', icon: 'fa-check', permission: false })(DemoRegionTreeSelect);
 $({ path: '/demos/image-map', name: 'ImageMap', icon: 'fa-check', permission: false })(DemoImageMap);
 $({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(DemoROI);
@@ -108,13 +112,13 @@ $({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
 $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Region);
 
 // Video Source (c)
-$({ path: '/video_sources', name: "_('w_Navigation_VideoSources')", icon: 'fa-bug', redirect: '/login' })();
-$({ path: '/video_sources/people_counting', name: "_('w_Navigation_VideoSources_PeopleCounting')", icon: 'fa-close', redirect: '/login' })();
-$({ path: '/video_sources/demographic', name: "_('w_Navigation_VideoSources_Demographic')", icon: 'fa-close', redirect: '/login' })();
-$({ path: '/video_sources/heatmap', name: "_('w_Navigation_VideoSources_Heatmap')", icon: 'fa-close', redirect: '/login' })();
-$({ path: '/video_sources/face_recognition', name: "_('w_Navigation_VideoSources_FaceRecognition')", icon: 'fa-close', redirect: '/login' })();
-$({ path: '/video_sources/cms', name: "_('w_Navigation_VideoSources_CMS')", icon: 'fa-close', redirect: '/login' })();
-$({ path: '/video_sources/vip', name: "_('w_Navigation_VideoSources_VIP')", icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources', name: 'VideoSources', icon: 'fa-bug', redirect: '/login' })();
+$({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-close' })(PeopleCounting);
+$({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redirect: '/login' })();
 
 // Rules and Action (?)
 $({ path: '/rules_actions', name: "_('w_Navigation_RulesActions')", icon: 'fa-question', redirect: '/login' })();
@@ -142,4 +146,3 @@ $({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManager
 $({ path: '/server/frs_server', name: "_('w_Navigation_Server_FRSServer')", icon: 'fa-check' })(FRSServer);
 $({ path: '/server/demographic_server', name: "_('w_Navigation_Server_DemographicServer')", icon: 'fa-check' })(DemographicServer);
 $({ path: '/server/hd_server', name: "_('w_Navigation_Server_HDServer')", icon: 'fa-check' })(HumanDetectionServer);
-

@@ -86,6 +86,7 @@ export default class LangObject implements ILang {
     w_ManagedSites = 'Managed sites';
     w_Description = 'Description';
     w_Sites = 'Site(s)';
+    w_Site = 'Site';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';
     w_CurrentPassword = 'Current Password';
@@ -98,6 +99,10 @@ export default class LangObject implements ILang {
     w_Selected = 'Selected';
     w_RegionTreeSelect = 'Region Tree Select';
     w_SiteTreeSelect = 'Site Tree Select';
+    w_Brand = 'Brand';
+    w_Model = 'Model';
+    w_DeviceName = 'Device Name';
+    w_DeviceGroups = 'Device Group(s)';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
@@ -139,7 +144,7 @@ export default class LangObject implements ILang {
     w_Navigation_Users = 'Users';
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
-    
+
     w_Navigation_Site = 'Site';
 
     w_Navigation_Region = 'Region';
@@ -535,4 +540,23 @@ export default class LangObject implements ILang {
     w_BOCampaign_EditSuccess = 'Campaign edit success.';
     w_BOCampaign_EditFailed = 'Campaign edit failed, please try again.';
     w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
+
+        // Business Operation Sales Records
+    w_BOSalesRecords_CardTitle = 'Import Excel (.xlsx)';
+    
+    // People Counting Device
+    w_VSPeopleCounting_List = 'People Counting Device List';
+    w_VSPeopleCounting_Add = 'People Counting Device Add';
+    w_VSPeopleCounting_Edit = 'People Counting Device Edit';
+    w_VSPeopleCounting_View = 'People Counting Device View';
+
+    w_VSPeopleCounting_Addhanwha = 'Add by Hanwha';
+    w_VSPeopleCounting_isap = 'Add by iSap';
+
+    w_VSPeopleCounting_AddSuccess = 'People Counting Device List add success.';
+    w_VSPeopleCounting_ADDFailed = 'People Counting Device add failed, please try again.';
+    w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
+    w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
+    w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
+
 }
