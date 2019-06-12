@@ -113,6 +113,10 @@
                         :label="_('w_Navigation_Server_FRSServer')"
                         url="/server/frs_server"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_HDServer')"
+                        url="/server/hd_server"
+                    />
                 </SidebarNavItem>
 
                 <!-- Setting -->
