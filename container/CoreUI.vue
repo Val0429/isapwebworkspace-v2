@@ -50,11 +50,11 @@
                     url="/users"
                 >
                     <SidebarNavItem
-                        :label="_('w_Navigation_User')"
+                        :label="_('w_Navigation_Users_User')"
                         url="/users/user"
                     />
                     <SidebarNavItem
-                        :label="_('w_Navigation_UserGroup')"
+                        :label="_('w_Navigation_Users_UserGroup')"
                         url="/users/user_group"
                     />
                 </SidebarNavItem>
@@ -146,7 +146,7 @@
                         />
                     <SidebarNavItem
                         :label="_('w_Navigation_Server_DemographicServer')"
-                        url="/server/demographicServer"
+                        url="/server/demographic_server"
                     />
                     <SidebarNavItem
                         :label="_('w_Navigation_Server_HDServer')"
