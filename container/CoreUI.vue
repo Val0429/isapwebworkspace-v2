@@ -14,7 +14,9 @@
         </template>
 
         <template #footer>
-            iSAP
+            <div class="footer-copy">
+                <a href="http://www.isapsolution.com/" target="_blank">www.isapsolution.com</a>&copy;2019
+            </div>
         </template>
 
         <template #nav>
@@ -208,5 +210,8 @@ export default class CoreUI extends Vue {
             margin: 0 10px;
         }
     }
+}
+.footer-copy{
+    padding: 10px;
 }
 </style>

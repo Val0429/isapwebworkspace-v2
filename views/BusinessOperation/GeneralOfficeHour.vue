@@ -250,8 +250,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { DateTime2String } from "@/services/Datetime.ts";
-
+import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
@@ -411,17 +410,17 @@ export default class GeneralOfficeHour extends Vue {
                 let tempDateTimeNumber = {
                     startDay: parseInt(dayRange.startDay),
                     startHour: parseInt(
-                        DateTime2String(new Date(dayRange.startDate), "HH")
+                        Datetime.DateTime2String(new Date(dayRange.startDate), "HH")
                     ),
                     startMinute: parseInt(
-                        DateTime2String(new Date(dayRange.startDate), "mm")
+                        Datetime.DateTime2String(new Date(dayRange.startDate), "mm")
                     ),
                     endDay: parseInt(dayRange.endDay),
                     endHour: parseInt(
-                        DateTime2String(new Date(dayRange.endDate), "HH")
+                        Datetime.DateTime2String(new Date(dayRange.endDate), "HH")
                     ),
                     endMinute: parseInt(
-                        DateTime2String(new Date(dayRange.endDate), "mm")
+                        Datetime.DateTime2String(new Date(dayRange.endDate), "mm")
                     )
                 };
 
@@ -479,16 +478,16 @@ export default class GeneralOfficeHour extends Vue {
 
         for (const item of this.inputOfficeHourData.dayRanges) {
             let startHour = parseInt(
-                DateTime2String(new Date(item.startDate), "HH")
+                Datetime.DateTime2String(new Date(item.startDate), "HH")
             );
             let startMinute = parseInt(
-                DateTime2String(new Date(item.startDate), "mm")
+                Datetime.DateTime2String(new Date(item.startDate), "mm")
             );
             let endHour = parseInt(
-                DateTime2String(new Date(item.endDate), "HH")
+                Datetime.DateTime2String(new Date(item.endDate), "HH")
             );
             let endMinute = parseInt(
-                DateTime2String(new Date(item.endDate), "mm")
+                Datetime.DateTime2String(new Date(item.endDate), "mm")
             );
 
             const tempOfficeHourTime = {
@@ -769,17 +768,17 @@ export default class GeneralOfficeHour extends Vue {
                 let tempDateTimeNumber = {
                     startDay: parseInt(dayRange.startDay),
                     startHour: parseInt(
-                        DateTime2String(new Date(dayRange.startDate), "HH")
+                        Datetime.DateTime2String(new Date(dayRange.startDate), "HH")
                     ),
                     startMinute: parseInt(
-                        DateTime2String(new Date(dayRange.startDate), "mm")
+                        Datetime.DateTime2String(new Date(dayRange.startDate), "mm")
                     ),
                     endDay: parseInt(dayRange.endDay),
                     endHour: parseInt(
-                        DateTime2String(new Date(dayRange.endDate), "HH")
+                        Datetime.DateTime2String(new Date(dayRange.endDate), "HH")
                     ),
                     endMinute: parseInt(
-                        DateTime2String(new Date(dayRange.endDate), "mm")
+                        Datetime.DateTime2String(new Date(dayRange.endDate), "mm")
                     )
                 };
 
