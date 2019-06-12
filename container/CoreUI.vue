@@ -22,56 +22,29 @@
         <template #nav>
             <SidebarHeader :label="_('w_Navigation_Label')" />
             <SidebarNav>
-                <!-- <SidebarNavTitle label="Components" /> -->
-                <!-- <SidebarNavItem url="/components">
-                    <SidebarNavItem url="/components/forms" />
-                </SidebarNavItem> -->
 
-                <!-- <SidebarNavTitle label="基本元件" />
-                <SidebarNavItem url="/components" />
-                <SidebarNavItem url="/components/forms" />
-                <SidebarNavItem url="/components/step-progress" />
-                <SidebarNavItem url="/components/toolbox" />
-                <SidebarNavItem url="/components/cards" />
-                <SidebarNavItem url="/components/cards/auto" />
-                <SidebarNavItem url="/components/table" />
-                <SidebarNavItem url="/components/tree" />
-                <SidebarNavItem url="/components/transition" />
-                <SidebarNavItem url="/components/modal" />
-                <SidebarNavItem url="/components/utilities" />
-
-                <SidebarNavTitle label="選單特殊樣式" />
-                <SidebarNavItem url="/menu-style/1" />
-                <SidebarNavItem url="/menu-style/2" />
-
-                <SidebarNavItem url="/home">
-                    <SidebarNavItem url="/home">
-                        <SidebarNavItem url="/home/about" />
-                        <SidebarNavItem url="/home" />
-                        <SidebarNavItem url="/home/about" />
-                    </SidebarNavItem>
-                    <SidebarNavItem url="/home/about" />
-                    <SidebarNavItem url="/home" />
-                    <SidebarNavItem url="/home/about" />
-                </SidebarNavItem>
-                <SidebarNavItem url="/home/about" /> -->
-
-                <!-- Region -->
+                <!-- Dashboard -->
                 <SidebarNavItem
-                    :label="_('w_Navigation_Region')"
-                    url="/region"
+                    :label="_('w_Navigation_Dashboards')"
+                    url="/dashboards"
                 />
 
-                <!-- Site -->
+                <!-- Analysis -->
                 <SidebarNavItem
-                    :label="_('w_Navigation_Site')"
-                    url="/site"
+                    :label="_('w_Navigation_Analysises')"
+                    url="/analysises"
+                />
+
+                <!-- Report -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Reports')"
+                    url="/reports"
                 />
 
                 <!-- Users -->
                 <SidebarNavItem
                     :label="_('w_Navigation_Users')"
-                    url="/users/user"
+                    url="/users"
                 >
                     <SidebarNavItem
                         :label="_('w_Navigation_User')"
@@ -83,10 +56,59 @@
                     />
                 </SidebarNavItem>
 
+                <!-- Site -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Site')"
+                    url="/site"
+                />
+
+                <!-- Region -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Region')"
+                    url="/region"
+                />
+
+                <!-- Video Source -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_VideoSources')"
+                    url="/video_sources"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_PeopleCounting')"
+                        url="/video_sources/people_counting"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_Demographic')"
+                        url="/video_sources/demographic"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_Heatmap')"
+                        url="/video_sources/heatmap"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_FaceRecognition')"
+                        url="/video_sources/face_recognition"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_CMS')"
+                        url="/video_sources/cms"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_VIP')"
+                        url="/video_sources/vip"
+                    />
+                </SidebarNavItem>
+
+                <!-- Rules and Action -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_RulesActions')"
+                    url="/rules_actions"
+                />
+               
                 <!-- Business Operation -->
                 <SidebarNavItem
                     :label="_('w_Navigation_BusinessOperation')"
-                    url="/business_operations/campaign_setting"
+                    url="/business_operations"
                 >
                     <SidebarNavItem
                         :label="_('w_Navigation_BO_CampaignSetting')"
@@ -105,7 +127,7 @@
                 <!-- Server -->
                 <SidebarNavItem
                     :label="_('w_Navigation_Server')"
-                    url="/server/cms_server"
+                    url="/server"
                 >
                     <SidebarNavItem
                         :label="_('w_Navigation_Server_CMSServer')"
@@ -116,6 +138,10 @@
                         url="/server/frs_server"
                     />
                     <SidebarNavItem
+                        :label="_('w_Navigation_Server_FRSManagerServer')"
+                        url="/server/frs_manager_server"
+                    />
+                    <SidebarNavItem
                         :label="_('w_Navigation_Server_HDServer')"
                         url="/server/hd_server"
                     />
@@ -124,7 +150,7 @@
                 <!-- Setting -->
                 <SidebarNavItem
                     :label="_('w_Navigation_Setting')"
-                    url="/setting/mail_server"
+                    url="/setting"
                 >
                     <SidebarNavItem
                         :label="_('w_Navigation_Setting_MailServer')"
