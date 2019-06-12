@@ -36,7 +36,7 @@
                 variant="secondary"
                 size="lg"
                 @click="clickBack"
-            >{{ regionTreeItem.titleItem.backButton == "" ? "{titleItem.backButton}" : regionTreeItem.titleItem.backButton }}
+            >{{ _('w_Back') }}
             </b-button>
         </template>
     </iv-card>

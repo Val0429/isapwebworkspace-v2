@@ -1,7 +1,16 @@
 <template>
     <CoreUIBase>
         <template #header>
-            Hello iSAP
+            <b-navbar-nav class="nav navbar-nav ml-auto">
+                <div class="navbar-nav-user-name">{{ $user && $user.username ? $user.username : "" }}</div>
+                <a href="/my_profile">
+                    <img
+                        class="img-avatar"
+                        src="@/assets/images/default-user-icon.svg"
+                    />
+                </a>
+                <b-button @click="logout">{{ _('w_Logout') }}</b-button>
+            </b-navbar-nav>
         </template>
 
         <template #footer>
@@ -168,5 +177,32 @@ import {
         SidebarNavItem
     }
 })
-export default class CoreUI extends Vue {}
+export default class CoreUI extends Vue {
+    logout() {
+        // this.$login
+        console.log("Waitting logout function in framework");
+    }
+}
 </script>
+
+<style lang="scss" scoped>
+.app-header {
+    .navbar-nav {
+        padding-right: 20px;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center;
+        align-items: center;
+
+        .navbar-nav-user-name {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        img.img-avatar {
+            height: 35px;
+            margin: 0 10px;
+        }
+    }
+}
+</style>
