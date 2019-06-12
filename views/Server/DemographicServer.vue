@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <!--List-->
         <div v-show="pageStep === ePageStep.List">
-            <iv-card :label="_('w_ServerHD_List')">
+            <iv-card :label="_('w_DemographicServer_List')">
 
                 <template #toolbox>
 
@@ -27,10 +27,10 @@
                     ref="dataTable"
                     :interface="IList()"
                     @selected="selectedData($event)"
-                    :server="{ path: '/partner/human-detection' }"
+                    :server="{ path: '/partner/demographic' }"
                     :multiple="true"
                 >
-                    <!-- :server="{ path: '/partner/human-detection' }" -->
+                    <!-- :server="{ path: '/partner/demographic' }" -->
                     <!-- :data="datas" -->
 
                     <template #target_score="{$attrs, $listeners}">
@@ -60,7 +60,7 @@
 
         <!--View-->
         <div v-show="pageStep === ePageStep.View">
-            <iv-card :label="_('w_ServerHD_View')">
+            <iv-card :label="_('w_DemographicServer_View')">
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
@@ -92,7 +92,7 @@
 
         <!--From (Add and Edit)-->
         <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
-            <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
+            <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') ">
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
@@ -145,11 +145,11 @@
             hide-footer
             hide-header
             size="md"
-            :title="_('w_ServerHD_Test')"
+            :title="_('w_DemographicServer_Test')"
             v-model="modalShow"
         >
 
-            <iv-auto-card :label=" _('w_ServerHD_Test') ">
+            <iv-auto-card :label=" _('w_DemographicServer_Test') ">
 
                 <iv-form
                     :visible="true"
@@ -225,7 +225,7 @@ interface IHDServer {
 @Component({
     components: {}
 })
-export default class HumanDetectionServer extends Vue {
+export default class DemographicServer extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     modalShow: boolean = false;
@@ -331,7 +331,7 @@ export default class HumanDetectionServer extends Vue {
                 };
 
                 this.$server
-                    .D("/partner/human-detection", deleteParam)
+                    .D("/partner/demographic", deleteParam)
                     .then((response: any) => {
                         if (response) {
                             Dialog.success(this._("w_Success"));
@@ -363,10 +363,12 @@ export default class HumanDetectionServer extends Vue {
             const addParam = { datas };
 
             await this.$server
-                .C("/partner/human-detection", addParam)
+                .C("/partner/demographic", addParam)
                 .then((response: any) => {
                     if (response != undefined) {
-                        Dialog.success(this._("w_ServerHD_AddSuccess"));
+                        Dialog.success(
+                            this._("w_DemographicServer_AddSuccess")
+                        );
                         this.pageToList();
                     }
                 })
@@ -389,10 +391,12 @@ export default class HumanDetectionServer extends Vue {
             const editParam = { datas };
 
             await this.$server
-                .U("/partner/human-detection", editParam)
+                .U("/partner/demographic", editParam)
                 .then((response: any) => {
                     if (response != undefined) {
-                        Dialog.success(this._("w_ServerHD_EditSuccess"));
+                        Dialog.success(
+                            this._("w_DemographicServer_EditSuccess")
+                        );
                         this.pageToList();
                     }
                 })
@@ -468,7 +472,7 @@ export default class HumanDetectionServer extends Vue {
         };
 
         await this.$server
-            .C("/partner/human-detection/test", humanObject)
+            .C("/partner/demographic/test", humanObject)
             .then((response: any) => {
                 if (response != undefined) {
                     this.modalShow = !this.modalShow;
@@ -506,17 +510,17 @@ export default class HumanDetectionServer extends Vue {
                 no: string;
 
                  /**
-                 * @uiLabel - ${this._("w_ServerHD_DeviceID")}
+                 * @uiLabel - ${this._("w_DemographicServer_DeviceID")}
                  */
                 customId: string;
 
                  /**
-                 * @uiLabel - ${this._("w_ServerHD_DeviceName")}
+                 * @uiLabel - ${this._("w_DemographicServer_DeviceName")}
                  */
                 name: string;
 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Scale")}
+                * @uiLabel - ${this._("w_DemographicServer_Scale")}
                 */
                 target_score: number;
 
@@ -527,13 +531,13 @@ export default class HumanDetectionServer extends Vue {
     IView() {
         return `interface {
                 /**
-                 * @uiLabel - ${this._("w_ServerHD_DeviceID")}
+                 * @uiLabel - ${this._("w_DemographicServer_DeviceID")}
                  * @uiType - iv-form-label
                  */
                 customId?: string;
 
                  /**
-                 * @uiLabel - ${this._("w_ServerHD_DeviceName")}
+                 * @uiLabel - ${this._("w_DemographicServer_DeviceName")}
                  * @uiType - iv-form-label
                  */
                 name?: string;
@@ -548,20 +552,20 @@ export default class HumanDetectionServer extends Vue {
                  })};
 
                 /**
-                 * @uiLabel - ${this._("w_ServerHD_IP")}
+                 * @uiLabel - ${this._("w_DemographicServer_IP")}
                  * @uiType - iv-form-label
                  */
                 ip?: string;
 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Port")}
+                * @uiLabel - ${this._("w_DemographicServer_Port")}
                 * @uiType - iv-form-label
                 */
                 port?: number;
 
                 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Scale")}
+                * @uiLabel - ${this._("w_DemographicServer_Scale")}
                 */
                 target_score?: any;
 
@@ -572,14 +576,14 @@ export default class HumanDetectionServer extends Vue {
         return `interface {
 
                 /**
-                 * @uiLabel - ${this._("w_ServerHD_DeviceID")}
-                 * @uiPlaceHolder - ${this._("w_ServerHD_DeviceID")}
+                 * @uiLabel - ${this._("w_DemographicServer_DeviceID")}
+                 * @uiPlaceHolder - ${this._("w_DemographicServer_DeviceID")}
                  */
                 customId: string;
 
                  /**
-                 * @uiLabel - ${this._("w_ServerHD_DeviceName")}
-                 * @uiPlaceHolder - ${this._("w_ServerHD_DeviceName")}
+                 * @uiLabel - ${this._("w_DemographicServer_DeviceName")}
+                 * @uiPlaceHolder - ${this._("w_DemographicServer_DeviceName")}
                  */
                 name: string;
 
@@ -592,14 +596,14 @@ export default class HumanDetectionServer extends Vue {
                  })};
 
                 /**
-                 * @uiLabel - ${this._("w_ServerHD_IP")}
-                 * @uiPlaceHolder - ${this._("w_ServerHD_IP")}
+                 * @uiLabel - ${this._("w_DemographicServer_IP")}
+                 * @uiPlaceHolder - ${this._("w_DemographicServer_IP")}
                  * @uiType - iv-form-ip
                  */
                 ip: string;
 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Port")}
+                * @uiLabel - ${this._("w_DemographicServer_Port")}
                * @uiPlaceHolder - ${this._("w_Port_PlaceHolder")}
                  * @uiAttrs - { max: 65535, min: 1}
                 */
@@ -607,8 +611,8 @@ export default class HumanDetectionServer extends Vue {
 
                 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Scale")}
-                * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
+                * @uiLabel - ${this._("w_DemographicServer_Scale")}
+                * @uiPlaceHolder - ${this._("w_DemographicServer_Scale")}
                 */
                 target_score?: ${toEnumInterface(
                     this.targetScoreItem as any,

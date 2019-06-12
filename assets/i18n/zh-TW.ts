@@ -155,6 +155,7 @@ export default class LangObject implements ILang {
     w_Navigation_Server = 'Server';
     w_Navigation_Server_CMSServer = 'CMS Server';
     w_Navigation_Server_FRSServer = 'FRS Server';
+    w_Navigation_Server_DemographicServer = 'Demographic Server';
     w_Navigation_Server_HDServer = 'HD Server';
 
     // 401
@@ -169,8 +170,8 @@ export default class LangObject implements ILang {
     w_ImageMap_DataWindowHrAgoTitle = '1 Hr Ago';
     w_ImageMap_DataWindowNowTitle = 'Now';
     w_ImageMap_CardTitle = 'Setup Dashboard';
-    w_ImageMap_DeviceTagLabelTitle = 'Device group';
-    w_ImageMap_DeviceGroupTagLabelTitle = 'Device';
+    w_ImageMap_DeviceTagLabelTitle = 'Device';
+    w_ImageMap_DeviceGroupTagLabelTitle = 'Device group';
 
     // Login
     w_Login_LoginTitle = 'Login';
