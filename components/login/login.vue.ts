@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Vue, Component } from 'vue-property-decorator';
+=======
+import { Vue, Component } from "vue-property-decorator";
+>>>>>>> master
 import { RegisterLoginRouter } from '@/../core';
 import { ServerName, ServerVersion } from '@/../core/server';
 
