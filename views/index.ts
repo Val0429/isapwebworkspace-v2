@@ -60,6 +60,7 @@ import MyProfile from './MyProfile/MyProfile.vue';
 // Home
 $({ path: '/', name: 'Home', redirect: '/region' })();
 
+// Guest
 $({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(ForgotPassword);
 
 // MyProfile
@@ -80,41 +81,64 @@ $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
 // $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
 // Demo
-$({ path: '/demos/region-tree-select', name: 'DemoRegionTreeSelect', icon: 'fa-twitter', permission: false })(DemoRegionTreeSelect);
-$({ path: '/demos/image-map', name: 'DemoImageMap', icon: 'fa-twitter', permission: false })(DemoImageMap);
-$({ path: '/demos/roi', name: 'DemoROI', icon: 'fa-twitter', permission: false })(DemoROI);
-$({ path: '/demos/dialog', name: 'DemoDialog', icon: 'fa-twitter', permission: false })(DemoDialog);
+$({ path: '/demos/region-tree-select', name: 'Demo_RegionTreeSelect', icon: 'fa-check', permission: false })(DemoRegionTreeSelect);
+$({ path: '/demos/image-map', name: 'Demo_ImageMap', icon: 'fa-check', permission: false })(DemoImageMap);
+$({ path: '/demos/roi', name: 'Demo_ROI', icon: 'fa-check', permission: false })(DemoROI);
+$({ path: '/demos/dialog', name: 'Demo_Dialog', icon: 'fa-check', permission: false })(DemoDialog);
+
+// Dashboard
+$({ path: '/dashboards', name: 'Dashboards', icon: 'fa-question', redirect: '/login' })();
+
+// Analysis
+$({ path: '/analysises', name: 'Analysises', icon: 'fa-question', redirect: '/login' })();
+
+// Report
+$({ path: '/reports', name: 'Reports', icon: 'fa-question', redirect: '/login' })();
 
 // Users
-$({ path: '/users', name: 'Users', icon: 'fa-twitter', redirect: '/users/user' })();
-$({ path: '/users/user', name: 'User', icon: 'fa-twitter' })(User);
-$({ path: '/users/user_group', name: 'User Group', icon: 'fa-twitter' })(UserGroup);
+$({ path: '/users', name: 'Users', icon: 'fa-check', redirect: '/login' })();
+$({ path: '/users/user', name: 'Users_User', icon: 'fa-check' })(User);
+$({ path: '/users/user_group', name: 'Users_UserGroup', icon: 'fa-check' })(UserGroup);
 
 // Business Operation
-$({ path: '/business_operations', name: 'Business Operation', icon: 'fa-twitter', redirect: '/business_operations/campaign_setting' })();
-$({ path: '/business_operations/campaign_setting', name: 'Campaign Setting', icon: 'fa-twitter' })(CampaignSetting);
-$({ path: '/business_operations/sales_records', name: 'Sales Records', icon: 'fa-twitter' })(SalesRecords);
-$({ path: '/business_operations/general_office_hour', name: 'General Office Hour', icon: 'fa-twitter' })(GeneralOfficeHour);
-
-// Regions
-$({ path: '/region', name: 'Region', icon: 'fa-twitter' })(Region);
+$({ path: '/business_operations', name: 'BusinessOperation', icon: 'fa-close', redirect: '/business_operations/campaign_setting' })();
+$({ path: '/business_operations/campaign_setting', name: 'BO_CampaignSetting', icon: 'fa-check' })(CampaignSetting);
+$({ path: '/business_operations/sales_records', name: 'BO_SalesRecords', icon: 'fa-close' })(SalesRecords);
+$({ path: '/business_operations/general_office_hour', name: 'BO_GeneralOfficeHour', icon: 'fa-check' })(GeneralOfficeHour);
 
 // Sites
-$({ path: '/site', name: 'Site', icon: 'fa-twitter' })(Site);
+$({ path: '/site', name: 'Site', icon: 'fa-check' })(Site);
+
+// Regions
+$({ path: '/region', name: 'Region', icon: 'fa-check' })(Region);
+
+// Video Source (c)
+$({ path: '/video_sources', name: 'VideoSources', icon: 'fa-bug', redirect: '/login' })();
+$({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redirect: '/login' })();
+
+// Rules and Action (?)
+$({ path: '/rules_actions', name: 'RulesActions', icon: 'fa-question', redirect: '/login' })();
 
 // Setting
-$({ path: '/setting', name: 'Setting', icon: 'fa-twitter', redirect: '/setting/mail_server' })();
-$({ path: '/setting/mail_server', name: 'Mail Server', icon: 'fa-twitter' })(MailServer);
-$({ path: '/setting/sms', name: 'SMS', icon: 'fa-twitter' })(SMS);
-$({ path: '/setting/weather', name: 'Weather', icon: 'fa-twitter' })(Weather);
-$({ path: '/setting/backup', name: 'Backup', icon: 'fa-twitter' })(Backup);
-$({ path: '/setting/restore', name: 'Restore', icon: 'fa-twitter' })(Restore);
-$({ path: '/setting/license', name: 'License', icon: 'fa-twitter' })(License);
-$({ path: '/setting/tag', name: 'Tag', icon: 'fa-twitter' })(Tag);
+$({ path: '/setting', name: 'Setting', icon: 'fa-close', redirect: '/setting/mail_server' })();
+$({ path: '/setting/mail_server', name: 'Setting_MailServer', icon: 'fa-check' })(MailServer);
+$({ path: '/setting/sms', name: 'Setting_SMS', icon: 'fa-check' })(SMS);
+$({ path: '/setting/weather', name: 'Setting_Weather', icon: 'fa-check' })(Weather);
+$({ path: '/setting/backup', name: 'Setting_Backup', icon: 'fa-question' })(Backup);
+$({ path: '/setting/restore', name: 'Setting_Restore', icon: 'fa-question' })(Restore);
+$({ path: '/setting/license', name: 'Setting_License', icon: 'fa-check' })(License);
+$({ path: '/setting/tag', name: 'Setting_Tag', icon: 'fa-check' })(Tag);
 
 // Server
-$({ path: '/server', name: 'Server', icon: 'fa-twitter', redirect: '/server/cms_server' })();
-$({ path: '/server/cms_server', name: 'CMS Server', icon: 'fa-twitter' })(CMSServer);
-$({ path: '/server/frs_server', name: 'FRS Server', icon: 'fa-twitter' })(FRSServer);
-$({ path: '/server/demographicServer', name: 'Demographic Server', icon: 'fa-twitter' })(DemographicServer);
-$({ path: '/server/hd_server', name: 'HD Server', icon: 'fa-twitter' })(HumanDetectionServer);
+$({ path: '/server', name: 'Server', icon: 'fa-close', redirect: '/server/cms_server' })();
+$({ path: '/server/cms_server', name: 'Server_CMSServer', icon: 'fa-check' })(CMSServer);
+$({ path: '/server/frs_manager_server', name: 'Server_FRSManagerServer', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/server/frs_server', name: 'Server_FRSServer', icon: 'fa-check' })(FRSServer);
+$({ path: '/server/demographicServer', name: 'Server_DemographicServer', icon: 'fa-check' })(DemographicServer);
+$({ path: '/server/hd_server', name: 'Server_HDServer', icon: 'fa-check' })(HumanDetectionServer);
+

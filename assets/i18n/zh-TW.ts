@@ -128,15 +128,31 @@ export default class LangObject implements ILang {
     w_Dialog_SuccessTitle = 'Success';
 
     // Navigation
-    w_Navigation_Label = 'iSAP Solution';
+   w_Navigation_Label = 'iSAP Solution';
+
+    w_Navigation_Dashboards = 'Dashboards';
+
+    w_Navigation_Analysises = 'Analysises';
+
+    w_Navigation_Reports = 'Reports';
 
     w_Navigation_Users = 'Users';
     w_Navigation_User = 'User';
     w_Navigation_UserGroup = 'User Group';
 
+    w_Navigation_Site = 'Site';
+
     w_Navigation_Region = 'Region';
 
-    w_Navigation_Site = 'Site';
+    w_Navigation_VideoSources = 'Video Source';
+    w_Navigation_VideoSources_PeopleCounting = 'People Counting';
+    w_Navigation_VideoSources_Demographic = 'Demographic';
+    w_Navigation_VideoSources_Heatmap = 'Heatmap';
+    w_Navigation_VideoSources_FaceRecognition = 'Face Recognition';
+    w_Navigation_VideoSources_CMS = 'CMS';
+    w_Navigation_VideoSources_VIP = 'VIP';
+
+    w_Navigation_RulesActions = 'Rules and Action';
 
     w_Navigation_BusinessOperation = 'Business Operation';
     w_Navigation_BO_CampaignSetting = 'Campaign Setting';
@@ -154,6 +170,7 @@ export default class LangObject implements ILang {
 
     w_Navigation_Server = 'Server';
     w_Navigation_Server_CMSServer = 'CMS Server';
+    w_Navigation_Server_FRSManagerServer = 'FRS Manager Server';
     w_Navigation_Server_FRSServer = 'FRS Server';
     w_Navigation_Server_DemographicServer = 'Demographic Server';
     w_Navigation_Server_HDServer = 'HD Server';

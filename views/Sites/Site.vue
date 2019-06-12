@@ -51,7 +51,7 @@
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="!isSelectSite">
                             <iv-toolbox-area @click="pageToAreaList()" />
-                            <iv-toolbox-device-group @click="pageToDeviceList()" />
+                            <iv-toolbox-device-group @click="PageToDeviceListFormSite()" />
                         </iv-toolbox-more>
                     </template>
                 </iv-table>
@@ -59,7 +59,7 @@
             </iv-card>
         </div>
 
-        <!--Site From (Add and Edit)-->
+        <!--Site Form (Add and Edit)-->
         <div v-if="pageStep === ePageStep.siteAdd || pageStep === ePageStep.siteEdit">
             <iv-auto-card :label="pageStep == ePageStep.siteAdd ? _('w_Site_AddSite') :  _('w_Site_EditSite')">
 
@@ -68,9 +68,9 @@
                 </template>
 
                 <iv-form
-                    :interface="ISiteFrom()"
+                    :interface="ISiteForm()"
                     :value="site"
-                    @update:*="updateSiteFrom($event)"
+                    @update:*="updateSiteForm($event)"
                     @submit="saveSite($event)"
                 >
 
@@ -283,7 +283,7 @@
 
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="!isSelectArea">
-                            <iv-toolbox-device-group @click="pageToDeviceList()" />
+                            <iv-toolbox-device-group @click="PageToDeviceListFormArea()" />
                         </iv-toolbox-more>
                     </template>
                 </iv-table>
@@ -291,7 +291,7 @@
             </iv-card>
         </div>
 
-        <!--Area From (Add and Edit)-->
+        <!--Area Form (Add and Edit)-->
         <div v-if="pageStep === ePageStep.areaAdd || pageStep === ePageStep.areaEdit">
             <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_Site_AddArea') :  _('w_Site_EditArea')">
                 <template #toolbox>
@@ -299,9 +299,9 @@
                 </template>
 
                 <iv-form
-                    :interface="IAreaFrom()"
+                    :interface="IAreaForm()"
                     :value="area"
-                    @update:*="updateAreaFrom($event)"
+                    @update:*="updateAreaForm($event)"
                     @submit="saveArea($event)"
                 >
 
@@ -423,7 +423,7 @@
 
                     <iv-toolbox-divider />
                     <iv-toolbox-add @click="pageToDeviceAdd()" />
-                    <iv-toolbox-back @click="pageToSiteList()" />
+                    <iv-toolbox-back @click="lastPageStep == ePageStep.siteList ? pageToSiteList() : pageToAreaList()" />
 
                 </template>
 
@@ -448,12 +448,7 @@
                     </template>
 
                     <template #devices="{$attrs, $listeners}">
-
-                        <iv-from-label
-                            title="abctest&#10;<br>sagdsg&#13;gg \n gg"
-                            :title="modalContext"
-                            @mouseover="showDeviceDetialShow($attrs.row.devices)"
-                        >{{showDevices($attrs.row.devices)}}</iv-from-label>
+                        <iv-form-label :title="showDeviceDetialShow($attrs.row.devices)">{{showDevices($attrs.row.devices)}}</iv-form-label>
                     </template>
 
                 </iv-table>
@@ -461,7 +456,7 @@
             </iv-card>
         </div>
 
-        <!--Device From (Add and Edit)-->
+        <!--Device Form (Add and Edit)-->
         <div v-if="pageStep === ePageStep.deviceAdd || pageStep === ePageStep.deviceEdit">
             <iv-auto-card :label="pageStep == ePageStep.deviceAdd ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')">
                 <template #toolbox>
@@ -469,9 +464,9 @@
                 </template>
 
                 <iv-form
-                    :interface="IDeviceFrom()"
+                    :interface="IDeviceForm()"
                     :value="deviceGroup"
-                    @update:*="updateDeviceFrom($event)"
+                    @update:*="updateDeviceForm($event)"
                     @submit="saveDevice($event)"
                 >
 
@@ -515,15 +510,12 @@
                         />
                     </template>
 
-                    <template #deviceName="{$attrs, $listeners}">
-                        <iv-form-selection
+                    <template #devices="{$attrs, $listeners}">
+                        <iv-form-label
                             v-bind="$attrs"
-                            :value="$attrs.value ? $attrs.value.join(',') : ''"
                             v-on="$listeners"
-                            :multiple="true"
-                            :options="ShowDeviceItem(deviceNameItem)"
-                        >
-                        </iv-form-selection>
+                            :value="$attrs.value ? showDeviceDtail($attrs.value) : ''"
+                        />
                     </template>
 
                     <template #footer-before>
@@ -572,6 +564,14 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="deviceGroup ? deviceGroup.name : '' "
+                        />
+                    </template>
+
+                    <template #devices="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="$attrs.value ? showDeviceDtail($attrs.value) : ''"
                         />
                     </template>
 
@@ -656,6 +656,7 @@ export default class Site extends Vue {
     newImgSrc = "";
     tableMultiple = false;
     ePageStep = EPageStep;
+    lastPageStep: EPageStep = EPageStep.none;
     pageStep: EPageStep = EPageStep.none;
     imageMap = new ImageMapItem();
     isMounted = false;
@@ -984,6 +985,16 @@ export default class Site extends Vue {
         this.areaMapSrc = this.serverUrl + this.area["mapSrc"];
         this.initMap();
         this.pageStep = EPageStep.areaEdit;
+    }
+
+    PageToDeviceListFormSite() {
+        this.lastPageStep = EPageStep.siteList;
+        this.pageToDeviceList();
+    }
+
+    PageToDeviceListFormArea() {
+        this.lastPageStep = EPageStep.areaList;
+        this.pageToDeviceList();
     }
 
     pageToDeviceList() {
@@ -1587,8 +1598,8 @@ export default class Site extends Vue {
         }
     }
 
-    updateSiteFrom(data) {
-        console.log("updateSiteFrom", data);
+    updateSiteForm(data) {
+        console.log("updateSiteForm", data);
         if (data) {
             this.site[data.key] = data.value;
             if (data.key == "sitePhoto") {
@@ -1597,8 +1608,8 @@ export default class Site extends Vue {
         }
     }
 
-    async updateAreaFrom(data) {
-        console.log("updateAreaFrom", data);
+    async updateAreaForm(data) {
+        console.log("updateAreaForm", data);
         if (data) {
             this.area[data.key] = data.value;
             if (data.key == "areaPhoto") {
@@ -1621,8 +1632,8 @@ export default class Site extends Vue {
         }
     }
 
-    updateDeviceFrom(data) {
-        console.log("updateDeviceFrom", data);
+    updateDeviceForm(data) {
+        console.log("updateDeviceForm", data);
         if (data) {
             this.deviceGroup[data.key] = data.value;
         }
@@ -1704,11 +1715,6 @@ export default class Site extends Vue {
         this.site = {};
     }
 
-    ShowDeviceItem(value) {
-        console.log("ShowDeviceItem", value, this.deviceGroup);
-        return value.filter(v => v.type == this.deviceGroup["deviceType"]);
-    }
-
     showFirst(value): string {
         if (value.length >= 2) {
             return value.map(item => item)[0] + "...";
@@ -1762,13 +1768,17 @@ export default class Site extends Vue {
 
     showDeviceDetialShow(values) {
         if (values && values.length > 0) {
-            this.modalContext = "";
             this.modalShow = true;
-            for (let value of values) {
-                this.modalContext += value.mode + " : " + value.count + ",";
-            }
-            this.modalContext = this.modalContext.slice(0, -1);
+            return this.showDeviceDtail(values);
         }
+    }
+
+    showDeviceDtail(values) {
+        this.modalContext = "";
+        for (let value of values) {
+            this.modalContext += value.mode + " : " + value.count + ",";
+        }
+        return this.modalContext.slice(0, -1);
     }
 
     showTags(values) {
@@ -1849,7 +1859,7 @@ export default class Site extends Vue {
             }`;
     }
 
-    ISiteFrom() {
+    ISiteForm() {
         return `interface {
                 /**
                 * @uiLabel - ${this._("w_Site_SiteID")}
@@ -2049,7 +2059,7 @@ export default class Site extends Vue {
             }`;
     }
 
-    IAreaFrom() {
+    IAreaForm() {
         return `interface {
                  /**
                  * @uiLabel - ${this._("w_Site_AreaName")}
@@ -2130,7 +2140,7 @@ export default class Site extends Vue {
             }`;
     }
 
-    IDeviceFrom() {
+    IDeviceForm() {
         return `interface {
 
                 /**
@@ -2150,21 +2160,11 @@ export default class Site extends Vue {
                  */
                 name?: string;
 
-                /**
-                 * @uiLabel - ${this._("w_Site_DeviceType")}
-                 * @uiPlaceHolder - ${this._("w_Site_DeviceType")}
-                 * @uiType - iv-form-selection
-                 */
-                deviceType?: ${toEnumInterface(
-                    this.deviceTypeItem as any,
-                    false
-                )};
-
-                /**
-                * @uiLabel - ${this._("w_Site_DeviceName")}
-                * @uiPlaceHolder - ${this._("w_Site_DeviceName")}
+                 /**
+                * @uiLabel - ${this._("w_Site_Devices")}
+                * @uiType - iv-form-label
                 */
-                deviceName?: any;
+                devices?: string;
 
             }`;
     }
@@ -2190,17 +2190,13 @@ export default class Site extends Vue {
                  */
                 deviceGroupName?: string;
 
-                 /**
-                 * @uiLabel - ${this._("w_Site_DeviceType")}
-                 * @uiType - iv-form-label
-                 */
-                deviceType?: string;
-
                 /**
-                 * @uiLabel - ${this._("w_Site_DeviceName")}
-                 * @uiType - iv-form-label
-                 */
-                deviceName?: string;
+                * @uiLabel - ${this._("w_Site_Devices")}
+                * @uiType - iv-form-label
+                */
+                devices?: string;
+
+                
 
             }`;
     }

@@ -90,7 +90,7 @@
             </iv-card>
         </div>
 
-        <!--From (Add and Edit)-->
+        <!--Form (Add and Edit)-->
         <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
             <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
                 <template #toolbox>
@@ -98,9 +98,9 @@
                 </template>
 
                 <iv-form
-                    :interface="IFrom()"
+                    :interface="IForm()"
                     :value="data[0]"
-                    @update:*="updateFrom($event)"
+                    @update:*="updateForm($event)"
                     @submit="saveData($event)"
                 >
 
@@ -402,8 +402,8 @@ export default class HumanDetectionServer extends Vue {
         }
     }
 
-    updateFrom(data) {
-        console.log("updateFrom", data);
+    updateForm(data) {
+        console.log("updateForm", data);
         if (data) {
             this.data[data.key] = data.value;
         }
@@ -568,7 +568,7 @@ export default class HumanDetectionServer extends Vue {
             }`;
     }
 
-    IFrom() {
+    IForm() {
         return `interface {
 
                 /**
