@@ -169,8 +169,8 @@ export default class LangObject {
     w_ImageMap_DataWindowHrAgoTitle = '1 Hr Ago';
     w_ImageMap_DataWindowNowTitle = 'Now';
     w_ImageMap_CardTitle = 'Setup Dashboard';
-    w_ImageMap_DeviceTagLabelTitle = 'Device group';
-    w_ImageMap_DeviceGroupTagLabelTitle = 'Device';
+    w_ImageMap_DeviceTagLabelTitle = 'Device';
+    w_ImageMap_DeviceGroupTagLabelTitle = 'Device group';
 
     // Login
     w_Login_LoginTitle = 'Login';
