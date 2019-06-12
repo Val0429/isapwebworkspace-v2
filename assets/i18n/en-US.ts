@@ -554,5 +554,5 @@ export default class LangObject {
     w_VSPeopleCounting_ADDFailed = 'People Counting Device add failed, please try again.';
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
-    w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';s
+    w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
 }
