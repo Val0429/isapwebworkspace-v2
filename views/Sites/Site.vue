@@ -448,7 +448,7 @@
                     </template>
 
                     <template #devices="{$attrs, $listeners}">
-                        <iv-form-label :title="showDeviceDetialShow($attrs.row.devices)">{{showDevices($attrs.row.devices)}}</iv-form-label>
+                        <label :title="showDeviceDtail($attrs.row.devices)">{{showDevices($attrs.row.devices)}}</label>
                     </template>
 
                 </iv-table>
@@ -660,7 +660,6 @@ export default class Site extends Vue {
     pageStep: EPageStep = EPageStep.none;
     imageMap = new ImageMapItem();
     isMounted = false;
-    modalShow = false;
     modalContext = "";
 
     //google map
@@ -1715,22 +1714,22 @@ export default class Site extends Vue {
         this.site = {};
     }
 
-    showFirst(value): string {
-        if (value.length >= 2) {
-            return value.map(item => item)[0] + "...";
+    showFirst(data): string {
+        if (data.length >= 2) {
+            return data.map(item => item)[0] + "...";
         }
-        if (value.length === 1) {
-            return value.map(item => item)[0];
+        if (data.length === 1) {
+            return data.map(item => item)[0];
         }
-        if (value.length == 0) {
+        if (data.length == 0) {
             return "";
         }
     }
 
-    showArea(value) {
+    showArea(data) {
         let areas = [];
         for (let area of this.areaAll) {
-            if (area.site.objectId == value) {
+            if (area.site.objectId == data) {
                 areas.push(area.name);
             }
         }
@@ -1738,7 +1737,7 @@ export default class Site extends Vue {
         return this.showFirst(areas);
     }
 
-    showDeviceGroup(value, type) {
+    showDeviceGroup(data, type) {
         let deviceGroups = [];
         for (let devicegroup of this.deviceGroupAll) {
             var mapId = "";
@@ -1748,7 +1747,7 @@ export default class Site extends Vue {
                 mapId = devicegroup.area.objectId;
             }
 
-            if (mapId == value) {
+            if (mapId == data) {
                 deviceGroups.push(devicegroup.name);
             }
         }
@@ -1756,57 +1755,55 @@ export default class Site extends Vue {
         return this.showFirst(deviceGroups);
     }
 
-    showDevices(values) {
+    showDevices(datas) {
         let count = 0;
-        if (values) {
-            for (let value of values) {
-                count += value.count;
+        if (datas) {
+            for (let data of datas) {
+                count += data.count;
             }
         }
         return count;
     }
 
-    showDeviceDetialShow(values) {
-        if (values && values.length > 0) {
-            this.modalShow = true;
-            return this.showDeviceDtail(values);
-        }
-    }
-
-    showDeviceDtail(values) {
+    showDeviceDtail(datas) {
         this.modalContext = "";
-        for (let value of values) {
-            this.modalContext += value.mode + " : " + value.count + ",";
+        console.log("showDeviceDtail", datas);
+        if (datas) {
+            for (let data of datas) {
+                if (data) {
+                    this.modalContext += data.mode + " : " + data.count + ",";
+                }
+            }
+            return this.modalContext.slice(0, -1);
         }
-        return this.modalContext.slice(0, -1);
     }
 
-    showTags(values) {
-        console.log("showTags", values);
+    showTags(datas) {
+        console.log("showTags", datas);
         var tags = [];
-        for (let value of values) {
-            tags.push(this.tagItem.filter(m => m.id == value)[0].text);
+        for (let data of datas) {
+            tags.push(this.tagItem.filter(m => m.id == data)[0].text);
         }
         console.log("tags", tags);
         return tags.join(",");
     }
 
-    showOfficeHour(value) {
-        console.log("showOfficeHour", value);
-        return this.officeHourItem.filter(m => m.id == value)[0]
-            ? this.officeHourItem.filter(m => m.id == value)[0].text
+    showOfficeHour(data) {
+        console.log("showOfficeHour", data);
+        return this.officeHourItem.filter(m => m.id == data)[0]
+            ? this.officeHourItem.filter(m => m.id == data)[0].text
             : "";
     }
 
-    showManager(value) {
-        console.log("showManager", value);
-        return this.managerItem.filter(m => m.id == value)[0]
-            ? this.managerItem.filter(m => m.id == value)[0].text
+    showManager(data) {
+        console.log("showManager", data);
+        return this.managerItem.filter(m => m.id == data)[0]
+            ? this.managerItem.filter(m => m.id == data)[0].text
             : "";
     }
 
-    showTime(value) {
-        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+    showTime(data) {
+        return Datetime.DateTime2String(new Date(data), "YYYY-MM-DD");
     }
 
     ISiteList() {
