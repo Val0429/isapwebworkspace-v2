@@ -155,6 +155,7 @@ export default class LangObject implements ILang {
     w_Navigation_Server = 'Server';
     w_Navigation_Server_CMSServer = 'CMS Server';
     w_Navigation_Server_FRSServer = 'FRS Server';
+    w_Navigation_Server_DemographicServer = 'Demographic Server';
     w_Navigation_Server_HDServer = 'HD Server';
 
     // 401
