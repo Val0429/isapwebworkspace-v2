@@ -43,6 +43,9 @@ import FRSServer from './Server/FRSServer.vue';
 import DemographicServer from './Server/DemographicServer.vue';
 import HumanDetectionServer from './Server/HumanDetectionServer.vue';
 
+// Video Source
+import PeopleCounting from './VideoSource/PeopleCounting.vue'
+
 // Setting
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
@@ -114,7 +117,7 @@ $({ path: '/region', name: 'Region', icon: 'fa-check' })(Region);
 
 // Video Source (c)
 $({ path: '/video_sources', name: 'VideoSources', icon: 'fa-bug', redirect: '/login' })();
-$({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-close'})(PeopleCounting);
 $({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })();
