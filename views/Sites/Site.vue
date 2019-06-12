@@ -404,7 +404,7 @@
 
         <!--Device List-->
         <div v-if="pageStep === ePageStep.deviceList">
-            <iv-card :label=" _('w_Site_DeviceList')">
+            <iv-card :label=" _('w_Site_DeviceGroupList')">
 
                 <template #toolbox>
 
@@ -449,7 +449,11 @@
 
                     <template #devices="{$attrs, $listeners}">
 
-                        <div @mouseover="showDeviceDetialShow($attrs.row.devices)">{{showDevices($attrs.row.devices)}}</div>
+                        <iv-from-label
+                            title="abctest&#10;<br>sagdsg&#13;gg \n gg"
+                            :title="modalContext"
+                            @mouseover="showDeviceDetialShow($attrs.row.devices)"
+                        >{{showDevices($attrs.row.devices)}}</iv-from-label>
                     </template>
 
                 </iv-table>
@@ -584,19 +588,6 @@
             </iv-card>
         </div>
 
-        <b-modal
-            hide-footer
-            hide-header
-            size="md"
-            :title="_('w_DeviceGroup')"
-            v-model="modalShow"
-        >
-            <template v-for="(value, index) in modalContext">
-                <p>{{value.mode + " : " + value.count}}</p>
-            </template>
-
-        </b-modal>
-
     </div>
 
 </template>
@@ -669,7 +660,7 @@ export default class Site extends Vue {
     imageMap = new ImageMapItem();
     isMounted = false;
     modalShow = false;
-    modalContext = [];
+    modalContext = "";
 
     //google map
     googleMap: IGoogleMap = {
@@ -1771,9 +1762,12 @@ export default class Site extends Vue {
 
     showDeviceDetialShow(values) {
         if (values && values.length > 0) {
-            this.modalContext = [];
+            this.modalContext = "";
             this.modalShow = true;
-            this.modalContext = values;
+            for (let value of values) {
+                this.modalContext += value.mode + " : " + value.count + ",";
+            }
+            this.modalContext = this.modalContext.slice(0, -1);
         }
     }
 

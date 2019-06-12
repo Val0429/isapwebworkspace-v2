@@ -324,7 +324,7 @@ export default class LangObject implements ILang {
     w_Site_ViewArea = 'View Area';
     w_Site_AddArea = 'Add Area';
     w_Site_EditArea = 'Edit Area';
-    w_Site_DeviceList = 'Device List';
+    w_Site_DeviceGroupList = 'Device Group List';
     w_Site_ViewDevice = 'View Device';
     w_Site_AddDevice = 'Add Device';
     w_Site_EditDevice = 'Edit Device';
