@@ -294,7 +294,7 @@ export default class User extends Vue {
     isSelected: any = [];
     tableMultiple: boolean = true;
 
-    userDetail: any = [];
+    selectedDetail: any = [];
 
     sitesSelectItem: any = {};
     userGroupSelectItem: any = {};
@@ -445,13 +445,13 @@ export default class User extends Vue {
 
     selectedItem(data) {
         this.isSelected = data;
-        this.userDetail = [];
-        this.userDetail = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
     }
 
     getInputData() {
         this.clearInputData();
-        for (const param of this.userDetail) {
+        for (const param of this.selectedDetail) {
             this.inputUserData = {
                 objectId: param.objectId,
                 employeeId: param.employeeId,
@@ -738,7 +738,7 @@ export default class User extends Vue {
             this._("w_User_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.userDetail) {
+                for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
                     } = {

@@ -181,11 +181,6 @@ enum EPageStep {
     chooseSiteTree = "chooseSiteTree"
 }
 
-enum EType {
-    add = "add",
-    edit = "edit"
-}
-
 @Component({
     components: {}
 })
@@ -196,7 +191,7 @@ export default class Tags extends Vue {
     isSelected: any = [];
     tableMultiple: boolean = true;
 
-    tagDetail: any = [];
+    selectedDetail: any = [];
 
     regionsSelectItem: any = {};
     sitesSelectItem: any = {};
@@ -326,13 +321,13 @@ export default class Tags extends Vue {
 
     selectedItem(data) {
         this.isSelected = data;
-        this.tagDetail = [];
-        this.tagDetail = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
     }
 
     getInputData() {
         this.clearInputData();
-        for (const param of this.tagDetail) {
+        for (const param of this.selectedDetail) {
             this.inputTagData = {
                 objectId: param.objectId,
                 name: param.name,
@@ -607,7 +602,7 @@ export default class Tags extends Vue {
             this._("w_Tag_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.tagDetail) {
+                for (const param of this.selectedDetail) {
                     const deleteUserParam: {
                         objectId: string;
                     } = {

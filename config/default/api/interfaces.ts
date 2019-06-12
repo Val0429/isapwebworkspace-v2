@@ -297,26 +297,23 @@ interface ICMSServerResults extends IEditCMSServer {
 export { IAddCMSServer, IEditCMSServer, ICMSServerResults };
 
 // FRS Server
-interface IAddFRSServer extends IConfig, IAnalysis {
-    customId?: string;
-    name: string;
-    analysis: IAnalysis;
-    manage: IConfig;
-}
-
-interface IEditFRSServer extends IConfig, IAnalysis {
-    objectId?: string;
-    name: string;
-    analysis: IAnalysis;
-    manage: IConfig;
-}
-
-interface IFRSServerResults extends IConfig, IAnalysis {
-    objectId: string;
+interface IAddFRSServer extends IAnalysis {
     customId: string;
     name: string;
-    analysis: IAnalysis;
-    manage: IConfig;
+    protocol: string;
+}
+
+interface IEditFRSServer {
+    objectId: string;
+    name: string;
+    protocol: string;
+}
+
+interface IFRSServerResults extends IAnalysis {
+    objectId?: string;
+    customId?: string;
+    name: string;
+    protocol: string;
 }
 
 export { IAddFRSServer, IEditFRSServer, IFRSServerResults };

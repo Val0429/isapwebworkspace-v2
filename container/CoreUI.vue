@@ -100,7 +100,10 @@
                         :label="_('w_Navigation_Server_CMSServer')"
                         url="/server/cms_server"
                     />
-
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_FRSServer')"
+                        url="/server/frs_server"
+                    />
                 </SidebarNavItem>
 
                 <!-- Setting -->

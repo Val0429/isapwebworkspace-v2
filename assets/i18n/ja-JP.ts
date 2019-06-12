@@ -153,6 +153,7 @@ export default class LangObject implements ILang {
 
     w_Navigation_Server = 'Server';
     w_Navigation_Server_CMSServer = 'CMS Server';
+    w_Navigation_Server_FRSServer = 'FRS Server';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -485,8 +486,11 @@ export default class LangObject implements ILang {
     w_ServerFRS_Add = 'Add FRS Server';
     w_ServerFRS_Edit = 'Edit FRS Server';
     w_ServerFRS_View = 'View FRS Server';
+    w_ServerFRS_wsport = 'WS Port';
+
     w_ServerFRS_AddSuccess = 'FRS Server add success.';
     w_ServerFRS_ADDFailed = 'Add failed! Can not found the FRS Server, please try again.';
     w_ServerFRS_EditSuccess = 'CMS Server edit success.';
     w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
+    w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
 }

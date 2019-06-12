@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :label=" _('w_ServerCMS_List') "
+            :label=" _('w_ServerFRS_List') "
         >
             <template #toolbox>
 
@@ -27,7 +27,7 @@
                 ref="cmsTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ path: '/partner/cms' }"
+                :server="{ path: '/partner/frs' }"
                 @selected="selectedItem($event)"
             >
 
@@ -47,7 +47,7 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
             :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
+            :label="pageStep === ePageStep.add ? _('w_ServerFRS_Add') :  _('w_ServerFRS_Edit')"
         >
             <template #toolbox>
 
@@ -57,7 +57,7 @@
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputCMSData"
+                :value="inputFRSData"
                 @submit="saveAddOrEdit($event)"
             ></iv-form>
 
@@ -76,7 +76,7 @@
         <iv-card
             v-show="pageStep === ePageStep.view"
             :visible="true"
-            :label=" _('w_ServerCMS_View') "
+            :label=" _('w_ServerFRS_View') "
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -84,7 +84,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputCMSData"
+                :value="inputFRSData"
             >
 
             </iv-form>
@@ -106,12 +106,12 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { IAddCMSServer, IEditCMSServer } from "@/config/default/api/interfaces";
+import { IFRSServerResults } from "@/config/default/api/interfaces";
 
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface IInputCMSData extends IAddCMSServer, IEditCMSServer {
+interface IInputFRSData extends IFRSServerResults {
     type?: string;
 }
 
@@ -126,7 +126,7 @@ enum EPageStep {
 @Component({
     components: {}
 })
-export default class CMSServer extends Vue {
+export default class FRSServer extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -135,13 +135,14 @@ export default class CMSServer extends Vue {
 
     selectedDetail: any = [];
 
-    inputCMSData: IInputCMSData = {
+    inputFRSData: IInputFRSData = {
         objectId: "",
         customId: "",
         name: "",
         protocol: "http",
         ip: "",
         port: null,
+        wsport: null,
         account: "",
         password: "",
         type: ""
@@ -152,13 +153,14 @@ export default class CMSServer extends Vue {
     mounted() {}
 
     clearInputData() {
-        this.inputCMSData = {
+        this.inputFRSData = {
             objectId: "",
             customId: "",
             name: "",
             protocol: "http",
             ip: "",
             port: null,
+            wsport: null,
             account: "",
             password: "",
             type: ""
@@ -174,7 +176,7 @@ export default class CMSServer extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputCMSData = {
+            this.inputFRSData = {
                 objectId: param.objectId,
                 customId: param.customId,
                 ip: param.ip,
@@ -182,6 +184,7 @@ export default class CMSServer extends Vue {
                 name: param.name,
                 password: param.password,
                 port: param.port,
+                wsport: param.wsport,
                 protocol: param.protocol
             };
         }
@@ -195,13 +198,13 @@ export default class CMSServer extends Vue {
     pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
-        this.inputCMSData.type = type;
+        this.inputFRSData.type = type;
     }
 
     pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
         this.clearInputData();
-        this.inputCMSData.type = type;
+        this.inputFRSData.type = type;
     }
 
     pageToList() {
@@ -211,13 +214,14 @@ export default class CMSServer extends Vue {
 
     async saveAddOrEdit(data) {
         // add
-        if (this.inputCMSData.type === EPageStep.add) {
-            const datas: IInputCMSData[] = [
+        if (this.inputFRSData.type === EPageStep.add) {
+            const datas: IInputFRSData[] = [
                 {
                     customId: data.customId,
                     name: data.name,
                     protocol: data.protocol,
                     ip: data.ip,
+                    wsport: data.wsport,
                     port: data.port,
                     account: data.account,
                     password: data.password
@@ -233,15 +237,15 @@ export default class CMSServer extends Vue {
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_ServerCMS_AddSuccess"));
+                            Dialog.success(this._("w_ServerFRS_AddSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_ServerCMS_ADDFailed"));
+                            Dialog.error(this._("w_ServerFRS_ADDFailed"));
                             return false;
                         }
                         if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerCMS_ADDDuplicate"));
+                            Dialog.error(this._("w_ServerFRS_ADDFailed"));
                             return false;
                         }
                     }
@@ -251,7 +255,7 @@ export default class CMSServer extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_ServerCMS_ADDFailed"));
+                        Dialog.error(this._("w_ServerFRS_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -260,13 +264,14 @@ export default class CMSServer extends Vue {
         }
 
         // edit
-        if (this.inputCMSData.type === EPageStep.edit) {
-            const datas: IInputCMSData[] = [
+        if (this.inputFRSData.type === EPageStep.edit) {
+            const datas: IInputFRSData[] = [
                 {
                     name: data.name,
                     protocol: data.protocol,
                     ip: data.ip,
                     port: data.port,
+                    wsport: data.wsport,
                     account: data.account,
                     password: data.password,
                     objectId: data.objectId
@@ -282,15 +287,15 @@ export default class CMSServer extends Vue {
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_ServerCMS_EditSuccess"));
+                            Dialog.success(this._("w_ServerFRS_EditSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_ServerCMS_EditFailed"));
+                            Dialog.error(this._("w_ServerFRS_EditFailed"));
                             return false;
                         }
                         if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerCMS_EditDuplicate"));
+                            Dialog.error(this._("w_ServerFRS_EditFailed"));
                             return false;
                         }
                     }
@@ -300,7 +305,7 @@ export default class CMSServer extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_ServerCMS_EditFailed"));
+                        Dialog.error(this._("w_ServerFRS_EditFailed"));
                         return false;
                     }
                     console.log(e);
@@ -311,7 +316,7 @@ export default class CMSServer extends Vue {
 
     async doDelete() {
         Dialog.confirm(
-            this._("w_ServerCMSDeleteConfirm"),
+            this._("w_ServerFRS_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const param of this.selectedDetail) {
@@ -342,7 +347,6 @@ export default class CMSServer extends Vue {
                             ) {
                                 return ResponseFilter.base(this, e);
                             }
-
                             console.log(e);
                         });
                 }
@@ -392,7 +396,7 @@ export default class CMSServer extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputCMSData.type === EPageStep.add
+                     this.inputFRSData.type === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
@@ -446,6 +450,14 @@ export default class CMSServer extends Vue {
                  */
                 port: number;
 
+
+                /**
+                 * @uiLabel - ${this._("w_ServerFRS_wsport")}
+                 * @uiPlaceHolder - ${this._("w_Port_PlaceHolder")}
+                 * @uiAttrs - { max: 65535, min: 1}
+                 */
+                wsport: number;
+
             }
         `;
     }
@@ -494,6 +506,13 @@ export default class CMSServer extends Vue {
              * @uiType - iv-form-label
              */
             port: number;
+
+
+            /**
+             * @uiLabel - ${this._("w_ServerFRS_wsport")}
+             * @uiType - iv-form-label
+             */
+             wsport: number;
 
             }
         `;
