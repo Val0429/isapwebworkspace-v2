@@ -602,19 +602,12 @@
 </template>
 
 <script lang="ts">
-import {
-    Vue,
-    Component,
-    Watch,
-    iSAPServerBase,
-    MetaParser,
-    createDecorator,
-    toEnumInterface
-} from "../../../core";
+import { Vue, Component } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 import ImageBase64 from "@/services/ImageBase64";
 import ServerConfig from "@/services/ServerConfig";
 import Dialog from "@/services/Dialog/Dialog";
-import Datetime from "@/services/Datetime.vue";
+import Datetime from "@/services/Datetime";
 import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
 import {
     EDragType,
@@ -1809,9 +1802,7 @@ export default class Site extends Vue {
     }
 
     showTime(value) {
-        return value
-            ? "YYYY-MM-DD" //Datetime.DateTime2String(new Date(value), "YYYY-MM-DD") //TODO fix it
-            : "";
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
     ISiteList() {

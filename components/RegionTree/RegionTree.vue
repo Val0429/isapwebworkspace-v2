@@ -224,7 +224,6 @@ Vue.component("region-tree", RegionTree);
 export default RegionTree;
 </script>
 
-
 <style lang="scss" scoped>
 .card-header {
     border: 1px solid #798a93;
@@ -244,6 +243,7 @@ export default RegionTree;
 
     &.focus {
         background-color: $gray-600;
+        color: $white;
     }
 }
 

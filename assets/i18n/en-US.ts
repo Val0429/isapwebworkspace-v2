@@ -121,6 +121,7 @@ export default class LangObject {
     w_Check = 'Check';
     w_Submit = 'Submit';
     w_Confirm = 'Confirm';
+    w_Upload = 'Upload';
 
     // Dialog
     w_Dialog_ErrorTitle = 'Something wrong';
@@ -154,6 +155,7 @@ export default class LangObject {
     w_Navigation_Server = 'Server';
     w_Navigation_Server_CMSServer = 'CMS Server';
     w_Navigation_Server_FRSServer = 'FRS Server';
+    w_Navigation_Server_HDServer = 'HD Server';
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -240,7 +242,6 @@ export default class LangObject {
     w_User_EditUserSuccess = 'Edit User Success';
     w_User_EditUserFailed = 'Edit User Failed';
     w_User_DeleteConfirm = 'Are you sure to delete selected user(s)?';
-
 
     // UserGroup
     w_UserGroup_UserGroupList = 'Group List';
@@ -474,6 +475,7 @@ export default class LangObject {
     w_ServerHD_IP = 'IP';
     w_ServerHD_Port = 'Port';
     w_ServerHD_Scale = 'Scale';
+    w_ServerHD_Test = 'Server Human Detection Test';
     w_ServerHD_AddSuccess = 'Server Human Detection Add Success';
     w_ServerHD_EditSuccess = 'Server Human Detection Edit Success';
     w_ServerHD_TestSuccess = 'Server Human Detection Test Success';
