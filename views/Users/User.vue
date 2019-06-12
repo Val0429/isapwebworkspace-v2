@@ -651,9 +651,8 @@ export default class User extends Vue {
                 phone: data.phone,
                 password: data.password,
                 employeeId: data.employeeId,
-                siteIds: data.siteIds,
-                //siteIds: ArrayHelper.addTreeArray(data.siteIds, this.selecteds),
-                groupIds: data.groupIds
+                siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                groupIds: data.groupIds !== undefined ? data.groupIds : [],
             }
         ];
 
@@ -695,9 +694,8 @@ export default class User extends Vue {
                 name: data.name,
                 email: data.email,
                 phone: data.phone,
-                siteIds: data.siteIds,
-                //siteIds: ArrayHelper.addTreeArray(data.siteIds, this.selecteds),
-                groupIds: data.groupIds,
+                siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                groupIds: data.groupIds !== undefined ? data.groupIds : [],
                 objectId: data.objectId
             }
         ];

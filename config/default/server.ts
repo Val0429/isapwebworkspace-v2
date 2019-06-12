@@ -61,6 +61,9 @@ import { FRSUpdate, FRSCreate, FRSDelete, FRSRead } from '@/config/default/api/S
 // import Business Operation Office Hour
 import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, OfficeHourUpdate } from '@/config/default/api/BusinessOperationOfficeHour';
 
+// import Business Operation Campaign
+import { CampaignCreate, CampaignDelete, CampaignRead, CampaignUpdate } from '@/config/default/api/BusinessOperationCampaign';
+
 interface RestfulRequest extends ApisRequestBase {
     // create
     Post: {
@@ -133,6 +136,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Business Operation Office Hour
         '/office-hour': [OfficeHourCreate.Input, OfficeHourCreate.Output, false];
+
+        // Business Operation Campaign
+        '/event/campaign': [CampaignCreate.Input, CampaignCreate.Output, false];
     };
 
     // read
@@ -229,6 +235,10 @@ interface RestfulRequest extends ApisRequestBase {
         // Business Operation Office Hour
         '/office-hour': [OfficeHourRead.Input, OfficeHourRead.Output, false];
         '/office-hour/all': [OfficeHourReadAll.Input, OfficeHourReadAll.Output, false];
+
+        // Business Operation Campaign
+        '/event/campaign': [CampaignRead.Input, CampaignRead.Output, false];
+
     };
 
     // update
@@ -292,6 +302,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Business Operation Office Hour
         '/office-hour': [OfficeHourUpdate.Input, OfficeHourUpdate.Output, false];
+
+        // Business Operation Campaign
+        '/event/campaign': [CampaignUpdate.Input, CampaignUpdate.Output, false];
     };
 
     // delete
@@ -327,6 +340,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Business Operation Office Hour
         '/office-hour': [OfficeHourDelete.Input, OfficeHourDelete.Output, false];
+
+        // Business Operation Campaign
+        '/event/campaign': [CampaignDelete.Input, CampaignDelete.Output, false];
 
         // Server CMS
         '/partner/cms': [CMSDelete.Input, CMSDelete.Output, false];

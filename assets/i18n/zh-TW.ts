@@ -493,4 +493,25 @@ export default class LangObject implements ILang {
     w_ServerFRS_EditSuccess = 'CMS Server edit success.';
     w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
     w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
+
+	// Business Operation Campaign
+	w_BOCampaign_List = 'Campaign List';
+	w_BOCampaign_Add = 'Campaign Server';
+	w_BOCampaign_Edit = 'Campaign Server';
+	w_BOCampaign_View = 'Campaign Server';
+
+	w_BOCampaign_EventList = 'Event List';
+	w_BOCampaign_EventType = 'Event Type';
+	w_BOCampaign_Period = 'Period';
+	w_BOCampaign_EventName = 'Event Name';
+	w_BOCampaign_StartDate = 'Start Date';
+	w_BOCampaign_FinishDate = 'Finish Date';
+	w_BOCampaign_Budget = 'Budget';
+
+	w_BOCampaign_AddSuccess = 'Campaign add success.';
+	w_BOCampaign_ADDFailed = 'Campaign add failed, please try again.';
+	w_BOCampaign_EditSuccess = 'Campaign success.';
+	w_BOCampaign_EditFailed = 'Campaign edit failed, please try again.';
+	w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
 }
+
