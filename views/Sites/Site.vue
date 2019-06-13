@@ -1018,7 +1018,7 @@ export default class Site extends Vue {
     }
 
     pageToDeviceList(lastPageStep) {
-        this.lastPageStep = lastPageStep;
+        this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
         this.pageStep = EPageStep.deviceList;
     }
 
@@ -1029,7 +1029,7 @@ export default class Site extends Vue {
     }
 
     pageToDeviceAdd(lastPageStep) {
-        this.lastPageStep = lastPageStep;
+        this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
         this.clearDeviceData();
         this.initDeviceTypeItem();
 
@@ -1037,7 +1037,7 @@ export default class Site extends Vue {
     }
 
     pageToDeviceEdit(lastPageStep) {
-        this.lastPageStep = lastPageStep;
+        this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
         this.initDeviceTypeItem();
         this.pageStep = EPageStep.deviceEdit;
     }
