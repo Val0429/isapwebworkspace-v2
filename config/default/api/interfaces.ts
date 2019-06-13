@@ -375,13 +375,13 @@ interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
 }
 
 interface IAddVSPeopleCountingiSap extends IVSPeopleCounting {
-    customId: string;
+    customId?: string;
     config: IConfigiSap;
     direction: string;
 }
 
 interface IEditVSPeopleCountingHanwha extends IVSPeopleCounting {
-    objectId: string;
+    objectId?: string;
     model: string;
     config: IConfig;
 }

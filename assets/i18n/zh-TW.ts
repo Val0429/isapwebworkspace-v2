@@ -103,6 +103,9 @@ export default class LangObject implements ILang {
     w_Model = 'Model';
     w_DeviceName = 'Device Name';
     w_DeviceGroups = 'Device Group(s)';
+    w_Hanwha = 'Hanwha';
+    w_iSapFRS = 'FRS';
+    w_iSapFRSManager = 'FRS Manager';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
@@ -526,10 +529,10 @@ export default class LangObject implements ILang {
     w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
 
     // Business Operation Campaign
-    w_BOCampaign_List = 'Campaign List';
-    w_BOCampaign_Add = 'Campaign Server';
-    w_BOCampaign_Edit = 'Campaign Server';
-    w_BOCampaign_View = 'Campaign Server';
+    w_BOCampaign_List = 'Campaign Setting List';
+    w_BOCampaign_Add = 'Add Campaign Setting';
+    w_BOCampaign_Edit = 'Edit Campaign Setting';
+    w_BOCampaign_View = 'View Campaign Setting';
 
     w_BOCampaign_EventList = 'Event List';
     w_BOCampaign_EventType = 'Event Type';
@@ -550,12 +553,17 @@ export default class LangObject implements ILang {
 
     // People Counting Device
     w_VSPeopleCounting_List = 'People Counting Device List';
-    w_VSPeopleCounting_Add = 'People Counting Device Add';
-    w_VSPeopleCounting_Edit = 'People Counting Device Edit';
-    w_VSPeopleCounting_View = 'People Counting Device View';
+    w_VSPeopleCounting_Add = 'Add People Counting Device';
+    w_VSPeopleCounting_Edit = 'Edit People Counting Device';
+    w_VSPeopleCounting_View = 'View People Counting Device';
 
-    w_VSPeopleCounting_Addhanwha = 'Add by Hanwha';
-    w_VSPeopleCounting_isap = 'Add by iSap';
+    w_VSPeopleCounting_Addhanwha = 'Use Hanwha Server';
+    w_VSPeopleCounting_AddhanwhaUse = 'Add People Counting Device Use Hanwha Server';
+    w_VSPeopleCounting_isap = 'Use iSap Server';
+    w_VSPeopleCounting_isapUseFRSManger = 'Add People Counting Device Use iSap FRS Manger Server';
+    w_VSPeopleCounting_isapUseFRS = 'Add People Counting Device Use iSap FRS Server';
+    w_VSPeopleCounting_SetFRS = 'Not yet set? Go to set FRS Server';
+    w_VSPeopleCounting_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
 
     w_VSPeopleCounting_AddSuccess = 'People Counting Device List add success.';
     w_VSPeopleCounting_ADDFailed = 'People Counting Device add failed, please try again.';
