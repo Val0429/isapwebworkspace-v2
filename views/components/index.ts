@@ -21,7 +21,7 @@ import TimeSchedule from './components/TimeSchedule.vue';
 import DoorGroup from './components/DoorGroup.vue';
 import PermissionTable from './components/PermissionTable.vue';
 
-
+console.log('get here!');
 $({ path: '/', name: "Home", redirect: '/components' })();
 $({ path: '/elevator', name: "Elevator", icon: 'fa-building' })(Elevator);
     $({ path: '/door', name: "Door", icon: 'fa-building' })(Door);

@@ -1,7 +1,16 @@
 <template>
     <CoreUIBase>
         <template #header>
-            FET ACS
+            <div class="float-right navbar-nav">
+                <div class="navbar-nav-user-name">{{ $user && $user.username ? $user.username : "" }}</div>
+                <a href="/my_profile">
+                    <img
+                        class="img-avatar"
+                        src="@/assets/images/default-user-icon.svg"
+                    />
+                </a>
+                <b-button @click="logout">{{ _('w_Logout') }}</b-button>
+            </div>
         </template>
 
         <template #footer>
@@ -36,6 +45,32 @@ import { CoreUI as CoreUIBase,
     }
 })
 export default class CoreUI extends Vue {
-
+    async logout() {
+        console.debug("logout");        
+    }
 }
 </script>
+<style lang="scss" scoped>
+.app-header {
+    .navbar-nav {
+        padding-right: 20px;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center;
+        align-items: center;
+
+        .navbar-nav-user-name {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        img.img-avatar {
+            height: 35px;
+            margin: 0 10px;
+        }
+    }
+}
+.footer-copy {
+    padding: 10px;
+}
+</style>

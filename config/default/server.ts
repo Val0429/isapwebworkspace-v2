@@ -2,25 +2,20 @@ import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '@/../core/serv
 
 interface RestfulRequest extends ApisRequestBase { 
     "Get": { 
-        "/users/login": [UsersLoginAll.Input, UsersLoginAll.Output, false],
-        "/acs/door":[any, any, true],
+        "/users/login": [UsersLoginAll.Input, UsersLoginAll.Output, false],        
         "/users": [any, any, true],
-        "/announcements": [AnnouncementsGet.Input, AnnouncementsGet.Output, true],
-        "/acs/member":[any,any,true],
+        "/announcements": [AnnouncementsGet.Input, AnnouncementsGet.Output, true]
     }, 
     "Post": { 
         "/users/login": [UsersLoginAll.Input, UsersLoginAll.Output, false], 
         "/users/logout": [UsersLogoutPost.Input, any, true], 
-        "/users": [any, any, true],
-        "/acs/member":[Member.Input, Member.Output, true]
+        "/users": [any, any, true]
     },
     "Put": {
-        "/users": [any, any, true],
-        "/acs/member":[Member.Output, Member.Output, true]
+        "/users": [any, any, true]
     },
     "Delete": {
-        "/users": [any, any, true],
-        "/acs/member":[any, any, true]
+        "/users": [any, any, true]
     },
     "Ws": {
         "/users/alive": [any, any, true], 
