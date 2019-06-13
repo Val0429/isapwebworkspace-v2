@@ -1,7 +1,7 @@
 <template>
     <CoreUIBase>
         <template #header>
-            <b-navbar-nav class="nav navbar-nav ml-auto">
+            <div class="float-right navbar-nav">
                 <div class="navbar-nav-user-name">{{ $user && $user.username ? $user.username : "" }}</div>
                 <a href="/my_profile">
                     <img
@@ -10,7 +10,7 @@
                     />
                 </a>
                 <b-button @click="logout">{{ _('w_Logout') }}</b-button>
-            </b-navbar-nav>
+            </div>
         </template>
 
         <template #footer>
@@ -107,7 +107,7 @@
                     :label="_('w_Navigation_RulesActions')"
                     url="/rules_actions"
                 />
-               
+
                 <!-- Business Operation -->
                 <SidebarNavItem
                     :label="_('w_Navigation_BusinessOperation')"
@@ -143,7 +143,7 @@
                     <SidebarNavItem
                         :label="_('w_Navigation_Server_FRSManagerServer')"
                         url="/server/frs_manager_server"
-                        />
+                    />
                     <SidebarNavItem
                         :label="_('w_Navigation_Server_DemographicServer')"
                         url="/server/demographic_server"
@@ -152,7 +152,7 @@
                         :label="_('w_Navigation_Server_HDServer')"
                         url="/server/hd_server"
                     />
-                   
+
                 </SidebarNavItem>
 
                 <!-- Setting -->
