@@ -662,7 +662,6 @@ export default class Site extends Vue {
     pageStep: EPageStep = EPageStep.none;
     imageMap = new ImageMapItem();
     isMounted = false;
-    modalContext = "";
 
     //google map
     googleMap: IGoogleMap = {
@@ -1838,15 +1837,15 @@ export default class Site extends Vue {
     }
 
     showDeviceDtail(datas) {
-        this.modalContext = "";
+        let modalContext = "";
         console.log("showDeviceDtail", datas);
         if (datas) {
             for (let data of datas) {
                 if (data) {
-                    this.modalContext += data.mode + " : " + data.count + ",";
+                    modalContext += data.mode + " : " + data.count + ",";
                 }
             }
-            return this.modalContext.slice(0, -1);
+            return modalContext.slice(0, -1);
         }
     }
 
