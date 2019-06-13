@@ -13,16 +13,16 @@ import Transition from './components/Transition.vue';
 import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
-import Member from './components/Member.vue';
-import User from './components/User.vue';
-import Door from './components/Door.vue';
-import Elevator from './components/Elevator.vue';
-import TimeSchedule from './components/TimeSchedule.vue';
-import DoorGroup from './components/DoorGroup.vue';
-import PermissionTable from './components/PermissionTable.vue';
+import Member from './components/acs/Member.vue';
+import User from './components/acs/User.vue';
+import Door from './components/acs/Door.vue';
+import Elevator from './components/acs/Elevator.vue';
+import TimeSchedule from './components/acs/TimeSchedule.vue';
+import DoorGroup from './components/acs/DoorGroup.vue';
+import PermissionTable from './components/acs/PermissionTable.vue';
 
-console.log('get here!');
-$({ path: '/', name: "Home", redirect: '/components' })();
+
+$({ path: '/', name: "Home", redirect: '/member' })();
 $({ path: '/elevator', name: "Elevator", icon: 'fa-building' })(Elevator);
     $({ path: '/door', name: "Door", icon: 'fa-building' })(Door);
     $({ path: '/permissiontable', name: "Permission Table", icon: 'fa-building' })(PermissionTable);
