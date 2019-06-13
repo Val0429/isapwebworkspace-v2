@@ -993,7 +993,6 @@ export default class Site extends Vue {
 
     pageToAreaList() {
         this.clearDeviceData();
-        (this.$refs.areaTable as any).reload();
         this.pageStep = EPageStep.areaList;
     }
 
@@ -1023,7 +1022,6 @@ export default class Site extends Vue {
     pageToDeviceGroupList(lastPageStep) {
         console.log("pageToDeviceGroupList", this.lastPageStep, lastPageStep);
         this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
-        (this.$refs.deviceGroupTable as any).reload();
         this.pageStep = EPageStep.deviceGroupList;
     }
 
@@ -1091,7 +1089,6 @@ export default class Site extends Vue {
         this.initSiteListDeviceGroup();
         this.clearAreaData();
         this.clearDeviceData();
-        (this.$refs.siteTable as any).reload();
         this.pageStep = EPageStep.siteList;
     }
 
@@ -1558,7 +1555,6 @@ export default class Site extends Vue {
                 .then((response: any) => {
                     if (response) {
                         Dialog.success(this._("w_Success"));
-
                         (this.$refs.areaTable as any).reload();
                     }
                 })
