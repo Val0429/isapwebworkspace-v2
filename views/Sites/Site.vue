@@ -428,7 +428,7 @@
                 </template>
 
                 <iv-table
-                    ref="deviceTable"
+                    ref="deviceGroupTable"
                     :interface="IDeviceGroupList()"
                     @selected="selectedDeviceGroup($event)"
                     :multiple="tableMultiple"
@@ -619,6 +619,8 @@ import {
     ISiteEditData,
     IAreaAddData,
     IAreaEditData,
+    IDeviceGroupAddData,
+    IDeviceGroupEditData,
     ITagReadUpdate,
     IOfficeHourEditData
 } from "@/config/default/api/interfaces";
@@ -991,6 +993,7 @@ export default class Site extends Vue {
 
     pageToAreaList() {
         this.clearDeviceData();
+        (this.$refs.areaTable as any).reload();
         this.pageStep = EPageStep.areaList;
     }
 
@@ -1020,6 +1023,7 @@ export default class Site extends Vue {
     pageToDeviceGroupList(lastPageStep) {
         console.log("pageToDeviceGroupList", this.lastPageStep, lastPageStep);
         this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
+        (this.$refs.deviceGroupTable as any).reload();
         this.pageStep = EPageStep.deviceGroupList;
     }
 
@@ -1087,6 +1091,7 @@ export default class Site extends Vue {
         this.initSiteListDeviceGroup();
         this.clearAreaData();
         this.clearDeviceData();
+        (this.$refs.siteTable as any).reload();
         this.pageStep = EPageStep.siteList;
     }
 
@@ -1567,9 +1572,53 @@ export default class Site extends Vue {
         console.log("saveDeviceGroup", data);
 
         if (this.pageStep == EPageStep.deviceGroupAdd) {
-            console.log("deviceGroupAdd", data);
+            const datas: IDeviceGroupAddData[] = [
+                {
+                    areaId: this.area["objectId"],
+                    name: data.name
+                }
+            ];
+
+            const addDeviceGroupParam = { datas };
+            await this.$server
+                .C("/device/group", addDeviceGroupParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        Dialog.success(this._("w_Site_AddDeviceGroupSuccess"));
+                        this.lastPageStep === EPageStep.areaAdd
+                            ? this.pageToAreaAdd()
+                            : this.lastPageStep == EPageStep.areaEdit
+                            ? this.pageToAreaEdit()
+                            : this.pageToDeviceGroupList(null);
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
         } else if (this.pageStep == EPageStep.deviceGroupEdit) {
-            console.log("deviceGroupEdit", data);
+            const datas: IDeviceGroupEditData[] = [
+                {
+                    objectId: data.objectId,
+                    name: data.name
+                }
+            ];
+
+            const editDeviceGroupParam = { datas };
+            await this.$server
+                .U("/device/group", editDeviceGroupParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        Dialog.success(this._("w_Site_EditDeviceGroupSuccess"));
+                        this.lastPageStep === EPageStep.areaAdd
+                            ? this.pageToAreaAdd()
+                            : this.lastPageStep == EPageStep.areaEdit
+                            ? this.pageToAreaEdit()
+                            : this.pageToDeviceGroupList(null);
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
         }
     }
 
@@ -1585,7 +1634,7 @@ export default class Site extends Vue {
                 .then((response: any) => {
                     if (response) {
                         Dialog.success(this._("w_Success"));
-                        (this.$refs.deviceTable as any).reload();
+                        (this.$refs.deviceGroupTable as any).reload();
                     }
                 })
                 .catch((e: any) => {

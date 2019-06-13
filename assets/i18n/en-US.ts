@@ -358,6 +358,10 @@ export default class LangObject {
     w_Site_AddAreaFailed = 'Add Area Failed';
     w_Site_EditAreaSuccess = 'Edit Area Success';
     w_Site_EditAreaFailed = 'Edit Area Failed';
+    w_Site_AddDeviceGroupSuccess = 'Add Device Group Success';
+    w_Site_AddDeviceGroupFailed = 'Add Device Group Failed';
+    w_Site_EditDeviceGroupSuccess = 'Edit Device Group Success';
+    w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
 
     // Backup
     w_Backup_List = 'Function List';
