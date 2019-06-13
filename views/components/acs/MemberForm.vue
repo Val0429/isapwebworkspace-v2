@@ -21,9 +21,9 @@ export default class MemberForm extends Vue implements IFormQuick {
     /// 2) cgi path
     path: string = "/acs/member";
     /// 3) i18n - view / edit / add
-    tView: string = "w_Announcements";
-    tAdd: string = "w_AnnouncementsAdd";
-    tEdit: string = "w_AnnouncementsEdit";
+    tView: string = "w_Member";
+    tAdd: string = "w_MemberAdd";
+    tEdit: string = "w_MemberEdit";
     /// 4) possibility - edit / add / delete
     canAdd: boolean = true;
     canEdit: boolean = true;
