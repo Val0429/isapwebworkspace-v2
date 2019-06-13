@@ -9,9 +9,11 @@
             }
             " -->
 
-        <iv-table
+        <!-- <iv-table
             :server="{ path: '/acs/member' }"
-            />
+            /> -->
+
+        <MemberForm />
     </div>
 </template>
 
@@ -20,8 +22,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
+import MemberForm from './MemberForm.vue';
 
-@Component
+@Component({
+    components: { MemberForm }
+})
 export default class Member extends Vue {
     private isMounted: boolean = false;
     private doMounted() {
