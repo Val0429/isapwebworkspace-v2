@@ -562,4 +562,14 @@ export default class LangObject implements ILang {
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
     w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
+
+    // Heatmap Device
+    w_VSHeatmap_List = 'Heatmap Device List';
+    w_VSHeatmap_Add = 'Heatmap Device Add';
+    w_VSHeatmap_Edit = 'Heatmap Device Edit';
+    w_VSHeatmap_View = 'Heatmap Device View';
+    w_VSHeatmap_SelectBrand = 'Select Brand';
+    w_VSHeatmap_FillInInformation = 'Fill In Information';
+    w_VSHeatmap_DrawROI = 'Draw ROI';
+    w_VSHeatmap_CheckAndOverlook = 'Check and Overlook';
 }
