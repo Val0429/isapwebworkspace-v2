@@ -85,7 +85,7 @@
                 size="md"
                 variant="success"
                 type="button"
-                @click="pageToAddByiSapFRS(eAddStep.isap)"
+                @click="pageToAddByiSapFRS(eAddStep.isapFrs)"
             >
                 {{ _('w_iSapFRS') }}
             </b-button>
@@ -105,7 +105,7 @@
                 size="md"
                 variant="success"
                 type="button"
-                @click="pageToAddByiSapFRSManager(eAddStep.isap)"
+                @click="pageToAddByiSapFRSManager(eAddStep.isapFrsManager)"
             >
                 {{ _('w_iSapFRSManager') }}
             </b-button>
@@ -195,7 +195,7 @@
 
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
-            v-show="addStep === eAddStep.isapFrs || addStep === eAddStep.isapFrsManager"
+            v-show="addStep === eAddStep.isapFrs || addStep === eAddStep.isapFrsManager || pageStep === ePageStep.edit"
             :label="addStep === eAddStep.isapFrs ? _('w_VSPeopleCounting_isapUseFRS') :  _('w_VSPeopleCounting_isapUseFRSManger')"
         >
             <template #toolbox>
@@ -206,6 +206,7 @@
             <iv-form
                 :interface="IAddAndEditFromiSap()"
                 :value="inputPeopleCountingData"
+                @update:serverId="selectSourceIdAndLocation($event)"
                 @submit="saveAddOrEditiSap($event)"
             >
 
@@ -230,32 +231,32 @@
         </iv-auto-card>
 
         <!-- view -->
-<!--        <iv-card-->
-<!--            v-show="pageStep === ePageStep.view"-->
-<!--            :visible="true"-->
-<!--            :label="_('w_BOCampaign_View')"-->
-<!--        >-->
-<!--            <template #toolbox>-->
-<!--                <iv-toolbox-back @click="pageToList()" />-->
-<!--            </template>-->
+        <!--        <iv-card-->
+        <!--            v-show="pageStep === ePageStep.view"-->
+        <!--            :visible="true"-->
+        <!--            :label="_('w_BOCampaign_View')"-->
+        <!--        >-->
+        <!--            <template #toolbox>-->
+        <!--                <iv-toolbox-back @click="pageToList()" />-->
+        <!--            </template>-->
 
-<!--            <iv-form-->
-<!--                :interface="IViewFromHanwha()"-->
-<!--                :value="inputPeopleCountingData"-->
-<!--            >-->
+        <!--            <iv-form-->
+        <!--                :interface="IViewFromHanwha()"-->
+        <!--                :value="inputPeopleCountingData"-->
+        <!--            >-->
 
-<!--            </iv-form>-->
+        <!--            </iv-form>-->
 
-<!--            <template #footer>-->
-<!--                <b-button-->
-<!--                    variant="dark"-->
-<!--                    size="lg"-->
-<!--                    @click="pageToList()"-->
-<!--                >{{ _('w_Back') }}-->
-<!--                </b-button>-->
-<!--            </template>-->
+        <!--            <template #footer>-->
+        <!--                <b-button-->
+        <!--                    variant="dark"-->
+        <!--                    size="lg"-->
+        <!--                    @click="pageToList()"-->
+        <!--                >{{ _('w_Back') }}-->
+        <!--                </b-button>-->
+        <!--            </template>-->
 
-<!--        </iv-card>-->
+        <!--        </iv-card>-->
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
@@ -334,6 +335,9 @@ export default class PeopleCounting extends Vue {
     sitesSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     areaSelectItem: any = {};
+    serverIdSelectItem: any = {};
+    sourceIdSelectItem: any = {};
+    locationSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.peopleCounting
@@ -469,11 +473,32 @@ export default class PeopleCounting extends Vue {
             });
     }
 
+    async initSelectItemFRSServer() {
+        await this.$server
+            .R("/partner/frs")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 areaSelectItem 的 key 的方式
+                        this.serverIdSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+        console.log("initSelectItemFRSServer", this.serverIdSelectItem);
+    }
+
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
-        console.log("data - ", data);
     }
 
     getInputData() {
@@ -539,14 +564,59 @@ export default class PeopleCounting extends Vue {
         }
     }
 
-    async pageToAdd(stepType: string) {
-        this.pageStep = EPageStep.none;
-        this.addStep = EAddStep.select;
-        this.clearInputData();
-        await this.initSelectItemSite();
+    async selectSourceIdAndLocation(data) {
+        console.log("data - ", data);
+        if (data !== undefined) {
+            const readParam: {
+                objectId: string;
+            } = {
+                objectId: data
+            };
 
-        this.selecteds = [];
+            await this.$server
+                .C("/partner/frs/device", readParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        for (const returnValue of response) {
+                            // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
+                            this.sourceIdSelectItem[returnValue.sourceid] =
+                                returnValue.sourceid;
+                            this.locationSelectItem[returnValue.location] =
+                                returnValue.location;
+                        }
+
+                        if (
+                            returnValue.statusCode === 500 ||
+                            returnValue.statusCode === 400
+                        ) {
+                            Dialog.error(this._("w_ErrorReadData"));
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
+        console.log("locationSelectItem - ", this.locationSelectItem);
+    }
+
+    async pageToAdd(stepType: string) {
+        this.clearInputData();
+        this.pageStep = EPageStep.add;
+        this.addStep = EAddStep.select;
         this.inputPeopleCountingData.stepType = stepType;
+        await this.initSelectItemSite();
+        this.selecteds = [];
     }
 
     async pageToEdit(stepType: string) {
@@ -580,22 +650,32 @@ export default class PeopleCounting extends Vue {
     }
 
     async pageToAddByHanwha(brand: string) {
-        this.addStep = EAddStep.hanwha;
         this.clearInputData();
         await this.initSelectItemArea();
         await this.initSelectItemDeviceGroup();
+        this.addStep = EAddStep.hanwha;
         this.inputPeopleCountingData.stepType = EPageStep.add;
         this.inputPeopleCountingData.brand = brand;
     }
 
-    pageToAddByiSapFRS() {
-        this.addStep = EAddStep.isapFrs;
+    async pageToAddByiSapFRS(brand: string) {
         this.clearInputData();
+        await this.initSelectItemFRSServer();
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+        this.addStep = EAddStep.isapFrs;
+        this.inputPeopleCountingData.brand = brand;
+        this.inputPeopleCountingData.stepType = EPageStep.add;
+        console.log("pageToAddByiSapFRS", this.serverIdSelectItem);
     }
 
-    pageToAddByiSapFRSManager() {
-        this.addStep = EAddStep.isapFrsManager;
+    async pageToAddByiSapFRSManager(brand: string) {
         this.clearInputData();
+        this.addStep = EAddStep.isapFrsManager;
+        this.inputPeopleCountingData.brand = brand;
+        this.inputPeopleCountingData.stepType = EPageStep.add;
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
     }
 
     pageStepBackward() {
@@ -980,6 +1060,12 @@ export default class PeopleCounting extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_Area")}
+                 */
+                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+
+
+                /**
                  * @uiLabel - ${this._("w_DeviceGroup")}
                  */
                 groupIds?: ${toEnumInterface(
@@ -987,11 +1073,6 @@ export default class PeopleCounting extends Vue {
                     true
                 )};
 
-
-                /**
-                 * @uiLabel - ${this._("w_Area")}
-                 */
-                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
             }
          `;
     }
@@ -1050,25 +1131,110 @@ export default class PeopleCounting extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_Area")}
+                 * @uiType - iv-form-label
+                 */
+                areaId?: string;
+
+
+                /**
                  * @uiLabel - ${this._("w_DeviceGroup")}
                  * @uiType - iv-form-label
                  */
                 groupIdsText?: string;
 
-
-                /**
-                 * @uiLabel - ${this._("w_Area")}
-                 * @uiType - iv-form-label
-                 */
-                areaId?: string;
             }
          `;
     }
 
-
     IAddAndEditFromiSap() {
         return `
             interface {
+
+                /**
+                 * @uiLabel - ${this._("w_Id")}
+                 * @uiPlaceHolder - ${this._("w_Id")}
+                 * @uiType - ${
+                     this.inputPeopleCountingData.stepType === EPageStep.add
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                 */
+                customId: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Name")}
+                 * @uiPlaceHolder - ${this._("w_Name")}
+                 */
+                name: string;
+
+         
+
+                /**
+                 * @uiLabel - ${this._("w_ServerId")}
+                 * @uiPlaceHolder - ${this._("w_ServerId")}
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                 }
+                 */
+                serverId: ${toEnumInterface(
+                    this.serverIdSelectItem as any,
+                    false
+                )};
+
+
+                /**
+                 * @uiLabel - ${this._("w_SourceId")}
+                 * @uiPlaceHolder - ${this._("w_SourceId")}
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                 }
+                 */
+                sourceid: ${toEnumInterface(
+                    this.sourceIdSelectItem as any,
+                    false
+                )};
+           
+
+                /**
+                 * @uiLabel - ${this._("w_Location")}
+                 * @uiPlaceHolder - ${this._("w_Location")}
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                 }
+                 */
+                location: ${toEnumInterface(
+                    this.serverIdSelectItem as any,
+                    false
+                )};
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_Direction")}
+                 * @uiPlaceHolder - ${this._("w_Direction")}
+                 */
+                direction: ${toEnumInterface({
+                    in: this._("w_In"),
+                    out: this._("w_Out")
+                })};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Area")}
+                 */
+                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_DeviceGroup")}
+                 */
+                groupIds?: ${toEnumInterface(
+                    this.deviceGroupSelectItem as any,
+                    true
+                )};
+
             }
          `;
     }
