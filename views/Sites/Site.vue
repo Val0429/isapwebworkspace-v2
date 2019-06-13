@@ -51,7 +51,7 @@
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="!isSelectSite">
                             <iv-toolbox-area @click="pageToAreaList()" />
-                            <iv-toolbox-device-group @click="pageToDeviceList(ePageStep.siteList)" />
+                            <iv-toolbox-device-group @click="pageToDeviceGroupList(ePageStep.siteList)" />
                         </iv-toolbox-more>
                     </template>
                 </iv-table>
@@ -283,7 +283,7 @@
 
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="!isSelectArea">
-                            <iv-toolbox-device-group @click="pageToDeviceList(ePageStep.areaList)" />
+                            <iv-toolbox-device-group @click="pageToDeviceGroupList(ePageStep.areaList)" />
                         </iv-toolbox-more>
                     </template>
                 </iv-table>
@@ -402,35 +402,35 @@
             </iv-card>
         </div>
 
-        <!--Device List-->
-        <div v-if="pageStep === ePageStep.deviceList">
+        <!--Device Group List-->
+        <div v-if="pageStep === ePageStep.deviceGroupList">
             <iv-card :label=" _('w_Site_DeviceGroupList')">
 
                 <template #toolbox>
 
                     <iv-toolbox-view
-                        :disabled="!isSelectDevice"
-                        @click="pageToDeviceView()"
+                        :disabled="!isSelectDeviceGroup"
+                        @click="pageToDeviceGroupView()"
                     />
                     <iv-toolbox-edit
-                        :disabled="!isSelectDevice"
-                        @click="pageToDeviceEdit(ePageStep.deviceList)"
+                        :disabled="!isSelectDeviceGroup"
+                        @click="pageToDeviceGroupEdit(ePageStep.deviceGroupList)"
                     />
                     <iv-toolbox-delete
-                        :disabled="!isSelectDevice"
-                        @click="deleteDevice()"
+                        :disabled="!isSelectDeviceGroup"
+                        @click="deleteGroupDevice()"
                     />
 
                     <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToDeviceAdd(ePageStep.deviceList)" />
+                    <iv-toolbox-add @click="pageToDeviceGroupAdd(ePageStep.deviceGroupList)" />
                     <iv-toolbox-back @click="lastPageStep == ePageStep.siteList ? pageToSiteList() : pageToAreaList()" />
 
                 </template>
 
                 <iv-table
-                    ref="deviceTable"
-                    :interface="IDeviceList()"
-                    @selected="selectedDevice($event)"
+                    ref="deviceGroupTable"
+                    :interface="IDeviceGroupList()"
+                    @selected="selectedDeviceGroup($event)"
                     :multiple="tableMultiple"
                     :server="{path: '/device/group' }"
                     :params="deviceGroupParams"
@@ -457,28 +457,28 @@
         </div>
 
         <!--Device Form (Add and Edit)-->
-        <div v-if="pageStep === ePageStep.deviceAdd || pageStep === ePageStep.deviceEdit">
-            <iv-auto-card :label="pageStep == ePageStep.deviceAdd ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')">
+        <div v-if="pageStep === ePageStep.deviceGroupAdd || pageStep === ePageStep.deviceGroupEdit">
+            <iv-auto-card :label="pageStep == ePageStep.deviceGroupAdd ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')">
                 <template #toolbox>
-                    <iv-toolbox-back @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceList()" />
+                    <iv-toolbox-back @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceGroupList()" />
                 </template>
 
                 <iv-form
-                    :interface="IDeviceForm()"
+                    :interface="IDeviceGroupForm()"
                     :value="deviceGroup"
-                    @update:*="updateDeviceForm($event)"
-                    @submit="saveDevice($event)"
+                    @update:*="updateDeviceGroupForm($event)"
+                    @submit="saveDeviceGroup($event)"
                 >
 
                     <template #siteName="{$attrs, $listeners}">
                         <iv-form-label
-                            v-if="pageStep === ePageStep.deviceAdd"
+                            v-if="pageStep === ePageStep.deviceGroupAdd"
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="site.name ? site.name : '' "
                         />
                         <iv-form-label
-                            v-if="pageStep === ePageStep.deviceEdit"
+                            v-if="pageStep === ePageStep.deviceGroupEdit"
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="deviceGroup.site ? deviceGroup.site.name : '' "
@@ -487,7 +487,7 @@
 
                     <template #areaName="{$attrs, $listeners}">
                         <iv-form-selection
-                            v-if="pageStep === ePageStep.deviceAdd && isEmptyObject(area)"
+                            v-if="pageStep === ePageStep.deviceGroupAdd && isEmptyObject(area)"
                             v-bind="$attrs"
                             :value="$attrs.value ? $attrs.value : ''"
                             v-on="$listeners"
@@ -497,13 +497,13 @@
                         </iv-form-selection>
 
                         <iv-form-label
-                            v-if="pageStep === ePageStep.deviceAdd && !isEmptyObject(area)"
+                            v-if="pageStep === ePageStep.deviceGroupAdd && !isEmptyObject(area)"
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="area ? area.name : '' "
                         />
                         <iv-form-label
-                            v-if="pageStep === ePageStep.deviceEdit"
+                            v-if="pageStep === ePageStep.deviceGroupEdit"
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="deviceGroup.area ? deviceGroup.area.name : '' "
@@ -522,7 +522,7 @@
                         <b-button
                             variant="secondary"
                             size="lg"
-                            @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceList()"
+                            @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceGroupList()"
                         >{{ _('w_Back') }}
                         </b-button>
                     </template>
@@ -531,15 +531,15 @@
         </div>
 
         <!--Device View-->
-        <div v-if="pageStep === ePageStep.deviceView">
+        <div v-if="pageStep === ePageStep.deviceGroupView">
             <iv-card :label=" _('w_Site_ViewDevice')">
 
                 <template #toolbox>
-                    <iv-toolbox-back @click="pageToDeviceList()" />
+                    <iv-toolbox-back @click="pageToDeviceGroupList()" />
                 </template>
 
                 <iv-form
-                    :interface="IDeviceView()"
+                    :interface="IDeviceGroupView()"
                     :value="deviceGroup"
                 >
 
@@ -581,7 +581,7 @@
                     <b-button
                         variant="secondary"
                         size="lg"
-                        @click="pageToDeviceList()"
+                        @click="pageToDeviceGroupList()"
                     >{{ _('w_Back') }}
                     </b-button>
                 </template>
@@ -619,6 +619,8 @@ import {
     ISiteEditData,
     IAreaAddData,
     IAreaEditData,
+    IDeviceGroupAddData,
+    IDeviceGroupEditData,
     ITagReadUpdate,
     IOfficeHourEditData
 } from "@/config/default/api/interfaces";
@@ -634,10 +636,10 @@ enum EPageStep {
     areaAdd = "areaAdd",
     areaEdit = "areaEdit",
 
-    deviceList = "deviceList",
-    deviceView = "deviceView",
-    deviceAdd = "deviceAdd",
-    deviceEdit = "deviceEdit",
+    deviceGroupList = "deviceGroupList",
+    deviceGroupView = "deviceGroupView",
+    deviceGroupAdd = "deviceGroupAdd",
+    deviceGroupEdit = "deviceGroupEdit",
 
     none = "none"
 }
@@ -660,7 +662,6 @@ export default class Site extends Vue {
     pageStep: EPageStep = EPageStep.none;
     imageMap = new ImageMapItem();
     isMounted = false;
-    modalContext = "";
 
     //google map
     googleMap: IGoogleMap = {
@@ -684,7 +685,7 @@ export default class Site extends Vue {
     areaAll = [];
 
     //device Group datas
-    isSelectDevice = false;
+    isSelectDeviceGroup = false;
     deviceGroups = {};
     deviceGroup = {};
     deviceGroupParams = {};
@@ -834,7 +835,7 @@ export default class Site extends Vue {
         for (let device of this.devices) {
             if (
                 this.imageMap.deviceGroups.some(
-                    i => i.name === device.group.name //TODO this.imageMap.deviceGroups 可能要追加objectId來判斷
+                    i => i.objectId === device.group.objectId
                 )
             ) {
                 continue;
@@ -1017,29 +1018,30 @@ export default class Site extends Vue {
         this.pageStep = EPageStep.areaEdit;
     }
 
-    pageToDeviceList(lastPageStep) {
-        this.lastPageStep = lastPageStep;
-        this.pageStep = EPageStep.deviceList;
+    pageToDeviceGroupList(lastPageStep) {
+        console.log("pageToDeviceGroupList", this.lastPageStep, lastPageStep);
+        this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
+        this.pageStep = EPageStep.deviceGroupList;
     }
 
-    pageToDeviceView() {
-        console.log("pageToDeviceView", this.site);
+    pageToDeviceGroupView() {
+        console.log("pageToDeviceGroupView", this.site);
         this.newImgSrc = this.serverUrl + this.site["imageSrc"];
-        this.pageStep = EPageStep.deviceView;
+        this.pageStep = EPageStep.deviceGroupView;
     }
 
-    pageToDeviceAdd(lastPageStep) {
-        this.lastPageStep = lastPageStep;
+    pageToDeviceGroupAdd(lastPageStep) {
+        this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
         this.clearDeviceData();
         this.initDeviceTypeItem();
 
-        this.pageStep = EPageStep.deviceAdd;
+        this.pageStep = EPageStep.deviceGroupAdd;
     }
 
-    pageToDeviceEdit(lastPageStep) {
-        this.lastPageStep = lastPageStep;
+    pageToDeviceGroupEdit(lastPageStep) {
+        this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
         this.initDeviceTypeItem();
-        this.pageStep = EPageStep.deviceEdit;
+        this.pageStep = EPageStep.deviceGroupEdit;
     }
 
     async initSiteListArea() {
@@ -1107,16 +1109,16 @@ export default class Site extends Vue {
 
     pageAddDeviceGroup() {
         var lastPageSetp = this.pageStep;
-        this.pageToDeviceList(EPageStep.none);
+        this.pageToDeviceGroupList(EPageStep.none);
         console.log("pageAddDeviceGroup", this.deviceGroup);
-        this.pageToDeviceAdd(lastPageSetp);
+        this.pageToDeviceGroupAdd(lastPageSetp);
     }
 
     pageEditDeviceGroup(event: any, data: any) {
         var lastPageSetp = this.pageStep;
-        this.pageToDeviceList(EPageStep.none);
+        this.pageToDeviceGroupList(EPageStep.none);
         console.log("pageEditDeviceGroup", this.imageMap.deviceGroups, data);
-        this.pageToDeviceEdit(lastPageSetp);
+        this.pageToDeviceGroupEdit(lastPageSetp);
         //for (let tempData of this.imageMap.deviceGroups) {
         //    if (data == tempData) {
         //        console.log("Edit - deviceGroupId: ", data.deviceGroupId);
@@ -1552,7 +1554,6 @@ export default class Site extends Vue {
                 .then((response: any) => {
                     if (response) {
                         Dialog.success(this._("w_Success"));
-
                         (this.$refs.areaTable as any).reload();
                     }
                 })
@@ -1562,17 +1563,61 @@ export default class Site extends Vue {
         });
     }
 
-    async saveDevice(data) {
-        console.log("saveDevice", data);
+    async saveDeviceGroup(data) {
+        console.log("saveDeviceGroup", data);
 
-        if (this.pageStep == EPageStep.deviceAdd) {
-            console.log("deviceAdd", data);
-        } else if (this.pageStep == EPageStep.deviceEdit) {
-            console.log("deviceEdit", data);
+        if (this.pageStep == EPageStep.deviceGroupAdd) {
+            const datas: IDeviceGroupAddData[] = [
+                {
+                    areaId: this.area["objectId"],
+                    name: data.name
+                }
+            ];
+
+            const addDeviceGroupParam = { datas };
+            await this.$server
+                .C("/device/group", addDeviceGroupParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        Dialog.success(this._("w_Site_AddDeviceGroupSuccess"));
+                        this.lastPageStep === EPageStep.areaAdd
+                            ? this.pageToAreaAdd()
+                            : this.lastPageStep == EPageStep.areaEdit
+                            ? this.pageToAreaEdit()
+                            : this.pageToDeviceGroupList(null);
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+        } else if (this.pageStep == EPageStep.deviceGroupEdit) {
+            const datas: IDeviceGroupEditData[] = [
+                {
+                    objectId: data.objectId,
+                    name: data.name
+                }
+            ];
+
+            const editDeviceGroupParam = { datas };
+            await this.$server
+                .U("/device/group", editDeviceGroupParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        Dialog.success(this._("w_Site_EditDeviceGroupSuccess"));
+                        this.lastPageStep === EPageStep.areaAdd
+                            ? this.pageToAreaAdd()
+                            : this.lastPageStep == EPageStep.areaEdit
+                            ? this.pageToAreaEdit()
+                            : this.pageToDeviceGroupList(null);
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
         }
     }
 
-    async deleteDevice() {
+    async deleteGroupDevice() {
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
             var body: {
                 objectId: string;
@@ -1584,7 +1629,7 @@ export default class Site extends Vue {
                 .then((response: any) => {
                     if (response) {
                         Dialog.success(this._("w_Success"));
-                        (this.$refs.deviceTable as any).reload();
+                        (this.$refs.deviceGroupTable as any).reload();
                     }
                 })
                 .catch((e: any) => {
@@ -1657,18 +1702,18 @@ export default class Site extends Vue {
         }
     }
 
-    updateDeviceForm(data) {
-        console.log("updateDeviceForm", data);
+    updateDeviceGroupForm(data) {
+        console.log("updateDeviceGroupForm", data);
         if (data) {
             this.deviceGroup[data.key] = data.value;
         }
     }
 
-    selectedDevice(data) {
-        console.log("selectedDevice", data);
+    selectedDeviceGroup(data) {
+        console.log("selectedDeviceGroup", data);
         this.newImgSrc = "";
         if (data) {
-            this.deviceGroup = this.isSelectDevice = data;
+            this.deviceGroup = this.isSelectDeviceGroup = data;
         } else {
             this.clearDeviceData();
         }
@@ -1718,7 +1763,7 @@ export default class Site extends Vue {
     }
 
     clearDeviceData() {
-        this.isSelectDevice = false;
+        this.isSelectDeviceGroup = false;
         this.newImgSrc = "";
         this.deviceGroup = {};
     }
@@ -1792,15 +1837,15 @@ export default class Site extends Vue {
     }
 
     showDeviceDtail(datas) {
-        this.modalContext = "";
+        let modalContext = "";
         console.log("showDeviceDtail", datas);
         if (datas) {
             for (let data of datas) {
                 if (data) {
-                    this.modalContext += data.mode + " : " + data.count + ",";
+                    modalContext += data.mode + " : " + data.count + ",";
                 }
             }
-            return this.modalContext.slice(0, -1);
+            return modalContext.slice(0, -1);
         }
     }
 
@@ -2133,7 +2178,7 @@ export default class Site extends Vue {
             }`;
     }
 
-    IDeviceList() {
+    IDeviceGroupList() {
         return `interface {
                  /**
                  * @uiLabel - ${this._("w_No")}
@@ -2163,7 +2208,7 @@ export default class Site extends Vue {
             }`;
     }
 
-    IDeviceForm() {
+    IDeviceGroupForm() {
         return `interface {
 
                 /**
@@ -2192,7 +2237,7 @@ export default class Site extends Vue {
             }`;
     }
 
-    IDeviceView() {
+    IDeviceGroupView() {
         return `interface {
 
                  /**

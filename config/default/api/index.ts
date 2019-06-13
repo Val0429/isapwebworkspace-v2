@@ -70,7 +70,7 @@ import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, 
 //     port: parseInt(ServerConfig.port),
 // });
 
-interface RestfulRequest  {
+interface RestfulRequest {
     // C => Post
     Post: {
         // User
@@ -105,6 +105,9 @@ interface RestfulRequest  {
 
         // location device
         '/location/device': [LocationDeviceCreate.Input, LocationDeviceCreate.Output, false];
+
+        //device group
+        '/device/group': [any, any, false];
 
         // Setting SMS
         '/setting/sgsms/test': [SMSTest.Input, SMSTest.Output, false];
@@ -255,6 +258,9 @@ interface RestfulRequest  {
         // location device
         '/location/device': [LocationDeviceUpdate.Input, LocationDeviceUpdate.Output, false];
 
+        //device group
+        '/device/group': [any, any, false];
+
         // Setting SMS
         '/setting/sgsms': [SMSUpdate.Input, SMSUpdate.Output, false];
 
@@ -313,6 +319,9 @@ interface RestfulRequest  {
 
         // location device
         '/location/device': [LocationDeviceDelete.Input, LocationDeviceDelete.Output, false];
+
+        //device group
+        '/device/group': [any, any, false];
 
         // Setting tag
         '/tag': [TagDelete.Input, TagDelete.Output, false];

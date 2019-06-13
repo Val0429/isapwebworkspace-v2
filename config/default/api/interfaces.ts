@@ -223,6 +223,19 @@ interface IBindingRegion {
 
 export { IBindingRegion, ISiteAddData, ISiteEditData, ISiteResults, ISiteReadAll };
 
+//Device Group
+interface IDeviceGroupAddData {
+    areaId: string;
+    name: string;
+}
+
+interface IDeviceGroupEditData {
+    objectId: string;
+    name?: string;
+}
+
+export { IDeviceGroupAddData, IDeviceGroupEditData };
+
 //Area
 interface IAreaAddData {
     siteId: string;
@@ -345,7 +358,7 @@ interface IBusinessOperationCampaignResults extends IBusinessOperationCampaign {
     sites: IObjectIdAndName[];
 }
 
-export { IAddBusinessOperationCampaign, IEditBusinessOperationCampaign, IBusinessOperationCampaignResults }
+export { IAddBusinessOperationCampaign, IEditBusinessOperationCampaign, IBusinessOperationCampaignResults };
 
 // Video Source People Counting
 interface IVSPeopleCounting extends IConfig {
@@ -353,7 +366,6 @@ interface IVSPeopleCounting extends IConfig {
     groupIds: string[];
     name: string;
     brand: string;
-
 }
 
 interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
@@ -363,15 +375,16 @@ interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
 }
 
 interface IAddVSPeopleCountingiSap extends IVSPeopleCounting {
-    customId: string;
+    customId?: string;
     config: IConfigiSap;
     direction: string;
 }
 
 interface IEditVSPeopleCountingHanwha extends IVSPeopleCounting {
-    objectId: string;
+    objectId?: string;
     model: string;
-    config: IConfig;}
+    config: IConfig;
+}
 
 interface IEditVSPeopleCountingiSap extends IVSPeopleCounting {
     objectId: string;
@@ -379,7 +392,7 @@ interface IEditVSPeopleCountingiSap extends IVSPeopleCounting {
     direction: string;
 }
 
-export { IAddVSPeopleCountingHanwha, IAddVSPeopleCountingiSap, IEditVSPeopleCountingHanwha, IEditVSPeopleCountingiSap }
+export { IAddVSPeopleCountingHanwha, IAddVSPeopleCountingiSap, IEditVSPeopleCountingHanwha, IEditVSPeopleCountingiSap };
 
 ////////////////////// 以上為確定使用 //////////////////////
 

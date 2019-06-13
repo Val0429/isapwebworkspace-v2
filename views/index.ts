@@ -46,6 +46,7 @@ import HumanDetectionServer from './Server/HumanDetectionServer.vue';
 
 // Video Source
 import PeopleCounting from './VideoSource/PeopleCounting.vue';
+import Heatmap from './VideoSource/Heatmap.vue';
 
 // Setting
 import MailServer from './Setting/MailServer.vue';
@@ -115,7 +116,7 @@ $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Regio
 $({ path: '/video_sources', name: 'VideoSources', icon: 'fa-bug', redirect: '/login' })();
 $({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-close' })(PeopleCounting);
 $({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-close', redirect: '/login' })();
-$({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close' })(Heatmap);
 $({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redirect: '/login' })();
