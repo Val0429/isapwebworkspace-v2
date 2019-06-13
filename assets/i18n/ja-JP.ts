@@ -361,6 +361,10 @@ export default class LangObject implements ILang {
     w_Site_AddAreaFailed = 'Add Area Failed';
     w_Site_EditAreaSuccess = 'Edit Area Success';
     w_Site_EditAreaFailed = 'Edit Area Failed';
+    w_Site_AddDeviceGroupSuccess = 'Add Device Group Success';
+    w_Site_AddDeviceGroupFailed = 'Add Device Group Failed';
+    w_Site_EditDeviceGroupSuccess = 'Edit Device Group Success';
+    w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
 
     // Backup
     w_Backup_List = 'Function List';
@@ -544,7 +548,7 @@ export default class LangObject implements ILang {
     w_BOCampaign_EditFailed = 'Campaign edit failed, please try again.';
     w_BOCampaign_DeleteConfirm = 'Are you sure to delete selected campaign(s)?';
 
-        // Business Operation Sales Records
+    // Business Operation Sales Records
     w_BOSalesRecords_CardTitle = 'Import Excel (.xlsx)';
 
     // People Counting Device
@@ -566,5 +570,4 @@ export default class LangObject implements ILang {
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
     w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
-
 }
