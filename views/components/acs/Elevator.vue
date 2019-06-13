@@ -1,17 +1,7 @@
 <template>
      <div key="main">
         
-            <!-- interface="
-            interface {
-                objectId:string;
-                createdAt:Date;
-                updatedAt:Date;
-            }
-            " -->
-
-        <iv-table
-            :server="{ path: '/acs/elevator' }"
-            />
+           <ElevatorForm/>
     </div>
 </template>
 
@@ -20,8 +10,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
+import ElevatorForm from "./ElevatorForm.vue";
 
-@Component
+@Component({
+    components: { ElevatorForm }
+})
 export default class Elevator extends Vue {
     private isMounted: boolean = false;
     private doMounted() {
