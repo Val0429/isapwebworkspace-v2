@@ -353,7 +353,6 @@ interface IVSPeopleCounting extends IConfig {
     groupIds: string[];
     name: string;
     brand: string;
-
 }
 
 interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
@@ -363,15 +362,16 @@ interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
 }
 
 interface IAddVSPeopleCountingiSap extends IVSPeopleCounting {
-    customId: string;
+    customId?: string;
     config: IConfigiSap;
     direction: string;
 }
 
 interface IEditVSPeopleCountingHanwha extends IVSPeopleCounting {
-    objectId: string;
+    objectId?: string;
     model: string;
-    config: IConfig;}
+    config: IConfig;
+}
 
 interface IEditVSPeopleCountingiSap extends IVSPeopleCounting {
     objectId: string;

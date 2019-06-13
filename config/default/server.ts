@@ -64,6 +64,9 @@ import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, 
 // import Business Operation Campaign
 import { CampaignCreate, CampaignDelete, CampaignRead, CampaignUpdate } from '@/config/default/api/BusinessOperationCampaign';
 
+// Video Source People Counting
+import { VSPeopleCountingCreate, VSPeopleCountingUpdate } from '@/config/default/api/VideoSourcePeopleCounting';
+
 interface RestfulRequest extends ApisRequestBase {
     // create
     Post: {
@@ -139,6 +142,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Business Operation Campaign
         '/event/campaign': [CampaignCreate.Input, CampaignCreate.Output, false];
+
+        // Video Source People Counting
+        '/device/people-counting': [VSPeopleCountingCreate.Input, VSPeopleCountingCreate.Output, false];
     };
 
     // read
@@ -305,6 +311,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Business Operation Campaign
         '/event/campaign': [CampaignUpdate.Input, CampaignUpdate.Output, false];
+
+        // Video Source People Counting
+        '/device/people-counting': [VSPeopleCountingUpdate.Input, VSPeopleCountingUpdate.Output, false];
     };
 
     // delete
@@ -354,6 +363,10 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Server HD
         '/partner/human-detection': [any, any, false];
+
+
+        //device
+        '/device': [any, any, false];
     };
 
     // web socket
