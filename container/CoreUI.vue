@@ -46,7 +46,16 @@ import { CoreUI as CoreUIBase,
 })
 export default class CoreUI extends Vue {
     async logout() {
-        console.debug("logout");        
+        try{
+            let sessionId=this.$server.getSessionId();
+            await this.$server.C("/users/logout",{sessionId})
+            console.log("logout");
+            this.$router.push({ path: "/login" });
+        }
+        catch(e){
+            console.error("logout", e);
+            this.$router.push({ path: "/login" });
+        }
     }
 }
 </script>
