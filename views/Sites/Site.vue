@@ -51,7 +51,7 @@
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="!isSelectSite">
                             <iv-toolbox-area @click="pageToAreaList()" />
-                            <iv-toolbox-device-group @click="PageToDeviceListFormSite()" />
+                            <iv-toolbox-device-group @click="pageToDeviceList(ePageStep.siteList)" />
                         </iv-toolbox-more>
                     </template>
                 </iv-table>
@@ -283,7 +283,7 @@
 
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="!isSelectArea">
-                            <iv-toolbox-device-group @click="PageToDeviceListFormArea()" />
+                            <iv-toolbox-device-group @click="pageToDeviceList(ePageStep.areaList)" />
                         </iv-toolbox-more>
                     </template>
                 </iv-table>
@@ -414,7 +414,7 @@
                     />
                     <iv-toolbox-edit
                         :disabled="!isSelectDevice"
-                        @click="pageToDeviceEdit()"
+                        @click="pageToDeviceEdit(ePageStep.deviceList)"
                     />
                     <iv-toolbox-delete
                         :disabled="!isSelectDevice"
@@ -422,7 +422,7 @@
                     />
 
                     <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToDeviceAdd()" />
+                    <iv-toolbox-add @click="pageToDeviceAdd(ePageStep.deviceList)" />
                     <iv-toolbox-back @click="lastPageStep == ePageStep.siteList ? pageToSiteList() : pageToAreaList()" />
 
                 </template>
@@ -460,7 +460,7 @@
         <div v-if="pageStep === ePageStep.deviceAdd || pageStep === ePageStep.deviceEdit">
             <iv-auto-card :label="pageStep == ePageStep.deviceAdd ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')">
                 <template #toolbox>
-                    <iv-toolbox-back @click="pageToDeviceList()" />
+                    <iv-toolbox-back @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceList()" />
                 </template>
 
                 <iv-form
@@ -522,7 +522,7 @@
                         <b-button
                             variant="secondary"
                             size="lg"
-                            @click="pageToDeviceList()"
+                            @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceList()"
                         >{{ _('w_Back') }}
                         </b-button>
                     </template>
@@ -691,6 +691,8 @@ export default class Site extends Vue {
     deviceGroupAll = [];
 
     //device datas
+    devicesGroupDevices = [];
+    devicesGroupDevice = {};
     devices = [];
     device = {};
 
@@ -718,6 +720,30 @@ export default class Site extends Vue {
     }
 
     async initMap() {
+        this.getDeviceGroupData();
+    }
+
+    async getDeviceGroupData() {
+        let body: {
+            siteId: string;
+            areaId: string;
+        } = {
+            siteId: this.site["objectId"],
+            areaId: this.area["objectId"]
+        };
+
+        await this.$server
+            .R("/device/group/all", body)
+            .then((response: any) => {
+                this.devicesGroupDevices = response;
+                this.getDeviceData();
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
+    }
+
+    async getDeviceData() {
         let body: {
             paging: {
                 page: number;
@@ -747,7 +773,12 @@ export default class Site extends Vue {
     }
 
     initImageMap() {
-        console.log("initImageMap", this.imageMap, this.devices);
+        console.log(
+            "initImageMap",
+            this.imageMap,
+            this.devicesGroupDevices,
+            this.devices
+        );
 
         let imageMapRef: any = this.$refs.imageMap;
 
@@ -986,17 +1017,8 @@ export default class Site extends Vue {
         this.pageStep = EPageStep.areaEdit;
     }
 
-    PageToDeviceListFormSite() {
-        this.lastPageStep = EPageStep.siteList;
-        this.pageToDeviceList();
-    }
-
-    PageToDeviceListFormArea() {
-        this.lastPageStep = EPageStep.areaList;
-        this.pageToDeviceList();
-    }
-
-    pageToDeviceList() {
+    pageToDeviceList(lastPageStep) {
+        this.lastPageStep = lastPageStep;
         this.pageStep = EPageStep.deviceList;
     }
 
@@ -1006,14 +1028,16 @@ export default class Site extends Vue {
         this.pageStep = EPageStep.deviceView;
     }
 
-    pageToDeviceAdd() {
+    pageToDeviceAdd(lastPageStep) {
+        this.lastPageStep = lastPageStep;
         this.clearDeviceData();
         this.initDeviceTypeItem();
 
         this.pageStep = EPageStep.deviceAdd;
     }
 
-    pageToDeviceEdit() {
+    pageToDeviceEdit(lastPageStep) {
+        this.lastPageStep = lastPageStep;
         this.initDeviceTypeItem();
         this.pageStep = EPageStep.deviceEdit;
     }
@@ -1082,15 +1106,17 @@ export default class Site extends Vue {
     }
 
     pageAddDeviceGroup() {
-        this.pageToDeviceList();
+        var lastPageSetp = this.pageStep;
+        this.pageToDeviceList(EPageStep.none);
         console.log("pageAddDeviceGroup", this.deviceGroup);
-        this.pageToDeviceAdd();
+        this.pageToDeviceAdd(lastPageSetp);
     }
 
     pageEditDeviceGroup(event: any, data: any) {
-        this.pageToDeviceList();
+        var lastPageSetp = this.pageStep;
+        this.pageToDeviceList(EPageStep.none);
         console.log("pageEditDeviceGroup", this.imageMap.deviceGroups, data);
-        //this.pageToDeviceEdit();
+        this.pageToDeviceEdit(lastPageSetp);
         //for (let tempData of this.imageMap.deviceGroups) {
         //    if (data == tempData) {
         //        console.log("Edit - deviceGroupId: ", data.deviceGroupId);

@@ -58,19 +58,19 @@
         <!-- 選擇增加方式 -->
         <iv-auto-card
             v-show="addStep === eAddStep.select"
-            :label="_('w_License_Add') "
+            :label="_('w_VSPeopleCounting_Add') "
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList" />
                 <iv-toolbox-step-backward
-                    v-show="addStep === eAddStep.macLicense || addStep === eAddStep.offline"
+                    v-show="addStep === eAddStep.hanwha || addStep === eAddStep.isap"
                     @click="pageStepBackward"
                 />
             </template>
 
             <iv-form :interface="IAddFromSelect()">
 
-                <template #licensemac="{$attrs, $listeners}">
+                <template #hanwha="{$attrs, $listeners}">
                     <b-button
                         class="button ml-3 mr-5 mb-3 mt-2"
                         size="md"
@@ -78,12 +78,12 @@
                         type="button"
                         @click="pageToAddByMac()"
                     >
-                        {{ _('w_License_Step1_mac') }}
+                        {{ _('w_VSPeopleCounting_Addhanwha') }}
                     </b-button>
 
                 </template>
 
-                <template #offline="{$attrs, $listeners}">
+                <template #isap="{$attrs, $listeners}">
                     <b-button
                         class="button mb-3 mt-2"
                         size="md"
@@ -91,7 +91,7 @@
                         type="button"
                         @click="pageToAddByOffline()"
                     >
-                        {{ _('w_License_Step1_offline') }}
+                        {{ _('w_VSPeopleCounting_isap') }}
                     </b-button>
 
                 </template>
@@ -257,6 +257,9 @@ enum ECameraMode {
 export default class PeopleCounting extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
+
+    eAddStep = EAddStep;
+    addStep: EAddStep = EAddStep.none;
 
     isSelected: any = [];
     tableMultiple: boolean = true;
@@ -433,7 +436,8 @@ export default class PeopleCounting extends Vue {
     }
 
     async pageToAdd(stepType: string) {
-        this.pageStep = EPageStep.add;
+        this.pageStep = EPageStep.none;
+        this.addStep = EAddStep.select;
         this.clearInputData();
         await this.initSelectItemSite();
 
@@ -463,6 +467,11 @@ export default class PeopleCounting extends Vue {
     pageToList() {
         this.pageStep = EPageStep.list;
         (this.$refs.campaignTable as any).reload();
+    }
+
+    pageStepBackward() {
+        this.clearInputData();
+        this.addStep = EAddStep.select;
     }
 
     async pageToChooseTree() {
@@ -729,6 +738,15 @@ export default class PeopleCounting extends Vue {
 
             }
         `;
+    }
+
+    IAddFromSelect() {
+        return `
+            interface {
+                hanwha: any;
+                isap: any;
+            }
+         `;
     }
 
     IAddAndEditForm() {
