@@ -835,7 +835,7 @@ export default class Site extends Vue {
         for (let device of this.devices) {
             if (
                 this.imageMap.deviceGroups.some(
-                    i => i.name === device.group.name //TODO this.imageMap.deviceGroups 可能要追加objectId來判斷
+                    i => i.objectId === device.group.objectId
                 )
             ) {
                 continue;
