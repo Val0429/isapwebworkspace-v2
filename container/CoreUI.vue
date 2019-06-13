@@ -17,6 +17,7 @@
                 </SidebarNavItem> -->
 
                 <SidebarNavTitle label="基本元件" />
+                <SidebarNavItem url="/member" />
                 <SidebarNavItem url="/components" />
                 <SidebarNavItem url="/components/forms" />
                 <SidebarNavItem url="/components/step-progress" />

@@ -13,10 +13,12 @@ import Transition from './components/Transition.vue';
 import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
+import Member from './components/Member.vue';
 
 $({ path: '/', name: "Home", redirect: '/components' })();
 
     $({ path: '/components', name: "Components", icon: 'isap-icon-add' })(Components);
+    $({ path: '/member', name: "Member", icon: 'isap-icon-add' })(Member);
         $({ path: '/components/forms', name: "Forms", icon: 'fa-facebook', permission: '/announcements' })(Forms);
         $({ path: '/components/step-progress', name: "Step Progress", icon: 'fa-twitter' })(StepProgress);
         $({ path: '/components/tab', name: "Tab", icon: 'fa-twitter' })(Tab);

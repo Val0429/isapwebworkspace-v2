@@ -2,7 +2,7 @@ module.exports = {
     prodMode: process.env.NODE_ENV === 'production',
 
     title: 'iSAP',
-    port: 8080,
+    port: 4300,
     https: false,
     autoOpen: false,
     historyApiFallback: true,

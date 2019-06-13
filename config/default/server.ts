@@ -3,19 +3,24 @@ import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '@/../core/serv
 interface RestfulRequest extends ApisRequestBase { 
     "Get": { 
         "/users/login": [UsersLoginAll.Input, UsersLoginAll.Output, false],
+        "/acs/doors":[any, any, true],
         "/users": [any, any, true],
         "/announcements": [AnnouncementsGet.Input, AnnouncementsGet.Output, true],
+        "/acs/member":[any,any,true],
     }, 
     "Post": { 
         "/users/login": [UsersLoginAll.Input, UsersLoginAll.Output, false], 
         "/users/logout": [UsersLogoutPost.Input, any, true], 
         "/users": [any, any, true],
+        "/acs/member":[Member.Input, Member.Output, true]
     },
     "Put": {
         "/users": [any, any, true],
+        "/acs/member":[Member.Output, Member.Output, true]
     },
     "Delete": {
         "/users": [any, any, true],
+        "/acs/member":[any, any, true]
     },
     "Ws": {
         "/users/alive": [any, any, true], 
@@ -64,3 +69,24 @@ export declare namespace AnnouncementsGet {
     export type Output = OutputR<IAnnouncements>;
 }
 ////////////////////////////////////////////////////////////// 
+declare namespace Member{    
+    export interface Input {
+        memberid: string;
+        firstname: string;
+        middlename: string;
+        lastname: string;
+        status: number; 
+        cardnNum : string;
+    }
+    export interface Output{
+        objectId:string;
+        memberid: string;
+        firstname: string;
+        middlename: string;
+        lastname: string;
+        status: number; 
+        cardnNum : string;
+        createdAt:Date;
+        updatedAt:Date;
+    }
+}
