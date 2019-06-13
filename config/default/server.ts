@@ -2,6 +2,7 @@ import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '@/../core/serv
 
 interface RestfulRequest extends ApisRequestBase { 
     "Get": { 
+        "/acs/door": [any, any, true],
         "/users/login": [UsersLoginAll.Input, UsersLoginAll.Output, false],        
         "/users": [any, any, true],
         "/announcements": [AnnouncementsGet.Input, AnnouncementsGet.Output, true]

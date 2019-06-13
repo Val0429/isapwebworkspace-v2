@@ -9,9 +9,7 @@
             }
             " -->
 
-        <iv-table
-            :server="{ path: '/acs/doorgroup' }"
-            />
+        <DoorGroupForm/>
     </div>
 </template>
 
@@ -21,7 +19,11 @@ import { Component, Vue } from 'vue-property-decorator';
 import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
 
-@Component
+import DoorGroupForm from './DoorGroupForm.vue';
+
+@Component({
+    components: { DoorGroupForm }
+})
 export default class DoorGroup extends Vue {
     private isMounted: boolean = false;
     private doMounted() {
