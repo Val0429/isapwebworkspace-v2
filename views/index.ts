@@ -14,11 +14,25 @@ import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 import Member from './components/Member.vue';
+import User from './components/User.vue';
+import Door from './components/Door.vue';
+import Elevator from './components/Elevator.vue';
+import TimeSchedule from './components/TimeSchedule.vue';
+import DoorGroup from './components/DoorGroup.vue';
+import PermissionTable from './components/PermissionTable.vue';
+
 
 $({ path: '/', name: "Home", redirect: '/components' })();
+$({ path: '/elevator', name: "Elevator", icon: 'fa-building' })(Elevator);
+    $({ path: '/door', name: "Door", icon: 'fa-building' })(Door);
+    $({ path: '/permissiontable', name: "Permission Table", icon: 'fa-building' })(PermissionTable);
+    $({ path: '/doorgroup', name: "Door Group", icon: 'fa-building' })(DoorGroup);
+    $({ path: '/timeschedule', name: "Time Schedule", icon: 'fa-building' })(TimeSchedule);
+    $({ path: '/member', name: "Member", icon: 'fa-user' })(Member);
+    $({ path: '/user', name: "User", icon: 'fa-user' })(User);
 
     $({ path: '/components', name: "Components", icon: 'isap-icon-add' })(Components);
-    $({ path: '/member', name: "Member", icon: 'isap-icon-add' })(Member);
+    
         $({ path: '/components/forms', name: "Forms", icon: 'fa-facebook', permission: '/announcements' })(Forms);
         $({ path: '/components/step-progress', name: "Step Progress", icon: 'fa-twitter' })(StepProgress);
         $({ path: '/components/tab', name: "Tab", icon: 'fa-twitter' })(Tab);

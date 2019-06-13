@@ -1,7 +1,7 @@
 <template>
     <CoreUIBase>
         <template #header>
-            Hello iSAP
+            FET ACS
         </template>
 
         <template #footer>
@@ -9,7 +9,7 @@
         </template>
 
         <template #nav>
-            <SidebarHeader label="iSAP Web Framework" />
+            <SidebarHeader label="Menu" />
             <SidebarNav>
                 <!-- <SidebarNavTitle label="Components" /> -->
                 <!-- <SidebarNavItem url="/components">
@@ -18,6 +18,12 @@
 
                 <SidebarNavTitle label="基本元件" />
                 <SidebarNavItem url="/member" />
+                <SidebarNavItem url="/user" />
+                <SidebarNavItem url="/door" />
+                <SidebarNavItem url="/doorgroup" />
+                <SidebarNavItem url="/elevator" />
+                <SidebarNavItem url="/timeschedule" />
+                <SidebarNavItem url="/permissiontable" />
                 <SidebarNavItem url="/components" />
                 <SidebarNavItem url="/components/forms" />
                 <SidebarNavItem url="/components/step-progress" />

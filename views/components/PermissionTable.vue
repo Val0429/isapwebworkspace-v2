@@ -1,7 +1,7 @@
 <template>
      <div key="main">
         
-         <!-- interface="
+            <!-- interface="
             interface {
                 objectId:string;
                 createdAt:Date;
@@ -10,7 +10,7 @@
             " -->
 
         <iv-table
-            :server="{ path: '/acs/member' }"
+            :server="{ path: '/acs/permissiontable' }"
             />
     </div>
 </template>
@@ -22,7 +22,7 @@ import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
 
 @Component
-export default class Member extends Vue {
+export default class PermissionTable extends Vue {
     private isMounted: boolean = false;
     private doMounted() {
         this.isMounted = true;
