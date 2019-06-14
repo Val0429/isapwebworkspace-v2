@@ -155,6 +155,7 @@
                 :value="inputPeopleCountingData"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
+                @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEditHanwha($event)"
             >
                 <template #selectTree="{ $atrs, $listeners }">
@@ -250,6 +251,9 @@
                 :interface="IAddAndEditFromiSap()"
                 :value="inputPeopleCountingData"
                 @update:serverId="selectSourceIdAndLocation($event)"
+                @update:siteId="selectAreaId($event)"
+                @update:areaId="selectGroupDeviceId($event)"
+                @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEditiSap($event)"
             >
                 <template #selectTree="{ $atrs, $listeners }">
@@ -416,6 +420,7 @@ export default class PeopleCounting extends Vue {
             stepType: "",
             customId: "",
             areaId: "",
+            siteId: "",
             groupIds: [],
             name: "",
             brand: "",
@@ -477,48 +482,6 @@ export default class PeopleCounting extends Vue {
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
-
-    async initSelectItemDeviceGroup() {
-        await this.$server
-            .R("/device/group/all")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 deviceGroupSelectItem 的 key 的方式
-                        this.deviceGroupSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
-
-    async initSelectItemArea() {
-        await this.$server
-            .R("/location/area/all")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 areaSelectItem 的 key 的方式
-                        this.areaSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
                 }
             })
             .catch((e: any) => {
@@ -647,9 +610,8 @@ export default class PeopleCounting extends Vue {
 
         this.selecteds = [];
 
-        for (const id of this.inputPeopleCountingData.siteId) {
             for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
+                if (this.inputPeopleCountingData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -658,7 +620,6 @@ export default class PeopleCounting extends Vue {
                     this.selecteds.push(selectedsObject);
                 }
             }
-        }
     }
 
     async selectSourceIdAndLocation(data) {
@@ -709,42 +670,26 @@ export default class PeopleCounting extends Vue {
                     return false;
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async selectAreaId(data) {
+
+        this.areaSelectItem = {};
+
         if (data !== undefined) {
             const readParam: {
-                objectId: string;
+                siteId: string;
             } = {
-                objectId: data
+                siteId: data
             };
 
             await this.$server
-                .C("/partner/frs/device", readParam)
+                .R("/location/area/all", readParam)
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            for (const returnValue of response) {
-                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
-                                this.$set(
-                                    this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
-                                );
-                            }
-
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(this._("w_ErrorReadData"));
-                                return false;
-                            }
+                            // 自定義 areaSelectItem 的 key 的方式
+                            this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                         }
                     }
                 })
@@ -752,50 +697,31 @@ export default class PeopleCounting extends Vue {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
-                        return false;
-                    }
                     console.log(e);
                     return false;
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
+
     }
 
     async selectGroupDeviceId(data) {
         if (data !== undefined) {
             const readParam: {
-                objectId: string;
+                areaId: string;
+                mode: string;
             } = {
-                objectId: data
+                areaId: data,
+                mode: 'peopleCounting'
             };
 
             await this.$server
-                .C("/partner/frs/device", readParam)
+                .R("/device/group/all", readParam)
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            for (const returnValue of response) {
-                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
-                                this.$set(
-                                    this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
-                                );
-                            }
+                            // 自定義 deviceGroupSelectItem 的 key 的方式
+                            this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
 
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(this._("w_ErrorReadData"));
-                                return false;
-                            }
                         }
                     }
                 })
@@ -803,15 +729,10 @@ export default class PeopleCounting extends Vue {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
-                        return false;
-                    }
                     console.log(e);
                     return false;
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async pageToAdd(stepType: string) {
@@ -827,8 +748,6 @@ export default class PeopleCounting extends Vue {
         this.pageStep = EPageStep.edit;
         this.getInputData();
         await this.initSelectItemFRSServer();
-        // await this.initSelectItemDeviceGroup();
-        // await this.initSelectItemArea();
         this.inputPeopleCountingData.stepType = stepType;
         this.inputPeopleCountingData.groupIds = JSON.parse(
             JSON.stringify(
@@ -874,8 +793,6 @@ export default class PeopleCounting extends Vue {
     async pageToAddByHanwha(brand: string) {
         this.clearInputData();
         await this.initSelectItemSite();
-        // await this.initSelectItemArea();
-        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.hanwha;
         this.inputPeopleCountingData.stepType = EPageStep.add;
         this.inputPeopleCountingData.brand = brand;
@@ -885,19 +802,15 @@ export default class PeopleCounting extends Vue {
         this.clearInputData();
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
-        // await this.initSelectItemArea();
-        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.isapFrs;
         this.inputPeopleCountingData.brand = brand;
         this.inputPeopleCountingData.stepType = EPageStep.add;
-        console.log("brand", this.inputPeopleCountingData.brand);
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
         this.clearInputData();
         await this.initSelectItemSite();
-        // await this.initSelectItemArea();
-        // await this.initSelectItemDeviceGroup();
+
         this.addStep = EAddStep.isapFrsManager;
         this.inputPeopleCountingData.brand = brand;
         this.inputPeopleCountingData.stepType = EPageStep.add;
@@ -913,9 +826,8 @@ export default class PeopleCounting extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
-        for (const id of this.inputPeopleCountingData.siteId) {
             for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
+                if (this.inputPeopleCountingData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -924,31 +836,37 @@ export default class PeopleCounting extends Vue {
                     this.selecteds.push(selectedsObject);
                 }
             }
-        }
+
     }
 
-    pageToShowResult() {
+    async pageToShowResult() {
         if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteId clear
-            this.inputPeopleCountingData.siteId = [];
+            this.inputPeopleCountingData.siteId = '';
 
             // from selecteds push siteId
-            for (const item of this.selecteds) {
-                this.inputPeopleCountingData.siteId.push(item.objectId);
-            }
+            // for (const item of this.selecteds) {
+            //     this.inputPeopleCountingData.siteId.push(item.objectId);
+            // }
+            this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
+            this.areaSelectItem = {};
+            await this.selectAreaId(this.selecteds[0].objectId);
         }
 
         if (this.inputPeopleCountingData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteId clear
-            this.inputPeopleCountingData.siteId = [];
+            this.inputPeopleCountingData.siteId = '';
 
             // from selecteds push siteId
-            for (const item of this.selecteds) {
-                this.inputPeopleCountingData.siteId.push(item.objectId);
-            }
+            // for (const item of this.selecteds) {
+            //     this.inputPeopleCountingData.siteId.push(item.objectId);
+            // }
+            this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
+            this.areaSelectItem = {};
+            await this.selectAreaId(this.selecteds[0].objectId);
         }
     }
 
@@ -1387,7 +1305,7 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                siteId: ${toEnumInterface(this.sitesSelectItem as any, false)};
 
                 selectTree?: any;
 
@@ -1551,7 +1469,7 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                siteId?: ${toEnumInterface(this.sitesSelectItem as any, false)};
 
                 selectTree?: any;
 

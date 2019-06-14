@@ -269,8 +269,8 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
 interface InputUserData extends IUserAddData, IUserEditData {
-    siteIdsText: string;
-    groupIdsText: string;
+    siteIdsText?: string;
+    groupIdsText?: string;
     confirmPassword?: string;
     type?: string;
 }
@@ -480,6 +480,8 @@ export default class User extends Vue {
                 break;
         }
 
+        console.log('data - ', data);
+
         this.selecteds = [];
 
         for (const id of this.inputUserData.siteIds) {
@@ -498,6 +500,7 @@ export default class User extends Vue {
 
     async pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
+        this.clearInputData();
         await this.initSelectItemSite();
         await this.initSelectItemUserGroup();
         this.selecteds = [];
@@ -806,7 +809,7 @@ export default class User extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Account")}
                  */
-                account: string;
+                username: string;
 
 
                 /**
@@ -858,7 +861,7 @@ export default class User extends Vue {
                  * @uiLabel - ${this._("w_Account")}
                  * @uiPlaceHolder - ${this._("w_Account")}
                  */
-                account: string;
+                username: string;
 
 
                 /**
@@ -948,7 +951,7 @@ export default class User extends Vue {
                  * @uiPlaceHolder - ${this._("w_Account")}
                  * @uiType - iv-form-label
                  */
-                account: string;
+                username: string;
 
 
                 /**
@@ -1018,7 +1021,7 @@ export default class User extends Vue {
                  * @uiLabel - ${this._("w_Account")}
                  * @uiType - iv-form-label
                  */
-                account?: string;
+                username?: string;
 
 
                 /**
