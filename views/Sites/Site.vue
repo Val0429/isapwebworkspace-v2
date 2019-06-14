@@ -510,6 +510,24 @@
                         />
                     </template>
 
+                    <template #mode="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-if="pageStep === ePageStep.deviceGroupAdd"
+                            v-bind="$attrs"
+                            :value="$attrs.value ? $attrs.value : ''"
+                            v-on="$listeners"
+                            :multiple="false"
+                            :options="cameraModeItem"
+                        >
+                        </iv-form-selection>
+                        <iv-form-label
+                            v-if="pageStep === ePageStep.deviceGroupEdit"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="$attrs.value ? $attrs.value : ''"
+                        />
+                    </template>
+
                     <template #devices="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
@@ -564,6 +582,14 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :value="deviceGroup ? deviceGroup.name : '' "
+                        />
+                    </template>
+
+                    <template #mode="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="$attrs.value ? $attrs.value : ''"
                         />
                     </template>
 
@@ -649,6 +675,15 @@ interface IGoogleMap {
     zSize: string;
 }
 
+enum ECameraMode {
+    peopleCounting = "People Counting",
+    humanDetection = "Human Detection",
+    heatmap = "Heatmap",
+    dwellTime = "Dwell Time",
+    demographic = "Demographic",
+    visitor = "Visitor"
+}
+
 @Component({
     components: {}
 })
@@ -704,6 +739,7 @@ export default class Site extends Vue {
     deviceTypeItem = {};
     deviceNameItem = [];
     areaNameItem = [];
+    cameraModeItem = [];
 
     created() {}
 
@@ -1020,6 +1056,7 @@ export default class Site extends Vue {
 
     pageToDeviceGroupList(lastPageStep) {
         console.log("pageToDeviceGroupList", this.lastPageStep, lastPageStep);
+        this.initCameraItem();
         this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
         this.pageStep = EPageStep.deviceGroupList;
     }
@@ -1055,6 +1092,17 @@ export default class Site extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.base(this, e);
             });
+    }
+
+    initCameraItem() {
+        this.cameraModeItem = [
+            { id: "peopleCounting", text: ECameraMode.peopleCounting },
+            { id: "humanDetection", text: ECameraMode.humanDetection },
+            { id: "heatmap", text: ECameraMode.heatmap },
+            { id: "dwellTime", text: ECameraMode.dwellTime },
+            { id: "demographic", text: ECameraMode.demographic },
+            { id: "visitor", text: ECameraMode.visitor }
+        ];
     }
 
     async initSiteListDeviceGroup() {
@@ -1570,7 +1618,8 @@ export default class Site extends Vue {
             const datas: IDeviceGroupAddData[] = [
                 {
                     areaId: this.area["objectId"],
-                    name: data.name
+                    name: data.name,
+                    mode: data.mode
                 }
             ];
 
@@ -2200,6 +2249,11 @@ export default class Site extends Vue {
                 * @uiLabel - ${this._("w_Site_DeviceGroup")}
                 */
                 deviceGroupName: string;
+                
+                /**
+                * @uiLabel - ${this._("w_Site_Model")}
+                */
+                mode: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Devices")}
@@ -2227,6 +2281,12 @@ export default class Site extends Vue {
                  * @uiType - iv-form-string
                  */
                 name?: string;
+
+                  /**
+                * @uiLabel - ${this._("w_Site_Model")}
+                */
+                mode: any;
+
 
                  /**
                 * @uiLabel - ${this._("w_Site_Devices")}
@@ -2257,6 +2317,12 @@ export default class Site extends Vue {
                  * @uiType - iv-form-label
                  */
                 deviceGroupName?: string;
+
+                /**
+                * @uiLabel - ${this._("w_Site_Model")}
+                * @uiType - iv-form-label
+                */
+                mode: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Devices")}

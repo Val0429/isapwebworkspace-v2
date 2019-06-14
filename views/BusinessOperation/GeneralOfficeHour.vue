@@ -656,7 +656,7 @@ export default class GeneralOfficeHour extends Vue {
         );
     }
 
-    showFirst(value) {
+    showFirst(value): string {
         if (value.length >= 2) {
             return value.map(item => item.name)[0] + "...";
         }
