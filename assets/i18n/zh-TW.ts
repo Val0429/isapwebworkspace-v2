@@ -111,7 +111,7 @@ export default class LangObject implements ILang {
     w_Direction = 'Direction';
     w_ServerId = 'Server Id';
     w_SourceId = 'Source Id';
-    w_SourceIdAndLocation  = 'Source Id and Location ';
+    w_SourceIdAndLocation = 'Source Id and Location ';
     w_Location = 'Location';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
@@ -605,6 +605,32 @@ export default class LangObject implements ILang {
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
     w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
+
+    // Demographic
+    w_VSDemographic_List = 'Demographic Device List';
+    w_VSDemographic_Add = 'Add Demographic Device';
+    w_VSDemographic_Edit = 'Edit Demographic Device';
+    w_VSDemographic_View = 'View Demographic Device';
+
+    w_VSDemographic_Addhanwha = 'Use Hanwha Server';
+    w_VSDemographic_AddhanwhaUse = 'Add Demographic Device Use Hanwha Server';
+    w_VSDemographic_EdithanwhaUse = 'Edit Demographic Device Use Hanwha Server';
+
+    w_VSDemographic_isap = 'Use iSap Server';
+    w_VSDemographic_AddisapUseFRS = 'Add Demographic Device Use iSap FRS Server';
+    w_VSDemographic_EditisapUseFRS = 'Edit Demographic Device Use iSap FRS Server';
+
+    w_VSDemographic_AddisapUseFRSManger = 'Add Demographic Device Use iSap FRS Manger Server';
+    w_VSDemographic_EditisapUseFRSManger = 'Edit Demographic Device Use iSap FRS Manger Server';
+
+    w_VSDemographic_SetFRS = 'Not yet set? Go to set FRS Server';
+    w_VSDemographic_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
+
+    w_VSDemographic_AddSuccess = 'Demographic Device List add success.';
+    w_VSDemographic_ADDFailed = 'Demographic Device add failed, please try again.';
+    w_VSDemographic_EditSuccess = 'Demographic Device edit success.';
+    w_VSDemographic_EditFailed = 'Demographic Device edit failed, please try again.';
+    w_VSDemographic_DeleteConfirm = 'Are you sure to delete selected Demographic Device(s)?';
 
     // Heatmap Device
     w_VSHeatmap_List = 'Heatmap Device List';
