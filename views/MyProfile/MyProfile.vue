@@ -118,7 +118,6 @@ enum EPageStep {
     components: {}
 })
 export default class MyProfile extends Vue {
-
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.view;
 
@@ -164,6 +163,7 @@ export default class MyProfile extends Vue {
     }
 
     initUserDetail() {
+        console.log("$user", this.$user);
         this.inputMyProfile = {
             // objectId: User.userId,
             // employeeId: User.employeeId,
@@ -204,16 +204,17 @@ export default class MyProfile extends Vue {
             current: data.current
         };
 
-        await this.$server.U("/user/base/password", editPasswordParam)
+        await this.$server
+            .U("/user/base/password", editPasswordParam)
             .then((response: any) => {
                 if (response != undefined) {
                     Dialog.success(this._("w_MyProfile_ChangePasswordSuccess"));
-                    this.logout();
+                    this.$logout();
                 }
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e)
+                    return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
                     Dialog.error(this._("w_MyProfile_ChangePasswordFailed"));
@@ -238,7 +239,8 @@ export default class MyProfile extends Vue {
             datas
         };
 
-        await this.$server.U("/user/user", editMyProfileParam)
+        await this.$server
+            .U("/user/user", editMyProfileParam)
             .then((response: any) => {
                 if (response != undefined) {
                     Dialog.success(this._("w_MyProfile_EditSuccess"));
@@ -250,7 +252,7 @@ export default class MyProfile extends Vue {
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e)
+                    return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
                     Dialog.error(this._("w_MyProfile_EditFailed"));
@@ -259,21 +261,6 @@ export default class MyProfile extends Vue {
                 console.log(e);
                 return false;
             });
-    }
-
-    async logout() {
-        await this.$server.C("/user/base/logout", {})
-            .then((response: any) => {
-                this.logoutAlways();
-            })
-            .catch((e: any) => {
-                this.logoutAlways();
-            });
-    }
-
-    logoutAlways() {
-        //User.clearUser();
-        this.$router.push({ path: "/login" });
     }
 
     IEditFormPassword() {
