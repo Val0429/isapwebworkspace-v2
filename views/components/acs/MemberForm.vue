@@ -27,7 +27,7 @@ export default class MemberForm extends Vue implements IFormQuick {
     /// 4) possibility - edit / add / delete
     canAdd: boolean = true;
     canEdit: boolean = true;
-    canDelete: boolean = true;
+    canDelete: boolean = false;
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
