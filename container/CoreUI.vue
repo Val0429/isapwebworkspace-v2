@@ -9,7 +9,7 @@
                         src="@/assets/images/default-user-icon.svg"
                     />
                 </a>
-                <b-button @click="logout">{{ _('w_Logout') }}</b-button>
+                <b-button @click="clickLogout">{{ _('w_Logout') }}</b-button>
             </div>
         </template>
 
@@ -218,9 +218,10 @@ import {
     }
 })
 export default class CoreUI extends Vue {
-    logout() {
-        // this.$login
-        console.log("Waitting logout function in framework");
+    logoutPath = "/user/base/logout";
+    async clickLogout() {
+        await this.$logout(this.logoutPath);
+        this.$router.push("/");
     }
 }
 </script>
