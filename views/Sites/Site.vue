@@ -585,6 +585,14 @@
                         />
                     </template>
 
+                    <template #mode="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="$attrs.value ? $attrs.value : ''"
+                        />
+                    </template>
+
                     <template #devices="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
@@ -1610,7 +1618,8 @@ export default class Site extends Vue {
             const datas: IDeviceGroupAddData[] = [
                 {
                     areaId: this.area["objectId"],
-                    name: data.name
+                    name: data.name,
+                    mode: data.mode
                 }
             ];
 
@@ -2308,6 +2317,12 @@ export default class Site extends Vue {
                  * @uiType - iv-form-label
                  */
                 deviceGroupName?: string;
+
+                /**
+                * @uiLabel - ${this._("w_Site_Model")}
+                * @uiType - iv-form-label
+                */
+                mode: string;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Devices")}
