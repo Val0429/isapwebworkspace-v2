@@ -133,11 +133,18 @@
         <!-- add and edit by Hanwha -->
         <iv-auto-card
             v-show="addStep === eAddStep.hanwha"
-            :label="addStep === eAddStep.hanwha ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_Edit')"
+            :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_EdithanwhaUse')"
         >
             <template #toolbox>
-                <iv-toolbox-leave @click="pageToList" />
-                <iv-toolbox-step-backward @click="pageStepBackward" />
+                <iv-toolbox-leave
+                    v-show="pageStep === ePageStep.add"
+                    @click="pageToList" />
+                <iv-toolbox-step-backward
+                    v-show="pageStep === ePageStep.add"
+                    @click="pageStepBackward" />
+                <iv-toolbox-back
+                    v-show="pageStep === ePageStep.edit"
+                    @click="pageToList" />
             </template>
 
             <iv-form
@@ -150,6 +157,7 @@
 
             <template #footer-before>
                 <b-button
+                    v-show="pageStep === ePageStep.add"
                     variant="dark"
                     size="lg"
                     @click="pageToList"
@@ -157,10 +165,19 @@
                 </b-button>
 
                 <b-button
+                    v-show="pageStep === ePageStep.add"
                     variant="secondary"
                     size="lg"
                     @click="pageStepBackward"
                 >{{ _('w_StepBackward') }}
+                </b-button>
+
+                <b-button
+                    v-show="pageStep === ePageStep.edit"
+                    variant="dark"
+                    size="lg"
+                    @click="pageToList"
+                >{{ _('w_Back') }}
                 </b-button>
             </template>
 
@@ -197,11 +214,18 @@
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
             v-show="addStep === eAddStep.isapFrs || addStep === eAddStep.isapFrsManager"
-            :label="addStep === eAddStep.isapFrs ? _('w_VSPeopleCounting_isapUseFRS') :  _('w_VSPeopleCounting_isapUseFRSManger')"
+            :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_AddisapUseFRS') :  _('w_VSPeopleCounting_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_EditisapUseFRS') :  _('w_VSPeopleCounting_EditisapUseFRSManger')"
         >
             <template #toolbox>
-                <iv-toolbox-leave @click="pageToList" />
-                <iv-toolbox-step-backward @click="pageStepBackward" />
+                <iv-toolbox-leave
+                    v-show="pageStep === ePageStep.add"
+                    @click="pageToList" />
+                <iv-toolbox-step-backward
+                    v-show="pageStep === ePageStep.add"
+                    @click="pageStepBackward" />
+                <iv-toolbox-back
+                    v-show="pageStep === ePageStep.edit"
+                    @click="pageToList" />
             </template>
 
             <iv-form
@@ -215,6 +239,7 @@
 
             <template #footer-before>
                 <b-button
+                    v-show="pageStep === ePageStep.add"
                     variant="dark"
                     size="lg"
                     @click="pageToList"
@@ -222,10 +247,19 @@
                 </b-button>
 
                 <b-button
+                    v-show="pageStep === ePageStep.add"
                     variant="secondary"
                     size="lg"
                     @click="pageStepBackward"
                 >{{ _('w_StepBackward') }}
+                </b-button>
+
+                <b-button
+                    v-show="pageStep === ePageStep.edit"
+                    variant="dark"
+                    size="lg"
+                    @click="pageToList"
+                >{{ _('w_Back') }}
                 </b-button>
             </template>
 
@@ -492,18 +526,16 @@ export default class PeopleCounting extends Vue {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
-        console.log('data - ', data)
     }
 
     getInputData() {
-
         this.clearInputData();
         for (const param of this.selectedDetail) {
             this.inputPeopleCountingData = {
-                objectId: param.objectId,
+                // objectId: param.objectId,
                 name: param.name,
-                areaId: param.area["objectId"],
-                site: param.site["name"],
+                areaId: param.area && param.area["objectId"] ? param.area["objectId"] : '',
+                site: param.site && param.site["name"] ? param.site["name"] : '',
                 brand: param.brand,
                 customId: param.customId,
                 groupIds: param.groups,
@@ -514,14 +546,17 @@ export default class PeopleCounting extends Vue {
                 protocol: param.config["protocol"],
                 ip: param.config["ip"],
                 port: param.config["port"],
-                serverId: param.config.server.objectId === undefined ? '' : param.config.server.objectId ,
-                sourceid: param.config.sourceid,
+                serverId: param.config && param.config.server &&  param.config.server.objectId ? param.config.server.objectId : '',
+                sourceid: `${param.config.sourceid} - ${param.config.location}`,
                 location: param.config.location,
                 groupIdsText: this.idsToText(param.groups),
                 stepType: ""
             };
         }
-        //console.log(this.inputPeopleCountingData);
+
+        if (this.inputPeopleCountingData.serverId !== '') {
+            this.selectSourceIdAndLocation(this.inputPeopleCountingData.serverId)
+        }
     }
 
     tempSaveInputData(data) {
@@ -642,7 +677,7 @@ export default class PeopleCounting extends Vue {
             this.addStep = EAddStep.hanwha;
         }
 
-        if (this.inputPeopleCountingData.serverId !== undefined) {
+        if (this.inputPeopleCountingData.serverId !== '') {
             this.addStep = EAddStep.isapFrs;
         }
 
@@ -653,7 +688,6 @@ export default class PeopleCounting extends Vue {
                 this.addStep = EAddStep.isapFrsManager;
                 break;
         }
-        console.log('this.inputPeopleCountingData.brand - ', this.inputPeopleCountingData.brand)
     }
 
     pageToView() {
@@ -877,7 +911,7 @@ export default class PeopleCounting extends Vue {
                 {
                     customId: data.customId,
                     name: data.name,
-                    brand: (this.inputPeopleCountingData.brand).split("F")[0],
+                    brand: this.inputPeopleCountingData.brand.split("F")[0],
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
