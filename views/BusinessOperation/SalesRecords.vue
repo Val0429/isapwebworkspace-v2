@@ -9,13 +9,25 @@
             >
                 <template #1-title>{{ _('w_BOSalesRecords_Step1') }}</template>
                 <template #1>
-                    <b-button @click="chooseStore">{{ _('w_BOSalesRecords_RecordTypeStore') }}</b-button>
-                    <b-button @click="chooseProduct">{{ _('w_BOSalesRecords_RecordTypeProduct') }}</b-button>
+                    <b-button
+                        class="col-md-5"
+                        @click="chooseStore"
+                    >{{ _('w_BOSalesRecords_RecordTypeStore') }}
+                    </b-button>
+                    <span class="col-md-1"></span>
+                    <b-button
+                        class="col-md-5"
+                        @click="chooseProduct"
+                    >{{ _('w_BOSalesRecords_RecordTypeProduct') }}
+                    </b-button>
                 </template>
 
                 <template #2-title>{{ _('w_BOSalesRecords_Step2') }}</template>
                 <template #2>
-                    <b-button @click="downloadExample">{{ _('w_BOSalesRecords_Download') }}</b-button>
+                    <b-button
+                        class="col-md-12"
+                        @click="downloadExample"
+                    >{{ _('w_BOSalesRecords_Download') }}</b-button>
                 </template>
 
                 <template #3-title>{{ _('w_BOSalesRecords_Step3') }}</template>
