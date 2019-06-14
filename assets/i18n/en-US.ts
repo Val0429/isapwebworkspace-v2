@@ -557,6 +557,26 @@ export default class LangObject {
 
     // Business Operation Sales Records
     w_BOSalesRecords_CardTitle = 'Import Excel (.xlsx)';
+    w_BOSalesRecords_Step1 = 'Choose Record type';
+    w_BOSalesRecords_Step2 = 'Download .xlsx example';
+    w_BOSalesRecords_Step3 = 'Upload .xlsx file';
+    w_BOSalesRecords_Step4 = 'Confirm upload information';
+    w_BOSalesRecords_Step5 = 'Upload result';
+    w_BOSalesRecords_RecordTypeStore = 'Store';
+    w_BOSalesRecords_RecordTypeProduct = 'Product';
+    w_BOSalesRecords_Download = 'Download';
+    w_BOSalesRecords_StoreId = 'Store ID';
+    w_BOSalesRecords_Date = 'Date';
+    w_BOSalesRecords_Hour = 'Hour';
+    w_BOSalesRecords_Time = 'Time';
+    w_BOSalesRecords_Amount = 'Amount';
+    w_BOSalesRecords_Transaction = 'Transaction';
+    w_BOSalesRecords_ProductId = 'Product ID';
+    w_BOSalesRecords_Count = 'Count';
+
+    w_BOSalesRecords_ErrorFileType = 'Please upload xlsx';
+    w_BOSalesRecords_ErrorFileResolve = 'File content can not be Resolve';
+    w_BOSalesRecords_ErrorNoData = 'no data';
 
     // People Counting Device
     w_VSPeopleCounting_List = 'People Counting Device List';
@@ -577,4 +597,14 @@ export default class LangObject {
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
     w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
+
+    // Heatmap Device
+    w_VSHeatmap_List = 'Heatmap Device List';
+    w_VSHeatmap_Add = 'Heatmap Device Add';
+    w_VSHeatmap_Edit = 'Heatmap Device Edit';
+    w_VSHeatmap_View = 'Heatmap Device View';
+    w_VSHeatmap_SelectBrand = 'Select Brand';
+    w_VSHeatmap_FillInInformation = 'Fill In Information';
+    w_VSHeatmap_DrawROI = 'Draw ROI';
+    w_VSHeatmap_CheckAndOverlook = 'Check and Overlook';
 }
