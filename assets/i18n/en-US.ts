@@ -106,6 +106,13 @@ export default class LangObject {
     w_Hanwha = 'Hanwha';
     w_iSapFRS = 'FRS';
     w_iSapFRSManager = 'FRS Manager';
+    w_In = 'In';
+    w_Out = 'Out';
+    w_Direction = 'Direction';
+    w_ServerId = 'Server Id';
+    w_SourceId = 'Source Id';
+    w_SourceIdAndLocation  = 'Source Id and Location ';
+    w_Location = 'Location';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
@@ -115,6 +122,7 @@ export default class LangObject {
     w_Error_Password = 'Password and PasswordConfirm should be same';
     w_ErrorLongitude = 'Longitude only -180~180';
     w_ErrorLatitude = 'Latitude only -90~90';
+    w_ErrorReadData = 'Read data failed, please try again.';
 
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';

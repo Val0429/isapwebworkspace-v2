@@ -3,7 +3,7 @@ import { IObjectIdAndName } from '@/config/default/api/interfaces';
 declare namespace UserLoginPost {
     export interface Input {
         account: string;
-        password: string;
+        username: string;
     }
 
     export interface Output {

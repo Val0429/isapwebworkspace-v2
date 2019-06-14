@@ -309,7 +309,7 @@ export default class User extends Vue {
 
     inputUserData: InputUserData = {
         objectId: "",
-        account: "",
+        username: "",
         role: "",
         name: "",
         email: "",
@@ -330,7 +330,7 @@ export default class User extends Vue {
     clearInputData() {
         this.inputUserData = {
             objectId: "",
-            account: "",
+            username: "",
             role: "User",
             name: "",
             email: "",
@@ -434,7 +434,7 @@ export default class User extends Vue {
             this.inputUserData = {
                 objectId: param.objectId,
                 employeeId: param.employeeId,
-                account: param.account,
+                username: param.username,
                 role: param.role,
                 name: param.name,
                 email: param.email,
@@ -451,7 +451,7 @@ export default class User extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "account":
-                this.inputUserData.account = data.value;
+                this.inputUserData.username = data.value;
                 break;
             case "password":
                 this.inputUserData.password = data.value;
@@ -614,7 +614,7 @@ export default class User extends Vue {
     async saveAdd(data) {
         const datas: IUserAddData[] = [
             {
-                account: data.account,
+                username: data.username,
                 role: data.role,
                 name: data.name,
                 email: data.email,
@@ -742,7 +742,7 @@ export default class User extends Vue {
         );
     }
 
-    showFirst(value) {
+    showFirst(value): string {
         if (value.length >= 2) {
             return value.map(item => item.name)[0] + "...";
         }
@@ -783,7 +783,7 @@ export default class User extends Vue {
     searchKeywords(search: string) {
         // TODO: finished search
         if (search != "") {
-            const accountText = this.inputUserData.account.toLocaleLowerCase();
+            const accountText = this.inputUserData.username.toLocaleLowerCase();
             const nameText = this.inputUserData.name.toLocaleLowerCase();
             const searchText = search.toLowerCase();
             const searchResult =
