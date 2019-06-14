@@ -34,13 +34,37 @@ export default class MemberForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
+                    /**
+                    * @uiLabel - ${this._("memberid")}
+                    */
                     memberid: string;
+                    /**
+                    * @uiLabel - ${this._("firstname")}
+                    */
                     firstname: string;
+                    /**
+                    * @uiLabel - ${this._("middlename")}
+                    */
                     middlename: string;
+                    /**
+                    * @uiLabel - ${this._("lastname")}
+                    */
                     lastname: string;
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */
                     status: number;
+                    /**
+                    * @uiLabel - ${this._("cardnNum")}
+                    */
                     cardnNum: string;
+                    /**
+                    * @uiLabel - ${this._("createdAt")}
+                    */
                     createdAt: Date;
+                    /**
+                    * @uiLabel - ${this._("updatedAt")}
+                    */
                     updatedAt: Date;
                 }
                 `;
@@ -48,12 +72,32 @@ export default class MemberForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
+                    /**
+                    * @uiLabel - ${this._("memberid")}
+                    */
                     memberid: string;
+                    /**
+                    * @uiLabel - ${this._("firstname")}
+                    */
                     firstname: string;
+                    /**
+                    * @uiLabel - ${this._("middlename")}
+                    */
                     middlename: string;
+                    /**
+                    * @uiLabel - ${this._("lastname")}
+                    */
                     lastname: string;
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */
                     status: number;
+                    /**
+                    * @uiLabel - ${this._("cardnNum")}
+                    */
                     cardnNum: string;
+                    /**
+                    * @uiLabel - ${this._("createdAt")}
                 }
                 `;
         }

@@ -1,14 +1,5 @@
 <template>
      <div key="main">
-        
-            <!-- interface="
-            interface {
-                objectId:string;
-                createdAt:Date;
-                updatedAt:Date;
-            }
-            " -->
-
         <DoorGroupForm/>
     </div>
 </template>

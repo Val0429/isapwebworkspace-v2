@@ -1,18 +1,5 @@
 <template>
      <div key="main">
-        
-         <!-- interface="
-            interface {
-                objectId:string;
-                createdAt:Date;
-                updatedAt:Date;
-            }
-            " -->
-
-        <!-- <iv-table
-            :server="{ path: '/acs/member' }"
-            /> -->
-
         <MemberForm />
     </div>
 </template>

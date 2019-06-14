@@ -34,13 +34,37 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
+                    /**
+                    * @uiLabel - ${this._("system")}
+                    */
                     system: number;
+                    /**
+                    * @uiLabel - ${this._("elevatorid")}
+                    */
                     elevatorid: number;
+                    /**
+                    * @uiLabel - ${this._("floor")}
+                    */
                     floor: number;
+                    /**
+                    * @uiLabel - ${this._("unlocktime")}
+                    */
                     unlocktime:string;
+                    /**
+                    * @uiLabel - ${this._("shunttime")}
+                    */
                     shunttime:string;
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */
                     status: number;
+                    /**
+                    * @uiLabel - ${this._("createdAt")}
+                    */
                     createdAt: Date;
+                    /**
+                    * @uiLabel - ${this._("updatedAt")}
+                    */
                     updatedAt: Date;
                 }
                 `;
@@ -48,11 +72,29 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
+                    /**
+                    * @uiLabel - ${this._("system")}
+                    */
                     system: number;
+                    /**
+                    * @uiLabel - ${this._("elevatorid")}
+                    */
                     elevatorid: number;
+                    /**
+                    * @uiLabel - ${this._("floor")}
+                    */
                     floor: number;
+                    /**
+                    * @uiLabel - ${this._("unlocktime")}
+                    */
                     unlocktime:string;
+                    /**
+                    * @uiLabel - ${this._("shunttime")}
+                    */
                     shunttime:string;
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */
                     status: number;
                 }
                 `;

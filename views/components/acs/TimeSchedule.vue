@@ -4,16 +4,7 @@
          
             <iv-table
             :server="{ path: '/acs/timeschedule' }"
-            interface="
-                interface {
-                schedule:string;
-                timeid :string;
-                timename :string;
-                status	:number;
-                createdAt:Date;
-                updatedAt:Date;
-                }
-            "
+            :interface="inf()"
             >
                 <template #schedule="{$attrs,$listeners}">
                     {{!$attrs.value || $attrs.value.length==0 ? '' : $attrs.value.map(x=> _("day"+x.weekday) +" "+x.starttime+"-"+x.endtime).join(", ")}}
@@ -37,6 +28,37 @@ export default class TimeSchedule extends Vue {
     private doMounted() {
         this.isMounted = true;
         
+    }
+    inf(){
+        return `
+        
+                interface {
+                /**
+                * @uiLabel - ${this._("schedule")}
+                */
+                schedule:string;
+                /**
+                * @uiLabel - ${this._("timeid")}
+                */
+                timeid :string;
+                /**
+                * @uiLabel - ${this._("timename")}
+                */
+                timename :string;
+                /**
+                * @uiLabel - ${this._("status")}
+                */
+                status	:number;
+                /**
+                * @uiLabel - ${this._("createdAt")}
+                */
+                createdAt:Date;
+                /**
+                * @uiLabel - ${this._("updatedAt")}
+                */
+                updatedAt:Date;
+                }
+        `;
     }
 }
 </script>

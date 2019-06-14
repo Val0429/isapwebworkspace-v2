@@ -7,7 +7,7 @@
                         <div class="card p-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h1>{{ '自訂' }}</h1>
+                                    <h1>{{ _("wb_Login") }}</h1>
 
                                     <p class="text-muted">{{ version }}</p>
 

@@ -23,13 +23,13 @@ import PermissionTable from './components/acs/PermissionTable.vue';
 
 
 $({ path: '/', name: "Home", redirect: '/member' })();
-$({ path: '/elevator', name: "Elevator", icon: 'fa-building' })(Elevator);
-    $({ path: '/door', name: "Door", icon: 'fa-building' })(Door);
-    $({ path: '/permissiontable', name: "Permission Table", icon: 'fa-building' })(PermissionTable);
-    $({ path: '/doorgroup', name: "Door Group", icon: 'fa-building' })(DoorGroup);
-    $({ path: '/timeschedule', name: "Time Schedule", icon: 'fa-building' })(TimeSchedule);
-    $({ path: '/member', name: "Member", icon: 'fa-user' })(Member);
-    $({ path: '/user', name: "User", icon: 'fa-user' })(User);
+$({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
+    $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
+    $({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
+    $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
+    $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
+    $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
+    $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
 
     $({ path: '/components', name: "Components", icon: 'isap-icon-add' })(Components);
     

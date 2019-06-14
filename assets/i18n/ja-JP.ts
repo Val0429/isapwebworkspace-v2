@@ -2,6 +2,8 @@ import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage("ja-JP", "日本語")
 export default class LangObject implements ILang {
+    wb_Login = "Login";
+    
     w_Name = "名前";
     w_Enabled = "有効";
     w_Value = "値";
@@ -24,6 +26,8 @@ export default class LangObject implements ILang {
     w_UserEdit = "修改使用者";
 
     m_PasswordShouldBeSame = "兩個密碼必須相同";
+    w_Logout="Log out";
+
     day0="Monday";
     day1="Tuesday";
     day2="Wednesday";
@@ -31,5 +35,48 @@ export default class LangObject implements ILang {
     day4="Friday";
     day5="Saturday";
     day6="Sunday";
+
+    w_Member="Member";
+    w_MemberAdd="Add Member";
+    w_MemberEdit="Edit Member";
+    memberid="Member Id";
+    firstname= "First Name";
+    middlename= "Middle Name";
+    lastname= "Last Name";
+    status= "Status";
+    cardnNum= "Card Number";
+    createdAt= "Created At";
+    updatedAt= "Updated At";
+
+    w_Door="Door";
+    system="System";
+    doorid="Door Id";
+    doorname="Door Name";
+    unlocktime="Unlock Time";
+    shunttime="Shunt Time";
+
+    w_DoorGroup="Door Group";
+    w_DoorGroupAdd="Add Door Group";
+    w_DoorGroupEdit="Edit Door Group";
+    groupid="Group Id";
+    groupname="Group Name";
+    doors = "Doors";
+
+    w_Elevator="Elevator";
+    w_ElevatorAdd="Add Elevator";
+    w_ElevatorEdit="Edit Elevator";
+    elevatorid="Elevator Id";
+    floor="Floor";
+
+    w_TimeSchedule="Time Schedule";
+    schedule="Schedule";
+    timeid ="Time Id";
+    timename="Time Name";
+
+    w_PermissionTable="Permission Table";
+    w_PermissionTableAdd="Add Permission Table";
+    w_PermissionTableEdit="Edit Permission Table";
+    tableid="Table Id";
+    tablename="Table Name";
 }
 

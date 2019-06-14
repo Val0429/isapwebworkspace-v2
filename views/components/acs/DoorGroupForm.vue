@@ -37,12 +37,30 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {      
+                interface {   
+                    /**
+                    * @uiLabel - ${this._("groupid")}
+                    */
                     groupid:number;       
+                    /**
+                    * @uiLabel - ${this._("groupname")}
+                    */
                     groupname: string;
+                    /**
+                    * @uiLabel - ${this._("doors")}
+                    */
                     doors:string;
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */
                     status: number;                    
+                    /**
+                    * @uiLabel - ${this._("createdAt")}
+                    */
                     createdAt: Date;
+                    /**
+                    * @uiLabel - ${this._("updatedAt")}
+                    */
                     updatedAt: Date;
                 }
                 `;
@@ -50,9 +68,21 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
-                    groupid:number;
+                    /**
+                    * @uiLabel - ${this._("groupid")}
+                    */
+                    groupid:number;       
+                    /**
+                    * @uiLabel - ${this._("groupname")}
+                    */
                     groupname: string;
+                    /**
+                    * @uiLabel - ${this._("doors")}
+                    */
                     doors:${toEnumInterface(this.doors, true)};                   
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */
                     status: number;
                 }
                 `;

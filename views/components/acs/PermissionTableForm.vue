@@ -37,27 +37,61 @@ export default class PermissionTableForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {      
+                interface {
+                    /**
+                    * @uiLabel - ${this._("tableid")}
+                    */      
                     tableid: string;
+                    /**
+                    * @uiLabel - ${this._("tablename")}
+                    */ 
                     tablename:string;
+                    /**
+                    * @uiLabel - ${this._("w_Member")}
+                    */ 
                     member:string;
+                    /**
+                    * @uiLabel - ${this._("w_TimeSchedule")}
+                    */ 
                     timeschedule:string;
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */ 
                     status: number;                    
+                    /**
+                    * @uiLabel - ${this._("createdAt")}
+                    */ 
                     createdAt: Date;
+                    /**
+                    * @uiLabel - ${this._("updatedAt")}
+                    */ 
                     updatedAt: Date;
                 }
                 `;
             case EFormQuick.Add:
             case EFormQuick.Edit:
                 return `
-                interface {          
+                interface {      
+                    /**
+                    * @uiLabel - ${this._("tableid")}
+                    */      
                     tableid: string;
+                    /**
+                    * @uiLabel - ${this._("tablename")}
+                    */ 
                     tablename:string;
+                    /**
+                    * @uiLabel - ${this._("w_Member")}
+                    */ 
                     member:${toEnumInterface(this.members,true)};
+                    /**
+                    * @uiLabel - ${this._("w_TimeSchedule")}
+                    */ 
                     timeschedule:${toEnumInterface(this.timeschedules,true)};
-                    status: number;                    
-                    createdAt: Date;
-                    updatedAt: Date;
+                    /**
+                    * @uiLabel - ${this._("status")}
+                    */ 
+                    status: number;   
                 }
                 `;
         }
