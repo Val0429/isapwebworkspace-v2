@@ -9,13 +9,25 @@
             >
                 <template #1-title>{{ _('w_BOSalesRecords_Step1') }}</template>
                 <template #1>
-                    <b-button @click="chooseStore">{{ _('w_BOSalesRecords_RecordTypeStore') }}</b-button>
-                    <b-button @click="chooseProduct">{{ _('w_BOSalesRecords_RecordTypeProduct') }}</b-button>
+                    <b-button
+                        class="col-md-5"
+                        @click="chooseStore"
+                    >{{ _('w_BOSalesRecords_RecordTypeStore') }}
+                    </b-button>
+                    <span class="col-md-1"></span>
+                    <b-button
+                        class="col-md-5"
+                        @click="chooseProduct"
+                    >{{ _('w_BOSalesRecords_RecordTypeProduct') }}
+                    </b-button>
                 </template>
 
                 <template #2-title>{{ _('w_BOSalesRecords_Step2') }}</template>
                 <template #2>
-                    <b-button @click="downloadExample">{{ _('w_BOSalesRecords_Download') }}</b-button>
+                    <b-button
+                        class="col-md-12"
+                        @click="downloadExample"
+                    >{{ _('w_BOSalesRecords_Download') }}</b-button>
                 </template>
 
                 <template #3-title>{{ _('w_BOSalesRecords_Step3') }}</template>
@@ -53,8 +65,8 @@
                                 <th>{{ _('w_BOSalesRecords_StoreId') }}</th>
                                 <th>{{ _('w_BOSalesRecords_Time') }}</th>
                                 <th>{{ _('w_BOSalesRecords_ProductId') }}</th>
-                                <th>{{ _('w_BOSalesRecords_ProductId') }}</th>
                                 <th>{{ _('w_BOSalesRecords_Count') }}</th>
+                                <th>{{ _('w_BOSalesRecords_Amount') }}</th>
                             </thead>
                             <tbody>
                                 <tr v-for="value in recordFileContent">
@@ -263,22 +275,24 @@ export default class SalesRecords extends Vue {
     }
 
     downloadExampleStore() {
-        let excelData: IRecordFile[] = [
-            {
-                storeId: "Store_1",
-                dateText: "2019/1/1",
-                hourText: "1",
-                amount: 12,
-                transaction: 132
-            },
-            {
-                storeId: "Store_1",
-                dateText: "2019/1/1",
-                hourText: "2",
-                amount: 24,
-                transaction: 493
-            }
-        ];
+        let excelData: IRecordFile[] = [];
+
+        let rowCount = Math.floor(Math.random() * 50) + 1;
+        let now = new Date();
+        for (let i = 0; i < rowCount; i++) {
+            excelData.push({
+                storeId: "Store_" + Math.floor(Math.random() * 50),
+                dateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                hourText: Math.floor(Math.random() * 23).toString(),
+                amount: Math.floor(Math.random() * 5000),
+                transaction: Math.floor(Math.random() * 1000)
+            });
+        }
 
         const th = [
             this.excelTitleName.storeId,
@@ -304,24 +318,25 @@ export default class SalesRecords extends Vue {
     }
 
     downloadExampleProduct() {
-        let excelData = [
-            {
-                storeId: "Store_1",
-                dateText: "2019/1/1",
-                hourText: "1",
-                amount: 12,
-                productId: "Product_1",
-                count: 123
-            },
-            {
-                storeId: "Store_1",
-                dateText: "2019/1/1",
-                hourText: "2",
-                amount: 140,
-                productId: "Product_1",
-                count: 12
-            }
-        ];
+        let excelData = [];
+
+        let rowCount = Math.floor(Math.random() * 50) + 1;
+        let now = new Date();
+        for (let i = 0; i < rowCount; i++) {
+            excelData.push({
+                storeId: "Store_" + Math.floor(Math.random() * 50),
+                dateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                hourText: Math.floor(Math.random() * 23).toString(),
+                amount: Math.floor(Math.random() * 5000),
+                productId: "Product_" + Math.floor(Math.random() * 20),
+                count: Math.floor(Math.random() * 1000)
+            });
+        }
 
         const th = [
             this.excelTitleName.storeId,
@@ -382,18 +397,28 @@ export default class SalesRecords extends Vue {
 
                         // get value
                         if (row[this.excelTitleName.storeId] != undefined) {
-                            recordFile.storeId =
-                                row[this.excelTitleName.storeId];
+                            recordFile.storeId = row[
+                                this.excelTitleName.storeId
+                            ]
+                                .toString()
+                                .trim();
                         }
                         if (row[this.excelTitleName.date] != undefined) {
-                            recordFile.dateText = row[this.excelTitleName.date];
+                            recordFile.dateText = row[this.excelTitleName.date]
+                                .toString()
+                                .trim();
                         }
                         if (row[this.excelTitleName.hour] != undefined) {
-                            recordFile.hourText = row[this.excelTitleName.hour];
+                            recordFile.hourText = row[this.excelTitleName.hour]
+                                .toString()
+                                .trim();
                         }
                         if (row[this.excelTitleName.productId] != undefined) {
-                            recordFile.productId =
-                                row[this.excelTitleName.productId];
+                            recordFile.productId = row[
+                                this.excelTitleName.productId
+                            ]
+                                .toString()
+                                .trim();
                         }
                         if (
                             row[this.excelTitleName.amount] != undefined &&
@@ -401,6 +426,8 @@ export default class SalesRecords extends Vue {
                         ) {
                             recordFile.amount = parseFloat(
                                 row[this.excelTitleName.amount]
+                                    .toString()
+                                    .trim()
                             );
                         }
                         if (
@@ -411,6 +438,8 @@ export default class SalesRecords extends Vue {
                         ) {
                             recordFile.transaction = parseFloat(
                                 row[this.excelTitleName.transaction]
+                                    .toString()
+                                    .trim()
                             );
                         }
 
@@ -418,37 +447,79 @@ export default class SalesRecords extends Vue {
                             row[this.excelTitleName.count] != undefined &&
                             !isNaN(parseFloat(row[this.excelTitleName.count]))
                         ) {
-                            recordFile.transaction = parseFloat(
-                                row[this.excelTitleName.count]
+                            recordFile.count = parseFloat(
+                                row[this.excelTitleName.count].toString().trim()
                             );
                         }
 
-                        // recordFile.hourText = Utility.PadLeft(
-                        //     recordFile.hourText,
-                        //     "0",
-                        //     2
-                        // );
-                        console.log(
-                            `${recordFile.dateText} ${
-                                recordFile.hourText
-                            }:00:00`
-                        );
+                        // 判斷時間格式
+                        let resolveDate = true;
+                        let DateArray = recordFile.dateText
+                            .toString()
+                            .split("/");
+                        if (DateArray.length < 3) {
+                            this.recordFileError = true;
+                            resolveDate = false;
+                        }
 
-                        // get Date
-                        let datetimeString: string = `${recordFile.dateText} ${
-                            recordFile.hourText
-                        }:00:00`;
-
-                        recordFile.datetime = Datetime.String2DateTime(
-                            `2019/12/4 10:00:00`,
-                            "YYYY/M/D HH:mm:SS"
-                        );
-
-                        if (!isNaN(recordFile.datetime.getTime())) {
-                            recordFile.datetimeText = Datetime.DateTime2String(
-                                recordFile.datetime,
-                                "YYYY/MM/DD HH:mm:ss"
+                        if (resolveDate) {
+                            let resolveDateDetail = true;
+                            let tempYear = Utility.PadLeft(
+                                DateArray[0],
+                                "0",
+                                2
                             );
+                            let tempMonth = Utility.PadLeft(
+                                DateArray[1],
+                                "0",
+                                2
+                            );
+                            let tempDate = Utility.PadLeft(
+                                DateArray[2],
+                                "0",
+                                2
+                            );
+                            let tempHour = Utility.PadLeft(
+                                recordFile.hourText,
+                                "0",
+                                2
+                            );
+
+                            if (isNaN(parseInt(tempYear))) {
+                                this.recordFileError = true;
+                                resolveDateDetail = false;
+                            }
+                            if (isNaN(parseInt(tempMonth))) {
+                                this.recordFileError = true;
+                                resolveDateDetail = false;
+                            }
+                            if (isNaN(parseInt(tempDate))) {
+                                this.recordFileError = true;
+                                resolveDateDetail = false;
+                            }
+                            if (isNaN(parseInt(tempHour))) {
+                                this.recordFileError = true;
+                                resolveDateDetail = false;
+                            }
+
+                            if (resolveDateDetail) {
+                                // get Date()
+                                let tempDatetimeString: string = `${tempYear}-${tempMonth}-${tempDate} ${tempHour}:00:00`;
+
+                                // get Date relay string
+                                recordFile.datetime = Datetime.String2DateTime(
+                                    tempDatetimeString,
+                                    "YYYY-MM-DD HH:mm:SS"
+                                );
+
+                                // reset datetime text
+                                if (!isNaN(recordFile.datetime.getTime())) {
+                                    recordFile.datetimeText = Datetime.DateTime2String(
+                                        recordFile.datetime,
+                                        "YYYY-MM-DD HH:mm:ss"
+                                    );
+                                }
+                            }
                         }
 
                         // check disable submit button
@@ -457,8 +528,7 @@ export default class SalesRecords extends Vue {
                                 case ERecordType.store:
                                     if (
                                         recordFile.storeId == "" ||
-                                        recordFile.dateText == "" ||
-                                        recordFile.hourText == "" ||
+                                        recordFile.datetime == undefined ||
                                         recordFile.transaction == undefined ||
                                         recordFile.amount == undefined
                                     ) {
@@ -468,8 +538,7 @@ export default class SalesRecords extends Vue {
                                 case ERecordType.product:
                                     if (
                                         recordFile.storeId == "" ||
-                                        recordFile.dateText == "" ||
-                                        recordFile.hourText == "" ||
+                                        recordFile.datetime == undefined ||
                                         recordFile.productId == undefined ||
                                         recordFile.count == undefined ||
                                         recordFile.amount == undefined

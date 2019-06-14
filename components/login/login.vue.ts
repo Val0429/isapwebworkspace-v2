@@ -5,6 +5,7 @@ import { ServerName, ServerVersion } from '@/../core/server';
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
     path: '/login',
+    permission: '/user/user/login',
     disableContainer: true,
 })
 @Component

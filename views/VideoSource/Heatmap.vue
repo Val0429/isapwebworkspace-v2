@@ -64,6 +64,7 @@
                 <iv-step-progress
                     ref="step"
                     @mounted="doMounted"
+                    :data="inputFormData"
                 >
 
                     <template #1>
@@ -129,17 +130,6 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 import RegionAPI from "@/services/RegionAPI";
 
-interface IInputCampaignData
-    extends IAddBusinessOperationCampaign,
-        IEditBusinessOperationCampaign {
-    siteIdsText?: string;
-    tempSiteIds?: any;
-    stepType?: string;
-    startDateText?: string;
-    endDateText?: string;
-    sites?: any;
-}
-
 enum EPageStep {
     list = "list",
     add = "add",
@@ -171,8 +161,9 @@ export default class Heatmap extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputCampaignData: IInputCampaignData = {
+    inputFormData = {
         objectId: "",
+        brand: "isap",
         name: "",
         budget: null,
         description: "",
@@ -193,8 +184,9 @@ export default class Heatmap extends Vue {
     }
 
     clearInputData() {
-        this.inputCampaignData = {
+        this.inputFormData = {
             objectId: "",
+            brand: "isap",
             name: "",
             budget: null,
             description: "",
@@ -411,7 +403,6 @@ export default class Heatmap extends Vue {
              */
             groups: string;
 
-
             Actions?: any;
 
             }
@@ -427,7 +418,6 @@ export default class Heatmap extends Vue {
                  * @uiType - iv-form-label
                  */
                 name?: string;
-
 
 
                 /**
@@ -483,7 +473,7 @@ export default class Heatmap extends Vue {
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                account: ${toEnumInterface({
+                brand: ${toEnumInterface({
                     isap: "iSAP",
                     isap2: "iSAP2"
                 })}
@@ -498,11 +488,7 @@ export default class Heatmap extends Vue {
                 /**
                  * @uiLabel - ${this._("w_BOCampaign_EventName")}
                  * @uiPlaceHolder - ${this._("w_BOCampaign_EventName")}
-                 * @uiType - ${
-                     this.inputCampaignData.stepType === EPageStep.add
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                 * @uiType - iv-form-string
                 */
                 name: string;
 

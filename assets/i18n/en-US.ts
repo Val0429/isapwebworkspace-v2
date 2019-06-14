@@ -342,6 +342,7 @@ export default class LangObject {
     w_Site_Tag = 'Tag';
     w_Site_Devices = 'Devices';
     w_Site_DeviceGroup = 'Device Group';
+    w_Site_Model = 'Model';
     w_Site_Photo = 'Photo';
     w_Site_MapPhoto = 'Map Photo';
     w_Site_Longitude = 'Longitude';

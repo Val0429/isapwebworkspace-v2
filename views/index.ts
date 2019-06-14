@@ -113,7 +113,7 @@ $({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
 $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Region);
 
 // Video Source (c)
-$({ path: '/video_sources', name: 'VideoSources', icon: 'fa-bug', redirect: '/login' })();
+$({ path: '/video_sources', name: 'VideoSources', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-close' })(PeopleCounting);
 $({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close' })(Heatmap);
@@ -125,13 +125,13 @@ $({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redi
 $({ path: '/rules_actions', name: "_('w_Navigation_RulesActions')", icon: 'fa-question', redirect: '/login' })();
 
 // Business Operation
-$({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", icon: 'fa-close', redirect: '/business_operations/campaign_setting' })();
+$({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", icon: 'fa-bug', redirect: '/business_operations/campaign_setting' })();
 $({ path: '/business_operations/campaign_setting', name: "_('w_Navigation_BO_CampaignSetting')", icon: 'fa-check' })(CampaignSetting);
 $({ path: '/business_operations/sales_records', name: "_('w_Navigation_BO_SalesRecords')", icon: 'fa-close' })(SalesRecords);
 $({ path: '/business_operations/general_office_hour', name: "_('w_Navigation_BO_GeneralOfficeHour')", icon: 'fa-check' })(GeneralOfficeHour);
 
 // Setting
-$({ path: '/setting', name: "_('w_Navigation_Setting')", icon: 'fa-close', redirect: '/setting/mail_server' })();
+$({ path: '/setting', name: "_('w_Navigation_Setting')", icon: 'fa-bug', redirect: '/setting/mail_server' })();
 $({ path: '/setting/mail_server', name: "_('w_Navigation_Setting_MailServer')", icon: 'fa-check' })(MailServer);
 $({ path: '/setting/sms', name: "_('w_Navigation_Setting_SMS')", icon: 'fa-check' })(SMS);
 $({ path: '/setting/weather', name: "_('w_Navigation_Setting_Weather')", icon: 'fa-check' })(Weather);
@@ -141,7 +141,7 @@ $({ path: '/setting/license', name: "_('w_Navigation_Setting_License')", icon: '
 $({ path: '/setting/tag', name: "_('w_Navigation_Setting_Tag')", icon: 'fa-check' })(Tag);
 
 // Server
-$({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-close', redirect: '/server/cms_server' })();
+$({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-bug', redirect: '/server/cms_server' })();
 $({ path: '/server/cms_server', name: "_('w_Navigation_Server_CMSServer')", icon: 'fa-check' })(CMSServer);
 $({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-close', redirect: '/login' })();
 $({ path: '/server/frs_server', name: "_('w_Navigation_Server_FRSServer')", icon: 'fa-check' })(FRSServer);
