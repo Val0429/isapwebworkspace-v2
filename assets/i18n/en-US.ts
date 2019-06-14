@@ -24,4 +24,11 @@ export default class LangObject {
     w_UserEdit = "修改使用者";
 
     m_PasswordShouldBeSame = "兩個密碼必須相同";
+    day0="Monday";
+    day1="Tuesday";
+    day2="Wednesday";
+    day3="Thursday";
+    day4="Friday";
+    day5="Saturday";
+    day6="Sunday";
 }
