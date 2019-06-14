@@ -68,7 +68,24 @@
                 >
 
                     <template #1>
-                        <iv-form :interface="inf1()" />
+                        <iv-form :interface="inf1()">
+
+                            <template #serverId="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                >
+                                </iv-form-selection>
+                                <b-button
+                                    class="linkPadding"
+                                    variant="link"
+                                    @click="goToSetCMS"
+                                >
+                                    {{ _('w_VSHeatmap_SetCMS') }}
+                                </b-button>
+                            </template>
+
+                        </iv-form>
 
                     </template>
                     <template #1-title>{{_('w_VSHeatmap_SelectBrand')}}</template>
@@ -349,6 +366,10 @@ export default class Heatmap extends Vue {
         }
         result = result.substring(0, result.length - 2);
         return result;
+    }
+
+    goToSetCMS() {
+        this.$router.push("/server/cms_server");
     }
 
     ITableList() {
@@ -752,5 +773,10 @@ export default class Heatmap extends Vue {
 
 .selectMinuteWidth {
     width: 80px;
+}
+
+.linkPadding {
+    position: relative;
+    top: -20px;
 }
 </style>

@@ -645,6 +645,7 @@ export default class LangObject implements ILang {
     w_VSHeatmap_Name = 'Name';
     w_VSHeatmap_Brand = 'Brand';
     w_VSHeatmap_CMS = 'CMS';
+    w_VSHeatmap_SetCMS = 'Not yet set? Go to set CMS';
     w_VSHeatmap_NVR = 'NVR';
     w_VSHeatmap_ChannelInNVR = 'Channel In NVR';
     w_VSHeatmap_Site = 'Site';
