@@ -219,9 +219,15 @@ import {
 })
 export default class CoreUI extends Vue {
     logoutPath = "/user/base/logout";
-    async clickLogout() {
-        await this.$logout(this.logoutPath);
-        this.$router.push("/");
+    clickLogout() {
+        try {
+            this.$logout(this.logoutPath);
+        } catch (e) {
+            console.log("catch", e);
+        } finally {
+            console.log("finally");
+            this.$router.push("/");
+        }
     }
 }
 </script>

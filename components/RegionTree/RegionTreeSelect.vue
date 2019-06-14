@@ -93,6 +93,12 @@ export class RegionTreeSelect extends Vue {
     })
     selecteds: IRegionTreeSelected[];
 
+    @Prop({
+        type: Boolean,
+        default: true
+    })
+    mulit: boolean;
+
     @Watch("regionTreeItem.tree", { deep: true })
     private onRegionDatasChanged(newval: IRegionItem, oldval: IRegionItem) {
         this.watchToggleTreeEvent(newval);
@@ -151,6 +157,11 @@ export class RegionTreeSelect extends Vue {
         // 是否被 focus
         if (regionItem.event.clickBar && itemType == wantType) {
             regionItem.status.focusBar = !regionItem.status.focusBar;
+        }
+
+        // 單選判斷
+        if (!this.mulit && !regionItem.event.clickBar) {
+            regionItem.status.focusBar = false;
         }
 
         // 判斷完成就移除事件
