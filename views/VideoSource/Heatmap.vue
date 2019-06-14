@@ -76,7 +76,7 @@
                     <template #2>
                         <iv-form :interface="inf2()" />
                     </template>
-                    <template #2-title>{{_('w_VSHeatmap_FillInInformation')}}</template>
+                    <template #2-title>{{_('w_VSHeatmap_SelectRegion')}}</template>
 
                     <template #3>
                         <iv-form :interface="inf3()">
@@ -411,71 +411,149 @@ export default class Heatmap extends Vue {
 
     IViewForm() {
         return `
-            interface {
+             interface {
+                /**
+                * @uiLabel - ${this._("w_VSHeatmap_CustomId")}
+                * @uiPlaceHolder - ${this._("w_VSHeatmap_CustomId")}
+                * @uiType - iv-form-label
+                */
+                customId?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventName")}
-                 * @uiType - iv-form-label
-                 */
+                * @uiLabel - ${this._("w_VSHeatmap_Name")}
+                * @uiPlaceHolder - ${this._("w_VSHeatmap_Name")}
+                * @uiType - iv-form-label
+                */
                 name?: string;
 
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventType")}
-                 * @uiType - iv-form-label
-                 */
-                type?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_Budget")}
-                 * @uiType - iv-form-label
-                 */
-                budget?: number;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Description")}
-                 * @uiType - iv-form-label
-                 */
-                description?: string;
-
-
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_StartDate")}
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Brand")}
                 * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
                 */
-                startDateText?: any;
+                brand?: ${toEnumInterface({
+                    isap: "iSAP"
+                })}
 
-
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_CMS")}
                 * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
                 */
-                endDateText?: any;
+                serverId?: ${toEnumInterface({
+                    ygLbmtofz: "CMS1",
+                    ygLbmtofc: "CMS2"
+                })}
+
+                  /*
+                * @uiLabel - ${this._("w_VSHeatmap_NVR")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                nvrId?: ${toEnumInterface({
+                    1: "NVR1",
+                    2: "NVR2"
+                })}
+
+                    /*
+                * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                channelId?: ${toEnumInterface({
+                    1: "1 ch",
+                    2: "2 ch"
+                })}
+            
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Site")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                siteId?: ${toEnumInterface({
+                    site1: "site01",
+                    site2: "site02"
+                })}
+
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Area")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                areaId?: ${toEnumInterface({
+                    area1: "area01",
+                    area2: "area02"
+                })}
 
 
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiType - iv-form-label
-                 */
-                siteIdsText: string;
-
-            }
+                        /*
+                * @uiLabel - ${this._("w_VSHeatmap_DeviceGroup")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: true }
+                */
+                groupIds?: ${toEnumInterface({
+                    group1: "group01",
+                    group2: "group02"
+                })}
+        }
         `;
     }
 
     private inf1() {
         return `
             interface {
+
+                /**
+                * @uiLabel - ${this._("w_VSHeatmap_CustomId")}
+                * @uiPlaceHolder - ${this._("w_VSHeatmap_CustomId")}
+                * @uiType - iv-form-string
+                */
+                customId: string;
+
+                /**
+                * @uiLabel - ${this._("w_VSHeatmap_Name")}
+                * @uiPlaceHolder - ${this._("w_VSHeatmap_Name")}
+                * @uiType - iv-form-string
+                */
+                name: string;
+
                 /*
-                * @uiLabel - ${this._("w_Brand")}
+                * @uiLabel - ${this._("w_VSHeatmap_Brand")}
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
                 brand: ${toEnumInterface({
-                    isap: "iSAP",
-                    isap2: "iSAP2"
+                    isap: "iSAP"
+                })}
+
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_CMS")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: false }
+                */
+                serverId: ${toEnumInterface({
+                    ygLbmtofz: "CMS1",
+                    ygLbmtofc: "CMS2"
+                })}
+
+                  /*
+                * @uiLabel - ${this._("w_VSHeatmap_NVR")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: false }
+                */
+                nvrId: ${toEnumInterface({
+                    1: "NVR1",
+                    2: "NVR2"
+                })}
+
+                    /*
+                * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: false }
+                */
+                channelId: ${toEnumInterface({
+                    1: "1 ch",
+                    2: "2 ch"
                 })}
             }
         `;
@@ -485,59 +563,36 @@ export default class Heatmap extends Vue {
         return `
         interface {
 
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventName")}
-                 * @uiPlaceHolder - ${this._("w_BOCampaign_EventName")}
-                 * @uiType - iv-form-string
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Site")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: false }
                 */
-                name: string;
+                siteId: ${toEnumInterface({
+                    site1: "site01",
+                    site2: "site02"
+                })}
 
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventType")}
-                 * @uiPlaceHolder - ${this._("w_BOCampaign_EventType")}
-                 */
-                type: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_Budget")}
-                 * @uiPlaceHolder - ${this._("w_BOCampaign_Budget")}
-                 * @uiAttrs - { min: 0 }
-                 */
-                budget: number;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Description")}
-                 * @uiPlaceHolder - ${this._("w_Description")}
-                 * @uiType - iv-form-textarea
-                 */
-                description: string;
-
-
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_StartDate")}
-                * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
-                * @uiType - iv-form-date
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Area")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: false }
                 */
-                startDate: any;
+                areaId: ${toEnumInterface({
+                    area1: "area01",
+                    area2: "area02"
+                })}
 
 
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
-                * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
-                * @uiType - iv-form-date
+                        /*
+                * @uiLabel - ${this._("w_VSHeatmap_DeviceGroup")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: true }
                 */
-                endDate: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                selectTree?: any;
+                groupIds: ${toEnumInterface({
+                    group1: "group01",
+                    group2: "group02"
+                })}
 
             }
         `;
@@ -553,22 +608,89 @@ export default class Heatmap extends Vue {
     private inf4() {
         return `
         interface {
-            selection: ${toEnumInterface(
-                {
-                    "0": "Admin",
-                    "1": "User"
-                },
-                false
-            )};
-            multiple: ${toEnumInterface(
-                {
-                    "0": "VIP",
-                    "1": "Guard",
-                    "2": "Blacklist",
-                    "3": "Visitor"
-                },
-                true
-            )};
+           /**
+                * @uiLabel - ${this._("w_VSHeatmap_CustomId")}
+                * @uiPlaceHolder - ${this._("w_VSHeatmap_CustomId")}
+                * @uiType - iv-form-label
+                */
+                customId?: string;
+
+                /**
+                * @uiLabel - ${this._("w_VSHeatmap_Name")}
+                * @uiPlaceHolder - ${this._("w_VSHeatmap_Name")}
+                * @uiType - iv-form-label
+                */
+                name?: string;
+
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Brand")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                brand?: ${toEnumInterface({
+                    isap: "iSAP"
+                })}
+
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_CMS")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                serverId?: ${toEnumInterface({
+                    ygLbmtofz: "CMS1",
+                    ygLbmtofc: "CMS2"
+                })}
+
+                  /*
+                * @uiLabel - ${this._("w_VSHeatmap_NVR")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                nvrId?: ${toEnumInterface({
+                    1: "NVR1",
+                    2: "NVR2"
+                })}
+
+                    /*
+                * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                channelId?: ${toEnumInterface({
+                    1: "1 ch",
+                    2: "2 ch"
+                })}
+            
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Site")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                siteId?: ${toEnumInterface({
+                    site1: "site01",
+                    site2: "site02"
+                })}
+
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Area")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: false }
+                */
+                areaId?: ${toEnumInterface({
+                    area1: "area01",
+                    area2: "area02"
+                })}
+
+
+                 /*
+                * @uiLabel - ${this._("w_VSHeatmap_DeviceGroup")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: true }
+                */
+                groupIds?: ${toEnumInterface({
+                    group1: "group01",
+                    group2: "group02"
+                })}
         }
         `;
     }

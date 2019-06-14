@@ -111,7 +111,7 @@ export default class LangObject {
     w_Direction = 'Direction';
     w_ServerId = 'Server Id';
     w_SourceId = 'Source Id';
-    w_SourceIdAndLocation  = 'Source Id and Location ';
+    w_SourceIdAndLocation = 'Source Id and Location ';
     w_Location = 'Location';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
@@ -612,7 +612,16 @@ export default class LangObject {
     w_VSHeatmap_Edit = 'Heatmap Device Edit';
     w_VSHeatmap_View = 'Heatmap Device View';
     w_VSHeatmap_SelectBrand = 'Select Brand';
-    w_VSHeatmap_FillInInformation = 'Fill In Information';
+    w_VSHeatmap_SelectRegion = 'Select Region';
     w_VSHeatmap_DrawROI = 'Draw ROI';
     w_VSHeatmap_CheckAndOverlook = 'Check and Overlook';
+    w_VSHeatmap_CustomId = 'Id';
+    w_VSHeatmap_Name = 'Name';
+    w_VSHeatmap_Brand = 'Brand';
+    w_VSHeatmap_CMS = 'CMS';
+    w_VSHeatmap_NVR = 'NVR';
+    w_VSHeatmap_ChannelInNVR = 'Channel In NVR';
+    w_VSHeatmap_Site = 'Site';
+    w_VSHeatmap_Area = 'Area';
+    w_VSHeatmap_DeviceGroup = 'Device Group';
 }
