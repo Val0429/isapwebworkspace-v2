@@ -702,7 +702,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -753,7 +753,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -804,7 +804,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -1012,7 +1012,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -1122,7 +1122,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
                         return false;
                     }
                     console.log(e);
