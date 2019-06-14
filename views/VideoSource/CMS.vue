@@ -378,7 +378,7 @@ enum ECameraMode {
 @Component({
     components: {}
 })
-export default class PeopleCounting extends Vue {
+export default class CMS extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
