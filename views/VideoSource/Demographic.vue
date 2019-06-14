@@ -701,7 +701,7 @@ export default class Demographic extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -752,7 +752,7 @@ export default class Demographic extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -803,7 +803,7 @@ export default class Demographic extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
                     console.log(e);
