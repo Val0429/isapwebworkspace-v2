@@ -124,10 +124,11 @@
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
+            v-on:click-back="pageToShowResult"
+            :multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
             :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
         >
         </region-tree-select>
 

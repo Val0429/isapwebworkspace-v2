@@ -128,10 +128,11 @@
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
+            v-on:click-back="pageToShowResult"
+            :multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
             :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
         >
         </region-tree-select>
 
@@ -321,7 +322,6 @@ export default class UserGroup extends Vue {
                 }
             }
         }
-
     }
 
     async pageToAdd(type: string) {
@@ -330,7 +330,6 @@ export default class UserGroup extends Vue {
         this.clearInputData();
         this.selecteds = [];
         this.inputUserGroupData.type = type;
-
     }
 
     async pageToEdit(type: string) {
@@ -340,7 +339,6 @@ export default class UserGroup extends Vue {
         this.selecteds = [];
 
         this.inputUserGroupData.type = type;
-
 
         this.inputUserGroupData.siteIds = JSON.parse(
             JSON.stringify(
@@ -567,7 +565,6 @@ export default class UserGroup extends Vue {
         result = result.substring(0, result.length - 2);
         return result;
     }
-
 
     ITableList() {
         return `

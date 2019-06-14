@@ -93,11 +93,17 @@ export class RegionTreeSelect extends Vue {
     })
     selecteds: IRegionTreeSelected[];
 
+    clickItem: IRegionTreeSelected = {
+        objectId: "",
+        type: ERegionType.none,
+        name: ""
+    };
+
     @Prop({
         type: Boolean,
         default: true
     })
-    mulit: boolean;
+    multiple: boolean;
 
     @Watch("regionTreeItem.tree", { deep: true })
     private onRegionDatasChanged(newval: IRegionItem, oldval: IRegionItem) {
@@ -154,22 +160,36 @@ export class RegionTreeSelect extends Vue {
             regionItem.type
         );
 
-        // 是否被 focus
+        // 是否被 click
         if (regionItem.event.clickBar && itemType == wantType) {
             regionItem.status.focusBar = !regionItem.status.focusBar;
+
+            if (regionItem.status.focusBar) {
+                // 被選項寫入變數做判斷用
+                this.clickItem = {
+                    objectId: regionItem.objectId,
+                    type: regionItem.type,
+                    name: regionItem.name
+                };
+            }
         }
 
-        // 單選判斷
-        if (!this.mulit && !regionItem.event.clickBar) {
+        // 單選移除其他選項
+        if (
+            !this.multiple &&
+            !(
+                regionItem.objectId == this.clickItem.objectId &&
+                regionItem.type == this.clickItem.type
+            )
+        ) {
             regionItem.status.focusBar = false;
         }
-
-        // 判斷完成就移除事件
-        regionItem.event.clickBar = false;
 
         // 是否加入選單或移除
         if (regionItem.status.focusBar) {
             let inSelect = false;
+
+            // 加入回傳選單內容
             for (let i in this.selecteds) {
                 let selectItem = this.selecteds[i];
                 if (
@@ -245,6 +265,9 @@ export class RegionTreeSelect extends Vue {
         for (let tempRegionItem of regionItem.children) {
             this.watchToggleTreeEvent(tempRegionItem);
         }
+
+        // 判斷完成就移除事件
+        regionItem.event.clickBar = false;
     }
 
     focusTree(regionItem: IRegionItem) {
@@ -263,6 +286,14 @@ export class RegionTreeSelect extends Vue {
                 continue;
             }
 
+            if (!this.multiple) {
+                this.clickItem = {
+                    objectId: selectItem.objectId,
+                    type: selectItem.type,
+                    name: selectItem.name
+                };
+            }
+
             if (
                 regionItem.objectId == selectItem.objectId &&
                 itemType == selectType
@@ -270,9 +301,6 @@ export class RegionTreeSelect extends Vue {
                 regionItem.status.focusBar = true;
             }
         }
-
-        // 選單不出現 toggle 按鈕
-        regionItem.status.showToggle = false;
 
         // 不顯示的
         if (itemType != wantType) {
@@ -287,6 +315,8 @@ export class RegionTreeSelect extends Vue {
 
     focusTreeClear(regionItem: IRegionItem) {
         regionItem.status.focusBar = false;
+        // 選單不出現 toggle 按鈕
+        regionItem.status.showToggle = false;
         for (let tempRegionItem of regionItem.children) {
             this.focusTreeClear(tempRegionItem);
         }

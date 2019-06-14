@@ -126,19 +126,21 @@
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseRegionTree"
+            v-on:click-back="pageToShowResultRegionTree"
+            :multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectTypeRegion"
             :selecteds="selectedsRegions"
-            v-on:click-back="pageToShowResultRegionTree"
         >
         </region-tree-select>
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseSiteTree"
+            v-on:click-back="pageToShowResultSiteTree"
+            :multiple="true"
             :regionTreeItem="siteTreeItem"
             :selectType="selectTypeSite"
             :selecteds="selectedsSites"
-            v-on:click-back="pageToShowResultSiteTree"
         >
         </region-tree-select>
 

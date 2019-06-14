@@ -184,9 +184,10 @@
 
         </iv-auto-card>
 
+        <!-- region tree select -->
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
-            multi="false"
+            :multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
             :selecteds="selecteds"

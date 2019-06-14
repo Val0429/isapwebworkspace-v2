@@ -261,10 +261,11 @@
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
+            v-on:click-back="pageToShowResult"
+            :multiple="false"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
             :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
         >
         </region-tree-select>
 
@@ -492,11 +493,10 @@ export default class PeopleCounting extends Vue {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
-        console.log('data - ', data)
+        console.log("data - ", data);
     }
 
     getInputData() {
-
         this.clearInputData();
         for (const param of this.selectedDetail) {
             this.inputPeopleCountingData = {
@@ -514,7 +514,10 @@ export default class PeopleCounting extends Vue {
                 protocol: param.config["protocol"],
                 ip: param.config["ip"],
                 port: param.config["port"],
-                serverId: param.config.server.objectId === undefined ? '' : param.config.server.objectId ,
+                serverId:
+                    param.config.server.objectId === undefined
+                        ? ""
+                        : param.config.server.objectId,
                 sourceid: param.config.sourceid,
                 location: param.config.location,
                 groupIdsText: this.idsToText(param.groups),
@@ -653,7 +656,10 @@ export default class PeopleCounting extends Vue {
                 this.addStep = EAddStep.isapFrsManager;
                 break;
         }
-        console.log('this.inputPeopleCountingData.brand - ', this.inputPeopleCountingData.brand)
+        console.log(
+            "this.inputPeopleCountingData.brand - ",
+            this.inputPeopleCountingData.brand
+        );
     }
 
     pageToView() {
@@ -877,7 +883,7 @@ export default class PeopleCounting extends Vue {
                 {
                     customId: data.customId,
                     name: data.name,
-                    brand: (this.inputPeopleCountingData.brand).split("F")[0],
+                    brand: this.inputPeopleCountingData.brand.split("F")[0],
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
