@@ -369,7 +369,13 @@ export default class Heatmap extends Vue {
     }
 
     goToSetCMS() {
-        this.$router.push("/server/cms_server");
+        Dialog.confirm(
+            this._("w_VSHeatmap_PageToCMSAlter"),
+            this._("w_DeleteConfirm"),
+            () => {
+                this.$router.push("/server/cms_server");
+            }
+        );
     }
 
     ITableList() {

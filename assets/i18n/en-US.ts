@@ -651,4 +651,5 @@ export default class LangObject {
     w_VSHeatmap_Site = 'Site';
     w_VSHeatmap_Area = 'Area';
     w_VSHeatmap_DeviceGroup = 'Device Group';
+    w_VSHeatmap_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
 }
