@@ -251,6 +251,28 @@ export default class License extends Vue {
 
     mounted() {}
 
+    async initMacSelectItem() {
+        await this.$server
+            .R("/server/network")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 macSelectItem 的 key 的方式
+                        this.macSelectItem[returnValue.mac] = `${
+                            returnValue.mac
+                            }, ${returnValue.ifname}`;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
     clearInputData() {
         this.licenseInputDataMac = {
             key: "",
@@ -274,9 +296,9 @@ export default class License extends Vue {
     }
 
     async pageToAddByMac() {
-        this.addStep = EAddStep.macLicense;
         this.clearInputData();
         await this.initMacSelectItem();
+        this.addStep = EAddStep.macLicense;
     }
 
     pageToAddByOffline() {
@@ -299,28 +321,6 @@ export default class License extends Vue {
             this.licenseInputDataOffline.data = e.target.result;
         };
         reader.readAsText(file);
-    }
-
-    async initMacSelectItem() {
-        await this.$server
-            .R("/server/network")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 macSelectItem 的 key 的方式
-                        this.macSelectItem[returnValue.mac] = `${
-                            returnValue.mac
-                        }, ${returnValue.ifname}`;
-                    }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
     }
 
     async saveAddLicenseMac(data) {

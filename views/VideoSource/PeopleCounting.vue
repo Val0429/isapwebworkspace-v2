@@ -132,7 +132,7 @@
 
         <!-- add and edit by Hanwha -->
         <iv-auto-card
-            v-show="addStep === eAddStep.hanwha"
+            v-show="(addStep === eAddStep.hanwha && pageStep === ePageStep.add) || (addStep === eAddStep.hanwha && pageStep === ePageStep.edit)"
             :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_EdithanwhaUse')"
         >
             <template #toolbox>
@@ -150,8 +150,20 @@
             <iv-form
                 :interface="IAddAndEditFromHanwha()"
                 :value="inputPeopleCountingData"
+                @update:siteId="selectAreaId($event)"
+                @update:areaId="selectGroupDeviceId($event)"
                 @submit="saveAddOrEditHanwha($event)"
             >
+                <template #selectTree="{ $atrs, $listeners }">
+
+                    <div class="m-3">
+
+                        <b-button @click="pageToChooseTree">
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
+                    </div>
+
+                </template>
 
             </iv-form>
 
@@ -185,7 +197,7 @@
 
         <!-- view by Hanwha -->
         <iv-card
-            v-show="pageStep === ePageStep.view"
+            v-show="pageStep === ePageStep.view && addStep === eAddStep.hanwha"
             :visible="true"
             :label="_('w_VSPeopleCounting_View')"
         >
@@ -213,7 +225,7 @@
 
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
-            v-show="addStep === eAddStep.isapFrs || addStep === eAddStep.isapFrsManager"
+            v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "
             :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_AddisapUseFRS') :  _('w_VSPeopleCounting_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_EditisapUseFRS') :  _('w_VSPeopleCounting_EditisapUseFRSManger')"
         >
             <template #toolbox>
@@ -234,6 +246,16 @@
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @submit="saveAddOrEditiSap($event)"
             >
+                <template #selectTree="{ $atrs, $listeners }">
+
+                    <div class="m-3">
+
+                        <b-button @click="pageToChooseTree">
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
+                    </div>
+
+                </template>
 
             </iv-form>
 
@@ -265,33 +287,33 @@
 
         </iv-auto-card>
 
-        <!-- view -->
-        <!--        <iv-card-->
-        <!--            v-show="pageStep === ePageStep.view"-->
-        <!--            :visible="true"-->
-        <!--            :label="_('w_BOCampaign_View')"-->
-        <!--        >-->
-        <!--            <template #toolbox>-->
-        <!--                <iv-toolbox-back @click="pageToList()" />-->
-        <!--            </template>-->
+        <!-- view by iSap FRS and FRS Manager -->
+        <iv-card
+            v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"
+            :visible="true"
+            :label="_('w_VSPeopleCounting_View')"
+        >
+            <template #toolbox>
+                <iv-toolbox-back @click="pageToList()" />
+            </template>
 
-        <!--            <iv-form-->
-        <!--                :interface="IViewFromHanwha()"-->
-        <!--                :value="inputPeopleCountingData"-->
-        <!--            >-->
+            <iv-form
+                :interface="IViewFromiSap()"
+                :value="inputPeopleCountingData"
+            >
 
-        <!--            </iv-form>-->
+            </iv-form>
 
-        <!--            <template #footer>-->
-        <!--                <b-button-->
-        <!--                    variant="dark"-->
-        <!--                    size="lg"-->
-        <!--                    @click="pageToList()"-->
-        <!--                >{{ _('w_Back') }}-->
-        <!--                </b-button>-->
-        <!--            </template>-->
+            <template #footer>
+                <b-button
+                    variant="dark"
+                    size="lg"
+                    @click="pageToList()"
+                >{{ _('w_Back') }}
+                </b-button>
+            </template>
 
-        <!--        </iv-card>-->
+        </iv-card>
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
@@ -564,29 +586,50 @@ export default class PeopleCounting extends Vue {
             case "name":
                 this.inputPeopleCountingData.name = data.value;
                 break;
-            case "type":
-                this.inputPeopleCountingData.type = data.value;
+            case "customId":
+                this.inputPeopleCountingData.customId = data.value;
                 break;
-            case "budget":
-                this.inputPeopleCountingData.budget = data.value;
+            case "areaId":
+                this.inputPeopleCountingData.areaId = data.value;
                 break;
-            case "description":
-                this.inputPeopleCountingData.description = data.value;
+            case "groupIds":
+                this.inputPeopleCountingData.groupIds = data.value;
                 break;
-            case "startDate":
-                this.inputPeopleCountingData.startDate = data.value;
+            case "model":
+                this.inputPeopleCountingData.model = data.value;
                 break;
-            case "endDate":
-                this.inputPeopleCountingData.endDate = data.value;
+            case "protocol":
+                this.inputPeopleCountingData.protocol = data.value;
                 break;
-            case "siteIds":
-                this.inputPeopleCountingData.siteIds = data.value;
+            case "ip":
+                this.inputPeopleCountingData.ip = data.value;
+                break;
+            case "port":
+                this.inputPeopleCountingData.port = data.value;
+                break;
+            case "account":
+                this.inputPeopleCountingData.account = data.value;
+                break;
+            case "password":
+                this.inputPeopleCountingData.password = data.value;
+                break;
+            case "serverId":
+                this.inputPeopleCountingData.serverId = data.value;
+                break;
+            case "sourceid":
+                this.inputPeopleCountingData.sourceid = data.value;
+                break;
+            case "direction":
+                this.inputPeopleCountingData.direction = data.value;
+                break;
+            case "siteId":
+                this.inputPeopleCountingData.siteId = data.value;
                 break;
         }
 
         this.selecteds = [];
 
-        for (const id of this.inputPeopleCountingData.siteIds) {
+        for (const id of this.inputPeopleCountingData.siteId) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -651,6 +694,108 @@ export default class PeopleCounting extends Vue {
         console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
+    async selectAreaId(data) {
+        if (data !== undefined) {
+            const readParam: {
+                objectId: string;
+            } = {
+                objectId: data
+            };
+
+            await this.$server
+                .C("/partner/frs/device", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            for (const returnValue of response) {
+                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
+                                this.$set(
+                                    this.sourceIdSelectItem,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`
+                                );
+                            }
+
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
+                                Dialog.error(this._("w_ErrorReadData"));
+                                return false;
+                            }
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
+    }
+
+    async selectGroupDeviceId(data) {
+        if (data !== undefined) {
+            const readParam: {
+                objectId: string;
+            } = {
+                objectId: data
+            };
+
+            await this.$server
+                .C("/partner/frs/device", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            for (const returnValue of response) {
+                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
+                                this.$set(
+                                    this.sourceIdSelectItem,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`
+                                );
+                            }
+
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
+                                Dialog.error(this._("w_ErrorReadData"));
+                                return false;
+                            }
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
+    }
+
     async pageToAdd(stepType: string) {
         this.clearInputData();
         this.pageStep = EPageStep.add;
@@ -664,8 +809,8 @@ export default class PeopleCounting extends Vue {
         this.pageStep = EPageStep.edit;
         this.getInputData();
         await this.initSelectItemFRSServer();
-        await this.initSelectItemDeviceGroup();
-        await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
+        // await this.initSelectItemArea();
         this.inputPeopleCountingData.stepType = stepType;
         this.inputPeopleCountingData.groupIds = JSON.parse(
             JSON.stringify(
@@ -693,6 +838,13 @@ export default class PeopleCounting extends Vue {
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
+        if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
+            this.addStep = EAddStep.hanwha;
+        }
+
+        if (this.inputPeopleCountingData.serverId !== '') {
+            this.addStep = EAddStep.isapFrs;
+        }
     }
 
     pageToList() {
@@ -703,8 +855,9 @@ export default class PeopleCounting extends Vue {
 
     async pageToAddByHanwha(brand: string) {
         this.clearInputData();
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemSite();
+        // await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.hanwha;
         this.inputPeopleCountingData.stepType = EPageStep.add;
         this.inputPeopleCountingData.brand = brand;
@@ -713,8 +866,9 @@ export default class PeopleCounting extends Vue {
     async pageToAddByiSapFRS(brand: string) {
         this.clearInputData();
         await this.initSelectItemFRSServer();
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemSite();
+        // await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.isapFrs;
         this.inputPeopleCountingData.brand = brand;
         this.inputPeopleCountingData.stepType = EPageStep.add;
@@ -723,11 +877,13 @@ export default class PeopleCounting extends Vue {
 
     async pageToAddByiSapFRSManager(brand: string) {
         this.clearInputData();
+        await this.initSelectItemSite();
+        // await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.isapFrsManager;
         this.inputPeopleCountingData.brand = brand;
         this.inputPeopleCountingData.stepType = EPageStep.add;
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
+
     }
 
     pageStepBackward() {
@@ -740,7 +896,7 @@ export default class PeopleCounting extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
-        for (const id of this.inputPeopleCountingData.siteIds) {
+        for (const id of this.inputPeopleCountingData.siteId) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -757,24 +913,24 @@ export default class PeopleCounting extends Vue {
     pageToShowResult() {
         if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
-            // siteIds clear
-            this.inputPeopleCountingData.siteIds = [];
+            // siteId clear
+            this.inputPeopleCountingData.siteId = [];
 
-            // from selecteds push siteIds
+            // from selecteds push siteId
             for (const item of this.selecteds) {
-                this.inputPeopleCountingData.siteIds.push(item.objectId);
+                this.inputPeopleCountingData.siteId.push(item.objectId);
             }
         }
 
         if (this.inputPeopleCountingData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
-            // siteIds clear
-            this.inputPeopleCountingData.siteIds = [];
+            // siteId clear
+            this.inputPeopleCountingData.siteId = [];
 
-            // from selecteds push siteIds
+            // from selecteds push siteId
             for (const item of this.selecteds) {
-                this.inputPeopleCountingData.siteIds.push(item.objectId);
+                this.inputPeopleCountingData.siteId.push(item.objectId);
             }
         }
     }
@@ -1212,6 +1368,14 @@ export default class PeopleCounting extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
+
+                selectTree?: any;
+
+
+                /**
                  * @uiLabel - ${this._("w_Area")}
                  */
                 areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
@@ -1365,6 +1529,14 @@ export default class PeopleCounting extends Vue {
                     in: this._("w_In"),
                     out: this._("w_Out")
                 })};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
+
+                selectTree?: any;
 
 
                 /**
