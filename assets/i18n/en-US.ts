@@ -588,9 +588,15 @@ export default class LangObject {
 
     w_VSPeopleCounting_Addhanwha = 'Use Hanwha Server';
     w_VSPeopleCounting_AddhanwhaUse = 'Add People Counting Device Use Hanwha Server';
+    w_VSPeopleCounting_EdithanwhaUse = 'Edit People Counting Device Use Hanwha Server';
+
     w_VSPeopleCounting_isap = 'Use iSap Server';
-    w_VSPeopleCounting_isapUseFRSManger = 'Add People Counting Device Use iSap FRS Manger Server';
-    w_VSPeopleCounting_isapUseFRS = 'Add People Counting Device Use iSap FRS Server';
+    w_VSPeopleCounting_AddisapUseFRS = 'Add People Counting Device Use iSap FRS Server';
+    w_VSPeopleCounting_EditisapUseFRS = 'Edit People Counting Device Use iSap FRS Server';
+
+    w_VSPeopleCounting_AddisapUseFRSManger = 'Add People Counting Device Use iSap FRS Manger Server';
+    w_VSPeopleCounting_EditisapUseFRSManger = 'Edit People Counting Device Use iSap FRS Manger Server';
+
     w_VSPeopleCounting_SetFRS = 'Not yet set? Go to set FRS Server';
     w_VSPeopleCounting_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
 

@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn">
         <!--Site List-->
-        <div v-if="pageStep === ePageStep.siteList">
+        <div v-show="pageStep === ePageStep.siteList">
             <iv-card :label="_('w_Site_SiteList')">
 
                 <template #toolbox>
@@ -240,7 +240,7 @@
         </div>
 
         <!--Area List-->
-        <div v-if="pageStep === ePageStep.areaList">
+        <div v-show="pageStep === ePageStep.areaList">
             <iv-card :label=" _('w_Site_AreaList') ">
 
                 <template #toolbox>
@@ -707,7 +707,7 @@ export default class Site extends Vue {
     //site datas
     isSelectSite = false;
     sites = {};
-    site = {};
+    site: any = {};
     gooleMapSrc = "";
 
     //area datas
@@ -715,14 +715,14 @@ export default class Site extends Vue {
     areaPhotoSrc = "";
     areaMapSrc = "";
     areas = {};
-    area = {};
+    area: any = {};
     areaParams = {};
     areaAll = [];
 
     //device Group datas
     isSelectDeviceGroup = false;
     deviceGroups = {};
-    deviceGroup = {};
+    deviceGroup: any = {};
     deviceGroupParams = {};
     deviceGroupAll = [];
 
@@ -765,8 +765,8 @@ export default class Site extends Vue {
             siteId: string;
             areaId: string;
         } = {
-            siteId: this.site["objectId"],
-            areaId: this.area["objectId"]
+            siteId: this.site.objectId,
+            areaId: this.area.objectId
         };
 
         await this.$server
@@ -781,32 +781,39 @@ export default class Site extends Vue {
     }
 
     async getDeviceData() {
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
-        await this.$server
-            .R("/device", body)
-            .then((response: any) => {
-                this.devices = [];
-                for (let item of response.results) {
-                    if (item.area.objectId == this.area["objectId"]) {
-                        this.devices.push(item);
-                    }
+        if (this.area) {
+            let body: {
+                paging: {
+                    page: number;
+                    pageSize: number;
+                };
+            } = {
+                paging: {
+                    page: 1,
+                    pageSize: 999
                 }
-                this.initImageMap();
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
+            };
+
+            await this.$server
+                .R("/device", body)
+                .then((response: any) => {
+                    this.devices = [];
+                    for (let item of response.results) {
+                        if (
+                            item.area &&
+                            item.area.objectId == this.area.objectId
+                        ) {
+                            this.devices.push(item);
+                        }
+                    }
+                    this.initImageMap();
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+        } else {
+            this.initImageMap();
+        }
     }
 
     initImageMap() {
@@ -834,6 +841,7 @@ export default class Site extends Vue {
         this.imageMap.draw.viewerInDevice = true;
 
         // image box
+        console.log("imgate", this.areaMapSrc);
         this.imageMap.imageBox = new ImageBoxItem(this.areaMapSrc, {
             width: 1170,
             height: 665
@@ -1029,12 +1037,13 @@ export default class Site extends Vue {
     pageToAreaList() {
         this.clearDeviceData();
         this.pageStep = EPageStep.areaList;
+        (this.$refs.areaTable as any).reload();
     }
 
     pageToAreaView() {
         console.log("pageToAreaView", this.area);
-        this.areaPhotoSrc = this.serverUrl + this.area["imageSrc"];
-        this.areaMapSrc = this.serverUrl + this.area["mapSrc"];
+        this.areaPhotoSrc = this.serverUrl + this.area.imageSrc;
+        this.areaMapSrc = this.serverUrl + this.area.mapSrc;
         this.initMap();
         this.imageMap.setupMode = ESetupMode.preview;
         this.pageStep = EPageStep.areaView;
@@ -1049,7 +1058,7 @@ export default class Site extends Vue {
     }
 
     pageToAreaEdit() {
-        this.areaMapSrc = this.serverUrl + this.area["mapSrc"];
+        this.areaMapSrc = this.serverUrl + this.area.mapSrc;
         this.initMap();
         this.pageStep = EPageStep.areaEdit;
     }
@@ -1063,7 +1072,7 @@ export default class Site extends Vue {
 
     pageToDeviceGroupView() {
         console.log("pageToDeviceGroupView", this.site);
-        this.newImgSrc = this.serverUrl + this.site["imageSrc"];
+        this.newImgSrc = this.serverUrl + this.site.imageSrc;
         this.pageStep = EPageStep.deviceGroupView;
     }
 
@@ -1137,10 +1146,11 @@ export default class Site extends Vue {
         this.clearAreaData();
         this.clearDeviceData();
         this.pageStep = EPageStep.siteList;
+        (this.$refs.siteTable as any).reload();
     }
 
     pageToSiteView() {
-        this.newImgSrc = this.serverUrl + this.site["imageSrc"];
+        this.newImgSrc = this.serverUrl + this.site.imageSrc;
         this.googleMapMapping();
         this.pageStep = EPageStep.siteView;
     }
@@ -1151,7 +1161,7 @@ export default class Site extends Vue {
     }
 
     pageToSiteEdit() {
-        this.newImgSrc = this.serverUrl + this.site["imageSrc"];
+        this.newImgSrc = this.serverUrl + this.site.imageSrc;
         this.pageStep = EPageStep.siteEdit;
     }
 
@@ -1230,7 +1240,7 @@ export default class Site extends Vue {
         let body: {
             siteId: string;
         } = {
-            siteId: this.site["objectId"]
+            siteId: this.site.objectId
         };
 
         await this.$server
@@ -1304,11 +1314,11 @@ export default class Site extends Vue {
         await this.$server
             .R("/office-hour", body)
             .then((response: any) => {
-                this.site["officeHour"] = [];
+                this.site.officeHour = [];
                 for (let item of response.results) {
                     for (let subItem of item.sites) {
-                        if (subItem.objectId == this.site["objectId"]) {
-                            this.site["officeHour"] = item.objectId;
+                        if (subItem.objectId == this.site.objectId) {
+                            this.site.officeHour = item.objectId;
                             break;
                         }
                     }
@@ -1349,11 +1359,11 @@ export default class Site extends Vue {
         await this.$server
             .R("/tag", body)
             .then((response: any) => {
-                this.site["tag"] = [];
+                this.site.tag = [];
                 for (let item of response.results) {
                     for (let subItem of item.sites) {
-                        if (subItem.objectId == this.site["objectId"]) {
-                            this.site["tag"].push(item.objectId);
+                        if (subItem.objectId == this.site.objectId) {
+                            this.site.tag.push(item.objectId);
                             break;
                         }
                     }
@@ -1373,7 +1383,7 @@ export default class Site extends Vue {
                     // regionId: "uCsinPqUj1",
                     name: data.name,
                     customId: data.customId,
-                    managerId: data.manager,
+                    managerId: data.managerId,
                     address: data.address,
                     phone: data.phone,
                     establishment: data.establishment,
@@ -1406,7 +1416,7 @@ export default class Site extends Vue {
                     objectId: data.objectId,
                     name: data.name,
                     customId: data.customId,
-                    managerId: data.manager,
+                    managerId: data.managerId,
                     address: data.address,
                     phone: data.phone,
                     establishment: data.establishment,
@@ -1497,7 +1507,7 @@ export default class Site extends Vue {
         if (this.pageStep == EPageStep.areaAdd) {
             const datas: IAreaAddData[] = [
                 {
-                    siteId: this.site["objectId"],
+                    siteId: this.site.objectId,
                     name: data.name,
                     imageBase64: this.areaPhotoSrc,
                     mapBase64: this.imageMap.imageBox.src
@@ -1574,7 +1584,7 @@ export default class Site extends Vue {
             var body: {
                 objectId: string;
             } = {
-                objectId: this.site["objectId"]
+                objectId: this.site.objectId
             };
             this.$server
                 .D("/location/site", body)
@@ -1595,7 +1605,7 @@ export default class Site extends Vue {
             var body: {
                 objectId: string;
             } = {
-                objectId: this.area["objectId"]
+                objectId: this.area.objectId
             };
             this.$server
                 .D("/location/area", body)
@@ -1612,12 +1622,14 @@ export default class Site extends Vue {
     }
 
     async saveDeviceGroup(data) {
-        console.log("saveDeviceGroup", data);
+        console.log("saveDeviceGroup", data, this.area.objectId);
 
         if (this.pageStep == EPageStep.deviceGroupAdd) {
             const datas: IDeviceGroupAddData[] = [
                 {
-                    areaId: this.area["objectId"],
+                    areaId: this.area.objectId
+                        ? this.area.objectId
+                        : data.areaName,
                     name: data.name,
                     mode: data.mode
                 }
@@ -1671,7 +1683,7 @@ export default class Site extends Vue {
             var body: {
                 objectId: string;
             } = {
-                objectId: this.site["objectId"]
+                objectId: this.site.objectId
             };
             this.$server
                 .D("/location/device", body)
@@ -1691,17 +1703,17 @@ export default class Site extends Vue {
         console.log("googleMapMapping", this.site);
         if (this.site) {
             if (
-                parseFloat(this.site["longitude"]) > 180 ||
-                parseFloat(this.site["longitude"]) < -180
+                parseFloat(this.site.longitude) > 180 ||
+                parseFloat(this.site.longitude) < -180
             ) {
-                console.log("ING", parseFloat(this.site["longitude"]));
+                console.log("ING", parseFloat(this.site.longitude));
                 Dialog.error(this._("w_Site_Longitude_Range"));
                 return;
             }
 
             if (
-                parseFloat(this.site["latitude"]) > 90 ||
-                parseFloat(this.site["latitude"]) < -90
+                parseFloat(this.site.latitude) > 90 ||
+                parseFloat(this.site.latitude) < -90
             ) {
                 Dialog.error(this._("w_Site_Latitude_Range"));
                 return;
@@ -1711,9 +1723,9 @@ export default class Site extends Vue {
                 "&z=" +
                 this.googleMap.zSize +
                 "&q=" +
-                this.site["latitude"] +
+                this.site.latitude +
                 "," +
-                this.site["longitude"];
+                this.site.longitude;
         }
     }
 
@@ -2036,7 +2048,7 @@ export default class Site extends Vue {
                 * @uiLabel - ${this._("w_Site_Tag")}
                 * @uiPlaceHolder - ${this._("w_Site_Tag")}
                 */
-                tag: any;
+                tag?: any;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Photo")}
