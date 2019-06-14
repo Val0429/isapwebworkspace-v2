@@ -186,6 +186,7 @@
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
+            multi="false"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
             :selecteds="selecteds"
@@ -401,7 +402,6 @@ export default class User extends Vue {
     }
 
     async initSelectItemUserGroup() {
-
         await this.$server
             .R("/user/group/all")
             .then((response: any) => {
@@ -501,7 +501,6 @@ export default class User extends Vue {
         await this.initSelectItemUserGroup();
         this.selecteds = [];
         this.inputUserData.type = type;
-
     }
 
     async pageToEdit(type: string) {
@@ -622,7 +621,7 @@ export default class User extends Vue {
                 password: data.password,
                 employeeId: data.employeeId,
                 siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                groupIds: data.groupIds !== undefined ? data.groupIds : []
             }
         ];
 
@@ -772,7 +771,6 @@ export default class User extends Vue {
         result = result.substring(0, result.length - 2);
         return result;
     }
-
 
     cardSearch(search: string) {
         // TODO: finished search

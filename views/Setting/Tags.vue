@@ -32,7 +32,6 @@
             >
 
                 <template #Actions="{$attrs, $listeners}">
-
                     <iv-toolbox-more :disabled="isSelected.length !== 1">
                         <iv-toolbox-view @click="pageToView" />
                         <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
@@ -211,7 +210,7 @@ export default class Tags extends Vue {
         regionIds: [],
         siteIdsText: "",
         regionIdsText: "",
-        type: "",
+        type: ""
     };
 
     created() {}
@@ -227,7 +226,7 @@ export default class Tags extends Vue {
             regionIds: [],
             siteIdsText: "",
             regionIdsText: "",
-            type: "",
+            type: ""
         };
     }
 
@@ -287,7 +286,6 @@ export default class Tags extends Vue {
     }
 
     async initSelectItemRegion() {
-
         await this.$server
             .R("/location/region/all")
             .then((response: any) => {
@@ -388,7 +386,6 @@ export default class Tags extends Vue {
         this.selectedsSites = [];
         this.selectedsRegions = [];
         this.inputTagData.type = type;
-
     }
 
     async pageToEdit(type: string) {
@@ -399,7 +396,6 @@ export default class Tags extends Vue {
         this.selectedsSites = [];
         this.selectedsRegions = [];
         this.inputTagData.type = type;
-
 
         this.inputTagData.siteIds = JSON.parse(
             JSON.stringify(this.inputTagData.siteIds.map(item => item.objectId))
@@ -500,7 +496,6 @@ export default class Tags extends Vue {
             for (const item of this.selectedsSites) {
                 this.inputTagData.siteIds.push(item.objectId);
             }
-
         }
 
         if (this.inputTagData.type === EPageStep.add) {
