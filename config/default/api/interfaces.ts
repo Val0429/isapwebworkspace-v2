@@ -227,6 +227,7 @@ export { IBindingRegion, ISiteAddData, ISiteEditData, ISiteResults, ISiteReadAll
 interface IDeviceGroupAddData {
     areaId: string;
     name: string;
+    mode: string;
 }
 
 interface IDeviceGroupEditData {
