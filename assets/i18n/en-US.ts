@@ -111,6 +111,7 @@ export default class LangObject {
     w_Direction = 'Direction';
     w_ServerId = 'Server Id';
     w_SourceId = 'Source Id';
+    w_SourceIdAndLocation  = 'Source Id and Location ';
     w_Location = 'Location';
 
     w_Port_PlaceHolder = 'Port , 1~65535';

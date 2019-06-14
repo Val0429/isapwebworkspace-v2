@@ -33,7 +33,8 @@
             >
 
                 <template #site="{$attrs}">
-                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}
+                    <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
+                    {{ $attrs.value ? $attrs.value.name : ""}}
                 </template>
 
                 <template #area="{$attrs}">
@@ -131,7 +132,7 @@
 
         <!-- add and edit by Hanwha -->
         <iv-auto-card
-            v-show="addStep === eAddStep.hanwha || pageStep === ePageStep.edit"
+            v-show="addStep === eAddStep.hanwha"
             :label="addStep === eAddStep.hanwha ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_Edit')"
         >
             <template #toolbox>
@@ -195,7 +196,7 @@
 
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
-            v-show="addStep === eAddStep.isapFrs || addStep === eAddStep.isapFrsManager || pageStep === ePageStep.edit"
+            v-show="addStep === eAddStep.isapFrs || addStep === eAddStep.isapFrsManager"
             :label="addStep === eAddStep.isapFrs ? _('w_VSPeopleCounting_isapUseFRS') :  _('w_VSPeopleCounting_isapUseFRSManger')"
         >
             <template #toolbox>
@@ -274,13 +275,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import Datetime from "@/services/Datetime";
 import { toEnumInterface } from "@/../core";
-import {
-    IAddVSPeopleCountingHanwha,
-    IEditVSPeopleCountingHanwha,
-    IAddVSPeopleCountingiSap,
-    IEditVSPeopleCountingiSap,
-    IConfig
-} from "@/config/default/api/interfaces";
+import { IConfig, IConfigiSap } from "@/config/default/api/interfaces";
 
 import {
     ERegionType,
@@ -337,7 +332,6 @@ export default class PeopleCounting extends Vue {
     areaSelectItem: any = {};
     serverIdSelectItem: any = {};
     sourceIdSelectItem: any = {};
-    locationSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.peopleCounting
@@ -492,35 +486,42 @@ export default class PeopleCounting extends Vue {
                 console.log(e);
                 return false;
             });
-        console.log("initSelectItemFRSServer", this.serverIdSelectItem);
     }
 
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
+        console.log('data - ', data)
     }
 
     getInputData() {
+
         this.clearInputData();
         for (const param of this.selectedDetail) {
             this.inputPeopleCountingData = {
                 objectId: param.objectId,
                 name: param.name,
                 areaId: param.area["objectId"],
+                site: param.site["name"],
                 brand: param.brand,
                 customId: param.customId,
                 groupIds: param.groups,
                 model: param.model,
+                direction: param.direction,
                 account: param.config["account"],
                 password: param.config["password"],
                 protocol: param.config["protocol"],
                 ip: param.config["ip"],
                 port: param.config["port"],
+                serverId: param.config.server.objectId === undefined ? '' : param.config.server.objectId ,
+                sourceid: param.config.sourceid,
+                location: param.config.location,
                 groupIdsText: this.idsToText(param.groups),
                 stepType: ""
             };
         }
+        //console.log(this.inputPeopleCountingData);
     }
 
     tempSaveInputData(data) {
@@ -565,7 +566,6 @@ export default class PeopleCounting extends Vue {
     }
 
     async selectSourceIdAndLocation(data) {
-        console.log("data - ", data);
         if (data !== undefined) {
             const readParam: {
                 objectId: string;
@@ -576,21 +576,28 @@ export default class PeopleCounting extends Vue {
             await this.$server
                 .C("/partner/frs/device", readParam)
                 .then((response: any) => {
-                    for (const returnValue of response) {
+                    if (response != undefined) {
                         for (const returnValue of response) {
-                            // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
-                            this.sourceIdSelectItem[returnValue.sourceid] =
-                                returnValue.sourceid;
-                            this.locationSelectItem[returnValue.location] =
-                                returnValue.location;
-                        }
+                            for (const returnValue of response) {
+                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
+                                this.$set(
+                                    this.sourceIdSelectItem,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`
+                                );
+                            }
 
-                        if (
-                            returnValue.statusCode === 500 ||
-                            returnValue.statusCode === 400
-                        ) {
-                            Dialog.error(this._("w_ErrorReadData"));
-                            return false;
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
+                                Dialog.error(this._("w_ErrorReadData"));
+                                return false;
+                            }
                         }
                     }
                 })
@@ -607,7 +614,6 @@ export default class PeopleCounting extends Vue {
                 });
         }
         console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
-        console.log("locationSelectItem - ", this.locationSelectItem);
     }
 
     async pageToAdd(stepType: string) {
@@ -622,20 +628,32 @@ export default class PeopleCounting extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
+        await this.initSelectItemFRSServer();
         await this.initSelectItemDeviceGroup();
         await this.initSelectItemArea();
         this.inputPeopleCountingData.stepType = stepType;
+        this.inputPeopleCountingData.groupIds = JSON.parse(
+            JSON.stringify(
+                this.inputPeopleCountingData.groupIds.map(item => item.objectId)
+            )
+        );
+
         if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
-
-            this.inputPeopleCountingData.groupIds = JSON.parse(
-                JSON.stringify(
-                    this.inputPeopleCountingData.groupIds.map(
-                        item => item.objectId
-                    )
-                )
-            );
         }
+
+        if (this.inputPeopleCountingData.serverId !== undefined) {
+            this.addStep = EAddStep.isapFrs;
+        }
+
+        switch (this.inputPeopleCountingData.brand) {
+            case EAddStep.hanwha:
+                break;
+            case EAddStep.isapFrsManager:
+                this.addStep = EAddStep.isapFrsManager;
+                break;
+        }
+        console.log('this.inputPeopleCountingData.brand - ', this.inputPeopleCountingData.brand)
     }
 
     pageToView() {
@@ -666,7 +684,7 @@ export default class PeopleCounting extends Vue {
         this.addStep = EAddStep.isapFrs;
         this.inputPeopleCountingData.brand = brand;
         this.inputPeopleCountingData.stepType = EPageStep.add;
-        console.log("pageToAddByiSapFRS", this.serverIdSelectItem);
+        console.log("brand", this.inputPeopleCountingData.brand);
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
@@ -736,15 +754,15 @@ export default class PeopleCounting extends Vue {
     }
 
     async saveAddOrEditHanwha(data) {
-        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
-            const configObject: IConfig = {
-                protocol: data.protocol,
-                ip: data.ip,
-                port: data.port,
-                account: data.account,
-                password: data.password
-            };
+        const configObject: IConfig = {
+            protocol: data.protocol,
+            ip: data.ip,
+            port: data.port,
+            account: data.account,
+            password: data.password
+        };
 
+        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
             const datas: any = [
                 {
                     customId: data.customId,
@@ -796,14 +814,6 @@ export default class PeopleCounting extends Vue {
         }
 
         if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
-            const configObject: IConfig = {
-                protocol: data.protocol,
-                ip: data.ip,
-                port: data.port,
-                account: data.account,
-                password: data.password
-            };
-
             const datas: any = [
                 {
                     objectId: data.objectId,
@@ -855,7 +865,115 @@ export default class PeopleCounting extends Vue {
         }
     }
 
-    async saveAddOrEditiSap() {}
+    async saveAddOrEditiSap(data) {
+        const configObject: IConfigiSap = {
+            serverId: data.serverId,
+            sourceid: data.sourceid.split(" - ")[0],
+            location: data.sourceid.split(" - ")[1]
+        };
+
+        if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
+            const datas: any = [
+                {
+                    customId: data.customId,
+                    name: data.name,
+                    brand: (this.inputPeopleCountingData.brand).split("F")[0],
+                    areaId: data.areaId,
+                    direction: data.direction,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    config: configObject
+                }
+            ];
+
+            const addParam = {
+                datas
+            };
+
+            await this.$server
+                .C("/device/people-counting", addParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_VSPeopleCounting_AddSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (
+                            returnValue.statusCode === 500 ||
+                            returnValue.statusCode === 400
+                        ) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_ADDFailed")
+                            );
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+            const datas: any = [
+                {
+                    objectId: data.objectId,
+                    name: data.name,
+                    brand: this.inputPeopleCountingData.brand,
+                    areaId: data.areaId,
+                    direction: data.direction,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    config: configObject
+                }
+            ];
+
+            const editParam = {
+                datas
+            };
+
+            await this.$server
+                .U("/device/people-counting", editParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_VSPeopleCounting_EditSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (
+                            returnValue.statusCode === 500 ||
+                            returnValue.statusCode === 400
+                        ) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_EditFailed")
+                            );
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+    }
 
     async doDelete() {
         await Dialog.confirm(
@@ -898,7 +1016,7 @@ export default class PeopleCounting extends Vue {
         );
     }
 
-    showFirst(value) {
+    showFirst(value): string {
         if (value.length >= 2) {
             return value.map(item => item.name)[0] + "...";
         }
@@ -1131,6 +1249,14 @@ export default class PeopleCounting extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_Site")}
+                 * @uiType - iv-form-label
+                 */
+                site?: string;
+
+
+
+                /**
                  * @uiLabel - ${this._("w_Area")}
                  * @uiType - iv-form-label
                  */
@@ -1169,7 +1295,7 @@ export default class PeopleCounting extends Vue {
                  */
                 name: string;
 
-         
+
 
                 /**
                  * @uiLabel - ${this._("w_ServerId")}
@@ -1185,8 +1311,8 @@ export default class PeopleCounting extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_SourceId")}
-                 * @uiPlaceHolder - ${this._("w_SourceId")}
+                 * @uiLabel - ${this._("w_SourceIdAndLocation")}
+                 * @uiPlaceHolder - ${this._("w_SourceIdAndLocation")}
                  * @uiHidden - ${
                      this.addStep === EAddStep.isapFrsManager ? "true" : "false"
                  }
@@ -1195,20 +1321,6 @@ export default class PeopleCounting extends Vue {
                     this.sourceIdSelectItem as any,
                     false
                 )};
-           
-
-                /**
-                 * @uiLabel - ${this._("w_Location")}
-                 * @uiPlaceHolder - ${this._("w_Location")}
-                 * @uiHidden - ${
-                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                 }
-                 */
-                location: ${toEnumInterface(
-                    this.serverIdSelectItem as any,
-                    false
-                )};
-
 
 
                 /**
@@ -1239,61 +1351,68 @@ export default class PeopleCounting extends Vue {
          `;
     }
 
-    IViewForm() {
+    IViewFromiSap() {
         return `
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventName")}
+                 * @uiLabel - ${this._("w_Id")}
+                 * @uiType - iv-form-label
+                 */
+                customId?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Name")}
                  * @uiType - iv-form-label
                  */
                 name?: string;
 
 
-
                 /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventType")}
+                 * @uiLabel - ${this._("w_ServerId")}
                  * @uiType - iv-form-label
                  */
-                type?: string;
+                serverId?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_BOCampaign_Budget")}
+                 * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
                  */
-                budget?: number;
+                sourceid?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Description")}
+                 * @uiLabel - ${this._("w_Location")}
                  * @uiType - iv-form-label
                  */
-                description?: string;
+                location?: string;
 
 
                 /**
-                * @uiLabel - ${this._("w_BOCampaign_StartDate")}
-                * @uiType - iv-form-label
-                */
-                startDateText?: any;
-
-
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
-                * @uiType - iv-form-label
-                */
-                endDateText?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiLabel - ${this._("w_Site")}
                  * @uiType - iv-form-label
                  */
-                siteIdsText: string;
+                site?: string;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_Area")}
+                 * @uiType - iv-form-label
+                 */
+                areaId?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_DeviceGroup")}
+                 * @uiType - iv-form-label
+                 */
+                groupIdsText?: string;
 
             }
-        `;
+         `;
     }
 }
 </script>

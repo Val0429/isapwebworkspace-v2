@@ -46,7 +46,7 @@ interface IObjectIdAndName {
     name: string;
 }
 
-export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis };
+export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap };
 
 // User
 interface IUser {
@@ -59,7 +59,7 @@ interface IUser {
 }
 
 interface IUserAddData extends IUser {
-    account?: string;
+    username?: string;
     password?: string;
     employeeId?: string;
 }
