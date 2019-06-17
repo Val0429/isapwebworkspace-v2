@@ -2300,11 +2300,7 @@ export default class Site extends Vue {
                 mode: any;
 
 
-                 /**
-                * @uiLabel - ${this._("w_Site_Devices")}
-                * @uiType - iv-form-label
-                */
-                devices?: string;
+        
 
             }`;
     }
