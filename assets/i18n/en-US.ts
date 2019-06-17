@@ -111,7 +111,7 @@ export default class LangObject {
     w_Direction = 'Direction';
     w_ServerId = 'Server Id';
     w_SourceId = 'Source Id';
-    w_SourceIdAndLocation  = 'Source Id and Location ';
+    w_SourceIdAndLocation = 'Source Id and Location ';
     w_Location = 'Location';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
@@ -606,13 +606,50 @@ export default class LangObject {
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
     w_VSPeopleCounting_DeleteConfirm = 'Are you sure to delete selected People Counting Device(s)?';
 
+    // Demographic
+    w_VSDemographic_List = 'Demographic Device List';
+    w_VSDemographic_Add = 'Add Demographic Device';
+    w_VSDemographic_Edit = 'Edit Demographic Device';
+    w_VSDemographic_View = 'View Demographic Device';
+
+    w_VSDemographic_Addhanwha = 'Use Hanwha Server';
+    w_VSDemographic_AddhanwhaUse = 'Add Demographic Device Use Hanwha Server';
+    w_VSDemographic_EdithanwhaUse = 'Edit Demographic Device Use Hanwha Server';
+
+    w_VSDemographic_isap = 'Use iSap Server';
+    w_VSDemographic_AddisapUseFRS = 'Add Demographic Device Use iSap FRS Server';
+    w_VSDemographic_EditisapUseFRS = 'Edit Demographic Device Use iSap FRS Server';
+
+    w_VSDemographic_AddisapUseFRSManger = 'Add Demographic Device Use iSap FRS Manger Server';
+    w_VSDemographic_EditisapUseFRSManger = 'Edit Demographic Device Use iSap FRS Manger Server';
+
+    w_VSDemographic_SetFRS = 'Not yet set? Go to set FRS Server';
+    w_VSDemographic_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
+
+    w_VSDemographic_AddSuccess = 'Demographic Device List add success.';
+    w_VSDemographic_ADDFailed = 'Demographic Device add failed, please try again.';
+    w_VSDemographic_EditSuccess = 'Demographic Device edit success.';
+    w_VSDemographic_EditFailed = 'Demographic Device edit failed, please try again.';
+    w_VSDemographic_DeleteConfirm = 'Are you sure to delete selected Demographic Device(s)?';
+
     // Heatmap Device
     w_VSHeatmap_List = 'Heatmap Device List';
     w_VSHeatmap_Add = 'Heatmap Device Add';
     w_VSHeatmap_Edit = 'Heatmap Device Edit';
     w_VSHeatmap_View = 'Heatmap Device View';
     w_VSHeatmap_SelectBrand = 'Select Brand';
-    w_VSHeatmap_FillInInformation = 'Fill In Information';
+    w_VSHeatmap_SelectRegion = 'Select Region';
     w_VSHeatmap_DrawROI = 'Draw ROI';
     w_VSHeatmap_CheckAndOverlook = 'Check and Overlook';
+    w_VSHeatmap_CustomId = 'Id';
+    w_VSHeatmap_Name = 'Name';
+    w_VSHeatmap_Brand = 'Brand';
+    w_VSHeatmap_CMS = 'CMS';
+    w_VSHeatmap_SetCMS = 'Not yet set? Go to set CMS';
+    w_VSHeatmap_NVR = 'NVR';
+    w_VSHeatmap_ChannelInNVR = 'Channel In NVR';
+    w_VSHeatmap_Site = 'Site';
+    w_VSHeatmap_Area = 'Area';
+    w_VSHeatmap_DeviceGroup = 'Device Group';
+    w_VSHeatmap_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
 }

@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :label="_('w_VSPeopleCounting_List')"
+            :label="_('w_VSDemographic_List')"
         >
             <template #toolbox>
 
@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="peopleCountingTable"
+                ref="demographicTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/device' }"
@@ -33,7 +33,6 @@
             >
 
                 <template #site="{$attrs}">
-                    <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
                     {{ $attrs.value ? $attrs.value.name : ""}}
                 </template>
 
@@ -59,13 +58,13 @@
         <!-- 選擇增加方式 -->
         <iv-card
             v-show="addStep === eAddStep.select"
-            :label="_('w_VSPeopleCounting_Add') "
+            :label="_('w_VSDemographic_Add') "
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList" />
             </template>
 
-            <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_Addhanwha') }}</div>
+            <div class="font-weight-bold"> {{ _('w_VSDemographic_Addhanwha') }}</div>
 
             <b-button
                 class="button mt-3 mb-1"
@@ -79,7 +78,7 @@
 
             <hr>
 
-            <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_isap') }}</div>
+            <div class="font-weight-bold"> {{ _('w_VSDemographic_isap') }}</div>
 
             <b-button
                 class="button mt-3 mb-1"
@@ -96,7 +95,7 @@
                 class="mt-4"
                 @click="goToSetFRSServer"
             >
-                {{ _('w_VSPeopleCounting_SetFRS') }}
+                {{ _('w_VSDemographic_SetFRS') }}
             </b-button>
 
             <br>
@@ -116,7 +115,7 @@
                 class="mt-4"
                 @click="goToSetFRSManager"
             >
-                {{ _('w_VSPeopleCounting_SetFRSManger') }}
+                {{ _('w_VSDemographic_SetFRSManger') }}
             </b-button>
 
             <template #footer>
@@ -133,7 +132,7 @@
         <!-- add and edit by Hanwha -->
         <iv-auto-card
             v-show="(addStep === eAddStep.hanwha && pageStep === ePageStep.add) || (addStep === eAddStep.hanwha && pageStep === ePageStep.edit)"
-            :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_EdithanwhaUse')"
+            :label="pageStep === ePageStep.add ? _('w_VSDemographic_AddhanwhaUse') : _('w_VSDemographic_EdithanwhaUse')"
         >
             <template #toolbox>
                 <iv-toolbox-leave
@@ -155,7 +154,6 @@
                 :value="inputPeopleCountingData"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
-                @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEditHanwha($event)"
             >
                 <template #selectTree="{ $atrs, $listeners }">
@@ -203,7 +201,7 @@
         <iv-card
             v-show="pageStep === ePageStep.view && addStep === eAddStep.hanwha"
             :visible="true"
-            :label="_('w_VSPeopleCounting_View')"
+            :label="_('w_VSDemographic_View')"
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -230,7 +228,7 @@
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
             v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "
-            :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_AddisapUseFRS') :  _('w_VSPeopleCounting_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_EditisapUseFRS') :  _('w_VSPeopleCounting_EditisapUseFRSManger')"
+            :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSDemographic_AddisapUseFRS') :  _('w_VSDemographic_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSDemographic_EditisapUseFRS') :  _('w_VSDemographic_EditisapUseFRSManger')"
         >
             <template #toolbox>
                 <iv-toolbox-leave
@@ -251,9 +249,6 @@
                 :interface="IAddAndEditFromiSap()"
                 :value="inputPeopleCountingData"
                 @update:serverId="selectSourceIdAndLocation($event)"
-                @update:siteId="selectAreaId($event)"
-                @update:areaId="selectGroupDeviceId($event)"
-                @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEditiSap($event)"
             >
                 <template #selectTree="{ $atrs, $listeners }">
@@ -301,7 +296,7 @@
         <iv-card
             v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"
             :visible="true"
-            :label="_('w_VSPeopleCounting_View')"
+            :label="_('w_VSDemographic_View')"
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -382,7 +377,7 @@ enum ECameraMode {
 @Component({
     components: {}
 })
-export default class PeopleCounting extends Vue {
+export default class Demographic extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -420,7 +415,6 @@ export default class PeopleCounting extends Vue {
             stepType: "",
             customId: "",
             areaId: "",
-            siteId: "",
             groupIds: [],
             name: "",
             brand: "",
@@ -482,6 +476,48 @@ export default class PeopleCounting extends Vue {
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemDeviceGroup() {
+        await this.$server
+            .R("/device/group/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 deviceGroupSelectItem 的 key 的方式
+                        this.deviceGroupSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemArea() {
+        await this.$server
+            .R("/location/area/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 areaSelectItem 的 key 的方式
+                        this.areaSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
                 }
             })
             .catch((e: any) => {
@@ -610,8 +646,9 @@ export default class PeopleCounting extends Vue {
 
         this.selecteds = [];
 
+        for (const id of this.inputPeopleCountingData.siteId) {
             for (const detail in this.sitesSelectItem) {
-                if (this.inputPeopleCountingData.siteId === detail) {
+                if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -620,6 +657,7 @@ export default class PeopleCounting extends Vue {
                     this.selecteds.push(selectedsObject);
                 }
             }
+        }
     }
 
     async selectSourceIdAndLocation(data) {
@@ -663,33 +701,49 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
                     console.log(e);
                     return false;
                 });
         }
+        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async selectAreaId(data) {
-
-        this.areaSelectItem = {};
-
         if (data !== undefined) {
             const readParam: {
-                siteId: string;
+                objectId: string;
             } = {
-                siteId: data
+                objectId: data
             };
 
             await this.$server
-                .R("/location/area/all", readParam)
+                .C("/partner/frs/device", readParam)
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            // 自定義 areaSelectItem 的 key 的方式
-                            this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                            for (const returnValue of response) {
+                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
+                                this.$set(
+                                    this.sourceIdSelectItem,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`
+                                );
+                            }
+
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
+                                Dialog.error(this._("w_ErrorReadData"));
+                                return false;
+                            }
                         }
                     }
                 })
@@ -697,38 +751,50 @@ export default class PeopleCounting extends Vue {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-<<<<<<< HEAD
-=======
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
->>>>>>> 601f2319314f199a23556a4d95141c50216df0cc
                     console.log(e);
                     return false;
                 });
         }
-
+        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async selectGroupDeviceId(data) {
         if (data !== undefined) {
             const readParam: {
-                areaId: string;
-                mode: string;
+                objectId: string;
             } = {
-                areaId: data,
-                mode: 'peopleCounting'
+                objectId: data
             };
 
             await this.$server
-                .R("/device/group/all", readParam)
+                .C("/partner/frs/device", readParam)
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            // 自定義 deviceGroupSelectItem 的 key 的方式
-                            this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
+                            for (const returnValue of response) {
+                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
+                                this.$set(
+                                    this.sourceIdSelectItem,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`,
+                                    `${returnValue.sourceid} - ${
+                                        returnValue.location
+                                    }`
+                                );
+                            }
 
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
+                                Dialog.error(this._("w_ErrorReadData"));
+                                return false;
+                            }
                         }
                     }
                 })
@@ -736,17 +802,15 @@ export default class PeopleCounting extends Vue {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-<<<<<<< HEAD
-=======
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
->>>>>>> 601f2319314f199a23556a4d95141c50216df0cc
                     console.log(e);
                     return false;
                 });
         }
+        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async pageToAdd(stepType: string) {
@@ -762,6 +826,8 @@ export default class PeopleCounting extends Vue {
         this.pageStep = EPageStep.edit;
         this.getInputData();
         await this.initSelectItemFRSServer();
+        // await this.initSelectItemDeviceGroup();
+        // await this.initSelectItemArea();
         this.inputPeopleCountingData.stepType = stepType;
         this.inputPeopleCountingData.groupIds = JSON.parse(
             JSON.stringify(
@@ -801,12 +867,14 @@ export default class PeopleCounting extends Vue {
     pageToList() {
         this.pageStep = EPageStep.list;
         this.addStep = EAddStep.none;
-        (this.$refs.peopleCountingTable as any).reload();
+        (this.$refs.demographicTable as any).reload();
     }
 
     async pageToAddByHanwha(brand: string) {
         this.clearInputData();
         await this.initSelectItemSite();
+        // await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.hanwha;
         this.inputPeopleCountingData.stepType = EPageStep.add;
         this.inputPeopleCountingData.brand = brand;
@@ -816,15 +884,19 @@ export default class PeopleCounting extends Vue {
         this.clearInputData();
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
+        // await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.isapFrs;
         this.inputPeopleCountingData.brand = brand;
         this.inputPeopleCountingData.stepType = EPageStep.add;
+        console.log("brand", this.inputPeopleCountingData.brand);
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
         this.clearInputData();
         await this.initSelectItemSite();
-
+        // await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.isapFrsManager;
         this.inputPeopleCountingData.brand = brand;
         this.inputPeopleCountingData.stepType = EPageStep.add;
@@ -840,8 +912,9 @@ export default class PeopleCounting extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
+        for (const id of this.inputPeopleCountingData.siteId) {
             for (const detail in this.sitesSelectItem) {
-                if (this.inputPeopleCountingData.siteId === detail) {
+                if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -850,37 +923,31 @@ export default class PeopleCounting extends Vue {
                     this.selecteds.push(selectedsObject);
                 }
             }
-
+        }
     }
 
-    async pageToShowResult() {
+    pageToShowResult() {
         if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteId clear
-            this.inputPeopleCountingData.siteId = '';
+            this.inputPeopleCountingData.siteId = [];
 
             // from selecteds push siteId
-            // for (const item of this.selecteds) {
-            //     this.inputPeopleCountingData.siteId.push(item.objectId);
-            // }
-            this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
-            this.areaSelectItem = {};
-            await this.selectAreaId(this.selecteds[0].objectId);
+            for (const item of this.selecteds) {
+                this.inputPeopleCountingData.siteId.push(item.objectId);
+            }
         }
 
         if (this.inputPeopleCountingData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteId clear
-            this.inputPeopleCountingData.siteId = '';
+            this.inputPeopleCountingData.siteId = [];
 
             // from selecteds push siteId
-            // for (const item of this.selecteds) {
-            //     this.inputPeopleCountingData.siteId.push(item.objectId);
-            // }
-            this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
-            this.areaSelectItem = {};
-            await this.selectAreaId(this.selecteds[0].objectId);
+            for (const item of this.selecteds) {
+                this.inputPeopleCountingData.siteId.push(item.objectId);
+            }
         }
     }
 
@@ -924,7 +991,7 @@ export default class PeopleCounting extends Vue {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
-                                this._("w_VSPeopleCounting_AddSuccess")
+                                this._("w_VSDemographic_AddSuccess")
                             );
                             this.pageToList();
                         }
@@ -932,9 +999,7 @@ export default class PeopleCounting extends Vue {
                             returnValue.statusCode === 500 ||
                             returnValue.statusCode === 400
                         ) {
-                            Dialog.error(
-                                this._("w_VSPeopleCounting_ADDFailed")
-                            );
+                            Dialog.error(this._("w_VSDemographic_ADDFailed"));
                             return false;
                         }
                     }
@@ -944,7 +1009,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -975,7 +1040,7 @@ export default class PeopleCounting extends Vue {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
-                                this._("w_VSPeopleCounting_EditSuccess")
+                                this._("w_VSDemographic_EditSuccess")
                             );
                             this.pageToList();
                         }
@@ -983,9 +1048,7 @@ export default class PeopleCounting extends Vue {
                             returnValue.statusCode === 500 ||
                             returnValue.statusCode === 400
                         ) {
-                            Dialog.error(
-                                this._("w_VSPeopleCounting_EditFailed")
-                            );
+                            Dialog.error(this._("w_VSDemographic_EditFailed"));
                             return false;
                         }
                     }
@@ -995,7 +1058,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
+                        Dialog.error(this._("w_VSDemographic_EditFailed"));
                         return false;
                     }
                     console.log(e);
@@ -1034,7 +1097,7 @@ export default class PeopleCounting extends Vue {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
-                                this._("w_VSPeopleCounting_AddSuccess")
+                                this._("w_VSDemographic_AddSuccess")
                             );
                             this.pageToList();
                         }
@@ -1042,9 +1105,7 @@ export default class PeopleCounting extends Vue {
                             returnValue.statusCode === 500 ||
                             returnValue.statusCode === 400
                         ) {
-                            Dialog.error(
-                                this._("w_VSPeopleCounting_ADDFailed")
-                            );
+                            Dialog.error(this._("w_VSDemographic_ADDFailed"));
                             return false;
                         }
                     }
@@ -1054,7 +1115,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        Dialog.error(this._("w_VSDemographic_ADDFailed"));
                         return false;
                     }
                     console.log(e);
@@ -1085,7 +1146,7 @@ export default class PeopleCounting extends Vue {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
-                                this._("w_VSPeopleCounting_EditSuccess")
+                                this._("w_VSDemographic_EditSuccess")
                             );
                             this.pageToList();
                         }
@@ -1093,9 +1154,7 @@ export default class PeopleCounting extends Vue {
                             returnValue.statusCode === 500 ||
                             returnValue.statusCode === 400
                         ) {
-                            Dialog.error(
-                                this._("w_VSPeopleCounting_EditFailed")
-                            );
+                            Dialog.error(this._("w_VSDemographic_EditFailed"));
                             return false;
                         }
                     }
@@ -1105,7 +1164,7 @@ export default class PeopleCounting extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
+                        Dialog.error(this._("w_VSDemographic_EditFailed"));
                         return false;
                     }
                     console.log(e);
@@ -1116,7 +1175,7 @@ export default class PeopleCounting extends Vue {
 
     async doDelete() {
         await Dialog.confirm(
-            this._("w_VSPeopleCounting_DeleteConfirm"),
+            this._("w_VSDemographic_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const param of this.selectedDetail) {
@@ -1213,13 +1272,6 @@ export default class PeopleCounting extends Vue {
              * @uiLabel - ${this._("w_Brand")}
              */
             brand: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Model")}
-             */
-            model: string;
-
 
             /**
              * @uiLabel - ${this._("w_Site")}
@@ -1319,7 +1371,7 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteId: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
                 selectTree?: any;
 
@@ -1483,7 +1535,7 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteId?: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
                 selectTree?: any;
 
