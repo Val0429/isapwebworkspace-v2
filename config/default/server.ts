@@ -88,7 +88,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/user/forget/step2': [Step2.Input, Step2.Output, false];
         '/user/forget/step3': [Step3.Input, Step3.Output, false];
 
-        // camera
+        // server device
+        '/partner/cms/device': [any, any, false];
 
         // Setting License
         '/license': [LicenseCreate.Input, LicenseCreate.Output, false];
@@ -372,7 +373,6 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Server HD
         '/partner/human-detection': [any, any, false];
-
 
         //device
         '/device': [any, any, false];

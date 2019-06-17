@@ -68,12 +68,17 @@
                 >
 
                     <template #1>
-                        <iv-form :interface="inf1()">
+                        <iv-form
+                            :interface="inf1()"
+                            @update:serverId="initDeviceData($event)"
+                            @update:nvrId="initChannelItem($event)"
+                        >
 
                             <template #serverId="{$attrs, $listeners}">
                                 <iv-form-selection
                                     v-bind="$attrs"
                                     v-on="$listeners"
+                                    :options="cmsItem"
                                 >
                                 </iv-form-selection>
                                 <b-button
@@ -83,6 +88,24 @@
                                 >
                                     {{ _('w_VSHeatmap_SetCMS') }}
                                 </b-button>
+                            </template>
+
+                            <template #nvrId="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :options="nvrItem"
+                                >
+                                </iv-form-selection>
+                            </template>
+
+                            <template #channelId="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :options="channelItem"
+                                >
+                                </iv-form-selection>
                             </template>
 
                         </iv-form>
@@ -173,6 +196,13 @@ export default class Heatmap extends Vue {
         mode: ECameraMode.heatmap
     };
 
+    // options
+    cmsItem = [];
+    devices = [];
+    nvrItem = [];
+    channels = [];
+    channelItem = [];
+
     // tree
     selectType = ERegionType.site;
     regionTreeItem = new RegionTreeItem();
@@ -218,9 +248,83 @@ export default class Heatmap extends Vue {
         };
     }
 
-    initRegionTreeSelect() {
-        this.regionTreeItem = new RegionTreeItem();
-        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    async initCMSItem() {
+        let body: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
+
+        await this.$server
+            .R("/partner/cms", body)
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.cmsItem = [];
+                    for (let item of response.results) {
+                        let cms = { id: item.objectId, text: item.name };
+
+                        this.cmsItem.push(cms);
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initDeviceData(data) {
+        console.log("initDeviceData", data);
+        let body: {
+            objectId: string;
+        } = {
+            objectId: data
+        };
+
+        await this.$server
+            .C("/partner/cms/device", body)
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.devices = response;
+                    this.initNVRItem();
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    initNVRItem() {
+        this.nvrItem = [];
+        for (let device of this.devices) {
+            let nvr = { id: device.nvrId, text: device.nvrId };
+            this.nvrItem.push(nvr);
+        }
+    }
+
+    initChannelItem(data) {
+        this.channelItem = [];
+        for (let device of this.devices) {
+            if (device.nvrId == data) {
+                for (let channel of device.channels) {
+                    let item = { id: channel.channelId, text: channel.name };
+                    this.channelItem.push(item);
+                }
+            }
+        }
     }
 
     async initSelectItemSite() {
@@ -253,26 +357,6 @@ export default class Heatmap extends Vue {
             });
     }
 
-    async initSelectItemTree() {
-        await this.$server
-            .R("/location/tree")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
-
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
@@ -293,6 +377,7 @@ export default class Heatmap extends Vue {
     }
 
     pageToList() {
+        this.initCMSItem();
         this.pageStep = EPageStep.list;
     }
 
@@ -436,96 +521,6 @@ export default class Heatmap extends Vue {
         `;
     }
 
-    IViewForm() {
-        return `
-             interface {
-                /**
-                * @uiLabel - ${this._("w_VSHeatmap_CustomId")}
-                * @uiPlaceHolder - ${this._("w_VSHeatmap_CustomId")}
-                * @uiType - iv-form-label
-                */
-                customId?: string;
-
-                /**
-                * @uiLabel - ${this._("w_VSHeatmap_Name")}
-                * @uiPlaceHolder - ${this._("w_VSHeatmap_Name")}
-                * @uiType - iv-form-label
-                */
-                name?: string;
-
-                /*
-                * @uiLabel - ${this._("w_VSHeatmap_Brand")}
-                * @uiType - iv-form-label
-                * @uiAttrs - { multiple: false }
-                */
-                brand?: ${toEnumInterface({
-                    isap: "iSAP"
-                })}
-
-                /*
-                * @uiLabel - ${this._("w_VSHeatmap_CMS")}
-                * @uiType - iv-form-label
-                * @uiAttrs - { multiple: false }
-                */
-                serverId?: ${toEnumInterface({
-                    ygLbmtofz: "CMS1",
-                    ygLbmtofc: "CMS2"
-                })}
-
-                  /*
-                * @uiLabel - ${this._("w_VSHeatmap_NVR")}
-                * @uiType - iv-form-label
-                * @uiAttrs - { multiple: false }
-                */
-                nvrId?: ${toEnumInterface({
-                    1: "NVR1",
-                    2: "NVR2"
-                })}
-
-                    /*
-                * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
-                * @uiType - iv-form-label
-                * @uiAttrs - { multiple: false }
-                */
-                channelId?: ${toEnumInterface({
-                    1: "1 ch",
-                    2: "2 ch"
-                })}
-            
-                /*
-                * @uiLabel - ${this._("w_VSHeatmap_Site")}
-                * @uiType - iv-form-label
-                * @uiAttrs - { multiple: false }
-                */
-                siteId?: ${toEnumInterface({
-                    site1: "site01",
-                    site2: "site02"
-                })}
-
-                /*
-                * @uiLabel - ${this._("w_VSHeatmap_Area")}
-                * @uiType - iv-form-label
-                * @uiAttrs - { multiple: false }
-                */
-                areaId?: ${toEnumInterface({
-                    area1: "area01",
-                    area2: "area02"
-                })}
-
-
-                        /*
-                * @uiLabel - ${this._("w_VSHeatmap_DeviceGroup")}
-                * @uiType - iv-form-label
-                * @uiAttrs - { multiple: true }
-                */
-                groupIds?: ${toEnumInterface({
-                    group1: "group01",
-                    group2: "group02"
-                })}
-        }
-        `;
-    }
-
     private inf1() {
         return `
             interface {
@@ -554,34 +549,25 @@ export default class Heatmap extends Vue {
                 })}
 
                 /*
-                * @uiLabel - ${this._("w_VSHeatmap_CMS")}
+                * @uiLabel - ${this._("w_VSHeatmap_CMS")} 
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                serverId: ${toEnumInterface({
-                    ygLbmtofz: "CMS1",
-                    ygLbmtofc: "CMS2"
-                })}
+                 serverId: any;
 
                   /*
                 * @uiLabel - ${this._("w_VSHeatmap_NVR")}
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                nvrId: ${toEnumInterface({
-                    1: "NVR1",
-                    2: "NVR2"
-                })}
+                nvrId: any;
 
                     /*
                 * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                channelId: ${toEnumInterface({
-                    1: "1 ch",
-                    2: "2 ch"
-                })}
+                channelId: any;
             }
         `;
     }
@@ -663,10 +649,7 @@ export default class Heatmap extends Vue {
                 * @uiType - iv-form-label
                 * @uiAttrs - { multiple: false }
                 */
-                serverId?: ${toEnumInterface({
-                    ygLbmtofz: "CMS1",
-                    ygLbmtofc: "CMS2"
-                })}
+                   serverId?: any;
 
                   /*
                 * @uiLabel - ${this._("w_VSHeatmap_NVR")}
