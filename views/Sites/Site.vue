@@ -885,14 +885,14 @@ export default class Site extends Vue {
         for (let device of this.devices) {
             if (
                 this.imageMap.deviceGroups.some(
-                    i => i.objectId === device.group.objectId
+                    i => i.objectId === device.groups.objectId
                 )
             ) {
                 continue;
             }
 
             let deviceGroup = new DeviceGroupItem(
-                device.group.name,
+                device.groups[0].name,
                 EDragType.dataWindowInDeviceGroup,
                 device.mode
             );
