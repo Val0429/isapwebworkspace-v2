@@ -15,8 +15,12 @@ import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 
-// Demos
-import DragSelect from './Demos/DragSelect.vue';
+// Demo
+import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
+import DemoImageMap from './Demos/DemoImageMap.vue';
+import DemoROI from './Demos/DemoROI.vue';
+import DemoDialog from './Demos/DemoDialog.vue';
+import DemoDragSelect from './Demos/DemoDragSelect.vue';
 
 ///////////////////////////////////////////////////////////////////
 
@@ -38,6 +42,10 @@ $({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
 $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
 $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
-// Demos
-$({ path: '/demos', name: 'Demos', icon: 'fa-check', redirect: '/demos/drag_select' })();
-$({ path: '/demos/drag_select', name: 'Drag Select', icon: 'fa-check', permission: false })(DragSelect);
+// Demo
+$({ path: '/demos', name: 'Demo', icon: 'fa-check', redirect: '/demos/region-tree-select' })();
+$({ path: '/demos/region-tree-select', name: 'Region Tree Select', icon: 'fa-check', permission: false })(DemoRegionTreeSelect);
+$({ path: '/demos/image-map', name: 'ImageMap', icon: 'fa-check', permission: false })(DemoImageMap);
+$({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(DemoROI);
+$({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
+$({ path: '/demos/drag_select', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDragSelect);
