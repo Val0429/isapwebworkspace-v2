@@ -697,13 +697,10 @@ export default class PeopleCounting extends Vue {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-<<<<<<< HEAD
-=======
                     if (e.res.statusCode == 500) {
                         Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
                         return false;
                     }
->>>>>>> 601f2319314f199a23556a4d95141c50216df0cc
                     console.log(e);
                     return false;
                 });
@@ -736,13 +733,10 @@ export default class PeopleCounting extends Vue {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-<<<<<<< HEAD
-=======
                     if (e.res.statusCode == 500) {
                         Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
                         return false;
                     }
->>>>>>> 601f2319314f199a23556a4d95141c50216df0cc
                     console.log(e);
                     return false;
                 });
