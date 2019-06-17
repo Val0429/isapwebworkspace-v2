@@ -139,15 +139,16 @@
                         </iframe>
                     </template>
 
-                    <template #footer-before>
-                        <b-button
-                            variant="secondary"
-                            size="lg"
-                            @click="pageToSiteList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
                 </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToSiteList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
             </iv-auto-card>
         </div>
@@ -329,15 +330,17 @@
                         </div>
                     </template>
 
-                    <template #footer-before>
-                        <b-button
-                            variant="secondary"
-                            size="lg"
-                            @click="pageToAreaList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
                 </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToAreaList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
             </iv-auto-card>
         </div>
 
@@ -391,7 +394,7 @@
 
                 </iv-form>
 
-                <template #footer-before>
+                <template #footer>
                     <b-button
                         variant="secondary"
                         size="lg"
@@ -399,6 +402,7 @@
                     >{{ _('w_Back') }}
                     </b-button>
                 </template>
+
             </iv-card>
         </div>
 
@@ -536,15 +540,17 @@
                         />
                     </template>
 
-                    <template #footer-before>
-                        <b-button
-                            variant="secondary"
-                            size="lg"
-                            @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceGroupList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
                 </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceGroupList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
             </iv-auto-card>
         </div>
 
@@ -2261,7 +2267,7 @@ export default class Site extends Vue {
                 * @uiLabel - ${this._("w_Site_DeviceGroup")}
                 */
                 deviceGroupName: string;
-                
+
                 /**
                 * @uiLabel - ${this._("w_Site_Model")}
                 */
@@ -2338,7 +2344,7 @@ export default class Site extends Vue {
                 */
                 devices?: string;
 
-                
+
 
             }`;
     }
