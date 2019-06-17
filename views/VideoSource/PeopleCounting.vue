@@ -536,9 +536,14 @@ export default class PeopleCounting extends Vue {
                     param.area && param.area["objectId"]
                         ? param.area["objectId"]
                         : "",
+                area:
+                    param.area && param.area["name"]
+                        ? param.area["name"]
+                        : "",
                 site: param.site && param.site["name"] ? param.site["name"] : "",
                 brand: param.brand,
                 customId: param.customId,
+                objectId: param.objectId,
                 siteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
                 groupIds: param.groups,
                 model: param.model,
@@ -557,7 +562,9 @@ export default class PeopleCounting extends Vue {
                 sourceid: `${param.config.sourceid} - ${param.config.location}`,
                 location: param.config.location,
                 groupIdsText: this.idsToText(param.groups),
-                stepType: ""
+                stepType: "",
+                tempSiteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
+                tempGroupIds: param.groups,
             };
         }
 
@@ -768,37 +775,82 @@ export default class PeopleCounting extends Vue {
 
         this.deviceGroupSelectItem = {};
 
-        if (data !== undefined) {
-            const readParam: {
-                areaId: string;
-                mode: string;
-            } = {
-                areaId: data,
-                mode: 'peopleCounting'
-            };
+        if (data === undefined || data === '') {
+            this.inputPeopleCountingData.groupIds = [];
+        }
 
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 deviceGroupSelectItem 的 key 的方式
-                            this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
 
+        if (this.pageStep === EPageStep.add) {
+            if (data !== undefined) {
+                const readParam: {
+                    areaId: string;
+                    mode: string;
+                } = {
+                    areaId: data,
+                    mode: 'peopleCounting'
+                };
+
+                await this.$server
+                    .R("/device/group/all", readParam)
+                    .then((response: any) => {
+                        if (response != undefined) {
+                            for (const returnValue of response) {
+                                this.inputPeopleCountingData.groupIds = [];
+                                // 自定義 deviceGroupSelectItem 的 key 的方式
+                                this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
+
+                            }
                         }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                    })
+                    .catch((e: any) => {
+                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                            return ResponseFilter.base(this, e);
+                        }
+                        if (e.res.statusCode == 500) {
+                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            return false;
+                        }
+                        console.log(e);
                         return false;
-                    }
-                    console.log(e);
-                    return false;
-                });
+                    });
+            }
+
+        }
+
+        if (this.pageStep === EPageStep.edit) {
+            if (data !== undefined) {
+                const readParam: {
+                    areaId: string;
+                    mode: string;
+                } = {
+                    areaId: data,
+                    mode: 'peopleCounting'
+                };
+
+                await this.$server
+                    .R("/device/group/all", readParam)
+                    .then((response: any) => {
+                        if (response != undefined) {
+                            for (const returnValue of response) {
+                                // 自定義 deviceGroupSelectItem 的 key 的方式
+                                this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
+
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                            return ResponseFilter.base(this, e);
+                        }
+                        if (e.res.statusCode == 500) {
+                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            return false;
+                        }
+                        console.log(e);
+                        return false;
+                    });
+            }
+
         }
     }
 
@@ -845,6 +897,7 @@ export default class PeopleCounting extends Vue {
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
+        console.log('area - ',this.inputPeopleCountingData.area);
         if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
         }
@@ -1474,7 +1527,7 @@ export default class PeopleCounting extends Vue {
                  * @uiLabel - ${this._("w_Area")}
                  * @uiType - iv-form-label
                  */
-                areaId?: string;
+                area?: string;
 
 
                 /**
@@ -1624,7 +1677,7 @@ export default class PeopleCounting extends Vue {
                  * @uiLabel - ${this._("w_Area")}
                  * @uiType - iv-form-label
                  */
-                areaId?: string;
+                area?: string;
 
 
                 /**
