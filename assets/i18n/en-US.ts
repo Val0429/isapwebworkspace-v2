@@ -138,6 +138,8 @@ export default class LangObject {
     w_Submit = 'Submit';
     w_Confirm = 'Confirm';
     w_Upload = 'Upload';
+    w_Restart = 'Restart';
+    w_Reset = 'Reset';
 
     // Dialog
     w_Dialog_ErrorTitle = 'Something wrong';
