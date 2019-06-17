@@ -19,6 +19,7 @@ import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
 import DemoImageMap from './Demos/DemoImageMap.vue';
 import DemoROI from './Demos/DemoROI.vue';
 import DemoDialog from './Demos/DemoDialog.vue';
+import DemoDragSelect from './Demos/DemoDragSelect.vue';
 
 // Guest
 import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
@@ -95,6 +96,7 @@ $({ path: '/demos/region-tree-select', name: 'Region Tree Select', icon: 'fa-che
 $({ path: '/demos/image-map', name: 'ImageMap', icon: 'fa-check', permission: false })(DemoImageMap);
 $({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(DemoROI);
 $({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
+$({ path: '/demos/drag_select', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDragSelect);
 
 // Dashboard
 $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();

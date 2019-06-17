@@ -8,7 +8,6 @@
             :data="{ label: _('w_MyProfile_ViewMyProfile') }"
         >
             <template #toolbox>
-                <iv-toolbox-leave @click="pageToLeave" />
                 <iv-toolbox-editmyprofile @click="pageToEdit" />
                 <iv-toolbox-changepassword @click="pageToChangePassword" />
             </template>
@@ -18,15 +17,6 @@
                 :value="inputMyProfile"
             >
             </iv-form>
-
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToLeave"
-                >{{ _('w_Leave') }}
-                </b-button>
-            </template>
 
         </iv-card>
 
@@ -163,25 +153,14 @@ export default class MyProfile extends Vue {
     }
 
     initUserDetail() {
-        console.log("$user", this.$user);
         this.inputMyProfile = {
-            // objectId: User.userId,
-            // employeeId: User.employeeId,
-            // account: User.account,
-            // name: User.name,
-            // email: User.email,
-            // phone: User.phone
-            objectId: "",
-            account: "",
-            name: "",
-            employeeId: "",
-            email: "",
-            phone: ""
+            objectId: this.$user.objectId,
+            account: this.$user.username,
+            name: this.$user.name,
+            employeeId: this.$user.employeeId,
+            email: this.$user.email,
+            phone: this.$user.phone
         };
-    }
-
-    pageToLeave() {
-        this.$router.push({ path: "/" });
     }
 
     pageToView() {
