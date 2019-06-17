@@ -233,6 +233,9 @@ export default class Tags extends Vue {
     }
 
     async initSelectItemSite() {
+
+        this.sitesSelectItem = {};
+
         const readAllSiteParam: {
             type: string;
         } = {

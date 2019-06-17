@@ -226,6 +226,9 @@ export default class UserGroup extends Vue {
     }
 
     async initSelectItemSite() {
+
+        this.sitesSelectItem = {};
+
         const readAllSiteParam: {
             type: string;
         } = {

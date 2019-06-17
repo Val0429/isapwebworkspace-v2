@@ -341,7 +341,7 @@ export default class User extends Vue {
             employeeId: "",
             siteIdsText: "",
             groupIdsText: "",
-            type: "add",
+            type: "",
             siteIds: [],
             groupIds: []
         };
@@ -353,6 +353,9 @@ export default class User extends Vue {
     }
 
     async initSelectItemSite() {
+
+        this.sitesSelectItem = {};
+
         const readAllSiteParam: {
             type: string;
         } = {
@@ -403,12 +406,15 @@ export default class User extends Vue {
     }
 
     async initSelectItemUserGroup() {
+
+        this.userGroupSelectItem = {};
+
         await this.$server
             .R("/user/group/all")
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
+                        // 自定義 userGroupSelectItem 的 key 的方式
                         this.userGroupSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
@@ -477,6 +483,9 @@ export default class User extends Vue {
                 break;
             case "groupIds":
                 this.inputUserData.groupIds = data.value;
+                break;
+            case "role":
+                this.inputUserData.role = data.value;
                 break;
         }
 

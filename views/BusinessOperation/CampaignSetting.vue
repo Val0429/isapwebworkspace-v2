@@ -238,6 +238,9 @@ export default class CampaignSetting extends Vue {
     }
 
     async initSelectItemSite() {
+
+        this.sitesSelectItem = {};
+
         const readAllSiteParam: {
             type: string;
         } = {
