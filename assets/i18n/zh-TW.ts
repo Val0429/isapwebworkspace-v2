@@ -1,83 +1,83 @@
-import { RegisterLanguage, ILang } from '@/../core/i18n';
+﻿import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage("zh-TW", "正體中文")
 export default class LangObject implements ILang {
-    wb_Login = "Login";
+    wb_Login = "登入";
     
-    w_Name = "名前";
-    w_Enabled = "有効";
+    w_Name = "姓名";
+    w_Enabled = "有效";
     w_Value = "値";
-    w_Startdate = "開始日";
-    w_Enddate = "終了日";
+    w_Startdate = "起始日";
+    w_Enddate = "結束日";
     w_Password = "密碼";
-    w_Selection = "選択";
-    w_Multi = "複数";
+    w_Selection = "";
+    w_Multi = "";
 
     w_Username = "使用者名稱";
-    w_Roles = "權限";
+    w_Roles = "角色";
     w_Email = "Email";
     w_CreatedAt = "建立日期";
-    w_UpdatedAt = "修改日期";
-    w_Actions = "動作";
-    w_ConfirmPassword = "重複輸入密碼";
+    w_UpdatedAt = "編輯日期";
+    w_Actions = "";
+    w_ConfirmPassword = "確認密碼";
 
     w_User = "使用者";
     w_UserAdd = "新增使用者";
-    w_UserEdit = "修改使用者";
+    w_UserEdit = "編輯使用者";
 
     m_PasswordShouldBeSame = "兩個密碼必須相同";
     
-    w_Logout="Log out";
+    w_Logout="登出";
 
-    day0="Monday";
-    day1="Tuesday";
-    day2="Wednesday";
-    day3="Thursday";
-    day4="Friday";
-    day5="Saturday";
-    day6="Sunday";
+    day0="星期一";
+    day1="星期二";
+    day2="星期三";
+    day3="星期四";
+    day4="星期五";
+    day5="星期六";
+    day6="星期日";
 
-    w_Member="Member";
-    w_MemberAdd="Add Member";
-    w_MemberEdit="Edit Member";
-    memberid="Member Id";
-    firstname= "First Name";
-    middlename= "Middle Name";
-    lastname= "Last Name";
-    status= "Status";
-    cardnNum= "Card Number";
-    createdAt= "Created At";
-    updatedAt= "Updated At";
+    w_Member="人員";
+    w_MemberAdd="新增人員";
+    w_MemberEdit="編輯人員";
+    memberid="員工工號";
+    firstname= "名";
+    middlename= "中間名";
+    lastname= "姓";
+    status= "狀態";
+    cardnNum= "卡號";
+    createdAt= "建立日期";
+    updatedAt= "編輯日期";
 
-    w_Door="Door";
-    system="System";
-    doorid="Door Id";
-    doorname="Door Name";
+    w_Door="門號";
+    system="門禁系統";
+    doorid="門號ID";
+    doorname="門號名稱";
     unlocktime="Unlock Time";
     shunttime="Shunt Time";
 
-    w_DoorGroup="Door Group";
-    w_DoorGroupAdd="Add Door Group";
-    w_DoorGroupEdit="Edit Door Group";
-    groupid="Group Id";
-    groupname="Group Name";
-    doors = "Doors";
+    w_DoorGroup="門號群組";
+    w_DoorGroupAdd="新增門號群組";
+    w_DoorGroupEdit="編輯門號群組";
+    groupid="門號群組ID";
+    groupname="門號群組名稱";
+    doors = "";
 
-    w_Elevator="Elevator";
-    w_ElevatorAdd="Add Elevator";
-    w_ElevatorEdit="Edit Elevator";
-    elevatorid="Elevator Id";
-    floor="Floor";
+    w_Elevator="電梯";
+    w_ElevatorAdd="新增電梯";
+    w_ElevatorEdit="編輯電梯";
+    elevatorid="電梯ID";
+    floor="樓層";
 
-    w_TimeSchedule="Time Schedule";
-    schedule="Schedule";
-    timeid ="Time Id";
-    timename="Time Name";
+    w_TimeSchedule="時間規格";
+    schedule="";
+    timeid ="時間規格ID";
+    timename="時間規格名稱";
 
-    w_PermissionTable="Permission Table";
-    w_PermissionTableAdd="Add Permission Table";
-    w_PermissionTableEdit="Edit Permission Table";
-    tableid="Table Id";
-    tablename="Table Name";
+    w_PermissionTable="權限表";
+    w_PermissionTableAdd="新增權限表";
+    w_PermissionTableEdit="編輯權限表";
+    tableid="權限表ID";
+    tablename="權限表名稱";
 
 }
