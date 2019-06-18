@@ -3,4 +3,10 @@ interface ISortSelectOption {
     text: string;
 }
 
-export { ISortSelectOption };
+interface ISortSelectTreeOption {
+    value: string;
+    text: string;
+    childrens: ISortSelectTreeOption[];
+}
+
+export { ISortSelectOption, ISortSelectTreeOption };

@@ -174,6 +174,10 @@ export class SortSelect extends Vue {
     created() {}
 
     mounted() {
+        this.initValue();
+    }
+
+    initValue() {
         this.optionsSelected = [];
         this.chooseSelected = [];
         this.optionsSelectItem = [];
@@ -414,7 +418,7 @@ export default SortSelect;
 .sort-select {
     display: flex;
     .move-button-row {
-        width: 80px;
+        width: 67px;
         padding-top: 100px;
         .move-button-frame {
             text-align: center;
@@ -438,7 +442,7 @@ export default SortSelect;
                 }
             }
             .check-frame {
-                height: 300px;
+                height: 400px;
                 overflow-x: hidden;
                 overflow-y: auto;
                 padding: 10px;

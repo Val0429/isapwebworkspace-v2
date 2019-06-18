@@ -27,7 +27,7 @@
                 </div>
                 <hr>
                 <div class="check-frame">
-                    <b-form-group>
+                    <!-- <b-form-group>
                         <b-form-checkbox
                             v-for="option in optionsSelectItem"
                             v-model="optionsSelected"
@@ -39,7 +39,7 @@
                         >
                             {{ option.text }}
                         </b-form-checkbox>
-                    </b-form-group>
+                    </b-form-group> -->
                 </div>
             </div>
         </div>
@@ -118,7 +118,7 @@
                 </div>
                 <hr>
                 <div class="check-frame">
-                    <b-form-group>
+                    <!-- <b-form-group>
                         <b-form-checkbox
                             v-for="choose in chooseSelectItem"
                             v-model="chooseSelected"
@@ -130,7 +130,7 @@
                         >
                             {{ choose.text }}
                         </b-form-checkbox>
-                    </b-form-group>
+                    </b-form-group> -->
                 </div>
 
             </div>
@@ -141,7 +141,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Model } from "vue-property-decorator";
-import { ISortSelectOption } from "./models/ISortSelect";
+import { ISortSelectTreeOption } from "./models/ISortSelect";
 
 @Component({
     components: {}
@@ -150,48 +150,130 @@ export class SortSelectTree extends Vue {
     optionSearchText = "";
     chooseSearchText = "";
 
-    optionsSelected: string[] = [];
-    chooseSelected: string[] = [];
-    optionsSelectItem: ISortSelectOption[] = [];
-    chooseSelectItem: ISortSelectOption[] = [];
+    optionsSelected: string[][] = [];
+    chooseSelected: string[][] = [];
+    optionsSelectItem: ISortSelectTreeOption[] = [];
+    chooseSelectItem: ISortSelectTreeOption[] = [];
 
-    // Model
-    @Model("input", {
-        type: Array,
-        default: function() {
-            return [];
-        }
-    })
-    value: string[];
+    value: string[] = ["A8", "A7", "B9", "A9"];
+    options: ISortSelectTreeOption[] = [
+        {
+            value: "A1",
+            text: "A 1",
+            childrens: [
+                { value: "A8", text: "A 8", childrens: [] },
+                { value: "A9", text: "A 9", childrens: [] },
+                { value: "A10", text: "A 10", childrens: [] }
+            ]
+        },
+        {
+            value: "A2",
+            text: "A 2",
+            childrens: [
+                {
+                    value: "A5",
+                    text: "A 5",
+                    childrens: [{ value: "A7", text: "A 7", childrens: [] }]
+                },
+                { value: "A6", text: "A 6", childrens: [] }
+            ]
+        },
+        {
+            value: "A3",
+            text: "A 3",
+            childrens: [{ value: "A4", text: "A 4", childrens: [] }]
+        },
+        {
+            value: "B1",
+            text: "B 1",
+            childrens: [
+                { value: "B5", text: "B 5", childrens: [] },
+                { value: "B6", text: "B 6", childrens: [] },
+                {
+                    value: "B7",
+                    text: "B 7",
+                    childrens: [
+                        { value: "B9", text: "B 9", childrens: [] },
+                        { value: "B10", text: "B 10", childrens: [] }
+                    ]
+                }
+            ]
+        },
+        {
+            value: "B2",
+            text: "B 2",
+            childrens: [{ value: "B8", text: "B 8", childrens: [] }]
+        },
+        { value: "B3", text: "B 3", childrens: [] },
+        { value: "B4", text: "B 4", childrens: [] }
+    ];
 
-    // prop
-    @Prop({
-        type: Array,
-        default: []
-    })
-    options: ISortSelectOption[];
+    // // Model
+    // @Model("input", {
+    //     type: Array,
+    //     default: function() {
+    //         return [];
+    //     }
+    // })
+    // value: string[];
+
+    // // prop
+    // @Prop({
+    //     type: Array,
+    //     default: []
+    // })
+    // options: ISortSelectOption[];
 
     created() {}
 
     mounted() {
+        this.initValue();
+    }
+
+    initValue() {
         this.optionsSelected = [];
         this.chooseSelected = [];
         this.optionsSelectItem = [];
         this.chooseSelectItem = [];
+
+        let anysisResult: ISortSelectTreeOption[] = [];
+
         for (let option of this.options) {
             let inValue = false;
             for (let val of this.value) {
-                if (val == option.value) {
-                    inValue = true;
-                    this.chooseSelectItem.push(option);
-                    break;
+                let tempRes = this.anysisChildren(val, option);
+                if (tempRes != null) {
+                    anysisResult.push(tempRes);
                 }
             }
-            if (!inValue) {
-                this.optionsSelectItem.push(option);
+        }
+
+        if (anysisResult.length > 0) {
+            this.mergeValue(anysisResult);
+        }
+
+        console.log(anysisResult);
+    }
+
+    anysisChildren(value: string, option: ISortSelectTreeOption) {
+        let result: any = null;
+        let tempOption = JSON.parse(JSON.stringify(option));
+        if (value == tempOption.value) {
+            result = tempOption;
+        } else {
+            tempOption.childrens = [];
+            for (let optionChildren of option.childrens) {
+                let childrenResult = this.anysisChildren(value, optionChildren);
+                if (childrenResult != null) {
+                    result = tempOption;
+                    result.childrens.push(childrenResult);
+                }
             }
         }
+        return result;
     }
+
+    mergeValue(anysisResult: ISortSelectTreeOption[]) {}
 
     // disable
     disableSelectAllOption(): boolean {
@@ -230,15 +312,15 @@ export class SortSelectTree extends Vue {
         let result = false;
         let chooseSelected = this.chooseSelected[0];
         if (chooseSelected != undefined && this.chooseSelected.length == 1) {
-            for (let i in this.chooseSelectItem) {
-                let choose = this.chooseSelectItem[i];
-                if (chooseSelected == choose.value) {
-                    if (parseInt(i) == 0) {
-                        result = true;
-                    }
-                    break;
-                }
-            }
+            // for (let i in this.chooseSelectItem) {
+            //     let choose = this.chooseSelectItem[i];
+            //     if (chooseSelected == choose.value) {
+            //         if (parseInt(i) == 0) {
+            //             result = true;
+            //         }
+            //         break;
+            //     }
+            // }
         } else {
             result = true;
         }
@@ -249,15 +331,15 @@ export class SortSelectTree extends Vue {
         let result = false;
         let chooseSelected = this.chooseSelected[0];
         if (chooseSelected != undefined && this.chooseSelected.length == 1) {
-            for (let i in this.chooseSelectItem) {
-                let choose = this.chooseSelectItem[i];
-                if (chooseSelected == choose.value) {
-                    if (parseInt(i) == this.chooseSelectItem.length - 1) {
-                        result = true;
-                    }
-                    break;
-                }
-            }
+            // for (let i in this.chooseSelectItem) {
+            //     let choose = this.chooseSelectItem[i];
+            //     if (chooseSelected == choose.value) {
+            //         if (parseInt(i) == this.chooseSelectItem.length - 1) {
+            //             result = true;
+            //         }
+            //         break;
+            //     }
+            // }
         } else {
             result = true;
         }
@@ -283,9 +365,9 @@ export class SortSelectTree extends Vue {
 
     selectAllOption() {
         this.optionsSelected = [];
-        for (let option of this.optionsSelectItem) {
-            this.optionsSelected.push(option.value);
-        }
+        // for (let option of this.optionsSelectItem) {
+        //     this.optionsSelected.push(option.value);
+        // }
     }
 
     clearOptions() {
@@ -303,9 +385,9 @@ export class SortSelectTree extends Vue {
 
     selectAllChoose() {
         this.chooseSelected = [];
-        for (let choose of this.chooseSelectItem) {
-            this.chooseSelected.push(choose.value);
-        }
+        // for (let choose of this.chooseSelectItem) {
+        //     this.chooseSelected.push(choose.value);
+        // }
     }
 
     clearAllChoose() {
@@ -317,15 +399,15 @@ export class SortSelectTree extends Vue {
         if (chooseSelected != undefined) {
             let chooseIndex = -1;
             let tempChooseItem: any = undefined;
-            for (let i in this.chooseSelectItem) {
-                let chooseItem = this.chooseSelectItem[i];
-                if (chooseItem.value == chooseSelected) {
-                    chooseIndex = parseInt(i);
-                    tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-                    this.chooseSelectItem.splice(parseInt(i), 1);
-                    break;
-                }
-            }
+            // for (let i in this.chooseSelectItem) {
+            //     let chooseItem = this.chooseSelectItem[i];
+            //     if (chooseItem.value == chooseSelected) {
+            //         chooseIndex = parseInt(i);
+            //         tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+            //         this.chooseSelectItem.splice(parseInt(i), 1);
+            //         break;
+            //     }
+            // }
             if (chooseIndex > 0) {
                 this.chooseSelectItem.splice(
                     chooseIndex - 1,
@@ -342,15 +424,15 @@ export class SortSelectTree extends Vue {
         if (chooseSelected != undefined) {
             let chooseIndex = -1;
             let tempChooseItem: any = undefined;
-            for (let i in this.chooseSelectItem) {
-                let chooseItem = this.chooseSelectItem[i];
-                if (chooseItem.value == chooseSelected) {
-                    chooseIndex = parseInt(i);
-                    tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-                    this.chooseSelectItem.splice(parseInt(i), 1);
-                    break;
-                }
-            }
+            // for (let i in this.chooseSelectItem) {
+            //     let chooseItem = this.chooseSelectItem[i];
+            //     if (chooseItem.value == chooseSelected) {
+            //         chooseIndex = parseInt(i);
+            //         tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+            //         this.chooseSelectItem.splice(parseInt(i), 1);
+            //         break;
+            //     }
+            // }
             if (chooseIndex < this.chooseSelectItem.length) {
                 this.chooseSelectItem.splice(
                     chooseIndex + 1,
@@ -364,35 +446,35 @@ export class SortSelectTree extends Vue {
 
     // change option and choose
     chooseToOption() {
-        for (let choose of this.chooseSelected) {
-            for (let i in this.chooseSelectItem) {
-                let chooseItem = this.chooseSelectItem[i];
-                if (choose == chooseItem.value) {
-                    this.optionsSelectItem.push(
-                        JSON.parse(JSON.stringify(chooseItem))
-                    );
-                    this.chooseSelectItem.splice(parseInt(i), 1);
-                    break;
-                }
-            }
-        }
+        // for (let choose of this.chooseSelected) {
+        //     for (let i in this.chooseSelectItem) {
+        //         let chooseItem = this.chooseSelectItem[i];
+        //         if (choose == chooseItem.value) {
+        //             this.optionsSelectItem.push(
+        //                 JSON.parse(JSON.stringify(chooseItem))
+        //             );
+        //             this.chooseSelectItem.splice(parseInt(i), 1);
+        //             break;
+        //         }
+        //     }
+        // }
         this.chooseSelected = [];
         this.$emit("input", this.resultList());
     }
 
     optionToChoose() {
-        for (let option of this.optionsSelected) {
-            for (let i in this.optionsSelectItem) {
-                let optionItem = this.optionsSelectItem[i];
-                if (option == optionItem.value) {
-                    this.chooseSelectItem.push(
-                        JSON.parse(JSON.stringify(optionItem))
-                    );
-                    this.optionsSelectItem.splice(parseInt(i), 1);
-                    break;
-                }
-            }
-        }
+        // for (let option of this.optionsSelected) {
+        //     for (let i in this.optionsSelectItem) {
+        //         let optionItem = this.optionsSelectItem[i];
+        //         if (option == optionItem.value) {
+        //             this.chooseSelectItem.push(
+        //                 JSON.parse(JSON.stringify(optionItem))
+        //             );
+        //             this.optionsSelectItem.splice(parseInt(i), 1);
+        //             break;
+        //         }
+        //     }
+        // }
         this.optionsSelected = [];
         this.$emit("input", this.resultList());
     }
@@ -414,7 +496,7 @@ export default SortSelectTree;
 .sort-select {
     display: flex;
     .move-button-row {
-        width: 80px;
+        width: 67px;
         padding-top: 100px;
         .move-button-frame {
             text-align: center;
@@ -438,7 +520,7 @@ export default SortSelectTree;
                 }
             }
             .check-frame {
-                height: 300px;
+                height: 400px;
                 overflow-x: hidden;
                 overflow-y: auto;
                 padding: 10px;

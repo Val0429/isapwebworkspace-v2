@@ -65,7 +65,10 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
-import { ISortSelectOption } from "@/components/SortSelect";
+import {
+    ISortSelectOption,
+    ISortSelectTreeOption
+} from "@/components/SortSelect";
 import SortSelect from "@/components/SortSelect/SortSelect.vue";
 import SortSelectTree from "@/components/SortSelect/SortSelectTree.vue";
 
