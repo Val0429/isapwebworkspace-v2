@@ -465,7 +465,9 @@ export default class HumanDetection extends Vue {
         console.log("selectedItem", data);
         this.isSelected = data;
         this.initInputFromData(data);
-        this.canvasDetail = this.inputFormData[0].rois;
+        if (this.inputFormData[0]) {
+            this.canvasDetail = this.inputFormData[0].rois;
+        }
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
