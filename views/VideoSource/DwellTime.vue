@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :label="_('w_VSDemographic_List')"
+            :label="_('w_VSDwellTime_List')"
         >
             <template #toolbox>
 
@@ -59,7 +59,7 @@
         <!-- 選擇增加方式 -->
         <iv-card
             v-show="addStep === eAddStep.select"
-            :label="_('w_VSDemographic_Add') "
+            :label="_('w_VSDwellTime_Add') "
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList" />
@@ -119,7 +119,7 @@
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
             v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "
-            :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSDemographic_AddisapUseFRS') :  _('w_VSDemographic_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSDemographic_EditisapUseFRS') :  _('w_VSDemographic_EditisapUseFRSManger')"
+            :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSDwellTime_AddisapUseFRS') :  _('w_VSDwellTime_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSDwellTime_EditisapUseFRS') :  _('w_VSDwellTime_EditisapUseFRSManger')"
         >
             <template #toolbox>
                 <iv-toolbox-leave
@@ -138,7 +138,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromiSap()"
-                :value="inputDemographicData"
+                :value="inputDwellTimeData"
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
@@ -198,7 +198,7 @@
 
             <iv-form
                 :interface="IViewFromiSap()"
-                :value="inputDemographicData"
+                :value="inputDwellTimeData"
             >
 
             </iv-form>
@@ -264,13 +264,13 @@
     }
 
     enum ECameraMode {
-        demographic = "demographic"
+        dwellTime = "dwellTime"
     }
 
     @Component({
         components: {}
     })
-    export default class Demographic extends Vue {
+    export default class DwellTime extends Vue {
         ePageStep = EPageStep;
         pageStep: EPageStep = EPageStep.list;
 
@@ -290,7 +290,7 @@
         sourceIdSelectItem: any = {};
 
         params: any = {
-            mode: ECameraMode.demographic
+            mode: ECameraMode.dwellTime
         };
 
         // tree 相關
@@ -298,24 +298,24 @@
         regionTreeItem = new RegionTreeItem();
         selecteds: IRegionTreeSelected[] = [];
 
-        inputDemographicData: any = {};
+        inputDwellTimeData: any = {};
 
         created() {}
 
         mounted() {}
 
         clearInputData() {
-            this.inputDemographicData = {
+            this.inputDwellTimeData = {
                 stepType: "",
                 customId: "",
                 areaId: "",
                 siteId: "",
                 groupIds: [],
                 name: "",
-                demoServerId: "",
                 serverId: "",
                 sourceid: "",
                 location: "",
+                direction: "",
                 objectId: ""
             };
         }
@@ -402,30 +402,6 @@
                 });
         }
 
-        async initSelectItemDemographicServer() {
-
-            this.demographicIdSelectItem = {};
-
-            await this.$server
-                .R("/partner/demographic")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response.results) {
-                            // 自定義 demographicIdSelectItem 的 key 的方式
-                            this.demographicIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
-
         selectedItem(data) {
             this.isSelected = data;
             this.selectedDetail = [];
@@ -435,7 +411,7 @@
         getInputData() {
             this.clearInputData();
             for (const param of this.selectedDetail) {
-                this.inputDemographicData = {
+                this.inputDwellTimeData = {
                     // objectId: param.objectId,
                     name: param.name,
                     areaId:
@@ -451,8 +427,7 @@
                     objectId: param.objectId,
                     siteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
                     groupIds: param.groups,
-                    demoServerId: param.demoServer && param.demoServer["objectId"] ? param.demoServer["objectId"] : "",
-                    demoServerIdView: param.demoServer && param.demoServer["name"] ? param.demoServer["name"] : "",
+                    direction: param.direction,
                     serverId:
                         param.config &&
                         param.config.server &&
@@ -475,9 +450,9 @@
                 };
             }
 
-            if (this.inputDemographicData.serverId !== "") {
+            if (this.inputDwellTimeData.serverId !== "") {
                 this.selectSourceIdAndLocation(
-                    this.inputDemographicData.serverId
+                    this.inputDwellTimeData.serverId
                 );
             }
         }
@@ -485,35 +460,35 @@
         tempSaveInputData(data) {
             switch (data.key) {
                 case "name":
-                    this.inputDemographicData.name = data.value;
+                    this.inputDwellTimeData.name = data.value;
                     break;
                 case "customId":
-                    this.inputDemographicData.customId = data.value;
+                    this.inputDwellTimeData.customId = data.value;
                     break;
                 case "areaId":
-                    this.inputDemographicData.areaId = data.value;
+                    this.inputDwellTimeData.areaId = data.value;
                     break;
                 case "groupIds":
-                    this.inputDemographicData.groupIds = data.value;
-                    break;
-                case "demoServerId":
-                    this.inputDemographicData.demoServerId = data.value;
+                    this.inputDwellTimeData.groupIds = data.value;
                     break;
                 case "serverId":
-                    this.inputDemographicData.serverId = data.value;
+                    this.inputDwellTimeData.serverId = data.value;
                     break;
                 case "sourceid":
-                    this.inputDemographicData.sourceid = data.value;
+                    this.inputDwellTimeData.sourceid = data.value;
+                    break;
+                case "direction":
+                    this.inputDwellTimeData.direction = data.value;
                     break;
                 case "siteId":
-                    this.inputDemographicData.siteId = data.value;
+                    this.inputDwellTimeData.siteId = data.value;
                     break;
             }
 
             this.selecteds = [];
 
             for (const detail in this.sitesSelectItem) {
-                if (this.inputDemographicData.siteId === detail) {
+                if (this.inputDwellTimeData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -578,8 +553,8 @@
             this.deviceGroupSelectItem = {};
 
             if (data === undefined || data === '') {
-                this.inputDemographicData.areaId = '';
-                this.inputDemographicData.groupIds = [];
+                this.inputDwellTimeData.areaId = '';
+                this.inputDwellTimeData.groupIds = [];
             }
 
             if (this.pageStep === EPageStep.add) {
@@ -596,8 +571,8 @@
                         .then((response: any) => {
                             if (response != undefined) {
                                 for (const returnValue of response) {
-                                    this.inputDemographicData.areaId = '';
-                                    this.inputDemographicData.groupIds = [];
+                                    this.inputDwellTimeData.areaId = '';
+                                    this.inputDwellTimeData.groupIds = [];
                                     // 自定義 areaSelectItem 的 key 的方式
                                     this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                                 }
@@ -621,8 +596,8 @@
             if (this.pageStep === EPageStep.edit) {
                 if (data !== undefined || data !== '') {
 
-                    if (this.inputDemographicData.tempSiteId !== data) {
-                        this.inputDemographicData.areaId = '';
+                    if (this.inputDwellTimeData.tempSiteId !== data) {
+                        this.inputDwellTimeData.areaId = '';
                     }
 
                     const readParam: {
@@ -664,7 +639,7 @@
             this.deviceGroupSelectItem = {};
 
             if (data === undefined || data === '') {
-                this.inputDemographicData.groupIds = [];
+                this.inputDwellTimeData.groupIds = [];
             }
 
             if (this.pageStep === EPageStep.add) {
@@ -674,7 +649,7 @@
                         mode: string;
                     } = {
                         areaId: data,
-                        mode: ECameraMode.demographic
+                        mode: ECameraMode.dwellTime
                     };
 
                     await this.$server
@@ -682,7 +657,7 @@
                         .then((response: any) => {
                             if (response != undefined) {
                                 for (const returnValue of response) {
-                                    this.inputDemographicData.groupIds = [];
+                                    this.inputDwellTimeData.groupIds = [];
                                     // 自定義 deviceGroupSelectItem 的 key 的方式
                                     this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
 
@@ -711,11 +686,11 @@
                         mode: string;
                     } = {
                         areaId: data,
-                        mode: ECameraMode.demographic
+                        mode: ECameraMode.dwellTime
                     };
 
-                    if (this.inputDemographicData.tempAreaId !== data) {
-                        this.inputDemographicData.groupIds = [];
+                    if (this.inputDwellTimeData.tempAreaId !== data) {
+                        this.inputDwellTimeData.groupIds = [];
                     }
 
                     await this.$server
@@ -747,10 +722,9 @@
         async pageToAdd(stepType: string) {
             this.clearInputData();
             await this.initSelectItemSite();
-            await this.initSelectItemDemographicServer();
             this.pageStep = EPageStep.add;
             this.addStep = EAddStep.select;
-            this.inputDemographicData.stepType = stepType;
+            this.inputDwellTimeData.stepType = stepType;
             this.selecteds = [];
         }
 
@@ -758,18 +732,17 @@
             this.pageStep = EPageStep.edit;
             this.getInputData();
             await this.initSelectItemFRSServer();
-            await this.initSelectItemDemographicServer();
             await this.initSelectItemSite();
-            await this.selectAreaId(this.inputDemographicData.siteId);
-            await this.selectGroupDeviceId(this.inputDemographicData.areaId);
-            this.inputDemographicData.stepType = stepType;
-            this.inputDemographicData.groupIds = JSON.parse(
+            await this.selectAreaId(this.inputDwellTimeData.siteId);
+            await this.selectGroupDeviceId(this.inputDwellTimeData.areaId);
+            this.inputDwellTimeData.stepType = stepType;
+            this.inputDwellTimeData.groupIds = JSON.parse(
                 JSON.stringify(
-                    this.inputDemographicData.groupIds.map(item => item.objectId)
+                    this.inputDwellTimeData.groupIds.map(item => item.objectId)
                 )
             );
 
-            if (this.inputDemographicData.serverId !== "") {
+            if (this.inputDwellTimeData.serverId !== "") {
                 this.addStep = EAddStep.isapFrs;
             }
 
@@ -779,7 +752,7 @@
             this.pageStep = EPageStep.view;
             this.getInputData();
 
-            if (this.inputDemographicData.serverId !== "") {
+            if (this.inputDwellTimeData.serverId !== "") {
                 this.addStep = EAddStep.isapFrs;
             }
         }
@@ -795,8 +768,8 @@
             await this.initSelectItemFRSServer();
             await this.initSelectItemSite();
             this.addStep = EAddStep.isapFrs;
-            this.inputDemographicData.brand = brand;
-            this.inputDemographicData.stepType = EPageStep.add;
+            this.inputDwellTimeData.brand = brand;
+            this.inputDwellTimeData.stepType = EPageStep.add;
         }
 
         async pageToAddByiSapFRSManager(brand: string) {
@@ -804,8 +777,8 @@
             await this.initSelectItemSite();
 
             this.addStep = EAddStep.isapFrsManager;
-            this.inputDemographicData.brand = brand;
-            this.inputDemographicData.stepType = EPageStep.add;
+            this.inputDwellTimeData.brand = brand;
+            this.inputDwellTimeData.stepType = EPageStep.add;
         }
 
         pageStepBackward() {
@@ -820,10 +793,10 @@
             this.selecteds = [];
             this.areaSelectItem = {};
             this.deviceGroupSelectItem = {};
-            this.inputDemographicData.areaId = '';
-            this.inputDemographicData.groupIds = [];
+            this.inputDwellTimeData.areaId = '';
+            this.inputDwellTimeData.groupIds = [];
             for (const detail in this.sitesSelectItem) {
-                if (this.inputDemographicData.siteId === detail) {
+                if (this.inputDwellTimeData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -837,25 +810,25 @@
 
         async pageToShowResult() {
 
-            if (this.inputDemographicData.stepType === EPageStep.add) {
+            if (this.inputDwellTimeData.stepType === EPageStep.add) {
                 this.pageStep = EPageStep.add;
 
                 // siteId clear
-                this.inputDemographicData.siteId = '';
+                this.inputDwellTimeData.siteId = '';
 
                 // from selecteds push siteId
-                this.inputDemographicData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputDemographicData.siteId);
+                this.inputDwellTimeData.siteId = this.selecteds[0].objectId;
+                await this.selectAreaId(this.inputDwellTimeData.siteId);
             }
 
-            if (this.inputDemographicData.stepType === EPageStep.edit) {
+            if (this.inputDwellTimeData.stepType === EPageStep.edit) {
                 this.pageStep = EPageStep.edit;
                 // siteId clear
-                this.inputDemographicData.siteId = '';
+                this.inputDwellTimeData.siteId = '';
 
                 // from selecteds push siteId
-                this.inputDemographicData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputDemographicData.siteId);
+                this.inputDwellTimeData.siteId = this.selecteds[0].objectId;
+                await this.selectAreaId(this.inputDwellTimeData.siteId);
             }
 
         }
@@ -872,16 +845,17 @@
             const configObject: IConfigiSap = {
                 serverId: data.serverId,
                 sourceid: data.sourceid,
+
             };
 
-            if (this.inputDemographicData.brand === EAddStep.isapFrs) {
+            if (this.inputDwellTimeData.brand === EAddStep.isapFrs) {
                 const datas: any = [
                     {
                         customId: data.customId,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        direction: data.direction,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
                         config: configObject
                     }
                 ];
@@ -891,7 +865,7 @@
                 };
 
                 await this.$server
-                    .C("/device/demographic", addParam)
+                    .C("/device/dwell-time", addParam)
                     .then((response: any) => {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
@@ -924,14 +898,14 @@
                     });
             }
 
-            if (this.inputDemographicData.stepType === EPageStep.edit) {
+            if (this.inputDwellTimeData.stepType === EPageStep.edit) {
                 const datas: any = [
                     {
                         objectId: data.objectId,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        direction: data.direction,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
                         config: configObject
                     }
                 ];
@@ -941,7 +915,7 @@
                 };
 
                 await this.$server
-                    .U("/device/demographic", editParam)
+                    .U("/device/dwell-time", editParam)
                     .then((response: any) => {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
@@ -1108,7 +1082,7 @@
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                this.inputDemographicData.stepType === EPageStep.add
+                this.inputDwellTimeData.stepType === EPageStep.add
                     ? "iv-form-string"
                     : "iv-form-label"
                 }
@@ -1121,20 +1095,6 @@
                  * @uiPlaceHolder - ${this._("w_Name")}
                  */
                 name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiHidden - ${
-                this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                }
-                 */
-                demoServerId: ${toEnumInterface(
-                this.demographicIdSelectItem as any,
-                false
-            )};
-
 
 
                 /**
@@ -1162,6 +1122,15 @@
                 false
             )};
 
+
+                /**
+                 * @uiLabel - ${this._("w_Direction")}
+                 * @uiPlaceHolder - ${this._("w_Direction")}
+                 */
+                direction: ${toEnumInterface({
+                in: this._("w_In"),
+                out: this._("w_Out")
+            })};
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
@@ -1206,11 +1175,6 @@
                  */
                 name?: string;
 
-                /*
-                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiType - iv-form-label
-                 */
-                demoServerIdView?: string;
 
                 /**
                  * @uiLabel - ${this._("w_ServerId")}
@@ -1224,6 +1188,13 @@
                  * @uiType - iv-form-label
                  */
                 sourceidView?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Direction")}
+                 * @uiType - iv-form-label
+                 */
+                direction?: direction;
 
 
                 /**

@@ -1,6 +1,7 @@
 import { IVSDemographic, IResponse } from "@/config/default/api/interfaces";
+import VSDemographicCreate from "@/config/default/api/VideoSourceDemographic/vsDemographicCreate";
 
-declare namespace VSPeopleCountingUpdate {
+declare namespace VSPDemographicUpdate {
     export interface Input {
         datas: IVSDemographic[];
     }
@@ -9,4 +10,4 @@ declare namespace VSPeopleCountingUpdate {
     }
 }
 
-export default VSPeopleCountingUpdate;
+export default VSPDemographicUpdate;

@@ -49,7 +49,10 @@
 
                 <template #Actions="{$attrs, $listeners}">
 
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
+                    <iv-toolbox-more
+                        size="sm"
+                        :disabled="isSelected.length !== 1"
+                    >
                         <iv-toolbox-view @click="pageToView" />
                         <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
                         <iv-toolbox-delete @click="doDelete" />
@@ -353,7 +356,6 @@ export default class User extends Vue {
     }
 
     async initSelectItemSite() {
-
         this.sitesSelectItem = {};
 
         const readAllSiteParam: {
@@ -406,7 +408,6 @@ export default class User extends Vue {
     }
 
     async initSelectItemUserGroup() {
-
         this.userGroupSelectItem = {};
 
         await this.$server
@@ -489,7 +490,7 @@ export default class User extends Vue {
                 break;
         }
 
-        console.log('data - ', data);
+        console.log("data - ", data);
 
         this.selecteds = [];
 

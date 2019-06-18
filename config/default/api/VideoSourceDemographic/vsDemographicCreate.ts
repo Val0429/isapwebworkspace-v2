@@ -1,7 +1,7 @@
 import { IVSDemographic, IResponse } from '@/config/default/api/interfaces';
 
 
-declare namespace VSPeopleCountingCreate {
+declare namespace VSDemographicCreate {
     export interface Input {
         datas: IVSDemographic[];
     }
@@ -11,4 +11,4 @@ declare namespace VSPeopleCountingCreate {
     }
 }
 
-export default VSPeopleCountingCreate;
+export default VSDemographicCreate;

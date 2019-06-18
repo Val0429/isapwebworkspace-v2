@@ -85,6 +85,10 @@
                         url="/video_sources/demographic"
                     />
                     <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_DwellTime')"
+                        url="/video_sources/dwell_time"
+                    />
+                    <SidebarNavItem
                         :label="_('w_Navigation_VideoSources_Heatmap')"
                         url="/video_sources/heatmap"
                     />

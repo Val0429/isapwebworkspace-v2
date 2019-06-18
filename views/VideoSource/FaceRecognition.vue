@@ -79,7 +79,7 @@
 
             <hr>
 
-            <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_isap') }}</div>
+            <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
 
             <b-button
                 class="button mt-3 mb-1"
@@ -96,7 +96,7 @@
                 class="mt-4"
                 @click="goToSetFRSServer"
             >
-                {{ _('w_VSPeopleCounting_SetFRS') }}
+                {{ _('w_SetFRS') }}
             </b-button>
 
             <br>
@@ -116,7 +116,7 @@
                 class="mt-4"
                 @click="goToSetFRSManager"
             >
-                {{ _('w_VSPeopleCounting_SetFRSManger') }}
+                {{ _('w_SetFRSManger') }}
             </b-button>
 
             <template #footer>
