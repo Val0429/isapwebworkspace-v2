@@ -564,7 +564,7 @@ export default class PeopleCounting extends Vue {
                 groupIdsText: this.idsToText(param.groups),
                 stepType: "",
                 tempSiteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
-                tempGroupIds: param.groups,
+                tempAreaId: param.area && param.area["objectId"]? param.area["objectId"]: "",
             };
         }
 
@@ -737,6 +737,10 @@ export default class PeopleCounting extends Vue {
         if (this.pageStep === EPageStep.edit) {
             if (data !== undefined || data !== '') {
 
+                if (this.inputPeopleCountingData.tempSiteId !== data) {
+                    this.inputPeopleCountingData.areaId = '';
+                }
+
                 const readParam: {
                     siteId: string;
                 } = {
@@ -778,7 +782,6 @@ export default class PeopleCounting extends Vue {
         if (data === undefined || data === '') {
             this.inputPeopleCountingData.groupIds = [];
         }
-
 
         if (this.pageStep === EPageStep.add) {
             if (data !== undefined) {
@@ -826,6 +829,10 @@ export default class PeopleCounting extends Vue {
                     areaId: data,
                     mode: 'peopleCounting'
                 };
+
+                if (this.inputPeopleCountingData.tempAreaId !== data) {
+                    this.inputPeopleCountingData.groupIds = '';
+                }
 
                 await this.$server
                     .R("/device/group/all", readParam)
@@ -976,13 +983,7 @@ export default class PeopleCounting extends Vue {
 
             // from selecteds push siteId
             this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
-
-            if (this.inputPeopleCountingData.siteId === undefined || this.inputPeopleCountingData.siteId === '') {
-                this.areaSelectItem = {};
-                this.deviceGroupSelectItem = {};
-            } else {
-                await this.selectAreaId(this.inputPeopleCountingData.siteId);
-            }
+            await this.selectAreaId(this.inputPeopleCountingData.siteId);
         }
 
         if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
@@ -992,14 +993,7 @@ export default class PeopleCounting extends Vue {
 
             // from selecteds push siteId
             this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
-
-            if (this.inputPeopleCountingData.siteId === undefined || this.inputPeopleCountingData.siteId === '') {
-                this.areaSelectItem = {};
-                this.deviceGroupSelectItem = {};
-            } else {
-                await this.selectAreaId(this.inputPeopleCountingData.siteId);
-            }
-
+            await this.selectAreaId(this.inputPeopleCountingData.siteId);
         }
 
     }
