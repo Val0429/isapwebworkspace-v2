@@ -73,7 +73,6 @@ import { VSDemographicCreate, VSDemographicUpdate } from '@/config/default/api/V
 // Video Source Dwell Time
 import { VSDwellTimeUpdate, VSDwellTimeCreate } from '@/config/default/api/VideoSourceDwellTime';
 
-
 interface RestfulRequest extends ApisRequestBase {
     // create
     Post: {
@@ -97,6 +96,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // device heatmap
         '/device/heatmap': [any, any, false];
+
+        // device/human-detection
+        '/device/human-detection': [any, any, false];
 
         // server device
         '/partner/cms/device': [any, any, false];
@@ -281,6 +283,9 @@ interface RestfulRequest extends ApisRequestBase {
         // device heatmap
         '/device/heatmap': [any, any, false];
 
+        // device/human-detection
+        '/device/human-detection': [any, any, false];
+
         // Location Region
         '/location/region': [RegionUpdate.Input, RegionUpdate.Output, false];
 
@@ -343,7 +348,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/device/demographic': [VSDemographicUpdate.Input, VSDemographicUpdate.Output, false];
 
         // Video Source Dwell Time
-        '/device/dwell-time': [VSDwellTimeUpdate.Input, VSDwellTimeUpdate.Output, false];};
+        '/device/dwell-time': [VSDwellTimeUpdate.Input, VSDwellTimeUpdate.Output, false];
+    };
 
     // delete
     Delete: {
