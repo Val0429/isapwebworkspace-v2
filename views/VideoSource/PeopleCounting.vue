@@ -230,7 +230,7 @@
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
             v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "
-            :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_AddisapUseFRS') :  _('w_VSPeopleCounting_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSPeopleCounting_EditisapUseFRS') :  _('w_VSPeopleCounting_EditisapUseFRSManger')"
+            :label=showLabelTitle()
         >
             <template #toolbox>
                 <iv-toolbox-leave
@@ -1301,6 +1301,25 @@ export default class PeopleCounting extends Vue {
         }
         result = result.substring(0, result.length - 2);
         return result;
+    }
+
+    showLabelTitle(): string {
+        if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrs) {
+            return this._("w_VSPeopleCounting_AddisapUseFRS")
+        }
+
+        if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrsManager) {
+            return this._("w_VSPeopleCounting_AddisapUseFRSManger")
+        }
+
+        if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrs) {
+            return this._("w_VSPeopleCounting_EditisapUseFRS")
+        }
+
+        if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrsManager) {
+            return this._("w_VSPeopleCounting_EditisapUseFRSManger")
+        }
+
     }
 
     ITableList() {

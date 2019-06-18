@@ -53,6 +53,7 @@ import FaceRecognition from './VideoSource/FaceRecognition.vue';
 import Heatmap from './VideoSource/Heatmap.vue';
 import CMS from './VideoSource/CMS.vue';
 import VIP from './VideoSource/VIP.vue';
+import VIP_Stranger_Visitor from './VideoSource/VIP_Stranger_Visitor.vue';
 
 // Setting
 import MailServer from './Setting/MailServer.vue';
@@ -127,7 +128,8 @@ $({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-clos
 $({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })(FaceRecognition);
 $({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-close', redirect: '/login' })(CMS);
 $({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redirect: '/login' })(VIP);
-$({ path: '/video_sources/dwell_time', name: 'VideoSources_DwellTime', icon: 'fa-close'})(DwellTime);
+$({ path: '/video_sources/dwell_time', name: 'VideoSources_DwellTime', icon: 'fa-check'})(DwellTime);
+$({ path: '/video_sources/vip_stranger_visitor', name: 'VideoSources_VIP_Stranger_Visitor', icon: 'fa-check'})(VIP_Stranger_Visitor);
 
 // Rules and Action (?)
 $({ path: '/rules_actions', name: "_('w_Navigation_RulesActions')", icon: 'fa-question', redirect: '/login' })();

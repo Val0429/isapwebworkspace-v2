@@ -119,7 +119,7 @@
         <!-- add and edit by iSap FRS and FRS Manager  -->
         <iv-auto-card
             v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "
-            :label="(pageStep === ePageStep.add && addStep === eAddStep.isapFrs) ? _('w_VSDwellTime_AddisapUseFRS') :  _('w_VSDwellTime_AddisapUseFRSManger') || (pageStep === ePageStep.edit && addStep === eAddStep.isapFrs) ? _('w_VSDwellTime_EditisapUseFRS') :  _('w_VSDwellTime_EditisapUseFRSManger')"
+            :label=showLabelTitle()
         >
             <template #toolbox>
                 <iv-toolbox-leave
@@ -190,7 +190,7 @@
         <iv-card
             v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"
             :visible="true"
-            :label="_('w_VSDemographic_View')"
+            :label="_('w_VSDwellTime_View')"
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -286,7 +286,6 @@
         deviceGroupSelectItem: any = {};
         areaSelectItem: any = {};
         serverIdSelectItem: any = {};
-        demographicIdSelectItem: any = {};
         sourceIdSelectItem: any = {};
 
         params: any = {
@@ -870,7 +869,7 @@
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
                                 Dialog.success(
-                                    this._("w_VSDemographic_AddSuccess")
+                                    this._("w_VSDwellTime_AddSuccess")
                                 );
                                 this.pageToList();
                             }
@@ -879,7 +878,7 @@
                                 returnValue.statusCode === 400
                             ) {
                                 Dialog.error(
-                                    this._("w_VSDemographic_ADDFailed")
+                                    this._("w_VSDwellTime_ADDFailed")
                                 );
                                 return false;
                             }
@@ -890,7 +889,7 @@
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSDemographic_ADDFailed"));
+                            Dialog.error(this._("w_VSDwellTime_ADDFailed"));
                             return false;
                         }
                         console.log(e);
@@ -920,7 +919,7 @@
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
                                 Dialog.success(
-                                    this._("w_VSDemographic_EditSuccess")
+                                    this._("w_VSDwellTime_EditSuccess")
                                 );
                                 this.pageToList();
                             }
@@ -929,7 +928,7 @@
                                 returnValue.statusCode === 400
                             ) {
                                 Dialog.error(
-                                    this._("w_VSDemographic_EditFailed")
+                                    this._("w_VSDwellTime_EditFailed")
                                 );
                                 return false;
                             }
@@ -940,7 +939,7 @@
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSDemographic_EditFailed"));
+                            Dialog.error(this._("w_VSDwellTime_EditFailed"));
                             return false;
                         }
                         console.log(e);
@@ -951,7 +950,7 @@
 
         async doDelete() {
             await Dialog.confirm(
-                this._("w_VSDemographic_DeleteConfirm"),
+                this._("w_VSDwellTime_DeleteConfirm"),
                 this._("w_DeleteConfirm"),
                 () => {
                     for (const param of this.selectedDetail) {
@@ -1019,6 +1018,25 @@
             }
             result = result.substring(0, result.length - 2);
             return result;
+        }
+
+        showLabelTitle(): string {
+            if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrs) {
+                return this._("w_VSDwellTime_AddisapUseFRS")
+            }
+
+            if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrsManager) {
+                return this._("w_VSDwellTime_AddisapUseFRSManger")
+            }
+
+            if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrs) {
+                return this._("w_VSDwellTime_EditisapUseFRS")
+            }
+
+            if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrsManager) {
+                return this._("w_VSDwellTime_EditisapUseFRSManger")
+            }
+
         }
 
         ITableList() {

@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :label="_('w_VSDemographic_List')"
+            :label="_('w_VSVIP_Stranger_Visitor_List')"
         >
             <template #toolbox>
 
@@ -32,6 +32,11 @@
                 @selected="selectedItem($event)"
             >
 
+                <template #FRSServer="{$attrs}">
+                    <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
+                    {{ $attrs.row && $attrs.row.config && $attrs.row.config.server && $attrs.row.config.server.name ? $attrs.row.config.server.name : '' }}
+                </template>
+
                 <template #site="{$attrs}">
                     <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
                     {{ $attrs.value ? $attrs.value.name : ""}}
@@ -59,7 +64,7 @@
         <!-- 選擇增加方式 -->
         <iv-card
             v-show="addStep === eAddStep.select"
-            :label="_('w_VSDemographic_Add') "
+            :label="_('w_VSVIP_Stranger_Visitor_Add') "
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList" />
@@ -138,7 +143,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromiSap()"
-                :value="inputDemographicData"
+                :value="inputVIPStrangerVisitorData"
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
@@ -190,7 +195,7 @@
         <iv-card
             v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"
             :visible="true"
-            :label="_('w_VSDemographic_View')"
+            :label="_('w_VSVIP_Stranger_Visitor_View')"
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -198,7 +203,7 @@
 
             <iv-form
                 :interface="IViewFromiSap()"
-                :value="inputDemographicData"
+                :value="inputVIPStrangerVisitorData"
             >
 
             </iv-form>
@@ -264,13 +269,13 @@
     }
 
     enum ECameraMode {
-        demographic = "demographic"
+        visitor = "visitor"
     }
 
     @Component({
         components: {}
     })
-    export default class Demographic extends Vue {
+    export default class VIP_Stranger_Visitor extends Vue {
         ePageStep = EPageStep;
         pageStep: EPageStep = EPageStep.list;
 
@@ -286,11 +291,10 @@
         deviceGroupSelectItem: any = {};
         areaSelectItem: any = {};
         serverIdSelectItem: any = {};
-        demographicIdSelectItem: any = {};
         sourceIdSelectItem: any = {};
 
         params: any = {
-            mode: ECameraMode.demographic
+            mode: ECameraMode.visitor
         };
 
         // tree 相關
@@ -298,21 +302,20 @@
         regionTreeItem = new RegionTreeItem();
         selecteds: IRegionTreeSelected[] = [];
 
-        inputDemographicData: any = {};
+        inputVIPStrangerVisitorData: any = {};
 
         created() {}
 
         mounted() {}
 
         clearInputData() {
-            this.inputDemographicData = {
+            this.inputVIPStrangerVisitorData = {
                 stepType: "",
                 customId: "",
                 areaId: "",
                 siteId: "",
                 groupIds: [],
                 name: "",
-                demoServerId: "",
                 serverId: "",
                 sourceid: "",
                 location: "",
@@ -402,30 +405,6 @@
                 });
         }
 
-        async initSelectItemDemographicServer() {
-
-            this.demographicIdSelectItem = {};
-
-            await this.$server
-                .R("/partner/demographic")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response.results) {
-                            // 自定義 demographicIdSelectItem 的 key 的方式
-                            this.demographicIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
-
         selectedItem(data) {
             this.isSelected = data;
             this.selectedDetail = [];
@@ -435,7 +414,7 @@
         getInputData() {
             this.clearInputData();
             for (const param of this.selectedDetail) {
-                this.inputDemographicData = {
+                this.inputVIPStrangerVisitorData = {
                     // objectId: param.objectId,
                     name: param.name,
                     areaId:
@@ -451,8 +430,6 @@
                     objectId: param.objectId,
                     siteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
                     groupIds: param.groups,
-                    demoServerId: param.demoServer && param.demoServer["objectId"] ? param.demoServer["objectId"] : "",
-                    demoServerIdView: param.demoServer && param.demoServer["name"] ? param.demoServer["name"] : "",
                     serverId:
                         param.config &&
                         param.config.server &&
@@ -475,9 +452,9 @@
                 };
             }
 
-            if (this.inputDemographicData.serverId !== "") {
+            if (this.inputVIPStrangerVisitorData.serverId !== "") {
                 this.selectSourceIdAndLocation(
-                    this.inputDemographicData.serverId
+                    this.inputVIPStrangerVisitorData.serverId
                 );
             }
         }
@@ -485,35 +462,35 @@
         tempSaveInputData(data) {
             switch (data.key) {
                 case "name":
-                    this.inputDemographicData.name = data.value;
+                    this.inputVIPStrangerVisitorData.name = data.value;
                     break;
                 case "customId":
-                    this.inputDemographicData.customId = data.value;
+                    this.inputVIPStrangerVisitorData.customId = data.value;
                     break;
                 case "areaId":
-                    this.inputDemographicData.areaId = data.value;
+                    this.inputVIPStrangerVisitorData.areaId = data.value;
                     break;
                 case "groupIds":
-                    this.inputDemographicData.groupIds = data.value;
-                    break;
-                case "demoServerId":
-                    this.inputDemographicData.demoServerId = data.value;
+                    this.inputVIPStrangerVisitorData.groupIds = data.value;
                     break;
                 case "serverId":
-                    this.inputDemographicData.serverId = data.value;
+                    this.inputVIPStrangerVisitorData.serverId = data.value;
                     break;
                 case "sourceid":
-                    this.inputDemographicData.sourceid = data.value;
+                    this.inputVIPStrangerVisitorData.sourceid = data.value;
+                    break;
+                case "direction":
+                    this.inputVIPStrangerVisitorData.direction = data.value;
                     break;
                 case "siteId":
-                    this.inputDemographicData.siteId = data.value;
+                    this.inputVIPStrangerVisitorData.siteId = data.value;
                     break;
             }
 
             this.selecteds = [];
 
             for (const detail in this.sitesSelectItem) {
-                if (this.inputDemographicData.siteId === detail) {
+                if (this.inputVIPStrangerVisitorData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -578,8 +555,8 @@
             this.deviceGroupSelectItem = {};
 
             if (data === undefined || data === '') {
-                this.inputDemographicData.areaId = '';
-                this.inputDemographicData.groupIds = [];
+                this.inputVIPStrangerVisitorData.areaId = '';
+                this.inputVIPStrangerVisitorData.groupIds = [];
             }
 
             if (this.pageStep === EPageStep.add) {
@@ -596,8 +573,8 @@
                         .then((response: any) => {
                             if (response != undefined) {
                                 for (const returnValue of response) {
-                                    this.inputDemographicData.areaId = '';
-                                    this.inputDemographicData.groupIds = [];
+                                    this.inputVIPStrangerVisitorData.areaId = '';
+                                    this.inputVIPStrangerVisitorData.groupIds = [];
                                     // 自定義 areaSelectItem 的 key 的方式
                                     this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                                 }
@@ -621,8 +598,8 @@
             if (this.pageStep === EPageStep.edit) {
                 if (data !== undefined || data !== '') {
 
-                    if (this.inputDemographicData.tempSiteId !== data) {
-                        this.inputDemographicData.areaId = '';
+                    if (this.inputVIPStrangerVisitorData.tempSiteId !== data) {
+                        this.inputVIPStrangerVisitorData.areaId = '';
                     }
 
                     const readParam: {
@@ -664,7 +641,7 @@
             this.deviceGroupSelectItem = {};
 
             if (data === undefined || data === '') {
-                this.inputDemographicData.groupIds = [];
+                this.inputVIPStrangerVisitorData.groupIds = [];
             }
 
             if (this.pageStep === EPageStep.add) {
@@ -674,7 +651,7 @@
                         mode: string;
                     } = {
                         areaId: data,
-                        mode: ECameraMode.demographic
+                        mode: ECameraMode.visitor
                     };
 
                     await this.$server
@@ -682,7 +659,7 @@
                         .then((response: any) => {
                             if (response != undefined) {
                                 for (const returnValue of response) {
-                                    this.inputDemographicData.groupIds = [];
+                                    this.inputVIPStrangerVisitorData.groupIds = [];
                                     // 自定義 deviceGroupSelectItem 的 key 的方式
                                     this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
 
@@ -711,11 +688,11 @@
                         mode: string;
                     } = {
                         areaId: data,
-                        mode: ECameraMode.demographic
+                        mode: ECameraMode.visitor
                     };
 
-                    if (this.inputDemographicData.tempAreaId !== data) {
-                        this.inputDemographicData.groupIds = [];
+                    if (this.inputVIPStrangerVisitorData.tempAreaId !== data) {
+                        this.inputVIPStrangerVisitorData.groupIds = [];
                     }
 
                     await this.$server
@@ -747,10 +724,9 @@
         async pageToAdd(stepType: string) {
             this.clearInputData();
             await this.initSelectItemSite();
-            await this.initSelectItemDemographicServer();
             this.pageStep = EPageStep.add;
             this.addStep = EAddStep.select;
-            this.inputDemographicData.stepType = stepType;
+            this.inputVIPStrangerVisitorData.stepType = stepType;
             this.selecteds = [];
         }
 
@@ -758,18 +734,17 @@
             this.pageStep = EPageStep.edit;
             this.getInputData();
             await this.initSelectItemFRSServer();
-            await this.initSelectItemDemographicServer();
             await this.initSelectItemSite();
-            await this.selectAreaId(this.inputDemographicData.siteId);
-            await this.selectGroupDeviceId(this.inputDemographicData.areaId);
-            this.inputDemographicData.stepType = stepType;
-            this.inputDemographicData.groupIds = JSON.parse(
+            await this.selectAreaId(this.inputVIPStrangerVisitorData.siteId);
+            await this.selectGroupDeviceId(this.inputVIPStrangerVisitorData.areaId);
+            this.inputVIPStrangerVisitorData.stepType = stepType;
+            this.inputVIPStrangerVisitorData.groupIds = JSON.parse(
                 JSON.stringify(
-                    this.inputDemographicData.groupIds.map(item => item.objectId)
+                    this.inputVIPStrangerVisitorData.groupIds.map(item => item.objectId)
                 )
             );
 
-            if (this.inputDemographicData.serverId !== "") {
+            if (this.inputVIPStrangerVisitorData.serverId !== "") {
                 this.addStep = EAddStep.isapFrs;
             }
 
@@ -779,7 +754,7 @@
             this.pageStep = EPageStep.view;
             this.getInputData();
 
-            if (this.inputDemographicData.serverId !== "") {
+            if (this.inputVIPStrangerVisitorData.serverId !== "") {
                 this.addStep = EAddStep.isapFrs;
             }
         }
@@ -795,8 +770,9 @@
             await this.initSelectItemFRSServer();
             await this.initSelectItemSite();
             this.addStep = EAddStep.isapFrs;
-            this.inputDemographicData.brand = brand;
-            this.inputDemographicData.stepType = EPageStep.add;
+            this.inputVIPStrangerVisitorData.brand = brand;
+            this.inputVIPStrangerVisitorData.stepType = EPageStep.add;
+
         }
 
         async pageToAddByiSapFRSManager(brand: string) {
@@ -804,8 +780,8 @@
             await this.initSelectItemSite();
 
             this.addStep = EAddStep.isapFrsManager;
-            this.inputDemographicData.brand = brand;
-            this.inputDemographicData.stepType = EPageStep.add;
+            this.inputVIPStrangerVisitorData.brand = brand;
+            this.inputVIPStrangerVisitorData.stepType = EPageStep.add;
         }
 
         pageStepBackward() {
@@ -820,10 +796,10 @@
             this.selecteds = [];
             this.areaSelectItem = {};
             this.deviceGroupSelectItem = {};
-            this.inputDemographicData.areaId = '';
-            this.inputDemographicData.groupIds = [];
+            this.inputVIPStrangerVisitorData.areaId = '';
+            this.inputVIPStrangerVisitorData.groupIds = [];
             for (const detail in this.sitesSelectItem) {
-                if (this.inputDemographicData.siteId === detail) {
+                if (this.inputVIPStrangerVisitorData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -837,25 +813,25 @@
 
         async pageToShowResult() {
 
-            if (this.inputDemographicData.stepType === EPageStep.add) {
+            if (this.inputVIPStrangerVisitorData.stepType === EPageStep.add) {
                 this.pageStep = EPageStep.add;
 
                 // siteId clear
-                this.inputDemographicData.siteId = '';
+                this.inputVIPStrangerVisitorData.siteId = '';
 
                 // from selecteds push siteId
-                this.inputDemographicData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputDemographicData.siteId);
+                this.inputVIPStrangerVisitorData.siteId = this.selecteds[0].objectId;
+                await this.selectAreaId(this.inputVIPStrangerVisitorData.siteId);
             }
 
-            if (this.inputDemographicData.stepType === EPageStep.edit) {
+            if (this.inputVIPStrangerVisitorData.stepType === EPageStep.edit) {
                 this.pageStep = EPageStep.edit;
                 // siteId clear
-                this.inputDemographicData.siteId = '';
+                this.inputVIPStrangerVisitorData.siteId = '';
 
                 // from selecteds push siteId
-                this.inputDemographicData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputDemographicData.siteId);
+                this.inputVIPStrangerVisitorData.siteId = this.selecteds[0].objectId;
+                await this.selectAreaId(this.inputVIPStrangerVisitorData.siteId);
             }
 
         }
@@ -872,16 +848,16 @@
             const configObject: IConfigiSap = {
                 serverId: data.serverId,
                 sourceid: data.sourceid,
+
             };
 
-            if (this.inputDemographicData.brand === EAddStep.isapFrs) {
+            if (this.inputVIPStrangerVisitorData.brand === EAddStep.isapFrs) {
                 const datas: any = [
                     {
                         customId: data.customId,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
                         config: configObject
                     }
                 ];
@@ -891,12 +867,12 @@
                 };
 
                 await this.$server
-                    .C("/device/demographic", addParam)
+                    .C("/device/visitor", addParam)
                     .then((response: any) => {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
                                 Dialog.success(
-                                    this._("w_VSDemographic_AddSuccess")
+                                    this._("w_VSVIP_Stranger_Visitor_AddSuccess")
                                 );
                                 this.pageToList();
                             }
@@ -905,7 +881,7 @@
                                 returnValue.statusCode === 400
                             ) {
                                 Dialog.error(
-                                    this._("w_VSDemographic_ADDFailed")
+                                    this._("w_VSVIP_Stranger_Visitor_ADDFailed")
                                 );
                                 return false;
                             }
@@ -916,7 +892,7 @@
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSDemographic_ADDFailed"));
+                            Dialog.error(this._("w_VSVIP_Stranger_Visitor_ADDFailed"));
                             return false;
                         }
                         console.log(e);
@@ -924,14 +900,13 @@
                     });
             }
 
-            if (this.inputDemographicData.stepType === EPageStep.edit) {
+            if (this.inputVIPStrangerVisitorData.stepType === EPageStep.edit) {
                 const datas: any = [
                     {
                         objectId: data.objectId,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
                         config: configObject
                     }
                 ];
@@ -941,12 +916,12 @@
                 };
 
                 await this.$server
-                    .U("/device/demographic", editParam)
+                    .U("/device/visitor", editParam)
                     .then((response: any) => {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
                                 Dialog.success(
-                                    this._("w_VSDemographic_EditSuccess")
+                                    this._("w_VSVIP_Stranger_Visitor_EditSuccess")
                                 );
                                 this.pageToList();
                             }
@@ -955,7 +930,7 @@
                                 returnValue.statusCode === 400
                             ) {
                                 Dialog.error(
-                                    this._("w_VSDemographic_EditFailed")
+                                    this._("w_VSVIP_Stranger_Visitor_EditFailed")
                                 );
                                 return false;
                             }
@@ -966,7 +941,7 @@
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSDemographic_EditFailed"));
+                            Dialog.error(this._("w_VSVIP_Stranger_Visitor_EditFailed"));
                             return false;
                         }
                         console.log(e);
@@ -977,7 +952,7 @@
 
         async doDelete() {
             await Dialog.confirm(
-                this._("w_VSDemographic_DeleteConfirm"),
+                this._("w_VSVIP_Stranger_Visitor_DeleteConfirm"),
                 this._("w_DeleteConfirm"),
                 () => {
                     for (const param of this.selectedDetail) {
@@ -1049,21 +1024,20 @@
 
         showLabelTitle(): string {
             if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrs) {
-                return this._("w_VSDemographic_AddisapUseFRS")
+                return this._("w_VSVIP_Stranger_Visitor_AddisapUseFRS")
             }
 
             if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrsManager) {
-                return this._("w_VSDemographic_AddisapUseFRSManger")
+                return this._("w_VSVIP_Stranger_Visitor_AddisapUseFRSManger")
             }
 
             if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrs) {
-                return this._("w_VSDemographic_EditisapUseFRS")
+                return this._("w_VSVIP_Stranger_Visitor_EditisapUseFRS")
             }
 
             if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrsManager) {
-                return this._("w_VSDemographic_EditisapUseFRSManger")
+                return this._("w_VSVIP_Stranger_Visitor_EditisapUseFRSManger")
             }
-
         }
 
         ITableList() {
@@ -1093,6 +1067,13 @@
              * @uiLabel - ${this._("w_Brand")}
              */
             brand: string;
+
+
+
+            /**
+             * @uiLabel - ${this._("w_iSapFRSServer")}
+             */
+            FRSServer: string;
 
 
             /**
@@ -1127,7 +1108,7 @@
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                this.inputDemographicData.stepType === EPageStep.add
+                this.inputVIPStrangerVisitorData.stepType === EPageStep.add
                     ? "iv-form-string"
                     : "iv-form-label"
                 }
@@ -1140,20 +1121,6 @@
                  * @uiPlaceHolder - ${this._("w_Name")}
                  */
                 name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiHidden - ${
-                this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                }
-                 */
-                demoServerId: ${toEnumInterface(
-                this.demographicIdSelectItem as any,
-                false
-            )};
-
 
 
                 /**
@@ -1225,11 +1192,6 @@
                  */
                 name?: string;
 
-                /*
-                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiType - iv-form-label
-                 */
-                demoServerIdView?: string;
 
                 /**
                  * @uiLabel - ${this._("w_ServerId")}

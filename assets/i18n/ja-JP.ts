@@ -105,7 +105,9 @@ export default class LangObject implements ILang {
     w_DeviceGroups = 'Device Group(s)';
     w_Hanwha = 'Hanwha';
     w_iSapFRS = 'FRS';
+    w_iSapFRSServer = 'FRS Server';
     w_iSapFRSManager = 'FRS Manager';
+    w_iSapFRSManagerServer = 'FRS Manager ';
     w_In = 'In';
     w_Out = 'Out';
     w_Direction = 'Direction';
@@ -174,6 +176,7 @@ export default class LangObject implements ILang {
     w_Navigation_VideoSources_FaceRecognition = 'Face Recognition';
     w_Navigation_VideoSources_CMS = 'CMS';
     w_Navigation_VideoSources_VIP = 'VIP';
+    w_Navigation_VideoSources_VIP_Stranger_Visitor = 'VIP / Stranger / Visitor';
 
     w_Navigation_RulesActions = 'Rules and Action';
 
@@ -667,4 +670,22 @@ export default class LangObject implements ILang {
     w_VSDwellTime_EditSuccess = 'Dwell Time Device edit success.';
     w_VSDwellTime_EditFailed = 'Dwell Time Device edit failed, please try again.';
     w_VSDwellTime_DeleteConfirm = 'Are you sure to delete selected Dwell Time Device(s)?';
+
+    // VIP_Stranger_Visitor
+    w_VSVIP_Stranger_Visitor_List = 'VIP, Stranger, Frequent Visitor Device List';
+    w_VSVIP_Stranger_Visitor_Add = 'Add VIP, Stranger, Frequent Visitor Device';
+    w_VSVIP_Stranger_Visitor_Edit = 'Edit VIP, Stranger, Frequent Visitor Device';
+    w_VSVIP_Stranger_Visitor_View = 'View VIP, Stranger, Frequent Visitor Device';
+
+    w_VSVIP_Stranger_Visitor_AddisapUseFRS = 'Add VIP, Stranger, Frequent Visitor Device Use iSap FRS Server';
+    w_VSVIP_Stranger_Visitor_EditisapUseFRS = 'Edit VIP, Stranger, Frequent Visitor Device Use iSap FRS Server';
+
+    w_VSVIP_Stranger_Visitor_AddisapUseFRSManger = 'Add VIP, Stranger, Frequent Visitor Device Use iSap FRS Manger Server';
+    w_VSVIP_Stranger_Visitor_EditisapUseFRSManger = 'Edit VIP, Stranger, Frequent Visitor Device Use iSap FRS Manger Server';
+
+    w_VSVIP_Stranger_Visitor_AddSuccess = 'VIP, Stranger, Frequent Visitor Device add success.';
+    w_VSVIP_Stranger_Visitor_ADDFailed = 'VIP, Stranger, Frequent Visitor Device add failed, please try again.';
+    w_VSVIP_Stranger_Visitor_EditSuccess = 'VIP, Stranger, Frequent Visitor Device edit success.';
+    w_VSVIP_Stranger_Visitor_EditFailed = 'VIP, Stranger, Frequent Visitor Device edit failed, please try again.';
+    w_VSVIP_Stranger_Visitor_DeleteConfirm = 'Are you sure to delete selected VIP, Stranger, Frequent Visitor Device(s)?';
 }
