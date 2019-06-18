@@ -85,6 +85,10 @@
                         url="/video_sources/demographic"
                     />
                     <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_HumanDetection')"
+                        url="/video_sources/human_detection"
+                    />
+                    <SidebarNavItem
                         :label="_('w_Navigation_VideoSources_Heatmap')"
                         url="/video_sources/heatmap"
                     />
