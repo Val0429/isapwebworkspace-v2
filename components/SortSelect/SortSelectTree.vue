@@ -184,14 +184,11 @@ export class SortSelectTree extends Vue {
                 let tempOption = this.anysisChildren(val, option);
                 if (tempOption != null) {
                     let tempMerge: IMergeTree = {parent: false, children: false};
-                    for (let tempItem of this.chooseSelectItem) {
-                        if (tempOption.value == tempItem.value) {
-                             tempMerge = this.mergeValue(
-                                tempItem,
-                                tempOption as ISortSelectTreeOption,
-                                false
-                            );
-                        }
+                    for (let chooseItem of this.chooseSelectItem) {
+                        tempMerge = this.mergeValue(
+                            chooseItem,
+                            tempOption as ISortSelectTreeOption
+                        );
                         if (tempMerge.children) {
                             break;
                         }
@@ -206,29 +203,22 @@ export class SortSelectTree extends Vue {
 
     mergeValue(
         chooseItem: ISortSelectTreeOption,
-        anysisResult: ISortSelectTreeOption,
-        parentCheck: boolean
+        anysisResult: ISortSelectTreeOption
     ): IMergeTree {
         let result: IMergeTree = {children: false, parent: false};
         if (chooseItem.value == anysisResult.value) {
+            result.children = true;
             if (anysisResult.childrens.length > 0) {
+                let tempResult: IMergeTree = {children: false, parent: false};
                 for (let chooseChildrens of chooseItem.childrens) {
-                    let tempResult: IMergeTree = this.mergeValue(chooseChildrens, anysisResult.childrens[0], true);
-                    if (tempResult.children) {
-                        result.children = true;
-                    }
-                    if (tempResult.parent) {
+                    tempResult = this.mergeValue(chooseChildrens, anysisResult.childrens[0]);
+                    if (tempResult.parent && !tempResult.children) {
                         chooseItem.childrens.push(anysisResult.childrens[0]);
                         break;
                     }
                 }
-            } else {
-                result.children = true;
-                result.parent = true;
-            }
-        }
-        if (parentCheck && chooseItem.value != anysisResult.value) {
-            result.children = true;
+            } 
+        } else {
             result.parent = true;
         }
         return result;
