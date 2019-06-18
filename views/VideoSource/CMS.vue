@@ -1075,8 +1075,7 @@ export default class CMS extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid.split(" - ")[0],
-            location: data.sourceid.split(" - ")[1]
+            sourceid: data.sourceid,
         };
 
         if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
