@@ -654,4 +654,5 @@ export default class LangObject implements ILang {
     w_VSHeatmap_Area = 'Area';
     w_VSHeatmap_DeviceGroup = 'Device Group';
     w_VSHeatmap_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
+    w_VSHeatmap_DeleteConfirm = 'Are you sure to delete selected Device(s)?';
 }

@@ -88,6 +88,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/user/forget/step2': [Step2.Input, Step2.Output, false];
         '/user/forget/step3': [Step3.Input, Step3.Output, false];
 
+        // device heatmap
+        '/device/heatmap': [any, any, false];
+
         // server device
         '/partner/cms/device': [any, any, false];
 
@@ -262,7 +265,8 @@ interface RestfulRequest extends ApisRequestBase {
         // UserGroup
         '/user/group': [UserGroupUpdate.Input, UserGroupUpdate.Output, false];
 
-        // camera
+        // device heatmap
+        '/device/heatmap': [any, any, false];
 
         // Location Region
         '/location/region': [RegionUpdate.Input, RegionUpdate.Output, false];
