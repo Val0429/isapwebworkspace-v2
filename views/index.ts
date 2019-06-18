@@ -51,6 +51,7 @@ import Demographic from './VideoSource/Demographic.vue';
 import DwellTime from './VideoSource/DwellTime.vue';
 import FaceRecognition from './VideoSource/FaceRecognition.vue';
 import Heatmap from './VideoSource/Heatmap.vue';
+import HumanDetection from './VideoSource/HumanDetection.vue';
 import CMS from './VideoSource/CMS.vue';
 import VIP from './VideoSource/VIP.vue';
 import VIP_Stranger_Visitor from './VideoSource/VIP_Stranger_Visitor.vue';
@@ -122,14 +123,15 @@ $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Regio
 
 // Video Source (c)
 $({ path: '/video_sources', name: 'VideoSources', icon: 'fa-close', redirect: '/login' })();
-$({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-check' })(PeopleCounting);
-$({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-check' })(Demographic);
+$({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-close' })(PeopleCounting);
+$({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-close' })(Demographic);
+$({ path: '/video_sources/human_detection', name: 'VideoSources_HumanDetection', icon: 'fa-close' })(HumanDetection);
 $({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close' })(Heatmap);
 $({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })(FaceRecognition);
 $({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-close', redirect: '/login' })(CMS);
 $({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redirect: '/login' })(VIP);
-$({ path: '/video_sources/dwell_time', name: 'VideoSources_DwellTime', icon: 'fa-check'})(DwellTime);
-$({ path: '/video_sources/vip_stranger_visitor', name: 'VideoSources_VIP_Stranger_Visitor', icon: 'fa-check'})(VIP_Stranger_Visitor);
+$({ path: '/video_sources/dwell_time', name: 'VideoSources_DwellTime', icon: 'fa-check' })(DwellTime);
+$({ path: '/video_sources/vip_stranger_visitor', name: 'VideoSources_VIP_Stranger_Visitor', icon: 'fa-check' })(VIP_Stranger_Visitor);
 
 // Rules and Action (?)
 $({ path: '/rules_actions', name: "_('w_Navigation_RulesActions')", icon: 'fa-question', redirect: '/login' })();

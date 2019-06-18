@@ -171,6 +171,7 @@ export default class LangObject {
     w_Navigation_VideoSources = 'Video Source';
     w_Navigation_VideoSources_PeopleCounting = 'People Counting';
     w_Navigation_VideoSources_Demographic = 'Demographic';
+    w_Navigation_VideoSources_HumanDetection = 'Human Detection ';
     w_Navigation_VideoSources_Heatmap = 'Heatmap';
     w_Navigation_VideoSources_DwellTime = 'Dwell Time';
     w_Navigation_VideoSources_FaceRecognition = 'Face Recognition';
@@ -652,6 +653,28 @@ export default class LangObject {
     w_VSHeatmap_DeviceGroup = 'Device Group';
     w_VSHeatmap_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
     w_VSHeatmap_DeleteConfirm = 'Are you sure to delete selected Device(s)?';
+
+    // Human Detection
+    w_VSHumanDetection_List = 'Human Detection Device List';
+    w_VSHumanDetection_Add = 'Human Detection Device Add';
+    w_VSHumanDetection_Edit = 'Human Detection Device Edit';
+    w_VSHumanDetection_View = 'Human Detection Device View';
+    w_VSHumanDetection_SelectBrand = 'Select Brand';
+    w_VSHumanDetection_SelectRegion = 'Select Region';
+    w_VSHumanDetection_DrawROI = 'Draw ROI';
+    w_VSHumanDetection_CheckAndOverlook = 'Check and Overlook';
+    w_VSHumanDetection_CustomId = 'Id';
+    w_VSHumanDetection_Name = 'Name';
+    w_VSHumanDetection_Brand = 'Brand';
+    w_VSHumanDetection_CMS = 'CMS';
+    w_VSHumanDetection_SetCMS = 'Not yet set? Go to set CMS';
+    w_VSHumanDetection_NVR = 'NVR';
+    w_VSHumanDetection_ChannelInNVR = 'Channel In NVR';
+    w_VSHumanDetection_Site = 'Site';
+    w_VSHumanDetection_Area = 'Area';
+    w_VSHumanDetection_DeviceGroup = 'Device Group';
+    w_VSHumanDetection_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
+    w_VSHumanDetection_DeleteConfirm = 'Are you sure to delete selected Device(s)?';
 
     // DwellTime
     w_VSDwellTime_List = 'Dwell Time Device List';
