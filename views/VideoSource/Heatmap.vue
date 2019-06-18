@@ -54,7 +54,7 @@
             </iv-card>
         </div>
 
-        <div v-show="pageStep === ePageStep.add || pageStep ===  ePageStep.edit">
+        <div v-if="pageStep === ePageStep.add || pageStep ===  ePageStep.edit">
             <iv-auto-card :label="pageStep == ePageStep.add ? _('w_VSHeatmap_Add') :  _('w_VSHeatmap_Edit')">
 
                 <template #toolbox>
@@ -72,7 +72,7 @@
                             :interface="inf1()"
                             @update:serverId="initDeviceData($event)"
                             @update:nvrId="initChannelItem($event)"
-                            :value="inputFormData"
+                            :value="inputFormData[0]"
                         >
 
                             <template #serverId="{$attrs, $listeners}">
@@ -80,13 +80,14 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="cmsItem"
+                                    :value="inputFormData[0] ? inputFormData[0].config.server.objectId : ''"
                                 >
                                 </iv-form-selection>
 
                                 <b-button
                                     class="linkPadding"
                                     variant="link"
-                                    @click="goToSetCMS"
+                                    @click="$attrs"
                                 >
                                     {{ _('w_VSHeatmap_SetCMS') }}
                                 </b-button>
@@ -97,6 +98,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="nvrItem"
+                                    :value="inputFormData[0] ? inputFormData[0].config.nvrId.toString() : ''"
                                 >
                                 </iv-form-selection>
                             </template>
@@ -106,6 +108,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="channelItem"
+                                    :value="inputFormData[0] ? inputFormData[0].config.channelId.toString() : ''"
                                 >
                                 </iv-form-selection>
                             </template>
@@ -120,17 +123,28 @@
                             :interface="inf2()"
                             @update:siteId="selectAreaId($event)"
                             @update:areaId="selectGroupDeviceId($event)"
-                            :value="inputFormData"
+                            :value="inputFormData[0]"
                         >
 
-                            <!-- <template #siteId="{$attrs, $listeners}">
+                            <template #siteId="{$attrs, $listeners}">
                                 <iv-form-selection
                                     v-bind="$attrs"
                                     v-on="$listeners"
-                                    :options="sitesSelectItem"
+                                    :options="$attrs.options"
+                                    :value="inputFormData[0] ? inputFormData[0].site.objectId : ''"
                                 >
                                 </iv-form-selection>
-                            </template> -->
+                            </template>
+
+                            <template #areaId="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :options="$attrs.options"
+                                    :value="inputFormData[0] ? inputFormData[0].area.objectId : ''"
+                                >
+                                </iv-form-selection>
+                            </template>
 
                             <!--TODO 資料帶不回stepFrom中 先註解 -->
                             <!-- <template #selectTree="{ $atrs, $listeners }">
@@ -156,7 +170,7 @@
                                         v-on:save-roi="saveROI"
                                         v-on:clear-roi="clearROI"
                                         v-on:page-to-back="pageToBack"
-                                        :drawRegionCount="7"
+                                        :drawRegionCount="3"
                                         :snapshotData="snaphotDeial"
                                         :canvasData="canvasDetail"
                                     ></camera-roi>
@@ -421,7 +435,7 @@ export default class Heatmap extends Vue {
     initNVRItem() {
         this.nvrItem = [];
         for (let device of this.devices) {
-            let nvr = { id: device.nvrId, text: device.nvrId };
+            let nvr = { id: device.nvrId.toString(), text: device.nvrId };
             this.nvrItem.push(nvr);
         }
     }
@@ -431,7 +445,10 @@ export default class Heatmap extends Vue {
         for (let device of this.devices) {
             if (device.nvrId == data) {
                 for (let channel of device.channels) {
-                    let item = { id: channel.channelId, text: channel.name };
+                    let item = {
+                        id: channel.channelId.toString(),
+                        text: channel.name
+                    };
                     this.channelItem.push(item);
                 }
             }
@@ -439,7 +456,9 @@ export default class Heatmap extends Vue {
     }
 
     selectedItem(data) {
+        console.log("selectedItem", data);
         this.inputFormData = this.isSelected = data;
+        this.canvasDetail = this.inputFormData[0].rois;
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
@@ -451,9 +470,12 @@ export default class Heatmap extends Vue {
     }
 
     async pageToEdit() {
+        console.log("pageToEdit", this.inputFormData[0]);
         await this.initSelectItemSite();
-        await this.selectAreaId(this.inputFormData.siteId);
-        await this.selectGroupDeviceId(this.inputFormData.areaId);
+        await this.initDeviceData(this.inputFormData[0].config.server.objectId);
+        await this.initChannelItem(this.inputFormData[0].config.channelId);
+        await this.selectAreaId(this.inputFormData[0].site.objectId);
+        await this.selectGroupDeviceId(this.inputFormData[0].area.objectId);
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
                 this.inputFormData.groupIds.map(item => item.objectId)
@@ -840,26 +862,27 @@ export default class Heatmap extends Vue {
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                 serverId: any;
+                 serverId?: any;
 
                   /*
                 * @uiLabel - ${this._("w_VSHeatmap_NVR")}
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                nvrId: any;
+                nvrId?: any;
 
                     /*
                 * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                channelId: any;
+                channelId?: any;
             }
         `;
     }
 
     private inf2() {
+        //TODO 資料帶不回stepFrom中 Edit時雖然元件中有資料 下一步卻還是可以案 所以先寫成非必填
         return `
         interface {
 
@@ -957,10 +980,10 @@ export default class Heatmap extends Vue {
                 * @uiType - iv-form-label
                 * @uiAttrs - { multiple: true }
                 */
-               groupIds?: ${toEnumInterface(
-                   this.deviceGroupSelectItem as any,
-                   true
-               )};
+                groupIds?: ${toEnumInterface(
+                    this.deviceGroupSelectItem as any,
+                    true
+                )};
         }
         `;
     }
@@ -978,20 +1001,7 @@ export default class Heatmap extends Vue {
         cameraHeight: 350
     };
 
-    canvasDetail = [
-        {
-            x: 100,
-            y: 200,
-            width: 200,
-            height: 100
-        },
-        {
-            x: 0,
-            y: 0,
-            width: 600,
-            height: 350
-        }
-    ];
+    canvasDetail = [];
 
     async stepsubmit(data) {
         console.log("stepsubmit", data);
@@ -1038,15 +1048,21 @@ export default class Heatmap extends Vue {
         } else if (this.pageStep == EPageStep.edit) {
             const datas: any[] = [
                 {
-                    objectId: this.inputFormData.objectId,
+                    objectId: this.inputFormData[0].objectId,
                     customId: data[1].customId,
                     areaId: data[2].areaId,
                     groupIds: data[2].groupIds ? data[2].groupIds : [],
                     name: data[1].name,
                     config: {
-                        serverId: data[1].serverId,
-                        nvrId: data[1].nvrId,
+                        serverId: data[1].serverId
+                            ? data[1].serverId
+                            : this.inputFormData[0].config.server.objectId,
+                        nvrId: data[1].nvrId
+                            ? data[1].nvrId
+                            : this.inputFormData[0].config.nvrId,
                         channelId: data[1].channelId
+                            ? data[1].channelId
+                            : this.inputFormData[0].config.channelId
                     },
                     rois: this.canvasDetail
                 }
