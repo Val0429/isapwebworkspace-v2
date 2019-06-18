@@ -54,7 +54,10 @@
             </iv-card>
         </div>
 
-        <div v-if="pageStep === ePageStep.add || pageStep ===  ePageStep.edit">
+        <div
+            v-if="pageStep === ePageStep.add || pageStep ===  ePageStep.edit ||  pageStep === ePageStep.chooseTree "
+            v-show="pageStep != ePageStep.chooseTree"
+        >
             <iv-auto-card :label="pageStep == ePageStep.add ? _('w_VSHumanDetection_Add') :  _('w_VSHumanDetection_Edit')">
 
                 <template #toolbox>
@@ -146,9 +149,8 @@
                                 </iv-form-selection>
                             </template>
 
-                            <!--TODO 資料帶不回stepFrom中 先註解 -->
-                            <!-- <template #selectTree="{ $atrs, $listeners }">
-                                test:{{inputFormData}}
+                            <template #selectTree="{ $atrs, $listeners }">
+
                                 <div class="m-3">
 
                                     <b-button @click="pageToChooseTree">
@@ -156,7 +158,7 @@
                                     </b-button>
                                 </div>
 
-                            </template> -->
+                            </template>
 
                         </iv-form>
                     </template>
@@ -455,9 +457,14 @@ export default class HumanDetection extends Vue {
         }
     }
 
+    initInputFromData(data) {
+        this.inputFormData = data;
+    }
+
     selectedItem(data) {
         console.log("selectedItem", data);
-        this.inputFormData = this.isSelected = data;
+        this.isSelected = data;
+        this.initInputFromData(data);
         this.canvasDetail = this.inputFormData[0].rois;
         this.selectedDetail = [];
         this.selectedDetail = data;
@@ -476,9 +483,9 @@ export default class HumanDetection extends Vue {
         await this.initChannelItem(this.inputFormData[0].config.channelId);
         await this.selectAreaId(this.inputFormData[0].site.objectId);
         await this.selectGroupDeviceId(this.inputFormData[0].area.objectId);
-        this.inputFormData.groupIds = JSON.parse(
+        this.inputFormData[0].groupIds = JSON.parse(
             JSON.stringify(
-                this.inputFormData.groupIds.map(item => item.objectId)
+                this.inputFormData[0].groupIds.map(item => item.objectId)
             )
         );
 
@@ -675,10 +682,10 @@ export default class HumanDetection extends Vue {
         this.selecteds = [];
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
-        this.inputFormData.areaId = "";
-        this.inputFormData.groupIds = [];
+        this.inputFormData[0].area.objectId = "";
+        this.inputFormData[0].groupIds = [];
         for (const detail in this.sitesSelectItem) {
-            if (this.inputFormData.siteId === detail) {
+            if (this.inputFormData[0].site.objectId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -694,21 +701,21 @@ export default class HumanDetection extends Vue {
         this.pageStep = this.lastPageStep;
 
         // siteId clear
-        this.inputFormData.siteId = "";
+        this.inputFormData[0].site.objectId = "";
 
         // from selecteds push siteId
         if (this.selecteds && this.selecteds.length) {
-            this.inputFormData.siteId = this.selecteds[0].objectId;
+            this.inputFormData[0].site.objectId = this.selecteds[0].objectId;
         }
 
         if (
-            this.inputFormData.siteId === undefined ||
-            this.inputFormData.siteId === ""
+            this.inputFormData[0].site.objectId === undefined ||
+            this.inputFormData[0].site.objectId === ""
         ) {
             this.areaSelectItem = {};
             this.deviceGroupSelectItem = {};
         } else {
-            await this.selectAreaId(this.inputFormData.siteId);
+            await this.selectAreaId(this.inputFormData[0].site.objectId);
         }
     }
 
@@ -718,8 +725,8 @@ export default class HumanDetection extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputFormData.areaId = "";
-            this.inputFormData.groupIds = [];
+            this.inputFormData[0].area.objectId = "";
+            this.inputFormData[0].groupIds = [];
         }
 
         if (data !== undefined || data !== "") {
@@ -734,8 +741,8 @@ export default class HumanDetection extends Vue {
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            this.inputFormData.areaId = "";
-                            this.inputFormData.groupIds = [];
+                            this.inputFormData[0].area.objectId = "";
+                            this.inputFormData[0].groupIds = [];
                             // 自定義 areaSelectItem 的 key 的方式
                             this.$set(
                                 this.areaSelectItem,
@@ -882,7 +889,6 @@ export default class HumanDetection extends Vue {
     }
 
     private inf2() {
-        //TODO 資料帶不回stepFrom中 Edit時雖然元件中有資料 下一步卻還是可以案 所以先寫成非必填
         return `
         interface {
 
