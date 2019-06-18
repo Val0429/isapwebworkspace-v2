@@ -79,7 +79,7 @@
 
             <hr>
 
-            <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_isap') }}</div>
+            <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
 
             <b-button
                 class="button mt-3 mb-1"
@@ -96,7 +96,7 @@
                 class="mt-4"
                 @click="goToSetFRSServer"
             >
-                {{ _('w_VSPeopleCounting_SetFRS') }}
+                {{ _('w_SetFRS') }}
             </b-button>
 
             <br>
@@ -116,7 +116,7 @@
                 class="mt-4"
                 @click="goToSetFRSManager"
             >
-                {{ _('w_VSPeopleCounting_SetFRSManger') }}
+                {{ _('w_SetFRSManger') }}
             </b-button>
 
             <template #footer>
@@ -548,25 +548,35 @@ export default class PeopleCounting extends Vue {
                 groupIds: param.groups,
                 model: param.model,
                 direction: param.direction,
-                account: param.config["account"],
-                password: param.config["password"],
-                protocol: param.config["protocol"],
-                ip: param.config["ip"],
-                port: param.config["port"],
+                account: param.config && param.config["account"] ? param.config["account"] : '',
+                password: param.config && param.config["password"] ? param.config["password"] : '',
+                protocol: param.config && param.config["protocol"] ? param.config["protocol"] : '',
+                ip: param.config && param.config["ip"] ? param.config["ip"] : '',
+                port: param.config && param.config["port"] ? param.config["port"] : '',
                 serverId:
                     param.config &&
                     param.config.server &&
                     param.config.server.objectId
                         ? param.config.server.objectId
                         : "",
-                sourceid: `${param.config.sourceid} - ${param.config.location}`,
-                location: param.config.location,
+                serverIdView:
+                    param.config &&
+                    param.config.server &&
+                    param.config.server.name
+                        ? param.config.server.name
+                        : "",
+                sourceid: param.config && param.config.sourceid ? param.config.sourceid : '',
+                sourceidView: param.config && param.config.sourceid ? param.config.sourceid : '',
+                location: param.config && param.config.location ? param.config.location : '',
                 groupIdsText: this.idsToText(param.groups),
                 stepType: "",
                 tempSiteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
                 tempAreaId: param.area && param.area["objectId"]? param.area["objectId"]: "",
             };
         }
+
+        console.log('location - ', this.inputPeopleCountingData.location);
+        console.log('sourceid - ', this.inputPeopleCountingData.sourceid);
 
         if (this.inputPeopleCountingData.serverId !== "") {
             this.selectSourceIdAndLocation(
@@ -654,13 +664,8 @@ export default class PeopleCounting extends Vue {
                             for (const returnValue of response) {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
-                                    this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    this.sourceIdSelectItem, returnValue.sourceid, returnValue.sourceid
+
                                 );
                             }
 
@@ -762,7 +767,7 @@ export default class PeopleCounting extends Vue {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            Dialog.error(this._("w_ErrorReadData"));
                             return false;
                         }
                         console.log(e);
@@ -827,11 +832,11 @@ export default class PeopleCounting extends Vue {
                     mode: string;
                 } = {
                     areaId: data,
-                    mode: 'peopleCounting'
+                    mode: ECameraMode.peopleCounting
                 };
 
                 if (this.inputPeopleCountingData.tempAreaId !== data) {
-                    this.inputPeopleCountingData.groupIds = '';
+                    this.inputPeopleCountingData.groupIds = [];
                 }
 
                 await this.$server
@@ -850,7 +855,7 @@ export default class PeopleCounting extends Vue {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            Dialog.error(this._("w_ErrorReadData"));
                             return false;
                         }
                         console.log(e);
@@ -863,10 +868,10 @@ export default class PeopleCounting extends Vue {
 
     async pageToAdd(stepType: string) {
         this.clearInputData();
+        await this.initSelectItemSite();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
         this.inputPeopleCountingData.stepType = stepType;
-        await this.initSelectItemSite();
         this.selecteds = [];
     }
 
@@ -904,7 +909,6 @@ export default class PeopleCounting extends Vue {
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
-        console.log('area - ',this.inputPeopleCountingData.area);
         if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
         }
@@ -1121,8 +1125,7 @@ export default class PeopleCounting extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid.split(" - ")[0],
-            location: data.sourceid.split(" - ")[1]
+            sourceid: data.sourceid,
         };
 
         if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
@@ -1133,7 +1136,7 @@ export default class PeopleCounting extends Vue {
                     brand: this.inputPeopleCountingData.brand.split("F")[0],
                     areaId: data.areaId,
                     direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
                     config: configObject
                 }
             ];
@@ -1184,7 +1187,7 @@ export default class PeopleCounting extends Vue {
                     brand: this.inputPeopleCountingData.brand,
                     areaId: data.areaId,
                     direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
                     config: configObject
                 }
             ];
@@ -1572,8 +1575,8 @@ export default class PeopleCounting extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_SourceIdAndLocation")}
-                 * @uiPlaceHolder - ${this._("w_SourceIdAndLocation")}
+                 * @uiLabel - ${this._("w_SourceId")}
+                 * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
                      this.addStep === EAddStep.isapFrsManager ? "true" : "false"
                  }
@@ -1642,21 +1645,21 @@ export default class PeopleCounting extends Vue {
                  * @uiLabel - ${this._("w_ServerId")}
                  * @uiType - iv-form-label
                  */
-                serverId?: string;
+                serverIdView?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
                  */
-                sourceid?: string;
+                sourceidView?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Location")}
+                 * @uiLabel - ${this._("w_Direction")}
                  * @uiType - iv-form-label
                  */
-                location?: string;
+                direction?: direction;
 
 
                 /**
@@ -1664,7 +1667,6 @@ export default class PeopleCounting extends Vue {
                  * @uiType - iv-form-label
                  */
                 site?: string;
-
 
 
                 /**

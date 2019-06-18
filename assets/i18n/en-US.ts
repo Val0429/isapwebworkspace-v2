@@ -118,6 +118,10 @@ export default class LangObject {
     w_Email_Placeholder = 'ex : admin@isap.com';
     w_Phone_Placeholder = 'ex : +xxxxxxxxxx';
 
+    w_iSap_Use = 'Use iSap Server';
+    w_SetFRS = 'Not yet set? Go to set FRS Server';
+    w_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
+
     w_Error_Port = 'Port should be in 1~65535';
     w_Error_Password = 'Password and PasswordConfirm should be same';
     w_ErrorLongitude = 'Longitude only -180~180';
@@ -167,6 +171,7 @@ export default class LangObject {
     w_Navigation_VideoSources_Demographic = 'Demographic';
     w_Navigation_VideoSources_HumanDetection = 'Human Detection ';
     w_Navigation_VideoSources_Heatmap = 'Heatmap';
+    w_Navigation_VideoSources_DwellTime = 'Dwell Time';
     w_Navigation_VideoSources_FaceRecognition = 'Face Recognition';
     w_Navigation_VideoSources_CMS = 'CMS';
     w_Navigation_VideoSources_VIP = 'VIP';
@@ -593,17 +598,13 @@ export default class LangObject {
     w_VSPeopleCounting_AddhanwhaUse = 'Add People Counting Device Use Hanwha Server';
     w_VSPeopleCounting_EdithanwhaUse = 'Edit People Counting Device Use Hanwha Server';
 
-    w_VSPeopleCounting_isap = 'Use iSap Server';
     w_VSPeopleCounting_AddisapUseFRS = 'Add People Counting Device Use iSap FRS Server';
     w_VSPeopleCounting_EditisapUseFRS = 'Edit People Counting Device Use iSap FRS Server';
 
     w_VSPeopleCounting_AddisapUseFRSManger = 'Add People Counting Device Use iSap FRS Manger Server';
     w_VSPeopleCounting_EditisapUseFRSManger = 'Edit People Counting Device Use iSap FRS Manger Server';
 
-    w_VSPeopleCounting_SetFRS = 'Not yet set? Go to set FRS Server';
-    w_VSPeopleCounting_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
-
-    w_VSPeopleCounting_AddSuccess = 'People Counting Device List add success.';
+    w_VSPeopleCounting_AddSuccess = 'People Counting Device add success.';
     w_VSPeopleCounting_ADDFailed = 'People Counting Device add failed, please try again.';
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
@@ -614,22 +615,15 @@ export default class LangObject {
     w_VSDemographic_Add = 'Add Demographic Device';
     w_VSDemographic_Edit = 'Edit Demographic Device';
     w_VSDemographic_View = 'View Demographic Device';
+    w_VSDemographic_demoServerId = 'Demographic Server Id';
 
-    w_VSDemographic_Addhanwha = 'Use Hanwha Server';
-    w_VSDemographic_AddhanwhaUse = 'Add Demographic Device Use Hanwha Server';
-    w_VSDemographic_EdithanwhaUse = 'Edit Demographic Device Use Hanwha Server';
-
-    w_VSDemographic_isap = 'Use iSap Server';
     w_VSDemographic_AddisapUseFRS = 'Add Demographic Device Use iSap FRS Server';
     w_VSDemographic_EditisapUseFRS = 'Edit Demographic Device Use iSap FRS Server';
 
     w_VSDemographic_AddisapUseFRSManger = 'Add Demographic Device Use iSap FRS Manger Server';
     w_VSDemographic_EditisapUseFRSManger = 'Edit Demographic Device Use iSap FRS Manger Server';
 
-    w_VSDemographic_SetFRS = 'Not yet set? Go to set FRS Server';
-    w_VSDemographic_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
-
-    w_VSDemographic_AddSuccess = 'Demographic Device List add success.';
+    w_VSDemographic_AddSuccess = 'Demographic Device add success.';
     w_VSDemographic_ADDFailed = 'Demographic Device add failed, please try again.';
     w_VSDemographic_EditSuccess = 'Demographic Device edit success.';
     w_VSDemographic_EditFailed = 'Demographic Device edit failed, please try again.';
@@ -678,4 +672,22 @@ export default class LangObject {
     w_VSHumanDetection_DeviceGroup = 'Device Group';
     w_VSHumanDetection_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
     w_VSHumanDetection_DeleteConfirm = 'Are you sure to delete selected Device(s)?';
+
+    // DwellTime
+    w_VSDwellTime_List = 'Dwell Time Device List';
+    w_VSDwellTime_Add = 'Add Dwell Time Device';
+    w_VSDwellTime_Edit = 'Edit DwellTime Device';
+    w_VSDwellTime_View = 'View Dwell Time Device';
+
+    w_VSDwellTime_AddisapUseFRS = 'Add Dwell Time Device Use iSap FRS Server';
+    w_VSDwellTime_EditisapUseFRS = 'Edit Dwell Time Device Use iSap FRS Server';
+
+    w_VSDwellTime_AddisapUseFRSManger = 'Add Dwell Time Device Use iSap FRS Manger Server';
+    w_VSDwellTime_EditisapUseFRSManger = 'Edit Dwell Time Device Use iSap FRS Manger Server';
+
+    w_VSDwellTime_AddSuccess = 'Dwell Time Device add success.';
+    w_VSDwellTime_ADDFailed = 'Dwell Time Device add failed, please try again.';
+    w_VSDwellTime_EditSuccess = 'Dwell Time Device edit success.';
+    w_VSDwellTime_EditFailed = 'Dwell Time Device edit failed, please try again.';
+    w_VSDwellTime_DeleteConfirm = 'Are you sure to delete selected Dwell Time Device(s)?';
 }

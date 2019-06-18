@@ -17,7 +17,15 @@ interface IConfig {
 interface IConfigiSap {
     serverId: string;
     sourceid: string;
-    location: number;
+}
+
+interface IVideoSourceDevice {
+    areaId: string;
+    groupIds: string[];
+    name: string;
+    config: IConfigiSap;
+    customId?: string;
+    objectId?: string;
 }
 
 interface IAnalysis {
@@ -376,13 +384,13 @@ interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
 }
 
 interface IAddVSPeopleCountingiSap extends IVSPeopleCounting {
-    customId?: string;
+    customId: string;
     config: IConfigiSap;
     direction: string;
 }
 
 interface IEditVSPeopleCountingHanwha extends IVSPeopleCounting {
-    objectId?: string;
+    objectId: string;
     model: string;
     config: IConfig;
 }
@@ -394,6 +402,20 @@ interface IEditVSPeopleCountingiSap extends IVSPeopleCounting {
 }
 
 export { IAddVSPeopleCountingHanwha, IAddVSPeopleCountingiSap, IEditVSPeopleCountingHanwha, IEditVSPeopleCountingiSap };
+
+// Video Source Demographic
+interface IVSDemographic extends IVideoSourceDevice {
+    demoServerId: string;
+}
+
+export { IVSDemographic }
+
+// Video Source Dwell Time
+interface IVSDwellTime extends IVideoSourceDevice {
+    direction: string;
+}
+
+export { IVSDwellTime }
 
 ////////////////////// 以上為確定使用 //////////////////////
 

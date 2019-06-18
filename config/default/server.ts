@@ -67,6 +67,13 @@ import { CampaignCreate, CampaignDelete, CampaignRead, CampaignUpdate } from '@/
 // Video Source People Counting
 import { VSPeopleCountingCreate, VSPeopleCountingUpdate } from '@/config/default/api/VideoSourcePeopleCounting';
 
+// Video Source Demographic
+import { VSDemographicCreate, VSDemographicUpdate } from '@/config/default/api/VideoSourceDemographic';
+
+// Video Source Dwell Time
+import { VSDwellTimeUpdate, VSDwellTimeCreate } from '@/config/default/api/VideoSourceDwellTime';
+
+
 interface RestfulRequest extends ApisRequestBase {
     // create
     Post: {
@@ -153,6 +160,12 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Video Source People Counting
         '/device/people-counting': [VSPeopleCountingCreate.Input, VSPeopleCountingCreate.Output, false];
+
+        // Video Source People Counting
+        '/device/demographic': [VSDemographicCreate.Input, VSDemographicCreate.Output, false];
+
+        // Video Source Dwell Time
+        '/device/dwell-time': [VSDwellTimeCreate.Input, VSDwellTimeCreate.Output, false];
     };
 
     // read
@@ -325,7 +338,12 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Video Source People Counting
         '/device/people-counting': [VSPeopleCountingUpdate.Input, VSPeopleCountingUpdate.Output, false];
-    };
+
+        // Video Source People Counting
+        '/device/demographic': [VSDemographicUpdate.Input, VSDemographicUpdate.Output, false];
+
+        // Video Source Dwell Time
+        '/device/dwell-time': [VSDwellTimeUpdate.Input, VSDwellTimeUpdate.Output, false];};
 
     // delete
     Delete: {

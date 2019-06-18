@@ -1,9 +1,9 @@
 var config: Config = {
     // Min server
-    // ip: '172.16.10.21',
+    ip: '172.16.10.21',
 
     // Tina server
-    ip: '172.16.10.136',
+    // ip: '172.16.10.136',
 
     port: 6066,
     ssl: false,

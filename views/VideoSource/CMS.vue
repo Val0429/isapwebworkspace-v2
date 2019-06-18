@@ -79,7 +79,7 @@
 
             <hr>
 
-            <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_isap') }}</div>
+            <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
 
             <b-button
                 class="button mt-3 mb-1"
@@ -96,7 +96,7 @@
                 class="mt-4"
                 @click="goToSetFRSServer"
             >
-                {{ _('w_VSPeopleCounting_SetFRS') }}
+                {{ _('w_SetFRS') }}
             </b-button>
 
             <br>
@@ -116,7 +116,7 @@
                 class="mt-4"
                 @click="goToSetFRSManager"
             >
-                {{ _('w_VSPeopleCounting_SetFRSManger') }}
+                {{ _('w_SetFRSManger') }}
             </b-button>
 
             <template #footer>
@@ -1075,8 +1075,7 @@ export default class CMS extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid.split(" - ")[0],
-            location: data.sourceid.split(" - ")[1]
+            sourceid: data.sourceid,
         };
 
         if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
