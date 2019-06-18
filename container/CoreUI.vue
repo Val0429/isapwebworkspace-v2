@@ -87,6 +87,8 @@
                     <SidebarNavItem
                         :label="_('w_Navigation_VideoSources_HumanDetection')"
                         url="/video_sources/human_detection"
+                    />
+                    <SidebarNavItem
                         :label="_('w_Navigation_VideoSources_DwellTime')"
                         url="/video_sources/dwell_time"
                     />
