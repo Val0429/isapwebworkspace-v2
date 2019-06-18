@@ -108,6 +108,10 @@
                         :label="_('w_Navigation_VideoSources_VIP')"
                         url="/video_sources/vip"
                     />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_VIP_Stranger_Visitor')"
+                        url="/video_sources/vip_stranger_visitor"
+                    />
                 </SidebarNavItem>
 
                 <!-- Rules and Action -->

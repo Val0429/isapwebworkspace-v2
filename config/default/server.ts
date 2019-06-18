@@ -73,6 +73,9 @@ import { VSDemographicCreate, VSDemographicUpdate } from '@/config/default/api/V
 // Video Source Dwell Time
 import { VSDwellTimeUpdate, VSDwellTimeCreate } from '@/config/default/api/VideoSourceDwellTime';
 
+// Video Source VIP Stranger Visitor
+import { VSVIPStrangerVisitorCreate, VSVIPStrangerVisitorUpdate } from '@/config/default/api/VideoSourceVIPStrangerVisitor';
+
 interface RestfulRequest extends ApisRequestBase {
     // create
     Post: {
@@ -168,6 +171,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Video Source Dwell Time
         '/device/dwell-time': [VSDwellTimeCreate.Input, VSDwellTimeCreate.Output, false];
+
+        // Video Source VIP Stranger Visitor
+        '/device/visitor': [VSVIPStrangerVisitorCreate.Input, VSVIPStrangerVisitorCreate.Output, false];
     };
 
     // read
@@ -349,6 +355,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Video Source Dwell Time
         '/device/dwell-time': [VSDwellTimeUpdate.Input, VSDwellTimeUpdate.Output, false];
+
+        // Video Source VIP Stranger Visitor
+        '/device/visitor': [VSVIPStrangerVisitorUpdate.Input, VSVIPStrangerVisitorUpdate.Output, false];
     };
 
     // delete

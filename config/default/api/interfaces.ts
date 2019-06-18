@@ -54,7 +54,7 @@ interface IObjectIdAndName {
     name: string;
 }
 
-export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap };
+export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap, IVideoSourceDevice };
 
 // User
 interface IUser {
