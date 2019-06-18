@@ -602,7 +602,7 @@ export default class LangObject implements ILang {
     w_VSPeopleCounting_SetFRS = 'Not yet set? Go to set FRS Server';
     w_VSPeopleCounting_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
 
-    w_VSPeopleCounting_AddSuccess = 'People Counting Device List add success.';
+    w_VSPeopleCounting_AddSuccess = 'People Counting Device add success.';
     w_VSPeopleCounting_ADDFailed = 'People Counting Device add failed, please try again.';
     w_VSPeopleCounting_EditSuccess = 'People Counting Device edit success.';
     w_VSPeopleCounting_EditFailed = 'People Counting Device edit failed, please try again.';
@@ -613,6 +613,7 @@ export default class LangObject implements ILang {
     w_VSDemographic_Add = 'Add Demographic Device';
     w_VSDemographic_Edit = 'Edit Demographic Device';
     w_VSDemographic_View = 'View Demographic Device';
+    w_VSDemographic_demoServerId = 'Demographic Server Id';
 
     w_VSDemographic_Addhanwha = 'Use Hanwha Server';
     w_VSDemographic_AddhanwhaUse = 'Add Demographic Device Use Hanwha Server';
@@ -628,7 +629,7 @@ export default class LangObject implements ILang {
     w_VSDemographic_SetFRS = 'Not yet set? Go to set FRS Server';
     w_VSDemographic_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
 
-    w_VSDemographic_AddSuccess = 'Demographic Device List add success.';
+    w_VSDemographic_AddSuccess = 'Demographic Device add success.';
     w_VSDemographic_ADDFailed = 'Demographic Device add failed, please try again.';
     w_VSDemographic_EditSuccess = 'Demographic Device edit success.';
     w_VSDemographic_EditFailed = 'Demographic Device edit failed, please try again.';

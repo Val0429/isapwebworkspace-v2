@@ -762,7 +762,7 @@ export default class PeopleCounting extends Vue {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            Dialog.error(this._("w_ErrorReadData"));
                             return false;
                         }
                         console.log(e);
@@ -827,7 +827,7 @@ export default class PeopleCounting extends Vue {
                     mode: string;
                 } = {
                     areaId: data,
-                    mode: 'peopleCounting'
+                    mode: ECameraMode.peopleCounting
                 };
 
                 if (this.inputPeopleCountingData.tempAreaId !== data) {
@@ -850,7 +850,7 @@ export default class PeopleCounting extends Vue {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            Dialog.error(this._("w_ErrorReadData"));
                             return false;
                         }
                         console.log(e);
@@ -863,10 +863,10 @@ export default class PeopleCounting extends Vue {
 
     async pageToAdd(stepType: string) {
         this.clearInputData();
+        await this.initSelectItemSite();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
         this.inputPeopleCountingData.stepType = stepType;
-        await this.initSelectItemSite();
         this.selecteds = [];
     }
 
@@ -904,7 +904,6 @@ export default class PeopleCounting extends Vue {
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
-        console.log('area - ',this.inputPeopleCountingData.area);
         if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
         }

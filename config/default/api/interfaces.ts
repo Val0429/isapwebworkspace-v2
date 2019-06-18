@@ -376,13 +376,13 @@ interface IAddVSPeopleCountingHanwha extends IVSPeopleCounting {
 }
 
 interface IAddVSPeopleCountingiSap extends IVSPeopleCounting {
-    customId?: string;
+    customId: string;
     config: IConfigiSap;
     direction: string;
 }
 
 interface IEditVSPeopleCountingHanwha extends IVSPeopleCounting {
-    objectId?: string;
+    objectId: string;
     model: string;
     config: IConfig;
 }
@@ -394,6 +394,19 @@ interface IEditVSPeopleCountingiSap extends IVSPeopleCounting {
 }
 
 export { IAddVSPeopleCountingHanwha, IAddVSPeopleCountingiSap, IEditVSPeopleCountingHanwha, IEditVSPeopleCountingiSap };
+
+// Video Source Demographic
+interface IVSDemographic extends IConfig {
+    areaId: string;
+    groupIds: string[];
+    name: string;
+    config: IConfigiSap;
+    demoServerId: string;
+    customId: string;
+    objectId: string;
+}
+
+export { IVSDemographic }
 
 ////////////////////// 以上為確定使用 //////////////////////
 
