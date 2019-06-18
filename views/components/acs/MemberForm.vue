@@ -7,6 +7,13 @@
         </template> -->
 
         <!-- 6) custom edit / add template with <template #add.* /> -->
+        <template #add.permission="{$attrs, $listeners}">
+            <ivc-form-permission 
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="options" 
+            />
+        </template>
 
     </iv-form-quick>
 </template>
@@ -28,6 +35,8 @@ export default class MemberForm extends Vue implements IFormQuick {
     canAdd: boolean = true;
     canEdit: boolean = true;
     canDelete: boolean = false;
+    selectedOptions=[];
+    options = [];
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
@@ -93,11 +102,10 @@ export default class MemberForm extends Vue implements IFormQuick {
                     */
                     status: number;
                     /**
-                    * @uiLabel - ${this._("cardnNum")}
+                    * @uiLabel - ${this._("cardnNum")}                    
                     */
                     cardnNum: string;
-                    /**
-                    * @uiLabel - ${this._("createdAt")}
+                    permission?: any;
                 }
                 `;
         }
@@ -119,10 +127,13 @@ export default class MemberForm extends Vue implements IFormQuick {
         return;
     }
     /// Done
-
+    
     private server;
     created() {
         this.server = this.$server;
+        this.options.push({key:"1",value:"A", checked:false});
+        this.options.push({key:"2",value:"B", checked:false});
+        this.options.push({key:"3",value:"C", checked:false});
     }
 }
 </script>
