@@ -32,8 +32,8 @@
             <b-col>
                 <iv-card label="Select2">
                     <iv-sort-select-tree
-                        v-model="singleSelected"
-                        :options="singleSelectItem"
+                        v-model="treeSelected"
+                        :options="treeSelectItem"
                     ></iv-sort-select-tree>
                     <template #footer>
                         <b-button
@@ -74,7 +74,8 @@ import SortSelectTree from "@/components/SortSelect/SortSelectTree.vue";
 
 @Component({
     components: {
-        SortSelect
+        SortSelect,
+        SortSelectTree
     }
 })
 export default class DemoSortSelect extends Vue {
@@ -100,6 +101,54 @@ export default class DemoSortSelect extends Vue {
         { value: "B8", text: "B 8" },
         { value: "B9", text: "B 9" },
         { value: "B10", text: "B 10" }
+    ];
+
+    treeSelected: string[] = ["A1331", "A11", "A21", "A3"];
+    treeSelectItem: ISortSelectTreeOption[] = [
+        {
+            value: "A1",
+            text: "A1",
+            childrens: [
+                {
+                    value: "A11",
+                    text: "A11",
+                    childrens: [{ value: "A111", text: "A111", childrens: [] }]
+                },
+                { value: "A12", text: "A12", childrens: [] },
+                {
+                    value: "A13",
+                    text: "A13",
+                    childrens: [
+                        { value: "A131", text: "A131", childrens: [] },
+                        { value: "A132", text: "A132", childrens: [] },
+                        {
+                            value: "A133",
+                            text: "A133",
+                            childrens: [
+                                { value: "A1331", text: "A1331", childrens: [] }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            value: "A2",
+            text: "A2",
+            childrens: [
+                {
+                    value: "A21",
+                    text: "A21",
+                    childrens: [{ value: "A211", text: "A211", childrens: [] }]
+                },
+                { value: "A22", text: "A22", childrens: [] }
+            ]
+        },
+        {
+            value: "A3",
+            text: "A3",
+            childrens: [{ value: "A31", text: "A31", childrens: [] }]
+        }
     ];
 
     created() {}

@@ -45,7 +45,7 @@ $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission
 // Demo
 $({ path: '/demos', name: 'Demo', icon: 'fa-check', redirect: '/demos/region-tree-select' })();
 $({ path: '/demos/region-tree-select', name: 'Region Tree Select', icon: 'fa-check', permission: false })(DemoRegionTreeSelect);
-$({ path: '/demos/image-map', name: 'ImageMap', icon: 'fa-check', permission: false })(DemoImageMap);
+$({ path: '/demos/image-map', name: 'Image Map', icon: 'fa-check', permission: false })(DemoImageMap);
 $({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(DemoROI);
 $({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
-$({ path: '/demos/sort_select', name: 'DragSelect', icon: 'fa-check', permission: false })(DemoSortSelect);
+$({ path: '/demos/sort_select', name: 'Sort Select', icon: 'fa-check', permission: false })(DemoSortSelect);

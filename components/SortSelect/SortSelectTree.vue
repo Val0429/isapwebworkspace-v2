@@ -27,19 +27,12 @@
                 </div>
                 <hr>
                 <div class="check-frame">
-                    <!-- <b-form-group>
-                        <b-form-checkbox
-                            v-for="option in optionsSelectItem"
-                            v-model="optionsSelected"
-                            v-show="showOption(option.value)"
-                            class="checkbox-group"
-                            name="dragSelectOption"
-                            :key="'drag__select__options__key__'+option.value"
-                            :value="option.value"
-                        >
-                            {{ option.text }}
-                        </b-form-checkbox>
-                    </b-form-group> -->
+                    <iv-tree-form 
+                        v-for="(option, index) of options"
+                        :key="'sort__select__tree__root' + option.value + '__' + index"
+                        :data="option" 
+                        :optionSearchText="optionSearchText"
+                    />
                 </div>
             </div>
         </div>
@@ -118,19 +111,12 @@
                 </div>
                 <hr>
                 <div class="check-frame">
-                    <!-- <b-form-group>
-                        <b-form-checkbox
-                            v-for="choose in chooseSelectItem"
-                            v-model="chooseSelected"
-                            v-show="showChoose(choose.value)"
-                            class="checkbox-group"
-                            name="dragSelectChoose"
-                            :key="'drag__select__choose__key__'+choose.value"
-                            :value="choose.value"
-                        >
-                            {{ choose.text }}
-                        </b-form-checkbox>
-                    </b-form-group> -->
+                    <iv-tree-form 
+                        v-for="(option, index) of this.chooseSelectItem"
+                        :key="'sort__select__tree__choose' + option.value + '__' + index"
+                        :data="option" 
+                        :optionSearchText="optionSearchText"
+                    />
                 </div>
 
             </div>
@@ -141,10 +127,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Model } from "vue-property-decorator";
-import { ISortSelectTreeOption } from "./models/ISortSelect";
+import { ISortSelectOption, ISortSelectTreeOption } from "./models/ISortSelect";
+import { TreeView } from "./TreeView.vue";
 
 @Component({
-    components: {}
+    components: {
+        TreeView
+    }
 })
 export class SortSelectTree extends Vue {
     optionSearchText = "";
@@ -155,74 +144,21 @@ export class SortSelectTree extends Vue {
     optionsSelectItem: ISortSelectTreeOption[] = [];
     chooseSelectItem: ISortSelectTreeOption[] = [];
 
-    value: string[] = ["A8", "A7", "B9", "A9"];
-    options: ISortSelectTreeOption[] = [
-        {
-            value: "A1",
-            text: "A 1",
-            childrens: [
-                { value: "A8", text: "A 8", childrens: [] },
-                { value: "A9", text: "A 9", childrens: [] },
-                { value: "A10", text: "A 10", childrens: [] }
-            ]
-        },
-        {
-            value: "A2",
-            text: "A 2",
-            childrens: [
-                {
-                    value: "A5",
-                    text: "A 5",
-                    childrens: [{ value: "A7", text: "A 7", childrens: [] }]
-                },
-                { value: "A6", text: "A 6", childrens: [] }
-            ]
-        },
-        {
-            value: "A3",
-            text: "A 3",
-            childrens: [{ value: "A4", text: "A 4", childrens: [] }]
-        },
-        {
-            value: "B1",
-            text: "B 1",
-            childrens: [
-                { value: "B5", text: "B 5", childrens: [] },
-                { value: "B6", text: "B 6", childrens: [] },
-                {
-                    value: "B7",
-                    text: "B 7",
-                    childrens: [
-                        { value: "B9", text: "B 9", childrens: [] },
-                        { value: "B10", text: "B 10", childrens: [] }
-                    ]
-                }
-            ]
-        },
-        {
-            value: "B2",
-            text: "B 2",
-            childrens: [{ value: "B8", text: "B 8", childrens: [] }]
-        },
-        { value: "B3", text: "B 3", childrens: [] },
-        { value: "B4", text: "B 4", childrens: [] }
-    ];
+    // Model
+    @Model("input", {
+        type: Array,
+        default: function() {
+            return [];
+        }
+    })
+    value: string[];
 
-    // // Model
-    // @Model("input", {
-    //     type: Array,
-    //     default: function() {
-    //         return [];
-    //     }
-    // })
-    // value: string[];
-
-    // // prop
-    // @Prop({
-    //     type: Array,
-    //     default: []
-    // })
-    // options: ISortSelectOption[];
+    // prop
+    @Prop({
+        type: Array,
+        default: []
+    })
+    options: ISortSelectTreeOption[];
 
     created() {}
 
@@ -241,21 +177,31 @@ export class SortSelectTree extends Vue {
         for (let option of this.options) {
             let inValue = false;
             for (let val of this.value) {
-                let tempRes = this.anysisChildren(val, option);
-                if (tempRes != null) {
-                    anysisResult.push(tempRes);
+                let tempOption = this.anysisChildren(val, option);
+                if (tempOption != null) {
+                    let tempMerge = false;
+                    for (let tempItem of this.chooseSelectItem) {
+                        tempMerge = this.mergeValue(
+                            tempItem,
+                            tempOption as ISortSelectTreeOption
+                        );
+                        if (tempMerge) {
+                            break;
+                        }
+                    }
+                    if (!tempMerge) {
+                        this.chooseSelectItem.push(tempOption);
+                    }
                 }
             }
         }
-
-        if (anysisResult.length > 0) {
-            this.mergeValue(anysisResult);
-        }
-
-        console.log(anysisResult);
+        console.log(this.chooseSelectItem);
     }
 
-    anysisChildren(value: string, option: ISortSelectTreeOption) {
+    anysisChildren(
+        value: string,
+        option: ISortSelectTreeOption
+    ): ISortSelectTreeOption | null {
         let result: any = null;
         let tempOption = JSON.parse(JSON.stringify(option));
         if (value == tempOption.value) {
@@ -273,7 +219,18 @@ export class SortSelectTree extends Vue {
         return result;
     }
 
-    mergeValue(anysisResult: ISortSelectTreeOption[]) {}
+    mergeValue(
+        chooseItem: ISortSelectTreeOption,
+        anysisResult: ISortSelectTreeOption
+    ): boolean {
+        let result = false;
+        // if (chooseItem.value == anysisResult.value) {
+        //     result = true;
+        // }
+        return result;
+    }
+
+    mergeChildren() {}
 
     // disable
     disableSelectAllOption(): boolean {
@@ -355,14 +312,6 @@ export class SortSelectTree extends Vue {
     }
 
     // option
-    showOption(data: string): boolean {
-        let result = true;
-        if (this.optionSearchText != "" && !data.match(this.optionSearchText)) {
-            result = false;
-        }
-        return result;
-    }
-
     selectAllOption() {
         this.optionsSelected = [];
         // for (let option of this.optionsSelectItem) {
