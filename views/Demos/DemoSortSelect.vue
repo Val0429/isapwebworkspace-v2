@@ -103,7 +103,7 @@ export default class DemoSortSelect extends Vue {
         { value: "B10", text: "B 10" }
     ];
 
-    treeSelected: string[] = ["A1331", "A11", "A21", "A3"];
+    treeSelected: string[] = ["A11", "A132", "A1331", "A1335", "A211", "A22", "A3"];
     treeSelectItem: ISortSelectTreeOption[] = [
         {
             value: "A1",
@@ -125,7 +125,11 @@ export default class DemoSortSelect extends Vue {
                             value: "A133",
                             text: "A133",
                             childrens: [
-                                { value: "A1331", text: "A1331", childrens: [] }
+                                { value: "A1331", text: "A1331", childrens: [] },
+                                { value: "A1332", text: "A1332", childrens: [] },
+                                { value: "A1333", text: "A1333", childrens: [] },
+                                { value: "A1334", text: "A1334", childrens: [] },
+                                { value: "A1335", text: "A1335", childrens: [] },
                             ]
                         }
                     ]

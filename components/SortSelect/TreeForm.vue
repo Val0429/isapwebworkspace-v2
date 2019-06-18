@@ -39,7 +39,6 @@ export class TreeForm extends Vue {
     optionSearchText: string;
 
     created (){
-        console.log(this.data);
     }
 
     showOption(data: string): boolean {

@@ -130,6 +130,11 @@ import { Vue, Component, Prop, Model } from "vue-property-decorator";
 import { ISortSelectOption, ISortSelectTreeOption } from "./models/ISortSelect";
 import { TreeView } from "./TreeView.vue";
 
+interface IMergeTree {
+    parent: boolean;
+    children: boolean;
+}
+
 @Component({
     components: {
         TreeView
@@ -171,7 +176,6 @@ export class SortSelectTree extends Vue {
         this.chooseSelected = [];
         this.optionsSelectItem = [];
         this.chooseSelectItem = [];
-
         let anysisResult: ISortSelectTreeOption[] = [];
 
         for (let option of this.options) {
@@ -179,23 +183,55 @@ export class SortSelectTree extends Vue {
             for (let val of this.value) {
                 let tempOption = this.anysisChildren(val, option);
                 if (tempOption != null) {
-                    let tempMerge = false;
+                    let tempMerge: IMergeTree = {parent: false, children: false};
                     for (let tempItem of this.chooseSelectItem) {
-                        tempMerge = this.mergeValue(
-                            tempItem,
-                            tempOption as ISortSelectTreeOption
-                        );
-                        if (tempMerge) {
+                        if (tempOption.value == tempItem.value) {
+                             tempMerge = this.mergeValue(
+                                tempItem,
+                                tempOption as ISortSelectTreeOption,
+                                false
+                            );
+                        }
+                        if (tempMerge.children) {
                             break;
                         }
                     }
-                    if (!tempMerge) {
+                    if (!tempMerge.children) {
                         this.chooseSelectItem.push(tempOption);
                     }
                 }
             }
         }
-        console.log(this.chooseSelectItem);
+    }
+
+    mergeValue(
+        chooseItem: ISortSelectTreeOption,
+        anysisResult: ISortSelectTreeOption,
+        parentCheck: boolean
+    ): IMergeTree {
+        let result: IMergeTree = {children: false, parent: false};
+        if (chooseItem.value == anysisResult.value) {
+            if (anysisResult.childrens.length > 0) {
+                for (let chooseChildrens of chooseItem.childrens) {
+                    let tempResult: IMergeTree = this.mergeValue(chooseChildrens, anysisResult.childrens[0], true);
+                    if (tempResult.children) {
+                        result.children = true;
+                    }
+                    if (tempResult.parent) {
+                        chooseItem.childrens.push(anysisResult.childrens[0]);
+                        break;
+                    }
+                }
+            } else {
+                result.children = true;
+                result.parent = true;
+            }
+        }
+        if (parentCheck && chooseItem.value != anysisResult.value) {
+            result.children = true;
+            result.parent = true;
+        }
+        return result;
     }
 
     anysisChildren(
@@ -219,16 +255,7 @@ export class SortSelectTree extends Vue {
         return result;
     }
 
-    mergeValue(
-        chooseItem: ISortSelectTreeOption,
-        anysisResult: ISortSelectTreeOption
-    ): boolean {
-        let result = false;
-        // if (chooseItem.value == anysisResult.value) {
-        //     result = true;
-        // }
-        return result;
-    }
+
 
     mergeChildren() {}
 
