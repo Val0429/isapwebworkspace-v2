@@ -176,6 +176,100 @@
             </iv-auto-card>
         </div>
 
+        <!-- View-->
+        <div v-if="pageStep === ePageStep.view">
+            <iv-card :label="_('w_VSHeatmap_View')">
+
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="inf4()"
+                    :value="inputFormData[0]"
+                >
+
+                    <template #serverId="{$attrs, $listeners}">
+
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="cmsItem"
+                            :value="inputFormData[0].config.server ? inputFormData[0].config.server.name : ''"
+                        >
+                        </iv-form-label>
+                        <b-button
+                            class="linkPadding"
+                            variant="link"
+                            @click="goToSetCMS"
+                        >
+                            {{ _('w_VSHeatmap_SetCMS') }}
+                        </b-button>
+                    </template>
+
+                    <template #nvrId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="nvrItem"
+                            :value="inputFormData[0].config ? inputFormData[0].config.nvrId : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #channelId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="inputFormData[0].config ? inputFormData[0].config.channelId : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #siteId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="inputFormData[0].site ? inputFormData[0].site.name : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #areaId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="inputFormData[0].area ? inputFormData[0].area.name : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #groupIds="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="inputFormData[0].groups ? showGroups(inputFormData[0].groups) : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+            </iv-card>
+        </div>
+
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
             v-on:click-back="pageToShowResult"
@@ -345,7 +439,7 @@ export default class Heatmap extends Vue {
     }
 
     selectedItem(data) {
-        this.isSelected = data;
+        this.inputFormData = this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
@@ -643,6 +737,15 @@ export default class Heatmap extends Vue {
         }
     }
 
+    showGroups(datas) {
+        console.log("showGroups", datas);
+        var groups = [];
+        for (let data of datas) {
+            groups.push(data.name);
+        }
+        return groups.join(",");
+    }
+
     ITableList() {
         return `
             interface {
@@ -794,91 +897,73 @@ export default class Heatmap extends Vue {
         `;
     }
 
-    // private inf4() {
-    //     return `
-    //     interface {
-    //        /**
-    //             * @uiLabel - ${this._("w_VSHeatmap_CustomId")}
-    //             * @uiPlaceHolder - ${this._("w_VSHeatmap_CustomId")}
-    //             * @uiType - iv-form-label
-    //             */
-    //             customId?: string;
+    private inf4() {
+        return `
+        interface {
+           /**
+                * @uiLabel - ${this._("w_VSHeatmap_CustomId")}
+                * @uiType - iv-form-label
+                */
+                customId?: string;
 
-    //             /**
-    //             * @uiLabel - ${this._("w_VSHeatmap_Name")}
-    //             * @uiPlaceHolder - ${this._("w_VSHeatmap_Name")}
-    //             * @uiType - iv-form-label
-    //             */
-    //             name?: string;
+                /**
+                * @uiLabel - ${this._("w_VSHeatmap_Name")}
+                * @uiType - iv-form-label
+                */
+                name?: string;
 
-    //             /*
-    //             * @uiLabel - ${this._("w_VSHeatmap_Brand")}
-    //             * @uiType - iv-form-label
-    //             * @uiAttrs - { multiple: false }
-    //             */
-    //             brand?: ${toEnumInterface({
-    //                 isap: "iSAP"
-    //             })}
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Brand")}
+                * @uiType - iv-form-label
+                */
+                brand?: ${toEnumInterface({
+                    isap: "iSAP"
+                })}
 
-    //             /*
-    //             * @uiLabel - ${this._("w_VSHeatmap_CMS")}
-    //             * @uiType - iv-form-label
-    //             * @uiAttrs - { multiple: false }
-    //             */
-    //                serverId?: any;
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_CMS")}
+                * @uiType - iv-form-label
+                */
+                serverId?: any;
 
-    //               /*
-    //             * @uiLabel - ${this._("w_VSHeatmap_NVR")}
-    //             * @uiType - iv-form-label
-    //             * @uiAttrs - { multiple: false }
-    //             */
-    //             nvrId?: ${toEnumInterface({
-    //                 1: "NVR1",
-    //                 2: "NVR2"
-    //             })}
+                  /*
+                * @uiLabel - ${this._("w_VSHeatmap_NVR")}
+                * @uiType - iv-form-label
+                */
+                nvrId?: any;
 
-    //                 /*
-    //             * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
-    //             * @uiType - iv-form-label
-    //             * @uiAttrs - { multiple: false }
-    //             */
-    //             channelId?: ${toEnumInterface({
-    //                 1: "1 ch",
-    //                 2: "2 ch"
-    //             })}
+                    /*
+                * @uiLabel - ${this._("w_VSHeatmap_ChannelInNVR")}
+                * @uiType - iv-form-label
+                */
+                channelId?: any;
 
-    //             /*
-    //             * @uiLabel - ${this._("w_VSHeatmap_Site")}
-    //             * @uiType - iv-form-label
-    //             * @uiAttrs - { multiple: false }
-    //             */
-    //             siteId?: ${toEnumInterface({
-    //                 site1: "site01",
-    //                 site2: "site02"
-    //             })}
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Site")}
+                * @uiType - iv-form-label
+                */
+                siteId?: ${toEnumInterface(this.sitesSelectItem as any, false)};
 
-    //             /*
-    //             * @uiLabel - ${this._("w_VSHeatmap_Area")}
-    //             * @uiType - iv-form-label
-    //             * @uiAttrs - { multiple: false }
-    //             */
-    //             areaId?: ${toEnumInterface({
-    //                 area1: "area01",
-    //                 area2: "area02"
-    //             })}
 
-    //              /*
-    //             * @uiLabel - ${this._("w_VSHeatmap_DeviceGroup")}
-    //             * @uiType - iv-form-label
-    //             * @uiAttrs - { multiple: true }
-    //             */
-    //             groupIds?: ${toEnumInterface({
-    //                 group1: "group01",
-    //                 group2: "group02"
-    //             })}
-    //     }
-    //     `;
-    // }
+                /*
+                * @uiLabel - ${this._("w_VSHeatmap_Area")}
+                * @uiType - iv-form-label
+                */
+                 areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+
+
+                 /*
+                * @uiLabel - ${this._("w_VSHeatmap_DeviceGroup")}
+                * @uiType - iv-form-label
+                * @uiAttrs - { multiple: true }
+                */
+               groupIds?: ${toEnumInterface(
+                   this.deviceGroupSelectItem as any,
+                   true
+               )};
+        }
+        `;
+    }
 
     private isMounted: boolean = false;
     private doMounted() {
