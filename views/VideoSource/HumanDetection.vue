@@ -73,6 +73,7 @@
                     <template #1>
                         <iv-form
                             :interface="inf1()"
+                            @update:*="updateForm($event)"
                             @update:serverId="initDeviceData($event)"
                             @update:nvrId="initChannelItem($event)"
                             :value="inputFormData"
@@ -112,7 +113,6 @@
                                 >
                                     {{ _('w_VSHumanDetection_SetCMS') }}
                                 </b-button>
-
                             </template>
 
                             <template #serverId="{$attrs, $listeners}">
@@ -396,7 +396,7 @@ export default class HumanDetection extends Vue {
 
     inputFormData: any = {
         angle: 0,
-        brand: "",
+        brand: "isap",
         customId: "",
         dataWindowX: 0,
         dataWindowY: 0,
@@ -430,7 +430,7 @@ export default class HumanDetection extends Vue {
 
     clearInputData() {
         this.inputFormData.angle = 0;
-        this.inputFormData.brand = "";
+        this.inputFormData.brand = "isap";
         this.inputFormData.customId = "";
         this.inputFormData.dataWindowX = 0;
         this.inputFormData.dataWindowY = 0;
@@ -490,7 +490,6 @@ export default class HumanDetection extends Vue {
 
     initBrandItem() {
         this.brandItem = [];
-
         this.brandItem = [{ id: "isap", text: "ISAP" }];
     }
 
@@ -593,6 +592,13 @@ export default class HumanDetection extends Vue {
         for (let device of this.devices) {
             let nvr = { id: device.nvrId.toString(), text: device.nvrId };
             this.nvrItem.push(nvr);
+        }
+    }
+
+    updateForm(data) {
+        console.log("updateForm", data);
+        if (data) {
+            this.inputFormData[data.key] = data.value;
         }
     }
 
