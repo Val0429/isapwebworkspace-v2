@@ -201,7 +201,7 @@ export default class LangObject {
     w_Navigation_Server_FRSManagerServer = 'FRS Manager Server';
     w_Navigation_Server_FRSServer = 'FRS Server';
     w_Navigation_Server_DemographicServer = 'Demographic Server';
-    w_Navigation_Server_HDServer = 'HD Server';
+    w_Navigation_Server_HDServer = 'Human Detection Server';
 
     w_Navigation_Report = 'Report';
     w_Navigation_Report_ReportTemplate = 'Report Template';

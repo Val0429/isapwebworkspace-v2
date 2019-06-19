@@ -183,6 +183,28 @@
 
         </b-modal>
 
+        <!-- return ImageBase64 -->
+        <b-modal
+            ref="detail"
+            hide-footer
+            hide-header
+            size="lg"
+        >
+
+            <img :src="returnImageBase64">
+
+            <hr>
+
+            <b-button
+                class="float-right"
+                variant="dark"
+                size="lg"
+                @click="pageToForm1()"
+            >{{ _('w_Cancel') }}
+            </b-button>
+
+        </b-modal>
+
     </div>
 
 </template>
@@ -243,6 +265,8 @@ export default class HumanDetectionServer extends Vue {
         imageBase64: "",
         objectId: "",
     };
+
+    returnImageBase64: string = '';
 
     //options
     targetScoreItem: any = {};
@@ -430,6 +454,11 @@ export default class HumanDetectionServer extends Vue {
 
     }
 
+    pageToForm1() {
+        this.pageStep = EPageStep.Edit;
+        (this.$refs["detail"] as any).hide();
+    }
+
     async sendHumanServerTest(data) {
 
         if (this.newImgSrc == "") {
@@ -450,6 +479,8 @@ export default class HumanDetectionServer extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     this.modalShow = !this.modalShow;
+                    (this.$refs["detail"] as any).show();
+                    this.returnImageBase64 = response.imageBase64;
                 }
             })
             .catch((e: any) => {
