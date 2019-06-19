@@ -105,6 +105,14 @@
                                     :value="$attrs ?  $attrs.value : ''"
                                 >
                                 </iv-form-selection>
+                                <b-button
+                                    class="linkPadding"
+                                    variant="link"
+                                    @click="goToSetHDServer()"
+                                >
+                                    {{ _('w_VSHumanDetection_SetCMS') }}
+                                </b-button>
+
                             </template>
 
                             <template #serverId="{$attrs, $listeners}">
@@ -796,6 +804,16 @@ export default class HumanDetection extends Vue {
         }
         result = result.substring(0, result.length - 2);
         return result;
+    }
+
+    goToSetHDServer() {
+        Dialog.confirm(
+            this._("w_VSHumanDetection_PageToHDServerAlter"),
+            this._("w_DeleteConfirm"),
+            () => {
+                this.$router.push("/server/hd_server");
+            }
+        );
     }
 
     goToSetCMS() {
