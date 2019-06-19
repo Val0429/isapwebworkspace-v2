@@ -20,7 +20,7 @@ import Elevator from './components/acs/Elevator.vue';
 import TimeSchedule from './components/acs/TimeSchedule.vue';
 import DoorGroup from './components/acs/DoorGroup.vue';
 import PermissionTable from './components/acs/PermissionTable.vue';
-
+import Reader from './components/acs/Reader.vue';
 
 $({ path: '/', name: "Home", redirect: '/member' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
@@ -30,6 +30,7 @@ $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator)
     $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
     $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
     $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
+    $({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
 
     $({ path: '/components', name: "Components", icon: 'isap-icon-add' })(Components);
     

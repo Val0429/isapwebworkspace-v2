@@ -80,4 +80,10 @@ export default class LangObject implements ILang {
     tableid="權限表ID";
     tablename="權限表名稱";
 
+    w_Reader="Reader";
+    w_ReaderAdd="Add Reader";
+    w_ReaderEdit="Edit Reader";
+    readerid="Reader Id";
+    readername="Reader Name";
+
 }

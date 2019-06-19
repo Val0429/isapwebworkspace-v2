@@ -80,5 +80,10 @@ export default class LangObject {
     tableid="Table Id";
     tablename="Table Name";
                     
+    w_Reader="Reader";
+    w_ReaderAdd="Add Reader";
+    w_ReaderEdit="Edit Reader";
+    readerid="Reader Id";
+    readername="Reader Name";
     
 }
