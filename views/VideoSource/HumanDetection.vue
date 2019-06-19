@@ -100,7 +100,7 @@
                                 <b-button
                                     class="linkPadding"
                                     variant="link"
-                                    @click="$attrs"
+                                    @click="goToSetCMS()"
                                 >
                                     {{ _('w_VSHumanDetection_SetCMS') }}
                                 </b-button>
@@ -495,11 +495,10 @@ export default class HumanDetection extends Vue {
     }
 
     showChannelName(data) {
-        console.log("showChannelName");
+        console.log("showChannelName", this.channelItem, data);
         if (this.channelItem.length > 0) {
-            return this.channelItem.filter(
-                x => x.id.toString() === data.toString()
-            ).text;
+            return this.channelItem.filter(x => x.id == data.toString())[0]
+                .text;
         }
         return "";
     }
@@ -570,6 +569,7 @@ export default class HumanDetection extends Vue {
     async pageToAdd() {
         this.clearInputData();
         await this.initSelectItemSite();
+        this.canvasDetail = [];
         this.selecteds = [];
         this.pageStep = EPageStep.add;
     }
@@ -660,7 +660,7 @@ export default class HumanDetection extends Vue {
                         .D("/device", deleteParam)
                         .then((response: any) => {
                             Dialog.success(this._("w_Success"));
-                            (this.$refs.heatmapTable as any).reload();
+                            (this.$refs.humanDetectionTable as any).reload();
                         })
                         .catch((e: any) => {
                             if (
