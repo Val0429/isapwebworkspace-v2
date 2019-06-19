@@ -541,6 +541,7 @@ export default class Heatmap extends Vue {
     pageToList() {
         this.initCMSItem();
         this.pageStep = EPageStep.list;
+        (this.$refs.heatmapTable as any).reload();
     }
 
     async doDelete() {

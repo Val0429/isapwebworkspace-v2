@@ -22,7 +22,7 @@
                 </template>
 
                 <iv-table
-                    ref="heatmapTable"
+                    ref="humanDetectionTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
                     :server="{ path: '/device' }"
@@ -541,6 +541,8 @@ export default class HumanDetection extends Vue {
     pageToList() {
         this.initCMSItem();
         this.pageStep = EPageStep.list;
+        (this.$refs.humanDetectionTable as any).reload();
+
     }
 
     async doDelete() {
