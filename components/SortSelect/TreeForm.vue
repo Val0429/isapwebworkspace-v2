@@ -90,6 +90,7 @@ export class TreeForm extends Vue {
     }
 
     changeCheckbox(event: any) {
+        this.data.event.clickCheckbox = true;
         this.data.status.focus = event == false ? false : true;
     }
 }

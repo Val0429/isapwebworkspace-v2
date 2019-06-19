@@ -151,8 +151,9 @@ interface IMergeTree {
 export class SortSelectTree extends Vue {
     eSortSelectTreeEventType = ESortSelectTreeEventType;
 
-    optionSearchText = "";
-    chooseSearchText = "";
+    optionSearchText: string = "";
+    chooseSearchText: string = "";
+    checkboxClickTrues: string[] = [];
     selected: string[] = [];
     sortSelectTreeItemList: ISortSelectTreeItem[] = [];
 
@@ -182,11 +183,50 @@ export class SortSelectTree extends Vue {
     }
 
     @Watch("sortSelectTreeItemList", { deep: true })
-    private onSortSelectTreeItemListChanged(
-        newval: ISortSelectTreeItem,
-        oldval: ISortSelectTreeItem
+    private onChangedSortSelectTreeItemList(
+        newval: ISortSelectTreeItem[],
+        oldval: ISortSelectTreeItem[]
     ) {
-        console.log(newval);
+        for (let sortSelectTreeItem of newval) {
+            this.onWatchChildrenChange(sortSelectTreeItem);
+        }
+        console.log(this.checkboxClickTrues);
+    }
+
+    onWatchChildrenChange(sortSelectTreeItem: ISortSelectTreeItem) {
+        if (sortSelectTreeItem.event.clickCheckbox) {
+            if (sortSelectTreeItem.status.focus) {
+                this.pushValueToTrueList(sortSelectTreeItem.value);
+            } else {
+                this.removeFromTrueList(sortSelectTreeItem.value);
+            }
+        }
+        sortSelectTreeItem.event.clickCheckbox = false;
+        for (let children of sortSelectTreeItem.childrens) {
+            this.onWatchChildrenChange(children);
+        }
+    }
+
+    pushValueToTrueList(value: string) {
+        let inList = false;
+        for (let checkboxClickTrue of this.checkboxClickTrues) {
+            if (checkboxClickTrue == value) {
+                inList = true;
+                break;
+            }
+        }
+        if (!inList) {
+            this.checkboxClickTrues.push(value);
+        }
+    }
+
+    removeFromTrueList(value: string) {
+        for (let i in this.checkboxClickTrues) {
+            let checkboxClickTrue = this.checkboxClickTrues[i];
+            if (checkboxClickTrue == value) {
+                this.checkboxClickTrues.splice(parseInt(i), 1);
+            }
+        }
     }
 
     defaultSortSelectTreeItem(): ISortSelectTreeItem {
@@ -294,6 +334,7 @@ export class SortSelectTree extends Vue {
         }
     }
 
+    // 判斷選取
     calculateChoose(
         sortSelectTreeItem: ISortSelectTreeItem,
         parentChoose: boolean
@@ -310,6 +351,7 @@ export class SortSelectTree extends Vue {
         }
     }
 
+    // 重設 selected
     pushSelected(value: string) {
         let inSelected = false;
         for (let sel of this.selected) {
@@ -324,94 +366,193 @@ export class SortSelectTree extends Vue {
         this.resetVModel();
     }
 
-    ////////////////////////////////////////////////////
+    // 計算全部元件數量
+    calculAllItemTotal(): number {
+        let result = 0;
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            result += this.claculChildrenItemTotal(sortSelectTreeItem);
+        }
+        return result;
+    }
+
+    claculChildrenItemTotal(sortSelectTreeItem: ISortSelectTreeItem): number {
+        let result = 0;
+        result++;
+        for (let children of sortSelectTreeItem.childrens) {
+            result += this.claculChildrenItemTotal(children);
+        }
+        return result;
+    }
+
+    // 計算全部 choose 數量
+    calculOptionAllItemTotal(): number {
+        let result = 0;
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            result += this.calculOptionAllChildrenTotal(sortSelectTreeItem);
+        }
+        return result;
+    }
+
+    calculOptionAllChildrenTotal(
+        sortSelectTreeItem: ISortSelectTreeItem
+    ): number {
+        let result = 0;
+        if (!sortSelectTreeItem.status.choose) {
+            result++;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            result += this.calculOptionAllChildrenTotal(children);
+        }
+        return result;
+    }
+
+    calculOptionFocusItemTotal(): number {
+        let result = 0;
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            result += this.calculOptionFocusChildrenTotal(sortSelectTreeItem);
+        }
+        return result;
+    }
+
+    calculOptionFocusChildrenTotal(
+        sortSelectTreeItem: ISortSelectTreeItem
+    ): number {
+        let result = 0;
+        if (
+            !sortSelectTreeItem.status.choose &&
+            sortSelectTreeItem.status.focus
+        ) {
+            result++;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            result += this.calculOptionFocusChildrenTotal(children);
+        }
+        return result;
+    }
+
+    // 計算全部 choose 數量
+    calculChooseAllItemTotal(): number {
+        let result = 0;
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            result += this.calculChooseAllChildrenTotal(sortSelectTreeItem);
+        }
+        return result;
+    }
+
+    calculChooseAllChildrenTotal(
+        sortSelectTreeItem: ISortSelectTreeItem
+    ): number {
+        let result = 0;
+        if (sortSelectTreeItem.status.choose) {
+            result++;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            result += this.calculChooseAllChildrenTotal(children);
+        }
+        return result;
+    }
+
+    // 計算 choose 被打勾數量
+    calculChooseFocusItemTotal(): number {
+        let result = 0;
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            result += this.calculChooseFocusChildrenTotal(sortSelectTreeItem);
+        }
+        return result;
+    }
+
+    calculChooseFocusChildrenTotal(
+        sortSelectTreeItem: ISortSelectTreeItem
+    ): number {
+        let result = 0;
+        if (
+            sortSelectTreeItem.status.choose &&
+            sortSelectTreeItem.status.focus
+        ) {
+            result++;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            result += this.calculChooseFocusChildrenTotal(children);
+        }
+        return result;
+    }
 
     // disable
     disableSelectAllOption(): boolean {
         let result = false;
-        // if (this.optionsSelected.length == this.optionsSelectItem.length) {
-        //     result = true;
-        // }
+        let allTotal = this.calculOptionAllItemTotal();
+        let focusTotal = this.calculOptionFocusItemTotal();
+        if (focusTotal >= allTotal) {
+            result = true;
+        }
         return result;
     }
 
     disableSelectResetOption(): boolean {
         let result = false;
-        // if (this.optionsSelected.length == 0) {
-        //     result = true;
-        // }
+        let allTotal = this.calculOptionAllItemTotal();
+        let focusTotal = this.calculOptionFocusItemTotal();
+        if (focusTotal == 0) {
+            result = true;
+        }
         return result;
     }
 
     disableSelectAllChoose(): boolean {
         let result = false;
-        // if (this.chooseSelected.length == this.chooseSelectItem.length) {
-        //     result = true;
-        // }
+        let allTotal = this.calculChooseAllItemTotal();
+        let focusTotal = this.calculChooseFocusItemTotal();
+        if (focusTotal >= allTotal) {
+            result = true;
+        }
         return result;
     }
 
     disableSelectResetChoose(): boolean {
         let result = false;
-        // if (this.chooseSelected.length == 0) {
-        //     result = true;
-        // }
+        let allTotal = this.calculChooseAllItemTotal();
+        let focusTotal = this.calculChooseFocusItemTotal();
+        if (focusTotal == 0) {
+            result = true;
+        }
         return result;
     }
 
     disableChooseSortUp(): boolean {
         let result = false;
-        // let chooseSelected = this.chooseSelected[0];
-        // if (chooseSelected != undefined && this.chooseSelected.length == 1) {
-        //     for (let i in this.chooseSelectItem) {
-        //         let choose = this.chooseSelectItem[i];
-        //         if (chooseSelected == choose.value) {
-        //             if (parseInt(i) == 0) {
-        //                 result = true;
-        //             }
-        //             break;
-        //         }
-        //     }
-        // } else {
-        //     result = true;
-        // }
+        if (this.checkboxClickTrues.length != 1) {
+            result = true;
+        }
         return result;
     }
 
     disableChooseSortDown() {
         let result = false;
-        // let chooseSelected = this.chooseSelected[0];
-        // if (chooseSelected != undefined && this.chooseSelected.length == 1) {
-        //     for (let i in this.chooseSelectItem) {
-        //         let choose = this.chooseSelectItem[i];
-        //         if (chooseSelected == choose.value) {
-        //             if (parseInt(i) == this.chooseSelectItem.length - 1) {
-        //                 result = true;
-        //             }
-        //             break;
-        //         }
-        //     }
-        // } else {
-        //     result = true;
-        // }
+        if (this.checkboxClickTrues.length != 1) {
+            result = true;
+        }
         return result;
     }
 
     disableChooseToOption(): boolean {
         let result = false;
-        // if (this.chooseSelected.length < 1) {
-        //     result = true;
-        // }
+        let focusTotal = this.calculChooseFocusItemTotal();
+        if (focusTotal <= 0) {
+            result = true;
+        }
         return result;
     }
 
     disableOptionToChoose(): boolean {
         let result = false;
-        // if (this.optionsSelected.length < 1) {
-        //     result = true;
-        // }
+        let focusTotal = this.calculOptionFocusItemTotal();
+        if (focusTotal <= 0) {
+            result = true;
+        }
         return result;
     }
+
+    ////////////////////////////////////////////////////
 
     // option
     selectAllOption() {
@@ -426,14 +567,6 @@ export class SortSelectTree extends Vue {
     }
 
     // choose
-    showChoose(data: string): boolean {
-        let result = true;
-        // if (this.chooseSearchText != "" && !data.match(this.chooseSearchText)) {
-        //     result = false;
-        // }
-        return result;
-    }
-
     selectAllChoose() {
         // this.chooseSelected = [];
         // for (let choose of this.chooseSelectItem) {
@@ -539,7 +672,7 @@ export class SortSelectTree extends Vue {
     }
 
     // Model connecnt
-    resetVModel () {
+    resetVModel() {
         this.$emit("input", this.selected);
     }
 }
