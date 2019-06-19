@@ -78,6 +78,25 @@
                             :value="inputFormData"
                         >
 
+                            <template #name="{$attrs, $listeners}">
+                                <iv-form-string
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :value="$attrs ? $attrs.value : ''"
+                                >
+                                </iv-form-string>
+                            </template>
+
+                            <template #brand="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :options="brandItem"
+                                    :value="$attrs ? $attrs.value : ''"
+                                >
+                                </iv-form-selection>
+                            </template>
+
                             <template #hdServerId="{$attrs, $listeners}">
                                 <iv-form-selection
                                     v-bind="$attrs"
@@ -194,6 +213,16 @@
                     :interface="inf4()"
                     :value="inputFormData"
                 >
+
+                    <template #brand="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="brandItem"
+                            :value="inputFormData ? inputFormData.brand : ''"
+                        >
+                        </iv-form-label>
+                    </template>
 
                     <template #hdServerId="{$attrs, $listeners}">
                         <iv-form-label
@@ -345,6 +374,7 @@ export default class HumanDetection extends Vue {
 
     // options
     groupNameItem: any = [];
+    brandItem: any = [];
     hdServerItem: any = [];
     cmsItem: any = [];
     devices: any = [];
@@ -449,6 +479,12 @@ export default class HumanDetection extends Vue {
                 console.log(e);
                 return false;
             });
+    }
+
+    initBrandItem() {
+        this.brandItem = [];
+
+        this.brandItem = [{ id: "isap", text: "ISAP" }];
     }
 
     async initHdServerItem() {
@@ -692,6 +728,7 @@ export default class HumanDetection extends Vue {
 
     pageToList() {
         this.initCMSItem();
+        this.initBrandItem();
         this.initHdServerItem();
         this.pageStep = EPageStep.list;
         (this.$refs.humanDetectionTable as any).reload();
@@ -1041,9 +1078,7 @@ export default class HumanDetection extends Vue {
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                brand: ${toEnumInterface({
-                    isap: "iSAP"
-                })}
+                brand?: any;
 
                   /*
                 * @uiLabel - ${this._("w_VSHumanDetection_HDserver")}
