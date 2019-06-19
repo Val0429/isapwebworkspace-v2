@@ -28,6 +28,7 @@
                 <SidebarNavItem url="/timeschedule" />
                 <SidebarNavItem url="/permissiontable" />
                 <SidebarNavItem url="/reader" />
+                <SidebarNavItem url="/accesslevel" />
             </SidebarNav>
         </template>
     </CoreUIBase>

@@ -1,4 +1,4 @@
-﻿import { RegisterLanguage, ILang } from '@/../core/i18n';
+import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage("zh-TW", "正體中文")
 export default class LangObject implements ILang {
@@ -85,5 +85,15 @@ export default class LangObject implements ILang {
     w_ReaderEdit="Edit Reader";
     readerid="Reader Id";
     readername="Reader Name";
+
+    w_AccessLevel="Access Level";
+    w_AccessLevelAdd="Add Access Level";
+    w_AccessLevelEdit="Edit Access Level";
+
+    levelid="Level Id";
+    levelname="Level Name";
+    door="Door";
+    reader="Reader";
+    timeschedule="Time Schedule";
 
 }

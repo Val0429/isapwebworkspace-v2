@@ -86,4 +86,13 @@ export default class LangObject {
     readerid="Reader Id";
     readername="Reader Name";
     
+    w_AccessLevel="Access Level";
+    w_AccessLevelAdd="Add Access Level";
+    w_AccessLevelEdit="Edit Access Level";
+
+    levelid="Level Id";
+    levelname="Level Name";
+    door="Door";
+    reader="Reader";
+    timeschedule="Time Schedule";
 }
