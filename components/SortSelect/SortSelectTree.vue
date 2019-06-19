@@ -143,6 +143,12 @@ interface IMergeTree {
     children: boolean;
 }
 
+interface ISortIndex {
+    prev: number;
+    now: number;
+    next: number;
+}
+
 @Component({
     components: {
         TreeView
@@ -156,6 +162,11 @@ export class SortSelectTree extends Vue {
     checkboxClickTrues: string[] = [];
     selected: string[] = [];
     sortSelectTreeItemList: ISortSelectTreeItem[] = [];
+    sortIndex: ISortIndex = {
+        prev: -1,
+        now: -1,
+        next: -1
+    };
 
     // Prop
     @Prop({
@@ -178,8 +189,28 @@ export class SortSelectTree extends Vue {
     mounted() {
         this.sortSelectTreeItemList = [];
         this.initSelected();
-        this.anysisSelected();
+        this.anysisOption();
         this.calculateSelected();
+        this.resetVModel();
+    }
+
+    defaultSortSelectTreeItem(): ISortSelectTreeItem {
+        let result: ISortSelectTreeItem = {
+            value: "",
+            text: "",
+            event: {
+                clickCheckbox: false,
+                clickCheckboxType: ESortSelectTreeEventType.none
+            },
+            status: {
+                optionFocus: false,
+                chooseFocus: false,
+                choose: false,
+                childrenChoose: false
+            },
+            childrens: []
+        };
+        return JSON.parse(JSON.stringify(result));
     }
 
     @Watch("sortSelectTreeItemList", { deep: true })
@@ -188,22 +219,69 @@ export class SortSelectTree extends Vue {
         oldval: ISortSelectTreeItem[]
     ) {
         for (let sortSelectTreeItem of newval) {
+            if (sortSelectTreeItem.event.clickCheckbox) {
+                if (
+                    sortSelectTreeItem.event.clickCheckboxType ==
+                    ESortSelectTreeEventType.choose
+                ) {
+                    if (sortSelectTreeItem.status.chooseFocus) {
+                        this.pushValueToTrueList(sortSelectTreeItem.value);
+                    } else {
+                        this.removeFromTrueList(sortSelectTreeItem.value);
+                    }
+                }
+                for (let children of sortSelectTreeItem.childrens) {
+                    this.onWatchFocusChildren(children, sortSelectTreeItem);
+                }
+                sortSelectTreeItem.event.clickCheckbox = false;
+            }
             this.onWatchChildrenChange(sortSelectTreeItem);
+            this.calculateChooseFocusSortIndex();
         }
-        console.log(this.checkboxClickTrues);
     }
 
     onWatchChildrenChange(sortSelectTreeItem: ISortSelectTreeItem) {
         if (sortSelectTreeItem.event.clickCheckbox) {
-            if (sortSelectTreeItem.status.focus) {
-                this.pushValueToTrueList(sortSelectTreeItem.value);
-            } else {
-                this.removeFromTrueList(sortSelectTreeItem.value);
+            if (
+                sortSelectTreeItem.event.clickCheckboxType ==
+                ESortSelectTreeEventType.choose
+            ) {
+                if (sortSelectTreeItem.status.chooseFocus) {
+                    this.pushValueToTrueList(sortSelectTreeItem.value);
+                } else {
+                    this.removeFromTrueList(sortSelectTreeItem.value);
+                }
             }
+            for (let children of sortSelectTreeItem.childrens) {
+                this.onWatchFocusChildren(children, sortSelectTreeItem);
+            }
+            sortSelectTreeItem.event.clickCheckbox = false;
         }
-        sortSelectTreeItem.event.clickCheckbox = false;
         for (let children of sortSelectTreeItem.childrens) {
             this.onWatchChildrenChange(children);
+        }
+        this.calculateChooseFocusSortIndex();
+    }
+
+    onWatchFocusChildren(
+        sortSelectTreeItem: ISortSelectTreeItem,
+        clickItem: ISortSelectTreeItem
+    ) {
+        switch (clickItem.event.clickCheckboxType) {
+            case ESortSelectTreeEventType.option:
+                sortSelectTreeItem.status.optionFocus =
+                    clickItem.status.optionFocus;
+                break;
+            case ESortSelectTreeEventType.choose:
+                sortSelectTreeItem.status.chooseFocus =
+                    clickItem.status.chooseFocus;
+                break;
+            case ESortSelectTreeEventType.none:
+            default:
+                break;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            this.onWatchFocusChildren(children, clickItem);
         }
     }
 
@@ -229,21 +307,79 @@ export class SortSelectTree extends Vue {
         }
     }
 
-    defaultSortSelectTreeItem(): ISortSelectTreeItem {
-        let result: ISortSelectTreeItem = {
-            value: "",
-            text: "",
-            event: {
-                clickCheckbox: false
-            },
-            status: {
-                focus: false,
-                choose: false,
-                childrenChoose: false
-            },
-            childrens: []
-        };
-        return JSON.parse(JSON.stringify(result));
+    calculateChooseFocusSortIndex() {
+        this.sortIndex.prev = -1;
+        this.sortIndex.now = -1;
+        this.sortIndex.next = -1;
+        if (this.checkboxClickTrues.length == 1) {
+            let checkResult = this.calculateChooseFocusSortIndexChildren(
+                this.sortSelectTreeItemList
+            );
+            if (checkResult > -1) {
+                this.calculateRootSortIndex();
+            }
+        }
+    }
+
+    calculateChooseFocusSortIndexChildren(
+        sortSelectTreeItemList: ISortSelectTreeItem[]
+    ): number {
+        if (this.checkboxClickTrues.length != 1) {
+            return -1;
+        }
+        for (let i in sortSelectTreeItemList) {
+            let sortSelectTreeItem = sortSelectTreeItemList[i];
+            if (sortSelectTreeItem.value == this.checkboxClickTrues[0]) {
+                this.sortIndex.now = parseInt(i);
+                return this.sortIndex.now;
+            }
+            this.calculateChooseFocusSortIndexChildren(
+                sortSelectTreeItem.childrens
+            );
+            if (this.sortIndex.now != -1) {
+                this.calculateChildrenSortIndex(sortSelectTreeItem);
+                break;
+            }
+        }
+        return -1;
+    }
+
+    calculateRootSortIndex() {
+        for (let i in this.sortSelectTreeItemList) {
+            let children = this.sortSelectTreeItemList[i];
+            let iNumber = parseInt(i);
+            if (iNumber < this.sortIndex.now) {
+                if (children.status.choose) {
+                    this.sortIndex.prev = iNumber;
+                }
+            } else if (iNumber > this.sortIndex.now) {
+                if (children.status.choose) {
+                    this.sortIndex.next = iNumber;
+                    break;
+                }
+            } else {
+                continue;
+            }
+        }
+    }
+
+    calculateChildrenSortIndex(sortSelectTreeItem: ISortSelectTreeItem) {
+        for (let i in sortSelectTreeItem.childrens) {
+            let children = sortSelectTreeItem.childrens[i];
+            let iNumber = parseInt(i);
+            if (iNumber < this.sortIndex.now) {
+                if (children.status.choose) {
+                    this.sortIndex.prev = iNumber;
+                }
+            } else if (iNumber > this.sortIndex.now) {
+                if (children.status.choose) {
+                    this.sortIndex.next = iNumber;
+                    break;
+                }
+            } else {
+                continue;
+            }
+        }
     }
 
     initSelected() {
@@ -251,20 +387,19 @@ export class SortSelectTree extends Vue {
         for (let val of this.value) {
             this.pushSelected(val);
         }
-        this.resetVModel();
     }
 
-    // 分析物件
-    anysisSelected() {
+    // 分析物件從 prop
+    anysisOption() {
         for (let option of this.options) {
             this.sortSelectTreeItemList.push(
-                this.anysisChildren(option, false)
+                this.anysisOptionChildren(option, false)
             );
         }
     }
 
-    // 分析下層物件
-    anysisChildren(
+    // 分析下層物件從 prop
+    anysisOptionChildren(
         sortSelectTreeOption: ISortSelectTreeOption,
         parentChoose: boolean
     ): ISortSelectTreeItem {
@@ -287,7 +422,7 @@ export class SortSelectTree extends Vue {
         // 判斷下層結果
         for (let children of sortSelectTreeOption.childrens) {
             result.childrens.push(
-                this.anysisChildren(children, result.status.choose)
+                this.anysisOptionChildren(children, result.status.choose)
             );
         }
 
@@ -310,10 +445,12 @@ export class SortSelectTree extends Vue {
     }
 
     // 計算下層數量
-    calculateChildrenChooseCount(childrens: ISortSelectTreeItem[]): number {
+    calculateChildrenChooseCount(
+        sortSelectTreeItemList: ISortSelectTreeItem[]
+    ): number {
         let result = 0;
-        for (let children of childrens) {
-            if (children.status.choose) {
+        for (let sortSelectTreeItem of sortSelectTreeItemList) {
+            if (sortSelectTreeItem.status.choose) {
                 result++;
             }
         }
@@ -420,7 +557,7 @@ export class SortSelectTree extends Vue {
         let result = 0;
         if (
             !sortSelectTreeItem.status.choose &&
-            sortSelectTreeItem.status.focus
+            sortSelectTreeItem.status.optionFocus
         ) {
             result++;
         }
@@ -467,7 +604,7 @@ export class SortSelectTree extends Vue {
         let result = 0;
         if (
             sortSelectTreeItem.status.choose &&
-            sortSelectTreeItem.status.focus
+            sortSelectTreeItem.status.chooseFocus
         ) {
             result++;
         }
@@ -520,7 +657,7 @@ export class SortSelectTree extends Vue {
 
     disableChooseSortUp(): boolean {
         let result = false;
-        if (this.checkboxClickTrues.length != 1) {
+        if (this.checkboxClickTrues.length != 1 || this.sortIndex.prev == -1) {
             result = true;
         }
         return result;
@@ -528,7 +665,7 @@ export class SortSelectTree extends Vue {
 
     disableChooseSortDown() {
         let result = false;
-        if (this.checkboxClickTrues.length != 1) {
+        if (this.checkboxClickTrues.length != 1 || this.sortIndex.next == -1) {
             result = true;
         }
         return result;
@@ -552,129 +689,244 @@ export class SortSelectTree extends Vue {
         return result;
     }
 
-    ////////////////////////////////////////////////////
-
-    // option
+    // all or reset
     selectAllOption() {
-        // this.optionsSelected = [];
-        // for (let option of this.optionsSelectItem) {
-        //     this.optionsSelected.push(option.value);
-        // }
+        this.focusAllItem(ESortSelectTreeEventType.option, true);
     }
 
     clearOptions() {
-        // this.optionsSelected = [];
+        this.focusAllItem(ESortSelectTreeEventType.option, false);
     }
 
-    // choose
     selectAllChoose() {
-        // this.chooseSelected = [];
-        // for (let choose of this.chooseSelectItem) {
-        //     this.chooseSelected.push(choose.value);
-        // }
+        this.focusAllItem(ESortSelectTreeEventType.choose, true);
     }
 
     clearAllChoose() {
-        // this.chooseSelected = [];
+        this.focusAllItem(ESortSelectTreeEventType.choose, false);
     }
 
-    chooseSortUp() {
-        // let chooseSelected = this.chooseSelected[0];
-        // if (chooseSelected != undefined) {
-        //     let chooseIndex = -1;
-        //     let tempChooseItem: any = undefined;
-        //     for (let i in this.chooseSelectItem) {
-        //         let chooseItem = this.chooseSelectItem[i];
-        //         if (chooseItem.value == chooseSelected) {
-        //             chooseIndex = parseInt(i);
-        //             tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-        //             this.chooseSelectItem.splice(parseInt(i), 1);
-        //             break;
-        //         }
-        //     }
-        //     if (chooseIndex > 0) {
-        //         this.chooseSelectItem.splice(
-        //             chooseIndex - 1,
-        //             0,
-        //             tempChooseItem
-        //         );
-        //     }
-        // }
-        this.resetVModel();
+    focusAllItem(type: ESortSelectTreeEventType, focus: boolean) {
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            this.focusAllChildrenItem(sortSelectTreeItem, type, focus);
+        }
     }
 
-    chooseSortDown() {
-        // let chooseSelected = this.chooseSelected[0];
-        // if (chooseSelected != undefined) {
-        //     let chooseIndex = -1;
-        //     let tempChooseItem: any = undefined;
-        //     for (let i in this.chooseSelectItem) {
-        //         let chooseItem = this.chooseSelectItem[i];
-        //         if (chooseItem.value == chooseSelected) {
-        //             chooseIndex = parseInt(i);
-        //             tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-        //             this.chooseSelectItem.splice(parseInt(i), 1);
-        //             break;
-        //         }
-        //     }
-        //     if (chooseIndex < this.chooseSelectItem.length) {
-        //         this.chooseSelectItem.splice(
-        //             chooseIndex + 1,
-        //             0,
-        //             tempChooseItem
-        //         );
-        //     }
-        // }
-        this.resetVModel();
+    focusAllChildrenItem(
+        sortSelectTreeItem: ISortSelectTreeItem,
+        type: ESortSelectTreeEventType,
+        focus: boolean
+    ) {
+        switch (type) {
+            case ESortSelectTreeEventType.option:
+                sortSelectTreeItem.status.optionFocus = focus;
+                break;
+            case ESortSelectTreeEventType.choose:
+                sortSelectTreeItem.status.chooseFocus = focus;
+                break;
+            case ESortSelectTreeEventType.none:
+            default:
+                break;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            this.focusAllChildrenItem(children, type, focus);
+        }
     }
 
     // change option and choose
     chooseToOption() {
-        // for (let choose of this.chooseSelected) {
-        //     for (let i in this.chooseSelectItem) {
-        //         let chooseItem = this.chooseSelectItem[i];
-        //         if (choose == chooseItem.value) {
-        //             this.optionsSelectItem.push(
-        //                 JSON.parse(JSON.stringify(chooseItem))
-        //             );
-        //             this.chooseSelectItem.splice(parseInt(i), 1);
-        //             break;
-        //         }
-        //     }
-        // }
-        // this.chooseSelected = [];
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            this.chooseToOptionChildren(sortSelectTreeItem);
+        }
         this.resetVModel();
+    }
+
+    chooseToOptionChildren(sortSelectTreeItem: ISortSelectTreeItem) {
+        if (sortSelectTreeItem.status.chooseFocus) {
+            sortSelectTreeItem.status.choose = false;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            this.chooseToOptionChildren(children);
+        }
+        this.resetHaveChildrenStatusFromItem(sortSelectTreeItem);
+        sortSelectTreeItem.status.chooseFocus = false;
     }
 
     optionToChoose() {
-        // for (let option of this.optionsSelected) {
-        //     for (let i in this.optionsSelectItem) {
-        //         let optionItem = this.optionsSelectItem[i];
-        //         if (option == optionItem.value) {
-        //             this.chooseSelectItem.push(
-        //                 JSON.parse(JSON.stringify(optionItem))
-        //             );
-        //             this.optionsSelectItem.splice(parseInt(i), 1);
-        //             break;
-        //         }
-        //     }
-        // }
-        // this.optionsSelected = [];
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            this.optionToChooseChildren(sortSelectTreeItem);
+        }
         this.resetVModel();
     }
 
-    resultList(): string[] {
-        let result: string[] = [];
-        // for (let choose of this.chooseSelectItem) {
-        //     result.push(choose.value);
-        // }
+    optionToChooseChildren(sortSelectTreeItem: ISortSelectTreeItem) {
+        if (sortSelectTreeItem.status.optionFocus) {
+            sortSelectTreeItem.status.choose = true;
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            this.optionToChooseChildren(children);
+        }
+        this.resetHaveChildrenStatusFromItem(sortSelectTreeItem);
+        sortSelectTreeItem.status.optionFocus = false;
+    }
+
+    // reset have children status
+    resetHaveChildrenStatusFromItem(sortSelectTreeItem: ISortSelectTreeItem) {
+        if (sortSelectTreeItem.childrens.length <= 0) {
+            return;
+        }
+
+        let allchildrenCount = this.calculateAllItemTotalFromItem(
+            sortSelectTreeItem
+        );
+        let chooseChildrenCount = this.calculateChooseItemTotalFormItem(
+            sortSelectTreeItem
+        );
+
+        if (chooseChildrenCount == 0) {
+            sortSelectTreeItem.status.choose = false;
+            sortSelectTreeItem.status.childrenChoose = false;
+        } else {
+            sortSelectTreeItem.status.childrenChoose = true;
+            if (allchildrenCount > chooseChildrenCount) {
+                sortSelectTreeItem.status.choose = false;
+            } else if (allchildrenCount == chooseChildrenCount) {
+                sortSelectTreeItem.status.choose = true;
+            }
+        }
+    }
+
+    // 計算所選物件下層數量
+    calculateAllItemTotalFromItem(
+        sortSelectTreeItem: ISortSelectTreeItem
+    ): number {
+        let result = 0;
+        for (let children of sortSelectTreeItem.childrens) {
+            result++;
+            result += this.calculateChooseItemTotalFormItem(children);
+        }
         return result;
+    }
+
+    calculateChooseItemTotalFormItem(
+        sortSelectTreeItem: ISortSelectTreeItem
+    ): number {
+        let result = 0;
+        for (let children of sortSelectTreeItem.childrens) {
+            if (children.status.choose) {
+                result++;
+            }
+            result += this.calculateChooseItemTotalFormItem(children);
+        }
+        return result;
+    }
+
+    chooseSortUp() {
+        if (this.checkboxClickTrues.length != 1) {
+            return;
+        }
+        if (this.sortIndex.prev != -1) {
+            for (let i in this.sortSelectTreeItemList) {
+                let sortSelectTreeItem = this.sortSelectTreeItemList[i];
+                if (sortSelectTreeItem.value == this.checkboxClickTrues[0]) {
+                    let tempChooseItem = JSON.parse(
+                        JSON.stringify(sortSelectTreeItem)
+                    );
+                    this.sortSelectTreeItemList.splice(parseInt(i), 1);
+                    this.sortSelectTreeItemList.splice(
+                        this.sortIndex.prev,
+                        0,
+                        tempChooseItem
+                    );
+                }
+            }
+        }
+        this.checkboxClickTrues = [];
+        this.sortIndex.prev = -1;
+        this.sortIndex.now = -1;
+        this.sortIndex.next = -1;
+        this.resetVModel();
+    }
+
+    chooseSortDown() {
+        this.resetVModel();
+    }
+
+    // 重置 selected
+    resetSelected() {
+        this.selected = [];
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            if (
+                sortSelectTreeItem.status.choose ||
+                sortSelectTreeItem.status.childrenChoose
+            ) {
+                this.pushSelected(sortSelectTreeItem.value);
+            }
+            this.resetSelectedChildren(sortSelectTreeItem);
+        }
+    }
+
+    resetSelectedChildren(sortSelectTreeItem: ISortSelectTreeItem) {
+        if (
+            sortSelectTreeItem.status.choose ||
+            sortSelectTreeItem.status.childrenChoose
+        ) {
+            this.pushSelected(sortSelectTreeItem.value);
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            this.resetSelectedChildren(children);
+        }
     }
 
     // Model connecnt
     resetVModel() {
+        // this.resetSelected();
         this.$emit("input", this.selected);
+        console.log("Selected result: ", this.selected);
     }
+
+    // chooseSortUp() {
+    //     let chooseSelected = this.chooseSelected[0];
+    //     if (chooseSelected != undefined) {
+    //         let chooseIndex = -1;
+    //         let tempChooseItem: any = undefined;
+    //         for (let i in this.chooseSelectItem) {
+    //             let chooseItem = this.chooseSelectItem[i];
+    //             if (chooseItem.value == chooseSelected) {
+    //                 chooseIndex = parseInt(i);
+    //                 tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+    //                 this.chooseSelectItem.splice(parseInt(i), 1);
+    //                 break;
+    //             }
+    //         }
+    //         if (chooseIndex > 0) {
+    //         }
+    //     }
+    // }
+
+    // chooseSortDown() {
+    // let chooseSelected = this.chooseSelected[0];
+    // if (chooseSelected != undefined) {
+    //     let chooseIndex = -1;
+    //     let tempChooseItem: any = undefined;
+    //     for (let i in this.chooseSelectItem) {
+    //         let chooseItem = this.chooseSelectItem[i];
+    //         if (chooseItem.value == chooseSelected) {
+    //             chooseIndex = parseInt(i);
+    //             tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+    //             this.chooseSelectItem.splice(parseInt(i), 1);
+    //             break;
+    //         }
+    //     }
+    //     if (chooseIndex < this.chooseSelectItem.length) {
+    //         this.chooseSelectItem.splice(
+    //             chooseIndex + 1,
+    //             0,
+    //             tempChooseItem
+    //         );
+    //     }
+    // }
+    // }
 }
 
 Vue.component("iv-sort-select-tree", SortSelectTree);

@@ -1,11 +1,23 @@
 <template>
     <div>
         <b-form-checkbox
-            v-if="haveOption(data.value)"
-            v-show="showOption(data.value)"
+            v-if="isOption() && haveItem(data.value)"
+            v-show="showItem(data.value)"
             class="checkbox-group"
             name="sortSelectOption"
             :value="data.value"
+            :checked="checked"
+            @change="changeCheckbox"
+        >
+            {{ data.text }}
+        </b-form-checkbox>
+        <b-form-checkbox
+            v-if="isChoose() && haveItem(data.value)"
+            v-show="showItem(data.value)"
+            class="checkbox-group"
+            name="sortSelectChoose"
+            :value="data.value"
+            :checked="checked"
             @change="changeCheckbox"
         >
             {{ data.text }}
@@ -22,7 +34,7 @@
 </template>
 
 <script lang="ts" >
-import { Vue, Component, Prop } from "@/../core";
+import { Vue, Component, Prop, Watch } from "@/../core";
 import {
     ISortSelectTreeOption,
     ISortSelectTreeItem
@@ -58,7 +70,25 @@ export class TreeForm extends Vue {
 
     mounted() {}
 
-    showOption(data: string): boolean {
+    checked: string[] = [];
+
+    isOption(): boolean {
+        let result = false;
+        if (this.type == ESortSelectTreeEventType.option) {
+            result = true;
+        }
+        return result;
+    }
+
+    isChoose(): boolean {
+        let result = false;
+        if (this.type == ESortSelectTreeEventType.choose) {
+            result = true;
+        }
+        return result;
+    }
+
+    showItem(data: string): boolean {
         let result = true;
         if (this.searchText != "" && !data.match(this.searchText)) {
             result = false;
@@ -66,7 +96,7 @@ export class TreeForm extends Vue {
         return result;
     }
 
-    haveOption(data: string): boolean {
+    haveItem(data: string): boolean {
         let result = false;
         switch (this.type) {
             case ESortSelectTreeEventType.option:
@@ -89,9 +119,45 @@ export class TreeForm extends Vue {
         return result;
     }
 
+    @Watch("data.status.optionFocus", { deep: true })
+    private onOptionFocusChanged(newval: boolean, oldval: boolean) {
+        if (this.type == ESortSelectTreeEventType.option) {
+            this.checked = newval ? [this.data.value] : [];
+        }
+    }
+
+    @Watch("data.status.chooseFocus", { deep: true })
+    private onChooseFocusChanged(newval: boolean, oldval: boolean) {
+        if (this.type == ESortSelectTreeEventType.choose) {
+            this.checked = newval ? [this.data.value] : [];
+        }
+    }
+
     changeCheckbox(event: any) {
+        switch (this.type) {
+            case ESortSelectTreeEventType.option:
+                this.data.status.optionFocus =
+                    event == false || event == null || event == undefined
+                        ? false
+                        : true;
+                break;
+            case ESortSelectTreeEventType.choose:
+                this.data.status.chooseFocus =
+                    event == false || event == null || event == undefined
+                        ? false
+                        : true;
+                break;
+            case ESortSelectTreeEventType.none:
+            default:
+                break;
+        }
+        if (event == false) {
+            this.checked = [];
+        } else {
+            this.checked.push(this.data.value);
+        }
+        this.data.event.clickCheckboxType = this.type;
         this.data.event.clickCheckbox = true;
-        this.data.status.focus = event == false ? false : true;
     }
 }
 export default TreeForm;

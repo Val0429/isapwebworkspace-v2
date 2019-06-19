@@ -1,3 +1,5 @@
+import { ESortSelectTreeEventType } from './ESortSelectTree';
+
 interface ISortSelectTreeOption {
     value: string;
     text: string;
@@ -6,10 +8,12 @@ interface ISortSelectTreeOption {
 
 interface ISortSelectTreeEvent {
     clickCheckbox: boolean;
+    clickCheckboxType: ESortSelectTreeEventType;
 }
 
 interface ISortSelectTreeStatus {
-    focus: boolean;
+    chooseFocus: boolean;
+    optionFocus: boolean;
     choose: boolean;
     childrenChoose: boolean;
 }
