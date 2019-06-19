@@ -600,30 +600,6 @@ export default class HumanDetectionServer extends Vue {
         return `
                 interface IHumanServerTestComponent {
 
-                /**
-                 * @uiLabel - ${this._("w_Protocol")}
-                 */
-                 protocol: ${toEnumInterface({
-                     http: "http",
-                     https: "https"
-                 })};
-
-
-                 /**
-                  * @uiLabel - ${this._("w_Ip")}
-                  * @uiPlaceHolder - ${this._("w_Ip")}
-                  * @uiType - iv-form-ip
-                  */
-                ip: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Port")}
-                 * @uiPlaceHolder - ${this._("w_Port_PlaceHolder")}
-                 * @uiAttrs - { max: 65535, min: 1}
-                 */
-                port: number;
-
                 imageBase64: any;
 
         `;
