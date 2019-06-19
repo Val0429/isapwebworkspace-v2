@@ -214,13 +214,13 @@
                             :value="inputFormData[0].config.server ? inputFormData[0].config.server.name : ''"
                         >
                         </iv-form-label>
-                        <b-button
-                            class="linkPadding"
-                            variant="link"
-                            @click="goToSetCMS"
-                        >
-                            {{ _('w_VSHeatmap_SetCMS') }}
-                        </b-button>
+<!--                        <b-button-->
+<!--                            class="linkPadding"-->
+<!--                            variant="link"-->
+<!--                            @click="goToSetCMS"-->
+<!--                        >-->
+<!--                            {{ _('w_VSHeatmap_SetCMS') }}-->
+<!--                        </b-button>-->
                     </template>
 
                     <template #nvrId="{$attrs, $listeners}">
@@ -503,7 +503,7 @@ export default class Heatmap extends Vue {
                 mode: string;
             } = {
                 areaId: data,
-                mode: "peopleCounting"
+                mode: ECameraMode.heatmap
             };
 
             await this.$server
@@ -867,7 +867,7 @@ export default class Heatmap extends Vue {
                 })}
 
                 /*
-                * @uiLabel - ${this._("w_VSHeatmap_CMS")} 
+                * @uiLabel - ${this._("w_VSHeatmap_CMS")}
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
@@ -894,7 +894,7 @@ export default class Heatmap extends Vue {
         return `
         interface {
 
-         
+
                   /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
