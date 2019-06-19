@@ -83,7 +83,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="hdServerItem"
-                                    :value="inputFormData ? inputFormData.hdServerId : ''"
+                                    :value="$attrs ?  $attrs.value : ''"
                                 >
                                 </iv-form-selection>
                             </template>
@@ -93,7 +93,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="cmsItem"
-                                    :value="inputFormData ? inputFormData.serverId : ''"
+                                    :value="$attrs ?  $attrs.value : ''"
                                 >
                                 </iv-form-selection>
 
@@ -147,6 +147,7 @@
                                         {{ _('w_SelectSiteTree') }}
                                     </b-button>
                                 </div>
+                                {{ inputFormData}}
                             </template>
 
                         </iv-form>
@@ -801,7 +802,6 @@ export default class HumanDetection extends Vue {
                 console.log(e);
                 return false;
             });
-        console.log("initSelectItemSite", this.sitesSelectItem);
     }
 
     initRegionTreeSelect() {
@@ -834,23 +834,33 @@ export default class HumanDetection extends Vue {
         this.pageStep = EPageStep.chooseTree;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
-        console.log("pageToChooseTree", this.selecteds);
         this.selecteds = [];
-        console.log("pageToChooseTree2", this.selecteds);
-        // this.areaSelectItem = {};
-        // this.deviceGroupSelectItem = {};
-        // this.inputFormData.areaId = "";
-        // this.inputFormData.groupIds = [];
-        // for (const detail in this.sitesSelectItem) {
-        //     if (this.inputFormData.siteId === detail) {
-        //         let selectedsObject: IRegionTreeSelected = {
-        //             objectId: detail,
-        //             type: ERegionType.site,
-        //             name: this.sitesSelectItem[detail]
-        //         };
-        //         this.selecteds.push(selectedsObject);
-        //     }
-        // }
+        console.log(
+            "pageToChooseTree0",
+            JSON.stringify(this.selecteds),
+            this.sitesSelectItem
+        );
+        this.areaSelectItem = {};
+        this.deviceGroupSelectItem = {};
+        this.inputFormData.areaId = "";
+        this.inputFormData.groupIds = [];
+        for (const detail in this.sitesSelectItem) {
+            if (this.inputFormData.siteId === detail) {
+                console.log(
+                    "pageToChooseTree1",
+                    this.inputFormData.siteId,
+                    detail,
+                    this.inputFormData.siteId === detail
+                );
+                let selectedsObject: IRegionTreeSelected = {
+                    objectId: detail,
+                    type: ERegionType.site,
+                    name: this.sitesSelectItem[detail]
+                };
+                this.selecteds.push(selectedsObject);
+            }
+        }
+        console.log("pageToChooseTree2", JSON.stringify(this.selecteds));
     }
 
     async pageToShowResult() {
@@ -862,7 +872,9 @@ export default class HumanDetection extends Vue {
 
         // from selecteds push siteId
         if (this.selecteds && this.selecteds.length) {
-            this.inputFormData.siteId = this.selecteds[0].objectId;
+            this.inputFormData.siteId = this.selecteds[
+                this.selecteds.length - 1
+            ].objectId;
         }
 
         if (
@@ -873,17 +885,14 @@ export default class HumanDetection extends Vue {
             this.deviceGroupSelectItem = {};
         } else {
             this.inputFormData.siteId = "";
-            this.inputFormData.siteId = this.selecteds[0].objectId;
-            this.inputFormData.siteName = this.selecteds[0].name;
+            this.inputFormData.siteId = this.selecteds[
+                this.selecteds.length - 1
+            ].objectId;
+            this.inputFormData.siteName = this.selecteds[
+                this.selecteds.length - 1
+            ].name;
             await this.selectAreaId(this.inputFormData.siteId);
         }
-    }
-
-    test() {
-        this.inputFormData.siteId = "";
-        this.inputFormData.siteId = "yf6yra0jiw";
-        this.isMounted = true;
-        console.log("test", this.inputFormData);
     }
 
     async selectAreaId(data) {
@@ -891,6 +900,7 @@ export default class HumanDetection extends Vue {
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
 
+        this.inputFormData.siteId = data;
         if (data === undefined || data === "") {
             this.inputFormData.areaId = "";
             this.inputFormData.groupIds = [];
