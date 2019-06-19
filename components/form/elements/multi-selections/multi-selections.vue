@@ -36,7 +36,7 @@
     </b-form-group>
 </template>
 
-<script lang="ts" src="./form-permission.vue.ts" />
+<script lang="ts" src="./multi-selections.vue.ts" />
 
 <style lang="scss" scoped>
 .form-control {

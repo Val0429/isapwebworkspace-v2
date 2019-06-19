@@ -8,7 +8,7 @@
 
         <!-- 6) custom edit / add template with <template #add.* /> -->
         <template #add.permission="{$attrs, $listeners}">
-            <ivc-form-permission 
+            <ivc-multi-selections 
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="options" 
