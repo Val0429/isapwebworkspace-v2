@@ -666,6 +666,7 @@ export default class LangObject {
     w_VSHumanDetection_CustomId = 'Id';
     w_VSHumanDetection_Name = 'Name';
     w_VSHumanDetection_Brand = 'Brand';
+    w_VSHumanDetection_HDserver = 'HD Server';
     w_VSHumanDetection_CMS = 'CMS';
     w_VSHumanDetection_SetCMS = 'Not yet set? Go to set CMS';
     w_VSHumanDetection_NVR = 'NVR';
