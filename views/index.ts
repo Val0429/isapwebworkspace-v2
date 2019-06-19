@@ -137,8 +137,8 @@ $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Regio
 $({ path: '/video_sources', name: 'VideoSources', icon: 'fa-close', redirect: '/login' })();
 $({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-check' })(PeopleCounting);
 $({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-check' })(Demographic);
-$({ path: '/video_sources/human_detection', name: 'VideoSources_HumanDetection', icon: 'fa-close' })(HumanDetection);
-$({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-close' })(Heatmap);
+$({ path: '/video_sources/human_detection', name: 'VideoSources_HumanDetection', icon: 'fa-check' })(HumanDetection);
+$({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-check' })(Heatmap);
 $({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })(FaceRecognition);
 $({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-close', redirect: '/login' })(CMS);
 $({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redirect: '/login' })(VIP);
