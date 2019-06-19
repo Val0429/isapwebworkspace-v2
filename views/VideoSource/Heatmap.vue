@@ -214,13 +214,13 @@
                             :value="inputFormData[0].config.server ? inputFormData[0].config.server.name : ''"
                         >
                         </iv-form-label>
-<!--                        <b-button-->
-<!--                            class="linkPadding"-->
-<!--                            variant="link"-->
-<!--                            @click="goToSetCMS"-->
-<!--                        >-->
-<!--                            {{ _('w_VSHeatmap_SetCMS') }}-->
-<!--                        </b-button>-->
+                        <!--                        <b-button-->
+                        <!--                            class="linkPadding"-->
+                        <!--                            variant="link"-->
+                        <!--                            @click="goToSetCMS"-->
+                        <!--                        >-->
+                        <!--                            {{ _('w_VSHeatmap_SetCMS') }}-->
+                        <!--                        </b-button>-->
                     </template>
 
                     <template #nvrId="{$attrs, $listeners}">
@@ -237,8 +237,7 @@
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :options="channelItem"
-                            :value="inputFormData[0].config ? inputFormData[0].config.channelId : ''"
+                            :value="inputFormData[0].config ? showChannelName(inputFormData[0].config.channelId) : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -247,7 +246,6 @@
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :options="channelItem"
                             :value="inputFormData[0].site ? inputFormData[0].site.name : ''"
                         >
                         </iv-form-label>
@@ -257,7 +255,6 @@
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :options="channelItem"
                             :value="inputFormData[0].area ? inputFormData[0].area.name : ''"
                         >
                         </iv-form-label>
@@ -352,11 +349,11 @@ export default class Heatmap extends Vue {
     };
 
     // options
-    cmsItem = [];
-    devices = [];
-    nvrItem = [];
-    channels = [];
-    channelItem = [];
+    cmsItem: any = [];
+    devices: any = [];
+    nvrItem: any = [];
+    channels: any = [];
+    channelItem: any = [];
 
     // tree
     selectType = ERegionType.site;
@@ -440,6 +437,11 @@ export default class Heatmap extends Vue {
             let nvr = { id: device.nvrId.toString(), text: device.nvrId };
             this.nvrItem.push(nvr);
         }
+    }
+
+    showChannelName(data) {
+        console.log("showChannelName", data);
+        return this.channelItem.filter(x => x.id === data).text;
     }
 
     initChannelItem(data) {

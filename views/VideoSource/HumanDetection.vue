@@ -75,22 +75,32 @@
                             :interface="inf1()"
                             @update:serverId="initDeviceData($event)"
                             @update:nvrId="initChannelItem($event)"
-                            :value="inputFormData[0]"
+                            :value="inputFormData"
                         >
+
+                            <template #hdServerId="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :options="hdServerItem"
+                                    :value="inputFormData ? inputFormData.hdServerId : ''"
+                                >
+                                </iv-form-selection>
+                            </template>
 
                             <template #serverId="{$attrs, $listeners}">
                                 <iv-form-selection
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="cmsItem"
-                                    :value="inputFormData[0] ? inputFormData[0].config.server.objectId : ''"
+                                    :value="inputFormData ? inputFormData.serverId : ''"
                                 >
                                 </iv-form-selection>
 
                                 <b-button
                                     class="linkPadding"
                                     variant="link"
-                                    @click="$attrs"
+                                    @click="goToSetCMS()"
                                 >
                                     {{ _('w_VSHumanDetection_SetCMS') }}
                                 </b-button>
@@ -101,7 +111,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="nvrItem"
-                                    :value="inputFormData[0] ? inputFormData[0].config.nvrId.toString() : ''"
+                                    :value="inputFormData ? inputFormData.nvrId.toString() : ''"
                                 >
                                 </iv-form-selection>
                             </template>
@@ -111,7 +121,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="channelItem"
-                                    :value="inputFormData[0] ? inputFormData[0].config.channelId.toString() : ''"
+                                    :value="inputFormData ? inputFormData.channelId.toString() : ''"
                                 >
                                 </iv-form-selection>
                             </template>
@@ -126,28 +136,8 @@
                             :interface="inf2()"
                             @update:siteId="selectAreaId($event)"
                             @update:areaId="selectGroupDeviceId($event)"
-                            :value="inputFormData[0]"
+                            :value="inputFormData"
                         >
-
-                            <template #siteId="{$attrs, $listeners}">
-                                <iv-form-selection
-                                    v-bind="$attrs"
-                                    v-on="$listeners"
-                                    :options="$attrs.options"
-                                    :value="inputFormData[0] ? inputFormData[0].site.objectId : ''"
-                                >
-                                </iv-form-selection>
-                            </template>
-
-                            <template #areaId="{$attrs, $listeners}">
-                                <iv-form-selection
-                                    v-bind="$attrs"
-                                    v-on="$listeners"
-                                    :options="$attrs.options"
-                                    :value="inputFormData[0] ? inputFormData[0].area.objectId : ''"
-                                >
-                                </iv-form-selection>
-                            </template>
 
                             <template #selectTree="{ $atrs, $listeners }">
 
@@ -202,25 +192,27 @@
 
                 <iv-form
                     :interface="inf4()"
-                    :value="inputFormData[0]"
+                    :value="inputFormData"
                 >
 
-                    <template #serverId="{$attrs, $listeners}">
+                    <template #hdServerId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="hdServerItem"
+                            :value="inputFormData ? inputFormData.hdServerName : ''"
+                        >
+                        </iv-form-label>
+                    </template>
 
+                    <template #serverId="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="cmsItem"
-                            :value="inputFormData[0].config.server ? inputFormData[0].config.server.name : ''"
+                            :value="inputFormData.serverName ? inputFormData.serverName : ''"
                         >
                         </iv-form-label>
-<!--                        <b-button-->
-<!--                            class="linkPadding"-->
-<!--                            variant="link"-->
-<!--                            @click="goToSetCMS"-->
-<!--                        >-->
-<!--                            {{ _('w_VSHumanDetection_SetCMS') }}-->
-<!--                        </b-button>-->
                     </template>
 
                     <template #nvrId="{$attrs, $listeners}">
@@ -228,7 +220,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="nvrItem"
-                            :value="inputFormData[0].config ? inputFormData[0].config.nvrId : ''"
+                            :value="$attrs.value ? $attrs.value : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -238,7 +230,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="channelItem"
-                            :value="inputFormData[0].config ? inputFormData[0].config.channelId : ''"
+                            :value="inputFormData ?  showChannelName(inputFormData.channelId) : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -248,7 +240,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="channelItem"
-                            :value="inputFormData[0].site ? inputFormData[0].site.name : ''"
+                            :value="inputFormData ? inputFormData.siteName : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -258,7 +250,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="channelItem"
-                            :value="inputFormData[0].area ? inputFormData[0].area.name : ''"
+                            :value="inputFormData ? inputFormData.areaName : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -268,7 +260,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="channelItem"
-                            :value="inputFormData[0].groups ? showGroups(inputFormData[0].groups) : ''"
+                            :value="inputFormData.groups ? showGroups(inputFormData.groups) : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -352,11 +344,12 @@ export default class HumanDetection extends Vue {
     };
 
     // options
-    cmsItem = [];
-    devices = [];
-    nvrItem = [];
-    channels = [];
-    channelItem = [];
+    hdServerItem: any = [];
+    cmsItem: any = [];
+    devices: any = [];
+    nvrItem: any = [];
+    channels: any = [];
+    channelItem: any = [];
 
     // tree
     selectType = ERegionType.site;
@@ -372,7 +365,65 @@ export default class HumanDetection extends Vue {
     }
 
     clearInputData() {
-        this.inputFormData = {};
+        this.inputFormData.angle = 0;
+        this.inputFormData.brand = "";
+        this.inputFormData.customId = "";
+        this.inputFormData.dataWindowX = 0;
+        this.inputFormData.dataWindowY = 0;
+        this.inputFormData.groups = [];
+        this.inputFormData.hdServerId = "";
+        this.inputFormData.hdServerName = "";
+        this.inputFormData.serverId = "";
+        this.inputFormData.serverName = "";
+        this.inputFormData.nvrId = "";
+        this.inputFormData.channelId = "";
+        this.inputFormData.mode = "";
+        this.inputFormData.model = "";
+        this.inputFormData.name = "";
+        this.inputFormData.objectId = "";
+        this.inputFormData.rois = [];
+        this.inputFormData.siteId = "";
+        this.inputFormData.siteName = "";
+        this.inputFormData.areaId = "";
+        this.inputFormData.areaName = "";
+        this.inputFormData.visibleAngle = 0;
+        this.inputFormData.visibleDistance = 0;
+        this.inputFormData.x = 0;
+        this.inputFormData.y = 0;
+    }
+
+    async initHdServerItem() {
+        let body: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
+
+        await this.$server
+            .R("/partner/human-detection", body)
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.hdServerItem = [];
+                    for (let item of response.results) {
+                        let cms = { id: item.objectId, text: item.name };
+
+                        this.hdServerItem.push(cms);
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
     }
 
     async initCMSItem() {
@@ -435,6 +486,7 @@ export default class HumanDetection extends Vue {
     }
 
     initNVRItem() {
+        console.log("initNVRItem", this.devices);
         this.nvrItem = [];
         for (let device of this.devices) {
             let nvr = { id: device.nvrId.toString(), text: device.nvrId };
@@ -442,7 +494,17 @@ export default class HumanDetection extends Vue {
         }
     }
 
+    showChannelName(data) {
+        console.log("showChannelName", this.channelItem, data);
+        if (this.channelItem.length > 0) {
+            return this.channelItem.filter(x => x.id == data.toString())[0]
+                .text;
+        }
+        return "";
+    }
+
     initChannelItem(data) {
+        console.log("initChannelItem", this.devices, data);
         this.channelItem = [];
         for (let device of this.devices) {
             if (device.nvrId == data) {
@@ -458,15 +520,40 @@ export default class HumanDetection extends Vue {
     }
 
     initInputFromData(data) {
-        this.inputFormData = data;
+        console.log("initInputFromData", data);
+        this.inputFormData.angle = data.angle;
+        this.inputFormData.brand = data.brand;
+        this.inputFormData.customId = data.customId;
+        this.inputFormData.dataWindowX = data.dataWindowX;
+        this.inputFormData.dataWindowY = data.dataWindowY;
+        this.inputFormData.groups = data.groups;
+        this.inputFormData.hdServerId = data.hdServer.objectId;
+        this.inputFormData.hdServerName = data.hdServer.name;
+        this.inputFormData.serverId = data.config.server.objectId;
+        this.inputFormData.serverName = data.config.server.name;
+        this.inputFormData.nvrId = data.config.nvrId;
+        this.inputFormData.channelId = data.config.channelId;
+        this.inputFormData.mode = data.mode;
+        this.inputFormData.model = data.model;
+        this.inputFormData.name = data.name;
+        this.inputFormData.objectId = data.objectId;
+        this.inputFormData.rois = data.rois;
+        this.inputFormData.siteId = data.site.objectId;
+        this.inputFormData.siteName = data.site.name;
+        this.inputFormData.areaId = data.area.objectId;
+        this.inputFormData.areaName = data.area.name;
+        this.inputFormData.visibleAngle = data.visibleAngle;
+        this.inputFormData.visibleDistance = data.visibleDistance;
+        this.inputFormData.x = data.x;
+        this.inputFormData.y = data.y;
     }
 
-    selectedItem(data) {
+    async selectedItem(data) {
         console.log("selectedItem", data);
         this.isSelected = data;
-        this.initInputFromData(data);
-        if (this.inputFormData[0]) {
-            this.canvasDetail = this.inputFormData[0].rois;
+        if (this.isSelected.length > 0) {
+            this.initInputFromData(data[0]);
+            this.canvasDetail = this.inputFormData.rois;
         }
         this.selectedDetail = [];
         this.selectedDetail = data;
@@ -474,20 +561,21 @@ export default class HumanDetection extends Vue {
     async pageToAdd() {
         this.clearInputData();
         await this.initSelectItemSite();
+        this.canvasDetail = [];
         this.selecteds = [];
         this.pageStep = EPageStep.add;
     }
 
     async pageToEdit() {
-        console.log("pageToEdit", this.inputFormData[0]);
+        console.log("pageToEdit", this.inputFormData);
         await this.initSelectItemSite();
-        await this.initDeviceData(this.inputFormData[0].config.server.objectId);
-        await this.initChannelItem(this.inputFormData[0].config.channelId);
-        await this.selectAreaId(this.inputFormData[0].site.objectId);
-        await this.selectGroupDeviceId(this.inputFormData[0].area.objectId);
-        this.inputFormData[0].groupIds = JSON.parse(
+        await this.initDeviceData(this.inputFormData.serverId);
+        await this.initChannelItem(this.inputFormData.nvrId);
+        await this.selectAreaId(this.inputFormData.siteId);
+        await this.selectGroupDeviceId(this.inputFormData.areaId);
+        this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
-                this.inputFormData[0].groupIds.map(item => item.objectId)
+                this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
 
@@ -534,15 +622,18 @@ export default class HumanDetection extends Vue {
         }
     }
 
-    pageToView() {
+    async pageToView() {
+        await this.initDeviceData(this.inputFormData.serverId);
+        await this.initChannelItem(this.inputFormData.nvrId);
+
         this.pageStep = EPageStep.view;
     }
 
     pageToList() {
         this.initCMSItem();
+        this.initHdServerItem();
         this.pageStep = EPageStep.list;
         (this.$refs.humanDetectionTable as any).reload();
-
     }
 
     async doDelete() {
@@ -561,7 +652,7 @@ export default class HumanDetection extends Vue {
                         .D("/device", deleteParam)
                         .then((response: any) => {
                             Dialog.success(this._("w_Success"));
-                            (this.$refs.heatmapTable as any).reload();
+                            (this.$refs.humanDetectionTable as any).reload();
                         })
                         .catch((e: any) => {
                             if (
@@ -686,10 +777,10 @@ export default class HumanDetection extends Vue {
         this.selecteds = [];
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
-        this.inputFormData[0].area.objectId = "";
-        this.inputFormData[0].groupIds = [];
+        this.inputFormData.areaId = "";
+        this.inputFormData.groupIds = [];
         for (const detail in this.sitesSelectItem) {
-            if (this.inputFormData[0].site.objectId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -705,21 +796,21 @@ export default class HumanDetection extends Vue {
         this.pageStep = this.lastPageStep;
 
         // siteId clear
-        this.inputFormData[0].site.objectId = "";
+        this.inputFormData.siteId = "";
 
         // from selecteds push siteId
         if (this.selecteds && this.selecteds.length) {
-            this.inputFormData[0].site.objectId = this.selecteds[0].objectId;
+            this.inputFormData.siteId = this.selecteds[0].objectId;
         }
 
         if (
-            this.inputFormData[0].site.objectId === undefined ||
-            this.inputFormData[0].site.objectId === ""
+            this.inputFormData.siteId === undefined ||
+            this.inputFormData.siteId === ""
         ) {
             this.areaSelectItem = {};
             this.deviceGroupSelectItem = {};
         } else {
-            await this.selectAreaId(this.inputFormData[0].site.objectId);
+            await this.selectAreaId(this.inputFormData.siteId);
         }
     }
 
@@ -729,8 +820,8 @@ export default class HumanDetection extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputFormData[0].area.objectId = "";
-            this.inputFormData[0].groupIds = [];
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupIds = [];
         }
 
         if (data !== undefined || data !== "") {
@@ -745,8 +836,8 @@ export default class HumanDetection extends Vue {
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            this.inputFormData[0].area.objectId = "";
-                            this.inputFormData[0].groupIds = [];
+                            this.inputFormData.areaId = "";
+                            this.inputFormData.groupIds = [];
                             // 自定義 areaSelectItem 的 key 的方式
                             this.$set(
                                 this.areaSelectItem,
@@ -868,6 +959,13 @@ export default class HumanDetection extends Vue {
                     isap: "iSAP"
                 })}
 
+                  /*
+                * @uiLabel - ${this._("w_VSHumanDetection_HDserver")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: false }
+                */
+                 hdServerId?: any;
+
                 /*
                 * @uiLabel - ${this._("w_VSHumanDetection_CMS")}
                 * @uiType - iv-form-selection
@@ -953,6 +1051,13 @@ export default class HumanDetection extends Vue {
                     isap: "iSAP"
                 })}
 
+                
+                /*
+                * @uiLabel - ${this._("w_VSHumanDetection_HDserver")}
+                * @uiType - iv-form-label
+                */
+                hdServerId?: any;
+
                 /*
                 * @uiLabel - ${this._("w_VSHumanDetection_CMS")}
                 * @uiType - iv-form-label
@@ -1028,7 +1133,7 @@ export default class HumanDetection extends Vue {
                         nvrId: data[1].nvrId,
                         channelId: data[1].channelId
                     },
-                    hdServerId: data[1].serverId,
+                    hdServerId: data[1].hdServerId,
                     rois: this.canvasDetail
                 }
             ];
@@ -1059,7 +1164,7 @@ export default class HumanDetection extends Vue {
         } else if (this.pageStep == EPageStep.edit) {
             const datas: any[] = [
                 {
-                    objectId: this.inputFormData[0].objectId,
+                    objectId: this.inputFormData.objectId,
                     customId: data[1].customId,
                     areaId: data[2].areaId,
                     groupIds: data[2].groupIds ? data[2].groupIds : [],
@@ -1067,15 +1172,15 @@ export default class HumanDetection extends Vue {
                     config: {
                         serverId: data[1].serverId
                             ? data[1].serverId
-                            : this.inputFormData[0].config.server.objectId,
+                            : this.inputFormData.serverId,
                         nvrId: data[1].nvrId
                             ? data[1].nvrId
-                            : this.inputFormData[0].config.nvrId,
+                            : this.inputFormData.nvrId,
                         channelId: data[1].channelId
                             ? data[1].channelId
-                            : this.inputFormData[0].config.channelId
+                            : this.inputFormData.channelId
                     },
-                    hdServerId: data[1].serverId,
+                    hdServerId: data[1].hdServerId,
                     rois: this.canvasDetail
                 }
             ];
