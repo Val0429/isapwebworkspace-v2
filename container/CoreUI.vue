@@ -120,6 +120,49 @@
                     url="/rules_actions"
                 />
 
+                <!-- Report -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Report')"
+                    url="/reports"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_Traffic')"
+                        url="/reports/traffic"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_DwellTime')"
+                        url="/reports/dwell_time"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_Demographic')"
+                        url="/reports/demographic"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_Heatmap')"
+                        url="/reports/heatmap"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_Occupancy')"
+                        url="/reports/occupancy"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_VIPBlackList')"
+                        url="/reports/vip_black_list"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_RepeatVisitor')"
+                        url="/reports/report_visitor"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_Campaign')"
+                        url="/reports/campaign"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Report_ReportTemplate')"
+                        url="/reports/report_template"
+                    />
+                </SidebarNavItem>
+
                 <!-- Business Operation -->
                 <SidebarNavItem
                     :label="_('w_Navigation_BusinessOperation')"

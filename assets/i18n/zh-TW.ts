@@ -62,6 +62,7 @@ export default class LangObject implements ILang {
     w_StepBackward = 'Step Backward';
     w_ROIClear = 'ROI Clear';
     w_Upload_Fail = 'Upload Filed';
+    w_Duplicate = 'Duplicate';
 
     // date
     w_Week_0 = 'Sunday';
@@ -201,6 +202,18 @@ export default class LangObject implements ILang {
     w_Navigation_Server_FRSServer = 'FRS Server';
     w_Navigation_Server_DemographicServer = 'Demographic Server';
     w_Navigation_Server_HDServer = 'HD Server';
+
+    w_Navigation_Report = 'Report';
+    w_Navigation_Report_ReportTemplate = 'Report Template';
+    w_Navigation_Report_Traffic = 'Traffic';
+    w_Navigation_Report_DwellTime = 'Dwell Time';
+    w_Navigation_Report_Demographic = 'Demographic';
+    w_Navigation_Report_Heatmap = 'Heatmap';
+    w_Navigation_Report_Occupancy = 'Occupancy';
+    w_Navigation_Report_VIPBlackList = 'VIP & Black List';
+    w_Navigation_Report_RepeatVisitor = 'Repeat Visitor';
+    w_Navigation_Report_Campaign = 'Campaign';
+
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
