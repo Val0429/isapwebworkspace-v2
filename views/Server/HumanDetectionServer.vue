@@ -58,6 +58,41 @@
             </iv-card>
         </div>
 
+
+        <!--Form (Add and Edit)-->
+        <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
+            <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IForm()"
+                    :value="inputHumanDetectionServerData"
+                    @update:*="updateForm($event)"
+                    @submit="saveData($event)"
+                >
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToHumanServerTest()"
+                    >{{ _('w_Test') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+        </div>
+
         <!--View-->
         <div v-show="pageStep === ePageStep.View">
             <iv-card :label="_('w_ServerHD_View')">
@@ -67,13 +102,13 @@
 
                 <iv-form
                     :interface="IView()"
-                    :value="data[0]"
+                    :value="inputHumanDetectionServerData"
                 >
                     <template #target_score="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :value="data[0] ? Math.round(data[0].target_score*100) + '%': ''"
+                            :value="inputHumanDetectionServerData.target_score ? Math.round(inputHumanDetectionServerData.target_score*100) + '%': ''"
                         />
                     </template>
                 </iv-form>
@@ -89,56 +124,6 @@
             </iv-card>
         </div>
 
-        <!--Form (Add and Edit)-->
-        <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
-            <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
-                <template #toolbox>
-                    <iv-toolbox-back @click="pageToList()" />
-                </template>
-
-                <iv-form
-                    :interface="IForm()"
-                    :value="data[0]"
-                    @update:*="updateForm($event)"
-                    @submit="saveData($event)"
-                >
-
-                    <template #customId="{$attrs, $listeners}">
-                        <iv-form-string
-                            v-if="pageStep === ePageStep.Add"
-                            v-bind="
-                        $attrs"
-                            :value="$attrs.value ? $attrs.value : ''"
-                        >
-                        </iv-form-string>
-                        <iv-form-label
-                            v-if="pageStep === ePageStep.Edit"
-                            v-bind="
-                        $attrs"
-                            :value="$attrs.value ? $attrs.value : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-                </iv-form>
-
-                <template #footer-before>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="pageToList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                    <b-button
-                        v-show="pageStep === ePageStep.Edit"
-                        variant="dark"
-                        size="lg"
-                        @click="pageToHumanServerTest()"
-                    >{{ _('w_Test') }}
-                    </b-button>
-                </template>
-
-            </iv-auto-card>
-        </div>
 
         <!-- Model -->
         <b-modal
@@ -154,7 +139,7 @@
                 <iv-form
                     :visible="true"
                     :interface="IHumanServerTestComponent()"
-                    :value="inputHumanServerData"
+                    :value="inputHumanDetectionServerData"
                     @update:*="updateServerData"
                     @submit="sendHumanServerTest($event)"
                 >
@@ -257,8 +242,9 @@ export default class HumanDetectionServer extends Vue {
 
     //data
     isSelected: any = [];
-    datas = {};
-    data = [];
+    selectedDetail: any = [];
+
+    inputHumanDetectionServerData: any = {};
 
     //test data
     inputHumanServerData = {
@@ -277,12 +263,6 @@ export default class HumanDetectionServer extends Vue {
         this.pageToList();
     }
 
-    pageToList() {
-        // this.initData(); //todo for test when no datas
-        this.initTargetScoreItem();
-        this.pageStep = EPageStep.List;
-    }
-
     initTargetScoreItem() {
         this.targetScoreItem["0.1"] = "10%";
         this.targetScoreItem["0.2"] = "20%";
@@ -296,56 +276,190 @@ export default class HumanDetectionServer extends Vue {
         this.targetScoreItem["1"] = "100%";
     }
 
-    initData() {
-        this.datas = {
-            paging: {
-                total: 1,
-                totalPages: 1,
-                page: 1,
-                pageSize: 10
-            },
-            results: [
-                {
-                    customId: "S-0001",
-                    name: "server 1",
-                    protocol: "https",
-                    ip: "127.0.0.1",
-                    port: 8000,
-                    target_score: 1
-                },
-                {
-                    customId: "S-0002",
-                    name: "server 2",
-                    protocol: "http",
-                    ip: "127.0.0.1",
-                    port: 8000,
-                    target_score: 0.6
-                }
-            ]
-        };
+    clearInputData() {
+        this.inputHumanDetectionServerData = {
+            objectId: '',
+            customId: '',
+            name: '',
+            protocol: 'http',
+            ip: '',
+            port: '',
+            target_score: '0.5',
+            imageBase64: ''
+        }
     }
 
-    clearData() {
-        this.isSelected = [];
-        this.data = [];
+
+    selectedData(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+
+    }
+
+    getInputData() {
+        this.clearInputData();
+
+        for (const param of this.selectedDetail) {
+            this.inputHumanDetectionServerData = {
+                name: param.name,
+                customId: param.customId,
+                objectId: param.objectId,
+                ip: param.ip,
+                port: param.port,
+                protocol: param.protocol,
+                target_score: param.target_score.toString(),
+            };
+        }
+
     }
 
     pageToView() {
+        this.getInputData();
         this.pageStep = EPageStep.View;
     }
 
     pageToAdd() {
-        this.clearData();
+        this.clearInputData();
         this.pageStep = EPageStep.Add;
     }
 
     pageToEdit() {
+        this.getInputData();
         this.pageStep = EPageStep.Edit;
+    }
+
+    pageToList() {
+        this.initTargetScoreItem();
+        this.clearInputData();
+        this.pageStep = EPageStep.List;
+        (this.$refs.dataTable as any).reload();
+
+    }
+
+    pageToHumanServerTest() {
+        this.clearInputData();
+        this.modalShow = !this.modalShow;
+    }
+
+    pageToForm1() {
+        this.pageStep = EPageStep.Edit;
+        (this.$refs["detail"] as any).hide();
+    }
+
+    async sendHumanServerTest(data) {
+
+        if (this.newImgSrc == "") {
+            Dialog.error(this._("w_Upload_Fail"));
+            return;
+        }
+
+        const configOnject = {
+            protocol: data.protocol,
+            ip: data.ip,
+            port: data.port,
+            target_score: parseFloat(data.target_score),
+        };
+
+        const humanObject: {
+            config: any,
+            imageBase64: string;
+        } = {
+            config: configOnject,
+            imageBase64: this.newImgSrc
+        };
+
+        await this.$server
+            .C("/partner/human-detection/test", humanObject)
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.modalShow = !this.modalShow;
+                    (this.$refs["detail"] as any).show();
+                    this.returnImageBase64 = response.imageBase64;
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
+    }
+
+    async saveData(data) {
+        console.log("saveArea", data);
+
+        if (this.pageStep == EPageStep.Add) {
+            const datas = [
+                {
+                    customId: data.customId,
+                    name: data.name,
+                    protocol: data.protocol,
+                    ip: data.ip,
+                    port: data.port,
+                    target_score: parseFloat(data.target_score)
+                }
+            ];
+
+            const addParam = { datas };
+
+            await this.$server
+                .C("/partner/human-detection", addParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            if (returnValue.statusCode === 200) {
+                                Dialog.success(this._("w_ServerHD_AddSuccess"));
+                                this.pageToList();
+                            }
+                            if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                                Dialog.error(this._("w_ServerHD_AddFailed"));
+                                return false;
+                            }
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+
+        } else if (this.pageStep == EPageStep.Edit) {
+            const datas = [
+                {
+                    objectId: data.objectId,
+                    customId: data.customId,
+                    name: data.name,
+                    protocol: data.protocol,
+                    ip: data.ip,
+                    port: data.port,
+                    target_score: parseFloat(data.target_score)
+                }
+            ];
+
+            const editParam = { datas };
+
+            await this.$server
+                .U("/partner/human-detection", editParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            if (returnValue.statusCode === 200) {
+                                Dialog.success(this._("w_ServerHD_EditSuccess"));
+                                this.pageToList();
+                            }
+                            if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                                Dialog.error(this._("w_ServerHD_EditFailed"));
+                                return false;
+                            }
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+        }
     }
 
     async deleteData() {
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
-            for (const param of this.data) {
+            for (const param of this.selectedDetail) {
                 const deleteParam: {
                     objectId: string;
                 } = {
@@ -367,67 +481,10 @@ export default class HumanDetectionServer extends Vue {
         });
     }
 
-    async saveData(data) {
-        console.log("saveArea", data);
-
-        if (this.pageStep == EPageStep.Add) {
-            const datas = [
-                {
-                    customId: data.customId,
-                    name: data.name,
-                    protocol: data.protocol,
-                    ip: data.ip,
-                    port: data.port,
-                    target_score: data.target_score
-                }
-            ];
-
-            const addParam = { datas };
-
-            await this.$server
-                .C("/partner/human-detection", addParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        Dialog.success(this._("w_ServerHD_AddSuccess"));
-                        this.pageToList();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
-                });
-        } else if (this.pageStep == EPageStep.Edit) {
-            const datas = [
-                {
-                    objectId: data.objectId,
-                    customId: data.customId,
-                    name: data.name,
-                    protocol: data.protocol,
-                    ip: data.ip,
-                    port: data.port,
-                    target_score: data.target_score
-                }
-            ];
-
-            const editParam = { datas };
-
-            await this.$server
-                .U("/partner/human-detection", editParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        Dialog.success(this._("w_ServerHD_EditSuccess"));
-                        this.pageToList();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
-                });
-        }
-    }
-
     updateForm(data) {
         console.log("updateForm", data);
         if (data) {
-            this.data[data.key] = data.value;
+            this.inputHumanDetectionServerData[data.key] = data.value;
         }
     }
 
@@ -436,56 +493,6 @@ export default class HumanDetectionServer extends Vue {
         if (data && data.key == "imageBase64") {
             this.uploadFile(data.value);
         }
-    }
-
-    selectedData(data) {
-        this.isSelected = data;
-        this.data = [];
-        for (let item of data) {
-            item.target_score = item.target_score.toString();
-        }
-        this.data = data;
-    }
-
-    pageToHumanServerTest() {
-        console.log("pageToHumanServerTest", this.data);
-        this.modalShow = !this.modalShow;
-        this.inputHumanServerData.objectId = this.data["objectId"];
-
-    }
-
-    pageToForm1() {
-        this.pageStep = EPageStep.Edit;
-        (this.$refs["detail"] as any).hide();
-    }
-
-    async sendHumanServerTest(data) {
-
-        if (this.newImgSrc == "") {
-            Dialog.error(this._("w_Upload_Fail"));
-            return;
-        }
-
-        const humanObject: {
-            objectId: string;
-            imageBase64: string;
-        } = {
-            objectId: this.data[0].objectId,
-            imageBase64: this.newImgSrc
-        };
-
-        await this.$server
-            .C("/partner/human-detection/test", humanObject)
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.modalShow = !this.modalShow;
-                    (this.$refs["detail"] as any).show();
-                    this.returnImageBase64 = response.imageBase64;
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
     }
 
     async uploadFile(file) {
@@ -583,6 +590,11 @@ export default class HumanDetectionServer extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ServerHD_DeviceID")}
                  * @uiPlaceHolder - ${this._("w_ServerHD_DeviceID")}
+                 * @uiType - ${
+                    this.pageStep === EPageStep.Add
+                ? "iv-form-string"
+                : "iv-form-label"
+            }
                  */
                 customId: string;
 
@@ -630,6 +642,40 @@ export default class HumanDetectionServer extends Vue {
     IHumanServerTestComponent() {
         return `
                 interface IHumanServerTestComponent {
+
+
+                /**
+                 * @uiLabel - ${this._("w_Protocol")}
+                 */
+                 protocol: ${toEnumInterface({
+                    http: "http",
+                    https: "https"
+                })};
+
+                /**
+                 * @uiLabel - ${this._("w_ServerHD_IP")}
+                 * @uiPlaceHolder - ${this._("w_ServerHD_IP")}
+                 * @uiType - iv-form-ip
+                 */
+                ip: string;
+
+
+                /**
+                * @uiLabel - ${this._("w_ServerHD_Port")}
+               * @uiPlaceHolder - ${this._("w_Port_PlaceHolder")}
+                 * @uiAttrs - { max: 65535, min: 1}
+                */
+                port: number;
+
+
+                /**
+                * @uiLabel - ${this._("w_ServerHD_Scale")}
+                * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
+                */
+                target_score?: ${toEnumInterface(
+                    this.targetScoreItem as any,
+                    false
+                )};
 
                 imageBase64: any;
 
