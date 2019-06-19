@@ -1,1 +1,2 @@
-export { ISortSelectOption, ISortSelectTreeOption } from './models/ISortSelect';
+export { ISortSelectOption } from './models/ISortSelect';
+export { ISortSelectTreeOption } from './models/ISortSelectTree';

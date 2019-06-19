@@ -5,25 +5,25 @@
                 <iv-card label="Select1">
                     <iv-sort-select
                         v-model="singleSelected"
-                        :options="singleSelectItem"
+                        :options="singleSelectOption"
                     ></iv-sort-select>
                     <template #footer>
                         <b-button
                             variant="secondary"
                             size="lg"
-                            @click="demoBack"
+                            @click="demoBackSingle"
                         >{{ _('w_Back') }}
                         </b-button>
                         <b-button
                             variant="primary"
                             size="lg"
-                            @click="demoSubmit"
+                            @click="demoSubmitSingle"
                         >{{ _('w_Submit') }}
                         </b-button>
                         <b-button
                             variant="default"
                             size="lg"
-                            @click="demoReset"
+                            @click="demoResetSingle"
                         >{{ _('w_Reset') }}
                         </b-button>
                     </template>
@@ -33,25 +33,25 @@
                 <iv-card label="Select2">
                     <iv-sort-select-tree
                         v-model="treeSelected"
-                        :options="treeSelectItem"
+                        :options="treeSelectOption"
                     ></iv-sort-select-tree>
                     <template #footer>
                         <b-button
                             variant="secondary"
                             size="lg"
-                            @click="demoBack"
+                            @click="demoBackTree"
                         >{{ _('w_Back') }}
                         </b-button>
                         <b-button
                             variant="primary"
                             size="lg"
-                            @click="demoSubmit"
+                            @click="demoSubmitTree"
                         >{{ _('w_Submit') }}
                         </b-button>
                         <b-button
                             variant="default"
                             size="lg"
-                            @click="demoReset"
+                            @click="demoResetTree"
                         >{{ _('w_Reset') }}
                         </b-button>
                     </template>
@@ -80,7 +80,7 @@ import SortSelectTree from "@/components/SortSelect/SortSelectTree.vue";
 })
 export default class DemoSortSelect extends Vue {
     singleSelected: string[] = ["A1", "A7", "B10"];
-    singleSelectItem: ISortSelectOption[] = [
+    singleSelectOption: ISortSelectOption[] = [
         { value: "A1", text: "A 1" },
         { value: "A2", text: "A 2" },
         { value: "A3", text: "A 3" },
@@ -103,8 +103,8 @@ export default class DemoSortSelect extends Vue {
         { value: "B10", text: "B 10" }
     ];
 
-    treeSelected: string[] = ["A11", "A132", "A1331", "A1335", "A211", "A22", "A3"];
-    treeSelectItem: ISortSelectTreeOption[] = [
+    treeSelected: string[] = ["A12", "A11", "A132", "A1331", "A1335", "A3"];
+    treeSelectOption: ISortSelectTreeOption[] = [
         {
             value: "A1",
             text: "A1",
@@ -125,11 +125,31 @@ export default class DemoSortSelect extends Vue {
                             value: "A133",
                             text: "A133",
                             childrens: [
-                                { value: "A1331", text: "A1331", childrens: [] },
-                                { value: "A1332", text: "A1332", childrens: [] },
-                                { value: "A1333", text: "A1333", childrens: [] },
-                                { value: "A1334", text: "A1334", childrens: [] },
-                                { value: "A1335", text: "A1335", childrens: [] },
+                                {
+                                    value: "A1331",
+                                    text: "A1331",
+                                    childrens: []
+                                },
+                                {
+                                    value: "A1332",
+                                    text: "A1332",
+                                    childrens: []
+                                },
+                                {
+                                    value: "A1333",
+                                    text: "A1333",
+                                    childrens: []
+                                },
+                                {
+                                    value: "A1334",
+                                    text: "A1334",
+                                    childrens: []
+                                },
+                                {
+                                    value: "A1335",
+                                    text: "A1335",
+                                    childrens: []
+                                }
                             ]
                         }
                     ]
@@ -158,14 +178,14 @@ export default class DemoSortSelect extends Vue {
     created() {}
     mounted() {}
 
-    demoBack() {
-        Dialog.success("Click Back");
+    demoBackSingle() {
+        Dialog.success("Click Back from Single Layer");
     }
 
-    demoSubmit() {
+    demoSubmitSingle() {
         let submitText = "";
         for (let chooseSelected of this.singleSelected) {
-            for (let chooseItem of this.singleSelectItem) {
+            for (let chooseItem of this.singleSelectOption) {
                 if (chooseSelected == chooseItem.value) {
                     submitText += `${chooseItem.text}<br>`;
                 }
@@ -174,7 +194,24 @@ export default class DemoSortSelect extends Vue {
         Dialog.success(submitText);
     }
 
-    demoReset() {
+    demoResetSingle() {
+        Dialog.success("Click Reset");
+    }
+
+    demoBackTree() {
+        Dialog.success("Click Back from Tree");
+    }
+
+    demoSubmitTree() {
+        let submitText = "";
+        for (let chooseSelected of this.treeSelected) {
+            submitText += `${chooseSelected}<br>`;
+        }
+        console.log("Submit", this.treeSelected);
+        Dialog.success(submitText);
+    }
+
+    demoResetTree() {
         Dialog.success("Click Reset");
     }
 }

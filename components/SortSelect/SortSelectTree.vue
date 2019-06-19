@@ -27,11 +27,12 @@
                 </div>
                 <hr>
                 <div class="check-frame">
-                    <iv-tree-form 
-                        v-for="(option, index) of options"
-                        :key="'sort__select__tree__root' + option.value + '__' + index"
-                        :data="option" 
-                        :optionSearchText="optionSearchText"
+                    <iv-tree-form
+                        v-for="(sortSelectTreeItem, index) of sortSelectTreeItemList"
+                        :key="'sort__select__tree__root' + sortSelectTreeItem.value + '__' + index"
+                        :type="eSortSelectTreeEventType.option"
+                        :data="sortSelectTreeItem"
+                        :searchText="optionSearchText"
                     />
                 </div>
             </div>
@@ -111,11 +112,12 @@
                 </div>
                 <hr>
                 <div class="check-frame">
-                    <iv-tree-form 
-                        v-for="(option, index) of this.chooseSelectItem"
-                        :key="'sort__select__tree__choose' + option.value + '__' + index"
-                        :data="option" 
-                        :optionSearchText="optionSearchText"
+                    <iv-tree-form
+                        v-for="(sortSelectTreeItem, index) of this.sortSelectTreeItemList"
+                        :key="'sort__select__tree__choose' + sortSelectTreeItem.value + '__' + index"
+                        :type="eSortSelectTreeEventType.choose"
+                        :data="sortSelectTreeItem"
+                        :searchText="chooseSearchText"
                     />
                 </div>
 
@@ -126,9 +128,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Model } from "vue-property-decorator";
-import { ISortSelectOption, ISortSelectTreeOption } from "./models/ISortSelect";
+import { Vue, Component, Prop, Model, Watch } from "vue-property-decorator";
+import { ESortSelectTreeEventType } from "./models/ESortSelectTree";
+import { ISortSelectOption } from "./models/ISortSelect";
+import {
+    ISortSelectTreeOption,
+    ISortSelectTreeItem
+} from "./models/ISortSelectTree";
 import { TreeView } from "./TreeView.vue";
+import { zip } from "rxjs";
 
 interface IMergeTree {
     parent: boolean;
@@ -141,13 +149,19 @@ interface IMergeTree {
     }
 })
 export class SortSelectTree extends Vue {
+    eSortSelectTreeEventType = ESortSelectTreeEventType;
+
     optionSearchText = "";
     chooseSearchText = "";
+    selected: string[] = [];
+    sortSelectTreeItemList: ISortSelectTreeItem[] = [];
 
-    optionsSelected: string[][] = [];
-    chooseSelected: string[][] = [];
-    optionsSelectItem: ISortSelectTreeOption[] = [];
-    chooseSelectItem: ISortSelectTreeOption[] = [];
+    // Prop
+    @Prop({
+        type: Array,
+        default: []
+    })
+    options: ISortSelectTreeOption[];
 
     // Model
     @Model("input", {
@@ -158,256 +172,327 @@ export class SortSelectTree extends Vue {
     })
     value: string[];
 
-    // prop
-    @Prop({
-        type: Array,
-        default: []
-    })
-    options: ISortSelectTreeOption[];
-
     created() {}
 
     mounted() {
-        this.initValue();
+        this.sortSelectTreeItemList = [];
+        this.initSelected();
+        this.anysisSelected();
+        this.calculateSelected();
     }
 
-    initValue() {
-        this.optionsSelected = [];
-        this.chooseSelected = [];
-        this.optionsSelectItem = [];
-        this.chooseSelectItem = [];
-        let anysisResult: ISortSelectTreeOption[] = [];
+    @Watch("sortSelectTreeItemList", { deep: true })
+    private onSortSelectTreeItemListChanged(
+        newval: ISortSelectTreeItem,
+        oldval: ISortSelectTreeItem
+    ) {
+        console.log(newval);
+    }
 
+    defaultSortSelectTreeItem(): ISortSelectTreeItem {
+        let result: ISortSelectTreeItem = {
+            value: "",
+            text: "",
+            event: {
+                clickCheckbox: false
+            },
+            status: {
+                focus: false,
+                choose: false,
+                childrenChoose: false
+            },
+            childrens: []
+        };
+        return JSON.parse(JSON.stringify(result));
+    }
+
+    initSelected() {
+        this.selected = [];
+        for (let val of this.value) {
+            this.pushSelected(val);
+        }
+        this.resetVModel();
+    }
+
+    // 分析物件
+    anysisSelected() {
         for (let option of this.options) {
-            let inValue = false;
-            for (let val of this.value) {
-                let tempOption = this.anysisChildren(val, option);
-                if (tempOption != null) {
-                    let tempMerge: IMergeTree = {parent: false, children: false};
-                    for (let chooseItem of this.chooseSelectItem) {
-                        tempMerge = this.mergeValue(
-                            chooseItem,
-                            tempOption as ISortSelectTreeOption
-                        );
-                        if (tempMerge.children) {
-                            break;
-                        }
-                    }
-                    if (!tempMerge.children) {
-                        this.chooseSelectItem.push(tempOption);
-                    }
-                }
-            }
+            this.sortSelectTreeItemList.push(
+                this.anysisChildren(option, false)
+            );
         }
     }
 
-    mergeValue(
-        chooseItem: ISortSelectTreeOption,
-        anysisResult: ISortSelectTreeOption
-    ): IMergeTree {
-        let result: IMergeTree = {children: false, parent: false};
-        if (chooseItem.value == anysisResult.value) {
-            result.children = true;
-            if (anysisResult.childrens.length > 0) {
-                let tempResult: IMergeTree = {children: false, parent: false};
-                for (let chooseChildrens of chooseItem.childrens) {
-                    tempResult = this.mergeValue(chooseChildrens, anysisResult.childrens[0]);
-                    if (tempResult.parent && !tempResult.children) {
-                        chooseItem.childrens.push(anysisResult.childrens[0]);
-                        break;
-                    }
-                }
-            } 
-        } else {
-            result.parent = true;
-        }
-        return result;
-    }
-
+    // 分析下層物件
     anysisChildren(
-        value: string,
-        option: ISortSelectTreeOption
-    ): ISortSelectTreeOption | null {
-        let result: any = null;
-        let tempOption = JSON.parse(JSON.stringify(option));
-        if (value == tempOption.value) {
-            result = tempOption;
+        sortSelectTreeOption: ISortSelectTreeOption,
+        parentChoose: boolean
+    ): ISortSelectTreeItem {
+        let result: ISortSelectTreeItem = this.defaultSortSelectTreeItem();
+        result.value = sortSelectTreeOption.value;
+        result.text = sortSelectTreeOption.text;
+
+        // 上層被選就全選
+        if (parentChoose) {
+            result.status.choose = true;
         } else {
-            tempOption.childrens = [];
-            for (let optionChildren of option.childrens) {
-                let childrenResult = this.anysisChildren(value, optionChildren);
-                if (childrenResult != null) {
-                    result = tempOption;
-                    result.childrens.push(childrenResult);
+            for (let val of this.selected) {
+                if (val == result.value) {
+                    result.status.choose = true;
+                    break;
                 }
+            }
+        }
+
+        // 判斷下層結果
+        for (let children of sortSelectTreeOption.childrens) {
+            result.childrens.push(
+                this.anysisChildren(children, result.status.choose)
+            );
+        }
+
+        // 判斷是否有下層被選
+        let childrenChooseCount = this.calculateChildrenChooseCount(
+            result.childrens
+        );
+        if (
+            childrenChooseCount > 0 &&
+            childrenChooseCount == result.childrens.length
+        ) {
+            result.status.choose = true;
+        } else if (
+            childrenChooseCount > 0 &&
+            childrenChooseCount < result.childrens.length
+        ) {
+            result.status.childrenChoose = true;
+        }
+        return result;
+    }
+
+    // 計算下層數量
+    calculateChildrenChooseCount(childrens: ISortSelectTreeItem[]): number {
+        let result = 0;
+        for (let children of childrens) {
+            if (children.status.choose) {
+                result++;
             }
         }
         return result;
     }
 
+    // 計算被選取物件
+    calculateSelected() {
+        this.selected = [];
+        for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
+            if (sortSelectTreeItem.status.choose) {
+                this.pushSelected(sortSelectTreeItem.value);
+            }
+            this.calculateChoose(
+                sortSelectTreeItem,
+                sortSelectTreeItem.status.choose
+            );
+        }
+    }
 
+    calculateChoose(
+        sortSelectTreeItem: ISortSelectTreeItem,
+        parentChoose: boolean
+    ) {
+        if (parentChoose) {
+            this.pushSelected(sortSelectTreeItem.value);
+        } else {
+            if (sortSelectTreeItem.status.choose) {
+                this.pushSelected(sortSelectTreeItem.value);
+            }
+        }
+        for (let children of sortSelectTreeItem.childrens) {
+            this.calculateChoose(children, sortSelectTreeItem.status.choose);
+        }
+    }
 
-    mergeChildren() {}
+    pushSelected(value: string) {
+        let inSelected = false;
+        for (let sel of this.selected) {
+            if (value == sel) {
+                inSelected = true;
+                break;
+            }
+        }
+        if (!inSelected) {
+            this.selected.push(value);
+        }
+        this.resetVModel();
+    }
+
+    ////////////////////////////////////////////////////
 
     // disable
     disableSelectAllOption(): boolean {
         let result = false;
-        if (this.optionsSelected.length == this.optionsSelectItem.length) {
-            result = true;
-        }
+        // if (this.optionsSelected.length == this.optionsSelectItem.length) {
+        //     result = true;
+        // }
         return result;
     }
 
     disableSelectResetOption(): boolean {
         let result = false;
-        if (this.optionsSelected.length == 0) {
-            result = true;
-        }
+        // if (this.optionsSelected.length == 0) {
+        //     result = true;
+        // }
         return result;
     }
 
     disableSelectAllChoose(): boolean {
         let result = false;
-        if (this.chooseSelected.length == this.chooseSelectItem.length) {
-            result = true;
-        }
+        // if (this.chooseSelected.length == this.chooseSelectItem.length) {
+        //     result = true;
+        // }
         return result;
     }
 
     disableSelectResetChoose(): boolean {
         let result = false;
-        if (this.chooseSelected.length == 0) {
-            result = true;
-        }
+        // if (this.chooseSelected.length == 0) {
+        //     result = true;
+        // }
         return result;
     }
 
     disableChooseSortUp(): boolean {
         let result = false;
-        let chooseSelected = this.chooseSelected[0];
-        if (chooseSelected != undefined && this.chooseSelected.length == 1) {
-            // for (let i in this.chooseSelectItem) {
-            //     let choose = this.chooseSelectItem[i];
-            //     if (chooseSelected == choose.value) {
-            //         if (parseInt(i) == 0) {
-            //             result = true;
-            //         }
-            //         break;
-            //     }
-            // }
-        } else {
-            result = true;
-        }
+        // let chooseSelected = this.chooseSelected[0];
+        // if (chooseSelected != undefined && this.chooseSelected.length == 1) {
+        //     for (let i in this.chooseSelectItem) {
+        //         let choose = this.chooseSelectItem[i];
+        //         if (chooseSelected == choose.value) {
+        //             if (parseInt(i) == 0) {
+        //                 result = true;
+        //             }
+        //             break;
+        //         }
+        //     }
+        // } else {
+        //     result = true;
+        // }
         return result;
     }
 
     disableChooseSortDown() {
         let result = false;
-        let chooseSelected = this.chooseSelected[0];
-        if (chooseSelected != undefined && this.chooseSelected.length == 1) {
-            // for (let i in this.chooseSelectItem) {
-            //     let choose = this.chooseSelectItem[i];
-            //     if (chooseSelected == choose.value) {
-            //         if (parseInt(i) == this.chooseSelectItem.length - 1) {
-            //             result = true;
-            //         }
-            //         break;
-            //     }
-            // }
-        } else {
-            result = true;
-        }
+        // let chooseSelected = this.chooseSelected[0];
+        // if (chooseSelected != undefined && this.chooseSelected.length == 1) {
+        //     for (let i in this.chooseSelectItem) {
+        //         let choose = this.chooseSelectItem[i];
+        //         if (chooseSelected == choose.value) {
+        //             if (parseInt(i) == this.chooseSelectItem.length - 1) {
+        //                 result = true;
+        //             }
+        //             break;
+        //         }
+        //     }
+        // } else {
+        //     result = true;
+        // }
         return result;
     }
 
     disableChooseToOption(): boolean {
-        return this.chooseSelected.length < 1;
+        let result = false;
+        // if (this.chooseSelected.length < 1) {
+        //     result = true;
+        // }
+        return result;
     }
 
     disableOptionToChoose(): boolean {
-        return this.optionsSelected.length < 1;
+        let result = false;
+        // if (this.optionsSelected.length < 1) {
+        //     result = true;
+        // }
+        return result;
     }
 
     // option
     selectAllOption() {
-        this.optionsSelected = [];
+        // this.optionsSelected = [];
         // for (let option of this.optionsSelectItem) {
         //     this.optionsSelected.push(option.value);
         // }
     }
 
     clearOptions() {
-        this.optionsSelected = [];
+        // this.optionsSelected = [];
     }
 
     // choose
     showChoose(data: string): boolean {
         let result = true;
-        if (this.chooseSearchText != "" && !data.match(this.chooseSearchText)) {
-            result = false;
-        }
+        // if (this.chooseSearchText != "" && !data.match(this.chooseSearchText)) {
+        //     result = false;
+        // }
         return result;
     }
 
     selectAllChoose() {
-        this.chooseSelected = [];
+        // this.chooseSelected = [];
         // for (let choose of this.chooseSelectItem) {
         //     this.chooseSelected.push(choose.value);
         // }
     }
 
     clearAllChoose() {
-        this.chooseSelected = [];
+        // this.chooseSelected = [];
     }
 
     chooseSortUp() {
-        let chooseSelected = this.chooseSelected[0];
-        if (chooseSelected != undefined) {
-            let chooseIndex = -1;
-            let tempChooseItem: any = undefined;
-            // for (let i in this.chooseSelectItem) {
-            //     let chooseItem = this.chooseSelectItem[i];
-            //     if (chooseItem.value == chooseSelected) {
-            //         chooseIndex = parseInt(i);
-            //         tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-            //         this.chooseSelectItem.splice(parseInt(i), 1);
-            //         break;
-            //     }
-            // }
-            if (chooseIndex > 0) {
-                this.chooseSelectItem.splice(
-                    chooseIndex - 1,
-                    0,
-                    tempChooseItem
-                );
-            }
-        }
-        this.$emit("input", this.resultList());
+        // let chooseSelected = this.chooseSelected[0];
+        // if (chooseSelected != undefined) {
+        //     let chooseIndex = -1;
+        //     let tempChooseItem: any = undefined;
+        //     for (let i in this.chooseSelectItem) {
+        //         let chooseItem = this.chooseSelectItem[i];
+        //         if (chooseItem.value == chooseSelected) {
+        //             chooseIndex = parseInt(i);
+        //             tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+        //             this.chooseSelectItem.splice(parseInt(i), 1);
+        //             break;
+        //         }
+        //     }
+        //     if (chooseIndex > 0) {
+        //         this.chooseSelectItem.splice(
+        //             chooseIndex - 1,
+        //             0,
+        //             tempChooseItem
+        //         );
+        //     }
+        // }
+        this.resetVModel();
     }
 
     chooseSortDown() {
-        let chooseSelected = this.chooseSelected[0];
-        if (chooseSelected != undefined) {
-            let chooseIndex = -1;
-            let tempChooseItem: any = undefined;
-            // for (let i in this.chooseSelectItem) {
-            //     let chooseItem = this.chooseSelectItem[i];
-            //     if (chooseItem.value == chooseSelected) {
-            //         chooseIndex = parseInt(i);
-            //         tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-            //         this.chooseSelectItem.splice(parseInt(i), 1);
-            //         break;
-            //     }
-            // }
-            if (chooseIndex < this.chooseSelectItem.length) {
-                this.chooseSelectItem.splice(
-                    chooseIndex + 1,
-                    0,
-                    tempChooseItem
-                );
-            }
-        }
-        this.$emit("input", this.resultList());
+        // let chooseSelected = this.chooseSelected[0];
+        // if (chooseSelected != undefined) {
+        //     let chooseIndex = -1;
+        //     let tempChooseItem: any = undefined;
+        //     for (let i in this.chooseSelectItem) {
+        //         let chooseItem = this.chooseSelectItem[i];
+        //         if (chooseItem.value == chooseSelected) {
+        //             chooseIndex = parseInt(i);
+        //             tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+        //             this.chooseSelectItem.splice(parseInt(i), 1);
+        //             break;
+        //         }
+        //     }
+        //     if (chooseIndex < this.chooseSelectItem.length) {
+        //         this.chooseSelectItem.splice(
+        //             chooseIndex + 1,
+        //             0,
+        //             tempChooseItem
+        //         );
+        //     }
+        // }
+        this.resetVModel();
     }
 
     // change option and choose
@@ -424,8 +509,8 @@ export class SortSelectTree extends Vue {
         //         }
         //     }
         // }
-        this.chooseSelected = [];
-        this.$emit("input", this.resultList());
+        // this.chooseSelected = [];
+        this.resetVModel();
     }
 
     optionToChoose() {
@@ -441,16 +526,21 @@ export class SortSelectTree extends Vue {
         //         }
         //     }
         // }
-        this.optionsSelected = [];
-        this.$emit("input", this.resultList());
+        // this.optionsSelected = [];
+        this.resetVModel();
     }
 
     resultList(): string[] {
         let result: string[] = [];
-        for (let choose of this.chooseSelectItem) {
-            result.push(choose.value);
-        }
+        // for (let choose of this.chooseSelectItem) {
+        //     result.push(choose.value);
+        // }
         return result;
+    }
+
+    // Model connecnt
+    resetVModel () {
+        this.$emit("input", this.selected);
     }
 }
 

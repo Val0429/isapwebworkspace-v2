@@ -1,20 +1,25 @@
 <template>
     <div>
-        <iv-tree-form 
+        <iv-tree-form
+            :type="type"
             :data="data"
-            :optionSearchText="optionSearchText"
+            :searchText="searchText"
         />
     </div>
 </template>
 
 
 <script lang="ts" >
-import { Vue, Component, Prop} from "@/../core";
-import { ISortSelectTreeOption } from "./models/ISortSelect";
+import { Vue, Component, Prop } from "@/../core";
+import {
+    ISortSelectTreeOption,
+    ISortSelectTreeItem
+} from "./models/ISortSelectTree";
 import { TreeForm } from "./TreeForm.vue";
+import { ESortSelectTreeEventType } from "./models/ESortSelectTree";
 
 @Component({
-    components:{
+    components: {
         TreeForm
     }
 })
@@ -23,13 +28,25 @@ export class TreeView extends Vue {
         type: Object,
         default: {}
     })
-    data: ISortSelectTreeOption;
+    data: ISortSelectTreeItem;
 
     @Prop({
         type: String,
         default: ""
     })
-    optionSearchText: string;
+    searchText: string;
+
+    @Prop({
+        type: String,
+        default: ""
+    })
+    type: ESortSelectTreeEventType;
+
+    eSortSelectTreeEventType = ESortSelectTreeEventType;
+
+    created() {}
+
+    mounted() {}
 }
 export default TreeView;
 Vue.component("iv-tree-view", TreeView);
