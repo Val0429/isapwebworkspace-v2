@@ -356,7 +356,33 @@ export default class HumanDetection extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputFormData: any = {};
+    inputFormData: any = {
+        angle: 0,
+        brand: "",
+        customId: "",
+        dataWindowX: 0,
+        dataWindowY: 0,
+        groupIds: [],
+        hdServerId: "",
+        hdServerName: "",
+        serverId: "",
+        serverName: "",
+        nvrId: "",
+        channelId: "",
+        mode: "",
+        model: "",
+        name: "",
+        objectId: "",
+        rois: [],
+        siteId: "",
+        siteName: "",
+        areaId: "",
+        areaName: "",
+        visibleAngle: 0,
+        visibleDistance: 0,
+        x: 0,
+        y: 0
+    };
 
     created() {}
 
@@ -846,16 +872,18 @@ export default class HumanDetection extends Vue {
             this.areaSelectItem = {};
             this.deviceGroupSelectItem = {};
         } else {
-            console.log(
-                "pageToShowResult2",
-                this.selecteds[0].objectId,
-                this.selecteds[0].name
-            );
+            this.inputFormData.siteId = "";
             this.inputFormData.siteId = this.selecteds[0].objectId;
             this.inputFormData.siteName = this.selecteds[0].name;
             await this.selectAreaId(this.inputFormData.siteId);
-            console.log("pageToShowResult3", this.inputFormData.siteId);
         }
+    }
+
+    test() {
+        this.inputFormData.siteId = "";
+        this.inputFormData.siteId = "yf6yra0jiw";
+        this.isMounted = true;
+        console.log("test", this.inputFormData);
     }
 
     async selectAreaId(data) {
@@ -1271,11 +1299,6 @@ export default class HumanDetection extends Vue {
 
     clearROI(data) {
         console.log("clearROI", data, this.canvasDetail);
-    }
-
-    test() {
-        this.inputFormData.siteId = "yf6yra0jiw";
-        console.log("test", this.inputFormData);
     }
 }
 </script>
