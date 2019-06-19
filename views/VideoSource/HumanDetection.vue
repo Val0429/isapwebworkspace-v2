@@ -370,7 +370,7 @@ export default class HumanDetection extends Vue {
         this.inputFormData.customId = "";
         this.inputFormData.dataWindowX = 0;
         this.inputFormData.dataWindowY = 0;
-        this.inputFormData.groups = [];
+        this.inputFormData.groupIds = [];
         this.inputFormData.hdServerId = "";
         this.inputFormData.hdServerName = "";
         this.inputFormData.serverId = "";
@@ -526,7 +526,12 @@ export default class HumanDetection extends Vue {
         this.inputFormData.customId = data.customId;
         this.inputFormData.dataWindowX = data.dataWindowX;
         this.inputFormData.dataWindowY = data.dataWindowY;
-        this.inputFormData.groups = data.groups;
+        let groups = data.groups.map(g => g.objectId);
+        let groupIds = [];
+        for (let group of groups) {
+            groupIds.push(group);
+        }
+        this.inputFormData.groupIds = groupIds;
         this.inputFormData.hdServerId = data.hdServer.objectId;
         this.inputFormData.hdServerName = data.hdServer.name;
         this.inputFormData.serverId = data.config.server.objectId;
@@ -546,6 +551,7 @@ export default class HumanDetection extends Vue {
         this.inputFormData.visibleDistance = data.visibleDistance;
         this.inputFormData.x = data.x;
         this.inputFormData.y = data.y;
+        console.log("initInputFromData2", this.inputFormData);
     }
 
     async selectedItem(data) {
@@ -555,6 +561,7 @@ export default class HumanDetection extends Vue {
             this.initInputFromData(data[0]);
             this.canvasDetail = this.inputFormData.rois;
         }
+        console.log("selectedItem2", this.inputFormData);
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
@@ -573,11 +580,6 @@ export default class HumanDetection extends Vue {
         await this.initChannelItem(this.inputFormData.nvrId);
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.inputFormData.groupIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.groupIds.map(item => item.objectId)
-            )
-        );
 
         this.pageStep = EPageStep.edit;
     }
@@ -836,8 +838,10 @@ export default class HumanDetection extends Vue {
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            this.inputFormData.areaId = "";
-                            this.inputFormData.groupIds = [];
+                            if (data === undefined || data === "") {
+                                this.inputFormData.areaId = "";
+                                this.inputFormData.groupIds = [];
+                            }
                             // 自定義 areaSelectItem 的 key 的方式
                             this.$set(
                                 this.areaSelectItem,
