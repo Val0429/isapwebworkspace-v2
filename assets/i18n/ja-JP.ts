@@ -682,12 +682,14 @@ export default class LangObject implements ILang {
     w_VSHumanDetection_HDserver = 'HD Server';
     w_VSHumanDetection_CMS = 'CMS';
     w_VSHumanDetection_SetCMS = 'Not yet set? Go to set CMS';
+    w_VSHumanDetection_SetSHServer = 'Not yet set? Go to set SHServer';
     w_VSHumanDetection_NVR = 'NVR';
     w_VSHumanDetection_ChannelInNVR = 'Channel In NVR';
     w_VSHumanDetection_Site = 'Site';
     w_VSHumanDetection_Area = 'Area';
     w_VSHumanDetection_DeviceGroup = 'Device Group';
     w_VSHumanDetection_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
+    w_VSHumanDetection_PageToHDServerAlter = 'Data will not be stored, Are you sure to HD Server Page?';
     w_VSHumanDetection_DeleteConfirm = 'Are you sure to delete selected Device(s)?';
     // DwellTime
     w_VSDwellTime_List = 'Dwell Time Device List';

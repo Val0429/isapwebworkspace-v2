@@ -22,7 +22,7 @@
                 </template>
 
                 <iv-table
-                    ref="heatmapTable"
+                    ref="heatMapTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
                     :server="{ path: '/device' }"
@@ -73,24 +73,44 @@
                     <template #1>
                         <iv-form
                             :interface="inf1()"
+                            @update:*="updateForm($event)"
                             @update:serverId="initDeviceData($event)"
                             @update:nvrId="initChannelItem($event)"
-                            :value="inputFormData[0]"
+                            :value="inputFormData"
                         >
+
+                            <template #name="{$attrs, $listeners}">
+                                <iv-form-string
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :value="$attrs ? $attrs.value : ''"
+                                >
+                                </iv-form-string>
+                            </template>
+
+                            <template #brand="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :options="brandItem"
+                                    :value="$attrs ? $attrs.value : ''"
+                                >
+                                </iv-form-selection>
+                            </template>
 
                             <template #serverId="{$attrs, $listeners}">
                                 <iv-form-selection
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="cmsItem"
-                                    :value="inputFormData[0] ? inputFormData[0].config.server.objectId : ''"
+                                    :value="$attrs ?  $attrs.value : ''"
                                 >
                                 </iv-form-selection>
 
                                 <b-button
                                     class="linkPadding"
                                     variant="link"
-                                    @click="$attrs"
+                                    @click="goToSetCMS()"
                                 >
                                     {{ _('w_VSHeatmap_SetCMS') }}
                                 </b-button>
@@ -101,7 +121,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="nvrItem"
-                                    :value="inputFormData[0] ? inputFormData[0].config.nvrId.toString() : ''"
+                                    :value="inputFormData ? inputFormData.nvrId.toString() : ''"
                                 >
                                 </iv-form-selection>
                             </template>
@@ -111,7 +131,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
                                     :options="channelItem"
-                                    :value="inputFormData[0] ? inputFormData[0].config.channelId.toString() : ''"
+                                    :value="inputFormData ? inputFormData.channelId.toString() : ''"
                                 >
                                 </iv-form-selection>
                             </template>
@@ -126,38 +146,17 @@
                             :interface="inf2()"
                             @update:siteId="selectAreaId($event)"
                             @update:areaId="selectGroupDeviceId($event)"
-                            :value="inputFormData[0]"
+                            :value="inputFormData"
                         >
 
-                            <template #siteId="{$attrs, $listeners}">
-                                <iv-form-selection
-                                    v-bind="$attrs"
-                                    v-on="$listeners"
-                                    :options="$attrs.options"
-                                    :value="inputFormData[0] ? inputFormData[0].site.objectId : ''"
-                                >
-                                </iv-form-selection>
-                            </template>
+                            <template #selectTree="{ $attrs, $listeners }">
 
-                            <template #areaId="{$attrs, $listeners}">
-                                <iv-form-selection
-                                    v-bind="$attrs"
-                                    v-on="$listeners"
-                                    :options="$attrs.options"
-                                    :value="inputFormData[0] ? inputFormData[0].area.objectId : ''"
-                                >
-                                </iv-form-selection>
-                            </template>
-
-                            <template #selectTree="{ $atrs, $listeners }">
-                                test:{{inputFormData}}
                                 <div class="m-3">
 
                                     <b-button @click="pageToChooseTree">
                                         {{ _('w_SelectSiteTree') }}
                                     </b-button>
                                 </div>
-
                             </template>
 
                         </iv-form>
@@ -202,25 +201,27 @@
 
                 <iv-form
                     :interface="inf4()"
-                    :value="inputFormData[0]"
+                    :value="inputFormData"
                 >
 
-                    <template #serverId="{$attrs, $listeners}">
+                    <template #brand="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="brandItem"
+                            :value="inputFormData ? inputFormData.brand : ''"
+                        >
+                        </iv-form-label>
+                    </template>
 
+                    <template #serverId="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="cmsItem"
-                            :value="inputFormData[0].config.server ? inputFormData[0].config.server.name : ''"
+                            :value="inputFormData.serverName ? inputFormData.serverName : ''"
                         >
                         </iv-form-label>
-                        <!--                        <b-button-->
-                        <!--                            class="linkPadding"-->
-                        <!--                            variant="link"-->
-                        <!--                            @click="goToSetCMS"-->
-                        <!--                        >-->
-                        <!--                            {{ _('w_VSHeatmap_SetCMS') }}-->
-                        <!--                        </b-button>-->
                     </template>
 
                     <template #nvrId="{$attrs, $listeners}">
@@ -228,7 +229,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="nvrItem"
-                            :value="inputFormData[0].config ? inputFormData[0].config.nvrId : ''"
+                            :value="$attrs.value ? $attrs.value : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -237,7 +238,8 @@
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :value="inputFormData[0].config ? showChannelName(inputFormData[0].config.channelId) : ''"
+                            :options="channelItem"
+                            :value="inputFormData ?  showChannelName(inputFormData.channelId) : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -246,7 +248,8 @@
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :value="inputFormData[0].site ? inputFormData[0].site.name : ''"
+                            :options="channelItem"
+                            :value="inputFormData ? inputFormData.siteName : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -255,7 +258,8 @@
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :value="inputFormData[0].area ? inputFormData[0].area.name : ''"
+                            :options="channelItem"
+                            :value="inputFormData ? inputFormData.areaName : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -265,7 +269,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :options="channelItem"
-                            :value="inputFormData[0].groups ? showGroups(inputFormData[0].groups) : ''"
+                            :value="$attrs ? showGroups($attrs.value) : ''"
                         >
                         </iv-form-label>
                     </template>
@@ -328,13 +332,13 @@ enum EPageStep {
 }
 
 enum ECameraMode {
-    heatmap = "heatmap"
+    humanDetection = "humanDetection"
 }
 
 @Component({
     components: {}
 })
-export default class Heatmap extends Vue {
+export default class HumanDetection extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     lastPageStep: EPageStep = EPageStep.none;
@@ -345,10 +349,12 @@ export default class Heatmap extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     params: any = {
-        mode: ECameraMode.heatmap
+        mode: ECameraMode.humanDetection
     };
 
     // options
+    groupNameItem: any = [];
+    brandItem: any = [];
     cmsItem: any = [];
     devices: any = [];
     nvrItem: any = [];
@@ -360,7 +366,31 @@ export default class Heatmap extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputFormData: any = {};
+    inputFormData: any = {
+        angle: 0,
+        brand: "isap",
+        customId: "",
+        dataWindowX: 0,
+        dataWindowY: 0,
+        groupIds: [],
+        serverId: "",
+        serverName: "",
+        nvrId: "",
+        channelId: "",
+        mode: "",
+        model: "",
+        name: "",
+        objectId: "",
+        rois: [],
+        siteId: "",
+        siteName: "",
+        areaId: "",
+        areaName: "",
+        visibleAngle: 0,
+        visibleDistance: 0,
+        x: 0,
+        y: 0
+    };
 
     created() {}
 
@@ -369,7 +399,66 @@ export default class Heatmap extends Vue {
     }
 
     clearInputData() {
-        this.inputFormData = {};
+        this.inputFormData.angle = 0;
+        this.inputFormData.brand = "isap";
+        this.inputFormData.customId = "";
+        this.inputFormData.dataWindowX = 0;
+        this.inputFormData.dataWindowY = 0;
+        this.inputFormData.groupIds = [];
+        this.inputFormData.serverId = "";
+        this.inputFormData.serverName = "";
+        this.inputFormData.nvrId = "";
+        this.inputFormData.channelId = "";
+        this.inputFormData.mode = "";
+        this.inputFormData.model = "";
+        this.inputFormData.name = "";
+        this.inputFormData.objectId = "";
+        this.inputFormData.rois = [];
+        this.inputFormData.siteId = "";
+        this.inputFormData.siteName = "";
+        this.inputFormData.areaId = "";
+        this.inputFormData.areaName = "";
+        this.inputFormData.visibleAngle = 0;
+        this.inputFormData.visibleDistance = 0;
+        this.inputFormData.x = 0;
+        this.inputFormData.y = 0;
+    }
+
+    async initGroupItem() {
+        let body: {
+            siteId: string;
+            areaId: string;
+            mode: string;
+        } = {
+            siteId: this.inputFormData.siteId,
+            areaId: this.inputFormData.areaId,
+            mode: this.inputFormData.mode
+        };
+
+        await this.$server
+            .R("/device/group/all", body)
+            .then((response: any) => {
+                this.groupNameItem = [];
+                if (response != undefined) {
+                    for (let item of response) {
+                        let group = { id: item.objectId, text: item.name };
+
+                        this.groupNameItem.push(group);
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    initBrandItem() {
+        this.brandItem = [];
+        this.brandItem = [{ id: "isap", text: "ISAP" }];
     }
 
     async initCMSItem() {
@@ -432,6 +521,7 @@ export default class Heatmap extends Vue {
     }
 
     initNVRItem() {
+        console.log("initNVRItem", this.devices);
         this.nvrItem = [];
         for (let device of this.devices) {
             let nvr = { id: device.nvrId.toString(), text: device.nvrId };
@@ -439,12 +529,24 @@ export default class Heatmap extends Vue {
         }
     }
 
+    updateForm(data) {
+        console.log("updateForm", data);
+        if (data) {
+            this.inputFormData[data.key] = data.value;
+        }
+    }
+
     showChannelName(data) {
-        console.log("showChannelName", data);
-        return this.channelItem.filter(x => x.id === data).text;
+        console.log("showChannelName", this.channelItem, data);
+        if (this.channelItem.length > 0) {
+            return this.channelItem.filter(x => x.id == data.toString())[0]
+                .text;
+        }
+        return "";
     }
 
     initChannelItem(data) {
+        console.log("initChannelItem", this.devices, data);
         this.channelItem = [];
         for (let device of this.devices) {
             if (device.nvrId == data) {
@@ -460,15 +562,44 @@ export default class Heatmap extends Vue {
     }
 
     initInputFromData(data) {
-        this.inputFormData = data;
+        console.log("initInputFromData", data);
+        this.inputFormData.angle = data.angle;
+        this.inputFormData.brand = data.brand;
+        this.inputFormData.customId = data.customId;
+        this.inputFormData.dataWindowX = data.dataWindowX;
+        this.inputFormData.dataWindowY = data.dataWindowY;
+        let groups = data.groups.map(g => g.objectId);
+        let groupIds = [];
+        for (let group of groups) {
+            groupIds.push(group);
+        }
+        this.inputFormData.groupIds = groupIds;
+        this.inputFormData.serverId = data.config.server.objectId;
+        this.inputFormData.serverName = data.config.server.name;
+        this.inputFormData.nvrId = data.config.nvrId;
+        this.inputFormData.channelId = data.config.channelId;
+        this.inputFormData.mode = data.mode;
+        this.inputFormData.model = data.model;
+        this.inputFormData.name = data.name;
+        this.inputFormData.objectId = data.objectId;
+        this.inputFormData.rois = data.rois;
+        this.inputFormData.siteId = data.site.objectId;
+        this.inputFormData.siteName = data.site.name;
+        this.inputFormData.areaId = data.area.objectId;
+        this.inputFormData.areaName = data.area.name;
+        this.inputFormData.visibleAngle = data.visibleAngle;
+        this.inputFormData.visibleDistance = data.visibleDistance;
+        this.inputFormData.x = data.x;
+        this.inputFormData.y = data.y;
+        console.log("initInputFromData2", this.inputFormData);
     }
 
-    selectedItem(data) {
+    async selectedItem(data) {
         console.log("selectedItem", data);
         this.isSelected = data;
-        this.initInputFromData(data);
-        if (this.inputFormData[0]) {
-            this.canvasDetail = this.inputFormData[0].rois;
+        if (this.isSelected.length > 0) {
+            this.initInputFromData(data[0]);
+            this.canvasDetail = this.inputFormData.rois;
         }
         this.selectedDetail = [];
         this.selectedDetail = data;
@@ -476,22 +607,18 @@ export default class Heatmap extends Vue {
     async pageToAdd() {
         this.clearInputData();
         await this.initSelectItemSite();
+        this.canvasDetail = [];
         this.selecteds = [];
         this.pageStep = EPageStep.add;
     }
 
     async pageToEdit() {
-        console.log("pageToEdit", this.inputFormData[0]);
+        console.log("pageToEdit", this.inputFormData);
         await this.initSelectItemSite();
-        await this.initDeviceData(this.inputFormData[0].config.server.objectId);
-        await this.initChannelItem(this.inputFormData[0].config.channelId);
-        await this.selectAreaId(this.inputFormData[0].site.objectId);
-        await this.selectGroupDeviceId(this.inputFormData[0].area.objectId);
-        this.inputFormData[0].groupIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData[0].groupIds.map(item => item.objectId)
-            )
-        );
+        await this.initDeviceData(this.inputFormData.serverId);
+        await this.initChannelItem(this.inputFormData.nvrId);
+        await this.selectAreaId(this.inputFormData.siteId);
+        await this.selectGroupDeviceId(this.inputFormData.areaId);
 
         this.pageStep = EPageStep.edit;
     }
@@ -505,7 +632,7 @@ export default class Heatmap extends Vue {
                 mode: string;
             } = {
                 areaId: data,
-                mode: ECameraMode.heatmap
+                mode: ECameraMode.humanDetection
             };
 
             await this.$server
@@ -536,14 +663,19 @@ export default class Heatmap extends Vue {
         }
     }
 
-    pageToView() {
+    async pageToView() {
+        this.initGroupItem();
+        await this.initDeviceData(this.inputFormData.serverId);
+        await this.initChannelItem(this.inputFormData.nvrId);
+
         this.pageStep = EPageStep.view;
     }
 
     pageToList() {
         this.initCMSItem();
+        this.initBrandItem();
         this.pageStep = EPageStep.list;
-        (this.$refs.heatmapTable as any).reload();
+        (this.$refs.heatMapTable as any).reload();
     }
 
     async doDelete() {
@@ -562,7 +694,7 @@ export default class Heatmap extends Vue {
                         .D("/device", deleteParam)
                         .then((response: any) => {
                             Dialog.success(this._("w_Success"));
-                            (this.$refs.heatmapTable as any).reload();
+                            (this.$refs.heatMapTable as any).reload();
                         })
                         .catch((e: any) => {
                             if (
@@ -651,7 +783,6 @@ export default class Heatmap extends Vue {
                 console.log(e);
                 return false;
             });
-        console.log("initSelectItemSite", this.sitesSelectItem);
     }
 
     initRegionTreeSelect() {
@@ -687,10 +818,10 @@ export default class Heatmap extends Vue {
         this.selecteds = [];
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
-        this.inputFormData[0].area.objectId = "";
-        this.inputFormData[0].groupIds = [];
+        this.inputFormData.areaId = "";
+        this.inputFormData.groupIds = [];
         for (const detail in this.sitesSelectItem) {
-            if (this.inputFormData[0].site.objectId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -702,25 +833,34 @@ export default class Heatmap extends Vue {
     }
 
     async pageToShowResult() {
-        console.log("pageToShowResult", this.pageStep);
+        console.log("pageToShowResult", this.pageStep, this.selecteds);
         this.pageStep = this.lastPageStep;
 
         // siteId clear
-        this.inputFormData[0].site.objectId = "";
+        this.inputFormData.siteId = "";
 
         // from selecteds push siteId
         if (this.selecteds && this.selecteds.length) {
-            this.inputFormData[0].site.objectId = this.selecteds[0].objectId;
+            this.inputFormData.siteId = this.selecteds[
+                this.selecteds.length - 1
+            ].objectId;
         }
 
         if (
-            this.inputFormData[0].site.objectId === undefined ||
-            this.inputFormData[0].site.objectId === ""
+            this.inputFormData.siteId === undefined ||
+            this.inputFormData.siteId === ""
         ) {
             this.areaSelectItem = {};
             this.deviceGroupSelectItem = {};
         } else {
-            await this.selectAreaId(this.inputFormData[0].site.objectId);
+            this.inputFormData.siteId = "";
+            this.inputFormData.siteId = this.selecteds[
+                this.selecteds.length - 1
+            ].objectId;
+            this.inputFormData.siteName = this.selecteds[
+                this.selecteds.length - 1
+            ].name;
+            await this.selectAreaId(this.inputFormData.siteId);
         }
     }
 
@@ -729,9 +869,10 @@ export default class Heatmap extends Vue {
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
 
+        this.inputFormData.siteId = data;
         if (data === undefined || data === "") {
-            this.inputFormData[0].area.objectId = "";
-            this.inputFormData[0].groupIds = [];
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupIds = [];
         }
 
         if (data !== undefined || data !== "") {
@@ -746,8 +887,10 @@ export default class Heatmap extends Vue {
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            this.inputFormData[0].area.objectId = "";
-                            this.inputFormData[0].groupIds = [];
+                            if (data === undefined || data === "") {
+                                this.inputFormData.areaId = "";
+                                this.inputFormData.groupIds = [];
+                            }
                             // 自定義 areaSelectItem 的 key 的方式
                             this.$set(
                                 this.areaSelectItem,
@@ -772,10 +915,12 @@ export default class Heatmap extends Vue {
     }
 
     showGroups(datas) {
-        console.log("showGroups", datas);
+        console.log("showGroups", this.groupNameItem, datas);
         var groups = [];
         for (let data of datas) {
-            groups.push(data.name);
+            let groupName = this.groupNameItem.filter(g => g.id == data)[0]
+                .text;
+            groups.push(groupName);
         }
         return groups.join(",");
     }
@@ -865,9 +1010,9 @@ export default class Heatmap extends Vue {
                 * @uiType - iv-form-selection
                 * @uiAttrs - { multiple: false }
                 */
-                brand: ${toEnumInterface({
-                    isap: "iSAP"
-                })}
+                brand?: any;
+
+         
 
                 /*
                 * @uiLabel - ${this._("w_VSHeatmap_CMS")}
@@ -897,8 +1042,8 @@ export default class Heatmap extends Vue {
         return `
         interface {
 
-
-                  /**
+                /**
+                 * @uiType - iv-form-selection
                  * @uiLabel - ${this._("w_Sites")}
                  */
                 siteId?: ${toEnumInterface(this.sitesSelectItem as any, false)};
@@ -908,12 +1053,14 @@ export default class Heatmap extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Area")}
+                * @uiType - iv-form-selection
                  */
                 areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_DeviceGroup")}
+                    * @uiType - iv-form-selection
                  */
                 groupIds?: ${toEnumInterface(
                     this.deviceGroupSelectItem as any,
@@ -953,6 +1100,8 @@ export default class Heatmap extends Vue {
                 brand?: ${toEnumInterface({
                     isap: "iSAP"
                 })}
+
+     
 
                 /*
                 * @uiLabel - ${this._("w_VSHeatmap_CMS")}
@@ -1036,7 +1185,7 @@ export default class Heatmap extends Vue {
             const addParam = { datas };
 
             await this.$server
-                .C("/device/heatmap", addParam)
+                .C("/device/human-detection", addParam)
                 .then((response: any) => {
                     console.log("/device/heatmap", response);
                     if (response[0] != undefined) {
@@ -1059,7 +1208,7 @@ export default class Heatmap extends Vue {
         } else if (this.pageStep == EPageStep.edit) {
             const datas: any[] = [
                 {
-                    objectId: this.inputFormData[0].objectId,
+                    objectId: this.inputFormData.objectId,
                     customId: data[1].customId,
                     areaId: data[2].areaId,
                     groupIds: data[2].groupIds ? data[2].groupIds : [],
@@ -1067,13 +1216,13 @@ export default class Heatmap extends Vue {
                     config: {
                         serverId: data[1].serverId
                             ? data[1].serverId
-                            : this.inputFormData[0].config.server.objectId,
+                            : this.inputFormData.serverId,
                         nvrId: data[1].nvrId
                             ? data[1].nvrId
-                            : this.inputFormData[0].config.nvrId,
+                            : this.inputFormData.nvrId,
                         channelId: data[1].channelId
                             ? data[1].channelId
-                            : this.inputFormData[0].config.channelId
+                            : this.inputFormData.channelId
                     },
                     rois: this.canvasDetail
                 }
@@ -1084,7 +1233,7 @@ export default class Heatmap extends Vue {
             const editAreaParam = { datas };
 
             await this.$server
-                .U("/device/heatmap", editParam)
+                .U("/device/human-detection", editParam)
                 .then((response: any) => {
                     if (response[0].statusCode === 200) {
                         Dialog.success(this._("w_Success"));

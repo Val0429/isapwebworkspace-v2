@@ -339,131 +339,370 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import Datetime from "@/services/Datetime";
-    import { toEnumInterface } from "@/../core";
-    import { IConfig, IConfigiSap } from "@/config/default/api/interfaces";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import Datetime from "@/services/Datetime";
+import { toEnumInterface } from "@/../core";
+import { IConfig, IConfigiSap } from "@/config/default/api/interfaces";
 
-    import {
-        ERegionType,
-        IRegionItem,
-        RegionTreeItem,
-        IRegionTreeSelected
-    } from "@/components/RegionTree/models";
-    import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import {
+    ERegionType,
+    IRegionItem,
+    RegionTreeItem,
+    IRegionTreeSelected
+} from "@/components/RegionTree/models";
+import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog/Dialog";
-    import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog/Dialog";
+import RegionAPI from "@/services/RegionAPI";
 
-    enum EPageStep {
-        list = "list",
-        add = "add",
-        edit = "edit",
-        view = "view",
-        none = "none",
-        showResult = "showResult",
-        chooseTree = "chooseTree"
+enum EPageStep {
+    list = "list",
+    add = "add",
+    edit = "edit",
+    view = "view",
+    none = "none",
+    showResult = "showResult",
+    chooseTree = "chooseTree"
+}
+
+enum EAddStep {
+    select = "select",
+    hanwha = "hanwha",
+    isap = "isap",
+    isapFrs = "isapFrs",
+    isapFrsManager = "isapFrsManager",
+    none = "none"
+}
+
+enum ECameraMode {
+    peopleCounting = "peopleCounting"
+}
+
+@Component({
+    components: {}
+})
+export default class PeopleCounting extends Vue {
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
+
+    eAddStep = EAddStep;
+    addStep: EAddStep = EAddStep.none;
+
+    isSelected: any = [];
+    tableMultiple: boolean = true;
+
+    selectedDetail: any = [];
+
+    sitesSelectItem: any = {};
+    deviceGroupSelectItem: any = {};
+    areaSelectItem: any = {};
+    serverIdSelectItem: any = {};
+    sourceIdSelectItem: any = {};
+
+    params: any = {
+        mode: ECameraMode.peopleCounting
+    };
+
+    // tree 相關
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
+
+    inputPeopleCountingData: any = {};
+
+    created() {}
+
+    mounted() {}
+
+    clearInputData() {
+        this.inputPeopleCountingData = {
+            stepType: "",
+            customId: "",
+            areaId: "",
+            siteId: "",
+            groupIds: [],
+            name: "",
+            brand: "",
+            model: "xnd6020r",
+            protocol: "http",
+            ip: "",
+            port: null,
+            account: "",
+            password: "",
+            serverId: "",
+            sourceid: "",
+            location: "",
+            direction: "",
+            objectId: ""
+        };
     }
 
-    enum EAddStep {
-        select = "select",
-        hanwha = "hanwha",
-        isap = "isap",
-        isapFrs = "isapFrs",
-        isapFrsManager = "isapFrsManager",
-        none = "none"
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
-    enum ECameraMode {
-        peopleCounting = "peopleCounting"
-    }
+    async initSelectItemSite() {
+        this.sitesSelectItem = {};
 
-    @Component({
-        components: {}
-    })
-    export default class PeopleCounting extends Vue {
-        ePageStep = EPageStep;
-        pageStep: EPageStep = EPageStep.list;
-
-        eAddStep = EAddStep;
-        addStep: EAddStep = EAddStep.none;
-
-        isSelected: any = [];
-        tableMultiple: boolean = true;
-
-        selectedDetail: any = [];
-
-        sitesSelectItem: any = {};
-        deviceGroupSelectItem: any = {};
-        areaSelectItem: any = {};
-        serverIdSelectItem: any = {};
-        sourceIdSelectItem: any = {};
-
-        params: any = {
-            mode: ECameraMode.peopleCounting
+        const readAllSiteParam: {
+            type: string;
+        } = {
+            type: "all"
         };
 
-        // tree 相關
-        selectType = ERegionType.site;
-        regionTreeItem = new RegionTreeItem();
-        selecteds: IRegionTreeSelected[] = [];
+        await this.$server
+            .R("/location/site/all", readAllSiteParam)
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            returnValue
+                        );
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
-        inputPeopleCountingData: any = {};
+    async initSelectItemTree() {
+        await this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
-        created() {}
+    async initSelectItemFRSServer() {
+        this.serverIdSelectItem = {};
 
-        mounted() {}
+        await this.$server
+            .R("/partner/frs")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 areaSelectItem 的 key 的方式
+                        this.serverIdSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
-        clearInputData() {
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
             this.inputPeopleCountingData = {
+                // objectId: param.objectId,
+                name: param.name,
+                areaId:
+                    param.area && param.area["objectId"]
+                        ? param.area["objectId"]
+                        : "",
+                area:
+                    param.area && param.area["name"] ? param.area["name"] : "",
+                site:
+                    param.site && param.site["name"] ? param.site["name"] : "",
+                brand: param.brand,
+                customId: param.customId,
+                objectId: param.objectId,
+                siteId:
+                    param.site && param.site["objectId"]
+                        ? param.site["objectId"]
+                        : "",
+                groupIds: param.groups,
+                model: param.model,
+                direction: param.direction,
+                account:
+                    param.config && param.config["account"]
+                        ? param.config["account"]
+                        : "",
+                password:
+                    param.config && param.config["password"]
+                        ? param.config["password"]
+                        : "",
+                protocol:
+                    param.config && param.config["protocol"]
+                        ? param.config["protocol"]
+                        : "",
+                ip:
+                    param.config && param.config["ip"]
+                        ? param.config["ip"]
+                        : "",
+                port:
+                    param.config && param.config["port"]
+                        ? param.config["port"]
+                        : "",
+                serverId:
+                    param.config &&
+                    param.config.server &&
+                    param.config.server.objectId
+                        ? param.config.server.objectId
+                        : "",
+                serverIdView:
+                    param.config &&
+                    param.config.server &&
+                    param.config.server.name
+                        ? param.config.server.name
+                        : "",
+                sourceid:
+                    param.config && param.config.sourceid
+                        ? param.config.sourceid
+                        : "",
+                sourceidView:
+                    param.config && param.config.sourceid
+                        ? param.config.sourceid
+                        : "",
+                location:
+                    param.config && param.config.location
+                        ? param.config.location
+                        : "",
+                groupIdsText: this.idsToText(param.groups),
                 stepType: "",
-                customId: "",
-                areaId: "",
-                siteId: "",
-                groupIds: [],
-                name: "",
-                brand: "",
-                model: "xnd6020r",
-                protocol: "http",
-                ip: "",
-                port: null,
-                account: "",
-                password: "",
-                serverId: "",
-                sourceid: "",
-                location: "",
-                direction: "",
-                objectId: ""
+                tempSiteId:
+                    param.site && param.site["objectId"]
+                        ? param.site["objectId"]
+                        : "",
+                tempAreaId:
+                    param.area && param.area["objectId"]
+                        ? param.area["objectId"]
+                        : ""
             };
         }
 
-        initRegionTreeSelect() {
-            this.regionTreeItem = new RegionTreeItem();
-            this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+        if (this.inputPeopleCountingData.serverId !== "") {
+            this.selectSourceIdAndLocation(
+                this.inputPeopleCountingData.serverId
+            );
+        }
+    }
+
+    tempSaveInputData(data) {
+        switch (data.key) {
+            case "name":
+                this.inputPeopleCountingData.name = data.value;
+                break;
+            case "customId":
+                this.inputPeopleCountingData.customId = data.value;
+                break;
+            case "areaId":
+                this.inputPeopleCountingData.areaId = data.value;
+                break;
+            case "groupIds":
+                this.inputPeopleCountingData.groupIds = data.value;
+                break;
+            case "model":
+                this.inputPeopleCountingData.model = data.value;
+                break;
+            case "protocol":
+                this.inputPeopleCountingData.protocol = data.value;
+                break;
+            case "ip":
+                this.inputPeopleCountingData.ip = data.value;
+                break;
+            case "port":
+                this.inputPeopleCountingData.port = data.value;
+                break;
+            case "account":
+                this.inputPeopleCountingData.account = data.value;
+                break;
+            case "password":
+                this.inputPeopleCountingData.password = data.value;
+                break;
+            case "serverId":
+                this.inputPeopleCountingData.serverId = data.value;
+                break;
+            case "sourceid":
+                this.inputPeopleCountingData.sourceid = data.value;
+                break;
+            case "direction":
+                this.inputPeopleCountingData.direction = data.value;
+                break;
+            case "siteId":
+                this.inputPeopleCountingData.siteId = data.value;
+                break;
         }
 
-        async initSelectItemSite() {
+        this.selecteds = [];
 
-            this.sitesSelectItem = {};
+        for (const detail in this.sitesSelectItem) {
+            if (this.inputPeopleCountingData.siteId === detail) {
+                let selectedsObject: IRegionTreeSelected = {
+                    objectId: detail,
+                    type: ERegionType.site,
+                    name: this.sitesSelectItem[detail]
+                };
+                this.selecteds.push(selectedsObject);
+            }
+        }
+    }
 
-            const readAllSiteParam: {
-                type: string;
+    async selectSourceIdAndLocation(data) {
+        this.sourceIdSelectItem = {};
+
+        if (data !== undefined) {
+            const readParam: {
+                objectId: string;
             } = {
-                type: "all"
+                objectId: data
             };
 
             await this.$server
-                .R("/location/site/all", readAllSiteParam)
+                .C("/partner/frs/device", readParam)
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            // 自定義 sitesSelectItem 的 key 的方式
-                            this.sitesSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                            this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                                returnValue
-                            );
+                            for (const returnValue of response) {
+                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
+                                this.$set(
+                                    this.sourceIdSelectItem,
+                                    returnValue.sourceid,
+                                    returnValue.sourceid
+                                );
+                            }
+
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
+                                Dialog.error(this._("w_ErrorReadData"));
+                                return false;
+                            }
                         }
                     }
                 })
@@ -471,216 +710,104 @@
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                         return ResponseFilter.base(this, e);
                     }
-                    console.log(e);
-                    return false;
-                });
-        }
-
-        async initSelectItemTree() {
-            await this.$server
-                .R("/location/tree")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            response
-                        );
-                        this.regionTreeItem.region = this.regionTreeItem.tree;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
+                    if (e.res.statusCode == 500 || e.res.statusCode == 400) {
+                        Dialog.error(this._("w_ErrorReadData"));
+                        return false;
                     }
                     console.log(e);
                     return false;
                 });
         }
+    }
 
-        async initSelectItemFRSServer() {
+    async selectAreaId(data) {
+        this.areaSelectItem = {};
+        this.deviceGroupSelectItem = {};
 
-            this.serverIdSelectItem = {};
-
-            await this.$server
-                .R("/partner/frs")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response.results) {
-                            // 自定義 areaSelectItem 的 key 的方式
-                            this.serverIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
+        if (data === undefined || data === "") {
+            this.inputPeopleCountingData.areaId = "";
+            this.inputPeopleCountingData.groupIds = [];
         }
 
-        selectedItem(data) {
-            this.isSelected = data;
-            this.selectedDetail = [];
-            this.selectedDetail = data;
-        }
-
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.selectedDetail) {
-                this.inputPeopleCountingData = {
-                    // objectId: param.objectId,
-                    name: param.name,
-                    areaId:
-                        param.area && param.area["objectId"]
-                            ? param.area["objectId"]
-                            : "",
-                    area:
-                        param.area && param.area["name"]
-                            ? param.area["name"]
-                            : "",
-                    site: param.site && param.site["name"] ? param.site["name"] : "",
-                    brand: param.brand,
-                    customId: param.customId,
-                    objectId: param.objectId,
-                    siteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
-                    groupIds: param.groups,
-                    model: param.model,
-                    direction: param.direction,
-                    account: param.config && param.config["account"] ? param.config["account"] : '',
-                    password: param.config && param.config["password"] ? param.config["password"] : '',
-                    protocol: param.config && param.config["protocol"] ? param.config["protocol"] : '',
-                    ip: param.config && param.config["ip"] ? param.config["ip"] : '',
-                    port: param.config && param.config["port"] ? param.config["port"] : '',
-                    serverId:
-                        param.config &&
-                        param.config.server &&
-                        param.config.server.objectId
-                            ? param.config.server.objectId
-                            : "",
-                    serverIdView:
-                        param.config &&
-                        param.config.server &&
-                        param.config.server.name
-                            ? param.config.server.name
-                            : "",
-                    sourceid: param.config && param.config.sourceid ? param.config.sourceid : '',
-                    sourceidView: param.config && param.config.sourceid ? param.config.sourceid : '',
-                    location: param.config && param.config.location ? param.config.location : '',
-                    groupIdsText: this.idsToText(param.groups),
-                    stepType: "",
-                    tempSiteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
-                    tempAreaId: param.area && param.area["objectId"]? param.area["objectId"]: "",
-                };
-            }
-
-            if (this.inputPeopleCountingData.serverId !== "") {
-                this.selectSourceIdAndLocation(
-                    this.inputPeopleCountingData.serverId
-                );
-            }
-        }
-
-        tempSaveInputData(data) {
-            switch (data.key) {
-                case "name":
-                    this.inputPeopleCountingData.name = data.value;
-                    break;
-                case "customId":
-                    this.inputPeopleCountingData.customId = data.value;
-                    break;
-                case "areaId":
-                    this.inputPeopleCountingData.areaId = data.value;
-                    break;
-                case "groupIds":
-                    this.inputPeopleCountingData.groupIds = data.value;
-                    break;
-                case "model":
-                    this.inputPeopleCountingData.model = data.value;
-                    break;
-                case "protocol":
-                    this.inputPeopleCountingData.protocol = data.value;
-                    break;
-                case "ip":
-                    this.inputPeopleCountingData.ip = data.value;
-                    break;
-                case "port":
-                    this.inputPeopleCountingData.port = data.value;
-                    break;
-                case "account":
-                    this.inputPeopleCountingData.account = data.value;
-                    break;
-                case "password":
-                    this.inputPeopleCountingData.password = data.value;
-                    break;
-                case "serverId":
-                    this.inputPeopleCountingData.serverId = data.value;
-                    break;
-                case "sourceid":
-                    this.inputPeopleCountingData.sourceid = data.value;
-                    break;
-                case "direction":
-                    this.inputPeopleCountingData.direction = data.value;
-                    break;
-                case "siteId":
-                    this.inputPeopleCountingData.siteId = data.value;
-                    break;
-            }
-
-            this.selecteds = [];
-
-            for (const detail in this.sitesSelectItem) {
-                if (this.inputPeopleCountingData.siteId === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-
-        async selectSourceIdAndLocation(data) {
-
-            this.sourceIdSelectItem = {};
-
-            if (data !== undefined) {
+        if (this.pageStep === EPageStep.add) {
+            if (data !== undefined || data !== "") {
                 const readParam: {
-                    objectId: string;
+                    siteId: string;
                 } = {
-                    objectId: data
+                    siteId: data
                 };
 
                 await this.$server
-                    .C("/partner/frs/device", readParam)
+                    .R("/location/area/all", readParam)
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                for (const returnValue of response) {
-                                    // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
-                                    this.$set(
-                                        this.sourceIdSelectItem, returnValue.sourceid, returnValue.sourceid
-
-                                    );
-                                }
-
-                                if (
-                                    returnValue.statusCode === 500 ||
-                                    returnValue.statusCode === 400
-                                ) {
-                                    Dialog.error(this._("w_ErrorReadData"));
-                                    return false;
-                                }
+                                this.inputPeopleCountingData.areaId = "";
+                                this.inputPeopleCountingData.groupIds = [];
+                                // 自定義 areaSelectItem 的 key 的方式
+                                this.$set(
+                                    this.areaSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
                             }
                         }
                     })
                     .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
                             return ResponseFilter.base(this, e);
                         }
-                        if (e.res.statusCode == 500 || e.res.statusCode == 400) {
+                        if (e.res.statusCode == 500) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_ADDFailed")
+                            );
+                            return false;
+                        }
+                        console.log(e);
+                        return false;
+                    });
+            }
+        }
+
+        if (this.pageStep === EPageStep.edit) {
+            if (data !== undefined || data !== "") {
+                if (this.inputPeopleCountingData.tempSiteId !== data) {
+                    this.inputPeopleCountingData.areaId = "";
+                }
+
+                const readParam: {
+                    siteId: string;
+                } = {
+                    siteId: data
+                };
+
+                await this.$server
+                    .R("/location/area/all", readParam)
+                    .then((response: any) => {
+                        if (response != undefined) {
+                            for (const returnValue of response) {
+                                // 自定義 areaSelectItem 的 key 的方式
+                                this.$set(
+                                    this.areaSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
+                            return ResponseFilter.base(this, e);
+                        }
+                        if (e.res.statusCode == 500) {
                             Dialog.error(this._("w_ErrorReadData"));
                             return false;
                         }
@@ -689,638 +816,577 @@
                     });
             }
         }
+    }
 
-        async selectAreaId(data) {
+    async selectGroupDeviceId(data) {
+        this.deviceGroupSelectItem = {};
 
-            this.areaSelectItem = {};
-            this.deviceGroupSelectItem = {};
-
-            if (data === undefined || data === '') {
-                this.inputPeopleCountingData.areaId = '';
-                this.inputPeopleCountingData.groupIds = [];
-            }
-
-            if (this.pageStep === EPageStep.add) {
-                if (data !== undefined || data !== '') {
-
-                    const readParam: {
-                        siteId: string;
-                    } = {
-                        siteId: data
-                    };
-
-                    await this.$server
-                        .R("/location/area/all", readParam)
-                        .then((response: any) => {
-                            if (response != undefined) {
-                                for (const returnValue of response) {
-                                    this.inputPeopleCountingData.areaId = '';
-                                    this.inputPeopleCountingData.groupIds = [];
-                                    // 自定義 areaSelectItem 的 key 的方式
-                                    this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
-                                }
-                            }
-                        })
-                        .catch((e: any) => {
-                            if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                                return ResponseFilter.base(this, e);
-                            }
-                            if (e.res.statusCode == 500) {
-                                Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                                return false;
-                            }
-                            console.log(e);
-                            return false;
-                        });
-                }
-            }
-
-
-            if (this.pageStep === EPageStep.edit) {
-                if (data !== undefined || data !== '') {
-
-                    if (this.inputPeopleCountingData.tempSiteId !== data) {
-                        this.inputPeopleCountingData.areaId = '';
-                    }
-
-                    const readParam: {
-                        siteId: string;
-                    } = {
-                        siteId: data
-                    };
-
-                    await this.$server
-                        .R("/location/area/all", readParam)
-                        .then((response: any) => {
-                            if (response != undefined) {
-                                for (const returnValue of response) {
-                                    // 自定義 areaSelectItem 的 key 的方式
-                                    this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
-                                }
-                            }
-                        })
-                        .catch((e: any) => {
-                            if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                                return ResponseFilter.base(this, e);
-                            }
-                            if (e.res.statusCode == 500) {
-                                Dialog.error(this._("w_ErrorReadData"));
-                                return false;
-                            }
-                            console.log(e);
-                            return false;
-                        });
-                }
-            }
-
-
-
-        }
-
-        async selectGroupDeviceId(data) {
-
-            this.deviceGroupSelectItem = {};
-
-            if (data === undefined || data === '') {
-                this.inputPeopleCountingData.groupIds = [];
-            }
-
-            if (this.pageStep === EPageStep.add) {
-                if (data !== undefined) {
-                    const readParam: {
-                        areaId: string;
-                        mode: string;
-                    } = {
-                        areaId: data,
-                        mode: ECameraMode.peopleCounting
-                    };
-
-                    await this.$server
-                        .R("/device/group/all", readParam)
-                        .then((response: any) => {
-                            if (response != undefined) {
-                                for (const returnValue of response) {
-                                    this.inputPeopleCountingData.groupIds = [];
-                                    // 自定義 deviceGroupSelectItem 的 key 的方式
-                                    this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
-
-                                }
-                            }
-                        })
-                        .catch((e: any) => {
-                            if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                                return ResponseFilter.base(this, e);
-                            }
-                            if (e.res.statusCode == 500) {
-                                Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                                return false;
-                            }
-                            console.log(e);
-                            return false;
-                        });
-                }
-
-            }
-
-            if (this.pageStep === EPageStep.edit) {
-                if (data !== undefined) {
-                    const readParam: {
-                        areaId: string;
-                        mode: string;
-                    } = {
-                        areaId: data,
-                        mode: ECameraMode.peopleCounting
-                    };
-
-                    if (this.inputPeopleCountingData.tempAreaId !== data) {
-                        this.inputPeopleCountingData.groupIds = [];
-                    }
-
-                    await this.$server
-                        .R("/device/group/all", readParam)
-                        .then((response: any) => {
-                            if (response != undefined) {
-                                for (const returnValue of response) {
-                                    // 自定義 deviceGroupSelectItem 的 key 的方式
-                                    this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
-
-                                }
-                            }
-                        })
-                        .catch((e: any) => {
-                            if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                                return ResponseFilter.base(this, e);
-                            }
-                            if (e.res.statusCode == 500) {
-                                Dialog.error(this._("w_ErrorReadData"));
-                                return false;
-                            }
-                            console.log(e);
-                            return false;
-                        });
-                }
-
-            }
-        }
-
-        async pageToAdd(stepType: string) {
-            this.clearInputData();
-            await this.initSelectItemSite();
-            this.pageStep = EPageStep.add;
-            this.addStep = EAddStep.select;
-            this.inputPeopleCountingData.stepType = stepType;
-            this.selecteds = [];
-        }
-
-        async pageToEdit(stepType: string) {
-            this.pageStep = EPageStep.edit;
-            this.getInputData();
-            await this.initSelectItemFRSServer();
-            await this.initSelectItemSite();
-            await this.selectAreaId(this.inputPeopleCountingData.siteId);
-            await this.selectGroupDeviceId(this.inputPeopleCountingData.areaId);
-            this.inputPeopleCountingData.stepType = stepType;
-            this.inputPeopleCountingData.groupIds = JSON.parse(
-                JSON.stringify(
-                    this.inputPeopleCountingData.groupIds.map(item => item.objectId)
-                )
-            );
-
-            if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
-                this.addStep = EAddStep.hanwha;
-            }
-
-            if (this.inputPeopleCountingData.serverId !== "") {
-                this.addStep = EAddStep.isapFrs;
-            }
-
-            switch (this.inputPeopleCountingData.brand) {
-                case EAddStep.hanwha:
-                    break;
-                case EAddStep.isapFrsManager:
-                    this.addStep = EAddStep.isapFrsManager;
-                    break;
-            }
-        }
-
-        pageToView() {
-            this.pageStep = EPageStep.view;
-            this.getInputData();
-            if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
-                this.addStep = EAddStep.hanwha;
-            }
-
-            if (this.inputPeopleCountingData.serverId !== "") {
-                this.addStep = EAddStep.isapFrs;
-            }
-        }
-
-        pageToList() {
-            this.pageStep = EPageStep.list;
-            this.addStep = EAddStep.none;
-            (this.$refs.peopleCountingTable as any).reload();
-        }
-
-        async pageToAddByHanwha(brand: string) {
-            this.clearInputData();
-            await this.initSelectItemSite();
-            this.addStep = EAddStep.hanwha;
-            this.inputPeopleCountingData.stepType = EPageStep.add;
-            this.inputPeopleCountingData.brand = brand;
-        }
-
-        async pageToAddByiSapFRS(brand: string) {
-            this.clearInputData();
-            await this.initSelectItemFRSServer();
-            await this.initSelectItemSite();
-            this.addStep = EAddStep.isapFrs;
-            this.inputPeopleCountingData.brand = brand;
-            this.inputPeopleCountingData.stepType = EPageStep.add;
-        }
-
-        async pageToAddByiSapFRSManager(brand: string) {
-            this.clearInputData();
-            await this.initSelectItemSite();
-
-            this.addStep = EAddStep.isapFrsManager;
-            this.inputPeopleCountingData.brand = brand;
-            this.inputPeopleCountingData.stepType = EPageStep.add;
-        }
-
-        pageStepBackward() {
-            this.clearInputData();
-            this.addStep = EAddStep.select;
-        }
-
-        async pageToChooseTree() {
-            this.pageStep = EPageStep.chooseTree;
-            this.initRegionTreeSelect();
-            await this.initSelectItemTree();
-            this.selecteds = [];
-            this.areaSelectItem = {};
-            this.deviceGroupSelectItem = {};
-            this.inputPeopleCountingData.areaId = '';
+        if (data === undefined || data === "") {
             this.inputPeopleCountingData.groupIds = [];
-            for (const detail in this.sitesSelectItem) {
-                if (this.inputPeopleCountingData.siteId === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
+        }
+
+        if (this.pageStep === EPageStep.add) {
+            if (data !== undefined) {
+                const readParam: {
+                    areaId: string;
+                    mode: string;
+                } = {
+                    areaId: data,
+                    mode: ECameraMode.peopleCounting
+                };
+
+                await this.$server
+                    .R("/device/group/all", readParam)
+                    .then((response: any) => {
+                        if (response != undefined) {
+                            for (const returnValue of response) {
+                                this.inputPeopleCountingData.groupIds = [];
+                                // 自定義 deviceGroupSelectItem 的 key 的方式
+                                this.$set(
+                                    this.deviceGroupSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
+                            return ResponseFilter.base(this, e);
+                        }
+                        if (e.res.statusCode == 500) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_ADDFailed")
+                            );
+                            return false;
+                        }
+                        console.log(e);
+                        return false;
+                    });
+            }
+        }
+
+        if (this.pageStep === EPageStep.edit) {
+            if (data !== undefined) {
+                const readParam: {
+                    areaId: string;
+                    mode: string;
+                } = {
+                    areaId: data,
+                    mode: ECameraMode.peopleCounting
+                };
+
+                if (this.inputPeopleCountingData.tempAreaId !== data) {
+                    this.inputPeopleCountingData.groupIds = [];
+                }
+
+                await this.$server
+                    .R("/device/group/all", readParam)
+                    .then((response: any) => {
+                        if (response != undefined) {
+                            for (const returnValue of response) {
+                                // 自定義 deviceGroupSelectItem 的 key 的方式
+                                this.$set(
+                                    this.deviceGroupSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
+                            return ResponseFilter.base(this, e);
+                        }
+                        if (e.res.statusCode == 500) {
+                            Dialog.error(this._("w_ErrorReadData"));
+                            return false;
+                        }
+                        console.log(e);
+                        return false;
+                    });
+            }
+        }
+    }
+
+    async pageToAdd(stepType: string) {
+        this.clearInputData();
+        await this.initSelectItemSite();
+        this.pageStep = EPageStep.add;
+        this.addStep = EAddStep.select;
+        this.inputPeopleCountingData.stepType = stepType;
+        this.selecteds = [];
+    }
+
+    async pageToEdit(stepType: string) {
+        this.pageStep = EPageStep.edit;
+        this.getInputData();
+        await this.initSelectItemFRSServer();
+        await this.initSelectItemSite();
+        await this.selectAreaId(this.inputPeopleCountingData.siteId);
+        await this.selectGroupDeviceId(this.inputPeopleCountingData.areaId);
+        this.inputPeopleCountingData.stepType = stepType;
+        this.inputPeopleCountingData.groupIds = JSON.parse(
+            JSON.stringify(
+                this.inputPeopleCountingData.groupIds.map(item => item.objectId)
+            )
+        );
+
+        if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
+            this.addStep = EAddStep.hanwha;
+        }
+
+        if (this.inputPeopleCountingData.serverId !== "") {
+            this.addStep = EAddStep.isapFrs;
+        }
+
+        switch (this.inputPeopleCountingData.brand) {
+            case EAddStep.hanwha:
+                break;
+            case EAddStep.isapFrsManager:
+                this.addStep = EAddStep.isapFrsManager;
+                break;
+        }
+    }
+
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
+        if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
+            this.addStep = EAddStep.hanwha;
+        }
+
+        if (this.inputPeopleCountingData.serverId !== "") {
+            this.addStep = EAddStep.isapFrs;
+        }
+    }
+
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        this.addStep = EAddStep.none;
+        (this.$refs.peopleCountingTable as any).reload();
+    }
+
+    async pageToAddByHanwha(brand: string) {
+        this.clearInputData();
+        await this.initSelectItemSite();
+        this.addStep = EAddStep.hanwha;
+        this.inputPeopleCountingData.stepType = EPageStep.add;
+        this.inputPeopleCountingData.brand = brand;
+    }
+
+    async pageToAddByiSapFRS(brand: string) {
+        this.clearInputData();
+        await this.initSelectItemFRSServer();
+        await this.initSelectItemSite();
+        this.addStep = EAddStep.isapFrs;
+        this.inputPeopleCountingData.brand = brand;
+        this.inputPeopleCountingData.stepType = EPageStep.add;
+    }
+
+    async pageToAddByiSapFRSManager(brand: string) {
+        this.clearInputData();
+        await this.initSelectItemSite();
+
+        this.addStep = EAddStep.isapFrsManager;
+        this.inputPeopleCountingData.brand = brand;
+        this.inputPeopleCountingData.stepType = EPageStep.add;
+    }
+
+    pageStepBackward() {
+        this.clearInputData();
+        this.addStep = EAddStep.select;
+    }
+
+    async pageToChooseTree() {
+        this.pageStep = EPageStep.chooseTree;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selecteds = [];
+        this.areaSelectItem = {};
+        this.deviceGroupSelectItem = {};
+        this.inputPeopleCountingData.areaId = "";
+        this.inputPeopleCountingData.groupIds = [];
+        for (const detail in this.sitesSelectItem) {
+            if (this.inputPeopleCountingData.siteId === detail) {
+                let selectedsObject: IRegionTreeSelected = {
+                    objectId: detail,
+                    type: ERegionType.site,
+                    name: this.sitesSelectItem[detail]
+                };
+                this.selecteds.push(selectedsObject);
+            }
+        }
+    }
+
+    async pageToShowResult() {
+        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
+            this.pageStep = EPageStep.add;
+
+            // siteId clear
+            this.inputPeopleCountingData.siteId = "";
+
+            // from selecteds push siteId
+            this.inputPeopleCountingData.siteId = this.selecteds[
+                this.selecteds.length - 1
+            ].objectId;
+            await this.selectAreaId(this.inputPeopleCountingData.siteId);
+        }
+
+        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+            this.pageStep = EPageStep.edit;
+            // siteId clear
+            this.inputPeopleCountingData.siteId = "";
+
+            // from selecteds push siteId
+            this.inputPeopleCountingData.siteId = this.selecteds[
+                this.selecteds.length - 1
+            ].objectId;
+            await this.selectAreaId(this.inputPeopleCountingData.siteId);
+        }
+    }
+
+    goToSetFRSServer() {
+        this.$router.push("/server/frs_server");
+    }
+
+    goToSetFRSManager() {
+        this.$router.push("/server/frs_manager_server");
+    }
+
+    async saveAddOrEditHanwha(data) {
+        const configObject: IConfig = {
+            protocol: data.protocol,
+            ip: data.ip,
+            port: data.port,
+            account: data.account,
+            password: data.password
+        };
+
+        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
+            const datas: any = [
+                {
+                    customId: data.customId,
+                    name: data.name,
+                    brand: this.inputPeopleCountingData.brand,
+                    model: data.model,
+                    areaId: data.areaId,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    config: configObject
+                }
+            ];
+
+            const addParam = {
+                datas
+            };
+
+            await this.$server
+                .C("/device/people-counting", addParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_VSPeopleCounting_AddSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (
+                            returnValue.statusCode === 500 ||
+                            returnValue.statusCode === 400
+                        ) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_ADDFailed")
+                            );
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+            const datas: any = [
+                {
+                    objectId: data.objectId,
+                    name: data.name,
+                    brand: this.inputPeopleCountingData.brand,
+                    model: data.model,
+                    areaId: data.areaId,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    config: configObject
+                }
+            ];
+
+            const editParam = {
+                datas
+            };
+
+            await this.$server
+                .U("/device/people-counting", editParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_VSPeopleCounting_EditSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (
+                            returnValue.statusCode === 500 ||
+                            returnValue.statusCode === 400
+                        ) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_EditFailed")
+                            );
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+    }
+
+    async saveAddOrEditiSap(data) {
+        const configObject: IConfigiSap = {
+            serverId: data.serverId,
+            sourceid: data.sourceid
+        };
+
+        if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
+            const datas: any = [
+                {
+                    customId: data.customId,
+                    name: data.name,
+                    brand: this.inputPeopleCountingData.brand.split("F")[0],
+                    areaId: data.areaId,
+                    direction: data.direction,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    config: configObject
+                }
+            ];
+
+            const addParam = {
+                datas
+            };
+
+            await this.$server
+                .C("/device/people-counting", addParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_VSPeopleCounting_AddSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (
+                            returnValue.statusCode === 500 ||
+                            returnValue.statusCode === 400
+                        ) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_ADDFailed")
+                            );
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+            const datas: any = [
+                {
+                    objectId: data.objectId,
+                    name: data.name,
+                    brand: this.inputPeopleCountingData.brand,
+                    areaId: data.areaId,
+                    direction: data.direction,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    config: configObject
+                }
+            ];
+
+            const editParam = {
+                datas
+            };
+
+            await this.$server
+                .U("/device/people-counting", editParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(
+                                this._("w_VSPeopleCounting_EditSuccess")
+                            );
+                            this.pageToList();
+                        }
+                        if (
+                            returnValue.statusCode === 500 ||
+                            returnValue.statusCode === 400
+                        ) {
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_EditFailed")
+                            );
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+    }
+
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_VSPeopleCounting_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.selectedDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
                     };
-                    this.selecteds.push(selectedsObject);
+
+                    this.$server
+                        .D("/device", deleteParam)
+                        .then((response: any) => {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500) {
+                                    Dialog.error(this._("w_DeleteFailed"));
+                                    return false;
+                                }
+                            }
+                        })
+                        .catch((e: any) => {
+                            if (
+                                e.res &&
+                                e.res.statusCode &&
+                                e.res.statusCode == 401
+                            ) {
+                                return ResponseFilter.base(this, e);
+                            }
+
+                            console.log(e);
+                        });
                 }
             }
+        );
+    }
 
+    showFirst(value): string {
+        if (value.length >= 2) {
+            return value.map(item => item.name)[0] + "...";
+        }
+        if (value.length === 1) {
+            return value.map(item => item.name)[0];
+        }
+        if (value.length == 0) {
+            return "";
+        }
+    }
+
+    show30Words(
+        value: any,
+        startWord: number = 0,
+        endWord: number = 30
+    ): string {
+        return value.length < endWord
+            ? value.substring(startWord, endWord)
+            : value.substring(startWord, endWord) + "...";
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (const val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
+    showLabelTitle(): string {
+        if (
+            this.pageStep === EPageStep.add &&
+            this.addStep === EAddStep.isapFrs
+        ) {
+            return this._("w_VSPeopleCounting_AddisapUseFRS");
         }
 
-        async pageToShowResult() {
-
-            if (this.inputPeopleCountingData.stepType === EPageStep.add) {
-                this.pageStep = EPageStep.add;
-
-                // siteId clear
-                this.inputPeopleCountingData.siteId = '';
-
-                // from selecteds push siteId
-                this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputPeopleCountingData.siteId);
-            }
-
-            if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
-                this.pageStep = EPageStep.edit;
-                // siteId clear
-                this.inputPeopleCountingData.siteId = '';
-
-                // from selecteds push siteId
-                this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputPeopleCountingData.siteId);
-            }
-
+        if (
+            this.pageStep === EPageStep.add &&
+            this.addStep === EAddStep.isapFrsManager
+        ) {
+            return this._("w_VSPeopleCounting_AddisapUseFRSManger");
         }
 
-        goToSetFRSServer() {
-            this.$router.push("/server/frs_server");
+        if (
+            this.pageStep === EPageStep.edit &&
+            this.addStep === EAddStep.isapFrs
+        ) {
+            return this._("w_VSPeopleCounting_EditisapUseFRS");
         }
 
-        goToSetFRSManager() {
-            this.$router.push("/server/frs_manager_server");
+        if (
+            this.pageStep === EPageStep.edit &&
+            this.addStep === EAddStep.isapFrsManager
+        ) {
+            return this._("w_VSPeopleCounting_EditisapUseFRSManger");
         }
+    }
 
-        async saveAddOrEditHanwha(data) {
-            const configObject: IConfig = {
-                protocol: data.protocol,
-                ip: data.ip,
-                port: data.port,
-                account: data.account,
-                password: data.password
-            };
-
-            if (this.inputPeopleCountingData.stepType === EPageStep.add) {
-                const datas: any = [
-                    {
-                        customId: data.customId,
-                        name: data.name,
-                        brand: this.inputPeopleCountingData.brand,
-                        model: data.model,
-                        areaId: data.areaId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                        config: configObject
-                    }
-                ];
-
-                const addParam = {
-                    datas
-                };
-
-                await this.$server
-                    .C("/device/people-counting", addParam)
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_VSPeopleCounting_AddSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_VSPeopleCounting_ADDFailed")
-                                );
-                                return false;
-                            }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
-                    });
-            }
-
-            if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
-                const datas: any = [
-                    {
-                        objectId: data.objectId,
-                        name: data.name,
-                        brand: this.inputPeopleCountingData.brand,
-                        model: data.model,
-                        areaId: data.areaId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                        config: configObject
-                    }
-                ];
-
-                const editParam = {
-                    datas
-                };
-
-                await this.$server
-                    .U("/device/people-counting", editParam)
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_VSPeopleCounting_EditSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_VSPeopleCounting_EditFailed")
-                                );
-                                return false;
-                            }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
-                    });
-            }
-        }
-
-        async saveAddOrEditiSap(data) {
-            const configObject: IConfigiSap = {
-                serverId: data.serverId,
-                sourceid: data.sourceid,
-            };
-
-            if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
-                const datas: any = [
-                    {
-                        customId: data.customId,
-                        name: data.name,
-                        brand: this.inputPeopleCountingData.brand.split("F")[0],
-                        areaId: data.areaId,
-                        direction: data.direction,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
-                        config: configObject
-                    }
-                ];
-
-                const addParam = {
-                    datas
-                };
-
-                await this.$server
-                    .C("/device/people-counting", addParam)
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_VSPeopleCounting_AddSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_VSPeopleCounting_ADDFailed")
-                                );
-                                return false;
-                            }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
-                    });
-            }
-
-            if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
-                const datas: any = [
-                    {
-                        objectId: data.objectId,
-                        name: data.name,
-                        brand: this.inputPeopleCountingData.brand,
-                        areaId: data.areaId,
-                        direction: data.direction,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
-                        config: configObject
-                    }
-                ];
-
-                const editParam = {
-                    datas
-                };
-
-                await this.$server
-                    .U("/device/people-counting", editParam)
-                    .then((response: any) => {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_VSPeopleCounting_EditSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_VSPeopleCounting_EditFailed")
-                                );
-                                return false;
-                            }
-                        }
-                    })
-                    .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
-                    });
-            }
-        }
-
-        async doDelete() {
-            await Dialog.confirm(
-                this._("w_VSPeopleCounting_DeleteConfirm"),
-                this._("w_DeleteConfirm"),
-                () => {
-                    for (const param of this.selectedDetail) {
-                        const deleteParam: {
-                            objectId: string;
-                        } = {
-                            objectId: param.objectId
-                        };
-
-                        this.$server
-                            .D("/device", deleteParam)
-                            .then((response: any) => {
-                                for (const returnValue of response) {
-                                    if (returnValue.statusCode === 200) {
-                                        this.pageToList();
-                                    }
-                                    if (returnValue.statusCode === 500) {
-                                        Dialog.error(this._("w_DeleteFailed"));
-                                        return false;
-                                    }
-                                }
-                            })
-                            .catch((e: any) => {
-                                if (
-                                    e.res &&
-                                    e.res.statusCode &&
-                                    e.res.statusCode == 401
-                                ) {
-                                    return ResponseFilter.base(this, e);
-                                }
-
-                                console.log(e);
-                            });
-                    }
-                }
-            );
-        }
-
-        showFirst(value): string {
-            if (value.length >= 2) {
-                return value.map(item => item.name)[0] + "...";
-            }
-            if (value.length === 1) {
-                return value.map(item => item.name)[0];
-            }
-            if (value.length == 0) {
-                return "";
-            }
-        }
-
-        show30Words(
-            value: any,
-            startWord: number = 0,
-            endWord: number = 30
-        ): string {
-            return value.length < endWord
-                ? value.substring(startWord, endWord)
-                : value.substring(startWord, endWord) + "...";
-        }
-
-        idsToText(value: any): string {
-            let result = "";
-            for (const val of value) {
-                result += val.name + ", ";
-            }
-            result = result.substring(0, result.length - 2);
-            return result;
-        }
-
-        showLabelTitle(): string {
-            if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrs) {
-                return this._("w_VSPeopleCounting_AddisapUseFRS")
-            }
-
-            if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrsManager) {
-                return this._("w_VSPeopleCounting_AddisapUseFRSManger")
-            }
-
-            if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrs) {
-                return this._("w_VSPeopleCounting_EditisapUseFRS")
-            }
-
-            if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrsManager) {
-                return this._("w_VSPeopleCounting_EditisapUseFRSManger")
-            }
-
-        }
-
-        ITableList() {
-            return `
+    ITableList() {
+        return `
             interface {
 
             /**
@@ -1376,20 +1442,20 @@
 
             }
         `;
-        }
+    }
 
-        IAddAndEditFromHanwha() {
-            return `
+    IAddAndEditFromHanwha() {
+        return `
             interface {
 
                 /**
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                this.inputPeopleCountingData.stepType === EPageStep.add
-                    ? "iv-form-string"
-                    : "iv-form-label"
-                }
+                     this.inputPeopleCountingData.stepType === EPageStep.add
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
                 customId: string;
 
@@ -1405,8 +1471,8 @@
                  * @uiLabel - ${this._("w_Model")}
                  */
                 model: ${toEnumInterface({
-                xnd6020r: "xnd6020r"
-            })};
+                    xnd6020r: "xnd6020r"
+                })};
 
 
                 /**
@@ -1428,9 +1494,9 @@
                  * @uiLabel - ${this._("w_Protocol")}
                  */
                 protocol: ${toEnumInterface({
-                http: "http",
-                https: "https"
-            })};
+                    http: "http",
+                    https: "https"
+                })};
 
 
                 /**
@@ -1467,16 +1533,16 @@
                  * @uiLabel - ${this._("w_DeviceGroup")}
                  */
                 groupIds?: ${toEnumInterface(
-                this.deviceGroupSelectItem as any,
-                true
-            )};
+                    this.deviceGroupSelectItem as any,
+                    true
+                )};
 
             }
          `;
-        }
+    }
 
-        IViewFromHanwha() {
-            return `
+    IViewFromHanwha() {
+        return `
             interface {
 
                 /**
@@ -1551,20 +1617,20 @@
 
             }
          `;
-        }
+    }
 
-        IAddAndEditFromiSap() {
-            return `
+    IAddAndEditFromiSap() {
+        return `
             interface {
 
                 /**
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                this.inputPeopleCountingData.stepType === EPageStep.add
-                    ? "iv-form-string"
-                    : "iv-form-label"
-                }
+                     this.inputPeopleCountingData.stepType === EPageStep.add
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
                 customId: string;
 
@@ -1581,26 +1647,26 @@
                  * @uiLabel - ${this._("w_ServerId")}
                  * @uiPlaceHolder - ${this._("w_ServerId")}
                  * @uiHidden - ${
-                this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                }
+                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                 }
                  */
                 serverId: ${toEnumInterface(
-                this.serverIdSelectItem as any,
-                false
-            )};
+                    this.serverIdSelectItem as any,
+                    false
+                )};
 
 
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                }
+                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                 }
                  */
                 sourceid: ${toEnumInterface(
-                this.sourceIdSelectItem as any,
-                false
-            )};
+                    this.sourceIdSelectItem as any,
+                    false
+                )};
 
 
                 /**
@@ -1608,9 +1674,9 @@
                  * @uiPlaceHolder - ${this._("w_Direction")}
                  */
                 direction: ${toEnumInterface({
-                in: this._("w_In"),
-                out: this._("w_Out")
-            })};
+                    in: this._("w_In"),
+                    out: this._("w_Out")
+                })};
 
 
                 /**
@@ -1631,16 +1697,16 @@
                  * @uiLabel - ${this._("w_DeviceGroup")}
                  */
                 groupIds?: ${toEnumInterface(
-                this.deviceGroupSelectItem as any,
-                true
-            )};
+                    this.deviceGroupSelectItem as any,
+                    true
+                )};
 
             }
          `;
-        }
+    }
 
-        IViewFromiSap() {
-            return `
+    IViewFromiSap() {
+        return `
             interface {
 
                 /**
@@ -1700,13 +1766,13 @@
 
             }
          `;
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>
-    .separate_height {
-        height: 10px;
-        margin: 10px;
-    }
+.separate_height {
+    height: 10px;
+    margin: 10px;
+}
 </style>
