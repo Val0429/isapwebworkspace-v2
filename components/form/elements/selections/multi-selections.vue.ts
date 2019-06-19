@@ -34,7 +34,8 @@ export class FormString extends Vue {
         
         console.log("mounted", this.value, this.options);
 
-        let temp2=Object.assign([], this.value.map(x=>x.objectId));
+        let temp2=Object.assign([], this.value && this.value.length>0?this.value.map(x=>x.objectId):[]);
+        this.$emit('input', temp2);        
         if(temp2 && temp2.length>0){
             for(let key of temp2){
                 let itemValue = this.options.find(x=>x.key==key);
