@@ -444,7 +444,6 @@ export default class PeopleCounting extends Vue {
     }
 
     async initSelectItemSite() {
-
         this.sitesSelectItem = {};
 
         const readAllSiteParam: {
@@ -497,7 +496,6 @@ export default class PeopleCounting extends Vue {
     }
 
     async initSelectItemFRSServer() {
-
         this.serverIdSelectItem = {};
 
         await this.$server
@@ -537,22 +535,39 @@ export default class PeopleCounting extends Vue {
                         ? param.area["objectId"]
                         : "",
                 area:
-                    param.area && param.area["name"]
-                        ? param.area["name"]
-                        : "",
-                site: param.site && param.site["name"] ? param.site["name"] : "",
+                    param.area && param.area["name"] ? param.area["name"] : "",
+                site:
+                    param.site && param.site["name"] ? param.site["name"] : "",
                 brand: param.brand,
                 customId: param.customId,
                 objectId: param.objectId,
-                siteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
+                siteId:
+                    param.site && param.site["objectId"]
+                        ? param.site["objectId"]
+                        : "",
                 groupIds: param.groups,
                 model: param.model,
                 direction: param.direction,
-                account: param.config && param.config["account"] ? param.config["account"] : '',
-                password: param.config && param.config["password"] ? param.config["password"] : '',
-                protocol: param.config && param.config["protocol"] ? param.config["protocol"] : '',
-                ip: param.config && param.config["ip"] ? param.config["ip"] : '',
-                port: param.config && param.config["port"] ? param.config["port"] : '',
+                account:
+                    param.config && param.config["account"]
+                        ? param.config["account"]
+                        : "",
+                password:
+                    param.config && param.config["password"]
+                        ? param.config["password"]
+                        : "",
+                protocol:
+                    param.config && param.config["protocol"]
+                        ? param.config["protocol"]
+                        : "",
+                ip:
+                    param.config && param.config["ip"]
+                        ? param.config["ip"]
+                        : "",
+                port:
+                    param.config && param.config["port"]
+                        ? param.config["port"]
+                        : "",
                 serverId:
                     param.config &&
                     param.config.server &&
@@ -565,18 +580,30 @@ export default class PeopleCounting extends Vue {
                     param.config.server.name
                         ? param.config.server.name
                         : "",
-                sourceid: param.config && param.config.sourceid ? param.config.sourceid : '',
-                sourceidView: param.config && param.config.sourceid ? param.config.sourceid : '',
-                location: param.config && param.config.location ? param.config.location : '',
+                sourceid:
+                    param.config && param.config.sourceid
+                        ? param.config.sourceid
+                        : "",
+                sourceidView:
+                    param.config && param.config.sourceid
+                        ? param.config.sourceid
+                        : "",
+                location:
+                    param.config && param.config.location
+                        ? param.config.location
+                        : "",
                 groupIdsText: this.idsToText(param.groups),
                 stepType: "",
-                tempSiteId: param.site && param.site["objectId"] ? param.site["objectId"] : "",
-                tempAreaId: param.area && param.area["objectId"]? param.area["objectId"]: "",
+                tempSiteId:
+                    param.site && param.site["objectId"]
+                        ? param.site["objectId"]
+                        : "",
+                tempAreaId:
+                    param.area && param.area["objectId"]
+                        ? param.area["objectId"]
+                        : ""
             };
         }
-
-        console.log('location - ', this.inputPeopleCountingData.location);
-        console.log('sourceid - ', this.inputPeopleCountingData.sourceid);
 
         if (this.inputPeopleCountingData.serverId !== "") {
             this.selectSourceIdAndLocation(
@@ -633,20 +660,19 @@ export default class PeopleCounting extends Vue {
 
         this.selecteds = [];
 
-            for (const detail in this.sitesSelectItem) {
-                if (this.inputPeopleCountingData.siteId === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
+        for (const detail in this.sitesSelectItem) {
+            if (this.inputPeopleCountingData.siteId === detail) {
+                let selectedsObject: IRegionTreeSelected = {
+                    objectId: detail,
+                    type: ERegionType.site,
+                    name: this.sitesSelectItem[detail]
+                };
+                this.selecteds.push(selectedsObject);
             }
+        }
     }
 
     async selectSourceIdAndLocation(data) {
-
         this.sourceIdSelectItem = {};
 
         if (data !== undefined) {
@@ -664,8 +690,9 @@ export default class PeopleCounting extends Vue {
                             for (const returnValue of response) {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
-                                    this.sourceIdSelectItem, returnValue.sourceid, returnValue.sourceid
-
+                                    this.sourceIdSelectItem,
+                                    returnValue.sourceid,
+                                    returnValue.sourceid
                                 );
                             }
 
@@ -694,18 +721,16 @@ export default class PeopleCounting extends Vue {
     }
 
     async selectAreaId(data) {
-
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
 
-        if (data === undefined || data === '') {
-            this.inputPeopleCountingData.areaId = '';
+        if (data === undefined || data === "") {
+            this.inputPeopleCountingData.areaId = "";
             this.inputPeopleCountingData.groupIds = [];
         }
 
         if (this.pageStep === EPageStep.add) {
-            if (data !== undefined || data !== '') {
-
+            if (data !== undefined || data !== "") {
                 const readParam: {
                     siteId: string;
                 } = {
@@ -717,19 +742,29 @@ export default class PeopleCounting extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                this.inputPeopleCountingData.areaId = '';
+                                this.inputPeopleCountingData.areaId = "";
                                 this.inputPeopleCountingData.groupIds = [];
                                 // 自定義 areaSelectItem 的 key 的方式
-                                this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                                this.$set(
+                                    this.areaSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
                             }
                         }
                     })
                     .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_ADDFailed")
+                            );
                             return false;
                         }
                         console.log(e);
@@ -738,12 +773,10 @@ export default class PeopleCounting extends Vue {
             }
         }
 
-
         if (this.pageStep === EPageStep.edit) {
-            if (data !== undefined || data !== '') {
-
+            if (data !== undefined || data !== "") {
                 if (this.inputPeopleCountingData.tempSiteId !== data) {
-                    this.inputPeopleCountingData.areaId = '';
+                    this.inputPeopleCountingData.areaId = "";
                 }
 
                 const readParam: {
@@ -758,12 +791,20 @@ export default class PeopleCounting extends Vue {
                         if (response != undefined) {
                             for (const returnValue of response) {
                                 // 自定義 areaSelectItem 的 key 的方式
-                                this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                                this.$set(
+                                    this.areaSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
                             }
                         }
                     })
                     .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
@@ -775,16 +816,12 @@ export default class PeopleCounting extends Vue {
                     });
             }
         }
-
-
-
     }
 
     async selectGroupDeviceId(data) {
-
         this.deviceGroupSelectItem = {};
 
-        if (data === undefined || data === '') {
+        if (data === undefined || data === "") {
             this.inputPeopleCountingData.groupIds = [];
         }
 
@@ -795,7 +832,7 @@ export default class PeopleCounting extends Vue {
                     mode: string;
                 } = {
                     areaId: data,
-                    mode: 'peopleCounting'
+                    mode: "peopleCounting"
                 };
 
                 await this.$server
@@ -805,24 +842,32 @@ export default class PeopleCounting extends Vue {
                             for (const returnValue of response) {
                                 this.inputPeopleCountingData.groupIds = [];
                                 // 自定義 deviceGroupSelectItem 的 key 的方式
-                                this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
-
+                                this.$set(
+                                    this.deviceGroupSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
                             }
                         }
                     })
                     .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                            Dialog.error(
+                                this._("w_VSPeopleCounting_ADDFailed")
+                            );
                             return false;
                         }
                         console.log(e);
                         return false;
                     });
             }
-
         }
 
         if (this.pageStep === EPageStep.edit) {
@@ -845,13 +890,20 @@ export default class PeopleCounting extends Vue {
                         if (response != undefined) {
                             for (const returnValue of response) {
                                 // 自定義 deviceGroupSelectItem 的 key 的方式
-                                this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
-
+                                this.$set(
+                                    this.deviceGroupSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
                             }
                         }
                     })
                     .catch((e: any) => {
-                        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        if (
+                            e.res &&
+                            e.res.statusCode &&
+                            e.res.statusCode == 401
+                        ) {
                             return ResponseFilter.base(this, e);
                         }
                         if (e.res.statusCode == 500) {
@@ -862,7 +914,6 @@ export default class PeopleCounting extends Vue {
                         return false;
                     });
             }
-
         }
     }
 
@@ -962,28 +1013,26 @@ export default class PeopleCounting extends Vue {
         this.selecteds = [];
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
-        this.inputPeopleCountingData.areaId = '';
+        this.inputPeopleCountingData.areaId = "";
         this.inputPeopleCountingData.groupIds = [];
-            for (const detail in this.sitesSelectItem) {
-                if (this.inputPeopleCountingData.siteId === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
+        for (const detail in this.sitesSelectItem) {
+            if (this.inputPeopleCountingData.siteId === detail) {
+                let selectedsObject: IRegionTreeSelected = {
+                    objectId: detail,
+                    type: ERegionType.site,
+                    name: this.sitesSelectItem[detail]
+                };
+                this.selecteds.push(selectedsObject);
             }
-
+        }
     }
 
     async pageToShowResult() {
-
         if (this.inputPeopleCountingData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteId clear
-            this.inputPeopleCountingData.siteId = '';
+            this.inputPeopleCountingData.siteId = "";
 
             // from selecteds push siteId
             this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
@@ -993,13 +1042,12 @@ export default class PeopleCounting extends Vue {
         if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteId clear
-            this.inputPeopleCountingData.siteId = '';
+            this.inputPeopleCountingData.siteId = "";
 
             // from selecteds push siteId
             this.inputPeopleCountingData.siteId = this.selecteds[0].objectId;
             await this.selectAreaId(this.inputPeopleCountingData.siteId);
         }
-
     }
 
     goToSetFRSServer() {
@@ -1125,7 +1173,7 @@ export default class PeopleCounting extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid,
+            sourceid: data.sourceid
         };
 
         if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
@@ -1136,7 +1184,7 @@ export default class PeopleCounting extends Vue {
                     brand: this.inputPeopleCountingData.brand.split("F")[0],
                     areaId: data.areaId,
                     direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
                     config: configObject
                 }
             ];
@@ -1187,7 +1235,7 @@ export default class PeopleCounting extends Vue {
                     brand: this.inputPeopleCountingData.brand,
                     areaId: data.areaId,
                     direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [] ,
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
                     config: configObject
                 }
             ];
@@ -1304,22 +1352,33 @@ export default class PeopleCounting extends Vue {
     }
 
     showLabelTitle(): string {
-        if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrs) {
-            return this._("w_VSPeopleCounting_AddisapUseFRS")
+        if (
+            this.pageStep === EPageStep.add &&
+            this.addStep === EAddStep.isapFrs
+        ) {
+            return this._("w_VSPeopleCounting_AddisapUseFRS");
         }
 
-        if (this.pageStep === EPageStep.add && this.addStep === EAddStep.isapFrsManager) {
-            return this._("w_VSPeopleCounting_AddisapUseFRSManger")
+        if (
+            this.pageStep === EPageStep.add &&
+            this.addStep === EAddStep.isapFrsManager
+        ) {
+            return this._("w_VSPeopleCounting_AddisapUseFRSManger");
         }
 
-        if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrs) {
-            return this._("w_VSPeopleCounting_EditisapUseFRS")
+        if (
+            this.pageStep === EPageStep.edit &&
+            this.addStep === EAddStep.isapFrs
+        ) {
+            return this._("w_VSPeopleCounting_EditisapUseFRS");
         }
 
-        if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrsManager) {
-            return this._("w_VSPeopleCounting_EditisapUseFRSManger")
+        if (
+            this.pageStep === EPageStep.edit &&
+            this.addStep === EAddStep.isapFrsManager
+        ) {
+            return this._("w_VSPeopleCounting_EditisapUseFRSManger");
         }
-
     }
 
     ITableList() {
