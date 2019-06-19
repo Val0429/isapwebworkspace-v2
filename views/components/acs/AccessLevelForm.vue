@@ -150,14 +150,14 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
         await this.getScheduleOptions();
     }
     private async getScheduleOptions() {
-        let resp=await this.server.R("/acs/timeschedule",{});    
+        let resp=await this.server.R("/acs/timeschedule",{"paging.all":"true"});    
         for(let item of resp.results) {
             this.scheduleOptions.push({ key: item.objectId,value: item.timename });
         }
         console.log("scheduleOptions",this.scheduleOptions);
     }
     private async getDoorOptions() {
-        let resp=await this.server.R("/acs/door",{});    
+        let resp=await this.server.R("/acs/door",{"paging.all":"true"});    
         for(let item of resp.results) {
             this.doorOptions.push({ key: item.objectId,value: item.doorname });
         }
@@ -165,7 +165,7 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
     }
 
     private async getReaderOptions() {
-        let resp=await this.server.R("/acs/reader",{});    
+        let resp=await this.server.R("/acs/reader",{"paging.all":"true"});    
         for(let item of resp.results) {
         this.readerOptions.push({ key: item.objectId,value: item.readername });
         }
