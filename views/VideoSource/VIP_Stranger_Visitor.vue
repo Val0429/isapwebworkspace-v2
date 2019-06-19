@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="demographicTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/device' }"
@@ -143,7 +143,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromiSap()"
-                :value="inputVIPStrangerVisitorData"
+                :value="inputFormData"
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
@@ -203,7 +203,7 @@
 
             <iv-form
                 :interface="IViewFromiSap()"
-                :value="inputVIPStrangerVisitorData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -302,14 +302,14 @@
         regionTreeItem = new RegionTreeItem();
         selecteds: IRegionTreeSelected[] = [];
 
-        inputVIPStrangerVisitorData: any = {};
+        inputFormData: any = {};
 
         created() {}
 
         mounted() {}
 
         clearInputData() {
-            this.inputVIPStrangerVisitorData = {
+            this.inputFormData = {
                 stepType: "",
                 customId: "",
                 areaId: "",
@@ -414,7 +414,7 @@
         getInputData() {
             this.clearInputData();
             for (const param of this.selectedDetail) {
-                this.inputVIPStrangerVisitorData = {
+                this.inputFormData = {
                     // objectId: param.objectId,
                     name: param.name,
                     areaId:
@@ -452,9 +452,9 @@
                 };
             }
 
-            if (this.inputVIPStrangerVisitorData.serverId !== "") {
+            if (this.inputFormData.serverId !== "") {
                 this.selectSourceIdAndLocation(
-                    this.inputVIPStrangerVisitorData.serverId
+                    this.inputFormData.serverId
                 );
             }
         }
@@ -462,35 +462,35 @@
         tempSaveInputData(data) {
             switch (data.key) {
                 case "name":
-                    this.inputVIPStrangerVisitorData.name = data.value;
+                    this.inputFormData.name = data.value;
                     break;
                 case "customId":
-                    this.inputVIPStrangerVisitorData.customId = data.value;
+                    this.inputFormData.customId = data.value;
                     break;
                 case "areaId":
-                    this.inputVIPStrangerVisitorData.areaId = data.value;
+                    this.inputFormData.areaId = data.value;
                     break;
                 case "groupIds":
-                    this.inputVIPStrangerVisitorData.groupIds = data.value;
+                    this.inputFormData.groupIds = data.value;
                     break;
                 case "serverId":
-                    this.inputVIPStrangerVisitorData.serverId = data.value;
+                    this.inputFormData.serverId = data.value;
                     break;
                 case "sourceid":
-                    this.inputVIPStrangerVisitorData.sourceid = data.value;
+                    this.inputFormData.sourceid = data.value;
                     break;
                 case "direction":
-                    this.inputVIPStrangerVisitorData.direction = data.value;
+                    this.inputFormData.direction = data.value;
                     break;
                 case "siteId":
-                    this.inputVIPStrangerVisitorData.siteId = data.value;
+                    this.inputFormData.siteId = data.value;
                     break;
             }
 
             this.selecteds = [];
 
             for (const detail in this.sitesSelectItem) {
-                if (this.inputVIPStrangerVisitorData.siteId === detail) {
+                if (this.inputFormData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -555,8 +555,8 @@
             this.deviceGroupSelectItem = {};
 
             if (data === undefined || data === '') {
-                this.inputVIPStrangerVisitorData.areaId = '';
-                this.inputVIPStrangerVisitorData.groupIds = [];
+                this.inputFormData.areaId = '';
+                this.inputFormData.groupIds = [];
             }
 
             if (this.pageStep === EPageStep.add) {
@@ -573,8 +573,8 @@
                         .then((response: any) => {
                             if (response != undefined) {
                                 for (const returnValue of response) {
-                                    this.inputVIPStrangerVisitorData.areaId = '';
-                                    this.inputVIPStrangerVisitorData.groupIds = [];
+                                    this.inputFormData.areaId = '';
+                                    this.inputFormData.groupIds = [];
                                     // 自定義 areaSelectItem 的 key 的方式
                                     this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                                 }
@@ -598,8 +598,8 @@
             if (this.pageStep === EPageStep.edit) {
                 if (data !== undefined || data !== '') {
 
-                    if (this.inputVIPStrangerVisitorData.tempSiteId !== data) {
-                        this.inputVIPStrangerVisitorData.areaId = '';
+                    if (this.inputFormData.tempSiteId !== data) {
+                        this.inputFormData.areaId = '';
                     }
 
                     const readParam: {
@@ -641,7 +641,7 @@
             this.deviceGroupSelectItem = {};
 
             if (data === undefined || data === '') {
-                this.inputVIPStrangerVisitorData.groupIds = [];
+                this.inputFormData.groupIds = [];
             }
 
             if (this.pageStep === EPageStep.add) {
@@ -659,7 +659,7 @@
                         .then((response: any) => {
                             if (response != undefined) {
                                 for (const returnValue of response) {
-                                    this.inputVIPStrangerVisitorData.groupIds = [];
+                                    this.inputFormData.groupIds = [];
                                     // 自定義 deviceGroupSelectItem 的 key 的方式
                                     this.$set(this.deviceGroupSelectItem, returnValue.objectId, returnValue.name);
 
@@ -691,8 +691,8 @@
                         mode: ECameraMode.visitor
                     };
 
-                    if (this.inputVIPStrangerVisitorData.tempAreaId !== data) {
-                        this.inputVIPStrangerVisitorData.groupIds = [];
+                    if (this.inputFormData.tempAreaId !== data) {
+                        this.inputFormData.groupIds = [];
                     }
 
                     await this.$server
@@ -726,7 +726,7 @@
             await this.initSelectItemSite();
             this.pageStep = EPageStep.add;
             this.addStep = EAddStep.select;
-            this.inputVIPStrangerVisitorData.stepType = stepType;
+            this.inputFormData.stepType = stepType;
             this.selecteds = [];
         }
 
@@ -735,16 +735,16 @@
             this.getInputData();
             await this.initSelectItemFRSServer();
             await this.initSelectItemSite();
-            await this.selectAreaId(this.inputVIPStrangerVisitorData.siteId);
-            await this.selectGroupDeviceId(this.inputVIPStrangerVisitorData.areaId);
-            this.inputVIPStrangerVisitorData.stepType = stepType;
-            this.inputVIPStrangerVisitorData.groupIds = JSON.parse(
+            await this.selectAreaId(this.inputFormData.siteId);
+            await this.selectGroupDeviceId(this.inputFormData.areaId);
+            this.inputFormData.stepType = stepType;
+            this.inputFormData.groupIds = JSON.parse(
                 JSON.stringify(
-                    this.inputVIPStrangerVisitorData.groupIds.map(item => item.objectId)
+                    this.inputFormData.groupIds.map(item => item.objectId)
                 )
             );
 
-            if (this.inputVIPStrangerVisitorData.serverId !== "") {
+            if (this.inputFormData.serverId !== "") {
                 this.addStep = EAddStep.isapFrs;
             }
 
@@ -754,7 +754,7 @@
             this.pageStep = EPageStep.view;
             this.getInputData();
 
-            if (this.inputVIPStrangerVisitorData.serverId !== "") {
+            if (this.inputFormData.serverId !== "") {
                 this.addStep = EAddStep.isapFrs;
             }
         }
@@ -762,7 +762,7 @@
         pageToList() {
             this.pageStep = EPageStep.list;
             this.addStep = EAddStep.none;
-            (this.$refs.demographicTable as any).reload();
+            (this.$refs.listTable as any).reload();
         }
 
         async pageToAddByiSapFRS(brand: string) {
@@ -770,8 +770,8 @@
             await this.initSelectItemFRSServer();
             await this.initSelectItemSite();
             this.addStep = EAddStep.isapFrs;
-            this.inputVIPStrangerVisitorData.brand = brand;
-            this.inputVIPStrangerVisitorData.stepType = EPageStep.add;
+            this.inputFormData.brand = brand;
+            this.inputFormData.stepType = EPageStep.add;
 
         }
 
@@ -780,8 +780,8 @@
             await this.initSelectItemSite();
 
             this.addStep = EAddStep.isapFrsManager;
-            this.inputVIPStrangerVisitorData.brand = brand;
-            this.inputVIPStrangerVisitorData.stepType = EPageStep.add;
+            this.inputFormData.brand = brand;
+            this.inputFormData.stepType = EPageStep.add;
         }
 
         pageStepBackward() {
@@ -796,10 +796,10 @@
             this.selecteds = [];
             this.areaSelectItem = {};
             this.deviceGroupSelectItem = {};
-            this.inputVIPStrangerVisitorData.areaId = '';
-            this.inputVIPStrangerVisitorData.groupIds = [];
+            this.inputFormData.areaId = '';
+            this.inputFormData.groupIds = [];
             for (const detail in this.sitesSelectItem) {
-                if (this.inputVIPStrangerVisitorData.siteId === detail) {
+                if (this.inputFormData.siteId === detail) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail,
                         type: ERegionType.site,
@@ -813,25 +813,25 @@
 
         async pageToShowResult() {
 
-            if (this.inputVIPStrangerVisitorData.stepType === EPageStep.add) {
+            if (this.inputFormData.stepType === EPageStep.add) {
                 this.pageStep = EPageStep.add;
 
                 // siteId clear
-                this.inputVIPStrangerVisitorData.siteId = '';
+                this.inputFormData.siteId = '';
 
                 // from selecteds push siteId
-                this.inputVIPStrangerVisitorData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputVIPStrangerVisitorData.siteId);
+                this.inputFormData.siteId = this.selecteds[0].objectId;
+                await this.selectAreaId(this.inputFormData.siteId);
             }
 
-            if (this.inputVIPStrangerVisitorData.stepType === EPageStep.edit) {
+            if (this.inputFormData.stepType === EPageStep.edit) {
                 this.pageStep = EPageStep.edit;
                 // siteId clear
-                this.inputVIPStrangerVisitorData.siteId = '';
+                this.inputFormData.siteId = '';
 
                 // from selecteds push siteId
-                this.inputVIPStrangerVisitorData.siteId = this.selecteds[0].objectId;
-                await this.selectAreaId(this.inputVIPStrangerVisitorData.siteId);
+                this.inputFormData.siteId = this.selecteds[0].objectId;
+                await this.selectAreaId(this.inputFormData.siteId);
             }
 
         }
@@ -851,7 +851,7 @@
 
             };
 
-            if (this.inputVIPStrangerVisitorData.brand === EAddStep.isapFrs) {
+            if (this.inputFormData.brand === EAddStep.isapFrs) {
                 const datas: any = [
                     {
                         customId: data.customId,
@@ -900,7 +900,7 @@
                     });
             }
 
-            if (this.inputVIPStrangerVisitorData.stepType === EPageStep.edit) {
+            if (this.inputFormData.stepType === EPageStep.edit) {
                 const datas: any = [
                     {
                         objectId: data.objectId,
@@ -1108,7 +1108,7 @@
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                this.inputVIPStrangerVisitorData.stepType === EPageStep.add
+                this.inputFormData.stepType === EPageStep.add
                     ? "iv-form-string"
                     : "iv-form-label"
                 }

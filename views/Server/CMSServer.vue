@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="cmsTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/partner/cms' }"
@@ -57,7 +57,7 @@
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputCMSData"
+                :value="inputFormData"
                 @submit="saveAddOrEdit($event)"
             ></iv-form>
 
@@ -84,7 +84,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputCMSData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -111,7 +111,7 @@ import { IAddCMSServer, IEditCMSServer } from "@/config/default/api/interfaces";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface IInputCMSData extends IAddCMSServer, IEditCMSServer {
+interface IinputFormData extends IAddCMSServer, IEditCMSServer {
     type?: string;
 }
 
@@ -135,7 +135,7 @@ export default class CMSServer extends Vue {
 
     selectedDetail: any = [];
 
-    inputCMSData: IInputCMSData = {
+    inputFormData: IinputFormData = {
         objectId: "",
         customId: "",
         name: "",
@@ -152,7 +152,7 @@ export default class CMSServer extends Vue {
     mounted() {}
 
     clearInputData() {
-        this.inputCMSData = {
+        this.inputFormData = {
             objectId: "",
             customId: "",
             name: "",
@@ -174,7 +174,7 @@ export default class CMSServer extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputCMSData = {
+            this.inputFormData = {
                 objectId: param.objectId,
                 customId: param.customId,
                 ip: param.ip,
@@ -190,13 +190,13 @@ export default class CMSServer extends Vue {
     pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
         this.clearInputData();
-        this.inputCMSData.type = type;
+        this.inputFormData.type = type;
     }
 
     pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
-        this.inputCMSData.type = type;
+        this.inputFormData.type = type;
     }
 
     pageToView() {
@@ -206,13 +206,13 @@ export default class CMSServer extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.cmsTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     async saveAddOrEdit(data) {
         // add
-        if (this.inputCMSData.type === EPageStep.add) {
-            const datas: IInputCMSData[] = [
+        if (this.inputFormData.type === EPageStep.add) {
+            const datas: IinputFormData[] = [
                 {
                     customId: data.customId,
                     name: data.name,
@@ -260,8 +260,8 @@ export default class CMSServer extends Vue {
         }
 
         // edit
-        if (this.inputCMSData.type === EPageStep.edit) {
-            const datas: IInputCMSData[] = [
+        if (this.inputFormData.type === EPageStep.edit) {
+            const datas: IinputFormData[] = [
                 {
                     name: data.name,
                     protocol: data.protocol,
@@ -392,7 +392,7 @@ export default class CMSServer extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputCMSData.type === EPageStep.add
+                     this.inputFormData.type === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

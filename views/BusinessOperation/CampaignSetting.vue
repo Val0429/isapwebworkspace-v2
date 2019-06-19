@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="campaignTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/event/campaign' }"
@@ -67,7 +67,7 @@
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputCampaignData"
+                :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEdit($event)"
             >
@@ -106,7 +106,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputCampaignData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -156,7 +156,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 import RegionAPI from "@/services/RegionAPI";
 
-interface IInputCampaignData
+interface IinputFormData
     extends IAddBusinessOperationCampaign,
         IEditBusinessOperationCampaign {
     siteIdsText?: string;
@@ -196,7 +196,7 @@ export default class CampaignSetting extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputCampaignData: IInputCampaignData = {
+    inputFormData: IinputFormData = {
         objectId: "",
         name: "",
         budget: null,
@@ -216,7 +216,7 @@ export default class CampaignSetting extends Vue {
     mounted() {}
 
     clearInputData() {
-        this.inputCampaignData = {
+        this.inputFormData = {
             objectId: "",
             name: "",
             budget: null,
@@ -299,7 +299,7 @@ export default class CampaignSetting extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputCampaignData = {
+            this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
                 budget: param.budget,
@@ -319,31 +319,31 @@ export default class CampaignSetting extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputCampaignData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "type":
-                this.inputCampaignData.type = data.value;
+                this.inputFormData.type = data.value;
                 break;
             case "budget":
-                this.inputCampaignData.budget = data.value;
+                this.inputFormData.budget = data.value;
                 break;
             case "description":
-                this.inputCampaignData.description = data.value;
+                this.inputFormData.description = data.value;
                 break;
             case "startDate":
-                this.inputCampaignData.startDate = data.value;
+                this.inputFormData.startDate = data.value;
                 break;
             case "endDate":
-                this.inputCampaignData.endDate = data.value;
+                this.inputFormData.endDate = data.value;
                 break;
             case "siteIds":
-                this.inputCampaignData.siteIds = data.value;
+                this.inputFormData.siteIds = data.value;
                 break;
         }
 
         this.selecteds = [];
 
-        for (const id of this.inputCampaignData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -363,7 +363,7 @@ export default class CampaignSetting extends Vue {
         await this.initSelectItemSite();
 
         this.selecteds = [];
-        this.inputCampaignData.stepType = stepType;
+        this.inputFormData.stepType = stepType;
     }
 
     async pageToEdit(stepType: string) {
@@ -371,11 +371,11 @@ export default class CampaignSetting extends Vue {
         this.getInputData();
         await this.initSelectItemSite();
 
-        this.inputCampaignData.stepType = stepType;
+        this.inputFormData.stepType = stepType;
 
-        this.inputCampaignData.siteIds = JSON.parse(
+        this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(
-                this.inputCampaignData.sites.map(item => item.objectId)
+                this.inputFormData.sites.map(item => item.objectId)
             )
         );
     }
@@ -387,7 +387,7 @@ export default class CampaignSetting extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.campaignTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     async pageToChooseTree() {
@@ -395,7 +395,7 @@ export default class CampaignSetting extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
-        for (const id of this.inputCampaignData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -410,32 +410,32 @@ export default class CampaignSetting extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputCampaignData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteIds clear
-            this.inputCampaignData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds
             for (const item of this.selecteds) {
-                this.inputCampaignData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
 
-        if (this.inputCampaignData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteIds clear
-            this.inputCampaignData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds
             for (const item of this.selecteds) {
-                this.inputCampaignData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputCampaignData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             const datas: any = [
                 {
                     name: data.name,
@@ -480,7 +480,7 @@ export default class CampaignSetting extends Vue {
         }
 
         // edit
-        if (this.inputCampaignData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             const datas: any = [
                 {
                     objectId: data.objectId,
@@ -656,7 +656,7 @@ export default class CampaignSetting extends Vue {
                  * @uiLabel - ${this._("w_BOCampaign_EventName")}
                  * @uiPlaceHolder - ${this._("w_BOCampaign_EventName")}
                  * @uiType - ${
-                     this.inputCampaignData.stepType === EPageStep.add
+                     this.inputFormData.stepType === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

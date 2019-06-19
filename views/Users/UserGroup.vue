@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="userGroupTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/user/group' }"
@@ -71,7 +71,7 @@
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputUserGroupData"
+                :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEdit($event)"
             >
@@ -110,7 +110,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputUserGroupData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -155,7 +155,7 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface InputUserGroupData extends IUserGroupAdd, IUserGroupEdit {
+interface inputFormData extends IUserGroupAdd, IUserGroupEdit {
     users: any;
     siteIdsText?: string;
     groupIdsText?: string;
@@ -192,7 +192,7 @@ export default class UserGroup extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputUserGroupData: InputUserGroupData = {
+    inputFormData: inputFormData = {
         objectId: "",
         name: "",
         description: "",
@@ -208,7 +208,7 @@ export default class UserGroup extends Vue {
     mounted() {}
 
     clearInputData() {
-        this.inputUserGroupData = {
+        this.inputFormData = {
             objectId: "",
             name: "",
             description: "",
@@ -287,7 +287,7 @@ export default class UserGroup extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputUserGroupData = {
+            this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
                 description: param.description,
@@ -303,17 +303,17 @@ export default class UserGroup extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputUserGroupData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "description":
-                this.inputUserGroupData.description = data.value;
+                this.inputFormData.description = data.value;
                 break;
             case "siteIds":
-                this.inputUserGroupData.siteIds = data.value;
+                this.inputFormData.siteIds = data.value;
                 break;
         }
 
-        for (const id of this.inputUserGroupData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -332,7 +332,7 @@ export default class UserGroup extends Vue {
         await this.initSelectItemSite();
         this.clearInputData();
         this.selecteds = [];
-        this.inputUserGroupData.type = type;
+        this.inputFormData.type = type;
     }
 
     async pageToEdit(type: string) {
@@ -341,11 +341,11 @@ export default class UserGroup extends Vue {
         await this.initSelectItemSite();
         this.selecteds = [];
 
-        this.inputUserGroupData.type = type;
+        this.inputFormData.type = type;
 
-        this.inputUserGroupData.siteIds = JSON.parse(
+        this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(
-                this.inputUserGroupData.siteIds.map(item => item.objectId)
+                this.inputFormData.siteIds.map(item => item.objectId)
             )
         );
     }
@@ -357,7 +357,7 @@ export default class UserGroup extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.userGroupTable as any).reload();
+        (this.$refs.listTable as any).reload();
         this.selecteds = [];
     }
 
@@ -366,7 +366,7 @@ export default class UserGroup extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
-        for (const id of this.inputUserGroupData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -381,32 +381,32 @@ export default class UserGroup extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputUserGroupData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteIds clear
-            this.inputUserGroupData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds
             for (const item of this.selecteds) {
-                this.inputUserGroupData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
 
-        if (this.inputUserGroupData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteIds clear
-            this.inputUserGroupData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds
             for (const item of this.selecteds) {
-                this.inputUserGroupData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputUserGroupData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             const datas: IUserGroupAdd[] = [
                 {
                     name: data.name,
@@ -450,7 +450,7 @@ export default class UserGroup extends Vue {
                 });
         }
 
-        if (this.inputUserGroupData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             const datas: IUserGroupEdit[] = [
                 {
                     // siteIds: data.siteIds,
@@ -616,7 +616,7 @@ export default class UserGroup extends Vue {
                  * @uiLabel - ${this._("w_UserGroup_GroupName")}
                  * @uiPlaceHolder - ${this._("w_UserGroup_GroupName")}
                  * @uiType - ${
-                     this.inputUserGroupData.type === EPageStep.add
+                     this.inputFormData.type === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

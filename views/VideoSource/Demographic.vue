@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="demographicTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/device' }"
@@ -138,7 +138,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromiSap()"
-                :value="inputDemographicData"
+                :value="inputFormData"
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
@@ -198,7 +198,7 @@
 
             <iv-form
                 :interface="IViewFromiSap()"
-                :value="inputDemographicData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -298,14 +298,14 @@ export default class Demographic extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputDemographicData: any = {};
+    inputFormData: any = {};
 
     created() {}
 
     mounted() {}
 
     clearInputData() {
-        this.inputDemographicData = {
+        this.inputFormData = {
             stepType: "",
             customId: "",
             areaId: "",
@@ -432,7 +432,7 @@ export default class Demographic extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputDemographicData = {
+            this.inputFormData = {
                 // objectId: param.objectId,
                 name: param.name,
                 areaId:
@@ -495,43 +495,43 @@ export default class Demographic extends Vue {
             };
         }
 
-        if (this.inputDemographicData.serverId !== "") {
-            this.selectSourceIdAndLocation(this.inputDemographicData.serverId);
+        if (this.inputFormData.serverId !== "") {
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
         }
     }
 
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputDemographicData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "customId":
-                this.inputDemographicData.customId = data.value;
+                this.inputFormData.customId = data.value;
                 break;
             case "areaId":
-                this.inputDemographicData.areaId = data.value;
+                this.inputFormData.areaId = data.value;
                 break;
             case "groupIds":
-                this.inputDemographicData.groupIds = data.value;
+                this.inputFormData.groupIds = data.value;
                 break;
             case "demoServerId":
-                this.inputDemographicData.demoServerId = data.value;
+                this.inputFormData.demoServerId = data.value;
                 break;
             case "serverId":
-                this.inputDemographicData.serverId = data.value;
+                this.inputFormData.serverId = data.value;
                 break;
             case "sourceid":
-                this.inputDemographicData.sourceid = data.value;
+                this.inputFormData.sourceid = data.value;
                 break;
             case "siteId":
-                this.inputDemographicData.siteId = data.value;
+                this.inputFormData.siteId = data.value;
                 break;
         }
 
         this.selecteds = [];
 
         for (const detail in this.sitesSelectItem) {
-            if (this.inputDemographicData.siteId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -595,8 +595,8 @@ export default class Demographic extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputDemographicData.areaId = "";
-            this.inputDemographicData.groupIds = [];
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupIds = [];
         }
 
         if (this.pageStep === EPageStep.add) {
@@ -612,8 +612,8 @@ export default class Demographic extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                this.inputDemographicData.areaId = "";
-                                this.inputDemographicData.groupIds = [];
+                                this.inputFormData.areaId = "";
+                                this.inputFormData.groupIds = [];
                                 // 自定義 areaSelectItem 的 key 的方式
                                 this.$set(
                                     this.areaSelectItem,
@@ -643,8 +643,8 @@ export default class Demographic extends Vue {
 
         if (this.pageStep === EPageStep.edit) {
             if (data !== undefined || data !== "") {
-                if (this.inputDemographicData.tempSiteId !== data) {
-                    this.inputDemographicData.areaId = "";
+                if (this.inputFormData.tempSiteId !== data) {
+                    this.inputFormData.areaId = "";
                 }
 
                 const readParam: {
@@ -690,7 +690,7 @@ export default class Demographic extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputDemographicData.groupIds = [];
+            this.inputFormData.groupIds = [];
         }
 
         if (this.pageStep === EPageStep.add) {
@@ -708,7 +708,7 @@ export default class Demographic extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                this.inputDemographicData.groupIds = [];
+                                this.inputFormData.groupIds = [];
                                 // 自定義 deviceGroupSelectItem 的 key 的方式
                                 this.$set(
                                     this.deviceGroupSelectItem,
@@ -748,8 +748,8 @@ export default class Demographic extends Vue {
                     mode: ECameraMode.demographic
                 };
 
-                if (this.inputDemographicData.tempAreaId !== data) {
-                    this.inputDemographicData.groupIds = [];
+                if (this.inputFormData.tempAreaId !== data) {
+                    this.inputFormData.groupIds = [];
                 }
 
                 await this.$server
@@ -793,7 +793,7 @@ export default class Demographic extends Vue {
         await this.initSelectItemDemographicServer();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
-        this.inputDemographicData.stepType = stepType;
+        this.inputFormData.stepType = stepType;
         this.selecteds = [];
     }
 
@@ -803,16 +803,16 @@ export default class Demographic extends Vue {
         await this.initSelectItemFRSServer();
         await this.initSelectItemDemographicServer();
         await this.initSelectItemSite();
-        await this.selectAreaId(this.inputDemographicData.siteId);
-        await this.selectGroupDeviceId(this.inputDemographicData.areaId);
-        this.inputDemographicData.stepType = stepType;
-        this.inputDemographicData.groupIds = JSON.parse(
+        await this.selectAreaId(this.inputFormData.siteId);
+        await this.selectGroupDeviceId(this.inputFormData.areaId);
+        this.inputFormData.stepType = stepType;
+        this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
-                this.inputDemographicData.groupIds.map(item => item.objectId)
+                this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
 
-        if (this.inputDemographicData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
     }
@@ -821,7 +821,7 @@ export default class Demographic extends Vue {
         this.pageStep = EPageStep.view;
         this.getInputData();
 
-        if (this.inputDemographicData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
     }
@@ -829,7 +829,7 @@ export default class Demographic extends Vue {
     pageToList() {
         this.pageStep = EPageStep.list;
         this.addStep = EAddStep.none;
-        (this.$refs.demographicTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     async pageToAddByiSapFRS(brand: string) {
@@ -837,8 +837,8 @@ export default class Demographic extends Vue {
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         this.addStep = EAddStep.isapFrs;
-        this.inputDemographicData.brand = brand;
-        this.inputDemographicData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
@@ -846,8 +846,8 @@ export default class Demographic extends Vue {
         await this.initSelectItemSite();
 
         this.addStep = EAddStep.isapFrsManager;
-        this.inputDemographicData.brand = brand;
-        this.inputDemographicData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
     }
 
     pageStepBackward() {
@@ -862,10 +862,10 @@ export default class Demographic extends Vue {
         this.selecteds = [];
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
-        this.inputDemographicData.areaId = "";
-        this.inputDemographicData.groupIds = [];
+        this.inputFormData.areaId = "";
+        this.inputFormData.groupIds = [];
         for (const detail in this.sitesSelectItem) {
-            if (this.inputDemographicData.siteId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -877,29 +877,29 @@ export default class Demographic extends Vue {
     }
 
     async pageToShowResult() {
-        if (this.inputDemographicData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteId clear
-            this.inputDemographicData.siteId = "";
+            this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputDemographicData.siteId = this.selecteds[
+            this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
             ].objectId;
-            await this.selectAreaId(this.inputDemographicData.siteId);
+            await this.selectAreaId(this.inputFormData.siteId);
         }
 
-        if (this.inputDemographicData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteId clear
-            this.inputDemographicData.siteId = "";
+            this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputDemographicData.siteId = this.selecteds[
+            this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
             ].objectId;
-            await this.selectAreaId(this.inputDemographicData.siteId);
+            await this.selectAreaId(this.inputFormData.siteId);
         }
     }
 
@@ -917,7 +917,7 @@ export default class Demographic extends Vue {
             sourceid: data.sourceid
         };
 
-        if (this.inputDemographicData.brand === EAddStep.isapFrs) {
+        if (this.inputFormData.brand === EAddStep.isapFrs) {
             const datas: any = [
                 {
                     customId: data.customId,
@@ -965,7 +965,7 @@ export default class Demographic extends Vue {
                 });
         }
 
-        if (this.inputDemographicData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             const datas: any = [
                 {
                     objectId: data.objectId,
@@ -1177,7 +1177,7 @@ export default class Demographic extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputDemographicData.stepType === EPageStep.add
+                     this.inputFormData.stepType === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="officeHourTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/office-hour' }"
@@ -64,7 +64,7 @@
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputOfficeHourData"
+                :value="inputFormData"
                 @submit="saveAddOrEdit($event)"
             >
                 <template #title="{ $attrs, $listeners }">
@@ -215,7 +215,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputOfficeHourData"
+                :value="inputFormData"
             >
                 <!--                <template #sites="{$attrs, $listeners}">-->
                 <!--                    <form-label-->
@@ -314,7 +314,7 @@ export default class GeneralOfficeHour extends Vue {
         }
     ];
 
-    inputOfficeHourData: any = {
+    inputFormData: any = {
         objectId: "",
         name: "",
         dayRanges: [],
@@ -332,7 +332,7 @@ export default class GeneralOfficeHour extends Vue {
     }
 
     clearInputData() {
-        this.inputOfficeHourData = {
+        this.inputFormData = {
             objectId: "",
             name: "",
             dayRanges: [
@@ -373,7 +373,7 @@ export default class GeneralOfficeHour extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputOfficeHourData = {
+            this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
                 dayRanges: param.dayRanges,
@@ -401,7 +401,7 @@ export default class GeneralOfficeHour extends Vue {
             ];
 
             this.clearInputData();
-            this.inputOfficeHourData.type = type;
+            this.inputFormData.type = type;
         }
         this.dayRangesToText();
     }
@@ -410,11 +410,11 @@ export default class GeneralOfficeHour extends Vue {
         this.pageStep = EPageStep.edit;
         this.getInputData();
 
-        this.inputOfficeHourData.type = type;
+        this.inputFormData.type = type;
 
         this.officeHourTime = [];
 
-        for (const item of this.inputOfficeHourData.dayRanges) {
+        for (const item of this.inputFormData.dayRanges) {
             let startHour = parseInt(
                 Datetime.DateTime2String(new Date(item.startDate), "HH")
             );
@@ -451,7 +451,7 @@ export default class GeneralOfficeHour extends Vue {
                 )
             };
             this.officeHourTime.push(tempOfficeHourTime);
-            this.inputOfficeHourData.dayRanges = JSON.parse(
+            this.inputFormData.dayRanges = JSON.parse(
                 JSON.stringify(this.officeHourTime)
             );
         }
@@ -466,7 +466,7 @@ export default class GeneralOfficeHour extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.officeHourTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     addOfficeHour() {
@@ -479,7 +479,7 @@ export default class GeneralOfficeHour extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputOfficeHourData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             data.dayRanges = [];
 
             for (const item of this.officeHourTime) {
@@ -546,7 +546,7 @@ export default class GeneralOfficeHour extends Vue {
         }
 
         // edit
-        if (this.inputOfficeHourData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             data.dayRanges = [];
 
             for (const item of this.officeHourTime) {
@@ -690,8 +690,8 @@ export default class GeneralOfficeHour extends Vue {
     dayRangesToText(): string {
         let showData = "";
 
-        if (this.inputOfficeHourData && this.inputOfficeHourData.dayRanges) {
-            for (let dayRange of this.inputOfficeHourData.dayRanges) {
+        if (this.inputFormData && this.inputFormData.dayRanges) {
+            for (let dayRange of this.inputFormData.dayRanges) {
                 let tempDateTimeNumber = {
                     startDay: parseInt(dayRange.startDay),
                     startHour: parseInt(
@@ -752,11 +752,11 @@ export default class GeneralOfficeHour extends Vue {
         }
 
         // 去掉結尾,
-        this.inputOfficeHourData.dayRanges = showData.substring(
+        this.inputFormData.dayRanges = showData.substring(
             0,
             showData.lastIndexOf(",")
         );
-        return this.inputOfficeHourData.dayRanges;
+        return this.inputFormData.dayRanges;
     }
 
     getWeekText(value: any): string {
@@ -881,7 +881,7 @@ export default class GeneralOfficeHour extends Vue {
                  * @uiLabel - ${this._("w_OfficeHour_Name")}
                  * @uiPlaceHolder - ${this._("w_OfficeHour_Name")}
                  * @uiType - ${
-                     this.inputOfficeHourData.type === EPageStep.add
+                     this.inputFormData.type === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

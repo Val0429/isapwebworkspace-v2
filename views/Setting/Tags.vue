@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="tagTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/tag' }"
@@ -63,7 +63,7 @@
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputTagData"
+                :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEdit($event)"
             >
@@ -109,7 +109,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputTagData"
+                :value="inputFormData"
             >
             </iv-form>
 
@@ -163,7 +163,7 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface IInputTagData extends ITag, ITagReadUpdate {
+interface IinputFormData extends ITag, ITagReadUpdate {
     siteIdsText?: string;
     regionIdsText?: string;
     type?: string;
@@ -204,7 +204,7 @@ export default class Tags extends Vue {
     selectedsRegions: IRegionTreeSelected[] = [];
     regionTreeItem = new RegionTreeItem();
 
-    inputTagData: IInputTagData = {
+    inputFormData: IinputFormData = {
         objectId: "",
         name: "",
         description: "",
@@ -220,7 +220,7 @@ export default class Tags extends Vue {
     mounted() {}
 
     clearInputData() {
-        this.inputTagData = {
+        this.inputFormData = {
             objectId: "",
             name: "",
             description: "",
@@ -327,7 +327,7 @@ export default class Tags extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputTagData = {
+            this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
                 description: param.description,
@@ -343,20 +343,20 @@ export default class Tags extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputTagData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "description":
-                this.inputTagData.description = data.value;
+                this.inputFormData.description = data.value;
                 break;
             case "siteIds":
-                this.inputTagData.siteIds = data.value;
+                this.inputFormData.siteIds = data.value;
                 break;
             case "regionIds":
-                this.inputTagData.regionIds = data.value;
+                this.inputFormData.regionIds = data.value;
                 break;
         }
 
-        for (const id of this.inputTagData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -369,7 +369,7 @@ export default class Tags extends Vue {
             }
         }
 
-        for (const id of this.inputTagData.regionIds) {
+        for (const id of this.inputFormData.regionIds) {
             for (const detail in this.regionsSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -390,7 +390,7 @@ export default class Tags extends Vue {
         this.clearInputData();
         this.selectedsSites = [];
         this.selectedsRegions = [];
-        this.inputTagData.type = type;
+        this.inputFormData.type = type;
     }
 
     async pageToEdit(type: string) {
@@ -400,14 +400,14 @@ export default class Tags extends Vue {
         await this.initSelectItemRegion();
         this.selectedsSites = [];
         this.selectedsRegions = [];
-        this.inputTagData.type = type;
+        this.inputFormData.type = type;
 
-        this.inputTagData.siteIds = JSON.parse(
-            JSON.stringify(this.inputTagData.siteIds.map(item => item.objectId))
+        this.inputFormData.siteIds = JSON.parse(
+            JSON.stringify(this.inputFormData.siteIds.map(item => item.objectId))
         );
-        this.inputTagData.regionIds = JSON.parse(
+        this.inputFormData.regionIds = JSON.parse(
             JSON.stringify(
-                this.inputTagData.regionIds.map(item => item.objectId)
+                this.inputFormData.regionIds.map(item => item.objectId)
             )
         );
     }
@@ -419,7 +419,7 @@ export default class Tags extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.tagTable as any).reload();
+        (this.$refs.listTable as any).reload();
         this.selectedsSites = [];
         this.selectedsRegions = [];
     }
@@ -429,7 +429,7 @@ export default class Tags extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selectedsRegions = [];
-        for (const id of this.inputTagData.regionIds) {
+        for (const id of this.inputFormData.regionIds) {
             for (const detail in this.regionsSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -448,7 +448,7 @@ export default class Tags extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selectedsSites = [];
-        for (const id of this.inputTagData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -463,61 +463,61 @@ export default class Tags extends Vue {
     }
 
     pageToShowResultRegionTree() {
-        if (this.inputTagData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
 
             // siteIds clear
-            this.inputTagData.regionIds = [];
+            this.inputFormData.regionIds = [];
 
             // from selecteds push siteIds / regionIds
 
             for (const item of this.selectedsRegions) {
-                this.inputTagData.regionIds.push(item.objectId);
+                this.inputFormData.regionIds.push(item.objectId);
             }
         }
 
-        if (this.inputTagData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteIds clear
-            this.inputTagData.regionIds = [];
+            this.inputFormData.regionIds = [];
 
             // from selecteds push siteIds / regionIds
 
             for (const item of this.selectedsRegions) {
-                this.inputTagData.regionIds.push(item.objectId);
+                this.inputFormData.regionIds.push(item.objectId);
             }
         }
     }
 
     pageToShowResultSiteTree() {
-        if (this.inputTagData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
 
             // siteIds clear
-            this.inputTagData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds / regionIds
             for (const item of this.selectedsSites) {
-                this.inputTagData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
 
-        if (this.inputTagData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteIds clear
-            this.inputTagData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds / regionIds
             for (const item of this.selectedsSites) {
-                this.inputTagData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputTagData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             const datas: ITag[] = [
                 {
                     name: data.name,
@@ -558,7 +558,7 @@ export default class Tags extends Vue {
                     return false;
                 });
         }
-        if (this.inputTagData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             const datas: ITagReadUpdate[] = [
                 {
                     description: data.description,
@@ -721,7 +721,7 @@ export default class Tags extends Vue {
                  * @uiLabel - ${this._("w_Tag_TagName")}
                  * @uiPlaceHolder - ${this._("w_Tag_TagName")}
                  * @uiType - ${
-                     this.inputTagData.type === EPageStep.add
+                     this.inputFormData.type === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

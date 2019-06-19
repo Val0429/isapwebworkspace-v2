@@ -8,7 +8,7 @@
 
             <iv-form
                 :interface="IMailServerComponent()"
-                :value="inputMailData"
+                :value="inputFormData"
                 @submit="saveMailServer($event)"
             ></iv-form>
 
@@ -86,7 +86,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface IInputMailData {
+interface IinputFormData {
     id: string;
     enable: boolean;
     host: string;
@@ -102,7 +102,7 @@ export default class MailServer extends Vue {
     modalShow: boolean = false;
 
     // input框綁定model資料
-    inputMailData: IInputMailData = {
+    inputFormData: IinputFormData = {
         id: "",
         host: "",
         password: "",
@@ -122,7 +122,7 @@ export default class MailServer extends Vue {
     }
 
     clearMailServerData() {
-        this.inputMailData = {
+        this.inputFormData = {
             id: "",
             host: "",
             password: "",
@@ -171,11 +171,11 @@ export default class MailServer extends Vue {
             .R("/setting/smtp")
             .then((response: any) => {
                 if (response != undefined) {
-                    this.inputMailData.enable = response.enable;
-                    this.inputMailData.host = response.host;
-                    this.inputMailData.port = response.port;
-                    this.inputMailData.email = response.email;
-                    this.inputMailData.password = response.password;
+                    this.inputFormData.enable = response.enable;
+                    this.inputFormData.host = response.host;
+                    this.inputFormData.port = response.port;
+                    this.inputFormData.email = response.email;
+                    this.inputFormData.password = response.password;
                 }
             })
             .catch((e: any) => {

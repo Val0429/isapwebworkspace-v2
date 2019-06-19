@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="cmsTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/partner/frs' }"
@@ -57,7 +57,7 @@
 
             <iv-form
                 :interface="IAddAndEditForm()"
-                :value="inputFRSData"
+                :value="inputFormData"
                 @submit="saveAddOrEdit($event)"
             ></iv-form>
 
@@ -84,7 +84,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputFRSData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -111,7 +111,7 @@ import { IFRSServerResults, IAddFRSServer, IEditFRSServer } from "@/config/defau
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface IInputFRSData extends IFRSServerResults {
+interface IinputFormData extends IFRSServerResults {
     type?: string;
 }
 
@@ -135,7 +135,7 @@ export default class FRSServer extends Vue {
 
     selectedDetail: any = [];
 
-    inputFRSData: IInputFRSData = {
+    inputFormData: IinputFormData = {
         objectId: "",
         customId: "",
         name: "",
@@ -153,7 +153,7 @@ export default class FRSServer extends Vue {
     mounted() {}
 
     clearInputData() {
-        this.inputFRSData = {
+        this.inputFormData = {
             objectId: "",
             customId: "",
             name: "",
@@ -176,7 +176,7 @@ export default class FRSServer extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputFRSData = {
+            this.inputFormData = {
                 objectId: param.objectId,
                 customId: param.customId,
                 ip: param.ip,
@@ -193,13 +193,13 @@ export default class FRSServer extends Vue {
     pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
         this.clearInputData();
-        this.inputFRSData.type = type;
+        this.inputFormData.type = type;
     }
 
     pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
-        this.inputFRSData.type = type;
+        this.inputFormData.type = type;
     }
 
     pageToView() {
@@ -209,12 +209,12 @@ export default class FRSServer extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.cmsTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     async saveAddOrEdit(data) {
         // add
-        if (this.inputFRSData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             const datas: IAddFRSServer[] = [
                 {
                     customId: data.customId,
@@ -264,7 +264,7 @@ export default class FRSServer extends Vue {
         }
 
         // edit
-        if (this.inputFRSData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             const datas: IEditFRSServer[] = [
                 {
                     name: data.name,
@@ -396,7 +396,7 @@ export default class FRSServer extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputFRSData.type === EPageStep.add
+                     this.inputFormData.type === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

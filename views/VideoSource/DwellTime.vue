@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="demographicTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/device' }"
@@ -138,7 +138,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromiSap()"
-                :value="inputDwellTimeData"
+                :value="inputFormData"
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
@@ -198,7 +198,7 @@
 
             <iv-form
                 :interface="IViewFromiSap()"
-                :value="inputDwellTimeData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -297,14 +297,14 @@ export default class DwellTime extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputDwellTimeData: any = {};
+    inputFormData: any = {};
 
     created() {}
 
     mounted() {}
 
     clearInputData() {
-        this.inputDwellTimeData = {
+        this.inputFormData = {
             stepType: "",
             customId: "",
             areaId: "",
@@ -408,7 +408,7 @@ export default class DwellTime extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputDwellTimeData = {
+            this.inputFormData = {
                 // objectId: param.objectId,
                 name: param.name,
                 areaId:
@@ -464,43 +464,43 @@ export default class DwellTime extends Vue {
             };
         }
 
-        if (this.inputDwellTimeData.serverId !== "") {
-            this.selectSourceIdAndLocation(this.inputDwellTimeData.serverId);
+        if (this.inputFormData.serverId !== "") {
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
         }
     }
 
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputDwellTimeData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "customId":
-                this.inputDwellTimeData.customId = data.value;
+                this.inputFormData.customId = data.value;
                 break;
             case "areaId":
-                this.inputDwellTimeData.areaId = data.value;
+                this.inputFormData.areaId = data.value;
                 break;
             case "groupIds":
-                this.inputDwellTimeData.groupIds = data.value;
+                this.inputFormData.groupIds = data.value;
                 break;
             case "serverId":
-                this.inputDwellTimeData.serverId = data.value;
+                this.inputFormData.serverId = data.value;
                 break;
             case "sourceid":
-                this.inputDwellTimeData.sourceid = data.value;
+                this.inputFormData.sourceid = data.value;
                 break;
             case "direction":
-                this.inputDwellTimeData.direction = data.value;
+                this.inputFormData.direction = data.value;
                 break;
             case "siteId":
-                this.inputDwellTimeData.siteId = data.value;
+                this.inputFormData.siteId = data.value;
                 break;
         }
 
         this.selecteds = [];
 
         for (const detail in this.sitesSelectItem) {
-            if (this.inputDwellTimeData.siteId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -564,8 +564,8 @@ export default class DwellTime extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputDwellTimeData.areaId = "";
-            this.inputDwellTimeData.groupIds = [];
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupIds = [];
         }
 
         if (this.pageStep === EPageStep.add) {
@@ -581,8 +581,8 @@ export default class DwellTime extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                this.inputDwellTimeData.areaId = "";
-                                this.inputDwellTimeData.groupIds = [];
+                                this.inputFormData.areaId = "";
+                                this.inputFormData.groupIds = [];
                                 // 自定義 areaSelectItem 的 key 的方式
                                 this.$set(
                                     this.areaSelectItem,
@@ -612,8 +612,8 @@ export default class DwellTime extends Vue {
 
         if (this.pageStep === EPageStep.edit) {
             if (data !== undefined || data !== "") {
-                if (this.inputDwellTimeData.tempSiteId !== data) {
-                    this.inputDwellTimeData.areaId = "";
+                if (this.inputFormData.tempSiteId !== data) {
+                    this.inputFormData.areaId = "";
                 }
 
                 const readParam: {
@@ -659,7 +659,7 @@ export default class DwellTime extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputDwellTimeData.groupIds = [];
+            this.inputFormData.groupIds = [];
         }
 
         if (this.pageStep === EPageStep.add) {
@@ -677,7 +677,7 @@ export default class DwellTime extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                this.inputDwellTimeData.groupIds = [];
+                                this.inputFormData.groupIds = [];
                                 // 自定義 deviceGroupSelectItem 的 key 的方式
                                 this.$set(
                                     this.deviceGroupSelectItem,
@@ -717,8 +717,8 @@ export default class DwellTime extends Vue {
                     mode: ECameraMode.dwellTime
                 };
 
-                if (this.inputDwellTimeData.tempAreaId !== data) {
-                    this.inputDwellTimeData.groupIds = [];
+                if (this.inputFormData.tempAreaId !== data) {
+                    this.inputFormData.groupIds = [];
                 }
 
                 await this.$server
@@ -761,7 +761,7 @@ export default class DwellTime extends Vue {
         await this.initSelectItemSite();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
-        this.inputDwellTimeData.stepType = stepType;
+        this.inputFormData.stepType = stepType;
         this.selecteds = [];
     }
 
@@ -770,16 +770,16 @@ export default class DwellTime extends Vue {
         this.getInputData();
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
-        await this.selectAreaId(this.inputDwellTimeData.siteId);
-        await this.selectGroupDeviceId(this.inputDwellTimeData.areaId);
-        this.inputDwellTimeData.stepType = stepType;
-        this.inputDwellTimeData.groupIds = JSON.parse(
+        await this.selectAreaId(this.inputFormData.siteId);
+        await this.selectGroupDeviceId(this.inputFormData.areaId);
+        this.inputFormData.stepType = stepType;
+        this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
-                this.inputDwellTimeData.groupIds.map(item => item.objectId)
+                this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
 
-        if (this.inputDwellTimeData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
     }
@@ -788,7 +788,7 @@ export default class DwellTime extends Vue {
         this.pageStep = EPageStep.view;
         this.getInputData();
 
-        if (this.inputDwellTimeData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
     }
@@ -796,7 +796,7 @@ export default class DwellTime extends Vue {
     pageToList() {
         this.pageStep = EPageStep.list;
         this.addStep = EAddStep.none;
-        (this.$refs.demographicTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     async pageToAddByiSapFRS(brand: string) {
@@ -804,8 +804,8 @@ export default class DwellTime extends Vue {
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         this.addStep = EAddStep.isapFrs;
-        this.inputDwellTimeData.brand = brand;
-        this.inputDwellTimeData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
@@ -813,8 +813,8 @@ export default class DwellTime extends Vue {
         await this.initSelectItemSite();
 
         this.addStep = EAddStep.isapFrsManager;
-        this.inputDwellTimeData.brand = brand;
-        this.inputDwellTimeData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
     }
 
     pageStepBackward() {
@@ -829,10 +829,10 @@ export default class DwellTime extends Vue {
         this.selecteds = [];
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
-        this.inputDwellTimeData.areaId = "";
-        this.inputDwellTimeData.groupIds = [];
+        this.inputFormData.areaId = "";
+        this.inputFormData.groupIds = [];
         for (const detail in this.sitesSelectItem) {
-            if (this.inputDwellTimeData.siteId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -844,29 +844,29 @@ export default class DwellTime extends Vue {
     }
 
     async pageToShowResult() {
-        if (this.inputDwellTimeData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteId clear
-            this.inputDwellTimeData.siteId = "";
+            this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputDwellTimeData.siteId = this.selecteds[
+            this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
             ].objectId;
-            await this.selectAreaId(this.inputDwellTimeData.siteId);
+            await this.selectAreaId(this.inputFormData.siteId);
         }
 
-        if (this.inputDwellTimeData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteId clear
-            this.inputDwellTimeData.siteId = "";
+            this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputDwellTimeData.siteId = this.selecteds[
+            this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
             ].objectId;
-            await this.selectAreaId(this.inputDwellTimeData.siteId);
+            await this.selectAreaId(this.inputFormData.siteId);
         }
     }
 
@@ -884,7 +884,7 @@ export default class DwellTime extends Vue {
             sourceid: data.sourceid
         };
 
-        if (this.inputDwellTimeData.brand === EAddStep.isapFrs) {
+        if (this.inputFormData.brand === EAddStep.isapFrs) {
             const datas: any = [
                 {
                     customId: data.customId,
@@ -930,7 +930,7 @@ export default class DwellTime extends Vue {
                 });
         }
 
-        if (this.inputDwellTimeData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             const datas: any = [
                 {
                     objectId: data.objectId,
@@ -1140,7 +1140,7 @@ export default class DwellTime extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputDwellTimeData.stepType === EPageStep.add
+                     this.inputFormData.stepType === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

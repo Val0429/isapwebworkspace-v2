@@ -24,7 +24,7 @@
                 </template>
 
                 <iv-table
-                    ref="dataTable"
+                    ref="listTable"
                     :interface="IList()"
                     @selected="selectedData($event)"
                     :server="{ path: '/partner/human-detection' }"
@@ -68,7 +68,7 @@
 
                 <iv-form
                     :interface="IForm()"
-                    :value="inputHumanDetectionServerData"
+                    :value="inputFormData"
                     @update:*="updateForm($event)"
                     @submit="saveData($event)"
                 >
@@ -102,13 +102,13 @@
 
                 <iv-form
                     :interface="IView()"
-                    :value="inputHumanDetectionServerData"
+                    :value="inputFormData"
                 >
                     <template #target_score="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :value="inputHumanDetectionServerData.target_score ? Math.round(inputHumanDetectionServerData.target_score*100) + '%': ''"
+                            :value="inputFormData.target_score ? Math.round(inputFormData.target_score*100) + '%': ''"
                         />
                     </template>
                 </iv-form>
@@ -139,7 +139,7 @@
                 <iv-form
                     :visible="true"
                     :interface="IHumanServerTestComponent()"
-                    :value="inputHumanDetectionServerData"
+                    :value="inputFormData"
                     @update:*="updateServerData"
                     @submit="sendHumanServerTest($event)"
                 >
@@ -244,7 +244,7 @@ export default class HumanDetectionServer extends Vue {
     isSelected: any = [];
     selectedDetail: any = [];
 
-    inputHumanDetectionServerData: any = {};
+    inputFormData: any = {};
 
     //test data
     inputHumanServerData = {
@@ -277,7 +277,7 @@ export default class HumanDetectionServer extends Vue {
     }
 
     clearInputData() {
-        this.inputHumanDetectionServerData = {
+        this.inputFormData = {
             objectId: '',
             customId: '',
             name: '',
@@ -301,7 +301,7 @@ export default class HumanDetectionServer extends Vue {
         this.clearInputData();
 
         for (const param of this.selectedDetail) {
-            this.inputHumanDetectionServerData = {
+            this.inputFormData = {
                 name: param.name,
                 customId: param.customId,
                 objectId: param.objectId,
@@ -333,7 +333,7 @@ export default class HumanDetectionServer extends Vue {
         this.initTargetScoreItem();
         this.clearInputData();
         this.pageStep = EPageStep.List;
-        (this.$refs.dataTable as any).reload();
+        (this.$refs.listTable as any).reload();
 
     }
 
@@ -484,7 +484,7 @@ export default class HumanDetectionServer extends Vue {
     updateForm(data) {
         console.log("updateForm", data);
         if (data) {
-            this.inputHumanDetectionServerData[data.key] = data.value;
+            this.inputFormData[data.key] = data.value;
         }
     }
 

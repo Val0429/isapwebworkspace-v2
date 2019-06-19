@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="peopleCountingTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/device' }"
@@ -152,7 +152,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromHanwha()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
                 @update:*="tempSaveInputData($event)"
@@ -211,7 +211,7 @@
 
             <iv-form
                 :interface="IViewFromHanwha()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -249,7 +249,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromiSap()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
@@ -309,7 +309,7 @@
 
             <iv-form
                 :interface="IViewFromiSap()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -409,14 +409,14 @@ export default class PeopleCounting extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputPeopleCountingData: any = {};
+    inputFormData: any = {};
 
     created() {}
 
     mounted() {}
 
     clearInputData() {
-        this.inputPeopleCountingData = {
+        this.inputFormData = {
             stepType: "",
             customId: "",
             areaId: "",
@@ -527,7 +527,7 @@ export default class PeopleCounting extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputPeopleCountingData = {
+            this.inputFormData = {
                 // objectId: param.objectId,
                 name: param.name,
                 areaId:
@@ -605,9 +605,9 @@ export default class PeopleCounting extends Vue {
             };
         }
 
-        if (this.inputPeopleCountingData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.selectSourceIdAndLocation(
-                this.inputPeopleCountingData.serverId
+                this.inputFormData.serverId
             );
         }
     }
@@ -615,53 +615,53 @@ export default class PeopleCounting extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputPeopleCountingData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "customId":
-                this.inputPeopleCountingData.customId = data.value;
+                this.inputFormData.customId = data.value;
                 break;
             case "areaId":
-                this.inputPeopleCountingData.areaId = data.value;
+                this.inputFormData.areaId = data.value;
                 break;
             case "groupIds":
-                this.inputPeopleCountingData.groupIds = data.value;
+                this.inputFormData.groupIds = data.value;
                 break;
             case "model":
-                this.inputPeopleCountingData.model = data.value;
+                this.inputFormData.model = data.value;
                 break;
             case "protocol":
-                this.inputPeopleCountingData.protocol = data.value;
+                this.inputFormData.protocol = data.value;
                 break;
             case "ip":
-                this.inputPeopleCountingData.ip = data.value;
+                this.inputFormData.ip = data.value;
                 break;
             case "port":
-                this.inputPeopleCountingData.port = data.value;
+                this.inputFormData.port = data.value;
                 break;
             case "account":
-                this.inputPeopleCountingData.account = data.value;
+                this.inputFormData.account = data.value;
                 break;
             case "password":
-                this.inputPeopleCountingData.password = data.value;
+                this.inputFormData.password = data.value;
                 break;
             case "serverId":
-                this.inputPeopleCountingData.serverId = data.value;
+                this.inputFormData.serverId = data.value;
                 break;
             case "sourceid":
-                this.inputPeopleCountingData.sourceid = data.value;
+                this.inputFormData.sourceid = data.value;
                 break;
             case "direction":
-                this.inputPeopleCountingData.direction = data.value;
+                this.inputFormData.direction = data.value;
                 break;
             case "siteId":
-                this.inputPeopleCountingData.siteId = data.value;
+                this.inputFormData.siteId = data.value;
                 break;
         }
 
         this.selecteds = [];
 
         for (const detail in this.sitesSelectItem) {
-            if (this.inputPeopleCountingData.siteId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -725,8 +725,8 @@ export default class PeopleCounting extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputPeopleCountingData.areaId = "";
-            this.inputPeopleCountingData.groupIds = [];
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupIds = [];
         }
 
         if (this.pageStep === EPageStep.add) {
@@ -742,8 +742,8 @@ export default class PeopleCounting extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                this.inputPeopleCountingData.areaId = "";
-                                this.inputPeopleCountingData.groupIds = [];
+                                this.inputFormData.areaId = "";
+                                this.inputFormData.groupIds = [];
                                 // 自定義 areaSelectItem 的 key 的方式
                                 this.$set(
                                     this.areaSelectItem,
@@ -775,8 +775,8 @@ export default class PeopleCounting extends Vue {
 
         if (this.pageStep === EPageStep.edit) {
             if (data !== undefined || data !== "") {
-                if (this.inputPeopleCountingData.tempSiteId !== data) {
-                    this.inputPeopleCountingData.areaId = "";
+                if (this.inputFormData.tempSiteId !== data) {
+                    this.inputFormData.areaId = "";
                 }
 
                 const readParam: {
@@ -822,7 +822,7 @@ export default class PeopleCounting extends Vue {
         this.deviceGroupSelectItem = {};
 
         if (data === undefined || data === "") {
-            this.inputPeopleCountingData.groupIds = [];
+            this.inputFormData.groupIds = [];
         }
 
         if (this.pageStep === EPageStep.add) {
@@ -840,7 +840,7 @@ export default class PeopleCounting extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                this.inputPeopleCountingData.groupIds = [];
+                                this.inputFormData.groupIds = [];
                                 // 自定義 deviceGroupSelectItem 的 key 的方式
                                 this.$set(
                                     this.deviceGroupSelectItem,
@@ -880,8 +880,8 @@ export default class PeopleCounting extends Vue {
                     mode: ECameraMode.peopleCounting
                 };
 
-                if (this.inputPeopleCountingData.tempAreaId !== data) {
-                    this.inputPeopleCountingData.groupIds = [];
+                if (this.inputFormData.tempAreaId !== data) {
+                    this.inputFormData.groupIds = [];
                 }
 
                 await this.$server
@@ -922,7 +922,7 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemSite();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
-        this.inputPeopleCountingData.stepType = stepType;
+        this.inputFormData.stepType = stepType;
         this.selecteds = [];
     }
 
@@ -931,24 +931,24 @@ export default class PeopleCounting extends Vue {
         this.getInputData();
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
-        await this.selectAreaId(this.inputPeopleCountingData.siteId);
-        await this.selectGroupDeviceId(this.inputPeopleCountingData.areaId);
-        this.inputPeopleCountingData.stepType = stepType;
-        this.inputPeopleCountingData.groupIds = JSON.parse(
+        await this.selectAreaId(this.inputFormData.siteId);
+        await this.selectGroupDeviceId(this.inputFormData.areaId);
+        this.inputFormData.stepType = stepType;
+        this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
-                this.inputPeopleCountingData.groupIds.map(item => item.objectId)
+                this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
 
-        if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
+        if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
         }
 
-        if (this.inputPeopleCountingData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
 
-        switch (this.inputPeopleCountingData.brand) {
+        switch (this.inputFormData.brand) {
             case EAddStep.hanwha:
                 break;
             case EAddStep.isapFrsManager:
@@ -960,11 +960,11 @@ export default class PeopleCounting extends Vue {
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
-        if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
+        if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
         }
 
-        if (this.inputPeopleCountingData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
     }
@@ -972,15 +972,15 @@ export default class PeopleCounting extends Vue {
     pageToList() {
         this.pageStep = EPageStep.list;
         this.addStep = EAddStep.none;
-        (this.$refs.peopleCountingTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     async pageToAddByHanwha(brand: string) {
         this.clearInputData();
         await this.initSelectItemSite();
         this.addStep = EAddStep.hanwha;
-        this.inputPeopleCountingData.stepType = EPageStep.add;
-        this.inputPeopleCountingData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
     }
 
     async pageToAddByiSapFRS(brand: string) {
@@ -988,8 +988,8 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         this.addStep = EAddStep.isapFrs;
-        this.inputPeopleCountingData.brand = brand;
-        this.inputPeopleCountingData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
@@ -997,8 +997,8 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemSite();
 
         this.addStep = EAddStep.isapFrsManager;
-        this.inputPeopleCountingData.brand = brand;
-        this.inputPeopleCountingData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
     }
 
     pageStepBackward() {
@@ -1013,10 +1013,10 @@ export default class PeopleCounting extends Vue {
         this.selecteds = [];
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
-        this.inputPeopleCountingData.areaId = "";
-        this.inputPeopleCountingData.groupIds = [];
+        this.inputFormData.areaId = "";
+        this.inputFormData.groupIds = [];
         for (const detail in this.sitesSelectItem) {
-            if (this.inputPeopleCountingData.siteId === detail) {
+            if (this.inputFormData.siteId === detail) {
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -1028,29 +1028,29 @@ export default class PeopleCounting extends Vue {
     }
 
     async pageToShowResult() {
-        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteId clear
-            this.inputPeopleCountingData.siteId = "";
+            this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputPeopleCountingData.siteId = this.selecteds[
+            this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
             ].objectId;
-            await this.selectAreaId(this.inputPeopleCountingData.siteId);
+            await this.selectAreaId(this.inputFormData.siteId);
         }
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteId clear
-            this.inputPeopleCountingData.siteId = "";
+            this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputPeopleCountingData.siteId = this.selecteds[
+            this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
             ].objectId;
-            await this.selectAreaId(this.inputPeopleCountingData.siteId);
+            await this.selectAreaId(this.inputFormData.siteId);
         }
     }
 
@@ -1071,12 +1071,12 @@ export default class PeopleCounting extends Vue {
             password: data.password
         };
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             const datas: any = [
                 {
                     customId: data.customId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand,
+                    brand: this.inputFormData.brand,
                     model: data.model,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1122,12 +1122,12 @@ export default class PeopleCounting extends Vue {
                 });
         }
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             const datas: any = [
                 {
                     objectId: data.objectId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand,
+                    brand: this.inputFormData.brand,
                     model: data.model,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1180,12 +1180,12 @@ export default class PeopleCounting extends Vue {
             sourceid: data.sourceid
         };
 
-        if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
+        if (this.inputFormData.brand === EAddStep.isapFrs) {
             const datas: any = [
                 {
                     customId: data.customId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand.split("F")[0],
+                    brand: this.inputFormData.brand.split("F")[0],
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1231,12 +1231,12 @@ export default class PeopleCounting extends Vue {
                 });
         }
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             const datas: any = [
                 {
                     objectId: data.objectId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand,
+                    brand: this.inputFormData.brand,
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1452,7 +1452,7 @@ export default class PeopleCounting extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputPeopleCountingData.stepType === EPageStep.add
+                     this.inputFormData.stepType === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
@@ -1627,7 +1627,7 @@ export default class PeopleCounting extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputPeopleCountingData.stepType === EPageStep.add
+                     this.inputFormData.stepType === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

@@ -8,7 +8,7 @@
 
             <iv-form
                 :interface="ISmsServerComponent()"
-                :value="inputSmsServerData"
+                :value="inputFormData"
                 @submit="saveSmsServer($event)"
             ></iv-form>
             <template #footer-before>
@@ -85,7 +85,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface IInputSmsServerData {
+interface IinputFormData {
     id: string;
     account: string;
     password: string;
@@ -100,7 +100,7 @@ export default class SMS extends Vue {
     modalShow: boolean = false;
 
     // input框綁定model資料
-    inputSmsServerData: IInputSmsServerData = {
+    inputFormData: IinputFormData = {
         id: "",
         account: "",
         password: "",
@@ -120,7 +120,7 @@ export default class SMS extends Vue {
     }
 
     clearLicenseData() {
-        this.inputSmsServerData = {
+        this.inputFormData = {
             id: "",
             account: "",
             password: "",
@@ -168,10 +168,10 @@ export default class SMS extends Vue {
             .R("/setting/sgsms")
             .then((response: any) => {
                 if (response != undefined) {
-                    this.inputSmsServerData.enable = response.enable;
-                    this.inputSmsServerData.password = response.password;
-                    this.inputSmsServerData.account = response.account;
-                    this.inputSmsServerData.url = response.url;
+                    this.inputFormData.enable = response.enable;
+                    this.inputFormData.password = response.password;
+                    this.inputFormData.account = response.account;
+                    this.inputFormData.url = response.url;
                 }
             })
             .catch((e: any) => {

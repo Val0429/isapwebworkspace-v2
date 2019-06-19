@@ -26,7 +26,7 @@
             </template>
 
             <iv-table
-                ref="userTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/user/user' }"
@@ -76,7 +76,7 @@
 
             <iv-form
                 :interface="IAddForm()"
-                :value="inputUserData"
+                :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAdd($event)"
             >
@@ -123,7 +123,7 @@
 
             <iv-form
                 :interface="IEditForm()"
-                :value="inputUserData"
+                :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
                 @submit="saveEdit($event)"
             >
@@ -171,7 +171,7 @@
 
             <iv-form
                 :interface="IViewForm()"
-                :value="inputUserData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -271,7 +271,7 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface InputUserData extends IUserAddData, IUserEditData {
+interface inputFormData extends IUserAddData, IUserEditData {
     siteIdsText?: string;
     groupIdsText?: string;
     confirmPassword?: string;
@@ -312,7 +312,7 @@ export default class User extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputUserData: InputUserData = {
+    inputFormData: inputFormData = {
         objectId: "",
         username: "",
         role: "",
@@ -333,7 +333,7 @@ export default class User extends Vue {
     mounted() {}
 
     clearInputData() {
-        this.inputUserData = {
+        this.inputFormData = {
             objectId: "",
             username: "",
             role: "User",
@@ -439,7 +439,7 @@ export default class User extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputUserData = {
+            this.inputFormData = {
                 objectId: param.objectId,
                 employeeId: param.employeeId,
                 username: param.username,
@@ -459,34 +459,34 @@ export default class User extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "account":
-                this.inputUserData.username = data.value;
+                this.inputFormData.username = data.value;
                 break;
             case "password":
-                this.inputUserData.password = data.value;
+                this.inputFormData.password = data.value;
                 break;
             case "confirmPassword":
-                this.inputUserData.confirmPassword = data.value;
+                this.inputFormData.confirmPassword = data.value;
                 break;
             case "employeeId":
-                this.inputUserData.employeeId = data.value;
+                this.inputFormData.employeeId = data.value;
                 break;
             case "name":
-                this.inputUserData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "email":
-                this.inputUserData.email = data.value;
+                this.inputFormData.email = data.value;
                 break;
             case "phone":
-                this.inputUserData.phone = data.value;
+                this.inputFormData.phone = data.value;
                 break;
             case "siteIds":
-                this.inputUserData.siteIds = data.value;
+                this.inputFormData.siteIds = data.value;
                 break;
             case "groupIds":
-                this.inputUserData.groupIds = data.value;
+                this.inputFormData.groupIds = data.value;
                 break;
             case "role":
-                this.inputUserData.role = data.value;
+                this.inputFormData.role = data.value;
                 break;
         }
 
@@ -494,7 +494,7 @@ export default class User extends Vue {
 
         this.selecteds = [];
 
-        for (const id of this.inputUserData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -514,7 +514,7 @@ export default class User extends Vue {
         await this.initSelectItemSite();
         await this.initSelectItemUserGroup();
         this.selecteds = [];
-        this.inputUserData.type = type;
+        this.inputFormData.type = type;
     }
 
     async pageToEdit(type: string) {
@@ -524,16 +524,16 @@ export default class User extends Vue {
         await this.initSelectItemUserGroup();
         this.selecteds = [];
 
-        this.inputUserData.type = type;
+        this.inputFormData.type = type;
 
-        this.inputUserData.siteIds = JSON.parse(
+        this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(
-                this.inputUserData.siteIds.map(item => item.objectId)
+                this.inputFormData.siteIds.map(item => item.objectId)
             )
         );
-        this.inputUserData.groupIds = JSON.parse(
+        this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
-                this.inputUserData.groupIds.map(item => item.objectId)
+                this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
     }
@@ -545,7 +545,7 @@ export default class User extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        (this.$refs.userTable as any).reload();
+        (this.$refs.listTable as any).reload();
         this.selecteds = [];
     }
 
@@ -554,7 +554,7 @@ export default class User extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
-        for (const id of this.inputUserData.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -569,26 +569,26 @@ export default class User extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputUserData.type === EPageStep.edit) {
+        if (this.inputFormData.type === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteIds clear
-            this.inputUserData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds
             for (const item of this.selecteds) {
-                this.inputUserData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
 
-        if (this.inputUserData.type === EPageStep.add) {
+        if (this.inputFormData.type === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteIds clear
-            this.inputUserData.siteIds = [];
+            this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds
             for (const item of this.selecteds) {
-                this.inputUserData.siteIds.push(item.objectId);
+                this.inputFormData.siteIds.push(item.objectId);
             }
         }
     }
@@ -795,8 +795,8 @@ export default class User extends Vue {
     searchKeywords(search: string) {
         // TODO: finished search
         if (search != "") {
-            const accountText = this.inputUserData.username.toLocaleLowerCase();
-            const nameText = this.inputUserData.name.toLocaleLowerCase();
+            const accountText = this.inputFormData.username.toLocaleLowerCase();
+            const nameText = this.inputFormData.name.toLocaleLowerCase();
             const searchText = search.toLowerCase();
             const searchResult =
                 accountText.match(searchText) || nameText.match(searchText);

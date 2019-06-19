@@ -24,7 +24,7 @@
             </template>
 
             <iv-table
-                ref="peopleCountingTable"
+                ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
                 :server="{ path: '/device' }"
@@ -152,7 +152,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromHanwha()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
                 @update:siteId="selectAreaId($event)"
                 @update:areaId="selectGroupDeviceId($event)"
                 @submit="saveAddOrEditHanwha($event)"
@@ -210,7 +210,7 @@
 
             <iv-form
                 :interface="IViewFromHanwha()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -248,7 +248,7 @@
 
             <iv-form
                 :interface="IAddAndEditFromiSap()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
                 @update:serverId="selectSourceIdAndLocation($event)"
                 @submit="saveAddOrEditiSap($event)"
             >
@@ -305,7 +305,7 @@
 
             <iv-form
                 :interface="IViewFromiSap()"
-                :value="inputPeopleCountingData"
+                :value="inputFormData"
             >
 
             </iv-form>
@@ -405,14 +405,14 @@ export default class FaceRecognition extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputPeopleCountingData: any = {};
+    inputFormData: any = {};
 
     created() {}
 
     mounted() {}
 
     clearInputData() {
-        this.inputPeopleCountingData = {
+        this.inputFormData = {
             stepType: "",
             customId: "",
             areaId: "",
@@ -560,7 +560,7 @@ export default class FaceRecognition extends Vue {
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            this.inputPeopleCountingData = {
+            this.inputFormData = {
                 // objectId: param.objectId,
                 name: param.name,
                 areaId:
@@ -592,9 +592,9 @@ export default class FaceRecognition extends Vue {
             };
         }
 
-        if (this.inputPeopleCountingData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.selectSourceIdAndLocation(
-                this.inputPeopleCountingData.serverId
+                this.inputFormData.serverId
             );
         }
     }
@@ -602,52 +602,52 @@ export default class FaceRecognition extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "name":
-                this.inputPeopleCountingData.name = data.value;
+                this.inputFormData.name = data.value;
                 break;
             case "customId":
-                this.inputPeopleCountingData.customId = data.value;
+                this.inputFormData.customId = data.value;
                 break;
             case "areaId":
-                this.inputPeopleCountingData.areaId = data.value;
+                this.inputFormData.areaId = data.value;
                 break;
             case "groupIds":
-                this.inputPeopleCountingData.groupIds = data.value;
+                this.inputFormData.groupIds = data.value;
                 break;
             case "model":
-                this.inputPeopleCountingData.model = data.value;
+                this.inputFormData.model = data.value;
                 break;
             case "protocol":
-                this.inputPeopleCountingData.protocol = data.value;
+                this.inputFormData.protocol = data.value;
                 break;
             case "ip":
-                this.inputPeopleCountingData.ip = data.value;
+                this.inputFormData.ip = data.value;
                 break;
             case "port":
-                this.inputPeopleCountingData.port = data.value;
+                this.inputFormData.port = data.value;
                 break;
             case "account":
-                this.inputPeopleCountingData.account = data.value;
+                this.inputFormData.account = data.value;
                 break;
             case "password":
-                this.inputPeopleCountingData.password = data.value;
+                this.inputFormData.password = data.value;
                 break;
             case "serverId":
-                this.inputPeopleCountingData.serverId = data.value;
+                this.inputFormData.serverId = data.value;
                 break;
             case "sourceid":
-                this.inputPeopleCountingData.sourceid = data.value;
+                this.inputFormData.sourceid = data.value;
                 break;
             case "direction":
-                this.inputPeopleCountingData.direction = data.value;
+                this.inputFormData.direction = data.value;
                 break;
             case "siteId":
-                this.inputPeopleCountingData.siteId = data.value;
+                this.inputFormData.siteId = data.value;
                 break;
         }
 
         this.selecteds = [];
 
-        for (const id of this.inputPeopleCountingData.siteId) {
+        for (const id of this.inputFormData.siteId) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -818,7 +818,7 @@ export default class FaceRecognition extends Vue {
         this.clearInputData();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
-        this.inputPeopleCountingData.stepType = stepType;
+        this.inputFormData.stepType = stepType;
         await this.initSelectItemSite();
         this.selecteds = [];
     }
@@ -829,22 +829,22 @@ export default class FaceRecognition extends Vue {
         await this.initSelectItemFRSServer();
         // await this.initSelectItemDeviceGroup();
         // await this.initSelectItemArea();
-        this.inputPeopleCountingData.stepType = stepType;
-        this.inputPeopleCountingData.groupIds = JSON.parse(
+        this.inputFormData.stepType = stepType;
+        this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
-                this.inputPeopleCountingData.groupIds.map(item => item.objectId)
+                this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
 
-        if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
+        if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
         }
 
-        if (this.inputPeopleCountingData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
 
-        switch (this.inputPeopleCountingData.brand) {
+        switch (this.inputFormData.brand) {
             case EAddStep.hanwha:
                 break;
             case EAddStep.isapFrsManager:
@@ -856,11 +856,11 @@ export default class FaceRecognition extends Vue {
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
-        if (this.inputPeopleCountingData.brand === EAddStep.hanwha) {
+        if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
         }
 
-        if (this.inputPeopleCountingData.serverId !== "") {
+        if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
         }
     }
@@ -868,7 +868,7 @@ export default class FaceRecognition extends Vue {
     pageToList() {
         this.pageStep = EPageStep.list;
         this.addStep = EAddStep.none;
-        (this.$refs.peopleCountingTable as any).reload();
+        (this.$refs.listTable as any).reload();
     }
 
     async pageToAddByHanwha(brand: string) {
@@ -877,8 +877,8 @@ export default class FaceRecognition extends Vue {
         // await this.initSelectItemArea();
         // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.hanwha;
-        this.inputPeopleCountingData.stepType = EPageStep.add;
-        this.inputPeopleCountingData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
     }
 
     async pageToAddByiSapFRS(brand: string) {
@@ -888,9 +888,9 @@ export default class FaceRecognition extends Vue {
         // await this.initSelectItemArea();
         // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.isapFrs;
-        this.inputPeopleCountingData.brand = brand;
-        this.inputPeopleCountingData.stepType = EPageStep.add;
-        console.log("brand", this.inputPeopleCountingData.brand);
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
+        console.log("brand", this.inputFormData.brand);
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
@@ -899,8 +899,8 @@ export default class FaceRecognition extends Vue {
         // await this.initSelectItemArea();
         // await this.initSelectItemDeviceGroup();
         this.addStep = EAddStep.isapFrsManager;
-        this.inputPeopleCountingData.brand = brand;
-        this.inputPeopleCountingData.stepType = EPageStep.add;
+        this.inputFormData.brand = brand;
+        this.inputFormData.stepType = EPageStep.add;
     }
 
     pageStepBackward() {
@@ -913,7 +913,7 @@ export default class FaceRecognition extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
-        for (const id of this.inputPeopleCountingData.siteId) {
+        for (const id of this.inputFormData.siteId) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -928,26 +928,26 @@ export default class FaceRecognition extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteId clear
-            this.inputPeopleCountingData.siteId = [];
+            this.inputFormData.siteId = [];
 
             // from selecteds push siteId
             for (const item of this.selecteds) {
-                this.inputPeopleCountingData.siteId.push(item.objectId);
+                this.inputFormData.siteId.push(item.objectId);
             }
         }
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
 
             // siteId clear
-            this.inputPeopleCountingData.siteId = [];
+            this.inputFormData.siteId = [];
 
             // from selecteds push siteId
             for (const item of this.selecteds) {
-                this.inputPeopleCountingData.siteId.push(item.objectId);
+                this.inputFormData.siteId.push(item.objectId);
             }
         }
     }
@@ -969,12 +969,12 @@ export default class FaceRecognition extends Vue {
             password: data.password
         };
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             const datas: any = [
                 {
                     customId: data.customId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand,
+                    brand: this.inputFormData.brand,
                     model: data.model,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1020,12 +1020,12 @@ export default class FaceRecognition extends Vue {
                 });
         }
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             const datas: any = [
                 {
                     objectId: data.objectId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand,
+                    brand: this.inputFormData.brand,
                     model: data.model,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1079,12 +1079,12 @@ export default class FaceRecognition extends Vue {
 
         };
 
-        if (this.inputPeopleCountingData.brand === EAddStep.isapFrs) {
+        if (this.inputFormData.brand === EAddStep.isapFrs) {
             const datas: any = [
                 {
                     customId: data.customId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand.split("F")[0],
+                    brand: this.inputFormData.brand.split("F")[0],
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1130,12 +1130,12 @@ export default class FaceRecognition extends Vue {
                 });
         }
 
-        if (this.inputPeopleCountingData.stepType === EPageStep.edit) {
+        if (this.inputFormData.stepType === EPageStep.edit) {
             const datas: any = [
                 {
                     objectId: data.objectId,
                     name: data.name,
-                    brand: this.inputPeopleCountingData.brand,
+                    brand: this.inputFormData.brand,
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1321,7 +1321,7 @@ export default class FaceRecognition extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputPeopleCountingData.stepType === EPageStep.add
+                     this.inputFormData.stepType === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
@@ -1496,7 +1496,7 @@ export default class FaceRecognition extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputPeopleCountingData.stepType === EPageStep.add
+                     this.inputFormData.stepType === EPageStep.add
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
