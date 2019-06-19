@@ -80,8 +80,7 @@
 
                 <template #footer>
                     <b-button
-                        variant="
-                            secondary"
+                        variant="secondary"
                         size="lg"
                         @click="pageToList()"
                     >{{ _('w_Back') }}
@@ -124,16 +123,17 @@
 
                 <template #footer-before>
                     <b-button
-                        variant="dark"
-                        size="lg"
-                        @click="pageToHumanServerTest()"
-                    >{{ _('w_Test') }}
-                    </b-button>
-                    <b-button
                         variant="secondary"
                         size="lg"
                         @click="pageToList()"
                     >{{ _('w_Back') }}
+                    </b-button>
+                    <b-button
+                        v-show="pageStep === ePageStep.Edit"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToHumanServerTest()"
+                    >{{ _('w_Test') }}
                     </b-button>
                 </template>
 
@@ -241,9 +241,7 @@ export default class HumanDetectionServer extends Vue {
     //test data
     inputHumanServerData = {
         imageBase64: "",
-        protocol: "http",
-        ip: "",
-        port: null
+        objectId: "",
     };
 
     //options
@@ -428,19 +426,11 @@ export default class HumanDetectionServer extends Vue {
     pageToHumanServerTest() {
         console.log("pageToHumanServerTest", this.data);
         this.modalShow = !this.modalShow;
-        this.inputHumanServerData.protocol = this.data["protocol"];
-        this.inputHumanServerData.ip = this.data["ip"];
-        this.inputHumanServerData.port = this.data["port"];
+        this.inputHumanServerData.objectId = this.data["objectId"];
+
     }
 
     async sendHumanServerTest(data) {
-        // port正則
-        const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
-
-        if (!portRegex.test(data.port.toString())) {
-            Dialog.error(this._("w_Error_Port"));
-            return false;
-        }
 
         if (this.newImgSrc == "") {
             Dialog.error(this._("w_Upload_Fail"));
@@ -449,21 +439,9 @@ export default class HumanDetectionServer extends Vue {
 
         const humanObject: {
             objectId: string;
-            config: {
-                protocol: string;
-                ip: string;
-                port: number;
-                target_score: number;
-            };
             imageBase64: string;
         } = {
             objectId: this.data[0].objectId,
-            config: {
-                protocol: data.protocol,
-                ip: data.ip,
-                port: data.port,
-                target_score: this.data[0].target_score
-            },
             imageBase64: this.newImgSrc
         };
 

@@ -511,6 +511,7 @@ export default class LangObject {
     w_DemographicServer_View = 'Demographic Server View';
     w_DemographicServer_Add = 'Demographic Server Add';
     w_DemographicServer_Edit = 'Demographic Server Edit';
+    w_DemographicServer_Test = 'Demographic Server Test';
     w_DemographicServer_DeviceID = 'Device ID';
     w_DemographicServer_DeviceName = 'Device Name';
     w_DemographicServer_IP = 'IP';
