@@ -166,7 +166,6 @@
                                         {{ _('w_SelectSiteTree') }}
                                     </b-button>
                                 </div>
-                                {{ inputFormData}}
                             </template>
 
                         </iv-form>
@@ -872,23 +871,12 @@ export default class HumanDetection extends Vue {
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
-        console.log(
-            "pageToChooseTree0",
-            JSON.stringify(this.selecteds),
-            this.sitesSelectItem
-        );
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
         this.inputFormData.areaId = "";
         this.inputFormData.groupIds = [];
         for (const detail in this.sitesSelectItem) {
             if (this.inputFormData.siteId === detail) {
-                console.log(
-                    "pageToChooseTree1",
-                    this.inputFormData.siteId,
-                    detail,
-                    this.inputFormData.siteId === detail
-                );
                 let selectedsObject: IRegionTreeSelected = {
                     objectId: detail,
                     type: ERegionType.site,
@@ -897,7 +885,6 @@ export default class HumanDetection extends Vue {
                 this.selecteds.push(selectedsObject);
             }
         }
-        console.log("pageToChooseTree2", JSON.stringify(this.selecteds));
     }
 
     async pageToShowResult() {
