@@ -14,7 +14,9 @@
             :options="options" 
             />
         </template>
-
+        <template #view.permission="{$attrs, $listeners}" v-if="isMounted">
+            {{!$attrs.value || $attrs.value.length==0 ? '' : $attrs.value.map(x=>getName(x)).join(", ")}}
+        </template>
     </iv-form-quick>
 </template>
 
@@ -36,7 +38,7 @@ export default class MemberForm extends Vue implements IFormQuick {
     canEdit: boolean = true;
     canDelete: boolean = false;
     selectedOptions=[];
-    options = [];
+    options :{key:any, value:any}[]=[];
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
@@ -75,6 +77,7 @@ export default class MemberForm extends Vue implements IFormQuick {
                     * @uiLabel - ${this._("updatedAt")}
                     */
                     updatedAt: Date;
+                    permission:string;
                 }
                 `;
             case EFormQuick.Add:
@@ -131,9 +134,17 @@ export default class MemberForm extends Vue implements IFormQuick {
     private server;
     created() {
         this.server = this.$server;
-        this.options.push({key:"1",value:"A", checked:false});
-        this.options.push({key:"2",value:"B", checked:false});
-        this.options.push({key:"3",value:"C", checked:false});
+        this.options.push({key:"1",value:"A"});
+        this.options.push({key:"2",value:"B"});
+        this.options.push({key:"3",value:"C"});
+    }
+    isMounted:boolean=false;
+    mounted(){
+        this.isMounted=true;
+    }
+    getName(key:any){
+        let item = this.options.find(x=>x.key==key);        
+        return item?item.value:'';
     }
 }
 </script>

@@ -21,10 +21,10 @@ export class FormString extends Vue {
     value!: any[];
 
     @Prop({ type: Array, required: false })
-    options: any[];
+    options: {key:any, value:any}[];
     
-    leftOptions:any[]=[];    
-    rightOptions:any[]=[];
+    leftOptions:{key:any, value:any}[]=[];    
+    rightOptions:{key:any, value:any}[]=[];
 
     created(){
         
@@ -33,11 +33,26 @@ export class FormString extends Vue {
     mounted(){
         
         console.log("mounted", this.value);
-        let temp=Object.assign([], this.options);
-        this.leftOptions.push(...temp);
-        
+
         let temp2=Object.assign([], this.value);
-        this.rightOptions.push(...temp2);
+        if(temp2 && temp2.length>0){
+            for(let key of temp2){
+                let itemValue = this.options.find(x=>x.key==key);
+                if(itemValue){
+                    let newItem={key:itemValue.key, value:itemValue.value};                    
+                    this.rightOptions.push(newItem);
+                }            
+            }
+        }
+
+        let temp=Object.assign([], this.options);
+        if(!temp || temp.length<=0)return;
+
+        for(let item of temp){
+            item.checked=false;
+            if(this.rightOptions.findIndex(x=>x.key == item.key)<0) this.leftOptions.push(item);
+        }            
+        
     }
     
     moveItems(source:any[], target:any){
@@ -60,8 +75,9 @@ export class FormString extends Vue {
         this.updateSelected();   
     }
     updateSelected(){
-        let newvalue = [...this.rightOptions];
-        this.$emit('input', newvalue);        
+        let newValue = [...this.rightOptions.map(x=>x.key)];
+        console.log("new value", newValue);
+        this.$emit('input', newValue);        
     }
 }
 export default FormString;
