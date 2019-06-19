@@ -332,7 +332,7 @@ enum EPageStep {
 }
 
 enum ECameraMode {
-    humanDetection = "humanDetection"
+    heatmap = "heatmap"
 }
 
 @Component({
@@ -349,7 +349,7 @@ export default class HumanDetection extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     params: any = {
-        mode: ECameraMode.humanDetection
+        mode: ECameraMode.heatmap
     };
 
     // options
@@ -632,7 +632,7 @@ export default class HumanDetection extends Vue {
                 mode: string;
             } = {
                 areaId: data,
-                mode: ECameraMode.humanDetection
+                mode: ECameraMode.heatmap
             };
 
             await this.$server
@@ -1185,7 +1185,7 @@ export default class HumanDetection extends Vue {
             const addParam = { datas };
 
             await this.$server
-                .C("/device/human-detection", addParam)
+                .C("/device/heatmap", addParam)
                 .then((response: any) => {
                     console.log("/device/heatmap", response);
                     if (response[0] != undefined) {
@@ -1233,7 +1233,7 @@ export default class HumanDetection extends Vue {
             const editAreaParam = { datas };
 
             await this.$server
-                .U("/device/human-detection", editParam)
+                .U("/device/heatmap", editParam)
                 .then((response: any) => {
                     if (response[0].statusCode === 200) {
                         Dialog.success(this._("w_Success"));
