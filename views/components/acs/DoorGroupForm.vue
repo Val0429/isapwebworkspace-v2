@@ -3,9 +3,16 @@
         <!-- 5) custom view templates with <template #view.* /> -->
 
         <template #view.doors="{$attrs, $listeners}">
-            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(value => value.doorname).join(', ') }}
+            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId)).join(', ') }}
         </template>  
-
+        <template #add.doors="{$attrs, $listeners}">
+            <ivc-multi-selections 
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="options" 
+            />
+        </template>
+        
         <!-- 6) custom edit / add template with <template #add.* /> -->
 
     </iv-form-quick>
@@ -18,7 +25,8 @@ import { EFormQuick, IFormQuick } from '@/../components/form';
 @Component
 /// 1) class name
 export default class DoorGroupForm extends Vue implements IFormQuick {
-    private doors:any={};
+    private doors:any[]=[];
+    private options:{key:any, value:any}[]=[];
     
     
     
@@ -79,7 +87,7 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("doors")}
                     */
-                    doors:${toEnumInterface(this.doors, true)};                   
+                    doors:any;                   
                     /**
                     * @uiLabel - ${this._("status")}
                     */
@@ -110,12 +118,17 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
     async created() {
         this.server = this.$server;        
         let resp = await this.server.R("/acs/door", {});       
-        this.doors={};
+        this.doors=resp.results;
         for(let door of resp.results){
-            this.doors[door.objectId]=door.doorname;
+            this.options.push({key:door.objectId, value:door.doorname});
         }
-        console.log("doors", this.doors)
+        console.log("doors", this.options)
     }
+    getName(key:any){
+        let item = this.options.find(x=>x.key==key);
+        return item?item.value:'';
+    }
+    
 }
 </script>
 

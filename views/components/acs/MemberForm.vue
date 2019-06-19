@@ -7,16 +7,7 @@
         </template> -->
 
         <!-- 6) custom edit / add template with <template #add.* /> -->
-        <template #add.permission="{$attrs, $listeners}">
-            <ivc-multi-selections 
-            v-bind="$attrs" 
-            v-on="$listeners" 
-            :options="options" 
-            />
-        </template>
-        <template #view.permission="{$attrs, $listeners}" v-if="isMounted">
-            {{!$attrs.value || $attrs.value.length==0 ? '' : $attrs.value.map(x=>getName(x)).join(", ")}}
-        </template>
+        
     </iv-form-quick>
 </template>
 
@@ -77,7 +68,6 @@ export default class MemberForm extends Vue implements IFormQuick {
                     * @uiLabel - ${this._("updatedAt")}
                     */
                     updatedAt: Date;
-                    permission:string;
                 }
                 `;
             case EFormQuick.Add:
@@ -108,7 +98,6 @@ export default class MemberForm extends Vue implements IFormQuick {
                     * @uiLabel - ${this._("cardnNum")}                    
                     */
                     cardnNum: string;
-                    permission?: any;
                 }
                 `;
         }
@@ -134,14 +123,9 @@ export default class MemberForm extends Vue implements IFormQuick {
     private server;
     created() {
         this.server = this.$server;
-        this.options.push({key:"1",value:"A"});
-        this.options.push({key:"2",value:"B"});
-        this.options.push({key:"3",value:"C"});
+        
     }
-    isMounted:boolean=false;
-    mounted(){
-        this.isMounted=true;
-    }
+    
     getName(key:any){
         let item = this.options.find(x=>x.key==key);        
         return item?item.value:'';
