@@ -63,6 +63,9 @@ export default class LangObject implements ILang {
     w_ROIClear = 'ROI Clear';
     w_Upload_Fail = 'Upload Filed';
     w_Duplicate = 'Duplicate';
+    w_Snapshot = 'Snapshot';
+    w_Gender = 'Gender';
+    w_Age = 'Age Range';
 
     // date
     w_Week_0 = 'Sunday';
@@ -508,10 +511,10 @@ export default class LangObject implements ILang {
 
     // Demographic Server
     w_DemographicServer_List = 'Demographic Server List';
-    w_DemographicServer_View = 'Demographic Server View';
-    w_DemographicServer_Add = 'Demographic Server Add';
-    w_DemographicServer_Edit = 'Demographic Server Edit';
-    w_DemographicServer_Test = 'Demographic Server Test';
+    w_DemographicServer_View = 'View Demographic Server';
+    w_DemographicServer_Add = 'Add Demographic Server';
+    w_DemographicServer_Edit = 'Edit Demographic Server';
+    w_DemographicServer_Test = 'Test Demographic Server';
     w_DemographicServer_DeviceID = 'Device ID';
     w_DemographicServer_DeviceName = 'Device Name';
     w_DemographicServer_IP = 'IP';
@@ -522,29 +525,28 @@ export default class LangObject implements ILang {
     w_DemographicServer_TestSuccess = 'Server Human Detection Test Success';
     w_DemographicServer_AddFailed = 'Demographic Server Add Failed';
     w_DemographicServer_EditFailed = 'Demographic Server Edit Failed';
-    w_DemographicServer_TestFailed = 'Server Human Detection Test Failed';
+    w_DemographicServer_TestResult = 'Demographic Server Test Result';
+    w_DemographicServer_DeleteConfirm = 'Are you sure to delete selected Demographic Server(s)?';
 
     // Server Human Detection
-    w_ServerHD_List = 'Server Human Detection List';
-    w_ServerHD_View = 'Server Human Detection View';
-    w_ServerHD_Add = 'Server Human Detection Add';
-    w_ServerHD_Edit = 'Server Human Detection Edit';
-    w_ServerHD_DemographicServerList = 'Server Human Detection List';
-    w_ServerHD_DemographicServerView = 'Server Human Detection View';
-    w_ServerHD_DemographicServerAdd = 'Server Human Detection Add';
-    w_ServerHD_DemographicServerEdit = 'Server Human Detection Edit';
+    w_ServerHD_List = 'Human Detection Server List';
+    w_ServerHD_View = 'View Human Detection Server';
+    w_ServerHD_Add = 'Add Human Detection Server';
+    w_ServerHD_Edit = 'Edit Human Detection Server';
+
     w_ServerHD_DeviceID = 'Device ID';
     w_ServerHD_DeviceName = 'Device Name';
     w_ServerHD_IP = 'IP';
     w_ServerHD_Port = 'Port';
     w_ServerHD_Scale = 'Scale';
-    w_ServerHD_Test = 'Server Human Detection Test';
-    w_ServerHD_AddSuccess = 'Server Human Detection Add Success';
-    w_ServerHD_EditSuccess = 'Server Human Detection Edit Success';
-    w_ServerHD_TestSuccess = 'Server Human Detection Test Success';
-    w_ServerHD_AddFailed = 'Server Human Detection Add Failed';
-    w_ServerHD_EditFailed = 'Server Human Detection Edit Failed';
-    w_ServerHD_TestFailed = 'Server Human Detection Test Failed';
+    w_ServerHD_Test = 'Test Human Detection Server';
+    w_ServerHD_AddSuccess = 'Human Detection Server Add Success';
+    w_ServerHD_EditSuccess = 'Human Detection Server Edit Success';
+    w_ServerHD_TestSuccess = 'Human Detection Server Test Success';
+    w_ServerHD_AddFailed = 'Human Detection Server Add Failed';
+    w_ServerHD_EditFailed = 'Human Detection Server Edit Failed';
+    w_ServerHD_TestFailed = 'Human Detection Server Test Failed';
+    w_ServerHD_DeleteConfirm = 'Are you sure to delete selected Human Detection Server(s)?';
 
     // Server FRS
     w_ServerFRS_List = 'FRS Server List';

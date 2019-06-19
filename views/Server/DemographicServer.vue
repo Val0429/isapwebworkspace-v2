@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <!--List-->
         <div v-show="pageStep === ePageStep.List">
-            <iv-card :label="_('w_ServerHD_List')">
+            <iv-card :label="_('w_DemographicServer_List')">
 
                 <template #toolbox>
 
@@ -27,14 +27,14 @@
                     ref="listTable"
                     :interface="IList()"
                     @selected="selectedData($event)"
-                    :server="{ path: '/partner/human-detection' }"
+                    :server="{ path: '/partner/demographic' }"
                     :multiple="true"
                 >
                     <!-- :server="{ path: '/partner/human-detection' }" -->
                     <!-- :data="datas" -->
 
-                    <template #target_score="{$attrs, $listeners}">
-                        {{Math.round($attrs.row.target_score*100) + '%'}}
+                    <template #margin="{$attrs, $listeners}">
+                        {{Math.round($attrs.row.margin*100) + '%'}}
                     </template>
 
                     <template #Actions="{$attrs, $listeners}">
@@ -61,7 +61,7 @@
 
         <!--Form (Add and Edit)-->
         <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
-            <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
+            <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') ">
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
@@ -95,7 +95,7 @@
 
         <!--View-->
         <div v-show="pageStep === ePageStep.View">
-            <iv-card :label="_('w_ServerHD_View')">
+            <iv-card :label="_('w_DemographicServer_View')">
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
@@ -104,11 +104,11 @@
                     :interface="IView()"
                     :value="inputFormData"
                 >
-                    <template #target_score="{$attrs, $listeners}">
+                    <template #margin="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :value="inputFormData.target_score ? Math.round(inputFormData.target_score*100) + '%': ''"
+                            :value="inputFormData.margin ? Math.round(inputFormData.margin*100) + '%': ''"
                         />
                     </template>
                 </iv-form>
@@ -130,11 +130,11 @@
             hide-footer
             hide-header
             size="md"
-            :title="_('w_ServerHD_Test')"
+            :title="_('w_DemographicServer_Test')"
             v-model="modalShow"
         >
 
-            <iv-auto-card :label=" _('w_ServerHD_Test') ">
+            <iv-auto-card :label=" _('w_DemographicServer_Test') ">
 
                 <iv-form
                     :visible="true"
@@ -176,17 +176,44 @@
             size="lg"
         >
 
-            <img :src="returnImageBase64">
+            <iv-card :label="_('w_DemographicServer_TestResult')">
 
-            <hr>
+                <table class="table b-table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th
+                            v-for="(value,index) in testDetailTable.title"
+                            :key="'title_' + index"
+                        >{{ value }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr
+                        v-for="(value,index) in testDetailTable.tableDataFromApi"
+                        :key="'tableDataFromApi__' + index"
+                    >
+                        <td>{{ value.imageBase64 }}</td>
+                        <td>{{ value.age }}</td>
+                        <td>
+                                <img
+                                    class="threshold-image"
+                                    :src="value.imageBase64"
+                                >
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <template #footer>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToForm1"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
-            <b-button
-                class="float-right"
-                variant="dark"
-                size="lg"
-                @click="pageToForm1()"
-            >{{ _('w_Cancel') }}
-            </b-button>
+            </iv-card>
 
         </b-modal>
 
@@ -226,7 +253,7 @@
         protocol: string;
         ip: string;
         port: number;
-        target_score: number;
+        margin: number;
     }
 
     @Component({
@@ -247,10 +274,7 @@
         inputFormData: any = {};
 
         //test data
-        inputHumanServerData = {
-            imageBase64: "",
-            objectId: "",
-        };
+        testDetailTable: any = {};
 
         returnImageBase64: string = '';
 
@@ -276,6 +300,14 @@
             this.targetScoreItem["1"] = "100%";
         }
 
+        initDate() {
+            this.testDetailTable.title = [
+                this._("w_Snapshot"),
+                this._("w_Gender"),
+                this._("w_Age"),
+            ];
+        }
+
         clearInputData() {
             this.inputFormData = {
                 objectId: '',
@@ -284,7 +316,7 @@
                 protocol: 'http',
                 ip: '',
                 port: '',
-                target_score: '0.5',
+                margin: '0.5',
                 imageBase64: ''
             }
         }
@@ -308,7 +340,7 @@
                     ip: param.ip,
                     port: param.port,
                     protocol: param.protocol,
-                    target_score: param.target_score.toString(),
+                    margin: param.margin.toString(),
                 };
             }
 
@@ -358,7 +390,7 @@
                 protocol: data.protocol,
                 ip: data.ip,
                 port: data.port,
-                target_score: parseFloat(data.target_score),
+                margin: parseFloat(data.margin),
             };
 
             const humanObject: {
@@ -370,12 +402,20 @@
             };
 
             await this.$server
-                .C("/partner/human-detection/test", humanObject)
+                .C("/partner/demographic/test", humanObject)
                 .then((response: any) => {
                     if (response != undefined) {
                         this.modalShow = !this.modalShow;
                         (this.$refs["detail"] as any).show();
-                        this.returnImageBase64 = response.imageBase64;
+                        for (const returnValue of response) {
+                            let detailObject = {
+                                age: returnValue.age,
+                                gender: returnValue.gender,
+                                imageBase64: returnValue.imageBase64,
+                            };
+                            this.testDetailTable.tableDataFromApi.push(detailObject);
+                        }
+
                     }
                 })
                 .catch((e: any) => {
@@ -394,23 +434,23 @@
                         protocol: data.protocol,
                         ip: data.ip,
                         port: data.port,
-                        target_score: parseFloat(data.target_score)
+                        margin: parseFloat(data.margin)
                     }
                 ];
 
                 const addParam = { datas };
 
                 await this.$server
-                    .C("/partner/human-detection", addParam)
+                    .C("/partner/demographic", addParam)
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
-                                    Dialog.success(this._("w_ServerHD_AddSuccess"));
+                                    Dialog.success(this._("w_DemographicServer_AddSuccess"));
                                     this.pageToList();
                                 }
                                 if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
-                                    Dialog.error(this._("w_ServerHD_AddFailed"));
+                                    Dialog.error(this._("w_DemographicServer_AddFailed"));
                                     return false;
                                 }
                             }
@@ -429,23 +469,23 @@
                         protocol: data.protocol,
                         ip: data.ip,
                         port: data.port,
-                        target_score: parseFloat(data.target_score)
+                        margin: parseFloat(data.margin)
                     }
                 ];
 
                 const editParam = { datas };
 
                 await this.$server
-                    .U("/partner/human-detection", editParam)
+                    .U("/partner/demographic", editParam)
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
-                                    Dialog.success(this._("w_ServerHD_EditSuccess"));
+                                    Dialog.success(this._("w_DemographicServer_EditSuccess"));
                                     this.pageToList();
                                 }
                                 if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
-                                    Dialog.error(this._("w_ServerHD_EditFailed"));
+                                    Dialog.error(this._("w_DemographicServer_EditFailed"));
                                     return false;
                                 }
                             }
@@ -458,7 +498,7 @@
         }
 
         async deleteData() {
-            Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
+            Dialog.confirm(this._("w_DemographicServer_DeleteConfirm"), this._("w_Confirm"), () => {
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -467,7 +507,7 @@
                     };
 
                     this.$server
-                        .D("/partner/human-detection", deleteParam)
+                        .D("/partner/demographic", deleteParam)
                         .then((response: any) => {
                             if (response) {
                                 Dialog.success(this._("w_Success"));
@@ -534,7 +574,7 @@
                 /**
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 */
-                target_score: number;
+                margin: number;
 
                 Actions: any;
             }`;
@@ -579,7 +619,7 @@
                 /**
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 */
-                target_score?: any;
+                margin?: any;
 
             }`;
         }
@@ -631,7 +671,7 @@
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
                 */
-                target_score?: ${toEnumInterface(
+                margin?: ${toEnumInterface(
                 this.targetScoreItem as any,
                 false
             )};
@@ -672,7 +712,7 @@
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
                 */
-                target_score?: ${toEnumInterface(
+                margin?: ${toEnumInterface(
                 this.targetScoreItem as any,
                 false
             )};

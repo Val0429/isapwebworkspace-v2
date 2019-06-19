@@ -458,7 +458,7 @@ export default class HumanDetectionServer extends Vue {
     }
 
     async deleteData() {
-        Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
+        Dialog.confirm(this._("w_ServerHD_DeleteConfirm"), this._("w_Confirm"), () => {
             for (const param of this.selectedDetail) {
                 const deleteParam: {
                     objectId: string;
