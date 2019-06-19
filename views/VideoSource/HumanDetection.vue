@@ -507,20 +507,12 @@ export default class HumanDetection extends Vue {
         console.log("initChannelItem", this.devices, data);
         this.channelItem = [];
         for (let device of this.devices) {
-            console.log(
-                "initChannelItem1",
-                device.nvrId,
-                data,
-                device.nvrId == data
-            );
             if (device.nvrId == data) {
-                console.log("initChannelItem2", device.channels);
                 for (let channel of device.channels) {
                     let item = {
                         id: channel.channelId.toString(),
                         text: channel.name
                     };
-                    console.log("initChannelItem3", item);
                     this.channelItem.push(item);
                 }
             }
@@ -578,7 +570,7 @@ export default class HumanDetection extends Vue {
         console.log("pageToEdit", this.inputFormData);
         await this.initSelectItemSite();
         await this.initDeviceData(this.inputFormData.serverId);
-        await this.initChannelItem(this.inputFormData.channelId);
+        await this.initChannelItem(this.inputFormData.nvrId);
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
         this.inputFormData.groupIds = JSON.parse(
@@ -632,7 +624,7 @@ export default class HumanDetection extends Vue {
 
     async pageToView() {
         await this.initDeviceData(this.inputFormData.serverId);
-        await this.initChannelItem(this.inputFormData.channelId);
+        await this.initChannelItem(this.inputFormData.nvrId);
 
         this.pageStep = EPageStep.view;
     }
