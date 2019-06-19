@@ -527,7 +527,7 @@ export default class Heatmap extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        Dialog.error(this._("w_ErrorReadData"));
                         return false;
                     }
                     console.log(e);
@@ -762,7 +762,7 @@ export default class Heatmap extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
+                        Dialog.error(this._("w_ErrorReadData"));
                         return false;
                     }
                     console.log(e);
