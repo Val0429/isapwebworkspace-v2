@@ -3,7 +3,7 @@ import { RegisterLanguage, ILang } from '@/../core/i18n';
 @RegisterLanguage("ja-JP", "日本語")
 export default class LangObject implements ILang {
     wb_Login = "Login";
-    
+    w_Add = "Add";
     w_Name = "名前";
     w_Enabled = "有効";
     w_Value = "値";
@@ -84,6 +84,14 @@ export default class LangObject implements ILang {
     w_ReaderEdit="Edit Reader";
     readerid="Reader Id";
     readername="Reader Name";
+
+    w_SyncReceiver="Sync Receiver";
+    w_SyncReceiverAdd="Add Sync Receiver";
+    w_SyncReceiverEdit="Edit Sync Receiver";
+    receivename="Receiver Name";
+    emailaddress="Email Address";
+    receivers="Receivers";
+
     w_AccessLevel="Access Level";
     w_AccessLevelAdd="Add Access Level";
     w_AccessLevelEdit="Edit Access Level";

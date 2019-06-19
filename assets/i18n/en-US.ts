@@ -4,6 +4,7 @@ import { RegisterLanguage } from '@/../core/i18n';
 export default class LangObject {
     wb_Login = "Login";
 
+    w_Add = "Add";
     w_Name = "Name";
     w_Enabled = "Enabled";
     w_Value = "Value";
@@ -85,7 +86,14 @@ export default class LangObject {
     w_ReaderEdit="Edit Reader";
     readerid="Reader Id";
     readername="Reader Name";
-    
+
+    w_SyncReceiver="Sync Receiver";
+    w_SyncReceiverAdd="Add Sync Receiver";
+    w_SyncReceiverEdit="Edit Sync Receiver";
+    receivename="Receiver Name";
+    emailaddress="Email Address";
+    receivers="Receivers";
+
     w_AccessLevel="Access Level";
     w_AccessLevelAdd="Add Access Level";
     w_AccessLevelEdit="Edit Access Level";
@@ -95,4 +103,5 @@ export default class LangObject {
     door="Door";
     reader="Reader";
     timeschedule="Time Schedule";
+    
 }

@@ -21,6 +21,7 @@ import TimeSchedule from './components/acs/TimeSchedule.vue';
 import DoorGroup from './components/acs/DoorGroup.vue';
 import PermissionTable from './components/acs/PermissionTable.vue';
 import Reader from './components/acs/Reader.vue';
+import SyncReceiver from './components/acs/SyncReceiver.vue';
 import AccessLevel from './components/acs/AccessLevel.vue';
 
 $({ path: '/', name: "Home", redirect: '/member' })();
@@ -32,6 +33,7 @@ $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator)
     $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
     $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
     $({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
+    $({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
     $({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
 
     $({ path: '/components', name: "Components", icon: 'isap-icon-add' })(Components);
