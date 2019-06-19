@@ -92,7 +92,9 @@
 
         <!--Form (Add and Edit)-->
         <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
-            <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') ">
+            <iv-auto-card
+                :label="pageStep === ePageStep.Add ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit')"
+            >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
@@ -563,7 +565,7 @@ export default class DemographicServer extends Vue {
                 */
                 port?: number;
 
-                
+
                 /**
                 * @uiLabel - ${this._("w_DemographicServer_Scale")}
                 */
@@ -609,7 +611,7 @@ export default class DemographicServer extends Vue {
                 */
                 port: number;
 
-                
+
                 /**
                 * @uiLabel - ${this._("w_DemographicServer_Scale")}
                 * @uiPlaceHolder - ${this._("w_DemographicServer_Scale")}

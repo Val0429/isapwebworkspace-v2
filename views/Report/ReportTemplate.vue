@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
-            :data="{ label: _('w_Tag_TagList') }"
+            :label=" _('w_Tag_TagList') "
         >
             <template #toolbox>
 

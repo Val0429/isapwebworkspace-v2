@@ -92,7 +92,7 @@
 
         <!--Form (Add and Edit)-->
         <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
-            <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
+            <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
@@ -559,7 +559,7 @@ export default class HumanDetectionServer extends Vue {
                 */
                 port?: number;
 
-                
+
                 /**
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 */
@@ -605,7 +605,7 @@ export default class HumanDetectionServer extends Vue {
                 */
                 port: number;
 
-                
+
                 /**
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
