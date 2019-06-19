@@ -3,13 +3,26 @@
         <!-- 5) custom view templates with <template #view.* /> -->
 
         <template #view.member="{$attrs, $listeners}">
-            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(value => value.firstname+ " "+ value.lastname).join(', ') }}
+            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(x => getMemberName(x.objectId)).join(', ') }}
         </template>  
         <template #view.timeschedule="{$attrs, $listeners}">
-            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(value => value.timename).join(', ') }}
+            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(x => getScheduleName(x.objectId)).join(', ') }}
         </template>  
         <!-- 6) custom edit / add template with <template #add.* /> -->
-
+        <template #add.member="{$attrs, $listeners}">
+            <ivc-multi-selections 
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="memberOptions" 
+            />
+        </template>
+        <template #add.timeschedule="{$attrs, $listeners}">
+            <ivc-multi-selections 
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="schedulesOptions" 
+            />
+        </template>
     </iv-form-quick>
 </template>
 
@@ -20,8 +33,12 @@ import { EFormQuick, IFormQuick } from '@/../components/form';
 @Component
 /// 1) class name
 export default class PermissionTableForm extends Vue implements IFormQuick {
-    private members:any={};
-    private timeschedules:any={};
+    private members:any[]=[];
+    private timeschedules:any[]=[];
+
+    memberOptions:{key:any,value:any}[]=[];
+    schedulesOptions:{key:any,value:any}[]=[];
+
     /// 2) cgi path
     path: string = "/acs/permissiontable";
     /// 3) i18n - view / edit / add
@@ -83,11 +100,11 @@ export default class PermissionTableForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("w_Member")}
                     */ 
-                    member:${toEnumInterface(this.members,true)};
+                    member:any;
                     /**
                     * @uiLabel - ${this._("w_TimeSchedule")}
                     */ 
-                    timeschedule:${toEnumInterface(this.timeschedules,true)};
+                    timeschedule:any;
                     /**
                     * @uiLabel - ${this._("status")}
                     */ 
@@ -118,18 +135,28 @@ export default class PermissionTableForm extends Vue implements IFormQuick {
     async created() {
         this.server = this.$server;        
         let resp1 = await this.server.R("/acs/timeschedule", {});       
-        this.timeschedules={};
-        for(let ts of resp1.results){
-            this.timeschedules[ts.objectId]=ts.timename;
+        this.timeschedules=resp1.results;
+        
+        for(let item of resp1.results){
+            this.schedulesOptions.push({key:item.objectId, value:item.timename});
         }
-        console.log("timeschedules", this.timeschedules);
+        
+        console.log("timeschedules", this.schedulesOptions);
 
         let resp2 = await this.server.R("/acs/member", {});       
-        this.members={};
-        for(let m of resp2.results){
-            this.members[m.objectId]=m.firstname + " " + m.lastname;
+        this.members=resp2.results;
+        for(let item of resp2.results){
+            this.memberOptions.push({key:item.objectId, value:item.firstname + " " + item.lastname});
         }
-        console.log("members", this.members);
+        console.log("members", this.memberOptions);
+    }
+    getMemberName(key:any){
+        let item = this.memberOptions.find(x=>x.key==key);
+        return item?item.value:'';
+    }
+    getScheduleName(key:any){
+        let item = this.schedulesOptions.find(x=>x.key==key);
+        return item?item.value:'';
     }
 }
 </script>
