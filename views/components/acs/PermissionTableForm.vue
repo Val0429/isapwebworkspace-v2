@@ -45,42 +45,24 @@ export default class PermissionTableForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
-                    /**
-                    * @uiLabel - ${this._("tableid")}
-                    */      
-                    tableid: string;
+                   
                     /**
                     * @uiLabel - ${this._("tablename")}
                     */ 
                     tablename:string;
                     
-                    /**
-                    * @uiLabel - ${this._("w_TimeSchedule")}
-                    */                     
-                    status: number;                    
-                    /**
-                    * @uiLabel - ${this._("w_AccessLevel")}
-                    */
-                    accesslevels:string;
                 }
                 `;
             case EFormQuick.Add:
             case EFormQuick.Edit:
                 return `
                 interface {      
-                    /**
-                    * @uiLabel - ${this._("tableid")}
-                    */      
-                    tableid: string;
+                    
                     /**
                     * @uiLabel - ${this._("tablename")}
                     */ 
                     tablename:string;
-                    
-                    /**
-                    * @uiLabel - ${this._("w_TimeSchedule")}
-                    */                     
-                    status: number;                    
+                                      
                     /**
                     * @uiLabel - ${this._("w_AccessLevel")}
                     */
