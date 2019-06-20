@@ -1,9 +1,6 @@
 <template>
-    <div ref="mapParent">
-
-        <div>
-        </div>
-
+    <div>
+        Components Empty
     </div>
 </template>
 
