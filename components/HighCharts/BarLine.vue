@@ -1,37 +1,67 @@
 <template>
-    <div class="animated fadeIn">
-        <div v-show="pageStep === ePageStep.none">
-            Empty
-        </div>
-
+    <div>
+        {{ label }}
+        <!-- <highcharts :options="chartOptions"></highcharts> -->
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog/Dialog";
+import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import HighchartsVue from "highcharts-vue";
 
-enum EPageStep {
-    none = "none"
-}
+Vue.use(HighchartsVue);
 
 @Component({
-    components: {}
+    components: {
+        
+    }
 })
-export default class Empty extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
+export class ChartBarLine extends Vue {
+    // Prop
+    @Prop({
+        type: String,
+        default: ""
+    })
+    label: string;
 
-    created() {}
+    // Model
+    @Model("model", {
+        type: String,
+        default: ""
+    })
+    value: string;
 
-    mounted() {}
+    inputData = "Test input data";
+    modelData = "";
+
+    chartOptions: {
+        series: [
+            {
+                data: [1, 2, 3]; // sample data
+            }
+        ];
+    };
+
+    created() {
+        this.modelData = this.value;
+    }
+
+    mounted() {
+        this.start();
+    }
+
+    start() {
+        this.$emit("input", this.inputData);
+    }
+
+    putModel() {
+        this.$emit("model", this.modelData);
+    }
 }
-</script>
 
+export default ChartBarLine;
+Vue.component("chart-bar-line", ChartBarLine);
+</script>
 
 <style lang="scss" scoped>
 </style>
-
-
-
-
