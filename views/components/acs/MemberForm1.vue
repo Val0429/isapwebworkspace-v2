@@ -172,17 +172,6 @@
 
         </iv-auto-card>
 
-        <!-- region tree select -->
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
-
         <!-- 點擊彈出測試輸入框 -->
         <b-modal
             hide-footer
@@ -306,7 +295,10 @@ export default class MemberForm1 extends Vue {
         groupIds: []
     };
 
-    created() {}
+    created() {
+        // Morris
+        this.pageStep = EPageStep.add;
+    }
 
     mounted() {}
 
