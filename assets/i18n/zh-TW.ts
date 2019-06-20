@@ -1,4 +1,4 @@
-import { RegisterLanguage, ILang } from '@/../core/i18n';
+﻿import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage("zh-TW", "正體中文")
 export default class LangObject implements ILang {
@@ -107,5 +107,7 @@ export default class LangObject implements ILang {
     door="Door";
     reader="Reader";
     timeschedule="Time Schedule";
+
+    PersonalDetails="Personal Details";
 
 }

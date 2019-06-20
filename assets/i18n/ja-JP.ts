@@ -106,5 +106,7 @@ export default class LangObject implements ILang {
     door="Door";
     reader="Reader";
     timeschedule="Time Schedule";
+
+    PersonalDetails="Personal Details";
 }
 

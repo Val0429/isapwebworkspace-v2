@@ -108,4 +108,5 @@ export default class LangObject {
     reader="Reader";
     timeschedule="Time Schedule";
     
+    PersonalDetails="Personal Details";
 }
