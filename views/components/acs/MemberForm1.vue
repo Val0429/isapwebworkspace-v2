@@ -5,9 +5,7 @@
             :label="_('w_Member_List')"
         >
             <template #toolbox>
-
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
-
+                <iv-toolbox-add @click="pageToAdd()" />
             </template>
 
             <iv-table
@@ -47,9 +45,7 @@
             :label="pageStep === ePageStep.add ? _('w_Member_Add') :  _('w_Member_Edit')"
         >
             <template #toolbox>
-
                 <iv-toolbox-back @click="pageToList()" />
-
             </template>
 
             <iv-form
@@ -58,6 +54,74 @@
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEdit($event)"
             >
+
+                <!-- Morris -->
+                <template #premissionList>
+                    <iv-sort-select
+                        v-if="premissionOptions.length > 0"
+                        v-model="inputFormData.premissionSelected"
+                        class="col-md-12"
+                        :options="premissionOptions"
+                    ></iv-sort-select>
+                </template>
+
+                <template #tabItem>
+
+                    <iv-tab
+                        class="col-md-12"
+                        ref="tab"
+                        :active="1"
+                        @mounted="doTabMount"
+                    >
+
+                        <template #1-title>{{ _('w_Member_PersonInfo') }}</template>
+                        <template #1>
+                            <iv-form
+                                :interface="ITabForm1()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                        <template #2-title>{{ _('w_Member_General') }}</template>
+                        <template #2>
+                            <iv-form
+                                :interface="ITabForm2()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                        <template #3-title>{{ _('w_Member_CardRecord') }}</template>
+                        <template #3>
+                            <iv-form
+                                :interface="ITabForm3()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                        <template #4-title>{{ _('w_Member_Other') }}</template>
+                        <template #4>
+                            <iv-form
+                                :interface="ITabForm4()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                    </iv-tab>
+
+                </template>
+
+                <!-- Morris -->
+
+                <template #test="{ $attrs, $listeners }">
+                    <div class="mt-2 ml-3 mb-3">
+                        <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
+                        </b-button>
+                    </div>
+                </template>
 
             </iv-form>
 
@@ -111,6 +175,10 @@ import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
 import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
 
+// Sort Select
+import { ISortSelectOption } from "@/components/SortSelect";
+import SortSelect from "@/components/SortSelect/SortSelect.vue";
+
 enum EPageStep {
     list = "list",
     add = "add",
@@ -121,7 +189,8 @@ enum EPageStep {
 
 @Component({
     components: {
-        ToolboxBack
+        ToolboxBack,
+        SortSelect
     }
 })
 export default class MemberForm1 extends Vue {
@@ -140,10 +209,18 @@ export default class MemberForm1 extends Vue {
 
     inputFormData: any = {};
 
+    // Morris //
+    premissionOptions: ISortSelectOption[] = [];
+    tabMounted: boolean = false;
+    doTabMount() {
+        this.tabMounted = true;
+    }
+    // Morris //
+
     created() {
-        // Morris
-        // this.pageStep = EPageStep.add;
-        // this.initDepartment();
+        // Morris //
+        this.pageToAdd();
+        // Morris //
     }
 
     mounted() {
@@ -152,7 +229,6 @@ export default class MemberForm1 extends Vue {
     }
 
     async initSelectItemWorkGroup() {
-
         this.workGroupSelectItem = {};
 
         await this.$server
@@ -182,8 +258,7 @@ export default class MemberForm1 extends Vue {
                 // console.log('returnValue - ', response.results.CustomFields);
                 if (response != undefined) {
                     for (const returnValue of response.results.CustomFields) {
-                        console.log('returnValue - ', returnValue);
-
+                        console.log("returnValue - ", returnValue);
                     }
                 }
             })
@@ -196,10 +271,16 @@ export default class MemberForm1 extends Vue {
             });
     }
 
-
     clearInputData() {
+        // Morris //
+        this.premissionOptions = [];
+        // Morris //
+
         this.inputFormData = {
             objectId: "",
+            // Morris //
+            premissionSelected: []
+            // Morris //
         };
     }
 
@@ -211,6 +292,7 @@ export default class MemberForm1 extends Vue {
 
     getInputData() {
         this.clearInputData();
+
         // for (const param of this.selectedDetail) {
         //     this.inputFormData = {
         //         objectId: param.objectId,
@@ -264,12 +346,57 @@ export default class MemberForm1 extends Vue {
         }
     }
 
-    async pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
+    async pageToAdd() {
         this.clearInputData();
         this.initSelectItemWorkGroup();
-        this.inputFormData.type = type;
+
+        // Morris //
+        this.initPremission();
+        // Morris //
+
+        this.pageStep = EPageStep.add;
     }
+
+    // Morris //
+    async initPremission() {
+        let param: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 10000
+            }
+        };
+        await this.$server
+            .R("/acs/permissiontable", param)
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (let content of response.results) {
+                        if (
+                            content.objectId != undefined &&
+                            content.tablename != undefined
+                        ) {
+                            let tempOption: ISortSelectOption = {
+                                value: content.objectId,
+                                text: content.tablename
+                            };
+                            this.premissionOptions.push(tempOption);
+                        }
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+    // Morris //
 
     async pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
@@ -463,6 +590,24 @@ export default class MemberForm1 extends Vue {
         return result;
     }
 
+    cardSearch(search: string) {
+        // TODO: finished search
+        // console.log('search - ', search)
+        this.searchKeywords(search);
+    }
+
+    searchKeywords(search: string) {
+        // TODO: finished search
+        if (search != "") {
+            const accountText = this.inputFormData.username.toLocaleLowerCase();
+            const nameText = this.inputFormData.name.toLocaleLowerCase();
+            const searchText = search.toLowerCase();
+            const searchResult =
+                accountText.match(searchText) || nameText.match(searchText);
+            return searchResult;
+        }
+    }
+
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
@@ -538,19 +683,24 @@ export default class MemberForm1 extends Vue {
         return `
             interface {
 
+                premissionList?: any;
+
+                tabItem?: any;
+
                 /**
                  * @uiLabel - ${this._("w_Member_CompanyName")}
                  * @uiColumnGroup - row1
                  */
                 companyName?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_PersonType")}
                  * @uiColumnGroup - row1
                  */
-                personType?: ${toEnumInterface(this.workGroupSelectItem as any, false)};
-
+                personType?: ${toEnumInterface(
+                    this.workGroupSelectItem as any,
+                    false
+                )};
 
                 /**
                  * @uiLabel - ${this._("w_Member_EmployeeNumber")}
@@ -558,26 +708,56 @@ export default class MemberForm1 extends Vue {
                  */
                 employeeNumber?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CompanyName")}
                  * @uiColumnGroup - row2
                  */
                 companyName1?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_PersonType")}
                  * @uiColumnGroup - row2
                  */
-                personType1?: ${toEnumInterface(this.workGroupSelectItem as any, false)};
-
+                personType1?: ${toEnumInterface(
+                    this.workGroupSelectItem as any,
+                    false
+                )};
 
                 /**
                  * @uiLabel - ${this._("w_Member_EmployeeNumber")}
                  * @uiColumnGroup - row2
                  */
+
                 employeeNumber1?: string;
+
+                email: string;
+
+                test?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Phone")}
+                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
+                 */
+                 phone?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_User_Role")}
+                 */
+                role: ${toEnumInterface({
+                    Admin: this._("w_User_UserGroup_Admin"),
+                    User: this._("w_User_UserGroup_User")
+                })};
+
+                /**
+                 * @uiLabel - ${this._("w_User_UserGroup")}
+                 */
+                groupIds?: ${toEnumInterface(
+                    this.userGroupSelectItem as any,
+                    true
+                )};
+
+                selectTree?: any;
+
             }
         `;
     }
@@ -644,6 +824,56 @@ export default class MemberForm1 extends Vue {
             }
         `;
     }
+
+    // Morris //
+    ITabForm1() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+
+    ITabForm2() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+
+    ITabForm3() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+
+    ITabForm4() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+    // Morris //
 }
 </script>
 

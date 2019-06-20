@@ -17,8 +17,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/announcements': [AnnouncementsGet.Input, AnnouncementsGet.Output, true];
 
         // Member
-        '/acs/member': [any, any, true];
-        '/acs/workgroup': [any, any, true];
+        "/acs/member": [any, any, true];
+        "/acs/workgroup": [any, any, true];
+        "/acs/permissiontable": [any, any, true];
     };
 
     Put: {
