@@ -602,13 +602,19 @@ export default class LangObject implements ILang {
     w_BOSalesRecords_Hour = 'Hour';
     w_BOSalesRecords_Time = 'Time';
     w_BOSalesRecords_Amount = 'Amount';
+    w_BOSalesRecords_Revenue = 'Revenue';
     w_BOSalesRecords_Transaction = 'Transaction';
     w_BOSalesRecords_ProductId = 'Product ID';
     w_BOSalesRecords_Count = 'Count';
+    w_BOSalesRecords_ApiMessage = 'Message';
+    w_BOSalesRecords_ApiSuccess = 'Success';
 
     w_BOSalesRecords_ErrorFileType = 'Please upload xlsx';
     w_BOSalesRecords_ErrorFileResolve = 'File content can not be Resolve';
     w_BOSalesRecords_ErrorNoData = 'no data';
+    w_BOSalesRecords_ErrorServerError = 'Server Connect Error';
+    w_BOSalesRecords_ErrorNoSite = 'Store not find';
+    w_BOSalesRecords_ErrorNoPremission = "No Premission";
 
     // People Counting Device
     w_VSPeopleCounting_List = 'People Counting Device List';

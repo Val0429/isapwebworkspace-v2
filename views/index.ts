@@ -72,6 +72,13 @@ import MyProfile from './MyProfile/MyProfile.vue';
 // Report
 import ReportTemplate from './Report/ReportTemplate.vue';
 import Traffic from './Report/Traffic.vue';
+import ReportDwellTime from './Report/ReportDwellTime.vue';
+import ReportDemographic from './Report/ReportDemographic.vue';
+import ReportHeatmap from './Report/ReportHeatmap.vue';
+import ReportOccupancy from './Report/ReportOccupancy.vue';
+import ReportVIPTracking from './Report/ReportVIPTracking.vue';
+import RepeatVisitor from './Report/RepeatVisitor.vue';
+import ReportCampaign from './Report/ReportCampaign.vue';
 
 // ============================================================= //
 
@@ -116,13 +123,13 @@ $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-questio
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-close', redirect: '/reports/report_template' })();
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-close' })(ReportTemplate);
 $({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-close' })(Traffic);
-$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-close' })();
-$({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-close' })();
-$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-close' })();
-$({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-close' })();
-$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-close' })();
-$({ path: '/reports/report_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-close' })();
-$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-close' })();
+$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-close' })(ReportDwellTime);
+$({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-close' })(ReportDemographic);
+$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-close' })(ReportHeatmap);
+$({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-close' })(ReportOccupancy);
+$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-close' })(ReportVIPTracking);
+$({ path: '/reports/report_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-close' })(RepeatVisitor);
+$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-close' })(ReportCampaign);
 
 // Users
 $({ path: '/users', name: "_('w_Navigation_Users')", icon: 'fa-check', redirect: '/users/user' })();
@@ -151,9 +158,9 @@ $({ path: '/video_sources/vip_stranger_visitor', name: 'VideoSources_VIP_Strange
 $({ path: '/rules_actions', name: "_('w_Navigation_RulesActions')", icon: 'fa-question', redirect: '/login' })();
 
 // Business Operation
-$({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", icon: 'fa-bug', redirect: '/business_operations/campaign_setting' })();
+$({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", icon: 'fa-check', redirect: '/business_operations/campaign_setting' })();
 $({ path: '/business_operations/campaign_setting', name: "_('w_Navigation_BO_CampaignSetting')", icon: 'fa-check' })(CampaignSetting);
-$({ path: '/business_operations/sales_records', name: "_('w_Navigation_BO_SalesRecords')", icon: 'fa-close' })(SalesRecords);
+$({ path: '/business_operations/sales_records', name: "_('w_Navigation_BO_SalesRecords')", icon: 'fa-check' })(SalesRecords);
 $({ path: '/business_operations/general_office_hour', name: "_('w_Navigation_BO_GeneralOfficeHour')", icon: 'fa-check' })(GeneralOfficeHour);
 
 // Setting
