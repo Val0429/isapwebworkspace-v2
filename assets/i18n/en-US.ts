@@ -51,12 +51,16 @@ export default class LangObject {
     updatedAt= "Updated At";
 
     w_Door="Door";
+    w_DoorAdd="Add Door";
+    w_DoorEdit="Edit Door";
     system="System";
     doorid="Door Id";
     doorname="Door Name";
     unlocktime="Unlock Time";
     shunttime="Shunt Time";
-
+    readerin="Reader In";
+    readerout="Reader Out";
+    
     w_DoorGroup="Door Group";
     w_DoorGroupAdd="Add Door Group";
     w_DoorGroupEdit="Edit Door Group";

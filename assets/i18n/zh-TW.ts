@@ -1,4 +1,4 @@
-﻿import { RegisterLanguage, ILang } from '@/../core/i18n';
+import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage("zh-TW", "正體中文")
 export default class LangObject implements ILang {
@@ -50,11 +50,16 @@ export default class LangObject implements ILang {
     updatedAt= "編輯日期";
 
     w_Door="門號";
+    w_DoorAdd="Add Door";
+    w_DoorEdit="Edit Door";
     system="門禁系統";
     doorid="門號ID";
     doorname="門號名稱";
     unlocktime="Unlock Time";
     shunttime="Shunt Time";
+    readerin="Reader In";
+    readerout="Reader Out";
+    
 
     w_DoorGroup="門號群組";
     w_DoorGroupAdd="新增門號群組";

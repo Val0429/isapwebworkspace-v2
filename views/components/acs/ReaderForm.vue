@@ -25,9 +25,9 @@ export default class ReaderForm extends Vue implements IFormQuick {
     tAdd: string = "w_ReaderAdd";
     tEdit: string = "w_ReaderEdit";
     /// 4) possibility - edit / add / delete
-    canAdd: boolean = true;
-    canEdit: boolean = true;
-    canDelete: boolean = true;
+    canAdd: boolean = false;
+    canEdit: boolean = false;
+    canDelete: boolean = false;
     selectedOptions=[];
     options :{key:any, value:any}[]=[];
     /// 4) interfaces - view / edit / add
