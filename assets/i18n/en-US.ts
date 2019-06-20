@@ -399,4 +399,12 @@ export default class LangObject {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+
+    // Member
+    w_Member_List = 'Member List';
+    w_Member_Add = 'Add Member';
+    w_Member_Edit = 'Edit Member';
+    w_Member_View = 'View Member';
+
+    w_Member_ = '';
 }
