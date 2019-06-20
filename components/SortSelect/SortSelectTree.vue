@@ -661,11 +661,6 @@ export class SortSelectTree extends Vue {
 
     disableChooseSortDown() {
         let result = false;
-        console.log(
-            "disableChooseSortDown",
-            this.checkboxClickTrues.length,
-            this.sortIndex.next
-        );
         if (this.checkboxClickTrues.length != 1 || this.sortIndex.next == -1) {
             result = true;
         }
@@ -982,7 +977,6 @@ export class SortSelectTree extends Vue {
     // Model connecnt
     resetVModel() {
         this.$emit("input", this.selected);
-        console.log("Selected result: ", this.selected);
     }
 }
 
