@@ -168,6 +168,7 @@ export default class PermissionTable extends Vue {
     }
 
     pageToList() {
+        console.log("pageToList");
         this.pageStep = EPageStep.list;
         (this.$refs.mainTable as any).reload();
     }
@@ -199,15 +200,7 @@ export default class PermissionTable extends Vue {
                     this.$server
                         .D("/acs/permissiontable", deleteParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
-                                    this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                            this.pageToList();
                         })
                         .catch((e: any) => {
                             console.log(e);
