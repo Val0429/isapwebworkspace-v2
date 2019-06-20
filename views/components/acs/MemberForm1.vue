@@ -241,59 +241,80 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
-    import { IUserAddData, IUserEditData } from "@/config/default/api/interfaces";
-    import {
-        ERegionType,
-        IRegionItem,
-        RegionTreeItem,
-        IRegionTreeSelected
-    } from "@/components/RegionTree/models";
-    import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import { IUserAddData, IUserEditData } from "@/config/default/api/interfaces";
+import {
+    ERegionType,
+    IRegionItem,
+    RegionTreeItem,
+    IRegionTreeSelected
+} from "@/components/RegionTree/models";
+import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
-    import RegionAPI from "@/services/RegionAPI";
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog/Dialog";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog/Dialog";
 
-    interface inputFormData extends IUserAddData, IUserEditData {
-        siteIdsText?: string;
-        groupIdsText?: string;
-        confirmPassword?: string;
-        type?: string;
-    }
+interface inputFormData extends IUserAddData, IUserEditData {
+    siteIdsText?: string;
+    groupIdsText?: string;
+    confirmPassword?: string;
+    type?: string;
+}
 
-    enum EPageStep {
-        list = "list",
-        add = "add",
-        edit = "edit",
-        view = "view",
-        none = "none",
-    }
+enum EPageStep {
+    list = "list",
+    add = "add",
+    edit = "edit",
+    view = "view",
+    none = "none"
+}
 
-    @Component({
-        components: {}
-    })
-    export default class MemberForm1 extends Vue {
-        ePageStep = EPageStep;
-        pageStep: EPageStep = EPageStep.list;
+@Component({
+    components: {}
+})
+export default class MemberForm1 extends Vue {
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
 
-        isSelected: any = [];
-        tableMultiple: boolean = true;
+    isSelected: any = [];
+    tableMultiple: boolean = true;
 
-        selectedDetail: any = [];
+    selectedDetail: any = [];
 
-        sitesSelectItem: any = {};
-        userGroupSelectItem: any = {};
+    sitesSelectItem: any = {};
+    userGroupSelectItem: any = {};
 
-        inputTestEmail: string = "";
+    inputTestEmail: string = "";
 
-        modalShow: boolean = false;
+    modalShow: boolean = false;
 
-        inputFormData: inputFormData = {
+    inputFormData: inputFormData = {
+        objectId: "",
+        username: "",
+        role: "",
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        employeeId: "",
+        siteIdsText: "",
+        groupIdsText: "",
+        type: "add",
+        siteIds: [],
+        groupIds: []
+    };
+
+    created() {}
+
+    mounted() {}
+
+    clearInputData() {
+        this.inputFormData = {
             objectId: "",
             username: "",
-            role: "",
+            role: "User",
             name: "",
             email: "",
             phone: "",
@@ -301,314 +322,290 @@
             employeeId: "",
             siteIdsText: "",
             groupIdsText: "",
-            type: "add",
+            type: "",
             siteIds: [],
             groupIds: []
         };
+    }
 
-        created() {}
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
 
-        mounted() {}
-
-        clearInputData() {
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
             this.inputFormData = {
-                objectId: "",
-                username: "",
-                role: "User",
-                name: "",
-                email: "",
-                phone: "",
-                password: "",
-                employeeId: "",
-                siteIdsText: "",
-                groupIdsText: "",
-                type: "",
-                siteIds: [],
-                groupIds: []
+                objectId: param.objectId,
+                employeeId: param.employeeId,
+                username: param.username,
+                role: param.role,
+                name: param.name,
+                email: param.email,
+                phone: param.phone,
+                siteIdsText: this.idsToText(param.sites),
+                groupIdsText: this.idsToText(param.groups),
+                siteIds: param.sites,
+                groupIds: param.groups,
+                type: ""
             };
         }
+    }
 
-
-        selectedItem(data) {
-            this.isSelected = data;
-            this.selectedDetail = [];
-            this.selectedDetail = data;
+    tempSaveInputData(data) {
+        switch (data.key) {
+            case "account":
+                this.inputFormData.username = data.value;
+                break;
+            case "password":
+                this.inputFormData.password = data.value;
+                break;
+            case "confirmPassword":
+                this.inputFormData.confirmPassword = data.value;
+                break;
+            case "employeeId":
+                this.inputFormData.employeeId = data.value;
+                break;
+            case "name":
+                this.inputFormData.name = data.value;
+                break;
+            case "email":
+                this.inputFormData.email = data.value;
+                break;
+            case "phone":
+                this.inputFormData.phone = data.value;
+                break;
+            case "siteIds":
+                this.inputFormData.siteIds = data.value;
+                break;
+            case "groupIds":
+                this.inputFormData.groupIds = data.value;
+                break;
+            case "role":
+                this.inputFormData.role = data.value;
+                break;
         }
+    }
 
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.selectedDetail) {
-                this.inputFormData = {
-                    objectId: param.objectId,
-                    employeeId: param.employeeId,
-                    username: param.username,
-                    role: param.role,
-                    name: param.name,
-                    email: param.email,
-                    phone: param.phone,
-                    siteIdsText: this.idsToText(param.sites),
-                    groupIdsText: this.idsToText(param.groups),
-                    siteIds: param.sites,
-                    groupIds: param.groups,
-                    type: ""
-                };
+    async pageToAdd(type: string) {
+        this.pageStep = EPageStep.add;
+        this.clearInputData();
+        this.inputFormData.type = type;
+    }
+
+    async pageToEdit(type: string) {
+        this.pageStep = EPageStep.edit;
+        this.getInputData();
+
+        this.inputFormData.type = type;
+
+        this.inputFormData.siteIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.siteIds.map(item => item.objectId)
+            )
+        );
+        this.inputFormData.groupIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.groupIds.map(item => item.objectId)
+            )
+        );
+    }
+
+    pageToView() {
+        this.pageStep = EPageStep.view;
+        this.getInputData();
+    }
+
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        (this.$refs.listTable as any).reload();
+    }
+
+    async saveAdd(data) {
+        const datas: IUserAddData[] = [
+            {
+                username: data.username,
+                role: data.role,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                password: data.password,
+                employeeId: data.employeeId,
+                siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                groupIds: data.groupIds !== undefined ? data.groupIds : []
             }
-        }
+        ];
 
-        tempSaveInputData(data) {
-            switch (data.key) {
-                case "account":
-                    this.inputFormData.username = data.value;
-                    break;
-                case "password":
-                    this.inputFormData.password = data.value;
-                    break;
-                case "confirmPassword":
-                    this.inputFormData.confirmPassword = data.value;
-                    break;
-                case "employeeId":
-                    this.inputFormData.employeeId = data.value;
-                    break;
-                case "name":
-                    this.inputFormData.name = data.value;
-                    break;
-                case "email":
-                    this.inputFormData.email = data.value;
-                    break;
-                case "phone":
-                    this.inputFormData.phone = data.value;
-                    break;
-                case "siteIds":
-                    this.inputFormData.siteIds = data.value;
-                    break;
-                case "groupIds":
-                    this.inputFormData.groupIds = data.value;
-                    break;
-                case "role":
-                    this.inputFormData.role = data.value;
-                    break;
-            }
-            
-        }
+        const addParam = {
+            datas
+        };
 
-        async pageToAdd(type: string) {
-            this.pageStep = EPageStep.add;
-            this.clearInputData();
-            this.inputFormData.type = type;
-        }
-
-        async pageToEdit(type: string) {
-            this.pageStep = EPageStep.edit;
-            this.getInputData();
-
-            this.inputFormData.type = type;
-
-            this.inputFormData.siteIds = JSON.parse(
-                JSON.stringify(
-                    this.inputFormData.siteIds.map(item => item.objectId)
-                )
-            );
-            this.inputFormData.groupIds = JSON.parse(
-                JSON.stringify(
-                    this.inputFormData.groupIds.map(item => item.objectId)
-                )
-            );
-        }
-
-        pageToView() {
-            this.pageStep = EPageStep.view;
-            this.getInputData();
-        }
-
-        pageToList() {
-            this.pageStep = EPageStep.list;
-            (this.$refs.listTable as any).reload();
-        }
-
-
-        async saveAdd(data) {
-            const datas: IUserAddData[] = [
-                {
-                    username: data.username,
-                    role: data.role,
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    password: data.password,
-                    employeeId: data.employeeId,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    groupIds: data.groupIds !== undefined ? data.groupIds : []
-                }
-            ];
-
-            const addParam = {
-                datas
-            };
-
-            await this.$server
-                .C("/acs/member", addParam)
-                .then((response: any) => {
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_User_AddUserSuccess"));
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_User_AddUserFailed"));
-                            return false;
-                        }
+        await this.$server
+            .C("/acs/member", addParam)
+            .then((response: any) => {
+                for (const returnValue of response) {
+                    if (returnValue.statusCode === 200) {
+                        Dialog.success(this._("w_User_AddUserSuccess"));
+                        this.pageToList();
                     }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
+                    if (returnValue.statusCode === 500) {
                         Dialog.error(this._("w_User_AddUserFailed"));
                         return false;
                     }
-                    console.log(e);
-                    return false;
-                });
-        }
-
-        async saveEdit(data) {
-            const datas: IUserEditData[] = [
-                {
-                    role: data.role,
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    objectId: data.objectId
                 }
-            ];
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                if (e.res.statusCode == 500) {
+                    Dialog.error(this._("w_User_AddUserFailed"));
+                    return false;
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
-            const editParam = {
-                datas
-            };
+    async saveEdit(data) {
+        const datas: IUserEditData[] = [
+            {
+                role: data.role,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                objectId: data.objectId
+            }
+        ];
 
-            await this.$server
-                .U("/acs/member", editParam)
-                .then((response: any) => {
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_User_EditUserSuccess"));
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_User_EditUserFailed"));
-                            return false;
-                        }
+        const editParam = {
+            datas
+        };
+
+        await this.$server
+            .U("/acs/member", editParam)
+            .then((response: any) => {
+                for (const returnValue of response) {
+                    if (returnValue.statusCode === 200) {
+                        Dialog.success(this._("w_User_EditUserSuccess"));
+                        this.pageToList();
                     }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
+                    if (returnValue.statusCode === 500) {
                         Dialog.error(this._("w_User_EditUserFailed"));
                         return false;
                     }
-                    console.log(e);
-                    return false;
-                });
-        }
-
-        async doDelete() {
-            await Dialog.confirm(
-                this._("w_User_DeleteConfirm"),
-                this._("w_DeleteConfirm"),
-                () => {
-                    for (const param of this.selectedDetail) {
-                        const deleteParam: {
-                            objectId: string;
-                        } = {
-                            objectId: param.objectId
-                        };
-
-                        this.$server
-                            .D("/acs/member", deleteParam)
-                            .then((response: any) => {
-                                for (const returnValue of response) {
-                                    if (returnValue.statusCode === 200) {
-                                        this.pageToList();
-                                    }
-                                    if (returnValue.statusCode === 500) {
-                                        Dialog.error(this._("w_DeleteFailed"));
-                                        return false;
-                                    }
-                                }
-                            })
-                            .catch((e: any) => {
-                                if (
-                                    e.res &&
-                                    e.res.statusCode &&
-                                    e.res.statusCode == 401
-                                ) {
-                                    return ResponseFilter.base(this, e);
-                                }
-
-                                console.log(e);
-                            });
-                    }
                 }
-            );
-        }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                if (e.res.statusCode == 500) {
+                    Dialog.error(this._("w_User_EditUserFailed"));
+                    return false;
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
-        showFirst(value): string {
-            if (value.length >= 2) {
-                return value.map(item => item.name)[0] + "...";
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_User_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.selectedDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
+
+                    this.$server
+                        .D("/acs/member", deleteParam)
+                        .then((response: any) => {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500) {
+                                    Dialog.error(this._("w_DeleteFailed"));
+                                    return false;
+                                }
+                            }
+                        })
+                        .catch((e: any) => {
+                            if (
+                                e.res &&
+                                e.res.statusCode &&
+                                e.res.statusCode == 401
+                            ) {
+                                return ResponseFilter.base(this, e);
+                            }
+
+                            console.log(e);
+                        });
+                }
             }
-            if (value.length === 1) {
-                return value.map(item => item.name)[0];
-            }
-            if (value.length == 0) {
-                return "";
-            }
+        );
+    }
+
+    showFirst(value): string {
+        if (value.length >= 2) {
+            return value.map(item => item.name)[0] + "...";
         }
-
-        show30Words(
-            value: any,
-            startWord: number = 0,
-            endWord: number = 30
-        ): string {
-            return value.length < endWord
-                ? value.substring(startWord, endWord)
-                : value.substring(startWord, endWord) + "...";
+        if (value.length === 1) {
+            return value.map(item => item.name)[0];
         }
-
-        idsToText(value: any): string {
-            let result = "";
-            for (let val of value) {
-                result += val.name + ", ";
-            }
-            result = result.substring(0, result.length - 2);
-            return result;
+        if (value.length == 0) {
+            return "";
         }
+    }
 
-        cardSearch(search: string) {
-            // TODO: finished search
-            // console.log('search - ', search)
-            this.searchKeywords(search);
+    show30Words(
+        value: any,
+        startWord: number = 0,
+        endWord: number = 30
+    ): string {
+        return value.length < endWord
+            ? value.substring(startWord, endWord)
+            : value.substring(startWord, endWord) + "...";
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (let val of value) {
+            result += val.name + ", ";
         }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
 
-        searchKeywords(search: string) {
-            // TODO: finished search
-            if (search != "") {
-                const accountText = this.inputFormData.username.toLocaleLowerCase();
-                const nameText = this.inputFormData.name.toLocaleLowerCase();
-                const searchText = search.toLowerCase();
-                const searchResult =
-                    accountText.match(searchText) || nameText.match(searchText);
+    cardSearch(search: string) {
+        // TODO: finished search
+        // console.log('search - ', search)
+        this.searchKeywords(search);
+    }
 
-                return searchResult;
-            }
+    searchKeywords(search: string) {
+        // TODO: finished search
+        if (search != "") {
+            const accountText = this.inputFormData.username.toLocaleLowerCase();
+            const nameText = this.inputFormData.name.toLocaleLowerCase();
+            const searchText = search.toLowerCase();
+            const searchResult =
+                accountText.match(searchText) || nameText.match(searchText);
+
+            return searchResult;
         }
+    }
 
-        ITableList() {
-            return `
+    ITableList() {
+        return `
             interface {
 
                 /**
@@ -663,10 +660,10 @@
 
             }
         `;
-        }
+    }
 
-        IAddForm() {
-            return `
+    IAddForm() {
+        return `
             interface {
 
                 /**
@@ -729,18 +726,18 @@
                  * @uiLabel - ${this._("w_User_Role")}
                  */
                 role: ${toEnumInterface({
-                Admin: this._("w_User_UserGroup_Admin"),
-                User: this._("w_User_UserGroup_User")
-            })};
+                    Admin: this._("w_User_UserGroup_Admin"),
+                    User: this._("w_User_UserGroup_User")
+                })};
 
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
                  */
                 groupIds?: ${toEnumInterface(
-                this.userGroupSelectItem as any,
-                true
-            )};
+                    this.userGroupSelectItem as any,
+                    true
+                )};
 
 
                 /**
@@ -752,10 +749,10 @@
 
             }
         `;
-        }
+    }
 
-        IEditForm() {
-            return `
+    IEditForm() {
+        return `
             interface {
 
                 /**
@@ -800,18 +797,18 @@
                  * @uiLabel - ${this._("w_User_Role")}
                  */
                 role: ${toEnumInterface({
-                Admin: this._("w_User_UserGroup_Admin"),
-                User: this._("w_User_UserGroup_User")
-            })};
+                    Admin: this._("w_User_UserGroup_Admin"),
+                    User: this._("w_User_UserGroup_User")
+                })};
 
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
                  */
                 groupIds?: ${toEnumInterface(
-                this.userGroupSelectItem as any,
-                true
-            )};
+                    this.userGroupSelectItem as any,
+                    true
+                )};
 
 
                 /**
@@ -823,10 +820,10 @@
 
             }
         `;
-        }
+    }
 
-        IViewForm() {
-            return `
+    IViewForm() {
+        return `
             interface {
 
                 /**
@@ -886,8 +883,8 @@
 
             }
         `;
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>
