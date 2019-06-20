@@ -415,17 +415,25 @@ export default class LangObject {
 
     w_Member_CompanyName = '公司名稱：';
     w_Member_PersonType = '人員類型：';
+    w_Member_PersonType1 = '人員類型';
     w_Member_EmployeeNumber = '工號：';
+    w_Member_EmployeeNumber1 = '工號';
     w_Member_ChineseName = '中文姓名：';
+    w_Member_ChineseName1 = '中文姓名';
     w_Member_EnglishName = '英文姓名：';
-    w_Member_CardNumber = '卡號';
+    w_Member_EnglishName1 = '英文姓名';
+    w_Member_CardNumber = '卡號：';
+    w_Member_CardNumber1 = '卡號';
     w_Member_CardType = '證卡類型：';
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
+    w_Member_Actions = '功能';
 
     w_Member_Info = '資訊狀態：';
     w_Member_StartDate = '起始日期：';
+    w_Member_StartDate1 = '起始日期';
     w_Member_EndDate = '結束日期：';
+    w_Member_EndDate1 = '結束日期';
     w_Member_LastEditPerson = '上次修改人員：';
     w_Member_LastEditTime = '上次修改時間：';
 
@@ -442,7 +450,9 @@ export default class LangObject {
     w_Member_Birthday = '出生日期：';
     w_Member_CompanyInfo = '公司資訊：';
     w_Member_Department = '部門：';
+    w_Member_Department1 = '部門';
     w_Member_CostCenter= '成本中心：';
+    w_Member_CostCenter1= '成本中心';
     w_Member_Area = '地區：';
     w_Member_WorkArea = '工作地區：';
     w_Member_RegistrationDate = '報到日期：';
