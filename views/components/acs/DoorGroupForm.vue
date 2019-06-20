@@ -3,7 +3,7 @@
         <!-- 5) custom view templates with <template #view.* /> -->
 
         <template #view.doors="{$attrs, $listeners}">
-            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId)).join(', ') }}
+            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId, options)).join(', ') }}
         </template>  
         <template #add.doors="{$attrs, $listeners}">
             <ivc-multi-selections 
@@ -25,8 +25,7 @@ import { EFormQuick, IFormQuick } from '@/../components/form';
 @Component
 /// 1) class name
 export default class DoorGroupForm extends Vue implements IFormQuick {
-    private doors:any[]=[];
-    private options:{key:any, value:any}[]=[];
+    
     
     
     
@@ -113,19 +112,19 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
         return;
     }
     /// Done
-
+    private options:{key:any, value:any}[]=[];
+    
     private server;
     async created() {
         this.server = this.$server;        
-        let resp = await this.server.R("/acs/door", {"paging.all":"true"});       
-        this.doors=resp.results;
-        for(let door of resp.results){
-            this.options.push({key:door.objectId, value:door.doorname});
-        }
+        let resp = await this.server.R("/acs/door", {"paging.all":"true"});
+
+        this.options = resp.results.map(door=>{return{key:door.objectId, value:door.doorname}});
+        
         console.log("doors", this.options)
     }
-    getName(key:any){
-        let item = this.options.find(x=>x.key==key);
+    getName(key:any, options:{key:any, value:any}[]){
+        let item = options.find(x=>x.key==key);
         return item?item.value:'';
     }
     

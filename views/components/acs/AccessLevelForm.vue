@@ -151,24 +151,24 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
     }
     private async getScheduleOptions() {
         let resp=await this.server.R("/acs/timeschedule",{"paging.all":"true"});    
-        for(let item of resp.results) {
-            this.scheduleOptions.push({ key: item.objectId,value: item.timename });
-        }
+        
+        this.scheduleOptions= resp.results.map(item=>{return { key: item.objectId,value: item.timename }});
+        
         console.log("scheduleOptions",this.scheduleOptions);
     }
     private async getDoorOptions() {
         let resp=await this.server.R("/acs/door",{"paging.all":"true"});    
-        for(let item of resp.results) {
-            this.doorOptions.push({ key: item.objectId,value: item.doorname });
-        }
+        
+        this.doorOptions = resp.results.map(item=>{return { key: item.objectId,value: item.doorname }});
+        
         console.log("doorOptions",this.doorOptions);
     }
 
     private async getReaderOptions() {
         let resp=await this.server.R("/acs/reader",{"paging.all":"true"});    
-        for(let item of resp.results) {
-        this.readerOptions.push({ key: item.objectId,value: item.readername });
-        }
+        
+        this.readerOptions = resp.results.map(item=>{return { key: item.objectId,value: item.readername }});
+        
         console.log("readerOptions",this.readerOptions);
     }
 
