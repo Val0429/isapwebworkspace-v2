@@ -7,91 +7,107 @@
                 ref="step"
                 @mounted="doMounted"
             >
-
-                <template #1-title>{{ _('w_BOSalesRecords_Step2') }}</template>
+                <template #1-title>{{ _('w_BOSalesRecords_Step1') }}</template>
                 <template #1>
+                    <b-button
+                        class="col-md-5"
+                        @click="chooseStore"
+                    >{{ _('w_BOSalesRecords_RecordTypeStore') }}
+                    </b-button>
+                    <span class="col-md-1"></span>
+                    <b-button
+                        class="col-md-5"
+                        @click="chooseProduct"
+                    >{{ _('w_BOSalesRecords_RecordTypeProduct') }}
+                    </b-button>
+                </template>
+
+                <template #2-title>{{ _('w_BOSalesRecords_Step2') }}</template>
+                <template #2>
                     <b-button
                         class="col-md-12"
                         @click="downloadExample"
                     >{{ _('w_BOSalesRecords_Download') }}</b-button>
                 </template>
 
-                <template #2-title>{{ _('w_BOSalesRecords_Step3') }}</template>
-                <template #2>
+                <template #3-title>{{ _('w_BOSalesRecords_Step3') }}</template>
+                <template #3>
                     <b-form-file
                         v-model="file"
                         v-on:input="uploadFile"
                     />
                 </template>
 
-                <template #3-title>{{ _('w_BOSalesRecords_Step4') }}</template>
-                <template #3>
-                    <div>
+                <template #4-title>{{ _('w_BOSalesRecords_Step4') }}</template>
+                <template #4>
+                    <div>{{ recordType }}</div>
+                    <div v-if="recordType == eRecordType.store">
                         <table class="table table-bordered table-hover datatable dataTable no-footer records-table">
                             <thead>
                                 <th>{{ _('w_BOSalesRecords_StoreId') }}</th>
                                 <th>{{ _('w_BOSalesRecords_Time') }}</th>
                                 <th>{{ _('w_BOSalesRecords_Transaction') }}</th>
-                                <th>{{ _('w_BOSalesRecords_Revenue') }}</th>
+                                <th>{{ _('w_BOSalesRecords_Amount') }}</th>
                             </thead>
                             <tbody>
                                 <tr v-for="value in recordFileContent">
                                     <td v-html="value.storeId ? value.storeId : errorMessageInTable()"></td>
                                     <td v-html="value.datetimeText ? value.datetimeText : errorMessageInTable()"></td>
                                     <td v-html="value.transaction ? value.transaction.toString() : errorMessageInTable()"></td>
-                                    <td v-html="value.revenue ? value.revenue.toString() : errorMessageInTable()"></td>
+                                    <td v-html="value.amount ? value.amount.toString() : errorMessageInTable()"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div v-if="recordType == eRecordType.product">
+                        <table class="table table-bordered table-hover datatable dataTable no-footer records-table">
+                            <thead>
+                                <th>{{ _('w_BOSalesRecords_StoreId') }}</th>
+                                <th>{{ _('w_BOSalesRecords_Time') }}</th>
+                                <th>{{ _('w_BOSalesRecords_ProductId') }}</th>
+                                <th>{{ _('w_BOSalesRecords_Count') }}</th>
+                                <th>{{ _('w_BOSalesRecords_Amount') }}</th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="value in recordFileContent">
+                                    <td v-html="value.storeId ? value.storeId : errorMessageInTable()"></td>
+                                    <td v-html="value.datetimeText ? value.datetimeText : errorMessageInTable()"></td>
+                                    <td v-html="value.productId ? value.productId : errorMessageInTable()"></td>
+                                    <td v-html="value.count ? value.count.toString() : errorMessageInTable()"></td>
+                                    <td v-html="value.amount? value.amount.toString() : errorMessageInTable()"></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </template>
 
-                <template #4-title>{{ _('w_BOSalesRecords_Step5') }}</template>
-                <template #4>
-                    <div>
-                        <table class="table table-bordered table-hover datatable dataTable no-footer records-table">
-                            <thead>
-                                <th>{{ _('w_BOSalesRecords_StoreId') }}</th>
-                                <th>{{ _('w_BOSalesRecords_Time') }}</th>
-                                <th>{{ _('w_BOSalesRecords_Transaction') }}</th>
-                                <th>{{ _('w_BOSalesRecords_Revenue') }}</th>
-                                <th>{{ _('w_BOSalesRecords_ApiMessage') }}</th>
-                            </thead>
-                            <tbody>
-                                <tr v-for="value in recordFileContent">
-                                    <td v-html="value.storeId"></td>
-                                    <td v-html="value.datetimeText"></td>
-                                    <td v-html="value.transaction"></td>
-                                    <td v-html="value.revenue"></td>
-                                    <td v-html="value.apiMessage"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <template #5-title>{{ _('w_BOSalesRecords_Step5') }}</template>
+                <template #5>
+                    TODO: Waitting API
                 </template>
 
             </iv-step-progress>
 
             <template
                 #footer
-                v-if="pageStep > 0"
+                v-if="pageStep > 1"
             >
                 <b-button
-                    v-if="pageStep > 1 && pageStep < 4"
+                    v-if="pageStep > 1 && pageStep < 5"
                     variant="dark"
                     size="lg"
                     @click="pageToPrev"
                 >{{ _('w_PreviousPage') }}
                 </b-button>
                 <b-button
-                    v-if="pageStep == 1"
+                    v-if="pageStep == 2"
                     variant="dark"
                     size="lg"
-                    @click="pageTo2"
+                    @click="pageTo3"
                 >{{ _('w_NextPage') }}
                 </b-button>
                 <b-button
-                    v-if="pageStep == 3"
+                    v-if="pageStep == 4"
                     variant="dark"
                     size="lg"
                     :disabled="recordFileError"
@@ -99,7 +115,7 @@
                 >{{ _('w_Submit') }}
                 </b-button>
                 <b-button
-                    v-if="pageStep == 4"
+                    v-if="pageStep == 5"
                     variant="dark"
                     size="lg"
                     @click="pageTo1"
@@ -123,24 +139,28 @@ import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import Datetime from "@/services/Datetime";
 import Utility from "@/services/Utility";
-import { IBusinessOperationSalesRecord } from "../../config/default/api/interfaces";
+
+enum ERecordType {
+    none = "none",
+    store = "store",
+    product = "product"
+}
 
 interface IExcelTitle {
     storeId: string;
     date: string;
     hour: string;
-    revenue: string;
+    amount: string;
     transaction: string;
     productId: string;
     count: string;
 }
 
 interface IRecordFile {
-    apiMessage: string;
     storeId: string;
     dateText: string;
     hourText: string;
-    revenue: number;
+    amount: number;
     transaction?: number; // ERecordType.sotre
     productId?: string; // ERecordType.product
     count?: number; // ERecordType.product
@@ -153,20 +173,18 @@ interface IRecordFile {
 })
 export default class SalesRecords extends Vue {
     pageStep: number = 1;
+    eRecordType = ERecordType;
+    recordType: ERecordType = ERecordType.none;
     stepRef: any = this.$refs.step;
     file: any | null = null;
     recordFileError: boolean = false;
     recordFileContent: IRecordFile[] = [];
 
-    errorMessageFromServer = {
-        noSite: "site not found"
-    };
-
     excelTitleName: IExcelTitle = {
         storeId: "Store ID",
         date: "Date",
         hour: "Hour",
-        revenue: "Revenue",
+        amount: "Amount",
         transaction: "Transaction",
         productId: "Product ID",
         count: "Count"
@@ -197,6 +215,7 @@ export default class SalesRecords extends Vue {
 
     pageTo1() {
         this.file = null;
+        this.recordType = ERecordType.none;
         this.recordFileContent = [];
         this.pageStep = 1;
         this.recordFileError = false;
@@ -204,15 +223,19 @@ export default class SalesRecords extends Vue {
     }
 
     pageTo2() {
-        this.pageStep = 2;
-        this.recordFileContent = [];
-        this.recordFileError = false;
-        this.file = null;
-        this.stepToPageStep();
+        if (this.recordType == ERecordType.none) {
+            this.pageTo1();
+        } else {
+            this.pageStep = 2;
+            this.stepToPageStep();
+        }
     }
 
     pageTo3() {
         this.pageStep = 3;
+        this.recordFileContent = [];
+        this.recordFileError = false;
+        this.file = null;
         this.stepToPageStep();
     }
 
@@ -230,17 +253,34 @@ export default class SalesRecords extends Vue {
         this.stepRef.currentStep = this.pageStep;
     }
 
+    chooseStore() {
+        this.recordType = ERecordType.store;
+        this.pageTo2();
+    }
+
+    chooseProduct() {
+        this.recordType = ERecordType.product;
+        this.pageTo2();
+    }
+
     downloadExample() {
-        this.downloadExampleStore();
+        switch (this.recordType) {
+            case ERecordType.store:
+                this.downloadExampleStore();
+                break;
+            case ERecordType.product:
+                this.downloadExampleProduct();
+                break;
+        }
     }
 
     downloadExampleStore() {
         let excelData: IRecordFile[] = [];
+
         let rowCount = Math.floor(Math.random() * 50) + 1;
         let now = new Date();
         for (let i = 0; i < rowCount; i++) {
             excelData.push({
-                apiMessage: "",
                 storeId: "Store_" + Math.floor(Math.random() * 50),
                 dateText:
                     (now.getFullYear() + 1).toString() +
@@ -249,7 +289,7 @@ export default class SalesRecords extends Vue {
                     "/" +
                     (Math.floor(Math.random() * 27) + 1).toString(),
                 hourText: Math.floor(Math.random() * 23).toString(),
-                revenue: Math.floor(Math.random() * 5000),
+                amount: Math.floor(Math.random() * 5000),
                 transaction: Math.floor(Math.random() * 1000)
             });
         }
@@ -259,20 +299,66 @@ export default class SalesRecords extends Vue {
             this.excelTitleName.date,
             this.excelTitleName.hour,
             this.excelTitleName.transaction,
-            this.excelTitleName.revenue
+            this.excelTitleName.amount
         ];
         const filterVal = [
             "storeId",
             "dateText",
             "hourText",
             "transaction",
-            "revenue"
+            "amount"
         ];
         const data = excelData.map(v => filterVal.map(k => v[k]));
         const [fileName, fileType, sheetName] = [
-            "ImportSalesRevenueTemplate",
+            "ImportSalesAmountTemplate",
             "xlsx",
-            "SalesRevenue"
+            "SalesAmount"
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
+
+    downloadExampleProduct() {
+        let excelData = [];
+
+        let rowCount = Math.floor(Math.random() * 50) + 1;
+        let now = new Date();
+        for (let i = 0; i < rowCount; i++) {
+            excelData.push({
+                storeId: "Store_" + Math.floor(Math.random() * 50),
+                dateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                hourText: Math.floor(Math.random() * 23).toString(),
+                amount: Math.floor(Math.random() * 5000),
+                productId: "Product_" + Math.floor(Math.random() * 20),
+                count: Math.floor(Math.random() * 1000)
+            });
+        }
+
+        const th = [
+            this.excelTitleName.storeId,
+            this.excelTitleName.date,
+            this.excelTitleName.hour,
+            this.excelTitleName.productId,
+            this.excelTitleName.count,
+            this.excelTitleName.amount
+        ];
+        const filterVal = [
+            "storeId",
+            "dateText",
+            "hourText",
+            "productId",
+            "count",
+            "amount"
+        ];
+        const data = excelData.map(v => filterVal.map(k => v[k]));
+        const [fileName, fileType, sheetName] = [
+            "ImportProductSalesAmountTemplate",
+            "xlsx",
+            "ProductSalesAmount"
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
     }
@@ -303,11 +389,10 @@ export default class SalesRecords extends Vue {
                 for (let sheetRow of data) {
                     for (let row of sheetRow.sheet) {
                         let recordFile: IRecordFile = {
-                            apiMessage: "",
                             storeId: "",
                             dateText: "",
                             hourText: "",
-                            revenue: 0
+                            amount: 0
                         };
 
                         // get value
@@ -336,11 +421,11 @@ export default class SalesRecords extends Vue {
                                 .trim();
                         }
                         if (
-                            row[this.excelTitleName.revenue] != undefined &&
-                            !isNaN(parseFloat(row[this.excelTitleName.revenue]))
+                            row[this.excelTitleName.amount] != undefined &&
+                            !isNaN(parseFloat(row[this.excelTitleName.amount]))
                         ) {
-                            recordFile.revenue = parseFloat(
-                                row[this.excelTitleName.revenue]
+                            recordFile.amount = parseFloat(
+                                row[this.excelTitleName.amount]
                                     .toString()
                                     .trim()
                             );
@@ -439,19 +524,34 @@ export default class SalesRecords extends Vue {
 
                         // check disable submit button
                         if (!this.recordFileError) {
-                            if (
-                                recordFile.storeId == "" ||
-                                recordFile.datetime == undefined ||
-                                recordFile.transaction == undefined ||
-                                recordFile.revenue == undefined
-                            ) {
-                                this.recordFileError = true;
+                            switch (this.recordType) {
+                                case ERecordType.store:
+                                    if (
+                                        recordFile.storeId == "" ||
+                                        recordFile.datetime == undefined ||
+                                        recordFile.transaction == undefined ||
+                                        recordFile.amount == undefined
+                                    ) {
+                                        this.recordFileError = true;
+                                    }
+                                    break;
+                                case ERecordType.product:
+                                    if (
+                                        recordFile.storeId == "" ||
+                                        recordFile.datetime == undefined ||
+                                        recordFile.productId == undefined ||
+                                        recordFile.count == undefined ||
+                                        recordFile.amount == undefined
+                                    ) {
+                                        this.recordFileError = true;
+                                    }
+                                    break;
                             }
                         }
                         this.recordFileContent.push(recordFile);
                     }
                 }
-                this.pageTo3();
+                this.pageTo4();
             })
             .catch((e: any) => {
                 console.log(e);
@@ -462,67 +562,7 @@ export default class SalesRecords extends Vue {
 
     async sendRecordFile() {
         // TODO: waitting API
-        let param: {
-            datas: IBusinessOperationSalesRecord[];
-        } = {
-            datas: []
-        };
-
-        for (let content of this.recordFileContent) {
-            let tempItem: IBusinessOperationSalesRecord = {
-                customId: content.storeId,
-                date: content.datetime.toISOString(),
-                revenue: content.revenue,
-                transaction: content.transaction
-            };
-            param.datas.push(tempItem);
-        }
-
-        await this.$server
-            .C("/report/sales-record", param)
-            .then((response: any) => {
-                if (typeof response == "object" && response.length > 0) {
-                    for (let i in response) {
-                        let iNumber = parseInt(i);
-                        let tempLoopValue = response[iNumber];
-                        if (this.recordFileContent[iNumber] == undefined) {
-                            continue;
-                        }
-                        if (tempLoopValue.statusCode == 200) {
-                            this.recordFileContent[iNumber].apiMessage = `<span style='color:green;'>${this._('w_BOSalesRecords_ApiSuccess')}</span>`;
-                        } else if (tempLoopValue.statusCode == 400) {
-                            if (tempLoopValue.message == this.errorMessageFromServer.noSite) {
-                                this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorNoSite')}</span>`;
-                            } else {
-                                this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorServerError')}</span>`;
-                            }
-                        } else if (tempLoopValue.statusCode == 401) {
-                            this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorNoPremission')}</span>`;
-                        } else {
-                            this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorServerError')}</span>`;
-                        }
-                    }
-                    this.pageTo4();
-                } else {
-                    this.sendError();
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                this.sendError();
-                return false;
-            });
-    }
-
-    sendError() {
-        for (let i in this.recordFileContent) {
-            this.recordFileContent[parseInt(i)].apiMessage = this._(
-                "w_BOSalesRecords_ErrorServerError"
-            );
-        }
-        this.pageTo4();
+        this.pageTo5();
     }
 
     errorMessageInTable() {

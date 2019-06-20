@@ -64,6 +64,9 @@ import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, 
 // import Business Operation Campaign
 import { CampaignCreate, CampaignDelete, CampaignRead, CampaignUpdate } from '@/config/default/api/BusinessOperationCampaign';
 
+// import Business Operation Sales Record
+import { SalesRecordCreate } from '@/config/default/api/BusinessOperationSalesRecord';
+
 // Video Source People Counting
 import { VSPeopleCountingCreate, VSPeopleCountingUpdate } from '@/config/default/api/VideoSourcePeopleCounting';
 
@@ -162,6 +165,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Business Operation Campaign
         '/event/campaign': [CampaignCreate.Input, CampaignCreate.Output, false];
+
+        // Business Operation Sales Record
+        '/report/sales-record': [SalesRecordCreate.Input, SalesRecordCreate.Output, false];
 
         // Video Source People Counting
         '/device/people-counting': [VSPeopleCountingCreate.Input, VSPeopleCountingCreate.Output, false];

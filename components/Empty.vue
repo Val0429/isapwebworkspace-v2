@@ -13,7 +13,7 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 export class Empty extends Vue {
     // Prop
     @Prop({
-        type: String,
+        type: String, // Boolean, Number, String, Array, Object
         default: ""
     })
     label: string;

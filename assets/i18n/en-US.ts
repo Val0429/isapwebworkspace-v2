@@ -602,13 +602,19 @@ export default class LangObject {
     w_BOSalesRecords_Hour = 'Hour';
     w_BOSalesRecords_Time = 'Time';
     w_BOSalesRecords_Amount = 'Amount';
+    w_BOSalesRecords_Revenue = 'Revenue';
     w_BOSalesRecords_Transaction = 'Transaction';
     w_BOSalesRecords_ProductId = 'Product ID';
     w_BOSalesRecords_Count = 'Count';
+    w_BOSalesRecords_ApiMessage = 'Message';
+    w_BOSalesRecords_ApiSuccess = 'Success';
 
     w_BOSalesRecords_ErrorFileType = 'Please upload xlsx';
     w_BOSalesRecords_ErrorFileResolve = 'File content can not be Resolve';
     w_BOSalesRecords_ErrorNoData = 'no data';
+    w_BOSalesRecords_ErrorServerError = 'Server Connect Error';
+    w_BOSalesRecords_ErrorNoSite = 'Store not find';
+    w_BOSalesRecords_ErrorNoPremission = "No Premission";
 
     // People Counting Device
     w_VSPeopleCounting_List = 'People Counting Device List';
@@ -733,4 +739,21 @@ export default class LangObject {
     w_VSVIP_Stranger_Visitor_EditSuccess = 'VIP, Stranger, Frequent Visitor Device edit success.';
     w_VSVIP_Stranger_Visitor_EditFailed = 'VIP, Stranger, Frequent Visitor Device edit failed, please try again.';
     w_VSVIP_Stranger_Visitor_DeleteConfirm = 'Are you sure to delete selected VIP, Stranger, Frequent Visitor Device(s)?';
+
+    // Report Template
+    w_ReportTemplate_List = 'Report Template List';
+    w_ReportTemplate_Add = 'Add Report Template';
+    w_ReportTemplate_Edit = 'Edit Report Template';
+    w_ReportTemplate_View = 'View Report Template';
+    w_ReportTemplate_AddDuplicate = 'Duplicate Add Report Template';
+
+    w_ReportTemplate_Name = 'Report Name';
+    w_ReportTemplate_Metric = 'Metric';
+    w_ReportTemplate_ReportPeriod = 'Report Period';
+    w_ReportTemplate_ReportPeriod1 = '* Select Report Period';
+    w_ReportTemplate_DesignationPeriod = 'Designation';
+    w_ReportTemplate_SendReportTime = 'Send Report Time';
+    w_ReportTemplate_SendReportTime1 = '* Send Report Time';
+    w_ReportTemplate_Recipient = 'Recipient';
+
 }

@@ -4,7 +4,10 @@
         <div v-show="pageStep === ePageStep.none">
 
             <!-- Morris -->
-            <chart-bar-line label="Test Label">
+            <chart-bar-line
+                label="Test Label"
+                @input="test"
+            >
             </chart-bar-line>
 
         </div>
@@ -35,6 +38,8 @@ export default class Traffic extends Vue {
     created() {}
 
     mounted() {}
+
+    test(data: any) {}
 }
 </script>
 

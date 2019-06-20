@@ -490,8 +490,6 @@ export default class User extends Vue {
                 break;
         }
 
-        console.log("data - ", data);
-
         this.selecteds = [];
 
         for (const id of this.inputFormData.siteIds) {
