@@ -35,7 +35,7 @@
                     ref="mainTable"
                     :interface="IMainTable()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/acs/member' }"
+                    :server="{ path: '/acs/permissiontable' }"
                     @selected="selectedItem($event)"
                 >
                     <template #Actions="{$attrs, $listeners}">
@@ -66,6 +66,19 @@
                     @update:*="updateForm($event)"
                     @submit="doSave($event)"
                 >
+
+                    <template #deviceType="{ $attrs, $listeners}">
+                        <div class="card-content iv-form-group col-md-12">
+                            <b-form-group :label="_('w_Permission_DeviceType')">
+                                <b-form-radio-group
+                                    id="radio-group-1"
+                                    v-model="selected"
+                                    :options="options"
+                                    name="radio-options"
+                                ></b-form-radio-group>
+                            </b-form-group>
+                        </div>
+                    </template>
                 </iv-form>
 
                 <template #footer-before>
@@ -106,6 +119,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
 import PermissionTableForm from "./PermissionTableForm.vue";
+import Dialog from "@/services/Dialog/Dialog";
 
 enum EPageStep {
     list = "list",
@@ -130,6 +144,11 @@ export default class PermissionTable extends Vue {
     deviceNameItem: any = [];
     deviceAreaItem: any = [];
     deviceTimeFromatItem: any = [];
+    devoceTypeItem: any = [
+        { text: "Door", value: "first" },
+        { text: "Door Group", value: "second" },
+        { text: "Elevator", value: { fourth: 4 } }
+    ];
 
     created() {}
 
@@ -167,7 +186,38 @@ export default class PermissionTable extends Vue {
         this.pageStep = EPageStep.view;
     }
 
-    doDelete() {}
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.selectedDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
+
+                    this.$server
+                        .D("/acs/permissiontable", deleteParam)
+                        .then((response: any) => {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500) {
+                                    Dialog.error(this._("w_DeleteFailed"));
+                                    return false;
+                                }
+                            }
+                        })
+                        .catch((e: any) => {
+                            console.log(e);
+                        });
+                }
+            }
+        );
+    }
 
     doSave() {}
 
@@ -194,7 +244,7 @@ export default class PermissionTable extends Vue {
                  * @uiLabel - ${this._("w_Permission_PermissionName")}
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
-                permissionName?: string;
+                tablename?: string;
               
                 Actions: any;
             }
