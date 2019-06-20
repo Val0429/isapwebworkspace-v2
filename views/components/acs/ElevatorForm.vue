@@ -2,12 +2,18 @@
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
 
-        <!-- <template #view.firstname="{$attrs, $listeners}">
-            <img style="max-width: 150px; max-height: 150px" src="https://res.klook.com/image/upload/fl_lossy.progressive/q_auto/f_auto/c_fill/blogen/5-taipei-hotspots-new-cover.png" />
-        </template> -->
+        <template #view.reader="{$attrs, $listeners}">
+            {{ $attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x => getName(x.objectId, floorOptions)).join(', '):'' }}
+        </template>
 
         <!-- 6) custom edit / add template with <template #add.* /> -->
-
+        <template #add.reader="{$attrs, $listeners}">
+            <ivc-multi-selections 
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="floorOptions" 
+            />
+        </template>
     </iv-form-quick>
 </template>
 
@@ -43,29 +49,18 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                     */
                     elevatorid: number;
                     /**
-                    * @uiLabel - ${this._("floor")}
+                    * @uiLabel - ${this._("name")}
                     */
-                    floor: number;
+                    elevatorname: string;
                     /**
-                    * @uiLabel - ${this._("unlocktime")}
+                    * @uiLabel - ${this._("reader")}
                     */
-                    unlocktime:string;
-                    /**
-                    * @uiLabel - ${this._("shunttime")}
-                    */
-                    shunttime:string;
+                    reader:string;                    
                     /**
                     * @uiLabel - ${this._("status")}
                     */
                     status: number;
-                    /**
-                    * @uiLabel - ${this._("createdAt")}
-                    */
-                    createdAt: Date;
-                    /**
-                    * @uiLabel - ${this._("updatedAt")}
-                    */
-                    updatedAt: Date;
+                    
                 }
                 `;
             case EFormQuick.Add:
@@ -81,17 +76,13 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                     */
                     elevatorid: number;
                     /**
-                    * @uiLabel - ${this._("floor")}
+                    * @uiLabel - ${this._("name")}
                     */
-                    floor: number;
+                    elevatorname: string;
                     /**
-                    * @uiLabel - ${this._("unlocktime")}
+                    * @uiLabel - ${this._("reader")}
                     */
-                    unlocktime:string;
-                    /**
-                    * @uiLabel - ${this._("shunttime")}
-                    */
-                    shunttime:string;
+                    reader:string;                    
                     /**
                     * @uiLabel - ${this._("status")}
                     */
@@ -117,6 +108,21 @@ export default class ElevatorForm extends Vue implements IFormQuick {
         return;
     }
     /// Done
+    floorOptions=[];
+    async created(){
+        await this.getFloorOptions();
+    }
+    private async getFloorOptions() {
+        let resp: any =await this.$server.R("/acs/floor" as any,{"paging.all":"true"});    
+        
+        this.floorOptions = resp.results.map(item=>{return { key: item.objectId,value: item.floorname }});
+        
+        console.log("floorOptions",this.floorOptions);
+    }
+    getName(key:any, options:{key:any, value:any}[]){
+        let item = options.find(x=>x.key==key);
+        return item?item.value:'';
+    }
 }
 </script>
 

@@ -4,9 +4,9 @@
 
         
         <!-- 6) custom edit / add template with <template #add.* /> -->
-        <template #view.image="{$attrs, $listeners}">
+        <!-- <template #view.image="{$attrs, $listeners}">
             <b-img v-bind:src="$attrs.value" fluid class="floor-image"/>
-        </template> 
+        </template>  -->
 
     </iv-form-quick>
 </template>
@@ -19,7 +19,7 @@ import { EFormQuick, IFormQuick } from '@/../components/form';
 /// 1) class name
 export default class FloorForm extends Vue implements IFormQuick {
     /// 2) cgi path
-    path: string = "/floors";
+    path: string = "/acs/floor";
     /// 3) i18n - view / edit / add
     tView: string = "w_Floor";
     tAdd: string = "w_FloorAdd";
@@ -35,17 +35,37 @@ export default class FloorForm extends Vue implements IFormQuick {
                 return `
                 interface {   
                 /**
-                * @uiLabel - ${this._("floor")}
+                * @uiLabel - ${this._("system")}
                 */
-                floor:number;
+                system:number;
+                /**
+                * @uiLabel - ${this._("floorid")}
+                */
+                floorid:number;                
                 /**
                 * @uiLabel - ${this._("name")}
                 */
-                name:string;                
+                floorname: string;
                 /**
-                * @uiLabel - ${this._("image")}
+                * @uiLabel - ${this._("ccureid")}
                 */
-                image: string;
+                ccureid:number;
+                /**
+                * @uiLabel - ${this._("ccurename")}
+                */
+                ccurename:string;
+                /**
+                * @uiLabel - ${this._("sipassid")}
+                */
+                sipassid:number;
+                /**
+                * @uiLabel - ${this._("sipassname")}
+                */
+                sipassname:string;
+                /**
+                * @uiLabel - ${this._("status")}
+                */
+                status?:number;   
                 }
                 `;
             case EFormQuick.Add:
@@ -53,18 +73,37 @@ export default class FloorForm extends Vue implements IFormQuick {
                 return `
                 interface {
                 /**
-                * @uiLabel - ${this._("floor")}
+                * @uiLabel - ${this._("system")}
                 */
-                floor:number;
+                system:number;
+                /**
+                * @uiLabel - ${this._("floorid")}
+                */
+                floorid:number;                
                 /**
                 * @uiLabel - ${this._("name")}
                 */
-                name:string;                
-                /** 
-                * @uiType - ivc-form-file-base64
-                * @uiLabel - ${this._("image")}
+                floorname: string;
+                /**
+                * @uiLabel - ${this._("ccureid")}
                 */
-                image: string;
+                ccureid:number;
+                /**
+                * @uiLabel - ${this._("ccurename")}
+                */
+                ccurename:string;
+                /**
+                * @uiLabel - ${this._("sipassid")}
+                */
+                sipassid:number;
+                /**
+                * @uiLabel - ${this._("sipassname")}
+                */
+                sipassname:string;
+                /**
+                * @uiLabel - ${this._("status")}
+                */
+                status?:number;  
                 }
                 `;
         }

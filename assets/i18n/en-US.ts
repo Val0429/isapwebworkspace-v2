@@ -115,5 +115,10 @@ export default class LangObject {
     w_FloorEdit="Edit Floor";
     name="Name";
     image="Image";
+    floorid="Floor Id";    
+    ccureid="CCURE Id";
+    ccurename="CCURE Name";
+    sipassid="SIPASS Id";
+    sipassname="SIPASS Name";
 
 }
