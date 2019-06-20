@@ -7,7 +7,10 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor cyan">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">TRAFFIC</span>
                             <span class="value">Weather</span>
@@ -38,7 +41,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">AVERAGE OCCUPANCY</span>
                         </div>
@@ -68,7 +74,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">AVERAGE DWELL TIME(M)</span>
                         </div>
@@ -98,7 +107,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">DEMOGRAPHIC</span>
                         </div>
@@ -128,7 +140,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">VIP/BLACKLIST</span>
                         </div>
@@ -170,7 +185,10 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">BEPEAT CUSTOMER</span>
                         </div>
@@ -200,7 +218,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">BEVENUE</span>
                         </div>
@@ -230,7 +251,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">TRANSACTION</span>
                         </div>
@@ -260,7 +284,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">CONVERSION%</span>
                         </div>
@@ -290,7 +317,10 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div class="backgroundColor gary">
+                    <div
+                        class="backgroundColor"
+                        @click="dashboardClick($event)"
+                    >
                         <div class="clearfix">
                             <span class="title">ASP</span>
                         </div>
@@ -340,17 +370,17 @@ export class AnlysisDashboard extends Vue {
     })
     anlysisData: object;
 
-    inputData = "Test input data";
-    modelData = "";
-
     created() {}
 
-    mounted() {
-        this.start();
-    }
+    mounted() {}
 
-    start() {
-        this.$emit("input", this.inputData);
+    dashboardClick(event) {
+        let els = document.getElementsByClassName("backgroundColor") as any;
+
+        for (let el of els) {
+            el.classList.remove("selected");
+        }
+        event.currentTarget.classList.add("selected");
     }
 }
 
@@ -359,16 +389,15 @@ Vue.component("anlysis-dashboard", AnlysisDashboard);
 </script>
 
 <style lang="scss" scoped>
-.backgroundColor.cyan {
-    background: #4e93b7;
-    padding: 10px;
-    color: white;
-}
-
-.backgroundColor.gary {
+.backgroundColor {
     padding: 10px;
     background: #f9f9f9;
     color: black;
+}
+
+.backgroundColor.selected {
+    background: #4e93b7;
+    color: white;
 }
 
 .box {
