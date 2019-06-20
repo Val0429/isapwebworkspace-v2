@@ -28,36 +28,35 @@ import ElevatorGroup from './components/acs/ElevatorGroup.vue';
 import AttendanceRecord from './components/acs/AttendanceRecord.vue';
 import EmployeeList from './components/acs/EmployeeList.vue';
 
-$({ path: '/', name: "Home", redirect: '/member' })();
+$({ path: '/', name: 'Home', redirect: '/member' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
 $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
-    $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
-    $({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
-    $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
-    $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
-    $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
-    $({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
-    $({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
-    
-    
-    $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
-    $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
-    $({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
-    $({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
-    $({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
+$({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
+$({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
+$({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
+$({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
+$({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
+$({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
+$({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
 
-    $({ path: '/components', name: "Components", icon: 'isap-icon-add' })(Components);
-    
-        $({ path: '/components/forms', name: "Forms", icon: 'fa-facebook', permission: '/announcements' })(Forms);
-        $({ path: '/components/step-progress', name: "Step Progress", icon: 'fa-twitter' })(StepProgress);
-        $({ path: '/components/tab', name: "Tab", icon: 'fa-twitter' })(Tab);
-        $({ path: '/components/toolbox', name: "Toolbox", icon: 'fa-twitter' })(Toolbox);
-        $({ path: '/components/cards', name: "Cards", icon: 'fa-twitter' })(Cards);
-        $({ path: '/components/cards/auto', name: "Auto Cards", icon: 'fa-twitter' })(AutoCards);
-        $({ path: '/components/table', name: "Table", icon: 'fa-twitter' })(Table);
-        $({ path: '/components/tree', name: "Tree", icon: 'fa-twitter' })(Tree);
-        $({ path: '/components/transition', name: "Transition", icon: 'fa-twitter' })(Transition);
-        $({ path: '/components/modal', name: "Modal", icon: 'fa-twitter' })(Modal);
-        $({ path: '/components/utilities', name: "Utilities", icon: 'fa-twitter' })(Utilities);
+$({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
+$({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
+$({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
+$({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
+$({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
 
-    $({ path: '/menu-style/1', name: "選單特殊1", icon: 'fa-twitter', permission: '/test' })(Test);
+$({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
+
+$({ path: '/components/forms', name: 'Forms', icon: 'fa-facebook', permission: '/announcements' })(Forms);
+$({ path: '/components/step-progress', name: 'Step Progress', icon: 'fa-twitter' })(StepProgress);
+$({ path: '/components/tab', name: 'Tab', icon: 'fa-twitter' })(Tab);
+$({ path: '/components/toolbox', name: 'Toolbox', icon: 'fa-twitter' })(Toolbox);
+$({ path: '/components/cards', name: 'Cards', icon: 'fa-twitter' })(Cards);
+$({ path: '/components/cards/auto', name: 'Auto Cards', icon: 'fa-twitter' })(AutoCards);
+$({ path: '/components/table', name: 'Table', icon: 'fa-twitter' })(Table);
+$({ path: '/components/tree', name: 'Tree', icon: 'fa-twitter' })(Tree);
+$({ path: '/components/transition', name: 'Transition', icon: 'fa-twitter' })(Transition);
+$({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
+$({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
+
+$({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
