@@ -389,42 +389,42 @@ Vue.component("anlysis-dashboard", AnlysisDashboard);
 </script>
 
 <style lang="scss" scoped>
-.backgroundColor {
-    padding: 10px;
-    background: #f9f9f9;
-    color: black;
-}
-
-.backgroundColor.selected {
-    background: #4e93b7;
-    color: white;
-}
-
-.box {
+.info-box {
     border: 1px solid #dbdee0;
     margin: 0 0 30px 0;
-}
 
-.title {
-    float: left;
-    font-weight: bold;
-    font-size: 12px;
-    margin: 0;
-    padding: 0;
-}
+    .backgroundColor {
+        padding: 10px;
+        background: #f9f9f9;
+        color: black;
 
-.value {
-    float: right;
-    font-weight: bold;
-    font-size: 12px;
-    margin: 0;
-    padding: 0;
-}
+        .title {
+            float: left;
+            font-weight: bold;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+        }
 
-.red {
-    color: #e26929;
-}
-.green {
-    color: #1bbc9b;
+        .value {
+            float: right;
+            font-weight: bold;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .red {
+            color: #e26929;
+        }
+        .green {
+            color: #1bbc9b;
+        }
+    }
+
+    .backgroundColor.selected {
+        background: #4e93b7;
+        color: white;
+    }
 }
 </style>
