@@ -8,9 +8,20 @@
         <template #view.door="{$attrs, $listeners}">
             {{ $attrs.value ? getName($attrs.value.objectId, doorOptions): ''}}
         </template>
+        <template #view.doorgroup="{$attrs, $listeners}">
+            {{ $attrs.value ? getName($attrs.value.objectId, doorGroupOptions): ''}}
+        </template>
         <template #view.timeschedule="{$attrs, $listeners}">
             {{ $attrs.value ? getName($attrs.value.objectId, scheduleOptions): ''}}
         </template>
+        <template #view.elevator="{$attrs, $listeners}">
+            {{ $attrs.value ? getName($attrs.value.objectId, elevatorOptions): ''}}
+        </template>
+        <template #view.elevatorgroup="{$attrs, $listeners}">
+            {{ $attrs.value ? getName($attrs.value.objectId, elevatorGroupOptions): ''}}
+        </template>
+        <!-- 6) custom edit / add template with <template #add.* /> -->
+
         <template #add.reader="{$attrs, $listeners}">
             <ivc-multi-selections 
             v-bind="$attrs" 
@@ -25,6 +36,13 @@
             :options="doorOptions" 
             />
         </template>
+        <template #add.doorgroup="{$attrs, $listeners}">
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="doorGroupOptions" 
+            />
+        </template>
         <template #add.timeschedule="{$attrs, $listeners}">
             <ivc-single-selection
             v-bind="$attrs" 
@@ -32,8 +50,21 @@
             :options="scheduleOptions" 
             />
         </template>
+        <template #add.elevator="{$attrs, $listeners}">
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="elevatorOptions" 
+            />
+        </template>
+        <template #add.elevatorgroup="{$attrs, $listeners}">
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="elevatorGroupOptions" 
+            />
+        </template>
         
-        <!-- 6) custom edit / add template with <template #add.* /> -->
 
     </iv-form-quick>
 </template>
@@ -75,6 +106,18 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
                     */
                     door:string;
                     /**
+                    * @uiLabel - ${this._("w_DoorGroup")}
+                    */
+                    doorgroup:string;
+                    /**
+                    * @uiLabel - ${this._("w_Elevator")}
+                    */
+                    elevator:string;
+                    /**
+                    * @uiLabel - ${this._("w_ElevatorGroup")}
+                    */
+                    elevatorgroup:string;
+                    /**
                     * @uiLabel - ${this._("status")}
                     */
                     status: number;
@@ -103,11 +146,23 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("door")}
                     */
-                    door:any;
+                    door:string;
+                    /**
+                    * @uiLabel - ${this._("w_DoorGroup")}
+                    */
+                    doorgroup:string;
+                    /**
+                    * @uiLabel - ${this._("w_Elevator")}
+                    */
+                    elevator:string;
+                    /**
+                    * @uiLabel - ${this._("w_ElevatorGroup")}
+                    */
+                    elevatorgroup:string;
                     /**
                     * @uiLabel - ${this._("status")}
                     */
-                    status: number;
+                    status?: number;
                     /**
                     * @uiLabel - ${this._("reader")}
                     */
@@ -138,14 +193,19 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
     }
     /// Done
     private doorOptions:any[]=[];    
+    private doorGroupOptions:any[]=[];    
     private scheduleOptions:any[]=[];    
-    private readerOptions:{key:any, value:any}[]=[];
+    private readerOptions:any[]=[];
     
-    
+    private elevatorOptions:any[]=[];    
+    private elevatorGroupOptions:any[]=[];   
     async created() {
-        await this.getReaderOptions();
-        await this.getDoorOptions();
-        await this.getScheduleOptions();
+        await Promise.all([this.getReaderOptions(),
+        this.getDoorOptions(),
+        this.getDoorGroupOptions(),
+        this.getScheduleOptions(),
+        this.getElevatorOptions(),
+        this.getElevatorGroupOptions()]);
     }
     private async getScheduleOptions() {
         let resp: any =await this.$server.R("/acs/timeschedule" as any,{"paging.all":"true"});    
@@ -161,7 +221,27 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
         
         console.log("doorOptions",this.doorOptions);
     }
-
+    private async getDoorGroupOptions() {
+        let resp: any =await this.$server.R("/acs/doorgroup" as any,{"paging.all":"true"});    
+        
+        this.doorGroupOptions = resp.results.map(item=>{return { key: item.objectId,value: item.groupname }});
+        
+        console.log("doorGroupOptions",this.doorGroupOptions);
+    }
+    private async getElevatorOptions() {
+        let resp: any =await this.$server.R("/acs/elevator" as any,{"paging.all":"true"});    
+        
+        this.elevatorOptions = resp.results.map(item=>{return { key: item.objectId,value: item.elevatorname }});
+        
+        console.log("elevatorOptions",this.elevatorOptions);
+    }
+    private async getElevatorGroupOptions() {
+        let resp: any =await this.$server.R("/acs/elevatorgroup" as any,{"paging.all":"true"});    
+        
+        this.elevatorGroupOptions = resp.results.map(item=>{return { key: item.objectId,value: item.groupname }});
+        
+        console.log("elevatorGroupOptions",this.elevatorGroupOptions);
+    }
     private async getReaderOptions() {
         let resp: any =await this.$server.R("/acs/reader" as any,{"paging.all":"true"});    
         
