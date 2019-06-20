@@ -117,11 +117,6 @@ export default class ElevatorForm extends Vue implements IFormQuick {
         return;
     }
     /// Done
-
-    private server;
-    created() {
-        this.server = this.$server;
-    }
 }
 </script>
 

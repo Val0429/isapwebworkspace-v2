@@ -114,10 +114,8 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
     /// Done
     private options:{key:any, value:any}[]=[];
     
-    private server;
     async created() {
-        this.server = this.$server;        
-        let resp = await this.server.R("/acs/door", {"paging.all":"true"});
+        let resp:any = await this.$server.R("/acs/door", {"paging.all":"true"});
 
         this.options = resp.results.map(door=>{return{key:door.objectId, value:door.doorname}});
         

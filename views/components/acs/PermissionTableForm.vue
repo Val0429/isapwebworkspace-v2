@@ -107,14 +107,11 @@ export default class PermissionTableForm extends Vue implements IFormQuick {
     }
     /// Done
     levelOptions:{key:any,value:any}[]=[];
-    private server;
     async created() {
-        this.server = this.$server;        
         await this.getLevelOptions();
     }
     private async getLevelOptions() {
-        let resp=await this.server.R("/acs/accesslevel",{"paging.all":"true"});    
-        
+        let resp: any =await this.$server.R("/acs/accesslevel" as any,{"paging.all":"true"});    
         this.levelOptions = resp.results.map(item=>{return { key: item.objectId,value: item.levelname }});
         
         console.log("levelOptions",this.levelOptions);

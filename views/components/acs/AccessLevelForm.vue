@@ -142,22 +142,20 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
     private readerOptions:{key:any, value:any}[]=[];
     
     
-    private server;
     async created() {
-        this.server = this.$server;        
         await this.getReaderOptions();
         await this.getDoorOptions();
         await this.getScheduleOptions();
     }
     private async getScheduleOptions() {
-        let resp=await this.server.R("/acs/timeschedule",{"paging.all":"true"});    
+        let resp: any =await this.$server.R("/acs/timeschedule" as any,{"paging.all":"true"});    
         
         this.scheduleOptions= resp.results.map(item=>{return { key: item.objectId,value: item.timename }});
         
         console.log("scheduleOptions",this.scheduleOptions);
     }
     private async getDoorOptions() {
-        let resp=await this.server.R("/acs/door",{"paging.all":"true"});    
+        let resp: any =await this.$server.R("/acs/door",{"paging.all":"true"});    
         
         this.doorOptions = resp.results.map(item=>{return { key: item.objectId,value: item.doorname }});
         
@@ -165,7 +163,7 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
     }
 
     private async getReaderOptions() {
-        let resp=await this.server.R("/acs/reader",{"paging.all":"true"});    
+        let resp: any =await this.$server.R("/acs/reader" as any,{"paging.all":"true"});    
         
         this.readerOptions = resp.results.map(item=>{return { key: item.objectId,value: item.readername }});
         

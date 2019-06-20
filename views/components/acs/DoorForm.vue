@@ -139,10 +139,8 @@ export default class DoorForm extends Vue implements IFormQuick {
     /// Done
     private options:{key:any, value:any}[]=[];
     
-    private server;
     async created() {
-        this.server = this.$server;        
-        let resp = await this.server.R("/acs/reader", {"paging.all":"true"});
+        let resp: any = await this.$server.R("/acs/reader" as any, {"paging.all":"true"});
 
         this.options = resp.results.map(item=>{return{key:item.objectId, value:item.readername}});
         
