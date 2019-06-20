@@ -367,7 +367,15 @@ interface IBusinessOperationCampaignResults extends IBusinessOperationCampaign {
     sites: IObjectIdAndName[];
 }
 
+interface IBusinessOperationSalesRecord {
+    customId: string;
+    date: string;
+    revenue: number;
+    transaction: number;
+}
+
 export { IAddBusinessOperationCampaign, IEditBusinessOperationCampaign, IBusinessOperationCampaignResults };
+export { IBusinessOperationSalesRecord };
 
 // Video Source People Counting
 interface IVSPeopleCounting extends IConfig {
@@ -408,14 +416,14 @@ interface IVSDemographic extends IVideoSourceDevice {
     demoServerId: string;
 }
 
-export { IVSDemographic }
+export { IVSDemographic };
 
 // Video Source Dwell Time
 interface IVSDwellTime extends IVideoSourceDevice {
     direction: string;
 }
 
-export { IVSDwellTime }
+export { IVSDwellTime };
 
 ////////////////////// 以上為確定使用 //////////////////////
 
