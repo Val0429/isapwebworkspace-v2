@@ -59,11 +59,62 @@
                 <template #premissionList>
                    <iv-sort-select
                         v-if="premissionOptions.length > 0"
-                        v-model="premissionSelected"
+                        v-model="inputFormData.premissionSelected"
                         class="col-md-12"
                         :options="premissionOptions"
                     ></iv-sort-select>
                 </template>
+
+                <template #tabItem>
+
+                    <iv-tab 
+                        class="col-md-12" 
+                        ref="tab"  
+                        :active="1" 
+                        @mounted="doTabMount"
+                    >
+
+                        <template #1-title>{{ _('w_Member_PersonInfo') }}</template>
+                        <template #1>
+                            <iv-form 
+                                :interface="ITabForm1()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                        <template #2-title>{{ _('w_Member_General') }}</template>
+                        <template #2>
+                            <iv-form 
+                                :interface="ITabForm2()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                        <template #3-title>{{ _('w_Member_CardRecord') }}</template>
+                        <template #3>
+                            <iv-form 
+                                :interface="ITabForm3()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                        <template #4-title>{{ _('w_Member_Other') }}</template>
+                        <template #4>
+                            <iv-form 
+                                :interface="ITabForm4()"
+                                :value="inputFormData"
+                            >
+                            </iv-form>
+                        </template>
+
+                    </iv-tab>
+
+                </template>
+
+                
                 <!-- Morris -->
 
                 <template #test="{ $attrs, $listeners }">
@@ -159,25 +210,14 @@ export default class MemberForm1 extends Vue {
 
     modalShow: boolean = false;
 
-    inputFormData: any = {
-        objectId: "",
-        username: "",
-        role: "",
-        name: "",
-        email: "",
-        phone: "",
-        password: "",
-        employeeId: "",
-        siteIdsText: "",
-        groupIdsText: "",
-        type: "add",
-        siteIds: [],
-        groupIds: []
-    };
+    inputFormData: any = {};
 
     // Morris //
-    premissionSelected: string[] = [];
     premissionOptions: ISortSelectOption[] = [];
+    tabMounted: boolean = false;
+    doTabMount() {
+        this.tabMounted = true;
+    }
     // Morris //
 
     created() {
@@ -195,18 +235,10 @@ export default class MemberForm1 extends Vue {
 
         this.inputFormData = {
             objectId: "",
-            username: "",
-            role: "User",
-            name: "",
-            email: "",
-            phone: "",
-            password: "",
-            employeeId: "",
-            siteIdsText: "",
-            groupIdsText: "",
-            type: "",
-            siteIds: [],
-            groupIds: []
+            // Morris //
+            premissionSelected: [],
+            // Morris //
+           
         };
     }
 
@@ -221,17 +253,6 @@ export default class MemberForm1 extends Vue {
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
-                employeeId: param.employeeId,
-                username: param.username,
-                role: param.role,
-                name: param.name,
-                email: param.email,
-                phone: param.phone,
-                siteIdsText: this.idsToText(param.sites),
-                groupIdsText: this.idsToText(param.groups),
-                siteIds: param.sites,
-                groupIds: param.groups,
-                type: ""
             };
         }
     }
@@ -307,7 +328,6 @@ export default class MemberForm1 extends Vue {
                             this.premissionOptions.push(tempOption);
                         }
                    }
-                   console.log(this.premissionOptions);
                 }
             })
             .catch((e: any) => {
@@ -528,7 +548,7 @@ export default class MemberForm1 extends Vue {
             return searchResult;
         }
     }
-    
+
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
@@ -605,6 +625,8 @@ export default class MemberForm1 extends Vue {
             interface {
 
                 premissionList?: any;
+
+                tabItem?: any;
 
                 /**
                  * @uiLabel - ${this._("w_Account")}
@@ -745,6 +767,57 @@ export default class MemberForm1 extends Vue {
             }
         `;
     }
+
+    // Morris //
+    ITabForm1 () {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+
+    ITabForm2 () {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+
+    ITabForm3 () {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+
+    ITabForm4 () {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 */
+                name: string;
+            }
+        `;
+    }
+    // Morris //
+
 }
 </script>
 
