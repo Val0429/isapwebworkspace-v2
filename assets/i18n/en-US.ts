@@ -408,9 +408,9 @@ export default class LangObject {
     w_Reset = 'Reset';
 
     // Member
-    w_Member_List = 'Member List';
-    w_Member_Add = 'Add Member';
-    w_Member_Edit = 'Edit Member';
+    w_Member_List = '人員管理';
+    w_Member_Add = '新增人員資訊';
+    w_Member_Edit = '編輯人員資訊';
     w_Member_View = 'View Member';
 
     w_Member_CompanyName = '公司名稱：';

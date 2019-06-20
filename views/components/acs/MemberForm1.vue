@@ -44,7 +44,7 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.add"
             :visible="true"
-            :label="_('w_User_AddUser')"
+            :label="pageStep === ePageStep.add ? _('w_Member_Add') :  _('w_Member_Edit')"
         >
             <template #toolbox>
 
@@ -58,52 +58,6 @@
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEdit($event)"
             >
-                <template #test="{ $attrs, $listeners }">
-
-                    <div class="mt-2 ml-3 mb-3">
-                        <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
-                        </b-button>
-                    </div>
-
-                </template>
-
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- edit -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.edit"
-            :visible="true"
-            :label="_('w_User_EditUser') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IEditForm()"
-                :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveEdit($event)"
-            >
-                <template #test="{ $attrs, $listeners }">
-
-                    <div class="mt-2 ml-3 mb-3">
-                        <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
-                        </b-button>
-                    </div>
-
-                </template>
 
             </iv-form>
 
@@ -179,51 +133,73 @@ export default class MemberForm1 extends Vue {
 
     selectedDetail: any = [];
 
-    sitesSelectItem: any = {};
+    workGroupSelectItem: any = {};
     userGroupSelectItem: any = {};
 
     inputTestEmail: string = "";
 
-    modalShow: boolean = false;
-
-    inputFormData: any = {
-        objectId: "",
-        username: "",
-        role: "",
-        name: "",
-        email: "",
-        phone: "",
-        password: "",
-        employeeId: "",
-        siteIdsText: "",
-        groupIdsText: "",
-        type: "add",
-        siteIds: [],
-        groupIds: []
-    };
+    inputFormData: any = {};
 
     created() {
         // Morris
-        this.pageStep = EPageStep.add;
+        // this.pageStep = EPageStep.add;
+        // this.initDepartment();
     }
 
-    mounted() {}
+    mounted() {
+        this.initSelectItemWorkGroup();
+        this.initDepartment();
+    }
+
+    async initSelectItemWorkGroup() {
+
+        this.workGroupSelectItem = {};
+
+        await this.$server
+            .R("/acs/workgroup")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.workGroupSelectItem[returnValue.objectId] =
+                            returnValue.groupname;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initDepartment() {
+        await this.$server
+            .R("/acs/member")
+            .then((response: any) => {
+                // console.log('returnValue - ', response.results.CustomFields);
+                if (response != undefined) {
+                    for (const returnValue of response.results.CustomFields) {
+                        console.log('returnValue - ', returnValue);
+
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
 
     clearInputData() {
         this.inputFormData = {
             objectId: "",
-            username: "",
-            role: "User",
-            name: "",
-            email: "",
-            phone: "",
-            password: "",
-            employeeId: "",
-            siteIdsText: "",
-            groupIdsText: "",
-            type: "",
-            siteIds: [],
-            groupIds: []
         };
     }
 
@@ -235,22 +211,22 @@ export default class MemberForm1 extends Vue {
 
     getInputData() {
         this.clearInputData();
-        for (const param of this.selectedDetail) {
-            this.inputFormData = {
-                objectId: param.objectId,
-                employeeId: param.employeeId,
-                username: param.username,
-                role: param.role,
-                name: param.name,
-                email: param.email,
-                phone: param.phone,
-                siteIdsText: this.idsToText(param.sites),
-                groupIdsText: this.idsToText(param.groups),
-                siteIds: param.sites,
-                groupIds: param.groups,
-                type: ""
-            };
-        }
+        // for (const param of this.selectedDetail) {
+        //     this.inputFormData = {
+        //         objectId: param.objectId,
+        //         employeeId: param.employeeId,
+        //         username: param.username,
+        //         role: param.role,
+        //         name: param.name,
+        //         email: param.email,
+        //         phone: param.phone,
+        //         siteIdsText: this.idsToText(param.sites),
+        //         groupIdsText: this.idsToText(param.groups),
+        //         siteIds: param.sites,
+        //         groupIds: param.groups,
+        //         type: ""
+        //     };
+        // }
     }
 
     tempSaveInputData(data) {
@@ -291,6 +267,7 @@ export default class MemberForm1 extends Vue {
     async pageToAdd(type: string) {
         this.pageStep = EPageStep.add;
         this.clearInputData();
+        this.initSelectItemWorkGroup();
         this.inputFormData.type = type;
     }
 
@@ -515,25 +492,25 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ChineseName1")}
                  */
-                role: string;
+                LastName: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Member_EnglishName1")}
                  */
-                email: string;
+                FirstName: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Member_Department1")}
                  */
-                groups: string;
+                CustomTextBoxControl5__CF_CF_CF: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Member_CostCenter1")}
                  */
-                sites: string;
+                CustomTextBoxControl5__CF_CF_CF_CF: string;
 
 
                 /**
@@ -562,157 +539,45 @@ export default class MemberForm1 extends Vue {
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_Account")}
-                 * @uiPlaceHolder - ${this._("w_Account")}
+                 * @uiLabel - ${this._("w_Member_CompanyName")}
+                 * @uiColumnGroup - row1
                  */
-                username: string;
+                companyName?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Password")}
-                 * @uiPlaceHolder - ${this._("w_Password")}
-                 * @uiType - iv-form-password
-                 * @uiColumnGroup - password
+                 * @uiLabel - ${this._("w_Member_PersonType")}
+                 * @uiColumnGroup - row1
                  */
-                password: string;
+                personType?: ${toEnumInterface(this.workGroupSelectItem as any, false)};
 
 
                 /**
-                 * @uiLabel - ${this._("w_PasswordConfirm")}
-                 * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
-                 * @uiType - iv-form-password
-                 * @uiColumnGroup - password
-                 * @uiValidation - (value, all) => value === all.password
-                 * @uiInvalidMessage - ${this._("w_Error_Password")}
+                 * @uiLabel - ${this._("w_Member_EmployeeNumber")}
+                 * @uiColumnGroup - row1
                  */
-                confirmPassword: string;
+                employeeNumber?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 * @uiLabel - ${this._("w_Member_CompanyName")}
+                 * @uiColumnGroup - row2
                  */
-                name: string;
+                companyName1?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiPlaceHolder - ${this._("w_User_ID")}
+                 * @uiLabel - ${this._("w_Member_PersonType")}
+                 * @uiColumnGroup - row2
                  */
-                employeeId: string;
+                personType1?: ${toEnumInterface(this.workGroupSelectItem as any, false)};
 
 
                 /**
-                 * @uiLabel - ${this._("w_Email")}
-                 * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
+                 * @uiLabel - ${this._("w_Member_EmployeeNumber")}
+                 * @uiColumnGroup - row2
                  */
-                email: string;
-
-                test?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                 */
-                 phone?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_Role")}
-                 */
-                role: ${toEnumInterface({
-                    Admin: this._("w_User_UserGroup_Admin"),
-                    User: this._("w_User_UserGroup_User")
-                })};
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                selectTree?: any;
-
-            }
-        `;
-    }
-
-    IEditForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_Account")}
-                 * @uiPlaceHolder - ${this._("w_Account")}
-                 * @uiType - iv-form-label
-                 */
-                username: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiPlaceHolder - ${this._("w_User_ID")}
-                 * @uiType - iv-form-label
-                 */
-                employeeId: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Email")}
-                 * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
-                 */
-                email: string;
-
-                test?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                 */
-                 phone?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_Role")}
-                 */
-                role: ${toEnumInterface({
-                    Admin: this._("w_User_UserGroup_Admin"),
-                    User: this._("w_User_UserGroup_User")
-                })};
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                selectTree?: any;
-
+                employeeNumber1?: string;
             }
         `;
     }
