@@ -172,96 +172,15 @@
 
         </iv-auto-card>
 
-        <!-- region tree select -->
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
-
-        <!-- 點擊彈出測試輸入框 -->
-        <b-modal
-            hide-footer
-            size="md"
-            :title="_('w_MailServer_Test')"
-            v-model="modalShow"
-        >
-
-            <div class="card-content">
-                <b-form-group
-                    :label="_('w_MailServer_Email')"
-                    :label-cols="3"
-                >
-                    <b-row>
-                        <b-col>
-                            <b-form-input
-                                v-model="inputTestEmail"
-                                :placeholder="_('w_Email_Placeholder')"
-                            ></b-form-input>
-                        </b-col>
-                    </b-row>
-                </b-form-group>
-            </div>
-
-            <hr>
-
-            <b-row>
-                <!-- 送出email按鈕 -->
-                <b-col
-                    cols="3"
-                    offset="6"
-                >
-                    <b-button
-                        class="button button-full"
-                        variant="success"
-                        type="button"
-                        @click="sendEmailTest()"
-                    >{{ _('w_Send') }}
-                    </b-button>
-                </b-col>
-                <!-- 離開按鈕 -->
-                <b-col cols="3">
-                    <b-button
-                        class="button button-full"
-                        variant="secondary"
-                        type="button"
-                        @click="modalShow = !modalShow"
-                    >{{ _('w_Cancel') }}
-                    </b-button>
-                </b-col>
-            </b-row>
-
-        </b-modal>
-
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { IUserAddData, IUserEditData } from "@/config/default/api/interfaces";
-import {
-    ERegionType,
-    IRegionItem,
-    RegionTreeItem,
-    IRegionTreeSelected
-} from "@/components/RegionTree/models";
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-
-import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 
-interface inputFormData extends IUserAddData, IUserEditData {
-    siteIdsText?: string;
-    groupIdsText?: string;
-    confirmPassword?: string;
-    type?: string;
-}
 
 enum EPageStep {
     list = "list",
@@ -290,7 +209,7 @@ export default class MemberForm1 extends Vue {
 
     modalShow: boolean = false;
 
-    inputFormData: inputFormData = {
+    inputFormData: any = {
         objectId: "",
         username: "",
         role: "",
@@ -424,7 +343,7 @@ export default class MemberForm1 extends Vue {
     }
 
     async saveAdd(data) {
-        const datas: IUserAddData[] = [
+        const datas: any[] = [
             {
                 username: data.username,
                 role: data.role,
@@ -470,7 +389,7 @@ export default class MemberForm1 extends Vue {
     }
 
     async saveEdit(data) {
-        const datas: IUserEditData[] = [
+        const datas: any[] = [
             {
                 role: data.role,
                 name: data.name,
