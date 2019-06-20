@@ -5,46 +5,8 @@
             :label="_('w_Member_List')"
         >
             <template #toolbox>
-
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
-
+                <iv-toolbox-add @click="pageToAdd()" />
             </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/acs/member' }"
-                @selected="selectedItem($event)"
-            >
-                <template #email="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ show30Words($attrs.value) }}
-                </template>
-
-                <template #sites="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #groups="{$attrs}">
-                    <!--                {{ $attrs.value.map(item => item.name).join(', ')}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #Actions="{$attrs, $listeners}">
-
-                    <iv-toolbox-more
-                        size="sm"
-                        :disabled="isSelected.length !== 1"
-                    >
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
-                </template>
-
-            </iv-table>
         </iv-card>
 
         <!-- add -->
@@ -54,9 +16,7 @@
             :label="_('w_User_AddUser')"
         >
             <template #toolbox>
-
                 <iv-toolbox-back @click="pageToList()" />
-
             </template>
 
             <iv-form
@@ -65,51 +25,23 @@
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAdd($event)"
             >
-                <template #test="{ $attrs, $listeners }">
 
-                    <div class="mt-2 ml-3 mb-3">
-                        <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
-                        </b-button>
-                    </div>
-
+                <!-- Morris -->
+                <template #premissionList>
+                   <iv-sort-select
+                        v-if="premissionOptions.length > 0"
+                        v-model="premissionSelected"
+                        class="col-md-12"
+                        :options="premissionOptions"
+                    ></iv-sort-select>
                 </template>
+                <!-- Morris -->
 
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- edit -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.edit"
-            :visible="true"
-            :label="_('w_User_EditUser') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IEditForm()"
-                :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveEdit($event)"
-            >
                 <template #test="{ $attrs, $listeners }">
-
                     <div class="mt-2 ml-3 mb-3">
                         <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
                         </b-button>
                     </div>
-
                 </template>
 
             </iv-form>
@@ -163,6 +95,10 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
 
+// Sort Select
+import { ISortSelectOption } from "@/components/SortSelect";
+import SortSelect from "@/components/SortSelect/SortSelect.vue";
+
 enum EPageStep {
     list = "list",
     add = "add",
@@ -173,7 +109,8 @@ enum EPageStep {
 
 @Component({
     components: {
-        ToolboxBack
+        ToolboxBack,
+        SortSelect
     }
 })
 export default class MemberForm1 extends Vue {
@@ -208,14 +145,24 @@ export default class MemberForm1 extends Vue {
         groupIds: []
     };
 
+    // Morris //
+    premissionSelected: string[] = [];
+    premissionOptions: ISortSelectOption[] = [];
+    // Morris //
+
     created() {
-        // Morris
-        this.pageStep = EPageStep.add;
+        // Morris //
+        this.pageToAdd();
+        // Morris //
     }
 
     mounted() {}
 
     clearInputData() {
+        // Morris //
+        this.premissionOptions = [];
+        // Morris //
+
         this.inputFormData = {
             objectId: "",
             username: "",
@@ -294,10 +241,52 @@ export default class MemberForm1 extends Vue {
         }
     }
 
-    async pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
+    async pageToAdd() {
         this.clearInputData();
-        this.inputFormData.type = type;
+
+        // Morris //
+        this.initPremission();
+        // Morris //
+
+        this.pageStep = EPageStep.add;
+    }
+
+    async initPremission () {
+        
+        let param:{
+            paging: {
+                page: number;
+                pageSize: number;
+            }
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 10000
+            }
+        };
+        await this.$server
+            .R("/acs/permissiontable", param)
+            .then((response: any) => {
+                if (response != undefined) {
+                   for (let content of response.results) {
+                       if (content.objectId != undefined && content.tablename != undefined) {
+                            let tempOption: ISortSelectOption = {
+                                value: content.objectId ,
+                                text: content.tablename
+                            };
+                            this.premissionOptions.push(tempOption);
+                        }
+                   }
+                   console.log(this.premissionOptions);
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
     }
 
     async pageToEdit(type: string) {
@@ -504,7 +493,6 @@ export default class MemberForm1 extends Vue {
             const searchText = search.toLowerCase();
             const searchResult =
                 accountText.match(searchText) || nameText.match(searchText);
-
             return searchResult;
         }
     }
@@ -571,12 +559,13 @@ export default class MemberForm1 extends Vue {
         return `
             interface {
 
+                premissionList?: any;
+
                 /**
                  * @uiLabel - ${this._("w_Account")}
                  * @uiPlaceHolder - ${this._("w_Account")}
                  */
                 username: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Password")}
@@ -585,7 +574,6 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - password
                  */
                 password: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_PasswordConfirm")}
@@ -597,20 +585,17 @@ export default class MemberForm1 extends Vue {
                  */
                 confirmPassword: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_User_FullName")}
                  * @uiPlaceHolder - ${this._("w_User_FullName")}
                  */
                 name: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_User_ID")}
                  * @uiPlaceHolder - ${this._("w_User_ID")}
                  */
                 employeeId: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Email")}
@@ -626,7 +611,6 @@ export default class MemberForm1 extends Vue {
                  */
                  phone?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_User_Role")}
                  */
@@ -635,7 +619,6 @@ export default class MemberForm1 extends Vue {
                     User: this._("w_User_UserGroup_User")
                 })};
 
-
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
                  */
@@ -643,78 +626,6 @@ export default class MemberForm1 extends Vue {
                     this.userGroupSelectItem as any,
                     true
                 )};
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                selectTree?: any;
-
-            }
-        `;
-    }
-
-    IEditForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_Account")}
-                 * @uiPlaceHolder - ${this._("w_Account")}
-                 * @uiType - iv-form-label
-                 */
-                username: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiPlaceHolder - ${this._("w_User_ID")}
-                 * @uiType - iv-form-label
-                 */
-                employeeId: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Email")}
-                 * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
-                 */
-                email: string;
-
-                test?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                 */
-                 phone?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_Role")}
-                 */
-                role: ${toEnumInterface({
-                    Admin: this._("w_User_UserGroup_Admin"),
-                    User: this._("w_User_UserGroup_User")
-                })};
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
-
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}

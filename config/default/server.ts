@@ -19,6 +19,7 @@ interface RestfulRequest extends ApisRequestBase {
         // Member
         "/acs/member": [any, any, true]
         "/acs/workgroup": [any, any, true]
+        "/acs/permissiontable": [any, any, true]
 
     },
 
