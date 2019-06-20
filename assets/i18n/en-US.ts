@@ -120,5 +120,10 @@ export default class LangObject {
     ccurename="CCURE Name";
     sipassid="SIPASS Id";
     sipassname="SIPASS Name";
+    
+    w_ElevatorGroup="Elevator Group";
+    w_ElevatorGroupAdd="Add Elevator Group";
+    w_ElevatorGroupEdit="Edit Elevator Group";
+    elevators="Elevators";
 
 }

@@ -24,6 +24,7 @@ import Reader from './components/acs/Reader.vue';
 import SyncReceiver from './components/acs/SyncReceiver.vue';
 import AccessLevel from './components/acs/AccessLevel.vue';
 import Floor from './components/acs/Floor.vue';
+import ElevatorGroup from './components/acs/ElevatorGroup.vue';
 
 $({ path: '/', name: "Home", redirect: '/member' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
@@ -32,6 +33,8 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
     $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
     $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
+    $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
+    
     $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
     $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
     $({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);

@@ -25,6 +25,7 @@
                 <SidebarNavItem url="/door" />
                 <SidebarNavItem url="/doorgroup" />
                 <SidebarNavItem url="/elevator" />
+                <SidebarNavItem url="/elevatorgroup" />
                 <!-- <SidebarNavItem url="/timeschedule" /> -->
                 <SidebarNavItem url="/permissiontable" />
                 <SidebarNavItem url="/reader" />
