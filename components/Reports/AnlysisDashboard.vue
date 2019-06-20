@@ -1,10 +1,11 @@
 <template>
     <div class="animated fadeIn">
         <div class="row">
-            <div class="col-lg-1 col-sm-1 col-xs-1 col-xxs-1">
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
             </div>
+            <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6col-xxs-12">
                 <div class="box info-box">
                     <div class="backgroundColor cyan">
                         <div class="clearfix">
@@ -154,12 +155,18 @@
                 </div>
             </div>
             <!--/col-->
+
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
         </div>
+
         <!-- /row -->
 
         <div class="row">
-            <div class="col-lg-1 col-sm-1 col-xs-1 col-xxs-1">
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
             </div>
+            <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
@@ -308,6 +315,10 @@
                     </div>
 
                 </div>
+            </div>
+            <!--/col-->
+
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
             </div>
             <!--/col-->
         </div>
