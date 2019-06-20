@@ -74,15 +74,6 @@
 
                 </template>
 
-                <template #selectTree="{ $attrs, $listeners }">
-
-                    <div class="mt-2 ml-3">
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-                </template>
-
             </iv-form>
 
             <template #footer-before>
@@ -121,16 +112,6 @@
 
                 </template>
 
-                <template #selectTree="{ $atrs, $listeners }">
-
-                    <div class="m-3">
-
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-
-                </template>
             </iv-form>
 
             <template #footer-before>
@@ -180,7 +161,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
-
+import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
 
 enum EPageStep {
     list = "list",
@@ -191,7 +172,9 @@ enum EPageStep {
 }
 
 @Component({
-    components: {}
+    components: {
+        ToolboxBack
+    }
 })
 export default class MemberForm1 extends Vue {
     ePageStep = EPageStep;
@@ -225,7 +208,10 @@ export default class MemberForm1 extends Vue {
         groupIds: []
     };
 
-    created() {}
+    created() {
+        // Morris
+        this.pageStep = EPageStep.add;
+    }
 
     mounted() {}
 
