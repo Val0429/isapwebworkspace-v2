@@ -184,7 +184,7 @@
                 class="float-right"
                 variant="dark"
                 size="lg"
-                @click="pageToForm1()"
+                @click="pageToForm()"
             >{{ _('w_Cancel') }}
             </b-button>
 
@@ -264,6 +264,7 @@ export default class HumanDetectionServer extends Vue {
     }
 
     initTargetScoreItem() {
+        this.targetScoreItem["0"] = "0%";
         this.targetScoreItem["0.1"] = "10%";
         this.targetScoreItem["0.2"] = "20%";
         this.targetScoreItem["0.3"] = "30%";
@@ -342,8 +343,7 @@ export default class HumanDetectionServer extends Vue {
         this.modalShow = !this.modalShow;
     }
 
-    pageToForm1() {
-        this.pageStep = EPageStep.Edit;
+    pageToForm() {
         (this.$refs["detail"] as any).hide();
     }
 

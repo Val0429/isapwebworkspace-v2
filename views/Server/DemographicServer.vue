@@ -58,6 +58,7 @@
             </iv-card>
         </div>
 
+
         <!--Form (Add and Edit)-->
         <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
             <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') ">
@@ -123,6 +124,7 @@
             </iv-card>
         </div>
 
+
         <!-- Model -->
         <b-modal
             hide-footer
@@ -175,39 +177,40 @@
         >
 
             <iv-card :label="_('w_DemographicServer_TestResult')">
+
                 <table class="table b-table table-striped table-hover">
                     <thead>
-                        <tr>
-                            <th
-                                v-for="(value,index) in testDetailTable.title"
-                                :key="'title_' + index"
-                            >{{ value }}
-                            </th>
-                        </tr>
+                    <tr>
+                        <th
+                            v-for="(value,index) in testDetailTable.title"
+                            :key="'title_' + index"
+                        >{{ value }}
+                        </th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr
-                            v-for="(value,index) in testDetailTable.tableDataFromApi"
-                            :key="'tableDataFromApi__' + index"
-                        >
-                            <td>
-                                <img
-                                    class="threshold-image"
-                                    :src="value.imageBase64"
-                                >
-                            </td>
-                            <td>{{ value.gender }}</td>
-                            <td>{{ value.age }}</td>
+                    <tr
+                        v-for="(value,index) in testDetailTable.tableDataFromApi"
+                        :key="'tableDataFromApi' + index"
+                    >
+                        <td>
+                            <img
+                                class="threshold-image"
+                                :src="value.imageBase64"
+                            >
+                        </td>
+                        <td>{{ value.gender }}</td>
+                        <td>{{ value.age }}</td>
 
-                        </tr>
+                    </tr>
                     </tbody>
                 </table>
                 <template #footer>
                     <b-button
                         variant="secondary"
                         size="lg"
-                        @click="pageToForm1"
-                    >{{ _('w_Back') }}
+                        @click="pageToForm"
+                    >{{ _('w_Cancel') }}
                     </b-button>
                 </template>
 
@@ -220,300 +223,322 @@
 </template>
 
 <script lang="ts">
-import {
-    Vue,
-    Component,
-    Watch,
-    iSAPServerBase,
-    MetaParser,
-    createDecorator,
-    toEnumInterface
-} from "../../../core";
-import ImageBase64 from "@/services/ImageBase64";
-import ServerConfig from "@/services/ServerConfig";
-import Dialog from "@/services/Dialog/Dialog";
-import Datetime from "@/services/Datetime.vue";
-import ResponseFilter from "@/services/ResponseFilter";
+    import {
+        Vue,
+        Component,
+        Watch,
+        iSAPServerBase,
+        MetaParser,
+        createDecorator,
+        toEnumInterface
+    } from "../../../core";
+    import ImageBase64 from "@/services/ImageBase64";
+    import ServerConfig from "@/services/ServerConfig";
+    import Dialog from "@/services/Dialog/Dialog";
+    import Datetime from "@/services/Datetime.vue";
+    import ResponseFilter from "@/services/ResponseFilter";
 
-enum EPageStep {
-    List = "List",
-    View = "View",
-    Add = "Add",
-    Edit = "Edit",
+    enum EPageStep {
+        List = "List",
+        View = "View",
+        Add = "Add",
+        Edit = "Edit",
 
-    none = "none"
-}
-
-interface IHDServer {
-    objectId?: string;
-    customId: string;
-    name: string;
-    protocol: string;
-    ip: string;
-    port: number;
-    margin: number;
-}
-
-@Component({
-    components: {}
-})
-export default class DemographicServer extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
-    modalShow: boolean = false;
-
-    newImg = new Image();
-    newImgSrc = "";
-
-    //data
-    isSelected: any = [];
-    selectedDetail: any = [];
-
-    inputFormData: any = {};
-
-    //test data
-    testDetailTable: any = {
-        title: "",
-        tableDataFromApi: []
-    };
-
-    returnImageBase64: string = "";
-
-    //options
-    targetScoreItem: any = {};
-
-    created() {}
-
-    mounted() {
-        this.pageToList();
+        none = "none"
     }
 
-    initTargetScoreItem() {
-        this.targetScoreItem["0.1"] = "10%";
-        this.targetScoreItem["0.2"] = "20%";
-        this.targetScoreItem["0.3"] = "30%";
-        this.targetScoreItem["0.4"] = "40%";
-        this.targetScoreItem["0.5"] = "50%";
-        this.targetScoreItem["0.6"] = "60%";
-        this.targetScoreItem["0.7"] = "70%";
-        this.targetScoreItem["0.8"] = "80%";
-        this.targetScoreItem["0.9"] = "90%";
-        this.targetScoreItem["1"] = "100%";
+    interface IHDServer {
+        objectId?: string;
+        customId: string;
+        name: string;
+        protocol: string;
+        ip: string;
+        port: number;
+        margin: number;
     }
 
-    initDate() {
-        this.testDetailTable.title = [
-            this._("w_Snapshot"),
-            this._("w_Gender"),
-            this._("w_Age")
-        ];
-        this.testDetailTable.tableDataFromApi = [];
-    }
+    @Component({
+        components: {}
+    })
+    export default class DemographicServer extends Vue {
+        ePageStep = EPageStep;
+        pageStep: EPageStep = EPageStep.none;
+        modalShow: boolean = false;
 
-    clearInputData() {
-        this.inputFormData = {
-            objectId: "",
-            customId: "",
-            name: "",
-            protocol: "http",
-            ip: "",
-            port: "",
-            margin: "0.5",
-            imageBase64: ""
+        newImg = new Image();
+        newImgSrc = "";
+
+        //data
+        isSelected: any = [];
+        selectedDetail: any = [];
+
+        inputFormData: any = {};
+
+        //test data
+        testDetailTable: any = {
+            title: [],
+            tableDataFromApi: [],
         };
-    }
 
-    selectedData(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        this.selectedDetail = data;
-    }
+        returnImageBase64: string = '';
 
-    getInputData() {
-        this.clearInputData();
+        //options
+        targetScoreItem: any = {};
 
-        for (const param of this.selectedDetail) {
+        created() {}
+
+        mounted() {
+            this.pageToList();
+        }
+
+        initTargetScoreItem() {
+            this.targetScoreItem["0"] = "0%";
+            this.targetScoreItem["0.1"] = "10%";
+            this.targetScoreItem["0.2"] = "20%";
+            this.targetScoreItem["0.3"] = "30%";
+            this.targetScoreItem["0.4"] = "40%";
+            this.targetScoreItem["0.5"] = "50%";
+            this.targetScoreItem["0.6"] = "60%";
+            this.targetScoreItem["0.7"] = "70%";
+            this.targetScoreItem["0.8"] = "80%";
+            this.targetScoreItem["0.9"] = "90%";
+            this.targetScoreItem["1"] = "100%";
+        }
+
+        initDate() {
+            this.testDetailTable.title = [
+                this._("w_Snapshot"),
+                this._("w_Gender"),
+                this._("w_Age"),
+            ];
+        }
+
+        clearInputData() {
             this.inputFormData = {
-                name: param.name,
-                customId: param.customId,
-                objectId: param.objectId,
-                ip: param.ip,
-                port: param.port,
-                protocol: param.protocol,
-                margin: param.margin.toString()
+                objectId: '',
+                customId: '',
+                name: '',
+                protocol: 'http',
+                ip: '',
+                port: '',
+                margin: '0.5',
+                imageBase64: ''
+            }
+        }
+
+
+        selectedData(data) {
+            this.isSelected = data;
+            this.selectedDetail = [];
+            this.selectedDetail = data;
+
+        }
+
+        getInputData() {
+            this.clearInputData();
+
+            for (const param of this.selectedDetail) {
+                this.inputFormData = {
+                    name: param.name,
+                    customId: param.customId,
+                    objectId: param.objectId,
+                    ip: param.ip,
+                    port: param.port,
+                    protocol: param.protocol,
+                    margin: param.margin.toString(),
+                };
+            }
+
+        }
+
+        pageToView() {
+            this.getInputData();
+            this.pageStep = EPageStep.View;
+        }
+
+        pageToAdd() {
+            this.clearInputData();
+            this.pageStep = EPageStep.Add;
+        }
+
+        pageToEdit() {
+            this.getInputData();
+            this.pageStep = EPageStep.Edit;
+        }
+
+        pageToList() {
+            this.initTargetScoreItem();
+            this.clearInputData();
+            this.pageStep = EPageStep.List;
+            (this.$refs.listTable as any).reload();
+
+        }
+
+        pageToHumanServerTest() {
+            this.clearInputData();
+            this.testDetailTable.tableDataFromApi = [];
+            this.modalShow = !this.modalShow;
+        }
+
+        pageToForm() {
+            (this.$refs["detail"] as any).hide();
+        }
+
+        async sendHumanServerTest(data) {
+
+            if (this.newImgSrc == "") {
+                Dialog.error(this._("w_Upload_Fail"));
+                return;
+            }
+
+            const configOnject = {
+                protocol: data.protocol,
+                ip: data.ip,
+                port: data.port,
+                margin: parseFloat(data.margin),
             };
-        }
-    }
 
-    pageToView() {
-        this.getInputData();
-        this.pageStep = EPageStep.View;
-    }
-
-    pageToAdd() {
-        this.clearInputData();
-        this.pageStep = EPageStep.Add;
-    }
-
-    pageToEdit() {
-        this.getInputData();
-        this.pageStep = EPageStep.Edit;
-    }
-
-    pageToList() {
-        this.initTargetScoreItem();
-        this.clearInputData();
-        this.pageStep = EPageStep.List;
-        (this.$refs.listTable as any).reload();
-    }
-
-    pageToHumanServerTest() {
-        this.clearInputData();
-        this.modalShow = !this.modalShow;
-    }
-
-    pageToForm1() {
-        this.pageStep = EPageStep.Edit;
-        (this.$refs["detail"] as any).hide();
-    }
-
-    async sendHumanServerTest(data) {
-        if (this.newImgSrc == "") {
-            Dialog.error(this._("w_Upload_Fail"));
-            return;
-        }
-
-        const configOnject = {
-            protocol: data.protocol,
-            ip: data.ip,
-            port: data.port,
-            margin: parseFloat(data.margin)
-        };
-
-        const humanObject: {
-            config: any;
-            imageBase64: string;
-        } = {
-            config: configOnject,
-            imageBase64: this.newImgSrc
-        };
-
-        await this.$server
-            .C("/partner/demographic/test", humanObject)
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.initDate();
-                    this.modalShow = !this.modalShow;
-                    (this.$refs["detail"] as any).show();
-                    for (const returnValue of response) {
-                        let detailObject = {
-                            age: returnValue.age,
-                            gender: returnValue.gender,
-                            imageBase64: returnValue.imageBase64
-                        };
-                        this.testDetailTable.tableDataFromApi.push(
-                            detailObject
-                        );
-                    }
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
-    }
-
-    async saveData(data) {
-        console.log("saveArea", data);
-
-        if (this.pageStep == EPageStep.Add) {
-            const datas = [
-                {
-                    customId: data.customId,
-                    name: data.name,
-                    protocol: data.protocol,
-                    ip: data.ip,
-                    port: data.port,
-                    margin: parseFloat(data.margin)
-                }
-            ];
-
-            const addParam = { datas };
+            const humanObject: {
+                config: any,
+                imageBase64: string;
+            } = {
+                config: configOnject,
+                imageBase64: this.newImgSrc
+            };
 
             await this.$server
-                .C("/partner/demographic", addParam)
+                .C("/partner/demographic/test", humanObject)
                 .then((response: any) => {
-                    if (response != undefined) {
+                    if (response.length > 0) {
+                        this.modalShow = !this.modalShow;
+                        this.initDate();
                         for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_DemographicServer_AddSuccess")
-                                );
-                                this.pageToList();
+
+                            if (returnValue.age <= 20) {
+                                returnValue.age = '0~20';
                             }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_DemographicServer_AddFailed")
-                                );
-                                return false;
+
+                            if (returnValue.age >= 21 && returnValue.age <= 30) {
+                                returnValue.age = '21~30';
                             }
+
+                            if (returnValue.age >= 31 && returnValue.age <= 40) {
+                                returnValue.age = '31~40';
+                            }
+
+                            if (returnValue.age >= 31 && returnValue.age <= 40) {
+                                returnValue.age = '31~40';
+                            }
+
+                            if (returnValue.age >= 41 && returnValue.age <= 50) {
+                                returnValue.age = '41~50';
+                            }
+
+                            if (returnValue.age >= 51 && returnValue.age <= 60) {
+                                returnValue.age = '51~60';
+                            }
+
+                            if (returnValue.age >= 61) {
+                                returnValue.age = '61~';
+                            }
+
+                            let detailObject = {
+                                age: returnValue.age,
+                                gender: returnValue.gender,
+                                imageBase64: returnValue.imageBase64,
+                            };
+
+
+
+                            this.testDetailTable.tableDataFromApi.push(detailObject);
                         }
+                        (this.$refs["detail"] as any).show();
                     }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
-                });
-        } else if (this.pageStep == EPageStep.Edit) {
-            const datas = [
-                {
-                    objectId: data.objectId,
-                    customId: data.customId,
-                    name: data.name,
-                    protocol: data.protocol,
-                    ip: data.ip,
-                    port: data.port,
-                    margin: parseFloat(data.margin)
-                }
-            ];
-
-            const editParam = { datas };
-
-            await this.$server
-                .U("/partner/demographic", editParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_DemographicServer_EditSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_DemographicServer_EditFailed")
-                                );
-                                return false;
-                            }
-                        }
+                    if (response.length === 0) {
+                        Dialog.error(this._("w_ErrorRecognize"));
                     }
                 })
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
         }
-    }
 
-    async deleteData() {
-        Dialog.confirm(
-            this._("w_DemographicServer_DeleteConfirm"),
-            this._("w_Confirm"),
-            () => {
+        async saveData(data) {
+            console.log("saveArea", data);
+
+            if (this.pageStep == EPageStep.Add) {
+                const datas = [
+                    {
+                        customId: data.customId,
+                        name: data.name,
+                        protocol: data.protocol,
+                        ip: data.ip,
+                        port: data.port,
+                        margin: parseFloat(data.margin)
+                    }
+                ];
+
+                const addParam = { datas };
+
+                await this.$server
+                    .C("/partner/demographic", addParam)
+                    .then((response: any) => {
+                        if (response != undefined) {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    Dialog.success(this._("w_DemographicServer_AddSuccess"));
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                                    Dialog.error(this._("w_DemographicServer_AddFailed"));
+                                    return false;
+                                }
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.base(this, e);
+                    });
+
+            } else if (this.pageStep == EPageStep.Edit) {
+                const datas = [
+                    {
+                        objectId: data.objectId,
+                        customId: data.customId,
+                        name: data.name,
+                        protocol: data.protocol,
+                        ip: data.ip,
+                        port: data.port,
+                        margin: parseFloat(data.margin)
+                    }
+                ];
+
+                const editParam = { datas };
+
+                await this.$server
+                    .U("/partner/demographic", editParam)
+                    .then((response: any) => {
+                        if (response != undefined) {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    Dialog.success(this._("w_DemographicServer_EditSuccess"));
+                                    this.pageToList();
+                                }
+                                if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                                    Dialog.error(this._("w_DemographicServer_EditFailed"));
+                                    return false;
+                                }
+                            }
+                        }
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.base(this, e);
+                    });
+            }
+        }
+
+        async deleteData() {
+            Dialog.confirm(this._("w_DemographicServer_DeleteConfirm"), this._("w_Confirm"), () => {
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -533,44 +558,43 @@ export default class DemographicServer extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
-            }
-        );
-    }
-
-    updateForm(data) {
-        console.log("updateForm", data);
-        if (data) {
-            this.inputFormData[data.key] = data.value;
-        }
-    }
-
-    updateServerData(data) {
-        console.log("updateServerData", data);
-        if (data && data.key == "imageBase64") {
-            this.uploadFile(data.value);
-        }
-    }
-
-    async uploadFile(file) {
-        if (file) {
-            ImageBase64.fileToBase64(file, (base64 = "") => {
-                if (base64 != "") {
-                    this.newImg = new Image();
-                    this.newImg.src = base64;
-                    this.newImg.onload = () => {
-                        this.newImgSrc = base64;
-                        console.log("newImgSrc", this.newImgSrc);
-                        return;
-                    };
-                } else {
-                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
-                }
             });
         }
-    }
 
-    IList() {
-        return `interface {
+        updateForm(data) {
+            console.log("updateForm", data);
+            if (data) {
+                this.inputFormData[data.key] = data.value;
+            }
+        }
+
+        updateServerData(data) {
+            console.log("updateServerData", data);
+            if (data && data.key == "imageBase64") {
+                this.uploadFile(data.value);
+            }
+        }
+
+        async uploadFile(file) {
+            if (file) {
+                ImageBase64.fileToBase64(file, (base64 = "") => {
+                    if (base64 != "") {
+                        this.newImg = new Image();
+                        this.newImg.src = base64;
+                        this.newImg.onload = () => {
+                            this.newImgSrc = base64;
+                            console.log("newImgSrc", this.newImgSrc);
+                            return;
+                        };
+                    } else {
+                        Dialog.error(this._("w_Region_ErrorFileToLarge"));
+                    }
+                });
+            }
+        }
+
+        IList() {
+            return `interface {
                  /**
                  * @uiLabel - ${this._("w_No")}
                  * @uiType - iv-cell-auto-index
@@ -594,10 +618,10 @@ export default class DemographicServer extends Vue {
 
                 Actions: any;
             }`;
-    }
+        }
 
-    IView() {
-        return `interface {
+        IView() {
+            return `interface {
                 /**
                  * @uiLabel - ${this._("w_ServerHD_DeviceID")}
                  * @uiType - iv-form-label
@@ -615,9 +639,9 @@ export default class DemographicServer extends Vue {
                 * @uiType - iv-form-label
                  */
                  protocol?: ${toEnumInterface({
-                     http: "http",
-                     https: "https"
-                 })};
+                http: "http",
+                https: "https"
+            })};
 
                 /**
                  * @uiLabel - ${this._("w_ServerHD_IP")}
@@ -638,19 +662,19 @@ export default class DemographicServer extends Vue {
                 margin?: any;
 
             }`;
-    }
+        }
 
-    IForm() {
-        return `interface {
+        IForm() {
+            return `interface {
 
                 /**
                  * @uiLabel - ${this._("w_ServerHD_DeviceID")}
                  * @uiPlaceHolder - ${this._("w_ServerHD_DeviceID")}
                  * @uiType - ${
-                     this.pageStep === EPageStep.Add
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                this.pageStep === EPageStep.Add
+                    ? "iv-form-string"
+                    : "iv-form-label"
+                }
                  */
                 customId: string;
 
@@ -664,9 +688,9 @@ export default class DemographicServer extends Vue {
                  * @uiLabel - ${this._("w_Protocol")}
                  */
                  protocol: ${toEnumInterface({
-                     http: "http",
-                     https: "https"
-                 })};
+                http: "http",
+                https: "https"
+            })};
 
                 /**
                  * @uiLabel - ${this._("w_ServerHD_IP")}
@@ -687,13 +711,16 @@ export default class DemographicServer extends Vue {
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
                 */
-                margin?: ${toEnumInterface(this.targetScoreItem as any, false)};
+                margin?: ${toEnumInterface(
+                this.targetScoreItem as any,
+                false
+            )};
 
             }`;
-    }
+        }
 
-    IHumanServerTestComponent() {
-        return `
+        IHumanServerTestComponent() {
+            return `
                 interface IHumanServerTestComponent {
 
 
@@ -701,9 +728,9 @@ export default class DemographicServer extends Vue {
                  * @uiLabel - ${this._("w_Protocol")}
                  */
                  protocol: ${toEnumInterface({
-                     http: "http",
-                     https: "https"
-                 })};
+                http: "http",
+                https: "https"
+            })};
 
                 /**
                  * @uiLabel - ${this._("w_ServerHD_IP")}
@@ -725,19 +752,23 @@ export default class DemographicServer extends Vue {
                 * @uiLabel - ${this._("w_ServerHD_Scale")}
                 * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
                 */
-                margin?: ${toEnumInterface(this.targetScoreItem as any, false)};
+                margin?: ${toEnumInterface(
+                this.targetScoreItem as any,
+                false
+            )};
 
                 imageBase64: any;
 
         `;
+        }
     }
-}
 </script>
 
 
 <style lang="scss" scoped>
-.threshold-image {
-    width: 50px;
-}
+    .threshold-image {
+        margin-bottom: 5px;
+    }
+
 </style>
 

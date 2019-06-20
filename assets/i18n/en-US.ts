@@ -136,6 +136,7 @@ export default class LangObject {
     w_ErrorLongitude = 'Longitude only -180~180';
     w_ErrorLatitude = 'Latitude only -90~90';
     w_ErrorReadData = 'Read data failed, please try again.';
+    w_ErrorRecognize = 'Recognize failed, please try again.';
 
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
