@@ -7,6 +7,35 @@
             <template #toolbox>
                 <iv-toolbox-add @click="pageToAdd()" />
             </template>
+
+            <iv-table
+                ref="listTable"
+                :interface="ITableList()"
+                :multiple="tableMultiple"
+                :server="{ path: '/acs/member' }"
+                @selected="selectedItem($event)"
+            >
+                <template #StartDate="{$attrs}">
+                    {{ dateToYYYY_MM_DD($attrs.value) }}
+                </template>
+
+                <template #EndDate="{$attrs}">
+                    {{ dateToYYYY_MM_DD($attrs.value) }}
+                </template>
+
+                <template #Actions="{$attrs, $listeners}">
+
+                    <iv-toolbox-more
+                        size="sm"
+                        :disabled="isSelected.length !== 1"
+                    >
+                        <iv-toolbox-view @click="pageToView" />
+                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                        <iv-toolbox-delete @click="doDelete" />
+                    </iv-toolbox-more>
+                </template>
+
+            </iv-table>
         </iv-card>
 
         <!-- add -->
@@ -20,10 +49,10 @@
             </template>
 
             <iv-form
-                :interface="IAddForm()"
+                :interface="IAddAndEditForm()"
                 :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
-                @submit="saveAdd($event)"
+                @submit="saveAddOrEdit($event)"
             >
 
                 <!-- Morris -->
@@ -92,8 +121,9 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
 import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
+import Dialog from "@/services/Dialog/Dialog";
+import Datetime from "@/services/Datetime";
 
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
@@ -317,6 +347,8 @@ export default class MemberForm1 extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
+    saveAddOrEdit() {}
+
     async saveAdd(data) {
         const datas: any[] = [
             {
@@ -496,66 +528,79 @@ export default class MemberForm1 extends Vue {
             return searchResult;
         }
     }
+    
+    dateToYYYY_MM_DD(value) {
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+    }
 
     ITableList() {
         return `
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_No")}
-                 * @uiType - iv-cell-auto-index
+                 * @uiLabel - ${this._("w_Member_EmployeeNumber1")}
                  */
-                no: string;
+                EmployeeNumber: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Account")}
+                 * @uiLabel - ${this._("w_Member_CardNumber1")}
                  */
-                username: string;
+                CardNumber: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiLabel - ${this._("w_Member_PersonType1")}
                  */
-                name: string;
+                PrimaryWorkgroupName: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_Role")}
+                 * @uiLabel - ${this._("w_Member_ChineseName1")}
                  */
                 role: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Email")}
+                 * @uiLabel - ${this._("w_Member_EnglishName1")}
                  */
                 email: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_Group")}
+                 * @uiLabel - ${this._("w_Member_Department1")}
                  */
                 groups: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_ManagedSites")}
+                 * @uiLabel - ${this._("w_Member_CostCenter1")}
                  */
                 sites: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_AppInstalled")}
+                 * @uiLabel - ${this._("w_Member_StartDate1")}
                  */
-                isAppBinding: string;
+                StartDate: string;
 
+
+                /**
+                 * @uiLabel - ${this._("w_Member_EndDate1")}
+                 */
+                EndDate: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Actions")}
+                 */
                 Actions?: any;
 
             }
         `;
     }
 
-    IAddForm() {
+    IAddAndEditForm() {
         return `
             interface {
 
