@@ -382,7 +382,14 @@ export default class LangObject implements ILang {
     // Permission
     w_Permission_PermissionManage = 'Permission Manage';
     w_Permission_PermissionList = 'Permission List';
+    w_Permission_PermissionAdd = 'Permission Add';
+    w_Permission_PermissionEdit = 'Permission Edit';
+    w_Permission_PermissionView = 'Permission View';
     w_Permission_PermissionName = 'Permission Name';
+    w_Permission_DeviceType = 'Device Type';
+    w_Permission_DeviceName = 'Device Name';
+    w_Permission_DeviceArea = 'Device Area';
+    w_Permission_DeviceTimeFormat = 'Time Format';
 
     // button
     w_Save = 'Save';
