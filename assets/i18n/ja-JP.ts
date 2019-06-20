@@ -125,5 +125,8 @@ export default class LangObject implements ILang {
     w_ElevatorGroupAdd="Add Elevator Group";
     w_ElevatorGroupEdit="Edit Elevator Group";
     elevators="Elevators";
+
+    w_EmployeeList="Employee List";
+    w_AttendanceRecord="Attendance Record";
 }
 

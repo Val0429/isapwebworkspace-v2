@@ -126,4 +126,7 @@ export default class LangObject {
     w_ElevatorGroupEdit="Edit Elevator Group";
     elevators="Elevators";
 
+    w_EmployeeList="Employee List";
+    w_AttendanceRecord="Attendance Record";
+
 }

@@ -25,6 +25,8 @@ import SyncReceiver from './components/acs/SyncReceiver.vue';
 import AccessLevel from './components/acs/AccessLevel.vue';
 import Floor from './components/acs/Floor.vue';
 import ElevatorGroup from './components/acs/ElevatorGroup.vue';
+import AttendanceRecord from './components/acs/AttendanceRecord.vue';
+import EmployeeList from './components/acs/EmployeeList.vue';
 
 $({ path: '/', name: "Home", redirect: '/member' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
@@ -34,6 +36,9 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
     $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
     $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
+    $({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
+    $({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
+    
     
     $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
     $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);

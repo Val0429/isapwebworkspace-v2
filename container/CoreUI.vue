@@ -26,12 +26,15 @@
                 <SidebarNavItem url="/doorgroup" />
                 <SidebarNavItem url="/elevator" />
                 <SidebarNavItem url="/elevatorgroup" />
-                <!-- <SidebarNavItem url="/timeschedule" /> -->
-                <SidebarNavItem url="/permissiontable" />
+                <SidebarNavItem url="/floor" />
                 <SidebarNavItem url="/reader" />
+                <!-- <SidebarNavItem url="/timeschedule" /> -->
+                <SidebarNavItem url="/permissiontable" />                
                 <SidebarNavItem url="/syncreceiver" />
                 <SidebarNavItem url="/accesslevel" />
-                <SidebarNavItem url="/floor" />
+                <SidebarNavItem url="/attendance" />
+                <SidebarNavItem url="/employee" />
+                
             </SidebarNav>
         </template>
     </CoreUIBase>
