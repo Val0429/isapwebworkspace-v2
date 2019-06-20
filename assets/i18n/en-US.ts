@@ -66,6 +66,9 @@ export default class LangObject {
     w_Snapshot = 'Snapshot';
     w_Gender = 'Gender';
     w_Age = 'Age Range';
+    w_Options = 'Options';
+    w_Chooses = 'Choose';
+    w_AllChoose = 'All';
 
     // date
     w_Week_0 = 'Sunday';

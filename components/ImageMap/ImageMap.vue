@@ -13,6 +13,7 @@
                 >
                     <div class="tag-label-title-view">
                         <div>{{ _('w_ImageMap_DeviceGroupTagLabelTitle') }}</div>
+
                         <!-- bar2.0 此功能移至其他頁面新刪修 -->
                         <!-- <div>
                             <template>
@@ -22,6 +23,7 @@
                                 />
                             </template>
                         </div> -->
+
                     </div>
 
                     <tag-label-view
