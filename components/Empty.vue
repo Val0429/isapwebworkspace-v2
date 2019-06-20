@@ -8,28 +8,43 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 
 @Component({
     components: {}
 })
 export class Empty extends Vue {
+    // Prop
     @Prop({
         type: String,
         default: ""
     })
     label: string;
 
-    inputData = "Test input data";
+    // Model
+    @Model("input", {
+        type: String,
+        default: ""
+    })
+    value: string;
 
-    created() {}
+    inputData = "Test input data";
+    modelData = "";
+
+    created() {
+        this.modelData = this.value;
+    }
 
     mounted() {
         this.start();
     }
 
     start() {
-        this.$emit("input", this.inputData);
+        this.$emit("change", this.inputData);
+    }
+
+    putModel() {
+        this.$emit("input", this.modelData);
     }
 }
 
