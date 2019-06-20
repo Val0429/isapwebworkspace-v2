@@ -1,6 +1,5 @@
 <template>
     <div class="chart">
-        {{ label }}
         <highcharts :options="chartOptions"></highcharts>
     </div>
 </template>
@@ -34,7 +33,10 @@ export class ChartBarLine extends Vue {
         xAxis: [
             {
                 crosshair: true,
-                categories: []
+                categories: [],
+                customData: [
+                    1,2,3
+                ]
             }
         ],
         yAxis: [
@@ -60,18 +62,56 @@ export class ChartBarLine extends Vue {
                 opposite: true
             }
         ],
-        tooltip: { shared: false },
-        legend: {
-            layout: "vertical",
-            align: "left",
-            x: 120,
-            verticalAlign: "top",
-            y: 100,
-            floating: true,
-            backgroundColor: "rgba(255,255,255,0.25)"
+        tooltip: { 
+            enabled: true,
+            shared: true, 
+            backgroundColor: "#333",
+            style:{
+                color: "#fff"
+            },
+            formatter: function (tooltip: any) {
+                let self: any = this;
+                let pointIndex: number = -1;
+                if (
+                    self.points != undefined && 
+                    self.points[0] != undefined &&
+                    self.points[0].point != undefined && 
+                    self.points[0].point.index != undefined
+                ) {
+                    pointIndex = self.points[0].point.index;
+                }
+                console.log(self.points);
+                return "";
+            }
         },
-        series: [
-            {
+        series: []
+    };
+
+    created() {}
+
+    mounted() {
+        this.start();
+    }
+
+    start() {
+        this.chartOptions.xAxis[0].categories = [
+            "Jan<span style='display:none;'>1235</span>",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        ];
+        this.chartOptions.yAxis[0].title.text = "Traffic";
+        this.chartOptions.yAxis[1].title.text = "Revenue";
+
+        this.chartOptions.series[0] = {
                 name: "Rainfall",
                 type: "column",
                 yAxis: 1,
@@ -88,9 +128,13 @@ export class ChartBarLine extends Vue {
                     194.1,
                     95.6,
                     54.4
+                ],
+                custom:[
+                    1,2,3
                 ]
-            },
-            {
+            }
+
+            this.chartOptions.series[1] = {
                 name: "Temperature",
                 type: "spline",
                 data: [
@@ -108,35 +152,14 @@ export class ChartBarLine extends Vue {
                     9.6
                 ]
             }
-        ]
-    };
-
-    created() {}
-
-    mounted() {
-        this.start();
+            this.chartOptions.series[3] = {
+                data: [
+                   "a", "b", "c", "d", "e", "f", "g", "h", "i", 
+                ]
+            }
     }
 
-    start() {
-        this.chartOptions.xAxis[0].categories = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-        ];
-
-        this.chartOptions.yAxis[0].title.text = "Traffic";
-        this.chartOptions.yAxis[1].title.text = "Revenue";
-        // this.$emit("input", this.inputData);
-    }
+    
 }
 
 export default ChartBarLine;
