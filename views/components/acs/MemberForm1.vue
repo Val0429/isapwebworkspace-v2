@@ -17,19 +17,12 @@
                 :server="{ path: '/acs/member' }"
                 @selected="selectedItem($event)"
             >
-                <template #email="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ show30Words($attrs.value) }}
+                <template #StartDate="{$attrs}">
+                    {{ dateToYYYY_MM_DD($attrs.value) }}
                 </template>
 
-                <template #sites="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #groups="{$attrs}">
-                    <!--                {{ $attrs.value.map(item => item.name).join(', ')}}-->
-                    {{ showFirst($attrs.value) }}
+                <template #EndDate="{$attrs}">
+                    {{ dateToYYYY_MM_DD($attrs.value) }}
                 </template>
 
                 <template #Actions="{$attrs, $listeners}">
@@ -60,10 +53,10 @@
             </template>
 
             <iv-form
-                :interface="IAddForm()"
+                :interface="IAddAndEditForm()"
                 :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
-                @submit="saveAdd($event)"
+                @submit="saveAddOrEdit($event)"
             >
                 <template #test="{ $attrs, $listeners }">
 
@@ -160,8 +153,9 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
 import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
+import Dialog from "@/services/Dialog/Dialog";
+import Datetime from "@/services/Datetime";
 
 enum EPageStep {
     list = "list",
@@ -328,6 +322,8 @@ export default class MemberForm1 extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
+    saveAddOrEdit() {}
+
     async saveAdd(data) {
         const datas: any[] = [
             {
@@ -490,23 +486,8 @@ export default class MemberForm1 extends Vue {
         return result;
     }
 
-    cardSearch(search: string) {
-        // TODO: finished search
-        // console.log('search - ', search)
-        this.searchKeywords(search);
-    }
-
-    searchKeywords(search: string) {
-        // TODO: finished search
-        if (search != "") {
-            const accountText = this.inputFormData.username.toLocaleLowerCase();
-            const nameText = this.inputFormData.name.toLocaleLowerCase();
-            const searchText = search.toLowerCase();
-            const searchResult =
-                accountText.match(searchText) || nameText.match(searchText);
-
-            return searchResult;
-        }
+    dateToYYYY_MM_DD(value) {
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
     ITableList() {
@@ -514,60 +495,69 @@ export default class MemberForm1 extends Vue {
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_No")}
-                 * @uiType - iv-cell-auto-index
+                 * @uiLabel - ${this._("w_Member_EmployeeNumber1")}
                  */
-                no: string;
+                EmployeeNumber: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Account")}
+                 * @uiLabel - ${this._("w_Member_CardNumber1")}
                  */
-                username: string;
+                CardNumber: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
+                 * @uiLabel - ${this._("w_Member_PersonType1")}
                  */
-                name: string;
+                PrimaryWorkgroupName: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_Role")}
+                 * @uiLabel - ${this._("w_Member_ChineseName1")}
                  */
                 role: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Email")}
+                 * @uiLabel - ${this._("w_Member_EnglishName1")}
                  */
                 email: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_Group")}
+                 * @uiLabel - ${this._("w_Member_Department1")}
                  */
                 groups: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_ManagedSites")}
+                 * @uiLabel - ${this._("w_Member_CostCenter1")}
                  */
                 sites: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_AppInstalled")}
+                 * @uiLabel - ${this._("w_Member_StartDate1")}
                  */
-                isAppBinding: string;
+                StartDate: string;
 
+
+                /**
+                 * @uiLabel - ${this._("w_Member_EndDate1")}
+                 */
+                EndDate: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Actions")}
+                 */
                 Actions?: any;
 
             }
         `;
     }
 
-    IAddForm() {
+    IAddAndEditForm() {
         return `
             interface {
 
