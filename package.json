@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "file-saver": "^2.0.2",
+        "highcharts-vue": "^1.3.5",
         "xlsx": "^0.14.3"
     },
     "devDependencies": {
