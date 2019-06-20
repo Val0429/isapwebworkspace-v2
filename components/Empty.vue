@@ -22,7 +22,7 @@ export class Empty extends Vue {
     label: string;
 
     // Model
-    @Model("input", {
+    @Model("model", {
         type: String,
         default: ""
     })
@@ -40,11 +40,11 @@ export class Empty extends Vue {
     }
 
     start() {
-        this.$emit("change", this.inputData);
+        this.$emit("input", this.inputData);
     }
 
     putModel() {
-        this.$emit("input", this.modelData);
+        this.$emit("model", this.modelData);
     }
 }
 
