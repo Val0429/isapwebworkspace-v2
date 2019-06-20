@@ -23,9 +23,11 @@ import PermissionTable from './components/acs/PermissionTable.vue';
 import Reader from './components/acs/Reader.vue';
 import SyncReceiver from './components/acs/SyncReceiver.vue';
 import AccessLevel from './components/acs/AccessLevel.vue';
+import Floor from './components/acs/Floor.vue';
 
 $({ path: '/', name: "Home", redirect: '/member' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
+$({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
     $({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
     $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);

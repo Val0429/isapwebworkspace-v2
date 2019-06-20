@@ -110,4 +110,10 @@ export default class LangObject implements ILang {
 
     PersonalDetails="Personal Details";
 
+    w_Floor="Floor";
+    w_FloorAdd="Add Floor";
+    w_FloorEdit="Edit Floor";
+    name="Name";
+    image="Image";
+
 }

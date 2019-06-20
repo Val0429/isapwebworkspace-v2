@@ -30,6 +30,7 @@
                 <SidebarNavItem url="/reader" />
                 <SidebarNavItem url="/syncreceiver" />
                 <SidebarNavItem url="/accesslevel" />
+                <SidebarNavItem url="/floor" />
             </SidebarNav>
         </template>
     </CoreUIBase>
