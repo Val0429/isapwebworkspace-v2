@@ -275,6 +275,16 @@ enum EPageStep {
     chooseTree = "chooseTree"
 }
 
+enum EWeeks {
+    Sunday = "Sunday",
+    Monday = "Monday",
+    Tuesday = "Tuesday",
+    Wednesday = "Wednesday",
+    Thursday = "Thursday",
+    Friday = "Friday",
+    Saturday = "Saturday",
+}
+
 @Component({
     components: {}
 })
@@ -289,13 +299,13 @@ export default class GeneralOfficeHour extends Vue {
 
     dayRanges: any = {
         weeks: [
-            { value: "0", text: "Sunday" },
-            { value: "1", text: "Monday" },
-            { value: "2", text: "Tuesday" },
-            { value: "3", text: "Wednesday" },
-            { value: "4", text: "Thursday" },
-            { value: "5", text: "Friday" },
-            { value: "6", text: "Saturday" }
+            { value: "0", text: EWeeks.Sunday },
+            { value: "1", text: EWeeks.Monday },
+            { value: "2", text: EWeeks.Tuesday },
+            { value: "3", text: EWeeks.Wednesday },
+            { value: "4", text: EWeeks.Thursday },
+            { value: "5", text: EWeeks.Friday },
+            { value: "6", text: EWeeks.Saturday }
         ],
         hours: [],
         minutes: []

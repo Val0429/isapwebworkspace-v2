@@ -733,4 +733,21 @@ export default class LangObject {
     w_VSVIP_Stranger_Visitor_EditSuccess = 'VIP, Stranger, Frequent Visitor Device edit success.';
     w_VSVIP_Stranger_Visitor_EditFailed = 'VIP, Stranger, Frequent Visitor Device edit failed, please try again.';
     w_VSVIP_Stranger_Visitor_DeleteConfirm = 'Are you sure to delete selected VIP, Stranger, Frequent Visitor Device(s)?';
+
+    // Report Template
+    w_ReportTemplate_List = 'Report Template List';
+    w_ReportTemplate_Add = 'Add Report Template';
+    w_ReportTemplate_Edit = 'Edit Report Template';
+    w_ReportTemplate_View = 'View Report Template';
+    w_ReportTemplate_AddDuplicate = 'Duplicate Add Report Template';
+
+    w_ReportTemplate_Name = 'Report Name';
+    w_ReportTemplate_Metric = 'Metric';
+    w_ReportTemplate_ReportPeriod = 'Report Period';
+    w_ReportTemplate_ReportPeriod1 = '* Select Report Period';
+    w_ReportTemplate_DesignationPeriod = 'Designation';
+    w_ReportTemplate_SendReportTime = 'Send Report Time';
+    w_ReportTemplate_SendReportTime1 = '* Send Report Time';
+    w_ReportTemplate_Recipient = 'Recipient';
+
 }
