@@ -66,6 +66,9 @@ export default class LangObject implements ILang {
     w_Snapshot = 'Snapshot';
     w_Gender = 'Gender';
     w_Age = 'Age Range';
+    w_Options = '可用選項';
+    w_Chooses = '已選擇';
+    w_AllChoose = '全選';
 
     // date
     w_Week_0 = 'Sunday';
