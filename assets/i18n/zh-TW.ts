@@ -406,5 +406,89 @@ export default class LangObject implements ILang {
     w_Member_Edit = 'Edit Member';
     w_Member_View = 'View Member';
 
-    w_Member_ = '';
+    w_Member_CompanyName = '公司名稱：';
+    w_Member_PersonType = '人員類型：';
+    w_Member_EmployeeNumber = '工號：';
+    w_Member_ChineseName = '中文姓名：';
+    w_Member_EnglishName = '英文姓名：';
+    w_Member_CardNumber = '卡號';
+    w_Member_CardType = '證卡類型：';
+    w_Member_CardAllNumber = '證卡全碼：';
+    w_Member_CardCustodian = '證卡保管人：';
+
+    w_Member_Info = '資訊狀態：';
+    w_Member_StartDate = '起始日期：';
+    w_Member_EndDate = '結束日期：';
+    w_Member_LastEditPerson = '上次修改人員：';
+    w_Member_LastEditTime = '上次修改時間：';
+
+    w_Member_PermissionTable = '權限表：';
+    w_Member_CanSelect = '可用選項：';
+    w_Member_BeSelected = '已選擇：';
+
+    w_Member_PersonInfo = '個人資訊：';
+    w_Member_ExtensionNumber = '分機號碼：';
+    w_Member_MVPN = 'MVPN：';
+    w_Member_Phone = '行動電話：';
+    w_Member_Email = 'Email：';
+    w_Member_Gender = '性別：';
+    w_Member_Birthday = '出生日期：';
+    w_Member_CompanyInfo = '公司資訊：';
+    w_Member_Department = '部門：';
+    w_Member_CostCenter= '成本中心：';
+    w_Member_Area = '地區：';
+    w_Member_WorkArea = '工作地區：';
+    w_Member_RegistrationDate = '報到日期：';
+    w_Member_ResignationDate = '離職日期：';
+
+    w_Member_General = '一般';
+    w_Member_CarLicenseCategory = '車證類別：';
+    w_Member_CardLicense = '車證編號：';
+    w_Member_CarLicense = '車位編號：';
+    w_Member_CarLicense1 = '車牌號碼I：';
+    w_Member_CarLicense2 = '車牌號碼II：';
+    w_Member_CarLicense3 = '車牌號碼III：';
+
+    w_Member_AccountInfo = '用戶詳情：';
+    w_Member_Account = '用戶名：';
+    w_Member_Password = '密碼：';
+
+
+    w_Member_CardRecord = '證卡紀錄';
+    w_Member_ResignationNote = '離職備註：';
+    w_Member_ResignationRecordCardRecord = '離職繳回紀錄_證卡：';
+    ReasonForCard1 = '製卡原因I：';
+    w_Member_HistoryForCard1 = '歷史卡號I：';
+    w_Member_DateForCard1 = '發卡日期I：';
+    ReasonForCard2 = '製卡原因II：';
+    w_Member_HistoryForCard2 = '歷史卡號II：';
+    w_Member_DateForCard2 = '發卡日期II：';
+    ReasonForCard3 = '製卡原因III：';
+    w_Member_HistoryForCard3 = '歷史卡號III：';
+    w_Member_DateForCard3 = '發卡日期III：';
+
+    w_Member_CarLicenseRecord = '車證紀錄';
+    w_Member_ReasonForApplication1 = '申請原因I：';
+    w_Member_DateForApplication1 = '發證日期I：';
+    w_Member_ReasonForApplication2 = '申請原因II：';
+    w_Member_DateForApplication2 = '發證日期II：';
+    w_Member_ReasonForApplication3 = '申請原因III：';
+    w_Member_DateForApplication3 = '發證日期III：';
+    w_Member_ResignationRecordCarLicense = '離職繳回紀錄_車證：';
+
+    w_Member_Other = '其他：';
+    w_Member_CensusRecord1 = '普查紀錄I：';
+    w_Member_CensusDate1 = '普查日期I：';
+    w_Member_CensusRecord2 = '普查紀錄II：';
+    w_Member_CensusDate2 = '普查日期II：';
+    w_Member_CensusRecord3 = '普查紀錄：III';
+    w_Member_CensusDate3 = '普查日期III：';
+
+    w_Member_ParkingViolation = '停車違規';
+    w_Member_InfoOfViolation1 = '違規說明I：';
+    w_Member_DateOfViolation1 = '違規日期I：';
+    w_Member_InfoOfViolation2 = '違規說明II：';
+    w_Member_DateOfViolation2 = '違規日期II：';
+    w_Member_InfoOfViolation3 = '違規說明III：';
+    w_Member_DateOfViolation3 = '違規日期III：';
 }
