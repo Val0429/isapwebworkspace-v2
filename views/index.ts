@@ -22,6 +22,7 @@ import DemoROI from './Demos/DemoROI.vue';
 import DemoDialog from './Demos/DemoDialog.vue';
 import DemoSortSelect from './Demos/DemoSortSelect.vue';
 import DemoReportTableComponent from './Demos/DemoReportTableComponent.vue';
+import DemoFilterConditionComponent from './Demos/DemoFilterConditionComponent.vue';
 
 // Guest
 import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
@@ -114,6 +115,7 @@ $({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(Demo
 $({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
 $({ path: '/demos/sort_select', name: 'Sort Select', icon: 'fa-check', permission: false })(DemoSortSelect);
 $({ path: '/demos/report_table_component', name: 'Report Table Component', icon: 'fa-check', permission: false })(DemoReportTableComponent);
+$({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component', icon: 'fa-check' })(DemoFilterConditionComponent);
 
 // Dashboard
 $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();

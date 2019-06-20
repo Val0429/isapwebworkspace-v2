@@ -3,13 +3,16 @@
 
         <div v-show="pageStep === ePageStep.none">
 
-            <!-- Morris -->
-            <chart-bar-line
-                label="Test Label"
-                @input="test"
-            >
-            </chart-bar-line>
+            <iv-card>
+                 <!-- Morris -->
+                <chart-bar-line
+                    label="Test Label"
+                    @input="test"
+                >
+                </chart-bar-line>
 
+            </iv-card>
+           
         </div>
 
     </div>
