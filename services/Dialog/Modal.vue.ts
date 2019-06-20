@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { BehaviorSubject } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
-import { ICard } from '../../../../isapwebframework-v2_bar/components/cards/card/card.vue';
+import { ICard } from '@/../components/cards/card/card.vue';
 
 @Component({
     components: { VuePerfectScrollbar },
