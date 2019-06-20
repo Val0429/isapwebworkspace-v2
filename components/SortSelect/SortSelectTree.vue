@@ -184,16 +184,6 @@ export class SortSelectTree extends Vue {
     })
     value: string[];
 
-    created() {}
-
-    mounted() {
-        this.sortSelectTreeItemList = [];
-        this.initSelected();
-        this.anysisOption();
-        this.calculateSelected();
-        this.resetVModel();
-    }
-
     defaultSortSelectTreeItem(): ISortSelectTreeItem {
         let result: ISortSelectTreeItem = {
             value: "",
@@ -211,6 +201,74 @@ export class SortSelectTree extends Vue {
             childrens: []
         };
         return JSON.parse(JSON.stringify(result));
+    }
+
+    created() {}
+
+    mounted() {
+        this.sortSelectTreeItemList = [];
+        this.anysisOption();
+        this.calculateSelected();
+        this.resetVModel();
+    }
+
+    // 分析物件從 prop
+    anysisOption() {
+        this.selected = [];
+        for (let val of this.value) {
+            this.pushSelected(val);
+        }
+        for (let option of this.options) {
+            this.sortSelectTreeItemList.push(
+                this.anysisOptionChildren(option, false)
+            );
+        }
+    }
+
+    // 分析下層物件從 prop
+    anysisOptionChildren(
+        sortSelectTreeOption: ISortSelectTreeOption,
+        parentChoose: boolean
+    ): ISortSelectTreeItem {
+        let result: ISortSelectTreeItem = this.defaultSortSelectTreeItem();
+        result.value = sortSelectTreeOption.value;
+        result.text = sortSelectTreeOption.text;
+
+        // 上層被選就全選
+        if (parentChoose) {
+            result.status.choose = true;
+        } else {
+            for (let val of this.selected) {
+                if (val == result.value) {
+                    result.status.choose = true;
+                    break;
+                }
+            }
+        }
+
+        // 判斷下層結果
+        for (let children of sortSelectTreeOption.childrens) {
+            result.childrens.push(
+                this.anysisOptionChildren(children, result.status.choose)
+            );
+        }
+
+        // 判斷是否有下層被選
+        let childrenChooseCount = this.calculateChildrenChooseCount(
+            result.childrens
+        );
+        if (
+            childrenChooseCount > 0 &&
+            childrenChooseCount == result.childrens.length
+        ) {
+            result.status.choose = true;
+        } else if (
+            childrenChooseCount > 0 &&
+            childrenChooseCount < result.childrens.length
+        ) {
+            result.status.childrenChoose = true;
+        }
+        return result;
     }
 
     @Watch("sortSelectTreeItemList", { deep: true })
@@ -368,11 +426,11 @@ export class SortSelectTree extends Vue {
             let children = sortSelectTreeItem.childrens[i];
             let iNumber = parseInt(i);
             if (iNumber < this.sortIndex.now) {
-                if (children.status.choose) {
+                if (children.status.choose || children.status.childrenChoose) {
                     this.sortIndex.prev = iNumber;
                 }
             } else if (iNumber > this.sortIndex.now) {
-                if (children.status.choose) {
+                if (children.status.choose || children.status.childrenChoose) {
                     this.sortIndex.next = iNumber;
                     break;
                 }
@@ -380,68 +438,6 @@ export class SortSelectTree extends Vue {
                 continue;
             }
         }
-    }
-
-    initSelected() {
-        this.selected = [];
-        for (let val of this.value) {
-            this.pushSelected(val);
-        }
-    }
-
-    // 分析物件從 prop
-    anysisOption() {
-        for (let option of this.options) {
-            this.sortSelectTreeItemList.push(
-                this.anysisOptionChildren(option, false)
-            );
-        }
-    }
-
-    // 分析下層物件從 prop
-    anysisOptionChildren(
-        sortSelectTreeOption: ISortSelectTreeOption,
-        parentChoose: boolean
-    ): ISortSelectTreeItem {
-        let result: ISortSelectTreeItem = this.defaultSortSelectTreeItem();
-        result.value = sortSelectTreeOption.value;
-        result.text = sortSelectTreeOption.text;
-
-        // 上層被選就全選
-        if (parentChoose) {
-            result.status.choose = true;
-        } else {
-            for (let val of this.selected) {
-                if (val == result.value) {
-                    result.status.choose = true;
-                    break;
-                }
-            }
-        }
-
-        // 判斷下層結果
-        for (let children of sortSelectTreeOption.childrens) {
-            result.childrens.push(
-                this.anysisOptionChildren(children, result.status.choose)
-            );
-        }
-
-        // 判斷是否有下層被選
-        let childrenChooseCount = this.calculateChildrenChooseCount(
-            result.childrens
-        );
-        if (
-            childrenChooseCount > 0 &&
-            childrenChooseCount == result.childrens.length
-        ) {
-            result.status.choose = true;
-        } else if (
-            childrenChooseCount > 0 &&
-            childrenChooseCount < result.childrens.length
-        ) {
-            result.status.childrenChoose = true;
-        }
-        return result;
     }
 
     // 計算下層數量
@@ -665,6 +661,11 @@ export class SortSelectTree extends Vue {
 
     disableChooseSortDown() {
         let result = false;
+        console.log(
+            "disableChooseSortDown",
+            this.checkboxClickTrues.length,
+            this.sortIndex.next
+        );
         if (this.checkboxClickTrues.length != 1 || this.sortIndex.next == -1) {
             result = true;
         }
@@ -738,6 +739,7 @@ export class SortSelectTree extends Vue {
         for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
             this.chooseToOptionChildren(sortSelectTreeItem);
         }
+        this.resetSelected();
         this.resetVModel();
     }
 
@@ -756,6 +758,7 @@ export class SortSelectTree extends Vue {
         for (let sortSelectTreeItem of this.sortSelectTreeItemList) {
             this.optionToChooseChildren(sortSelectTreeItem);
         }
+        this.resetSelected();
         this.resetVModel();
     }
 
@@ -829,15 +832,20 @@ export class SortSelectTree extends Vue {
             for (let i in this.sortSelectTreeItemList) {
                 let sortSelectTreeItem = this.sortSelectTreeItemList[i];
                 if (sortSelectTreeItem.value == this.checkboxClickTrues[0]) {
-                    let tempChooseItem = JSON.parse(
-                        JSON.stringify(sortSelectTreeItem)
+                    this.sortChnage(
+                        this.sortSelectTreeItemList,
+                        sortSelectTreeItem,
+                        parseInt(i),
+                        this.sortIndex.prev
                     );
-                    this.sortSelectTreeItemList.splice(parseInt(i), 1);
-                    this.sortSelectTreeItemList.splice(
-                        this.sortIndex.prev,
-                        0,
-                        tempChooseItem
+                    break;
+                } else {
+                    let sortResult = this.sortUpChildren(
+                        sortSelectTreeItem.childrens
                     );
+                    if (sortResult) {
+                        break;
+                    }
                 }
             }
         }
@@ -845,11 +853,104 @@ export class SortSelectTree extends Vue {
         this.sortIndex.prev = -1;
         this.sortIndex.now = -1;
         this.sortIndex.next = -1;
+        this.resetSelected();
         this.resetVModel();
     }
 
+    sortUpChildren(sortSelectTreeItemList: ISortSelectTreeItem[]): boolean {
+        let result = false;
+        for (let i in sortSelectTreeItemList) {
+            let sortSelectTreeItem = sortSelectTreeItemList[i];
+            if (sortSelectTreeItem.value == this.checkboxClickTrues[0]) {
+                this.sortChnage(
+                    sortSelectTreeItemList,
+                    sortSelectTreeItem,
+                    parseInt(i),
+                    this.sortIndex.prev
+                );
+                result = true;
+                break;
+            } else {
+                let sortResult = this.sortUpChildren(
+                    sortSelectTreeItem.childrens
+                );
+                if (sortResult) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
     chooseSortDown() {
+        if (this.checkboxClickTrues.length != 1) {
+            return;
+        }
+        if (this.sortIndex.next != -1) {
+            for (let i in this.sortSelectTreeItemList) {
+                let sortSelectTreeItem = this.sortSelectTreeItemList[i];
+                if (sortSelectTreeItem.value == this.checkboxClickTrues[0]) {
+                    this.sortChnage(
+                        this.sortSelectTreeItemList,
+                        sortSelectTreeItem,
+                        parseInt(i),
+                        this.sortIndex.next
+                    );
+                    break;
+                } else {
+                    let sortResult = this.sortDownChildren(
+                        sortSelectTreeItem.childrens
+                    );
+                    if (sortResult) {
+                        break;
+                    }
+                }
+            }
+        }
+        this.checkboxClickTrues = [];
+        this.sortIndex.prev = -1;
+        this.sortIndex.now = -1;
+        this.sortIndex.next = -1;
+        this.resetSelected();
         this.resetVModel();
+    }
+
+    sortDownChildren(sortSelectTreeItemList: ISortSelectTreeItem[]): boolean {
+        let result = false;
+        for (let i in sortSelectTreeItemList) {
+            let sortSelectTreeItem = sortSelectTreeItemList[i];
+            if (sortSelectTreeItem.value == this.checkboxClickTrues[0]) {
+                this.sortChnage(
+                    sortSelectTreeItemList,
+                    sortSelectTreeItem,
+                    parseInt(i),
+                    this.sortIndex.next
+                );
+                result = true;
+                break;
+            } else {
+                let sortResult = this.sortDownChildren(
+                    sortSelectTreeItem.childrens
+                );
+                if (sortResult) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    sortChnage(
+        sortSelectTreeItemList: ISortSelectTreeItem[],
+        sortSelectTreeItem: ISortSelectTreeItem,
+        nowIndex: number,
+        toIndex: number
+    ) {
+        let tempItem = JSON.parse(JSON.stringify(sortSelectTreeItem));
+        sortSelectTreeItemList.splice(nowIndex, 1);
+        sortSelectTreeItemList.splice(toIndex, 0, tempItem);
     }
 
     // 重置 selected
@@ -880,53 +981,9 @@ export class SortSelectTree extends Vue {
 
     // Model connecnt
     resetVModel() {
-        // this.resetSelected();
         this.$emit("input", this.selected);
         console.log("Selected result: ", this.selected);
     }
-
-    // chooseSortUp() {
-    //     let chooseSelected = this.chooseSelected[0];
-    //     if (chooseSelected != undefined) {
-    //         let chooseIndex = -1;
-    //         let tempChooseItem: any = undefined;
-    //         for (let i in this.chooseSelectItem) {
-    //             let chooseItem = this.chooseSelectItem[i];
-    //             if (chooseItem.value == chooseSelected) {
-    //                 chooseIndex = parseInt(i);
-    //                 tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-    //                 this.chooseSelectItem.splice(parseInt(i), 1);
-    //                 break;
-    //             }
-    //         }
-    //         if (chooseIndex > 0) {
-    //         }
-    //     }
-    // }
-
-    // chooseSortDown() {
-    // let chooseSelected = this.chooseSelected[0];
-    // if (chooseSelected != undefined) {
-    //     let chooseIndex = -1;
-    //     let tempChooseItem: any = undefined;
-    //     for (let i in this.chooseSelectItem) {
-    //         let chooseItem = this.chooseSelectItem[i];
-    //         if (chooseItem.value == chooseSelected) {
-    //             chooseIndex = parseInt(i);
-    //             tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
-    //             this.chooseSelectItem.splice(parseInt(i), 1);
-    //             break;
-    //         }
-    //     }
-    //     if (chooseIndex < this.chooseSelectItem.length) {
-    //         this.chooseSelectItem.splice(
-    //             chooseIndex + 1,
-    //             0,
-    //             tempChooseItem
-    //         );
-    //     }
-    // }
-    // }
 }
 
 Vue.component("iv-sort-select-tree", SortSelectTree);
