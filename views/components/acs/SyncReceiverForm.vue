@@ -80,13 +80,7 @@ export default class SyncReceiverForm extends Vue implements IFormQuick {
         return;
     }
     /// Done
-    
-    private server;
-    created() {
-        this.server = this.$server;
-        
-    }
-    
+ 
     getName(key:any){
         let item = this.options.find(x=>x.key==key);        
         return item?item.value:'';
