@@ -26,7 +26,7 @@ export default class LangObject implements ILang {
     w_UserEdit = "編輯使用者";
 
     m_PasswordShouldBeSame = "兩個密碼必須相同";
-    
+
     w_Logout="登出";
 
     day0="星期一";
@@ -59,7 +59,7 @@ export default class LangObject implements ILang {
     shunttime="Shunt Time";
     readerin="Reader In";
     readerout="Reader Out";
-    
+
 
     w_DoorGroup="門號群組";
     w_DoorGroupAdd="新增門號群組";
@@ -116,13 +116,13 @@ export default class LangObject implements ILang {
     name="Name";
     image="Image";
 
-    floorid="Floor Id";    
+    floorid="Floor Id";
     ccureid="CCURE Id";
     ccurename="CCURE Name";
     sipassid="SIPASS Id";
     sipassname="SIPASS Name";
 
-        
+
     w_ElevatorGroup="Elevator Group";
     w_ElevatorGroupAdd="Add Elevator Group";
     w_ElevatorGroupEdit="Edit Elevator Group";
@@ -282,7 +282,7 @@ export default class LangObject implements ILang {
      w_MailServer_Enable = 'Mail Server Enable';
      w_MailServer_Setting = 'Set Mail Server';
      w_MailServer_Test = 'Test Email';
- 
+
      w_MailServer_Setting_Success = 'Email Server set success.';
      w_MailServer_Setting_Fail = 'Email Server set failed.';
      w_MailServer_Test_Success = 'Email Server test success.';
@@ -332,7 +332,7 @@ export default class LangObject implements ILang {
     w_Region_ErrorLatitude = 'Latitude only -90~90';
     w_Region_ErrorNoSiteBeBinding = 'No site can be binding';
     w_Region_ErrorFileToLarge = 'Image max size is 7MB';
- 
+
     // Site
     w_Site_SiteID = 'Site ID';
     w_Site_SiteName = 'Site Name';
@@ -397,4 +397,13 @@ export default class LangObject implements ILang {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+
+    // Member
+    w_Member_List = 'Member List';
+    w_Member_Add = 'Add Member';
+    w_Member_Edit = 'Edit Member';
+    w_Member_View = 'View Member';
+
+    w_Member_ = '';
+
 }

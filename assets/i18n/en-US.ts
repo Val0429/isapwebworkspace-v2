@@ -13,7 +13,7 @@ export default class LangObject {
     w_Password = "Password";
     w_Selection = "Selection";
     w_Multi = "Multi";
-    
+
     w_Username = "User Name";
     w_Roles = "Rolese";
     w_Email = "Email";
@@ -60,7 +60,7 @@ export default class LangObject {
     shunttime="Shunt Time";
     readerin="Reader In";
     readerout="Reader Out";
-    
+
     w_DoorGroup="Door Group";
     w_DoorGroupAdd="Add Door Group";
     w_DoorGroupEdit="Edit Door Group";
@@ -84,7 +84,7 @@ export default class LangObject {
     w_PermissionTableEdit="Edit Permission Table";
     tableid="Table Id";
     tablename="Table Name";
-                    
+
     w_Reader="Reader";
     w_ReaderAdd="Add Reader";
     w_ReaderEdit="Edit Reader";
@@ -107,7 +107,7 @@ export default class LangObject {
     door="Door";
     reader="Reader";
     timeschedule="Time Schedule";
-    
+
     PersonalDetails="Personal Details";
 
     w_Floor="Floor";
@@ -115,12 +115,12 @@ export default class LangObject {
     w_FloorEdit="Edit Floor";
     name="Name";
     image="Image";
-    floorid="Floor Id";    
+    floorid="Floor Id";
     ccureid="CCURE Id";
     ccurename="CCURE Name";
     sipassid="SIPASS Id";
     sipassname="SIPASS Name";
-    
+
     w_ElevatorGroup="Elevator Group";
     w_ElevatorGroupAdd="Add Elevator Group";
     w_ElevatorGroupEdit="Edit Elevator Group";
@@ -162,7 +162,7 @@ export default class LangObject {
     w_UserGroup_EditUserGroupFailed = 'Edit User Group Failed';
     w_UserGroup_DeleteConfirm = 'Are you sure to delete selected usergroup(s)?';
 
-        
+
     // many page
     w_Account = 'Account';
     w_PasswordConfirm = 'PasswordConfirm';
@@ -395,4 +395,13 @@ export default class LangObject {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+
+    // Member
+    w_Member_List = 'Member List';
+    w_Member_Add = 'Add Member';
+    w_Member_Edit = 'Edit Member';
+    w_Member_View = 'View Member';
+
+    w_Member_ = '';
+
 }

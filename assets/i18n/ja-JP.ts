@@ -58,7 +58,7 @@ export default class LangObject implements ILang {
     shunttime="Shunt Time";
     readerin="Reader In";
     readerout="Reader Out";
-    
+
 
     w_DoorGroup="Door Group";
     w_DoorGroupAdd="Add Door Group";
@@ -114,13 +114,13 @@ export default class LangObject implements ILang {
     w_FloorEdit="Edit Floor";
     name="Name";
     image="Image";
-    floorid="Floor Id";    
+    floorid="Floor Id";
     ccureid="CCURE Id";
     ccurename="CCURE Name";
     sipassid="SIPASS Id";
     sipassname="SIPASS Name";
 
-        
+
     w_ElevatorGroup="Elevator Group";
     w_ElevatorGroupAdd="Add Elevator Group";
     w_ElevatorGroupEdit="Edit Elevator Group";
@@ -129,7 +129,7 @@ export default class LangObject implements ILang {
     w_EmployeeList="Employee List";
     w_AttendanceRecord="Attendance Record";
 
-    
+
     // User
     w_User_UserList = 'User List';
     w_User_AddUser = 'Add User';
@@ -395,6 +395,14 @@ export default class LangObject implements ILang {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+
+    // Member
+    w_Member_List = 'Member List';
+    w_Member_Add = 'Add Member';
+    w_Member_Edit = 'Edit Member';
+    w_Member_View = 'View Member';
+
+    w_Member_ = '';
 
 }
 
