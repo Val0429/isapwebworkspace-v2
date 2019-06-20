@@ -71,6 +71,7 @@ import MyProfile from './MyProfile/MyProfile.vue';
 
 // Report
 import ReportTemplate from './Report/ReportTemplate.vue';
+import Traffic from './Report/Traffic.vue';
 
 // ============================================================= //
 
@@ -114,7 +115,7 @@ $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-questio
 // Report
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-close', redirect: '/reports/report_template' })();
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-close' })(ReportTemplate);
-$({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-close' })();
+$({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-close' })(Traffic);
 $({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-close' })();
 $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-close' })();
 $({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-close' })();
