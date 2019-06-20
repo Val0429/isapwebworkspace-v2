@@ -71,10 +71,8 @@
                         <div class="card-content iv-form-group col-md-12">
                             <b-form-group :label="_('w_Permission_DeviceType')">
                                 <b-form-radio-group
-                                    id="radio-group-1"
-                                    v-model="selected"
-                                    :options="options"
-                                    name="radio-options"
+                                    v-model="$attrs.value"
+                                    :options="devoceTypeItem"
                                 ></b-form-radio-group>
                             </b-form-group>
                         </div>
@@ -145,9 +143,9 @@ export default class PermissionTable extends Vue {
     deviceAreaItem: any = [];
     deviceTimeFromatItem: any = [];
     devoceTypeItem: any = [
-        { text: "Door", value: "first" },
-        { text: "Door Group", value: "second" },
-        { text: "Elevator", value: { fourth: 4 } }
+        { text: "Door", value: "door" },
+        { text: "Door Group", value: "doorGroup" },
+        { text: "Elevator", value: "elevator" }
     ];
 
     created() {}
