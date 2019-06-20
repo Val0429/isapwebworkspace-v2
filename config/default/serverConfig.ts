@@ -1,10 +1,10 @@
 var config: Config = {
-    ip: "localhost",
+    ip: '172.16.10.178',
     port: 6060,
     ssl: false,
 
-    serverFrameworkVersionGreaterThan: "1.06.00"
-}
+    serverFrameworkVersionGreaterThan: '1.06.00',
+};
 export default config;
 
 export interface Config {
