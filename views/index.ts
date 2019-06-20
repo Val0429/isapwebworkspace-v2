@@ -14,7 +14,7 @@ import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 import Member from './components/acs/Member.vue';
-import User from './components/acs/User.vue';
+import User from './components/bar/User.vue';
 import Door from './components/acs/Door.vue';
 import Elevator from './components/acs/Elevator.vue';
 import TimeSchedule from './components/acs/TimeSchedule.vue';

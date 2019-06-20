@@ -21,7 +21,7 @@
             <SidebarHeader label="Menu" />
             <SidebarNav>
                 <SidebarNavItem url="/member" />
-                <!-- <SidebarNavItem url="/user" /> -->
+                <SidebarNavItem url="/user" />
                 <SidebarNavItem url="/door" />
                 <SidebarNavItem url="/doorgroup" />
                 <SidebarNavItem url="/elevator" />
