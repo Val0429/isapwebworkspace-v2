@@ -1,17 +1,15 @@
 <template>
-     <div key="main">
-        <MemberForm />
+    <div key="main">
         <MemberForm1 />
     </div>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
-import MemberForm from './MemberForm.vue';
-import MemberForm1 from './MemberForm1.vue';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
+import MemberForm1 from "./MemberForm1.vue";
 
 @Component({
     components: { MemberForm1 }

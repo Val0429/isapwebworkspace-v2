@@ -6,14 +6,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
-import { EFormQuick, IFormQuick } from '@/../components/form';
+import {
+    Vue,
+    Component,
+    iSAPServerBase,
+    MetaParser,
+    createDecorator,
+    Observe,
+    toEnumInterface
+} from "@/../core";
+import { EFormQuick, IFormQuick } from "@/../components/form";
 
 @Component
-export default class MemberForm1 extends Vue  {
-
-
-}
+export default class MemberForm1 extends Vue {}
 </script>
 
 
