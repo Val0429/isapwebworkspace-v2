@@ -53,12 +53,12 @@
             </iv-card>
         </div>
 
-        <!--Site Form (Add and Edit)-->
+        <!--Site Form (Add and Edit and View)-->
         <div v-if="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view">
-            <iv-auto-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') :  _('w_Permission_PermissionEdit')">
+            <iv-auto-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')">
 
                 <template #toolbox>
-                    <iv-toolbox-back @click="pageToSiteList()" />
+                    <iv-toolbox-back @click="pageToList()" />
                 </template>
 
                 <iv-form
@@ -78,6 +78,23 @@
                 </template>
 
             </iv-auto-card>
+
+            <!-- Sub  Table -->
+            <iv-card :label="_('w_Permission_PermissionList')">
+
+                <iv-table
+                    ref="subTable"
+                    :interface="ISubTable()"
+                    :multiple="tableMultiple"
+                    :data="{data}"
+                    @selected="selectedSubItem($event)"
+                >
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-delete @click="doDelete" />
+                    </template>
+
+                </iv-table>
+            </iv-card>
         </div>
 
     </div>
@@ -187,46 +204,77 @@ export default class PermissionTable extends Vue {
     IForm() {
         return `
             interface {
-
+  
                  /**
                  * @uiLabel - ${this._("w_Permission_PermissionName")}
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
-                permissionName: string;
+                 permissionName: string;
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceType")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceType")}
                  */
-                deviceType: string;
+                 deviceType: string;
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceName")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
                  */
-                     deviceType: ${toEnumInterface(
-                         this.deviceNameItem as any,
-                         false
-                     )};
+                 deviceName?: ${toEnumInterface(
+                     this.deviceNameItem as any,
+                     false
+                 )};
+
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceArea")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceArea")}
                  */
-                    deviceType: ${toEnumInterface(
-                        this.deviceAreaItem as any,
-                        false
-                    )};
+                 deviceArea?: ${toEnumInterface(
+                     this.deviceAreaItem as any,
+                     false
+                 )};
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
                  */
-                 deviceType: ${toEnumInterface(
+                 deviceTimeFormat?: ${toEnumInterface(
                      this.deviceTimeFromatItem as any,
                      false
                  )};
 
+            }
+        `;
+    }
 
+    ISubTable() {
+        return `
+            interface {
+  
+          
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceType")}
+                 */
+                 deviceType: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceName")}
+                 */
+                 deviceName: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 */
+                 deviceArea: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
+                 */
+                 deviceTimeFormat: string;
+
+                 Actions: any;
             }
         `;
     }
