@@ -112,7 +112,7 @@ $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-questio
 $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-question', redirect: '/login' })();
 
 // Report
-$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-question', redirect: '/reports/report_template' })();
+$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-close', redirect: '/reports/report_template' })();
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-close' })(ReportTemplate);
 $({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-close' })();
 $({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-close' })();
