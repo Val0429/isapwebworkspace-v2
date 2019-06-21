@@ -64,7 +64,6 @@
             <iv-form
                 :interface="IAddAndEditForm()"
                 :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
                 @update:personPhoto="updateShowPhoto($event)"
                 @submit="saveAddOrEdit($event)"
             >
@@ -77,7 +76,7 @@
 
                 <template #imageSrc="{ $attrs, $listeners}">
                     <label class="col-md-12">
-                        {{_("w_Member_UpLoadPersonPic")}}
+                        {{_("w_Member_PersonPic")}}
                     </label>
                     <img
                         class="imgSide"
@@ -181,7 +180,21 @@
                             <iv-form
                                 :interface="ITabForm4()"
                                 :value="inputFormData"
+                                @update:cardTemplate="updateShowPhoto($event)"
                             >
+
+                                <template #imageSrc="{ $attrs, $listeners}">
+                                    <label class="col-md-12">
+                                        {{_("w_Member_CardPhoto")}}
+                                    </label>
+                                    <img
+                                        class="imgCard"
+                                        v-if="newImgSrc"
+                                        v-bind="$attrs"
+                                        v-on="$listeners"
+                                        :src="newImgSrc"
+                                    />
+                                </template>
 
                             </iv-form>
                         </template>
@@ -300,7 +313,7 @@ export default class MemberForm1 extends Vue {
     selectedDetail: any = [];
 
     workGroupSelectItem: any = {};
-    userGroupSelectItem: any = {};
+    cardTemplateSelectItem: any = {};
 
     inputTestEmail: string = "";
 
@@ -415,40 +428,6 @@ export default class MemberForm1 extends Vue {
         // }
     }
 
-    tempSaveInputData(data) {
-        switch (data.key) {
-            case "account":
-                this.inputFormData.username = data.value;
-                break;
-            case "password":
-                this.inputFormData.password = data.value;
-                break;
-            case "confirmPassword":
-                this.inputFormData.confirmPassword = data.value;
-                break;
-            case "employeeId":
-                this.inputFormData.employeeId = data.value;
-                break;
-            case "name":
-                this.inputFormData.name = data.value;
-                break;
-            case "email":
-                this.inputFormData.email = data.value;
-                break;
-            case "phone":
-                this.inputFormData.phone = data.value;
-                break;
-            case "siteIds":
-                this.inputFormData.siteIds = data.value;
-                break;
-            case "groupIds":
-                this.inputFormData.groupIds = data.value;
-                break;
-            case "role":
-                this.inputFormData.role = data.value;
-                break;
-        }
-    }
 
     async pageToAdd() {
         this.clearInputData();
@@ -531,9 +510,7 @@ export default class MemberForm1 extends Vue {
     }
 
     updateShowPhoto(data) {
-        if (data) {
-                this.uploadFile(data);
-        }
+        if (data) this.uploadFile(data);
     }
 
     async uploadFile(file) {
@@ -907,8 +884,8 @@ export default class MemberForm1 extends Vue {
                 cardCustodian?: string;
 
                /**
-                * @uiLabel - ${this._("w_Member_PersonPic")}
-                * @uiPlaceHolder - ${this._("w_Member_PersonPic")}
+                * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
+                * @uiPlaceHolder - ${this._("w_Member_UpLoadPersonPic")}
                 * @uiColumnGroup - row13
                 * @uiType - iv-form-file
                 */
@@ -1138,6 +1115,7 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_Password")}
                  * @uiColumnGroup - row2
+                 * @uiType - iv-form-password
                  */
                 password?: string;
 
@@ -1332,10 +1310,20 @@ export default class MemberForm1 extends Vue {
         return `
             interface {
 
+
                 /**
                  * @uiLabel - ${this._("w_Member_CardTemplate")}
+                 * @uiColumnGroup - row13
                  */
-                imageSrc: any;
+                cardTemplate?: ${toEnumInterface(
+                        this.cardTemplateSelectItem as any,
+                        false
+                )};
+
+               /**
+                * @uiColumnGroup - row13
+                */
+                imageSrc?:any;
             }
         `;
     }
@@ -1551,6 +1539,14 @@ export default class MemberForm1 extends Vue {
 <style lang="scss" scoped>
     .imgSide {
         max-width: 200px;
+        min-width: 200px;
+        max-height: none;
+        min-height: auto;
+        height: 100%;
+        margin-bottom: 10px;
+    }
+    .imgCard {
+        max-width: 300px;
         min-width: 200px;
         max-height: none;
         min-height: auto;

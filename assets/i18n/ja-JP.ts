@@ -487,6 +487,7 @@ export default class LangObject implements ILang {
 
     w_Member_SelectTemplate = '選擇模板';
     w_Member_CardTemplate = '卡片模板';
+    w_Member_CardPhoto = '卡片樣式';
 
     w_Member_CarLicenseRecord = '車證紀錄';
     w_Member_ReasonForApplication1 = '申請原因I：';
