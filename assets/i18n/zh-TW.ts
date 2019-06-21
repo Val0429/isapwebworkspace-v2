@@ -497,7 +497,7 @@ export default class LangObject implements ILang {
     w_Member_DateForApplication3 = '發證日期III：';
     w_Member_ResignationRecordCarLicense = '離職繳回紀錄_車證：';
 
-    w_Member_Other = '其他：';
+    w_Member_Other = '其他';
     w_Member_CensusRecord = '普查紀錄：';
     w_Member_CensusRecord1 = '普查紀錄I：';
     w_Member_CensusDate1 = '普查日期I：';

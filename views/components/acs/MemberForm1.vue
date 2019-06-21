@@ -771,12 +771,12 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_Department1")}
                  */
                 Department: string;
-               
+
                 /**
                  * @uiLabel - ${this._("w_Member_CostCenter1")}
                  */
                 CostCenter: string;
-                
+
                 /**
                  * @uiLabel - ${this._("w_Member_StartDate1")}
                  */
@@ -1040,6 +1040,14 @@ export default class MemberForm1 extends Vue {
                  */
                 cardLicense?: string;
 
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense")}
+                 * @uiColumnGroup - row1
+                 */
+                carLicense?: string;
+
+
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense1")}
                  * @uiColumnGroup - row2
@@ -1051,11 +1059,11 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row2
                  */
                 carLicense2?: string;
+                
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense3")}
                  * @uiColumnGroup - row2
-                 * @uiType - iv-form-date
                  */
                 carLicense3?: string;
 
@@ -1277,21 +1285,21 @@ export default class MemberForm1 extends Vue {
     ITabForm5() {
         return `
             interface {
-               carLicenseRecord?: any;
+               censusRecord?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ReasonForApplication1")}
+                 * @uiLabel - ${this._("w_Member_CensusRecord1")}
                  * @uiColumnGroup - row5
                  */
-                reasonForApplication1?: string;
+                censusRecord1?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateForApplication1")}
+                 * @uiLabel - ${this._("w_Member_CensusDate1")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
                  */
-                dateForApplication1?: string;
+                censusDate1?: string;
 
 
                 /**
@@ -1301,68 +1309,8 @@ export default class MemberForm1 extends Vue {
                 row53: string;
 
 
-                /**
-                 * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
-                 * @uiColumnGroup - row6
-                 */
-                reasonForApplication2?: string;
 
-
-                /**
-                 * @uiLabel - ${this._("w_Member_DateForApplication2")}
-                 * @uiColumnGroup - row6
-                 * @uiType - iv-form-date
-                 */
-                dateForApplication2?: string;
-
-
-                /**
-                 * @uiColumnGroup - row6
-                 * @uiHidden - true
-                 */
-                row63: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
-                 * @uiColumnGroup - row7
-                 */
-                reasonForApplication3?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Member_DateForApplication3")}
-                 * @uiColumnGroup - row7
-                 * @uiType - iv-form-date
-                 */
-                dateForApplication3?: string;
-
-
-                /**
-                 * @uiColumnGroup - row7
-                 * @uiHidden - true
-                 */
-                row73: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Member_ResignationRecordCarLicense")}
-                 * @uiColumnGroup - row8
-                 */
-                resignationRecordCarLicense?: string;
-
-                /**
-                 * @uiColumnGroup - row8
-                 * @uiHidden - true
-                 */
-                row82: string;
-
-                 /**
-                 * @uiColumnGroup - row8
-                 * @uiHidden - true
-                 */
-                row83: string;
-            }
+                            }
         `;
     }
     // Morris //
