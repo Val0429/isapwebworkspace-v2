@@ -979,6 +979,7 @@ export default class MemberForm1 extends Vue {
     tempSaveInputData(data) {
         console.log('data - ', data);
         switch (data.key) {
+            // Master
             case "objectId":
                 this.inputFormData.objectId= data.value;
                 break;
@@ -994,92 +995,210 @@ export default class MemberForm1 extends Vue {
             case "chineseName":
                 this.inputFormData.chineseName = data.value;
                 break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
+            case "englishName":
+                this.inputFormData.englishName = data.value;
+                break;
+            case "cardNumber":
+                this.inputFormData.cardNumber = data.value;
+                break;
+            case "cardAllNumber":
+                this.inputFormData.cardAllNumber = data.value;
+                break;
+            case "startDate":
+                this.inputFormData.startDate = data.value;
+                break;
+            case "endDate":
+                this.inputFormData.endDate = data.value;
+                break;
+            case "companyName":
+                this.inputFormData.companyName = data.value;
+                break;
+            case "cardCustodian":
+                this.inputFormData.cardCustodian = data.value;
+                break;
+            case "lastEditPerson":
+                this.inputFormData.lastEditPerson = data.value;
+                break;
+            case "lastEditTime":
+                this.inputFormData.lastEditTime = data.value;
+                break;
 
+            // tab1
+            case "extensionNumber":
+                this.inputFormData.extensionNumber = data.value;
+                break;
+            case "phone":
+                this.inputFormData.phone = data.value;
+                break;
+            case "email":
+                this.inputFormData.email = data.value;
+                break;
+            case "birthday":
+                this.inputFormData.birthday = data.value;
+                break;
+            case "MVPN":
+                this.inputFormData.MVPN = data.value;
+                break;
+            case "gender":
+                this.inputFormData.gender = data.value;
+                break;
+            case "department":
+                this.inputFormData.department = data.value;
+                break;
+            case "costCenter":
+                this.inputFormData.costCenter = data.value;
+                break;
+            case "area":
+                this.inputFormData.area = data.value;
+                break;
+            case "workArea":
+                this.inputFormData.workArea = data.value;
+                break;
+            case "registrationDate":
+                this.inputFormData.registrationDate = data.value;
+                break;
+            case "resignationDate":
+                this.inputFormData.resignationDate = data.value;
+                break;
 
+            // tab2
+            case "carLicenseCategory":
+                this.inputFormData.carLicenseCategory = data.value;
+                break;
+            case "cardLicense":
+                this.inputFormData.cardLicense = data.value;
+                break;
+            case "carLicense":
+                this.inputFormData.carLicense = data.value;
+                break;
+            case "carLicense1":
+                this.inputFormData.carLicense1 = data.value;
+                break;
+            case "carLicense2":
+                this.inputFormData.carLicense2 = data.value;
+                break;
+            case "carLicense3":
+                this.inputFormData.carLicense3 = data.value;
+                break;
+            case "account":
+                this.inputFormData.account = data.value;
+                break;
+            case "password":
+                this.inputFormData.password = data.value;
+                break;
+
+            // tab3
+            case "resignationNote":
+                this.inputFormData.resignationNote = data.value;
+                break;
+            case "resignationRecordCardRecord":
+                this.inputFormData.resignationRecordCardRecord = data.value;
+                break;
+            case "reasonForCard1":
+                this.inputFormData.reasonForCard1 = data.value;
+                break;
+            case "historyForCard1":
+                this.inputFormData.historyForCard1 = data.value;
+                break;
+            case "dateForCard1":
+                this.inputFormData.dateForCard1 = data.value;
+                break;
+            case "reasonForCard2":
+                this.inputFormData.reasonForCard2 = data.value;
+                break;
+            case "historyForCard2":
+                this.inputFormData.historyForCard2 = data.value;
+                break;
+            case "dateForCard2":
+                this.inputFormData.dateForCard2 = data.value;
+                break;
+            case "reasonForCard3":
+                this.inputFormData.reasonForCard3 = data.value;
+                break;
+            case "historyForCard3":
+                this.inputFormData.historyForCard3 = data.value;
+                break;
+            case "dateForCard3":
+                this.inputFormData.dateForCard3 = data.value;
+                break;
+            case "reasonForApplication1":
+                this.inputFormData.reasonForApplication1 = data.value;
+                break;
+            case "dateForApplication1":
+                this.inputFormData.dateForApplication1 = data.value;
+                break;
+            case "reasonForApplication2":
+                this.inputFormData.reasonForApplication2 = data.value;
+                break;
+            case "dateForApplication2":
+                this.inputFormData.dateForApplication2 = data.value;
+                break;
+            case "reasonForApplication3":
+                this.inputFormData.reasonForApplication3 = data.value;
+                break;
+            case "dateForApplication3":
+                this.inputFormData.dateForApplication3 = data.value;
+                break;
+            case "resignationRecordCarLicense":
+                this.inputFormData.resignationRecordCarLicense = data.value;
+                break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
         }
 
     }
