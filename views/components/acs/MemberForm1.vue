@@ -65,7 +65,7 @@
 
         <!-- add -->
         <iv-auto-card
-            v-show="pageStep === ePageStep.add"
+            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view"
             :visible="true"
             :label="pageStep === ePageStep.add ? _('w_Member_Add') :  _('w_Member_Edit')"
         >
@@ -254,34 +254,6 @@
             </iv-form>
 
             <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- view -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label="_('w_User_ViewUser') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
-            >
-
-            </iv-form>
-
-            <template #footer>
                 <b-button
                     variant="dark"
                     size="lg"
@@ -640,6 +612,8 @@ export default class MemberForm1 extends Vue {
 
         if (this.selectedDetail[0] != undefined) {
             let detailData = this.selectedDetail[0];
+
+            console.log('detailData - ', detailData);
 
             // Master form
             if (detailData.objectId != undefined) {
@@ -1953,12 +1927,20 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CompanyName")}
                  * @uiColumnGroup - row1
-                 */
+                 * @uiType - ${
+                        (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                */
                 companyName?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_PersonType")}
                  * @uiColumnGroup - row1
+                 * @uiDisabled - ${
+                        (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 personType?: ${toEnumInterface(
                     this.workGroupSelectItem as any,
@@ -1968,24 +1950,44 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_EmployeeNumber")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 employeeNumber?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_ChineseName")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 chineseName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_EnglishName")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 englishName?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardNumber")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 cardNumber?: string;
 
@@ -2006,6 +2008,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CardCustodian")}
                  * @uiColumnGroup - row3
+                 * @uiType - ${
+                     (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 cardCustodian?: string;
 
@@ -2013,6 +2020,9 @@ export default class MemberForm1 extends Vue {
                 * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
                 * @uiColumnGroup - row13
                 * @uiType - iv-form-file
+                * @uiHidden - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                     }
                 */
                 personPhoto?: string;
 
@@ -2028,6 +2038,9 @@ export default class MemberForm1 extends Vue {
                 * @uiPlaceHolder - ${this._("w_Member_StartDate")}
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
+                * @uiDisabled - ${
+                     (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                 */
                 startDate?: any;
 
@@ -2036,6 +2049,9 @@ export default class MemberForm1 extends Vue {
                 * @uiPlaceHolder - ${this._("w_Member_EndDate")}
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
+                * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                }
                 */
                 endDate?: any;
 
@@ -2087,30 +2103,55 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_ExtensionNumber")}
                  * @uiAttrs - { min: 0}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 extensionNumber?: number;
 
                 /**
                  * @uiLabel - ${this._("w_Member_MVPN")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 MVPN?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_Phone")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 phone?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_Email")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 email?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_Gender")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 gender?: string;
 
@@ -2118,6 +2159,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_Birthday")}
                  * @uiColumnGroup - row2
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 birthday?: string;
 
@@ -2126,24 +2170,44 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_Department")}
                  * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 department?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CostCenter")}
                  * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 costCenter?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_Area")}
                  * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 area?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_WorkArea")}
                  * @uiColumnGroup - row5
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 workArea?: string;
 
@@ -2151,6 +2215,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_RegistrationDate")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 registrationDate?: string;
 
@@ -2158,6 +2225,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_ResignationDate")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 resignationDate?: string;
             }
@@ -2172,36 +2242,66 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicenseCategory")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 carLicenseCategory?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardLicense")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 cardLicense?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 carLicense?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense1")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 carLicense1?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense2")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 carLicense2?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense3")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 carLicense3?: string;
 
@@ -2210,6 +2310,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_Account")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 account?: string;
 
@@ -2217,7 +2322,10 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_Password")}
                  * @uiColumnGroup - row2
                  * @uiType - iv-form-password
-                 */
+                * @uiHidden - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                */
                 password?: string;
 
                 /**
@@ -2238,12 +2346,22 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ResignationNote")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 resignationNote?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_ResignationRecordCardRecord")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 resignationRecordCardRecord?: string;
 
@@ -2256,12 +2374,22 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("ReasonForCard1")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 reasonForCard1?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard1")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 historyForCard1?: string;
 
@@ -2269,18 +2397,31 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateForCard1")}
                  * @uiColumnGroup - row2
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateForCard1?: string;
 
                 /**
                  * @uiLabel - ${this._("ReasonForCard2")}
                  * @uiColumnGroup - row3
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 reasonForCard2?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard2")}
                  * @uiColumnGroup - row3
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 historyForCard2?: string;
 
@@ -2288,18 +2429,31 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateForCard2")}
                  * @uiColumnGroup - row3
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateForCard2?: string;
 
                 /**
                  * @uiLabel - ${this._("ReasonForCard3")}
                  * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 reasonForCard3?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard3")}
                  * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 historyForCard3?: string;
 
@@ -2307,6 +2461,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateForCard3")}
                  * @uiColumnGroup - row4
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateForCard3?: string;
 
@@ -2315,6 +2472,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication1")}
                  * @uiColumnGroup - row5
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 reasonForApplication1?: string;
 
@@ -2322,6 +2484,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateForApplication1")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateForApplication1?: string;
 
@@ -2334,6 +2499,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
                  * @uiColumnGroup - row6
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 reasonForApplication2?: string;
 
@@ -2341,6 +2511,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateForApplication2")}
                  * @uiColumnGroup - row6
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateForApplication2?: string;
 
@@ -2353,6 +2526,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
                  * @uiColumnGroup - row7
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 reasonForApplication3?: string;
 
@@ -2360,6 +2538,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateForApplication3")}
                  * @uiColumnGroup - row7
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateForApplication3?: string;
 
@@ -2372,6 +2553,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ResignationRecordCarLicense")}
                  * @uiColumnGroup - row8
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 resignationRecordCarLicense?: string;
 
@@ -2397,6 +2583,9 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CardTemplate")}
                  * @uiColumnGroup - row13
+                 * @uiDisabled - ${
+            (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+            }
                  */
                 cardTemplate?: ${toEnumInterface(
                     this.cardTemplateSelectItem as any,
@@ -2419,6 +2608,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CensusRecord1")}
                  * @uiColumnGroup - row5
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 censusRecord1?: string;
 
@@ -2426,6 +2620,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_CensusDate1")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 censusDate1?: string;
 
@@ -2438,6 +2635,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CensusRecord2")}
                  * @uiColumnGroup - row6
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 censusRecord2?: string;
 
@@ -2445,6 +2647,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_CensusDate2")}
                  * @uiColumnGroup - row6
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 censusDate2?: string;
 
@@ -2457,6 +2662,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CensusRecord3")}
                  * @uiColumnGroup - row7
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 censusRecord3?: string;
 
@@ -2464,6 +2674,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_CensusDate3")}
                  * @uiColumnGroup - row7
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 censusDate3?: string;
 
@@ -2478,6 +2691,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_InfoOfViolation1")}
                  * @uiColumnGroup - row15
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 infoOfViolation1?: string;
 
@@ -2485,6 +2703,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateOfViolation1")}
                  * @uiColumnGroup - row15
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateOfViolation1?: string;
 
@@ -2497,6 +2718,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_InfoOfViolation2")}
                  * @uiColumnGroup - row16
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 infoOfViolation2?: string;
 
@@ -2504,6 +2730,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateOfViolation2")}
                  * @uiColumnGroup - row16
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateOfViolation2?: string;
 
@@ -2516,6 +2745,11 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_InfoOfViolation3")}
                  * @uiColumnGroup - row17
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 infoOfViolation3?: string;
 
@@ -2523,6 +2757,9 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_DateOfViolation3")}
                  * @uiColumnGroup - row17
                  * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 dateOfViolation3?: string;
 
