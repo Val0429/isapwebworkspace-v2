@@ -298,27 +298,28 @@ export default class PermissionTable extends Vue {
         this.pageStep = EPageStep.view;
     }
 
-    async doSubDelete(datas) {
+    async doSubDelete(data) {
+        console.log("doSubDelete", data);
         await Dialog.confirm(
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of datas) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
+                const deleteParam: {
+                    objectId: string;
+                } = {
+                    objectId: data.objectId
+                };
 
-                    this.$server
-                        .D("/acs/accesslevel", deleteParam)
-                        .then((response: any) => {
-                            this.pageToList();
-                        })
-                        .catch((e: any) => {
-                            console.log(e);
-                        });
-                }
+                this.$server
+                    .D("/acs/accesslevel", deleteParam)
+                    .then((response: any) => {
+                        this.inputFormData.accesslevels = this.inputFormData.accesslevels.filter(
+                            a => a.objectId != data.objectId
+                        );
+                    })
+                    .catch((e: any) => {
+                        console.log(e);
+                    });
             }
         );
     }
