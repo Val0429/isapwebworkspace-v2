@@ -561,6 +561,14 @@ export default class MemberForm1 extends Vue {
                 this.inputFormData.birthday = detailData.DateOfBirth;
             }
 
+            if (detailData.CustomFields != undefined) {
+                for (let content of detailData.CustomFields) {
+                    // Master
+                    // if (content.) {
+                    // }
+                }
+            }
+
             //     inputFormData: any = {
             //     // Master
             //     objectId
@@ -574,56 +582,54 @@ export default class MemberForm1 extends Vue {
             //     cardAllNumber        Credentials[0]CardNumber
             //     startDate            StartDate
             //     endDate              EndDate
-
-            //     companyName          CustomField -> CustomTextBoxControl6__CF
-            //     cardCustodian        CustomField -> CustomTextBoxControl2__CF
-            //     lastEditPerson       CustomField -> CustomTextBoxControl3__CF
-            //     lastEditTime         CustomField -> CustomDateControl2__CF
+            //     companyName          CustomFields -> CustomTextBoxControl6__CF
+            //     cardCustodian        CustomFields -> CustomTextBoxControl2__CF
+            //     lastEditPerson       CustomFields -> CustomTextBoxControl3__CF
+            //     lastEditTime         CustomFields -> CustomDateControl2__CF
 
             //     // tab1
             //     extensionNumber      PhoneNumber
             //     phone                MobileNumber
             //     email                Email
             //     birthday             DateOfBirth
-
-            //     MVPN                 CustomField -> CustomTextBoxControl5__CF_CF
-            //     gender               CustomField -> CustomDropdownControl2__CF_CF
-            //     department           CustomField -> CustomTextBoxControl5__CF_CF_CF
-            //     costCenter           CustomField -> CustomTextBoxControl5__CF_CF_CF_CF
-            //     area                 CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF
-            //     workArea             CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF
-            //     registrationDate     CustomField -> CustomDateControl1__CF_CF_CF
-            //     resignationDate      CustomField -> CustomDateControl1__CF
+            //     MVPN                 CustomFields -> CustomTextBoxControl5__CF_CF
+            //     gender               CustomFields -> CustomDropdownControl2__CF_CF
+            //     department           CustomFields -> CustomTextBoxControl5__CF_CF_CF
+            //     costCenter           CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF
+            //     area                 CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF
+            //     workArea             CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF
+            //     registrationDate     CustomFields -> CustomDateControl1__CF_CF_CF
+            //     resignationDate      CustomFields -> CustomDateControl1__CF
 
             //     // tab2
-            //     carLicenseCategory   CustomField -> CustomDropdownControl2__CF
-            //     cardLicense          CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF
-            //     carLicense           CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF
-            //     carLicense1          CustomField -> CustomTextBoxControl5__CF
-            //     carLicense2          CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-            //     carLicense3          CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+            //     carLicenseCategory   CustomFields -> CustomDropdownControl2__CF
+            //     cardLicense          CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF
+            //     carLicense           CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF
+            //     carLicense1          CustomFields -> CustomTextBoxControl5__CF
+            //     carLicense2          CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+            //     carLicense3          CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
             //     account
             //     password
 
             //     // tab3
-            //     resignationNote              CustomField -> CustomTextBoxControl7__CF_CF
-            //     resignationRecordCardRecord  CustomField -> CustomTextBoxControl7__CF_CF_CF
-            //     reasonForCard1               CustomField -> CustomDropdownControl3__CF_CF
-            //     historyForCard1              CustomField -> CustomTextBoxControl7__CF_CF_CF_CF
-            //     dateForCard1                 CustomField -> CustomDateControl3__CF_CF_CF_CF_CF
-            //     reasonForCard2               CustomField -> CustomDropdownControl3__CF_CF_CF
-            //     historyForCard2              CustomField -> CustomTextBoxControl7__CF_CF_CF_CF_CF
-            //     dateForCard2                 CustomField -> CustomDateControl3__CF_CF_CF_CF_CF_CF
-            //     reasonForCard3               CustomField -> CustomDropdownControl3__CF_CF_CF_CF
-            //     historyForCard3              CustomField -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF
-            //     dateForCard3                 CustomField -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF
-            //     reasonForApplication1        CustomField -> CustomDropdownControl3__CF_CF_CF_CF_CF
-            //     dateForApplication1          CustomField -> CustomDateControl3__CF_CF_CF_CF_CF
-            //     reasonForApplication2        CustomField -> CustomDropdownControl3__CF_CF_CF_CF_CF_CF
-            //     dateForApplication2          CustomField -> CustomDateControl3__CF_CF_CF
-            //     reasonForApplication3        CustomField -> CustomDropdownControl3__CF
-            //     dateForApplication3          CustomField -> CustomDateControl3__CF_CF_CF_CF
-            //     resignationRecordCarLicense  CustomField -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF
+            //     resignationNote              CustomFields -> CustomTextBoxControl7__CF_CF
+            //     resignationRecordCardRecord  CustomFields -> CustomTextBoxControl7__CF_CF_CF
+            //     reasonForCard1               CustomFields -> CustomDropdownControl3__CF_CF
+            //     historyForCard1              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF
+            //     dateForCard1                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
+            //     reasonForCard2               CustomFields -> CustomDropdownControl3__CF_CF_CF
+            //     historyForCard2              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF
+            //     dateForCard2                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF
+            //     reasonForCard3               CustomFields -> CustomDropdownControl3__CF_CF_CF_CF
+            //     historyForCard3              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF
+            //     dateForCard3                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF
+            //     reasonForApplication1        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF
+            //     dateForApplication1          CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
+            //     reasonForApplication2        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF_CF
+            //     dateForApplication2          CustomFields -> CustomDateControl3__CF_CF_CF
+            //     reasonForApplication3        CustomFields -> CustomDropdownControl3__CF
+            //     dateForApplication3          CustomFields -> CustomDateControl3__CF_CF_CF_CF
+            //     resignationRecordCarLicense  CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF
 
             //     // tab4
             // };
