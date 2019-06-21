@@ -14,7 +14,7 @@ import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 import Member from './components/acs/Member.vue';
-import User from './components/bar/User.vue';
+
 import Door from './components/acs/Door.vue';
 import Elevator from './components/acs/Elevator.vue';
 import TimeSchedule from './components/acs/TimeSchedule.vue';
@@ -28,18 +28,35 @@ import ElevatorGroup from './components/acs/ElevatorGroup.vue';
 import AttendanceRecord from './components/acs/AttendanceRecord.vue';
 import EmployeeList from './components/acs/EmployeeList.vue';
 
+import User from './components/bar/User.vue';
+import Site from './components/bar/Site.vue';
+import UserGroup from './components/bar/UserGroup.vue';
+import Region from './components/bar/Region.vue';
+
+
+
 $({ path: '/', name: "Home", redirect: '/member' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
 $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
     $({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
     $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
-    $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
+    $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);    
     $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
     $({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
     $({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
     
-    
+// Users
+$({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);
+$({ path: '/user_group', name: "_('w_Navigation_Users_UserGroup')", icon: 'fa-user' })(UserGroup);
+
+// Sites
+$({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
+
+// Regions
+$({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Region);
+
+
     $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
     $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
     $({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);

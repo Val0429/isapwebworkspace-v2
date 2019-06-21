@@ -22,6 +22,7 @@
             <SidebarNav>
                 <SidebarNavItem url="/member" />
                 <SidebarNavItem url="/user" />
+                <SidebarNavItem url="/user_group" />
                 <SidebarNavItem url="/door" />
                 <SidebarNavItem url="/doorgroup" />
                 <SidebarNavItem url="/elevator" />
@@ -34,6 +35,10 @@
                 <SidebarNavItem url="/accesslevel" />
                 <SidebarNavItem url="/attendance" />
                 <SidebarNavItem url="/employee" />
+                <SidebarNavItem url="/site" />
+                <SidebarNavItem url="/region" />
+                
+                
                 
             </SidebarNav>
         </template>

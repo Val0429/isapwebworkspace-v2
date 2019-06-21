@@ -397,5 +397,11 @@ export default class LangObject implements ILang {
     w_Reset = 'Reset';
     readerIO="Reader I/O";
 
+    w_Navigation_Users = 'Users';
+    w_Navigation_Users_User = 'User';
+    w_Navigation_Users_UserGroup = 'User Group';
+    w_Navigation_Site = 'Site';
+    w_Navigation_Region = 'Region';
+
 }
 
