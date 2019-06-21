@@ -683,10 +683,6 @@ export default class MemberForm1 extends Vue {
         return `
             interface {
 
-                premissionList?: any;
-
-                tabItem?: any;
-
                 /**
                  * @uiLabel - ${this._("w_Member_CompanyName")}
                  * @uiColumnGroup - row1
@@ -709,26 +705,51 @@ export default class MemberForm1 extends Vue {
                 employeeNumber?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CompanyName")}
+                 * @uiLabel - ${this._("w_Member_ChineseName")}
                  * @uiColumnGroup - row2
                  */
-                companyName1?: string;
+                chineseName?: string;
+
 
                 /**
-                 * @uiLabel - ${this._("w_Member_PersonType")}
+                 * @uiLabel - ${this._("w_Member_EnglishName")}
                  * @uiColumnGroup - row2
+                 */
+                englishName?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ChineseName")}
+                 * @uiColumnGroup - row2
+                 */
+                chineseName?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardType")}
+                 * @uiColumnGroup - row3
                  */
                 personType1?: ${toEnumInterface(
                     this.workGroupSelectItem as any,
                     false
                 )};
 
-                /**
-                 * @uiLabel - ${this._("w_Member_EmployeeNumber")}
-                 * @uiColumnGroup - row2
-                 */
 
-                employeeNumber1?: string;
+                /**
+                 * @uiLabel - ${this._("w_Member_CardAllNumber")}
+                 * @uiColumnGroup - row3
+                 */
+                cardAllNumber?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardCustodian")}
+                 * @uiColumnGroup - row3
+                 */
+                cardCustodian?: string;
+
+
+                
 
                 email: string;
 
@@ -757,6 +778,11 @@ export default class MemberForm1 extends Vue {
                 )};
 
                 selectTree?: any;
+
+
+                premissionList?: any;
+
+                tabItem?: any;
 
             }
         `;
