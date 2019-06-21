@@ -106,7 +106,6 @@
                     </h4>
                 </template>
 
-                <!-- Morris -->
                 <template #premissionList>
                     <iv-sort-select
                         v-if="premissionOptions.length > 0"
@@ -236,8 +235,6 @@
 
                 </template>
 
-                <!-- Morris -->
-
                 <template #test="{ $attrs, $listeners }">
                     <div class="mt-2 ml-3 mb-3">
                         <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
@@ -317,6 +314,87 @@ enum EPageStep {
     }
 })
 export default class MemberForm1 extends Vue {
+    // // Master
+    // objectId                     objectId
+    // premissionSelected           AccessRules (premissionTableAPI: tableid => ObjectToken, show: ObjectName)
+    // personType                   ApbWorkgroupId
+    // personType1                  ApbWorkgroupId
+    // employeeNumber               EmployeeNumber
+    // chineseName                  LastName
+    // englishName                  FirstName
+    // cardNumber                   Credentials[0]CardNumber
+    // cardAllNumber                Credentials[0]CardNumber
+    // startDate                    StartDate
+    // endDate                      EndDate
+    // companyName                  CustomFields -> CustomTextBoxControl6__CF
+    // cardCustodian                CustomFields -> CustomTextBoxControl2__CF
+    // lastEditPerson               CustomFields -> CustomTextBoxControl3__CF
+    // lastEditTime                 CustomFields -> CustomDateControl2__CF
+
+    // // tab1
+    // extensionNumber              PhoneNumber
+    // phone                        MobileNumber
+    // email                        Email
+    // birthday                     DateOfBirth
+    // MVPN                         CustomFields -> CustomTextBoxControl5__CF_CF
+    // gender                       CustomFields -> CustomDropdownControl2__CF_CF
+    // department                   CustomFields -> CustomTextBoxControl5__CF_CF_CF
+    // costCenter                   CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF
+    // area                         CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF
+    // workArea                     CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF
+    // registrationDate             CustomFields -> CustomDateControl1__CF_CF_CF
+    // resignationDate              CustomFields -> CustomDateControl1__CF
+
+    // // tab2
+    // carLicenseCategory           CustomFields -> CustomDropdownControl2__CF
+    // cardLicense                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF
+    // carLicense                   CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // carLicense1                  CustomFields -> CustomTextBoxControl5__CF
+    // carLicense2                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // carLicense3                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // account                      PersonalDetails.UserDetails.UserName
+    // password                     PersonalDetails.UserDetails.Password
+
+    // // tab3
+    // resignationNote              CustomFields -> CustomTextBoxControl7__CF_CF
+    // resignationRecordCardRecord  CustomFields -> CustomTextBoxControl7__CF_CF_CF
+    // reasonForCard1               CustomFields -> CustomDropdownControl3__CF_CF
+    // historyForCard1              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF
+    // dateForCard1                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
+    // reasonForCard2               CustomFields -> CustomDropdownControl3__CF_CF_CF
+    // historyForCard2              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF
+    // dateForCard2                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF
+    // reasonForCard3               CustomFields -> CustomDropdownControl3__CF_CF_CF_CF
+    // historyForCard3              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF
+    // dateForCard3                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF
+    // reasonForApplication1        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF
+    // dateForApplication1          CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
+    // reasonForApplication2        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF_CF
+    // dateForApplication2          CustomFields -> CustomDateControl3__CF_CF_CF
+    // reasonForApplication3        CustomFields -> CustomDropdownControl3__CF
+    // dateForApplication3          CustomFields -> CustomDateControl3__CF_CF_CF_CF
+    // resignationRecordCarLicense  CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF
+
+    // // tab4
+    // cardTemplate
+    // imageSrc
+
+    // // tab 5
+    // censusRecord1                CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusDate1                  CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusRecord2                CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusDate2                  CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusRecord3                CustomFields -> CustomTextBoxControl7__CF
+    // censusDate3                  CustomFields -> CustomDateControl3__CF
+    // infoOfViolation1             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF
+    // dateOfViolation1             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF
+    // infoOfViolation2             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // dateOfViolation2             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // infoOfViolation3             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // dateOfViolation3             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+
+    ////////////////////////////////////////////////////////////////
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -341,27 +419,27 @@ export default class MemberForm1 extends Vue {
         // Master
         objectId: "",
         premissionSelected: [],
-        companyName: "",
         personType: "",
+        personType1: "",
         employeeNumber: "",
         chineseName: "",
         englishName: "",
         cardNumber: "",
-        personType1: "",
         cardAllNumber: "",
-        cardCustodian: "",
         startDate: null,
         endDate: null,
+        companyName: "",
+        cardCustodian: "",
         lastEditPerson: "",
         lastEditTime: "",
 
         // tab1
         extensionNumber: "",
-        MVPN: "",
         phone: "",
         email: "",
-        gender: "",
         birthday: null,
+        MVPN: "",
+        gender: "",
         department: "",
         costCenter: "",
         area: "",
@@ -397,9 +475,25 @@ export default class MemberForm1 extends Vue {
         dateForApplication2: null,
         reasonForApplication3: "",
         dateForApplication3: null,
-        resignationRecordCarLicense: ""
+        resignationRecordCarLicense: "",
 
         // tab4
+        cardTemplate: "",
+        imageSrc: "",
+
+        // tab 5
+        censusRecord1: "",
+        censusDate1: null,
+        censusRecord2: "",
+        censusDate2: null,
+        censusRecord3: "",
+        censusDate3: null,
+        infoOfViolation1: "",
+        dateOfViolation1: null,
+        infoOfViolation2: "",
+        dateOfViolation2: null,
+        infoOfViolation3: "",
+        dateOfViolation3: null
     };
 
     clearInputData() {
@@ -408,27 +502,27 @@ export default class MemberForm1 extends Vue {
             // Master
             objectId: "",
             premissionSelected: [],
-            companyName: "",
             personType: "",
+            personType1: "",
             employeeNumber: "",
             chineseName: "",
             englishName: "",
             cardNumber: "",
-            personType1: "",
             cardAllNumber: "",
-            cardCustodian: "",
             startDate: null,
             endDate: null,
+            companyName: "",
+            cardCustodian: "",
             lastEditPerson: "",
             lastEditTime: "",
 
             // tab1
             extensionNumber: "",
-            MVPN: "",
             phone: "",
             email: "",
-            gender: "",
             birthday: null,
+            MVPN: "",
+            gender: "",
             department: "",
             costCenter: "",
             area: "",
@@ -464,9 +558,25 @@ export default class MemberForm1 extends Vue {
             dateForApplication2: null,
             reasonForApplication3: "",
             dateForApplication3: null,
-            resignationRecordCarLicense: ""
+            resignationRecordCarLicense: "",
 
             // tab4
+            cardTemplate: "",
+            imageSrc: "",
+
+            // tab 5
+            censusRecord1: "",
+            censusDate1: null,
+            censusRecord2: "",
+            censusDate2: null,
+            censusRecord3: "",
+            censusDate3: null,
+            infoOfViolation1: "",
+            dateOfViolation1: null,
+            infoOfViolation2: "",
+            dateOfViolation2: null,
+            infoOfViolation3: "",
+            dateOfViolation3: null
         };
     }
 
@@ -474,13 +584,10 @@ export default class MemberForm1 extends Vue {
 
     mounted() {
         this.initSelectItemWorkGroup();
-        this.initDepartment();
-        this.initSelectItemWorkGroup();
     }
 
     async initSelectItemWorkGroup() {
         this.workGroupSelectItem = {};
-
         await this.$server
             .R("/acs/workgroup")
             .then((response: any) => {
@@ -489,26 +596,6 @@ export default class MemberForm1 extends Vue {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.workGroupSelectItem[returnValue.objectId] =
                             returnValue.groupname;
-                    }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
-
-    async initDepartment() {
-        await this.$server
-            .R("/acs/member")
-            .then((response: any) => {
-                // console.log('returnValue - ', response.results.CustomFields);
-                if (response != undefined) {
-                    for (const returnValue of response.results.CustomFields) {
-                        console.log("returnValue - ", returnValue);
                     }
                 }
             })
@@ -537,42 +624,37 @@ export default class MemberForm1 extends Vue {
 
             // Master form
             if (detailData.objectId != undefined) {
-                this.inputFormData.objectId = detailData.objectId;
+                this.inputFormData.objectId = detailData.objectId.toString();
             }
 
             if (detailData.AccessRules != undefined) {
                 for (let rules of detailData.AccessRules) {
-                    // Morris === premissionTableAPI: tableid => ObjectToken, show: ObjectName
                     if (
                         rules.ObjectToken != undefined &&
                         rules.ObjectName != undefined
                     ) {
-                        let tempData = {
-                            value: rules.value,
-                            text: rules.text
-                        };
                         this.inputFormData.premissionSelected.push(
-                            rules.ObjectToken
+                            rules.ObjectToken.toString()
                         );
                     }
                 }
             }
 
             if (detailData.ApbWorkgroupId != undefined) {
-                this.inputFormData.personType = detailData.ApbWorkgroupId;
-                this.inputFormData.personType1 = detailData.ApbWorkgroupId;
+                this.inputFormData.personType = detailData.ApbWorkgroupId.toString();
+                this.inputFormData.personType1 = detailData.ApbWorkgroupId.toString();
             }
 
             if (detailData.EmployeeNumber != undefined) {
-                this.inputFormData.employeeNumber = detailData.EmployeeNumber;
+                this.inputFormData.employeeNumber = detailData.EmployeeNumber.toString();
             }
 
             if (detailData.LastName != undefined) {
-                this.inputFormData.chineseName = detailData.LastName;
+                this.inputFormData.chineseName = detailData.LastName.toString();
             }
 
             if (detailData.FirstName != undefined) {
-                this.inputFormData.englishName = detailData.FirstName;
+                this.inputFormData.englishName = detailData.FirstName.toString();
             }
 
             if (
@@ -580,10 +662,8 @@ export default class MemberForm1 extends Vue {
                 detailData.Credentials[0] != undefined &&
                 detailData.Credentials[0].CardNumber != undefined
             ) {
-                this.inputFormData.cardNumber =
-                    detailData.Credentials[0].CardNumber;
-                this.inputFormData.cardAllNumber =
-                    detailData.Credentials[0].CardNumber;
+                this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber.toString();
+                this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber.toString();
             }
 
             if (
@@ -609,13 +689,13 @@ export default class MemberForm1 extends Vue {
 
             // tab1
             if (detailData.PhoneNumber != undefined) {
-                this.inputFormData.extensionNumber = detailData.PhoneNumber;
+                this.inputFormData.extensionNumber = detailData.PhoneNumber.toString();
             }
             if (detailData.MobileNumber != undefined) {
-                this.inputFormData.phone = detailData.MobileNumber;
+                this.inputFormData.phone = detailData.MobileNumber.toString();
             }
             if (detailData.Email != undefined) {
-                this.inputFormData.email = detailData.Email;
+                this.inputFormData.email = detailData.Email.toString();
             }
             if (
                 detailData.DateOfBirth != undefined &&
@@ -630,6 +710,27 @@ export default class MemberForm1 extends Vue {
                 }
             }
 
+            // tab2
+            if (
+                detailData.PersonalDetails != undefined &&
+                detailData.PersonalDetails.UserDetails != undefined &&
+                detailData.PersonalDetails.UserDetails.UserName != undefined &&
+                detailData.PersonalDetails.UserDetails.UserName != ""
+            ) {
+                this.inputFormData.account =
+                    detailData.PersonalDetails.UserDetails.UserName;
+            }
+
+            if (
+                detailData.PersonalDetails != undefined &&
+                detailData.PersonalDetails.UserDetails != undefined &&
+                detailData.PersonalDetails.UserDetails.Password != undefined &&
+                detailData.PersonalDetails.UserDetails.Password != ""
+            ) {
+                this.inputFormData.password =
+                    detailData.PersonalDetails.UserDetails.Password;
+            }
+
             if (detailData.CustomFields != undefined) {
                 for (let content of detailData.CustomFields) {
                     if (
@@ -638,60 +739,57 @@ export default class MemberForm1 extends Vue {
                     ) {
                         // Master
                         if (content.FiledName == "CustomTextBoxControl6__CF") {
-                            this.inputFormData.companyName = content.FieldValue;
+                            this.inputFormData.companyName = content.FieldValue.toString();
                         }
                         if (content.FiledName == "CustomTextBoxControl2__CF") {
-                            this.inputFormData.cardCustodian =
-                                content.FieldValue;
+                            this.inputFormData.cardCustodian = content.FieldValue.toString();
                         }
                         if (content.FiledName == "CustomTextBoxControl3__CF") {
-                            this.inputFormData.lastEditPerson =
-                                content.FieldValue;
+                            this.inputFormData.lastEditPerson = content.FieldValue.toString();
                         }
                         if (content.FiledName == "CustomDateControl2__CF") {
-                            this.inputFormData.lastEditTime =
-                                content.FieldValue;
+                            this.inputFormData.lastEditTime = content.FieldValue.toString();
                         }
 
                         // tab1
                         if (
                             content.FiledName == "CustomTextBoxControl5__CF_CF"
                         ) {
-                            this.inputFormData.MVPN = content.FieldValue;
+                            this.inputFormData.MVPN = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName == "CustomDropdownControl2__CF_CF"
                         ) {
-                            this.inputFormData.gender = content.FieldValue;
+                            this.inputFormData.gender = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF"
                         ) {
-                            this.inputFormData.department = content.FieldValue;
+                            this.inputFormData.department = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.costCenter = content.FieldValue;
+                            this.inputFormData.costCenter = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.area = content.FieldValue;
+                            this.inputFormData.area = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.workArea = content.FieldValue;
+                            this.inputFormData.workArea = content.FieldValue.toString();
                         }
 
                         if (
@@ -707,74 +805,68 @@ export default class MemberForm1 extends Vue {
                         }
 
                         if (content.FiledName == "CustomDateControl1__CF") {
-                            this.inputFormData.resignationDate =
-                                content.FieldValue;
+                            this.inputFormData.resignationDate = content.FieldValue.toString();
                         }
 
                         // tab2
                         if (content.FiledName == "CustomDropdownControl2__CF") {
-                            this.inputFormData.carLicenseCategory =
-                                content.FieldValue;
+                            this.inputFormData.carLicenseCategory = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.cardLicense = content.FieldValue;
+                            this.inputFormData.cardLicense = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.carLicense = content.FieldValue;
+                            this.inputFormData.carLicense = content.FieldValue.toString();
                         }
 
                         if (content.FiledName == "CustomTextBoxControl5__CF") {
-                            this.inputFormData.carLicense1 = content.FieldValue;
+                            this.inputFormData.carLicense1 = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.carLicense2 = content.FieldValue;
+                            this.inputFormData.carLicense2 = content.FieldValue.toString();
                         }
 
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.carLicense3 = content.FieldValue;
+                            this.inputFormData.carLicense3 = content.FieldValue.toString();
                         }
 
                         // tab3
                         if (
                             content.FiledName == "CustomTextBoxControl7__CF_CF"
                         ) {
-                            this.inputFormData.resignationNote =
-                                content.FieldValue;
+                            this.inputFormData.resignationNote = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl7__CF_CF_CF"
                         ) {
-                            this.inputFormData.resignationRecordCardRecord =
-                                content.FieldValue;
+                            this.inputFormData.resignationRecordCardRecord = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName == "CustomDropdownControl3__CF_CF"
                         ) {
-                            this.inputFormData.reasonForCard1 =
-                                content.FieldValue;
+                            this.inputFormData.reasonForCard1 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl7__CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.historyForCard1 =
-                                content.FieldValue;
+                            this.inputFormData.historyForCard1 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
@@ -793,15 +885,13 @@ export default class MemberForm1 extends Vue {
                             content.FiledName ==
                             "CustomDropdownControl3__CF_CF_CF"
                         ) {
-                            this.inputFormData.reasonForCard2 =
-                                content.FieldValue;
+                            this.inputFormData.reasonForCard2 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl7__CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.historyForCard2 =
-                                content.FieldValue;
+                            this.inputFormData.historyForCard2 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
@@ -809,7 +899,7 @@ export default class MemberForm1 extends Vue {
                         ) {
                             try {
                                 this.inputFormData.dateForCard2 = new Date(
-                                    content.FieldValue
+                                    content.FieldValue.toString()
                                 );
                             } catch (e) {
                                 console.log(e);
@@ -819,15 +909,13 @@ export default class MemberForm1 extends Vue {
                             content.FiledName ==
                             "CustomDropdownControl3__CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.reasonForCard3 =
-                                content.FieldValue;
+                            this.inputFormData.reasonForCard3 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
                             "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.historyForCard3 =
-                                content.FieldValue;
+                            this.inputFormData.historyForCard3 = content.FieldValue.toString();
                         }
 
                         if (
@@ -846,8 +934,7 @@ export default class MemberForm1 extends Vue {
                             content.FiledName ==
                             "CustomDropdownControl3__CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.reasonForApplication1 =
-                                content.FieldValue;
+                            this.inputFormData.reasonForApplication1 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
@@ -865,8 +952,7 @@ export default class MemberForm1 extends Vue {
                             content.FiledName ==
                             "CustomDropdownControl3__CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.reasonForApplication2 =
-                                content.FieldValue;
+                            this.inputFormData.reasonForApplication2 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName == "CustomDateControl3__CF_CF_CF"
@@ -881,8 +967,7 @@ export default class MemberForm1 extends Vue {
                         }
 
                         if (content.FiledName == "CustomDropdownControl3__CF") {
-                            this.inputFormData.reasonForApplication3 =
-                                content.FieldValue;
+                            this.inputFormData.reasonForApplication3 = content.FieldValue.toString();
                         }
                         if (
                             content.FiledName ==
@@ -900,77 +985,117 @@ export default class MemberForm1 extends Vue {
                             content.FiledName ==
                             "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF"
                         ) {
-                            this.inputFormData.resignationRecordCarLicense =
-                                content.FieldValue;
+                            this.inputFormData.resignationRecordCarLicense = content.FieldValue.toString();
+                        }
+
+                        // tab 5
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.censusRecord1 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.censusDate1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.censusRecord2 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.censusDate2 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (content.FiledName == "CustomTextBoxControl7__CF") {
+                            this.inputFormData.censusRecord3 = content.FieldValue.toString();
+                        }
+
+                        if (content.FiledName == "CustomDateControl3__CF") {
+                            try {
+                                this.inputFormData.censusDate3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.infoOfViolation1 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateOfViolation1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.infoOfViolation2 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateOfViolation2 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.infoOfViolation3 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateOfViolation3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
                         }
                     }
                 }
             }
-
-            //     inputFormData: any = {
-            //     // Master
-            //     objectId
-            //     premissionSelected   AccessRules
-            //     personType           ApbWorkgroupId
-            //     personType1          ApbWorkgroupId
-            //     employeeNumber       EmployeeNumber
-            //     chineseName          LastName
-            //     englishName          FirstName
-            //     cardNumber           Credentials[0]CardNumber
-            //     cardAllNumber        Credentials[0]CardNumber
-            //     startDate            StartDate
-            //     endDate              EndDate
-            //     companyName          CustomFields -> CustomTextBoxControl6__CF
-            //     cardCustodian        CustomFields -> CustomTextBoxControl2__CF
-            //     lastEditPerson       CustomFields -> CustomTextBoxControl3__CF
-            //     lastEditTime         CustomFields -> CustomDateControl2__CF
-
-            //     // tab1
-            //     extensionNumber      PhoneNumber
-            //     phone                MobileNumber
-            //     email                Email
-            //     birthday             DateOfBirth
-            //     MVPN                 CustomFields -> CustomTextBoxControl5__CF_CF
-            //     gender               CustomFields -> CustomDropdownControl2__CF_CF
-            //     department           CustomFields -> CustomTextBoxControl5__CF_CF_CF
-            //     costCenter           CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF
-            //     area                 CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF
-            //     workArea             CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF
-            //     registrationDate     CustomFields -> CustomDateControl1__CF_CF_CF
-            //     resignationDate      CustomFields -> CustomDateControl1__CF
-
-            //     // tab2
-            //     carLicenseCategory   CustomFields -> CustomDropdownControl2__CF
-            //     cardLicense          CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF
-            //     carLicense           CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF
-            //     carLicense1          CustomFields -> CustomTextBoxControl5__CF
-            //     carLicense2          CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-            //     carLicense3          CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-            //     account
-            //     password
-
-            //     // tab3
-            //     resignationNote              CustomFields -> CustomTextBoxControl7__CF_CF
-            //     resignationRecordCardRecord  CustomFields -> CustomTextBoxControl7__CF_CF_CF
-            //     reasonForCard1               CustomFields -> CustomDropdownControl3__CF_CF
-            //     historyForCard1              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF
-            //     dateForCard1                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
-            //     reasonForCard2               CustomFields -> CustomDropdownControl3__CF_CF_CF
-            //     historyForCard2              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF
-            //     dateForCard2                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF
-            //     reasonForCard3               CustomFields -> CustomDropdownControl3__CF_CF_CF_CF
-            //     historyForCard3              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF
-            //     dateForCard3                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF
-            //     reasonForApplication1        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF
-            //     dateForApplication1          CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
-            //     reasonForApplication2        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF_CF
-            //     dateForApplication2          CustomFields -> CustomDateControl3__CF_CF_CF
-            //     reasonForApplication3        CustomFields -> CustomDropdownControl3__CF
-            //     dateForApplication3          CustomFields -> CustomDateControl3__CF_CF_CF_CF
-            //     resignationRecordCarLicense  CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF
-
-            //     // tab4
-            // };
         }
 
         this.pageToAdd();
@@ -1082,12 +1207,9 @@ export default class MemberForm1 extends Vue {
     }
 
     async pageToAdd() {
-        this.clearInputData();
-        this.initPremission();
         this.pageStep = EPageStep.add;
     }
 
-    // Morris //
     async initPremission() {
         let param: {
             paging: {
@@ -1110,8 +1232,8 @@ export default class MemberForm1 extends Vue {
                             content.tablename != undefined
                         ) {
                             let tempOption: ISortSelectOption = {
-                                value: content.tableid,
-                                text: content.tablename
+                                value: content.tableid.toString(),
+                                text: content.tablename.toString()
                             };
                             this.premissionOptions.push(tempOption);
                         }
@@ -1126,7 +1248,6 @@ export default class MemberForm1 extends Vue {
                 return false;
             });
     }
-    // Morris //
 
     async pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
@@ -1470,20 +1591,17 @@ export default class MemberForm1 extends Vue {
                  */
                 chineseName: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_EnglishName")}
                  * @uiColumnGroup - row2
                  */
                 englishName?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CardNumber")}
                  * @uiColumnGroup - row2
                  */
                 cardNumber?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardType")}
@@ -1519,9 +1637,7 @@ export default class MemberForm1 extends Vue {
                 */
                 imageSrc?:any;
 
-
                 info?: any;
-
 
                 /**
                 * @uiLabel - ${this._("w_Member_StartDate")}
@@ -1531,7 +1647,6 @@ export default class MemberForm1 extends Vue {
                 */
                 startDate?: any;
 
-
                 /**
                 * @uiLabel - ${this._("w_Member_EndDate")}
                 * @uiPlaceHolder - ${this._("w_Member_EndDate")}
@@ -1540,7 +1655,6 @@ export default class MemberForm1 extends Vue {
                 */
                 endDate?: any;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_LastEditPerson")}
                  * @uiPlaceHolder - ${this._("w_Member_LastEditPerson")}
@@ -1548,7 +1662,6 @@ export default class MemberForm1 extends Vue {
                  * @uiType - iv-form-label
                  */
                 lastEditPerson?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_LastEditTime")}
@@ -1563,7 +1676,6 @@ export default class MemberForm1 extends Vue {
                  * @uiHidden - true
                  */
                 row62?: string;
-
 
                 /**
                  * @uiColumnGroup - row6
@@ -1581,13 +1693,11 @@ export default class MemberForm1 extends Vue {
         `;
     }
 
-    // Morris //
     ITabForm1() {
         return `
             interface {
 
                 personInfo?: any;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_ExtensionNumber")}
@@ -1596,20 +1706,17 @@ export default class MemberForm1 extends Vue {
                  */
                 extensionNumber?: number;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_MVPN")}
                  * @uiColumnGroup - row1
                  */
                 MVPN?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Phone")}
                  * @uiColumnGroup - row1
                  */
                 phone?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_Email")}
@@ -1623,7 +1730,6 @@ export default class MemberForm1 extends Vue {
                  */
                 gender?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Birthday")}
                  * @uiColumnGroup - row2
@@ -1633,13 +1739,11 @@ export default class MemberForm1 extends Vue {
 
                 companyInfo?: any;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Department")}
                  * @uiColumnGroup - row4
                  */
                 department?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CostCenter")}
@@ -1647,20 +1751,17 @@ export default class MemberForm1 extends Vue {
                  */
                 costCenter?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Area")}
                  * @uiColumnGroup - row4
                  */
                 area?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_WorkArea")}
                  * @uiColumnGroup - row5
                  */
                 workArea?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_RegistrationDate")}
@@ -1669,7 +1770,7 @@ export default class MemberForm1 extends Vue {
                  */
                 registrationDate?: string;
 
-                                /**
+                /**
                  * @uiLabel - ${this._("w_Member_ResignationDate")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
@@ -1684,13 +1785,11 @@ export default class MemberForm1 extends Vue {
             interface {
                 carLicenseData?: any;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicenseCategory")}
                  * @uiColumnGroup - row1
                  */
                 carLicenseCategory?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardLicense")}
@@ -1698,13 +1797,11 @@ export default class MemberForm1 extends Vue {
                  */
                 cardLicense?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense")}
                  * @uiColumnGroup - row1
                  */
                 carLicense?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense1")}
@@ -1718,7 +1815,6 @@ export default class MemberForm1 extends Vue {
                  */
                 carLicense2?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense3")}
                  * @uiColumnGroup - row2
@@ -1727,13 +1823,11 @@ export default class MemberForm1 extends Vue {
 
                 accountInfo?: any;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Account")}
                  * @uiColumnGroup - row2
                  */
                 account?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_Password")}
@@ -1741,7 +1835,6 @@ export default class MemberForm1 extends Vue {
                  * @uiType - iv-form-password
                  */
                 password?: string;
-
 
                 /**
                  * @uiColumnGroup - row2
@@ -1764,13 +1857,11 @@ export default class MemberForm1 extends Vue {
                  */
                 resignationNote?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_ResignationRecordCardRecord")}
                  * @uiColumnGroup - row1
                  */
                 resignationRecordCardRecord?: string;
-
 
                 /**
                  * @uiColumnGroup - row1
@@ -1778,13 +1869,11 @@ export default class MemberForm1 extends Vue {
                  */
                 row13?: string;
 
-
                 /**
                  * @uiLabel - ${this._("ReasonForCard1")}
                  * @uiColumnGroup - row2
                  */
                 reasonForCard1?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard1")}
@@ -1804,7 +1893,6 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row3
                  */
                 reasonForCard2?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard2")}
@@ -1838,7 +1926,6 @@ export default class MemberForm1 extends Vue {
                  */
                 dateForCard3?: string;
 
-
                 carLicenseRecord?: any;
 
                 /**
@@ -1847,7 +1934,6 @@ export default class MemberForm1 extends Vue {
                  */
                 reasonForApplication1?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_DateForApplication1")}
                  * @uiColumnGroup - row5
@@ -1855,20 +1941,17 @@ export default class MemberForm1 extends Vue {
                  */
                 dateForApplication1?: string;
 
-
                 /**
                  * @uiColumnGroup - row5
                  * @uiHidden - true
                  */
                 row53?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
                  * @uiColumnGroup - row6
                  */
                 reasonForApplication2?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_DateForApplication2")}
@@ -1877,20 +1960,17 @@ export default class MemberForm1 extends Vue {
                  */
                 dateForApplication2?: string;
 
-
                 /**
                  * @uiColumnGroup - row6
                  * @uiHidden - true
                  */
                 row63?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
                  * @uiColumnGroup - row7
                  */
                 reasonForApplication3?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_DateForApplication3")}
@@ -1899,13 +1979,11 @@ export default class MemberForm1 extends Vue {
                  */
                 dateForApplication3?: string;
 
-
                 /**
                  * @uiColumnGroup - row7
                  * @uiHidden - true
                  */
                 row73?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_ResignationRecordCarLicense")}
@@ -1931,7 +2009,6 @@ export default class MemberForm1 extends Vue {
     ITabForm4() {
         return `
             interface {
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardTemplate")}
@@ -1961,7 +2038,6 @@ export default class MemberForm1 extends Vue {
                  */
                 censusRecord1?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CensusDate1")}
                  * @uiColumnGroup - row5
@@ -1969,20 +2045,17 @@ export default class MemberForm1 extends Vue {
                  */
                 censusDate1?: string;
 
-
                 /**
                  * @uiColumnGroup - row5
                  * @uiHidden - true
                  */
                 row53?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CensusRecord2")}
                  * @uiColumnGroup - row6
                  */
                 censusRecord2?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CensusDate2")}
@@ -1991,20 +2064,17 @@ export default class MemberForm1 extends Vue {
                  */
                 censusDate2?: string;
 
-
                 /**
                  * @uiColumnGroup - row6
                  * @uiHidden - true
                  */
                 row63?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CensusRecord3")}
                  * @uiColumnGroup - row7
                  */
                 censusRecord3?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CensusDate3")}
@@ -2013,13 +2083,11 @@ export default class MemberForm1 extends Vue {
                  */
                 censusDate3?: string;
 
-
                 /**
                  * @uiColumnGroup - row7
                  * @uiHidden - true
                  */
                 row73?: string;
-
 
                parkingViolation?: any;
 
@@ -2029,7 +2097,6 @@ export default class MemberForm1 extends Vue {
                  */
                 infoOfViolation1?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_DateOfViolation1")}
                  * @uiColumnGroup - row15
@@ -2037,20 +2104,17 @@ export default class MemberForm1 extends Vue {
                  */
                 dateOfViolation1?: string;
 
-
                 /**
                  * @uiColumnGroup - row15
                  * @uiHidden - true
                  */
                 row153?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_InfoOfViolation2")}
                  * @uiColumnGroup - row16
                  */
                 infoOfViolation2?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_DateOfViolation2")}
@@ -2059,13 +2123,11 @@ export default class MemberForm1 extends Vue {
                  */
                 dateOfViolation2?: string;
 
-
                 /**
                  * @uiColumnGroup - row16
                  * @uiHidden - true
                  */
                 row163?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_InfoOfViolation3")}
@@ -2073,14 +2135,12 @@ export default class MemberForm1 extends Vue {
                  */
                 infoOfViolation3?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_DateOfViolation3")}
                  * @uiColumnGroup - row17
                  * @uiType - iv-form-date
                  */
                 dateOfViolation3?: string;
-
 
                 /**
                  * @uiColumnGroup - row17
@@ -2091,69 +2151,9 @@ export default class MemberForm1 extends Vue {
              }
         `;
     }
-    // Morris //
 
     IViewForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_Account")}
-                 * @uiType - iv-form-label
-                 */
-                username?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Name")}
-                 * @uiType - iv-form-label
-                 */
-                name?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiType - iv-form-label
-                 */
-                employeeId?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Email")}
-                 * @uiType - iv-form-label
-                 */
-                email?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiType - iv-form-label
-                 */
-                phone?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_Role")}
-                 * @uiType - iv-form-label
-                 */
-                role?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 * @uiType - iv-form-label
-                 */
-                groupIdsText?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiType - iv-form-label
-                 */
-                siteIdsText: string;
-
-            }
-        `;
+        return `interface{}`;
     }
 }
 </script>
