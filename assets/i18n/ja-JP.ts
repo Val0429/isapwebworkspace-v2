@@ -65,6 +65,8 @@ export default class LangObject implements ILang {
     groupid = 'Group Id';
     groupname = 'Group Name';
     doors = 'Doors';
+    doorscount = 'Doors Count';
+    readerscount= 'Readers Count';
 
     w_Elevator = 'Elevator';
     w_ElevatorAdd = 'Add Elevator';
@@ -220,6 +222,10 @@ export default class LangObject implements ILang {
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
 
+     // Dialog
+     w_Dialog_ErrorTitle = 'Something wrong';
+     w_Dialog_SuccessTitle = 'Success';
+     
     // common
     w_Error = 'Error';
     w_NextPage = 'Next';

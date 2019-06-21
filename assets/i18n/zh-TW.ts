@@ -66,6 +66,8 @@ export default class LangObject implements ILang {
     groupid = '門號群組ID';
     groupname = '門號群組名稱';
     doors = '';
+    doorscount = 'Doors Count';
+    readerscount= 'Readers Count';
 
     w_Elevator = '電梯';
     w_ElevatorAdd = '新增電梯';
@@ -221,6 +223,10 @@ export default class LangObject implements ILang {
 
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
+
+    // Dialog
+    w_Dialog_ErrorTitle = 'Something wrong';
+    w_Dialog_SuccessTitle = 'Success';
 
     // common
     w_Error = 'Error';

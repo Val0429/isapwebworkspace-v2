@@ -44,11 +44,7 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {   
-                    /**
-                    * @uiLabel - ${this._("groupid")}
-                    */
-                    groupid:number;       
+                interface {       
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -56,21 +52,13 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("elevators")}
                     */
-                    elevators:string;
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status: number;                 
+                    elevators:string;               
                 }
                 `;
             case EFormQuick.Add:
             case EFormQuick.Edit:
                 return `
-                interface {
-                    /**
-                    * @uiLabel - ${this._("groupid")}
-                    */
-                    groupid:number;       
+                interface {     
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -78,11 +66,7 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("elevators")}
                     */
-                    elevators:string;
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status?: number;      
+                    elevators:string; 
                 }
                 `;
         }
