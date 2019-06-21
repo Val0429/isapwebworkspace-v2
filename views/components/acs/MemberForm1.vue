@@ -5,8 +5,20 @@
             :label="_('w_Member_List')"
         >
             <template #toolbox>
-                <iv-toolbox-add @click="pageToAdd()" />
-            </template>
+                <iv-toolbox-view
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToView"
+                />
+                <iv-toolbox-edit
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToEdit(ePageStep.edit)"
+                />
+                <iv-toolbox-delete
+                    :disabled="isSelected.length === 0"
+                    @click="doDelete"
+                />
+                <iv-toolbox-divider />
+                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />            </template>
 
             <iv-table
                 ref="listTable"
@@ -525,7 +537,7 @@ export default class MemberForm1 extends Vue {
                         return;
                     };
                 } else {
-                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
+                    Dialog.error(this._("w_Member_ErrorUploadFile"));
                 }
             });
         }
@@ -557,11 +569,10 @@ export default class MemberForm1 extends Vue {
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_AddUserSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_AddUserFailed"));
+                        Dialog.error(this._("w_Member_AddFailed"));
                         return false;
                     }
                 }
@@ -571,7 +582,7 @@ export default class MemberForm1 extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_AddUserFailed"));
+                    Dialog.error(this._("w_Member_AddFailed"));
                     return false;
                 }
                 console.log(e);
@@ -601,11 +612,10 @@ export default class MemberForm1 extends Vue {
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_EditUserSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_EditUserFailed"));
+                        Dialog.error(this._("w_Member_EditFailed"));
                         return false;
                     }
                 }
@@ -615,7 +625,7 @@ export default class MemberForm1 extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_EditUserFailed"));
+                    Dialog.error(this._("w_Member_EditFailed"));
                     return false;
                 }
                 console.log(e);
@@ -625,7 +635,7 @@ export default class MemberForm1 extends Vue {
 
     async doDelete() {
         await Dialog.confirm(
-            this._("w_User_DeleteConfirm"),
+            this._("w_Member_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const param of this.selectedDetail) {

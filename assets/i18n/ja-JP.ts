@@ -515,4 +515,8 @@ export default class LangObject implements ILang {
     w_Member_InfoOfViolation3 = '違規說明III：';
     w_Member_DateOfViolation3 = '違規日期III：';
 
+    w_Member_DeleteConfirm = 'Are you sure to delete selected member(s)?';
+    w_Member_EditFailed = '編輯失敗';
+    w_Member_AddFailed = '新增失敗';
+    w_Member_ErrorUploadFile = '上傳失敗';
 }
