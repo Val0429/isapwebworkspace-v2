@@ -298,8 +298,8 @@ export default class MemberForm1 extends Vue {
     // // Master
     // objectId                     objectId
     // premissionSelected           AccessRules (premissionTableAPI: tableid => ObjectToken, show: ObjectName)
-    // personType                   ApbWorkgroupId
-    // personType1                  ApbWorkgroupId
+    // personType                   PrimaryWorkgroupId
+    // personType1                  PrimaryWorkgroupId
     // employeeNumber               EmployeeNumber
     // chineseName                  LastName
     // englishName                  FirstName
@@ -632,9 +632,9 @@ export default class MemberForm1 extends Vue {
                 }
             }
 
-            if (detailData.ApbWorkgroupId != undefined) {
+            if (detailData.PrimaryWorkgroupId != undefined) {
                 for (const detail in this.workGroupIdSelectItem) {
-                    if (detailData.ApbWorkgroupId.toString() == detail) {
+                    if (detailData.PrimaryWorkgroupId.toString() == detail) {
                         this.inputFormData.personType = this.workGroupIdSelectItem[
                             detail
                         ];
@@ -1730,7 +1730,7 @@ export default class MemberForm1 extends Vue {
             // master
             editParam.objectId = this.inputFormData.objectId;
             editParam.AccessRules = this.inputFormData.premissionSelected;
-            editParam.ApbWorkgroupId = !isNaN(
+            editParam.PrimaryWorkgroupId = !isNaN(
                 parseInt(this.inputFormData.personType)
             )
                 ? parseInt(this.inputFormData.personType)
@@ -1773,7 +1773,7 @@ export default class MemberForm1 extends Vue {
                 // master
                 objectId: this.inputFormData.objectId,
                 AccessRules: this.inputFormData.premissionSelected,
-                ApbWorkgroupId: !isNaN(parseInt(this.inputFormData.personType))
+                PrimaryWorkgroupId: !isNaN(parseInt(this.inputFormData.personType))
                     ? parseInt(this.inputFormData.personType)
                     : 0,
                 EmployeeNumber: this.inputFormData.employeeNumber,
