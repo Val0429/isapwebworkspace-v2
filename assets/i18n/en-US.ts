@@ -1,133 +1,133 @@
 import { RegisterLanguage } from '@/../core/i18n';
 
-@RegisterLanguage("en-US", "English")
+@RegisterLanguage('en-US', 'English')
 export default class LangObject {
-    wb_Login = "Login";
+    wb_Login = 'Login';
 
-    w_Add = "Add";
-    w_Name = "Name";
-    w_Enabled = "Enabled";
-    w_Value = "Value";
-    w_Startdate = "Start Date";
-    w_Enddate = "End Date";
-    w_Password = "Password";
-    w_Selection = "Selection";
-    w_Multi = "Multi";
-    
-    w_Username = "User Name";
-    w_Roles = "Rolese";
-    w_Email = "Email";
-    w_CreatedAt = "Created At";
-    w_UpdatedAt = "Updated At";
-    w_Actions = "Action";
-    w_ConfirmPassword = "Confirm Password";
+    w_Add = 'Add';
+    w_Name = 'Name';
+    w_Enabled = 'Enabled';
+    w_Value = 'Value';
+    w_Startdate = 'Start Date';
+    w_Enddate = 'End Date';
+    w_Password = 'Password';
+    w_Selection = 'Selection';
+    w_Multi = 'Multi';
 
-    w_User = "User";
-    w_UserAdd = "Add User";
-    w_UserEdit = "Edit User";
+    w_Username = 'User Name';
+    w_Roles = 'Rolese';
+    w_Email = 'Email';
+    w_CreatedAt = 'Created At';
+    w_UpdatedAt = 'Updated At';
+    w_Actions = 'Action';
+    w_ConfirmPassword = 'Confirm Password';
 
-    m_PasswordShouldBeSame = "Password missmatch";
+    w_User = 'User';
+    w_UserAdd = 'Add User';
+    w_UserEdit = 'Edit User';
 
-    w_Logout="Log out";
+    m_PasswordShouldBeSame = 'Password missmatch';
 
-    day0="Monday";
-    day1="Tuesday";
-    day2="Wednesday";
-    day3="Thursday";
-    day4="Friday";
-    day5="Saturday";
-    day6="Sunday";
+    w_Logout = 'Log out';
 
-    w_Member="Member";
-    w_MemberAdd="Add Member";
-    w_MemberEdit="Edit Member";
-    memberid="Member Id";
-    firstname= "First Name";
-    middlename= "Middle Name";
-    lastname= "Last Name";
-    status= "Status";
-    cardnNum= "Card Number";
-    createdAt= "Created At";
-    updatedAt= "Updated At";
+    day0 = 'Monday';
+    day1 = 'Tuesday';
+    day2 = 'Wednesday';
+    day3 = 'Thursday';
+    day4 = 'Friday';
+    day5 = 'Saturday';
+    day6 = 'Sunday';
 
-    w_Door="Door";
-    w_DoorAdd="Add Door";
-    w_DoorEdit="Edit Door";
-    system="System";
-    doorid="Door Id";
-    doorname="Door Name";
-    unlocktime="Unlock Time";
-    shunttime="Shunt Time";
-    readerin="Reader In";
-    readerout="Reader Out";
-    
-    w_DoorGroup="Door Group";
-    w_DoorGroupAdd="Add Door Group";
-    w_DoorGroupEdit="Edit Door Group";
-    groupid="Group Id";
-    groupname="Group Name";
-    doors = "Doors";
+    w_Member = 'Member';
+    w_MemberAdd = 'Add Member';
+    w_MemberEdit = 'Edit Member';
+    memberid = 'Member Id';
+    firstname = 'First Name';
+    middlename = 'Middle Name';
+    lastname = 'Last Name';
+    status = 'Status';
+    cardnNum = 'Card Number';
+    createdAt = 'Created At';
+    updatedAt = 'Updated At';
 
-    w_Elevator="Elevator";
-    w_ElevatorAdd="Add Elevator";
-    w_ElevatorEdit="Edit Elevator";
-    elevatorid="Elevator Id";
-    floor="Floor"
+    w_Door = 'Door';
+    w_DoorAdd = 'Add Door';
+    w_DoorEdit = 'Edit Door';
+    system = 'System';
+    doorid = 'Door Id';
+    doorname = 'Door Name';
+    unlocktime = 'Unlock Time';
+    shunttime = 'Shunt Time';
+    readerin = 'Reader In';
+    readerout = 'Reader Out';
 
-    w_TimeSchedule="Time Schedule";
-    schedule="Schedule";
-    timeid ="Time Id";
-    timename="Time Name";
+    w_DoorGroup = 'Door Group';
+    w_DoorGroupAdd = 'Add Door Group';
+    w_DoorGroupEdit = 'Edit Door Group';
+    groupid = 'Group Id';
+    groupname = 'Group Name';
+    doors = 'Doors';
 
-    w_PermissionTable="Permission Table";
-    w_PermissionTableAdd="Add Permission Table";
-    w_PermissionTableEdit="Edit Permission Table";
-    tableid="Table Id";
-    tablename="Table Name";
-                    
-    w_Reader="Reader";
-    w_ReaderAdd="Add Reader";
-    w_ReaderEdit="Edit Reader";
-    readerid="Reader Id";
-    readername="Reader Name";
+    w_Elevator = 'Elevator';
+    w_ElevatorAdd = 'Add Elevator';
+    w_ElevatorEdit = 'Edit Elevator';
+    elevatorid = 'Elevator Id';
+    floor = 'Floor';
 
-    w_SyncReceiver="Sync Receiver";
-    w_SyncReceiverAdd="Add Sync Receiver";
-    w_SyncReceiverEdit="Edit Sync Receiver";
-    receivename="Receiver Name";
-    emailaddress="Email Address";
-    receivers="Receivers";
+    w_TimeSchedule = 'Time Schedule';
+    schedule = 'Schedule';
+    timeid = 'Time Id';
+    timename = 'Time Name';
 
-    w_AccessLevel="Access Level";
-    w_AccessLevelAdd="Add Access Level";
-    w_AccessLevelEdit="Edit Access Level";
+    w_PermissionTable = 'Permission Table';
+    w_PermissionTableAdd = 'Add Permission Table';
+    w_PermissionTableEdit = 'Edit Permission Table';
+    tableid = 'Table Id';
+    tablename = 'Table Name';
 
-    levelid="Level Id";
-    levelname="Level Name";
-    door="Door";
-    reader="Reader";
-    timeschedule="Time Schedule";
-    
-    PersonalDetails="Personal Details";
+    w_Reader = 'Reader';
+    w_ReaderAdd = 'Add Reader';
+    w_ReaderEdit = 'Edit Reader';
+    readerid = 'Reader Id';
+    readername = 'Reader Name';
 
-    w_Floor="Floor";
-    w_FloorAdd="Add Floor";
-    w_FloorEdit="Edit Floor";
-    name="Name";
-    image="Image";
-    floorid="Floor Id";    
-    ccureid="CCURE Id";
-    ccurename="CCURE Name";
-    sipassid="SIPASS Id";
-    sipassname="SIPASS Name";
-    
-    w_ElevatorGroup="Elevator Group";
-    w_ElevatorGroupAdd="Add Elevator Group";
-    w_ElevatorGroupEdit="Edit Elevator Group";
-    elevators="Elevators";
+    w_SyncReceiver = 'Sync Receiver';
+    w_SyncReceiverAdd = 'Add Sync Receiver';
+    w_SyncReceiverEdit = 'Edit Sync Receiver';
+    receivename = 'Receiver Name';
+    emailaddress = 'Email Address';
+    receivers = 'Receivers';
 
-    w_EmployeeList="Employee List";
-    w_AttendanceRecord="Attendance Record";
+    w_AccessLevel = 'Access Level';
+    w_AccessLevelAdd = 'Add Access Level';
+    w_AccessLevelEdit = 'Edit Access Level';
+
+    levelid = 'Level Id';
+    levelname = 'Level Name';
+    door = 'Door';
+    reader = 'Reader';
+    timeschedule = 'Time Schedule';
+
+    PersonalDetails = 'Personal Details';
+
+    w_Floor = 'Floor';
+    w_FloorAdd = 'Add Floor';
+    w_FloorEdit = 'Edit Floor';
+    name = 'Name';
+    image = 'Image';
+    floorid = 'Floor Id';
+    ccureid = 'CCURE Id';
+    ccurename = 'CCURE Name';
+    sipassid = 'SIPASS Id';
+    sipassname = 'SIPASS Name';
+
+    w_ElevatorGroup = 'Elevator Group';
+    w_ElevatorGroupAdd = 'Add Elevator Group';
+    w_ElevatorGroupEdit = 'Edit Elevator Group';
+    elevators = 'Elevators';
+
+    w_EmployeeList = 'Employee List';
+    w_AttendanceRecord = 'Attendance Record';
 
     // User
     w_User_UserList = 'User List';
@@ -162,7 +162,6 @@ export default class LangObject {
     w_UserGroup_EditUserGroupFailed = 'Edit User Group Failed';
     w_UserGroup_DeleteConfirm = 'Are you sure to delete selected usergroup(s)?';
 
-        
     // many page
     w_Account = 'Account';
     w_PasswordConfirm = 'PasswordConfirm';
@@ -382,6 +381,18 @@ export default class LangObject {
     w_Site_EditDeviceGroupSuccess = 'Edit Device Group Success';
     w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
 
+    // Permission
+    w_Permission_PermissionManage = 'Permission Manage';
+    w_Permission_PermissionList = 'Permission List';
+    w_Permission_PermissionAdd = 'Permission Add';
+    w_Permission_PermissionEdit = 'Permission Edit';
+    w_Permission_PermissionView = 'Permission View';
+    w_Permission_PermissionName = 'Permission Name';
+    w_Permission_DeviceType = 'Device Type';
+    w_Permission_DeviceName = 'Device Name';
+    w_Permission_DeviceArea = 'Device Area';
+    w_Permission_DeviceTimeFormat = 'Time Format';
+
     // button
     w_Save = 'Save';
     w_Back = 'Back';
@@ -395,6 +406,109 @@ export default class LangObject {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+
+    // Member
+    w_Member_List = '人員管理';
+    w_Member_Add = '新增人員資訊';
+    w_Member_Edit = '編輯人員資訊';
+    w_Member_View = 'View Member';
+
+    w_Member_CompanyName = '公司名稱：';
+    w_Member_PersonType = '人員類型：';
+    w_Member_PersonType1 = '人員類型';
+    w_Member_EmployeeNumber = '工號：';
+    w_Member_EmployeeNumber1 = '工號';
+    w_Member_ChineseName = '中文姓名：';
+    w_Member_ChineseName1 = '中文姓名';
+    w_Member_EnglishName = '英文姓名：';
+    w_Member_EnglishName1 = '英文姓名';
+    w_Member_CardNumber = '卡號：';
+    w_Member_CardNumber1 = '卡號';
+    w_Member_CardType = '證卡類型：';
+    w_Member_CardAllNumber = '證卡全碼：';
+    w_Member_CardCustodian = '證卡保管人：';
+    w_Member_Actions = '功能';
+
+    w_Member_Info = '資訊狀態：';
+    w_Member_StartDate = '起始日期：';
+    w_Member_StartDate1 = '起始日期';
+    w_Member_EndDate = '結束日期：';
+    w_Member_EndDate1 = '結束日期';
+    w_Member_LastEditPerson = '上次修改人員：';
+    w_Member_LastEditTime = '上次修改時間：';
+
+    w_Member_PermissionTable = '權限表：';
+    w_Member_CanSelect = '可用選項：';
+    w_Member_BeSelected = '已選擇：';
+
+    w_Member_PersonInfo = '個人資訊：';
+    w_Member_ExtensionNumber = '分機號碼：';
+    w_Member_MVPN = 'MVPN：';
+    w_Member_Phone = '行動電話：';
+    w_Member_Email = 'Email：';
+    w_Member_Gender = '性別：';
+    w_Member_Birthday = '出生日期：';
+    w_Member_CompanyInfo = '公司資訊：';
+    w_Member_Department = '部門：';
+    w_Member_Department1 = '部門';
+    w_Member_CostCenter= '成本中心：';
+    w_Member_CostCenter1= '成本中心';
+    w_Member_Area = '地區：';
+    w_Member_WorkArea = '工作地區：';
+    w_Member_RegistrationDate = '報到日期：';
+    w_Member_ResignationDate = '離職日期：';
+
+    w_Member_General = '一般';
+    w_Member_CarLicenseCategory = '車證類別：';
+    w_Member_CardLicense = '車證編號：';
+    w_Member_CarLicense = '車位編號：';
+    w_Member_CarLicense1 = '車牌號碼I：';
+    w_Member_CarLicense2 = '車牌號碼II：';
+    w_Member_CarLicense3 = '車牌號碼III：';
+
+    w_Member_AccountInfo = '用戶詳情：';
+    w_Member_Account = '用戶名：';
+    w_Member_Password = '密碼：';
+
+
+    w_Member_CardRecord = '證卡紀錄';
+    w_Member_ResignationNote = '離職備註：';
+    w_Member_ResignationRecordCardRecord = '離職繳回紀錄_證卡：';
+    ReasonForCard1 = '製卡原因I：';
+    w_Member_HistoryForCard1 = '歷史卡號I：';
+    w_Member_DateForCard1 = '發卡日期I：';
+    ReasonForCard2 = '製卡原因II：';
+    w_Member_HistoryForCard2 = '歷史卡號II：';
+    w_Member_DateForCard2 = '發卡日期II：';
+    ReasonForCard3 = '製卡原因III：';
+    w_Member_HistoryForCard3 = '歷史卡號III：';
+    w_Member_DateForCard3 = '發卡日期III：';
+
+    w_Member_CarLicenseRecord = '車證紀錄';
+    w_Member_ReasonForApplication1 = '申請原因I：';
+    w_Member_DateForApplication1 = '發證日期I：';
+    w_Member_ReasonForApplication2 = '申請原因II：';
+    w_Member_DateForApplication2 = '發證日期II：';
+    w_Member_ReasonForApplication3 = '申請原因III：';
+    w_Member_DateForApplication3 = '發證日期III：';
+    w_Member_ResignationRecordCarLicense = '離職繳回紀錄_車證：';
+
+    w_Member_Other = '其他：';
+    w_Member_CensusRecord1 = '普查紀錄I：';
+    w_Member_CensusDate1 = '普查日期I：';
+    w_Member_CensusRecord2 = '普查紀錄II：';
+    w_Member_CensusDate2 = '普查日期II：';
+    w_Member_CensusRecord3 = '普查紀錄：III';
+    w_Member_CensusDate3 = '普查日期III：';
+
+    w_Member_ParkingViolation = '停車違規';
+    w_Member_InfoOfViolation1 = '違規說明I：';
+    w_Member_DateOfViolation1 = '違規日期I：';
+    w_Member_InfoOfViolation2 = '違規說明II：';
+    w_Member_DateOfViolation2 = '違規日期II：';
+    w_Member_InfoOfViolation3 = '違規說明III：';
+    w_Member_DateOfViolation3 = '違規日期III：';
+
     readerIO="Reader I/O";
 
     w_Navigation_Users = 'Users';

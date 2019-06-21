@@ -1,18 +1,18 @@
 <template>
-     <div key="main">
-        <MemberForm />
+    <div key="main">
+        <MemberForm1 />
     </div>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
-import MemberForm from './MemberForm.vue';
+import { Component, Vue } from "vue-property-decorator";
+import { RegisterRouter } from "@/../core/router";
+import { toEnumInterface } from "@/../core";
+import MemberForm1 from "./MemberForm1.vue";
 
 @Component({
-    components: { MemberForm }
+    components: { MemberForm1 }
 })
 export default class Member extends Vue {
     private isMounted: boolean = false;

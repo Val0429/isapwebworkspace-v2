@@ -63,18 +63,24 @@ $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Regio
     $({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
     $({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
 
-    $({ path: '/components', name: "Components", icon: 'isap-icon-add' })(Components);
-    
-        $({ path: '/components/forms', name: "Forms", icon: 'fa-facebook', permission: '/announcements' })(Forms);
-        $({ path: '/components/step-progress', name: "Step Progress", icon: 'fa-twitter' })(StepProgress);
-        $({ path: '/components/tab', name: "Tab", icon: 'fa-twitter' })(Tab);
-        $({ path: '/components/toolbox', name: "Toolbox", icon: 'fa-twitter' })(Toolbox);
-        $({ path: '/components/cards', name: "Cards", icon: 'fa-twitter' })(Cards);
-        $({ path: '/components/cards/auto', name: "Auto Cards", icon: 'fa-twitter' })(AutoCards);
-        $({ path: '/components/table', name: "Table", icon: 'fa-twitter' })(Table);
-        $({ path: '/components/tree', name: "Tree", icon: 'fa-twitter' })(Tree);
-        $({ path: '/components/transition', name: "Transition", icon: 'fa-twitter' })(Transition);
-        $({ path: '/components/modal', name: "Modal", icon: 'fa-twitter' })(Modal);
-        $({ path: '/components/utilities', name: "Utilities", icon: 'fa-twitter' })(Utilities);
+$({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
+$({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
+$({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
+$({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
+$({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
 
-    $({ path: '/menu-style/1', name: "選單特殊1", icon: 'fa-twitter', permission: '/test' })(Test);
+$({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
+
+$({ path: '/components/forms', name: 'Forms', icon: 'fa-facebook', permission: '/announcements' })(Forms);
+$({ path: '/components/step-progress', name: 'Step Progress', icon: 'fa-twitter', permission: false })(StepProgress);
+$({ path: '/components/tab', name: 'Tab', icon: 'fa-twitter', permission: false })(Tab);
+$({ path: '/components/toolbox', name: 'Toolbox', icon: 'fa-twitter', permission: false })(Toolbox);
+$({ path: '/components/cards', name: 'Cards', icon: 'fa-twitter', permission: false })(Cards);
+$({ path: '/components/cards/auto', name: 'Auto Cards', icon: 'fa-twitter', permission: false })(AutoCards);
+$({ path: '/components/table', name: 'Table', icon: 'fa-twitter', permission: false })(Table);
+$({ path: '/components/tree', name: 'Tree', icon: 'fa-twitter', permission: false })(Tree);
+$({ path: '/components/transition', name: 'Transition', icon: 'fa-twitter', permission: false })(Transition);
+$({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter', permission: false })(Modal);
+$({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter', permission: false })(Utilities);
+
+$({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
