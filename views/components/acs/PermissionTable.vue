@@ -192,6 +192,7 @@ export default class PermissionTable extends Vue {
     deviceNameItem: any = [];
     deviceAreaItem: any = [];
     deviceTimeFromatItem: any = [];
+    showdeviceTimeFromatItem: any = [];
     devoceTypeItem: any = ["door", "doorGroup", "elevator"];
     selected = "door";
 
@@ -244,16 +245,42 @@ export default class PermissionTable extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     this.inputFormData.accesslevels = [];
-                    for (const returnValue of response.results) {
+                    for (let accesslevel of response.results) {
+                        //TODO ture有資料後 要改成比較資料 = > (returnValue.objectId ==  this.inputFormData.id)
                         if (true) {
-                            let accesslevel = {
-                                objectId: returnValue.objectId,
-                                deviceType: "",
-                                deviceName: returnValue.levelname,
-                                deviceArea: "",
-                                deviceTimeFormat: returnValue.timeschedule
-                            };
-                            this.inputFormData.accesslevels.push(accesslevel);
+                            if (accesslevel.door) {
+                                this.$server
+                                    .R("/acs/door", {
+                                        objectId: accesslevel.door.objectId
+                                    })
+                                    .then((subResponse: any) => {
+                                        if (subResponse != undefined) {
+                                            for (let door of subResponse.results) {
+                                                let item = {
+                                                    objectId:
+                                                        accesslevel.objectId, //accesslevel
+                                                    deviceType: "door",
+                                                    deviceName: door.doorname,
+                                                    deviceArea: "",
+                                                    deviceTimeFormat: this.showdeviceTimeFromatItem.filter(
+                                                        x =>
+                                                            x.id ==
+                                                            accesslevel.timeschedule
+                                                    )[0].text
+                                                };
+                                                this.inputFormData.accesslevels.push(
+                                                    item
+                                                );
+                                            }
+                                        }
+                                    })
+                                    .catch((e: any) => {
+                                        console.log(e);
+                                        return false;
+                                    });
+                            } else if (accesslevel.doorgroup) {
+                            } else if (accesslevel.elevator) {
+                            }
                         }
                     }
                 }
@@ -275,22 +302,20 @@ export default class PermissionTable extends Vue {
 
     pageToList() {
         console.log("pageToList");
+        this.selected = "door";
+        this.selectedDeviceType(0);
+        this.initDeviceTimeFromatItem();
         this.pageStep = EPageStep.list;
         (this.$refs.mainTable as any).reload();
     }
 
     pageToAdd() {
-        this.selected = "door";
         this.clearInputFormData();
-        this.selectedDeviceType(0);
-        this.initDeviceTimeFromatItem();
+
         this.pageStep = EPageStep.add;
     }
 
     pageToEdit() {
-        this.selected = "door";
-        this.selectedDeviceType(0);
-        this.initDeviceTimeFromatItem();
         this.pageStep = EPageStep.edit;
     }
 
@@ -349,7 +374,11 @@ export default class PermissionTable extends Vue {
         );
     }
 
-    doSave() {}
+    doSave() {
+        //新增的時候要先新增PermissionTable再新增AccessLeve,Edit 則直接新增AccessLevel即可
+        //TODO Edit or Add PermissionTable API
+        //TODO Add AccessLevel API
+    }
 
     // swtichWeeks(data) {
     //     switch (data) {
@@ -382,6 +411,11 @@ export default class PermissionTable extends Vue {
                             returnValue.objectId,
                             returnValue.timename
                         );
+                        let item = {
+                            id: returnValue.objectId,
+                            text: returnValue.timename
+                        };
+                        this.showdeviceTimeFromatItem.push(item);
                     }
                 }
             })
@@ -389,8 +423,6 @@ export default class PermissionTable extends Vue {
                 console.log(e);
                 return false;
             });
-
-        console.log("initDeviceTimeFromatItem", this.deviceTimeFromatItem);
     }
 
     async deviceNameItemByDoor() {
