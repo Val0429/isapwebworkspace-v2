@@ -39,7 +39,15 @@
             :options="sipassOptions" 
             />
         </template>
-
+        <template #view.doorgroup="{$attrs, $listeners}">
+            {{getInfo($attrs.row).doorgroup}}
+        </template>
+        <template #view.area="{$attrs, $listeners}">
+            {{getInfo($attrs.row).area}}
+        </template>
+        <template #view.site="{$attrs, $listeners}">
+            {{getInfo($attrs.row).site}}
+        </template>
     </iv-form-quick>
 </template>
 
@@ -67,7 +75,18 @@ export default class DoorForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {   
-                
+                /**
+                * @uiLabel - ${this._("w_Region_LevelSite")}
+                */
+                site:string;
+                /**
+                * @uiLabel - ${this._("w_Region_LevelArea")}
+                */
+                area:string;
+                /**
+                * @uiLabel - ${this._("w_DoorGroup")}
+                */
+                doorgroup:string;
                 /**
                 * @uiLabel - ${this._("doorname")}
                 */
@@ -170,16 +189,37 @@ export default class DoorForm extends Vue implements IFormQuick {
     private sipassOptions:{key:any, value:any, system:any}[]=[];
     private ccureOptions:{key:any, value:any, system:any}[]=[];
     private options:{key:any, value:any, system:any}[]=[];
-    
+    private doorGroups:any[]=[];
+    private areas:any[]=[];
     async created() {
-        let resp: any = await this.$server.R("/acs/reader" as any, {"paging.all":"true"});        
-        this.options = resp.results.map(item=>{return{key:item.objectId, value:item.readername, system:item.system}});
-
-        this.sipassOptions = this.options.filter(x=>x.system==System.SIPASS);
-        this.ccureOptions = this.options.filter(x=>x.system==System.CCURE);
+        await Promise.all([this.getOptions(),
+        this.getDoorGroups()]);
 
         console.log("sipassOptions", this.sipassOptions);
         console.log("ccureOptions", this.ccureOptions);
+    }
+    private async getDoorGroups(){
+        let resp: any=await this.$server.R("/acs/doorgroup" as any,{ "paging.all": "true" });
+        this.doorGroups=resp.results;
+        console.log("doorGroups", this.doorGroups)    
+    }
+    private async getAreas(){
+        let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true"});
+        this.areas =  resp.results;
+    }
+
+    private async getOptions() {
+        let resp: any=await this.$server.R("/acs/reader" as any,{ "paging.all": "true" });
+        this.options=resp.results.map(item => { return { key: item.objectId,value: item.readername,system: item.system }; });
+        this.sipassOptions=this.options.filter(x => x.system==System.SIPASS);
+        this.ccureOptions=this.options.filter(x => x.system==System.CCURE);
+    }
+    getInfo(door:any){
+        let group = this.doorGroups.find(x=>x.doors.find(y=>y.objectId==door.objectId));
+        let doorgroup = group ? group.groupname : "";
+        let area = group && group.area ? group.area.name : "";
+        let site = group && group.area && group.area.site ? group.area.site.name : "";
+        return {doorgroup, area, site};
     }
     getName(obj:any, options:{key:any, value:any}[]){
         if (!obj)return'';
