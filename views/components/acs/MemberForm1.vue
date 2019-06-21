@@ -1458,125 +1458,343 @@ export default class MemberForm1 extends Vue {
     }
 
     async saveAddOrEdit() {
-        console.log(this.inputFormData);
+        let tempCredentials: any = [];
+        let tempPersonalDetails: any = {};
+        let tempCustomFieldsList: any = [];
 
-        const credentialsObject: any = {
-            CardNumber: this.inputFormData.cardNumber
-        };
-
-        const customFieldsObject: any = {
-            CustomTextBoxControl6__CF: this.inputFormData.companyName,
-            CustomTextBoxControl2__CF: this.inputFormData.cardCustodian,
-            CustomTextBoxControl3__CF: this.inputFormData.lastEditPerson,
-            CustomDateControl2__CF: this.inputFormData.lastEditTime
-        };
-
-        if (this.pageStep === EPageStep.add) {
-            const datas: any = [
+        if (
+            this.selectedDetail[0] != undefined &&
+            this.selectedDetail[0].Credentials != undefined &&
+            this.selectedDetail[0].Credentials[0] != undefined
+        ) {
+            tempCredentials = JSON.parse(
+                JSON.stringify(this.selectedDetail[0].Credentials)
+            );
+            tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
+        } else {
+            tempCredentials = [
                 {
-                    // master
-                    AccessRules: this.inputFormData.premissionSelected,
-                    objectId: this.inputFormData.objectId,
-                    ApbWorkgroupId: this.inputFormData.personType,
-                    EmployeeNumber: this.inputFormData.employeeNumber,
-                    LastName: this.inputFormData.chineseName,
-                    FirstName: this.inputFormData.englishName,
-                    Credentials: [credentialsObject],
-                    StartDate: this.inputFormData.startDate,
-                    EndDate: this.inputFormData.endDate,
-
-                    CustomFields: [customFieldsObject],
-
-                    // tab1
-                    extensionNumber: this.inputFormData.PhoneNumber,
-                    phone: this.inputFormData.MobileNumber,
-                    Email: this.inputFormData.email,
-                    DateOfBirth: this.inputFormData.birthday
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //     : this.inputFormData.,
-                    //
-                    //
+                    CardNumber: this.inputFormData.cardNumber
                 }
             ];
-
-            const addParam = {
-                datas
-            };
-
-            await this.$server
-                .C("/acs/member", addParam)
-                .then((response: any) => {
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_Member_AddFailed"));
-                            return false;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_Member_AddFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
-                });
         }
 
-        if (this.pageStep === EPageStep.edit) {
-            const editParam: { datas: any } = {
-                datas: []
+        if (
+            this.selectedDetail[0] != undefined &&
+            this.selectedDetail[0].PersonalDetails != undefined
+        ) {
+            tempPersonalDetails = JSON.parse(
+                JSON.stringify(this.selectedDetail[0].PersonalDetails)
+            );
+            if (tempPersonalDetails.UserDetails != undefined) {
+                tempPersonalDetails.UserDetails.account = this.inputFormData.account;
+                tempPersonalDetails.UserDetails.password = this.inputFormData.password;
+            } else {
+                tempPersonalDetails.UserDetails = {
+                    UserName: this.inputFormData.account,
+                    Password: this.inputFormData.password
+                };
+            }
+        } else {
+            tempPersonalDetails = {
+                UserDetails: {
+                    UserName: this.inputFormData.account,
+                    Password: this.inputFormData.password
+                }
             };
+        }
+
+        // master
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl6__CF",
+            FieldValue: this.inputFormData.companyName.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl2__CF",
+            FieldValue: this.inputFormData.cardCustodian.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl3__CF",
+            FieldValue: this.inputFormData.lastEditPerson.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.lastEditTime.toString()
+        });
+
+        // tab1
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF",
+            FieldValue: this.inputFormData.MVPN.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl2__CF_CF",
+            FieldValue: this.inputFormData.gender.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF",
+            FieldValue: this.inputFormData.department.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF",
+            FieldValue: this.inputFormData.costCenter.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.area.toString()
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.workArea.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl1__CF_CF_CF",
+            FieldValue:
+                this.inputFormData.registrationDate != null
+                    ? this.inputFormData.registrationDate.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl1__CF",
+            FieldValue:
+                this.inputFormData.resignationDate != null
+                    ? this.inputFormData.resignationDate.toISOString()
+                    : ""
+        });
+
+        // tab2
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl2__CF",
+            FieldValue: this.inputFormData.carLicenseCategory.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.cardLicense.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.carLicense.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF",
+            FieldValue: this.inputFormData.carLicense1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.carLicense2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName:
+                "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.carLicense3.toString()
+        });
+
+        // tab3
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF",
+            FieldValue: this.inputFormData.resignationNote.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF",
+            FieldValue: this.inputFormData.resignationRecordCardRecord.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF",
+            FieldValue: this.inputFormData.reasonForCard1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF",
+            FieldValue: this.inputFormData.historyForCard1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForCard1 != null
+                    ? this.inputFormData.dateForCard1.toISOString()
+                    : ""
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForCard2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.historyForCard2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForCard2 != null
+                    ? this.inputFormData.dateForCard2.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForCard3.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.historyForCard3.toString()
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForCard3 != null
+                    ? this.inputFormData.dateForCard3.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForApplication1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForApplication1 != null
+                    ? this.inputFormData.dateForApplication1.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForApplication2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForApplication2 != null
+                    ? this.inputFormData.dateForApplication2.toISOString()
+                    : ""
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF",
+            FieldValue: this.inputFormData.reasonForApplication3.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForApplication3 != null
+                    ? this.inputFormData.dateForApplication3.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.resignationRecordCarLicense.toString()
+        });
+
+        // tab5
+        tempCustomFieldsList.push({
+            FiledName:
+                "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.censusRecord1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.censusDate1 != null
+                    ? this.inputFormData.censusDate1.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName:
+                "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.censusRecord2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.censusDate2 != null
+                    ? this.inputFormData.censusDate2.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF",
+            FieldValue: this.inputFormData.censusRecord3.toString()
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.censusDate3 != null
+                    ? this.inputFormData.censusDate3.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.infoOfViolation1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateOfViolation1 != null
+                    ? this.inputFormData.dateOfViolation1.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.infoOfViolation2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateOfViolation2 != null
+                    ? this.inputFormData.dateOfViolation2.toISOString()
+                    : ""
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.infoOfViolation3.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateOfViolation3 != null
+                    ? this.inputFormData.dateOfViolation3.toISOString()
+                    : ""
+        });
+
+        if (
+            this.selectedDetail[0] != undefined &&
+            this.selectedDetail[0].objectId != undefined &&
+            this.selectedDetail[0].objectId != ""
+        ) {
+            const editParam: any = JSON.parse(
+                JSON.stringify(this.selectedDetail[0])
+            );
+
+            // master
+            editParam.objectId = this.inputFormData.objectId;
+            editParam.AccessRules = this.inputFormData.premissionSelected;
+            editParam.ApbWorkgroupId = !isNaN(
+                parseInt(this.inputFormData.personType)
+            )
+                ? parseInt(this.inputFormData.personType)
+                : 0;
+            editParam.EmployeeNumber = this.inputFormData.employeeNumber;
+            editParam.LastName = this.inputFormData.chineseName;
+            editParam.FirstName = this.inputFormData.englishName;
+            editParam.StartDate = this.inputFormData.startDate;
+            editParam.EndDate = this.inputFormData.endDate;
+
+            // tab1
+            editParam.extensionNumber = this.inputFormData.PhoneNumber;
+            editParam.phone = this.inputFormData.MobileNumber;
+            editParam.Email = this.inputFormData.email;
+            editParam.DateOfBirth = this.inputFormData.birthday;
+
+            // special
+            editParam.Credentials = tempCredentials;
+            editParam.PersonalDetails = tempPersonalDetails;
+            editParam.CustomFields = tempCustomFieldsList;
 
             await this.$server
                 .U("/acs/member", editParam)
                 .then((response: any) => {
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_Member_EditFailed"));
-                            return false;
-                        }
-                    }
+                    this.pageToList();
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
@@ -1584,6 +1802,48 @@ export default class MemberForm1 extends Vue {
                     }
                     if (e.res.statusCode == 500) {
                         Dialog.error(this._("w_Member_EditFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else {
+            const addParam = {
+                // master
+                objectId: this.inputFormData.objectId,
+                AccessRules: this.inputFormData.premissionSelected,
+                ApbWorkgroupId: !isNaN(parseInt(this.inputFormData.personType))
+                    ? parseInt(this.inputFormData.personType)
+                    : 0,
+                EmployeeNumber: this.inputFormData.employeeNumber,
+                LastName: this.inputFormData.chineseName,
+                FirstName: this.inputFormData.englishName,
+                StartDate: this.inputFormData.startDate,
+                EndDate: this.inputFormData.endDate,
+
+                // tab1
+                extensionNumber: this.inputFormData.PhoneNumber,
+                phone: this.inputFormData.MobileNumber,
+                Email: this.inputFormData.email,
+                DateOfBirth: this.inputFormData.birthday,
+
+                // special
+                Credentials: tempCredentials,
+                PersonalDetails: tempPersonalDetails,
+                CustomFields: tempCustomFieldsList
+            };
+
+            await this.$server
+                .C("/acs/member", addParam)
+                .then((response: any) => {
+                    this.pageToList();
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_Member_AddFailed"));
                         return false;
                     }
                     console.log(e);
