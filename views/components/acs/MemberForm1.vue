@@ -289,21 +289,146 @@ export default class MemberForm1 extends Vue {
 
     inputTestEmail: string = "";
 
-    inputFormData: any = {};
-
-    // Morris //
     premissionOptions: ISortSelectOption[] = [];
     tabMounted: boolean = false;
     doTabMount() {
         this.tabMounted = true;
     }
-    // Morris //
 
-    created() {
-        // Morris //
-        this.pageToAdd();
-        // Morris //
+    inputFormData: any = {
+        // Master
+        objectId: "",
+        premissionSelected: [],
+        companyName: "",
+        personType: "",
+        employeeNumber: "",
+        chineseName: "",
+        englishName: "",
+        cardNumber: "",
+        personType1: "",
+        cardAllNumber: "",
+        cardCustodian: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        lastEditPerson: "",
+        lastEditTime: "",
+
+        // tab1
+        extensionNumber: "",
+        MVPN: "",
+        phone: "",
+        email: "",
+        gender: "",
+        birthday: "",
+        department: "",
+        costCenter: "",
+        area: "",
+        workArea: "",
+        registrationDate: new Date(),
+        resignationDate: new Date(),
+
+        // tab2
+        carLicenseCategory: "",
+        cardLicense: "",
+        carLicense: "",
+        carLicense1: "",
+        carLicense2: "",
+        carLicense3: "",
+        account: "",
+        password: "",
+
+        // tab3
+        resignationNote: "",
+        resignationRecordCardRecord: "",
+        reasonForCard1: "",
+        historyForCard1: "",
+        dateForCard1: new Date(),
+        reasonForCard2: "",
+        historyForCard2: "",
+        dateForCard2: new Date(),
+        reasonForCard3: "",
+        historyForCard3: "",
+        dateForCard3: new Date(),
+        reasonForApplication1: "",
+        dateForApplication1: new Date(),
+        reasonForApplication2: "",
+        dateForApplication2: new Date(),
+        reasonForApplication3: "",
+        dateForApplication3: new Date(),
+        resignationRecordCarLicense: ""
+
+        // tab4
+    };
+
+    clearInputData() {
+        this.premissionOptions = [];
+        this.inputFormData = {
+            // Master
+            objectId: "",
+            premissionSelected: [],
+            companyName: "",
+            personType: "",
+            employeeNumber: "",
+            chineseName: "",
+            englishName: "",
+            cardNumber: "",
+            personType1: "",
+            cardAllNumber: "",
+            cardCustodian: "",
+            startDate: new Date(),
+            endDate: new Date(),
+            lastEditPerson: "",
+            lastEditTime: "",
+
+            // tab1
+            extensionNumber: "",
+            MVPN: "",
+            phone: "",
+            email: "",
+            gender: "",
+            birthday: "",
+            department: "",
+            costCenter: "",
+            area: "",
+            workArea: "",
+            registrationDate: new Date(),
+            resignationDate: new Date(),
+
+            // tab2
+            carLicenseCategory: "",
+            cardLicense: "",
+            carLicense: "",
+            carLicense1: "",
+            carLicense2: "",
+            carLicense3: "",
+            account: "",
+            password: "",
+
+            // tab3
+            resignationNote: "",
+            resignationRecordCardRecord: "",
+            reasonForCard1: "",
+            historyForCard1: "",
+            dateForCard1: new Date(),
+            reasonForCard2: "",
+            historyForCard2: "",
+            dateForCard2: new Date(),
+            reasonForCard3: "",
+            historyForCard3: "",
+            dateForCard3: new Date(),
+            reasonForApplication1: "",
+            dateForApplication1: new Date(),
+            reasonForApplication2: "",
+            dateForApplication2: new Date(),
+            reasonForApplication3: "",
+            dateForApplication3: new Date(),
+            resignationRecordCarLicense: ""
+
+            // tab4
+        };
     }
+
+    created() {}
 
     mounted() {
         this.initSelectItemWorkGroup();
@@ -353,19 +478,6 @@ export default class MemberForm1 extends Vue {
             });
     }
 
-    clearInputData() {
-        // Morris //
-        this.premissionOptions = [];
-        // Morris //
-
-        this.inputFormData = {
-            objectId: "",
-            // Morris //
-            premissionSelected: []
-            // Morris //
-        };
-    }
-
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
@@ -375,24 +487,149 @@ export default class MemberForm1 extends Vue {
     getInputData() {
         this.clearInputData();
 
-        console.log(this.selectedDetail);
+        if (this.selectedDetail[0] != undefined) {
+            let detailData = this.selectedDetail[0];
 
-        // for (const param of this.selectedDetail) {
-        //     this.inputFormData = {
-        //         objectId: param.objectId,
-        //         employeeId: param.employeeId,
-        //         username: param.username,
-        //         role: param.role,
-        //         name: param.name,
-        //         email: param.email,
-        //         phone: param.phone,
-        //         siteIdsText: this.idsToText(param.sites),
-        //         groupIdsText: this.idsToText(param.groups),
-        //         siteIds: param.sites,
-        //         groupIds: param.groups,
-        //         type: ""
-        //     };
-        // }
+            // Master form
+            if (detailData.objectId != undefined) {
+                this.inputFormData.objectId = detailData.objectId;
+            }
+
+            if (detailData.AccessRules != undefined) {
+                for (let rules of detailData.AccessRules) {
+                    // TODO: Morris, rules.value && rules.text not right
+                    if (rules.value != undefined && rules.text != undefined) {
+                        let tempData = {
+                            value: rules.value,
+                            text: rules.text
+                        };
+                        this.inputFormData.premissionSelected.push(tempData);
+                    }
+                }
+            }
+
+            if (detailData.ApbWorkgroupId != undefined) {
+                this.inputFormData.personType = detailData.ApbWorkgroupId;
+                this.inputFormData.personType1 = detailData.ApbWorkgroupId;
+            }
+
+            if (detailData.EmployeeNumber != undefined) {
+                this.inputFormData.employeeNumber = detailData.EmployeeNumber;
+            }
+
+            if (detailData.LastName != undefined) {
+                this.inputFormData.chineseName = detailData.LastName;
+            }
+
+            if (detailData.FirstName != undefined) {
+                this.inputFormData.englishName = detailData.FirstName;
+            }
+
+            if (
+                detailData.Credentials != undefined &&
+                detailData.Credentials[0] != undefined &&
+                detailData.Credentials[0].CardNumber != undefined
+            ) {
+                this.inputFormData.cardNumber =
+                    detailData.detailData.Credentials[0].CardNumber;
+                this.inputFormData.cardAllNumber =
+                    detailData.detailData.Credentials[0].CardNumber;
+            }
+
+            if (detailData.StartDate != undefined) {
+                this.inputFormData.startDate = detailData.StartDate;
+            }
+
+            if (detailData.EndDate != undefined) {
+                this.inputFormData.endDate = detailData.EndDate;
+            }
+
+            // tab1
+            if (detailData.PhoneNumber != undefined) {
+                this.inputFormData.extensionNumber = detailData.PhoneNumber;
+            }
+
+            if (detailData.MobileNumber != undefined) {
+                this.inputFormData.phone = detailData.MobileNumber;
+            }
+
+            if (detailData.Email != undefined) {
+                this.inputFormData.email = detailData.Email;
+            }
+
+            if (detailData.DateOfBirth != undefined) {
+                this.inputFormData.birthday = detailData.DateOfBirth;
+            }
+
+            //     inputFormData: any = {
+            //     // Master
+            //     objectId
+            //     premissionSelected   AccessRules
+            //     personType           ApbWorkgroupId
+            //     personType1          ApbWorkgroupId
+            //     employeeNumber       EmployeeNumber
+            //     chineseName          LastName
+            //     englishName          FirstName
+            //     cardNumber           Credentials[0]CardNumber
+            //     cardAllNumber        Credentials[0]CardNumber
+            //     startDate            StartDate
+            //     endDate              EndDate
+
+            //     companyName          CustomField -> CustomTextBoxControl6__CF
+            //     cardCustodian        CustomField -> CustomTextBoxControl2__CF
+            //     lastEditPerson       CustomField -> CustomTextBoxControl3__CF
+            //     lastEditTime         CustomField -> CustomDateControl2__CF
+
+            //     // tab1
+            //     extensionNumber      PhoneNumber
+            //     phone                MobileNumber
+            //     email                Email
+            //     birthday             DateOfBirth
+
+            //     MVPN                 CustomField -> CustomTextBoxControl5__CF_CF
+            //     gender               CustomField -> CustomDropdownControl2__CF_CF
+            //     department           CustomField -> CustomTextBoxControl5__CF_CF_CF
+            //     costCenter           CustomField -> CustomTextBoxControl5__CF_CF_CF_CF
+            //     area                 CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF
+            //     workArea             CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF
+            //     registrationDate     CustomField -> CustomDateControl1__CF_CF_CF
+            //     resignationDate      CustomField -> CustomDateControl1__CF
+
+            //     // tab2
+            //     carLicenseCategory   CustomField -> CustomDropdownControl2__CF
+            //     cardLicense          CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF
+            //     carLicense           CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF
+            //     carLicense1          CustomField -> CustomTextBoxControl5__CF
+            //     carLicense2          CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+            //     carLicense3          CustomField -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+            //     account
+            //     password
+
+            //     // tab3
+            //     resignationNote              CustomField -> CustomTextBoxControl7__CF_CF
+            //     resignationRecordCardRecord  CustomField -> CustomTextBoxControl7__CF_CF_CF
+            //     reasonForCard1               CustomField -> CustomDropdownControl3__CF_CF
+            //     historyForCard1              CustomField -> CustomTextBoxControl7__CF_CF_CF_CF
+            //     dateForCard1                 CustomField -> CustomDateControl3__CF_CF_CF_CF_CF
+            //     reasonForCard2               CustomField -> CustomDropdownControl3__CF_CF_CF
+            //     historyForCard2              CustomField -> CustomTextBoxControl7__CF_CF_CF_CF_CF
+            //     dateForCard2                 CustomField -> CustomDateControl3__CF_CF_CF_CF_CF_CF
+            //     reasonForCard3               CustomField -> CustomDropdownControl3__CF_CF_CF_CF
+            //     historyForCard3              CustomField -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF
+            //     dateForCard3                 CustomField -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF
+            //     reasonForApplication1        CustomField -> CustomDropdownControl3__CF_CF_CF_CF_CF
+            //     dateForApplication1          CustomField -> CustomDateControl3__CF_CF_CF_CF_CF
+            //     reasonForApplication2        CustomField -> CustomDropdownControl3__CF_CF_CF_CF_CF_CF
+            //     dateForApplication2          CustomField -> CustomDateControl3__CF_CF_CF
+            //     reasonForApplication3        CustomField -> CustomDropdownControl3__CF
+            //     dateForApplication3          CustomField -> CustomDateControl3__CF_CF_CF_CF
+            //     resignationRecordCarLicense  CustomField -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF
+
+            //     // tab4
+            // };
+        }
+
+        this.pageToAdd();
     }
 
     tempSaveInputData(data) {
@@ -433,11 +670,7 @@ export default class MemberForm1 extends Vue {
     async pageToAdd() {
         this.clearInputData();
         this.initSelectItemWorkGroup();
-
-        // Morris //
         this.initPremission();
-        // Morris //
-
         this.pageStep = EPageStep.add;
     }
 
@@ -1165,7 +1398,6 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row4
                  */
                 reasonForCard3?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard3")}
