@@ -579,9 +579,9 @@ export default class MemberForm1 extends Vue {
                 detailData.Credentials[0].CardNumber != undefined
             ) {
                 this.inputFormData.cardNumber =
-                    detailData.detailData.Credentials[0].CardNumber;
+                    detailData.Credentials[0].CardNumber;
                 this.inputFormData.cardAllNumber =
-                    detailData.detailData.Credentials[0].CardNumber;
+                    detailData.Credentials[0].CardNumber;
             }
 
             if (
