@@ -822,7 +822,6 @@ export default class MemberForm1 extends Vue {
 
                 selectTree?: any;
 
-
                 premissionList?: any;
 
                 tabItem?: any;
