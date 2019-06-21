@@ -1058,7 +1058,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row2
                  */
                 carLicense2?: string;
-                
+
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense3")}
@@ -1308,8 +1308,50 @@ export default class MemberForm1 extends Vue {
                 row53: string;
 
 
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusRecord2")}
+                 * @uiColumnGroup - row6
+                 */
+                censusRecord2?: string;
 
-                            }
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusDate2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-date
+                 */
+                censusDate2?: string;
+
+
+                /**
+                 * @uiColumnGroup - row7
+                 * @uiHidden - true
+                 */
+                row63: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusRecord2")}
+                 * @uiColumnGroup - row7
+                 */
+                censusRecord2?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusDate2")}
+                 * @uiColumnGroup - row7
+                 * @uiType - iv-form-date
+                 */
+                censusDate2?: string;
+
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row73: string;
+
+             }
         `;
     }
     // Morris //
