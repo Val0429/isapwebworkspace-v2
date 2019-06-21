@@ -76,6 +76,7 @@
             <iv-form
                 :interface="IAddAndEditForm()"
                 :value="inputFormData"
+                @update:*="tempSaveInputData($event)"
                 @update:personPhoto="updateShowPhoto($event)"
                 @submit="saveAddOrEdit($event)"
             >
@@ -474,6 +475,7 @@ export default class MemberForm1 extends Vue {
     mounted() {
         this.initSelectItemWorkGroup();
         this.initDepartment();
+        this.initSelectItemWorkGroup();
     }
 
     async initSelectItemWorkGroup() {
@@ -974,9 +976,116 @@ export default class MemberForm1 extends Vue {
         this.pageToAdd();
     }
 
+    tempSaveInputData(data) {
+        console.log('data - ', data);
+        switch (data.key) {
+            case "objectId":
+                this.inputFormData.objectId= data.value;
+                break;
+            case "premissionSelected":
+                this.inputFormData.premissionSelected = data.value;
+                break;
+            case "personType":
+                this.inputFormData.personType = data.value;
+                break;
+            case "employeeNumber":
+                this.inputFormData.employeeNumber = data.value;
+                break;
+            case "chineseName":
+                this.inputFormData.chineseName = data.value;
+                break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+            // case "":
+            //     this.inputFormData. = data.value;
+            //     break;
+
+
+        }
+
+    }
+
     async pageToAdd() {
         this.clearInputData();
-        this.initSelectItemWorkGroup();
         this.initPremission();
         this.pageStep = EPageStep.add;
     }
@@ -1046,11 +1155,8 @@ export default class MemberForm1 extends Vue {
     }
 
     pageToList() {
-        console.log("000 - ");
         this.pageStep = EPageStep.list;
-        console.log("111 - ");
         (this.$refs.listTable as any).reload();
-        console.log("222 - ");
     }
 
     updateShowPhoto(data) {
@@ -1075,94 +1181,96 @@ export default class MemberForm1 extends Vue {
         }
     }
 
-    saveAddOrEdit() {}
+    async saveAddOrEdit() {
+        console.log(this.inputFormData);
 
-    async saveAdd(data) {
-        const datas: any[] = [
-            {
-                username: data.username,
-                role: data.role,
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                password: data.password,
-                employeeId: data.employeeId,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : []
-            }
-        ];
+        return false;
 
-        const addParam = {
-            datas
-        };
+        if(this.pageStep === EPageStep.add) {
+            const datas: any[] = [
+                {
+                }
+            ];
 
-        await this.$server
-            .C("/acs/member", addParam)
-            .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        this.pageToList();
+            const addParam = {
+                datas
+            };
+
+            await this.$server
+                .C("/acs/member", addParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            Dialog.error(this._("w_Member_AddFailed"));
+                            return false;
+                        }
                     }
-                    if (returnValue.statusCode === 500) {
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
                         Dialog.error(this._("w_Member_AddFailed"));
                         return false;
                     }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_Member_AddFailed"));
+                    console.log(e);
                     return false;
+                });
+        }
+
+        if(this.pageStep === EPageStep.edit) {
+            const datas: any[] = [
+                {
+                    role: data.role,
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone,
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                    objectId: data.objectId
                 }
-                console.log(e);
-                return false;
-            });
-    }
+            ];
 
-    async saveEdit(data) {
-        const datas: any[] = [
-            {
-                role: data.role,
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                objectId: data.objectId
-            }
-        ];
+            const editParam = {
+                datas
+            };
 
-        const editParam = {
-            datas
-        };
-
-        await this.$server
-            .U("/acs/member", editParam)
-            .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        this.pageToList();
+            await this.$server
+                .U("/acs/member", editParam)
+                .then((response: any) => {
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500) {
+                            Dialog.error(this._("w_Member_EditFailed"));
+                            return false;
+                        }
                     }
-                    if (returnValue.statusCode === 500) {
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
                         Dialog.error(this._("w_Member_EditFailed"));
                         return false;
                     }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_Member_EditFailed"));
+                    console.log(e);
                     return false;
-                }
-                console.log(e);
-                return false;
-            });
+                });
+        }
+    }
+
+    async saveAdd(data) {
+
+    }
+
+    async saveEdit(data) {
     }
 
     async doDelete() {
@@ -1381,7 +1489,7 @@ export default class MemberForm1 extends Vue {
                  * @uiLabel - ${this._("w_Member_ChineseName")}
                  * @uiColumnGroup - row2
                  */
-                chineseName?: string;
+                chineseName: string;
 
 
                 /**
@@ -1442,7 +1550,7 @@ export default class MemberForm1 extends Vue {
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
                 */
-                startDate: any;
+                startDate?: any;
 
 
                 /**
@@ -1451,7 +1559,7 @@ export default class MemberForm1 extends Vue {
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
                 */
-                endDate: any;
+                endDate?: any;
 
 
                 /**
@@ -1460,7 +1568,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-label
                  */
-                lastEditPerson: string;
+                lastEditPerson?: string;
 
 
                 /**
@@ -1469,20 +1577,20 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row6
                  * @uiType - iv-form-label
                  */
-                lastEditTime: string;
+                lastEditTime?: string;
 
                 /**
                  * @uiColumnGroup - row6
                  * @uiHidden - true
                  */
-                row62: string;
+                row62?: string;
 
 
                 /**
                  * @uiColumnGroup - row6
                  * @uiHidden - true
                  */
-                row63: string;
+                row63?: string;
 
                 permissionTable?: any;
 
@@ -1660,7 +1768,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row2
                  * @uiHidden - true
                  */
-                row23: string;
+                row23?: string;
             }
         `;
     }
@@ -1689,7 +1797,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row1
                  * @uiHidden - true
                  */
-                row13: string;
+                row13?: string;
 
 
                 /**
@@ -1773,7 +1881,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row5
                  * @uiHidden - true
                  */
-                row53: string;
+                row53?: string;
 
 
                 /**
@@ -1795,7 +1903,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row6
                  * @uiHidden - true
                  */
-                row63: string;
+                row63?: string;
 
 
                 /**
@@ -1817,7 +1925,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row7
                  * @uiHidden - true
                  */
-                row73: string;
+                row73?: string;
 
 
                 /**
@@ -1830,13 +1938,13 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row8
                  * @uiHidden - true
                  */
-                row82: string;
+                row82?: string;
 
                  /**
                  * @uiColumnGroup - row8
                  * @uiHidden - true
                  */
-                row83: string;
+                row83?: string;
             }
         `;
     }
@@ -1887,7 +1995,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row5
                  * @uiHidden - true
                  */
-                row53: string;
+                row53?: string;
 
 
                 /**
@@ -1909,7 +2017,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row6
                  * @uiHidden - true
                  */
-                row63: string;
+                row63?: string;
 
 
                 /**
@@ -1931,7 +2039,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row7
                  * @uiHidden - true
                  */
-                row73: string;
+                row73?: string;
 
 
                parkingViolation?: any;
@@ -1955,7 +2063,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row15
                  * @uiHidden - true
                  */
-                row153: string;
+                row153?: string;
 
 
                 /**
@@ -1977,7 +2085,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row16
                  * @uiHidden - true
                  */
-                row163: string;
+                row163?: string;
 
 
                 /**
@@ -1999,7 +2107,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row17
                  * @uiHidden - true
                  */
-                row173: string;
+                row173?: string;
 
              }
         `;
