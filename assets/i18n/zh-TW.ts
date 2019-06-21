@@ -428,6 +428,8 @@ export default class LangObject implements ILang {
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
     w_Member_Actions = '功能';
+    w_Member_PersonPic = '人員照片：';
+    w_Member_UpLoadPersonPic = '上傳照片：';
 
     w_Member_Info = '資訊狀態：';
     w_Member_StartDate = '起始日期：';
@@ -487,6 +489,7 @@ export default class LangObject implements ILang {
 
     w_Member_SelectTemplate = '選擇模板';
     w_Member_CardTemplate = '卡片模板';
+    w_Member_CardPhoto = '卡片樣式';
 
     w_Member_CarLicenseRecord = '車證紀錄';
     w_Member_ReasonForApplication1 = '申請原因I：';
@@ -514,4 +517,8 @@ export default class LangObject implements ILang {
     w_Member_InfoOfViolation3 = '違規說明III：';
     w_Member_DateOfViolation3 = '違規日期III：';
 
+    w_Member_DeleteConfirm = 'Are you sure to delete selected member(s)?';
+    w_Member_EditFailed = '編輯失敗';
+    w_Member_AddFailed = '新增失敗';
+    w_Member_ErrorUploadFile = '上傳失敗';
 }

@@ -5,8 +5,20 @@
             :label="_('w_Member_List')"
         >
             <template #toolbox>
-                <iv-toolbox-add @click="pageToAdd()" />
-            </template>
+                <iv-toolbox-view
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToView"
+                />
+                <iv-toolbox-edit
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToEdit(ePageStep.edit)"
+                />
+                <iv-toolbox-delete
+                    :disabled="isSelected.length === 0"
+                    @click="doDelete"
+                />
+                <iv-toolbox-divider />
+                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" /> </template>
 
             <iv-table
                 ref="listTable"
@@ -64,7 +76,7 @@
             <iv-form
                 :interface="IAddAndEditForm()"
                 :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
+                @update:personPhoto="updateShowPhoto($event)"
                 @submit="saveAddOrEdit($event)"
             >
 
@@ -72,6 +84,19 @@
                     <h4 class="ml-3 mt-4 font-weight-bold">
                         {{ _('w_Member_Info') }}
                     </h4>
+                </template>
+
+                <template #imageSrc="{ $attrs, $listeners}">
+                    <label class="col-md-12">
+                        {{_("w_Member_PersonPic")}}
+                    </label>
+                    <img
+                        class="imgSide"
+                        v-if="newImgSrc"
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        :src="newImgSrc"
+                    />
                 </template>
 
                 <template #permissionTable="{ $attr }">
@@ -167,7 +192,21 @@
                             <iv-form
                                 :interface="ITabForm4()"
                                 :value="inputFormData"
+                                @update:cardTemplate="updateShowPhoto($event)"
                             >
+
+                                <template #imageSrc="{ $attrs, $listeners}">
+                                    <label class="col-md-12">
+                                        {{_("w_Member_CardPhoto")}}
+                                    </label>
+                                    <img
+                                        class="imgCard"
+                                        v-if="newImgSrc"
+                                        v-bind="$attrs"
+                                        v-on="$listeners"
+                                        :src="newImgSrc"
+                                    />
+                                </template>
 
                             </iv-form>
                         </template>
@@ -256,6 +295,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
 import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
+import ImageBase64 from "@/services/ImageBase64";
 
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
@@ -285,10 +325,11 @@ export default class MemberForm1 extends Vue {
     selectedDetail: any = [];
 
     workGroupSelectItem: any = {};
-    userGroupSelectItem: any = {};
+    cardTemplateSelectItem: any = {};
 
     inputTestEmail: string = "";
-
+    newImg = new Image();
+    newImgSrc = "";
     premissionOptions: ISortSelectOption[] = [];
     tabMounted: boolean = false;
     doTabMount() {
@@ -638,41 +679,6 @@ export default class MemberForm1 extends Vue {
         this.pageToAdd();
     }
 
-    tempSaveInputData(data) {
-        switch (data.key) {
-            case "account":
-                this.inputFormData.username = data.value;
-                break;
-            case "password":
-                this.inputFormData.password = data.value;
-                break;
-            case "confirmPassword":
-                this.inputFormData.confirmPassword = data.value;
-                break;
-            case "employeeId":
-                this.inputFormData.employeeId = data.value;
-                break;
-            case "name":
-                this.inputFormData.name = data.value;
-                break;
-            case "email":
-                this.inputFormData.email = data.value;
-                break;
-            case "phone":
-                this.inputFormData.phone = data.value;
-                break;
-            case "siteIds":
-                this.inputFormData.siteIds = data.value;
-                break;
-            case "groupIds":
-                this.inputFormData.groupIds = data.value;
-                break;
-            case "role":
-                this.inputFormData.role = data.value;
-                break;
-        }
-    }
-
     async pageToAdd() {
         this.clearInputData();
         this.initSelectItemWorkGroup();
@@ -745,8 +751,33 @@ export default class MemberForm1 extends Vue {
     }
 
     pageToList() {
+        console.log("000 - ");
         this.pageStep = EPageStep.list;
+        console.log("111 - ");
         (this.$refs.listTable as any).reload();
+        console.log("222 - ");
+    }
+
+    updateShowPhoto(data) {
+        if (data) this.uploadFile(data);
+    }
+
+    async uploadFile(file) {
+        if (file) {
+            ImageBase64.fileToBase64(file, (base64 = "") => {
+                if (base64 != "") {
+                    this.newImg = new Image();
+                    this.newImg.src = base64;
+                    this.newImg.onload = () => {
+                        this.newImgSrc = base64;
+                        console.log("newImgSrc", this.newImgSrc);
+                        return;
+                    };
+                } else {
+                    Dialog.error(this._("w_Member_ErrorUploadFile"));
+                }
+            });
+        }
     }
 
     saveAddOrEdit() {}
@@ -775,11 +806,10 @@ export default class MemberForm1 extends Vue {
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_AddUserSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_AddUserFailed"));
+                        Dialog.error(this._("w_Member_AddFailed"));
                         return false;
                     }
                 }
@@ -789,7 +819,7 @@ export default class MemberForm1 extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_AddUserFailed"));
+                    Dialog.error(this._("w_Member_AddFailed"));
                     return false;
                 }
                 console.log(e);
@@ -819,11 +849,10 @@ export default class MemberForm1 extends Vue {
             .then((response: any) => {
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_EditUserSuccess"));
                         this.pageToList();
                     }
                     if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_EditUserFailed"));
+                        Dialog.error(this._("w_Member_EditFailed"));
                         return false;
                     }
                 }
@@ -833,7 +862,7 @@ export default class MemberForm1 extends Vue {
                     return ResponseFilter.base(this, e);
                 }
                 if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_EditUserFailed"));
+                    Dialog.error(this._("w_Member_EditFailed"));
                     return false;
                 }
                 console.log(e);
@@ -843,7 +872,7 @@ export default class MemberForm1 extends Vue {
 
     async doDelete() {
         await Dialog.confirm(
-            this._("w_User_DeleteConfirm"),
+            this._("w_Member_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const param of this.selectedDetail) {
@@ -856,14 +885,8 @@ export default class MemberForm1 extends Vue {
                     this.$server
                         .D("/acs/member", deleteParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
-                                    this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
+                            if (response) {
+                                this.pageToList();
                             }
                         })
                         .catch((e: any) => {
@@ -1101,6 +1124,20 @@ export default class MemberForm1 extends Vue {
                  */
                 cardCustodian?: string;
 
+               /**
+                * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
+                * @uiPlaceHolder - ${this._("w_Member_UpLoadPersonPic")}
+                * @uiColumnGroup - row13
+                * @uiType - iv-form-file
+                */
+                personPhoto?: string;
+
+               /**
+                * @uiColumnGroup - row13
+                */
+                imageSrc?:any;
+
+
                 info?: any;
 
 
@@ -1298,7 +1335,7 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row2
                  */
                 carLicense2?: string;
-                
+
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense3")}
@@ -1319,6 +1356,7 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_Password")}
                  * @uiColumnGroup - row2
+                 * @uiType - iv-form-password
                  */
                 password?: string;
 
@@ -1512,10 +1550,20 @@ export default class MemberForm1 extends Vue {
         return `
             interface {
 
+
                 /**
                  * @uiLabel - ${this._("w_Member_CardTemplate")}
+                 * @uiColumnGroup - row13
                  */
-                imageSrc: any;
+                cardTemplate?: ${toEnumInterface(
+                    this.cardTemplateSelectItem as any,
+                    false
+                )};
+
+               /**
+                * @uiColumnGroup - row13
+                */
+                imageSrc?:any;
             }
         `;
     }
@@ -1547,8 +1595,118 @@ export default class MemberForm1 extends Vue {
                 row53: string;
 
 
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusRecord2")}
+                 * @uiColumnGroup - row6
+                 */
+                censusRecord2?: string;
 
-                            }
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusDate2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-date
+                 */
+                censusDate2?: string;
+
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row63: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusRecord3")}
+                 * @uiColumnGroup - row7
+                 */
+                censusRecord3?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusDate3")}
+                 * @uiColumnGroup - row7
+                 * @uiType - iv-form-date
+                 */
+                censusDate3?: string;
+
+
+                /**
+                 * @uiColumnGroup - row7
+                 * @uiHidden - true
+                 */
+                row73: string;
+
+
+               parkingViolation?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation1")}
+                 * @uiColumnGroup - row15
+                 */
+                infoOfViolation1?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation1")}
+                 * @uiColumnGroup - row15
+                 * @uiType - iv-form-date
+                 */
+                dateOfViolation1?: string;
+
+
+                /**
+                 * @uiColumnGroup - row15
+                 * @uiHidden - true
+                 */
+                row153: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation2")}
+                 * @uiColumnGroup - row16
+                 */
+                infoOfViolation2?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation2")}
+                 * @uiColumnGroup - row16
+                 * @uiType - iv-form-date
+                 */
+                dateOfViolation2?: string;
+
+
+                /**
+                 * @uiColumnGroup - row16
+                 * @uiHidden - true
+                 */
+                row163: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation3")}
+                 * @uiColumnGroup - row17
+                 */
+                infoOfViolation3?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation3")}
+                 * @uiColumnGroup - row17
+                 * @uiType - iv-form-date
+                 */
+                dateOfViolation3?: string;
+
+
+                /**
+                 * @uiColumnGroup - row17
+                 * @uiHidden - true
+                 */
+                row173: string;
+
+             }
         `;
     }
     // Morris //
@@ -1619,4 +1777,20 @@ export default class MemberForm1 extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.imgSide {
+    max-width: 200px;
+    min-width: 200px;
+    max-height: none;
+    min-height: auto;
+    height: 100%;
+    margin-bottom: 10px;
+}
+.imgCard {
+    max-width: 300px;
+    min-width: 200px;
+    max-height: none;
+    min-height: auto;
+    height: 100%;
+    margin-bottom: 10px;
+}
 </style>
