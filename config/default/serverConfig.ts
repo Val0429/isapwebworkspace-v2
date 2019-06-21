@@ -1,5 +1,5 @@
 var config: Config = {
-    ip: '172.16.10.59',
+    ip: 'localhost',
     port: 6060,
     ssl: false,
 
