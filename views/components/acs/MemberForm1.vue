@@ -15,12 +15,25 @@
                 :server="{ path: '/acs/member' }"
                 @selected="selectedItem($event)"
             >
+
+                <template #CardNumber="{$attrs}">
+                    {{ anysisTableColumn($attrs.row, "CardNumber") }}
+                </template>
+
                 <template #StartDate="{$attrs}">
                     {{ dateToYYYY_MM_DD($attrs.value) }}
                 </template>
 
                 <template #EndDate="{$attrs}">
                     {{ dateToYYYY_MM_DD($attrs.value) }}
+                </template>
+
+                <template #Department="{$attrs}">
+                    {{ anysisTableColumn($attrs.row, "Department") }}
+                </template>
+
+                <template #CostCenter="{$attrs}">
+                    {{ anysisTableColumn($attrs.row, "CostCenter") }}
                 </template>
 
                 <template #Actions="{$attrs, $listeners}">
@@ -285,6 +298,7 @@ export default class MemberForm1 extends Vue {
     }
 
     selectedItem(data) {
+        console.log(data);
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
@@ -612,6 +626,48 @@ export default class MemberForm1 extends Vue {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
+    // CardNumber: CustomTextBoxControl1__CF
+    // Department: CustomTextBoxControl5__CF_CF_CF
+    // CostCenter: CustomTextBoxControl5__CF_CF_CF_CF
+    anysisTableColumn(row: any, key: string): string {
+        let result: string = "";
+        if (key == "CardNumber") {
+            if (
+                row.Credentials != undefined &&
+                row.Credentials[0] != undefined &&
+                row.Credentials[0].CardNumber != undefined
+            ) {
+                result = row.Credentials[0].CardNumber;
+            }
+        } else {
+            if (row.CustomFields != undefined) {
+                for (let fidled of row.CustomFields) {
+                    if (
+                        key == "Department" &&
+                        fidled.FiledName != undefined &&
+                        fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF"
+                    ) {
+                        if (fidled.FieldValue != undefined) {
+                            result = fidled.FieldValue;
+                        }
+                    }
+
+                    if (
+                        key == "CostCenter" &&
+                        fidled.FiledName != undefined &&
+                        fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF"
+                    ) {
+                        if (fidled.FieldValue != undefined) {
+                            result = fidled.FieldValue;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
     ITableList() {
         return `
             interface {
@@ -621,60 +677,50 @@ export default class MemberForm1 extends Vue {
                  */
                 EmployeeNumber: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CardNumber1")}
                  */
                 CardNumber: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_PersonType1")}
                  */
                 PrimaryWorkgroupName: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_ChineseName1")}
                  */
                 LastName: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_EnglishName1")}
                  */
                 FirstName: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Department1")}
                  */
-                CustomTextBoxControl5__CF_CF_CF: string;
-
-
+                Department: string;
+               
                 /**
                  * @uiLabel - ${this._("w_Member_CostCenter1")}
                  */
-                CustomTextBoxControl5__CF_CF_CF_CF: string;
-
-
+                CostCenter: string;
+                
                 /**
                  * @uiLabel - ${this._("w_Member_StartDate1")}
                  */
                 StartDate: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_EndDate1")}
                  */
                 EndDate: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Actions")}
                  */
                 Actions?: any;
-
             }
         `;
     }
@@ -734,13 +780,11 @@ export default class MemberForm1 extends Vue {
                     false
                 )};
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CardAllNumber")}
                  * @uiColumnGroup - row3
                  */
                 cardAllNumber?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardCustodian")}
@@ -749,8 +793,7 @@ export default class MemberForm1 extends Vue {
                 cardCustodian?: string;
 
 
-                
-
+            
                 email: string;
 
                 test?: any;
