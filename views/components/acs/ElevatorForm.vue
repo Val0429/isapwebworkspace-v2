@@ -14,6 +14,7 @@
             :options="floorOptions" 
             />
         </template>
+        
     </iv-form-quick>
 </template>
 
@@ -41,10 +42,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                 return `
                 interface {
                     
-                    /**
-                    * @uiLabel - ${this._("elevatorid")}
-                    */
-                    elevatorid: number;
+                    
                     /**
                     * @uiLabel - ${this._("name")}
                     */
@@ -53,10 +51,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                     * @uiLabel - ${this._("reader")}
                     */
                     reader:string;                    
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status: number;
+                    
                     
                 }
                 `;
@@ -65,10 +60,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                 return `
                 interface {
                    
-                    /**
-                    * @uiLabel - ${this._("elevatorid")}
-                    */
-                    elevatorid: number;
+                   
                     /**
                     * @uiLabel - ${this._("name")}
                     */
@@ -76,11 +68,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("reader")}
                     */
-                    reader:string;                    
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status: number;
+                    reader:string;                                        
                 }
                 `;
         }

@@ -5,18 +5,10 @@
             {{$attrs.row}}
         </template> -->
         
-        <template #view.sipassin="{$attrs, $listeners}">
-            {{ getName(getReaderInfo($attrs.row).sipassin, options) }}
+        <template #view.readerscount="{$attrs, $listeners}">
+            {{ getReadersCount($attrs.row) }}
         </template>  
-        <template #view.sipassout="{$attrs, $listeners}">
-            {{ getName(getReaderInfo($attrs.row).sipassout, options) }}
-        </template> 
-        <template #view.ccurein="{$attrs, $listeners}">
-            {{ getName(getReaderInfo($attrs.row).ccurein, options) }}
-        </template> 
-        <template #view.ccureout="{$attrs, $listeners}">
-            {{ getName(getReaderInfo($attrs.row).ccureout, options) }}
-        </template> 
+        
         <!-- 6) custom edit / add template with <template #add.* /> -->
 
         <template #add.ccurein="{$attrs, $listeners}">
@@ -82,21 +74,9 @@ export default class DoorForm extends Vue implements IFormQuick {
                 doorname:string;
                
                 /**
-                * @uiLabel - ${"SIPASS"+" "+this._("readerin")}
+                * @uiLabel - ${this._("readerscount")}
                 */
-                sipassin: string;
-                 /**
-                * @uiLabel - ${"SIPASS"+" "+this._("readerout")}
-                */
-                sipassout: string;
-                /**
-                * @uiLabel - ${"CCURE"+" "+this._("readerin")}
-                */
-                ccurein: string;
-                /**
-                * @uiLabel - ${"CCURE"+" "+this._("readerout")}
-                */
-                ccureout: string;
+                readerscount:string;
                 }
                 `;
             case EFormQuick.Add:
@@ -206,7 +186,13 @@ export default class DoorForm extends Vue implements IFormQuick {
         let item = options.find(x=>x.key==obj.objectId);
         return item?item.value:'';
     }
-    
+    getReadersCount(door:any){
+        if(!door)return 0;
+        let count = door.readerin ? door.readerin.length : 0;
+        count += door.readerout ? door.readerout.length : 0;
+        
+        return count;
+    }
 }
 </script>
 

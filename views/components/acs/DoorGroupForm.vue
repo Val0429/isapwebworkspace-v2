@@ -15,6 +15,12 @@
             :options="options" 
             />
         </template>
+        <template #add.area="{$attrs, $listeners}">
+            <ivc-site-area 
+            v-bind="$attrs" 
+            v-on="$listeners"              
+            />
+        </template>
         
         <!-- 6) custom edit / add template with <template #add.* /> -->
 
@@ -68,7 +74,10 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
-                    
+                    /**
+                    * @uiLabel - ${this._("w_Region_LevelArea")}
+                    */
+                    area:string;
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -116,8 +125,8 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
         if(!doors)return 0;
         let count=0;
         for(let item of doors){
-            count += item.readerin.length;
-            count += item.readerout.length;
+            count += item.readerin?item.readerin.length:0;
+            count += item.readerout?item.readerout.length:0;
         }
         return count;
     }
