@@ -11,7 +11,7 @@
                 />
                 <iv-toolbox-edit
                     :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
+                    @click="pageToEdit()"
                 />
                 <iv-toolbox-delete
                     :disabled="isSelected.length === 0"
@@ -55,7 +55,7 @@
                         :disabled="isSelected.length !== 1"
                     >
                         <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                        <iv-toolbox-edit @click="pageToEdit()" />
                         <iv-toolbox-delete @click="doDelete" />
                     </iv-toolbox-more>
                 </template>
@@ -635,8 +635,6 @@ export default class MemberForm1 extends Vue {
         if (this.selectedDetail[0] != undefined) {
             let detailData = this.selectedDetail[0];
 
-            console.log(detailData);
-
             // Master form
             if (detailData.objectId != undefined) {
                 this.inputFormData.objectId = detailData.objectId.toString();
@@ -1117,7 +1115,6 @@ export default class MemberForm1 extends Vue {
     }
 
     tempSaveInputData(data) {
-
         switch (data.key) {
             // Master
             case "objectId":
@@ -1130,7 +1127,9 @@ export default class MemberForm1 extends Vue {
                 this.inputFormData.personType = data.value;
                 for (const detail in this.workGroupSelectItem) {
                     if (data.value === detail)
-                        this.inputFormData.personType1 = this.workGroupSelectItem[detail];
+                        this.inputFormData.personType1 = this.workGroupSelectItem[
+                            detail
+                        ];
                 }
 
                 break;
@@ -1288,63 +1287,6 @@ export default class MemberForm1 extends Vue {
             case "resignationRecordCarLicense":
                 this.inputFormData.resignationRecordCarLicense = data.value;
                 break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
-            // case "":
-            //     this.inputFormData. = data.value;
-            //     break;
         }
     }
 
@@ -1391,27 +1333,14 @@ export default class MemberForm1 extends Vue {
             });
     }
 
-    async pageToEdit(type: string) {
-        this.pageStep = EPageStep.edit;
+    async pageToEdit() {
         this.getInputData();
-
-        this.inputFormData.type = type;
-
-        this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.siteIds.map(item => item.objectId)
-            )
-        );
-        this.inputFormData.groupIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.groupIds.map(item => item.objectId)
-            )
-        );
+        this.pageStep = EPageStep.edit;
     }
 
     pageToView() {
-        this.pageStep = EPageStep.view;
         this.getInputData();
+        this.pageStep = EPageStep.view;
     }
 
     pageToList() {
@@ -1858,10 +1787,6 @@ export default class MemberForm1 extends Vue {
         }
     }
 
-    async saveAdd(data) {}
-
-    async saveEdit(data) {}
-
     async doDelete() {
         await Dialog.confirm(
             this._("w_Member_DeleteConfirm"),
@@ -1895,55 +1820,6 @@ export default class MemberForm1 extends Vue {
                 }
             }
         );
-    }
-
-    showFirst(value): string {
-        if (value.length >= 2) {
-            return value.map(item => item.name)[0] + "...";
-        }
-        if (value.length === 1) {
-            return value.map(item => item.name)[0];
-        }
-        if (value.length == 0) {
-            return "";
-        }
-    }
-
-    show30Words(
-        value: any,
-        startWord: number = 0,
-        endWord: number = 30
-    ): string {
-        return value.length < endWord
-            ? value.substring(startWord, endWord)
-            : value.substring(startWord, endWord) + "...";
-    }
-
-    idsToText(value: any): string {
-        let result = "";
-        for (let val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
-    }
-
-    cardSearch(search: string) {
-        // TODO: finished search
-        // console.log('search - ', search)
-        this.searchKeywords(search);
-    }
-
-    searchKeywords(search: string) {
-        // TODO: finished search
-        if (search != "") {
-            const accountText = this.inputFormData.username.toLocaleLowerCase();
-            const nameText = this.inputFormData.name.toLocaleLowerCase();
-            const searchText = search.toLowerCase();
-            const searchResult =
-                accountText.match(searchText) || nameText.match(searchText);
-            return searchResult;
-        }
     }
 
     dateToYYYY_MM_DD(value) {
