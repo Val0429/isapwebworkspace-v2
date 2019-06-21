@@ -415,8 +415,6 @@ export default class MemberForm1 extends Vue {
     workGroupSelectItem: any = {};
     cardTemplateSelectItem: any = {};
 
-    workGroupValue: any = {};
-
     inputTestEmail: string = "";
     newImg = new Image();
     newImgCard = new Image();
@@ -442,6 +440,7 @@ export default class MemberForm1 extends Vue {
         startDate: null,
         endDate: null,
         personPhoto: "",
+        imageSrc: "",
         companyName: "",
         cardCustodian: "",
         lastEditPerson: "",
@@ -493,7 +492,7 @@ export default class MemberForm1 extends Vue {
 
         // tab4
         cardTemplate: "",
-        imageSrc: "",
+        imageSrcCard: "",
 
         // tab 5
         censusRecord1: "",
@@ -526,6 +525,7 @@ export default class MemberForm1 extends Vue {
             startDate: null,
             endDate: null,
             personPhoto: "",
+            imageSrc: "",
             companyName: "",
             cardCustodian: "",
             lastEditPerson: "",
@@ -577,7 +577,7 @@ export default class MemberForm1 extends Vue {
 
             // tab4
             cardTemplate: "",
-            imageSrc: "",
+            imageSrcCard: "",
 
             // tab 5
             censusRecord1: "",
