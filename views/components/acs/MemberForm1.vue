@@ -818,7 +818,13 @@ export default class MemberForm1 extends Vue {
                         }
 
                         if (content.FiledName == "CustomDateControl1__CF") {
-                            this.inputFormData.resignationDate = content.FieldValue.toString();
+                            try {
+                                this.inputFormData.resignationDate = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
                         }
 
                         // tab2
@@ -1290,8 +1296,9 @@ export default class MemberForm1 extends Vue {
         }
     }
 
-    async pageToAdd() {
+    pageToAdd() {
         this.pageStep = EPageStep.add;
+        this.initPremission();
     }
 
     async initPremission() {
@@ -1335,7 +1342,7 @@ export default class MemberForm1 extends Vue {
 
     async pageToEdit() {
         this.getInputData();
-        this.pageStep = EPageStep.edit;
+        this.pageStep = EPageStep.add;
     }
 
     pageToView() {
