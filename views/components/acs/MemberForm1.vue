@@ -350,8 +350,8 @@ export default class MemberForm1 extends Vue {
         personType1: "",
         cardAllNumber: "",
         cardCustodian: "",
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: null,
+        endDate: null,
         lastEditPerson: "",
         lastEditTime: "",
 
@@ -361,13 +361,13 @@ export default class MemberForm1 extends Vue {
         phone: "",
         email: "",
         gender: "",
-        birthday: "",
+        birthday: null,
         department: "",
         costCenter: "",
         area: "",
         workArea: "",
-        registrationDate: new Date(),
-        resignationDate: new Date(),
+        registrationDate: null,
+        resignationDate: null,
 
         // tab2
         carLicenseCategory: "",
@@ -384,19 +384,19 @@ export default class MemberForm1 extends Vue {
         resignationRecordCardRecord: "",
         reasonForCard1: "",
         historyForCard1: "",
-        dateForCard1: new Date(),
+        dateForCard1: null,
         reasonForCard2: "",
         historyForCard2: "",
-        dateForCard2: new Date(),
+        dateForCard2: null,
         reasonForCard3: "",
         historyForCard3: "",
-        dateForCard3: new Date(),
+        dateForCard3: null,
         reasonForApplication1: "",
-        dateForApplication1: new Date(),
+        dateForApplication1: null,
         reasonForApplication2: "",
-        dateForApplication2: new Date(),
+        dateForApplication2: null,
         reasonForApplication3: "",
-        dateForApplication3: new Date(),
+        dateForApplication3: null,
         resignationRecordCarLicense: ""
 
         // tab4
@@ -417,8 +417,8 @@ export default class MemberForm1 extends Vue {
             personType1: "",
             cardAllNumber: "",
             cardCustodian: "",
-            startDate: new Date(),
-            endDate: new Date(),
+            startDate: null,
+            endDate: null,
             lastEditPerson: "",
             lastEditTime: "",
 
@@ -428,13 +428,13 @@ export default class MemberForm1 extends Vue {
             phone: "",
             email: "",
             gender: "",
-            birthday: "",
+            birthday: null,
             department: "",
             costCenter: "",
             area: "",
             workArea: "",
-            registrationDate: new Date(),
-            resignationDate: new Date(),
+            registrationDate: null,
+            resignationDate: null,
 
             // tab2
             carLicenseCategory: "",
@@ -451,19 +451,19 @@ export default class MemberForm1 extends Vue {
             resignationRecordCardRecord: "",
             reasonForCard1: "",
             historyForCard1: "",
-            dateForCard1: new Date(),
+            dateForCard1: null,
             reasonForCard2: "",
             historyForCard2: "",
-            dateForCard2: new Date(),
+            dateForCard2: null,
             reasonForCard3: "",
             historyForCard3: "",
-            dateForCard3: new Date(),
+            dateForCard3: null,
             reasonForApplication1: "",
-            dateForApplication1: new Date(),
+            dateForApplication1: null,
             reasonForApplication2: "",
-            dateForApplication2: new Date(),
+            dateForApplication2: null,
             reasonForApplication3: "",
-            dateForApplication3: new Date(),
+            dateForApplication3: null,
             resignationRecordCarLicense: ""
 
             // tab4
@@ -533,6 +533,8 @@ export default class MemberForm1 extends Vue {
         if (this.selectedDetail[0] != undefined) {
             let detailData = this.selectedDetail[0];
 
+            console.log(detailData);
+
             // Master form
             if (detailData.objectId != undefined) {
                 this.inputFormData.objectId = detailData.objectId;
@@ -540,13 +542,18 @@ export default class MemberForm1 extends Vue {
 
             if (detailData.AccessRules != undefined) {
                 for (let rules of detailData.AccessRules) {
-                    // TODO: Morris, rules.value && rules.text not right
-                    if (rules.value != undefined && rules.text != undefined) {
+                    // Morris === premissionTableAPI: tableid => ObjectToken, show: ObjectName
+                    if (
+                        rules.ObjectToken != undefined &&
+                        rules.ObjectName != undefined
+                    ) {
                         let tempData = {
                             value: rules.value,
                             text: rules.text
                         };
-                        this.inputFormData.premissionSelected.push(tempData);
+                        this.inputFormData.premissionSelected.push(
+                            rules.ObjectToken
+                        );
                     }
                 }
             }
@@ -579,36 +586,324 @@ export default class MemberForm1 extends Vue {
                     detailData.detailData.Credentials[0].CardNumber;
             }
 
-            if (detailData.StartDate != undefined) {
-                this.inputFormData.startDate = detailData.StartDate;
+            if (
+                detailData.StartDate != undefined &&
+                detailData.StartDate != ""
+            ) {
+                try {
+                    this.inputFormData.startDate = new Date(
+                        detailData.StartDate
+                    );
+                } catch (e) {
+                    console.log(e);
+                }
             }
 
-            if (detailData.EndDate != undefined) {
-                this.inputFormData.endDate = detailData.EndDate;
+            if (detailData.EndDate != undefined && detailData.EndDate != "") {
+                try {
+                    this.inputFormData.endDate = new Date(detailData.EndDate);
+                } catch (e) {
+                    console.log(e);
+                }
             }
 
             // tab1
             if (detailData.PhoneNumber != undefined) {
                 this.inputFormData.extensionNumber = detailData.PhoneNumber;
             }
-
             if (detailData.MobileNumber != undefined) {
                 this.inputFormData.phone = detailData.MobileNumber;
             }
-
             if (detailData.Email != undefined) {
                 this.inputFormData.email = detailData.Email;
             }
-
-            if (detailData.DateOfBirth != undefined) {
-                this.inputFormData.birthday = detailData.DateOfBirth;
+            if (
+                detailData.DateOfBirth != undefined &&
+                detailData.DateOfBirth != ""
+            ) {
+                try {
+                    this.inputFormData.birthday = new Date(
+                        detailData.DateOfBirth
+                    );
+                } catch (e) {
+                    console.log(e);
+                }
             }
 
             if (detailData.CustomFields != undefined) {
                 for (let content of detailData.CustomFields) {
-                    // Master
-                    // if (content.) {
-                    // }
+                    if (
+                        content.FiledName != undefined &&
+                        content.FieldValue != undefined
+                    ) {
+                        // Master
+                        if (content.FiledName == "CustomTextBoxControl6__CF") {
+                            this.inputFormData.companyName = content.FieldValue;
+                        }
+                        if (content.FiledName == "CustomTextBoxControl2__CF") {
+                            this.inputFormData.cardCustodian =
+                                content.FieldValue;
+                        }
+                        if (content.FiledName == "CustomTextBoxControl3__CF") {
+                            this.inputFormData.lastEditPerson =
+                                content.FieldValue;
+                        }
+                        if (content.FiledName == "CustomDateControl2__CF") {
+                            this.inputFormData.lastEditTime =
+                                content.FieldValue;
+                        }
+
+                        // tab1
+                        if (
+                            content.FiledName == "CustomTextBoxControl5__CF_CF"
+                        ) {
+                            this.inputFormData.MVPN = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName == "CustomDropdownControl2__CF_CF"
+                        ) {
+                            this.inputFormData.gender = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF"
+                        ) {
+                            this.inputFormData.department = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.costCenter = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.area = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.workArea = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName == "CustomDateControl1__CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.registrationDate = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (content.FiledName == "CustomDateControl1__CF") {
+                            this.inputFormData.resignationDate =
+                                content.FieldValue;
+                        }
+
+                        // tab2
+                        if (content.FiledName == "CustomDropdownControl2__CF") {
+                            this.inputFormData.carLicenseCategory =
+                                content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.cardLicense = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.carLicense = content.FieldValue;
+                        }
+
+                        if (content.FiledName == "CustomTextBoxControl5__CF") {
+                            this.inputFormData.carLicense1 = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.carLicense2 = content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.carLicense3 = content.FieldValue;
+                        }
+
+                        // tab3
+                        if (
+                            content.FiledName == "CustomTextBoxControl7__CF_CF"
+                        ) {
+                            this.inputFormData.resignationNote =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF"
+                        ) {
+                            this.inputFormData.resignationRecordCardRecord =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName == "CustomDropdownControl3__CF_CF"
+                        ) {
+                            this.inputFormData.reasonForCard1 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.historyForCard1 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForCard1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForCard2 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.historyForCard2 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForCard2 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForCard3 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.historyForCard3 =
+                                content.FieldValue;
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForCard3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForApplication1 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForApplication1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForApplication2 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName == "CustomDateControl3__CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForApplication2 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (content.FiledName == "CustomDropdownControl3__CF") {
+                            this.inputFormData.reasonForApplication3 =
+                                content.FieldValue;
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForApplication3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.resignationRecordCarLicense =
+                                content.FieldValue;
+                        }
+                    }
                 }
             }
 
@@ -814,11 +1109,11 @@ export default class MemberForm1 extends Vue {
                 if (response != undefined) {
                     for (let content of response.results) {
                         if (
-                            content.objectId != undefined &&
+                            content.tableid != undefined &&
                             content.tablename != undefined
                         ) {
                             let tempOption: ISortSelectOption = {
-                                value: content.objectId,
+                                value: content.tableid,
                                 text: content.tablename
                             };
                             this.premissionOptions.push(tempOption);
