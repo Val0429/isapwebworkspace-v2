@@ -5,20 +5,19 @@
         v-bind:label-for="'input-' + _uid"
         >
          <div class="input-group">    
-        <select
+        <b-form-select
             @change="updateSelected($event)"            
-            class="col-md-12"
+            v-model="selected"
         >
             <option />
             <option
                 v-for="option in options"  
-                v-bind:key="option.key"
-                v-bind:value="option.key"
-                v-bind:selected="selected == option.key"
+                :key="option.key"
+                :value="option.key"               
                 >
                 {{ option.value }}
             </option>
-        </select>
+        </b-form-select>
          </div>
         <b-form-invalid-feedback v-if="this.invalid">
             {{ this.invalid }}

@@ -5,10 +5,10 @@
         v-bind:label-for="'input-' + _uid"
         >
         <b-button size="md" @click="moreItem()">{{_("w_Add")}}</b-button>
-        <div class="card col-md-6" v-for="item in items"  v-bind:key="item.id">
-            <label>  {{_("receivename")}}</label><input type="string" v-model="item.receivename" @change="update()"/>
-            <label>  {{_("emailaddress")}}</label>  <input type="string" v-model="item.emailaddress" @change="update()"/>                
-        </div>
+        <b-card v-for="item in items"  v-bind:key="item.id">
+            <label>  {{_("receivename")}}</label><b-form-input v-model="item.receivename" @change="update()"/>
+            <label>  {{_("emailaddress")}}</label>  <b-form-input v-model="item.emailaddress" @change="update()"/>                
+        </b-card>
          
         <b-form-invalid-feedback v-if="this.invalid">
             {{ this.invalid }}
