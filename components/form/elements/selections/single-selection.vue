@@ -4,7 +4,7 @@
         v-bind:label="label"
         v-bind:label-for="'input-' + _uid"
         >
-         <div class="input-group">    
+         <b-input-group>    
         <b-form-select
             @change="updateSelected($event)"            
             v-model="selected"
@@ -18,7 +18,7 @@
                 {{ option.value }}
             </option>
         </b-form-select>
-         </div>
+         </b-input-group>
         <b-form-invalid-feedback v-if="this.invalid">
             {{ this.invalid }}
         </b-form-invalid-feedback>
