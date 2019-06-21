@@ -5,8 +5,20 @@
             :label="_('w_Member_List')"
         >
             <template #toolbox>
-                <iv-toolbox-add @click="pageToAdd()" />
-            </template>
+                <iv-toolbox-view
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToView"
+                />
+                <iv-toolbox-edit
+                    :disabled="isSelected.length !== 1"
+                    @click="pageToEdit()"
+                />
+                <iv-toolbox-delete
+                    :disabled="isSelected.length === 0"
+                    @click="doDelete"
+                />
+                <iv-toolbox-divider />
+                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" /> </template>
 
             <iv-table
                 ref="listTable"
@@ -15,12 +27,25 @@
                 :server="{ path: '/acs/member' }"
                 @selected="selectedItem($event)"
             >
+
+                <template #CardNumber="{$attrs}">
+                    {{ anysisTableColumn($attrs.row, "CardNumber") }}
+                </template>
+
                 <template #StartDate="{$attrs}">
                     {{ dateToYYYY_MM_DD($attrs.value) }}
                 </template>
 
                 <template #EndDate="{$attrs}">
                     {{ dateToYYYY_MM_DD($attrs.value) }}
+                </template>
+
+                <template #Department="{$attrs}">
+                    {{ anysisTableColumn($attrs.row, "Department") }}
+                </template>
+
+                <template #CostCenter="{$attrs}">
+                    {{ anysisTableColumn($attrs.row, "CostCenter") }}
                 </template>
 
                 <template #Actions="{$attrs, $listeners}">
@@ -30,7 +55,7 @@
                         :disabled="isSelected.length !== 1"
                     >
                         <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                        <iv-toolbox-edit @click="pageToEdit()" />
                         <iv-toolbox-delete @click="doDelete" />
                     </iv-toolbox-more>
                 </template>
@@ -40,7 +65,7 @@
 
         <!-- add -->
         <iv-auto-card
-            v-show="pageStep === ePageStep.add"
+            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view"
             :visible="true"
             :label="pageStep === ePageStep.add ? _('w_Member_Add') :  _('w_Member_Edit')"
         >
@@ -52,10 +77,37 @@
                 :interface="IAddAndEditForm()"
                 :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
+                @update:personPhoto="updateShowPhoto($event)"
                 @submit="saveAddOrEdit($event)"
             >
 
-                <!-- Morris -->
+                <template #info="{ $attr }">
+                    <h4 class="ml-3 mt-4 font-weight-bold">
+                        {{ _('w_Member_Info') }}
+                    </h4>
+                </template>
+
+                <template
+                    #imageSrc="{ $attrs, $listeners}"
+                    v-if="newImgSrc"
+                >
+                    <label class="col-md-12">
+                        {{_("w_Member_PersonPic")}}
+                    </label>
+                    <img
+                        class="imgSide"
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        :src="newImgSrc"
+                    />
+                </template>
+
+                <template #permissionTable="{ $attr }">
+                    <h4 class="ml-3 mt-4 font-weight-bold">
+                        {{ _('w_Member_PermissionTable') }}
+                    </h4>
+                </template>
+
                 <template #premissionList>
                     <iv-sort-select
                         v-if="premissionOptions.length > 0"
@@ -68,7 +120,7 @@
                 <template #tabItem>
 
                     <iv-tab
-                        class="col-md-12"
+                        class="col-md-12 mt-5"
                         ref="tab"
                         :active="1"
                         @mounted="doTabMount"
@@ -79,7 +131,20 @@
                             <iv-form
                                 :interface="ITabForm1()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
                             >
+                                <template #personInfo="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_PersonInfo') }}
+                                    </h4>
+                                </template>
+
+                                <template #companyInfo="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_CompanyInfo') }}
+                                    </h4>
+                                </template>
+
                             </iv-form>
                         </template>
 
@@ -88,7 +153,20 @@
                             <iv-form
                                 :interface="ITabForm2()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
                             >
+                                <template #carLicenseData="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_CarLicenseData') }}
+                                    </h4>
+                                </template>
+
+                                <template #accountInfo="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_AccountInfo') }}
+                                    </h4>
+                                </template>
+
                             </iv-form>
                         </template>
 
@@ -97,24 +175,74 @@
                             <iv-form
                                 :interface="ITabForm3()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
                             >
+                                <template #cardRecord="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_CardRecord') }}
+                                    </h4>
+                                </template>
+
+                                <template #carLicenseRecord="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_CarLicenseRecord') }}
+                                    </h4>
+                                </template>
+
                             </iv-form>
                         </template>
 
-                        <template #4-title>{{ _('w_Member_Other') }}</template>
+                        <template #4-title>{{ _('w_Member_SelectTemplate') }}</template>
                         <template #4>
                             <iv-form
                                 :interface="ITabForm4()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
+                                @update:cardTemplate="updateShowCard($event)"
                             >
+
+                                <template
+                                    #imageSrcCard="{ $attrs, $listeners}"
+                                    v-if="imageSrcCard"
+                                >
+                                    <label class="col-md-12">
+                                        {{_("w_Member_CardPhoto")}}
+                                    </label>
+                                    <img
+                                        class="imgCard"
+                                        v-bind="$attrs"
+                                        v-on="$listeners"
+                                        :src="imageSrcCard"
+                                    />
+                                </template>
+
+                            </iv-form>
+                        </template>
+
+                        <template #5-title>{{ _('w_Member_Other') }}</template>
+                        <template #5>
+                            <iv-form
+                                :interface="ITabForm5()"
+                                :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
+                            >
+                                <template #censusRecord="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_CensusRecord') }}
+                                    </h4>
+                                </template>
+
+                                <template #parkingViolation="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_ParkingViolation') }}
+                                    </h4>
+                                </template>
                             </iv-form>
                         </template>
 
                     </iv-tab>
 
                 </template>
-
-                <!-- Morris -->
 
                 <template #test="{ $attrs, $listeners }">
                     <div class="mt-2 ml-3 mb-3">
@@ -136,34 +264,6 @@
 
         </iv-auto-card>
 
-        <!-- view -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label="_('w_User_ViewUser') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
-            >
-
-            </iv-form>
-
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
     </div>
 </template>
 
@@ -174,6 +274,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
 import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
+import ImageBase64 from "@/services/ImageBase64";
 
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
@@ -194,6 +295,87 @@ enum EPageStep {
     }
 })
 export default class MemberForm1 extends Vue {
+    // // Master
+    // objectId                     objectId
+    // premissionSelected           AccessRules (premissionTableAPI: tableid => ObjectToken, show: ObjectName)
+    // personType                   PrimaryWorkgroupId
+    // personType1                  PrimaryWorkgroupId
+    // employeeNumber               EmployeeNumber
+    // chineseName                  LastName
+    // englishName                  FirstName
+    // cardNumber                   Credentials[0]CardNumber
+    // cardAllNumber                Credentials[0]CardNumber
+    // startDate                    StartDate
+    // endDate                      EndDate
+    // companyName                  CustomFields -> CustomTextBoxControl6__CF
+    // cardCustodian                CustomFields -> CustomTextBoxControl2__CF
+    // lastEditPerson               CustomFields -> CustomTextBoxControl3__CF
+    // lastEditTime                 CustomFields -> CustomDateControl2__CF
+
+    // // tab1
+    // extensionNumber              PhoneNumber
+    // phone                        MobileNumber
+    // email                        Email
+    // birthday                     DateOfBirth
+    // MVPN                         CustomFields -> CustomTextBoxControl5__CF_CF
+    // gender                       CustomFields -> CustomDropdownControl2__CF_CF
+    // department                   CustomFields -> CustomTextBoxControl5__CF_CF_CF
+    // costCenter                   CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF
+    // area                         CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF
+    // workArea                     CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF
+    // registrationDate             CustomFields -> CustomDateControl1__CF_CF_CF
+    // resignationDate              CustomFields -> CustomDateControl1__CF
+
+    // // tab2
+    // carLicenseCategory           CustomFields -> CustomDropdownControl2__CF
+    // cardLicense                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF
+    // carLicense                   CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // carLicense1                  CustomFields -> CustomTextBoxControl5__CF
+    // carLicense2                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // carLicense3                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // account                      PersonalDetails.UserDetails.UserName
+    // password                     PersonalDetails.UserDetails.Password
+
+    // // tab3
+    // resignationNote              CustomFields -> CustomTextBoxControl7__CF_CF
+    // resignationRecordCardRecord  CustomFields -> CustomTextBoxControl7__CF_CF_CF
+    // reasonForCard1               CustomFields -> CustomDropdownControl3__CF_CF
+    // historyForCard1              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF
+    // dateForCard1                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
+    // reasonForCard2               CustomFields -> CustomDropdownControl3__CF_CF_CF
+    // historyForCard2              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF
+    // dateForCard2                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF
+    // reasonForCard3               CustomFields -> CustomDropdownControl3__CF_CF_CF_CF
+    // historyForCard3              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF
+    // dateForCard3                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF
+    // reasonForApplication1        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF
+    // dateForApplication1          CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
+    // reasonForApplication2        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF_CF
+    // dateForApplication2          CustomFields -> CustomDateControl3__CF_CF_CF
+    // reasonForApplication3        CustomFields -> CustomDropdownControl3__CF
+    // dateForApplication3          CustomFields -> CustomDateControl3__CF_CF_CF_CF
+    // resignationRecordCarLicense  CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF
+
+    // // tab4
+    // cardTemplate
+    // imageSrc
+
+    // // tab 5
+    // censusRecord1                CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusDate1                  CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusRecord2                CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusDate2                  CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // censusRecord3                CustomFields -> CustomTextBoxControl7__CF
+    // censusDate3                  CustomFields -> CustomDateControl3__CF
+    // infoOfViolation1             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF
+    // dateOfViolation1             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF
+    // infoOfViolation2             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // dateOfViolation2             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // infoOfViolation3             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+    // dateOfViolation3             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
+
+    ////////////////////////////////////////////////////////////////
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -203,34 +385,198 @@ export default class MemberForm1 extends Vue {
     selectedDetail: any = [];
 
     workGroupSelectItem: any = {};
-    userGroupSelectItem: any = {};
+    cardTemplateSelectItem: any = {};
+
+    workGroupIdSelectItem: any = {};
 
     inputTestEmail: string = "";
-
-    inputFormData: any = {};
-
-    // Morris //
+    newImg = new Image();
+    newImgCard = new Image();
+    newImgSrc = "";
+    imageSrcCard = "";
     premissionOptions: ISortSelectOption[] = [];
     tabMounted: boolean = false;
     doTabMount() {
         this.tabMounted = true;
     }
-    // Morris //
 
-    created() {
-        // Morris //
-        this.pageToAdd();
-        // Morris //
+    inputFormData: any = {
+        // Master
+        objectId: "",
+        premissionSelected: [],
+        personType: "",
+        personType1: "",
+        employeeNumber: "",
+        chineseName: "",
+        englishName: "",
+        cardNumber: "",
+        cardAllNumber: "",
+        startDate: null,
+        endDate: null,
+        personPhoto: "",
+        imageSrc: "",
+        companyName: "",
+        cardCustodian: "",
+        lastEditPerson: "",
+        lastEditTime: "",
+
+        // tab1
+        extensionNumber: "",
+        phone: "",
+        email: "",
+        birthday: null,
+        MVPN: "",
+        gender: "",
+        department: "",
+        costCenter: "",
+        area: "",
+        workArea: "",
+        registrationDate: null,
+        resignationDate: null,
+
+        // tab2
+        carLicenseCategory: "",
+        cardLicense: "",
+        carLicense: "",
+        carLicense1: "",
+        carLicense2: "",
+        carLicense3: "",
+        account: "",
+        password: "",
+
+        // tab3
+        resignationNote: "",
+        resignationRecordCardRecord: "",
+        reasonForCard1: "",
+        historyForCard1: "",
+        dateForCard1: null,
+        reasonForCard2: "",
+        historyForCard2: "",
+        dateForCard2: null,
+        reasonForCard3: "",
+        historyForCard3: "",
+        dateForCard3: null,
+        reasonForApplication1: "",
+        dateForApplication1: null,
+        reasonForApplication2: "",
+        dateForApplication2: null,
+        reasonForApplication3: "",
+        dateForApplication3: null,
+        resignationRecordCarLicense: "",
+
+        // tab4
+        cardTemplate: "",
+        imageSrcCard: "",
+
+        // tab 5
+        censusRecord1: "",
+        censusDate1: null,
+        censusRecord2: "",
+        censusDate2: null,
+        censusRecord3: "",
+        censusDate3: null,
+        infoOfViolation1: "",
+        dateOfViolation1: null,
+        infoOfViolation2: "",
+        dateOfViolation2: null,
+        infoOfViolation3: "",
+        dateOfViolation3: null
+    };
+
+    clearInputData() {
+        this.premissionOptions = [];
+        this.inputFormData = {
+            // Master
+            objectId: "",
+            premissionSelected: [],
+            personType: "",
+            personType1: "",
+            employeeNumber: "",
+            chineseName: "",
+            englishName: "",
+            cardNumber: "",
+            cardAllNumber: "",
+            startDate: null,
+            endDate: null,
+            personPhoto: "",
+            imageSrc: "",
+            companyName: "",
+            cardCustodian: "",
+            lastEditPerson: "",
+            lastEditTime: "",
+
+            // tab1
+            extensionNumber: "",
+            phone: "",
+            email: "",
+            birthday: null,
+            MVPN: "",
+            gender: "",
+            department: "",
+            costCenter: "",
+            area: "",
+            workArea: "",
+            registrationDate: null,
+            resignationDate: null,
+
+            // tab2
+            carLicenseCategory: "",
+            cardLicense: "",
+            carLicense: "",
+            carLicense1: "",
+            carLicense2: "",
+            carLicense3: "",
+            account: "",
+            password: "",
+
+            // tab3
+            resignationNote: "",
+            resignationRecordCardRecord: "",
+            reasonForCard1: "",
+            historyForCard1: "",
+            dateForCard1: null,
+            reasonForCard2: "",
+            historyForCard2: "",
+            dateForCard2: null,
+            reasonForCard3: "",
+            historyForCard3: "",
+            dateForCard3: null,
+            reasonForApplication1: "",
+            dateForApplication1: null,
+            reasonForApplication2: "",
+            dateForApplication2: null,
+            reasonForApplication3: "",
+            dateForApplication3: null,
+            resignationRecordCarLicense: "",
+
+            // tab4
+            cardTemplate: "",
+            imageSrcCard: "",
+
+            // tab 5
+            censusRecord1: "",
+            censusDate1: null,
+            censusRecord2: "",
+            censusDate2: null,
+            censusRecord3: "",
+            censusDate3: null,
+            infoOfViolation1: "",
+            dateOfViolation1: null,
+            infoOfViolation2: "",
+            dateOfViolation2: null,
+            infoOfViolation3: "",
+            dateOfViolation3: null
+        };
     }
+
+    created() {}
 
     mounted() {
         this.initSelectItemWorkGroup();
-        this.initDepartment();
     }
 
     async initSelectItemWorkGroup() {
         this.workGroupSelectItem = {};
-
         await this.$server
             .R("/acs/workgroup")
             .then((response: any) => {
@@ -239,6 +585,9 @@ export default class MemberForm1 extends Vue {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.workGroupSelectItem[returnValue.objectId] =
                             returnValue.groupname;
+
+                        this.workGroupIdSelectItem[returnValue.groupid] =
+                            returnValue.objectId;
                     }
                 }
             })
@@ -249,39 +598,6 @@ export default class MemberForm1 extends Vue {
                 console.log(e);
                 return false;
             });
-    }
-
-    async initDepartment() {
-        await this.$server
-            .R("/acs/member")
-            .then((response: any) => {
-                // console.log('returnValue - ', response.results.CustomFields);
-                if (response != undefined) {
-                    for (const returnValue of response.results.CustomFields) {
-                        console.log("returnValue - ", returnValue);
-                    }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
-
-    clearInputData() {
-        // Morris //
-        this.premissionOptions = [];
-        // Morris //
-
-        this.inputFormData = {
-            objectId: "",
-            // Morris //
-            premissionSelected: []
-            // Morris //
-        };
     }
 
     selectedItem(data) {
@@ -293,71 +609,691 @@ export default class MemberForm1 extends Vue {
     getInputData() {
         this.clearInputData();
 
-        // for (const param of this.selectedDetail) {
-        //     this.inputFormData = {
-        //         objectId: param.objectId,
-        //         employeeId: param.employeeId,
-        //         username: param.username,
-        //         role: param.role,
-        //         name: param.name,
-        //         email: param.email,
-        //         phone: param.phone,
-        //         siteIdsText: this.idsToText(param.sites),
-        //         groupIdsText: this.idsToText(param.groups),
-        //         siteIds: param.sites,
-        //         groupIds: param.groups,
-        //         type: ""
-        //     };
-        // }
+        if (this.selectedDetail[0] != undefined) {
+            let detailData = this.selectedDetail[0];
+
+            console.log('detailData - ', detailData);
+
+            // Master form
+            if (detailData.objectId != undefined) {
+                this.inputFormData.objectId = detailData.objectId.toString();
+            }
+
+            if (detailData.AccessRules != undefined) {
+                for (let rules of detailData.AccessRules) {
+                    if (
+                        rules.ObjectToken != undefined &&
+                        rules.ObjectName != undefined
+                    ) {
+                        this.inputFormData.premissionSelected.push(
+                            rules.ObjectToken.toString()
+                        );
+                    }
+                }
+            }
+
+            if (detailData.PrimaryWorkgroupId != undefined) {
+                for (const detail in this.workGroupIdSelectItem) {
+                    if (detailData.PrimaryWorkgroupId.toString() == detail) {
+                        this.inputFormData.personType = this.workGroupIdSelectItem[
+                            detail
+                        ];
+                        this.inputFormData.personType1 = this.workGroupIdSelectItem[
+                            detail
+                        ];
+                    }
+                    for (const detail in this.workGroupSelectItem) {
+                        if (this.inputFormData.personType1 == detail) {
+                            this.inputFormData.personType1 = this.workGroupSelectItem[
+                                detail
+                            ];
+                        }
+                    }
+                }
+            }
+
+            if (detailData.EmployeeNumber != undefined) {
+                this.inputFormData.employeeNumber = detailData.EmployeeNumber.toString();
+            }
+
+            if (detailData.LastName != undefined) {
+                this.inputFormData.chineseName = detailData.LastName.toString();
+            }
+
+            if (detailData.FirstName != undefined) {
+                this.inputFormData.englishName = detailData.FirstName.toString();
+            }
+
+            if (
+                detailData.Credentials != undefined &&
+                detailData.Credentials[0] != undefined &&
+                detailData.Credentials[0].CardNumber != undefined
+            ) {
+                this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber.toString();
+                this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber.toString();
+            }
+
+            if (
+                detailData.StartDate != undefined &&
+                detailData.StartDate != ""
+            ) {
+                try {
+                    this.inputFormData.startDate = new Date(
+                        detailData.StartDate
+                    );
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+            if (detailData.EndDate != undefined && detailData.EndDate != "") {
+                try {
+                    this.inputFormData.endDate = new Date(detailData.EndDate);
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+            // tab1
+            if (detailData.PhoneNumber != undefined) {
+                this.inputFormData.extensionNumber = detailData.PhoneNumber.toString();
+            }
+            if (detailData.MobileNumber != undefined) {
+                this.inputFormData.phone = detailData.MobileNumber.toString();
+            }
+            if (detailData.Email != undefined) {
+                this.inputFormData.email = detailData.Email.toString();
+            }
+            if (
+                detailData.DateOfBirth != undefined &&
+                detailData.DateOfBirth != ""
+            ) {
+                try {
+                    this.inputFormData.birthday = new Date(
+                        detailData.DateOfBirth
+                    );
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+            // tab2
+            if (
+                detailData.PersonalDetails != undefined &&
+                detailData.PersonalDetails.UserDetails != undefined &&
+                detailData.PersonalDetails.UserDetails.UserName != undefined &&
+                detailData.PersonalDetails.UserDetails.UserName != ""
+            ) {
+                this.inputFormData.account =
+                    detailData.PersonalDetails.UserDetails.UserName;
+            }
+
+            if (
+                detailData.PersonalDetails != undefined &&
+                detailData.PersonalDetails.UserDetails != undefined &&
+                detailData.PersonalDetails.UserDetails.Password != undefined &&
+                detailData.PersonalDetails.UserDetails.Password != ""
+            ) {
+                this.inputFormData.password =
+                    detailData.PersonalDetails.UserDetails.Password;
+            }
+
+            if (detailData.CustomFields != undefined) {
+                for (let content of detailData.CustomFields) {
+                    if (
+                        content.FiledName != undefined &&
+                        content.FieldValue != undefined
+                    ) {
+                        // Master
+                        if (content.FiledName == "CustomTextBoxControl6__CF") {
+                            this.inputFormData.companyName = content.FieldValue.toString();
+                        }
+                        if (content.FiledName == "CustomTextBoxControl2__CF") {
+                            this.inputFormData.cardCustodian = content.FieldValue.toString();
+                        }
+                        if (content.FiledName == "CustomTextBoxControl3__CF") {
+                            this.inputFormData.lastEditPerson = content.FieldValue.toString();
+                        }
+                        if (content.FiledName == "CustomDateControl2__CF") {
+                            this.inputFormData.lastEditTime = content.FieldValue.toString();
+                        }
+
+                        // tab1
+                        if (
+                            content.FiledName == "CustomTextBoxControl5__CF_CF"
+                        ) {
+                            this.inputFormData.MVPN = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName == "CustomDropdownControl2__CF_CF"
+                        ) {
+                            this.inputFormData.gender = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF"
+                        ) {
+                            this.inputFormData.department = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.costCenter = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.area = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.workArea = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName == "CustomDateControl1__CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.registrationDate = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (content.FiledName == "CustomDateControl1__CF") {
+                            try {
+                                this.inputFormData.resignationDate = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        // tab2
+                        if (content.FiledName == "CustomDropdownControl2__CF") {
+                            this.inputFormData.carLicenseCategory = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.cardLicense = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.carLicense = content.FieldValue.toString();
+                        }
+
+                        if (content.FiledName == "CustomTextBoxControl5__CF") {
+                            this.inputFormData.carLicense1 = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.carLicense2 = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.carLicense3 = content.FieldValue.toString();
+                        }
+
+                        // tab3
+                        if (
+                            content.FiledName == "CustomTextBoxControl7__CF_CF"
+                        ) {
+                            this.inputFormData.resignationNote = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF"
+                        ) {
+                            this.inputFormData.resignationRecordCardRecord = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName == "CustomDropdownControl3__CF_CF"
+                        ) {
+                            this.inputFormData.reasonForCard1 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.historyForCard1 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForCard1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForCard2 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.historyForCard2 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForCard2 = new Date(
+                                    content.FieldValue.toString()
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForCard3 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.historyForCard3 = content.FieldValue.toString();
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForCard3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForApplication1 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForApplication1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDropdownControl3__CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.reasonForApplication2 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName == "CustomDateControl3__CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForApplication2 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (content.FiledName == "CustomDropdownControl3__CF") {
+                            this.inputFormData.reasonForApplication3 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateForApplication3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.resignationRecordCarLicense = content.FieldValue.toString();
+                        }
+
+                        // tab 5
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.censusRecord1 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.censusDate1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.censusRecord2 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.censusDate2 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (content.FiledName == "CustomTextBoxControl7__CF") {
+                            this.inputFormData.censusRecord3 = content.FieldValue.toString();
+                        }
+
+                        if (content.FiledName == "CustomDateControl3__CF") {
+                            try {
+                                this.inputFormData.censusDate3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.infoOfViolation1 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateOfViolation1 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.infoOfViolation2 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateOfViolation2 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+
+                        if (
+                            content.FiledName ==
+                            "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            this.inputFormData.infoOfViolation3 = content.FieldValue.toString();
+                        }
+                        if (
+                            content.FiledName ==
+                            "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
+                        ) {
+                            try {
+                                this.inputFormData.dateOfViolation3 = new Date(
+                                    content.FieldValue
+                                );
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        this.pageToAdd();
     }
 
     tempSaveInputData(data) {
         switch (data.key) {
-            case "account":
-                this.inputFormData.username = data.value;
+            // Master
+            case "objectId":
+                this.inputFormData.objectId = data.value;
                 break;
-            case "password":
-                this.inputFormData.password = data.value;
+            case "premissionSelected":
+                this.inputFormData.premissionSelected = data.value;
                 break;
-            case "confirmPassword":
-                this.inputFormData.confirmPassword = data.value;
+            case "personType":
+                this.inputFormData.personType = data.value;
+                for (const detail in this.workGroupSelectItem) {
+                    if (data.value === detail)
+                        this.inputFormData.personType1 = this.workGroupSelectItem[
+                            detail
+                        ];
+                }
                 break;
-            case "employeeId":
-                this.inputFormData.employeeId = data.value;
+            case "employeeNumber":
+                this.inputFormData.employeeNumber = data.value;
                 break;
-            case "name":
-                this.inputFormData.name = data.value;
+            case "chineseName":
+                this.inputFormData.chineseName = data.value;
                 break;
-            case "email":
-                this.inputFormData.email = data.value;
+            case "englishName":
+                this.inputFormData.englishName = data.value;
+                break;
+            case "cardNumber":
+                this.inputFormData.cardNumber = data.value;
+                this.inputFormData.cardAllNumber = data.value;
+                break;
+            case "startDate":
+                this.inputFormData.startDate = data.value;
+                break;
+            case "endDate":
+                this.inputFormData.endDate = data.value;
+                break;
+            case "companyName":
+                this.inputFormData.companyName = data.value;
+                break;
+            case "cardCustodian":
+                this.inputFormData.cardCustodian = data.value;
+                break;
+            case "personPhoto":
+                this.inputFormData.personPhoto = data.value;
+                break;
+            case "lastEditPerson":
+                this.inputFormData.lastEditPerson = data.value;
+                break;
+            case "lastEditTime":
+                this.inputFormData.lastEditTime = data.value;
+                break;
+
+            // tab1
+            case "extensionNumber":
+                this.inputFormData.extensionNumber = data.value;
                 break;
             case "phone":
                 this.inputFormData.phone = data.value;
                 break;
-            case "siteIds":
-                this.inputFormData.siteIds = data.value;
+            case "email":
+                this.inputFormData.email = data.value;
                 break;
-            case "groupIds":
-                this.inputFormData.groupIds = data.value;
+            case "birthday":
+                this.inputFormData.birthday = data.value;
                 break;
-            case "role":
-                this.inputFormData.role = data.value;
+            case "MVPN":
+                this.inputFormData.MVPN = data.value;
+                break;
+            case "gender":
+                this.inputFormData.gender = data.value;
+                break;
+            case "department":
+                this.inputFormData.department = data.value;
+                break;
+            case "costCenter":
+                this.inputFormData.costCenter = data.value;
+                break;
+            case "area":
+                this.inputFormData.area = data.value;
+                break;
+            case "workArea":
+                this.inputFormData.workArea = data.value;
+                break;
+            case "registrationDate":
+                this.inputFormData.registrationDate = data.value;
+                break;
+            case "resignationDate":
+                this.inputFormData.resignationDate = data.value;
+                break;
+
+            // tab2
+            case "carLicenseCategory":
+                this.inputFormData.carLicenseCategory = data.value;
+                break;
+            case "cardLicense":
+                this.inputFormData.cardLicense = data.value;
+                break;
+            case "carLicense":
+                this.inputFormData.carLicense = data.value;
+                break;
+            case "carLicense1":
+                this.inputFormData.carLicense1 = data.value;
+                break;
+            case "carLicense2":
+                this.inputFormData.carLicense2 = data.value;
+                break;
+            case "carLicense3":
+                this.inputFormData.carLicense3 = data.value;
+                break;
+            case "account":
+                this.inputFormData.account = data.value;
+                break;
+            case "password":
+                this.inputFormData.password = data.value;
+                break;
+
+            // tab3
+            case "resignationNote":
+                this.inputFormData.resignationNote = data.value;
+                break;
+            case "resignationRecordCardRecord":
+                this.inputFormData.resignationRecordCardRecord = data.value;
+                break;
+            case "reasonForCard1":
+                this.inputFormData.reasonForCard1 = data.value;
+                break;
+            case "historyForCard1":
+                this.inputFormData.historyForCard1 = data.value;
+                break;
+            case "dateForCard1":
+                this.inputFormData.dateForCard1 = data.value;
+                break;
+            case "reasonForCard2":
+                this.inputFormData.reasonForCard2 = data.value;
+                break;
+            case "historyForCard2":
+                this.inputFormData.historyForCard2 = data.value;
+                break;
+            case "dateForCard2":
+                this.inputFormData.dateForCard2 = data.value;
+                break;
+            case "reasonForCard3":
+                this.inputFormData.reasonForCard3 = data.value;
+                break;
+            case "historyForCard3":
+                this.inputFormData.historyForCard3 = data.value;
+                break;
+            case "dateForCard3":
+                this.inputFormData.dateForCard3 = data.value;
+                break;
+            case "reasonForApplication1":
+                this.inputFormData.reasonForApplication1 = data.value;
+                break;
+            case "dateForApplication1":
+                this.inputFormData.dateForApplication1 = data.value;
+                break;
+            case "reasonForApplication2":
+                this.inputFormData.reasonForApplication2 = data.value;
+                break;
+            case "dateForApplication2":
+                this.inputFormData.dateForApplication2 = data.value;
+                break;
+            case "reasonForApplication3":
+                this.inputFormData.reasonForApplication3 = data.value;
+                break;
+            case "dateForApplication3":
+                this.inputFormData.dateForApplication3 = data.value;
+                break;
+            case "resignationRecordCarLicense":
+                this.inputFormData.resignationRecordCarLicense = data.value;
                 break;
         }
     }
 
-    async pageToAdd() {
-        this.clearInputData();
-        this.initSelectItemWorkGroup();
-
-        // Morris //
-        this.initPremission();
-        // Morris //
-
+    pageToAdd() {
         this.pageStep = EPageStep.add;
+        this.initPremission();
     }
 
-    // Morris //
     async initPremission() {
         let param: {
             paging: {
@@ -376,12 +1312,12 @@ export default class MemberForm1 extends Vue {
                 if (response != undefined) {
                     for (let content of response.results) {
                         if (
-                            content.objectId != undefined &&
+                            content.tableid != undefined &&
                             content.tablename != undefined
                         ) {
                             let tempOption: ISortSelectOption = {
-                                value: content.objectId,
-                                text: content.tablename
+                                value: content.tableid.toString(),
+                                text: content.tablename.toString()
                             };
                             this.premissionOptions.push(tempOption);
                         }
@@ -396,29 +1332,15 @@ export default class MemberForm1 extends Vue {
                 return false;
             });
     }
-    // Morris //
 
-    async pageToEdit(type: string) {
-        this.pageStep = EPageStep.edit;
+    async pageToEdit() {
         this.getInputData();
-
-        this.inputFormData.type = type;
-
-        this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.siteIds.map(item => item.objectId)
-            )
-        );
-        this.inputFormData.groupIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.groupIds.map(item => item.objectId)
-            )
-        );
+        this.pageStep = EPageStep.add;
     }
 
     pageToView() {
-        this.pageStep = EPageStep.view;
         this.getInputData();
+        this.pageStep = EPageStep.view;
     }
 
     pageToList() {
@@ -426,101 +1348,474 @@ export default class MemberForm1 extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
-    saveAddOrEdit() {}
-
-    async saveAdd(data) {
-        const datas: any[] = [
-            {
-                username: data.username,
-                role: data.role,
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                password: data.password,
-                employeeId: data.employeeId,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : []
-            }
-        ];
-
-        const addParam = {
-            datas
-        };
-
-        await this.$server
-            .C("/acs/member", addParam)
-            .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_AddUserSuccess"));
-                        this.pageToList();
-                    }
-                    if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_AddUserFailed"));
-                        return false;
-                    }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_AddUserFailed"));
-                    return false;
-                }
-                console.log(e);
-                return false;
-            });
+    updateShowPhoto(data) {
+        if (data) this.uploadFile(data);
     }
 
-    async saveEdit(data) {
-        const datas: any[] = [
-            {
-                role: data.role,
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                objectId: data.objectId
+    updateShowCard(data) {
+        if (data) this.uploadFileCard(data);
+    }
+
+    async uploadFile(file) {
+        if (file) {
+            ImageBase64.fileToBase64(file, (base64 = "") => {
+                if (base64 != "") {
+                    this.newImg = new Image();
+                    this.newImg.src = base64;
+                    this.newImg.onload = () => {
+                        this.newImgSrc = base64;
+                        console.log("newImgSrc", this.newImgSrc);
+                        return;
+                    };
+                } else {
+                    Dialog.error(this._("w_Member_ErrorUploadFile"));
+                }
+            });
+        }
+    }
+
+    async uploadFileCard(file) {
+        if (file) {
+            ImageBase64.fileToBase64(file, (base64 = "") => {
+                if (base64 != "") {
+                    this.newImgCard = new Image();
+                    this.newImgCard.src = base64;
+                    this.newImgCard.onload = () => {
+                        this.imageSrcCard = base64;
+                        console.log("newImgSrc", this.imageSrcCard);
+                        return;
+                    };
+                } else {
+                    Dialog.error(this._("w_Member_ErrorUploadFile"));
+                }
+            });
+        }
+    }
+
+    async saveAddOrEdit() {
+        let tempCredentials: any = [];
+        let tempPersonalDetails: any = {};
+        let tempCustomFieldsList: any = [];
+
+        if (
+            this.selectedDetail[0] != undefined &&
+            this.selectedDetail[0].Credentials != undefined &&
+            this.selectedDetail[0].Credentials[0] != undefined
+        ) {
+            tempCredentials = JSON.parse(
+                JSON.stringify(this.selectedDetail[0].Credentials)
+            );
+            tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
+        } else {
+            tempCredentials = [
+                {
+                    CardNumber: this.inputFormData.cardNumber
+                }
+            ];
+        }
+
+        if (
+            this.selectedDetail[0] != undefined &&
+            this.selectedDetail[0].PersonalDetails != undefined
+        ) {
+            tempPersonalDetails = JSON.parse(
+                JSON.stringify(this.selectedDetail[0].PersonalDetails)
+            );
+            if (tempPersonalDetails.UserDetails != undefined) {
+                tempPersonalDetails.UserDetails.account = this.inputFormData.account;
+                tempPersonalDetails.UserDetails.password = this.inputFormData.password;
+            } else {
+                tempPersonalDetails.UserDetails = {
+                    UserName: this.inputFormData.account,
+                    Password: this.inputFormData.password
+                };
             }
-        ];
+        } else {
+            tempPersonalDetails = {
+                UserDetails: {
+                    UserName: this.inputFormData.account,
+                    Password: this.inputFormData.password
+                }
+            };
+        }
 
-        const editParam = {
-            datas
-        };
+        console.log("!!! master");
 
-        await this.$server
-            .U("/acs/member", editParam)
-            .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_EditUserSuccess"));
-                        this.pageToList();
+        // master
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl6__CF",
+            FieldValue: this.inputFormData.companyName.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl2__CF",
+            FieldValue: this.inputFormData.cardCustodian.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl3__CF",
+            FieldValue: this.inputFormData.lastEditPerson.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.lastEditTime.toString()
+        });
+
+        console.log("!!! tab1");
+
+        // tab1
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF",
+            FieldValue: this.inputFormData.MVPN.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl2__CF_CF",
+            FieldValue: this.inputFormData.gender.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF",
+            FieldValue: this.inputFormData.department.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF",
+            FieldValue: this.inputFormData.costCenter.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.area.toString()
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.workArea.toString()
+        });
+        console.log("registrationDate", this.inputFormData.registrationDate);
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl1__CF_CF_CF",
+            FieldValue:
+                this.inputFormData.registrationDate != null &&
+                !isNaN(this.inputFormData.registrationDate.getTime())
+                    ? this.inputFormData.registrationDate.toISOString()
+                    : ""
+        });
+        console.log("resignationDate", this.inputFormData.resignationDate);
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl1__CF",
+            FieldValue:
+                this.inputFormData.resignationDate != null &&
+                !isNaN(this.inputFormData.resignationDate.getTime())
+                    ? this.inputFormData.resignationDate.toISOString()
+                    : ""
+        });
+
+        console.log("!!! tab2");
+
+        // tab2
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl2__CF",
+            FieldValue: this.inputFormData.carLicenseCategory.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.cardLicense.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.carLicense.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF",
+            FieldValue: this.inputFormData.carLicense1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.carLicense2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName:
+                "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.carLicense3.toString()
+        });
+
+        console.log("!!! tab3");
+
+        // tab3
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF",
+            FieldValue: this.inputFormData.resignationNote.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF",
+            FieldValue: this.inputFormData.resignationRecordCardRecord.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF",
+            FieldValue: this.inputFormData.reasonForCard1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF",
+            FieldValue: this.inputFormData.historyForCard1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForCard1 != null &&
+                !isNaN(this.inputFormData.dateForCard1.getTime())
+                    ? this.inputFormData.dateForCard1.toISOString()
+                    : ""
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForCard2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.historyForCard2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForCard2 != null &&
+                !isNaN(this.inputFormData.dateForCard2.getTime())
+                    ? this.inputFormData.dateForCard2.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForCard3.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.historyForCard3.toString()
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForCard3 != null &&
+                !isNaN(this.inputFormData.dateForCard3.getTime())
+                    ? this.inputFormData.dateForCard3.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForApplication1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForApplication1 != null &&
+                !isNaN(this.inputFormData.dateForApplication1.getTime())
+                    ? this.inputFormData.dateForApplication1.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.reasonForApplication2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForApplication2 != null &&
+                !isNaN(this.inputFormData.dateForApplication2.getTime())
+                    ? this.inputFormData.dateForApplication2.toISOString()
+                    : ""
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl3__CF",
+            FieldValue: this.inputFormData.reasonForApplication3.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateForApplication3 != null &&
+                !isNaN(this.inputFormData.dateForApplication3.getTime())
+                    ? this.inputFormData.dateForApplication3.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.resignationRecordCarLicense.toString()
+        });
+
+        console.log("!!! tab5");
+
+        // tab5
+        tempCustomFieldsList.push({
+            FiledName:
+                "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.censusRecord1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.censusDate1 != null &&
+                !isNaN(this.inputFormData.censusDate1.getTime())
+                    ? this.inputFormData.censusDate1.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName:
+                "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.censusRecord2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.censusDate2 != null &&
+                !isNaN(this.inputFormData.censusDate2.getTime())
+                    ? this.inputFormData.censusDate2.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF",
+            FieldValue: this.inputFormData.censusRecord3.toString()
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.censusDate3 != null &&
+                !isNaN(this.inputFormData.censusDate3.getTime())
+                    ? this.inputFormData.censusDate3.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.infoOfViolation1.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateOfViolation1 != null &&
+                !isNaN(this.inputFormData.dateOfViolation1.getTime())
+                    ? this.inputFormData.dateOfViolation1.toISOString()
+                    : ""
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.infoOfViolation2.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateOfViolation2 != null &&
+                !isNaN(this.inputFormData.dateOfViolation2.getTime())
+                    ? this.inputFormData.dateOfViolation2.toISOString()
+                    : ""
+        });
+
+        tempCustomFieldsList.push({
+            FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
+            FieldValue: this.inputFormData.infoOfViolation3.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
+            FieldValue:
+                this.inputFormData.dateOfViolation3 != null &&
+                !isNaN(this.inputFormData.dateOfViolation3.getTime())
+                    ? this.inputFormData.dateOfViolation3.toISOString()
+                    : ""
+        });
+
+        if (
+            this.selectedDetail[0] != undefined &&
+            this.selectedDetail[0].objectId != undefined &&
+            this.selectedDetail[0].objectId != ""
+        ) {
+            const editParam: any = JSON.parse(
+                JSON.stringify(this.selectedDetail[0])
+            );
+
+            // master
+            editParam.objectId = this.inputFormData.objectId;
+            editParam.AccessRules = this.inputFormData.premissionSelected;
+            editParam.PrimaryWorkgroupId = !isNaN(
+                parseInt(this.inputFormData.personType)
+            )
+                ? parseInt(this.inputFormData.personType)
+                : 0;
+            editParam.EmployeeNumber = this.inputFormData.employeeNumber;
+            editParam.LastName = this.inputFormData.chineseName;
+            editParam.FirstName = this.inputFormData.englishName;
+            editParam.StartDate = this.inputFormData.startDate;
+            editParam.EndDate = this.inputFormData.endDate;
+
+            // tab1
+            editParam.extensionNumber = this.inputFormData.PhoneNumber;
+            editParam.phone = this.inputFormData.MobileNumber;
+            editParam.Email = this.inputFormData.email;
+            editParam.DateOfBirth = this.inputFormData.birthday;
+
+            // special
+            editParam.Credentials = tempCredentials;
+            editParam.PersonalDetails = tempPersonalDetails;
+            editParam.CustomFields = tempCustomFieldsList;
+
+            await this.$server
+                .U("/acs/member", editParam)
+                .then((response: any) => {
+                    this.pageToList();
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
                     }
-                    if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_EditUserFailed"));
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_Member_EditFailed"));
                         return false;
                     }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_EditUserFailed"));
+                    console.log(e);
                     return false;
-                }
-                console.log(e);
-                return false;
-            });
+                });
+        } else {
+            const addParam = {
+                // master
+                objectId: this.inputFormData.objectId,
+                AccessRules: this.inputFormData.premissionSelected,
+                PrimaryWorkgroupId: !isNaN(parseInt(this.inputFormData.personType))
+                    ? parseInt(this.inputFormData.personType)
+                    : 0,
+                EmployeeNumber: this.inputFormData.employeeNumber,
+                LastName: this.inputFormData.chineseName,
+                FirstName: this.inputFormData.englishName,
+                StartDate: this.inputFormData.startDate,
+                EndDate: this.inputFormData.endDate,
+
+                // tab1
+                extensionNumber: this.inputFormData.PhoneNumber,
+                phone: this.inputFormData.MobileNumber,
+                Email: this.inputFormData.email,
+                DateOfBirth: this.inputFormData.birthday,
+
+                // special
+                Credentials: tempCredentials,
+                PersonalDetails: tempPersonalDetails,
+                CustomFields: tempCustomFieldsList
+            };
+
+            await this.$server
+                .C("/acs/member", addParam)
+                .then((response: any) => {
+                    this.pageToList();
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    if (e.res.statusCode == 500) {
+                        Dialog.error(this._("w_Member_AddFailed"));
+                        return false;
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
     }
 
     async doDelete() {
         await Dialog.confirm(
-            this._("w_User_DeleteConfirm"),
+            this._("w_Member_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const param of this.selectedDetail) {
@@ -533,14 +1828,8 @@ export default class MemberForm1 extends Vue {
                     this.$server
                         .D("/acs/member", deleteParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
-                                    this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
+                            if (response) {
+                                this.pageToList();
                             }
                         })
                         .catch((e: any) => {
@@ -559,57 +1848,50 @@ export default class MemberForm1 extends Vue {
         );
     }
 
-    showFirst(value): string {
-        if (value.length >= 2) {
-            return value.map(item => item.name)[0] + "...";
-        }
-        if (value.length === 1) {
-            return value.map(item => item.name)[0];
-        }
-        if (value.length == 0) {
-            return "";
-        }
-    }
-
-    show30Words(
-        value: any,
-        startWord: number = 0,
-        endWord: number = 30
-    ): string {
-        return value.length < endWord
-            ? value.substring(startWord, endWord)
-            : value.substring(startWord, endWord) + "...";
-    }
-
-    idsToText(value: any): string {
-        let result = "";
-        for (let val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
-    }
-
-    cardSearch(search: string) {
-        // TODO: finished search
-        // console.log('search - ', search)
-        this.searchKeywords(search);
-    }
-
-    searchKeywords(search: string) {
-        // TODO: finished search
-        if (search != "") {
-            const accountText = this.inputFormData.username.toLocaleLowerCase();
-            const nameText = this.inputFormData.name.toLocaleLowerCase();
-            const searchText = search.toLowerCase();
-            const searchResult =
-                accountText.match(searchText) || nameText.match(searchText);
-            return searchResult;
-        }
-    }
-
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+    }
+
+    // CardNumber: CustomTextBoxControl1__CF
+    // Department: CustomTextBoxControl5__CF_CF_CF
+    // CostCenter: CustomTextBoxControl5__CF_CF_CF_CF
+    anysisTableColumn(row: any, key: string): string {
+        let result: string = "";
+        if (key == "CardNumber") {
+            if (
+                row.Credentials != undefined &&
+                row.Credentials[0] != undefined &&
+                row.Credentials[0].CardNumber != undefined
+            ) {
+                result = row.Credentials[0].CardNumber;
+            }
+        } else {
+            if (row.CustomFields != undefined) {
+                for (let fidled of row.CustomFields) {
+                    if (
+                        key == "Department" &&
+                        fidled.FiledName != undefined &&
+                        fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF"
+                    ) {
+                        if (fidled.FieldValue != undefined) {
+                            result = fidled.FieldValue;
+                        }
+                    }
+
+                    if (
+                        key == "CostCenter" &&
+                        fidled.FiledName != undefined &&
+                        fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF"
+                    ) {
+                        if (fidled.FieldValue != undefined) {
+                            result = fidled.FieldValue;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     ITableList() {
@@ -621,60 +1903,50 @@ export default class MemberForm1 extends Vue {
                  */
                 EmployeeNumber: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_CardNumber1")}
                  */
                 CardNumber: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_PersonType1")}
                  */
                 PrimaryWorkgroupName: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_ChineseName1")}
                  */
                 LastName: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_EnglishName1")}
                  */
                 FirstName: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Department1")}
                  */
-                CustomTextBoxControl5__CF_CF_CF: string;
-
+                Department: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CostCenter1")}
                  */
-                CustomTextBoxControl5__CF_CF_CF_CF: string;
-
+                CostCenter: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_StartDate1")}
                  */
                 StartDate: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_EndDate1")}
                  */
                 EndDate: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Member_Actions")}
                  */
                 Actions?: any;
-
             }
         `;
     }
@@ -686,12 +1958,20 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CompanyName")}
                  * @uiColumnGroup - row1
-                 */
+                 * @uiType - ${
+                        (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                */
                 companyName?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_PersonType")}
                  * @uiColumnGroup - row1
+                 * @uiDisabled - ${
+                        (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
                  */
                 personType?: ${toEnumInterface(
                     this.workGroupSelectItem as any,
@@ -701,84 +1981,140 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_EmployeeNumber")}
                  * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 employeeNumber?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_ChineseName")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
-                chineseName?: string;
-
+                chineseName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_EnglishName")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 englishName?: string;
 
-
                 /**
-                 * @uiLabel - ${this._("w_Member_ChineseName")}
+                 * @uiLabel - ${this._("w_Member_CardNumber")}
                  * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
-                chineseName?: string;
-
+                cardNumber?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardType")}
                  * @uiColumnGroup - row3
+                 * @uiType - iv-form-label
                  */
-                personType1?: ${toEnumInterface(
-                    this.workGroupSelectItem as any,
-                    false
-                )};
-
+                personType1?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardAllNumber")}
                  * @uiColumnGroup - row3
+                 * @uiType - iv-form-label
                  */
                 cardAllNumber?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardCustodian")}
                  * @uiColumnGroup - row3
+                 * @uiType - ${
+                     (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
                 cardCustodian?: string;
 
+               /**
+                * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
+                * @uiColumnGroup - row13
+                * @uiType - iv-form-file
+                * @uiHidden - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                     }
+                */
+                personPhoto?: string;
 
-                
+               /**
+                * @uiColumnGroup - row13
+                */
+                imageSrc?:any;
 
-                email: string;
-
-                test?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                 */
-                 phone?: string;
-
-                /**
-                 * @uiLabel - ${this._("w_User_Role")}
-                 */
-                role: ${toEnumInterface({
-                    Admin: this._("w_User_UserGroup_Admin"),
-                    User: this._("w_User_UserGroup_User")
-                })};
+                info?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
+                * @uiLabel - ${this._("w_Member_StartDate")}
+                * @uiPlaceHolder - ${this._("w_Member_StartDate")}
+                * @uiColumnGroup - row5
+                * @uiType - iv-form-date
+                * @uiDisabled - ${
+                     (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                */
+                startDate?: any;
+
+                /**
+                * @uiLabel - ${this._("w_Member_EndDate")}
+                * @uiPlaceHolder - ${this._("w_Member_EndDate")}
+                * @uiColumnGroup - row5
+                * @uiType - iv-form-date
+                * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                }
+                */
+                endDate?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_LastEditPerson")}
+                 * @uiPlaceHolder - ${this._("w_Member_LastEditPerson")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-label
                  */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
+                lastEditPerson?: string;
 
-                selectTree?: any;
+                /**
+                 * @uiLabel - ${this._("w_Member_LastEditTime")}
+                 * @uiPlaceHolder - ${this._("w_Member_LastEditTime")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-label
+                 */
+                lastEditTime?: string;
 
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row62?: string;
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row63?: string;
+
+                permissionTable?: any;
 
                 premissionList?: any;
 
@@ -788,78 +2124,143 @@ export default class MemberForm1 extends Vue {
         `;
     }
 
-    IViewForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_Account")}
-                 * @uiType - iv-form-label
-                 */
-                username?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Name")}
-                 * @uiType - iv-form-label
-                 */
-                name?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiType - iv-form-label
-                 */
-                employeeId?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Email")}
-                 * @uiType - iv-form-label
-                 */
-                email?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiType - iv-form-label
-                 */
-                phone?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_Role")}
-                 * @uiType - iv-form-label
-                 */
-                role?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 * @uiType - iv-form-label
-                 */
-                groupIdsText?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiType - iv-form-label
-                 */
-                siteIdsText: string;
-
-            }
-        `;
-    }
-
-    // Morris //
     ITabForm1() {
         return `
             interface {
+
+                personInfo?: any;
+
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 * @uiLabel - ${this._("w_Member_ExtensionNumber")}
+                 * @uiAttrs - { min: 0}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
-                name: string;
+                extensionNumber?: number;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_MVPN")}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                MVPN?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Phone")}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                phone?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Email")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                email?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Gender")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                gender?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Birthday")}
+                 * @uiColumnGroup - row2
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                birthday?: string;
+
+                companyInfo?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Department")}
+                 * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                department?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CostCenter")}
+                 * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                costCenter?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Area")}
+                 * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                area?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_WorkArea")}
+                 * @uiColumnGroup - row5
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                workArea?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_RegistrationDate")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                registrationDate?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ResignationDate")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                resignationDate?: string;
             }
         `;
     }
@@ -867,11 +2268,102 @@ export default class MemberForm1 extends Vue {
     ITabForm2() {
         return `
             interface {
+                carLicenseData?: any;
+
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 * @uiLabel - ${this._("w_Member_CarLicenseCategory")}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
-                name: string;
+                carLicenseCategory?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardLicense")}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                cardLicense?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense")}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                carLicense?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense1")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                carLicense1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense2")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                carLicense2?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense3")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                carLicense3?: string;
+
+                accountInfo?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Account")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                account?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Password")}
+                 * @uiColumnGroup - row2
+                 * @uiType - iv-form-password
+                * @uiHidden - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                */
+                password?: string;
+
+                /**
+                 * @uiColumnGroup - row2
+                 * @uiHidden - true
+                 */
+                row23?: string;
             }
         `;
     }
@@ -879,11 +2371,238 @@ export default class MemberForm1 extends Vue {
     ITabForm3() {
         return `
             interface {
+
+                cardRecord?: any;
+
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 * @uiLabel - ${this._("w_Member_ResignationNote")}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
                  */
-                name: string;
+                resignationNote?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ResignationRecordCardRecord")}
+                 * @uiColumnGroup - row1
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                resignationRecordCardRecord?: string;
+
+                /**
+                 * @uiColumnGroup - row1
+                 * @uiHidden - true
+                 */
+                row13?: string;
+
+                /**
+                 * @uiLabel - ${this._("ReasonForCard1")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                reasonForCard1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_HistoryForCard1")}
+                 * @uiColumnGroup - row2
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                historyForCard1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForCard1")}
+                 * @uiColumnGroup - row2
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateForCard1?: string;
+
+                /**
+                 * @uiLabel - ${this._("ReasonForCard2")}
+                 * @uiColumnGroup - row3
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                reasonForCard2?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_HistoryForCard2")}
+                 * @uiColumnGroup - row3
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                historyForCard2?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForCard2")}
+                 * @uiColumnGroup - row3
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateForCard2?: string;
+
+                /**
+                 * @uiLabel - ${this._("ReasonForCard3")}
+                 * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                reasonForCard3?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_HistoryForCard3")}
+                 * @uiColumnGroup - row4
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                historyForCard3?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForCard3")}
+                 * @uiColumnGroup - row4
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateForCard3?: string;
+
+                carLicenseRecord?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication1")}
+                 * @uiColumnGroup - row5
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                reasonForApplication1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication1")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateForApplication1?: string;
+
+                /**
+                 * @uiColumnGroup - row5
+                 * @uiHidden - true
+                 */
+                row53?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                reasonForApplication2?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateForApplication2?: string;
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row63?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
+                 * @uiColumnGroup - row7
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                reasonForApplication3?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication3")}
+                 * @uiColumnGroup - row7
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateForApplication3?: string;
+
+                /**
+                 * @uiColumnGroup - row7
+                 * @uiHidden - true
+                 */
+                row73?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ResignationRecordCarLicense")}
+                 * @uiColumnGroup - row8
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                resignationRecordCarLicense?: string;
+
+                /**
+                 * @uiColumnGroup - row8
+                 * @uiHidden - true
+                 */
+                row82?: string;
+
+                 /**
+                 * @uiColumnGroup - row8
+                 * @uiHidden - true
+                 */
+                row83?: string;
             }
         `;
     }
@@ -891,17 +2610,221 @@ export default class MemberForm1 extends Vue {
     ITabForm4() {
         return `
             interface {
+
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
+                 * @uiLabel - ${this._("w_Member_CardTemplate")}
+                 * @uiColumnGroup - row13
+                 * @uiDisabled - ${
+            (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+            }
                  */
-                name: string;
+                cardTemplate?: ${toEnumInterface(
+                    this.cardTemplateSelectItem as any,
+                    false
+                )};
+
+               /**
+                * @uiColumnGroup - row13
+                */
+                imageSrcCard?:any;
             }
         `;
     }
-    // Morris //
+
+    ITabForm5() {
+        return `
+            interface {
+               censusRecord?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusRecord1")}
+                 * @uiColumnGroup - row5
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                censusRecord1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusDate1")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                censusDate1?: string;
+
+                /**
+                 * @uiColumnGroup - row5
+                 * @uiHidden - true
+                 */
+                row53?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusRecord2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                censusRecord2?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusDate2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                censusDate2?: string;
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row63?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusRecord3")}
+                 * @uiColumnGroup - row7
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                censusRecord3?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CensusDate3")}
+                 * @uiColumnGroup - row7
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                censusDate3?: string;
+
+                /**
+                 * @uiColumnGroup - row7
+                 * @uiHidden - true
+                 */
+                row73?: string;
+
+               parkingViolation?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation1")}
+                 * @uiColumnGroup - row15
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                infoOfViolation1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation1")}
+                 * @uiColumnGroup - row15
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateOfViolation1?: string;
+
+                /**
+                 * @uiColumnGroup - row15
+                 * @uiHidden - true
+                 */
+                row153?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation2")}
+                 * @uiColumnGroup - row16
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                infoOfViolation2?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation2")}
+                 * @uiColumnGroup - row16
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateOfViolation2?: string;
+
+                /**
+                 * @uiColumnGroup - row16
+                 * @uiHidden - true
+                 */
+                row163?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation3")}
+                 * @uiColumnGroup - row17
+                 * @uiType - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit)
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                    }
+                 */
+                infoOfViolation3?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation3")}
+                 * @uiColumnGroup - row17
+                 * @uiType - iv-form-date
+                 * @uiDisabled - ${
+                    (this.pageStep === EPageStep.add || this.pageStep === EPageStep.edit) ? "false" : "true"
+                    }
+                 */
+                dateOfViolation3?: string;
+
+                /**
+                 * @uiColumnGroup - row17
+                 * @uiHidden - true
+                 */
+                row173?: string;
+
+             }
+        `;
+    }
+
+    IViewForm() {
+        return `interface{}`;
+    }
 }
 </script>
 
 <style lang="scss" scoped>
+.imgSide {
+    max-width: 200px;
+    min-width: 200px;
+    max-height: none;
+    min-height: auto;
+    height: 100%;
+    margin-bottom: 10px;
+}
+.imgCard {
+    max-width: 300px;
+    min-width: 200px;
+    max-height: none;
+    min-height: auto;
+    height: 100%;
+    margin-bottom: 10px;
+}
 </style>

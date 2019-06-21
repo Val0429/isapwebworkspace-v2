@@ -412,8 +412,10 @@ export default class LangObject implements ILang {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+    w_Delete = 'Delete';
     readerIO="Reader I/O";
 
+    // Member
     w_Navigation_Users = 'Users';
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
@@ -441,6 +443,8 @@ export default class LangObject implements ILang {
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
     w_Member_Actions = '功能';
+    w_Member_PersonPic = '人員照片：';
+    w_Member_UpLoadPersonPic = '上傳照片：';
 
     w_Member_Info = '資訊狀態：';
     w_Member_StartDate = '起始日期：';
@@ -454,7 +458,7 @@ export default class LangObject implements ILang {
     w_Member_CanSelect = '可用選項：';
     w_Member_BeSelected = '已選擇：';
 
-    w_Member_PersonInfo = '個人資訊：';
+    w_Member_PersonInfo = '個人資訊';
     w_Member_ExtensionNumber = '分機號碼：';
     w_Member_MVPN = 'MVPN：';
     w_Member_Phone = '行動電話：';
@@ -464,14 +468,15 @@ export default class LangObject implements ILang {
     w_Member_CompanyInfo = '公司資訊：';
     w_Member_Department = '部門：';
     w_Member_Department1 = '部門';
-    w_Member_CostCenter= '成本中心：';
-    w_Member_CostCenter1= '成本中心';
+    w_Member_CostCenter = '成本中心：';
+    w_Member_CostCenter1 = '成本中心';
     w_Member_Area = '地區：';
     w_Member_WorkArea = '工作地區：';
     w_Member_RegistrationDate = '報到日期：';
     w_Member_ResignationDate = '離職日期：';
 
     w_Member_General = '一般';
+    w_Member_CarLicenseData = '車證資料';
     w_Member_CarLicenseCategory = '車證類別：';
     w_Member_CardLicense = '車證編號：';
     w_Member_CarLicense = '車位編號：';
@@ -482,7 +487,6 @@ export default class LangObject implements ILang {
     w_Member_AccountInfo = '用戶詳情：';
     w_Member_Account = '用戶名：';
     w_Member_Password = '密碼：';
-
 
     w_Member_CardRecord = '證卡紀錄';
     w_Member_ResignationNote = '離職備註：';
@@ -497,6 +501,10 @@ export default class LangObject implements ILang {
     w_Member_HistoryForCard3 = '歷史卡號III：';
     w_Member_DateForCard3 = '發卡日期III：';
 
+    w_Member_SelectTemplate = '選擇模板';
+    w_Member_CardTemplate = '卡片模板';
+    w_Member_CardPhoto = '卡片樣式';
+
     w_Member_CarLicenseRecord = '車證紀錄';
     w_Member_ReasonForApplication1 = '申請原因I：';
     w_Member_DateForApplication1 = '發證日期I：';
@@ -506,7 +514,8 @@ export default class LangObject implements ILang {
     w_Member_DateForApplication3 = '發證日期III：';
     w_Member_ResignationRecordCarLicense = '離職繳回紀錄_車證：';
 
-    w_Member_Other = '其他：';
+    w_Member_Other = '其他';
+    w_Member_CensusRecord = '普查紀錄：';
     w_Member_CensusRecord1 = '普查紀錄I：';
     w_Member_CensusDate1 = '普查日期I：';
     w_Member_CensusRecord2 = '普查紀錄II：';
@@ -522,4 +531,8 @@ export default class LangObject implements ILang {
     w_Member_InfoOfViolation3 = '違規說明III：';
     w_Member_DateOfViolation3 = '違規日期III：';
 
+    w_Member_DeleteConfirm = 'Are you sure to delete selected member(s)?';
+    w_Member_EditFailed = '編輯失敗';
+    w_Member_AddFailed = '新增失敗';
+    w_Member_ErrorUploadFile = '上傳失敗';
 }

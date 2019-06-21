@@ -12,14 +12,20 @@ interface RestfulRequest extends ApisRequestBase {
 
     Get: {
         '/acs/door': [any, any, true];
+        '/acs/doorgroup': [any, any, true];
+        '/acs/elevator': [any, any, true];
+        '/acs/elevatorgroup': [any, any, true];
+        '/acs/timeschedule': [any, any, true];
+        '/acs/accesslevel': [any, any, true];
+
         '/users/login': [UsersLoginAll.Input, UsersLoginAll.Output, false];
         '/users': [any, any, true];
         '/announcements': [AnnouncementsGet.Input, AnnouncementsGet.Output, true];
 
         // Member
-        "/acs/member": [any, any, true];
-        "/acs/workgroup": [any, any, true];
-        "/acs/permissiontable": [any, any, true];
+        '/acs/member': [any, any, true];
+        '/acs/workgroup': [any, any, true];
+        '/acs/permissiontable': [any, any, true];
     };
 
     Put: {
@@ -31,6 +37,7 @@ interface RestfulRequest extends ApisRequestBase {
     Delete: {
         '/users': [any, any, true];
         '/acs/permissiontable': [any, any, true];
+        '/acs/accesslevel': [any, any, true];
 
         // Member
         '/acs/member': [any, any, true];
