@@ -395,4 +395,5 @@ export default class LangObject {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+    readerIO="Reader I/O";
 }

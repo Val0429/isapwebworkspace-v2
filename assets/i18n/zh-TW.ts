@@ -397,4 +397,5 @@ export default class LangObject implements ILang {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+    readerIO="Reader I/O";
 }

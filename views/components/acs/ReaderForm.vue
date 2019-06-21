@@ -2,10 +2,18 @@
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
 
-        <!-- <template #view.firstname="{$attrs, $listeners}">
-            <img style="max-width: 150px; max-height: 150px" src="https://res.klook.com/image/upload/fl_lossy.progressive/q_auto/f_auto/c_fill/blogen/5-taipei-hotspots-new-cover.png" />
-        </template> -->
-
+        <template #view.system="{$attrs, $listeners}">
+            {{$attrs.value== 1 ? "SIPASS" : $attrs.value==800 ? "CCURE" : 'UNKNOWN'}}
+        </template>
+        <template #view.readerIO="{$attrs, $listeners}">
+            {{getInfo($attrs.row.objectId).io}}
+        </template>
+        <template #view.door="{$attrs, $listeners}">
+            {{getInfo($attrs.row.objectId).doorname}}
+        </template>
+        <template #view.doorgroup="{$attrs, $listeners}">
+            {{getInfo($attrs.row.objectId).groupname}}
+        </template>
         <!-- 6) custom edit / add template with <template #add.* /> -->
         
     </iv-form-quick>
@@ -35,23 +43,31 @@ export default class ReaderForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {
-                    /**
-                    * @uiLabel - ${this._("system")}
-                    */
-                    system: string;
+                interface {                    
                     /**
                     * @uiLabel - ${this._("readerid")}
                     */
                     readerid: string;
                     /**
+                    * @uiLabel - ${this._("w_DoorGroup")}
+                    */
+                    doorgroup: string;
+                    /**
+                    * @uiLabel - ${this._("w_Door")}
+                    */
+                    door: string;                  
+                    /**
+                    * @uiLabel - ${this._("readerIO")}
+                    */
+                    readerIO: string; 
+                    /**
                     * @uiLabel - ${this._("readername")}
                     */
-                    readername: string;                    
+                    readername: string;                   
                     /**
-                    * @uiLabel - ${this._("status")}
+                    * @uiLabel - ${this._("system")}
                     */
-                    status: number;                    
+                    system: string;
                 }
                 `;
             case EFormQuick.Add:
@@ -61,7 +77,10 @@ export default class ReaderForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("system")}
                     */
-                    system: string;
+                    system: ${toEnumInterface({
+                            1: 'SIPASS',
+                            800: 'CCURE'
+                        }, false)};
                     /**
                     * @uiLabel - ${this._("readerid")}
                     */
@@ -99,6 +118,43 @@ export default class ReaderForm extends Vue implements IFormQuick {
         let item = this.options.find(x=>x.key==key);        
         return item?item.value:'';
     }
+    doors:any[]=[];
+    doorGroups:any[]=[];
+    async created(){
+         await Promise.all([
+        this.getDoorOptions(),
+        this.getDoorGroupOptions()]);
+    }
+    private async getDoorOptions() {
+        let resp: any =await this.$server.R("/acs/door",{"paging.all":"true"});            
+        this.doors = resp.results;        
+        console.log("doors",this.doors);
+    }
+    private async getDoorGroupOptions() {
+        let resp: any =await this.$server.R("/acs/doorgroup" as any,{"paging.all":"true"});            
+        this.doorGroups = resp.results;        
+        console.log("doorGroups",this.doorGroups);    
+    }
+    getInfo(objectId:string){
+        let doorin = this.doors.find(x=>x.readerin&&x.readerin.objectId==objectId);
+        let doorout = this.doors.find(x=>x.readerout&&x.readerout.objectId==objectId);
+        let io = doorin ? "IN" : doorout ? "OUT" : "";
+        let doorname= doorin ? doorin.doorname : doorout ? doorout.doorname : "";
+        let groupin:any;
+        if(doorin){
+            groupin = this.doorGroups.find(x=>x.doors.find(y=>y.objectId==doorin.objectId));
+        }
+        let groupout:any;
+        if(doorout){
+            groupout = this.doorGroups.find(x=>x.doors.find(y=>y.objectId==doorout.objectId));
+        }
+        
+        let groupname = groupin ? groupin.groupname : groupout ? groupout.groupname : "";
+        return {io,doorname,groupname};
+    }
+    
+    
+        
 }
 </script>
 
