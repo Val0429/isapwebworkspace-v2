@@ -517,8 +517,11 @@ export default class MemberForm1 extends Vue {
     }
 
     pageToList() {
+        console.log('000 - ', );
         this.pageStep = EPageStep.list;
+        console.log('111 - ', );
         (this.$refs.listTable as any).reload();
+        console.log('222 - ', );
     }
 
     updateShowPhoto(data) {
@@ -648,15 +651,10 @@ export default class MemberForm1 extends Vue {
                     this.$server
                         .D("/acs/member", deleteParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                                if (response) {
                                     this.pageToList();
                                 }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+
                         })
                         .catch((e: any) => {
                             if (
