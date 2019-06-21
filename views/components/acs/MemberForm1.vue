@@ -367,7 +367,6 @@ export default class MemberForm1 extends Vue {
     }
 
     selectedItem(data) {
-        console.log(data);
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
@@ -375,6 +374,8 @@ export default class MemberForm1 extends Vue {
 
     getInputData() {
         this.clearInputData();
+
+        console.log(this.selectedDetail);
 
         // for (const param of this.selectedDetail) {
         //     this.inputFormData = {
@@ -1039,14 +1040,6 @@ export default class MemberForm1 extends Vue {
                  */
                 cardLicense?: string;
 
-
-                /**
-                 * @uiLabel - ${this._("w_Member_CarLicense")}
-                 * @uiColumnGroup - row1
-                 */
-                carLicense"?: string;
-
-
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense1")}
                  * @uiColumnGroup - row2
@@ -1058,7 +1051,6 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row2
                  */
                 carLicense2?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicense3")}
