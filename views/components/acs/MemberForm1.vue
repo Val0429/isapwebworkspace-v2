@@ -87,13 +87,14 @@
                     </h4>
                 </template>
 
-                <template #imageSrc="{ $attrs, $listeners}">
+                <template #imageSrc="{ $attrs, $listeners}"
+                          v-if="newImgSrc"
+                >
                     <label class="col-md-12">
                         {{_("w_Member_PersonPic")}}
                     </label>
                     <img
                         class="imgSide"
-                        v-if="newImgSrc"
                         v-bind="$attrs"
                         v-on="$listeners"
                         :src="newImgSrc"
@@ -130,6 +131,7 @@
                             <iv-form
                                 :interface="ITabForm1()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
                             >
                                 <template #personInfo="{ $attr }">
                                     <h4 class="ml-3 font-weight-bold">
@@ -151,6 +153,7 @@
                             <iv-form
                                 :interface="ITabForm2()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
                             >
                                 <template #carLicenseData="{ $attr }">
                                     <h4 class="ml-3 font-weight-bold">
@@ -172,6 +175,7 @@
                             <iv-form
                                 :interface="ITabForm3()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
                             >
                                 <template #cardRecord="{ $attr }">
                                     <h4 class="ml-3 font-weight-bold">
@@ -193,19 +197,21 @@
                             <iv-form
                                 :interface="ITabForm4()"
                                 :value="inputFormData"
-                                @update:cardTemplate="updateShowPhoto($event)"
+                                @update:*="tempSaveInputData($event)"
+                                @update:cardTemplate="updateShowCard($event)"
                             >
 
-                                <template #imageSrc="{ $attrs, $listeners}">
+                                <template #imageSrcCard="{ $attrs, $listeners}"
+                                          v-if="imageSrcCard"
+                                >
                                     <label class="col-md-12">
                                         {{_("w_Member_CardPhoto")}}
                                     </label>
                                     <img
                                         class="imgCard"
-                                        v-if="newImgSrc"
                                         v-bind="$attrs"
                                         v-on="$listeners"
-                                        :src="newImgSrc"
+                                        :src="imageSrcCard"
                                     />
                                 </template>
 
@@ -217,6 +223,7 @@
                             <iv-form
                                 :interface="ITabForm5()"
                                 :value="inputFormData"
+                                @update:*="tempSaveInputData($event)"
                             >
                                 <template #censusRecord="{ $attr }">
                                     <h4 class="ml-3 font-weight-bold">
@@ -330,7 +337,9 @@ export default class MemberForm1 extends Vue {
 
     inputTestEmail: string = "";
     newImg = new Image();
+    newImgCard = new Image();
     newImgSrc = "";
+    imageSrcCard = "";
     premissionOptions: ISortSelectOption[] = [];
     tabMounted: boolean = false;
     doTabMount() {
@@ -352,6 +361,7 @@ export default class MemberForm1 extends Vue {
         cardCustodian: "",
         startDate: null,
         endDate: null,
+        personPhoto: '',
         lastEditPerson: "",
         lastEditTime: "",
 
@@ -419,6 +429,7 @@ export default class MemberForm1 extends Vue {
             cardCustodian: "",
             startDate: null,
             endDate: null,
+            personPhoto: "",
             lastEditPerson: "",
             lastEditTime: "",
 
@@ -977,7 +988,6 @@ export default class MemberForm1 extends Vue {
     }
 
     tempSaveInputData(data) {
-        console.log('data - ', data);
         switch (data.key) {
             // Master
             case "objectId":
@@ -1015,6 +1025,9 @@ export default class MemberForm1 extends Vue {
                 break;
             case "cardCustodian":
                 this.inputFormData.cardCustodian = data.value;
+                break;
+            case "personPhoto":
+                this.inputFormData.personPhoto = data.value;
                 break;
             case "lastEditPerson":
                 this.inputFormData.lastEditPerson = data.value;
@@ -1282,6 +1295,10 @@ export default class MemberForm1 extends Vue {
         if (data) this.uploadFile(data);
     }
 
+    updateShowCard(data) {
+        if (data) this.uploadFileCard(data);
+    }
+
     async uploadFile(file) {
         if (file) {
             ImageBase64.fileToBase64(file, (base64 = "") => {
@@ -1300,15 +1317,97 @@ export default class MemberForm1 extends Vue {
         }
     }
 
+    async uploadFileCard(file) {
+        if (file) {
+            ImageBase64.fileToBase64(file, (base64 = "") => {
+                if (base64 != "") {
+                    this.newImgCard = new Image();
+                    this.newImgCard.src = base64;
+                    this.newImgCard.onload = () => {
+                        this.imageSrcCard = base64;
+                        console.log("newImgSrc", this.imageSrcCard);
+                        return;
+                    };
+                } else {
+                    Dialog.error(this._("w_Member_ErrorUploadFile"));
+                }
+            });
+        }
+    }
+
+
     async saveAddOrEdit() {
         console.log(this.inputFormData);
 
-        return false;
+
+        const credentialsObject: any = {
+            CardNumber: this.inputFormData.cardNumber,
+        };
+
+        const customFieldsObject: any = {
+            CustomTextBoxControl6__CF: this.inputFormData.companyName,
+            CustomTextBoxControl2__CF: this.inputFormData.cardCustodian,
+            CustomTextBoxControl3__CF: this.inputFormData.lastEditPerson,
+            CustomDateControl2__CF: this.inputFormData.lastEditTime,
+        };
 
         if(this.pageStep === EPageStep.add) {
             const datas: any = [
                 {
-                }
+                    // master
+                    AccessRules: this.inputFormData.premissionSelected,
+                    objectId: this.inputFormData.objectId,
+                    ApbWorkgroupId: this.inputFormData.personType,
+                    EmployeeNumber: this.inputFormData.employeeNumber,
+                    LastName: this.inputFormData.chineseName,
+                    FirstName: this.inputFormData.englishName,
+                    Credentials: [credentialsObject],
+                    StartDate: this.inputFormData.startDate,
+                    EndDate: this.inputFormData.endDate,
+
+                    CustomFields: [customFieldsObject],
+
+                    // tab1
+                    extensionNumber: this.inputFormData.PhoneNumber,
+                    phone: this.inputFormData.MobileNumber,
+                    Email: this.inputFormData.email,
+                    DateOfBirth: this.inputFormData.birthday,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //     : this.inputFormData.,
+                //
+                //
+                 }
             ];
 
             const addParam = {
@@ -2078,7 +2177,7 @@ export default class MemberForm1 extends Vue {
                /**
                 * @uiColumnGroup - row13
                 */
-                imageSrc?:any;
+                imageSrcCard?:any;
             }
         `;
     }
