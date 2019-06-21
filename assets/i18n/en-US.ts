@@ -406,6 +406,7 @@ export default class LangObject {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+    w_Delete = 'Delete';
 
     // Member
     w_Member_List = '人員管理';
@@ -443,7 +444,7 @@ export default class LangObject {
     w_Member_CanSelect = '可用選項：';
     w_Member_BeSelected = '已選擇：';
 
-    w_Member_PersonInfo = '個人資訊：';
+    w_Member_PersonInfo = '個人資訊';
     w_Member_ExtensionNumber = '分機號碼：';
     w_Member_MVPN = 'MVPN：';
     w_Member_Phone = '行動電話：';
@@ -453,8 +454,8 @@ export default class LangObject {
     w_Member_CompanyInfo = '公司資訊：';
     w_Member_Department = '部門：';
     w_Member_Department1 = '部門';
-    w_Member_CostCenter= '成本中心：';
-    w_Member_CostCenter1= '成本中心';
+    w_Member_CostCenter = '成本中心：';
+    w_Member_CostCenter1 = '成本中心';
     w_Member_Area = '地區：';
     w_Member_WorkArea = '工作地區：';
     w_Member_RegistrationDate = '報到日期：';
@@ -472,7 +473,6 @@ export default class LangObject {
     w_Member_AccountInfo = '用戶詳情：';
     w_Member_Account = '用戶名：';
     w_Member_Password = '密碼：';
-
 
     w_Member_CardRecord = '證卡紀錄';
     w_Member_ResignationNote = '離職備註：';

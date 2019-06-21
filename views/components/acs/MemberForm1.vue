@@ -440,6 +440,7 @@ export default class MemberForm1 extends Vue {
         startDate: null,
         endDate: null,
         personPhoto: "",
+        imageSrc: "",
         companyName: "",
         cardCustodian: "",
         lastEditPerson: "",
@@ -491,7 +492,7 @@ export default class MemberForm1 extends Vue {
 
         // tab4
         cardTemplate: "",
-        imageSrc: "",
+        imageSrcCard: "",
 
         // tab 5
         censusRecord1: "",
@@ -524,6 +525,7 @@ export default class MemberForm1 extends Vue {
             startDate: null,
             endDate: null,
             personPhoto: "",
+            imageSrc: "",
             companyName: "",
             cardCustodian: "",
             lastEditPerson: "",
@@ -575,7 +577,7 @@ export default class MemberForm1 extends Vue {
 
             // tab4
             cardTemplate: "",
-            imageSrc: "",
+            imageSrcCard: "",
 
             // tab 5
             censusRecord1: "",
@@ -1115,6 +1117,7 @@ export default class MemberForm1 extends Vue {
     }
 
     tempSaveInputData(data) {
+
         switch (data.key) {
             // Master
             case "objectId":
@@ -1125,6 +1128,11 @@ export default class MemberForm1 extends Vue {
                 break;
             case "personType":
                 this.inputFormData.personType = data.value;
+                for (const detail in this.workGroupSelectItem) {
+                    if (data.value === detail)
+                        this.inputFormData.personType1 = this.workGroupSelectItem[detail];
+                }
+
                 break;
             case "employeeNumber":
                 this.inputFormData.employeeNumber = data.value;
@@ -1137,8 +1145,6 @@ export default class MemberForm1 extends Vue {
                 break;
             case "cardNumber":
                 this.inputFormData.cardNumber = data.value;
-                break;
-            case "cardAllNumber":
                 this.inputFormData.cardAllNumber = data.value;
                 break;
             case "startDate":
@@ -2089,15 +2095,14 @@ export default class MemberForm1 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CardType")}
                  * @uiColumnGroup - row3
+                 * @uiType - iv-form-label
                  */
-                personType1?: ${toEnumInterface(
-                    this.workGroupSelectItem as any,
-                    false
-                )};
+                personType1?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardAllNumber")}
                  * @uiColumnGroup - row3
+                 * @uiType - iv-form-label
                  */
                 cardAllNumber?: string;
 
@@ -2109,7 +2114,6 @@ export default class MemberForm1 extends Vue {
 
                /**
                 * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
-                * @uiPlaceHolder - ${this._("w_Member_UpLoadPersonPic")}
                 * @uiColumnGroup - row13
                 * @uiType - iv-form-file
                 */

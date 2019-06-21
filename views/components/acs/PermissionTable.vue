@@ -36,6 +36,7 @@
                     :interface="IMainTable()"
                     :multiple="tableMultiple"
                     :server="{ path: '/acs/permissiontable' }"
+                    :params="SearchParams"
                     @selected="selectedItem($event)"
                 >
                     <template #Actions="{$attrs, $listeners}">
@@ -55,7 +56,10 @@
 
         <!--Site Form (Add and Edit and View)-->
         <div v-if="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view">
-            <iv-auto-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')">
+            <iv-auto-card
+                :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')"
+                v-if="pageStep != ePageStep.view"
+            >
 
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -69,7 +73,6 @@
                 >
 
                     <!-- <template #deviceType="{ $attrs, $listeners}">
-
                         <div class="card-content iv-form-group col-md-12">
                             <b-form-group :label="_('w_Permission_DeviceType')">
                                 <b-form-radio-group
@@ -97,17 +100,36 @@
             <!-- Sub  Table -->
             <iv-card :label="_('w_Permission_PermissionList')">
 
-                <iv-table
-                    ref="subTable"
-                    :interface="ISubTable()"
-                    :multiple="tableMultiple"
-                    @selected="selectedSubItem($event)"
+                <template
+                    #toolbox
+                    v-if="pageStep === ePageStep.view"
                 >
-                    <template #Actions="{$attrs, $listeners}">
-                        <iv-toolbox-delete @click="doDelete" />
-                    </template>
-
-                </iv-table>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+                <table class="table b-table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th v-show="pageStep ==='remove'"></th>
+                            <th v-for="value in inputFormData.title">{{ value }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(value, index) in inputFormData.accesslevels">
+                            <td>{{ value.deviceType }}</td>
+                            <td>{{ value.deviceName }}</td>
+                            <td>{{ value.deviceArea }}</td>
+                            <td>{{ value.deviceTimeFormat }}</td>
+                            <td>
+                                <b-button
+                                    v-if="pageStep != ePageStep.view"
+                                    class="button"
+                                    type="button"
+                                    @click="doSubDelete(value)"
+                                >{{ _('w_Delete')}}</b-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </iv-card>
         </div>
 
@@ -140,6 +162,14 @@ export default class PermissionTable extends Vue {
     isSelected: any = [];
     selectedDetail: any = [];
     inputFormData: any = {
+        title: [
+            "Device Type",
+            "Device Name",
+            "Device Area",
+            "Time Format",
+            "Action"
+        ],
+
         id: "",
         permissionName: "",
         deviceType: "door",
@@ -150,6 +180,7 @@ export default class PermissionTable extends Vue {
         accesslevels: []
     };
     accesslevel: any = {
+        objectId: "",
         deviceType: "",
         deviceName: "",
         deviceArea: "",
@@ -170,11 +201,35 @@ export default class PermissionTable extends Vue {
         this.pageToList();
     }
 
-    searchTable(data) {
-        this.SearchParams = {
-            name: data.permissionName
-        };
+    searchTable(datas) {
+        this.SearchParams = {};
+        for (var i in datas) {
+            this.SearchParams = {
+                tablename: datas.permissionName
+            };
+        }
+
         (this.$refs.mainTable as any).reload();
+    }
+
+    clearInputFormData() {
+        this.inputFormData = {
+            title: [
+                "Device Type",
+                "Device Name",
+                "Device Area",
+                "Time Format",
+                "Action"
+            ],
+            id: "",
+            permissionName: "",
+            deviceType: "door",
+            deviceName: "",
+            deviceArea: "",
+            deviceTimeFormat: "",
+            accesslevelIds: [],
+            accesslevels: []
+        };
     }
 
     async initInputFormData(datas) {
@@ -188,13 +243,11 @@ export default class PermissionTable extends Vue {
             .R("/acs/accesslevel")
             .then((response: any) => {
                 if (response != undefined) {
+                    this.inputFormData.accesslevels = [];
                     for (const returnValue of response.results) {
-                        if (
-                            this.inputFormData.accesslevelIds.some(
-                                x => x == returnValue.objectId
-                            )
-                        ) {
+                        if (true) {
                             let accesslevel = {
+                                objectId: returnValue.objectId,
                                 deviceType: "",
                                 deviceName: returnValue.levelname,
                                 deviceArea: "",
@@ -228,6 +281,7 @@ export default class PermissionTable extends Vue {
 
     pageToAdd() {
         this.selected = "door";
+        this.clearInputFormData();
         this.selectedDeviceType(0);
         this.initDeviceTimeFromatItem();
         this.pageStep = EPageStep.add;
@@ -242,6 +296,32 @@ export default class PermissionTable extends Vue {
 
     pageToView() {
         this.pageStep = EPageStep.view;
+    }
+
+    async doSubDelete(data) {
+        console.log("doSubDelete", data);
+        await Dialog.confirm(
+            this._("w_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                const deleteParam: {
+                    objectId: string;
+                } = {
+                    objectId: data.objectId
+                };
+
+                this.$server
+                    .D("/acs/accesslevel", deleteParam)
+                    .then((response: any) => {
+                        this.inputFormData.accesslevels = this.inputFormData.accesslevels.filter(
+                            a => a.objectId != data.objectId
+                        );
+                    })
+                    .catch((e: any) => {
+                        console.log(e);
+                    });
+            }
+        );
     }
 
     async doDelete() {
