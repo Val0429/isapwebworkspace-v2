@@ -415,6 +415,9 @@ export default class MemberForm1 extends Vue {
     workGroupSelectItem: any = {};
     cardTemplateSelectItem: any = {};
 
+    workGroupIdSelectItem: any = {};
+
+
     inputTestEmail: string = "";
     newImg = new Image();
     newImgCard = new Image();
@@ -611,6 +614,9 @@ export default class MemberForm1 extends Vue {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.workGroupSelectItem[returnValue.objectId] =
                             returnValue.groupname;
+
+                        this.workGroupIdSelectItem[returnValue.groupid] =
+                            returnValue.objectId;
                     }
                 }
             })
@@ -656,9 +662,18 @@ export default class MemberForm1 extends Vue {
             }
 
             if (detailData.ApbWorkgroupId != undefined) {
-                this.inputFormData.personType = detailData.ApbWorkgroupId.toString();
-                this.inputFormData.personType1 = detailData.ApbWorkgroupId.toString();
+            for (const detail in this.workGroupIdSelectItem) {
+                if ((detailData.ApbWorkgroupId).toString() == detail) {
+                    this.inputFormData.personType = this.workGroupIdSelectItem[detail];
+                    this.inputFormData.personType1 = this.workGroupIdSelectItem[detail];
+                }
+                for (const detail in this.workGroupSelectItem) {
+                    if (this.inputFormData.personType1 == detail) {
+                        this.inputFormData.personType1 = this.workGroupSelectItem[detail];
+                    }
+                }
             }
+        }
 
             if (detailData.EmployeeNumber != undefined) {
                 this.inputFormData.employeeNumber = detailData.EmployeeNumber.toString();
@@ -1132,7 +1147,6 @@ export default class MemberForm1 extends Vue {
                     if (data.value === detail)
                         this.inputFormData.personType1 = this.workGroupSelectItem[detail];
                 }
-
                 break;
             case "employeeNumber":
                 this.inputFormData.employeeNumber = data.value;
