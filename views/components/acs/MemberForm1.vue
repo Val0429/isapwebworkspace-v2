@@ -1550,8 +1550,8 @@ export default class MemberForm1 extends Vue {
 
 <style lang="scss" scoped>
     .imgSide {
-        max-width: 400px;
-        min-width: 300px;
+        max-width: 200px;
+        min-width: 200px;
         max-height: none;
         min-height: auto;
         height: 100%;
