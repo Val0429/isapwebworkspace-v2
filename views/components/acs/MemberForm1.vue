@@ -1854,7 +1854,6 @@ export default class MemberForm1 extends Vue {
 
                /**
                 * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
-                * @uiPlaceHolder - ${this._("w_Member_UpLoadPersonPic")}
                 * @uiColumnGroup - row13
                 * @uiType - iv-form-file
                 */
