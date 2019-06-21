@@ -444,7 +444,7 @@ export default class LangObject implements ILang {
     w_Member_CanSelect = '可用選項：';
     w_Member_BeSelected = '已選擇：';
 
-    w_Member_PersonInfo = '個人資訊：';
+    w_Member_PersonInfo = '個人資訊';
     w_Member_ExtensionNumber = '分機號碼：';
     w_Member_MVPN = 'MVPN：';
     w_Member_Phone = '行動電話：';
