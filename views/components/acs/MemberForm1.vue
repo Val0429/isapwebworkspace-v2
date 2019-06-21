@@ -65,6 +65,7 @@
                 :interface="IAddAndEditForm()"
                 :value="inputFormData"
                 @update:*="tempSaveInputData($event)"
+                @update:personPhoto="updateShowPhoto($event)"
                 @submit="saveAddOrEdit($event)"
             >
 
@@ -72,6 +73,19 @@
                     <h4 class="ml-3 mt-4 font-weight-bold">
                         {{ _('w_Member_Info') }}
                     </h4>
+                </template>
+
+                <template #imageSrc="{ $attrs, $listeners}">
+                    <label class="col-md-12">
+                        {{_("w_Member_UpLoadPersonPic")}}
+                    </label>
+                    <img
+                        class="imgSide"
+                        v-if="newImgSrc"
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        :src="newImgSrc"
+                    />
                 </template>
 
                 <template #permissionTable="{ $attr }">
@@ -256,6 +270,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
 import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
+import ImageBase64 from "@/services/ImageBase64";
 
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
@@ -291,9 +306,14 @@ export default class MemberForm1 extends Vue {
 
     inputFormData: any = {};
 
+    newImg = new Image();
+    newImgSrc = "";
+
     // Morris //
     premissionOptions: ISortSelectOption[] = [];
     tabMounted: boolean = false;
+
+
     doTabMount() {
         this.tabMounted = true;
     }
@@ -508,6 +528,30 @@ export default class MemberForm1 extends Vue {
     pageToList() {
         this.pageStep = EPageStep.list;
         (this.$refs.listTable as any).reload();
+    }
+
+    updateShowPhoto(data) {
+        if (data) {
+                this.uploadFile(data);
+        }
+    }
+
+    async uploadFile(file) {
+        if (file) {
+            ImageBase64.fileToBase64(file, (base64 = "") => {
+                if (base64 != "") {
+                    this.newImg = new Image();
+                    this.newImg.src = base64;
+                    this.newImg.onload = () => {
+                        this.newImgSrc = base64;
+                        console.log("newImgSrc", this.newImgSrc);
+                        return;
+                    };
+                } else {
+                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
+                }
+            });
+        }
     }
 
     saveAddOrEdit() {}
@@ -861,6 +905,20 @@ export default class MemberForm1 extends Vue {
                  * @uiColumnGroup - row3
                  */
                 cardCustodian?: string;
+
+               /**
+                * @uiLabel - ${this._("w_Member_PersonPic")}
+                * @uiPlaceHolder - ${this._("w_Member_PersonPic")}
+                * @uiColumnGroup - row13
+                * @uiType - iv-form-file
+                */
+                personPhoto?: string;
+
+               /**
+                * @uiColumnGroup - row13
+                */
+                imageSrc?:any;
+
 
                 info?: any;
 
@@ -1353,19 +1411,6 @@ export default class MemberForm1 extends Vue {
                 row73: string;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                parkingViolation?: any;
 
                 /**
@@ -1504,4 +1549,12 @@ export default class MemberForm1 extends Vue {
 </script>
 
 <style lang="scss" scoped>
+    .imgSide {
+        max-width: 400px;
+        min-width: 300px;
+        max-height: none;
+        min-height: auto;
+        height: 100%;
+        margin-bottom: 10px;
+    }
 </style>

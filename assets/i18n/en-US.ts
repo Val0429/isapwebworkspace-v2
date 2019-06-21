@@ -428,6 +428,8 @@ export default class LangObject {
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
     w_Member_Actions = '功能';
+    w_Member_PersonPic = '人員照片：';
+    w_Member_UpLoadPersonPic = '上傳照片：';
 
     w_Member_Info = '資訊狀態：';
     w_Member_StartDate = '起始日期：';
