@@ -977,10 +977,10 @@ export default class MemberForm1 extends Vue {
     }
 
     tempSaveInputData(data) {
-        console.log('data - ', data);
+        console.log("data - ", data);
         switch (data.key) {
             case "objectId":
-                this.inputFormData.objectId= data.value;
+                this.inputFormData.objectId = data.value;
                 break;
             case "premissionSelected":
                 this.inputFormData.premissionSelected = data.value;
@@ -1078,10 +1078,7 @@ export default class MemberForm1 extends Vue {
             // case "":
             //     this.inputFormData. = data.value;
             //     break;
-
-
         }
-
     }
 
     async pageToAdd() {
@@ -1186,11 +1183,8 @@ export default class MemberForm1 extends Vue {
 
         return false;
 
-        if(this.pageStep === EPageStep.add) {
-            const datas: any[] = [
-                {
-                }
-            ];
+        if (this.pageStep === EPageStep.add) {
+            const datas: any[] = [{}];
 
             const addParam = {
                 datas
@@ -1222,21 +1216,9 @@ export default class MemberForm1 extends Vue {
                 });
         }
 
-        if(this.pageStep === EPageStep.edit) {
-            const datas: any[] = [
-                {
-                    role: data.role,
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    objectId: data.objectId
-                }
-            ];
-
-            const editParam = {
-                datas
+        if (this.pageStep === EPageStep.edit) {
+            const editParam: { datas: any } = {
+                datas: []
             };
 
             await this.$server
@@ -1266,12 +1248,9 @@ export default class MemberForm1 extends Vue {
         }
     }
 
-    async saveAdd(data) {
+    async saveAdd(data) {}
 
-    }
-
-    async saveEdit(data) {
-    }
+    async saveEdit(data) {}
 
     async doDelete() {
         await Dialog.confirm(
