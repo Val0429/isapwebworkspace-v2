@@ -457,6 +457,7 @@ export default class LangObject implements ILang {
     w_Member_ResignationDate = '離職日期：';
 
     w_Member_General = '一般';
+    w_Member_CarLicenseData = '車證資料';
     w_Member_CarLicenseCategory = '車證類別：';
     w_Member_CardLicense = '車證編號：';
     w_Member_CarLicense = '車位編號：';
@@ -482,6 +483,9 @@ export default class LangObject implements ILang {
     w_Member_HistoryForCard3 = '歷史卡號III：';
     w_Member_DateForCard3 = '發卡日期III：';
 
+    w_Member_SelectTemplate = '選擇模板';
+    w_Member_CardTemplate = '卡片模板';
+
     w_Member_CarLicenseRecord = '車證紀錄';
     w_Member_ReasonForApplication1 = '申請原因I：';
     w_Member_DateForApplication1 = '發證日期I：';
@@ -492,6 +496,7 @@ export default class LangObject implements ILang {
     w_Member_ResignationRecordCarLicense = '離職繳回紀錄_車證：';
 
     w_Member_Other = '其他：';
+    w_Member_CensusRecord = '普查紀錄：';
     w_Member_CensusRecord1 = '普查紀錄I：';
     w_Member_CensusDate1 = '普查日期I：';
     w_Member_CensusRecord2 = '普查紀錄II：';
