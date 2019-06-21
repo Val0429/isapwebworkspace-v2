@@ -55,6 +55,18 @@
                 @submit="saveAddOrEdit($event)"
             >
 
+                <template #info="{ $attr }">
+                    <h4 class="ml-3 mt-4 font-weight-bold">
+                        {{ _('w_Member_Info') }}
+                    </h4>
+                </template>
+
+                <template #permissionTable="{ $attr }">
+                    <h4 class="ml-3 mt-4 font-weight-bold">
+                        {{ _('w_Member_PermissionTable') }}
+                    </h4>
+                </template>
+
                 <!-- Morris -->
                 <template #premissionList>
                     <iv-sort-select
@@ -68,7 +80,7 @@
                 <template #tabItem>
 
                     <iv-tab
-                        class="col-md-12"
+                        class="col-md-12 mt-5"
                         ref="tab"
                         :active="1"
                         @mounted="doTabMount"
@@ -80,6 +92,19 @@
                                 :interface="ITabForm1()"
                                 :value="inputFormData"
                             >
+                                <template #personInfo="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_PersonInfo') }}
+                                    </h4>
+                                </template>
+
+                                <template #companyInfo="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_CompanyInfo') }}
+                                    </h4>
+                                </template>
+
+
                             </iv-form>
                         </template>
 
@@ -89,6 +114,18 @@
                                 :interface="ITabForm2()"
                                 :value="inputFormData"
                             >
+                                <template #carLicenseData="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_CarLicenseData') }}
+                                    </h4>
+                                </template>
+
+                                <template #accountInfo="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_AccountInfo') }}
+                                    </h4>
+                                </template>
+
                             </iv-form>
                         </template>
 
@@ -98,15 +135,49 @@
                                 :interface="ITabForm3()"
                                 :value="inputFormData"
                             >
+                                <template #cardRecord="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_CardRecord') }}
+                                    </h4>
+                                </template>
+
+                                <template #carLicenseRecord="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_CarLicenseRecord') }}
+                                    </h4>
+                                </template>
+
                             </iv-form>
                         </template>
 
-                        <template #4-title>{{ _('w_Member_Other') }}</template>
+                        <template #4-title>{{ _('w_Member_SelectTemplate') }}</template>
                         <template #4>
                             <iv-form
                                 :interface="ITabForm4()"
                                 :value="inputFormData"
                             >
+
+                            </iv-form>
+                        </template>
+
+
+                        <template #5-title>{{ _('w_Member_Other') }}</template>
+                        <template #5>
+                            <iv-form
+                                :interface="ITabForm5()"
+                                :value="inputFormData"
+                            >
+                                <template #censusRecord="{ $attr }">
+                                    <h4 class="ml-3 font-weight-bold">
+                                        {{ _('w_Member_CensusRecord') }}
+                                    </h4>
+                                </template>
+
+                                <template #parkingViolation="{ $attr }">
+                                    <h4 class="ml-3 mt-4 font-weight-bold">
+                                        {{ _('w_Member_ParkingViolation') }}
+                                    </h4>
+                                </template>
                             </iv-form>
                         </template>
 
@@ -719,10 +790,10 @@ export default class MemberForm1 extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ChineseName")}
+                 * @uiLabel - ${this._("w_Member_CardNumber")}
                  * @uiColumnGroup - row2
                  */
-                chineseName?: string;
+                cardNumber?: string;
 
 
                 /**
@@ -748,37 +819,58 @@ export default class MemberForm1 extends Vue {
                  */
                 cardCustodian?: string;
 
+                info?: any;
 
-                
-
-                email: string;
-
-                test?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                 */
-                 phone?: string;
+                * @uiLabel - ${this._("w_Member_StartDate")}
+                * @uiPlaceHolder - ${this._("w_Member_StartDate")}
+                * @uiColumnGroup - row5
+                * @uiType - iv-form-date
+                */
+                startDate: any;
+
 
                 /**
-                 * @uiLabel - ${this._("w_User_Role")}
-                 */
-                role: ${toEnumInterface({
-                    Admin: this._("w_User_UserGroup_Admin"),
-                    User: this._("w_User_UserGroup_User")
-                })};
+                * @uiLabel - ${this._("w_Member_EndDate")}
+                * @uiPlaceHolder - ${this._("w_Member_EndDate")}
+                * @uiColumnGroup - row5
+                * @uiType - iv-form-date
+                */
+                endDate: any;
+
 
                 /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
+                 * @uiLabel - ${this._("w_Member_LastEditPerson")}
+                 * @uiPlaceHolder - ${this._("w_Member_LastEditPerson")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-label
                  */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
+                lastEditPerson: string;
 
-                selectTree?: any;
 
+                /**
+                 * @uiLabel - ${this._("w_Member_LastEditTime")}
+                 * @uiPlaceHolder - ${this._("w_Member_LastEditTime")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-label
+                 */
+                lastEditTime: string;
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row62: string;
+
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row63: string;
+
+                permissionTable?: any;
 
                 premissionList?: any;
 
@@ -787,6 +879,459 @@ export default class MemberForm1 extends Vue {
             }
         `;
     }
+
+    // Morris //
+    ITabForm1() {
+        return `
+            interface {
+
+                personInfo?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ExtensionNumber")}
+                 * @uiAttrs - { min: 0}
+                 * @uiColumnGroup - row1
+                 */
+                extensionNumber?: number;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_MVPN")}
+                 * @uiColumnGroup - row1
+                 */
+                MVPN?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Phone")}
+                 * @uiColumnGroup - row1
+                 */
+                phone?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Email")}
+                 * @uiColumnGroup - row2
+                 */
+                email?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Gender")}
+                 * @uiColumnGroup - row2
+                 */
+                gender?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Birthday")}
+                 * @uiColumnGroup - row2
+                 * @uiType - iv-form-date
+                 */
+                birthday?: string;
+
+                companyInfo?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Department")}
+                 * @uiColumnGroup - row4
+                 */
+                department?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CostCenter")}
+                 * @uiColumnGroup - row4
+                 */
+                costCenter?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Area")}
+                 * @uiColumnGroup - row4
+                 */
+                area?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_WorkArea")}
+                 * @uiColumnGroup - row5
+                 */
+                workArea?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_RegistrationDate")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 */
+                registrationDate?: string;
+
+                                /**
+                 * @uiLabel - ${this._("w_Member_ResignationDate")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 */
+                resignationDate?: string;
+            }
+        `;
+    }
+
+    ITabForm2() {
+        return `
+            interface {
+                carLicenseData?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicenseCategory")}
+                 * @uiColumnGroup - row1
+                 */
+                carLicenseCategory?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardLicense")}
+                 * @uiColumnGroup - row1
+                 */
+                cardLicense?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense")}
+                 * @uiColumnGroup - row1
+                 */
+                carLicense"?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense1")}
+                 * @uiColumnGroup - row2
+                 */
+                carLicense1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense2")}
+                 * @uiColumnGroup - row2
+                 */
+                carLicense2?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CarLicense3")}
+                 * @uiColumnGroup - row2
+                 * @uiType - iv-form-date
+                 */
+                carLicense3?: string;
+
+                accountInfo?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Account")}
+                 * @uiColumnGroup - row2
+                 */
+                account?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_Password")}
+                 * @uiColumnGroup - row2
+                 */
+                password?: string;
+
+
+                /**
+                 * @uiColumnGroup - row2
+                 * @uiHidden - true
+                 */
+                row23: string;
+            }
+        `;
+    }
+
+    ITabForm3() {
+        return `
+            interface {
+
+                cardRecord?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ResignationNote")}
+                 * @uiColumnGroup - row1
+                 */
+                resignationNote?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ResignationRecordCardRecord")}
+                 * @uiColumnGroup - row1
+                 */
+                resignationRecordCardRecord?: string;
+
+
+                /**
+                 * @uiColumnGroup - row1
+                 * @uiHidden - true
+                 */
+                row13: string;
+
+
+                /**
+                 * @uiLabel - ${this._("ReasonForCard1")}
+                 * @uiColumnGroup - row2
+                 */
+                reasonForCard1?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_HistoryForCard1")}
+                 * @uiColumnGroup - row2
+                 */
+                historyForCard1?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForCard1")}
+                 * @uiColumnGroup - row2
+                 * @uiType - iv-form-date
+                 */
+                dateForCard1?: string;
+
+                /**
+                 * @uiLabel - ${this._("ReasonForCard2")}
+                 * @uiColumnGroup - row3
+                 */
+                reasonForCard2?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_HistoryForCard2")}
+                 * @uiColumnGroup - row3
+                 */
+                historyForCard2?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForCard2")}
+                 * @uiColumnGroup - row3
+                 * @uiType - iv-form-date
+                 */
+                dateForCard2?: string;
+
+                /**
+                 * @uiLabel - ${this._("ReasonForCard3")}
+                 * @uiColumnGroup - row4
+                 */
+                reasonForCard3?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_HistoryForCard3")}
+                 * @uiColumnGroup - row4
+                 */
+                historyForCard3?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForCard3")}
+                 * @uiColumnGroup - row4
+                 * @uiType - iv-form-date
+                 */
+                dateForCard3?: string;
+
+
+                carLicenseRecord?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication1")}
+                 * @uiColumnGroup - row5
+                 */
+                reasonForApplication1?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication1")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 */
+                dateForApplication1?: string;
+
+
+                /**
+                 * @uiColumnGroup - row5
+                 * @uiHidden - true
+                 */
+                row53: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
+                 * @uiColumnGroup - row6
+                 */
+                reasonForApplication2?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-date
+                 */
+                dateForApplication2?: string;
+
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row63: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
+                 * @uiColumnGroup - row7
+                 */
+                reasonForApplication3?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication3")}
+                 * @uiColumnGroup - row7
+                 * @uiType - iv-form-date
+                 */
+                dateForApplication3?: string;
+
+
+                /**
+                 * @uiColumnGroup - row7
+                 * @uiHidden - true
+                 */
+                row73: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ResignationRecordCarLicense")}
+                 * @uiColumnGroup - row8
+                 */
+                resignationRecordCarLicense?: string;
+
+                /**
+                 * @uiColumnGroup - row8
+                 * @uiHidden - true
+                 */
+                row82: string;
+
+                 /**
+                 * @uiColumnGroup - row8
+                 * @uiHidden - true
+                 */
+                row83: string;
+            }
+        `;
+    }
+
+    ITabForm4() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardTemplate")}
+                 */
+                imageSrc: any;
+            }
+        `;
+    }
+
+    ITabForm5() {
+        return `
+            interface {
+               carLicenseRecord?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication1")}
+                 * @uiColumnGroup - row5
+                 */
+                reasonForApplication1?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication1")}
+                 * @uiColumnGroup - row5
+                 * @uiType - iv-form-date
+                 */
+                dateForApplication1?: string;
+
+
+                /**
+                 * @uiColumnGroup - row5
+                 * @uiHidden - true
+                 */
+                row53: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
+                 * @uiColumnGroup - row6
+                 */
+                reasonForApplication2?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication2")}
+                 * @uiColumnGroup - row6
+                 * @uiType - iv-form-date
+                 */
+                dateForApplication2?: string;
+
+
+                /**
+                 * @uiColumnGroup - row6
+                 * @uiHidden - true
+                 */
+                row63: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
+                 * @uiColumnGroup - row7
+                 */
+                reasonForApplication3?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateForApplication3")}
+                 * @uiColumnGroup - row7
+                 * @uiType - iv-form-date
+                 */
+                dateForApplication3?: string;
+
+
+                /**
+                 * @uiColumnGroup - row7
+                 * @uiHidden - true
+                 */
+                row73: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_ResignationRecordCarLicense")}
+                 * @uiColumnGroup - row8
+                 */
+                resignationRecordCarLicense?: string;
+
+                /**
+                 * @uiColumnGroup - row8
+                 * @uiHidden - true
+                 */
+                row82: string;
+
+                 /**
+                 * @uiColumnGroup - row8
+                 * @uiHidden - true
+                 */
+                row83: string;
+            }
+        `;
+    }
+    // Morris //
 
     IViewForm() {
         return `
@@ -850,56 +1395,6 @@ export default class MemberForm1 extends Vue {
             }
         `;
     }
-
-    // Morris //
-    ITabForm1() {
-        return `
-            interface {
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-            }
-        `;
-    }
-
-    ITabForm2() {
-        return `
-            interface {
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-            }
-        `;
-    }
-
-    ITabForm3() {
-        return `
-            interface {
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-            }
-        `;
-    }
-
-    ITabForm4() {
-        return `
-            interface {
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-            }
-        `;
-    }
-    // Morris //
 }
 </script>
 
