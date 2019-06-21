@@ -1,7 +1,10 @@
 <template>
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
-
+        
+        <template #view.system="{$attrs, $listeners}">
+            {{$attrs.value== 1 ? "SIPASS" : $attrs.value==800 ? "CCURE" : 'UNKNOWN'}}
+        </template>
         <template #view.readerin="{$attrs, $listeners}">
             {{ $attrs.value ? getName($attrs.value.objectId, options) : '' }}
         </template>  
@@ -95,7 +98,10 @@ export default class DoorForm extends Vue implements IFormQuick {
                     /**
                 * @uiLabel - ${this._("system")}
                 */
-                system:string;
+                system: ${toEnumInterface({
+                            "1": 'SIPASS',
+                            "800": 'CCURE'
+                        }, false)};
                 /**
                 * @uiLabel - ${this._("doorid")}
                 */
