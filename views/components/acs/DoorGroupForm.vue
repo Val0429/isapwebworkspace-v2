@@ -78,11 +78,11 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("doors")}
                     */
-                    doors:any;                   
+                    doors?:any;                   
                     /**
                     * @uiLabel - ${this._("status")}
                     */
-                    status: number;
+                    status?: number;
                 }
                 `;
         }

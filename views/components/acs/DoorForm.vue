@@ -1,31 +1,52 @@
 <template>
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
+        <!-- <template #view="{$attrs, $listeners}">
+            {{$attrs.row}}
+        </template> -->
         
-        <template #view.system="{$attrs, $listeners}">
-            {{$attrs.value== 1 ? "SIPASS" : $attrs.value==800 ? "CCURE" : 'UNKNOWN'}}
-        </template>
-        <template #view.readerin="{$attrs, $listeners}">
-            {{ $attrs.value ? getName($attrs.value.objectId, options) : '' }}
+        <template #view.sipassin="{$attrs, $listeners}">
+            {{ getName(getReaderInfo($attrs.row).sipassin, options) }}
         </template>  
-        <template #view.readerout="{$attrs, $listeners}">
-            {{ $attrs.value ? getName($attrs.value.objectId, options) : '' }}
-        </template>  
-        <template #add.readerin="{$attrs, $listeners}">
-            <ivc-single-selection
-            v-bind="$attrs" 
-            v-on="$listeners" 
-            :options="options" 
-            />
-        </template>
-        <template #add.readerout="{$attrs, $listeners}">
-            <ivc-single-selection
-            v-bind="$attrs" 
-            v-on="$listeners" 
-            :options="options" 
-            />
-        </template>
+        <template #view.sipassout="{$attrs, $listeners}">
+            {{ getName(getReaderInfo($attrs.row).sipassout, options) }}
+        </template> 
+        <template #view.ccurein="{$attrs, $listeners}">
+            {{ getName(getReaderInfo($attrs.row).ccurein, options) }}
+        </template> 
+        <template #view.ccureout="{$attrs, $listeners}">
+            {{ getName(getReaderInfo($attrs.row).ccureout, options) }}
+        </template> 
         <!-- 6) custom edit / add template with <template #add.* /> -->
+
+        <template #add.ccurein="{$attrs, $listeners}">
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="ccureOptions" 
+            />
+        </template>
+        <template #add.ccureout="{$attrs, $listeners}">
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="ccureOptions" 
+            />
+        </template>
+        <template #add.sipassin="{$attrs, $listeners}">
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="sipassOptions" 
+            />
+        </template>
+        <template #add.sipassout="{$attrs, $listeners}">
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="sipassOptions" 
+            />
+        </template>
 
     </iv-form-quick>
 </template>
@@ -33,14 +54,11 @@
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
 import { EFormQuick, IFormQuick } from '@/../components/form';
+import { System } from '@/config/default/api/interfaces';
 
 @Component
 /// 1) class name
-export default class DoorForm extends Vue implements IFormQuick {
-    
-    
-    
-    
+export default class DoorForm extends Vue implements IFormQuick {    
     /// 2) cgi path
     path: string = "/acs/door";
     /// 3) i18n - view / edit / add
@@ -57,71 +75,57 @@ export default class DoorForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {   
-                    /**
-                * @uiLabel - ${this._("system")}
-                */
-                system:string;
-                /**
-                * @uiLabel - ${this._("doorid")}
-                */
-                doorid:string;
+                
                 /**
                 * @uiLabel - ${this._("doorname")}
                 */
                 doorname:string;
+               
                 /**
-                * @uiLabel - ${this._("unlocktime")}
+                * @uiLabel - ${"SIPASS"+" "+this._("readerin")}
                 */
-                unlocktime:string;
-                /**
-                * @uiLabel - ${this._("shunttime")}
-                */
-                shunttime:string;
-                /**
-                * @uiLabel - ${this._("status")}
-                */
-                status: number;
-                /**
-                * @uiLabel - ${this._("readerin")}
-                */
-                readerin: string;
+                sipassin: string;
                  /**
-                * @uiLabel - ${this._("readerout")}
+                * @uiLabel - ${"SIPASS"+" "+this._("readerout")}
                 */
-                readerout: string;
+                sipassout: string;
+                /**
+                * @uiLabel - ${"CCURE"+" "+this._("readerin")}
+                */
+                ccurein: string;
+                /**
+                * @uiLabel - ${"CCURE"+" "+this._("readerout")}
+                */
+                ccureout: string;
                 }
                 `;
             case EFormQuick.Add:
             case EFormQuick.Edit:
                 return `
                 interface {
-                    /**
-                * @uiLabel - ${this._("system")}
-                */
-                system: ${toEnumInterface({
-                            "1": 'SIPASS',
-                            "800": 'CCURE'
-                        }, false)};
-                /**
-                * @uiLabel - ${this._("doorid")}
-                */
-                doorid:string;
+                
                 /**
                 * @uiLabel - ${this._("doorname")}
                 */
                 doorname:string;                
+                
                 /**
-                * @uiLabel - ${this._("status")}
+                * @uiLabel - ${"SIPASS"+" "+this._("readerin")}
                 */
-                status: number;
-                /**
-                * @uiLabel - ${this._("readerin")}
-                */
-                readerin: string;
+                sipassin?: string;
                  /**
-                * @uiLabel - ${this._("readerout")}
+                * @uiLabel - ${"SIPASS"+" "+this._("readerout")}
                 */
-                readerout: string;
+                sipassout?: string;
+                /**
+                * @uiLabel - ${"CCURE"+" "+this._("readerin")}
+                */
+                ccurein?: string;
+                /**
+                * @uiLabel - ${"CCURE"+" "+this._("readerout")}
+                */
+                ccureout?: string;
+                
                 }
                 `;
         }
@@ -132,28 +136,74 @@ export default class DoorForm extends Vue implements IFormQuick {
     }
     /// 8) post-add 寫入新增前要做甚麼調整
     postAdd(row) {
-        return;
+        return this.postAddEdit(row);     
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
     preEdit(row) {
-        return;
+        row.system = row.system.toString();
+        let props = this.getReaderInfo(row);
+        row.sipassin = props.sipassin;
+        row.sipassout = props.sipassout;
+        row.ccurein = props.ccurein;
+        row.ccureout = props.ccureout;
+        return row;
     }
+    getReaderInfo(row: any) {
+     let{sipassin, sipassout, ccurein, ccureout}={} as any;
+    if(row.readerin&&row.readerin.length>0) {
+      for(let item of row.readerin) {
+        let reader=this.options.find(x => x.key==item.objectId);
+        if(reader)
+          item.system=reader.system;
+      }
+      sipassin=row.readerin.find(x => x.system==System.SIPASS);
+      ccurein=row.readerin.find(x => x.system==System.CCURE);
+    }
+    if(row.readerout&&row.readerout.length>0) {
+      for(let item of row.readerout) {
+        let reader=this.options.find(x => x.key==item.objectId);
+        if(reader)
+          item.system=reader.system;
+      }
+      sipassout=row.readerout.find(x => x.system==System.SIPASS);
+      ccureout=row.readerout.find(x => x.system==System.CCURE);
+    }
+    
+    return {sipassin, sipassout, ccurein, ccureout};
+  }
+
     /// 10) post-edit 寫入修改前要做甚麼調整
     postEdit(row) {
-        return;
+        return this.postAddEdit(row);        
+    }
+    postAddEdit(row){
+        row.system = parseInt(row.system);
+        row.readerin= [];        
+        if(row.sipassin){row.readerin.push(row.sipassin);row.sipassin=undefined;}
+        if(row.ccurein){row.readerin.push(row.ccurein);row.ccurein=undefined;}
+        row.readerout= [];
+        if(row.sipassout){row.readerout.push(row.sipassout);row.sipassout=undefined;}
+        if(row.ccureout){row.readerout.push(row.ccureout);row.ccureout=undefined;}
+        return row;
     }
     /// Done
-    private options:{key:any, value:any}[]=[];
+    private sipassOptions:{key:any, value:any, system:any}[]=[];
+    private ccureOptions:{key:any, value:any, system:any}[]=[];
+    private options:{key:any, value:any, system:any}[]=[];
     
     async created() {
-        let resp: any = await this.$server.R("/acs/reader" as any, {"paging.all":"true"});
+        let resp: any = await this.$server.R("/acs/reader" as any, {"paging.all":"true"});        
+        this.options = resp.results.map(item=>{return{key:item.objectId, value:item.readername, system:item.system}});
 
-        this.options = resp.results.map(item=>{return{key:item.objectId, value:item.readername}});
-        
-        console.log("options", this.options)
+        this.sipassOptions = this.options.filter(x=>x.system==System.SIPASS);
+        this.ccureOptions = this.options.filter(x=>x.system==System.CCURE);
+
+        console.log("sipassOptions", this.sipassOptions);
+        console.log("ccureOptions", this.ccureOptions);
     }
-    getName(key:any, options:{key:any, value:any}[]){
-        let item = options.find(x=>x.key==key);
+    getName(obj:any, options:{key:any, value:any}[]){
+        if (!obj)return'';
+        let item = options.find(x=>x.key==obj.objectId);
         return item?item.value:'';
     }
     

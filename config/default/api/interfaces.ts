@@ -553,7 +553,10 @@ interface ICameraLocationResults {
     deviceId: string;
     deviceName: string;
 }
-
+export enum System{
+    CCURE=800,
+    SIPASS=1
+}
 export { ICameraResponse, ICameraLocationResults };
 
 // Others

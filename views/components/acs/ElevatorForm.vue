@@ -40,10 +40,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
-                    /**
-                    * @uiLabel - ${this._("system")}
-                    */
-                    system: number;
+                    
                     /**
                     * @uiLabel - ${this._("elevatorid")}
                     */
@@ -67,10 +64,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
-                    /**
-                    * @uiLabel - ${this._("system")}
-                    */
-                    system: number;
+                   
                     /**
                     * @uiLabel - ${this._("elevatorid")}
                     */

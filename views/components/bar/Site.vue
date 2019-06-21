@@ -763,7 +763,7 @@ export default class Site extends Vue {
     }
 
     async initMap() {
-        this.getDeviceGroupData();
+        //this.getDeviceGroupData();
     }
 
     async getDeviceGroupData() {
@@ -1148,7 +1148,7 @@ export default class Site extends Vue {
 
     pageToSiteList() {
         this.initSiteListArea();
-        this.initSiteListDeviceGroup();
+        //this.initSiteListDeviceGroup();
         this.clearAreaData();
         this.clearDeviceData();
         this.pageStep = EPageStep.siteList;
@@ -1818,7 +1818,7 @@ export default class Site extends Vue {
             };
             this.initManagerItem();
             this.initTagItem();
-            this.initOfficeHourItem();
+            //this.initOfficeHourItem();
             this.initAreaNameItem();
         } else {
             this.clearSiteData();
@@ -1845,7 +1845,7 @@ export default class Site extends Vue {
     clearSiteData() {
         this.initManagerItem();
         this.initTagItem();
-        this.initOfficeHourItem();
+        //this.initOfficeHourItem();
         this.isSelectSite = false;
         this.gooleMapSrc = "";
         this.newImgSrc = "";
