@@ -1306,7 +1306,7 @@ export default class MemberForm1 extends Vue {
         return false;
 
         if(this.pageStep === EPageStep.add) {
-            const datas: any[] = [
+            const datas: any = [
                 {
                 }
             ];
@@ -1342,15 +1342,8 @@ export default class MemberForm1 extends Vue {
         }
 
         if(this.pageStep === EPageStep.edit) {
-            const datas: any[] = [
+            const datas: any = [
                 {
-                    role: data.role,
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    objectId: data.objectId
                 }
             ];
 
