@@ -1325,32 +1325,113 @@ export default class MemberForm1 extends Vue {
 
 
                 /**
-                 * @uiColumnGroup - row7
+                 * @uiColumnGroup - row6
                  * @uiHidden - true
                  */
                 row63: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusRecord2")}
+                 * @uiLabel - ${this._("w_Member_CensusRecord3")}
                  * @uiColumnGroup - row7
                  */
-                censusRecord2?: string;
+                censusRecord3?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusDate2")}
+                 * @uiLabel - ${this._("w_Member_CensusDate3")}
                  * @uiColumnGroup - row7
                  * @uiType - iv-form-date
                  */
-                censusDate2?: string;
+                censusDate3?: string;
 
 
                 /**
-                 * @uiColumnGroup - row6
+                 * @uiColumnGroup - row7
                  * @uiHidden - true
                  */
                 row73: string;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               parkingViolation?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation1")}
+                 * @uiColumnGroup - row15
+                 */
+                infoOfViolation1?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation1")}
+                 * @uiColumnGroup - row15
+                 * @uiType - iv-form-date
+                 */
+                dateOfViolation1?: string;
+
+
+                /**
+                 * @uiColumnGroup - row15
+                 * @uiHidden - true
+                 */
+                row153: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation2")}
+                 * @uiColumnGroup - row16
+                 */
+                infoOfViolation2?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation2")}
+                 * @uiColumnGroup - row16
+                 * @uiType - iv-form-date
+                 */
+                dateOfViolation2?: string;
+
+
+                /**
+                 * @uiColumnGroup - row16
+                 * @uiHidden - true
+                 */
+                row163: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_InfoOfViolation3")}
+                 * @uiColumnGroup - row17
+                 */
+                infoOfViolation3?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_DateOfViolation3")}
+                 * @uiColumnGroup - row17
+                 * @uiType - iv-form-date
+                 */
+                dateOfViolation3?: string;
+
+
+                /**
+                 * @uiColumnGroup - row17
+                 * @uiHidden - true
+                 */
+                row173: string;
 
              }
         `;
