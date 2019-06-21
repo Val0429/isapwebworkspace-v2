@@ -5,7 +5,15 @@
         <template #view.reader="{$attrs, $listeners}">
             {{ $attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x => getName(x.objectId, floorOptions)).join(', '):'' }}
         </template>
-
+    <template #view.elevatorgroup="{$attrs, $listeners}">
+            {{getInfo($attrs.row).elevatorgroup}}
+        </template>
+        <template #view.area="{$attrs, $listeners}">
+            {{getInfo($attrs.row).area}}
+        </template>
+        <template #view.site="{$attrs, $listeners}">
+            {{getInfo($attrs.row).site}}
+        </template>
         <!-- 6) custom edit / add template with <template #add.* /> -->
         <template #add.reader="{$attrs, $listeners}">
             <ivc-multi-selections 
@@ -14,6 +22,7 @@
             :options="floorOptions" 
             />
         </template>
+        
     </iv-form-quick>
 </template>
 
@@ -40,14 +49,19 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
+                    
                     /**
-                    * @uiLabel - ${this._("system")}
-                    */
-                    system: number;
-                    /**
-                    * @uiLabel - ${this._("elevatorid")}
-                    */
-                    elevatorid: number;
+                * @uiLabel - ${this._("w_Region_LevelSite")}
+                */
+                site:string;
+                /**
+                * @uiLabel - ${this._("w_Region_LevelArea")}
+                */
+                area:string;
+                /**
+                * @uiLabel - ${this._("w_ElevatorGroup")}
+                */
+                elevatorgroup:string;
                     /**
                     * @uiLabel - ${this._("name")}
                     */
@@ -56,10 +70,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                     * @uiLabel - ${this._("reader")}
                     */
                     reader:string;                    
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status: number;
+                    
                     
                 }
                 `;
@@ -67,14 +78,8 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
-                    /**
-                    * @uiLabel - ${this._("system")}
-                    */
-                    system: number;
-                    /**
-                    * @uiLabel - ${this._("elevatorid")}
-                    */
-                    elevatorid: number;
+                   
+                   
                     /**
                     * @uiLabel - ${this._("name")}
                     */
@@ -82,11 +87,7 @@ export default class ElevatorForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("reader")}
                     */
-                    reader:string;                    
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status: number;
+                    reader:string;                                        
                 }
                 `;
         }
@@ -109,8 +110,9 @@ export default class ElevatorForm extends Vue implements IFormQuick {
     }
     /// Done
     floorOptions=[];
+    elevatorGroups =[];
     async created(){
-        await this.getFloorOptions();
+        await Promise.all([this.getFloorOptions(),this.getElevatorGroups()]);
     }
     private async getFloorOptions() {
         let resp: any =await this.$server.R("/acs/floor" as any,{"paging.all":"true"});    
@@ -118,6 +120,18 @@ export default class ElevatorForm extends Vue implements IFormQuick {
         this.floorOptions = resp.results.map(item=>{return { key: item.objectId,value: item.floorname }});
         
         console.log("floorOptions",this.floorOptions);
+    }
+    private async getElevatorGroups(){
+        let resp: any=await this.$server.R("/acs/elevatorgroup" as any,{ "paging.all": "true" });
+        this.elevatorGroups=resp.results;
+        console.log("elevatorGroups", this.elevatorGroups)    
+    }
+     getInfo(elevator:any){
+        let group = this.elevatorGroups.find(x=>x.elevators.find(y=>y.objectId==elevator.objectId));
+        let elevatorgroup = group ? group.groupname : "";
+        let area = group && group.area ? group.area.name : "";
+        let site = group && group.area && group.area.site ? group.area.site.name : "";
+        return {elevatorgroup, area, site};
     }
     getName(key:any, options:{key:any, value:any}[]){
         let item = options.find(x=>x.key==key);

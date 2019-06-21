@@ -35,8 +35,8 @@ export class FormString extends Vue {
     }
     
     
-    updateSelected($event:any){
-        this.selected = $event.target.value;
+    updateSelected($event:any){        
+        this.selected = $event;
         console.log("new value", this.selected);
         this.$emit('input', this.selected);  
     }

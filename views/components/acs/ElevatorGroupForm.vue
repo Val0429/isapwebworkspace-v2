@@ -3,8 +3,9 @@
         <!-- 5) custom view templates with <template #view.* /> -->
 
         <template #view.elevators="{$attrs, $listeners}">
-            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId, options)).join(', ') }}
+            {{ !$attrs.value || $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId, options)).join(', ') }}
         </template>  
+        <!-- 6) custom edit / add template with <template #add.* /> -->
         <template #add.elevators="{$attrs, $listeners}">
             <ivc-multi-selections 
             v-bind="$attrs" 
@@ -12,8 +13,13 @@
             :options="options" 
             />
         </template>
+        <template #add.area="{$attrs, $listeners}">
+            <ivc-site-area 
+            v-bind="$attrs" 
+            v-on="$listeners"              
+            />
+        </template>
         
-        <!-- 6) custom edit / add template with <template #add.* /> -->
 
     </iv-form-quick>
 </template>
@@ -44,11 +50,7 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {   
-                    /**
-                    * @uiLabel - ${this._("groupid")}
-                    */
-                    groupid:number;       
+                interface {       
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -56,21 +58,17 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("elevators")}
                     */
-                    elevators:string;
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status: number;                 
+                    elevators:string;               
                 }
                 `;
             case EFormQuick.Add:
             case EFormQuick.Edit:
                 return `
-                interface {
-                    /**
-                    * @uiLabel - ${this._("groupid")}
+                interface {     
+                     /**
+                    * @uiLabel - ${this._("w_Region_LevelArea")}
                     */
-                    groupid:number;       
+                    area:string;
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -78,11 +76,7 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("elevators")}
                     */
-                    elevators:string;
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status?: number;      
+                    elevators:string; 
                 }
                 `;
         }

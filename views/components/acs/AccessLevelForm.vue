@@ -146,19 +146,19 @@ export default class AccessLevelForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("door")}
                     */
-                    door:string;
+                    door?:string;
                     /**
                     * @uiLabel - ${this._("w_DoorGroup")}
                     */
-                    doorgroup:string;
+                    doorgroup?:string;
                     /**
                     * @uiLabel - ${this._("w_Elevator")}
                     */
-                    elevator:string;
+                    elevator?:string;
                     /**
                     * @uiLabel - ${this._("w_ElevatorGroup")}
                     */
-                    elevatorgroup:string;
+                    elevatorgroup?:string;
                     /**
                     * @uiLabel - ${this._("status")}
                     */

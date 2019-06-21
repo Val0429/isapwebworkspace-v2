@@ -185,29 +185,20 @@ export { IRegion, IRegionAddData, IRegionEditData, IRegionResults };
 
 // Location Site
 interface ISite {
-    customId: string;
+    
     name: string;
     address: string;
-    phone: string;
-    establishment: string;
-    squareMeter: string;
-    staffNumber: string;
-    officeHourId: string;
     longitude: number;
     latitude: number;
 }
 
 interface ISiteAddData extends ISite {
-    regionId?: string;
-    managerId: string;
-    imageBase64: string;
+    
 }
 
 interface ISiteEditData extends ISite {
     objectId: string;
     regionId?: string;
-    managerId: string;
-    imageBase64?: string;
 }
 
 interface ISiteResults extends IRegion {
@@ -553,7 +544,10 @@ interface ICameraLocationResults {
     deviceId: string;
     deviceName: string;
 }
-
+export enum System{
+    CCURE=800,
+    SIPASS=1
+}
 export { ICameraResponse, ICameraLocationResults };
 
 // Others

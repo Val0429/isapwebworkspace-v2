@@ -33,11 +33,7 @@ export default class FloorForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {   
-                /**
-                * @uiLabel - ${this._("system")}
-                */
-                system:number;
+                interface {
                 /**
                 * @uiLabel - ${this._("floorid")}
                 */
@@ -72,10 +68,7 @@ export default class FloorForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
-                /**
-                * @uiLabel - ${this._("system")}
-                */
-                system:number;
+                
                 /**
                 * @uiLabel - ${this._("floorid")}
                 */

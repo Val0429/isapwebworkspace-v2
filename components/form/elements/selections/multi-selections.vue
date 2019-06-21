@@ -4,24 +4,27 @@
         v-bind:label="label"
         v-bind:label-for="'input-' + _uid"
         >
-        <div class="input-group">            
-        <div class="option-box card col-md-5">
+        <b-input-group>            
+        <b-card class="option-box col-md-5">
             <div  v-for="option in leftOptions" v-bind:key="option.key">
-                <input type="checkbox" :id="option.key" v-model="option.checked"/>
-                <label :for="option.key">{{option.value}}</label>
+                <b-form-checkbox :id="option.key" v-model="option.checked">
+                    {{option.value}}
+                </b-form-checkbox>
+                
             </div>                
-        </div>
-        <div class="card col-md-1">
-            <button @click="goToRight()">&rarr;</button>
-            <button @click="goToLeft()"> &larr;</button>
-        </div>
-        <div class="option-box card col-md-5" >
+        </b-card>
+        <b-card class="col-md-1">
+            <b-button class="bt-left-right" @click="goToRight()">&rarr;</b-button>
+            <b-button class="bt-left-right" @click="goToLeft()"> &larr;</b-button>
+        </b-card>
+        <b-card class="option-box col-md-5" >
             <div  v-for="option in rightOptions" v-bind:key="option.key">
-                <input type="checkbox" :id="option.key" v-model="option.checked"/>
-                <label :for="option.key">{{option.value}}</label>
+                <b-form-checkbox :id="option.key" v-model="option.checked">
+                    {{option.value}}
+                </b-form-checkbox>
             </div>                
-        </div>
-        </div>
+        </b-card>
+        </b-input-group>
 
         <b-form-invalid-feedback v-if="this.invalid">
             {{ this.invalid }}
@@ -38,6 +41,10 @@
 .option-box{
     max-height:200px;
     overflow-y:scroll;
+}
+.bt-left-right{
+    margin: 2px;
+    width: 50px;
 }
 </style>
 
