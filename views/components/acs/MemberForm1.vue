@@ -389,7 +389,6 @@ export default class MemberForm1 extends Vue {
 
     workGroupIdSelectItem: any = {};
 
-
     inputTestEmail: string = "";
     newImg = new Image();
     newImgCard = new Image();
@@ -634,18 +633,24 @@ export default class MemberForm1 extends Vue {
             }
 
             if (detailData.ApbWorkgroupId != undefined) {
-            for (const detail in this.workGroupIdSelectItem) {
-                if ((detailData.ApbWorkgroupId).toString() == detail) {
-                    this.inputFormData.personType = this.workGroupIdSelectItem[detail];
-                    this.inputFormData.personType1 = this.workGroupIdSelectItem[detail];
-                }
-                for (const detail in this.workGroupSelectItem) {
-                    if (this.inputFormData.personType1 == detail) {
-                        this.inputFormData.personType1 = this.workGroupSelectItem[detail];
+                for (const detail in this.workGroupIdSelectItem) {
+                    if (detailData.ApbWorkgroupId.toString() == detail) {
+                        this.inputFormData.personType = this.workGroupIdSelectItem[
+                            detail
+                        ];
+                        this.inputFormData.personType1 = this.workGroupIdSelectItem[
+                            detail
+                        ];
+                    }
+                    for (const detail in this.workGroupSelectItem) {
+                        if (this.inputFormData.personType1 == detail) {
+                            this.inputFormData.personType1 = this.workGroupSelectItem[
+                                detail
+                            ];
+                        }
                     }
                 }
             }
-        }
 
             if (detailData.EmployeeNumber != undefined) {
                 this.inputFormData.employeeNumber = detailData.EmployeeNumber.toString();
@@ -1434,6 +1439,8 @@ export default class MemberForm1 extends Vue {
             };
         }
 
+        console.log("!!! master");
+
         // master
         tempCustomFieldsList.push({
             FiledName: "CustomTextBoxControl6__CF",
@@ -1451,6 +1458,8 @@ export default class MemberForm1 extends Vue {
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue: this.inputFormData.lastEditTime.toString()
         });
+
+        console.log("!!! tab1");
 
         // tab1
         tempCustomFieldsList.push({
@@ -1478,20 +1487,26 @@ export default class MemberForm1 extends Vue {
             FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF",
             FieldValue: this.inputFormData.workArea.toString()
         });
+        console.log("registrationDate", this.inputFormData.registrationDate);
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl1__CF_CF_CF",
             FieldValue:
-                this.inputFormData.registrationDate != null
+                this.inputFormData.registrationDate != null &&
+                !isNaN(this.inputFormData.registrationDate.getTime())
                     ? this.inputFormData.registrationDate.toISOString()
                     : ""
         });
+        console.log("resignationDate", this.inputFormData.resignationDate);
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl1__CF",
             FieldValue:
-                this.inputFormData.resignationDate != null
+                this.inputFormData.resignationDate != null &&
+                !isNaN(this.inputFormData.resignationDate.getTime())
                     ? this.inputFormData.resignationDate.toISOString()
                     : ""
         });
+
+        console.log("!!! tab2");
 
         // tab2
         tempCustomFieldsList.push({
@@ -1520,6 +1535,8 @@ export default class MemberForm1 extends Vue {
             FieldValue: this.inputFormData.carLicense3.toString()
         });
 
+        console.log("!!! tab3");
+
         // tab3
         tempCustomFieldsList.push({
             FiledName: "CustomTextBoxControl7__CF_CF",
@@ -1540,7 +1557,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateForCard1 != null
+                this.inputFormData.dateForCard1 != null &&
+                !isNaN(this.inputFormData.dateForCard1.getTime())
                     ? this.inputFormData.dateForCard1.toISOString()
                     : ""
         });
@@ -1556,7 +1574,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateForCard2 != null
+                this.inputFormData.dateForCard2 != null &&
+                !isNaN(this.inputFormData.dateForCard2.getTime())
                     ? this.inputFormData.dateForCard2.toISOString()
                     : ""
         });
@@ -1572,7 +1591,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateForCard3 != null
+                this.inputFormData.dateForCard3 != null &&
+                !isNaN(this.inputFormData.dateForCard3.getTime())
                     ? this.inputFormData.dateForCard3.toISOString()
                     : ""
         });
@@ -1583,7 +1603,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateForApplication1 != null
+                this.inputFormData.dateForApplication1 != null &&
+                !isNaN(this.inputFormData.dateForApplication1.getTime())
                     ? this.inputFormData.dateForApplication1.toISOString()
                     : ""
         });
@@ -1594,7 +1615,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateForApplication2 != null
+                this.inputFormData.dateForApplication2 != null &&
+                !isNaN(this.inputFormData.dateForApplication2.getTime())
                     ? this.inputFormData.dateForApplication2.toISOString()
                     : ""
         });
@@ -1606,7 +1628,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateForApplication3 != null
+                this.inputFormData.dateForApplication3 != null &&
+                !isNaN(this.inputFormData.dateForApplication3.getTime())
                     ? this.inputFormData.dateForApplication3.toISOString()
                     : ""
         });
@@ -1614,6 +1637,8 @@ export default class MemberForm1 extends Vue {
             FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF",
             FieldValue: this.inputFormData.resignationRecordCarLicense.toString()
         });
+
+        console.log("!!! tab5");
 
         // tab5
         tempCustomFieldsList.push({
@@ -1624,7 +1649,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.censusDate1 != null
+                this.inputFormData.censusDate1 != null &&
+                !isNaN(this.inputFormData.censusDate1.getTime())
                     ? this.inputFormData.censusDate1.toISOString()
                     : ""
         });
@@ -1636,7 +1662,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.censusDate2 != null
+                this.inputFormData.censusDate2 != null &&
+                !isNaN(this.inputFormData.censusDate2.getTime())
                     ? this.inputFormData.censusDate2.toISOString()
                     : ""
         });
@@ -1648,7 +1675,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.censusDate3 != null
+                this.inputFormData.censusDate3 != null &&
+                !isNaN(this.inputFormData.censusDate3.getTime())
                     ? this.inputFormData.censusDate3.toISOString()
                     : ""
         });
@@ -1659,7 +1687,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateOfViolation1 != null
+                this.inputFormData.dateOfViolation1 != null &&
+                !isNaN(this.inputFormData.dateOfViolation1.getTime())
                     ? this.inputFormData.dateOfViolation1.toISOString()
                     : ""
         });
@@ -1670,7 +1699,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateOfViolation2 != null
+                this.inputFormData.dateOfViolation2 != null &&
+                !isNaN(this.inputFormData.dateOfViolation2.getTime())
                     ? this.inputFormData.dateOfViolation2.toISOString()
                     : ""
         });
@@ -1682,7 +1712,8 @@ export default class MemberForm1 extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue:
-                this.inputFormData.dateOfViolation3 != null
+                this.inputFormData.dateOfViolation3 != null &&
+                !isNaN(this.inputFormData.dateOfViolation3.getTime())
                     ? this.inputFormData.dateOfViolation3.toISOString()
                     : ""
         });
