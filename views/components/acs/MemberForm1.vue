@@ -367,7 +367,6 @@ export default class MemberForm1 extends Vue {
     }
 
     selectedItem(data) {
-        console.log(data);
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
@@ -375,6 +374,8 @@ export default class MemberForm1 extends Vue {
 
     getInputData() {
         this.clearInputData();
+
+        console.log(this.selectedDetail);
 
         // for (const param of this.selectedDetail) {
         //     this.inputFormData = {
