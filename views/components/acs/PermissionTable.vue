@@ -83,37 +83,38 @@
                             </b-form-group>
                         </div>
                     </template> -->
+                    <template #showInputDataInTable>
+                        <b-button
+                            class="ml-3 mt-2"
+                            variant="primary"
+                            size="md"
+                            @click="pageToList()"
+                        >{{ _('w_ViewData') }}
+                        </b-button>
+                    </template>
+
+
 
                 </iv-form>
 
-                <template #footer-before>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="pageToList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
+                <!-- Sub  Table -->
 
-            </iv-auto-card>
 
-            <!-- Sub  Table -->
-            <iv-card :label="_('w_Permission_PermissionList')">
+                    <template
+                        #toolbox
+                        v-if="pageStep === ePageStep.view"
+                    >
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
 
-                <template
-                    #toolbox
-                    v-if="pageStep === ePageStep.view"
-                >
-                    <iv-toolbox-back @click="pageToList()" />
-                </template>
-                <table class="table b-table table-striped table-hover">
-                    <thead>
+                    <table class="table b-table table-striped table-hover mt-5">
+                        <thead>
                         <tr>
                             <th v-show="pageStep ==='remove'"></th>
                             <th v-for="value in inputFormData.title">{{ value }}</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr v-for="(value, index) in inputFormData.accesslevels">
                             <td>{{ value.deviceType }}</td>
                             <td>{{ value.deviceName }}</td>
@@ -128,9 +129,21 @@
                                 >{{ _('w_Delete')}}</b-button>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-            </iv-card>
+                        </tbody>
+                    </table>
+
+                <template #footer-before>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+
         </div>
 
     </div>
@@ -504,7 +517,7 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
                 permissionName?: string;
-              
+
 
             }
         `;
@@ -519,7 +532,7 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
                 tablename?: string;
-              
+
                 Actions: any;
             }
         `;
@@ -528,7 +541,7 @@ export default class PermissionTable extends Vue {
     IForm() {
         return `
             interface {
-  
+
                  /**
                  * @uiLabel - ${this._("w_Permission_PermissionName")}
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
@@ -575,6 +588,8 @@ export default class PermissionTable extends Vue {
                      false
                  )};
 
+                 showInputDataInTable: any
+
             }
         `;
     }
@@ -582,8 +597,8 @@ export default class PermissionTable extends Vue {
     ISubTable() {
         return `
             interface {
-  
-          
+
+
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceType")}

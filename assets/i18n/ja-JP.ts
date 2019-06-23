@@ -405,6 +405,7 @@ export default class LangObject implements ILang {
     w_Restart = 'Restart';
     w_Reset = 'Reset';
     w_Delete = 'Delete';
+    w_ViewData = 'View Form Data';
 
     // Member
     w_Member_List = '人員管理';
