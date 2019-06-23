@@ -521,6 +521,11 @@ export default class PermissionTable extends Vue {
 
     tempSaveInputData(data) {
         switch (data.key) {
+
+            case "permissionName":
+                this.inputFormData.permissionName = data.value;
+                break;
+
             case "deviceType":
                 this.inputFormData.deviceType = data.value;
                 break;
