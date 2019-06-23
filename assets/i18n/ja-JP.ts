@@ -273,6 +273,7 @@ export default class LangObject implements ILang {
     w_Options = 'Options';
     w_Chooses = 'Choose';
     w_AllChoose = 'All';
+    w_Select = 'Please Select';
 
     // date
     w_Week_0 = 'Sunday';

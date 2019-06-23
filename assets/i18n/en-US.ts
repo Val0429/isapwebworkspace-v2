@@ -268,6 +268,7 @@ export default class LangObject {
     w_Options = 'Options';
     w_Chooses = 'Choose';
     w_AllChoose = 'All';
+    w_Select = 'Please Select';
 
     // date
     w_Week_0 = 'Sunday';
