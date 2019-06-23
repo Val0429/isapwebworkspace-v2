@@ -67,9 +67,10 @@
 
                 <iv-form
                     :interface="IForm()"
+                    :value="inputFormData"
+                    ref="subForm"
                     @submit="doSave($event)"
                     @update:deviceType="selectedDeviceType($event)"
-                    :value="inputFormData"
                 >
 
                     <!-- <template #deviceType="{ $attrs, $listeners}">
@@ -88,8 +89,8 @@
                             class="ml-3 mt-2"
                             variant="primary"
                             size="md"
-                            @click="pageToList()"
-                        >{{ _('w_ViewData') }}
+                            @click="pageToshowInputDataInTable()"
+                        >{{ _('w_Add') }}
                         </b-button>
                     </template>
 
@@ -334,6 +335,10 @@ export default class PermissionTable extends Vue {
 
     pageToView() {
         this.pageStep = EPageStep.view;
+    }
+
+    pageToshowInputDataInTable() {
+        (this.$refs.subForm as any).set("showInputDataInTable", true);
     }
 
     async doSubDelete(data) {

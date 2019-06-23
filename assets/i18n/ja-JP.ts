@@ -232,7 +232,7 @@ export default class LangObject implements ILang {
      // Dialog
      w_Dialog_ErrorTitle = 'Something wrong';
      w_Dialog_SuccessTitle = 'Success';
-     
+
     // common
     w_Error = 'Error';
     w_NextPage = 'Next';
@@ -419,7 +419,7 @@ export default class LangObject implements ILang {
     w_Reset = 'Reset';
     readerIO="Reader I/O";
     w_Delete = 'Delete';
-    w_ViewData = 'View Form Data';
+    w_ViewData = 'View Device Data';
 
     // Member
     w_Member_List = '人員管理';

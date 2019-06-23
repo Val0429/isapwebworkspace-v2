@@ -227,8 +227,8 @@ export default class LangObject {
     // Dialog
     w_Dialog_ErrorTitle = 'Something wrong';
     w_Dialog_SuccessTitle = 'Success';
-    
-    // common    
+
+    // common
     w_Error = 'Error';
     w_NextPage = 'Next';
     w_PreviousPage = 'Prev';
@@ -413,7 +413,7 @@ export default class LangObject {
     w_Restart = 'Restart';
     w_Reset = 'Reset';
     w_Delete = 'Delete';
-    w_ViewData = 'View Form Data';
+    w_ViewData = 'View Device Data';
 
     // Member
     w_Member_List = '人員管理';
