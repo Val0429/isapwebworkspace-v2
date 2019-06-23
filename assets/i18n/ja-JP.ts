@@ -403,6 +403,12 @@ export default class LangObject implements ILang {
     w_Permission_DeviceName = 'Device Name';
     w_Permission_DeviceArea = 'Device Area';
     w_Permission_DeviceTimeFormat = 'Time Format';
+    w_Permission_Door = 'Door Name';
+    w_Permission_Elevator = 'Elevator Name';
+    w_Permission_DoorGroup = 'Door Group Name';
+    w_Permission_DoorAdd = 'Add Door';
+    w_Permission_ElevatorAdd = 'Add Elevator';
+    w_Permission_DoorGroupAdd = 'Add Door Group';
 
     // button
     w_Save = 'Save';
