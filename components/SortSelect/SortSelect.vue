@@ -34,7 +34,7 @@
                             v-show="showOption(option.value)"
                             class="checkbox-group"
                             name="dragSelectOption"
-                            :key="'drag__select__options__key__'+option.value"
+                            :key="'sort_select__options__key__'+option.value"
                             :value="option.value"
                         >
                             {{ option.text }}
@@ -125,7 +125,7 @@
                             v-show="showChoose(choose.value)"
                             class="checkbox-group"
                             name="dragSelectChoose"
-                            :key="'drag__select__choose__key__'+choose.value"
+                            :key="'sort__select__choose__key__'+choose.value"
                             :value="choose.value"
                         >
                             {{ choose.text }}
