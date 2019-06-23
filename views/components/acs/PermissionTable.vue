@@ -94,28 +94,24 @@
                         </b-button>
                     </template>
 
-
-
                 </iv-form>
 
                 <!-- Sub  Table -->
+                <template
+                    #toolbox
+                    v-if="pageStep === ePageStep.view"
+                >
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
 
-
-                    <template
-                        #toolbox
-                        v-if="pageStep === ePageStep.view"
-                    >
-                        <iv-toolbox-back @click="pageToList()" />
-                    </template>
-
-                    <table class="table b-table table-striped table-hover mt-5">
-                        <thead>
+                <table class="table b-table table-striped table-hover mt-5">
+                    <thead>
                         <tr>
                             <th v-show="pageStep ==='remove'"></th>
                             <th v-for="value in inputFormData.title">{{ value }}</th>
                         </tr>
-                        </thead>
-                        <tbody>
+                    </thead>
+                    <tbody>
                         <tr v-for="(value, index) in inputFormData.accesslevels">
                             <td>{{ value.deviceType }}</td>
                             <td>{{ value.deviceName }}</td>
@@ -130,8 +126,8 @@
                                 >{{ _('w_Delete')}}</b-button>
                             </td>
                         </tr>
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
 
                 <template #footer-before>
                     <b-button
@@ -143,7 +139,6 @@
                 </template>
 
             </iv-auto-card>
-
 
         </div>
 
