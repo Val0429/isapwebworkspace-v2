@@ -768,9 +768,9 @@ export default class PermissionTable extends Vue {
             await this.$server
                 .C("/acs/accesslevel", accessParam)
                 .then((response: any) => {
-                    if (response != undefined) {
+                    if (response != undefined && response.objectId != undefined) {
                         // TODO: push response id
-                        premissionParam.accesslevels.push("");
+                        premissionParam.accesslevels.push(response.objectId);
                     }
                 })
                 .catch((e: any) => {
