@@ -413,7 +413,7 @@ export default class LangObject implements ILang {
     w_Restart = 'Restart';
     w_Reset = 'Reset';
     w_Delete = 'Delete';
-    w_ViewData = 'View Form Data';
+    w_ViewData = 'View Device Data';
     readerIO = 'Reader I/O';
 
     // Member
