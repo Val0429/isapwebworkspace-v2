@@ -57,7 +57,6 @@
         <!--Site Form (Add and Edit and View)-->
         <div v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view">
             <iv-auto-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')">
-                <!--                v-if="pageStep != ePageStep.view"-->
 
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -69,7 +68,7 @@
                     :value="inputFormData"
                     @submit="doSave($event)"
                     @update:deviceType="selectedDeviceType($event)"
-                    @update:*="tempSaveInputData($event)"
+                    @update:*="updateInputData($event)"
                 >
 
                     <!-- door -->
@@ -78,7 +77,7 @@
                             v-show="deviceType == eDeviceType.door"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.doorName"
+                            v-model="inputFormData.doorNameOption"
                         ></iv-form-selection>
                     </template>
 
@@ -87,7 +86,7 @@
                             v-show="deviceType == eDeviceType.door"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.doorArea"
+                            v-model="inputFormData.doorAreaOption"
                             :disabled="true"
                         ></iv-form-string>
                     </template>
@@ -97,18 +96,17 @@
                             v-show="deviceType == eDeviceType.door"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.deviceTimeFormat"
+                            v-model="inputFormData.deviceTimeFormatOption"
                         ></iv-form-selection>
                     </template>
 
                     <template #doorAdd="{ $attrs }">
-
                         <b-button
                             v-show="deviceType == eDeviceType.door"
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-                            @click="pageToAddDeviceInTable()"
+                            @click="clickAddDeviceInTable()"
                         >{{ _('w_Add') }}
                         </b-button>
                     </template>
@@ -119,7 +117,7 @@
                             v-show="deviceType === eDeviceType.doorGroup"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.doorGroupName"
+                            v-model="inputFormData.doorGroupNameOption"
                         ></iv-form-selection>
                     </template>
 
@@ -128,7 +126,7 @@
                             v-show="deviceType === eDeviceType.doorGroup"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.doorGroupArea"
+                            v-model="inputFormData.doorGroupAreaOption"
                             :disabled="true"
                         ></iv-form-string>
                     </template>
@@ -138,7 +136,7 @@
                             v-show="deviceType == eDeviceType.doorGroup"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.deviceTimeFormat"
+                            v-model="inputFormData.deviceTimeFormatOption"
                         ></iv-form-selection>
                     </template>
 
@@ -148,7 +146,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-                            @click="pageToAddDeviceInTable()"
+                            @click="clickAddDeviceInTable()"
                         >{{ _('w_Add') }}
                         </b-button>
                     </template>
@@ -160,7 +158,7 @@
                             v-if="deviceType === eDeviceType.elevator"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.elevatorName"
+                            v-model="inputFormData.elevatorNameOption"
                         ></iv-form-selection>
                     </template>
 
@@ -170,7 +168,7 @@
                             v-bind="$attrs"
                             v-on="$listeners"
                             :disabled="true"
-                            v-model="inputFormData.elevatorArea"
+                            v-model="inputFormData.elevatorAreaOption"
                         ></iv-form-string>
                     </template>
 
@@ -179,7 +177,7 @@
                             v-show="deviceType == eDeviceType.elevator"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="inputFormData.deviceTimeFormat"
+                            v-model="inputFormData.deviceTimeFormatOption"
                         ></iv-form-selection>
                     </template>
 
@@ -189,7 +187,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-                            @click="pageToAddDeviceInTable()"
+                            @click="clickAddDeviceInTable()"
                         >{{ _('w_Add') }}
                         </b-button>
                     </template>
@@ -214,9 +212,9 @@
                     <tbody>
                         <tr v-for="(value, index) in inputFormData.data">
                             <td>{{ value.deviceType }}</td>
-                            <td>{{ value.deviceName }}</td>
-                            <td>{{ value.deviceArea }}</td>
-                            <td>{{ value.deviceTimeFormat }}</td>
+                            <td>{{ value.deviceName.text }}</td>
+                            <td>{{ value.area.text}}</td>
+                            <td>{{ value.timeFormat.text }}</td>
                             <td>
                                 <b-button
                                     v-if="pageStep != ePageStep.view"
@@ -305,9 +303,9 @@ export default class PermissionTable extends Vue {
         id: "",
         permissionName: "",
         deviceType: "door",
-        deviceName: "",
-        deviceArea: "",
-        deviceTimeFormat: "",
+        deviceNameOption: "",
+        deviceAreaOption: "",
+        deviceTimeFormatOption: "",
         data: [] // subTable use
     };
     SearchParams: any = {};
@@ -337,12 +335,6 @@ export default class PermissionTable extends Vue {
         elevatorDevice: [],
         elevatorGroupDevice: []
     };
-    selectAera: any = {
-        door: "",
-        doorGroup: "",
-        elevator: "",
-        elevatorGroup: ""
-    };
 
     created() {}
 
@@ -362,16 +354,6 @@ export default class PermissionTable extends Vue {
 
     clearInputFormData() {
         this.inputFormData = {
-            id: "",
-            permissionName: "",
-            deviceType: "door",
-            doorName: "",
-            doorArea: "",
-            doorGroupName: "",
-            doorGroupArea: "",
-            elevatorName: "",
-            elevatorArea: "",
-            deviceTimeFormat: "0",
             title: [
                 "Device Type",
                 "Device Name",
@@ -379,7 +361,13 @@ export default class PermissionTable extends Vue {
                 "Time Format",
                 "Action"
             ],
-            data: []
+            id: "",
+            permissionName: "",
+            deviceType: "door",
+            deviceNameOption: "",
+            deviceAreaOption: "",
+            deviceTimeFormatOption: "",
+            data: [] // subTable use
         };
     }
 
@@ -397,21 +385,25 @@ export default class PermissionTable extends Vue {
     }
 
     async pageToEdit() {
-        this.pageStep = EPageStep.edit;
+        this.clearInputFormData();
         if (this.isSelected[0] == undefined) {
             return false;
         }
+        await this.initSelectItem();
         this.selectedDetail = this.isSelected[0];
         this.initInputFormData();
+        this.pageStep = EPageStep.edit;
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
+    async pageToView() {
+        this.clearInputFormData();
         if (this.isSelected[0] == undefined) {
             return false;
         }
+        await this.initSelectItem();
         this.selectedDetail = this.isSelected[0];
         this.initInputFormData();
+        this.pageStep = EPageStep.view;
     }
 
     async initSelectItem() {
@@ -521,18 +513,30 @@ export default class PermissionTable extends Vue {
     }
 
     async initInputFormData() {
-        this.clearInputFormData();
-        await this.initSelectItem();
-
-        this.deviceType = EDeviceType.door;
         this.inputFormData.id = this.selectedDetail.objectId;
         this.inputFormData.permissionName = this.selectedDetail.tablename;
-        this.inputFormData.accesslevelIds = this.selectedDetail.accesslevels;
 
         for (const tempAccesslevels of this.selectedDetail.accesslevels) {
             console.log("tempAccesslevels - ", tempAccesslevels);
 
+            if (tempAccesslevels.objectId != undefined) {
+                continue;
+            }
+
+            let deviceData: any = {
+                deviceType: "",
+                deviceName: { id: "", text: "" },
+                area: { id: "", text: "" },
+                timeFormat: { id: "", text: "" }
+            };
+
+            // if () {
+            //     this.inputFormData.deviceType
+            // }
+
             switch (tempAccesslevels.type) {
+                case EDeviceType.door:
+                    break;
                 case EDeviceType.doorGroup:
                     const doorGroupData: any = {
                         deviceType: tempAccesslevels.type,
@@ -541,21 +545,36 @@ export default class PermissionTable extends Vue {
                         deviceTimeFormat: ""
                     };
 
-                    for (const key in this.selectItem.doorGroupDevice) {
-                        if (tempAccesslevels.objectId === key) {
-                            doorGroupData.deviceName = this.selectItem.doorGroupDevice[key];
-                            break;
+                    console.log(tempAccesslevels);
+
+                    if (tempAccesslevels.doorGroup != undefined) {
+                        console.log(tempAccesslevels.doorGroup);
+                        for (const key in this.selectItem.doorGroupDevice) {
+                            if (tempAccesslevels.doorGroup === key) {
+                                doorGroupData.deviceName = this.selectItem.doorGroupDevice[
+                                    key
+                                ];
+                                break;
+                            }
                         }
                     }
+
                     for (const key in this.selectItem.timeSchedule) {
-                        if (
-                            tempAccesslevels.timeschedule.objectId === key
-                        ) {
-                            doorGroupData.deviceTimeFormat = this.selectItem.timeSchedule[key];
+                        if (tempAccesslevels.timeschedule.objectId === key) {
+                            doorGroupData.deviceTimeFormat = this.selectItem.timeSchedule[
+                                key
+                            ];
                             break;
                         }
                     }
                     this.inputFormData.data.push(doorGroupData);
+                    break;
+                case EDeviceType.elevator:
+                    break;
+                case EDeviceType.elevatorGroup:
+                case EDeviceType.elevatorGroup:
+                case EDeviceType.none:
+                default:
                     break;
             }
         }
@@ -565,7 +584,7 @@ export default class PermissionTable extends Vue {
         this.isSelected = data;
     }
 
-    tempSaveInputData(data) {
+    updateInputData(data) {
         switch (data.key) {
             case "permissionName":
                 this.inputFormData.permissionName = data.value;
@@ -579,7 +598,7 @@ export default class PermissionTable extends Vue {
             case "doorName":
                 for (const key in this.selectItem.doorDevice) {
                     if (data.value === key) {
-                        this.inputFormData.doorName = key;
+                        this.inputFormData.doorNameOption = key;
                         break;
                     }
                 }
@@ -588,7 +607,7 @@ export default class PermissionTable extends Vue {
             case "doorTimeFormat":
                 for (const key in this.selectItem.timeSchedule) {
                     if (data.value === key) {
-                        this.inputFormData.deviceTimeFormat = key;
+                        this.inputFormData.deviceTimeFormatOption = key;
                         break;
                     }
                 }
@@ -598,7 +617,7 @@ export default class PermissionTable extends Vue {
             case "doorGroupName":
                 for (const key in this.selectItem.doorGroupDevice) {
                     if (data.value === key) {
-                        this.inputFormData.doorGroupName = key;
+                        this.inputFormData.doorGroupNameOption = key;
                         break;
                     }
                 }
@@ -609,7 +628,7 @@ export default class PermissionTable extends Vue {
                                 origin.area != undefined &&
                                 origin.area.name != undefined
                             ) {
-                                this.inputFormData.doorGroupArea =
+                                this.inputFormData.doorGroupAreaOption =
                                     origin.area.name;
                             }
                             break;
@@ -621,7 +640,7 @@ export default class PermissionTable extends Vue {
             case "doorGroupTimeFormat":
                 for (const key in this.selectItem.timeSchedule) {
                     if (data.value === key) {
-                        this.inputFormData.deviceTimeFormat = key;
+                        this.inputFormData.deviceTimeFormatOption = key;
                         break;
                     }
                 }
@@ -631,7 +650,7 @@ export default class PermissionTable extends Vue {
             case "elevatorName":
                 for (const key in this.selectItem.elevatorDevice) {
                     if (data.value === key) {
-                        this.inputFormData.elevatorName = key;
+                        this.inputFormData.elevatorNameOption = key;
                         break;
                     }
                 }
@@ -640,7 +659,7 @@ export default class PermissionTable extends Vue {
             case "elevatorTimeFormat":
                 for (const key in this.selectItem.timeSchedule) {
                     if (data.value === key) {
-                        this.inputFormData.deviceTimeFormat = key;
+                        this.inputFormData.deviceTimeFormatOption = key;
                         break;
                     }
                 }
@@ -653,89 +672,100 @@ export default class PermissionTable extends Vue {
         this.inputFormData.data.deviceType = data;
     }
 
-    pageToAddDeviceInTable() {
+    clickAddDeviceInTable() {
+        let deviceData: any = {
+            deviceType: this.inputFormData.deviceType,
+            deviceName: { id: "", text: "" },
+            area: { id: "", text: "" },
+            timeFormat: { id: "", text: "" }
+        };
+
+        if (this.inputFormData.deviceTimeFormatOption === "0") {
+            return false;
+        }
+
+        deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption 
+        for (let loopKey in this.selectItem.timeSchedule) {
+            if (loopKey == deviceData.timeFormat.id) {
+                deviceData.timeFormat.text = this.selectItem.timeSchedule[
+                    loopKey
+                ];
+                break;
+            }
+        }
+
         switch (this.deviceType) {
             case EDeviceType.door:
-                if (
-                    this.inputFormData.doorName === "Please Select" ||
-                    this.inputFormData.doorName === "0"
-                ) {
+                if (this.inputFormData.doorNameOption === "0") {
                     return false;
                 }
-                if (
-                    this.inputFormData.deviceTimeFormat === "Please Select" ||
-                    this.inputFormData.deviceTimeFormat === "0"
-                ) {
-                    return false;
+                deviceData.deviceName.id = this.inputFormData.doorNameOption;
+                for (let loopKey in this.selectItem.doorDevice) {
+                    if (loopKey == deviceData.deviceName.id) {
+                        deviceData.deviceName.text = this.selectItem.doorDevice[
+                            loopKey
+                        ];
+                        break;
+                    }
                 }
-                const doorData: any = {
-                    deviceType: this.inputFormData.deviceType,
-                    deviceName: this.inputFormData.doorName,
-                    deviceArea: this.inputFormData.doorArea,
-                    deviceTimeFormat: this.inputFormData.deviceTimeFormat
-                };
-                this.inputFormData.data.push(doorData);
-                this.clearDeviceSelection();
+
                 break;
             case EDeviceType.doorGroup:
-                if (
-                    this.inputFormData.doorGroupName === "Please Select" ||
-                    this.inputFormData.doorGroupName === "0"
-                ) {
+                if (this.inputFormData.doorGroupNameOption === "0") {
                     return false;
                 }
-                if (
-                    this.inputFormData.doorGroupTimeFormat ===
-                        "Please Select" ||
-                    this.inputFormData.doorGroupTimeFormat === "0"
-                ) {
-                    return false;
+                deviceData.deviceName.id = this.inputFormData.doorGroupNameOption;
+                for (let origin of this.selectItemOriginal.doorGroup) {
+                    if (
+                        origin.objectId ==
+                        this.inputFormData.doorGroupNameOption
+                    ) {
+                        if (
+                            origin.area != undefined &&
+                            origin.area.name != undefined
+                        ) {
+                            deviceData.area.id = origin.area.name;
+                            deviceData.area.text = origin.area.name;
+                        }
+                        break;
+                    }
                 }
-                const doorGroupData: any = {
-                    deviceType: this.inputFormData.deviceType,
-                    deviceName: this.inputFormData.doorGroupName,
-                    deviceArea: this.inputFormData.doorGroupArea,
-                    deviceTimeFormat: this.inputFormData.deviceTimeFormat
-                };
-                this.inputFormData.data.push(doorGroupData);
-                this.clearDeviceSelection();
+                for (let loopKey in this.selectItem.doorGroupDevice) {
+                    if (loopKey == deviceData.deviceName.id) {
+                        deviceData.deviceName.text = this.selectItem.doorGroupDevice[
+                            loopKey
+                        ];
+                        break;
+                    }
+                }
                 break;
             case EDeviceType.elevator:
-                if (
-                    this.inputFormData.elevatorName === "Please Select" ||
-                    this.inputFormData.elevatorName === "0"
-                ) {
+                if (this.inputFormData.elevatorNameOption === "0") {
                     return false;
                 }
-                if (
-                    this.inputFormData.elevatorTimeFormat === "Please Select" ||
-                    this.inputFormData.elevatorTimeFormat === "0"
-                ) {
-                    return false;
+                deviceData.deviceName.id = this.inputFormData.elevatorNameOption;
+                for (let loopKey in this.selectItem.elevatorDevice) {
+                    if (loopKey == deviceData.deviceName.id) {
+                        deviceData.deviceName.text = this.selectItem.elevatorDevice[
+                            loopKey
+                        ];
+                        break;
+                    }
                 }
-                const elevatorData: any = {
-                    deviceType: this.inputFormData.deviceType,
-                    deviceName: this.inputFormData.elevatorName,
-                    deviceArea: this.inputFormData.elevatorArea,
-                    deviceTimeFormat: this.inputFormData.deviceTimeFormat
-                };
-                this.inputFormData.data.push(elevatorData);
-                this.clearDeviceSelection();
                 break;
         }
+        this.inputFormData.data.push(deviceData);
+        this.clearDeviceSelection();
     }
 
     clearDeviceSelection() {
-        this.inputFormData.deviceTimeFormat = "0";
-
-        this.inputFormData.doorName = "0";
-        this.inputFormData.doorArea = "";
-
-        this.inputFormData.doorGroupName = "0";
-        this.inputFormData.doorGroupArea = "";
-
-        this.inputFormData.elevatorName = "0";
-        this.inputFormData.elevatorArea = "";
+        this.inputFormData.deviceTimeFormatOption = "0";
+        this.inputFormData.doorNameOption = "0";
+        this.inputFormData.doorAreaOption = "";
+        this.inputFormData.doorGroupNameOption = "0";
+        this.inputFormData.doorGroupAreaOption = "";
+        this.inputFormData.elevatorNameOption = "0";
+        this.inputFormData.elevatorAreaOption = "";
     }
 
     async doSubDelete(index) {
@@ -747,7 +777,7 @@ export default class PermissionTable extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.selectedDetail) {
+                for (const param of this.isSelected) {
                     const deleteParam: {
                         objectId: string;
                     } = {
@@ -784,8 +814,8 @@ export default class PermissionTable extends Vue {
                 status: 1, // always is 1
 
                 // need update
-                timeschedule: tempData.deviceTimeFormat, // timeschedule
-                type: this.deviceType, // for frontend use
+                timeschedule: tempData.timeFormat.id, // timeschedule
+                type: tempData.deviceType, // for frontend use
                 reader: [] // to door, doorGroup, elevator ogigin find reader
             };
 
@@ -794,10 +824,9 @@ export default class PermissionTable extends Vue {
                 continue;
             }
 
-            switch (this.deviceType) {
+            switch (tempData.deviceType) {
                 case EDeviceType.door:
-                    accessParam.door = tempData.doorName;
-
+                    accessParam.door = tempData.deviceName.id;
                     for (let door of this.selectItemOriginal.door) {
                         if (
                             door.objectId != undefined &&
@@ -827,34 +856,45 @@ export default class PermissionTable extends Vue {
                     }
                     break;
                 case EDeviceType.doorGroup:
-                    accessParam.doorGroup = tempData.doorGroupName;
+                    accessParam.doorGroup = tempData.deviceName.id;
+                    console.log("!!! doorGroup objectId", accessParam.doorGroup);
                     for (let doorGroup of this.selectItemOriginal.doorGroup) {
+                        console.log("!!!  doorGroup.objectId == accessParam.doorGroup", 
+                            doorGroup.objectId,
+                            doorGroup.objectId != undefined &&
+                            doorGroup.objectId == accessParam.doorGroup
+                        );
                         if (
                             doorGroup.objectId != undefined &&
-                            doorGroup.groupid != undefined &&
-                            doorGroup.objectId == tempData.doorGroupName
+                            doorGroup.objectId == accessParam.doorGroup
                         ) {
+                             console.log("!!!  doors", 
+                                doorGroup.doors,
+                                doorGroup.doors.readerin,
+                                doorGroup.doors != undefined &&
+                                doorGroup.doors.readerin != undefined
+                            );
                             if (
-                                doorGroup.door != undefined &&
-                                doorGroup.readerin != undefined
+                                doorGroup.doors != undefined 
                             ) {
-                                for (let reader of doorGroup.readerin) {
-                                    if (reader.objectId != undefined) {
-                                        accessParam.reader.push(
-                                            reader.objectId
-                                        );
+                                for (let door of doorGroup.doors) {
+                                    if (door.readerin != undefined) {
+                                        for (let reader of door.readerin ) {
+                                            if (reader.objectId != undefined) {
+                                                accessParam.reader.push(
+                                                    reader.objectId
+                                                );
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                            if (
-                                doorGroup.door != undefined &&
-                                doorGroup.readerout != undefined
-                            ) {
-                                for (let reader of doorGroup.readerout) {
-                                    if (reader.objectId != undefined) {
-                                        accessParam.reader.push(
-                                            reader.objectId
-                                        );
+                                    if (door.readerout != undefined) {
+                                        for (let reader of door.readerout ) {
+                                            if (reader.objectId != undefined) {
+                                                accessParam.reader.push(
+                                                    reader.objectId
+                                                );
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -862,13 +902,14 @@ export default class PermissionTable extends Vue {
                         }
                     }
                     break;
+
                 case EDeviceType.elevator:
-                    accessParam.elevator = tempData.elevator;
+                    accessParam.elevator = tempData.deviceName.id;
                     for (let elevator of this.selectItemOriginal.elevator) {
                         if (
                             elevator.objectId != undefined &&
                             elevator.elevatorid != undefined &&
-                            elevator.objectId == tempData.elevator
+                            elevator.objectId == accessParam.elevator
                         ) {
                             if (elevator.reader != undefined) {
                                 for (let reader of elevator.reader) {
@@ -882,6 +923,7 @@ export default class PermissionTable extends Vue {
                         }
                     }
                     break;
+
                 case EDeviceType.elevatorGroup:
                 case EDeviceType.none:
                 default:
