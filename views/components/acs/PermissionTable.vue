@@ -66,23 +66,138 @@
                 </template>
 
                 <iv-form
+                    ref="subForm"
                     :interface="IForm()"
                     :value="inputFormData"
-                    ref="subForm"
                     @submit="doSave($event)"
                     @update:deviceType="selectedDeviceType($event)"
                     @update:*="tempSaveInputData($event)"
                 >
 
-                    <template #showInputDataInTable="{ $attrs }">
+                    <!-- door -->
+                    <template #doorName="{ $attrs, $listeners }"
+                              >
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.door"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #doorArea="{ $attrs, $listeners }"
+                              >
+                        <iv-form-string
+                            v-show="deviceType == eDeviceType.door"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :disabled="true"
+                        ></iv-form-string>
+                    </template>
+
+
+                    <template #doorTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.door"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                        ></iv-form-selection>
+                    </template>
+
+
+                    <template #doorAdd="{ $attrs }">
+
                         <b-button
+                            v-show="deviceType == eDeviceType.door"
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
                             @click="pageToshowInputDataInTable()"
-                        >{{ _('w_Add') }}
+                        >{{ _('w_Permission_DoorAdd')  }}
                         </b-button>
                     </template>
+
+
+                    <!-- door Group -->
+                    <template #doorGroupName="{ $attrs, $listeners }"
+                              >
+                        <iv-form-selection
+                            v-show="deviceType === eDeviceType.doorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #doorGroupArea="{ $attrs, $listeners }"
+                              >
+                        <iv-form-string
+                            v-show="deviceType === eDeviceType.doorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :disabled="true"
+                        ></iv-form-string>
+                    </template>
+
+                    <template #doorGroupTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.doorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #doorGroupAdd="{ $attrs }">
+                        <b-button
+                            v-show="deviceType === eDeviceType.doorGroup"
+                            class="h-25 addButton"
+                            variant="primary"
+                            size="md"
+                            @click="pageToshowInputDataInTable()"
+                        >{{ _('w_Permission_DoorGroupAdd')  }}
+                        </b-button>
+                    </template>
+
+
+                    <!-- elevator -->
+
+                    <template #elevatorName="{ $attrs, $listeners }"
+                              >
+                        <iv-form-selection
+                            v-if="deviceType === eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #elevatorArea="{ $attrs, $listeners }"
+                              >
+                        <iv-form-string
+                            v-if="deviceType === eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :disabled="true"
+                        ></iv-form-string>
+                    </template>
+
+                    <template #elevatorTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #elevatorAdd="{ $attrs }"
+                              >
+                        <b-button
+                            v-if="deviceType === eDeviceType.elevator"
+                            class="h-25 addButton"
+                            variant="primary"
+                            size="md"
+                            @click="pageToshowInputDataInTable()"
+                        >{{ _('w_Permission_ElevatorAdd')  }}
+                        </b-button>
+                    </template>
+
 
                 </iv-form>
 
@@ -165,11 +280,11 @@ interface ISelectOption {
 }
 
 interface ISelectItem {
-    timeSchedule: ISelectOption[];
-    doorDevice: ISelectOption[];
-    doorGroupDevice: ISelectOption[];
-    elevatorDevice: ISelectOption[];
-    elevatorGroupDevice: ISelectOption[];
+    timeSchedule: any;
+    doorDevice: any;
+    doorGroupDevice: any;
+    elevatorDevice: any;
+    elevatorGroupDevice: any;
 }
 
 @Component({
@@ -178,6 +293,9 @@ interface ISelectItem {
 export default class PermissionTable extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+    eDeviceType = EDeviceType;
+    deviceType: EDeviceType;
+
     tableMultiple = true;
     isSelected: any = [];
     selectedDetail: any = [];
@@ -209,7 +327,6 @@ export default class PermissionTable extends Vue {
         doorGroup: "doorGroup",
         elevator: "elevator"
     };
-    selected = "door";
 
     // Morris
     selectItemOriginal: any = {
@@ -270,20 +387,20 @@ export default class PermissionTable extends Vue {
     }
 
     pageToList() {
-        this.selected = "door";
-        this.selectedDeviceType(0);
+        this.deviceType = EDeviceType.door;
+        this.selectedDeviceType(EDeviceType.door);
         (this.$refs.mainTable as any).reload();
         this.pageStep = EPageStep.list;
     }
 
-    pageToAdd() {
+    async pageToAdd() {
         this.clearInputFormData();
-        this.initSelectItem();
+        await this.initSelectItem();
         this.pageStep = EPageStep.add;
     }
 
-    pageToEdit() {
-        this.initSelectItem();
+    async pageToEdit() {
+        await this.initSelectItem();
         this.pageStep = EPageStep.edit;
     }
 
@@ -299,10 +416,10 @@ export default class PermissionTable extends Vue {
             }
         };
 
-        this.selectItem.timeSchedule = [];
-        this.selectItem.doorDevice = [];
-        this.selectItem.doorGroupDevice = [];
-        this.selectItem.elevatorDevice = [];
+        this.selectItem.timeSchedule = {};
+        this.selectItem.doorDevice = {};
+        this.selectItem.doorGroupDevice = {};
+        this.selectItem.elevatorDevice = {};
 
         await this.$server
             .R("/acs/timeschedule", param)
@@ -313,11 +430,8 @@ export default class PermissionTable extends Vue {
                             tempItem.timeid != undefined &&
                             tempItem.timename != undefined
                         ) {
-                            let tempOption: ISelectOption = {
-                                value: tempItem.timeid,
-                                text: tempItem.timename
-                            };
-                            this.selectItem.timeSchedule.push(tempOption);
+                            this.selectItem.timeSchedule[tempItem.objectId] =
+                                tempItem.timename;
                             this.selectItemOriginal.timeSchedule.push(tempItem);
                         }
                     }
@@ -337,11 +451,8 @@ export default class PermissionTable extends Vue {
                             tempItem.doorid != undefined &&
                             tempItem.doorname != undefined
                         ) {
-                            let tempOption: ISelectOption = {
-                                value: tempItem.doorid,
-                                text: tempItem.doorname
-                            };
-                            this.selectItem.doorDevice.push(tempOption);
+                            this.selectItem.doorDevice[tempItem.objectId] =
+                                tempItem.doorname;
                             this.selectItemOriginal.door.push(tempItem);
                         }
                     }
@@ -360,11 +471,8 @@ export default class PermissionTable extends Vue {
                         tempItem.groupid != undefined &&
                         tempItem.groupname != undefined
                     ) {
-                        let tempOption: ISelectOption = {
-                            value: tempItem.groupid,
-                            text: tempItem.groupname
-                        };
-                        this.selectItem.doorGroupDevice.push(tempOption);
+                        this.selectItem.doorGroupDevice[tempItem.objectId] =
+                            tempItem.groupname;
                         this.selectItemOriginal.doorGroup.push(tempItem);
                     }
                 }
@@ -382,11 +490,8 @@ export default class PermissionTable extends Vue {
                         tempItem.elevatorid != undefined &&
                         tempItem.elevatorname != undefined
                     ) {
-                        let tempOption: ISelectOption = {
-                            value: tempItem.elevatorid,
-                            text: tempItem.elevatorname
-                        };
-                        this.selectItem.elevatorDevice.push(tempOption);
+                        this.selectItem.elevatorDevice[tempItem.objectId] =
+                            tempItem.elevatorname;
                         this.selectItemOriginal.elevator.push(tempItem);
                     }
                 }
@@ -430,22 +535,10 @@ export default class PermissionTable extends Vue {
         }
     }
 
-    // TODO: change v-show for device type
     selectedDeviceType(data) {
-        this.selected = this.deviceTypeItem[data];
+        this.deviceType = data;
+        console.log("this.deviceType - ", this.deviceType);
         this.inputFormData.data.deviceType = data;
-        switch (this.selected) {
-            case "door":
-                break;
-            case "doorGroup":
-                break;
-            case "elevator":
-                break;
-            case "elevatorGroup":
-            case "none":
-            default:
-                break;
-        }
     }
 
     pageToshowInputDataInTable() {
@@ -522,6 +615,15 @@ export default class PermissionTable extends Vue {
         `;
     }
 
+    /*
+    selectItem
+        timeSchedule: ISelectOption[];
+    doorDevice: ISelectOption[];
+    doorGroupDevice: ISelectOption[];
+    elevatorDevice: ISelectOption[];
+    elevatorGroupDevice: ISelectOption[];
+    * */
+
     IForm() {
         return `
             interface {
@@ -533,64 +635,146 @@ export default class PermissionTable extends Vue {
                  */
                  permissionName: string;
 
-                /**
-                 * @uiColumnGroup - row1
-                 * @uiHidden - true
-                 */
-                row1?: string;
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceType")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceType")}
                  * @uiColumnGroup - row15
                  */
-                 deviceType?:: ${toEnumInterface(
+                 deviceType?: ${toEnumInterface(
                      this.deviceTypeItem as any,
                      false
                  )};
 
-                /**
-                 * @uiColumnGroup - row15
-                 * @uiHidden - true
-                 */
-                row153?: string;
+                 ///////////////////////////////////////////////////////
+
 
                  /**
-                 * @uiLabel - ${this._("w_Permission_DeviceName")}
-                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiLabel - ${this._("w_Permission_Door") }
+                 * @uiPlaceHolder - ${this._("w_Permission_Door")}
                  * @uiColumnGroup - row11
-                 */
-                 deviceName?: ${toEnumInterface(
-                     this.deviceNameItem as any,
+                */
+                 doorName?: ${toEnumInterface(
+                     this.selectItem.doorDevice as any,
                      false
                  )};
 
                 /**
                  * @uiLabel - ${this._("w_Permission_DeviceArea")}
-                 * @uiPlaceHolder - ${this._("w_Permission_DeviceArea")}
                  * @uiColumnGroup - row11
-                * @uiType - ${
-                    this.selected === "elevator"
-                        ? "iv-form-selection"
-                        : "iv-form-label"
-                }
-                 */
-                 deviceArea?: string;
+                 * @uiType - ${
+                     this.deviceType === "elevator"
+                         ? "iv-form-selection"
+                         : "iv-form-label"
+                 }
+                */
+                 doorArea?: string;
+
+
 
                 /**
                  * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiColumnGroup - row11
-                 */
-                deviceTimeFormat?: ${toEnumInterface(
-                    this.deviceTimeFromatItem as any,
+                */
+                doorTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
                     false
                 )};
 
+
                 /*
                  * @uiColumnGroup - row11
+                */
+                 doorAdd: any;
+
+
+                ///////////////////////////////////////////////////////
+
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DoorGroup") }
+                 * @uiPlaceHolder - ${this._("w_Permission_DoorGroup") }
+                 * @uiColumnGroup - row111
+                */
+                 doorGroupName?: ${toEnumInterface(
+                     this.selectItem.doorGroupDevice as any,
+                     false
+                 )};
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row111
+                * @uiType - ${
+                    this.deviceType === EDeviceType.doorGroup
+                        ? "iv-form-selection"
+                        : "iv-form-label"
+                }
                  */
-                 showInputDataInTable: any
+                 doorGroupArea?: string;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row111
+                 */
+                doorGroupTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
+                    false
+                )};
+
+
+                /*
+                 * @uiColumnGroup - row111
+                 */
+                 doorGroupAdd: any;
+
+                ///////////////////////////////////////////////////////
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_Elevator") }
+                 * @uiPlaceHolder - ${this._("w_Permission_Elevator")}
+                 * @uiColumnGroup - row112
+
+                 */
+                 elevatorName?: ${toEnumInterface(
+                     this.selectItem.elevatorDevice as any,
+                     false
+                 )};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row112
+                * @uiType - ${
+                    this.deviceType === EDeviceType.elevator
+                        ? "iv-form-selection"
+                        : "iv-form-label"
+                }
+                 */
+                 elevatorArea?: string;
+
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row112
+                 */
+                elevatorTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
+                    false
+                )};
+
+
+                /*
+                 * @uiColumnGroup - row112
+                 */
+                 elevatorAdd: any;
+
+
 
             }
         `;
