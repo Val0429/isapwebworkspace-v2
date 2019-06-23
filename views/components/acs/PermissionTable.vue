@@ -107,7 +107,11 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
+<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
+=======
+                            @click="pageToshowInputDataInTable()"
+>>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_DoorAdd') }}
                         </b-button>
                     </template>
@@ -144,7 +148,11 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
+<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
+=======
+                            @click="pageToshowInputDataInTable()"
+>>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_DoorGroupAdd') }}
                         </b-button>
                     </template>
@@ -182,7 +190,11 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
+<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
+=======
+                            @click="pageToshowInputDataInTable()"
+>>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_ElevatorAdd') }}
                         </b-button>
                     </template>
@@ -316,7 +328,6 @@ export default class PermissionTable extends Vue {
         elevator: EDeviceType.elevator
     };
 
-    // Morris
     selectItemOriginal: any = {
         timeSchedule: [],
         door: [],
@@ -337,7 +348,6 @@ export default class PermissionTable extends Vue {
         elevator: "",
         elevatorGroup: ""
     };
-    // Morris
 
     created() {}
 
@@ -660,9 +670,46 @@ export default class PermissionTable extends Vue {
         );
     }
 
-    doSave() {
-        // for create accesslevels
-        // create premissionTable
+    async doSave() {
+        let premissionParam: any = {
+            tablename: "",
+            status: 1,
+            accesslevels: []
+        };
+
+        for (let tempData of this.inputFormData.data) {
+            let accessParam: any = {
+                type: "door", // for frontend use
+                system: 0, // always is 0
+                levelid: "", // always is empty string
+                levelname: "", // always is empty string
+                status: 1, // always is 1
+                door: "27d5vu2rq1", // if type is doorGroup
+                doorGroup: "", // if type is doorGroup
+                elevator: "", // if type is elevator
+                reader: ["rjIF8VgrP0", "4YbQED97zD"], // to door, doorGroup, elevator ogigin find reader
+                timeschedule: "CiUSy8czv2" // timeschedule
+            };
+            await this.$server
+                .C("/acs/accesslevel", accessParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        premissionParam.accesslevels.push("");
+                    }
+                })
+                .catch((e: any) => {
+                    console.log(e);
+                });
+        }
+
+        await this.$server
+            .C("/acs/permissiontable", premissionParam)
+            .then((response: any) => {
+                this.pageToList();
+            })
+            .catch((e: any) => {
+                console.log(e);
+            });
     }
 
     ISerachFrom() {

@@ -618,14 +618,18 @@ export default class MemberForm extends Vue {
             }
 
             if (detailData.AccessRules != undefined) {
-                for (let rules of detailData.AccessRules) {
-                    if (
-                        rules.ObjectToken != undefined &&
-                        rules.ObjectName != undefined
-                    ) {
-                        this.inputFormData.premissionSelected.push(
-                            rules.ObjectToken.toString()
-                        );
+                for (let rule of detailData.AccessRules) {
+                    if (typeof rule == "object") {
+                        if (
+                            rule.ObjectToken != undefined &&
+                            rule.ObjectName != undefined
+                        ) {
+                            this.inputFormData.premissionSelected.push(
+                                rule.ObjectToken.toString()
+                            );
+                        }
+                    } else if (typeof rule == "string") {
+                        this.inputFormData.premissionSelected.push(rule);
                     }
                 }
             }
@@ -1108,7 +1112,6 @@ export default class MemberForm extends Vue {
                 }
             }
         }
-
         this.pageToAdd();
     }
 
@@ -1313,11 +1316,19 @@ export default class MemberForm extends Vue {
                             content.tableid != undefined &&
                             content.tablename != undefined
                         ) {
+                            let haveOption = false;
                             let tempOption: ISortSelectOption = {
                                 value: content.tableid.toString(),
                                 text: content.tablename.toString()
                             };
-                            this.premissionOptions.push(tempOption);
+                            for (let option of this.premissionOptions) {
+                                if (option.value == tempOption.value) {
+                                    haveOption = true;
+                                }
+                            }
+                            if (!haveOption) {
+                                this.premissionOptions.push(tempOption);
+                            }
                         }
                     }
                 }
