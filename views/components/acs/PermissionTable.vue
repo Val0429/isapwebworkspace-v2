@@ -107,11 +107,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
-=======
-                            @click="pageToshowInputDataInTable()"
->>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_DoorAdd') }}
                         </b-button>
                     </template>
@@ -148,11 +144,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
-=======
-                            @click="pageToshowInputDataInTable()"
->>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_DoorGroupAdd') }}
                         </b-button>
                     </template>
@@ -190,11 +182,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
-=======
-                            @click="pageToshowInputDataInTable()"
->>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_ElevatorAdd') }}
                         </b-button>
                     </template>
@@ -672,28 +660,116 @@ export default class PermissionTable extends Vue {
 
     async doSave() {
         let premissionParam: any = {
-            tablename: "",
             status: 1,
+
+            // TODO: need update
+            tablename: "",
             accesslevels: []
         };
 
         for (let tempData of this.inputFormData.data) {
             let accessParam: any = {
-                type: "door", // for frontend use
                 system: 0, // always is 0
                 levelid: "", // always is empty string
                 levelname: "", // always is empty string
                 status: 1, // always is 1
-                door: "27d5vu2rq1", // if type is doorGroup
-                doorGroup: "", // if type is doorGroup
-                elevator: "", // if type is elevator
-                reader: ["rjIF8VgrP0", "4YbQED97zD"], // to door, doorGroup, elevator ogigin find reader
-                timeschedule: "CiUSy8czv2" // timeschedule
+
+                // TODO: need update
+                timeschedule: "", // timeschedule
+                type: this.deviceType, // for frontend use
+                reader: [] // to door, doorGroup, elevator ogigin find reader
             };
+
+            switch (this.deviceType) {
+                case EDeviceType.door:
+                    // TODO: get door id
+                    accessParam.door = "";
+                    for (let door of this.selectItemOriginal.door) {
+                        if (
+                            door.doorid != undefined &&
+                            door.doorid == accessParam.door
+                        ) {
+                            if (door.readerin != undefined) {
+                                for (let reader of door.readerin) {
+                                    if (reader.objectId != undefined) {
+                                        accessParam.reader.push(
+                                            reader.objectId
+                                        );
+                                    }
+                                }
+                            }
+                            if (door.readerout != undefined) {
+                                for (let reader of door.readerout) {
+                                    if (reader.objectId != undefined) {
+                                        accessParam.reader.push(
+                                            reader.objectId
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case EDeviceType.doorGroup:
+                    // TODO: get door group id
+                    accessParam.doorGroup = "";
+                    for (let doorGroup of this.selectItemOriginal.doorGroup) {
+                        if (
+                            doorGroup.groupid != undefined &&
+                            doorGroup.groupid == accessParam.doorGroup
+                        ) {
+                            if (doorGroup.readerin != undefined) {
+                                for (let reader of doorGroup.readerin) {
+                                    if (reader.objectId != undefined) {
+                                        accessParam.reader.push(
+                                            reader.objectId
+                                        );
+                                    }
+                                }
+                            }
+                            if (doorGroup.readerout != undefined) {
+                                for (let reader of doorGroup.readerout) {
+                                    if (reader.objectId != undefined) {
+                                        accessParam.reader.push(
+                                            reader.objectId
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case EDeviceType.elevator:
+                    // TODO: get elevator id
+                    accessParam.elevator = "";
+                    for (let elevator of this.selectItemOriginal.elevator) {
+                        if (
+                            elevator.elevatorid != undefined &&
+                            elevator.elevatorid == accessParam.elevator
+                        ) {
+                            if (elevator.reader != undefined) {
+                                for (let reader of elevator.reader) {
+                                    if (reader.objectId != undefined) {
+                                        accessParam.reader.push(
+                                            reader.objectId
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case EDeviceType.elevatorGroup:
+                case EDeviceType.none:
+                default:
+                    break;
+            }
+
             await this.$server
                 .C("/acs/accesslevel", accessParam)
                 .then((response: any) => {
                     if (response != undefined) {
+                        // TODO: push response id
                         premissionParam.accesslevels.push("");
                     }
                 })
