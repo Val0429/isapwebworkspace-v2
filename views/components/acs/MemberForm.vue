@@ -67,7 +67,7 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view"
             :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_Member_Add') :  _('w_Member_Edit')"
+            :label="pageStep === ePageStep.add ? _('w_Member_Add') : pageStep === ePageStep.edit ? _('w_Member_Edit') :  _('w_Member_View')"
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />

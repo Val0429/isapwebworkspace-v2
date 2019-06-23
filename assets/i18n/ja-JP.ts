@@ -432,7 +432,7 @@ export default class LangObject implements ILang {
     w_Member_List = '人員管理';
     w_Member_Add = '新增人員資訊';
     w_Member_Edit = '編輯人員資訊';
-    w_Member_View = 'View Member';
+    w_Member_View = '查看人員資訊';
 
     w_Member_CompanyName = '公司名稱：';
     w_Member_PersonType = '人員類型：';
