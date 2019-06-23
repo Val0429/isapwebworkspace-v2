@@ -67,6 +67,8 @@ export default class LangObject {
     groupid = 'Group Id';
     groupname = 'Group Name';
     doors = 'Doors';
+    doorscount = 'Doors Count';
+    readerscount= 'Readers Count';
 
     w_Elevator = 'Elevator';
     w_ElevatorAdd = 'Add Elevator';
@@ -222,7 +224,11 @@ export default class LangObject {
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
 
-    // common
+    // Dialog
+    w_Dialog_ErrorTitle = 'Something wrong';
+    w_Dialog_SuccessTitle = 'Success';
+    
+    // common    
     w_Error = 'Error';
     w_NextPage = 'Next';
     w_PreviousPage = 'Prev';
@@ -521,4 +527,11 @@ export default class LangObject {
     w_Member_EditFailed = '編輯失敗';
     w_Member_AddFailed = '新增失敗';
     w_Member_ErrorUploadFile = '上傳失敗';
+    readerIO="Reader I/O";
+
+    w_Navigation_Users = 'Users';
+    w_Navigation_Users_User = 'User';
+    w_Navigation_Users_UserGroup = 'User Group';
+    w_Navigation_Site = 'Site';
+    w_Navigation_Region = 'Region';
 }

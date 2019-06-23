@@ -66,6 +66,8 @@ export default class LangObject implements ILang {
     groupid = '門號群組ID';
     groupname = '門號群組名稱';
     doors = '';
+    doorscount = 'Doors Count';
+    readerscount= 'Readers Count';
 
     w_Elevator = '電梯';
     w_ElevatorAdd = '新增電梯';
@@ -221,6 +223,10 @@ export default class LangObject implements ILang {
 
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
+
+    // Dialog
+    w_Dialog_ErrorTitle = 'Something wrong';
+    w_Dialog_SuccessTitle = 'Success';
 
     // common
     w_Error = 'Error';
@@ -407,8 +413,16 @@ export default class LangObject implements ILang {
     w_Restart = 'Restart';
     w_Reset = 'Reset';
     w_Delete = 'Delete';
+    readerIO="Reader I/O";
 
     // Member
+    w_Navigation_Users = 'Users';
+    w_Navigation_Users_User = 'User';
+    w_Navigation_Users_UserGroup = 'User Group';
+    w_Navigation_Site = 'Site';
+    w_Navigation_Region = 'Region';
+
+// Member
     w_Member_List = '人員管理';
     w_Member_Add = '新增人員資訊';
     w_Member_Edit = '編輯人員資訊';

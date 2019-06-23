@@ -65,6 +65,8 @@ export default class LangObject implements ILang {
     groupid = 'Group Id';
     groupname = 'Group Name';
     doors = 'Doors';
+    doorscount = 'Doors Count';
+    readerscount= 'Readers Count';
 
     w_Elevator = 'Elevator';
     w_ElevatorAdd = 'Add Elevator';
@@ -220,6 +222,17 @@ export default class LangObject implements ILang {
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
 
+    // Member
+    w_Navigation_Users = 'Users';
+    w_Navigation_Users_User = 'User';
+    w_Navigation_Users_UserGroup = 'User Group';
+    w_Navigation_Site = 'Site';
+    w_Navigation_Region = 'Region';
+
+     // Dialog
+     w_Dialog_ErrorTitle = 'Something wrong';
+     w_Dialog_SuccessTitle = 'Success';
+     
     // common
     w_Error = 'Error';
     w_NextPage = 'Next';
@@ -404,6 +417,7 @@ export default class LangObject implements ILang {
     w_Upload = 'Upload';
     w_Restart = 'Restart';
     w_Reset = 'Reset';
+    readerIO="Reader I/O";
     w_Delete = 'Delete';
 
     // Member
