@@ -426,9 +426,8 @@ export default class PermissionTable extends Vue {
                     for (let tempItem of response.results) {
                         if (
                             tempItem.objectId != undefined &&
-                            tempItem.timeid != undefined &&
                             tempItem.timename != undefined &&
-                            typeof tempItem.timeid == "string" &&
+                            typeof tempItem.objectId == "string" &&
                             typeof tempItem.timename == "string"
                         ) {
                             this.selectItem.timeSchedule[tempItem.objectId] =
@@ -450,9 +449,8 @@ export default class PermissionTable extends Vue {
                     for (let tempItem of response.results) {
                         if (
                             tempItem.objectId != undefined &&
-                            tempItem.doorid != undefined &&
                             tempItem.doorname != undefined &&
-                            typeof tempItem.doorid == "string" &&
+                            typeof tempItem.objectId == "string" &&
                             typeof tempItem.doorname == "string"
                         ) {
                             this.selectItem.doorDevice[tempItem.objectId] =
@@ -473,9 +471,8 @@ export default class PermissionTable extends Vue {
                 for (let tempItem of response.results) {
                     if (
                         tempItem.objectId != undefined &&
-                        tempItem.groupid != undefined &&
                         tempItem.groupname != undefined &&
-                        typeof tempItem.groupid == "string" &&
+                        typeof tempItem.objectId == "string" &&
                         typeof tempItem.groupname == "string"
                     ) {
                         this.selectItem.doorGroupDevice[tempItem.objectId] =
@@ -517,41 +514,81 @@ export default class PermissionTable extends Vue {
         this.inputFormData.permissionName = this.selectedDetail.tablename;
 
         for (const tempAccesslevels of this.selectedDetail.accesslevels) {
-            console.log("tempAccesslevels - ", tempAccesslevels);
+            if (tempAccesslevels.objectId == undefined) {
+                continue;
+            }
 
-            if (tempAccesslevels.objectId != undefined) {
+            if (tempAccesslevels.type == undefined) {
                 continue;
             }
 
             let deviceData: any = {
-                deviceType: "",
+                objectId: tempAccesslevels.objectId,
+                deviceType: tempAccesslevels.type,
                 deviceName: { id: "", text: "" },
                 area: { id: "", text: "" },
                 timeFormat: { id: "", text: "" }
             };
 
-            // if () {
-            //     this.inputFormData.deviceType
-            // }
+            if (
+                tempAccesslevels.timeschedule != undefined &&
+                tempAccesslevels.timeschedule.objectId != undefined &&
+                tempAccesslevels.timeschedule.timename != undefined
+            ) {
+                deviceData.timeFormat.id =
+                    tempAccesslevels.timeschedule.objectId;
+                deviceData.timeFormat.text =
+                    tempAccesslevels.timeschedule.timename;
+            }
 
             switch (tempAccesslevels.type) {
                 case EDeviceType.door:
+                    if (
+                        tempAccesslevels.door != undefined &&
+                        tempAccesslevels.door.objectId != undefined
+                    ) {
+                        deviceData.deviceName.id =
+                            tempAccesslevels.door.objectId;
+                        for (let key in this.selectItem.doorDevice) {
+                            if (key == tempAccesslevels.door.objectId) {
+                                deviceData.deviceName.text = this.selectItem.doorDevice[
+                                    key
+                                ];
+                                break;
+                            }
+                        }
+                    }
                     break;
                 case EDeviceType.doorGroup:
-                    const doorGroupData: any = {
-                        deviceType: tempAccesslevels.type,
-                        deviceName: "",
-                        deviceArea: "",
-                        deviceTimeFormat: ""
-                    };
+                    if (
+                        tempAccesslevels.doorgroup != undefined &&
+                        tempAccesslevels.doorgroup.objectId != undefined
+                    ) {
+                        deviceData.deviceName.id =
+                            tempAccesslevels.doorgroup.objectId;
 
-                    console.log(tempAccesslevels);
-
-                    if (tempAccesslevels.doorGroup != undefined) {
-                        console.log(tempAccesslevels.doorGroup);
-                        for (const key in this.selectItem.doorGroupDevice) {
-                            if (tempAccesslevels.doorGroup === key) {
-                                doorGroupData.deviceName = this.selectItem.doorGroupDevice[
+                        for (let origin of this.selectItemOriginal.doorGroup) {
+                            if (
+                                origin.objectId != undefined &&
+                                origin.objectId == deviceData.deviceName.id
+                            ) {
+                                if (origin.groupname != undefined) {
+                                    deviceData.deviceName.text =
+                                        origin.groupname;
+                                }
+                                if (
+                                    origin.area != undefined &&
+                                    origin.area.name != undefined
+                                ) {
+                                    deviceData.area.id = origin.area.name;
+                                    deviceData.area.text = origin.area.name;
+                                }
+                                break;
+                            }
+                        }
+                        for (let key in this.selectItem.doorGroupDevice) {
+                            if (key == tempAccesslevels.doorgroup.objectId) {
+                                deviceData.deviceName.text = this.selectItem.doorGroupDevice[
                                     key
                                 ];
                                 break;
@@ -559,17 +596,24 @@ export default class PermissionTable extends Vue {
                         }
                     }
 
-                    for (const key in this.selectItem.timeSchedule) {
-                        if (tempAccesslevels.timeschedule.objectId === key) {
-                            doorGroupData.deviceTimeFormat = this.selectItem.timeSchedule[
-                                key
-                            ];
-                            break;
-                        }
-                    }
-                    this.inputFormData.data.push(doorGroupData);
                     break;
                 case EDeviceType.elevator:
+                    if (
+                        tempAccesslevels.elevator != undefined &&
+                        tempAccesslevels.elevator.objectId != undefined
+                    ) {
+                        deviceData.deviceName.id =
+                            tempAccesslevels.elevator.objectId;
+                        for (let key in this.selectItem.elevatorDevice) {
+                            if (key == tempAccesslevels.elevator.objectId) {
+                                deviceData.deviceName.text = this.selectItem.elevatorDevice[
+                                    key
+                                ];
+                                break;
+                            }
+                        }
+                    }
+
                     break;
                 case EDeviceType.elevatorGroup:
                 case EDeviceType.elevatorGroup:
@@ -577,6 +621,7 @@ export default class PermissionTable extends Vue {
                 default:
                     break;
             }
+            this.inputFormData.data.push(deviceData);
         }
     }
 
@@ -674,6 +719,7 @@ export default class PermissionTable extends Vue {
 
     clickAddDeviceInTable() {
         let deviceData: any = {
+            objectId: "",
             deviceType: this.inputFormData.deviceType,
             deviceName: { id: "", text: "" },
             area: { id: "", text: "" },
@@ -684,7 +730,7 @@ export default class PermissionTable extends Vue {
             return false;
         }
 
-        deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption 
+        deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption;
         for (let loopKey in this.selectItem.timeSchedule) {
             if (loopKey == deviceData.timeFormat.id) {
                 deviceData.timeFormat.text = this.selectItem.timeSchedule[
@@ -807,145 +853,153 @@ export default class PermissionTable extends Vue {
         };
 
         for (let tempData of this.inputFormData.data) {
-            let accessParam: any = {
-                system: 0, // always is 0
-                levelid: "", // always is empty string
-                levelname: "", // always is empty string
-                status: 1, // always is 1
+            if (tempData.objectId != undefined && tempData.objectId != "") {
+                premissionParam.accesslevels.push(tempData.objectId);
+            } else {
+                let accessParam: any = {
+                    system: 0, // always is 0
+                    levelid: "", // always is empty string
+                    levelname: "", // always is empty string
+                    status: 1, // always is 1
 
-                // need update
-                timeschedule: tempData.timeFormat.id, // timeschedule
-                type: tempData.deviceType, // for frontend use
-                reader: [] // to door, doorGroup, elevator ogigin find reader
-            };
+                    // need update
+                    timeschedule: tempData.timeFormat.id, // timeschedule
+                    type: tempData.deviceType, // for frontend use
+                    reader: [] // to door, doorGroup, elevator ogigin find reader
+                };
 
-            if (accessParam.timeschedule == "") {
-                console.log("!!! accessParam.timeschedule not find");
-                continue;
-            }
+                if (accessParam.timeschedule == "") {
+                    console.log("!!! accessParam.timeschedule not find");
+                    continue;
+                }
 
-            switch (tempData.deviceType) {
-                case EDeviceType.door:
-                    accessParam.door = tempData.deviceName.id;
-                    for (let door of this.selectItemOriginal.door) {
-                        if (
-                            door.objectId != undefined &&
-                            door.doorid != undefined &&
-                            door.objectId == accessParam.door
-                        ) {
-                            if (door.readerin != undefined) {
-                                for (let reader of door.readerin) {
-                                    if (reader.objectId != undefined) {
-                                        accessParam.reader.push(
-                                            reader.objectId
-                                        );
-                                    }
-                                }
-                            }
-                            if (door.readerout != undefined) {
-                                for (let reader of door.readerout) {
-                                    if (reader.objectId != undefined) {
-                                        accessParam.reader.push(
-                                            reader.objectId
-                                        );
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    break;
-                case EDeviceType.doorGroup:
-                    accessParam.doorGroup = tempData.deviceName.id;
-                    console.log("!!! doorGroup objectId", accessParam.doorGroup);
-                    for (let doorGroup of this.selectItemOriginal.doorGroup) {
-                        console.log("!!!  doorGroup.objectId == accessParam.doorGroup", 
-                            doorGroup.objectId,
-                            doorGroup.objectId != undefined &&
-                            doorGroup.objectId == accessParam.doorGroup
-                        );
-                        if (
-                            doorGroup.objectId != undefined &&
-                            doorGroup.objectId == accessParam.doorGroup
-                        ) {
-                             console.log("!!!  doors", 
-                                doorGroup.doors,
-                                doorGroup.doors.readerin,
-                                doorGroup.doors != undefined &&
-                                doorGroup.doors.readerin != undefined
-                            );
+                switch (tempData.deviceType) {
+                    case EDeviceType.door:
+                        accessParam.door = tempData.deviceName.id;
+                        for (let door of this.selectItemOriginal.door) {
                             if (
-                                doorGroup.doors != undefined 
+                                door.objectId != undefined &&
+                                door.doorid != undefined &&
+                                door.objectId == accessParam.door
                             ) {
-                                for (let door of doorGroup.doors) {
-                                    if (door.readerin != undefined) {
-                                        for (let reader of door.readerin ) {
-                                            if (reader.objectId != undefined) {
-                                                accessParam.reader.push(
-                                                    reader.objectId
-                                                );
-                                            }
+                                if (door.readerin != undefined) {
+                                    for (let reader of door.readerin) {
+                                        if (reader.objectId != undefined) {
+                                            accessParam.reader.push(
+                                                reader.objectId
+                                            );
                                         }
                                     }
-                                    if (door.readerout != undefined) {
-                                        for (let reader of door.readerout ) {
-                                            if (reader.objectId != undefined) {
-                                                accessParam.reader.push(
-                                                    reader.objectId
-                                                );
+                                }
+                                if (door.readerout != undefined) {
+                                    for (let reader of door.readerout) {
+                                        if (reader.objectId != undefined) {
+                                            accessParam.reader.push(
+                                                reader.objectId
+                                            );
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    case EDeviceType.doorGroup:
+                        accessParam.doorgroup = tempData.deviceName.id;
+                        for (let doorGroup of this.selectItemOriginal
+                            .doorGroup) {
+                            if (
+                                doorGroup.objectId != undefined &&
+                                doorGroup.objectId == accessParam.doorgroup
+                            ) {
+                                if (doorGroup.doors != undefined) {
+                                    for (let door of doorGroup.doors) {
+                                        if (door.readerin != undefined) {
+                                            for (let reader of door.readerin) {
+                                                if (
+                                                    reader.objectId != undefined
+                                                ) {
+                                                    accessParam.reader.push(
+                                                        reader.objectId
+                                                    );
+                                                }
+                                            }
+                                        }
+                                        if (door.readerout != undefined) {
+                                            for (let reader of door.readerout) {
+                                                if (
+                                                    reader.objectId != undefined
+                                                ) {
+                                                    accessParam.reader.push(
+                                                        reader.objectId
+                                                    );
+                                                }
                                             }
                                         }
                                     }
                                 }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    break;
+                        break;
 
-                case EDeviceType.elevator:
-                    accessParam.elevator = tempData.deviceName.id;
-                    for (let elevator of this.selectItemOriginal.elevator) {
+                    case EDeviceType.elevator:
+                        accessParam.elevator = tempData.deviceName.id;
+                        for (let elevator of this.selectItemOriginal.elevator) {
+                            if (
+                                elevator.objectId != undefined &&
+                                elevator.elevatorid != undefined &&
+                                elevator.objectId == accessParam.elevator
+                            ) {
+                                if (elevator.reader != undefined) {
+                                    for (let reader of elevator.reader) {
+                                        if (reader.objectId != undefined) {
+                                            accessParam.reader.push(
+                                                reader.objectId
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case EDeviceType.elevatorGroup:
+                    case EDeviceType.none:
+                    default:
+                        break;
+                }
+
+                await this.$server
+                    .C("/acs/accesslevel", accessParam)
+                    .then((response: any) => {
                         if (
-                            elevator.objectId != undefined &&
-                            elevator.elevatorid != undefined &&
-                            elevator.objectId == accessParam.elevator
+                            response != undefined &&
+                            response.objectId != undefined
                         ) {
-                            if (elevator.reader != undefined) {
-                                for (let reader of elevator.reader) {
-                                    if (reader.objectId != undefined) {
-                                        accessParam.reader.push(
-                                            reader.objectId
-                                        );
-                                    }
-                                }
-                            }
+                            premissionParam.accesslevels.push(
+                                response.objectId
+                            );
                         }
-                    }
-                    break;
-
-                case EDeviceType.elevatorGroup:
-                case EDeviceType.none:
-                default:
-                    break;
+                    })
+                    .catch((e: any) => {
+                        console.log(e);
+                    });
             }
-
-            await this.$server
-                .C("/acs/accesslevel", accessParam)
-                .then((response: any) => {
-                    if (
-                        response != undefined &&
-                        response.objectId != undefined
-                    ) {
-                        premissionParam.accesslevels.push(response.objectId);
-                    }
-                })
-                .catch((e: any) => {
-                    console.log(e);
-                });
         }
 
-        await this.$server
+        if (this.inputFormData.id !=undefined && this.inputFormData.id  != "") {
+            premissionParam.objectId = this.inputFormData.id;
+              await this.$server
+            .U("/acs/permissiontable", premissionParam)
+            .then((response: any) => {
+                this.pageToList();
+            })
+            .catch((e: any) => {
+                console.log(e);
+            });
+        } else {
+            await this.$server
             .C("/acs/permissiontable", premissionParam)
             .then((response: any) => {
                 this.pageToList();
@@ -953,6 +1007,9 @@ export default class PermissionTable extends Vue {
             .catch((e: any) => {
                 console.log(e);
             });
+        }
+
+        
     }
 
     ISerachFrom() {

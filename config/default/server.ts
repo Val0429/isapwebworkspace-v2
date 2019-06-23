@@ -37,6 +37,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Member
         '/acs/member': [any, any, true];
+
+        // permissiontable
+        '/acs/permissiontable': [any, any, true];
     };
     Delete: {
         '/users': [any, any, true];
