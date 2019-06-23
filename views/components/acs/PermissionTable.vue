@@ -155,8 +155,8 @@ enum EDeviceType {
     none = "none",
     door = "door",
     doorGroup = "doorGroup",
-    evelator = "evelator",
-    evelatorGroup = "evelatorGroup"
+    elevator = "elevator",
+    elevatorGroup = "elevatorGroup"
 }
 
 interface ISelectOption {
@@ -168,8 +168,8 @@ interface ISelectItem {
     timeSchedule: ISelectOption[];
     doorDevice: ISelectOption[];
     doorGroupDevice: ISelectOption[];
-    evelatorDevice: ISelectOption[];
-    evelatorGruopDevice: ISelectOption[];
+    elevatorDevice: ISelectOption[];
+    elevatorGroupDevice: ISelectOption[];
 }
 
 @Component({
@@ -204,7 +204,7 @@ export default class PermissionTable extends Vue {
     deviceAreaItem: any = {};
     deviceTimeFromatItem: any = {};
     showdeviceTimeFromatItem: any = {};
-    devoceTypeItem: any = {
+    deviceTypeItem: any = {
         door: "door",
         doorGroup: "doorGroup",
         elevator: "elevator"
@@ -216,21 +216,21 @@ export default class PermissionTable extends Vue {
         timeSchedule: [],
         door: [],
         doorGroup: [],
-        evelator: [],
-        evelatorGruop: []
+        elevator: [],
+        elevatorGroup: []
     };
     selectItem: ISelectItem = {
         timeSchedule: [],
         doorDevice: [],
         doorGroupDevice: [],
-        evelatorDevice: [],
-        evelatorGruopDevice: []
+        elevatorDevice: [],
+        elevatorGroupDevice: []
     };
     selectAera: any = {
         door: "",
         doorGroup: "",
-        evelator: "",
-        evelatorGroup: ""
+        elevator: "",
+        elevatorGroup: ""
     };
     // Morris
 
@@ -302,7 +302,7 @@ export default class PermissionTable extends Vue {
         this.selectItem.timeSchedule = [];
         this.selectItem.doorDevice = [];
         this.selectItem.doorGroupDevice = [];
-        this.selectItem.evelatorDevice = [];
+        this.selectItem.elevatorDevice = [];
 
         await this.$server
             .R("/acs/timeschedule", param)
@@ -386,8 +386,8 @@ export default class PermissionTable extends Vue {
                             value: tempItem.elevatorid,
                             text: tempItem.elevatorname
                         };
-                        this.selectItem.evelatorDevice.push(tempOption);
-                        this.selectItemOriginal.evelator.push(tempItem);
+                        this.selectItem.elevatorDevice.push(tempOption);
+                        this.selectItemOriginal.elevator.push(tempItem);
                     }
                 }
             })
@@ -432,7 +432,7 @@ export default class PermissionTable extends Vue {
 
     // TODO: change v-show for device type
     selectedDeviceType(data) {
-        this.selected = this.devoceTypeItem[data];
+        this.selected = this.deviceTypeItem[data];
         this.inputFormData.data.deviceType = data;
         switch (this.selected) {
             case "door":
@@ -545,7 +545,7 @@ export default class PermissionTable extends Vue {
                  * @uiColumnGroup - row15
                  */
                  deviceType?:: ${toEnumInterface(
-                     this.devoceTypeItem as any,
+                     this.deviceTypeItem as any,
                      false
                  )};
 
