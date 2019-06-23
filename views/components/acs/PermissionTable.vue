@@ -75,8 +75,7 @@
                 >
 
                     <!-- door -->
-                    <template #doorName="{ $attrs, $listeners }"
-                              >
+                    <template #doorName="{ $attrs, $listeners }">
                         <iv-form-selection
                             v-show="deviceType == eDeviceType.door"
                             v-bind="$attrs"
@@ -84,8 +83,7 @@
                         ></iv-form-selection>
                     </template>
 
-                    <template #doorArea="{ $attrs, $listeners }"
-                              >
+                    <template #doorArea="{ $attrs, $listeners }">
                         <iv-form-string
                             v-show="deviceType == eDeviceType.door"
                             v-bind="$attrs"
@@ -93,7 +91,6 @@
                             :disabled="true"
                         ></iv-form-string>
                     </template>
-
 
                     <template #doorTimeFormat="{ $attrs, $listeners }">
                         <iv-form-selection
@@ -103,7 +100,6 @@
                         ></iv-form-selection>
                     </template>
 
-
                     <template #doorAdd="{ $attrs }">
 
                         <b-button
@@ -112,14 +108,12 @@
                             variant="primary"
                             size="md"
                             @click="pageToshowInputDataInTable()"
-                        >{{ _('w_Permission_DoorAdd')  }}
+                        >{{ _('w_Permission_DoorAdd') }}
                         </b-button>
                     </template>
 
-
                     <!-- door Group -->
-                    <template #doorGroupName="{ $attrs, $listeners }"
-                              >
+                    <template #doorGroupName="{ $attrs, $listeners }">
                         <iv-form-selection
                             v-show="deviceType === eDeviceType.doorGroup"
                             v-bind="$attrs"
@@ -127,8 +121,7 @@
                         ></iv-form-selection>
                     </template>
 
-                    <template #doorGroupArea="{ $attrs, $listeners }"
-                              >
+                    <template #doorGroupArea="{ $attrs, $listeners }">
                         <iv-form-string
                             v-show="deviceType === eDeviceType.doorGroup"
                             v-bind="$attrs"
@@ -152,15 +145,13 @@
                             variant="primary"
                             size="md"
                             @click="pageToshowInputDataInTable()"
-                        >{{ _('w_Permission_DoorGroupAdd')  }}
+                        >{{ _('w_Permission_DoorGroupAdd') }}
                         </b-button>
                     </template>
 
-
                     <!-- elevator -->
 
-                    <template #elevatorName="{ $attrs, $listeners }"
-                              >
+                    <template #elevatorName="{ $attrs, $listeners }">
                         <iv-form-selection
                             v-if="deviceType === eDeviceType.elevator"
                             v-bind="$attrs"
@@ -168,8 +159,7 @@
                         ></iv-form-selection>
                     </template>
 
-                    <template #elevatorArea="{ $attrs, $listeners }"
-                              >
+                    <template #elevatorArea="{ $attrs, $listeners }">
                         <iv-form-string
                             v-if="deviceType === eDeviceType.elevator"
                             v-bind="$attrs"
@@ -186,18 +176,16 @@
                         ></iv-form-selection>
                     </template>
 
-                    <template #elevatorAdd="{ $attrs }"
-                              >
+                    <template #elevatorAdd="{ $attrs }">
                         <b-button
                             v-if="deviceType === eDeviceType.elevator"
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
                             @click="pageToshowInputDataInTable()"
-                        >{{ _('w_Permission_ElevatorAdd')  }}
+                        >{{ _('w_Permission_ElevatorAdd') }}
                         </b-button>
                     </template>
-
 
                 </iv-form>
 
@@ -328,7 +316,6 @@ export default class PermissionTable extends Vue {
         elevator: "elevator"
     };
 
-    // Morris
     selectItemOriginal: any = {
         timeSchedule: [],
         door: [],
@@ -349,7 +336,6 @@ export default class PermissionTable extends Vue {
         elevator: "",
         elevatorGroup: ""
     };
-    // Morris
 
     created() {}
 
@@ -581,9 +567,46 @@ export default class PermissionTable extends Vue {
         );
     }
 
-    doSave() {
-        // for create accesslevels
-        // create premissionTable
+    async doSave() {
+        let premissionParam: any = {
+            tablename: "",
+            status: 1,
+            accesslevels: []
+        };
+
+        for (let tempData of this.inputFormData.data) {
+            let accessParam: any = {
+                type: "door", // for frontend use
+                system: 0, // always is 0
+                levelid: "", // always is empty string
+                levelname: "", // always is empty string
+                status: 1, // always is 1
+                door: "27d5vu2rq1", // if type is doorGroup
+                doorGroup: "", // if type is doorGroup
+                elevator: "", // if type is elevator
+                reader: ["rjIF8VgrP0", "4YbQED97zD"], // to door, doorGroup, elevator ogigin find reader
+                timeschedule: "CiUSy8czv2" // timeschedule
+            };
+            await this.$server
+                .C("/acs/accesslevel", accessParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        premissionParam.accesslevels.push("");
+                    }
+                })
+                .catch((e: any) => {
+                    console.log(e);
+                });
+        }
+
+        await this.$server
+            .C("/acs/permissiontable", premissionParam)
+            .then((response: any) => {
+                this.pageToList();
+            })
+            .catch((e: any) => {
+                console.log(e);
+            });
     }
 
     ISerachFrom() {
@@ -650,7 +673,7 @@ export default class PermissionTable extends Vue {
 
 
                  /**
-                 * @uiLabel - ${this._("w_Permission_Door") }
+                 * @uiLabel - ${this._("w_Permission_Door")}
                  * @uiPlaceHolder - ${this._("w_Permission_Door")}
                  * @uiColumnGroup - row11
                 */
@@ -693,8 +716,8 @@ export default class PermissionTable extends Vue {
 
 
                  /**
-                 * @uiLabel - ${this._("w_Permission_DoorGroup") }
-                 * @uiPlaceHolder - ${this._("w_Permission_DoorGroup") }
+                 * @uiLabel - ${this._("w_Permission_DoorGroup")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DoorGroup")}
                  * @uiColumnGroup - row111
                 */
                  doorGroupName?: ${toEnumInterface(
@@ -735,7 +758,7 @@ export default class PermissionTable extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Permission_Elevator") }
+                 * @uiLabel - ${this._("w_Permission_Elevator")}
                  * @uiPlaceHolder - ${this._("w_Permission_Elevator")}
                  * @uiColumnGroup - row112
 

@@ -8,6 +8,10 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Member
         '/acs/member': [any, any, true];
+
+        // permissiontable
+        '/acs/permissiontable': [any, any, true];
+        '/acs/accesslevel': [any, any, true];
     };
 
     Get: {
