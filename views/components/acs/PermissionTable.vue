@@ -72,17 +72,6 @@
                     :value="inputFormData"
                 >
 
-                    <!-- <template #deviceType="{ $attrs, $listeners}">
-                        <div class="card-content iv-form-group col-md-12">
-                            <b-form-group :label="_('w_Permission_DeviceType')">
-                                <b-form-radio-group
-                                    @change="selectedDeviceType()"
-                                    v-model="selected"
-                                    :options="devoceTypeItem"
-                                ></b-form-radio-group>
-                            </b-form-group>
-                        </div>
-                    </template> -->
                     <template #showInputDataInTable>
                         <b-button
                             class="ml-3 mt-2"
@@ -160,6 +149,19 @@ enum EPageStep {
     none = "none"
 }
 
+interface ISelectOption {
+    value: string;
+    text: string;
+}
+
+interface ISelectItem {
+    timeSchedule: ISelectOption[];
+    doorDevice: ISelectOption[];
+    doorGroupDevice: ISelectOption[];
+    evelatorDevice: ISelectOption[];
+    doorGroupArea: ISelectOption[];
+}
+
 @Component({
     components: { PermissionTableForm }
 })
@@ -177,7 +179,6 @@ export default class PermissionTable extends Vue {
             "Time Format",
             "Action"
         ],
-
         id: "",
         permissionName: "",
         deviceType: "door",
@@ -203,6 +204,22 @@ export default class PermissionTable extends Vue {
     showdeviceTimeFromatItem: any = [];
     devoceTypeItem: any = ["door", "doorGroup", "elevator"];
     selected = "door";
+
+    // Morris
+    selectItemOriginal: any = {
+        timeSchedule: [],
+        door: [],
+        doorGroup: [],
+        evelator: []
+    };
+    selectItem: ISelectItem = {
+        timeSchedule: [],
+        doorDevice: [],
+        doorGroupDevice: [],
+        evelatorDevice: [],
+        doorGroupArea: []
+    };
+    // Morris
 
     created() {}
 
@@ -240,9 +257,144 @@ export default class PermissionTable extends Vue {
         };
     }
 
+    pageToList() {
+        this.selected = "door";
+        this.selectedDeviceType(0);
+        this.initDeviceTimeFromatItem();
+        (this.$refs.mainTable as any).reload();
+        this.pageStep = EPageStep.list;
+    }
+
+    pageToAdd() {
+        this.clearInputFormData();
+        this.initSelectItem();
+        this.pageStep = EPageStep.add;
+    }
+
+    pageToEdit() {
+        this.initSelectItem();
+        this.pageStep = EPageStep.edit;
+    }
+
+    async initSelectItem() {
+        let param = {
+            paging: {
+                page: 1,
+                pageSize: 10000
+            }
+        };
+
+        this.selectItem.timeSchedule = [];
+        this.selectItem.doorDevice = [];
+        this.selectItem.doorGroupDevice = [];
+        this.selectItem.evelatorDevice = [];
+
+        await this.$server
+            .R("/acs/timeschedule", param)
+            .then((response: any) => {
+                if (response != undefined && response.results != undefined) {
+                    for (let tempItem of response.results) {
+                        if (
+                            tempItem.timeid != undefined &&
+                            tempItem.timename != undefined
+                        ) {
+                            let tempOption: ISelectOption = {
+                                value: tempItem.timeid,
+                                text: tempItem.timename
+                            };
+                            this.selectItem.timeSchedule.push(tempOption);
+                            this.selectItemOriginal.timeSchedule.push(tempItem);
+                        }
+                    }
+                }
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return false;
+            });
+
+        await this.$server
+            .R("/acs/door", param)
+            .then((response: any) => {
+                if (response != undefined && response.results != undefined) {
+                    for (let tempItem of response.results) {
+                        if (
+                            tempItem.doorid != undefined &&
+                            tempItem.doorname != undefined
+                        ) {
+                            let tempOption: ISelectOption = {
+                                value: tempItem.doorid,
+                                text: tempItem.doorname
+                            };
+                            this.selectItem.doorDevice.push(tempOption);
+                            this.selectItemOriginal.door.push(tempItem);
+                        }
+                    }
+                }
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return false;
+            });
+
+        await this.$server
+            .R("/acs/doorgroup", param)
+            .then((response: any) => {
+                for (let tempItem of response.results) {
+                    if (
+                        tempItem.groupid != undefined &&
+                        tempItem.groupname != undefined
+                    ) {
+                        let tempOption: ISelectOption = {
+                            value: tempItem.groupid,
+                            text: tempItem.groupname
+                        };
+                        this.selectItem.doorGroupDevice.push(tempOption);
+                        this.selectItemOriginal.doorGroup.push(tempItem);
+                    }
+                    if (
+                        tempItem.area != undefined &&
+                        tempItem.area.objectId != undefined &&
+                        tempItem.area.name != undefined
+                    ) {
+                        let tempOption: ISelectOption = {
+                            value: tempItem.groupid,
+                            text: tempItem.groupname
+                        };
+                        this.selectItem.doorGroupArea.push(tempOption);
+                    }
+                }
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return false;
+            });
+
+        await this.$server
+            .R("/acs/elevator", param)
+            .then((response: any) => {
+                for (let tempItem of response.results) {
+                    if (
+                        tempItem.elevatorid != undefined &&
+                        tempItem.elevatorname != undefined
+                    ) {
+                        let tempOption: ISelectOption = {
+                            value: tempItem.elevatorid,
+                            text: tempItem.elevatorname
+                        };
+                        this.selectItem.evelatorDevice.push(tempOption);
+                        this.selectItemOriginal.evelator.push(tempItem);
+                    }
+                }
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return false;
+            });
+    }
+
     async initInputFormData(datas) {
         let data = datas[0];
-
         this.inputFormData.id = data.objectId;
         this.inputFormData.permissionName = data.tablename;
         this.inputFormData.accesslevelIds = data.accesslevels;
@@ -305,23 +457,6 @@ export default class PermissionTable extends Vue {
             this.selectedDetail = data;
             this.initInputFormData(this.selectedDetail);
         }
-    }
-
-    pageToList() {
-        this.selected = "door";
-        this.selectedDeviceType(0);
-        this.initDeviceTimeFromatItem();
-        (this.$refs.mainTable as any).reload();
-        this.pageStep = EPageStep.list;
-    }
-
-    pageToAdd() {
-        this.clearInputFormData();
-        this.pageStep = EPageStep.add;
-    }
-
-    pageToEdit() {
-        this.pageStep = EPageStep.edit;
     }
 
     pageToView() {
