@@ -217,7 +217,6 @@ export default class PermissionTable extends Vue {
                 tablename: datas.permissionName
             };
         }
-
         (this.$refs.mainTable as any).reload();
     }
 
@@ -309,17 +308,15 @@ export default class PermissionTable extends Vue {
     }
 
     pageToList() {
-        console.log("pageToList");
         this.selected = "door";
         this.selectedDeviceType(0);
         this.initDeviceTimeFromatItem();
-        this.pageStep = EPageStep.list;
         (this.$refs.mainTable as any).reload();
+        this.pageStep = EPageStep.list;
     }
 
     pageToAdd() {
         this.clearInputFormData();
-
         this.pageStep = EPageStep.add;
     }
 
@@ -518,8 +515,6 @@ export default class PermissionTable extends Vue {
 
     selectedDeviceType(data) {
         this.selected = this.devoceTypeItem[data];
-        console.log("selectedDeviceType", data, this.selected);
-
         switch (this.selected) {
             case "door":
                 this.deviceNameItemByDoor();
@@ -544,7 +539,6 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
                 permissionName?: string;
-
 
             }
         `;
@@ -583,6 +577,7 @@ export default class PermissionTable extends Vue {
                      this.devoceTypeItem as any,
                      false
                  )};
+
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceName")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
@@ -592,30 +587,30 @@ export default class PermissionTable extends Vue {
                      false
                  )};
 
-                 /**
+                /**
                  * @uiLabel - ${this._("w_Permission_DeviceArea")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceArea")}
-                * @uiType - ${
-                    this.selected === "elevator"
-                        ? "iv-form-selection"
-                        : "iv-form-label"
-                }
+                 * @uiType - ${
+                     this.selected === "elevator"
+                         ? "iv-form-selection"
+                         : "iv-form-label"
+                 }
                  */
-                 deviceArea?: ${toEnumInterface(
-                     this.deviceAreaItem as any,
-                     false
-                 )};
+                deviceArea?: ${toEnumInterface(
+                    this.deviceAreaItem as any,
+                    false
+                )};
 
-                 /**
+                /**
                  * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
                  */
-                 deviceTimeFormat?: ${toEnumInterface(
-                     this.deviceTimeFromatItem as any,
-                     false
-                 )};
+                deviceTimeFormat?: ${toEnumInterface(
+                    this.deviceTimeFromatItem as any,
+                    false
+                )};
 
-                 showInputDataInTable: any
+                showInputDataInTable: any
 
             }
         `;
@@ -624,8 +619,6 @@ export default class PermissionTable extends Vue {
     ISubTable() {
         return `
             interface {
-
-
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceType")}
