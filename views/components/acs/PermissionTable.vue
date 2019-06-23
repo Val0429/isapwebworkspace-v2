@@ -71,6 +71,8 @@
                     ref="subForm"
                     @submit="doSave($event)"
                     @update:deviceType="selectedDeviceType($event)"
+
+                    @update:*="tempSaveInputData($event)"
                 >
 
                     <!-- <template #deviceType="{ $attrs, $listeners}">
@@ -84,9 +86,9 @@
                             </b-form-group>
                         </div>
                     </template> -->
-                    <template #showInputDataInTable>
+                    <template #showInputDataInTable="{ $attrs }">
                         <b-button
-                            class="ml-3 mt-2"
+                            class="h-25 addButton"
                             variant="primary"
                             size="md"
                             @click="pageToshowInputDataInTable()"
@@ -112,7 +114,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(value, index) in inputFormData.accesslevels">
+                        <tr v-for="(value, index) in inputFormData.data">
                             <td>{{ value.deviceType }}</td>
                             <td>{{ value.deviceName }}</td>
                             <td>{{ value.deviceArea }}</td>
@@ -178,13 +180,15 @@ export default class PermissionTable extends Vue {
             "Time Format",
             "Action"
         ],
-
-        id: "",
         permissionName: "",
         deviceType: "door",
         deviceName: "",
         deviceArea: "",
         deviceTimeFormat: "",
+        id: "",
+
+        data: [],   // subTable use
+
         accesslevelIds: [],
         accesslevels: []
     };
@@ -198,11 +202,16 @@ export default class PermissionTable extends Vue {
     SearchParams: any = {};
 
     //options
-    deviceNameItem: any = [];
-    deviceAreaItem: any = [];
-    deviceTimeFromatItem: any = [];
-    showdeviceTimeFromatItem: any = [];
-    devoceTypeItem: any = ["door", "doorGroup", "elevator"];
+    deviceNameItem: any = {};
+    deviceAreaItem: any = {};
+    deviceTimeFromatItem: any = {};
+    showdeviceTimeFromatItem: any = {};
+    devoceTypeItem: any = {
+        door: 'door',
+        doorGroup: 'doorGroup',
+        elevator: 'elevator',
+    };
+
     selected = "door";
 
     created() {}
@@ -231,12 +240,20 @@ export default class PermissionTable extends Vue {
                 "Time Format",
                 "Action"
             ],
+
+            data: [
+                // permissionName: "",
+                // deviceType: "door",
+                // deviceName: "",
+                // deviceArea: "",
+                // deviceTimeFormat: "",
+            ],
             id: "",
-            permissionName: "",
-            deviceType: "door",
-            deviceName: "",
-            deviceArea: "",
-            deviceTimeFormat: "",
+            // permissionName: "",
+            // deviceType: "door",
+            // deviceName: "",
+            // deviceArea: "",
+            // deviceTimeFormat: "",
             accesslevelIds: [],
             accesslevels: []
         };
@@ -309,6 +326,50 @@ export default class PermissionTable extends Vue {
         }
     }
 
+    tempSaveInputData(data) {
+        console.log('data - ', data);
+
+        switch (data.key) {
+
+            case "deviceType":
+                this.inputFormData.deviceType = data.value;
+                break;
+            case "deviceName":
+                this.inputFormData.deviceName = data.value;
+                break;
+            case "deviceArea":
+                this.inputFormData.deviceArea = data.value;
+                break;
+            case "deviceTimeFormat":
+                this.inputFormData.deviceTimeFormat = data.value;
+                break;
+        }
+
+       // console.log('this.inputFormData.data - ', this.inputFormData.data);
+
+    }
+
+    selectedDeviceType(data) {
+        this.selected = this.devoceTypeItem[data];
+        this.inputFormData.data.deviceType = data;
+        // console.log("selectedDeviceType", data, this.selected);
+
+        switch (this.selected) {
+            case "door":
+                this.deviceNameItemByDoor();
+                break;
+            case "doorGroup":
+                this.deviceNameItemByDoorGroup();
+                break;
+            case "elevator":
+                this.deviceNameItemByElevtor();
+                break;
+            default:
+                break;
+        }
+    }
+
+
     pageToList() {
         console.log("pageToList");
         this.selected = "door";
@@ -333,6 +394,17 @@ export default class PermissionTable extends Vue {
     }
 
     pageToshowInputDataInTable() {
+
+
+
+        const tableData: any = {
+            deviceType: this.inputFormData.deviceType,
+            deviceName: this.inputFormData.deviceName,
+            deviceArea: this.inputFormData.deviceArea,
+            deviceTimeFormat: this.inputFormData.deviceTimeFormat
+        };
+        this.inputFormData.data.push(tableData);
+
         (this.$refs.subForm as any).set("showInputDataInTable", true);
     }
 
@@ -418,6 +490,7 @@ export default class PermissionTable extends Vue {
             .R("/acs/timeschedule")
             .then((response: any) => {
                 if (response != undefined) {
+                    this.deviceTimeFromatItem = {};
                     for (const returnValue of response.results) {
                         this.$set(
                             this.deviceTimeFromatItem,
@@ -443,7 +516,7 @@ export default class PermissionTable extends Vue {
             .R("/acs/door")
             .then((response: any) => {
                 if (response != undefined) {
-                    this.deviceNameItem = [];
+                    this.deviceNameItem = {};
                     for (const returnValue of response.results) {
                         this.$set(
                             this.deviceNameItem,
@@ -465,7 +538,7 @@ export default class PermissionTable extends Vue {
             .R("/acs/doorgroup")
             .then((response: any) => {
                 if (response != undefined) {
-                    this.deviceNameItem = [];
+                    this.deviceNameItem = {};
                     for (const returnValue of response.results) {
                         this.$set(
                             this.deviceNameItem,
@@ -486,7 +559,7 @@ export default class PermissionTable extends Vue {
             .R("/acs/elevator")
             .then((response: any) => {
                 if (response != undefined) {
-                    this.deviceNameItem = [];
+                    this.deviceNameItem = {};
                     for (const returnValue of response.results) {
                         this.$set(
                             this.deviceNameItem,
@@ -505,7 +578,7 @@ export default class PermissionTable extends Vue {
             .R("/acs/elevatorgroup")
             .then((response: any) => {
                 if (response != undefined) {
-                    this.deviceAreaItem = [];
+                    this.deviceAreaItem = {};
                     for (const returnValue of response.results) {
                         this.$set(
                             this.deviceAreaItem,
@@ -521,24 +594,6 @@ export default class PermissionTable extends Vue {
             });
     }
 
-    selectedDeviceType(data) {
-        this.selected = this.devoceTypeItem[data];
-        console.log("selectedDeviceType", data, this.selected);
-
-        switch (this.selected) {
-            case "door":
-                this.deviceNameItemByDoor();
-                break;
-            case "doorGroup":
-                this.deviceNameItemByDoorGroup();
-                break;
-            case "elevator":
-                this.deviceNameItemByElevtor();
-                break;
-            default:
-                break;
-        }
-    }
 
     ISerachFrom() {
         return `
@@ -577,20 +632,36 @@ export default class PermissionTable extends Vue {
                  /**
                  * @uiLabel - ${this._("w_Permission_PermissionName")}
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
+                 * @uiColumnGroup - row1
                  */
                  permissionName: string;
+
+                /**
+                 * @uiColumnGroup - row1
+                 * @uiHidden - true
+                 */
+                row1?: string;
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceType")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceType")}
+                 * @uiColumnGroup - row15
                  */
                  deviceType?:: ${toEnumInterface(
                      this.devoceTypeItem as any,
                      false
                  )};
+
+                /**
+                 * @uiColumnGroup - row15
+                 * @uiHidden - true
+                 */
+                row153?: string;
+
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceName")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiColumnGroup - row11
                  */
                  deviceName?: ${toEnumInterface(
                      this.deviceNameItem as any,
@@ -600,26 +671,28 @@ export default class PermissionTable extends Vue {
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceArea")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row11
                 * @uiType - ${
                     this.selected === "elevator"
                         ? "iv-form-selection"
                         : "iv-form-label"
                 }
                  */
-                 deviceArea?: ${toEnumInterface(
-                     this.deviceAreaItem as any,
-                     false
-                 )};
+                 deviceArea?: string;
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row11
                  */
                  deviceTimeFormat?: ${toEnumInterface(
                      this.deviceTimeFromatItem as any,
                      false
                  )};
 
+                /*
+                 * @uiColumnGroup - row11
+                 */
                  showInputDataInTable: any
 
             }
@@ -658,3 +731,9 @@ export default class PermissionTable extends Vue {
     }
 }
 </script>
+<style lang="scss" scoped>
+    .addButton {
+        margin-top: 27px;
+    }
+
+</style>
