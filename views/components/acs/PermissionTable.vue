@@ -663,9 +663,6 @@ export default class PermissionTable extends Vue {
 
         console.log('this.inputFormData - ', this.inputFormData);
 
-        (this.$refs.subForm as any).set("doorAdd", true);
-        (this.$refs.subForm as any).set("doorGroupAdd", true);
-        (this.$refs.subForm as any).set("elevatorAdd", true);
     }
 
     clearDeviceSelection () {
@@ -930,7 +927,7 @@ export default class PermissionTable extends Vue {
                 /*
                  * @uiColumnGroup - row11
                 */
-                 doorAdd: any;
+                 doorAdd?: any;
 
 
                 ///////////////////////////////////////////////////////
@@ -972,7 +969,7 @@ export default class PermissionTable extends Vue {
                 /*
                  * @uiColumnGroup - row111
                  */
-                 doorGroupAdd: any;
+                 doorGroupAdd?: any;
 
                 ///////////////////////////////////////////////////////
 
@@ -1015,7 +1012,7 @@ export default class PermissionTable extends Vue {
                 /*
                  * @uiColumnGroup - row112
                  */
-                 elevatorAdd: any;
+                 elevatorAdd?: any;
 
 
 
