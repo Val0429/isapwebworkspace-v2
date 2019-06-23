@@ -56,11 +56,8 @@
 
         <!--Site Form (Add and Edit and View)-->
         <div v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view">
-            <iv-auto-card
-                :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')"
-
-            >
-<!--                v-if="pageStep != ePageStep.view"-->
+            <iv-auto-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')">
+                <!--                v-if="pageStep != ePageStep.view"-->
 
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -400,13 +397,21 @@ export default class PermissionTable extends Vue {
     }
 
     async pageToEdit() {
-        await this.initSelectItem();
         this.pageStep = EPageStep.edit;
+        if (this.isSelected[0] == undefined) {
+            return false;
+        }
+        this.selectedDetail = this.isSelected[0];
+        this.initInputFormData();
     }
 
     pageToView() {
         this.pageStep = EPageStep.view;
-        console.log('this.pageStep - ', this.pageStep);
+        if (this.isSelected[0] == undefined) {
+            return false;
+        }
+        this.selectedDetail = this.isSelected[0];
+        this.initInputFormData();
     }
 
     async initSelectItem() {
@@ -515,22 +520,49 @@ export default class PermissionTable extends Vue {
             });
     }
 
-    async initInputFormData(datas) {
-        let data = datas[0];
+    async initInputFormData() {
+        this.clearInputFormData();
+        await this.initSelectItem();
+
         this.deviceType = EDeviceType.door;
-        this.inputFormData.id = data.objectId;
-        this.inputFormData.permissionName = data.tablename;
-        this.inputFormData.accesslevelIds = data.accesslevels;
+        this.inputFormData.id = this.selectedDetail.objectId;
+        this.inputFormData.permissionName = this.selectedDetail.tablename;
+        this.inputFormData.accesslevelIds = this.selectedDetail.accesslevels;
+
+        for (const tempAccesslevels of this.selectedDetail.accesslevels) {
+            console.log("tempAccesslevels - ", tempAccesslevels);
+
+            switch (tempAccesslevels.type) {
+                case EDeviceType.doorGroup:
+                    const doorGroupData: any = {
+                        deviceType: tempAccesslevels.type,
+                        deviceName: "",
+                        deviceArea: "",
+                        deviceTimeFormat: ""
+                    };
+
+                    for (const key in this.selectItem.doorGroupDevice) {
+                        if (tempAccesslevels.objectId === key) {
+                            doorGroupData.deviceName = this.selectItem.doorGroupDevice[key];
+                            break;
+                        }
+                    }
+                    for (const key in this.selectItem.timeSchedule) {
+                        if (
+                            tempAccesslevels.timeschedule.objectId === key
+                        ) {
+                            doorGroupData.deviceTimeFormat = this.selectItem.timeSchedule[key];
+                            break;
+                        }
+                    }
+                    this.inputFormData.data.push(doorGroupData);
+                    break;
+            }
+        }
     }
 
     selectedItem(data) {
-        this.clearInputFormData();
         this.isSelected = data;
-        this.selectedDetail = [];
-        if (this.isSelected && this.isSelected.length > 0) {
-            this.selectedDetail = data;
-            this.initInputFormData(this.selectedDetail);
-        }
     }
 
     tempSaveInputData(data) {
@@ -919,11 +951,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  * @uiColumnGroup - row1
                  * @uiDisabled - ${
-                    this.pageStep === EPageStep.add ||
-                    this.pageStep === EPageStep.edit
-                        ? "false"
-                        : "true"
-                }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                  permissionName: string;
 
@@ -933,11 +965,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceType")}
                  * @uiColumnGroup - row15
                  * @uiDisabled - ${
-                        this.pageStep === EPageStep.add ||
-                        this.pageStep === EPageStep.edit
-                            ? "false"
-                            : "true"
-                        }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                  deviceType?: ${toEnumInterface(
                      this.deviceTypeItem as any,
@@ -952,11 +984,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
                  * @uiColumnGroup - row11
                  * @uiDisabled - ${
-                        this.pageStep === EPageStep.add ||
-                        this.pageStep === EPageStep.edit
-                            ? "false"
-                            : "true"
-                        }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                  doorName?: ${toEnumInterface(
                      this.selectItem.doorDevice as any,
@@ -981,11 +1013,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiColumnGroup - row11
                  * @uiDisabled - ${
-                        this.pageStep === EPageStep.add ||
-                        this.pageStep === EPageStep.edit
-                            ? "false"
-                            : "true"
-                        }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                 doorTimeFormat?: ${toEnumInterface(
                     this.selectItem.timeSchedule as any,
@@ -1007,11 +1039,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
                  * @uiColumnGroup - row111
                  * @uiDisabled - ${
-                        this.pageStep === EPageStep.add ||
-                        this.pageStep === EPageStep.edit
-                            ? "false"
-                            : "true"
-                        }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                  doorGroupName?: ${toEnumInterface(
                      this.selectItem.doorGroupDevice as any,
@@ -1035,11 +1067,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiColumnGroup - row111
                  * @uiDisabled - ${
-                        this.pageStep === EPageStep.add ||
-                        this.pageStep === EPageStep.edit
-                            ? "false"
-                            : "true"
-                        }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                 doorGroupTimeFormat?: ${toEnumInterface(
                     this.selectItem.timeSchedule as any,
@@ -1060,11 +1092,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
                  * @uiColumnGroup - row112
                  * @uiDisabled - ${
-                        this.pageStep === EPageStep.add ||
-                        this.pageStep === EPageStep.edit
-                            ? "false"
-                            : "true"
-                        }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                  elevatorName?: ${toEnumInterface(
                      this.selectItem.elevatorDevice as any,
@@ -1089,11 +1121,11 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiColumnGroup - row112
                  * @uiDisabled - ${
-                        this.pageStep === EPageStep.add ||
-                        this.pageStep === EPageStep.edit
-                            ? "false"
-                            : "true"
-                        }
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
                 */
                 elevatorTimeFormat?: ${toEnumInterface(
                     this.selectItem.timeSchedule as any,
