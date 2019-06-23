@@ -2,14 +2,23 @@
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
 
-        <template #view.doors="{$attrs, $listeners}">
-            {{ $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId, options)).join(', ') }}
+        <template #view.readerscount="{$attrs, $listeners}">
+            {{ getReadersCount($attrs.row.doors)}}
+        </template>  
+        <template #view.doorscount="{$attrs, $listeners}">
+            {{ $attrs.row.doors ? $attrs.row.doors.length:0 }}
         </template>  
         <template #add.doors="{$attrs, $listeners}">
             <ivc-multi-selections 
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="options" 
+            />
+        </template>
+        <template #add.area="{$attrs, $listeners}">
+            <ivc-site-area 
+            v-bind="$attrs" 
+            v-on="$listeners"              
             />
         </template>
         
@@ -45,22 +54,20 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {   
-                    /**
-                    * @uiLabel - ${this._("groupid")}
-                    */
-                    groupid:number;       
+                           
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
                     groupname: string;
                     /**
-                    * @uiLabel - ${this._("doors")}
+                    * @uiLabel - ${this._("doorscount")}
                     */
-                    doors:string;
+                    doorscount:string;
                     /**
-                    * @uiLabel - ${this._("status")}
+                    * @uiLabel - ${this._("readerscount")}
                     */
-                    status: number;                 
+                    readerscount:string;
+                    
                 }
                 `;
             case EFormQuick.Add:
@@ -68,9 +75,9 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
                 return `
                 interface {
                     /**
-                    * @uiLabel - ${this._("groupid")}
+                    * @uiLabel - ${this._("w_Region_LevelArea")}
                     */
-                    groupid:number;       
+                    area:string;
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -78,11 +85,8 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("doors")}
                     */
-                    doors:any;                   
-                    /**
-                    * @uiLabel - ${this._("status")}
-                    */
-                    status: number;
+                    doors?:any;                   
+                   
                 }
                 `;
         }
@@ -117,7 +121,15 @@ export default class DoorGroupForm extends Vue implements IFormQuick {
         let item = options.find(x=>x.key==key);
         return item?item.value:'';
     }
-    
+    getReadersCount(doors:any){
+        if(!doors)return 0;
+        let count=0;
+        for(let item of doors){
+            count += item.readerin?item.readerin.length:0;
+            count += item.readerout?item.readerout.length:0;
+        }
+        return count;
+    }
 }
 </script>
 
