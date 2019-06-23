@@ -107,11 +107,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
-=======
-                            @click="pageToshowInputDataInTable()"
->>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_DoorAdd') }}
                         </b-button>
                     </template>
@@ -148,11 +144,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
-=======
-                            @click="pageToshowInputDataInTable()"
->>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_DoorGroupAdd') }}
                         </b-button>
                     </template>
@@ -190,11 +182,7 @@
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
-<<<<<<< HEAD
                             @click="pageToAddDeviceInTable()"
-=======
-                            @click="pageToshowInputDataInTable()"
->>>>>>> d9e6ef6983af4cc1979c1f48b80fdda498bfbc91
                         >{{ _('w_Permission_ElevatorAdd') }}
                         </b-button>
                     </template>
