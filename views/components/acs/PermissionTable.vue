@@ -753,7 +753,7 @@ export default class PermissionTable extends Vue {
                 reader: [] // to door, doorGroup, elevator ogigin find reader
             };
 
-            if (accessParam.timeschedule == "" ) {
+            if (accessParam.timeschedule == "") {
                 console.log("!!! accessParam.timeschedule not find");
                 continue;
             }
@@ -768,7 +768,6 @@ export default class PermissionTable extends Vue {
                             door.doorid != undefined &&
                             door.objectId == accessParam.door
                         ) {
-
                             if (door.readerin != undefined) {
                                 for (let reader of door.readerin) {
                                     if (reader.objectId != undefined) {
@@ -787,19 +786,22 @@ export default class PermissionTable extends Vue {
                                     }
                                 }
                             }
+                            break;
                         }
                     }
                     break;
                 case EDeviceType.doorGroup:
-                    accessParam.doorGroup = tempData.doorGroupName
+                    accessParam.doorGroup = tempData.doorGroupName;
                     for (let doorGroup of this.selectItemOriginal.doorGroup) {
                         if (
                             doorGroup.objectId != undefined &&
                             doorGroup.groupid != undefined &&
                             doorGroup.objectId == tempData.doorGroupName
                         ) {
-
-                            if (doorGroup.readerin != undefined) {
+                            if (
+                                doorGroup.door != undefined &&
+                                doorGroup.readerin != undefined
+                            ) {
                                 for (let reader of doorGroup.readerin) {
                                     if (reader.objectId != undefined) {
                                         accessParam.reader.push(
@@ -808,7 +810,10 @@ export default class PermissionTable extends Vue {
                                     }
                                 }
                             }
-                            if (doorGroup.readerout != undefined) {
+                            if (
+                                doorGroup.door != undefined &&
+                                doorGroup.readerout != undefined
+                            ) {
                                 for (let reader of doorGroup.readerout) {
                                     if (reader.objectId != undefined) {
                                         accessParam.reader.push(
@@ -817,6 +822,7 @@ export default class PermissionTable extends Vue {
                                     }
                                 }
                             }
+                            break;
                         }
                     }
                     break;
@@ -828,7 +834,6 @@ export default class PermissionTable extends Vue {
                             elevator.elevatorid != undefined &&
                             elevator.objectId == tempData.elevator
                         ) {
-
                             if (elevator.reader != undefined) {
                                 for (let reader of elevator.reader) {
                                     if (reader.objectId != undefined) {
