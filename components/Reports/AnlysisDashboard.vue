@@ -12,6 +12,7 @@
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
                             <span class="weather">Weather</span>
+                            <!-- TODO chnage Weather Icon -->
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
@@ -340,7 +341,7 @@ Vue.component("anlysis-dashboard", AnlysisDashboard);
         padding: 10px;
         background: #f9f9f9;
         color: black;
-        height: 120px;
+        height: 10%;
 
         .title {
             float: left;

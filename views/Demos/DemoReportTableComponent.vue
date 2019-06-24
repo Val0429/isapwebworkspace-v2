@@ -29,12 +29,80 @@ enum Sign {
     negative = "negative"
 }
 
+interface IReportDashboard {
+    pageType: PageType;
+    traffic: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+    averageOccupancy: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+    averageDwellTime: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+    demographic: {
+        sign: Sign;
+        value: number;
+        valueRatio: number;
+        sign2: Sign;
+        value2: number;
+        valueRatio2: number;
+    };
+    vipBlacklist: {
+        sign: Sign;
+        value: number;
+        valueRatio: number;
+        sign2: Sign;
+        value2: number;
+        valueRatio2: number;
+    };
+    repeatCustomer: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+    revenue: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+    transaction: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+    conversion: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+    asp: {
+        sign: Sign;
+        total: number;
+        value: number;
+        valueRatio: number;
+    };
+}
+
 @Component
 export default class DemoReportComponent extends Vue {
     pageType = PageType;
     sign = Sign;
 
-    data = {
+    data: IReportDashboard = {
         pageType: PageType.traffic,
         traffic: {
             sign: Sign.negative,
