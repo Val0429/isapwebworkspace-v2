@@ -6,9 +6,21 @@
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
             :label="_('w_ReportFilterConditionComponent_')"
-            @submit-data="receiveData"
+            @submit-data="receivFiltereData"
         >
         </filter_condition>
+
+
+        <analysis_filter
+            :siteIds0="filterData.siteIds0"
+        >
+
+<!--
+            v-if="filterData.siteIds && filterData.siteIds.length === 1"
+
+-->
+
+        </analysis_filter>
     </div>
 </template>
 
@@ -25,20 +37,20 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 
-
 @Component
 export default class DemoFilterConditionComponent extends Vue {
-    filterData: any = {};
-
-
     // select 相關
     sitesSelectItem: any = {};
     tagSelectItem: any = {};
+
 
     // tree
     selectType = ERegionType.site;
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
+
+    // 接收 submit 相關
+    filterData: any = {};
 
     created() {
         this.initSelectItemSite();
@@ -48,6 +60,11 @@ export default class DemoFilterConditionComponent extends Vue {
     }
 
     mounted() {}
+
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
 
     async initSelectItemSite() {
         let tempSitesSelectItem = {};
@@ -64,7 +81,8 @@ export default class DemoFilterConditionComponent extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
-                        tempSitesSelectItem[returnValue.objectId] = returnValue.name;
+                        tempSitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
                     }
                     this.sitesSelectItem = tempSitesSelectItem;
                 }
@@ -87,7 +105,8 @@ export default class DemoFilterConditionComponent extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response) {
                         // 自定義 tagSelectItem 的 key 的方式
-                        tempTagSelectItem[returnValue.objectId] = returnValue.name;
+                        tempTagSelectItem[returnValue.objectId] =
+                            returnValue.name;
                     }
                     this.tagSelectItem = tempTagSelectItem;
                 }
@@ -102,7 +121,7 @@ export default class DemoFilterConditionComponent extends Vue {
     }
 
     async initSelectItemTree() {
-       await this.$server
+        await this.$server
             .R("/location/tree")
             .then((response: any) => {
                 if (response != undefined) {
@@ -121,15 +140,10 @@ export default class DemoFilterConditionComponent extends Vue {
             });
     }
 
-    initRegionTreeSelect() {
-        this.regionTreeItem = new RegionTreeItem();
-        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+
+    async receivFiltereData(data) {
+        this.filterData = data;
+        this.filterData.siteIds0 = data.siteIds[0];
     }
-
-    receiveData(data) {
-        console.log(' - ', data);
-    }
-
-
 }
 </script>

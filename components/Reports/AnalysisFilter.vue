@@ -1,98 +1,40 @@
 <template>
     <div>
-        <iv-auto-card
-            v-show="pageStep === ePageStep.none"
-            :visible="true"
-            :label="_('w_ReportFilterConditionComponent_')"
+
+        <iv-form
+            :interface="IAnalysisFilterForm()"
+            @update:*="whenSelected($event)"
         >
-            <iv-form
-                :interface="IFilterConditionForm()"
-                @update:*="tempSaveInputData($event)"
-                @submit="doSubmit($event)"
-            >
+            <template #areaIds="{ $attrs, $listeners }">
+                <iv-form-selection
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.areaIds"
+                >
+                </iv-form-selection>
+            </template>
 
-                <template #siteIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.siteIds">
 
-                    </iv-form-selection>
-                </template>
+            <template #selectInOrOut="{ $attrs, $listeners }">
 
-                <template #selectTree="{ $attrs, $listeners }">
+                <b-form-radio-group
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.type"
+                    class="h-25 select_date_button"
+                    buttons
+                    button-variant="outline-success"
+                    name="radio-btn-outline"
+                    :options="typeSelectItem"
+                ></b-form-radio-group>
+            </template>
 
-                    <div class="ml-3 select_report_period_button">
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-                </template>
+        </iv-form>
 
-                <template #ReportPeriodTitle="{ $attrs, $listeners }">
-                </template>
 
-                <template #selectPeriodAddWay="{ $attrs, $listeners }">
 
-                    <b-form-radio-group
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="selectPeriodAddWay"
-                        class="h-25 select_date_button"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="addPeriodSelectItem"
-                        @change="changeAddPeriodSelect"
-                    ></b-form-radio-group>
-                </template>
 
-                <template #startDate="{ $attrs, $listeners }">
-                    <iv-form-date
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.startDate">
-                    </iv-form-date>
-                </template>
-
-                <template #endDate="{ $attrs, $listeners }">
-                    <iv-form-date
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.startDate">
-
-                    </iv-form-date>
-                </template>
-
-                <template #designationPeriod="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.designationPeriod">
-                    </iv-form-selection>
-                </template>
-
-                <template #tagIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.siteIds">
-
-                    </iv-form-selection>
-                </template>
-
-            </iv-form>
-        </iv-auto-card>
-
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
+        <b-button @click="test">test</b-button>
 
     </div>
 </template>
@@ -115,24 +57,9 @@ enum EPageStep {
     chooseTree = "chooseTree"
 }
 
-enum EAddPeriodSelect {
-    period = "period",
-    designation = "designation"
-}
-
-enum EDesignationPeriod {
-    today = "Today",
-    yesterday = "Yesterday",
-    last7days = "Last 7 days",
-    thisWeek = "This Week",
-    lastWeek = "Last Week",
-    thisMonth = "This Month",
-    lastMonth = "Last Month",
-    q1 = "Q1",
-    q2 = "Q2",
-    q3 = "Q3",
-    q4 = "Q4",
-    thisYear = "This Year"
+enum EType {
+    in = "in",
+    out = "out",
 }
 
 @Component({
@@ -146,29 +73,18 @@ export class AnalysisFilter extends Vue {
     // })
     // label: string;
 
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: ''
+    })
+    siteIds0: string;
+
     // @Prop({
     //     type: Object, // Boolean, Number, String, Array, Object
-    //     default: ""
+    //     default: {}
     // })
-    // filterData: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    sitesSelectItem: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    tagSelectItem: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    regionTreeItem: object;
+    // regionTreeItem: object;
 
     // Model
     @Model("model", {
@@ -180,52 +96,24 @@ export class AnalysisFilter extends Vue {
     inputData = "Test input data";
     modelData = "";
 
-    doMounted: boolean = false;
-
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
-
-
-    inputFormData: any = {
-        siteIds: [],
-        tagIds: [],
-        startDate: new Date(),
-        endDate: new Date(),
-        designationPeriod: 'today',
-    };
-
-    // tree 相關
-    selectType = ERegionType.site;
-    selecteds: IRegionTreeSelected[] = [];
-
-    // date 相關
-    selectPeriodAddWay: string = EAddPeriodSelect.period;
-
-    addPeriodSelectItem: any = [
-        { value: EAddPeriodSelect.period, text: EAddPeriodSelect.period },
-        {
-            value: EAddPeriodSelect.designation,
-            text: EAddPeriodSelect.designation
-        }
+    // select 相關
+    areaSelectItem: any = {};
+    deviceGroupSelectItem: any = {};
+    deviceSelectItem: any = {};
+    typeSelectItem:  any = [
+        { value: EType.in, text: EType.in },
+        { value: EType.out, text: EType.out },
     ];
 
-    designationPeriodSelectItem: any = {
-        today: EDesignationPeriod.today,
-        yesterday: EDesignationPeriod.yesterday,
-        last7days: EDesignationPeriod.last7days,
-        thisWeek: EDesignationPeriod.thisWeek,
-        lastWeek: EDesignationPeriod.lastWeek,
-        thisMonth: EDesignationPeriod.thisMonth,
-        lastMonth: EDesignationPeriod.lastMonth,
-        q1: EDesignationPeriod.q1,
-        q2: EDesignationPeriod.q2,
-        q3: EDesignationPeriod.q3,
-        q4: EDesignationPeriod.q4,
-        thisYear: EDesignationPeriod.thisYear
+    inputFormData: any = {
+        areaIds: null ,
+        groupIds: null,
+        deviceIds: null,
+        type: 'in'
     };
 
-    created() {
 
+    created() {
     }
 
     async mounted() {
@@ -241,172 +129,124 @@ export class AnalysisFilter extends Vue {
         this.$emit("model", this.modelData);
     }
 
-    tempSaveInputData(data) {
-
-        switch (data.key) {
-            case "siteIds":
-                this.inputFormData.siteIds = data.value;
-                break;
-            case "tagIds":
-                this.inputFormData.tagIds = data.value;
-                break;
-            case "startDate":
-                this.inputFormData.startDate = data.value;
-                break;
-            case "endDate":
-                this.inputFormData.endDate = data.value;
-                break;
-            case "designationPeriod":
-                this.inputFormData.designationPeriod = data.value;
-                break;
-        }
-
-        this.selecteds = [];
-
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-    }
-
-    async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.selecteds = [];
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
+    async test() {
+        // console.log('siteIds0 - ', this.siteIds0);
+        await this.initSelectItemArea();
 
     }
 
-    pageToShowResult() {
-        this.pageStep = EPageStep.none;
-        // siteIds clear
-        this.inputFormData.siteIds = [];
 
-        // from selecteds push siteIds
-        for (const item of this.selecteds) {
-            this.inputFormData.siteIds.push(item.objectId);
+
+    async initSelectItemArea() {
+        if (this.siteIds0 !== undefined) {
+            let tempAreaSelectItem = {};
+
+            const readSingleAreaParam: {
+                siteId: string;
+            } = {
+                siteId: this.siteIds0
+            };
+
+            await this.$server
+                .R("/location/area/all", readSingleAreaParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 sitesSelectItem 的 key 的方式
+                            tempAreaSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.areaSelectItem = tempAreaSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else {
+            return false;
         }
+        console.log('this.areaSelectItem - ', this.areaSelectItem);
     }
 
+    // async initSelectItemDeviceGroup() {
+    //     if (this.filterData.siteIds && this.filterData.siteIds.length === 1 && ) {
+    //         let tempDeviceGroupSelectItem = {};
+    //
+    //         const readSingleAreaParam: {
+    //             siteId: string;
+    //         } = {
+    //             siteId: this.filterData.siteIds[0]
+    //         };
+    //
+    //         await this.$server
+    //             .R("/location/area/all", readSingleAreaParam)
+    //             .then((response: any) => {
+    //                 if (response != undefined) {
+    //                     for (const returnValue of response) {
+    //                         // 自定義 sitesSelectItem 的 key 的方式
+    //                         tempDeviceGroupSelectItem[returnValue.objectId] =
+    //                             returnValue.name;
+    //                     }
+    //                     this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+    //                 }
+    //             })
+    //             .catch((e: any) => {
+    //                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+    //                     return ResponseFilter.base(this, e);
+    //                 }
+    //                 console.log(e);
+    //                 return false;
+    //             });
+    //     } else {
+    //         return false;
+    //     }
+    //
+    // }
 
-
-    changeAddPeriodSelect(selected: string) {
-        this.selectPeriodAddWay = selected;
-        this.inputFormData.designationPeriod = 'today';
-        this.inputFormData.startDate = new Date();
-        this.inputFormData.endDate = new Date();
-    }
+    whenSelected() {}
 
     doSubmit() {
         // TODO: wait api
         this.$emit("submit-data", this.inputFormData);
         this.inputFormData = {
-            siteIds: [],
-            tagIds: [],
-            startDate: new Date(),
-            endDate: new Date(),
-            designationPeriod: 'today',
+            areaIds: []
         };
     }
 
-    IFilterConditionForm() {
+    IAnalysisFilterForm() {
         return `
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiColumnGroup - site
+                 * @uiLabel - ${this._("w_Areas")}
+                 * @uiColumnGroup - analysis
                  */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                areaIds?: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
-                 * @uiColumnGroup - site
+                 * @uiLabel - ${this._("w_DeviceGroups")}
+                 * @uiColumnGroup - analysis
                  */
-                 selectTree?: any;
+                groupIds?: ${toEnumInterface(this.deviceGroupSelectItem as any, false)};
 
 
                 /**
-                 * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
-                 * @uiColumnGroup - date
+                 * @uiLabel - ${this._("w_Devices")}
+                 * @uiColumnGroup - analysis
                  */
-                 selectPeriodAddWay?: any;
-
+                deviceIds?: ${toEnumInterface(this.deviceSelectItem as any, false)};
 
                 /**
-                * @uiLabel - ${this._("w_BOCampaign_StartDate")}
-                * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
-                * @uiColumnGroup - date
-                * @uiType - iv-form-date
-                * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation
-                        ? "true"
-                        : "false"
-                }
+                 * @uiColumnGroup - analysis
                  */
-                startDate?: any;
-
-
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
-                * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
-                * @uiColumnGroup - date
-                * @uiType - iv-form-date
-                * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation
-                        ? "true"
-                        : "false"
-                }
-                 */
-                endDate?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_ReportTemplate_DesignationPeriod")}
-                 * @uiColumnGroup - date
-                 * @uiHidden - ${
-                     this.selectPeriodAddWay === EAddPeriodSelect.period
-                         ? "true"
-                         : "false"
-                 }
-                 */
-                designationPeriod?: ${toEnumInterface(
-                    this.designationPeriodSelectItem as any,
-                    false
-                )};
-
-
-                /**
-                 * @uiLabel - ${this._("w_Tag")}
-                 * @uiColumnGroup - tag
-                 */
-                tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
-
-
-                /**
-                 * @uiColumnGroup - tag
-                 */
-                 tag1?: any;
+                selectInOrOut?: any;
             }
-        `;
+        `
     }
 }
 

@@ -180,8 +180,6 @@ export class FilterCondition extends Vue {
     inputData = "Test input data";
     modelData = "";
 
-    doMounted: boolean = false;
-
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
@@ -317,6 +315,7 @@ export class FilterCondition extends Vue {
 
     doSubmit() {
         // TODO: wait api
+
         this.$emit("submit-data", this.inputFormData);
         this.inputFormData = {
             siteIds: [],
