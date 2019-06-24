@@ -617,7 +617,7 @@ export default class LangObject {
     w_BOSalesRecords_ErrorNoData = 'no data';
     w_BOSalesRecords_ErrorServerError = 'Server Connect Error';
     w_BOSalesRecords_ErrorNoSite = 'Store not find';
-    w_BOSalesRecords_ErrorNoPremission = "No Premission";
+    w_BOSalesRecords_ErrorNoPremission = 'No Premission';
 
     // People Counting Device
     w_VSPeopleCounting_List = 'People Counting Device List';
@@ -743,6 +743,10 @@ export default class LangObject {
     w_VSVIP_Stranger_Visitor_EditFailed = 'VIP, Stranger, Frequent Visitor Device edit failed, please try again.';
     w_VSVIP_Stranger_Visitor_DeleteConfirm = 'Are you sure to delete selected VIP, Stranger, Frequent Visitor Device(s)?';
 
+    // Report Traffic
+    w_ReportTraffic_Traffic = 'Traffic';
+    w_ReportTraffic_TrafficRevenue = 'Revenue';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';
@@ -764,4 +768,16 @@ export default class LangObject {
     w_ReportFilterConditionComponent_SelectSite = 'Select Site(s)';
     w_ReportFilterConditionComponent_SelectDate = 'Select Date(s)';
     w_ReportFilterConditionComponent_Tag = 'Tag(s)';
+
+    // Report Dashboard
+    w_ReportDashboard_Traffic = 'TRAFFIC';
+    w_ReportDashboard_AverageOccupancy = 'AVERAGE OCCUPANCY';
+    w_ReportDashboard_AverageDwellTime = 'AVERAGE DWELL TIME(M)';
+    w_ReportDashboard_Demographic = 'DEMOGRAPHIC';
+    w_ReportDashboard_VIPBlacklist = 'VIP/BLACKLIST';
+    w_ReportDashboard_RepeatCustomer = 'REPEAT CUSTOMER';
+    w_ReportDashboard_Revenue = 'REVENUE';
+    w_ReportDashboard_Transaction = 'TRANSACTION';
+    w_ReportDashboard_Conversion = 'CONVERSION%';
+    w_ReportDashboard_ASP = 'ASP';
 }

@@ -1,11 +1,22 @@
 <template>
     <div class="chart">
-        <highcharts :options="chartOptions"></highcharts>
+        <highcharts
+            ref="chart"
+            v-if="mountChart"
+            :options="chartOptions"
+        ></highcharts>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
 
 /// install Highcharts
 import Highcharts from "highcharts";
@@ -14,7 +25,9 @@ import exportingInit from "highcharts/modules/exporting";
 exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
-import WeatherIconBase64 from "./models/WeatherIconBase64";
+// custom import
+import { EChartTimeMode } from "./models/EHightCharts";
+import { ITrafficData } from "./models/IHighCharts";
 
 @Component({
     components: {}
@@ -23,11 +36,30 @@ export class TrafficChart extends Vue {
     // Prop
     @Prop({
         type: String,
-        default: ""
+        default: EChartTimeMode.none
     })
-    label: string;
+    chartTimeMode: EChartTimeMode;
 
-    chartOptions: any = {
+    @Prop({
+        type: Array,
+        default: function() {
+            return [];
+        }
+    })
+    value: ITrafficData[];
+
+    @Watch("value", {})
+    private onValueChanged(newval: any, oldval: any) {
+        let chartRef: any = this.$refs.chart;
+        if (chartRef == undefined) {
+            return false;
+        }
+        // chartRef.setData();
+    }
+
+    mountChart: boolean = true;
+
+    barLineOption: any = {
         chart: { zoomType: "xy" },
         exporting: { enabled: false },
         title: { text: " " },
@@ -36,27 +68,19 @@ export class TrafficChart extends Vue {
             {
                 crosshair: true,
                 categories: [],
-                labels: {
-                    useHTML: true
-                }
+                labels: { useHTML: true }
             }
         ],
         yAxis: [
             {
-                // Primary yAxis
-                labels: {
-                    style: { color: "#000" }
-                },
+                labels: { style: { color: "#000" } },
                 title: {
                     text: "",
                     style: { color: "#000" }
                 }
             },
             {
-                // Secondary yAxis
-                labels: {
-                    style: { color: "#000" }
-                },
+                labels: { style: { color: "#000" } },
                 title: {
                     text: "",
                     style: { color: "#000" }
@@ -67,10 +91,9 @@ export class TrafficChart extends Vue {
         tooltip: {
             enabled: true,
             shared: true,
+            useHTML: true,
             backgroundColor: "#333",
-            style: {
-                color: "#fff"
-            },
+            style: { color: "#fff" },
             formatter: function(tooltip: any) {
                 let self: any = this;
                 let result = "";
@@ -86,7 +109,8 @@ export class TrafficChart extends Vue {
                         result += `test1: ${newValue.test1}<br>`;
                         result += `test2: ${newValue.test2}<br>`;
                         result += `test3: ${newValue.test3}<br>`;
-                        result += `test4: ${newValue.test4}`;
+                        result += `test4: ${newValue.test4}<br>`;
+                        result += `<i class='wi wi-night-sleet'></i>`;
                     } catch (e) {
                         console.log(e);
                     }
@@ -97,139 +121,78 @@ export class TrafficChart extends Vue {
         series: []
     };
 
-    viewPage = this;
+    lineOption: any = {
+        exporting: { enabled: false },
+        title: { text: " " },
+        subtitle: { text: " " },
+        xAxis: { labels: { useHTML: true } },
+        yAxis: { title: { text: "" } },
+        tooltip: {
+            enabled: true,
+            useHTML: true,
+            backgroundColor: "#333",
+            style: { color: "#fff" },
+            formatter: function(tooltip: any) {
+                let self: any = this;
+                let result = "";
+                if (self.x != undefined) {
+                    try {
+                        let startIndex = self.x.indexOf(">{");
+                        let endIndex = self.x.indexOf("}<");
+                        let valueJson = self.x.substring(
+                            startIndex + 1,
+                            endIndex + 1
+                        );
+                        let newValue: any = JSON.parse(valueJson);
+                        result += `test1: ${newValue.test1}<br>`;
+                        result += `test2: ${newValue.test2}<br>`;
+                        result += `test3: ${newValue.test3}<br>`;
+                        result += `test4: ${newValue.test4}<br>`;
+                        result += `<i class='wi wi-night-sleet'></i>`;
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+                return result;
+            }
+        },
+        series: []
+    };
 
-    value: any = [
-        {
-            label: "Jan",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Feb",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Mar",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Apr",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "May",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Jun",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Jul",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Aug",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Sep",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Oct",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Nov",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        },
-        {
-            label: "Dec",
-            data: {
-                test1: "2341324",
-                test2: "f324g3g",
-                test3: "t3g35bw354hb",
-                test4: "dgfadsggs"
-            }
-        }
-    ];
+    chartOptions: any = {};
 
     created() {}
 
     mounted() {
-        this.start();
+        this.startLine();
+        // this.startBarLine();
     }
 
-    start() {
-        this.chartOptions.yAxis[0].title.text = "Traffic";
-        this.chartOptions.yAxis[1].title.text = "Revenue";
+    startLine() {
+        this.chartOptions = JSON.parse(JSON.stringify(this.lineOption));
+        this.chartOptions.yAxis.title.text = this._("w_ReportTraffic_Traffic");
+        this.chartOptions.series = [];
+        this.mountChart = true;
+    }
 
+    startBarLine() {
+        this.chartOptions = JSON.parse(JSON.stringify(this.barLineOption));
+        this.chartOptions.yAxis[0].title.text = this._(
+            "w_ReportTraffic_Traffic"
+        );
+        this.chartOptions.yAxis[1].title.text = this._(
+            "w_ReportTraffic_TrafficRevenue"
+        );
         this.chartOptions.xAxis[0].categories = [];
-        for (let val of this.value) {
-            this.chartOptions.xAxis[0].categories.push(
-                `<span style='display:none;'>${JSON.stringify(
-                    val.data
-                )}</span>${
-                    val.label
-                }&nbsp;<span class='wi wi-night-sleet' style='font-size:1.2rem;color:#f00;'></span>`
-            );
-        }
+        // for (let val of this.value) {
+        // this.chartOptions.xAxis[0].categories.push(
+        //     `<span style='display:none;'>${JSON.stringify(
+        //         val.data
+        //     )}</span>${
+        //         val.label
+        //     }&nbsp;<span class='wi wi-night-sleet' style='font-size:1.2rem;color:#f00;'></span>`
+        // );
+        // }
 
         this.chartOptions.series[0] = {
             name: "Rainfall",
@@ -270,6 +233,7 @@ export class TrafficChart extends Vue {
                 9.6
             ]
         };
+        this.mountChart = true;
     }
 }
 
