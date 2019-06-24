@@ -140,7 +140,6 @@ import {
     Prop,
     Model,
     Emit,
-    Watch,
     Provide,
     Inject
 } from "vue-property-decorator";

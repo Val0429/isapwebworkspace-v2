@@ -615,7 +615,7 @@ export default class LangObject implements ILang {
     w_BOSalesRecords_ErrorNoData = 'no data';
     w_BOSalesRecords_ErrorServerError = 'Server Connect Error';
     w_BOSalesRecords_ErrorNoSite = 'Store not find';
-    w_BOSalesRecords_ErrorNoPremission = "No Premission";
+    w_BOSalesRecords_ErrorNoPremission = 'No Premission';
 
     // People Counting Device
     w_VSPeopleCounting_List = 'People Counting Device List';
@@ -739,6 +739,10 @@ export default class LangObject implements ILang {
     w_VSVIP_Stranger_Visitor_EditSuccess = 'VIP, Stranger, Frequent Visitor Device edit success.';
     w_VSVIP_Stranger_Visitor_EditFailed = 'VIP, Stranger, Frequent Visitor Device edit failed, please try again.';
     w_VSVIP_Stranger_Visitor_DeleteConfirm = 'Are you sure to delete selected VIP, Stranger, Frequent Visitor Device(s)?';
+
+    // Report Traffic
+    w_ReportTraffic_Traffic = 'Traffic';
+    w_ReportTraffic_TrafficRevenue = 'Revenue';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
