@@ -1,8 +1,10 @@
 <template>
     <div>
 
+        <!-- 父元件的data='傳到子元件的data' -->
         <filter_condition
         :sitesSelectItem="sitesSelectItem"
+        :tagSelectItem="tagSelectItem"
         :label="_('w_ReportFilterConditionComponent_')">
         </filter_condition>
     </div>
@@ -26,22 +28,24 @@ import ResponseFilter from "@/services/ResponseFilter";
 export default class DemoFilterConditionComponent extends Vue {
     filterData: any = {};
 
+    // select 相關
     sitesSelectItem: any = {};
+    tagSelectItem: any = {};
 
+    // tree
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
 
-   created() {
-       console.log('0000 - ', );
+    created() {
        this.initSelectItemSite();
-       console.log('1111 - ', );
+       this.initSelectItemTag();
    }
 
-    mounted() {
-        console.log('2222 - ', );
-        this.initSelectItemSite();
-        console.log('3333 - ', );
+    async mounted() {
     }
 
-    initSelectItemSite() {
+   initSelectItemSite() {
 
         this.sitesSelectItem = {};
 
@@ -54,7 +58,6 @@ export default class DemoFilterConditionComponent extends Vue {
         this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                console.log('demo - ', response);
                 if (response != undefined) {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
@@ -74,8 +77,31 @@ export default class DemoFilterConditionComponent extends Vue {
                 return false;
             });
 
-        console.log('demo - ', this.sitesSelectItem);
+    }
 
+   initSelectItemTag() {
+
+        this.sitesSelectItem = {};
+
+        this.$server
+            .R("/tag/all", )
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.tagSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+console.log('this.tagSelectItem - ', this.tagSelectItem);
     }
 }
 </script>
