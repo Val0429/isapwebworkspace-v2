@@ -123,6 +123,8 @@ export default class LangObject {
     w_SourceId = 'Source Id';
     w_SourceIdAndLocation = 'Source Id and Location ';
     w_Location = 'Location';
+    w_Areas = 'Area(s)';
+    w_Devices = 'Device(s)';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
@@ -766,4 +768,16 @@ export default class LangObject {
     w_ReportFilterConditionComponent_SelectSite = 'Select Site(s)';
     w_ReportFilterConditionComponent_SelectDate = 'Select Date(s)';
     w_ReportFilterConditionComponent_Tag = 'Tag(s)';
+
+    // Report Dashboard
+    w_ReportDashboard_Traffic = 'TRAFFIC';
+    w_ReportDashboard_AverageOccupancy = 'AVERAGE OCCUPANCY';
+    w_ReportDashboard_AverageDwellTime = 'AVERAGE DWELL TIME(M)';
+    w_ReportDashboard_Demographic = 'DEMOGRAPHIC';
+    w_ReportDashboard_VIPBlacklist = 'VIP/BLACKLIST';
+    w_ReportDashboard_RepeatCustomer = 'REPEAT CUSTOMER';
+    w_ReportDashboard_Revenue = 'REVENUE';
+    w_ReportDashboard_Transaction = 'TRANSACTION';
+    w_ReportDashboard_Conversion = 'CONVERSION%';
+    w_ReportDashboard_ASP = 'ASP';
 }

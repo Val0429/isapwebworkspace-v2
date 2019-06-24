@@ -1,20 +1,30 @@
 <template>
     <div class="animated fadeIn">
+
         <div class="row">
             <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
             </div>
             <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">TRAFFIC</span>
-                            <span class="value">Weather</span>
+                            <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
+                            <span class="weather">Weather</span>
+                            <!-- TODO chnage Weather Icon -->
                         </div>
-                        <div class="clearfix">
-                            <span class="date">432,50</span>
-                            <span class="change red">▼11 (15.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span class="date">{{numberWithCommas(anlysisData.traffic.total)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.traffic.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.traffic.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.traffic.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.traffic.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -25,11 +35,19 @@
                 <div class="box info-box">
                     <div :class="pageType.averageOccupancy == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">AVERAGE OCCUPANCY</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <span class="date">10</span>
-                            <span class="change green">▲1 (15.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span class="date">{{numberWithCommas(anlysisData.averageOccupancy.total)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.averageOccupancy.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.averageOccupancy.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.averageOccupancy.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.averageOccupancy.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -40,11 +58,19 @@
                 <div class="box info-box">
                     <div :class="pageType.averageDwellTime == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">AVERAGE DWELL TIME(M)</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <span class="date">25</span>
-                            <span class="change green">▲2 (15.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span class="date">{{numberWithCommas(anlysisData.averageDwellTime.total)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.averageDwellTime.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.averageDwellTime.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.averageDwellTime.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.averageDwellTime.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,13 +81,25 @@
                 <div class="box info-box">
                     <div :class="pageType.demographic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">DEMOGRAPHIC</span>
+                            <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <img src="../../assets/images/men.png">
-                            <span class="date green">▲11 (15.78%)</span>
-                            <img src="../../assets/images/women.png">
-                            <span class="change red">▼11 (15.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <img src="../../assets/images/men.png">
+                                <div :class="sign.positive == anlysisData.demographic.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.demographic.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.demographic.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.demographic.valueRatio,1)}}</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <img src="../../assets/images/women.png">
+                                <div :class="sign.positive == anlysisData.demographic.sign2 ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.demographic.sign2 ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.demographic.value2)}}</span><br>
+                                    <span>{{toPercent(anlysisData.demographic.valueRatio2,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -72,14 +110,25 @@
                 <div class="box info-box">
                     <div :class="pageType.vipBlacklist == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">VIP/BLACKLIST</span>
+                            <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <img src="../../assets/images/vip.png">
-                            <span class="date green">▲11</span>
-                            <span class="date green">(15.78%)</span>
-                            <img src="../../assets/images/stranger.png">
-                            <span class="change red">▼11 (15.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <img src="../../assets/images/vip.png">
+                                <div :class="sign.positive == anlysisData.vipBlacklist.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.vipBlacklist.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.vipBlacklist.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.vipBlacklist.valueRatio,1)}}</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <img src="../../assets/images/stranger.png">
+                                <div :class="sign.positive == anlysisData.vipBlacklist.sign2 ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.vipBlacklist.sign2 ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.vipBlacklist.value2)}}</span><br>
+                                    <span>{{toPercent(anlysisData.vipBlacklist.valueRatio2,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,13 +149,21 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.bepeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="pageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">BEPEAT CUSTOMER</span>
+                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <span class="date">36%</span>
-                            <span class="change red">▼9 (11.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span class="date">{{toPercent(anlysisData.repeatCustomer.total,0)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.repeatCustomer.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.repeatCustomer.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.repeatCustomer.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.repeatCustomer.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,13 +172,24 @@
 
             <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.bevenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="pageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">BEVENUE</span>
+                            <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <span class="date">99,999</span>
-                            <span class="change green">▲9.9 (99.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span
+                                    class="date"
+                                    style="font-size: 26px; padding:6px"
+                                >{{numberWithCommas(anlysisData.revenue.total)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.revenue.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.revenue.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.revenue.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.revenue.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -132,11 +200,19 @@
                 <div class="box info-box">
                     <div :class="pageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">TRANSACTION</span>
+                            <span class="title">{{_("w_ReportDashboard_Transaction")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <span class="date">666</span>
-                            <span class="change green">▲11 (19.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span class="date">{{numberWithCommas(anlysisData.transaction.total)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.transaction.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.transaction.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.transaction.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.transaction.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -147,11 +223,19 @@
                 <div class="box info-box">
                     <div :class="pageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">CONVERSION%</span>
+                            <span class="title">{{_("w_ReportDashboard_Conversion")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <span class="date">18%</span>
-                            <span class="change red">▼2 (1.78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span class="date">{{toPercent(anlysisData.conversion.total,0)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.conversion.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.conversion.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.conversion.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.conversion.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -162,11 +246,19 @@
                 <div class="box info-box">
                     <div :class="pageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">ASP</span>
+                            <span class="title">{{_("w_ReportDashboard_ASP")}}</span>
                         </div>
-                        <div class="clearfix">
-                            <span class="date">1,245</span>
-                            <span class="change red">▼1 (15,78%)</span>
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <span class="date">{{numberWithCommas(anlysisData.asp.total)}}</span>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
+                                <div :class="sign.positive == anlysisData.asp.sign ?  'ratio green':'ratio red'">
+                                    <span>{{sign.positive == anlysisData.asp.sign ? '▲':'▼'}}</span>
+                                    <span>{{numberWithCommas(anlysisData.asp.value)}}</span><br>
+                                    <span>{{toPercent(anlysisData.asp.valueRatio,1)}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -190,11 +282,16 @@ enum PageType {
     averageDwellTime = "averageDwellTime",
     demographic = "demographic",
     vipBlacklist = "vipBlacklist",
-    bepeatCustomer = "bepeatCustomer",
-    bevenue = "bevenue",
+    repeatCustomer = "repeatCustomer",
+    revenue = "revenue",
     transaction = "transaction",
     conversion = "conversion",
     asp = "asp"
+}
+
+enum Sign {
+    positive = "positive",
+    negative = "negative"
 }
 
 @Component({
@@ -209,18 +306,21 @@ export class AnlysisDashboard extends Vue {
     })
     anlysisData: object;
 
+    sign = Sign;
     pageType = PageType;
 
     created() {}
 
     mounted() {}
 
-    dashboardClick(event) {
-        let els = document.getElementsByClassName("backgroundColor") as any;
-        for (let el of els) {
-            el.classList.remove("selected");
-        }
-        event.currentTarget.classList.add("selected");
+    numberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    toPercent(point, fixed) {
+        var str = Number(point * 100).toFixed(fixed);
+        str += "%";
+        return str;
     }
 }
 
@@ -233,11 +333,15 @@ Vue.component("anlysis-dashboard", AnlysisDashboard);
     border: 1px solid #dbdee0;
     margin: 0 0 30px 0;
 
+    .clearfix {
+        padding: 10px;
+    }
+
     .backgroundColor {
         padding: 10px;
         background: #f9f9f9;
         color: black;
-        height: 120px;
+        height: 10%;
 
         .title {
             float: left;
@@ -247,7 +351,31 @@ Vue.component("anlysis-dashboard", AnlysisDashboard);
             padding: 0;
         }
 
-        .value {
+        .weather {
+            float: right;
+            font-weight: bold;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .date {
+            float: left;
+            font-weight: bold;
+            font-size: 36px;
+            margin-top: -8px;
+            padding: 0;
+        }
+
+        .date-sm {
+            float: left;
+            font-weight: bold;
+            font-size: 24px;
+            margin-top: -8px;
+            padding: 0;
+        }
+
+        .ratio {
             float: right;
             font-weight: bold;
             font-size: 12px;
