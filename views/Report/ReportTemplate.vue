@@ -626,6 +626,9 @@ export default class ReportTemplate extends Vue {
 
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
+        this.inputFormData.designationPeriod = 'today';
+        this.inputFormData.startDate = new Date();
+        this.inputFormData.endDate = new Date();
     }
 
     async saveAddOrEdit(data) {
