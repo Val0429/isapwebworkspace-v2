@@ -1,13 +1,12 @@
 <template>
     <div>
-        {{ pageStep }}
         <!-- 父元件的data='傳到子元件的data' -->
         <filter_condition
-            v-show="pageStep === ePageStep.none"
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
             :label="_('w_ReportFilterConditionComponent_')"
+            @submit-data="receiveData"
         >
         </filter_condition>
     </div>
@@ -57,7 +56,7 @@ export default class DemoFilterConditionComponent extends Vue {
 
     mounted() {}
 
-    initSelectItemSite() {
+    async initSelectItemSite() {
         let tempSitesSelectItem = {};
 
         const readAllSiteParam: {
@@ -66,7 +65,7 @@ export default class DemoFilterConditionComponent extends Vue {
             type: "all"
         };
 
-        this.$server
+        await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 if (response != undefined) {
@@ -86,10 +85,10 @@ export default class DemoFilterConditionComponent extends Vue {
             });
     }
 
-    initSelectItemTag() {
+    async initSelectItemTag() {
         let tempTagSelectItem = {};
 
-        this.$server
+        await this.$server
             .R("/tag/all")
             .then((response: any) => {
                 if (response != undefined) {
@@ -109,8 +108,8 @@ export default class DemoFilterConditionComponent extends Vue {
             });
     }
 
-    initSelectItemTree() {
-        this.$server
+    async initSelectItemTree() {
+       await this.$server
             .R("/location/tree")
             .then((response: any) => {
                 if (response != undefined) {
@@ -134,9 +133,10 @@ export default class DemoFilterConditionComponent extends Vue {
         this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
-    pageToChooseTree(pageStep: string) {
-        this.pageStep = pageStep;
-        console.log('father pageStep - ', pageStep);
+    receiveData(data) {
+        console.log(' - ', data);
     }
+
+
 }
 </script>

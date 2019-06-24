@@ -5,7 +5,20 @@
             :visible="true"
             :label="_('w_ReportFilterConditionComponent_')"
         >
-            <iv-form :interface="IFilterConditionForm()">
+            <iv-form
+                :interface="IFilterConditionForm()"
+                @update:*="tempSaveInputData($event)"
+                @submit="doSubmit($event)"
+            >
+
+                <template #siteIds="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.siteIds">
+
+                    </iv-form-selection>
+                </template>
 
                 <template #selectTree="{ $attrs, $listeners }">
 
@@ -34,12 +47,43 @@
                     ></b-form-radio-group>
                 </template>
 
+                <template #startDate="{ $attrs, $listeners }">
+                    <iv-form-date
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.startDate">
+                    </iv-form-date>
+                </template>
+
+                <template #endDate="{ $attrs, $listeners }">
+                    <iv-form-date
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.startDate">
+
+                    </iv-form-date>
+                </template>
+
+                <template #designationPeriod="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.designationPeriod">
+                    </iv-form-selection>
+                </template>
+
+                <template #tagIds="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.siteIds">
+
+                    </iv-form-selection>
+                </template>
+
             </iv-form>
         </iv-auto-card>
 
-        <!-- region tree select -->
-        <!--             "
- -->
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
             :multiple="true"
@@ -136,10 +180,19 @@ export class FilterCondition extends Vue {
     inputData = "Test input data";
     modelData = "";
 
+    doMounted: boolean = false;
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
-    siteIds: any = [];
+
+    inputFormData: any = {
+        siteIds: [],
+        tagIds: [],
+        startDate: new Date(),
+        endDate: new Date(),
+        designationPeriod: 'today',
+    };
 
     // tree 相關
     selectType = ERegionType.site;
@@ -172,6 +225,7 @@ export class FilterCondition extends Vue {
     };
 
     created() {
+
     }
 
     async mounted() {
@@ -187,13 +241,46 @@ export class FilterCondition extends Vue {
         this.$emit("model", this.modelData);
     }
 
+    tempSaveInputData(data) {
 
+        switch (data.key) {
+            case "siteIds":
+                this.inputFormData.siteIds = data.value;
+                break;
+            case "tagIds":
+                this.inputFormData.tagIds = data.value;
+                break;
+            case "startDate":
+                this.inputFormData.startDate = data.value;
+                break;
+            case "endDate":
+                this.inputFormData.endDate = data.value;
+                break;
+            case "designationPeriod":
+                this.inputFormData.designationPeriod = data.value;
+                break;
+        }
+
+        this.selecteds = [];
+
+        for (const id of this.inputFormData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
+    }
 
     async pageToChooseTree() {
         this.pageStep = EPageStep.chooseTree;
-        console.log('son pageStep - ',  this.pageStep);
         this.selecteds = [];
-        for (const id of this.siteIds) {
+        for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
                     let selectedsObject: IRegionTreeSelected = {
@@ -206,23 +293,38 @@ export class FilterCondition extends Vue {
             }
         }
 
-        this.$emit("page-to-choose-tree", this.pageStep);
-
     }
 
     pageToShowResult() {
         this.pageStep = EPageStep.none;
         // siteIds clear
-        this.siteIds = [];
+        this.inputFormData.siteIds = [];
 
         // from selecteds push siteIds
         for (const item of this.selecteds) {
-            this.siteIds.push(item.objectId);
+            this.inputFormData.siteIds.push(item.objectId);
         }
     }
 
+
+
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
+        this.inputFormData.designationPeriod = 'today';
+        this.inputFormData.startDate = new Date();
+        this.inputFormData.endDate = new Date();
+    }
+
+    doSubmit() {
+        // TODO: wait api
+        this.$emit("submit-data", this.inputFormData);
+        this.inputFormData = {
+            siteIds: [],
+            tagIds: [],
+            startDate: new Date(),
+            endDate: new Date(),
+            designationPeriod: 'today',
+        };
     }
 
     IFilterConditionForm() {
