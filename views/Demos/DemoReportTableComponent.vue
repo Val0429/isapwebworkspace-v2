@@ -18,7 +18,7 @@ enum PageType {
     demographic = "demographic",
     vipBlacklist = "vipBlacklist",
     repeatCustomer = "repeatCustomer",
-    bevenue = "bevenue",
+    revenue = "revenue",
     transaction = "transaction",
     conversion = "conversion",
     asp = "asp"
@@ -76,7 +76,7 @@ export default class DemoReportComponent extends Vue {
             value: 9,
             valueRatio: 0.11
         },
-        bevenue: {
+        revenue: {
             sign: Sign.positive,
             total: 9999999,
             value: 11,
