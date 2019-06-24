@@ -25,18 +25,11 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 
-enum EPageStep {
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree"
-}
 
 @Component
 export default class DemoFilterConditionComponent extends Vue {
     filterData: any = {};
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep | string = EPageStep.none;
 
     // select 相關
     sitesSelectItem: any = {};
