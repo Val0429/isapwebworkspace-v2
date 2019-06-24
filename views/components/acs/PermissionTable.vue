@@ -55,36 +55,177 @@
         </div>
 
         <!--Site Form (Add and Edit and View)-->
-        <div v-if="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view">
-            <iv-auto-card
-                :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')"
-                v-if="pageStep != ePageStep.view"
-            >
+        <div v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view">
+            <iv-auto-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')">
 
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
 
                 <iv-form
+                    ref="subForm"
                     :interface="IForm()"
+                    :value="inputFormData"
                     @submit="doSave($event)"
                     @update:deviceType="selectedDeviceType($event)"
-                    :value="inputFormData"
+                    @update:*="updateInputData($event)"
                 >
 
-                    <!-- <template #deviceType="{ $attrs, $listeners}">
-                        <div class="card-content iv-form-group col-md-12">
-                            <b-form-group :label="_('w_Permission_DeviceType')">
-                                <b-form-radio-group
-                                    @change="selectedDeviceType()"
-                                    v-model="selected"
-                                    :options="devoceTypeItem"
-                                ></b-form-radio-group>
-                            </b-form-group>
-                        </div>
-                    </template> -->
+                    <!-- door -->
+                    <template #doorName="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.door"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.doorNameOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #doorArea="{ $attrs, $listeners }">
+                        <iv-form-string
+                            v-show="deviceType == eDeviceType.door"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.doorAreaOption"
+                            :disabled="true"
+                        ></iv-form-string>
+                    </template>
+
+                    <template #doorTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.door"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.deviceTimeFormatOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #doorAdd="{ $attrs }">
+                        <b-button
+                            v-show="deviceType == eDeviceType.door"
+                            class="h-25 addButton"
+                            variant="primary"
+                            size="md"
+                            @click="clickAddDeviceInTable()"
+                        >{{ _('w_Add') }}
+                        </b-button>
+                    </template>
+
+                    <!-- door Group -->
+                    <template #doorGroupName="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType === eDeviceType.doorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.doorGroupNameOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #doorGroupArea="{ $attrs, $listeners }">
+                        <iv-form-string
+                            v-show="deviceType === eDeviceType.doorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.doorGroupAreaOption"
+                            :disabled="true"
+                        ></iv-form-string>
+                    </template>
+
+                    <template #doorGroupTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.doorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.deviceTimeFormatOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #doorGroupAdd="{ $attrs }">
+                        <b-button
+                            v-show="deviceType === eDeviceType.doorGroup"
+                            class="h-25 addButton"
+                            variant="primary"
+                            size="md"
+                            @click="clickAddDeviceInTable()"
+                        >{{ _('w_Add') }}
+                        </b-button>
+                    </template>
+
+                    <!-- elevator -->
+
+                    <template #elevatorName="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-if="deviceType === eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.elevatorNameOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #elevatorArea="{ $attrs, $listeners }">
+                        <iv-form-string
+                            v-if="deviceType === eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :disabled="true"
+                            v-model="inputFormData.elevatorAreaOption"
+                        ></iv-form-string>
+                    </template>
+
+                    <template #elevatorTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.deviceTimeFormatOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #elevatorAdd="{ $attrs }">
+                        <b-button
+                            v-if="deviceType === eDeviceType.elevator"
+                            class="h-25 addButton"
+                            variant="primary"
+                            size="md"
+                            @click="clickAddDeviceInTable()"
+                        >{{ _('w_Add') }}
+                        </b-button>
+                    </template>
 
                 </iv-form>
+
+                <!-- Sub  Table -->
+                <template
+                    #toolbox
+                    v-if="pageStep === ePageStep.view"
+                >
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <table class="table b-table table-striped table-hover mt-5">
+                    <thead>
+                        <tr>
+                            <th v-show="pageStep ==='remove'"></th>
+                            <th v-for="value in inputFormData.title">{{ value }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(value, index) in inputFormData.data">
+                            <td>{{ value.deviceType }}</td>
+                            <td>{{ value.deviceName.text }}</td>
+                            <td>{{ value.area.text}}</td>
+                            <td>{{ value.timeFormat.text }}</td>
+                            <td>
+                                <b-button
+                                    v-if="pageStep != ePageStep.view"
+                                    class="button"
+                                    type="button"
+                                    @click="doSubDelete(index)"
+                                >{{ _('w_Delete')}}</b-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <template #footer-before>
                     <b-button
@@ -97,40 +238,6 @@
 
             </iv-auto-card>
 
-            <!-- Sub  Table -->
-            <iv-card :label="_('w_Permission_PermissionList')">
-
-                <template
-                    #toolbox
-                    v-if="pageStep === ePageStep.view"
-                >
-                    <iv-toolbox-back @click="pageToList()" />
-                </template>
-                <table class="table b-table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th v-show="pageStep ==='remove'"></th>
-                            <th v-for="value in inputFormData.title">{{ value }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(value, index) in inputFormData.accesslevels">
-                            <td>{{ value.deviceType }}</td>
-                            <td>{{ value.deviceName }}</td>
-                            <td>{{ value.deviceArea }}</td>
-                            <td>{{ value.deviceTimeFormat }}</td>
-                            <td>
-                                <b-button
-                                    v-if="pageStep != ePageStep.view"
-                                    class="button"
-                                    type="button"
-                                    @click="doSubDelete(value)"
-                                >{{ _('w_Delete')}}</b-button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </iv-card>
         </div>
 
     </div>
@@ -152,12 +259,36 @@ enum EPageStep {
     none = "none"
 }
 
+enum EDeviceType {
+    none = "none",
+    door = "door",
+    doorGroup = "doorGroup",
+    elevator = "elevator",
+    elevatorGroup = "elevatorGroup"
+}
+
+interface ISelectOption {
+    value: string;
+    text: string;
+}
+
+interface ISelectItem {
+    timeSchedule: any;
+    doorDevice: any;
+    doorGroupDevice: any;
+    elevatorDevice: any;
+    elevatorGroupDevice: any;
+}
+
 @Component({
     components: { PermissionTableForm }
 })
 export default class PermissionTable extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+    eDeviceType = EDeviceType;
+    deviceType: EDeviceType = EDeviceType.door;
+
     tableMultiple = true;
     isSelected: any = [];
     selectedDetail: any = [];
@@ -169,32 +300,41 @@ export default class PermissionTable extends Vue {
             "Time Format",
             "Action"
         ],
-
         id: "",
         permissionName: "",
         deviceType: "door",
-        deviceName: "",
-        deviceArea: "",
-        deviceTimeFormat: "",
-        accesslevelIds: [],
-        accesslevels: []
-    };
-    accesslevel: any = {
-        objectId: "",
-        deviceType: "",
-        deviceName: "",
-        deviceArea: "",
-        deviceTimeFormat: ""
+        deviceNameOption: "",
+        deviceAreaOption: "",
+        deviceTimeFormatOption: "",
+        data: [] // subTable use
     };
     SearchParams: any = {};
 
     //options
-    deviceNameItem: any = [];
-    deviceAreaItem: any = [];
-    deviceTimeFromatItem: any = [];
-    showdeviceTimeFromatItem: any = [];
-    devoceTypeItem: any = ["door", "doorGroup", "elevator"];
-    selected = "door";
+    deviceNameItem: any = {};
+    deviceAreaItem: any = {};
+    deviceTimeFromatItem: any = {};
+    showdeviceTimeFromatItem: any = {};
+    deviceTypeItem: any = {
+        door: EDeviceType.door,
+        doorGroup: EDeviceType.doorGroup,
+        elevator: EDeviceType.elevator
+    };
+
+    selectItemOriginal: any = {
+        timeSchedule: [],
+        door: [],
+        doorGroup: [],
+        elevator: [],
+        elevatorGroup: []
+    };
+    selectItem: ISelectItem = {
+        timeSchedule: [],
+        doorDevice: [],
+        doorGroupDevice: [],
+        elevatorDevice: [],
+        elevatorGroupDevice: []
+    };
 
     created() {}
 
@@ -209,7 +349,6 @@ export default class PermissionTable extends Vue {
                 tablename: datas.permissionName
             };
         }
-
         (this.$refs.mainTable as any).reload();
     }
 
@@ -225,63 +364,142 @@ export default class PermissionTable extends Vue {
             id: "",
             permissionName: "",
             deviceType: "door",
-            deviceName: "",
-            deviceArea: "",
-            deviceTimeFormat: "",
-            accesslevelIds: [],
-            accesslevels: []
+            deviceNameOption: "",
+            deviceAreaOption: "",
+            deviceTimeFormatOption: "",
+            data: [] // subTable use
         };
     }
 
-    async initInputFormData(datas) {
-        let data = datas[0];
+    pageToList() {
+        this.clearInputFormData();
+        this.selectedDeviceType(EDeviceType.door);
+        (this.$refs.mainTable as any).reload();
+        this.pageStep = EPageStep.list;
+    }
 
-        this.inputFormData.id = data.objectId;
-        this.inputFormData.permissionName = data.tablename;
-        this.inputFormData.accesslevelIds = data.accesslevels;
+    async pageToAdd() {
+        this.clearInputFormData();
+        await this.initSelectItem();
+        this.pageStep = EPageStep.add;
+    }
+
+    async pageToEdit() {
+        this.clearInputFormData();
+        if (this.isSelected[0] == undefined) {
+            return false;
+        }
+        await this.initSelectItem();
+        this.selectedDetail = this.isSelected[0];
+        this.initInputFormData();
+        this.pageStep = EPageStep.edit;
+    }
+
+    async pageToView() {
+        this.clearInputFormData();
+        if (this.isSelected[0] == undefined) {
+            return false;
+        }
+        await this.initSelectItem();
+        this.selectedDetail = this.isSelected[0];
+        this.initInputFormData();
+        this.pageStep = EPageStep.view;
+    }
+
+    async initSelectItem() {
+        let param = {
+            paging: {
+                page: 1,
+                pageSize: 10000
+            }
+        };
+
+        this.selectItem.timeSchedule = { "0": this._("w_Select") };
+        this.selectItem.doorDevice = { "0": this._("w_Select") };
+        this.selectItem.doorGroupDevice = { "0": this._("w_Select") };
+        this.selectItem.elevatorDevice = { "0": this._("w_Select") };
 
         await this.$server
-            .R("/acs/accesslevel")
+            .R("/acs/timeschedule", param)
             .then((response: any) => {
-                if (response != undefined) {
-                    this.inputFormData.accesslevels = [];
-                    for (let accesslevel of response.results) {
-                        //TODO ture有資料後 要改成比較資料 = > (returnValue.objectId ==  this.inputFormData.id)
-                        if (true) {
-                            if (accesslevel.door) {
-                                this.$server
-                                    .R("/acs/door", {
-                                        objectId: accesslevel.door.objectId
-                                    })
-                                    .then((subResponse: any) => {
-                                        if (subResponse != undefined) {
-                                            for (let door of subResponse.results) {
-                                                let item = {
-                                                    objectId:
-                                                        accesslevel.objectId, //accesslevel
-                                                    deviceType: "door",
-                                                    deviceName: door.doorname,
-                                                    deviceArea: "",
-                                                    deviceTimeFormat: this.showdeviceTimeFromatItem.filter(
-                                                        x =>
-                                                            x.id ==
-                                                            accesslevel.timeschedule
-                                                    )[0].text
-                                                };
-                                                this.inputFormData.accesslevels.push(
-                                                    item
-                                                );
-                                            }
-                                        }
-                                    })
-                                    .catch((e: any) => {
-                                        console.log(e);
-                                        return false;
-                                    });
-                            } else if (accesslevel.doorgroup) {
-                            } else if (accesslevel.elevator) {
-                            }
+                if (response != undefined && response.results != undefined) {
+                    for (let tempItem of response.results) {
+                        if (
+                            tempItem.objectId != undefined &&
+                            tempItem.timename != undefined &&
+                            typeof tempItem.objectId == "string" &&
+                            typeof tempItem.timename == "string"
+                        ) {
+                            this.selectItem.timeSchedule[tempItem.objectId] =
+                                tempItem.timename;
+                            this.selectItemOriginal.timeSchedule.push(tempItem);
                         }
+                    }
+                }
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return false;
+            });
+
+        await this.$server
+            .R("/acs/door", param)
+            .then((response: any) => {
+                if (response != undefined && response.results != undefined) {
+                    for (let tempItem of response.results) {
+                        if (
+                            tempItem.objectId != undefined &&
+                            tempItem.doorname != undefined &&
+                            typeof tempItem.objectId == "string" &&
+                            typeof tempItem.doorname == "string"
+                        ) {
+                            this.selectItem.doorDevice[tempItem.objectId] =
+                                tempItem.doorname;
+                            this.selectItemOriginal.door.push(tempItem);
+                        }
+                    }
+                }
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return false;
+            });
+
+        await this.$server
+            .R("/acs/doorgroup", param)
+            .then((response: any) => {
+                for (let tempItem of response.results) {
+                    if (
+                        tempItem.objectId != undefined &&
+                        tempItem.groupname != undefined &&
+                        typeof tempItem.objectId == "string" &&
+                        typeof tempItem.groupname == "string"
+                    ) {
+                        this.selectItem.doorGroupDevice[tempItem.objectId] =
+                            tempItem.groupname;
+                        this.selectItemOriginal.doorGroup.push(tempItem);
+                    }
+                }
+            })
+            .catch((e: any) => {
+                console.log(e);
+                return false;
+            });
+
+        await this.$server
+            .R("/acs/elevator", param)
+            .then((response: any) => {
+                for (let tempItem of response.results) {
+                    if (
+                        tempItem.objectId != undefined &&
+                        tempItem.elevatorid != undefined &&
+                        tempItem.elevatorname != undefined &&
+                        typeof tempItem.elevatorid == "string" &&
+                        typeof tempItem.elevatorname == "string"
+                    ) {
+                        this.selectItem.elevatorDevice[tempItem.objectId] =
+                            tempItem.elevatorname;
+                        this.selectItemOriginal.elevator.push(tempItem);
                     }
                 }
             })
@@ -291,62 +509,313 @@ export default class PermissionTable extends Vue {
             });
     }
 
-    selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        if (this.isSelected && this.isSelected.length > 0) {
-            this.selectedDetail = data;
-            this.initInputFormData(this.selectedDetail);
+    async initInputFormData() {
+        this.inputFormData.id = this.selectedDetail.objectId;
+        this.inputFormData.permissionName = this.selectedDetail.tablename;
+
+        for (const tempAccesslevels of this.selectedDetail.accesslevels) {
+            if (tempAccesslevels.objectId == undefined) {
+                continue;
+            }
+
+            if (tempAccesslevels.type == undefined) {
+                continue;
+            }
+
+            let deviceData: any = {
+                objectId: tempAccesslevels.objectId,
+                deviceType: tempAccesslevels.type,
+                deviceName: { id: "", text: "" },
+                area: { id: "", text: "" },
+                timeFormat: { id: "", text: "" }
+            };
+
+            if (
+                tempAccesslevels.timeschedule != undefined &&
+                tempAccesslevels.timeschedule.objectId != undefined &&
+                tempAccesslevels.timeschedule.timename != undefined
+            ) {
+                deviceData.timeFormat.id =
+                    tempAccesslevels.timeschedule.objectId;
+                deviceData.timeFormat.text =
+                    tempAccesslevels.timeschedule.timename;
+            }
+
+            switch (tempAccesslevels.type) {
+                case EDeviceType.door:
+                    if (
+                        tempAccesslevels.door != undefined &&
+                        tempAccesslevels.door.objectId != undefined
+                    ) {
+                        deviceData.deviceName.id =
+                            tempAccesslevels.door.objectId;
+                        for (let key in this.selectItem.doorDevice) {
+                            if (key == tempAccesslevels.door.objectId) {
+                                deviceData.deviceName.text = this.selectItem.doorDevice[
+                                    key
+                                ];
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case EDeviceType.doorGroup:
+                    if (
+                        tempAccesslevels.doorgroup != undefined &&
+                        tempAccesslevels.doorgroup.objectId != undefined
+                    ) {
+                        deviceData.deviceName.id =
+                            tempAccesslevels.doorgroup.objectId;
+
+                        for (let origin of this.selectItemOriginal.doorGroup) {
+                            if (
+                                origin.objectId != undefined &&
+                                origin.objectId == deviceData.deviceName.id
+                            ) {
+                                if (origin.groupname != undefined) {
+                                    deviceData.deviceName.text =
+                                        origin.groupname;
+                                }
+                                if (
+                                    origin.area != undefined &&
+                                    origin.area.name != undefined
+                                ) {
+                                    deviceData.area.id = origin.area.name;
+                                    deviceData.area.text = origin.area.name;
+                                }
+                                break;
+                            }
+                        }
+                        for (let key in this.selectItem.doorGroupDevice) {
+                            if (key == tempAccesslevels.doorgroup.objectId) {
+                                deviceData.deviceName.text = this.selectItem.doorGroupDevice[
+                                    key
+                                ];
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
+                case EDeviceType.elevator:
+                    if (
+                        tempAccesslevels.elevator != undefined &&
+                        tempAccesslevels.elevator.objectId != undefined
+                    ) {
+                        deviceData.deviceName.id =
+                            tempAccesslevels.elevator.objectId;
+                        for (let key in this.selectItem.elevatorDevice) {
+                            if (key == tempAccesslevels.elevator.objectId) {
+                                deviceData.deviceName.text = this.selectItem.elevatorDevice[
+                                    key
+                                ];
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
+                case EDeviceType.elevatorGroup:
+                case EDeviceType.elevatorGroup:
+                case EDeviceType.none:
+                default:
+                    break;
+            }
+            this.inputFormData.data.push(deviceData);
         }
     }
 
-    pageToList() {
-        console.log("pageToList");
-        this.selected = "door";
-        this.selectedDeviceType(0);
-        this.initDeviceTimeFromatItem();
-        this.pageStep = EPageStep.list;
-        (this.$refs.mainTable as any).reload();
+    selectedItem(data) {
+        this.isSelected = data;
     }
 
-    pageToAdd() {
-        this.clearInputFormData();
+    updateInputData(data) {
+        switch (data.key) {
+            case "permissionName":
+                this.inputFormData.permissionName = data.value;
+                break;
 
-        this.pageStep = EPageStep.add;
+            case "deviceType":
+                this.inputFormData.deviceType = data.value;
+                break;
+
+            // door
+            case "doorName":
+                for (const key in this.selectItem.doorDevice) {
+                    if (data.value === key) {
+                        this.inputFormData.doorNameOption = key;
+                        break;
+                    }
+                }
+                break;
+
+            case "doorTimeFormat":
+                for (const key in this.selectItem.timeSchedule) {
+                    if (data.value === key) {
+                        this.inputFormData.deviceTimeFormatOption = key;
+                        break;
+                    }
+                }
+                break;
+
+            // doorGroup
+            case "doorGroupName":
+                for (const key in this.selectItem.doorGroupDevice) {
+                    if (data.value === key) {
+                        this.inputFormData.doorGroupNameOption = key;
+                        break;
+                    }
+                }
+                for (let origin of this.selectItemOriginal.doorGroup) {
+                    if (origin.objectId != undefined) {
+                        if (data.value == origin.objectId) {
+                            if (
+                                origin.area != undefined &&
+                                origin.area.name != undefined
+                            ) {
+                                this.inputFormData.doorGroupAreaOption =
+                                    origin.area.name;
+                            }
+                            break;
+                        }
+                    }
+                }
+                break;
+
+            case "doorGroupTimeFormat":
+                for (const key in this.selectItem.timeSchedule) {
+                    if (data.value === key) {
+                        this.inputFormData.deviceTimeFormatOption = key;
+                        break;
+                    }
+                }
+                break;
+
+            // elevator
+            case "elevatorName":
+                for (const key in this.selectItem.elevatorDevice) {
+                    if (data.value === key) {
+                        this.inputFormData.elevatorNameOption = key;
+                        break;
+                    }
+                }
+                break;
+
+            case "elevatorTimeFormat":
+                for (const key in this.selectItem.timeSchedule) {
+                    if (data.value === key) {
+                        this.inputFormData.deviceTimeFormatOption = key;
+                        break;
+                    }
+                }
+                break;
+        }
     }
 
-    pageToEdit() {
-        this.pageStep = EPageStep.edit;
+    selectedDeviceType(data) {
+        this.deviceType = data;
+        this.inputFormData.data.deviceType = data;
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-    }
+    clickAddDeviceInTable() {
+        let deviceData: any = {
+            objectId: "",
+            deviceType: this.inputFormData.deviceType,
+            deviceName: { id: "", text: "" },
+            area: { id: "", text: "" },
+            timeFormat: { id: "", text: "" }
+        };
 
-    async doSubDelete(data) {
-        console.log("doSubDelete", data);
-        await Dialog.confirm(
-            this._("w_DeleteConfirm"),
-            this._("w_DeleteConfirm"),
-            () => {
-                const deleteParam: {
-                    objectId: string;
-                } = {
-                    objectId: data.objectId
-                };
+        if (this.inputFormData.deviceTimeFormatOption === "0") {
+            return false;
+        }
 
-                this.$server
-                    .D("/acs/accesslevel", deleteParam)
-                    .then((response: any) => {
-                        this.inputFormData.accesslevels = this.inputFormData.accesslevels.filter(
-                            a => a.objectId != data.objectId
-                        );
-                    })
-                    .catch((e: any) => {
-                        console.log(e);
-                    });
+        deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption;
+        for (let loopKey in this.selectItem.timeSchedule) {
+            if (loopKey == deviceData.timeFormat.id) {
+                deviceData.timeFormat.text = this.selectItem.timeSchedule[
+                    loopKey
+                ];
+                break;
             }
-        );
+        }
+
+        switch (this.deviceType) {
+            case EDeviceType.door:
+                if (this.inputFormData.doorNameOption === "0") {
+                    return false;
+                }
+                deviceData.deviceName.id = this.inputFormData.doorNameOption;
+                for (let loopKey in this.selectItem.doorDevice) {
+                    if (loopKey == deviceData.deviceName.id) {
+                        deviceData.deviceName.text = this.selectItem.doorDevice[
+                            loopKey
+                        ];
+                        break;
+                    }
+                }
+
+                break;
+            case EDeviceType.doorGroup:
+                if (this.inputFormData.doorGroupNameOption === "0") {
+                    return false;
+                }
+                deviceData.deviceName.id = this.inputFormData.doorGroupNameOption;
+                for (let origin of this.selectItemOriginal.doorGroup) {
+                    if (
+                        origin.objectId ==
+                        this.inputFormData.doorGroupNameOption
+                    ) {
+                        if (
+                            origin.area != undefined &&
+                            origin.area.name != undefined
+                        ) {
+                            deviceData.area.id = origin.area.name;
+                            deviceData.area.text = origin.area.name;
+                        }
+                        break;
+                    }
+                }
+                for (let loopKey in this.selectItem.doorGroupDevice) {
+                    if (loopKey == deviceData.deviceName.id) {
+                        deviceData.deviceName.text = this.selectItem.doorGroupDevice[
+                            loopKey
+                        ];
+                        break;
+                    }
+                }
+                break;
+            case EDeviceType.elevator:
+                if (this.inputFormData.elevatorNameOption === "0") {
+                    return false;
+                }
+                deviceData.deviceName.id = this.inputFormData.elevatorNameOption;
+                for (let loopKey in this.selectItem.elevatorDevice) {
+                    if (loopKey == deviceData.deviceName.id) {
+                        deviceData.deviceName.text = this.selectItem.elevatorDevice[
+                            loopKey
+                        ];
+                        break;
+                    }
+                }
+                break;
+        }
+        this.inputFormData.data.push(deviceData);
+        this.clearDeviceSelection();
+    }
+
+    clearDeviceSelection() {
+        this.inputFormData.deviceTimeFormatOption = "0";
+        this.inputFormData.doorNameOption = "0";
+        this.inputFormData.doorAreaOption = "";
+        this.inputFormData.doorGroupNameOption = "0";
+        this.inputFormData.doorGroupAreaOption = "";
+        this.inputFormData.elevatorNameOption = "0";
+        this.inputFormData.elevatorAreaOption = "";
+    }
+
+    async doSubDelete(index) {
+        this.inputFormData.data.splice(index, 1);
     }
 
     async doDelete() {
@@ -354,7 +823,7 @@ export default class PermissionTable extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.selectedDetail) {
+                for (const param of this.isSelected) {
                     const deleteParam: {
                         objectId: string;
                     } = {
@@ -374,157 +843,173 @@ export default class PermissionTable extends Vue {
         );
     }
 
-    doSave() {
-        //新增的時候要先新增PermissionTable再新增AccessLeve,Edit 則直接新增AccessLevel即可
-        //TODO Edit or Add PermissionTable API
-        //TODO Add AccessLevel API
-    }
+    async doSave() {
+        let premissionParam: any = {
+            status: 1,
 
-    // swtichWeeks(data) {
-    //     switch (data) {
-    //         case 1:
-    //             return "Monday";
-    //         case 2:
-    //             return "Tuesday";
+            // need update
+            tablename: this.inputFormData.permissionName,
+            accesslevels: []
+        };
 
-    //         case 3:
-    //             return "Wednesday";
-    //         case 4:
-    //             return "Thursday";
-    //         case 5:
-    //             return "Friday";
-    //         case 6:
-    //             return "Saturday";
-    //         case 7:
-    //             return "Sunday";
-    //     }
-    // }
+        for (let tempData of this.inputFormData.data) {
+            if (tempData.objectId != undefined && tempData.objectId != "") {
+                premissionParam.accesslevels.push(tempData.objectId);
+            } else {
+                let accessParam: any = {
+                    system: 0, // always is 0
+                    levelid: "", // always is empty string
+                    levelname: "", // always is empty string
+                    status: 1, // always is 1
 
-    async initDeviceTimeFromatItem() {
-        await this.$server
-            .R("/acs/timeschedule")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response.results) {
-                        this.$set(
-                            this.deviceTimeFromatItem,
-                            returnValue.objectId,
-                            returnValue.timename
-                        );
-                        let item = {
-                            id: returnValue.objectId,
-                            text: returnValue.timename
-                        };
-                        this.showdeviceTimeFromatItem.push(item);
-                    }
+                    // need update
+                    timeschedule: tempData.timeFormat.id, // timeschedule
+                    type: tempData.deviceType, // for frontend use
+                    reader: [] // to door, doorGroup, elevator ogigin find reader
+                };
+
+                if (accessParam.timeschedule == "") {
+                    console.log("!!! accessParam.timeschedule not find");
+                    continue;
                 }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
-            });
-    }
 
-    async deviceNameItemByDoor() {
-        await this.$server
-            .R("/acs/door")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.deviceNameItem = [];
-                    for (const returnValue of response.results) {
-                        this.$set(
-                            this.deviceNameItem,
-                            returnValue.objectId,
-                            returnValue.doorname
-                        );
-                    }
-                    return;
+                switch (tempData.deviceType) {
+                    case EDeviceType.door:
+                        accessParam.door = tempData.deviceName.id;
+                        for (let door of this.selectItemOriginal.door) {
+                            if (
+                                door.objectId != undefined &&
+                                door.doorid != undefined &&
+                                door.objectId == accessParam.door
+                            ) {
+                                if (door.readerin != undefined) {
+                                    for (let reader of door.readerin) {
+                                        if (reader.objectId != undefined) {
+                                            accessParam.reader.push(
+                                                reader.objectId
+                                            );
+                                        }
+                                    }
+                                }
+                                if (door.readerout != undefined) {
+                                    for (let reader of door.readerout) {
+                                        if (reader.objectId != undefined) {
+                                            accessParam.reader.push(
+                                                reader.objectId
+                                            );
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    case EDeviceType.doorGroup:
+                        accessParam.doorgroup = tempData.deviceName.id;
+                        for (let doorGroup of this.selectItemOriginal
+                            .doorGroup) {
+                            if (
+                                doorGroup.objectId != undefined &&
+                                doorGroup.objectId == accessParam.doorgroup
+                            ) {
+                                if (doorGroup.doors != undefined) {
+                                    for (let door of doorGroup.doors) {
+                                        if (door.readerin != undefined) {
+                                            for (let reader of door.readerin) {
+                                                if (
+                                                    reader.objectId != undefined
+                                                ) {
+                                                    accessParam.reader.push(
+                                                        reader.objectId
+                                                    );
+                                                }
+                                            }
+                                        }
+                                        if (door.readerout != undefined) {
+                                            for (let reader of door.readerout) {
+                                                if (
+                                                    reader.objectId != undefined
+                                                ) {
+                                                    accessParam.reader.push(
+                                                        reader.objectId
+                                                    );
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+
+                    case EDeviceType.elevator:
+                        accessParam.elevator = tempData.deviceName.id;
+                        for (let elevator of this.selectItemOriginal.elevator) {
+                            if (
+                                elevator.objectId != undefined &&
+                                elevator.elevatorid != undefined &&
+                                elevator.objectId == accessParam.elevator
+                            ) {
+                                if (elevator.reader != undefined) {
+                                    for (let reader of elevator.reader) {
+                                        if (reader.objectId != undefined) {
+                                            accessParam.reader.push(
+                                                reader.objectId
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case EDeviceType.elevatorGroup:
+                    case EDeviceType.none:
+                    default:
+                        break;
                 }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
-            });
-    }
 
-    async deviceNameItemByDoorGroup() {
-        await this.$server
-            .R("/acs/doorgroup")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.deviceNameItem = [];
-                    for (const returnValue of response.results) {
-                        this.$set(
-                            this.deviceNameItem,
-                            returnValue.objectId,
-                            returnValue.groupname
-                        );
-                    }
-                }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
-            });
-    }
-
-    async deviceNameItemByElevtor() {
-        await this.$server
-            .R("/acs/elevator")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.deviceNameItem = [];
-                    for (const returnValue of response.results) {
-                        this.$set(
-                            this.deviceNameItem,
-                            returnValue.objectId,
-                            returnValue.elevatorname
-                        );
-                    }
-                }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
-            });
-
-        await this.$server
-            .R("/acs/elevatorgroup")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.deviceAreaItem = [];
-                    for (const returnValue of response.results) {
-                        this.$set(
-                            this.deviceAreaItem,
-                            returnValue.objectId,
-                            returnValue.elevatorname
-                        );
-                    }
-                }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
-            });
-    }
-
-    selectedDeviceType(data) {
-        this.selected = this.devoceTypeItem[data];
-        console.log("selectedDeviceType", data, this.selected);
-
-        switch (this.selected) {
-            case "door":
-                this.deviceNameItemByDoor();
-                break;
-            case "doorGroup":
-                this.deviceNameItemByDoorGroup();
-                break;
-            case "elevator":
-                this.deviceNameItemByElevtor();
-                break;
-            default:
-                break;
+                await this.$server
+                    .C("/acs/accesslevel", accessParam)
+                    .then((response: any) => {
+                        if (
+                            response != undefined &&
+                            response.objectId != undefined
+                        ) {
+                            premissionParam.accesslevels.push(
+                                response.objectId
+                            );
+                        }
+                    })
+                    .catch((e: any) => {
+                        console.log(e);
+                    });
+            }
         }
+
+        if (this.inputFormData.id !=undefined && this.inputFormData.id  != "") {
+            premissionParam.objectId = this.inputFormData.id;
+              await this.$server
+            .U("/acs/permissiontable", premissionParam)
+            .then((response: any) => {
+                this.pageToList();
+            })
+            .catch((e: any) => {
+                console.log(e);
+            });
+        } else {
+            await this.$server
+            .C("/acs/permissiontable", premissionParam)
+            .then((response: any) => {
+                this.pageToList();
+            })
+            .catch((e: any) => {
+                console.log(e);
+            });
+        }
+
+        
     }
 
     ISerachFrom() {
@@ -536,7 +1021,6 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
                 permissionName?: string;
-              
 
             }
         `;
@@ -551,7 +1035,7 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
                 tablename?: string;
-              
+
                 Actions: any;
             }
         `;
@@ -560,52 +1044,200 @@ export default class PermissionTable extends Vue {
     IForm() {
         return `
             interface {
-  
+
                  /**
                  * @uiLabel - ${this._("w_Permission_PermissionName")}
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
-                 */
+                 * @uiColumnGroup - row1
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
                  permissionName: string;
+
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceType")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceType")}
-                 */
-                 deviceType?:: ${toEnumInterface(
-                     this.devoceTypeItem as any,
-                     false
-                 )};
-                 /**
-                 * @uiLabel - ${this._("w_Permission_DeviceName")}
-                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
-                 */
-                 deviceName?: ${toEnumInterface(
-                     this.deviceNameItem as any,
+                 * @uiColumnGroup - row15
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
+                 deviceType?: ${toEnumInterface(
+                     this.deviceTypeItem as any,
                      false
                  )};
 
+                 ///////////////////////////////////////////////////////
+
+
                  /**
+                 * @uiLabel - ${this._("w_Permission_DeviceName")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiColumnGroup - row11
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
+                 doorName?: ${toEnumInterface(
+                     this.selectItem.doorDevice as any,
+                     false
+                 )};
+
+                /**
                  * @uiLabel - ${this._("w_Permission_DeviceArea")}
-                 * @uiPlaceHolder - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row11
+                 * @uiType - ${
+                     this.deviceType === "elevator"
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                */
+                 doorArea?: string;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row11
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
+                doorTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
+                    false
+                )};
+
+
+                /*
+                 * @uiColumnGroup - row11
+                */
+                 doorAdd?: any;
+
+
+                ///////////////////////////////////////////////////////
+
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceName")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiColumnGroup - row111
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
+                 doorGroupName?: ${toEnumInterface(
+                     this.selectItem.doorGroupDevice as any,
+                     false
+                 )};
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row111
                 * @uiType - ${
-                    this.selected === "elevator"
-                        ? "iv-form-selection"
+                    this.deviceType === EDeviceType.doorGroup
+                        ? "iv-form-string"
                         : "iv-form-label"
                 }
                  */
-                 deviceArea?: ${toEnumInterface(
-                     this.deviceAreaItem as any,
+                 doorGroupArea?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row111
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
+                doorGroupTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
+                    false
+                )};
+
+
+                /*
+                 * @uiColumnGroup - row111
+                 */
+                 doorGroupAdd?: any;
+
+                ///////////////////////////////////////////////////////
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceName")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiColumnGroup - row112
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
+                 elevatorName?: ${toEnumInterface(
+                     this.selectItem.elevatorDevice as any,
                      false
                  )};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row112
+                * @uiType - ${
+                    this.deviceType === EDeviceType.elevator
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                }
+                 */
+                 elevatorArea?: string;
+
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row112
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                */
+                elevatorTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
+                    false
+                )};
+
+
+                /*
+                 * @uiColumnGroup - row112
                  */
-                 deviceTimeFormat?: ${toEnumInterface(
-                     this.deviceTimeFromatItem as any,
-                     false
-                 )};
+                 elevatorAdd?: any;
+
+
 
             }
         `;
@@ -614,8 +1246,6 @@ export default class PermissionTable extends Vue {
     ISubTable() {
         return `
             interface {
-  
-          
 
                  /**
                  * @uiLabel - ${this._("w_Permission_DeviceType")}
@@ -643,3 +1273,8 @@ export default class PermissionTable extends Vue {
     }
 }
 </script>
+<style lang="scss" scoped>
+.addButton {
+    margin-top: 27px;
+}
+</style>

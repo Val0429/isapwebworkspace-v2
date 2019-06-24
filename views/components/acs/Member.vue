@@ -1,6 +1,6 @@
 <template>
     <div key="main">
-        <MemberForm1 />
+        <MemberForm />
     </div>
 </template>
 
@@ -9,10 +9,10 @@
 import { Component, Vue } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
-import MemberForm1 from "./MemberForm1.vue";
+import MemberForm from "./MemberForm.vue";
 
 @Component({
-    components: { MemberForm1 }
+    components: { MemberForm }
 })
 export default class Member extends Vue {
     private isMounted: boolean = false;

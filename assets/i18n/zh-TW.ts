@@ -67,7 +67,7 @@ export default class LangObject implements ILang {
     groupname = '門號群組名稱';
     doors = '';
     doorscount = 'Doors Count';
-    readerscount= 'Readers Count';
+    readerscount = 'Readers Count';
 
     w_Elevator = '電梯';
     w_ElevatorAdd = '新增電梯';
@@ -268,6 +268,7 @@ export default class LangObject implements ILang {
     w_Options = '可用選項';
     w_Chooses = '已選擇';
     w_AllChoose = '全選';
+    w_Select = 'Please Select';
 
     // date
     w_Week_0 = 'Sunday';
@@ -398,6 +399,12 @@ export default class LangObject implements ILang {
     w_Permission_DeviceName = 'Device Name';
     w_Permission_DeviceArea = 'Device Area';
     w_Permission_DeviceTimeFormat = 'Time Format';
+    w_Permission_Door = 'Door Name';
+    w_Permission_Elevator = 'Elevator Name';
+    w_Permission_DoorGroup = 'Door Group Name';
+    w_Permission_DoorAdd = 'Add Door';
+    w_Permission_ElevatorAdd = 'Add Elevator';
+    w_Permission_DoorGroupAdd = 'Add Door Group';
 
     // button
     w_Save = 'Save';
@@ -413,7 +420,8 @@ export default class LangObject implements ILang {
     w_Restart = 'Restart';
     w_Reset = 'Reset';
     w_Delete = 'Delete';
-    readerIO="Reader I/O";
+    w_ViewData = 'View Device Data';
+    readerIO = 'Reader I/O';
 
     // Member
     w_Navigation_Users = 'Users';
@@ -422,11 +430,11 @@ export default class LangObject implements ILang {
     w_Navigation_Site = 'Site';
     w_Navigation_Region = 'Region';
 
-// Member
+    // Member
     w_Member_List = '人員管理';
     w_Member_Add = '新增人員資訊';
     w_Member_Edit = '編輯人員資訊';
-    w_Member_View = 'View Member';
+    w_Member_View = '查看人員資訊';
 
     w_Member_CompanyName = '公司名稱：';
     w_Member_PersonType = '人員類型：';
