@@ -93,6 +93,7 @@ export default class LangObject {
     w_ManagedSites = 'Managed sites';
     w_Description = 'Description';
     w_Sites = 'Site(s)';
+    w_Tag = 'Tag(s)';
     w_Site = 'Site';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';

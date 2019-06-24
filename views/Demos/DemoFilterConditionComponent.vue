@@ -1,9 +1,13 @@
 <template>
     <div>
-
+        <!-- 父元件的data='傳到子元件的data' -->
         <filter_condition
-        :sitesSelectItem="sitesSelectItem"
-        :label="_('w_ReportFilterConditionComponent_')">
+            :sitesSelectItem="sitesSelectItem"
+            :tagSelectItem="tagSelectItem"
+            :regionTreeItem="regionTreeItem"
+            :label="_('w_ReportFilterConditionComponent_')"
+            @submit-data="receiveData"
+        >
         </filter_condition>
     </div>
 </template>
@@ -17,33 +21,43 @@ import {
     RegionTreeItem,
     IRegionTreeSelected
 } from "@/components/RegionTree/models";
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
+
+enum EPageStep {
+    none = "none",
+    showResult = "showResult",
+    chooseTree = "chooseTree"
+}
 
 @Component
 export default class DemoFilterConditionComponent extends Vue {
     filterData: any = {};
 
+    ePageStep = EPageStep;
+    pageStep: EPageStep | string = EPageStep.none;
+
+    // select 相關
     sitesSelectItem: any = {};
+    tagSelectItem: any = {};
 
+    // tree
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
 
-   created() {
-       console.log('0000 - ', );
-       this.initSelectItemSite();
-       console.log('1111 - ', );
-   }
-
-    mounted() {
-        console.log('2222 - ', );
+    created() {
         this.initSelectItemSite();
-        console.log('3333 - ', );
+        this.initSelectItemTag();
+        this.initSelectItemTree();
+        this.initRegionTreeSelect();
     }
 
-    initSelectItemSite() {
+    mounted() {}
 
-        this.sitesSelectItem = {};
+    async initSelectItemSite() {
+        let tempSitesSelectItem = {};
 
         const readAllSiteParam: {
             type: string;
@@ -51,19 +65,15 @@ export default class DemoFilterConditionComponent extends Vue {
             type: "all"
         };
 
-        this.$server
+        await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                console.log('demo - ', response);
                 if (response != undefined) {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
-                        this.sitesSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        // this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        //     returnValue
-                        // );
+                        tempSitesSelectItem[returnValue.objectId] = returnValue.name;
                     }
+                    this.sitesSelectItem = tempSitesSelectItem;
                 }
             })
             .catch((e: any) => {
@@ -73,9 +83,60 @@ export default class DemoFilterConditionComponent extends Vue {
                 console.log(e);
                 return false;
             });
-
-        console.log('demo - ', this.sitesSelectItem);
-
     }
+
+    async initSelectItemTag() {
+        let tempTagSelectItem = {};
+
+        await this.$server
+            .R("/tag/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 tagSelectItem 的 key 的方式
+                        tempTagSelectItem[returnValue.objectId] = returnValue.name;
+                    }
+                    this.tagSelectItem = tempTagSelectItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemTree() {
+       await this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
+
+    receiveData(data) {
+        console.log(' - ', data);
+    }
+
+
 }
 </script>
