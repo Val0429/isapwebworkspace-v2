@@ -416,29 +416,17 @@
 
                             if (returnValue.age <= 20) {
                                 returnValue.age = '0~20';
-                            }
-
-                            if (returnValue.age >= 21 && returnValue.age <= 30) {
+                            } else if (returnValue.age >= 21 && returnValue.age <= 30) {
                                 returnValue.age = '21~30';
-                            }
-
-                            if (returnValue.age >= 31 && returnValue.age <= 40) {
+                            } else if (returnValue.age >= 31 && returnValue.age <= 40) {
                                 returnValue.age = '31~40';
-                            }
-
-                            if (returnValue.age >= 31 && returnValue.age <= 40) {
+                            } else if (returnValue.age >= 31 && returnValue.age <= 40) {
                                 returnValue.age = '31~40';
-                            }
-
-                            if (returnValue.age >= 41 && returnValue.age <= 50) {
+                            } else if (returnValue.age >= 41 && returnValue.age <= 50) {
                                 returnValue.age = '41~50';
-                            }
-
-                            if (returnValue.age >= 51 && returnValue.age <= 60) {
+                            } else if (returnValue.age >= 51 && returnValue.age <= 60) {
                                 returnValue.age = '51~60';
-                            }
-
-                            if (returnValue.age >= 61) {
+                            } else if (returnValue.age >= 61) {
                                 returnValue.age = '61~';
                             }
 
