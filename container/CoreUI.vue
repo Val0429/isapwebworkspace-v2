@@ -20,6 +20,8 @@
         <template #nav>
             <SidebarHeader label="Menu" />
             <SidebarNav>
+                <SidebarNavItem url="/site" />
+                <SidebarNavItem url="/region" />
                 <SidebarNavItem url="/member" />
                 <SidebarNavItem url="/user" />
                 <SidebarNavItem url="/user_group" />
@@ -35,8 +37,7 @@
                 <SidebarNavItem url="/accesslevel" />
                 <SidebarNavItem url="/attendance" />
                 <SidebarNavItem url="/employee" />
-                <SidebarNavItem url="/site" />
-                <SidebarNavItem url="/region" />
+                
                 
                 
                 
