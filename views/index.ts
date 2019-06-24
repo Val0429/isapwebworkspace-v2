@@ -73,7 +73,7 @@ import MyProfile from './MyProfile/MyProfile.vue';
 
 // Report
 import ReportTemplate from './Report/ReportTemplate.vue';
-import Traffic from './Report/Traffic.vue';
+import ReportTraffic from './Report/ReportTraffic.vue';
 import ReportDwellTime from './Report/ReportDwellTime.vue';
 import ReportDemographic from './Report/ReportDemographic.vue';
 import ReportHeatmap from './Report/ReportHeatmap.vue';
@@ -126,7 +126,7 @@ $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-questio
 // Report
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-close', redirect: '/reports/report_template' })();
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-close' })(ReportTemplate);
-$({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-close' })(Traffic);
+$({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-close' })(ReportTraffic);
 $({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-close' })(ReportDwellTime);
 $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-close' })(ReportDemographic);
 $({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-close' })(ReportHeatmap);

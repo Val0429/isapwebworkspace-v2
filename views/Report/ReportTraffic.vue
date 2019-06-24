@@ -4,15 +4,15 @@
         <div v-show="pageStep === ePageStep.none">
 
             <iv-card>
-                 <!-- Morris -->
-                <chart-bar-line
+                <!-- Morris -->
+                <traffic-chart
                     label="Test Label"
                     @input="test"
                 >
-                </chart-bar-line>
+                </traffic-chart>
 
             </iv-card>
-           
+
         </div>
 
     </div>
@@ -23,7 +23,7 @@ import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
 // Morris
-import ChartBarLine from "@/components/HighCharts/BarLine.vue";
+import TrafficChart from "@/components/HighCharts/TrafficChart.vue";
 
 enum EPageStep {
     none = "none"
@@ -31,10 +31,10 @@ enum EPageStep {
 
 @Component({
     components: {
-        ChartBarLine
+        TrafficChart
     }
 })
-export default class Traffic extends Vue {
+export default class ReportTraffic extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
