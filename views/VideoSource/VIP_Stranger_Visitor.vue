@@ -992,16 +992,14 @@
         }
 
         showFirst(value): string {
-            if (value.length >= 2) {
-                return value.map(item => item.name)[0] + "...";
-            }
-            if (value.length === 1) {
-                return value.map(item => item.name)[0];
-            }
-            if (value.length == 0) {
-                return "";
-            }
+        if (value.length >= 2) {
+            return value.map(item => item.name)[0] + "...";
+        } else if (value.length === 1) {
+            return value.map(item => item.name)[0];
+        } else if (value.length == 0) {
+            return "";
         }
+    }
 
         show30Words(
             value: any,
@@ -1038,6 +1036,8 @@
             if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.isapFrsManager) {
                 return this._("w_VSVIP_Stranger_Visitor_EditisapUseFRSManger")
             }
+
+            return '';
         }
 
         ITableList() {

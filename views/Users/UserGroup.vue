@@ -541,11 +541,9 @@ export default class UserGroup extends Vue {
     showFirst(value): string {
         if (value.length >= 2) {
             return value.map(item => item.name)[0] + "...";
-        }
-        if (value.length === 1) {
+        } else if (value.length === 1) {
             return value.map(item => item.name)[0];
-        }
-        if (value.length == 0) {
+        } else if (value.length == 0) {
             return "";
         }
     }
