@@ -1,11 +1,14 @@
 <template>
     <div>
-
+        {{ pageStep }}
         <!-- 父元件的data='傳到子元件的data' -->
         <filter_condition
-        :sitesSelectItem="sitesSelectItem"
-        :tagSelectItem="tagSelectItem"
-        :label="_('w_ReportFilterConditionComponent_')">
+            v-show="pageStep === ePageStep.none"
+            :sitesSelectItem="sitesSelectItem"
+            :tagSelectItem="tagSelectItem"
+            :regionTreeItem="regionTreeItem"
+            :label="_('w_ReportFilterConditionComponent_')"
+        >
         </filter_condition>
     </div>
 </template>
@@ -19,14 +22,22 @@ import {
     RegionTreeItem,
     IRegionTreeSelected
 } from "@/components/RegionTree/models";
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 
+enum EPageStep {
+    none = "none",
+    showResult = "showResult",
+    chooseTree = "chooseTree"
+}
+
 @Component
 export default class DemoFilterConditionComponent extends Vue {
     filterData: any = {};
+
+    ePageStep = EPageStep;
+    pageStep: EPageStep | string = EPageStep.none;
 
     // select 相關
     sitesSelectItem: any = {};
@@ -38,16 +49,16 @@ export default class DemoFilterConditionComponent extends Vue {
     selecteds: IRegionTreeSelected[] = [];
 
     created() {
-       this.initSelectItemSite();
-       this.initSelectItemTag();
-   }
-
-    async mounted() {
+        this.initSelectItemSite();
+        this.initSelectItemTag();
+        this.initSelectItemTree();
+        this.initRegionTreeSelect();
     }
 
-   initSelectItemSite() {
+    mounted() {}
 
-        this.sitesSelectItem = {};
+    initSelectItemSite() {
+        let tempSitesSelectItem = {};
 
         const readAllSiteParam: {
             type: string;
@@ -61,12 +72,9 @@ export default class DemoFilterConditionComponent extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
-                        this.sitesSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        // this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        //     returnValue
-                        // );
+                        tempSitesSelectItem[returnValue.objectId] = returnValue.name;
                     }
+                    this.sitesSelectItem = tempSitesSelectItem;
                 }
             })
             .catch((e: any) => {
@@ -76,22 +84,20 @@ export default class DemoFilterConditionComponent extends Vue {
                 console.log(e);
                 return false;
             });
-
     }
 
-   initSelectItemTag() {
-
-        this.sitesSelectItem = {};
+    initSelectItemTag() {
+        let tempTagSelectItem = {};
 
         this.$server
-            .R("/tag/all", )
+            .R("/tag/all")
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
-                        this.tagSelectItem[returnValue.objectId] =
-                            returnValue.name;
+                        // 自定義 tagSelectItem 的 key 的方式
+                        tempTagSelectItem[returnValue.objectId] = returnValue.name;
                     }
+                    this.tagSelectItem = tempTagSelectItem;
                 }
             })
             .catch((e: any) => {
@@ -101,7 +107,36 @@ export default class DemoFilterConditionComponent extends Vue {
                 console.log(e);
                 return false;
             });
-console.log('this.tagSelectItem - ', this.tagSelectItem);
+    }
+
+    initSelectItemTree() {
+        this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
+
+    pageToChooseTree(pageStep: string) {
+        this.pageStep = pageStep;
+        console.log('father pageStep - ', pageStep);
     }
 }
 </script>

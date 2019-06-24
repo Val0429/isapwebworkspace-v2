@@ -1,20 +1,11 @@
 <template>
     <div>
         <iv-auto-card
+            v-show="pageStep === ePageStep.none"
             :visible="true"
             :label="_('w_ReportFilterConditionComponent_')"
         >
             <iv-form :interface="IFilterConditionForm()">
-                <!--                <template #siteIds="{ $attrs, $listeners }">-->
-                <!--                    <iv-form-selection-->
-                <!--                        v-bind="$attrs"-->
-                <!--                        v-on="$listeners"-->
-
-                <!--                    >-->
-
-                <!--                    </iv-form-selection>-->
-                <!--                    <div>{{ JSON.stringify(sitesSelectItem) }}</div>-->
-                <!--                </template>-->
 
                 <template #selectTree="{ $attrs, $listeners }">
 
@@ -47,6 +38,8 @@
         </iv-auto-card>
 
         <!-- region tree select -->
+        <!--             "
+ -->
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
             :multiple="true"
@@ -127,6 +120,12 @@ export class FilterCondition extends Vue {
     })
     tagSelectItem: object;
 
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    regionTreeItem: object;
+
     // Model
     @Model("model", {
         type: String,
@@ -144,7 +143,6 @@ export class FilterCondition extends Vue {
 
     // tree 相關
     selectType = ERegionType.site;
-    regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
     // date 相關
@@ -174,7 +172,6 @@ export class FilterCondition extends Vue {
     };
 
     created() {
-        console.log(this.sitesSelectItem);
     }
 
     async mounted() {
@@ -190,35 +187,11 @@ export class FilterCondition extends Vue {
         this.$emit("model", this.modelData);
     }
 
-    initRegionTreeSelect() {
-        this.regionTreeItem = new RegionTreeItem();
-        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
-    }
 
-    async initSelectItemTree() {
-        await this.$server
-            .R("/location/tree")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
 
     async pageToChooseTree() {
         this.pageStep = EPageStep.chooseTree;
-        this.initRegionTreeSelect();
-        await this.initSelectItemTree();
+        console.log('son pageStep - ',  this.pageStep);
         this.selecteds = [];
         for (const id of this.siteIds) {
             for (const detail in this.sitesSelectItem) {
@@ -232,6 +205,9 @@ export class FilterCondition extends Vue {
                 }
             }
         }
+
+        this.$emit("page-to-choose-tree", this.pageStep);
+
     }
 
     pageToShowResult() {
@@ -317,7 +293,7 @@ export class FilterCondition extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiLabel - ${this._("w_Tag")}
                  * @uiColumnGroup - tag
                  */
                 tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};

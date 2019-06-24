@@ -94,6 +94,7 @@ export default class LangObject implements ILang {
     w_Description = 'Description';
     w_Sites = 'Site(s)';
     w_Site = 'Site';
+    w_Tag = 'Tag(s)';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';
     w_CurrentPassword = 'Current Password';
