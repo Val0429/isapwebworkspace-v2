@@ -1,7 +1,12 @@
 <template>
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
-
+        <template #view.area="{$attrs, $listeners}">
+            {{$attrs.value ? $attrs.value.name : ''}}
+        </template>
+        <template #view.site="{$attrs, $listeners}">
+            {{$attrs.row.area && $attrs.row.area.site ? $attrs.row.area.site.name : ''}}
+        </template>
         <template #view.elevators="{$attrs, $listeners}">
             {{ !$attrs.value || $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId, options)).join(', ') }}
         </template>  
@@ -50,7 +55,15 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {       
+                interface {     
+                    /**
+                    * @uiLabel - ${this._("w_Region_LevelSite")}
+                    */
+                    site:string;
+                    /**
+                    * @uiLabel - ${this._("w_Region_LevelArea")}
+                    */
+                    area:string;  
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
