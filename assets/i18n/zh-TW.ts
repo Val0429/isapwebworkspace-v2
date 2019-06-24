@@ -229,6 +229,7 @@ export default class LangObject implements ILang {
     w_Dialog_SuccessTitle = 'Success';
 
     // common
+    w_Filter = "Filter";
     w_Error = 'Error';
     w_NextPage = 'Next';
     w_PreviousPage = 'Prev';

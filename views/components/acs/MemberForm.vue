@@ -2376,18 +2376,15 @@ export default class MemberForm extends Vue {
                  }
                  */
                 carLicense3?: string;
-
+                /*
+                * @uiHidden - true
+                */
                 accountInfo?: any;
 
                 /**
                  * @uiLabel - ${this._("w_Member_Account")}
                  * @uiColumnGroup - row2
-                 * @uiType - ${
-                     this.pageStep === EPageStep.add ||
-                     this.pageStep === EPageStep.edit
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                 * @uiHidden - true
                  */
                 account?: string;
 
@@ -2395,13 +2392,8 @@ export default class MemberForm extends Vue {
                  * @uiLabel - ${this._("w_Member_Password")}
                  * @uiColumnGroup - row2
                  * @uiType - iv-form-password
-                * @uiHidden - ${
-                    this.pageStep === EPageStep.add ||
-                    this.pageStep === EPageStep.edit
-                        ? "false"
-                        : "true"
-                }
-                */
+                 * @uiHidden - true
+                 */
                 password?: string;
 
                 /**
