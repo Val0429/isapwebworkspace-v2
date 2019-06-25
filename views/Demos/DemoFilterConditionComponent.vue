@@ -54,10 +54,12 @@ export default class DemoFilterConditionComponent extends Vue {
     selecteds: IRegionTreeSelected[] = [];
 
     // 接收 submit 相關
-    filterData: any = {};
+    filterData: any = {
+        siteIds0: ''
+    };
 
     // 網子元件傳資料
-    deviceMode: string = EDeviceMode.peopleCounting
+    deviceMode: string = EDeviceMode.peopleCounting;
 
     created() {
         this.initSelectItemSite();
