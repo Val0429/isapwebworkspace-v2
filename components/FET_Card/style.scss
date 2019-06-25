@@ -1,0 +1,59 @@
+@media print {
+    @page {
+        margin: 0;
+    }
+
+    * {
+        -webkit-transition: none !important;
+        transition: none !important;
+    }
+
+    header.app-header {
+        display: none;
+    }
+    footer.footer {
+        &.app-footer {
+            display: none;
+        }
+    }
+
+    body {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .fade-slider {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .container-fluid {
+    }
+
+    div.app-body {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        .sidebar {
+            display: none;
+        }
+        main.main {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            .breadcrumb {
+                display: none;
+            }
+            .container-fluid {
+                margin: 0 !important;
+                padding: 0 !important;
+                border: 0 !important;
+            }
+        }
+    }
+    .animated > :not(.card-model) {
+        display: none;
+    }
+}

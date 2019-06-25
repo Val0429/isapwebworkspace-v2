@@ -33,19 +33,21 @@ import Site from './components/bar/Site.vue';
 import UserGroup from './components/bar/UserGroup.vue';
 import Region from './components/bar/Region.vue';
 
+// Demos
+import DemoFETCardPrint from './Demos/DemoFETCardPrint.vue';
+$({ path: '/demos/fet_card_print', name: 'FET ID Card Print', icon: 'fa-print', permission: false })(DemoFETCardPrint);
 
-
-$({ path: '/', name: "Home", redirect: '/member' })();
+$({ path: '/', name: 'Home', redirect: '/member' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
 $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
-    $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
-    $({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
-    $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
-    $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);    
-    $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
-    $({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
-    $({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
-    
+$({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
+$({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
+$({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
+$({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);
+$({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
+$({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
+$({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
+
 // Users
 $({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);
 $({ path: '/user_group', name: "_('w_Navigation_Users_UserGroup')", icon: 'fa-user' })(UserGroup);
@@ -56,12 +58,11 @@ $({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
 // Regions
 $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Region);
 
-
-    $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
-    $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
-    $({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
-    $({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
-    $({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
+$({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
+$({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
+$({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
+$({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
+$({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
 
 $({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
 $({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
