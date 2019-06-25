@@ -25,8 +25,11 @@ import SyncReceiver from './components/acs/SyncReceiver.vue';
 import AccessLevel from './components/acs/AccessLevel.vue';
 import Floor from './components/acs/Floor.vue';
 import ElevatorGroup from './components/acs/ElevatorGroup.vue';
-import AttendanceRecord from './components/acs/AttendanceRecord.vue';
-import EmployeeList from './components/acs/EmployeeList.vue';
+import AttendanceRecord from './components/acs/reports/AttendanceRecord.vue';
+import EmployeeList from './components/acs/reports/EmployeeList.vue';
+import DoorReport from './components/acs/reports/DoorReport.vue';
+import ContractorReport from './components/acs/reports/ContractorReport.vue';
+import DemographicReport from './components/acs/reports/DemographicReport.vue';
 
 import User from './components/bar/User.vue';
 import Site from './components/bar/Site.vue';
@@ -45,6 +48,9 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
     $({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
     $({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
+    $({ path: '/doorreport', name: "_('w_DoorReport')", icon: 'fa-building' })(DoorReport);
+    $({ path: '/contractorreport', name: "_('w_ContractorReport')", icon: 'fa-building' })(ContractorReport);
+    $({ path: '/demographicreport', name: "_('w_DemographicReport')", icon: 'fa-building' })(DemographicReport);
     
 // Users
 $({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);

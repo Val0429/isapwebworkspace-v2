@@ -228,7 +228,9 @@ export default class LangObject implements ILang {
     w_Navigation_Users_UserGroup = 'User Group';
     w_Navigation_Site = 'Site';
     w_Navigation_Region = 'Region';
-
+    w_ContractorReport = "Contractor Report";
+    w_DoorReport = 'Door Report';
+    w_DemographicReport = "Demographic Report"
      // Dialog
      w_Dialog_ErrorTitle = 'Something wrong';
      w_Dialog_SuccessTitle = 'Success';

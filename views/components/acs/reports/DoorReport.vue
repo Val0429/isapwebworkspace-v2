@@ -65,7 +65,7 @@ import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
 
 @Component
-export default class AttendanceRecord extends Vue {
+export default class DoorReport extends Vue {
     currentPage:number=1;
     options=[];
     perPage:number=10;

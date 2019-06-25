@@ -50,6 +50,7 @@ export default class LangObject {
     createdAt = 'Created At';
     updatedAt = 'Updated At';
 
+    
     w_Door = 'Door';
     w_DoorAdd = 'Add Door';
     w_DoorEdit = 'Edit Door';
@@ -545,4 +546,7 @@ export default class LangObject {
     w_Navigation_Users_UserGroup = 'User Group';
     w_Navigation_Site = 'Site';
     w_Navigation_Region = 'Region';
+    w_ContractorReport = "Contractor Report";
+    w_DoorReport = 'Door Report';
+    w_DemographicReport = "Demographic Report"
 }
