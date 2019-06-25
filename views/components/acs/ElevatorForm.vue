@@ -2,7 +2,7 @@
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
         <template #view.system="{$attrs, $listeners}">
-            {{$attrs.value== 1 ? "SIPASS" : $attrs.value==800 ? "CCURE" : 'UNKNOWN'}}
+            {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
         </template>
         <template #view.reader="{$attrs, $listeners}">
             {{ $attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x => getName(x.objectId, floorOptions)).join(', '):'' }}
@@ -36,6 +36,7 @@ import { System } from '@/config/default/api/interfaces';
 @Component
 /// 1) class name
 export default class ElevatorForm extends Vue implements IFormQuick {
+    system = System;
     /// 2) cgi path
     path: string = "/acs/elevator";
     /// 3) i18n - view / edit / add
