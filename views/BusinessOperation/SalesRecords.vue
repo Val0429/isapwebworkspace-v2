@@ -323,6 +323,7 @@ export default class SalesRecords extends Vue {
                                 .toString()
                                 .trim();
                         }
+
                         if (row[this.excelTitleName.hour] != undefined) {
                             recordFile.hourText = row[this.excelTitleName.hour]
                                 .toString()
@@ -372,69 +373,103 @@ export default class SalesRecords extends Vue {
                         let DateArray = recordFile.dateText
                             .toString()
                             .split("/");
-                        if (DateArray.length < 3) {
-                            this.recordFileError = true;
-                            resolveDate = false;
-                        }
 
-                        if (resolveDate) {
-                            let resolveDateDetail = true;
-                            let tempYear = Utility.PadLeft(
-                                DateArray[0],
-                                "0",
-                                2
-                            );
-                            let tempMonth = Utility.PadLeft(
-                                DateArray[1],
-                                "0",
-                                2
-                            );
-                            let tempDate = Utility.PadLeft(
-                                DateArray[2],
-                                "0",
-                                2
-                            );
-                            let tempHour = Utility.PadLeft(
-                                recordFile.hourText,
-                                "0",
-                                2
-                            );
-
-                            if (isNaN(parseInt(tempYear))) {
-                                this.recordFileError = true;
-                                resolveDateDetail = false;
-                            }
-                            if (isNaN(parseInt(tempMonth))) {
-                                this.recordFileError = true;
-                                resolveDateDetail = false;
-                            }
-                            if (isNaN(parseInt(tempDate))) {
-                                this.recordFileError = true;
-                                resolveDateDetail = false;
-                            }
-                            if (isNaN(parseInt(tempHour))) {
-                                this.recordFileError = true;
-                                resolveDateDetail = false;
-                            }
-
-                            if (resolveDateDetail) {
-                                // get Date()
-                                let tempDatetimeString: string = `${tempYear}-${tempMonth}-${tempDate} ${tempHour}:00:00`;
-
-                                // get Date relay string
-                                recordFile.datetime = Datetime.String2DateTime(
-                                    tempDatetimeString,
-                                    "YYYY-MM-DD HH:mm:SS"
+                        try {
+                            if (DateArray.length > 0 && DateArray.length < 3) {
+                                let tempDate: Date = new Date(
+                                    (parseInt(DateArray[0]) - (25567 + 2)) *
+                                        86400 *
+                                        1000
                                 );
-
+                                let tempHour = Utility.PadLeft(
+                                    recordFile.hourText,
+                                    "0",
+                                    2
+                                );
                                 // reset datetime text
-                                if (!isNaN(recordFile.datetime.getTime())) {
+                                if (isNaN(tempDate.getTime())) {
+                                    this.recordFileError = true;
+                                }
+                                if (isNaN(parseInt(tempHour))) {
+                                    this.recordFileError = true;
+                                }
+
+                                if (
+                                    !isNaN(tempDate.getTime()) &&
+                                    !isNaN(parseInt(tempHour))
+                                ) {
+                                    tempDate.setHours(parseInt(tempHour));
+                                    recordFile.datetime = tempDate;
                                     recordFile.datetimeText = Datetime.DateTime2String(
                                         recordFile.datetime,
                                         "YYYY-MM-DD HH:mm:ss"
                                     );
                                 }
+                            } else if (DateArray.length >= 3) {
+                                let resolveDateDetail = true;
+                                let tempYear = Utility.PadLeft(
+                                    DateArray[0],
+                                    "0",
+                                    2
+                                );
+                                let tempMonth = Utility.PadLeft(
+                                    DateArray[1],
+                                    "0",
+                                    2
+                                );
+                                let tempDate = Utility.PadLeft(
+                                    DateArray[2],
+                                    "0",
+                                    2
+                                );
+                                let tempHour = Utility.PadLeft(
+                                    recordFile.hourText,
+                                    "0",
+                                    2
+                                );
+
+                                if (isNaN(parseInt(tempYear))) {
+                                    this.recordFileError = true;
+                                    resolveDateDetail = false;
+                                }
+                                if (isNaN(parseInt(tempMonth))) {
+                                    this.recordFileError = true;
+                                    resolveDateDetail = false;
+                                }
+                                if (isNaN(parseInt(tempDate))) {
+                                    this.recordFileError = true;
+                                    resolveDateDetail = false;
+                                }
+                                if (isNaN(parseInt(tempHour))) {
+                                    this.recordFileError = true;
+                                    resolveDateDetail = false;
+                                }
+
+                                if (resolveDateDetail) {
+                                    // get Date()
+                                    let tempDatetimeString: string = `${tempYear}-${tempMonth}-${tempDate} ${tempHour}:00:00`;
+
+                                    // get Date relay string
+                                    recordFile.datetime = Datetime.String2DateTime(
+                                        tempDatetimeString,
+                                        "YYYY-MM-DD HH:mm:SS"
+                                    );
+                                }
+                            } else {
+                                this.recordFileError = true;
+                                resolveDate = false;
                             }
+
+                            // reset datetime text
+                            if (!isNaN(recordFile.datetime.getTime())) {
+                                recordFile.datetimeText = Datetime.DateTime2String(
+                                    recordFile.datetime,
+                                    "YYYY-MM-DD HH:mm:ss"
+                                );
+                            }
+                        } catch (e) {
+                            this.recordFileError = true;
+                            console.log("Date error, e: ", e);
                         }
 
                         // check disable submit button
@@ -489,17 +524,40 @@ export default class SalesRecords extends Vue {
                             continue;
                         }
                         if (tempLoopValue.statusCode == 200) {
-                            this.recordFileContent[iNumber].apiMessage = `<span style='color:green;'>${this._('w_BOSalesRecords_ApiSuccess')}</span>`;
+                            this.recordFileContent[
+                                iNumber
+                            ].apiMessage = `<span style='color:green;'>${this._(
+                                "w_BOSalesRecords_ApiSuccess"
+                            )}</span>`;
                         } else if (tempLoopValue.statusCode == 400) {
-                            if (tempLoopValue.message == this.errorMessageFromServer.noSite) {
-                                this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorNoSite')}</span>`;
+                            if (
+                                tempLoopValue.message ==
+                                this.errorMessageFromServer.noSite
+                            ) {
+                                this.recordFileContent[
+                                    iNumber
+                                ].apiMessage = `<span style='color:red;'>${this._(
+                                    "w_BOSalesRecords_ErrorNoSite"
+                                )}</span>`;
                             } else {
-                                this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorServerError')}</span>`;
+                                this.recordFileContent[
+                                    iNumber
+                                ].apiMessage = `<span style='color:red;'>${this._(
+                                    "w_BOSalesRecords_ErrorServerError"
+                                )}</span>`;
                             }
                         } else if (tempLoopValue.statusCode == 401) {
-                            this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorNoPremission')}</span>`;
+                            this.recordFileContent[
+                                iNumber
+                            ].apiMessage = `<span style='color:red;'>${this._(
+                                "w_BOSalesRecords_ErrorNoPremission"
+                            )}</span>`;
                         } else {
-                            this.recordFileContent[iNumber].apiMessage = `<span style='color:red;'>${this._('w_BOSalesRecords_ErrorServerError')}</span>`;
+                            this.recordFileContent[
+                                iNumber
+                            ].apiMessage = `<span style='color:red;'>${this._(
+                                "w_BOSalesRecords_ErrorServerError"
+                            )}</span>`;
                         }
                     }
                     this.pageTo4();
