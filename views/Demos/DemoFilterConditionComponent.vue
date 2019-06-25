@@ -2,11 +2,12 @@
     <div>
         <!-- 父元件的data='傳到子元件的data' -->
         <filter_condition
-
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receivFiltereData"
         >
         </filter_condition>
+
+        <br>
 
         <analysis_filter_in_out
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
@@ -21,6 +22,17 @@
             :deviceMode="deviceMode"
         >
         </analysis_filter>
+
+        <b-button
+            @click="sendEmail"
+        >
+            {{ _('w_ReportTemplate_Recipient') }}
+        </b-button>
+
+        <br>
+
+        <recipient
+            @user-data="receivUSerData"></recipient>
 
     </div>
 </template>
@@ -52,9 +64,15 @@ export default class DemoFilterConditionComponent extends Vue {
 
     mounted() {}
 
-    async receivFiltereData(data) {
+    sendEmail() {}
+
+    receivFiltereData(data) {
         this.filterData = data;
         Vue.set(this.filterData, "siteIds0", data.siteIds[0]);
+    }
+
+    receivUSerData(data) {
+        console.log('data - ', data);
     }
 }
 </script>

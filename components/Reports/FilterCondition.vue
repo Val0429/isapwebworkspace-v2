@@ -159,46 +159,6 @@ enum EDesignationPeriod {
     components: {}
 })
 export class FilterCondition extends Vue {
-    // Prop
-    // @Prop({
-    //     type: String, // Boolean, Number, String, Array, Object
-    //     default: "000"
-    // })
-    // label: string;
-
-    // @Prop({
-    //     type: Object, // Boolean, Number, String, Array, Object
-    //     default: ""
-    // })
-    // filterData: object;
-
-    // @Prop({
-    //     type: Object, // Boolean, Number, String, Array, Object
-    //     default: {}
-    // })
-    // sitesSelectItem: object;
-    //
-    // @Prop({
-    //     type: Object, // Boolean, Number, String, Array, Object
-    //     default: {}
-    // })
-    // tagSelectItem: object;
-    //
-    // @Prop({
-    //     type: Object, // Boolean, Number, String, Array, Object
-    //     default: {}
-    // })
-    // regionTreeItem: object;
-
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
-
-    inputData = "Test input data";
-    modelData = "";
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
@@ -258,18 +218,7 @@ export class FilterCondition extends Vue {
         this.initRegionTreeSelect();
     }
 
-    async mounted() {
-        this.start();
-        this.modelData = this.value;
-    }
-
-    start() {
-        this.$emit("input", this.inputData);
-    }
-
-    putModel() {
-        this.$emit("model", this.modelData);
-    }
+    mounted() {}
 
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();

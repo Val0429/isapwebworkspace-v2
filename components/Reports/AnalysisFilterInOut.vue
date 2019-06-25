@@ -21,8 +21,6 @@
                     v-model="inputFormData.groupId"
                 >
                 </iv-form-selection>
-                <!--                                    v-if="inputFormData.groupId != undefined"
--->
             </template>
 
             <template #deviceId="{ $attrs, $listeners }">
@@ -94,12 +92,6 @@ enum EType {
     components: {}
 })
 export class AnalysisFilterInOut extends Vue {
-    // Prop
-    // @Prop({
-    //     type: String, // Boolean, Number, String, Array, Object
-    //     default: "000"
-    // })
-    // label: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
@@ -112,22 +104,6 @@ export class AnalysisFilterInOut extends Vue {
         default: ""
     })
     deviceMode: string;
-
-    // @Prop({
-    //     type: Object, // Boolean, Number, String, Array, Object
-    //     default: {}
-    // })
-    // regionTreeItem: object;
-
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
-
-    inputData = "Test input data";
-    modelData = "";
 
     // select 相關
     areaSelectItem: any = {};
@@ -151,28 +127,13 @@ export class AnalysisFilterInOut extends Vue {
         this.initSelectItemDevice();
     }
 
-    async mounted() {
-        this.start();
-        this.modelData = this.value;
-    }
-
-    start() {
-        this.$emit("input", this.inputData);
-    }
-
-    putModel() {
-        this.$emit("model", this.modelData);
-    }
+    mounted() {}
 
     @Watch("siteIds0", { deep: true })
     private onSiteIds0Changed(newVal, oldVal) {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
-    }
-
-    async test() {
-
     }
 
     async initSelectItemArea() {
