@@ -476,7 +476,7 @@ Vue.component("anlysis-dashboard", AnlysisDashboard);
         padding: 10px;
         background: #f9f9f9;
         color: black;
-        height: 10%;
+        height: 120px;
 
         .title {
             float: left;
