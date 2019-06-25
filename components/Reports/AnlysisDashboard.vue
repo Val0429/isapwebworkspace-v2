@@ -31,7 +31,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.averageOccupancy == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -54,7 +54,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.averageDwellTime == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -77,7 +77,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.demographic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -106,7 +106,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.vipBlacklist == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -169,7 +169,7 @@
                 </div>
             </div>
             <!--/col-->
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-122">
                 <div class="box info-box">
                     <div :class="pageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -192,7 +192,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -215,7 +215,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -239,7 +239,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2  col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
                     <div :class="pageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
