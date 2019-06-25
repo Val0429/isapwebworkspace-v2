@@ -1,4 +1,8 @@
 @media print {
+    @page {
+        margin: 0;
+    }
+
     * {
         -webkit-transition: none !important;
         transition: none !important;

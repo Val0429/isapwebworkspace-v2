@@ -197,16 +197,6 @@ Vue.component("fet-card-model-1", FETCardModel1);
 }
 
 @media print {
-    @page {
-        margin: 0;
-    }
-
-    body {
-        width: 992px !important;
-        min-width: 992px !important;
-        max-width: 992px !important;
-    }
-
     // 55mm, 86mm, 0.6395, 1.5636
     .fet-card-printer {
         width: 100%; // 55mm
