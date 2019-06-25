@@ -1,6 +1,6 @@
 <template>
     <div class="animated fadeIn">
-
+        test
     </div>
 </template>
 
@@ -15,7 +15,9 @@ export class PeakTimeRange extends Vue {
 
     @Prop({
         type: Object,
-        default: ""
+        default: function() {
+            return {};
+        }
     })
     timeRangeData: object;
 
@@ -25,7 +27,7 @@ export class PeakTimeRange extends Vue {
 }
 
 export default PeakTimeRange;
-Vue.component("peak-tiem-range", PeakTimeRange);
+Vue.component("peak-time-range", PeakTimeRange);
 </script>
 
 <style lang="scss" scoped>

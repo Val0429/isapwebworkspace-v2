@@ -3,6 +3,8 @@
         DemoReportComponent
         <anlysis-dashboard :anlysisData="data">
         </anlysis-dashboard>
+        <peak-time-range>
+        </peak-time-range>
     </div>
 </template>
 
