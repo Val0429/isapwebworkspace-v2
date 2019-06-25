@@ -3,7 +3,11 @@
         DemoReportComponent
         <anlysis-dashboard :anlysisData="dData">
         </anlysis-dashboard>
-        <peak-time-range :timeRangeData="pData">
+        <peak-time-range
+            :timeRangeData="pData"
+            :siteItem="siteItem"
+            v-on:changeSite="changeSite"
+        >
         </peak-time-range>
     </div>
 </template>
@@ -116,6 +120,12 @@ export default class DemoReportComponent extends Vue {
     pageType = PageType;
     sign = Sign;
 
+    siteItem = [
+        { value: "dfgsadg", text: "台北店" },
+        { value: "ewtewfg", text: "台中店" },
+        { value: "segasdg", text: "台南店" }
+    ];
+
     pData: IPeckTimeRange = {
         head: [],
         body: []
@@ -189,6 +199,8 @@ export default class DemoReportComponent extends Vue {
         }
     };
 
+    site = "";
+
     created() {}
 
     mounted() {
@@ -197,56 +209,102 @@ export default class DemoReportComponent extends Vue {
     }
 
     initPeakTimeRange() {
-        this.pData = {
-            head: [
-                "09:00-10:00",
-                "10:00-11:00",
-                "11:00-12:00",
-                "12:00-13:00",
-                "13:00-14:00",
-                "14:00-15:00",
-                "15:00-16:00",
-                "16:00-17:00",
-                "17:00-18:00"
-            ],
-            body: [
-                {
-                    title: "2019/1/1 Tue",
-                    context: [1, 2, 3, 4, 5, 1, 1, 4, 1]
-                },
-                {
-                    title: "2019/1/2 Wed",
-                    context: [5, 4, 5, 3, 2, 1, 2, 4, 1]
-                },
-                {
-                    title: "2019/1/3 Thu",
-                    context: [1, 3, 5, 4, 2, 1, 2, 1, 1]
-                },
-                {
-                    title: "2019/1/4 Fri",
-                    context: [1, 3, 4, 4, 2, 1, 3, 4, 1]
-                },
-                {
-                    title: "2019/1/5 Sat",
-                    context: [1, 3, 5, 4, 2, 1, 3, 2, 2]
-                },
-                {
-                    title: "2019/1/6 Sun",
-                    context: [1, 2, 1, 4, 2, 1, 3, 3, 1]
-                },
-                {
-                    title: "2019/1/7 Mon",
-                    context: [1, 1, 1, 2, 2, 1, 3, 4, 1]
-                }
-            ]
-        };
+        if (this.site == "site") {
+            this.pData = {
+                head: [
+                    "09:00-10:00",
+                    "10:00-11:00",
+                    "11:00-12:00",
+                    "12:00-13:00",
+                    "13:00-14:00",
+                    "14:00-15:00",
+                    "15:00-16:00",
+                    "16:00-17:00",
+                    "17:00-18:00"
+                ],
+                body: [
+                    {
+                        title: "2019/1/1 Tue",
+                        context: [1, 2, 3, 4, 5, 1, 1, 4, 1]
+                    },
+                    {
+                        title: "2019/1/2 Wed",
+                        context: [5, 4, 5, 3, 2, 1, 2, 4, 1]
+                    },
+                    {
+                        title: "2019/1/3 Thu",
+                        context: [1, 3, 5, 4, 2, 1, 2, 1, 1]
+                    },
+                    {
+                        title: "2019/1/4 Fri",
+                        context: [1, 3, 4, 4, 2, 1, 3, 4, 1]
+                    },
+                    {
+                        title: "2019/1/5 Sat",
+                        context: [1, 3, 5, 4, 2, 1, 3, 2, 2]
+                    },
+                    {
+                        title: "2019/1/6 Sun",
+                        context: [1, 2, 1, 4, 2, 1, 3, 3, 1]
+                    },
+                    {
+                        title: "2019/1/7 Mon",
+                        context: [1, 1, 1, 2, 2, 1, 3, 4, 1]
+                    }
+                ]
+            };
+        } else {
+            this.pData = {
+                head: [
+                    "09:00-10:00",
+                    "10:00-11:00",
+                    "11:00-12:00",
+                    "12:00-13:00",
+                    "13:00-14:00",
+                    "14:00-15:00",
+                    "15:00-16:00",
+                    "16:00-17:00",
+                    "17:00-18:00"
+                ],
+                body: [
+                    {
+                        title: "2019/1/1 Tue",
+                        context: [4, 2, 5, 4, 1, 2, 1, 4, 2]
+                    },
+                    {
+                        title: "2019/1/2 Wed",
+                        context: [5, 4, 5, 3, 4, 1, 2, 5, 1]
+                    },
+                    {
+                        title: "2019/1/3 Thu",
+                        context: [1, 3, 5, 4, 2, 1, 2, 1, 1]
+                    },
+                    {
+                        title: "2019/1/4 Fri",
+                        context: [1, 1, 4, 4, 3, 1, 3, 4, 1]
+                    },
+                    {
+                        title: "2019/1/5 Sat",
+                        context: [1, 3, 1, 4, 2, 1, 5, 2, 2]
+                    },
+                    {
+                        title: "2019/1/6 Sun",
+                        context: [1, 2, 1, 2, 2, 1, 3, 3, 1]
+                    },
+                    {
+                        title: "2019/1/7 Mon",
+                        context: [1, 1, 1, 2, 5, 2, 3, 4, 1]
+                    }
+                ]
+            };
+        }
     }
 
     initAnlyDashboardData() {
         this.dData = {
             pageType: PageType.traffic,
             traffic: {
-                sign: Sign.none,
+                sign: Sign.negative,
                 total: 43250,
                 value: 10,
                 valueRatio: 0.156
@@ -310,6 +368,11 @@ export default class DemoReportComponent extends Vue {
                 valueRatio: 0.01
             }
         };
+    }
+
+    changeSite(site) {
+        this.site = site;
+        console.log("changeSite - f", site);
     }
 }
 </script>
