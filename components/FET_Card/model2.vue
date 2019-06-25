@@ -26,6 +26,10 @@
                 :src="footerSrc"
             >
 
+            <div class="fet-card-footer-title">
+                {{ footerTitle }}
+            </div>
+
         </div>
 
     </div>
@@ -38,7 +42,7 @@ import IconBase64 from "./models/IconBase64";
 @Component({
     components: {}
 })
-class FETCardModel1 extends Vue {
+class FETCardModel2 extends Vue {
     // Prop start
     @Prop({
         type: String,
@@ -63,6 +67,12 @@ class FETCardModel1 extends Vue {
         default: ""
     })
     cardNumber: string;
+
+    @Prop({
+        type: String,
+        default: ""
+    })
+    footerTitle: string;
     // Prop end
 
     logoSrc: string = "";
@@ -80,13 +90,13 @@ class FETCardModel1 extends Vue {
     destroyed() {}
 
     initSrc() {
-        this.logoSrc = IconBase64.model1Logo;
-        this.footerSrc = IconBase64.model1Footer;
+        this.logoSrc = IconBase64.model2Logo;
+        this.footerSrc = IconBase64.model2Footer;
     }
 }
 
-export default FETCardModel1;
-Vue.component("fet-card-model-1", FETCardModel1);
+export default FETCardModel2;
+Vue.component("fet-card-model-2", FETCardModel2);
 </script>
 
 <style lang="scss" scoped>
@@ -150,6 +160,16 @@ Vue.component("fet-card-model-1", FETCardModel1);
             width: 100%;
             height: 80px; // 8mm
             top: 1535px; // top: 79mm;
+        }
+        .fet-card-footer-title {
+            position: absolute;
+            z-index: 100;
+            width: 100%;
+            height: 60px; // 8mm
+            top: 1531px; // top: 79mm;
+            text-align: center;
+            font-size: 35px; // 2.5mm
+            color: #fff;
         }
     }
 }
