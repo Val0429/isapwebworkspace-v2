@@ -1,0 +1,481 @@
+<template>
+    <div>
+        <b-button @click="test">test</b-button>
+
+        <iv-form
+            :interface="IAnalysisFilterForm()"
+            @update:areaId="whenSelectedAreaId($event)"
+            @update:groupId="whenSelectedGroupId($event)"
+        >
+            <template #areaId="{ $attrs, $listeners }" >
+                <iv-form-selection
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.areaId"
+                >
+                </iv-form-selection>
+            </template>
+
+
+            <template #groupId="{ $attrs, $listeners }" >
+                <iv-form-selection
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.groupId"
+                >
+                </iv-form-selection>
+<!--                                    v-if="inputFormData.groupId != undefined"
+-->
+            </template>
+
+            <template #deviceId="{ $attrs, $listeners }" >
+                <iv-form-selection
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.deviceId"
+                >
+                </iv-form-selection>
+            </template>
+
+            <template #selectInOrOut="{ $attrs, $listeners }">
+
+                <b-form-radio-group
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.type"
+                    class="h-25 click_button"
+                    buttons
+                    button-variant="outline-success"
+                    name="radio-btn-outline"
+                    :options="typeSelectItem"
+                ></b-form-radio-group>
+            </template>
+
+            <template #clickButtonsSubmit>
+                <b-button
+                    class="h-25 ml-3 click_button submit"
+                    @click="doSubmit"
+                >
+                    {{ _('wb_Submit') }}
+                </b-button>
+
+
+            </template>
+
+            <template #clickButtonsReset>
+                <b-button
+                    class="h-25 ml-3 click_button reset"
+                    @click="doReset"
+                >
+                    {{ _('wb_Reset') }}
+                </b-button>
+            </template>
+
+        </iv-form>
+
+    </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import ResponseFilter from "@/services/ResponseFilter";
+
+enum EPageStep {
+    none = "none",
+    showResult = "showResult",
+    chooseTree = "chooseTree"
+}
+
+enum EType {
+    in = "in",
+    out = "out",
+}
+
+@Component({
+    components: {}
+})
+export class AnalysisFilterInOut extends Vue {
+    // Prop
+    // @Prop({
+    //     type: String, // Boolean, Number, String, Array, Object
+    //     default: "000"
+    // })
+    // label: string;
+
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: ''
+    })
+    siteIds0: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: ''
+    })
+    deviceMode: string;
+
+    // @Prop({
+    //     type: Object, // Boolean, Number, String, Array, Object
+    //     default: {}
+    // })
+    // regionTreeItem: object;
+
+    // Model
+    @Model("model", {
+        type: String,
+        default: ""
+    })
+    value: string;
+
+    inputData = "Test input data";
+    modelData = "";
+
+    // select 相關
+    areaSelectItem: any = {};
+    deviceGroupSelectItem: any = {};
+    deviceSelectItem: any = {};
+    typeSelectItem:  any = [
+        { value: EType.in, text: EType.in },
+        { value: EType.out, text: EType.out },
+    ];
+
+    inputFormData: any = {
+        areaId: '' ,
+        groupId: '',
+        deviceId: '',
+        type: 'in'
+    };
+
+
+    created() {
+        // console.log('son siteIds0 - ', this.siteIds0);
+        // console.log('areaSelectItem - ', this.areaSelectItem);
+    }
+
+    async mounted() {
+        this.start();
+        this.modelData = this.value;
+        console.log('son siteIds0 - ', this.siteIds0);
+    }
+
+    start() {
+        this.$emit("input", this.inputData);
+    }
+
+    putModel() {
+        this.$emit("model", this.modelData);
+    }
+
+    async test() {
+        console.log('siteIds0 - ', this.siteIds0);
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemDevice();
+    }
+
+
+
+    async initSelectItemArea() {
+
+        let tempAreaSelectItem = {};
+
+        const readParam: {
+            siteId: string;
+        } = {
+            siteId: this.siteIds0,
+        };
+
+        if (this.siteIds0 !== undefined && this.siteIds0 !== '') {
+            await this.$server
+                .R("/location/area/all", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 sitesSelectItem 的 key 的方式
+                            tempAreaSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                            // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                        }
+                        this.areaSelectItem = tempAreaSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else {
+            return false;
+        }
+        console.log('this.areaSelectItem - ', this.areaSelectItem);
+    }
+
+    async initSelectItemDeviceGroup() {
+
+        let tempDeviceGroupSelectItem = {};
+
+        let readParam: {
+            siteId: string;
+            areaId?: string;
+            mode: string;
+        } = {
+            siteId: this.siteIds0,
+            mode: this.deviceMode
+        };
+
+        if ((this.siteIds0 !== undefined && this.siteIds0 !== '') && (this.inputFormData.areaId === undefined || this.inputFormData.areaId === '')) {
+            await this.$server
+                .R("/device/group/all", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
+                            tempDeviceGroupSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else if (this.siteIds0 !== undefined && (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '')) {
+            readParam.areaId = this.inputFormData.areaId;
+
+            await this.$server
+                .R("/device/group/all", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
+                            tempDeviceGroupSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else {
+            return false;
+        }
+        console.log('this.deviceGroupSelectItem - ', this.deviceGroupSelectItem);
+    }
+
+    async initSelectItemDevice() {
+
+        let tempDeviceSelectItem = {};
+
+        const readParam: {
+            siteId: string;
+            areaId?: string;
+            groupId?: string;
+            mode: string;
+        } = {
+            siteId: this.siteIds0,
+            mode: this.deviceMode
+        };
+
+        if ((this.siteIds0 !== undefined && this.siteIds0 !== '') &&
+            (this.inputFormData.areaId === undefined || this.inputFormData.areaId === '') &&
+            (this.inputFormData.groupId === undefined || this.inputFormData.groupId === '')) {
+
+            await this.$server
+                .R("/device", readParam)
+                .then((response: any) => {
+                    if (response.results.length > 0) {
+                        for (const returnValue of response.results) {
+                            // 自定義 tempDeviceSelectItem 的 key 的方式
+                            tempDeviceSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceSelectItem = tempDeviceSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else if ((this.siteIds0 !== undefined && this.siteIds0 !== '') &&
+            (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '') &&
+            (this.inputFormData.groupId === undefined || this.inputFormData.groupId === '')) {
+
+            readParam.areaId = this.inputFormData.areaId;
+
+            console.log('readParam - ', readParam);
+            await this.$server
+                .R("/device", readParam)
+                .then((response: any) => {
+                    if (response.results.length > 0) {
+                        for (const returnValue of response.results) {
+                            // 自定義 tempDeviceSelectItem 的 key 的方式
+                            tempDeviceSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceSelectItem = tempDeviceSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+
+        } else if((this.siteIds0 !== undefined && this.siteIds0 !== '') &&
+            (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '') &&
+            (this.inputFormData.groupId !== undefined || this.inputFormData.groupId !== '')) {
+            readParam.groupId = this.inputFormData.groupId;
+
+            await this.$server
+                .R("/device", readParam)
+                .then((response: any) => {
+                    if (response.results.length > 0) {
+                        for (const returnValue of response.results) {
+                            // 自定義 tempDeviceSelectItem 的 key 的方式
+                            tempDeviceSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceSelectItem = tempDeviceSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+        else {
+            return false;
+        }
+        console.log('this.deviceSelectItem - ', this.deviceMode, this.deviceSelectItem);
+    }
+
+    async whenSelectedAreaId (){
+       //  console.log('this.inputFormData.areaId - ', this.inputFormData.areaId);
+        if (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '') {
+            this.inputFormData.groupId = '';
+            this.inputFormData.deviceId = '';
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+        } else {
+            return false;
+        }
+    }
+
+    async whenSelectedGroupId (){
+        console.log('this.inputFormData.groupId - ', this.inputFormData.groupId);
+        if (this.inputFormData.groupId !== undefined || this.inputFormData.groupId !== '') {
+            this.inputFormData.deviceId = '';
+            await this.initSelectItemDevice();
+        } else {
+            return false;
+        }
+    }
+
+    doSubmit() {
+        // TODO: wait api
+        this.$emit("submit-data", this.inputFormData);
+        this.inputFormData = {
+            areaId: []
+        };
+    }
+
+    async doReset() {
+        this.inputFormData = {
+            areaId: '' ,
+            groupId: '',
+            deviceId: '',
+            type: 'in'
+        };
+
+        this.inputFormData.groupId = '';
+        this.inputFormData.deviceId = '';
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+    }
+
+
+    IAnalysisFilterForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_Areas")}
+                 * @uiColumnGroup - analysis
+                 */
+                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_DeviceGroups")}
+                 * @uiColumnGroup - analysis
+                 */
+                groupId?: ${toEnumInterface(this.deviceGroupSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Devices")}
+                 * @uiColumnGroup - analysis
+                 */
+                deviceId?: ${toEnumInterface(this.deviceSelectItem as any, false)};
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                selectInOrOut?: any;
+
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                clickButtonsSubmit?: any;
+
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                clickButtonsReset?: any;
+
+            }
+        `
+    }
+}
+
+export default AnalysisFilterInOut;
+Vue.component("analysis_filter_in_out", AnalysisFilterInOut);
+</script>
+
+<style lang="scss" scoped>
+    .click_button {
+        margin-top: 27px;
+    }
+    .submit {
+        background-color: #5C7895;
+        border: 1px solid #5C7895;
+    }
+    .reset {
+        background-color: #D7D7D7;
+        border: 1px solid #D7D7D7;
+    }
+
+</style>
