@@ -116,7 +116,7 @@ $({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(Demo
 $({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
 $({ path: '/demos/sort_select', name: 'Sort Select', icon: 'fa-check', permission: false })(DemoSortSelect);
 $({ path: '/demos/report_table_component', name: 'Report Table Component', icon: 'fa-check', permission: false })(DemoReportTableComponent);
-$({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component', icon: 'fa-check', permission: false })(DemoFilterConditionComponent);
+$({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component', icon: 'fa-check' })(DemoFilterConditionComponent);
 $({ path: '/demos/fet_card_print', name: 'FET ID Card Print', icon: 'fa-print', permission: false })(DemoFETCardPrint);
 
 // Dashboard

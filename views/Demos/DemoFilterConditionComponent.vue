@@ -11,16 +11,12 @@
         </filter_condition>
 
 
-        <analysis_filter
-            :siteIds0="filterData.siteIds0"
-        >
-
-<!--
+        <analysis_filter_in_out
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
-
--->
-
-        </analysis_filter>
+            :siteIds0="filterData.siteIds0"
+            :deviceMode="deviceMode"
+        >
+        </analysis_filter_in_out>
     </div>
 </template>
 
@@ -37,12 +33,20 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 
+enum EDeviceMode {
+    peopleCounting = 'peopleCounting',
+    dwellTime = 'dwellTime',
+    demographic = 'demographic',
+    heatmap = 'heatmap',
+    visitor = 'visitor',
+    humanDetection = 'humanDetection',
+}
+
 @Component
 export default class DemoFilterConditionComponent extends Vue {
     // select 相關
     sitesSelectItem: any = {};
     tagSelectItem: any = {};
-
 
     // tree
     selectType = ERegionType.site;
@@ -51,6 +55,9 @@ export default class DemoFilterConditionComponent extends Vue {
 
     // 接收 submit 相關
     filterData: any = {};
+
+    // 網子元件傳資料
+    deviceMode: string = EDeviceMode.peopleCounting
 
     created() {
         this.initSelectItemSite();
@@ -143,7 +150,9 @@ export default class DemoFilterConditionComponent extends Vue {
 
     async receivFiltereData(data) {
         this.filterData = data;
+        this.filterData.siteIds0 = '';
         this.filterData.siteIds0 = data.siteIds[0];
+        console.log('father siteIds0 ', this.filterData.siteIds0);
     }
 }
 </script>
