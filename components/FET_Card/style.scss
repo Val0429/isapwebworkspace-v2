@@ -1,0 +1,34 @@
+@media print {
+    header.app-header {
+        display: none;
+    }
+    footer.footer {
+        &.app-footer {
+            display: none;
+        }
+    }
+    div.app-body {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        .sidebar {
+            display: none;
+        }
+        main.main {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            .breadcrumb {
+                display: none;
+            }
+            .container-fluid {
+                margin: 0 !important;
+                padding: 0 !important;
+                border: 0 !important;
+            }
+        }
+    }
+    .animated > :not(.card-model) {
+        display: none;
+    }
+}
