@@ -16,6 +16,14 @@
             :deviceMode="deviceMode"
         >
         </analysis_filter_in_out>
+
+        <analysis_filter
+            v-if="filterData.siteIds && filterData.siteIds.length === 1"
+            :siteIds0="filterData.siteIds0"
+            :deviceMode="deviceMode"
+        >
+        </analysis_filter>
+
     </div>
 </template>
 
@@ -56,7 +64,7 @@ export default class DemoFilterConditionComponent extends Vue {
     filterData: any = {};
 
     // 網子元件傳資料
-    deviceMode: string = EDeviceMode.peopleCounting;
+    deviceMode: string = EDeviceMode.humanDetection;
 
     created() {
         this.initSelectItemSite();
