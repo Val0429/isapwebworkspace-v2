@@ -358,6 +358,9 @@ export class AnalysisFilter extends Vue {
                         }
                         this.deviceSelectItem = tempDeviceSelectItem;
                     }
+                    if (response.results.length === 0) {
+                        this.deviceSelectItem = {};
+                    }
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {

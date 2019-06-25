@@ -172,23 +172,23 @@ export class FilterCondition extends Vue {
     // })
     // filterData: object;
 
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    sitesSelectItem: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    tagSelectItem: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    regionTreeItem: object;
+    // @Prop({
+    //     type: Object, // Boolean, Number, String, Array, Object
+    //     default: {}
+    // })
+    // sitesSelectItem: object;
+    //
+    // @Prop({
+    //     type: Object, // Boolean, Number, String, Array, Object
+    //     default: {}
+    // })
+    // tagSelectItem: object;
+    //
+    // @Prop({
+    //     type: Object, // Boolean, Number, String, Array, Object
+    //     default: {}
+    // })
+    // regionTreeItem: object;
 
     // Model
     @Model("model", {
@@ -203,6 +203,15 @@ export class FilterCondition extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
+    // select 相關
+    sitesSelectItem: any = {};
+    tagSelectItem: any = {};
+
+    // tree
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
+
 
     inputFormData: any = {
         siteIds: [],
@@ -212,9 +221,9 @@ export class FilterCondition extends Vue {
         designationPeriod: 'today',
     };
 
-    // tree 相關
-    selectType = ERegionType.site;
-    selecteds: IRegionTreeSelected[] = [];
+    // // tree 相關
+    // selectType = ERegionType.site;
+    // selecteds: IRegionTreeSelected[] = [];
 
     // date 相關
     selectPeriodAddWay: string = EAddPeriodSelect.period;
@@ -243,7 +252,10 @@ export class FilterCondition extends Vue {
     };
 
     created() {
-
+        this.initSelectItemSite();
+        this.initSelectItemTag();
+        this.initSelectItemTree();
+        this.initRegionTreeSelect();
     }
 
     async mounted() {
@@ -257,6 +269,85 @@ export class FilterCondition extends Vue {
 
     putModel() {
         this.$emit("model", this.modelData);
+    }
+
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
+
+    async initSelectItemSite() {
+        let tempSitesSelectItem = {};
+
+        const readAllSiteParam: {
+            type: string;
+        } = {
+            type: "all"
+        };
+
+        await this.$server
+            .R("/location/site/all", readAllSiteParam)
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        tempSitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.sitesSelectItem = tempSitesSelectItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemTag() {
+        let tempTagSelectItem = {};
+
+        await this.$server
+            .R("/tag/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 tagSelectItem 的 key 的方式
+                        tempTagSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.tagSelectItem = tempTagSelectItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemTree() {
+        await this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
     }
 
     tempSaveInputData(data) {
