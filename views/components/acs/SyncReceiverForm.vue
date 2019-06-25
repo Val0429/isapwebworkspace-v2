@@ -2,11 +2,15 @@
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
 
-        <template #view.receivers="{$attrs, $listeners}" >
-            <div class="col-md-6" v-for="item of $attrs.value" v-bind:key="item.receivename+item.emailaddress">
-                {{item.receivename}} -
-                {{item.emailaddress}}
-            </div>
+        <template #view.name="{$attrs, $listeners}" >            
+            <b-container v-for="(item, index) of $attrs.row.receivers" v-bind:key="index">                
+                {{item.receivename}}                 
+            </b-container>            
+        </template> 
+        <template #view.email="{$attrs, $listeners}" >            
+            <b-container v-for="(item, index) of $attrs.row.receivers" v-bind:key="index">                
+                {{item.emailaddress}}                 
+            </b-container>            
         </template> 
         <template #add.receivers="{$attrs, $listeners}">
             <ivc-syncreceiver
@@ -45,10 +49,13 @@ export default class SyncReceiverForm extends Vue implements IFormQuick {
                 return `
                 interface {                    
                     /**
-                    * @uiLabel - ${this._("receivers")}                    
+                    * @uiLabel - ${this._("name")}
                     */
-                    receivers: string;
-                                      
+                    name: string;
+                    /**
+                    * @uiLabel - ${this._("w_Email")}
+                    */
+                    email: string;     
                 }
                 `;
             case EFormQuick.Add:
