@@ -1,6 +1,9 @@
 <template>
     <div class="animated fadeIn">
-        <b-button @click="printCard">
+        <b-button
+            @click="printCard"
+            style="position:fixed; top: 100px; left: 100p; z-index :10000;"
+        >
             Print
         </b-button>
         <fet-card-model-1
