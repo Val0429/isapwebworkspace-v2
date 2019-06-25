@@ -10,7 +10,6 @@
         >
         </filter_condition>
 
-
         <analysis_filter_in_out
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
             :siteIds0="filterData.siteIds0"
@@ -34,12 +33,12 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 
 enum EDeviceMode {
-    peopleCounting = 'peopleCounting',
-    dwellTime = 'dwellTime',
-    demographic = 'demographic',
-    heatmap = 'heatmap',
-    visitor = 'visitor',
-    humanDetection = 'humanDetection',
+    peopleCounting = "peopleCounting",
+    dwellTime = "dwellTime",
+    demographic = "demographic",
+    heatmap = "heatmap",
+    visitor = "visitor",
+    humanDetection = "humanDetection"
 }
 
 @Component
@@ -57,7 +56,7 @@ export default class DemoFilterConditionComponent extends Vue {
     filterData: any = {};
 
     // 網子元件傳資料
-    deviceMode: string = EDeviceMode.peopleCounting
+    deviceMode: string = EDeviceMode.peopleCounting;
 
     created() {
         this.initSelectItemSite();
@@ -147,12 +146,12 @@ export default class DemoFilterConditionComponent extends Vue {
             });
     }
 
-
     async receivFiltereData(data) {
         this.filterData = data;
-        this.filterData.siteIds0 = '';
-        this.filterData.siteIds0 = data.siteIds[0];
-        console.log('father siteIds0 ', this.filterData.siteIds0);
+        // this.filterData.siteIds0 = '';
+        Vue.set(this.filterData, "siteIds0", data.siteIds[0]);
+        // this.filterData.siteIds0 = data.siteIds[0];
+        console.log("father siteIds0 ", this.filterData.siteIds0);
     }
 }
 </script>

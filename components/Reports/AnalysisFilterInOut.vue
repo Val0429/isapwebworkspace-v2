@@ -1,13 +1,11 @@
 <template>
     <div>
-        <b-button @click="test">test</b-button>
-
         <iv-form
             :interface="IAnalysisFilterForm()"
             @update:areaId="whenSelectedAreaId($event)"
             @update:groupId="whenSelectedGroupId($event)"
         >
-            <template #areaId="{ $attrs, $listeners }" >
+            <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -16,19 +14,18 @@
                 </iv-form-selection>
             </template>
 
-
-            <template #groupId="{ $attrs, $listeners }" >
+            <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
                 >
                 </iv-form-selection>
-<!--                                    v-if="inputFormData.groupId != undefined"
+                <!--                                    v-if="inputFormData.groupId != undefined"
 -->
             </template>
 
-            <template #deviceId="{ $attrs, $listeners }" >
+            <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -59,7 +56,6 @@
                     {{ _('wb_Submit') }}
                 </b-button>
 
-
             </template>
 
             <template #clickButtonsReset>
@@ -77,7 +73,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import ResponseFilter from "@/services/ResponseFilter";
 
@@ -89,7 +92,7 @@ enum EPageStep {
 
 enum EType {
     in = "in",
-    out = "out",
+    out = "out"
 }
 
 @Component({
@@ -103,16 +106,15 @@ export class AnalysisFilterInOut extends Vue {
     // })
     // label: string;
 
-
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
-        default: ''
+        default: ""
     })
     siteIds0: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
-        default: ''
+        default: ""
     })
     deviceMode: string;
 
@@ -136,28 +138,27 @@ export class AnalysisFilterInOut extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
-    typeSelectItem:  any = [
+    typeSelectItem: any = [
         { value: EType.in, text: EType.in },
-        { value: EType.out, text: EType.out },
+        { value: EType.out, text: EType.out }
     ];
 
     inputFormData: any = {
-        areaId: '' ,
-        groupId: '',
-        deviceId: '',
-        type: 'in'
+        areaId: "",
+        groupId: "",
+        deviceId: "",
+        type: "in"
     };
 
-
     created() {
-        // console.log('son siteIds0 - ', this.siteIds0);
-        // console.log('areaSelectItem - ', this.areaSelectItem);
+        this.initSelectItemArea();
+        this.initSelectItemDeviceGroup();
+        this.initSelectItemDevice();
     }
 
     async mounted() {
         this.start();
         this.modelData = this.value;
-        console.log('son siteIds0 - ', this.siteIds0);
     }
 
     start() {
@@ -168,26 +169,27 @@ export class AnalysisFilterInOut extends Vue {
         this.$emit("model", this.modelData);
     }
 
-    async test() {
-        console.log('siteIds0 - ', this.siteIds0);
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
-        await this.initSelectItemDevice();
+    @Watch("siteIds0", { deep: true })
+    private onSiteIds0Changed(newVal, oldVal) {
+        this.initSelectItemArea();
+        this.initSelectItemDeviceGroup();
+        this.initSelectItemDevice();
     }
 
+    async test() {
 
+    }
 
     async initSelectItemArea() {
-
         let tempAreaSelectItem = {};
 
         const readParam: {
             siteId: string;
         } = {
-            siteId: this.siteIds0,
+            siteId: this.siteIds0
         };
 
-        if (this.siteIds0 !== undefined && this.siteIds0 !== '') {
+        if (this.siteIds0 !== undefined && this.siteIds0 !== "") {
             await this.$server
                 .R("/location/area/all", readParam)
                 .then((response: any) => {
@@ -211,11 +213,9 @@ export class AnalysisFilterInOut extends Vue {
         } else {
             return false;
         }
-        console.log('this.areaSelectItem - ', this.areaSelectItem);
     }
 
     async initSelectItemDeviceGroup() {
-
         let tempDeviceGroupSelectItem = {};
 
         let readParam: {
@@ -227,7 +227,12 @@ export class AnalysisFilterInOut extends Vue {
             mode: this.deviceMode
         };
 
-        if ((this.siteIds0 !== undefined && this.siteIds0 !== '') && (this.inputFormData.areaId === undefined || this.inputFormData.areaId === '')) {
+        if (
+            this.siteIds0 !== undefined &&
+            this.siteIds0 !== "" &&
+            (this.inputFormData.areaId === undefined ||
+                this.inputFormData.areaId === "")
+        ) {
             await this.$server
                 .R("/device/group/all", readParam)
                 .then((response: any) => {
@@ -247,7 +252,11 @@ export class AnalysisFilterInOut extends Vue {
                     console.log(e);
                     return false;
                 });
-        } else if (this.siteIds0 !== undefined && (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '')) {
+        } else if (
+            this.siteIds0 !== undefined &&
+            (this.inputFormData.areaId !== undefined ||
+                this.inputFormData.areaId !== "")
+        ) {
             readParam.areaId = this.inputFormData.areaId;
 
             await this.$server
@@ -272,11 +281,9 @@ export class AnalysisFilterInOut extends Vue {
         } else {
             return false;
         }
-        console.log('this.deviceGroupSelectItem - ', this.deviceGroupSelectItem);
     }
 
     async initSelectItemDevice() {
-
         let tempDeviceSelectItem = {};
 
         const readParam: {
@@ -289,10 +296,14 @@ export class AnalysisFilterInOut extends Vue {
             mode: this.deviceMode
         };
 
-        if ((this.siteIds0 !== undefined && this.siteIds0 !== '') &&
-            (this.inputFormData.areaId === undefined || this.inputFormData.areaId === '') &&
-            (this.inputFormData.groupId === undefined || this.inputFormData.groupId === '')) {
-
+        if (
+            this.siteIds0 !== undefined &&
+            this.siteIds0 !== "" &&
+            (this.inputFormData.areaId === undefined ||
+                this.inputFormData.areaId === "") &&
+            (this.inputFormData.groupId === undefined ||
+                this.inputFormData.groupId === "")
+        ) {
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -312,13 +323,16 @@ export class AnalysisFilterInOut extends Vue {
                     console.log(e);
                     return false;
                 });
-        } else if ((this.siteIds0 !== undefined && this.siteIds0 !== '') &&
-            (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '') &&
-            (this.inputFormData.groupId === undefined || this.inputFormData.groupId === '')) {
-
+        } else if (
+            this.siteIds0 !== undefined &&
+            this.siteIds0 !== "" &&
+            (this.inputFormData.areaId !== undefined ||
+                this.inputFormData.areaId !== "") &&
+            (this.inputFormData.groupId === undefined ||
+                this.inputFormData.groupId === "")
+        ) {
             readParam.areaId = this.inputFormData.areaId;
 
-            console.log('readParam - ', readParam);
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -338,10 +352,14 @@ export class AnalysisFilterInOut extends Vue {
                     console.log(e);
                     return false;
                 });
-
-        } else if((this.siteIds0 !== undefined && this.siteIds0 !== '') &&
-            (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '') &&
-            (this.inputFormData.groupId !== undefined || this.inputFormData.groupId !== '')) {
+        } else if (
+            this.siteIds0 !== undefined &&
+            this.siteIds0 !== "" &&
+            (this.inputFormData.areaId !== undefined ||
+                this.inputFormData.areaId !== "") &&
+            (this.inputFormData.groupId !== undefined ||
+                this.inputFormData.groupId !== "")
+        ) {
             readParam.groupId = this.inputFormData.groupId;
 
             await this.$server
@@ -363,18 +381,18 @@ export class AnalysisFilterInOut extends Vue {
                     console.log(e);
                     return false;
                 });
-        }
-        else {
+        } else {
             return false;
         }
-        console.log('this.deviceSelectItem - ', this.deviceMode, this.deviceSelectItem);
     }
 
-    async whenSelectedAreaId (){
-       //  console.log('this.inputFormData.areaId - ', this.inputFormData.areaId);
-        if (this.inputFormData.areaId !== undefined || this.inputFormData.areaId !== '') {
-            this.inputFormData.groupId = '';
-            this.inputFormData.deviceId = '';
+    async whenSelectedAreaId() {
+        if (
+            this.inputFormData.areaId !== undefined ||
+            this.inputFormData.areaId !== ""
+        ) {
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
             await this.initSelectItemDeviceGroup();
             await this.initSelectItemDevice();
         } else {
@@ -382,10 +400,16 @@ export class AnalysisFilterInOut extends Vue {
         }
     }
 
-    async whenSelectedGroupId (){
-        console.log('this.inputFormData.groupId - ', this.inputFormData.groupId);
-        if (this.inputFormData.groupId !== undefined || this.inputFormData.groupId !== '') {
-            this.inputFormData.deviceId = '';
+    async whenSelectedGroupId() {
+        console.log(
+            "this.inputFormData.groupId - ",
+            this.inputFormData.groupId
+        );
+        if (
+            this.inputFormData.groupId !== undefined ||
+            this.inputFormData.groupId !== ""
+        ) {
+            this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
         } else {
             return false;
@@ -402,18 +426,18 @@ export class AnalysisFilterInOut extends Vue {
 
     async doReset() {
         this.inputFormData = {
-            areaId: '' ,
-            groupId: '',
-            deviceId: '',
-            type: 'in'
+            areaId: "",
+            groupId: "",
+            deviceId: "",
+            type: "in"
         };
 
-        this.inputFormData.groupId = '';
-        this.inputFormData.deviceId = '';
+        this.inputFormData.groupId = "";
+        this.inputFormData.deviceId = "";
         await this.initSelectItemArea();
         await this.initSelectItemDeviceGroup();
+        await this.initSelectItemDevice();
     }
-
 
     IAnalysisFilterForm() {
         return `
@@ -430,14 +454,20 @@ export class AnalysisFilterInOut extends Vue {
                  * @uiLabel - ${this._("w_DeviceGroups")}
                  * @uiColumnGroup - analysis
                  */
-                groupId?: ${toEnumInterface(this.deviceGroupSelectItem as any, false)};
+                groupId?: ${toEnumInterface(
+                    this.deviceGroupSelectItem as any,
+                    false
+                )};
 
 
                 /**
                  * @uiLabel - ${this._("w_Devices")}
                  * @uiColumnGroup - analysis
                  */
-                deviceId?: ${toEnumInterface(this.deviceSelectItem as any, false)};
+                deviceId?: ${toEnumInterface(
+                    this.deviceSelectItem as any,
+                    false
+                )};
 
                 /**
                  * @uiColumnGroup - analysis
@@ -457,7 +487,7 @@ export class AnalysisFilterInOut extends Vue {
                 clickButtonsReset?: any;
 
             }
-        `
+        `;
     }
 }
 
@@ -466,16 +496,15 @@ Vue.component("analysis_filter_in_out", AnalysisFilterInOut);
 </script>
 
 <style lang="scss" scoped>
-    .click_button {
-        margin-top: 27px;
-    }
-    .submit {
-        background-color: #5C7895;
-        border: 1px solid #5C7895;
-    }
-    .reset {
-        background-color: #D7D7D7;
-        border: 1px solid #D7D7D7;
-    }
-
+.click_button {
+    margin-top: 27px;
+}
+.submit {
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+}
+.reset {
+    background-color: #d7d7d7;
+    border: 1px solid #d7d7d7;
+}
 </style>

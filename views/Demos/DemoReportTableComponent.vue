@@ -1,9 +1,9 @@
 <template>
     <div>
         DemoReportComponent
-        <anlysis-dashboard :anlysisData="data">
+        <anlysis-dashboard :anlysisData="dData">
         </anlysis-dashboard>
-        <peak-time-range>
+        <peak-time-range :timeRangeData="pData">
         </peak-time-range>
     </div>
 </template>
@@ -101,12 +101,27 @@ interface IReportDashboard {
     };
 }
 
+interface IPeckTimeRange {
+    head: string[];
+    body: IPeckTimeRangeBody[];
+}
+
+interface IPeckTimeRangeBody {
+    title: string;
+    context: number[];
+}
+
 @Component
 export default class DemoReportComponent extends Vue {
     pageType = PageType;
     sign = Sign;
 
-    data: IReportDashboard = {
+    pData: IPeckTimeRange = {
+        head: [],
+        body: []
+    };
+
+    dData: IReportDashboard = {
         pageType: PageType.none,
         traffic: {
             sign: Sign.none,
@@ -177,11 +192,58 @@ export default class DemoReportComponent extends Vue {
     created() {}
 
     mounted() {
+        this.initPeakTimeRange();
         this.initAnlyDashboardData();
     }
 
+    initPeakTimeRange() {
+        this.pData = {
+            head: [
+                "09:00-10:00",
+                "10:00-11:00",
+                "11:00-12:00",
+                "12:00-13:00",
+                "13:00-14:00",
+                "14:00-15:00",
+                "15:00-16:00",
+                "16:00-17:00",
+                "17:00-18:00"
+            ],
+            body: [
+                {
+                    title: "2019/1/1 Tue",
+                    context: [1, 2, 3, 4, 5, 1, 1, 4, 1]
+                },
+                {
+                    title: "2019/1/2 Wed",
+                    context: [5, 4, 5, 3, 2, 1, 2, 4, 1]
+                },
+                {
+                    title: "2019/1/3 Thu",
+                    context: [1, 3, 5, 4, 2, 1, 2, 1, 1]
+                },
+                {
+                    title: "2019/1/4 Fri",
+                    context: [1, 3, 4, 4, 2, 1, 3, 4, 1]
+                },
+                {
+                    title: "2019/1/5 Sat",
+                    context: [1, 3, 5, 4, 2, 1, 3, 2, 2]
+                },
+                {
+                    title: "2019/1/6 Sun",
+                    context: [1, 2, 1, 4, 2, 1, 3, 3, 1]
+                },
+                {
+                    title: "2019/1/7 Mon",
+                    context: [1, 1, 1, 2, 2, 1, 3, 4, 1]
+                }
+            ]
+        };
+    }
+
     initAnlyDashboardData() {
-        this.data = {
+        this.dData = {
             pageType: PageType.traffic,
             traffic: {
                 sign: Sign.none,

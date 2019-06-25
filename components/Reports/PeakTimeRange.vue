@@ -1,80 +1,22 @@
 <template>
     <div class="animated fadeIn">
-        <div>Peak hours</div>
+        <title>Peak hours</title>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th></th>
-                    <th
-                        :class="showHoursRange(item)"
-                        v-for="(item, key, index) in timeRangeData.head"
-                    >
+                    <th v-for="(item, key, index) in timeRangeData.head">
                         {{item}}
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>2012/01/01</td>
-                    <td>Member</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Paĉjo Jadon</td>
-                </tr>
-
-                <tr>
-                    <td>2012/01/01</td>
-                    <td>Member</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Pompeius René</td>
-                    <td>Paĉjo Jadon</td>
-                </tr>
-                <tr>
-
-                    <td>2012/02/01</td>
-                    <td>Staff</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                </tr>
-                <tr>
-                    <td>2012/01/01</td>
-                    <td>Micheal Mercurius</td>
-                    <td>Staff</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                </tr>
-                <tr>
-                    <td>2012/01/01</td>
-                    <td>Ganesha Dubhghall</td>
-                    <td>Member</td>
-                    <td>Staff</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                </tr>
-                <tr>
-                    <td>2012/01/01</td>
-                    <td>Staff</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td>Paĉjo Jadon</td>
-                    <td></td>
+                <tr v-for="(items, key, index) in timeRangeData.body">
+                    <td>{{items.title}}</td>
+                    <td
+                        v-for="(item, key, index) in items.context"
+                        :class="showHoursRange(item)"
+                    ></td>
                 </tr>
             </tbody>
         </table>
@@ -94,7 +36,7 @@ export class PeakTimeRange extends Vue {
         type: Object,
         default: function() {
             return {
-                head: [1, 2, 3, 4, 5, 4, 1],
+                head: [],
                 body: []
             };
         }
@@ -135,20 +77,26 @@ Vue.component("peak-time-range", PeakTimeRange);
 <style lang="scss" scoped>
 .hoursRange0 {
     background-color: #ffffff;
+    height: 47px;
 }
 .hoursRange1 {
     background-color: #d7e7f7;
+    height: 47px;
 }
 .hoursRange2 {
     background-color: #9ec3ef;
+    height: 47px;
 }
 .hoursRange3 {
     background-color: #3e86db;
+    height: 47px;
 }
 .hoursRange4 {
     background-color: #194f8f;
+    height: 47px;
 }
 .hoursRange5 {
     background-color: #0f2f55;
+    height: 47px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <iv-auto-card
+        <iv-card
             v-show="pageStep === ePageStep.none"
             :visible="true"
             :label="_('w_ReportFilterConditionComponent_')"
@@ -76,13 +76,33 @@
                     <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
-                        v-model="inputFormData.siteIds">
+                        v-model="inputFormData.tagIds">
 
                     </iv-form-selection>
                 </template>
 
             </iv-form>
-        </iv-auto-card>
+
+            <template #footer>
+                <b-button
+                    class="submit"
+                    size="lg"
+                    @click="doSubmit"
+                >
+                    {{ _('wb_Submit') }}
+                </b-button>
+
+
+                <b-button
+                    class="reset"
+                    size="lg"
+                    @click="doReset"
+                >
+                    {{ _('wb_Reset') }}
+                </b-button>
+            </template>
+
+        </iv-card>
 
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree"
@@ -319,6 +339,16 @@ export class FilterCondition extends Vue {
         this.$emit("submit-data", this.inputFormData);
     }
 
+    doReset() {
+        this.inputFormData = {
+            siteIds: [],
+            tagIds: [],
+            startDate: new Date(),
+            endDate: new Date(),
+            designationPeriod: 'today',
+        };
+    }
+
     IFilterConditionForm() {
         return `
             interface {
@@ -414,4 +444,13 @@ Vue.component("filter_condition", FilterCondition);
 .select_date_button {
     margin-top: 29px;
 }
+.submit {
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+}
+.reset {
+    background-color: #d7d7d7;
+    border: 1px solid #d7d7d7;
+}
+
 </style>
