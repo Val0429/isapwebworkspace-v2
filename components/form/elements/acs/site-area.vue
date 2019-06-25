@@ -4,11 +4,12 @@
         v-bind:label="label"
         v-bind:label-for="'input-' + _uid"
         >
-         <b-input-group>    
-            <b-form-select
-                @change="updateArea()"
-                v-model="siteObjectId"
-            >
+             <b-row>
+                <b-col>  
+                <b-form-select
+                    @change="updateArea()"
+                    v-model="siteObjectId"
+                >
                 <option />
                 <option
                     v-for="option in sites"  
@@ -17,8 +18,9 @@
                     >
                     {{ option.value }}
                 </option>
-            </b-form-select> 
-
+                </b-form-select> 
+                </b-col>
+                <b-col>  
                 <b-form-select
                 @change="update()"
                 v-model="areaObjectId"
@@ -30,10 +32,10 @@
                     :value="option.key"               
                     >
                     {{ option.value }}
-                </option>
+                </option>                
             </b-form-select>
-
-         </b-input-group>
+                </b-col>
+             </b-row>
         <b-form-invalid-feedback v-if="this.invalid">
             {{ this.invalid }}
         </b-form-invalid-feedback>

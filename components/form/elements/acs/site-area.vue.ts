@@ -41,7 +41,7 @@ export class FormString extends Vue {
         let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true", "siteId":this.siteObjectId});
         this.areas =  resp.results.map(item=>{return{key:item.objectId, value:item.name}});
         console.log("areas", this.areas);
-        if(!this.areaObjectId || this.value.site.objectId!=this.siteObjectId) this.areaObjectId = this.areas.length>0?this.areas[0].key:"";
+        if(!this.areaObjectId || !this.value.site || this.value.site.objectId!=this.siteObjectId) this.areaObjectId = this.areas.length>0?this.areas[0].key:"";
         this.update();
     }
     update(){        
