@@ -1,6 +1,6 @@
 <template>
     <div class="animated fadeIn">
-        <div>Peak hours</div>
+        <title>Peak hours</title>
         <table class="table table-bordered">
             <thead>
                 <tr>

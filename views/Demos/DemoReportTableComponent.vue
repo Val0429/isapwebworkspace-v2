@@ -103,7 +103,12 @@ interface IReportDashboard {
 
 interface IPeckTimeRange {
     head: string[];
-    body: object[];
+    body: IPeckTimeRangeBody[];
+}
+
+interface IPeckTimeRangeBody {
+    title: string;
+    context: number[];
 }
 
 @Component
