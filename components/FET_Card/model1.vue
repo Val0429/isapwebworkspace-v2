@@ -53,9 +53,8 @@
                 class="fet-card-footer"
                 :src="footerSrc"
                 :style="{
-                    'height': (parentWidthScale * 2).toString() + 'px',
-                    'font-size': (parentWidthScale * 2).toString() + 'px',
-                    'top': (parentWidthScale * 79).toString() + 'px',
+                    'height': (parentWidthScale * 2).toString() + 'px' ,
+                    'top': (parentWidthScale * 80).toString() + 'px',
                 }"
             >
 
@@ -248,8 +247,8 @@ Vue.component("fet-card-model-1", FETCardModel1);
         .fet-card-footer {
             position: absolute;
             width: 100%;
-            // height: 8mm; // 8mm
             bottom: 0;
+            // height: 8mm; // 8mm
             // top: 79mm;
         }
     }
