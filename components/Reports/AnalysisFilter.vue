@@ -85,15 +85,10 @@ import { toEnumInterface } from "@/../core";
 import ResponseFilter from "@/services/ResponseFilter";
 
 
-enum EType {
-    in = "in",
-    out = "out"
-}
-
 @Component({
     components: {}
 })
-export class AnalysisFilterInOut extends Vue {
+export class AnalysisFilter extends Vue {
     // Prop
     // @Prop({
     //     type: String, // Boolean, Number, String, Array, Object
@@ -133,16 +128,11 @@ export class AnalysisFilterInOut extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
-    typeSelectItem: any = [
-        { value: EType.in, text: EType.in },
-        { value: EType.out, text: EType.out }
-    ];
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
-        type: "in"
     };
 
     created() {
@@ -424,7 +414,6 @@ export class AnalysisFilterInOut extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
-            type: "in"
         };
 
         this.inputFormData.groupId = "";
@@ -464,11 +453,6 @@ export class AnalysisFilterInOut extends Vue {
                     false
                 )};
 
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                selectInOrOut?: any;
-
 
                 /**
                  * @uiColumnGroup - analysis
@@ -486,8 +470,8 @@ export class AnalysisFilterInOut extends Vue {
     }
 }
 
-export default AnalysisFilterInOut;
-Vue.component("analysis_filter_in_out", AnalysisFilterInOut);
+export default AnalysisFilter;
+Vue.component("analysis_filter", AnalysisFilter);
 </script>
 
 <style lang="scss" scoped>
