@@ -256,8 +256,8 @@ Vue.component("fet-card-model-1", FETCardModel1);
 }
 
 @media screen {
-    // .fet-card-printer {
-    //     display: none;
-    // }
+    .fet-card-printer {
+        display: none;
+    }
 }
 </style>
