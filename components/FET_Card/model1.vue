@@ -71,79 +71,79 @@ Vue.component("fet-card-model-1", FETCardModel1);
 </script>
 
 <style lang="scss" scoped>
-// 55mm, 86mm, 0.6395, 1.5636
-.fet-card-printer {
-    position: relative;
-    width: 55mm;
-    height: 86mm;
-    .fet-card-img-logo {
-        width: 33mm;
-        position: absolute;
-        top: 8mm;
-        left: 11mm;
-    }
-    .fet-card-img-photo {
-        width: 23mm;
-        max-height: 30mm;
-        position: absolute;
-        top: 27mm;
-        left: 16mm;
-    }
-    .fet-card-chinese-name {
-        width: 100%;
-        height: 4mm;
-        font-size: 4mm;
-        text-align: center;
-        position: absolute;
-        top: 61mm;
-    }
-    .fet-card-english-name {
-        width: 100%;
-        height: 3mm;
-        font-size: 3mm;
-        text-align: center;
-        position: absolute;
-        top: 67mm;
-    }
-    .fet-card-number {
-        width: 100%;
-        height: 2.5mm;
-        font-size: 2.5mm;
-        text-align: center;
-        position: absolute;
-        top: 73mm;
-    }
-    .fet-card-footer {
-        position: absolute;
-        width: 100%;
-        height: 8mm;
-        top: 79mm;
-        .fet-card-footer-red {
+@media print {
+    // 55mm, 86mm, 0.6395, 1.5636
+    .fet-card-printer {
+        width: 55mm;
+        height: 86mm;
+        display: block;
+        position: relative;
+        .fet-card-img-logo {
+            width: 33mm;
+            position: absolute;
+            top: 8mm;
+            left: 11mm;
+        }
+        .fet-card-img-photo {
+            width: 23mm;
+            max-height: 30mm;
+            position: absolute;
+            top: 27mm;
+            left: 16mm;
+        }
+        .fet-card-chinese-name {
+            width: 100%;
+            height: 4mm;
+            font-size: 4mm;
+            text-align: center;
+            position: absolute;
+            top: 61mm;
+        }
+        .fet-card-english-name {
+            width: 100%;
+            height: 3mm;
+            font-size: 3mm;
+            text-align: center;
+            position: absolute;
+            top: 67mm;
+        }
+        .fet-card-number {
+            width: 100%;
+            height: 2.5mm;
+            font-size: 2.5mm;
+            text-align: center;
+            position: absolute;
+            top: 73mm;
+        }
+        .fet-card-footer {
+            position: absolute;
             width: 100%;
             height: 8mm;
-            background-color: #e6240f;
-        }
-        .fet-card-footer-gradual {
-            width: 40mm;
-            height: 8mm;
-            position: absolute;
-            z-index: 10;
-            right: 0mm;
-            top: 0mm;
-            background-color: #ad1500;
-            background: linear-gradient(135deg, transparent 8mm, #ad1500 0) top
-                left;
-            // border-top-left-radius: 12mm;
+            top: 79mm;
+            .fet-card-footer-red {
+                width: 100%;
+                height: 8mm;
+                background-color: #e6240f;
+            }
+            .fet-card-footer-gradual {
+                width: 40mm;
+                height: 8mm;
+                position: absolute;
+                z-index: 10;
+                right: 0mm;
+                top: 0mm;
+                background-color: #ad1500;
+                background: linear-gradient(135deg, transparent 8mm, #ad1500 0)
+                    top left;
+                // border-top-left-radius: 12mm;
+            }
         }
     }
-}
-
-@media print {
     .fet-card-printer {
-        display: block;
     }
     @page {
         size: 55mm 86mm portrait;
+        margin: 0;
     }
 }
 
