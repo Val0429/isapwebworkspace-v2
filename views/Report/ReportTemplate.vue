@@ -431,7 +431,7 @@ export default class ReportTemplate extends Vue {
 
     async initSelectItemUsers() {
 
-        this.sitesSelectItem = {};
+        this.userSelectItem = {};
 
         await this.$server
             .R("/user/user")
