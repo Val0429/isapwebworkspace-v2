@@ -54,9 +54,9 @@ export default class DemoFETCardPrint extends Vue {
     englishName = "Ju JingYi";
     cardNumber = "KI-1010";
 
-    model2footerTitle = "約聘工作人員";
+    model2footerTitle = "約 聘 工 作 人 員";
 
-    modelType = 0;
+    modelType = 2;
 
     created() {}
     mounted() {}

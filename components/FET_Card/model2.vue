@@ -21,13 +21,14 @@
 
             <div class="fet-card-card-number">{{cardNumber}}</div>
 
-            <img
-                class="fet-card-footer"
-                :src="footerSrc"
-            >
-
-            <div class="fet-card-footer-title">
-                {{ footerTitle }}
+            <div class="fet-card-footer">
+                <img
+                    :src="footerSrc"
+                    class="fet-card-footer-image"
+                >
+                <div class="fet-card-footer-title">
+                    {{ footerTitle }}
+                </div>
             </div>
 
         </div>
@@ -156,20 +157,27 @@ Vue.component("fet-card-model-2", FETCardModel2);
             top: 1400px; // 73mm
         }
         .fet-card-footer {
-            position: absolute;
+            position: relative;
             width: 100%;
-            height: 80px; // 8mm
-            top: 1535px; // top: 79mm;
-        }
-        .fet-card-footer-title {
-            position: absolute;
-            z-index: 100;
-            width: 100%;
-            height: 60px; // 8mm
-            top: 1531px; // top: 79mm;
-            text-align: center;
-            font-size: 35px; // 2.5mm
-            color: #fff;
+            height: 100px; // 8mm
+            top: 1520px; // top: 79mm;
+            .fet-card-footer-image {
+                position: absolute;
+                width: 100%;
+                height: 100px;
+                top: 0;
+                left: 0;
+            }
+            .fet-card-footer-title {
+                position: absolute;
+                z-index: 100;
+                width: 100%;
+                height: 60px; // 8mm
+                top: 10px; // top: 79mm;
+                text-align: center;
+                font-size: 35px; // 2.5mm
+                color: #fff;
+            }
         }
     }
 }
