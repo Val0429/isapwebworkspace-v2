@@ -18,12 +18,6 @@
             :options="options" 
             />
         </template>
-        <template #add.area="{$attrs, $listeners}">
-            <ivc-site-area 
-            v-bind="$attrs" 
-            v-on="$listeners"              
-            />
-        </template>
         
 
     </iv-form-quick>
@@ -78,8 +72,9 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {     
-                     /**
+                    /**
                     * @uiLabel - ${this._("w_Region_LevelArea")}
+                    * @uiType - ivc-site-area
                     */
                     area:string;
                     /**
@@ -89,7 +84,7 @@ export default class ElevatorGroupForm extends Vue implements IFormQuick {
                     /**
                     * @uiLabel - ${this._("elevators")}
                     */
-                    elevators:string; 
+                    elevators?:string; 
                 }
                 `;
         }

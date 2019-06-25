@@ -139,7 +139,6 @@ export default class DoorForm extends Vue implements IFormQuick {
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
     preEdit(row) {
-        row.system = row.system.toString();
         let props = this.getReaderInfo(row);
         row.sipassin = props.sipassin;
         row.sipassout = props.sipassout;

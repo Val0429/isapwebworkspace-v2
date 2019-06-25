@@ -76,11 +76,9 @@ export default class ReaderForm extends Vue implements IFormQuick {
                 interface {
                     /**
                     * @uiLabel - ${this._("system")}
+                    * @uiType - ivc-system-selection
                     */
-                    system: ${toEnumInterface({
-                            1: 'SIPASS',
-                            800: 'CCURE'
-                        }, false)};
+                    system: number;
                     /**
                     * @uiLabel - ${this._("readerid")}
                     */
