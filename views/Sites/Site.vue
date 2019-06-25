@@ -1685,18 +1685,28 @@ export default class Site extends Vue {
     }
 
     async deleteGroupDevice() {
+
+        console.log('objectId - ', this.deviceGroup.objectId);
+
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
-            var body: {
+            const body: {
                 objectId: string;
             } = {
-                objectId: this.site.objectId
+                objectId: this.deviceGroup.objectId
             };
             this.$server
-                .D("/location/device", body)
+                .D("/device/group", body)
                 .then((response: any) => {
                     if (response) {
-                        Dialog.success(this._("w_Success"));
-                        (this.$refs.deviceGroupTable as any).reload();
+                        for (const returnValue of response) {
+                            if (returnValue.statusCode === 200) {
+                                (this.$refs.deviceGroupTable as any).reload();
+                            }
+                            if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                                Dialog.error(this._("w_DeleteFailed"));
+                                return false;
+                            }
+                        }
                     }
                 })
                 .catch((e: any) => {
@@ -1784,6 +1794,7 @@ export default class Site extends Vue {
         } else {
             this.clearDeviceData();
         }
+
     }
 
     selectedArea(data) {
@@ -2306,7 +2317,7 @@ export default class Site extends Vue {
                 mode: any;
 
 
-        
+
 
             }`;
     }
