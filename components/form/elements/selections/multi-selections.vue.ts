@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Model, Emit } from "vue-property-decorator";
 
 
 @Component
-export class FormString extends Vue {
+export class MultiSelections extends Vue {
     @Prop({
         type: String,
         required: false
@@ -81,4 +81,4 @@ export class FormString extends Vue {
         this.$emit('input', newValue);        
     }
 }
-export default FormString;
+export default MultiSelections;

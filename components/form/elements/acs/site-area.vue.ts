@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Model, Emit } from "vue-property-decorator";
 
 
 @Component
-export class FormString extends Vue {
+export class SiteArea extends Vue {
     @Prop({
         type: String,
         required: false
@@ -49,4 +49,4 @@ export class FormString extends Vue {
         this.$emit('input', this.areaObjectId);  
     }
 }
-export default FormString;
+export default SiteArea;

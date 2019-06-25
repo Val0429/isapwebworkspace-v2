@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Model, Emit } from "vue-property-decorator";
 
 
 @Component
-export class FormString extends Vue {
+export class SingleSelection extends Vue {
     @Prop({
         type: String,
         required: false
@@ -41,4 +41,4 @@ export class FormString extends Vue {
         this.$emit('input', this.selected);  
     }
 }
-export default FormString;
+export default SingleSelection;
