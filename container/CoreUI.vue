@@ -35,8 +35,12 @@
                 <SidebarNavItem url="/permissiontable" />                
                 <SidebarNavItem url="/syncreceiver" />
                 <SidebarNavItem url="/accesslevel" />
+
                 <SidebarNavItem url="/attendance" />
                 <SidebarNavItem url="/employee" />
+                <SidebarNavItem url="/doorreport" />
+                <SidebarNavItem url="/contractorreport" />
+                <SidebarNavItem url="/demographicreport" />
                 
                 
                 

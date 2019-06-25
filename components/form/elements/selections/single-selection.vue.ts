@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Model, Emit } from "vue-property-decorator";
 
 
 @Component
-export class FormString extends Vue {
+export class SingleSelection extends Vue {
     @Prop({
         type: String,
         required: false
@@ -28,7 +28,7 @@ export class FormString extends Vue {
         console.log("created");
     }
     mounted(){   
-        this.selected = this.value? this.value.objectId:""; 
+        this.selected = this.value? this.value.objectId ? this.value.objectId : this.value: ""; 
         this.$emit('input', this.selected);            
         console.log("mounted selected", this.selected);
         console.log("mounted options", this.options);
@@ -41,4 +41,4 @@ export class FormString extends Vue {
         this.$emit('input', this.selected);  
     }
 }
-export default FormString;
+export default SingleSelection;

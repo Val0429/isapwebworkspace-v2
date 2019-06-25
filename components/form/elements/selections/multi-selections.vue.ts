@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Model, Emit } from "vue-property-decorator";
 
 
 @Component
-export class FormString extends Vue {
+export class MultiSelections extends Vue {
     @Prop({
         type: String,
         required: false
@@ -34,7 +34,7 @@ export class FormString extends Vue {
         
         console.log("mounted", this.value, this.options);
 
-        let temp2=Object.assign([], this.value && this.value.length>0?this.value.map(x=>x.objectId):[]);
+        let temp2=Object.assign([], this.value && this.value.length>0?this.value.map(x=> x.objectId ? x.objectId : x):[]);
         this.$emit('input', temp2);        
         if(temp2 && temp2.length>0){
             for(let key of temp2){
@@ -81,4 +81,4 @@ export class FormString extends Vue {
         this.$emit('input', newValue);        
     }
 }
-export default FormString;
+export default MultiSelections;

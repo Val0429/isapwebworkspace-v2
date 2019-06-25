@@ -7,34 +7,20 @@
              <b-row>
                 <b-col>  
                 <b-form-select
-                    @change="updateArea()"
-                    v-model="siteObjectId"
+                    @change="update()"
+                    v-model="system"
                 >
                 <option />
                 <option
-                    v-for="option in sites"  
+                    v-for="option in options"  
                     :key="option.key"
                     :value="option.key"               
                     >
                     {{ option.value }}
                 </option>
                 </b-form-select> 
-                </b-col>
-                <b-col>  
-                <b-form-select
-                @change="update()"
-                v-model="areaObjectId"
-            >
-                <option />
-                <option 
-                    v-for="option in areas"  
-                    :key="option.key"
-                    :value="option.key"               
-                    >
-                    {{ option.value }}
-                </option>                
-            </b-form-select>
-                </b-col>
+                </b-col>                
+                
              </b-row>
         <b-form-invalid-feedback v-if="this.invalid">
             {{ this.invalid }}
@@ -42,7 +28,7 @@
     </b-form-group>
 </template>
 
-<script lang="ts" src="./site-area.vue.ts" />
+<script lang="ts" src="./system-selection.vue.ts" />
 
 <style lang="scss">
 

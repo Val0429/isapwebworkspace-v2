@@ -1,11 +1,13 @@
 <template>
     <iv-form-quick>
         <!-- 5) custom view templates with <template #view.* /> -->
-
+        <template #view.system="{$attrs, $listeners}">
+            {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
+        </template>
         <template #view.reader="{$attrs, $listeners}">
             {{ $attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x => getName(x.objectId, floorOptions)).join(', '):'' }}
         </template>
-    <template #view.elevatorgroup="{$attrs, $listeners}">
+        <template #view.elevatorgroup="{$attrs, $listeners}">
             {{getInfo($attrs.row).elevatorgroup}}
         </template>
         <template #view.area="{$attrs, $listeners}">
@@ -29,10 +31,12 @@
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
 import { EFormQuick, IFormQuick } from '@/../components/form';
+import { System } from '@/config/default/api/interfaces';
 
 @Component
 /// 1) class name
 export default class ElevatorForm extends Vue implements IFormQuick {
+    system = System;
     /// 2) cgi path
     path: string = "/acs/elevator";
     /// 3) i18n - view / edit / add
@@ -49,8 +53,11 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
-                    
-                    /**
+                /**
+                * @uiLabel - ${this._("system")}
+                */    
+                system:string;
+                /**
                 * @uiLabel - ${this._("w_Region_LevelSite")}
                 */
                 site:string;
@@ -78,8 +85,11 @@ export default class ElevatorForm extends Vue implements IFormQuick {
             case EFormQuick.Edit:
                 return `
                 interface {
-                   
-                   
+                    /**
+                    * @uiLabel - ${this._("system")}
+                    * @uiType - ivc-system-selection
+                    */
+                    system:number;
                     /**
                     * @uiLabel - ${this._("name")}
                     */

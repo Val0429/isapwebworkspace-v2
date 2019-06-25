@@ -229,6 +229,7 @@ export default class LangObject implements ILang {
     w_Dialog_SuccessTitle = 'Success';
 
     // common
+    w_ColumnSelection ="Column Selection";
     w_Filter = "Filter";
     w_Error = 'Error';
     w_NextPage = 'Next';
@@ -430,6 +431,9 @@ export default class LangObject implements ILang {
     w_Navigation_Users_UserGroup = 'User Group';
     w_Navigation_Site = 'Site';
     w_Navigation_Region = 'Region';
+    w_ContractorReport = "Contractor Report";
+    w_DoorReport = 'Door Report';
+    w_DemographicReport = "Demographic Report"
 
     // Member
     w_Member_List = '人員管理';
@@ -481,6 +485,7 @@ export default class LangObject implements ILang {
     w_Member_CostCenter1 = '成本中心';
     w_Member_Area = '地區：';
     w_Member_WorkArea = '工作地區：';
+    w_Member_WorkArea1 = '工作地區';
     w_Member_RegistrationDate = '報到日期：';
     w_Member_ResignationDate = '離職日期：';
 

@@ -2,7 +2,7 @@ import { Vue, Component, Prop, Model, Emit } from "vue-property-decorator";
 
 
 @Component
-export class FormString extends Vue {
+export class SiteArea extends Vue {
     @Prop({
         type: String,
         required: false
@@ -41,7 +41,7 @@ export class FormString extends Vue {
         let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true", "siteId":this.siteObjectId});
         this.areas =  resp.results.map(item=>{return{key:item.objectId, value:item.name}});
         console.log("areas", this.areas);
-        if(!this.areaObjectId || this.value.site.objectId!=this.siteObjectId) this.areaObjectId = this.areas.length>0?this.areas[0].key:"";
+        if(!this.areaObjectId || !this.value.site || this.value.site.objectId!=this.siteObjectId) this.areaObjectId = this.areas.length>0?this.areas[0].key:"";
         this.update();
     }
     update(){        
@@ -49,4 +49,4 @@ export class FormString extends Vue {
         this.$emit('input', this.areaObjectId);  
     }
 }
-export default FormString;
+export default SiteArea;

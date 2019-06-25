@@ -33,11 +33,7 @@ export default class FloorForm extends Vue implements IFormQuick {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {
-                /**
-                * @uiLabel - ${this._("floorid")}
-                */
-                floorid:number;                
+                interface {             
                 /**
                 * @uiLabel - ${this._("name")}
                 */
@@ -45,58 +41,18 @@ export default class FloorForm extends Vue implements IFormQuick {
                 /**
                 * @uiLabel - ${this._("ccureid")}
                 */
-                ccureid:number;
-                /**
-                * @uiLabel - ${this._("ccurename")}
-                */
-                ccurename:string;
-                /**
-                * @uiLabel - ${this._("sipassid")}
-                */
-                sipassid:number;
-                /**
-                * @uiLabel - ${this._("sipassname")}
-                */
-                sipassname:string;
-                /**
-                * @uiLabel - ${this._("status")}
-                */
-                status?:number;   
+                
                 }
                 `;
             case EFormQuick.Add:
             case EFormQuick.Edit:
                 return `
                 interface {
-                
-                /**
-                * @uiLabel - ${this._("floorid")}
-                */
-                floorid:number;                
+                           
                 /**
                 * @uiLabel - ${this._("name")}
                 */
                 floorname: string;
-                /**
-                * @uiLabel - ${this._("ccureid")}
-                */
-                ccureid:number;
-                /**
-                * @uiLabel - ${this._("ccurename")}
-                */
-                ccurename:string;
-                /**
-                * @uiLabel - ${this._("sipassid")}
-                */
-                sipassid:number;
-                /**
-                * @uiLabel - ${this._("sipassname")}
-                */
-                sipassname:string;
-                /**
-                * @uiLabel - ${this._("status")}
-                */
-                status?:number;  
                 }
                 `;
         }

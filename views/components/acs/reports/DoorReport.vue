@@ -19,10 +19,26 @@
             <b-button size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onSubmit()">{{ _("wb_Reset") }}</b-button>
         </template>
         </iv-card>
-        <div class="col-md-12">
+         <iv-card            
+            :label="_('w_ColumnSelection')"
+        >
+        <template>
+             <iv-sort-select  
+                v-if="options.length>0"                      
+                v-model="selectedColumns"
+                class="col-md-12"
+                :options="options"
+            />
+            
+        </template>
+
+        </iv-card>
+        <iv-card            
+            :label="_('w_EmployeeList')">        
+        
            <b-table striped hover 
                 :items="employeeList" 
-                :fields="fields()" 
+                :fields="fields().filter(x=> selectedColumns.find(y=>y==x.key))" 
                 :per-page="perPage"
                 :busy="isBusy"
                 :current-page="currentPage"
@@ -33,7 +49,11 @@
             :per-page="perPage"
             aria-controls="my-table"
             ></b-pagination>
-        </div>
+        <template >
+            <b-button size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
+        </template>
+        
+        </iv-card>
         
     </div>
 </template>
@@ -45,10 +65,12 @@ import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
 
 @Component
-export default class AttendanceRecord extends Vue {
+export default class DoorReport extends Vue {
     currentPage:number=1;
+    options=[];
     perPage:number=10;
     employeeList:any[]=[];
+    selectedColumns=[];
     isBusy:boolean=false;
     members:any[]=[];
     async created(){
@@ -59,6 +81,12 @@ export default class AttendanceRecord extends Vue {
     isMounted:boolean=false;
     doMounted(){
         this.isMounted=true;
+        this.options=this.fields().map(x=>{return{value:x.key,text:x.label}});
+        this.selectedColumns = this.fields().map(x=>x.key);
+    }
+    filterColumn(){
+        console.log(this.selectedColumns);
+        console.log(this.options);
     }
   private getData(filter?:any) {        
         this.isBusy=true;        
@@ -110,72 +138,79 @@ export default class AttendanceRecord extends Vue {
         return `interface {
                 /**
                  * @uiColumnGroup - name
-                 * @uiLabel - ${this._('w_Member_ChineseName')}
+                 * @uiLabel - ${this._('w_Member_ChineseName1')}
                  */
                 FirstName?: string;
                 /**
                  * @uiColumnGroup - name
-                 * @uiLabel - ${this._('w_Member_EnglishName')}
+                 * @uiLabel - ${this._('w_Member_EnglishName1')}
                  */
                 LastName?: string;
                 /**
                  * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_EmployeeNumber')}
+                 * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
                  */
                 EmployeeNumber?: string;
                 /**
                  * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_CardNumber')}
+                 * @uiLabel - ${this._('w_Member_CardNumber1')}
                  */
                 CardNumber?: string;
                 /**
                  * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_Department')}
+                 * @uiLabel - ${this._('w_Member_Department1')}
                  */
                 DepartmentName?:string;
                 /**
                  * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_CostCenter')}
+                 * @uiLabel - ${this._('w_Member_CostCenter1')}
                  */
                 CostCenterName?:string;
                 /**
                  * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_WorkArea')}
+                 * @uiLabel - ${this._('w_Member_WorkArea1')}
                  */
                 WorkAreaName?:string;
             }`;
             
     }
     fields(){
-        return{
-            
-            FirstName: {
-                label: this._('w_Member_ChineseName'),
+        return [            
+            {
+                key:"FirstName",
+                label: this._('w_Member_ChineseName1'),
                 sortable: true
             },
-            LastName: {
-                label: this._('w_Member_EnglishName'),
+            {  
+                key:"LastName",
+                label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
-            EmployeeNumber: {
-                label: this._('w_Member_EmployeeNumber')
+            {
+                key: "EmployeeNumber",
+                label: this._('w_Member_EmployeeNumber1')
             },
-            CardNumber: {
-                label: this._('w_Member_CardNumber')
+            {
+                key:"CardNumber",
+                label: this._('w_Member_CardNumber1')
             },
-            DepartmentName:{
-                label: this._("w_Member_Department")
+            {
+                key:"DepartmentName",
+                label: this._("w_Member_Department1")
             },
-            CostCenterName:{
-                label: this._("w_Member_CostCenter")
+            {
+                key:"CostCenterName",
+                label: this._("w_Member_CostCenter1")
             },
-            WorkAreaName:{
-                label: this._("w_Member_WorkArea")
+            {
+                key:"WorkAreaName",
+                label: this._("w_Member_WorkArea1")
             },
-            PermissionList:{
+            {
+                key:"PermissionList",
                 label: this._("w_Permission_PermissionList")
             }
-        }
+        ];
     }
     onSubmit($events){        
         this.getData($events);
