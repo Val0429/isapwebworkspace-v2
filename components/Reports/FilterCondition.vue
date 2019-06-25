@@ -317,13 +317,6 @@ export class FilterCondition extends Vue {
         // TODO: wait api
 
         this.$emit("submit-data", this.inputFormData);
-        this.inputFormData = {
-            siteIds: [],
-            tagIds: [],
-            startDate: new Date(),
-            endDate: new Date(),
-            designationPeriod: 'today',
-        };
     }
 
     IFilterConditionForm() {
