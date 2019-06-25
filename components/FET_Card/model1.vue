@@ -52,6 +52,11 @@
             <img
                 class="fet-card-footer"
                 :src="footerSrc"
+                :style="{
+                    'height': (parentWidthScale * 2).toString() + 'px',
+                    'font-size': (parentWidthScale * 2).toString() + 'px',
+                    'top': (parentWidthScale * 79).toString() + 'px',
+                }"
             >
 
         </div>
@@ -131,7 +136,6 @@ class FETCardModel1 extends Vue {
 
         fetCardRefWidth = 1070;
         this.parentWidthScale = parseInt(fetCardRefWidth) / 55;
-        console.log("parentWidthScale", this.parentWidthScale);
     }
 
     printCard() {
@@ -192,7 +196,7 @@ Vue.component("fet-card-model-1", FETCardModel1);
         position: absolute;
         width: 100%;
         // height: 8mm; // 8mm
-        bottom: 0;
+        // bottom: 0;
     }
 }
 
@@ -247,23 +251,6 @@ Vue.component("fet-card-model-1", FETCardModel1);
             // height: 8mm; // 8mm
             bottom: 0;
             // top: 79mm;
-            .fet-card-footer-red {
-                position: absolute;
-                width: 100%;
-                height: 100%; // 8mm
-                background-color: #e6240f;
-            }
-            .fet-card-footer-gradual {
-                width: 72.7%; // 40mm
-                height: 100%; // 8mm
-                position: absolute;
-                z-index: 10;
-                right: 0;
-                top: 0;
-                background-color: #ad1500;
-                background: linear-gradient(135deg, transparent 8mm, #ad1500 0)
-                    top left; // 8mm
-            }
         }
     }
 }
