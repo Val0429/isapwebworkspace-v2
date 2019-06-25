@@ -96,7 +96,7 @@ Vue.component("fet-card-model-1", FETCardModel1);
     position: fixed;
     left: -1000;
     top: -1000;
-    height: 1673px;
+    height: 3000px;
 }
 
 @media print {
@@ -104,7 +104,126 @@ Vue.component("fet-card-model-1", FETCardModel1);
         position: static;
     }
 
-    // 55mm, 86mm, 0.6395, 1.5636
+    // 55mm, 86mm, 0.6395, 1.5636,
+    // 55 => 81: 1.473
+    // 原始尺寸:  邊界預設:  邊界無:
+    // .fet-card-printer {
+    //     width: 81mm; // 55mm; 100%; 81mm;
+    //     height: 127mm; // 86mm; 1673px; 127mm;
+    //     display: block;
+    //     position: relative;
+    //     top: 0;
+    //     .fet-card-img-logo {
+    //         width: 49mm; // 33mm; 60%; 49mm
+    //         position: absolute;
+    //         left: 16mm; // 11mm; 20%; 16mm
+    //         top: 12mm; // 8mm; 156px; 12mm
+    //     }
+    //     .fet-card-img-photo {
+    //         width: 34mm; // 23mm; 41.8%; 34mm
+    //         position: absolute;
+    //         left: 24mm; // 16mm; 29%; 24mm
+    //         top: 40mm; // 27mm; 525px; 40mm
+    //     }
+    //     .fet-card-chinese-name {
+    //         width: 81mm; // 55mm; 100%;  81mm
+    //         height: 6mm; // 4mm; 78px; 6mm
+    //         font-size: 6mm; // 4mm; 78px; 6mm
+    //         text-align: center;
+    //         position: absolute;
+    //         top: 90mm; // 61mm; 1186px; 90mm
+    //     }
+    //     .fet-card-english-name {
+    //         width: 81mm; // 55mm; 100%; 81mm
+    //         height: 4mm; // 3mm; 58px; 4mm
+    //         font-size: 4mm; // 3mm; 58px; 4mm
+    //         text-align: center;
+    //         position: absolute;
+    //         top: 99mm; // 67mm; 1303px; 99mm
+    //     }
+    //     .fet-card-card-number {
+    //         width: 81mm; // 55mm; 100%; 81mm
+    //         height: 4mm; // 2mm; 39px; 4mm
+    //         font-size: 4mm; // 2mm; 39px; 4mm
+    //         text-align: center;
+    //         position: absolute;
+    //         top: 108mm; // 73mm; 1400px; 108mm
+    //     }
+    //     .fet-card-footer {
+    //         position: relative;
+    //         width: 81mm; // 55mm; 100%;  81mm
+    //         height: 12mm; // 8mm; 100px; 12mm
+    //         top: 116mm; // 79mm; 1520px; 116mm
+    //         .fet-card-footer-image {
+    //             position: absolute;
+    //             width: 81mm; // 55mm; 100%;  81mm
+    //             height: 12mm; // 8mm; 100px; 12mm
+    //             top: 0;
+    //             left: 0;
+    //         }
+    //     }
+    // }
+
+    // default size
+    // // 55mm, 86mm, 0.6395, 1.5636
+    // .fet-card-printer {
+    //     width: 55mm; // 55mm; 100%;
+    //     height: 86mm; // 86mm; 1673px;
+    //     display: block;
+    //     position: relative;
+    //     top: 0;
+    //     .fet-card-img-logo {
+    //         width: 33mm; // 33mm; 60%;
+    //         position: absolute;
+    //         left: 11mm; // 11mm; 20%;
+    //         top: 8mm; // 8mm; 156px;
+    //     }
+    //     .fet-card-img-photo {
+    //         width: 23mm; // 23mm; 41.8%;
+    //         position: absolute;
+    //         left: 16mm; // 16mm; 29%;
+    //         top: 27mm; // 27mm; 525px;
+    //     }
+    //     .fet-card-chinese-name {
+    //         width: 55mm; // 55mm; 100%;
+    //         height: 4mm; // 4mm; 78px;
+    //         font-size: 4mm; // 4mm; 78px;
+    //         text-align: center;
+    //         position: absolute;
+    //         top: 61mm; // 61mm; 1186px;
+    //     }
+    //     .fet-card-english-name {
+    //         width: 55mm; // 55mm; 100%;
+    //         height: 3mm; // 3mm; 58px;
+    //         font-size: 3mm; // 3mm; 58px;
+    //         text-align: center;
+    //         position: absolute;
+    //         top: 67mm; // 67mm; 1303px;
+    //     }
+    //     .fet-card-card-number {
+    //         width: 55mm; // 55mm; 100%;
+    //         height: 2.5mm; // 2.5mm; 39px;
+    //         font-size: 2.5mm; // 2.5mm; 39px;
+    //         text-align: center;
+    //         position: absolute;
+    //         top: 73mm; // 73mm; 1400px;
+    //     }
+    //     .fet-card-footer {
+    //         position: relative;
+    //         width: 55mm; // 55mm; 100%;
+    //         height: 8mm; // 8mm; 100px;
+    //         top: 79mm; // 79mm; 1520px;
+    //         .fet-card-footer-image {
+    //             position: absolute;
+    //             width: 55mm; // 55mm; 100%;
+    //             height: 8mm; // 8mm; 100px;
+    //             top: 0;
+    //             left: 0;
+    //         }
+    //     }
+    // }
+
+    // print default
     .fet-card-printer {
         width: 100%; // 55mm
         height: 1673px; // 86mm;

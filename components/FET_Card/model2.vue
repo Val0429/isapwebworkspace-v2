@@ -173,7 +173,7 @@ Vue.component("fet-card-model-2", FETCardModel2);
                 z-index: 100;
                 width: 100%;
                 height: 60px; // 8mm
-                top: 10px; // top: 79mm;
+                top: 20px; // top: 79mm;
                 text-align: center;
                 font-size: 35px; // 2.5mm
                 color: #fff;

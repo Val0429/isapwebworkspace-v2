@@ -56,7 +56,7 @@ export default class DemoFETCardPrint extends Vue {
 
     model2footerTitle = "約 聘 工 作 人 員";
 
-    modelType = 2;
+    modelType = 1;
 
     created() {}
     mounted() {}
