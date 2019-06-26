@@ -9,6 +9,8 @@
             v-on:changeSite="changeSite"
         >
         </peak-time-range>
+        <report-table :reportTableData="rData">
+        </report-table>
     </div>
 </template>
 
@@ -16,6 +18,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
+import { IReportTableData } from "../../components/Reports/models";
 
 enum PageType {
     traffic = "traffic",
@@ -125,6 +128,8 @@ export default class DemoReportComponent extends Vue {
         { value: "ewtewfg", text: "台中店" }
     ];
 
+    rData = new IReportTableData();
+
     pData: IPeckTimeRange = {
         head: [],
         body: []
@@ -198,13 +203,44 @@ export default class DemoReportComponent extends Vue {
         }
     };
 
-    site = "";
+    site = "dfgsadg";
 
     created() {}
 
     mounted() {
         this.initPeakTimeRange();
         this.initAnlyDashboardData();
+        this.initReportTable();
+    }
+
+    initReportTable() {
+        this.rData.head = ["10/1", "10/2"];
+        this.rData.body = [
+            {
+                area: "area",
+                group: "group",
+                in: [
+                    { sign: Sign.positive, value: 5, valueRatio: 0.24 },
+                    { sign: Sign.negative, value: 2, valueRatio: 0.021 }
+                ],
+                out: [
+                    { sign: Sign.negative, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 4, valueRatio: 0.54 }
+                ]
+            },
+            {
+                area: "area2",
+                group: "group2",
+                in: [
+                    { sign: Sign.positive, value: 5, valueRatio: 0.24 },
+                    { sign: Sign.negative, value: 2, valueRatio: 0.021 }
+                ],
+                out: [
+                    { sign: Sign.negative, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 4, valueRatio: 0.54 }
+                ]
+            }
+        ];
     }
 
     initPeakTimeRange() {
@@ -219,36 +255,39 @@ export default class DemoReportComponent extends Vue {
                     "14:00-15:00",
                     "15:00-16:00",
                     "16:00-17:00",
-                    "17:00-18:00"
+                    "17:00-18:00",
+                    "18:00-19:00",
+                    "19:00-20:00",
+                    "21:00-22:00"
                 ],
                 body: [
                     {
                         title: "2019/1/1 Tue",
-                        context: [1, 2, 3, 4, 5, 1, 1, 4, 1]
+                        context: [1, 2, 3, 4, 5, 1, 4, 5, 1, 1, 4, 1]
                     },
                     {
                         title: "2019/1/2 Wed",
-                        context: [5, 4, 5, 3, 2, 1, 2, 4, 1]
+                        context: [5, 4, 5, 3, 2, 1, 4, 5, 1, 2, 4, 1]
                     },
                     {
                         title: "2019/1/3 Thu",
-                        context: [1, 3, 5, 4, 2, 1, 2, 1, 1]
+                        context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
                     },
                     {
                         title: "2019/1/4 Fri",
-                        context: [1, 3, 4, 4, 2, 1, 3, 4, 1]
+                        context: [1, 3, 4, 4, 2, 1, 3, 4, 5, 1, 4, 1]
                     },
                     {
                         title: "2019/1/5 Sat",
-                        context: [1, 3, 5, 4, 2, 1, 3, 2, 2]
+                        context: [1, 3, 5, 4, 5, 1, 4, 2, 1, 3, 2, 2]
                     },
                     {
                         title: "2019/1/6 Sun",
-                        context: [1, 2, 1, 4, 2, 1, 3, 3, 1]
+                        context: [1, 2, 1, 4, 4, 5, 1, 2, 1, 3, 3, 1]
                     },
                     {
                         title: "2019/1/7 Mon",
-                        context: [1, 1, 1, 2, 2, 1, 3, 4, 1]
+                        context: [1, 1, 1, 2, 2, 4, 5, 1, 1, 3, 4, 1]
                     }
                 ]
             };
@@ -263,36 +302,39 @@ export default class DemoReportComponent extends Vue {
                     "14:00-15:00",
                     "15:00-16:00",
                     "16:00-17:00",
-                    "17:00-18:00"
+                    "17:00-18:00",
+                    "18:00-19:00",
+                    "19:00-20:00",
+                    "21:00-22:00"
                 ],
                 body: [
                     {
                         title: "2019/1/1 Tue",
-                        context: [4, 2, 5, 4, 1, 2, 1, 4, 2]
+                        context: [4, 2, 5, 4, 5, 1, 4, 1, 2, 1, 4, 2]
                     },
                     {
                         title: "2019/1/2 Wed",
-                        context: [5, 4, 5, 3, 4, 1, 2, 5, 1]
+                        context: [5, 4, 4, 5, 1, 5, 3, 4, 1, 2, 5, 1]
                     },
                     {
                         title: "2019/1/3 Thu",
-                        context: [1, 3, 5, 4, 2, 1, 2, 1, 1]
+                        context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
                     },
                     {
                         title: "2019/1/4 Fri",
-                        context: [1, 1, 4, 4, 3, 1, 3, 4, 1]
+                        context: [1, 1, 4, 5, 1, 4, 4, 3, 1, 3, 4, 1]
                     },
                     {
                         title: "2019/1/5 Sat",
-                        context: [1, 3, 1, 4, 2, 1, 5, 2, 2]
+                        context: [1, 3, 1, 4, 2, 1, 4, 5, 1, 5, 2, 2]
                     },
                     {
                         title: "2019/1/6 Sun",
-                        context: [1, 2, 1, 2, 2, 1, 3, 3, 1]
+                        context: [1, 2, 1, 2, 4, 5, 1, 2, 1, 3, 3, 1]
                     },
                     {
                         title: "2019/1/7 Mon",
-                        context: [1, 1, 1, 2, 5, 2, 3, 4, 1]
+                        context: [1, 1, 1, 2, 4, 5, 1, 5, 2, 3, 4, 1]
                     }
                 ]
             };

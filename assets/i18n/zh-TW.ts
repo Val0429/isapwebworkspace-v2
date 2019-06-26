@@ -125,6 +125,7 @@ export default class LangObject implements ILang {
     w_Location = 'Location';
     w_Areas = 'Area(s)';
     w_Devices = 'Device(s)';
+    w_All = 'All';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
