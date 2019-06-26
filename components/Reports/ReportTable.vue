@@ -100,11 +100,11 @@ export class ReportTable extends Vue {
     mounted() {}
 
     showRowTotal(datas) {
-        return datas.reduce((ty, u) => ty + u, 0);
+        return datas.reduce((ty, u) => ty.value + u.value, 0);
     }
 
     showColTotal(datas, key) {
-        return datas.reduce((ty, u) => ty[key] + u, 0);
+        return datas.reduce((ty, u) => ty[key].value + u[key].value, 0);
     }
 }
 

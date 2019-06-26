@@ -2,8 +2,10 @@ interface IReportTableDataBody {
     site?: string;
     area?: string;
     group?: string;
-    in?: IReportTableDataBodyInOut;
-    out?: IReportTableDataBodyInOut;
+    in?: IReportTableDataBodyInOut[];
+    out?: IReportTableDataBodyInOut[];
+    inTotal?: IReportTableDataBodyInOut;
+    outTotal?: IReportTableDataBodyInOut;
 }
 
 interface IReportTableDataBodyInOut {
@@ -28,14 +30,24 @@ class IReportTableData {
     body: IReportTableDataBody[] = [];
     foot: IReportTableDataFoot[] = [];
 
-    constructor() {}
+    constructor() {
+        for (let body of this.body) {
+            body.inTotal = this.showRowTotal(body.in);
+            body.outTotal = this.showRowTotal(body.out);
+        }
+
+        for (let foot of this.foot) {
+            foot.inTotal = this.showColTotal(this.body, 'in');
+            foot.outTotal = this.showColTotal(this.body, 'out');
+        }
+    }
 
     showRowTotal(datas) {
-        return datas.reduce((ty, u) => ty + u, 0);
+        return datas.reduce((ty, u) => ty.value + u.value, 0);
     }
 
     showColTotal(datas, key) {
-        return datas.reduce((ty, u) => ty[key] + u, 0);
+        return datas.reduce((ty, u) => ty[key].value + u[key].value, 0);
     }
 }
 
