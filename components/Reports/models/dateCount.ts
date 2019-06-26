@@ -28,7 +28,7 @@ class DateCount {
     }
 
     //獲得本月的天數
-    getThisMonthDays(year: number, month: number){
+    getThisMonthDays(year: number, month: number): number {
         const now = new Date(); //當前日期
 
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
@@ -41,11 +41,11 @@ class DateCount {
 
 
         const thisMonthDays = new Date(nowYear, nowMonth + 1, 0).getDate();
-        return thisMonthDays
+        return thisMonthDays;
     }
 
     //獲得上月的天數
-    getLastMonthDays(year: number, month: number){
+    getLastMonthDays(year: number, month: number): number {
         const now = new Date(); //當前日期
 
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
@@ -61,7 +61,7 @@ class DateCount {
     }
 
     //獲得本周的開始日期
-    getWeekStartDate() {
+    getWeekStartDate(): string {
         const now = new Date(); //當前日期
         const nowDayOfWeek = now.getDay(); //今天本周的第幾天 0（周日） 到 6（周六）
         const nowDay = now.getDate(); //當前日
@@ -78,7 +78,7 @@ class DateCount {
     }
 
     //獲得本周的結束日期
-    getWeekEndDate() {
+    getWeekEndDate(): string {
 
         const now = new Date(); //當前日期
         const nowDayOfWeek = now.getDay(); //今天本周的第幾天 0（周日） 到 6（周六）
@@ -96,7 +96,7 @@ class DateCount {
     }
 
     //獲得上周的開始日期
-    getLastWeekStartDate() {
+    getLastWeekStartDate(): string {
 
         const now = new Date(); //當前日期
         const nowDayOfWeek = now.getDay(); //今天本周的第幾天 0（周日） 到 6（周六）
@@ -113,7 +113,7 @@ class DateCount {
         return this.formatDate(weekStartDate);
     }
     //獲得上周的結束日期
-    getLastWeekEndDate() {
+    getLastWeekEndDate(): string {
 
         const now = new Date(); //當前日期
         const nowDayOfWeek = now.getDay(); //今天本周的第幾天 0（周日） 到 6（周六）
@@ -131,7 +131,7 @@ class DateCount {
     }
 
     //獲得本月的開始日期
-    getMonthStartDate(){
+    getMonthStartDate(): string {
 
         const now = new Date(); //當前日期
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
@@ -147,7 +147,7 @@ class DateCount {
     }
 
     //獲得本月的結束日期
-    getMonthEndDate(){
+    getMonthEndDate(): string {
 
         const now = new Date(); //當前日期
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
@@ -163,7 +163,7 @@ class DateCount {
     }
 
     //獲得上月開始日期
-    getLastMonthStartDate(){
+    getLastMonthStartDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -180,7 +180,7 @@ class DateCount {
     }
 
     //獲得上月結束日期
-    getLastMonthEndDate(){
+    getLastMonthEndDate(): string {
 
         const now = new Date(); //當前日期
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
@@ -197,7 +197,7 @@ class DateCount {
     }
 
     //獲得Q1開始日期
-    getQ1StartDate(){
+    getQ1StartDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -208,7 +208,7 @@ class DateCount {
     }
 
     //獲得Q1結束日期
-    getQ1EndDate(){
+    getQ1EndDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -219,7 +219,7 @@ class DateCount {
     }
 
     //獲得Q2開始日期
-    getQ2StartDate(){
+    getQ2StartDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -230,7 +230,7 @@ class DateCount {
     }
 
     //獲得Q2結束日期
-    getQ2EndDate(){
+    getQ2EndDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -241,7 +241,7 @@ class DateCount {
     }
 
     //獲得Q3開始日期
-    getQ3StartDate(){
+    getQ3StartDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -252,7 +252,7 @@ class DateCount {
     }
 
     //獲得Q3結束日期
-    getQ3EndDate(){
+    getQ3EndDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -263,7 +263,7 @@ class DateCount {
     }
 
     //獲得Q4開始日期
-    getQ4StartDate(){
+    getQ4StartDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -274,7 +274,7 @@ class DateCount {
     }
 
     //獲得Q4結束日期
-    getQ4EndDate(){
+    getQ4EndDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -285,7 +285,7 @@ class DateCount {
     }
 
     //獲得ThisYear開始日期
-    getThisYearStartDate(){
+    getThisYearStartDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
@@ -296,7 +296,7 @@ class DateCount {
     }
 
     //獲得ThisYear結束日期
-    getLastYearEndDate(){
+    getLastYearEndDate(): string {
 
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
