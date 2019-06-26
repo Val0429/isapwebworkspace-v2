@@ -3,11 +3,11 @@
         <!-- 父元件的data='傳到子元件的data' -->
         <filter_condition
             :label="_('w_ReportFilterConditionComponent_')"
-            @submit-data="receivFiltereData"
+            @submit-data="receiveFilterData"
         >
         </filter_condition>
 
-        <br>
+        <div class="h-25"></div>
 
         <analysis_filter_in_out
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
@@ -24,15 +24,19 @@
         </analysis_filter>
 
         <b-button
-            @click="sendEmail"
+            @click="modalShow = !modalShow"
         >
             {{ _('w_ReportTemplate_Recipient') }}
         </b-button>
 
-        <br>
+        <div class="h-25"></div>
 
         <recipient
-            @user-data="receivUSerData"></recipient>
+            :modalShow="modalShow"
+            @user-data="receiveUserData"
+            @return-modalShow="receiveModalShowData"
+        ></recipient>
+
 
     </div>
 </template>
@@ -54,8 +58,12 @@ enum EDeviceMode {
 @Component
 export default class DemoFilterConditionComponent extends Vue {
 
+    //
+    modalShow: boolean = false;
+
     // 接收 submit 相關
     filterData: any = {};
+    userData: any = [];
 
     // 網子元件傳資料
     deviceMode: string = EDeviceMode.demographic;
@@ -64,15 +72,18 @@ export default class DemoFilterConditionComponent extends Vue {
 
     mounted() {}
 
-    sendEmail() {}
-
-    receivFiltereData(data) {
+    receiveFilterData(data) {
         this.filterData = data;
         Vue.set(this.filterData, "siteIds0", data.siteIds[0]);
     }
 
-    receivUSerData(data) {
-        console.log('data - ', data);
+    receiveUserData(data) {
+        this.userData = data;
+    console.log('this.userData - ', this.userData);
+    }
+
+    receiveModalShowData(data) {
+        this.modalShow = data;
     }
 }
 </script>

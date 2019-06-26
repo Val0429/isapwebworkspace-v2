@@ -183,6 +183,7 @@ export class AnalysisFilterInOut extends Vue {
             mode: this.deviceMode
         };
 
+        // 只選擇site
         if (
             this.siteIds0 !== undefined &&
             this.siteIds0 !== "" &&
@@ -209,6 +210,7 @@ export class AnalysisFilterInOut extends Vue {
                     return false;
                 });
         } else if (
+            // 選擇site和area
             this.siteIds0 !== undefined &&
             (this.inputFormData.areaId !== undefined ||
                 this.inputFormData.areaId !== "")
@@ -252,6 +254,7 @@ export class AnalysisFilterInOut extends Vue {
             mode: this.deviceMode
         };
 
+        // 只選擇site
         if (
             this.siteIds0 !== undefined &&
             this.siteIds0 !== "" &&
@@ -281,6 +284,7 @@ export class AnalysisFilterInOut extends Vue {
                     return false;
                 });
         } else if (
+            // 選擇site和area
             this.siteIds0 !== undefined &&
             this.siteIds0 !== "" &&
             (this.inputFormData.areaId !== undefined ||
@@ -310,6 +314,7 @@ export class AnalysisFilterInOut extends Vue {
                     return false;
                 });
         } else if (
+            // 選擇site和area和device group
             this.siteIds0 !== undefined &&
             this.siteIds0 !== "" &&
             (this.inputFormData.areaId !== undefined ||

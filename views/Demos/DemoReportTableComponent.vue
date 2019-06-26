@@ -122,8 +122,7 @@ export default class DemoReportComponent extends Vue {
 
     siteItem = [
         { value: "dfgsadg", text: "台北店" },
-        { value: "ewtewfg", text: "台中店" },
-        { value: "segasdg", text: "台南店" }
+        { value: "ewtewfg", text: "台中店" }
     ];
 
     pData: IPeckTimeRange = {
@@ -209,7 +208,7 @@ export default class DemoReportComponent extends Vue {
     }
 
     initPeakTimeRange() {
-        if (this.site == "site") {
+        if (this.site == "dfgsadg") {
             this.pData = {
                 head: [
                     "09:00-10:00",
@@ -372,7 +371,8 @@ export default class DemoReportComponent extends Vue {
 
     changeSite(site) {
         this.site = site;
-        console.log("changeSite - f", site);
+
+        this.initPeakTimeRange();
     }
 }
 </script>
