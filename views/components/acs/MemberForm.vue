@@ -198,18 +198,23 @@
                                 :interface="ITabForm4()"
                                 :value="inputFormData"
                                 @update:*="tempSaveInputData($event)"
-                                @update:cardTemplate="updateShowCard($event)"
                             >
+
+                                <template #cardTemplate="{ $attrs, $listeners }">
+                                    <iv-form-selection
+                                        class="col-md-6"
+                                        v-bind="$attrs"
+                                        v-on="$listeners"
+                                        v-model="inputFormData.cardTemplate"
+                                    ></iv-form-selection>
+                                </template>
 
                                 <template
                                     #imageSrcCard="{ $attrs, $listeners}"
                                     v-if="imageSrcCard"
                                 >
-                                    <label class="col-md-12">
-                                        {{_("w_Member_CardPhoto")}}
-                                    </label>
                                     <img
-                                        class="imgCard"
+                                        class="col-md-6 imgCard"
                                         v-bind="$attrs"
                                         v-on="$listeners"
                                         :src="imageSrcCard"
@@ -275,6 +280,7 @@ import { ToolboxBack } from "@/components/Toolbox/toolbox-back.vue";
 import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
 import ImageBase64 from "@/services/ImageBase64";
+import CardTemplateBase64 from '@/components/FET_Card/models/cardTemplateBase64';
 
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
@@ -286,6 +292,11 @@ enum EPageStep {
     edit = "edit",
     view = "view",
     none = "none"
+}
+
+enum ITemplateCard {
+    permanent = '職員識別證',
+    contract  = '約聘職員識別證',
 }
 
 @Component({
@@ -385,13 +396,14 @@ export default class MemberForm extends Vue {
     selectedDetail: any = [];
 
     workGroupSelectItem: any = {};
-    cardTemplateSelectItem: any = {};
-
+    cardTemplateSelectItem: any = {
+        "permanent": ITemplateCard.permanent,
+        "contract": ITemplateCard.contract,
+    };
     workGroupIdSelectItem: any = {};
 
     inputTestEmail: string = "";
     newImg = new Image();
-    newImgCard = new Image();
     newImgSrc = "";
     imageSrcCard = "";
     premissionOptions: ISortSelectOption[] = [];
@@ -1287,8 +1299,21 @@ export default class MemberForm extends Vue {
             case "resignationRecordCarLicense":
                 this.inputFormData.resignationRecordCarLicense = data.value;
                 break;
+
+            // tab4
+            case 'cardTemplate':
+                switch (data.value) {
+                    case "permanent":
+                        this.imageSrcCard = CardTemplateBase64.permanent;
+                        break;
+                    case "contract":
+                        this.imageSrcCard = CardTemplateBase64.contract;
+                        break;
+                }
+                break;
+            }
         }
-    }
+
 
     pageToAdd() {
         this.pageStep = EPageStep.add;
@@ -1361,10 +1386,6 @@ export default class MemberForm extends Vue {
         if (data) this.uploadFile(data);
     }
 
-    updateShowCard(data) {
-        if (data) this.uploadFileCard(data);
-    }
-
     async uploadFile(file) {
         if (file) {
             ImageBase64.fileToBase64(file, (base64 = "") => {
@@ -1382,22 +1403,6 @@ export default class MemberForm extends Vue {
         }
     }
 
-    async uploadFileCard(file) {
-        if (file) {
-            ImageBase64.fileToBase64(file, (base64 = "") => {
-                if (base64 != "") {
-                    this.newImgCard = new Image();
-                    this.newImgCard.src = base64;
-                    this.newImgCard.onload = () => {
-                        this.imageSrcCard = base64;
-                        return;
-                    };
-                } else {
-                    Dialog.error(this._("w_Member_ErrorUploadFile"));
-                }
-            });
-        }
-    }
 
     async saveAddOrEdit() {
         let tempCredentials: any = [];
@@ -2914,7 +2919,7 @@ export default class MemberForm extends Vue {
     margin-bottom: 10px;
 }
 .imgCard {
-    max-width: 300px;
+    max-width: 250px;
     min-width: 200px;
     max-height: none;
     min-height: auto;
