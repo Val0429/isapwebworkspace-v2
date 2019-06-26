@@ -747,6 +747,7 @@ export default class LangObject {
     // Report Traffic
     w_ReportTraffic_Traffic = 'Traffic';
     w_ReportTraffic_TrafficRevenue = 'Revenue';
+    w_ReportTraffic_TrafficTime= 'Time';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';

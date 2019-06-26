@@ -208,6 +208,7 @@
             allTagIds: [],
             startDate: new Date(),
             endDate: new Date(),
+            type: '',
             designationPeriod: 'today',
         };
 
@@ -397,85 +398,71 @@
                     case "today":
                         this.inputFormData.startDate = DateCount.getDateStr(0);
                         this.inputFormData.endDate = DateCount.getDateStr(0);
-
                         console.log('startDate today - ', this.inputFormData.startDate);
                         console.log('endDate today - ',this.inputFormData.endDate);
                         break;
                     case "yesterday":
                         this.inputFormData.startDate = DateCount.getDateStr(-1);
-                        this.inputFormData.endDate = DateCount.getDateStr(0);
-
+                        this.inputFormData.endDate = DateCount.getDateStr(-1);
                         console.log('startDate yesterday - ', this.inputFormData.startDate);
                         console.log('endDate yesterday - ',this.inputFormData.endDate);
                         break;
                     case "last7days":
-                        this.inputFormData.startDate = DateCount.getDateStr(-7);
+                        this.inputFormData.startDate = DateCount.getDateStr(-6);
                         this.inputFormData.endDate = DateCount.getDateStr(0);
-
                         console.log('startDate last7days - ', this.inputFormData.startDate);
                         console.log('endDate last7days - ',this.inputFormData.endDate);break;
                     case "thisWeek":
                         this.inputFormData.startDate = DateCount.getWeekStartDate();
                          this.inputFormData.endDate = DateCount.getWeekEndDate();
-
                         console.log('startDate thisWeek - ', this.inputFormData.startDate);
                         console.log('endDate thisWeek - ',this.inputFormData.endDate);
                         break;
                     case "lastWeek":
                         this.inputFormData.startDate = DateCount.getLastWeekStartDate();
                         this.inputFormData.endDate = DateCount.getLastWeekEndDate();
-
                         console.log('startDate lastWeek - ', this.inputFormData.startDate);
                         console.log('endDate lastWeek - ',this.inputFormData.endDate);
                         break;
                     case "thisMonth":
                         this.inputFormData.startDate = DateCount.getMonthStartDate();
                         this.inputFormData.endDate = DateCount.getMonthEndDate();
-
                         console.log('startDate thisMonth - ', this.inputFormData.startDate);
                         console.log('endDate thisMonth - ',this.inputFormData.endDate);
                         break;
                     case "lastMonth":
                         this.inputFormData.startDate = DateCount.getLastMonthStartDate();
                         this.inputFormData.endDate = DateCount.getLastMonthEndDate();
-
                         console.log('startDate lastMonth - ', this.inputFormData.startDate);
                         console.log('endDate lastMonth - ',this.inputFormData.endDate);
                         break;
                     case "q1":
                         this.inputFormData.startDate = DateCount.getQ1StartDate();
                         this.inputFormData.endDate = DateCount.getQ1EndDate();
-
                         console.log('startDate q1 - ', this.inputFormData.startDate);
                         console.log('endDate q1 - ',this.inputFormData.endDate);
                         break;
                     case "q2":
                         this.inputFormData.startDate = DateCount.getQ2StartDate();
                         this.inputFormData.endDate = DateCount.getQ2EndDate();
-
                         console.log('startDate q2 - ', this.inputFormData.startDate);
                         console.log('endDate q2 - ',this.inputFormData.endDate);
-
                         break;
                     case "q3":
                         this.inputFormData.startDate = DateCount.getQ3StartDate();
                         this.inputFormData.endDate = DateCount.getQ3EndDate();
-
                         console.log('startDate q3 - ', this.inputFormData.startDate);
                         console.log('endDate q3 - ',this.inputFormData.endDate);
-
                         break;
                     case "q4":
                         this.inputFormData.startDate = DateCount.getQ4StartDate();
                         this.inputFormData.endDate = DateCount.getQ4EndDate();
-
                         console.log('startDate q4 - ', this.inputFormData.startDate);
                         console.log('endDate q4 - ',this.inputFormData.endDate);
                         break;
                     case "thisYear":
                         this.inputFormData.startDate = DateCount.getThisYearStartDate();
                         this.inputFormData.endDate = DateCount.getLastYearEndDate();
-
                         console.log('startDate thisYear - ', this.inputFormData.startDate);
                         console.log('endDate thisYear - ',this.inputFormData.endDate);
                     break;
@@ -558,9 +545,9 @@
                 }
                  */
                 designationPeriod?: ${toEnumInterface(
-                this.designationPeriodSelectItem as any,
-                false
-            )};
+                    this.designationPeriodSelectItem as any,
+                    false
+                )};
 
 
                 /**

@@ -746,6 +746,7 @@ export default class LangObject implements ILang {
     // Report Traffic
     w_ReportTraffic_Traffic = 'Traffic';
     w_ReportTraffic_TrafficRevenue = 'Revenue';
+    w_ReportTraffic_TrafficTime = 'Time';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
@@ -762,8 +763,8 @@ export default class LangObject implements ILang {
     w_ReportTemplate_SendReportTime = 'Send Report Time';
     w_ReportTemplate_SendReportTime1 = '* Send Report Time';
     w_ReportTemplate_Recipient = 'Recipient';
-	w_ReportTemplate_Recipients = 'Recipient(s)';
-	w_ReportTemplate_RecipientSelect = 'Select Recipient(s)';
+    w_ReportTemplate_Recipients = 'Recipient(s)';
+    w_ReportTemplate_RecipientSelect = 'Select Recipient(s)';
 
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
