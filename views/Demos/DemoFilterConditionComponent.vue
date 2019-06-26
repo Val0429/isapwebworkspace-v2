@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <!-- 父元件的data='傳到子元件的data' -->
         <filter_condition
             :label="_('w_ReportFilterConditionComponent_')"
@@ -55,10 +56,11 @@ enum EDeviceMode {
     humanDetection = "humanDetection"
 }
 
+
 @Component
 export default class DemoFilterConditionComponent extends Vue {
 
-    //
+    // recipient 相關
     modalShow: boolean = false;
 
     // 接收 submit 相關
@@ -85,5 +87,8 @@ export default class DemoFilterConditionComponent extends Vue {
     receiveModalShowData(data) {
         this.modalShow = data;
     }
+
 }
 </script>
+<style lang="scss" scoped>
+</style>
