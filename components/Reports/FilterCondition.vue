@@ -117,6 +117,7 @@
     </div>
 </template>
 
+
 <script lang="ts">
     import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
     import { toEnumInterface } from "@/../core";
@@ -128,6 +129,7 @@
     import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
     import RegionAPI from "@/services/RegionAPI";
     import ResponseFilter from "@/services/ResponseFilter";
+    import DateCount from "@/components/Reports/models/dateCount";
 
     enum EPageStep {
         none = "none",
@@ -155,6 +157,7 @@
         thisYear = "This Year"
     }
 
+
     @Component({
         components: {}
     })
@@ -171,21 +174,6 @@
         selectType = ERegionType.site;
         regionTreeItem = new RegionTreeItem();
         selecteds: IRegionTreeSelected[] = [];
-
-
-        inputFormData: any = {
-            siteIds: [],
-            tagIds: [],
-            allSiteIds: [],
-            allTagIds: [],
-            startDate: new Date(),
-            endDate: new Date(),
-            designationPeriod: 'today',
-        };
-
-        // // tree 相關
-        // selectType = ERegionType.site;
-        // selecteds: IRegionTreeSelected[] = [];
 
         // date 相關
         selectPeriodAddWay: string = EAddPeriodSelect.period;
@@ -213,6 +201,17 @@
             thisYear: EDesignationPeriod.thisYear
         };
 
+        inputFormData: any = {
+            siteIds: [],
+            tagIds: [],
+            allSiteIds: [],
+            allTagIds: [],
+            startDate: new Date(),
+            endDate: new Date(),
+            designationPeriod: 'today',
+        };
+
+
         created() {
             this.initSelectItemSite();
             this.initSelectItemTag();
@@ -220,7 +219,8 @@
             this.initRegionTreeSelect();
         }
 
-        mounted() {}
+        mounted() {
+        }
 
         initRegionTreeSelect() {
             this.regionTreeItem = new RegionTreeItem();
@@ -369,8 +369,6 @@
             }
         }
 
-
-
         changeAddPeriodSelect(selected: string) {
             this.selectPeriodAddWay = selected;
             this.inputFormData.designationPeriod = 'today';
@@ -387,38 +385,103 @@
             this.inputFormData.siteIds === ['all'] ? this.inputFormData.allSiteIds : this.inputFormData.siteIds;
             // this.inputFormData.tagIds === [] ? this.inputFormData.allTagIds : this.inputFormData.tagIds;
 
-            // 沒有指定時間區間，則startDate和endDate
-
+            // 選擇 period
             if(this.selectPeriodAddWay === EAddPeriodSelect.period) {
                 // this.inputFormData.startDate
                 // this.inputFormData.endDate
-            }
 
-            /*
-            this.inputFormData.startDate
-            this.inputFormData.endDate
-            this.inputFormData.
-            */
-
-            if(this.selectPeriodAddWay === EAddPeriodSelect.designation) {
-                // this.inputFormData.startDate
-                // this.inputFormData.endDate
+            // 選擇 designation
+            } else if(this.selectPeriodAddWay === EAddPeriodSelect.designation) {
 
                 switch (this.inputFormData.designationPeriod) {
                     case "today":
-                        // this.inputFormData.startDate
-                        // this.inputFormData.endDate
+                        this.inputFormData.startDate = DateCount.getDateStr(0);
+                        this.inputFormData.endDate = DateCount.getDateStr(0);
+
+                        console.log('startDate today - ', this.inputFormData.startDate);
+                        console.log('endDate today - ',this.inputFormData.endDate);
                         break;
-                    case "today":
-                        // this.inputFormData.startDate
-                        // this.inputFormData.endDate
+                    case "yesterday":
+                        this.inputFormData.startDate = DateCount.getDateStr(-1);
+                        this.inputFormData.endDate = DateCount.getDateStr(0);
+
+                        console.log('startDate yesterday - ', this.inputFormData.startDate);
+                        console.log('endDate yesterday - ',this.inputFormData.endDate);
                         break;
+                    case "last7days":
+                        this.inputFormData.startDate = DateCount.getDateStr(-7);
+                        this.inputFormData.endDate = DateCount.getDateStr(0);
+
+                        console.log('startDate last7days - ', this.inputFormData.startDate);
+                        console.log('endDate last7days - ',this.inputFormData.endDate);break;
+                    case "thisWeek":
+                        this.inputFormData.startDate = DateCount.getWeekStartDate();
+                         this.inputFormData.endDate = DateCount.getWeekEndDate();
+
+                        console.log('startDate thisWeek - ', this.inputFormData.startDate);
+                        console.log('endDate thisWeek - ',this.inputFormData.endDate);
+                        break;
+                    case "lastWeek":
+                        this.inputFormData.startDate = DateCount.getLastWeekStartDate();
+                        this.inputFormData.endDate = DateCount.getLastWeekEndDate();
+
+                        console.log('startDate lastWeek - ', this.inputFormData.startDate);
+                        console.log('endDate lastWeek - ',this.inputFormData.endDate);
+                        break;
+                    case "thisMonth":
+                        this.inputFormData.startDate = DateCount.getMonthStartDate();
+                        this.inputFormData.endDate = DateCount.getMonthEndDate();
+
+                        console.log('startDate thisMonth - ', this.inputFormData.startDate);
+                        console.log('endDate thisMonth - ',this.inputFormData.endDate);
+                        break;
+                    case "lastMonth":
+                        this.inputFormData.startDate = DateCount.getLastMonthStartDate();
+                        this.inputFormData.endDate = DateCount.getLastMonthEndDate();
+
+                        console.log('startDate lastMonth - ', this.inputFormData.startDate);
+                        console.log('endDate lastMonth - ',this.inputFormData.endDate);
+                        break;
+                    case "q1":
+                        this.inputFormData.startDate = DateCount.getQ1StartDate();
+                        this.inputFormData.endDate = DateCount.getQ1EndDate();
+
+                        console.log('startDate q1 - ', this.inputFormData.startDate);
+                        console.log('endDate q1 - ',this.inputFormData.endDate);
+                        break;
+                    case "q2":
+                        this.inputFormData.startDate = DateCount.getQ2StartDate();
+                        this.inputFormData.endDate = DateCount.getQ2EndDate();
+
+                        console.log('startDate q2 - ', this.inputFormData.startDate);
+                        console.log('endDate q2 - ',this.inputFormData.endDate);
+
+                        break;
+                    case "q3":
+                        this.inputFormData.startDate = DateCount.getQ3StartDate();
+                        this.inputFormData.endDate = DateCount.getQ3EndDate();
+
+                        console.log('startDate q3 - ', this.inputFormData.startDate);
+                        console.log('endDate q3 - ',this.inputFormData.endDate);
+
+                        break;
+                    case "q4":
+                        this.inputFormData.startDate = DateCount.getQ4StartDate();
+                        this.inputFormData.endDate = DateCount.getQ4EndDate();
+
+                        console.log('startDate q4 - ', this.inputFormData.startDate);
+                        console.log('endDate q4 - ',this.inputFormData.endDate);
+                        break;
+                    case "thisYear":
+                        this.inputFormData.startDate = DateCount.getThisYearStartDate();
+                        this.inputFormData.endDate = DateCount.getLastYearEndDate();
+
+                        console.log('startDate thisYear - ', this.inputFormData.startDate);
+                        console.log('endDate thisYear - ',this.inputFormData.endDate);
+                    break;
                 }
 
             }
-
-
-
 
             this.$emit("submit-data", this.inputFormData);
         }
