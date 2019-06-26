@@ -118,286 +118,330 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
-import {
-    ERegionType,
-    RegionTreeItem,
-    IRegionTreeSelected
-} from "@/components/RegionTree/models";
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
+    import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+    import { toEnumInterface } from "@/../core";
+    import {
+        ERegionType,
+        RegionTreeItem,
+        IRegionTreeSelected
+    } from "@/components/RegionTree/models";
+    import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+    import RegionAPI from "@/services/RegionAPI";
+    import ResponseFilter from "@/services/ResponseFilter";
 
-enum EPageStep {
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree"
-}
-
-enum EAddPeriodSelect {
-    period = "period",
-    designation = "designation"
-}
-
-enum EDesignationPeriod {
-    today = "Today",
-    yesterday = "Yesterday",
-    last7days = "Last 7 days",
-    thisWeek = "This Week",
-    lastWeek = "Last Week",
-    thisMonth = "This Month",
-    lastMonth = "Last Month",
-    q1 = "Q1",
-    q2 = "Q2",
-    q3 = "Q3",
-    q4 = "Q4",
-    thisYear = "This Year"
-}
-
-@Component({
-    components: {}
-})
-export class FilterCondition extends Vue {
-
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
-
-    // select 相關
-    sitesSelectItem: any = {};
-    tagSelectItem: any = {};
-
-    // tree
-    selectType = ERegionType.site;
-    regionTreeItem = new RegionTreeItem();
-    selecteds: IRegionTreeSelected[] = [];
-
-
-    inputFormData: any = {
-        siteIds: [],
-        tagIds: [],
-        startDate: new Date(),
-        endDate: new Date(),
-        designationPeriod: 'today',
-    };
-
-    // // tree 相關
-    // selectType = ERegionType.site;
-    // selecteds: IRegionTreeSelected[] = [];
-
-    // date 相關
-    selectPeriodAddWay: string = EAddPeriodSelect.period;
-
-    addPeriodSelectItem: any = [
-        { value: EAddPeriodSelect.period, text: EAddPeriodSelect.period },
-        {
-            value: EAddPeriodSelect.designation,
-            text: EAddPeriodSelect.designation
-        }
-    ];
-
-    designationPeriodSelectItem: any = {
-        today: EDesignationPeriod.today,
-        yesterday: EDesignationPeriod.yesterday,
-        last7days: EDesignationPeriod.last7days,
-        thisWeek: EDesignationPeriod.thisWeek,
-        lastWeek: EDesignationPeriod.lastWeek,
-        thisMonth: EDesignationPeriod.thisMonth,
-        lastMonth: EDesignationPeriod.lastMonth,
-        q1: EDesignationPeriod.q1,
-        q2: EDesignationPeriod.q2,
-        q3: EDesignationPeriod.q3,
-        q4: EDesignationPeriod.q4,
-        thisYear: EDesignationPeriod.thisYear
-    };
-
-    created() {
-        this.initSelectItemSite();
-        this.initSelectItemTag();
-        this.initSelectItemTree();
-        this.initRegionTreeSelect();
+    enum EPageStep {
+        none = "none",
+        showResult = "showResult",
+        chooseTree = "chooseTree"
     }
 
-    mounted() {}
-
-    initRegionTreeSelect() {
-        this.regionTreeItem = new RegionTreeItem();
-        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    enum EAddPeriodSelect {
+        period = "period",
+        designation = "designation"
     }
 
-    async initSelectItemSite() {
-        let tempSitesSelectItem = {};
-
-        const readAllSiteParam: {
-            type: string;
-        } = {
-            type: "all"
-        };
-
-        await this.$server
-            .R("/location/site/all", readAllSiteParam)
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
-                        tempSitesSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.sitesSelectItem = tempSitesSelectItem;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+    enum EDesignationPeriod {
+        today = "Today",
+        yesterday = "Yesterday",
+        last7days = "Last 7 days",
+        thisWeek = "This Week",
+        lastWeek = "Last Week",
+        thisMonth = "This Month",
+        lastMonth = "Last Month",
+        q1 = "Q1",
+        q2 = "Q2",
+        q3 = "Q3",
+        q4 = "Q4",
+        thisYear = "This Year"
     }
 
-    async initSelectItemTag() {
-        let tempTagSelectItem = {};
+    @Component({
+        components: {}
+    })
+    export class FilterCondition extends Vue {
 
-        await this.$server
-            .R("/tag/all")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 tagSelectItem 的 key 的方式
-                        tempTagSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.tagSelectItem = tempTagSelectItem;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
+        ePageStep = EPageStep;
+        pageStep: EPageStep = EPageStep.none;
 
-    async initSelectItemTree() {
-        await this.$server
-            .R("/location/tree")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
+        // select 相關
+        sitesSelectItem: any = {};
+        tagSelectItem: any = {};
 
-    tempSaveInputData(data) {
-
-        switch (data.key) {
-            case "siteIds":
-                this.inputFormData.siteIds = data.value;
-                break;
-            case "tagIds":
-                this.inputFormData.tagIds = data.value;
-                break;
-            case "startDate":
-                this.inputFormData.startDate = data.value;
-                break;
-            case "endDate":
-                this.inputFormData.endDate = data.value;
-                break;
-            case "designationPeriod":
-                this.inputFormData.designationPeriod = data.value;
-                break;
-        }
-
-        this.selecteds = [];
-
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-    }
-
-    async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.selecteds = [];
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-
-    }
-
-    pageToShowResult() {
-        this.pageStep = EPageStep.none;
-        // siteIds clear
-        this.inputFormData.siteIds = [];
-
-        // from selecteds push siteIds
-        for (const item of this.selecteds) {
-            this.inputFormData.siteIds.push(item.objectId);
-        }
-    }
+        // tree
+        selectType = ERegionType.site;
+        regionTreeItem = new RegionTreeItem();
+        selecteds: IRegionTreeSelected[] = [];
 
 
-
-    changeAddPeriodSelect(selected: string) {
-        this.selectPeriodAddWay = selected;
-        this.inputFormData.designationPeriod = 'today';
-        this.inputFormData.startDate = new Date();
-        this.inputFormData.endDate = new Date();
-    }
-
-    doSubmit() {
-        // TODO: wait api
-
-        this.$emit("submit-data", this.inputFormData);
-    }
-
-    doReset() {
-        this.inputFormData = {
+        inputFormData: any = {
             siteIds: [],
             tagIds: [],
+            allSiteIds: [],
+            allTagIds: [],
             startDate: new Date(),
             endDate: new Date(),
             designationPeriod: 'today',
         };
-    }
 
-    IFilterConditionForm() {
-        return `
+        // // tree 相關
+        // selectType = ERegionType.site;
+        // selecteds: IRegionTreeSelected[] = [];
+
+        // date 相關
+        selectPeriodAddWay: string = EAddPeriodSelect.period;
+
+        addPeriodSelectItem: any = [
+            { value: EAddPeriodSelect.period, text: EAddPeriodSelect.period },
+            {
+                value: EAddPeriodSelect.designation,
+                text: EAddPeriodSelect.designation
+            }
+        ];
+
+        designationPeriodSelectItem: any = {
+            today: EDesignationPeriod.today,
+            yesterday: EDesignationPeriod.yesterday,
+            last7days: EDesignationPeriod.last7days,
+            thisWeek: EDesignationPeriod.thisWeek,
+            lastWeek: EDesignationPeriod.lastWeek,
+            thisMonth: EDesignationPeriod.thisMonth,
+            lastMonth: EDesignationPeriod.lastMonth,
+            q1: EDesignationPeriod.q1,
+            q2: EDesignationPeriod.q2,
+            q3: EDesignationPeriod.q3,
+            q4: EDesignationPeriod.q4,
+            thisYear: EDesignationPeriod.thisYear
+        };
+
+        created() {
+            this.initSelectItemSite();
+            this.initSelectItemTag();
+            this.initSelectItemTree();
+            this.initRegionTreeSelect();
+        }
+
+        mounted() {}
+
+        initRegionTreeSelect() {
+            this.regionTreeItem = new RegionTreeItem();
+            this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+        }
+
+        async initSelectItemSite() {
+            let tempSitesSelectItem = { "all": this._("w_All") };
+
+            const readAllSiteParam: {
+                type: string;
+            } = {
+                type: "all"
+            };
+
+            await this.$server
+                .R("/location/site/all", readAllSiteParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 sitesSelectItem 的 key 的方式
+                            tempSitesSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                            this.inputFormData.allSiteIds.push(returnValue.objectId)
+                        }
+                        this.sitesSelectItem = tempSitesSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+        async initSelectItemTag() {
+            let tempTagSelectItem = {};
+
+            await this.$server
+                .R("/tag/all")
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 tagSelectItem 的 key 的方式
+                            tempTagSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                            this.inputFormData.allTagIds.push(returnValue.objectId)
+                        }
+                        this.tagSelectItem = tempTagSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+        async initSelectItemTree() {
+            await this.$server
+                .R("/location/tree")
+                .then((response: any) => {
+                    if (response != undefined) {
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            response
+                        );
+                        this.regionTreeItem.region = this.regionTreeItem.tree;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+        tempSaveInputData(data) {
+
+            switch (data.key) {
+                case "siteIds":
+                    this.inputFormData.siteIds = data.value;
+                    break;
+                case "tagIds":
+                    this.inputFormData.tagIds = data.value;
+                    break;
+                case "startDate":
+                    this.inputFormData.startDate = data.value;
+                    break;
+                case "endDate":
+                    this.inputFormData.endDate = data.value;
+                    break;
+                case "designationPeriod":
+                    this.inputFormData.designationPeriod = data.value;
+                    break;
+            }
+
+
+            this.selecteds = [];
+
+            for (const id of this.inputFormData.siteIds) {
+                for (const detail in this.sitesSelectItem) {
+                    if (id === detail) {
+                        let selectedsObject: IRegionTreeSelected = {
+                            objectId: detail,
+                            type: ERegionType.site,
+                            name: this.sitesSelectItem[detail]
+                        };
+                        this.selecteds.push(selectedsObject);
+                    }
+                }
+            }
+        }
+
+        async pageToChooseTree() {
+            this.pageStep = EPageStep.chooseTree;
+            this.selecteds = [];
+            for (const id of this.inputFormData.siteIds) {
+                for (const detail in this.sitesSelectItem) {
+                    if (id === detail) {
+                        let selectedsObject: IRegionTreeSelected = {
+                            objectId: detail,
+                            type: ERegionType.site,
+                            name: this.sitesSelectItem[detail]
+                        };
+                        this.selecteds.push(selectedsObject);
+                    }
+                }
+            }
+
+        }
+
+        pageToShowResult() {
+            this.pageStep = EPageStep.none;
+            // siteIds clear
+            this.inputFormData.siteIds = [];
+
+            // from selecteds push siteIds
+            for (const item of this.selecteds) {
+                this.inputFormData.siteIds.push(item.objectId);
+            }
+        }
+
+
+
+        changeAddPeriodSelect(selected: string) {
+            this.selectPeriodAddWay = selected;
+            this.inputFormData.designationPeriod = 'today';
+            this.inputFormData.startDate = new Date();
+            this.inputFormData.endDate = new Date();
+        }
+
+        doSubmit() {
+            // TODO: wait api
+
+
+            const sendParam = {};
+            // 如果沒有選擇 siteIds，則默認為全部的siteIds
+            this.inputFormData.siteIds === ['all'] ? this.inputFormData.allSiteIds : this.inputFormData.siteIds;
+            // this.inputFormData.tagIds === [] ? this.inputFormData.allTagIds : this.inputFormData.tagIds;
+
+            // 沒有指定時間區間，則startDate和endDate
+
+            if(this.selectPeriodAddWay === EAddPeriodSelect.period) {
+                // this.inputFormData.startDate
+                // this.inputFormData.endDate
+            }
+
+            /*
+            this.inputFormData.startDate
+            this.inputFormData.endDate
+            this.inputFormData.
+            */
+
+            if(this.selectPeriodAddWay === EAddPeriodSelect.designation) {
+                // this.inputFormData.startDate
+                // this.inputFormData.endDate
+
+                switch (this.inputFormData.designationPeriod) {
+                    case "today":
+                        // this.inputFormData.startDate
+                        // this.inputFormData.endDate
+                        break;
+                    case "today":
+                        // this.inputFormData.startDate
+                        // this.inputFormData.endDate
+                        break;
+                }
+
+            }
+
+
+
+
+            this.$emit("submit-data", this.inputFormData);
+        }
+
+        doReset() {
+            this.inputFormData = {
+                siteIds: [],
+                tagIds: [],
+                startDate: new Date(),
+                endDate: new Date(),
+                designationPeriod: 'today',
+            };
+        }
+
+        IFilterConditionForm() {
+            return `
             interface {
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
                  */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
 
                 /**
@@ -419,9 +463,9 @@ export class FilterCondition extends Vue {
                 * @uiColumnGroup - date
                 * @uiType - iv-form-date
                 * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation
-                        ? "true"
-                        : "false"
+                this.selectPeriodAddWay === EAddPeriodSelect.designation
+                    ? "true"
+                    : "false"
                 }
                  */
                 startDate?: any;
@@ -433,9 +477,9 @@ export class FilterCondition extends Vue {
                 * @uiColumnGroup - date
                 * @uiType - iv-form-date
                 * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation
-                        ? "true"
-                        : "false"
+                this.selectPeriodAddWay === EAddPeriodSelect.designation
+                    ? "true"
+                    : "false"
                 }
                  */
                 endDate?: any;
@@ -445,15 +489,15 @@ export class FilterCondition extends Vue {
                  * @uiLabel - ${this._("w_ReportTemplate_DesignationPeriod")}
                  * @uiColumnGroup - date
                  * @uiHidden - ${
-                     this.selectPeriodAddWay === EAddPeriodSelect.period
-                         ? "true"
-                         : "false"
-                 }
+                this.selectPeriodAddWay === EAddPeriodSelect.period
+                    ? "true"
+                    : "false"
+                }
                  */
                 designationPeriod?: ${toEnumInterface(
-                    this.designationPeriodSelectItem as any,
-                    false
-                )};
+                this.designationPeriodSelectItem as any,
+                false
+            )};
 
 
                 /**
@@ -469,28 +513,28 @@ export class FilterCondition extends Vue {
                  tag1?: any;
             }
         `;
+        }
     }
-}
 
-export default FilterCondition;
-Vue.component("filter_condition", FilterCondition);
+    export default FilterCondition;
+    Vue.component("filter_condition", FilterCondition);
 </script>
 
 <style lang="scss" scoped>
-.select_report_period_button {
-    margin-top: 27px;
-}
+    .select_report_period_button {
+        margin-top: 27px;
+    }
 
-.select_date_button {
-    margin-top: 29px;
-}
-.submit {
-    background-color: #5c7895;
-    border: 1px solid #5c7895;
-}
-.reset {
-    background-color: #d7d7d7;
-    border: 1px solid #d7d7d7;
-}
+    .select_date_button {
+        margin-top: 29px;
+    }
+    .submit {
+        background-color: #5c7895;
+        border: 1px solid #5c7895;
+    }
+    .reset {
+        background-color: #d7d7d7;
+        border: 1px solid #d7d7d7;
+    }
 
 </style>
