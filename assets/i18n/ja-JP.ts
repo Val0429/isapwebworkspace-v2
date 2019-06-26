@@ -761,12 +761,11 @@ export default class LangObject implements ILang {
     w_ReportTemplate_SendReportTime = 'Send Report Time';
     w_ReportTemplate_SendReportTime1 = '* Send Report Time';
     w_ReportTemplate_Recipient = 'Recipient';
+    w_ReportTemplate_Recipients = 'Recipient(s)';
+    w_ReportTemplate_RecipientSelect = 'Select Recipient(s)';
 
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
-    w_ReportFilterConditionComponent_SelectSite = 'Select Site(s)';
-    w_ReportFilterConditionComponent_SelectDate = 'Select Date(s)';
-    w_ReportFilterConditionComponent_Tag = 'Tag(s)';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';
