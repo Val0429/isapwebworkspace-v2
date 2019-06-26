@@ -1,10 +1,19 @@
 <template>
     <div class="animated fadeIn">
         <title>Peak hours</title>
-        <table class="table table-bordered">
+        <table
+            class="table table-bordered"
+            v-if="timeRangeData.head.length > 0"
+        >
             <thead>
                 <tr>
-                    <th></th>
+                    <th>
+                        <b-form-select
+                            v-model="site"
+                            :options="siteItem"
+                            @change="changeSite()"
+                        ></b-form-select>
+                    </th>
                     <th v-for="(item, key, index) in timeRangeData.head">
                         {{item}}
                     </th>
@@ -31,6 +40,13 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 })
 export class PeakTimeRange extends Vue {
     // Prop
+    @Prop({
+        type: Array,
+        default: function() {
+            return {};
+        }
+    })
+    siteItem: [];
 
     @Prop({
         type: Object,
@@ -42,6 +58,8 @@ export class PeakTimeRange extends Vue {
         }
     })
     timeRangeData: object;
+
+    site = "dfgsadg";
 
     created() {}
 
@@ -67,6 +85,10 @@ export class PeakTimeRange extends Vue {
             default:
                 return "hoursRange0";
         }
+    }
+
+    changeSite() {
+        this.$emit("changeSite", this.site);
     }
 }
 
