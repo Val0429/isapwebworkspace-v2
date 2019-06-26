@@ -67,7 +67,7 @@ export default class DoorReport extends BasicReportImpl  {
     
     
     async created(){
-        this.tableTitle= this._('w_EmployeeList');        
+        this.tableTitle= this._('w_DoorReport');        
         await this.getData();
     }
     

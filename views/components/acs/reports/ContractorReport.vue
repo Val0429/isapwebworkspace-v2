@@ -67,7 +67,7 @@ export default class ContractorReport extends BasicReportImpl  {
     
     
     async created(){
-        this.tableTitle= this._('w_EmployeeList');        
+        this.tableTitle= this._('w_ContractorReport');        
         await this.getData();
     }
     

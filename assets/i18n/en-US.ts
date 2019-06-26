@@ -129,8 +129,7 @@ export default class LangObject {
     w_ElevatorGroupEdit = 'Edit Elevator Group';
     elevators = 'Elevators';
 
-    w_EmployeeList = 'Employee List';
-    w_AttendanceRecord = 'Attendance Record';
+    
 
     // User
     w_User_UserList = 'User List';
@@ -546,7 +545,13 @@ export default class LangObject {
     w_Navigation_Users_UserGroup = 'User Group';
     w_Navigation_Site = 'Site';
     w_Navigation_Region = 'Region';
+
     w_ContractorReport = "Contractor Report";
     w_DoorReport = 'Door Report';
-    w_DemographicReport = "Demographic Report"
+    w_DoorGroupReport= 'Door Group Report';
+    w_DemographicReport = "Demographic Report";
+    w_EmployeeReport = 'Employee Report';
+    w_CardExpirationReport = 'Card Report';
+    w_AttendanceRecord = 'Attendance Record';
+
 }

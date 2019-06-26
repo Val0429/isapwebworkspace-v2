@@ -37,10 +37,12 @@
                 <SidebarNavItem url="/accesslevel" />
 
                 <SidebarNavItem url="/attendance" />
-                <SidebarNavItem url="/employee" />
+                <SidebarNavItem url="/employeereport" />
                 <SidebarNavItem url="/doorreport" />
+                <SidebarNavItem url="/doorgroupreport" />
                 <SidebarNavItem url="/contractorreport" />
                 <SidebarNavItem url="/demographicreport" />
+                <SidebarNavItem url="/cardreport" />
                 
                 
                 

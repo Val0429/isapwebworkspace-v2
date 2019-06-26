@@ -26,10 +26,12 @@ import AccessLevel from './components/acs/AccessLevel.vue';
 import Floor from './components/acs/Floor.vue';
 import ElevatorGroup from './components/acs/ElevatorGroup.vue';
 import AttendanceRecord from './components/acs/reports/AttendanceRecord.vue';
-import EmployeeList from './components/acs/reports/EmployeeList.vue';
+import EmployeeReport from './components/acs/reports/EmployeeReport.vue';
 import DoorReport from './components/acs/reports/DoorReport.vue';
+import DoorGroupReport from './components/acs/reports/DoorGroupReport.vue';
 import ContractorReport from './components/acs/reports/ContractorReport.vue';
 import DemographicReport from './components/acs/reports/DemographicReport.vue';
+import CardExpirationReport from './components/acs/reports/CardExpirationReport.vue';
 
 import User from './components/bar/User.vue';
 import Site from './components/bar/Site.vue';
@@ -49,10 +51,12 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);    
     $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
     $({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
-    $({ path: '/employee', name: "_('w_EmployeeList')", icon: 'fa-building' })(EmployeeList);
+    $({ path: '/employeereport', name: "_('w_EmployeeReport')", icon: 'fa-building' })(EmployeeReport);
     $({ path: '/doorreport', name: "_('w_DoorReport')", icon: 'fa-building' })(DoorReport);
+    $({ path: '/doorgroupreport', name: "_('w_DoorGroupReport')", icon: 'fa-building' })(DoorGroupReport);
     $({ path: '/contractorreport', name: "_('w_ContractorReport')", icon: 'fa-building' })(ContractorReport);
     $({ path: '/demographicreport', name: "_('w_DemographicReport')", icon: 'fa-building' })(DemographicReport);
+    $({ path: '/cardreport', name: "_('w_CardExpirationReport')", icon: 'fa-building' })(CardExpirationReport);
     
 // Users
 $({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);

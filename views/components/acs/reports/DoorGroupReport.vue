@@ -63,11 +63,11 @@ import { BasicReport, BasicReportImpl } from './BasicReport';
 import { config } from 'rxjs';
 
 @Component
-export default class EmployeeList extends BasicReportImpl  {
+export default class DoorGroupReport extends BasicReportImpl  {
     
     
     async created(){
-        this.tableTitle= this._('w_EmployeeList');        
+        this.tableTitle= this._('w_DoorGroupReport');        
         await this.getData();
     }
     
