@@ -9,6 +9,8 @@
             v-on:changeSite="changeSite"
         >
         </peak-time-range>
+        <report-table>
+        </report-table>
     </div>
 </template>
 

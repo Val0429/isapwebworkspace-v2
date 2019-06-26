@@ -1,19 +1,9 @@
 <template>
     <div class="animated fadeIn">
-        <title>Traffic hours</title>
-        <table
-            class="table table-bordered"
-            v-if="tableData.head.length > 0"
-        >
+        <title>Report Table</title>
+        <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>
-                        <b-form-select
-                            v-model="site"
-                            :options="siteItem"
-                            @change="changeSite()"
-                        ></b-form-select>
-                    </th>
                     <th v-for="(item, key, index) in tableData.head">
                         {{item}}
                     </th>
@@ -22,10 +12,9 @@
             <tbody>
                 <tr v-for="(items, key, index) in tableData.body">
                     <td>{{items.title}}</td>
-                    <td
-                        v-for="(item, key, index) in items.context"
-                        :class="showHoursRange(item)"
-                    ></td>
+                    <td v-for="(item, key, index) in items.context">
+                        {{item}}
+                    </td>
                 </tr>
             </tbody>
         </table>
