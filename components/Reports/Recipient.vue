@@ -1,57 +1,59 @@
 <template>
     <div>
-        <iv-card
-            :visible="true"
-            :label="_('w_ReportTemplate_RecipientSelect')"
-        >
-            <iv-form
-                :interface="IFilterConditionForm()"
-                @submit="doSubmit($event)"
+        <b-modal v-model="modalShow" hide-header hide-footer size="lg">
+            <iv-card
+                :visible="true"
+                :label="_('w_ReportTemplate_RecipientSelect')"
             >
+                <iv-form
+                    :interface="IFilterConditionForm()"
+                    @submit="doSubmit($event)"
+                >
 
-                <template #userIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="userIds">
-                    </iv-form-selection>
+                    <template #userIds="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="userIds">
+                        </iv-form-selection>
+                    </template>
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        class="info"
+                        size="lg"
+                        @click="doCancel"
+                    >
+                        {{ _('w_Cancel') }}
+                    </b-button>
+
+                    <b-button
+                        class="submit"
+                        size="lg"
+                        @click="doSubmit"
+                    >
+                        {{ _('wb_Submit') }}
+                    </b-button>
+
+                    <b-button
+                        class="reset"
+                        size="lg"
+                        @click="doReset"
+                    >
+                        {{ _('wb_Reset') }}
+                    </b-button>
                 </template>
 
-            </iv-form>
-
-            <template #footer>
-                <b-button
-                    class="info"
-                    size="lg"
-                    @click="doReset"
-                >
-                    {{ _('w_Cancel') }}
-                </b-button>
-
-                <b-button
-                    class="submit"
-                    size="lg"
-                    @click="doSubmit"
-                >
-                    {{ _('wb_Submit') }}
-                </b-button>
-
-                <b-button
-                    class="reset"
-                    size="lg"
-                    @click="doReset"
-                >
-                    {{ _('wb_Reset') }}
-                </b-button>
-            </template>
-
-        </iv-card>
+            </iv-card>
+        </b-modal >
 
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+    import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
     import { toEnumInterface } from "@/../core";
     import ResponseFilter from "@/services/ResponseFilter";
 
@@ -59,6 +61,13 @@
         components: {}
     })
     export class Recipient extends Vue {
+
+        // Prop
+        @Prop({
+            type: Boolean, // Boolean, Number, String, Array, Object
+            default: false
+        })
+        modalShow: boolean;
 
         userSelectItem: any = {};
 
@@ -69,6 +78,9 @@
         }
 
         mounted() {}
+
+        @Watch("modalShow", { deep: true })
+        private whenModalShowChanged(newVal, oldVal) {}
 
         async initSelectItemUsers() {
 
@@ -81,7 +93,7 @@
                         for (const returnValue of response.results) {
                             // 自定義 userSelectItem 的 key 的方式
                             tempUserSelectItem[returnValue.objectId] =
-                                `${returnValue.username} : ${returnValue.email}`;
+                                `${returnValue.username} - ${returnValue.email}`;
                         }
                         this.userSelectItem = tempUserSelectItem;
                     }
@@ -98,12 +110,17 @@
 
         doSubmit() {
             // TODO: wait api
-
             this.$emit("user-data", this.userIds);
+            this.doCancel();
         }
 
         doReset() {
             this.userIds = [];
+        }
+
+        doCancel() {
+            this.userIds = [];
+            this.$emit("return-modalShow", false);
         }
 
         IFilterConditionForm() {
@@ -113,7 +130,7 @@
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipients")}
                  */
-                userIds?: ${toEnumInterface(this.userSelectItem as any, true)};
+                userIds: ${toEnumInterface(this.userSelectItem as any, true)};
 
             }
         `;
@@ -125,13 +142,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .select_report_period_button {
-        margin-top: 27px;
-    }
-
-    .select_date_button {
-        margin-top: 29px;
-    }
     .submit {
         background-color: #5c7895;
         border: 1px solid #5c7895;
