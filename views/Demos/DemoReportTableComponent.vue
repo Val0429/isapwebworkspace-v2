@@ -9,7 +9,7 @@
             v-on:changeSite="changeSite"
         >
         </peak-time-range>
-        <report-table>
+        <report-table :reportTableData="rData">
         </report-table>
     </div>
 </template>
@@ -18,6 +18,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
+import { IReportTableData } from "../../components/Reports/models";
 
 enum PageType {
     traffic = "traffic",
@@ -127,6 +128,8 @@ export default class DemoReportComponent extends Vue {
         { value: "ewtewfg", text: "台中店" }
     ];
 
+    rData = new IReportTableData();
+
     pData: IPeckTimeRange = {
         head: [],
         body: []
@@ -207,6 +210,37 @@ export default class DemoReportComponent extends Vue {
     mounted() {
         this.initPeakTimeRange();
         this.initAnlyDashboardData();
+        this.initReportTable();
+    }
+
+    initReportTable() {
+        this.rData.head = ["10/1", "10/2"];
+        this.rData.body = [
+            {
+                area: "area",
+                group: "group",
+                in: [
+                    { sign: Sign.positive, value: 5, valueRatio: 0.24 },
+                    { sign: Sign.negative, value: 2, valueRatio: 0.021 }
+                ],
+                out: [
+                    { sign: Sign.negative, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 4, valueRatio: 0.54 }
+                ]
+            },
+            {
+                area: "area2",
+                group: "group2",
+                in: [
+                    { sign: Sign.positive, value: 5, valueRatio: 0.24 },
+                    { sign: Sign.negative, value: 2, valueRatio: 0.021 }
+                ],
+                out: [
+                    { sign: Sign.negative, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 4, valueRatio: 0.54 }
+                ]
+            }
+        ];
     }
 
     initPeakTimeRange() {
