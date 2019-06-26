@@ -63,6 +63,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
+import * as XLSX from 'xlsx';
 
 @Component
 export default class EmployeeList extends Vue {
@@ -87,6 +88,23 @@ export default class EmployeeList extends Vue {
     filterColumn(){
         console.log(this.selectedColumns);
         console.log(this.options);
+    }
+    exportToExcel(){
+        let headers= this.fields().filter(x=> this.selectedColumns.find(y=>y==x.key));
+        let exportList =[];
+        for (let item of this.employeeList){
+            let newItem = {};
+            for(let h of headers.map(x=>x.key)){
+                newItem[h]=item[h];
+            }
+            exportList.push(newItem);
+        }
+        console.log("headers", headers);
+        let workbook = XLSX.utils.book_new();
+        let ws = XLSX.utils.aoa_to_sheet([headers.map(x=>x.label)]);        
+        XLSX.utils.sheet_add_json(ws, exportList,  {skipHeader: true, origin: "A2"});
+        XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");        
+        XLSX.writeFile(workbook, `${window.location.pathname}.xlsx`);
     }
   private getData(filter?:any) {        
         this.isBusy=true;        
