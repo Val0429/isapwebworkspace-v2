@@ -220,24 +220,24 @@ export default class DemoReportComponent extends Vue {
                 area: "area",
                 group: "group",
                 in: [
-                    { sign: Sign.positive, value: 5, valueRatio: 0.24 },
-                    { sign: Sign.negative, value: 2, valueRatio: 0.021 }
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 2, valueRatio: 0.02 }
                 ],
                 out: [
-                    { sign: Sign.negative, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 4, valueRatio: 0.54 }
+                    { sign: Sign.negative, value: 3, valueRatio: 0.03 },
+                    { sign: Sign.positive, value: 4, valueRatio: 0.05 }
                 ]
             },
             {
                 area: "area2",
                 group: "group2",
                 in: [
-                    { sign: Sign.positive, value: 5, valueRatio: 0.24 },
-                    { sign: Sign.negative, value: 2, valueRatio: 0.021 }
+                    { sign: Sign.positive, value: 5, valueRatio: 0.06 },
+                    { sign: Sign.negative, value: 6, valueRatio: 0.07 }
                 ],
                 out: [
-                    { sign: Sign.negative, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 4, valueRatio: 0.54 }
+                    { sign: Sign.negative, value: 7, valueRatio: 0.08 },
+                    { sign: Sign.positive, value: 8, valueRatio: 0.09 }
                 ]
             }
         ];

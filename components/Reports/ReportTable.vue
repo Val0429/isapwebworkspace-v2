@@ -47,13 +47,19 @@
                             class="title"
                         >{{items.group}}</td>
                         <td class="title">Tarffic - IN</td>
-                        <td v-for="(item, key, index) in items.in">{{item}}</td>
+                        <td v-for="(itemIn, key, index) in items.in">
+                            <span>{{itemIn.value > 0 ? itemIn.value : "N/A"}}</span>
+                            <span :class="sign.none != itemIn.sign ? (sign.positive == itemIn.sign ?  'green':'red') : ''">{{itemIn.valueRatio > 0 ? " (" + toPercent(itemIn.valueRatio,0) + ")" : "N/A"}}</span>
+                        </td>
                         <td v-if="items.in">{{items.inTotal}}</td>
 
                     </tr>
                     <tr>
                         <td class="title">Tarffic - OUT</td>
-                        <td v-for="(item, key, index) in items.out">{{item}}</td>
+                        <td v-for="(itemOut, key, index) in items.out">
+                            <span>{{itemOut.value > 0 ? itemOut.value : "N/A"}}</span>
+                            <span :class="sign.none != itemOut.sign ? (sign.positive == itemOut.sign ?  'green':'red') : ''">{{itemOut.valueRatio > 0 ? " (" + toPercent(itemOut.valueRatio,0) + ")" : "N/A"}}</span>
+                        </td>
                         <td v-if="items.out">{{items.outTotal}}</td>
                     </tr>
                 </template>
@@ -91,6 +97,12 @@
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { IReportTableData } from "../Reports/models";
 
+enum Sign {
+    positive = "positive",
+    negative = "negative",
+    none = "none"
+}
+
 @Component({
     components: {}
 })
@@ -104,9 +116,17 @@ export class ReportTable extends Vue {
     })
     reportTableData: IReportTableData;
 
+    sign = Sign;
+
     created() {}
 
     mounted() {}
+
+    toPercent(point, fixed) {
+        var str = Number(point * 100).toFixed(fixed);
+        str += "%";
+        return str;
+    }
 }
 
 export default ReportTable;
@@ -117,10 +137,13 @@ Vue.component("report-table", ReportTable);
 .title {
     background-color: #f8f8f8;
 }
+
 .red {
     color: #e26929;
+    font-size: 10px;
 }
 .green {
     color: #1bbc9b;
+    font-size: 10px;
 }
 </style>
