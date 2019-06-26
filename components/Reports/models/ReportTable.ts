@@ -1,11 +1,9 @@
-interface IReportTableDataBody {
+interface IReportTableDataBody extends IReportTableDataTotal {
     site?: string;
     area?: string;
     group?: string;
     in?: IReportTableDataBodyInOut[];
     out?: IReportTableDataBodyInOut[];
-    inTotal?: IReportTableDataBodyInOut;
-    outTotal?: IReportTableDataBodyInOut;
 }
 
 interface IReportTableDataBodyInOut {
@@ -20,15 +18,15 @@ enum Sign {
     none = 'none',
 }
 
-interface IReportTableDataFoot {
-    inTotal: IReportTableDataBodyInOut;
-    outTotal: IReportTableDataBodyInOut;
+interface IReportTableDataTotal {
+    inTotal?: IReportTableDataBodyInOut;
+    outTotal?: IReportTableDataBodyInOut;
 }
 
 class IReportTableData {
     head: string[] = [];
     body: IReportTableDataBody[] = [];
-    foot: IReportTableDataFoot[] = [];
+    foot: IReportTableDataTotal[] = [];
 
     constructor() {
         for (let body of this.body) {
@@ -36,10 +34,14 @@ class IReportTableData {
             body.outTotal = this.showRowTotal(body.out);
         }
 
-        for (let foot of this.foot) {
-            foot.inTotal = this.showColTotal(this.body, 'in');
-            foot.outTotal = this.showColTotal(this.body, 'out');
+        for (let index in this.body) {
+            let total: IReportTableDataTotal = {
+                inTotal: this.showColTotal(this.body, 'in'),
+                outTotal: this.showColTotal(this.body, 'out'),
+            };
+            this.foot.push(total);
         }
+        console.log('tset', this.body);
     }
 
     showRowTotal(datas) {
