@@ -8,7 +8,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
                             <span class="weather">Weather</span>
@@ -33,7 +33,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.averageOccupancy == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.averageOccupancy == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}}</span>
                         </div>
@@ -56,7 +56,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.averageDwellTime == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.averageDwellTime == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
                         </div>
@@ -79,7 +79,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.demographic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.demographic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
                         </div>
@@ -108,7 +108,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.vipBlacklist == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.vipBlacklist == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
                         </div>
@@ -149,7 +149,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
                         </div>
@@ -171,7 +171,7 @@
             <!--/col-->
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-122">
                 <div class="box info-box">
-                    <div :class="pageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
                         </div>
@@ -194,7 +194,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Transaction")}}</span>
                         </div>
@@ -217,7 +217,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Conversion")}}</span>
                         </div>
@@ -241,7 +241,7 @@
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
-                    <div :class="pageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_ASP")}}</span>
                         </div>
@@ -274,8 +274,8 @@
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import {
     IReportDashboard,
-    PageType,
-    Sign
+    EPageType,
+    ESign
 } from "../../components/Reports/models";
 
 @Component({
@@ -288,67 +288,67 @@ export class AnlysisDashboard extends Vue {
         type: Object,
         default: function() {
             return {
-                pageType: PageType.none,
+                pageType: EPageType.none,
                 traffic: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 averageOccupancy: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 averageDwellTime: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 demographic: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     value: -1,
                     valueRatio: -1,
-                    sign2: Sign.none,
+                    sign2: ESign.none,
                     value2: -1,
                     valueRatio2: -1
                 },
                 vipBlacklist: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     value: -1,
                     valueRatio: -1,
-                    sign2: Sign.none,
+                    sign2: ESign.none,
                     value2: -1,
                     valueRatio2: -1
                 },
                 repeatCustomer: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 revenue: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 transaction: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 conversion: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 asp: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
@@ -358,8 +358,8 @@ export class AnlysisDashboard extends Vue {
     })
     anlysisData: IReportDashboard;
 
-    sign = Sign;
-    pageType = PageType;
+    eSign = ESign;
+    ePageType = EPageType;
 
     created() {}
 

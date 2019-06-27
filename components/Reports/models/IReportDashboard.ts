@@ -1,4 +1,4 @@
-enum PageType {
+enum EPageType {
     traffic = 'traffic',
     averageOccupancy = 'averageOccupancy',
     averageDwellTime = 'averageDwellTime',
@@ -12,77 +12,77 @@ enum PageType {
     none = 'none',
 }
 
-enum Sign {
+enum ESign {
     positive = 'positive',
     negative = 'negative',
     none = 'none',
 }
 
 interface IReportDashboard {
-    pageType: PageType;
+    pageType: EPageType;
     traffic: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     averageOccupancy: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     averageDwellTime: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     demographic: {
-        sign: Sign;
+        sign: ESign;
         value: number;
         valueRatio: number;
-        sign2: Sign;
+        sign2: ESign;
         value2: number;
         valueRatio2: number;
     };
     vipBlacklist: {
-        sign: Sign;
+        sign: ESign;
         value: number;
         valueRatio: number;
-        sign2: Sign;
+        sign2: ESign;
         value2: number;
         valueRatio2: number;
     };
     repeatCustomer: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     revenue: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     transaction: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     conversion: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     asp: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
 }
-export { IReportDashboard, Sign, PageType };
+export { IReportDashboard, ESign, EPageType };

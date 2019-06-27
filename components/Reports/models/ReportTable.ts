@@ -1,3 +1,5 @@
+import { ESign } from './IReportDashboard';
+
 interface IReportTableDataTotal {
     inTotal?: IReportTableDataBodyInOut;
     outTotal?: IReportTableDataBodyInOut;
@@ -12,15 +14,9 @@ interface IReportTableDataBody extends IReportTableDataTotal {
 }
 
 interface IReportTableDataBodyInOut {
-    sign: Sign;
+    sign: ESign;
     value: number;
     valueRatio: number;
-}
-
-enum Sign {
-    positive = 'positive',
-    negative = 'negative',
-    none = 'none',
 }
 
 class ReportTableData {
@@ -49,22 +45,22 @@ class ReportTableData {
 
         //all total
         let intTotal: IReportTableDataBodyInOut = {
-            sign: Sign.none,
+            sign: ESign.none,
             value: 0,
             valueRatio: 0,
         };
         intTotal.value = this._foot.reduce((ty, u) => ty + u.inTotal.value, 0);
         intTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.inTotal.valueRatio, 0);
-        intTotal.sign = intTotal.valueRatio > 0 ? Sign.positive : Sign.negative;
+        intTotal.sign = intTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
 
         let outTotal: IReportTableDataBodyInOut = {
-            sign: Sign.none,
+            sign: ESign.none,
             value: 0,
             valueRatio: 0,
         };
         outTotal.value = this._foot.reduce((ty, u) => ty + u.outTotal.value, 0);
         outTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.outTotal.valueRatio, 0);
-        outTotal.sign = outTotal.valueRatio > 0 ? Sign.positive : Sign.negative;
+        outTotal.sign = outTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
 
         let allTotal: IReportTableDataTotal = {
             inTotal: intTotal,
@@ -75,25 +71,25 @@ class ReportTableData {
 
     showRowTotal(data: IReportTableDataBodyInOut[]) {
         let total: IReportTableDataBodyInOut = {
-            sign: Sign.none,
+            sign: ESign.none,
             value: 0,
             valueRatio: 0,
         };
         total.value = data.reduce((ty, u) => ty + u.value, 0);
         total.valueRatio = data.reduce((ty, u) => ty + u.valueRatio, 0);
-        total.sign = total.valueRatio > 0 ? Sign.positive : Sign.negative;
+        total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
         return total;
     }
 
     showColTotal(data: IReportTableDataBody[], index: string, key: string) {
         let total: IReportTableDataBodyInOut = {
-            sign: Sign.none,
+            sign: ESign.none,
             value: 0,
             valueRatio: 0,
         };
         total.value = data.reduce((ty, u) => ty + u[key][index].value, 0);
         total.valueRatio = data.reduce((ty, u) => ty + u[key][index].valueRatio, 0);
-        total.sign = total.valueRatio > 0 ? Sign.positive : Sign.negative;
+        total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
         return total;
     }
 
