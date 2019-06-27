@@ -332,15 +332,6 @@ export class FilterCondition extends Vue {
             }
         }
 
-        console.log(
-            "this.inputFormData.allSiteIds - ",
-            this.inputFormData.allSiteIds
-        );
-        console.log(
-            "this.inputFormData.siteIds - ",
-            this.inputFormData.siteIds
-        );
-
         for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
@@ -403,6 +394,8 @@ export class FilterCondition extends Vue {
                     ? []
                     : this.inputFormData.tagIds
         };
+
+        if (this.inputFormData.siteIds.length === 0) return false;
 
         for (const singleSiteIds of this.inputFormData.siteIds) {
             if (

@@ -23,10 +23,10 @@
         </analysis_filter_in_out>
 
         <!--
-            v-if="filterData.siteIds && filterData.siteIds.length === 1"
 -->
 
         <analysis_filter
+            v-if="filterData.siteIds && filterData.siteIds.length === 1"
             :siteIds0="filterData.siteIds0"
             :deviceMode="deviceMode"
         >
