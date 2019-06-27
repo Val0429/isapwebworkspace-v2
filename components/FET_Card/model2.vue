@@ -26,9 +26,9 @@
                     :src="footerSrc"
                     class="fet-card-footer-image"
                 >
-                <div class="fet-card-footer-title">
+                <!-- <div class="fet-card-footer-title">
                     {{ footerTitle }}
-                </div>
+                </div> -->
             </div>
 
         </div>
