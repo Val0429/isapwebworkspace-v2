@@ -13,8 +13,11 @@ interface BasicReport{
     exportToExcel():void;
     filterColumn():void;
     tableTitle:string;
+    sortedFields:any[];
+    onOptionsChange($event:any[]):any;
 }
 class BasicReportImpl extends Vue implements  BasicReport{
+    sortedFields:any[]=[];
     tableTitle: string;
     currentPage: number=1;
     fields :any[]=[];
@@ -25,7 +28,7 @@ class BasicReportImpl extends Vue implements  BasicReport{
     isBusy: boolean=false;
     data: any[]=[];
     exportToExcel(){
-        let headers= this.fields.filter(x=> this.selectedColumns.find(y=>y==x.key));
+        let headers= this.sortedFields;
         let exportList =[];
         for (let item of this.records){
             let newItem = {};
@@ -44,6 +47,13 @@ class BasicReportImpl extends Vue implements  BasicReport{
     filterColumn(){
         console.log(this.selectedColumns);
         console.log(this.options);
+    }
+    onOptionsChange($event:any[]){
+        console.log("$event", $event);
+        this.sortedFields = [];
+        for(let key of $event){
+            this.sortedFields.push(this.fields.find(x=>x.key==key));
+        }    
     }
 }
 export{BasicReport, BasicReportImpl}

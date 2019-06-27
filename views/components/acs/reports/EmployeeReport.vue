@@ -6,6 +6,7 @@
         >
             <iv-form 
             ref="form"
+            class="col-md-9"
             @mounted="doMounted"
             :interface="inf()"
            
@@ -13,25 +14,27 @@
 
             </iv-form>
             
-        
-        <template v-if="isMounted">
-            <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
-            <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onSubmit()">{{ _("wb_Reset") }}</b-button>
-            <b-button class="btn-filter" size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
+        <iv-sort-select
+                v-if="options.length>0"                      
+                v-model="selectedColumns"
+                class="col-md-4"
+                v-on:input="onOptionsChange($event)"
+                :options="options"
+            />
+            
+        <template v-if="isMounted" >            
+            <div class="float-right">
+                <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onSubmit()">{{ _("wb_Reset") }}</b-button>
+                <b-button class="btn-filter" size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
+                
+            </div>
         </template>
         </iv-card>
          <iv-card            
             :label="_('w_ColumnSelection')"
         >
-        <template>
-             <iv-sort-select  
-                v-if="options.length>0"                      
-                v-model="selectedColumns"
-                class="col-md-12"
-                :options="options"
-            />
-            
-        </template>
+      
 
         </iv-card>
         <iv-card            
@@ -39,7 +42,7 @@
         
            <b-table striped hover 
                 :items="records" 
-                :fields="fields.filter(x=> selectedColumns.find(y=>y==x.key))" 
+                :fields="sortedFields" 
                 :per-page="perPage"
                 :busy="isBusy"
                 :current-page="currentPage"
@@ -123,6 +126,7 @@ export default class EmployeeReport extends BasicReportImpl  {
     }
     isMounted:boolean=false;
     doMounted(){
+        
         this.fields = 
         [            
             {
@@ -160,6 +164,7 @@ export default class EmployeeReport extends BasicReportImpl  {
                 label: this._("w_Permission_PermissionList")
             }
         ];
+        this.sortedFields = Object.assign([], this.fields);
         this.isMounted=true;
         this.options=this.fields.map(x=>{return{value:x.key,text:x.label}});
         this.selectedColumns = this.fields.map(x=>x.key);
@@ -172,6 +177,6 @@ export default class EmployeeReport extends BasicReportImpl  {
 </script>
 <style lang="scss" scoped>
 .btn-filter{
-    margin: 0 10px;
+    margin: 0 5px;
 }
 </style>
