@@ -747,6 +747,7 @@ export default class LangObject {
     // Report Traffic
     w_ReportTraffic_TrafficTime = 'Time';
     w_ReportTraffic_TrafficTraffic = 'Traffic';
+    w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
     w_ReportTraffic_TrafficRevenue = 'Revenue';
     w_ReportTraffic_TrafficTransaction = 'Transaction';
     w_ReportTraffic_TrafficConversion = 'Conversion';
