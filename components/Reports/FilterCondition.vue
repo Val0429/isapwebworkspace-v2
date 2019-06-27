@@ -153,7 +153,6 @@ export class FilterCondition extends Vue {
     // select 相關
     sitesSelectItem: any = {};
     tagSelectItem: any = {};
-    siteFilterPermissionItem: any = {};
 
     // tree
     selectType = ERegionType.site;
@@ -224,38 +223,38 @@ export class FilterCondition extends Vue {
         this.sitesSelectItem = tempSitesSelectItem;
     }
 
-    async initSelectItemSite() {
-        let tempSitesSelectItem = { all: this._("w_All") };
-
-        const readAllSiteParam: {
-            type: string;
-        } = {
-            type: "all"
-        };
-
-        await this.$server
-            .R("/location/site/all", readAllSiteParam)
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
-                        tempSitesSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        this.inputFormData.allSiteIds.push(
-                            returnValue.objectId
-                        );
-                    }
-                    this.sitesSelectItem = tempSitesSelectItem;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
+    // async initSelectItemSite() {
+    //     let tempSitesSelectItem = { all: this._("w_All") };
+    //
+    //     const readAllSiteParam: {
+    //         type: string;
+    //     } = {
+    //         type: "all"
+    //     };
+    //
+    //     await this.$server
+    //         .R("/location/site/all", readAllSiteParam)
+    //         .then((response: any) => {
+    //             if (response != undefined) {
+    //                 for (const returnValue of response) {
+    //                     // 自定義 sitesSelectItem 的 key 的方式
+    //                     tempSitesSelectItem[returnValue.objectId] =
+    //                         returnValue.name;
+    //                     this.inputFormData.allSiteIds.push(
+    //                         returnValue.objectId
+    //                     );
+    //                 }
+    //                 this.sitesSelectItem = tempSitesSelectItem;
+    //             }
+    //         })
+    //         .catch((e: any) => {
+    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+    //                 return ResponseFilter.base(this, e);
+    //             }
+    //             console.log(e);
+    //             return false;
+    //         });
+    // }
 
     async initSelectItemTag() {
         let tempTagSelectItem = {};
@@ -333,15 +332,6 @@ export class FilterCondition extends Vue {
             }
         }
 
-        console.log(
-            "this.inputFormData.allSiteIds - ",
-            this.inputFormData.allSiteIds
-        );
-        console.log(
-            "this.inputFormData.siteIds - ",
-            this.inputFormData.siteIds
-        );
-
         for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
@@ -404,6 +394,8 @@ export class FilterCondition extends Vue {
                     ? []
                     : this.inputFormData.tagIds
         };
+
+        if (this.inputFormData.siteIds.length === 0) return false;
 
         for (const singleSiteIds of this.inputFormData.siteIds) {
             if (

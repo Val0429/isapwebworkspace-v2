@@ -8,11 +8,9 @@
         >
         </filter_condition>
 
-
         <div v-show="pageStep === ePageStep.none">
 
             <iv-card>
-
 
                 <!-- Tina -->
                 <analysis_filter_in_out
@@ -45,7 +43,7 @@ import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
 // Tina
-import { EDeviceMode } from '@/components/Reports/models/EReport';
+import { EDeviceMode } from "@/components/Reports/models/EReport";
 
 // Morris
 import TrafficChart from "@/components/HighCharts/TrafficChart.vue";
@@ -96,97 +94,66 @@ export default class ReportTraffic extends Vue {
         this.initChartDeveloper();
     }
 
-    mounted() {
-    }
+    mounted() {}
 
+    // Morris //
     initChartDeveloper() {
-        this.startDate = new Date("2019-06-26T08:00:00.000Z");
-        this.endDate = new Date("2019-06-29T14:00:00.000Z");
+        // single day
+        // this.startDate = new Date("2019-06-26T08:00:00.000Z");
+        // this.endDate = new Date("2019-06-26T14:00:00.000Z");
 
-        this.sites.push({
-            objectId: "site-1",
-            name: "Site 1",
-            officeHour: [
-                {
-                    startDay: "0",
-                    endDay: "6",
-                    startDate: "2000-01-01T00:00:00.000Z",
-                    endDate: "2000-01-01T14:00:00.000Z"
+        // multipe day
+        this.startDate = new Date("2019-06-01T08:00:00.000Z");
+        this.endDate = new Date("2019-06-03T14:00:00.000Z");
+
+        for (let j = 0; j < 10; j++) {
+            let tempJ = j + 1;
+            this.sites.push({
+                objectId: "site-" + tempJ.toString(),
+                name: "Site " + tempJ.toString(),
+                officeHour: [
+                    {
+                        startDay: "0",
+                        endDay: "6",
+                        startDate: "2000-01-01T00:00:00.000Z",
+                        endDate: "2000-01-01T14:00:00.000Z"
+                    }
+                ]
+            });
+
+            for (let i = 1; i < 30; i++) {
+                let weather = EWeather.none;
+
+                let tmepWeatherNumber = Math.floor(Math.random() * 300);
+                if (tmepWeatherNumber % 3 == 0) {
+                    weather = EWeather.sunny;
+                } else if (tmepWeatherNumber % 3 == 1) {
+                    weather = EWeather.cloudy;
+                } else if (tmepWeatherNumber % 3 == 2) {
+                    weather = EWeather.rain;
                 }
-            ]
-        });
 
-        this.sites.push({
-            objectId: "site-2",
-            name: "Site 2",
-            officeHour: [
-                {
-                    startDay: "0",
-                    endDay: "6",
-                    startDate: "2000-01-01T12:00:00.000Z",
-                    endDate: "2000-01-01T16:00:00.000Z"
-                }
-            ]
-        });
-
-        this.sites.push({
-            objectId: "site-3",
-            name: "Site 3",
-            officeHour: [
-                {
-                    startDay: "0",
-                    endDay: "6",
-                    startDate: "2000-01-01T12:00:00.000Z",
-                    endDate: "2000-01-01T16:00:00.000Z"
-                }
-            ]
-        });
-
-        this.sites.push({
-            objectId: "site-4",
-            name: "Site 4",
-            officeHour: [
-                {
-                    startDay: "0",
-                    endDay: "6",
-                    startDate: "2000-01-01T12:00:00.000Z",
-                    endDate: "2000-01-01T16:00:00.000Z"
-                }
-            ]
-        });
-
-        this.sites.push({
-            objectId: "site-5",
-            name: "Site 5",
-            officeHour: [
-                {
-                    startDay: "0",
-                    endDay: "6",
-                    startDate: "2000-01-01T12:00:00.000Z",
-                    endDate: "2000-01-01T16:00:00.000Z"
-                }
-            ]
-        });
-
-        for (let i = 8; i < 16; i++) {
-            let iNumber = i;
-            let iString = i.toString();
-            let iString10 = iNumber < 10 ? `0${iString}` : iString;
-            let tempDate = new Date(`2019-06-26T${iString10}:00:00.000Z`);
-            let trafficChartData: ITrafficData = {
-                datetime: tempDate,
-                siteId: "site-" + ((iNumber % 2) + 1).toString(),
-                temperature: iNumber,
-                traffic: iNumber + 100,
-                revenue: iNumber * 1000,
-                transaction: iNumber,
-                conversion: iNumber / 1000,
-                asp: "Unknow",
-                weather: EWeather.sunny
-            };
-            this.value.push(trafficChartData);
+                let tempI = i;
+                let iNumber = tempI;
+                let iString = tempI.toString();
+                let iString10 = iNumber < 10 ? `0${iString}` : iString;
+                let tempDate = new Date(`2019-06-${iString10}T12:00:00.000Z`);
+                let trafficChartData: ITrafficData = {
+                    datetime: tempDate,
+                    siteId: "site-" + (j + 1).toString(),
+                    temperature: iNumber,
+                    traffic: Math.floor(Math.random() * 500),
+                    revenue: Math.floor(Math.random() * 1000),
+                    transaction: Math.floor(Math.random() * 50),
+                    conversion: Math.floor(Math.random() * 100) / 100,
+                    asp: "Unknow",
+                    weather: weather
+                };
+                this.value.push(trafficChartData);
+            }
         }
     }
+    // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -194,13 +161,13 @@ export default class ReportTraffic extends Vue {
         this.filterData = filterData;
         this.responseData = responseData;
         Vue.set(this.filterData, "siteIds0", filterData.siteIds[0]);
-        console.log('this.filterData  - ', this.filterData );
-        console.log('this.responseData  - ', this.responseData );
+        console.log("this.filterData  - ", this.filterData);
+        console.log("this.responseData  - ", this.responseData);
     }
 
     receiveUserData(data) {
         this.userData = data;
-        console.log('this.userData - ', this.userData);
+        console.log("this.userData - ", this.userData);
     }
 
     receiveModalShowData(data) {
@@ -208,8 +175,6 @@ export default class ReportTraffic extends Vue {
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
-
-
 }
 </script>
 

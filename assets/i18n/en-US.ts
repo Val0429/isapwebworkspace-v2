@@ -746,12 +746,15 @@ export default class LangObject {
 
     // Report Traffic
     w_ReportTraffic_TrafficTime = 'Time';
+    w_ReportTraffic_TrafficDate = 'Date';
     w_ReportTraffic_TrafficTraffic = 'Traffic';
     w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
     w_ReportTraffic_TrafficRevenue = 'Revenue';
     w_ReportTraffic_TrafficTransaction = 'Transaction';
     w_ReportTraffic_TrafficConversion = 'Conversion';
     w_ReportTraffic_TrafficTemperature = 'Temperature';
+    w_ReportTraffic_TrafficWeather = 'Weather';
+    w_ReportTraffic_TrafficASP = 'ASP';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
@@ -774,6 +777,7 @@ export default class LangObject {
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
     w_ReportDateError = 'EndDate must greater or equal than startDate.';
+	w_countSelect = 'Count Select';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';

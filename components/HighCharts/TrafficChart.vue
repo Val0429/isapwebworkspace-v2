@@ -84,44 +84,6 @@ export class TrafficChart extends Vue {
     })
     value: ITrafficData[];
 
-    lineOption: any = {
-        exporting: { enabled: false },
-        title: { text: " " },
-        subtitle: { text: " " },
-        xAxis: { labels: { useHTML: true } },
-        yAxis: { title: { text: "" } },
-        tooltip: {
-            enabled: true,
-            useHTML: true,
-            backgroundColor: "#333",
-            style: { color: "#fff" },
-            formatter: function(tooltip: any) {
-                let self: any = this;
-                let result = "";
-                if (self.x != undefined) {
-                    try {
-                        let startIndex = self.x.indexOf(">{");
-                        let endIndex = self.x.indexOf("}<");
-                        let valueJson = self.x.substring(
-                            startIndex + 1,
-                            endIndex + 1
-                        );
-                        let newValue: any = JSON.parse(valueJson);
-                        result += `test1: ${newValue.test1}<br>`;
-                        result += `test2: ${newValue.test2}<br>`;
-                        result += `test3: ${newValue.test3}<br>`;
-                        result += `test4: ${newValue.test4}<br>`;
-                        result += `<i class='wi wi-night-sleet'></i>`;
-                    } catch (e) {
-                        console.log(e);
-                    }
-                }
-                return result;
-            }
-        },
-        series: []
-    };
-
     mathRoundLength = 2;
     errorMessage: string = "";
     mountChart: boolean = false;
@@ -191,8 +153,9 @@ export class TrafficChart extends Vue {
             default:
                 break;
         }
-        console.log("initChart", this.chartMode, this.categories);
     }
+
+    ////////////////////////// day 1 site 1 //////////////////////////
 
     initDay1Site1() {
         let tempValues = JSON.parse(JSON.stringify(this.value));
@@ -334,6 +297,8 @@ export class TrafficChart extends Vue {
 
         this.mountChart = true;
     }
+
+    ////////////////////////// day 1 site X //////////////////////////
 
     initDay1SiteX() {
         let trafficAVG = 0;
@@ -515,6 +480,8 @@ export class TrafficChart extends Vue {
         this.mountChart = true;
     }
 
+    ////////////////////////// day X site 1 //////////////////////////
+
     initDayXSite1() {
         let tempValues = JSON.parse(JSON.stringify(this.value));
         let tempCategories: string[] = [];
@@ -678,93 +645,213 @@ export class TrafficChart extends Vue {
         this.mountChart = true;
     }
 
+    ////////////////////////// day X site X //////////////////////////
+
     initDayXSiteX() {
         let tempValues = JSON.parse(JSON.stringify(this.value));
         let tempCategories: string[] = [];
-        let tempSeries: { name: string; data: number[] }[] = [];
+        let tempSeries: {
+            name: string;
+            data: number[];
+        }[] = [];
+        let tempItem: any = [];
 
         for (let i in this.sites) {
             let iNumber = parseInt(i);
             let site = this.sites[iNumber];
-            tempSeries.push({
-                name: site.name,
-                data: []
-            });
+            let tempData: number[] = [];
+
             for (let categorie of this.categories) {
+                let haveValue = false;
                 let traffic: number = 0;
-                let i18n: any = this.i18nItem();
-                i18n.label = categorie;
-                for (let j in tempValues) {
-                    let jNumber = parseInt(j);
-                    let value: ITrafficData = tempValues[jNumber];
+                for (let value of tempValues) {
                     value.datetime = new Date(value.datetime);
                     let datetimeString = Datetime.DateTime2String(
                         value.datetime,
                         "YYYY/MM/DD"
                     );
-                    if (datetimeString == categorie) {
-                        let weatherIcon = HighChartsService.weatherIcon(
-                            value.weather
-                        );
-                        value.i18n = i18n;
-                        value.conversion = this.formatFloat(
-                            value.conversion * 100,
-                            this.mathRoundLength
-                        );
-                        tempValues.splice(iNumber, 1);
+                    if (
+                        value.siteId == site.objectId &&
+                        datetimeString == categorie
+                    ) {
+                        haveValue = true;
+                        // append chart data in tempData
+                        tempData.push(value.traffic);
+                        break;
                     }
                 }
+                if (!haveValue) {
+                    tempData.push(0);
+                }
             }
+            tempSeries.push({
+                name: `${site.name}<span style='display:none;'>__${
+                    site.objectId
+                }__</span>`,
+                data: tempData
+            });
         }
 
-        // set data
         for (let categorie of this.categories) {
-            let newCategorie: string = "";
-            let traffic: number = 0;
-            let revenue: number = 0;
-            let i18n: any = this.i18nItem();
-            i18n.label = categorie;
-            for (let i in tempValues) {
-                let iNumber = parseInt(i);
-                let value: ITrafficData = tempValues[iNumber];
+            let tempValueForCategorie = {
+                categorie: categorie,
+                i18n: this.i18nItem(),
+                siteValues: []
+            };
+            for (let value of tempValues) {
                 value.datetime = new Date(value.datetime);
                 let datetimeString = Datetime.DateTime2String(
                     value.datetime,
                     "YYYY/MM/DD"
                 );
-
                 if (datetimeString == categorie) {
-                    let weatherIcon = HighChartsService.weatherIcon(
-                        value.weather
-                    );
-                    value.i18n = i18n;
-                    value.conversion = this.formatFloat(
-                        value.conversion * 100,
-                        this.mathRoundLength
-                    );
-                    traffic = value.traffic;
-                    revenue = value.revenue;
-                    newCategorie = `${datetimeString} ${weatherIcon}<span style='display:none;'>${JSON.stringify(
-                        value
-                    )}</span>`;
-                    tempValues.splice(iNumber, 1);
+                    let siteName = "";
+                    for (let site of this.sites) {
+                        if (site.objectId == value.siteId) {
+                            siteName = site.name;
+                            break;
+                        }
+                    }
+                    tempValueForCategorie.siteValues.push({
+                        siteId: value.siteId,
+                        siteName: siteName,
+                        temperature: value.temperature,
+                        traffic: value.traffic,
+                        revenue: value.revenue,
+                        transaction: value.transaction,
+                        conversion: this.formatFloat(
+                            value.conversion * 100,
+                            this.mathRoundLength
+                        ),
+                        asp: value.asp,
+                        weatherIcon: HighChartsService.weatherIcon(
+                            value.weather
+                        )
+                    });
                 }
             }
-
-            let weatherIcon = HighChartsService.weatherIcon(EWeather.none);
-            if (newCategorie == "") {
-                newCategorie = `${categorie} ${weatherIcon}<span style='display:none;'>${JSON.stringify(
-                    { i18n: i18n }
-                )}</span>`;
-            }
-
-            tempSeries[0].data.push(revenue);
-            tempSeries[1].data.push(traffic);
-            tempCategories.push(newCategorie);
+            tempCategories.push(
+                `${categorie}<span style='display:none;'>${JSON.stringify(
+                    tempValueForCategorie
+                )}</span>`
+            );
         }
+
+        this.chartOptions = {
+            exporting: { enabled: false },
+            title: { text: " " },
+            subtitle: { text: " " },
+            xAxis: {
+                categories: tempCategories,
+                labels: { useHTML: true }
+            },
+            yAxis: {
+                labels: { style: { color: "#000" } },
+                title: {
+                    text: this._("w_ReportTraffic_TrafficTraffic"),
+                    style: { color: "#000" }
+                }
+            },
+            tooltip: {
+                enabled: true,
+                useHTML: true,
+                backgroundColor: "#333",
+                style: { color: "#fff" },
+                formatter: function(tooltip: any) {
+                    let self: any = this;
+                    let result = "";
+                    let siteId = "";
+                    if (
+                        self.point != undefined &&
+                        self.point.series != undefined &&
+                        self.point.series.name != undefined
+                    ) {
+                        let startIndex = self.point.series.name.indexOf(">__");
+                        let endIndex = self.point.series.name.indexOf("__<");
+                        siteId = self.point.series.name.substring(
+                            startIndex + 3,
+                            endIndex
+                        );
+                    }
+                    if (
+                        siteId != undefined &&
+                        siteId != "" &&
+                        self.x != undefined
+                    ) {
+                        try {
+                            let startIndex = self.x.indexOf(">{");
+                            let endIndex = self.x.indexOf("}<");
+                            let valueJson = self.x.substring(
+                                startIndex + 1,
+                                endIndex + 1
+                            );
+                            let newValue: any = JSON.parse(valueJson);
+
+                            for (let value of newValue.siteValues) {
+                                if (value.siteId == siteId) {
+                                    let temperature =
+                                        value.temperature != undefined
+                                            ? `${value.temperature}°C`
+                                            : "0°C";
+                                    let traffic =
+                                        value.traffic != undefined
+                                            ? value.traffic
+                                            : "0";
+                                    let revenue =
+                                        value.revenue != undefined
+                                            ? value.revenue
+                                            : "0";
+                                    let transaction =
+                                        value.transaction != undefined
+                                            ? value.transaction
+                                            : "0";
+                                    let conversion =
+                                        value.conversion != undefined
+                                            ? `${value.conversion}%`
+                                            : "0%";
+
+                                    result += `${value.siteName}<br>`;
+                                    result += `${newValue.i18n.date}: ${
+                                        newValue.categorie
+                                    }<br>`;
+                                    result += `${
+                                        newValue.i18n.temperature
+                                    }: ${temperature}<br>`;
+                                    result += `${newValue.i18n.weather}: ${
+                                        value.weatherIcon
+                                    }<br>`;
+                                    result += `${
+                                        newValue.i18n.traffic
+                                    }: ${traffic}<br>`;
+                                    result += `${
+                                        newValue.i18n.revenue
+                                    }: ${revenue}<br>`;
+                                    result += `${
+                                        newValue.i18n.transaction
+                                    }: ${transaction}<br>`;
+                                    result += `${
+                                        newValue.i18n.conversion
+                                    }: ${conversion}<br>`;
+                                    result += `${newValue.i18n.asp}: ${
+                                        value.asp
+                                    }<br>`;
+                                    break;
+                                }
+                            }
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    return result;
+                }
+            },
+            series: tempSeries
+        };
+
+        this.mountChart = true;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private formatFloat(num: number, pos: number) {
         var size = Math.pow(10, pos);
@@ -774,11 +861,14 @@ export class TrafficChart extends Vue {
     private i18nItem() {
         let result: any = {
             time: this._("w_ReportTraffic_TrafficTime"),
+            date: this._("w_ReportTraffic_TrafficDate"),
             temperature: this._("w_ReportTraffic_TrafficTemperature"),
             traffic: this._("w_ReportTraffic_TrafficTraffic"),
             revenue: this._("w_ReportTraffic_TrafficRevenue"),
             transaction: this._("w_ReportTraffic_TrafficTransaction"),
-            conversion: this._("w_ReportTraffic_TrafficConversion")
+            conversion: this._("w_ReportTraffic_TrafficConversion"),
+            weather: this._("w_ReportTraffic_TrafficWeather"),
+            asp: this._("w_ReportTraffic_TrafficASP")
         };
         return result;
     }
@@ -885,225 +975,6 @@ export class TrafficChart extends Vue {
             );
         }
     }
-
-    // dateList: IDate[] = [];
-    // siteList: ISite[] = [];
-    // categories: string[] = [];
-    // series: any = [];
-
-    // start() {
-    //     this.errorMessage = "";
-    //     this.mountChart = false;
-    //     this.chartMode = EChartMode.none;
-    //     this.dateList = [];
-    //     this.siteList = [];
-    //     this.categories = [];
-    //     this.series = [];
-
-    //     // get day and site list
-    //     for (let val of this.value) {
-    //         let haveDay = false;
-    //         let haveSite = false;
-    //         let tempDateString: string = this.dateToString(val.datetime);
-    //         for (let date of this.dateList) {
-    //             if (tempDateString == date.dateString) {
-    //                 haveDay = true;
-    //             }
-    //         }
-    //         for (let site of this.siteList) {
-    //             if (val.site.objectId == site.objectId) {
-    //                 haveSite = true;
-    //                 break;
-    //             }
-    //         }
-    //         if (!haveDay) {
-    //             this.dateList.push({
-    //                 date: val.datetime,
-    //                 dateString: tempDateString
-    //             });
-    //         }
-    //         if (!haveSite) {
-    //             this.siteList.push(val.site);
-    //         }
-    //     }
-
-    //     // check mode
-    //     if (this.dateList.length == 1 && this.siteList.length == 1) {
-    //         this.chartMode = EChartMode.day1Site1;
-    //     } else if (this.dateList.length == 1 && this.siteList.length > 1) {
-    //         this.chartMode = EChartMode.day1SiteX;
-    //     } else if (this.dateList.length > 1 && this.siteList.length == 1) {
-    //         this.chartMode = EChartMode.dayXSite1;
-    //     } else if (this.dateList.length > 1 && this.siteList.length > 1) {
-    //         this.chartMode = EChartMode.dayXSiteX;
-    //     }
-
-    //     // sort dateList
-    //     this.dateListSort();
-
-    //     // init chart flow
-    //     switch (this.chartMode) {
-    //         case EChartMode.day1Site1:
-    //             this.startBarLine();
-    //             this.officeHourCategories();
-    //             this.initChartData();
-    //             this.mountChart = true;
-    //             break;
-
-    //         case EChartMode.day1SiteX:
-    //             this.startBarLine();
-    //             this.initChartData();
-    //             this.mountChart = true;
-    //             break;
-
-    //         case EChartMode.dayXSite1:
-    //             this.startBarLine();
-    //             this.dateCategories();
-    //             this.initChartData();
-    //             for (let val of this.value) {
-    //                 let label = Datetime.DateTime2String(
-    //                     val.datetime,
-    //                     "YYYY/MM/DD"
-    //                 );
-    //             }
-    //             this.mountChart = true;
-    //             break;
-
-    //         case EChartMode.dayXSiteX:
-    //             this.startLine();
-    //             this.dateCategories();
-    //             this.initChartData();
-    //             this.mountChart = true;
-    //             break;
-
-    //         default:
-    //             this.mountChart = false;
-    //             break;
-    //     }
-    //     console.log(
-    //         "this.categories",
-    //         this.categories,
-    //         this.dateList,
-    //         this.siteList
-    //     );
-    // }
-
-    // initChartData() {
-    //     switch (this.chartMode) {
-    //         case EChartMode.day1Site1:
-    //             break;
-    //         case EChartMode.day1SiteX:
-    //             break;
-    //         case EChartMode.dayXSite1:
-    //             break;
-    //         case EChartMode.dayXSiteX:
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     for (let val of this.value) {
-    //         let label: string = "";
-    //         let weatherIcon = HighChartsService.weatherIcon(val.weather);
-    //         switch (this.chartMode) {
-    //             case EChartMode.day1Site1:
-    //                 label = Datetime.DateTime2String(val.datetime, "HH:mm");
-    //                 break;
-    //             case EChartMode.day1SiteX:
-    //                 label = val.site.name;
-    //                 break;
-    //             case EChartMode.dayXSite1:
-    //                 label = Datetime.DateTime2String(
-    //                     val.datetime,
-    //                     "YYYY/MM/DD"
-    //                 );
-    //                 label += ` ${weatherIcon}`;
-    //                 break;
-    //             case EChartMode.dayXSiteX:
-    //                 label = Datetime.DateTime2String(
-    //                     val.datetime,
-    //                     "YYYY/MM/DD"
-    //                 );
-    //                 label += ` ${weatherIcon}`;
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-    //     }
-    // }
-
-    // startLine() {
-    //     this.chartOptions = JSON.parse(JSON.stringify(this.lineOption));
-    //     this.chartOptions.yAxis.title.text = this._("w_ReportTraffic_Traffic");
-    //     this.chartOptions.series = [];
-    // }
-
-    // startBarLine() {
-    //     this.chartOptions = JSON.parse(JSON.stringify(this.barLineOption));
-    //     this.chartOptions.yAxis[0].title.text = this._(
-    //         "w_ReportTraffic_Traffic"
-    //     );
-    //     this.chartOptions.yAxis[1].title.text = this._(
-    //         "w_ReportTraffic_TrafficRevenue"
-    //     );
-    //     this.chartOptions.xAxis[0].categories = [];
-    // }
-
-    // private dateToString(date: Date): string {
-    //     return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-    // }
-
-    // private siteCategories() {
-    //     this.categories = [];
-    //     for (let site of this.siteList) {
-    //         this.categories.push(site.name);
-    //     }
-    // }
-
-    // private dateListSort() {
-    //     let timestampList: number[] = [];
-    //     for (let dateItem of this.dateList) {
-    //         let tempTime = dateItem.date.getTime();
-    //         timestampList.push(Math.floor(tempTime));
-    //     }
-    //     timestampList.sort(function(a, b) {
-    //         return a - b;
-    //     });
-    //     this.dateList = [];
-    //     for (let timestamp of timestampList) {
-    //         let tempDatetime = new Date();
-    //         tempDatetime.setTime(timestamp);
-    //         this.dateList.push({
-    //             date: tempDatetime,
-    //             dateString: this.dateToString(tempDatetime)
-    //         });
-    //     }
-    // }
-
-    // private dateCategories() {
-    //     this.categories = [];
-    //     if (this.dateList.length < 2) {
-    //         return false;
-    //     }
-
-    //     let startDate = this.dateList[0];
-    //     let endDate = this.dateList[this.dateList.length - 1];
-    //     let startDateTimestamp = startDate.date.getTime();
-    //     let endDateTimestamp = endDate.date.getTime();
-    //     for (let i = startDateTimestamp; i < endDateTimestamp; i += 86400) {}
-    // }
-
-    // temp() {
-    //     // for (let val of this.value) {
-    //     // this.chartOptions.xAxis[0].categories.push(
-    //     //     `<span style='display:none;'>${JSON.stringify(
-    //     //         val.data
-    //     //     )}</span>${
-    //     //         val.label
-    //     //     }&nbsp;<span class='wi wi-night-sleet' style='font-size:1.2rem;color:#f00;'></span>`
-    //     // );
-    //     // }
-
-    // }
 }
 
 export default TrafficChart;
