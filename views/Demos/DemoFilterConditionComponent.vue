@@ -10,8 +10,12 @@
 
         <div class="h-25"></div>
 
-        <analysis_filter_in_out
+<!--
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
+
+-->
+
+        <analysis_filter_in_out
             :siteIds0="filterData.siteIds0"
             :deviceMode="deviceMode"
         >

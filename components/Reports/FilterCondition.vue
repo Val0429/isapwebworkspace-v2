@@ -123,6 +123,7 @@
         IRegionTreeSelected
     } from "@/components/RegionTree/models";
     import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+    import { EAddPeriodSelect, ECountType, EDesignationPeriod } from '@/components/Reports/models/EReport';
     import RegionAPI from "@/services/RegionAPI";
     import ResponseFilter from "@/services/ResponseFilter";
     import DateCount from "@/components/Reports/models/dateCount";
@@ -132,35 +133,6 @@
         none = "none",
         showResult = "showResult",
         chooseTree = "chooseTree"
-    }
-
-    enum EAddPeriodSelect {
-        period = "period",
-        designation = "designation"
-    }
-
-    enum EDesignationPeriod {
-        today = "Today",
-        yesterday = "Yesterday",
-        last7days = "Last 7 days",
-        thisWeek = "This Week",
-        lastWeek = "Last Week",
-        thisMonth = "This Month",
-        lastMonth = "Last Month",
-        q1 = "Q1",
-        q2 = "Q2",
-        q3 = "Q3",
-        q4 = "Q4",
-        thisYear = "This Year"
-    }
-
-    enum EType {
-        hour = 'hour',
-        day = 'day',
-        week = 'week',
-        month = 'month',
-        season = 'season',
-        year = 'year',
     }
 
     @Component({
@@ -419,11 +391,11 @@
                 if (DateCount.checkTheSameDate(DateCount.formatDate(this.inputFormData.startDate), DateCount.formatDate(this.inputFormData.endDate))) {
                     doSubmitParam.startDate = DateCount.formatDate(this.inputFormData.startDate);
                     doSubmitParam.endDate = DateCount.formatDate(this.inputFormData.endDate);
-                    doSubmitParam.type = EType.hour;
+                    doSubmitParam.type = ECountType.hour;
                 } else {
                     doSubmitParam.startDate = DateCount.formatDate(this.inputFormData.startDate);
                     doSubmitParam.endDate = DateCount.formatDate(this.inputFormData.endDate);
-                    doSubmitParam.type = EType.day;
+                    doSubmitParam.type = ECountType.day;
                 }
 
             // 選擇 designation
@@ -433,83 +405,83 @@
                     case "today":
                         doSubmitParam.startDate = DateCount.getDateStr(0);
                         doSubmitParam.endDate = DateCount.getDateStr(0);
-                        doSubmitParam.type = EType.hour;
+                        doSubmitParam.type = ECountType.hour;
                         console.log('startDate today - ', doSubmitParam.startDate);
                         console.log('endDate today - ',doSubmitParam.endDate);
                         break;
                     case "yesterday":
                         doSubmitParam.startDate = DateCount.getDateStr(-1);
                         doSubmitParam.endDate = DateCount.getDateStr(-1);
-                        doSubmitParam.type = EType.hour;
+                        doSubmitParam.type = ECountType.hour;
                         console.log('startDate yesterday - ', doSubmitParam.startDate);
                         console.log('endDate yesterday - ',doSubmitParam.endDate);
                         break;
                     case "last7days":
                         doSubmitParam.startDate = DateCount.getDateStr(-6);
                         doSubmitParam.endDate = DateCount.getDateStr(0);
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate last7days - ', doSubmitParam.startDate);
                         console.log('endDate last7days - ',doSubmitParam.endDate);break;
                     case "thisWeek":
                         doSubmitParam.startDate = DateCount.getWeekStartDate();
                         doSubmitParam.endDate = DateCount.getWeekEndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate thisWeek - ', doSubmitParam.startDate);
                         console.log('endDate thisWeek - ',doSubmitParam.endDate);
                         break;
                     case "lastWeek":
                         doSubmitParam.startDate = DateCount.getLastWeekStartDate();
                         doSubmitParam.endDate = DateCount.getLastWeekEndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate lastWeek - ', doSubmitParam.startDate);
                         console.log('endDate lastWeek - ',doSubmitParam.endDate);
                         break;
                     case "thisMonth":
                         doSubmitParam.startDate = DateCount.getMonthStartDate();
                         doSubmitParam.endDate = DateCount.getMonthEndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate thisMonth - ', doSubmitParam.startDate);
                         console.log('endDate thisMonth - ',doSubmitParam.endDate);
                         break;
                     case "lastMonth":
                         doSubmitParam.startDate = DateCount.getLastMonthStartDate();
                         doSubmitParam.endDate = DateCount.getLastMonthEndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate lastMonth - ', doSubmitParam.startDate);
                         console.log('endDate lastMonth - ',doSubmitParam.endDate);
                         break;
                     case "q1":
                         doSubmitParam.startDate = DateCount.getQ1StartDate();
                         doSubmitParam.endDate = DateCount.getQ1EndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate q1 - ', doSubmitParam.startDate);
                         console.log('endDate q1 - ',doSubmitParam.endDate);
                         break;
                     case "q2":
                         doSubmitParam.startDate = DateCount.getQ2StartDate();
                         doSubmitParam.endDate = DateCount.getQ2EndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate q2 - ', doSubmitParam.startDate);
                         console.log('endDate q2 - ',doSubmitParam.endDate);
                         break;
                     case "q3":
                         doSubmitParam.startDate = DateCount.getQ3StartDate();
                         doSubmitParam.endDate = DateCount.getQ3EndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate q3 - ', doSubmitParam.startDate);
                         console.log('endDate q3 - ',doSubmitParam.endDate);
                         break;
                     case "q4":
                         doSubmitParam.startDate = DateCount.getQ4StartDate();
                         doSubmitParam.endDate = DateCount.getQ4EndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate q4 - ', doSubmitParam.startDate);
                         console.log('endDate q4 - ',doSubmitParam.endDate);
                         break;
                     case "thisYear":
                         doSubmitParam.startDate = DateCount.getThisYearStartDate();
                         doSubmitParam.endDate = DateCount.getLastYearEndDate();
-                        doSubmitParam.type = EType.day;
+                        doSubmitParam.type = ECountType.day;
                         console.log('startDate thisYear - ', doSubmitParam.startDate);
                         console.log('endDate thisYear - ',doSubmitParam.endDate);
                     break;

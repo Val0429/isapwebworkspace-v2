@@ -43,6 +43,9 @@
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
+// Tina
+import { EDeviceMode } from '@/components/Reports/models/EReport';
+
 // Morris
 import TrafficChart from "@/components/HighCharts/TrafficChart.vue";
 import FilterCondition from "@/components/Reports/FilterCondition.vue";
@@ -55,10 +58,6 @@ import {
 
 enum EPageStep {
     none = "none"
-}
-
-enum EDeviceMode {
-    peopleCounting = "peopleCounting",
 }
 
 @Component({
