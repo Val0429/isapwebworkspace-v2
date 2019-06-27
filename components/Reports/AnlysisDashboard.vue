@@ -155,7 +155,7 @@
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.repeatCustomer.total > 0 ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                                <span class="date">{{anlysisData.repeatCustomer.total > 0 ? toPercent(anlysisData.repeatCustomer.total) : "N/A"}}</span>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
                                 <div :class="sign.none != anlysisData.repeatCustomer.sign ? (sign.positive == anlysisData.repeatCustomer.sign ?  'ratio green':'ratio red') : 'ratio'">
