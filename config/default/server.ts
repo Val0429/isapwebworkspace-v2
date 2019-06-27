@@ -180,6 +180,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Video Source VIP Stranger Visitor
         '/device/visitor': [VSVIPStrangerVisitorCreate.Input, VSVIPStrangerVisitorCreate.Output, false];
+
+        // report people-counting/summary
+        '/report/people-counting/summary': [any, any, false];
     };
 
     // read

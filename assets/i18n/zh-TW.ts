@@ -768,6 +768,7 @@ export default class LangObject implements ILang {
 
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
+    w_ReportDateError = 'EndDate must greater or equal than startDate.';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';

@@ -65,23 +65,27 @@ export default class DemoFilterConditionComponent extends Vue {
 
     // 接收 submit 相關
     filterData: any = {};
+    responseData: any = {};
     userData: any = [];
 
-    // 網子元件傳資料
+    // 往子元件傳資料
     deviceMode: string = EDeviceMode.demographic;
 
     created() {}
 
     mounted() {}
 
-    receiveFilterData(data) {
-        this.filterData = data;
-        Vue.set(this.filterData, "siteIds0", data.siteIds[0]);
+    receiveFilterData(filterData, responseData) {
+        this.filterData = filterData;
+        this.responseData = responseData;
+        Vue.set(this.filterData, "siteIds0", filterData.siteIds[0]);
+        console.log('this.filterData  - ', this.filterData );
+        console.log('this.responseData  - ', this.responseData );
     }
 
     receiveUserData(data) {
         this.userData = data;
-    console.log('this.userData - ', this.userData);
+        console.log('this.userData - ', this.userData);
     }
 
     receiveModalShowData(data) {

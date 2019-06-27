@@ -15,6 +15,18 @@ class DateCount {
         return `${year}-${formatMonth}-${formatDay}`
     }
 
+    // 檢查日期的結束時間不能小於開始值間
+    checkDate(startDate: string, endDate: string) {
+        if (Date.parse(endDate) < Date.parse(startDate))
+        return false;
+    }
+
+    // 檢查日期的開始和結束時間是否為同一天
+    checkTheSameDate(startDate: string, endDate: string) {
+        if (Date.parse(endDate) === Date.parse(startDate))
+            return true;
+    }
+
     // 以今天為基準，計算往前、往後的幾天
     getDateStr(addDayCount: number): string {
         const today = new Date();
