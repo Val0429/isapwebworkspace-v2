@@ -401,6 +401,7 @@ export default class MemberForm extends Vue {
         "contract": ITemplateCard.contract,
     };
     workGroupIdSelectItem: any = {};
+    cardCertificateItem: any = {};
 
     inputTestEmail: string = "";
     newImg = new Image();
@@ -431,6 +432,7 @@ export default class MemberForm extends Vue {
         cardCustodian: "",
         lastEditPerson: "",
         lastEditTime: "",
+        cardCertificate: "",
 
         // tab1
         extensionNumber: "",
@@ -516,6 +518,7 @@ export default class MemberForm extends Vue {
             cardCustodian: "",
             lastEditPerson: "",
             lastEditTime: "",
+            cardCertificate: "",
 
             // tab1
             extensionNumber: "",
@@ -596,6 +599,31 @@ export default class MemberForm extends Vue {
                     for (const returnValue of response.results) {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.workGroupSelectItem[returnValue.objectId] =
+                            returnValue.groupname;
+
+                        this.workGroupIdSelectItem[returnValue.groupid] =
+                            returnValue.objectId;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemCardCertificate() {
+        this.cardCertificateItem = {};
+        await this.$server
+            .R("/acs/workgroup")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.cardCertificateItem[returnValue.objectId] =
                             returnValue.groupname;
 
                         this.workGroupIdSelectItem[returnValue.groupid] =
@@ -1310,6 +1338,44 @@ export default class MemberForm extends Vue {
                         this.imageSrcCard = CardTemplateBase64.contract;
                         break;
                 }
+                break;
+
+            // tab5
+            case "censusRecord1":
+                this.inputFormData.censusRecord1 = data.value;
+                break;
+            case "censusDate1":
+                this.inputFormData.censusDate1 = data.value;
+                break;
+            case "censusRecord2":
+                this.inputFormData.censusRecord2 = data.value;
+                break;
+            case "censusDate2":
+                this.inputFormData.censusDate2 = data.value;
+                break;
+            case "censusRecord3":
+                this.inputFormData.censusRecord3 = data.value;
+                break;
+            case "censusDate3":
+                this.inputFormData.censusDate3 = data.value;
+                break;
+            case "infoOfViolation1":
+                this.inputFormData.infoOfViolation1 = data.value;
+                break;
+            case "dateOfViolation1":
+                this.inputFormData.dateOfViolation1 = data.value;
+                break;
+            case "infoOfViolation2":
+                this.inputFormData.infoOfViolation2 = data.value;
+                break;
+            case "dateOfViolation2":
+                this.inputFormData.dateOfViolation2 = data.value;
+                break;
+            case "infoOfViolation3":
+                this.inputFormData.infoOfViolation3 = data.value;
+                break;
+            case "dateOfViolation3":
+                this.inputFormData.dateOfViolation3 = data.value;
                 break;
             }
         }
@@ -2041,12 +2107,6 @@ export default class MemberForm extends Vue {
                  */
                 personType1?: string;
 
-                /**
-                 * @uiLabel - ${this._("w_Member_CardAllNumber")}
-                 * @uiColumnGroup - row3
-                 * @uiType - iv-form-label
-                 */
-                cardAllNumber?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardCustodian")}
@@ -2059,6 +2119,26 @@ export default class MemberForm extends Vue {
                  }
                  */
                 cardCustodian?: string;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardVoucherType")}
+                 * @uiColumnGroup - row3
+                 * @uiType - iv-form-label
+                 * @uiDisabled - ${
+                        this.pageStep === EPageStep.add ||
+                        this.pageStep === EPageStep.edit
+                            ? "false"
+                            : "true"
+                        }
+                 */
+                cardCertificate?: ${toEnumInterface(
+                    this.cardCertificateItem as any,
+                    false
+                )};
+
+
 
                /**
                 * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
