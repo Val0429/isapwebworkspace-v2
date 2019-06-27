@@ -29,6 +29,7 @@ interface ITrafficData {
     asp: string;
     weather: EWeather;
     i18n?: any;
+    weatherIcon?: string;
 }
 
 export { ISite, IDate, IDayRange, ITrafficData };
