@@ -39,7 +39,7 @@ class BasicReportImpl extends Vue implements  BasicReport{
         let ws = XLSX.utils.aoa_to_sheet([headers.map(x=>x.label)]);        
         XLSX.utils.sheet_add_json(ws, exportList,  {skipHeader: true, origin: "A2"});
         XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");        
-        XLSX.writeFile(workbook, `${window.location.pathname}.xlsx`);
+        XLSX.writeFile(workbook, `${this.tableTitle}.xlsx`);
     }
     filterColumn(){
         console.log(this.selectedColumns);

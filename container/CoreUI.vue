@@ -43,9 +43,7 @@
                 <SidebarNavItem url="/contractorreport" />
                 <SidebarNavItem url="/demographicreport" />
                 <SidebarNavItem url="/cardreport" />
-                
-                
-                
+                <SidebarNavItem url="/visitorreport" />
                 
             </SidebarNav>
         </template>

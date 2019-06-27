@@ -32,6 +32,7 @@ import DoorGroupReport from './components/acs/reports/DoorGroupReport.vue';
 import ContractorReport from './components/acs/reports/ContractorReport.vue';
 import DemographicReport from './components/acs/reports/DemographicReport.vue';
 import CardExpirationReport from './components/acs/reports/CardExpirationReport.vue';
+import VisitorCardReport from './components/acs/reports/VisitorCardReport.vue';
 
 import User from './components/bar/User.vue';
 import Site from './components/bar/Site.vue';
@@ -57,6 +58,7 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/contractorreport', name: "_('w_ContractorReport')", icon: 'fa-building' })(ContractorReport);
     $({ path: '/demographicreport', name: "_('w_DemographicReport')", icon: 'fa-building' })(DemographicReport);
     $({ path: '/cardreport', name: "_('w_CardExpirationReport')", icon: 'fa-building' })(CardExpirationReport);
+    $({ path: '/visitorreport', name: "_('w_VisitorCardReport')", icon: 'fa-building' })(VisitorCardReport);
     
 // Users
 $({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);

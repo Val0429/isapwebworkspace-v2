@@ -165,8 +165,8 @@ export default class ContractorReport extends BasicReportImpl  {
         this.selectedColumns = this.fields.map(x=>x.key);
         console.log(this.options.length);
     }
-    onSubmit($events){        
-        this.getData($events);
+    async onSubmit($events){        
+        await this.getData($events);
     }
 }
 </script>

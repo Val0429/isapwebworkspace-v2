@@ -63,18 +63,18 @@ import { BasicReport, BasicReportImpl } from './BasicReport';
 import { config } from 'rxjs';
 
 @Component
-export default class DemographicReport extends BasicReportImpl  {
+export default class AttendanceRecord extends BasicReportImpl  {
     
     
     async created(){
-        this.tableTitle= this._('w_DemographicReport');        
+        this.tableTitle= this._('w_VisitorCardReport');        
         await this.getData();
     }
     
     
   private async getData(filter?:any) {        
         this.isBusy=true;            
-        let resp: any=await this.$server.R("/report/memberrecord" as any, filter);
+        let resp: any=await this.$server.R("/report/attendancerecord" as any, filter);
         this.data = resp.results;
         this.records = resp.results;
         this.isBusy=false;
@@ -83,41 +83,25 @@ export default class DemographicReport extends BasicReportImpl  {
 
     inf(){
         return `interface {
-                /**
+                /**                
                  * @uiColumnGroup - name
                  * @uiLabel - ${this._('w_Member_ChineseName1')}
                  */
-                FirstName?: string;
-                /**
+                first_name?: string;
+                /**                
                  * @uiColumnGroup - name
                  * @uiLabel - ${this._('w_Member_EnglishName1')}
                  */
-                LastName?: string;
+                last_name?: string;
                 /**
-                 * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
+                 * @uiColumnGroup - occ
                  */
-                EmployeeNumber?: string;
+                date_occurred?: number;
                 /**
-                 * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_CardNumber1')}
+                 * @uiColumnGroup - occ               
                  */
-                CardNumber?: string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_Department1')}
-                 */
-                DepartmentName?:string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_CostCenter1')}
-                 */
-                CostCenterName?:string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_WorkArea1')}
-                 */
-                WorkAreaName?:string;
+                time_occurred?: number;
+                
             }`;
             
     }
@@ -126,38 +110,22 @@ export default class DemographicReport extends BasicReportImpl  {
         this.fields = 
         [            
             {
-                key:"FirstName",
+                key:"first_name",
                 label: this._('w_Member_ChineseName1'),
                 sortable: true
             },
             {  
-                key:"LastName",
+                key:"last_name",
                 label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
             {
-                key: "EmployeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
+                key: "date_occurred",
+                label: "date_occurred"
             },
             {
-                key:"CardNumber",
-                label: this._('w_Member_CardNumber1')
-            },
-            {
-                key:"DepartmentName",
-                label: this._("w_Member_Department1")
-            },
-            {
-                key:"CostCenterName",
-                label: this._("w_Member_CostCenter1")
-            },
-            {
-                key:"WorkAreaName",
-                label: this._("w_Member_WorkArea1")
-            },
-            {
-                key:"PermissionList",
-                label: this._("w_Permission_PermissionList")
+                key: "time_occurred",
+                label: "time_occurred"
             }
         ];
         this.isMounted=true;
