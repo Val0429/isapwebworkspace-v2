@@ -1,9 +1,14 @@
+interface IReportTableDataTotal {
+    inTotal?: IReportTableDataBodyInOut;
+    outTotal?: IReportTableDataBodyInOut;
+}
+
 interface IReportTableDataBody extends IReportTableDataTotal {
     site?: string;
     area?: string;
     group?: string;
-    in?: IReportTableDataBodyInOut[];
-    out?: IReportTableDataBodyInOut[];
+    in: IReportTableDataBodyInOut[];
+    out: IReportTableDataBodyInOut[];
 }
 
 interface IReportTableDataBodyInOut {
@@ -18,39 +23,92 @@ enum Sign {
     none = 'none',
 }
 
-interface IReportTableDataTotal {
-    inTotal?: IReportTableDataBodyInOut;
-    outTotal?: IReportTableDataBodyInOut;
-}
+class ReportTableData {
+    _head: string[] = [];
+    _body: IReportTableDataBody[] = [];
+    _foot: IReportTableDataTotal[] = [];
 
-class IReportTableData {
-    head: string[] = [];
-    body: IReportTableDataBody[] = [];
-    foot: IReportTableDataTotal[] = [];
+    constructor() {}
 
-    constructor() {
-        for (let body of this.body) {
-            body.inTotal = this.showRowTotal(body.in);
-            body.outTotal = this.showRowTotal(body.out);
+    countTotal() {
+        //row total
+        for (let item of this._body) {
+            item.inTotal = this.showRowTotal(item.in);
+            item.outTotal = this.showRowTotal(item.out);
         }
 
-        for (let index in this.body) {
+        //column total
+        for (let index in this._head) {
             let total: IReportTableDataTotal = {
-                inTotal: this.showColTotal(this.body, 'in'),
-                outTotal: this.showColTotal(this.body, 'out'),
+                inTotal: this.showColTotal(this._body, index, 'in'),
+                outTotal: this.showColTotal(this._body, index, 'out'),
             };
-            this.foot.push(total);
+
+            this._foot.push(total);
         }
-        console.log('tset', this.body);
+
+        //all total
+        let intTotal: IReportTableDataBodyInOut = {
+            sign: Sign.none,
+            value: 0,
+            valueRatio: 0,
+        };
+        intTotal.value = this._foot.reduce((ty, u) => ty + u.inTotal.value, 0);
+        intTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.inTotal.valueRatio, 0);
+        intTotal.sign = intTotal.valueRatio > 0 ? Sign.positive : Sign.negative;
+
+        let outTotal: IReportTableDataBodyInOut = {
+            sign: Sign.none,
+            value: 0,
+            valueRatio: 0,
+        };
+        outTotal.value = this._foot.reduce((ty, u) => ty + u.outTotal.value, 0);
+        outTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.outTotal.valueRatio, 0);
+        outTotal.sign = outTotal.valueRatio > 0 ? Sign.positive : Sign.negative;
+
+        let allTotal: IReportTableDataTotal = {
+            inTotal: intTotal,
+            outTotal: outTotal,
+        };
+        this._foot.push(allTotal);
     }
 
-    showRowTotal(datas) {
-        return datas.reduce((ty, u) => ty.value + u.value, 0);
+    showRowTotal(data: IReportTableDataBodyInOut[]) {
+        let total: IReportTableDataBodyInOut = {
+            sign: Sign.none,
+            value: 0,
+            valueRatio: 0,
+        };
+        total.value = data.reduce((ty, u) => ty + u.value, 0);
+        total.valueRatio = data.reduce((ty, u) => ty + u.valueRatio, 0);
+        total.sign = total.valueRatio > 0 ? Sign.positive : Sign.negative;
+        return total;
     }
 
-    showColTotal(datas, key) {
-        return datas.reduce((ty, u) => ty[key].value + u[key].value, 0);
+    showColTotal(data: IReportTableDataBody[], index: string, key: string) {
+        let total: IReportTableDataBodyInOut = {
+            sign: Sign.none,
+            value: 0,
+            valueRatio: 0,
+        };
+        total.value = data.reduce((ty, u) => ty + u[key][index].value, 0);
+        total.valueRatio = data.reduce((ty, u) => ty + u[key][index].valueRatio, 0);
+        total.sign = total.valueRatio > 0 ? Sign.positive : Sign.negative;
+        return total;
+    }
+
+    set head(value: string[]) {
+        this._head = value;
+    }
+
+    set body(value: IReportTableDataBody[]) {
+        this._body = value;
+        this.countTotal();
+    }
+
+    get foot() {
+        return this._foot;
     }
 }
 
-export { IReportTableData };
+export { ReportTableData };

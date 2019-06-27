@@ -34,6 +34,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { IPeckTimeRange } from "../../components/Reports/models";
 
 @Component({
     components: {}
@@ -57,7 +58,7 @@ export class PeakTimeRange extends Vue {
             };
         }
     })
-    timeRangeData: object;
+    timeRangeData: IPeckTimeRange;
 
     site = "dfgsadg";
 
