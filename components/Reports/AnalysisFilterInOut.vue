@@ -7,6 +7,7 @@
         >
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -16,6 +17,7 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -25,6 +27,7 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -38,7 +41,7 @@
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.type"
-                    class="h-25 click_button"
+                    class="h-25 click_button col-md-1"
                     buttons
                     button-variant="outline-success"
                     name="radio-btn-outline"
@@ -48,7 +51,7 @@
 
             <template #clickButtonsSubmit>
                 <b-button
-                    class="h-25 ml-3 click_button submit"
+                    class="h-25 ml-3 click_button submit col-md-1"
                     @click="doSubmit"
                 >
                     {{ _('wb_Submit') }}
@@ -58,7 +61,7 @@
 
             <template #clickButtonsReset>
                 <b-button
-                    class="h-25 ml-3 click_button reset"
+                    class="h-25 ml-3 click_button reset col-md-1"
                     @click="doReset"
                 >
                     {{ _('wb_Reset') }}
@@ -113,6 +116,9 @@ export class AnalysisFilterInOut extends Vue {
         { value: EType.in, text: EType.in },
         { value: EType.out, text: EType.out }
     ];
+    countSelectItem: {
+
+    }
 
     inputFormData: any = {
         areaId: "",

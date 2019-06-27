@@ -1,9 +1,28 @@
 <template>
     <div class="animated fadeIn">
 
+        <!-- Tina -->
+        <filter_condition
+            :label="_('w_ReportFilterConditionComponent_')"
+            @submit-data="receiveFilterData"
+        >
+        </filter_condition>
+
+
         <div v-show="pageStep === ePageStep.none">
 
             <iv-card>
+
+
+                <!-- Tina -->
+                <analysis_filter_in_out
+                    class="mb-5 mt-3 ml-4"
+                    v-if="filterData.siteIds && filterData.siteIds.length === 1"
+                    :siteIds0="filterData.siteIds0"
+                    :deviceMode="deviceMode"
+                >
+                </analysis_filter_in_out>
+
                 <!-- Morris -->
                 <traffic-chart
                     :startDate="startDate"
@@ -25,8 +44,12 @@
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
+// Tina
+import { EDeviceMode } from '@/components/Reports/models/EReport';
+
 // Morris
 import TrafficChart from "@/components/HighCharts/TrafficChart.vue";
+import FilterCondition from "@/components/Reports/FilterCondition.vue";
 import {
     ETimeMode,
     EWeather,
@@ -54,11 +77,27 @@ export default class ReportTraffic extends Vue {
     sites: ISite[] = [];
     value: ITrafficData[] = [];
 
+    ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    // recipient 相關
+    modalShow: boolean = false;
+
+    // 往recipient子元件傳資料
+    deviceMode: string = EDeviceMode.peopleCounting;
+
+    // 接收 Filter Condition 資料 相關
+    filterData: any = {};
+    responseData: any = {};
+    userData: any = [];
+
+    ////////////////////////////////////// Tina End //////////////////////////////////////
+
     created() {
         this.initChartDeveloper();
     }
 
-    mounted() {}
+    mounted() {
+    }
 
     initChartDeveloper() {
         this.startDate = new Date("2019-06-26T08:00:00.000Z");
@@ -148,6 +187,29 @@ export default class ReportTraffic extends Vue {
             this.value.push(trafficChartData);
         }
     }
+
+    ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    receiveFilterData(filterData, responseData) {
+        this.filterData = filterData;
+        this.responseData = responseData;
+        Vue.set(this.filterData, "siteIds0", filterData.siteIds[0]);
+        console.log('this.filterData  - ', this.filterData );
+        console.log('this.responseData  - ', this.responseData );
+    }
+
+    receiveUserData(data) {
+        this.userData = data;
+        console.log('this.userData - ', this.userData);
+    }
+
+    receiveModalShowData(data) {
+        this.modalShow = data;
+    }
+
+    ////////////////////////////////////// Tina End //////////////////////////////////////
+
+
 }
 </script>
 

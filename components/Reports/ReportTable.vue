@@ -16,7 +16,6 @@
                     <th v-if="reportTableData.body[0].group">
                         Group
                     </th>
-                    </th>
                     <th>
                         Item
                     </th>
