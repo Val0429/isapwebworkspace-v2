@@ -1,2 +1,2 @@
 // interface
-export { IReportTableData } from './ReportTable';
+export { ReportTableData } from './ReportTable';

@@ -3,24 +3,24 @@
         <title>Report Table</title>
         <table
             class="table table-bordered"
-            v-if="reportTableData.body.length > 0"
+            v-if="reportTableData._body && reportTableData._body.length > 0"
         >
             <thead>
                 <tr class="title">
-                    <th v-if="reportTableData.body[0].site">
+                    <th v-if="reportTableData._body[0].site">
                         Site
                     </th>
-                    <th v-if="reportTableData.body[0].area">
+                    <th v-if="reportTableData._body[0].area">
                         Area
                     </th>
-                    <th v-if="reportTableData.body[0].group">
+                    <th v-if="reportTableData._body[0].group">
                         Group
                     </th>
                     </th>
                     <th>
                         Item
                     </th>
-                    <th v-for="(item, key, index) in reportTableData.head">
+                    <th v-for="(item, key, index) in reportTableData._head">
                         {{item}}
                     </th>
                     <th>
@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <template v-for="(items, key, index) in reportTableData.body">
+                <template v-for="(items, key, index) in reportTableData._body">
                     <tr>
                         <td
                             v-if="items.site"
@@ -48,45 +48,60 @@
                         >{{items.group}}</td>
                         <td class="title">Tarffic - IN</td>
                         <td v-for="(itemIn, key, index) in items.in">
-                            <span>{{itemIn.value > 0 ? itemIn.value : "N/A"}}</span>
-                            <span :class="sign.none != itemIn.sign ? (sign.positive == itemIn.sign ?  'green':'red') : ''">{{itemIn.valueRatio > 0 ? " (" + toPercent(itemIn.valueRatio,0) + ")" : "N/A"}}</span>
+                            <span>{{ itemIn.value}}</span>
+                            <span :class="sign.none != itemIn.sign ? (sign.positive == itemIn.sign ?  'green':'red') : ''">{{ " (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.in">{{items.inTotal}}</td>
+                        <td v-if="items.in">
+                            <span>{{items.inTotal.value }}</span>
+                            <span :class="sign.none != items.inTotal.sign ? (sign.positive == items.inTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
+
+                        </td>
 
                     </tr>
                     <tr>
                         <td class="title">Tarffic - OUT</td>
                         <td v-for="(itemOut, key, index) in items.out">
-                            <span>{{itemOut.value > 0 ? itemOut.value : "N/A"}}</span>
-                            <span :class="sign.none != itemOut.sign ? (sign.positive == itemOut.sign ?  'green':'red') : ''">{{itemOut.valueRatio > 0 ? " (" + toPercent(itemOut.valueRatio,0) + ")" : "N/A"}}</span>
+                            <span>{{ itemOut.value }}</span>
+                            <span :class="sign.none != itemOut.sign ? (sign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.out">{{items.outTotal}}</td>
+                        <td v-if="items.out">
+                            <span>{{ items.outTotal.value }}</span>
+                            <span :class="sign.none != items.outTotal.sign ? (sign.positive == items.outTotal.sign ?  'green':'red') : ''"> {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                        </td>
                     </tr>
                 </template>
             </tbody>
             <tfoot>
                 <tr>
                     <td
-                        v-if="reportTableData.body[0].site"
+                        v-if="reportTableData._body[0].site"
                         rowspan="2"
                         class="title"
                     ></td>
                     <td
-                        v-if="reportTableData.body[0].area"
+                        v-if="reportTableData._body[0].area"
                         rowspan="2"
                         class="title"
                     ></td>
                     <td
-                        v-if="reportTableData.body[0].group"
+                        v-if="reportTableData._body[0].group"
                         rowspan="2"
                         class="title"
                     ></td>
                     <td class="title">Tarffic-in Total</td>
-                    <td v-for="(items, key, index) in reportTableData.foot">{{items.inTotal}}</td>
+                    <td v-for="(items, key, index) in reportTableData.foot">
+                        <span>{{ items.inTotal.value}}</span>
+                        <span :class="sign.none != items.inTotal.sign ? (sign.positive == items.inTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
+                    </td>
+
                 </tr>
                 <tr>
                     <td class="title">Tarffic-out Total</td>
-                    <td v-for="(items, key, index) in reportTableData.foot">{{items.outTotal}}</td>
+                    <td v-for="(items, key, index) in reportTableData.foot">
+                        <span>{{ items.outTotal.value }}</span>
+                        <span :class="sign.none != items.outTotal.sign ? (sign.positive == items.outTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                    </td>
+
                 </tr>
             </tfoot>
         </table>
@@ -95,7 +110,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { IReportTableData } from "../Reports/models";
+import { ReportTableData } from "../Reports/models";
 
 enum Sign {
     positive = "positive",
@@ -111,10 +126,10 @@ export class ReportTable extends Vue {
     @Prop({
         type: Object,
         default: function() {
-            return new IReportTableData();
+            return new ReportTableData();
         }
     })
-    reportTableData: IReportTableData;
+    reportTableData: ReportTableData;
 
     sign = Sign;
 

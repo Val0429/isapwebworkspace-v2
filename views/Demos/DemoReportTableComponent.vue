@@ -18,7 +18,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
-import { IReportTableData } from "../../components/Reports/models";
+import { ReportTableData } from "../../components/Reports/models";
 
 enum PageType {
     traffic = "traffic",
@@ -128,7 +128,7 @@ export default class DemoReportComponent extends Vue {
         { value: "ewtewfg", text: "台中店" }
     ];
 
-    rData = new IReportTableData();
+    rData = new ReportTableData();
 
     pData: IPeckTimeRange = {
         head: [],
@@ -214,30 +214,83 @@ export default class DemoReportComponent extends Vue {
     }
 
     initReportTable() {
-        this.rData.head = ["10/1", "10/2"];
+        this.rData.head = [
+            "09:00-10:00",
+            "10:00-11:00",
+            "11:00-12:00",
+            "12:00-13:00",
+            "13:00-14:00",
+            "14:00-15:00",
+            "15:00-16:00",
+            "16:00-17:00",
+            "17:00-18:00",
+            "18:00-19:00",
+            "19:00-20:00",
+            "21:00-22:00"
+        ];
         this.rData.body = [
             {
-                area: "area",
-                group: "group",
+                area: "1F精品區",
+                group: "N/A",
                 in: [
                     { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 2, valueRatio: 0.02 }
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.negative, value: 2, valueRatio: -0.02 }
                 ],
                 out: [
-                    { sign: Sign.negative, value: 3, valueRatio: 0.03 },
+                    { sign: Sign.negative, value: 3, valueRatio: -0.03 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
                     { sign: Sign.positive, value: 4, valueRatio: 0.05 }
                 ]
             },
             {
-                area: "area2",
-                group: "group2",
+                area: "2F生活用品",
+                group: "Group01",
                 in: [
                     { sign: Sign.positive, value: 5, valueRatio: 0.06 },
-                    { sign: Sign.negative, value: 6, valueRatio: 0.07 }
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.negative, value: 6, valueRatio: -0.07 }
                 ],
                 out: [
-                    { sign: Sign.negative, value: 7, valueRatio: 0.08 },
-                    { sign: Sign.positive, value: 8, valueRatio: 0.09 }
+                    { sign: Sign.negative, value: 7, valueRatio: -0.08 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: Sign.negative, value: 8, valueRatio: -0.09 }
                 ]
             }
         ];
