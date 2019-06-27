@@ -227,6 +227,7 @@ import {
     IRegionTreeSelected
 } from "@/components/RegionTree/models";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import { EAddPeriodSelect, EDesignationPeriod } from '@/components/Reports/models/EReport';
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
@@ -253,11 +254,6 @@ enum ECameraMode {
     visitor = "Visitor"
 }
 
-enum EAddPeriodSelect {
-    period = "period",
-    designation = "designation",
-}
-
 enum EWeeks {
     Sunday = "Sunday",
     Monday = "Monday",
@@ -268,21 +264,6 @@ enum EWeeks {
     Saturday = "Saturday",
 }
 
-
-enum EDesignationPeriod {
-    today = "Today",
-    yesterday = "Yesterday",
-    last7days = "Last 7 days",
-    thisWeek= "This Week",
-    lastWeek= "Last Week",
-    thisMonth= "This Month",
-    lastMonth= "Last Month",
-    q1 = "Q1",
-    q2 = "Q2",
-    q3 = "Q3",
-    q4 = "Q4",
-    thisYear = "This Year",
-}
 
 const timeItem = {
     week: "1",

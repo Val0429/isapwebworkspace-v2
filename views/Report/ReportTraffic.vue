@@ -1,13 +1,33 @@
 <template>
     <div class="animated fadeIn">
 
+        <!-- Tina -->
+        <filter_condition
+            :label="_('w_ReportFilterConditionComponent_')"
+            @submit-data="receiveFilterData"
+        >
+        </filter_condition>
+
+
         <div v-show="pageStep === ePageStep.none">
 
             <iv-card>
+
+
+                <!-- Tina -->
+                <analysis_filter_in_out
+                    class="mb-5 mt-3 ml-4"
+                    v-if="filterData.siteIds && filterData.siteIds.length === 1"
+                    :siteIds0="filterData.siteIds0"
+                    :deviceMode="deviceMode"
+                >
+                </analysis_filter_in_out>
+
                 <!-- Morris -->
                 <traffic-chart
                     :startDate="startDate"
                     :endDate="endDate"
+                    :timeMode="timeMode"
                     :sites="sites"
                     :value="value"
                 >
@@ -24,9 +44,14 @@
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
+// Tina
+import { EDeviceMode } from '@/components/Reports/models/EReport';
+
 // Morris
 import TrafficChart from "@/components/HighCharts/TrafficChart.vue";
+import FilterCondition from "@/components/Reports/FilterCondition.vue";
 import {
+    ETimeMode,
     EWeather,
     ISite,
     IDayRange,
@@ -46,24 +71,41 @@ export default class ReportTraffic extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
-    startDate: Date = new Date("2019-06-26T08:00:00.000Z");
-    endDate: Date = new Date("2019-06-01T00:00:00.000Z");
+    startDate: Date = new Date("2019-01-01T00:00:00.000Z");
+    endDate: Date = new Date("2019-01-01T01:00:00.000Z");
+    timeMode: ETimeMode = ETimeMode.none;
     sites: ISite[] = [];
     value: ITrafficData[] = [];
+
+    ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    // recipient 相關
+    modalShow: boolean = false;
+
+    // 往recipient子元件傳資料
+    deviceMode: string = EDeviceMode.peopleCounting;
+
+    // 接收 Filter Condition 資料 相關
+    filterData: any = {};
+    responseData: any = {};
+    userData: any = [];
+
+    ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
         this.initChartDeveloper();
     }
 
-    mounted() {}
+    mounted() {
+    }
 
     initChartDeveloper() {
         this.startDate = new Date("2019-06-26T08:00:00.000Z");
-        this.endDate = new Date("2019-06-26T14:00:00.000Z");
+        this.endDate = new Date("2019-06-29T14:00:00.000Z");
 
         this.sites.push({
             objectId: "site-1",
-            name: "Site",
+            name: "Site 1",
             officeHour: [
                 {
                     startDay: "0",
@@ -74,18 +116,57 @@ export default class ReportTraffic extends Vue {
             ]
         });
 
-        // this.sites.push({
-        //     objectId: "site-2",
-        //     name: "Site",
-        //     officeHour: [
-        //         {
-        //             startDay: "0",
-        //             endDay: "6",
-        //             startDate: "2000-01-01T12:00:00.000Z",
-        //             endDate: "2000-01-01T16:00:00.000Z"
-        //         }
-        //     ]
-        // });
+        this.sites.push({
+            objectId: "site-2",
+            name: "Site 2",
+            officeHour: [
+                {
+                    startDay: "0",
+                    endDay: "6",
+                    startDate: "2000-01-01T12:00:00.000Z",
+                    endDate: "2000-01-01T16:00:00.000Z"
+                }
+            ]
+        });
+
+        this.sites.push({
+            objectId: "site-3",
+            name: "Site 3",
+            officeHour: [
+                {
+                    startDay: "0",
+                    endDay: "6",
+                    startDate: "2000-01-01T12:00:00.000Z",
+                    endDate: "2000-01-01T16:00:00.000Z"
+                }
+            ]
+        });
+
+        this.sites.push({
+            objectId: "site-4",
+            name: "Site 4",
+            officeHour: [
+                {
+                    startDay: "0",
+                    endDay: "6",
+                    startDate: "2000-01-01T12:00:00.000Z",
+                    endDate: "2000-01-01T16:00:00.000Z"
+                }
+            ]
+        });
+
+        this.sites.push({
+            objectId: "site-5",
+            name: "Site 5",
+            officeHour: [
+                {
+                    startDay: "0",
+                    endDay: "6",
+                    startDate: "2000-01-01T12:00:00.000Z",
+                    endDate: "2000-01-01T16:00:00.000Z"
+                }
+            ]
+        });
 
         for (let i = 8; i < 16; i++) {
             let iNumber = i;
@@ -94,7 +175,7 @@ export default class ReportTraffic extends Vue {
             let tempDate = new Date(`2019-06-26T${iString10}:00:00.000Z`);
             let trafficChartData: ITrafficData = {
                 datetime: tempDate,
-                siteId: "site-2",
+                siteId: "site-" + ((iNumber % 2) + 1).toString(),
                 temperature: iNumber,
                 traffic: iNumber + 100,
                 revenue: iNumber * 1000,
@@ -106,6 +187,29 @@ export default class ReportTraffic extends Vue {
             this.value.push(trafficChartData);
         }
     }
+
+    ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    receiveFilterData(filterData, responseData) {
+        this.filterData = filterData;
+        this.responseData = responseData;
+        Vue.set(this.filterData, "siteIds0", filterData.siteIds[0]);
+        console.log('this.filterData  - ', this.filterData );
+        console.log('this.responseData  - ', this.responseData );
+    }
+
+    receiveUserData(data) {
+        this.userData = data;
+        console.log('this.userData - ', this.userData);
+    }
+
+    receiveModalShowData(data) {
+        this.modalShow = data;
+    }
+
+    ////////////////////////////////////// Tina End //////////////////////////////////////
+
+
 }
 </script>
 

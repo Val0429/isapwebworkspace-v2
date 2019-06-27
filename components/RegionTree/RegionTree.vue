@@ -1,9 +1,10 @@
 <template>
     <iv-tree
         ref="tree"
+        v-if="data.status.showCard"
         :server="server"
         :data="data"
-        :visible="data.status.showCard"
+        :visible="true"
     >
         <!-- Pass on all named slots -->
         <slot

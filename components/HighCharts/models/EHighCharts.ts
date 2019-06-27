@@ -10,6 +10,10 @@ enum ETimeMode {
     none = 'none',
     hour = 'hour',
     day = 'day',
+    week = 'week',
+    month = 'month',
+    quarter = 'quarter',
+    year = 'year',
 }
 
 enum ESiteMode {

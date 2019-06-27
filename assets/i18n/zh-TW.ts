@@ -744,9 +744,13 @@ export default class LangObject implements ILang {
     w_VSVIP_Stranger_Visitor_DeleteConfirm = 'Are you sure to delete selected VIP, Stranger, Frequent Visitor Device(s)?';
 
     // Report Traffic
-    w_ReportTraffic_Traffic = 'Traffic';
-    w_ReportTraffic_TrafficRevenue = 'Revenue';
     w_ReportTraffic_TrafficTime = 'Time';
+    w_ReportTraffic_TrafficTraffic = 'Traffic';
+    w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
+    w_ReportTraffic_TrafficRevenue = 'Revenue';
+    w_ReportTraffic_TrafficTransaction = 'Transaction';
+    w_ReportTraffic_TrafficConversion = 'Conversion';
+    w_ReportTraffic_TrafficTemperature = 'Temperature';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
@@ -768,6 +772,7 @@ export default class LangObject implements ILang {
 
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
+    w_ReportDateError = 'EndDate must greater or equal than startDate.';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';
