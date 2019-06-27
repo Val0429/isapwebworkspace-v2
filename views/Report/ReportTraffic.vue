@@ -46,8 +46,8 @@ export default class ReportTraffic extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
-    startDate: Date = new Date("2019-06-26T08:00:00.000Z");
-    endDate: Date = new Date("2019-06-01T00:00:00.000Z");
+    startDate: Date = new Date("2019-01-01T00:00:00.000Z");
+    endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     sites: ISite[] = [];
     value: ITrafficData[] = [];
 
@@ -59,7 +59,7 @@ export default class ReportTraffic extends Vue {
 
     initChartDeveloper() {
         this.startDate = new Date("2019-06-26T08:00:00.000Z");
-        this.endDate = new Date("2019-06-26T14:00:00.000Z");
+        this.endDate = new Date("2019-06-27T14:00:00.000Z");
 
         this.sites.push({
             objectId: "site-1",

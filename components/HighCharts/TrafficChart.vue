@@ -84,68 +84,6 @@ export class TrafficChart extends Vue {
         }
     }
 
-    barLineOption: any = {
-        chart: { zoomType: "xy" },
-        exporting: { enabled: false },
-        title: { text: " " },
-        subtitle: { text: " " },
-        xAxis: [
-            {
-                crosshair: true,
-                categories: [],
-                labels: { useHTML: true }
-            }
-        ],
-        yAxis: [
-            {
-                labels: { style: { color: "#000" } },
-                title: {
-                    text: "",
-                    style: { color: "#000" }
-                }
-            },
-            {
-                labels: { style: { color: "#000" } },
-                title: {
-                    text: "",
-                    style: { color: "#000" }
-                },
-                opposite: true
-            }
-        ],
-        tooltip: {
-            enabled: true,
-            shared: true,
-            useHTML: true,
-            backgroundColor: "#333",
-            style: { color: "#fff" },
-            formatter: function(tooltip: any) {
-                let self: any = this;
-                let result = "";
-                if (self.x != undefined) {
-                    try {
-                        let startIndex = self.x.indexOf(">{");
-                        let endIndex = self.x.indexOf("}<");
-                        let valueJson = self.x.substring(
-                            startIndex + 1,
-                            endIndex + 1
-                        );
-                        let newValue: any = JSON.parse(valueJson);
-                        result += `test1: ${newValue.test1}<br>`;
-                        result += `test2: ${newValue.test2}<br>`;
-                        result += `test3: ${newValue.test3}<br>`;
-                        result += `test4: ${newValue.test4}<br>`;
-                        result += `<i class='wi wi-night-sleet'></i>`;
-                    } catch (e) {
-                        console.log(e);
-                    }
-                }
-                return result;
-            }
-        },
-        series: []
-    };
-
     lineOption: any = {
         exporting: { enabled: false },
         title: { text: " " },
@@ -266,7 +204,7 @@ export class TrafficChart extends Vue {
                 data: []
             },
             {
-                name: this._("w_ReportTraffic_Traffic"),
+                name: this._("w_ReportTraffic_TrafficTraffic"),
                 type: "spline",
                 data: []
             }
@@ -277,27 +215,23 @@ export class TrafficChart extends Vue {
             let newCategorie: string = "";
             let traffic: number = 0;
             let revenue: number = 0;
-            let i18n: any = {
-                label: categorie,
-                traffic: this._("w_ReportTraffic_Traffic"),
-                revenue: this._("w_ReportTraffic_TrafficRevenue"),
-                time: this._("w_ReportTraffic_TrafficTime")
-            };
+            let i18n: any = this.i18nItem();
+            i18n.label = categorie;
 
             for (let i in values) {
                 let iNumber = parseInt(i);
                 let value: ITrafficData = values[iNumber];
                 value.datetime = new Date(value.datetime);
-                let hourString = Datetime.DateTime2String(
+                let datetimeString = Datetime.DateTime2String(
                     value.datetime,
                     "HH:mm"
                 );
 
-                if (hourString == categorie) {
+                if (datetimeString == categorie) {
                     value.i18n = i18n;
                     traffic = value.traffic;
                     revenue = value.revenue;
-                    newCategorie = `${hourString}<span style='display:none;'>${JSON.stringify(
+                    newCategorie = `${datetimeString}<span style='display:none;'>${JSON.stringify(
                         value
                     )}</span>`;
                     values.splice(iNumber, 1);
@@ -333,7 +267,7 @@ export class TrafficChart extends Vue {
                 {
                     labels: { style: { color: "#000" } },
                     title: {
-                        text: this._("w_ReportTraffic_Traffic"),
+                        text: this._("w_ReportTraffic_TrafficTraffic"),
                         style: { color: "#000" }
                     }
                 },
@@ -399,9 +333,181 @@ export class TrafficChart extends Vue {
 
     initDay1SiteX() {}
 
-    initDayXSite1() {}
+    initDayXSite1() {
+        let values = JSON.parse(JSON.stringify(this.value));
+        let categories: string[] = [];
+        let series: any = [
+            {
+                name: this._("w_ReportTraffic_TrafficRevenue"),
+                type: "column",
+                yAxis: 1,
+                data: []
+            },
+            {
+                name: this._("w_ReportTraffic_TrafficTraffic"),
+                type: "spline",
+                data: []
+            }
+        ];
+
+        // set data
+        for (let categorie of this.categories) {
+            let newCategorie: string = "";
+            let traffic: number = 0;
+            let revenue: number = 0;
+            let i18n: any = this.i18nItem();
+            i18n.label = categorie;
+
+            for (let i in values) {
+                let iNumber = parseInt(i);
+                let value: ITrafficData = values[iNumber];
+                value.datetime = new Date(value.datetime);
+                let datetimeString = Datetime.DateTime2String(
+                    value.datetime,
+                    "YYYY/MM/DD"
+                );
+
+                if (datetimeString == categorie) {
+                    let weatherIcon = HighChartsService.weatherIcon(
+                        value.weather
+                    );
+                    value.i18n = i18n;
+                    traffic = value.traffic;
+                    revenue = value.revenue;
+                    newCategorie = `${datetimeString} ${weatherIcon}<span style='display:none;'>${JSON.stringify(
+                        value
+                    )}</span>`;
+                    values.splice(iNumber, 1);
+                    break;
+                }
+            }
+
+            let weatherIcon = HighChartsService.weatherIcon(EWeather.none);
+            if (newCategorie == "") {
+                newCategorie = `${categorie} ${weatherIcon}<span style='display:none;'>${JSON.stringify(
+                    { i18n: i18n }
+                )}</span>`;
+            }
+
+            series[0].data.push(revenue);
+            series[1].data.push(traffic);
+            categories.push(newCategorie);
+        }
+
+        // set chart options
+        this.chartOptions = {
+            chart: { zoomType: "xy" },
+            exporting: { enabled: false },
+            title: { text: " " },
+            subtitle: { text: " " },
+            xAxis: [
+                {
+                    crosshair: true,
+                    categories: categories,
+                    labels: { useHTML: true }
+                }
+            ],
+            yAxis: [
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportTraffic_TrafficTraffic"),
+                        style: { color: "#000" }
+                    }
+                },
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportTraffic_TrafficRevenue"),
+                        style: { color: "#000" }
+                    },
+                    opposite: true
+                }
+            ],
+            tooltip: {
+                enabled: true,
+                shared: true,
+                useHTML: true,
+                backgroundColor: "#333",
+                style: { color: "#fff" },
+                formatter: function(tooltip: any) {
+                    let self: any = this;
+                    let result = "";
+                    if (self.x != undefined) {
+                        try {
+                            let startIndex = self.x.indexOf(">{");
+                            let endIndex = self.x.indexOf("}<");
+                            let valueJson = self.x.substring(
+                                startIndex + 1,
+                                endIndex + 1
+                            );
+                            let newValue: any = JSON.parse(valueJson);
+
+                            let temperature =
+                                newValue.temperature != undefined
+                                    ? `${newValue.temperature}°C`
+                                    : "0°C";
+                            let traffic =
+                                newValue.traffic != undefined
+                                    ? newValue.traffic
+                                    : "0";
+                            let revenue =
+                                newValue.revenue != undefined
+                                    ? newValue.revenue
+                                    : "0";
+                            let transaction =
+                                newValue.transaction != undefined
+                                    ? newValue.transaction
+                                    : "0";
+                            let conversion =
+                                newValue.conversion != undefined
+                                    ? `${newValue.conversion * 100}%`
+                                    : "0%";
+
+                            result += `${
+                                newValue.i18n.label
+                            }, ${temperature}<br>`;
+                            result += `${
+                                newValue.i18n.traffic
+                            }: ${traffic}<br>`;
+                            result += `${
+                                newValue.i18n.revenue
+                            }: ${revenue}<br>`;
+                            result += `${
+                                newValue.i18n.transaction
+                            }: ${transaction}<br>`;
+                            result += `${
+                                newValue.i18n.conversion
+                            }: ${conversion}<br>`;
+                            console.log("tooltipValue", newValue);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    return result;
+                }
+            },
+            series: series
+        };
+
+        this.mountChart = true;
+    }
 
     initDayXSiteX() {}
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    private i18nItem() {
+        let result: any = {
+            time: this._("w_ReportTraffic_TrafficTime"),
+            temperature: this._("w_ReportTraffic_TrafficTemperature"),
+            traffic: this._("w_ReportTraffic_TrafficTraffic"),
+            revenue: this._("w_ReportTraffic_TrafficRevenue"),
+            transaction: this._("w_ReportTraffic_TrafficTransaction"),
+            conversion: this._("w_ReportTraffic_TrafficConversion")
+        };
+        return result;
+    }
 
     // Only for day1Site1
     private officeHourCategories() {
