@@ -63,13 +63,14 @@ export default class DemoFilterConditionComponent extends Vue {
     // recipient 相關
     modalShow: boolean = false;
 
-    // 接收 submit 相關
+    // 往recipient子元件傳資料
+    deviceMode: string = EDeviceMode.peopleCounting;
+
+    // 接收 Filter Condition 資料 相關
     filterData: any = {};
     responseData: any = {};
     userData: any = [];
 
-    // 往子元件傳資料
-    deviceMode: string = EDeviceMode.demographic;
 
     created() {}
 

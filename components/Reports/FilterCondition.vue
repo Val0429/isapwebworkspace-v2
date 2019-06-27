@@ -218,7 +218,7 @@
         };
 
         // response 相關
-        responseData: any = {}
+        responseData: any = {};
 
         created() {
             this.initSelectItemSite();
