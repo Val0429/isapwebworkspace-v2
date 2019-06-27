@@ -154,8 +154,6 @@ export class RegionAPI {
                 case 'site':
                     regionItem.type = ERegionType.site;
                     regionItem.status.showCard = false;
-                    // regionItem.status.showBar = false;
-                    regionItem.status.showToggle = false;
 
                     for (const detail of allowSites) {
                         if ((this.regionTreeItem.toggleStatus.site || this.regionTreeItem.toggleStatus.area) && detail.objectId === value.objectId) {

@@ -32,6 +32,16 @@
                 </iv-form-selection>
             </template>
 
+            <template #type="{ $attrs, $listeners }">
+                <iv-form-selection
+                    class="col-md-2"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.type"
+                >
+                </iv-form-selection>
+            </template>
+
             <template #selectInOrOut="{ $attrs, $listeners }">
 
                 <b-form-radio-group
@@ -80,6 +90,7 @@ import {
     Watch
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+import { ECountType } from '@/components/Reports/models/EReport';
 import ResponseFilter from "@/services/ResponseFilter";
 
 
@@ -104,17 +115,27 @@ export class AnalysisFilter extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
+    countSelectItem: any = {
+        hour: ECountType.hour,
+        day: ECountType.day,
+        week: ECountType.week,
+        month: ECountType.month,
+        season: ECountType.season,
+        year: ECountType.year,
+    };
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
+        type: "",
     };
 
     created() {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
+        console.log('deviceGroupSelectItem - ', this.deviceGroupSelectItem);
     }
 
     mounted() {}
@@ -383,6 +404,7 @@ export class AnalysisFilter extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
+            type: "",
         };
 
         this.inputFormData.groupId = "";
@@ -419,6 +441,17 @@ export class AnalysisFilter extends Vue {
                  */
                 deviceId?: ${toEnumInterface(
                     this.deviceSelectItem as any,
+                    false
+                )};
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_countSelect")}
+                 * @uiColumnGroup - analysis
+                 */
+                type?: ${toEnumInterface(
+                    this.countSelectItem as any,
                     false
                 )};
 

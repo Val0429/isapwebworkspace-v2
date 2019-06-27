@@ -10,27 +10,29 @@
 
         <div class="h-25"></div>
 
-<!--
+        <!--
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
 
 -->
 
         <analysis_filter_in_out
+            v-if="filterData.siteIds && filterData.siteIds.length === 1"
             :siteIds0="filterData.siteIds0"
             :deviceMode="deviceMode"
         >
         </analysis_filter_in_out>
 
-        <analysis_filter
+        <!--
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
+-->
+
+        <analysis_filter
             :siteIds0="filterData.siteIds0"
             :deviceMode="deviceMode"
         >
         </analysis_filter>
 
-        <b-button
-            @click="modalShow = !modalShow"
-        >
+        <b-button @click="modalShow = !modalShow">
             {{ _('w_ReportTemplate_Recipient') }}
         </b-button>
 
@@ -41,7 +43,6 @@
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
-
 
     </div>
 </template>
@@ -60,10 +61,8 @@ enum EDeviceMode {
     humanDetection = "humanDetection"
 }
 
-
 @Component
 export default class DemoFilterConditionComponent extends Vue {
-
     // recipient 相關
     modalShow: boolean = false;
 
@@ -75,7 +74,6 @@ export default class DemoFilterConditionComponent extends Vue {
     responseData: any = {};
     userData: any = [];
 
-
     created() {}
 
     mounted() {}
@@ -84,19 +82,18 @@ export default class DemoFilterConditionComponent extends Vue {
         this.filterData = filterData;
         this.responseData = responseData;
         Vue.set(this.filterData, "siteIds0", filterData.siteIds[0]);
-        console.log('this.filterData  - ', this.filterData );
-        console.log('this.responseData  - ', this.responseData );
+        console.log("this.filterData  - ", this.filterData);
+        console.log("this.responseData  - ", this.responseData);
     }
 
     receiveUserData(data) {
         this.userData = data;
-        console.log('this.userData - ', this.userData);
+        console.log("this.userData - ", this.userData);
     }
 
     receiveModalShowData(data) {
         this.modalShow = data;
     }
-
 }
 </script>
 <style lang="scss" scoped>

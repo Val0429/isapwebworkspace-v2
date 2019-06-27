@@ -35,12 +35,22 @@
                 </iv-form-selection>
             </template>
 
+            <template #type="{ $attrs, $listeners }">
+                <iv-form-selection
+                    class="col-md-2"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.type"
+                >
+                </iv-form-selection>
+            </template>
+
             <template #selectInOrOut="{ $attrs, $listeners }">
 
                 <b-form-radio-group
                     v-bind="$attrs"
                     v-on="$listeners"
-                    v-model="inputFormData.type"
+                    v-model="inputFormData.inOrOut"
                     class="h-25 click_button col-md-1"
                     buttons
                     button-variant="outline-success"
@@ -61,7 +71,7 @@
 
             <template #clickButtonsReset>
                 <b-button
-                    class="h-25 ml-3 click_button reset col-md-1"
+                    class="h-25 ml-2 click_button reset col-md-1"
                     @click="doReset"
                 >
                     {{ _('wb_Reset') }}
@@ -83,8 +93,9 @@ import {
     Watch
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+import { ECountType } from "@/components/Reports/models/EReport";
 import ResponseFilter from "@/services/ResponseFilter";
-
+let config = require("@/config/default/debug");
 
 enum EType {
     in = "in",
@@ -95,7 +106,6 @@ enum EType {
     components: {}
 })
 export class AnalysisFilterInOut extends Vue {
-
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
         default: ""
@@ -116,24 +126,32 @@ export class AnalysisFilterInOut extends Vue {
         { value: EType.in, text: EType.in },
         { value: EType.out, text: EType.out }
     ];
-    countSelectItem: {
-
-    }
+    countSelectItem: any = {
+        hour: ECountType.hour,
+        day: ECountType.day,
+        week: ECountType.week,
+        month: ECountType.month,
+        season: ECountType.season,
+        year: ECountType.year
+    };
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
-        type: "in"
+        type: "",
+        inOrOut: "in"
     };
 
     created() {
+
+    }
+
+    mounted() {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
     }
-
-    mounted() {}
 
     @Watch("siteIds0", { deep: true })
     private onSiteIds0Changed(newVal, oldVal) {
@@ -151,7 +169,9 @@ export class AnalysisFilterInOut extends Vue {
             siteId: this.siteIds0
         };
 
-        if (this.siteIds0 !== undefined && this.siteIds0 !== "") {
+        if (!this.siteIds0) {
+            return false;
+        } else  {
             await this.$server
                 .R("/location/area/all", readParam)
                 .then((response: any) => {
@@ -172,12 +192,11 @@ export class AnalysisFilterInOut extends Vue {
                     console.log(e);
                     return false;
                 });
-        } else {
-            return false;
         }
     }
 
     async initSelectItemDeviceGroup() {
+
         let tempDeviceGroupSelectItem = {};
 
         let readParam: {
@@ -190,12 +209,7 @@ export class AnalysisFilterInOut extends Vue {
         };
 
         // 只選擇site
-        if (
-            this.siteIds0 !== undefined &&
-            this.siteIds0 !== "" &&
-            (this.inputFormData.areaId === undefined ||
-                this.inputFormData.areaId === "")
-        ) {
+        if (!this.siteIds0 && !this.inputFormData.areaId) {
             await this.$server
                 .R("/device/group/all", readParam)
                 .then((response: any) => {
@@ -215,6 +229,16 @@ export class AnalysisFilterInOut extends Vue {
                     console.log(e);
                     return false;
                 });
+        }
+
+        if (
+            this.siteIds0 !== undefined &&
+            this.siteIds0 !== "" &&
+            (this.inputFormData.areaId === undefined ||
+                this.inputFormData.areaId === "")
+        ) {
+            console.log(" - ", readParam);
+
         } else if (
             // 選擇site和area
             this.siteIds0 !== undefined &&
@@ -280,7 +304,6 @@ export class AnalysisFilterInOut extends Vue {
                         }
                         this.deviceSelectItem = tempDeviceSelectItem;
                     }
-
                 })
                 .catch((e: any) => {
                     if (e.res && e.res.statusCode && e.res.statusCode == 401) {
@@ -372,7 +395,6 @@ export class AnalysisFilterInOut extends Vue {
     }
 
     async whenSelectedGroupId() {
-
         if (
             this.inputFormData.groupId !== undefined ||
             this.inputFormData.groupId !== ""
@@ -397,7 +419,8 @@ export class AnalysisFilterInOut extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
-            type: "in"
+            type: "",
+            inOrOut: "in"
         };
 
         this.inputFormData.groupId = "";
@@ -436,6 +459,14 @@ export class AnalysisFilterInOut extends Vue {
                     this.deviceSelectItem as any,
                     false
                 )};
+
+
+                /**
+                 * @uiLabel - ${this._("w_countSelect")}
+                 * @uiColumnGroup - analysis
+                 */
+                type?: ${toEnumInterface(this.countSelectItem as any, false)};
+
 
                 /**
                  * @uiColumnGroup - analysis
