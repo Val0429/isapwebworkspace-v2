@@ -67,4 +67,72 @@ interface IReportDashboard {
         valueRatio: number;
     };
 }
-export { IReportDashboard };
+
+class ReportDashboard {
+    pageType = EPageType.none;
+    traffic = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+    averageOccupancy = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+    averageDwellTime = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+    demographic = {
+        sign: ESign.none,
+        value: -1,
+        valueRatio: -1,
+        sign2: ESign.none,
+        value2: -1,
+        valueRatio2: -1,
+    };
+    vipBlacklist = {
+        sign: ESign.none,
+        value: -1,
+        valueRatio: -1,
+        sign2: ESign.none,
+        value2: -1,
+        valueRatio2: -1,
+    };
+    repeatCustomer = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+    revenue = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+    transaction = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+    conversion = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+    asp = {
+        sign: ESign.none,
+        total: -1,
+        value: -1,
+        valueRatio: -1,
+    };
+}
+export { ReportDashboard };

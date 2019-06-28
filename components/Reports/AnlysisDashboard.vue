@@ -272,7 +272,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { IReportDashboard, EPageType, ESign } from "@/components/Reports";
+import { ReportDashboard, EPageType, ESign } from "@/components/Reports";
 
 @Component({
     components: {}
@@ -283,76 +283,10 @@ export class AnlysisDashboard extends Vue {
     @Prop({
         type: Object,
         default: function() {
-            return {
-                pageType: EPageType.none,
-                traffic: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                },
-                averageOccupancy: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                },
-                averageDwellTime: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                },
-                demographic: {
-                    sign: ESign.none,
-                    value: -1,
-                    valueRatio: -1,
-                    sign2: ESign.none,
-                    value2: -1,
-                    valueRatio2: -1
-                },
-                vipBlacklist: {
-                    sign: ESign.none,
-                    value: -1,
-                    valueRatio: -1,
-                    sign2: ESign.none,
-                    value2: -1,
-                    valueRatio2: -1
-                },
-                repeatCustomer: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                },
-                revenue: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                },
-                transaction: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                },
-                conversion: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                },
-                asp: {
-                    sign: ESign.none,
-                    total: -1,
-                    value: -1,
-                    valueRatio: -1
-                }
-            };
+            return new ReportDashboard();
         }
     })
-    anlysisData: IReportDashboard;
+    anlysisData: ReportDashboard;
 
     eSign = ESign;
     ePageType = EPageType;
