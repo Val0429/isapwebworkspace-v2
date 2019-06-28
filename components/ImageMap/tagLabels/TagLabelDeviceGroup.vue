@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import { EDragType, DeviceGroupItem, EVideoSource } from "../models";
+import { EDragType, DeviceGroupItem, EVideoSource } from "../";
 
 @Component({
     components: {}

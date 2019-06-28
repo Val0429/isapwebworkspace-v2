@@ -216,7 +216,7 @@ import {
     DataWindowLicensePlateRecognitionItem,
     DataWindowOccupancyItem,
     DataWindowPeopleCountingItem
-} from "@/components/ImageMap/models";
+} from "@/components/ImageMap";
 import DeviceFisheyeCamera from "../components/Map/DeviceFisheyeCamera.vue";
 
 @Component({

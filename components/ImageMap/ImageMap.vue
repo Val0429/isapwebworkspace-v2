@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import { EDragType, ImageMapItem, ESetupMode } from "./models";
+import { EDragType, ImageMapItem, ESetupMode } from "./";
 import { ImageBox } from "./ImageBox.vue";
 import { TagLabelView } from "./tagLabels/TagLabelView.vue";
 

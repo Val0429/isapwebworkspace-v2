@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import { EDragType, IDeviceCameraViewerSvg } from "../models";
+import { EDragType, IDeviceCameraViewerSvg } from "../";
 
 @Component({
     components: {}

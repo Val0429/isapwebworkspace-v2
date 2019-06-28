@@ -197,7 +197,7 @@ import {
     DeviceNormalCameraItem,
     DataWindowOccupancyItem,
     DataWindowPeopleCountingItem
-} from "./models";
+} from "./";
 import IconBase64 from "./models/IconBase64";
 
 @Component({

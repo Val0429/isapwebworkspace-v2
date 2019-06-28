@@ -644,7 +644,7 @@ import {
     DataWindowLicensePlateRecognitionItem,
     DataWindowOccupancyItem,
     DataWindowPeopleCountingItem
-} from "@/components/ImageMap/models";
+} from "@/components/ImageMap";
 import ResponseFilter from "@/services/ResponseFilter";
 import {
     ISiteAddData,

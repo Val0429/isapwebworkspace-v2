@@ -8,13 +8,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import {
-    EDragType,
-    EVideoSource,
-    EDeviceType,
-    IScale,
-    DeviceItem
-} from "../models";
+import { EDragType, EVideoSource, EDeviceType, IScale, DeviceItem } from "../";
 @Component({
     components: {}
 })
