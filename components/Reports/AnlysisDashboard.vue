@@ -296,7 +296,7 @@ export class AnlysisDashboard extends Vue {
     mounted() {}
 
     numberWithCommas(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return number.toString().replace(/\B(?=(\d{3})+\b)/g, ",");
     }
 
     toPercent(point, fixed) {
