@@ -7,3 +7,7 @@ export { IReportDashboard } from './models/IReportDashboard';
 
 // class
 export { ReportTableData } from './models/ReportTable';
+
+// Highcharts
+export * from './models/EHighCharts';
+export * from './models/IHighCharts';
