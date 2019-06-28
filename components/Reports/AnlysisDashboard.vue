@@ -272,11 +272,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import {
-    IReportDashboard,
-    EPageType,
-    ESign
-} from "../../components/Reports/models";
+import { IReportDashboard, EPageType, ESign } from "@/components/Reports";
 
 @Component({
     components: {}

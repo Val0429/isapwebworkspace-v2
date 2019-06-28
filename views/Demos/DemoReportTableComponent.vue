@@ -24,7 +24,7 @@ import {
     IReportDashboard,
     EPageType,
     ESign
-} from "../../components/Reports/models";
+} from "@/components/Reports";
 
 @Component
 export default class DemoReportComponent extends Vue {

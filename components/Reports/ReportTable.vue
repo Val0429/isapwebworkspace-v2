@@ -109,7 +109,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { ReportTableData, ESign } from "../Reports/models";
+import { ReportTableData, ESign } from "./";
 
 @Component({
     components: {}

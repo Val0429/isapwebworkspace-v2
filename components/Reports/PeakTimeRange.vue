@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { IPeckTimeRange } from "../../components/Reports/models";
+import { IPeckTimeRange } from "@/components/Reports";
 
 @Component({
     components: {}
