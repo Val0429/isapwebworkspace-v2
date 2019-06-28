@@ -752,7 +752,6 @@ export default class MemberForm extends Vue {
                 detailData.Credentials[0].ProfileId != undefined
             ) {
                 this.inputFormData.cardCertificate = detailData.Credentials[0].ProfileId.toString();
-                console.log(' - ', this.inputFormData.cardCertificate);
             }
 
             if (
@@ -1202,8 +1201,6 @@ export default class MemberForm extends Vue {
                     }
                 }
             }
-
-            console.log('let detailData - ', detailData)
 
         }
 
