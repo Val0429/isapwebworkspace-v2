@@ -16,12 +16,6 @@ enum ETimeMode {
     year = 'year',
 }
 
-enum ESiteMode {
-    none = 'none',
-    single = 'single',
-    multipe = 'multipe',
-}
-
 enum EWeather {
     none = 'none',
     sunny = 'sunny',
@@ -29,4 +23,4 @@ enum EWeather {
     rain = 'rain',
 }
 
-export { ETimeMode, ESiteMode, EChartMode, EWeather };
+export { ETimeMode, EChartMode, EWeather };

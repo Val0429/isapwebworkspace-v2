@@ -29,13 +29,8 @@ exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
 // custom import
-import {
-    ETimeMode,
-    ESiteMode,
-    EChartMode,
-    EWeather
-} from "./models/EHighCharts";
-import { IDate, ISite, ITrafficData } from "./models/IHighCharts";
+import { ETimeMode, EChartMode, EWeather } from "./models/EHighCharts";
+import { IDate, ISite, IChartTrafficData } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
 
@@ -82,15 +77,16 @@ export class HighchartsTraffic extends Vue {
             return [];
         }
     })
-    value: ITrafficData[];
+    value: IChartTrafficData[];
 
     mathRoundLength = 2;
     errorMessage: string = "";
     mountChart: boolean = false;
     chartMode: EChartMode = EChartMode.none;
     chartOptions: any = {};
-
     categories: string[] = [];
+    dateFormat = "YYYY/MM/DD";
+    timeFormat = "HH:mm";
 
     created() {
         this.start();
@@ -100,22 +96,22 @@ export class HighchartsTraffic extends Vue {
 
     start() {
         if (isNaN(this.startDate.getTime())) {
-            this.errorMessage = "Start time error";
+            this.errorMessage = this._("w_ReportTraffic_ErrorDateStart");
             return false;
         }
 
         if (isNaN(this.endDate.getTime())) {
-            this.errorMessage = "End time error";
+            this.errorMessage = this._("w_ReportTraffic_ErrorDateEnd");
             return false;
         }
 
         let startDateString = Datetime.DateTime2String(
             this.startDate,
-            "YYYY-MM-DD"
+            this.dateFormat
         );
         let endDateString = Datetime.DateTime2String(
             this.endDate,
-            "YYYY-MM-DD"
+            this.dateFormat
         );
 
         if (startDateString == endDateString && this.sites.length == 1) {
@@ -127,7 +123,7 @@ export class HighchartsTraffic extends Vue {
         } else if (startDateString != endDateString && this.sites.length > 1) {
             this.chartMode = EChartMode.dayXSiteX;
         } else {
-            this.errorMessage = "No Find Chart Mode";
+            this.errorMessage = this._("w_ReportTraffic_ErrorChartMode");
         }
 
         this.initChart();
@@ -160,6 +156,7 @@ export class HighchartsTraffic extends Vue {
     initDay1Site1() {
         let tempValues = JSON.parse(JSON.stringify(this.value));
         let tempCategories: string[] = [];
+        let tempResult: IChartTrafficData[] = [];
         let tempSeries: any = [
             {
                 name: this._("w_ReportTraffic_TrafficRevenue"),
@@ -176,51 +173,176 @@ export class HighchartsTraffic extends Vue {
 
         // set data
         for (let categorie of this.categories) {
-            let newCategorie: string = "";
-            let traffic: number = 0;
-            let revenue: number = 0;
-            let i18n: any = this.i18nItem();
-            i18n.label = categorie;
-
+            let haveValue = false;
             for (let i in tempValues) {
                 let iNumber = parseInt(i);
-                let value: ITrafficData = tempValues[iNumber];
-                value.datetime = new Date(value.datetime);
-                let datetimeString = Datetime.DateTime2String(
-                    value.datetime,
-                    "HH:mm"
+                let value: IChartTrafficData = this.trafficValue(
+                    tempValues[iNumber]
                 );
-
-                if (datetimeString == categorie) {
-                    value.i18n = i18n;
-                    value.conversion = this.formatFloat(
-                        value.conversion * 100,
-                        this.mathRoundLength
-                    );
-                    traffic = value.traffic;
-                    revenue = value.revenue;
-                    newCategorie = `${datetimeString}<span style='display:none;'>${JSON.stringify(
-                        value
-                    )}</span>`;
-                    tempValues.splice(iNumber, 1);
+                if (value.timeString == categorie) {
+                    haveValue = true;
+                    tempResult.push(value);
                     break;
                 }
             }
-
-            if (newCategorie == "") {
-                newCategorie = `${categorie}<span style='display:none;'>${JSON.stringify(
-                    { i18n: i18n }
-                )}</span>`;
+            if (!haveValue) {
+                let defaultValue = this.trafficValueDefault();
+                defaultValue.timeString = categorie;
+                tempResult.push(defaultValue);
             }
+        }
 
-            tempSeries[0].data.push(revenue);
-            tempSeries[1].data.push(traffic);
-            tempCategories.push(newCategorie);
+        // set result
+        for (let result of tempResult) {
+            tempSeries[0].data.push(result.revenue);
+            tempSeries[1].data.push(result.traffic);
+            tempCategories.push(
+                this.categorieString(result.timeString, result)
+            );
         }
 
         // set chart options
         this.chartOptions = {
-            chart: { zoomType: "xy" },
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: " " },
+            subtitle: { text: " " },
+            xAxis: [
+                {
+                    crosshair: true,
+                    categories: tempCategories,
+                    labels: { useHTML: true }
+                }
+            ],
+            yAxis: [
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportTraffic_TrafficTraffic"),
+                        style: { color: "#000" }
+                    }
+                },
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportTraffic_TrafficRevenue"),
+                        style: { color: "#000" }
+                    },
+                    opposite: true
+                }
+            ],
+            tooltip: {
+                enabled: true,
+                shared: true,
+                useHTML: true,
+                backgroundColor: "#333",
+                style: { color: "#fff" },
+                formatter: function(tooltip: any) {
+                    let self: any = this;
+                    let result = "";
+                    if (self.x != undefined) {
+                        try {
+                            // anysisly JSON
+                            let startIndex = self.x.indexOf(">{");
+                            let endIndex = self.x.indexOf("}<");
+                            let valueJson = self.x.substring(
+                                startIndex + 1,
+                                endIndex + 1
+                            );
+                            let newValue: any = JSON.parse(valueJson);
+
+                            // set value
+                            result += `${newValue.i18n.time}:${
+                                newValue.timeString
+                            }<br>`;
+                            result += `${newValue.i18n.traffic}: ${
+                                newValue.traffic
+                            }<br>`;
+                            result += `${newValue.i18n.revenue}: ${
+                                newValue.revenue
+                            }<br>`;
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    return result;
+                }
+            },
+            series: tempSeries
+        };
+
+        this.mountChart = true;
+    }
+
+    ////////////////////////// day 1 site X //////////////////////////
+
+    initDay1SiteX() {
+        let trafficAVG = 0;
+        let trafficTotal = 0;
+        let tempValues = JSON.parse(JSON.stringify(this.value));
+        let tempResult: IChartTrafficData[] = [];
+        let tempCategories: string[] = [];
+        let tempSeries: any = [
+            {
+                name: this._("w_ReportTraffic_TrafficRevenue"),
+                type: "column",
+                yAxis: 1,
+                data: []
+            },
+            {
+                name: this._("w_ReportTraffic_TrafficTraffic"),
+                type: "spline",
+                data: []
+            },
+            {
+                name: this._("w_ReportTraffic_TrafficTrafficAVG"),
+                type: "spline",
+                data: []
+            }
+        ];
+
+        for (let site of this.sites) {
+            let haveValue = false;
+            this.categories.push(site.name);
+            for (let i in tempValues) {
+                let iNumber = parseInt(i);
+                let value: IChartTrafficData = this.trafficValue(
+                    tempValues[iNumber]
+                );
+                if (value.siteObjectId == site.objectId) {
+                    haveValue = true;
+                    tempResult.push(value);
+                    break;
+                }
+            }
+
+            if (!haveValue) {
+                let defaultValue = this.trafficValueDefault();
+                defaultValue.siteName = site.name;
+                tempResult.push(defaultValue);
+            }
+        }
+
+        // calculate avg
+        if (tempResult.length > 0) {
+            for (let result of tempResult) {
+                trafficTotal += result.traffic;
+            }
+            trafficAVG = trafficTotal / tempResult.length;
+        }
+
+        // set result
+        for (let result of tempResult) {
+            result.trafficAVG = trafficAVG;
+            tempSeries[0].data.push(result.revenue);
+            tempSeries[1].data.push(result.traffic);
+            tempSeries[2].data.push(trafficAVG);
+            tempCategories.push(this.categorieString(result.siteName, result));
+        }
+
+        // set chart options
+        this.chartOptions = {
+            chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: " " },
             subtitle: { text: " " },
@@ -267,24 +389,29 @@ export class HighchartsTraffic extends Vue {
                             );
                             let newValue: any = JSON.parse(valueJson);
 
-                            let traffic =
-                                newValue.traffic != undefined
-                                    ? newValue.traffic
-                                    : "0";
-                            let revenue =
-                                newValue.revenue != undefined
-                                    ? newValue.revenue
-                                    : "0";
-
-                            result += `${newValue.i18n.time}:${
-                                newValue.i18n.label
+                            ///////// tooltip /////////
+                            result += `${newValue.siteName}<br>`;
+                            result += `${newValue.i18n.date}: ${
+                                newValue.dateString
                             }<br>`;
-                            result += `${
-                                newValue.i18n.traffic
-                            }: ${traffic}<br>`;
-                            result += `${
-                                newValue.i18n.revenue
-                            }: ${revenue}<br>`;
+                            result += `${newValue.i18n.temperature}: ${
+                                newValue.temperature
+                            }°C<br>`;
+                            result += `${newValue.i18n.traffic}: ${
+                                newValue.traffic
+                            }<br>`;
+                            result += `${newValue.i18n.trafficAVG}: ${
+                                newValue.trafficAVG
+                            }<br>`;
+                            result += `${newValue.i18n.revenue}: ${
+                                newValue.revenue
+                            }<br>`;
+                            result += `${newValue.i18n.transaction}: ${
+                                newValue.transaction
+                            }<br>`;
+                            result += `${newValue.i18n.conversion}: ${
+                                newValue.conversionPercentage
+                            }%<br>`;
                         } catch (e) {
                             console.log(e);
                         }
@@ -298,9 +425,9 @@ export class HighchartsTraffic extends Vue {
         this.mountChart = true;
     }
 
-    ////////////////////////// day 1 site X //////////////////////////
+    ////////////////////////// day X site 1 //////////////////////////
 
-    initDay1SiteX() {
+    initDayXSite1() {
         let trafficAVG = 0;
         let trafficTotal = 0;
         let tempValues = JSON.parse(JSON.stringify(this.value));
@@ -324,47 +451,31 @@ export class HighchartsTraffic extends Vue {
             }
         ];
 
-        for (let site of this.sites) {
+        // set data
+        for (let categorie of this.categories) {
             let newCategorie: string = "";
             let traffic: number = 0;
             let revenue: number = 0;
-            let i18n: any = this.i18nItem();
-            i18n.label = site.name;
-            this.categories.push(site.name);
 
             for (let i in tempValues) {
                 let iNumber = parseInt(i);
-                let value: ITrafficData = tempValues[iNumber];
+                let value: IChartTrafficData = this.trafficValue(
+                    tempValues[iNumber]
+                );
 
-                value.datetime = new Date(value.datetime);
-                if (value.siteId == site.objectId) {
-                    let weatherIcon = HighChartsService.weatherIcon(
-                        value.weather
-                    );
-                    value.i18n = i18n;
-                    value.conversion = this.formatFloat(
-                        value.conversion * 100,
-                        this.mathRoundLength
-                    );
+                if (value.dateString == categorie) {
                     traffic = value.traffic;
                     revenue = value.revenue;
-                    newCategorie = `${
-                        site.name
-                    } ${weatherIcon}<span style='display:none;'>${JSON.stringify(
-                        value
-                    )}</span>`;
+                    newCategorie = this.categorieString(categorie, value);
                     tempValues.splice(iNumber, 1);
                     break;
                 }
             }
 
-            let weatherIcon = HighChartsService.weatherIcon(EWeather.none);
             if (newCategorie == "") {
-                newCategorie = `${
-                    site.name
-                } ${weatherIcon}<span style='display:none;'>${JSON.stringify({
-                    i18n: i18n
-                })}</span>`;
+                let defaultValue = this.trafficValueDefault();
+                defaultValue.dateString = categorie;
+                newCategorie = this.categorieString(categorie, defaultValue);
             }
 
             tempSeries[0].data.push(revenue);
@@ -385,171 +496,7 @@ export class HighchartsTraffic extends Vue {
 
         // set chart options
         this.chartOptions = {
-            chart: { zoomType: "xy" },
-            exporting: { enabled: false },
-            title: { text: " " },
-            subtitle: { text: " " },
-            xAxis: [
-                {
-                    crosshair: true,
-                    categories: tempCategories,
-                    labels: { useHTML: true }
-                }
-            ],
-            yAxis: [
-                {
-                    labels: { style: { color: "#000" } },
-                    title: {
-                        text: this._("w_ReportTraffic_TrafficTraffic"),
-                        style: { color: "#000" }
-                    }
-                },
-                {
-                    labels: { style: { color: "#000" } },
-                    title: {
-                        text: this._("w_ReportTraffic_TrafficRevenue"),
-                        style: { color: "#000" }
-                    },
-                    opposite: true
-                }
-            ],
-            tooltip: {
-                enabled: true,
-                shared: true,
-                useHTML: true,
-                backgroundColor: "#333",
-                style: { color: "#fff" },
-                formatter: function(tooltip: any) {
-                    let self: any = this;
-                    let result = "";
-                    if (self.x != undefined) {
-                        try {
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
-                            let temperature =
-                                newValue.temperature != undefined
-                                    ? `${newValue.temperature}°C`
-                                    : "0°C";
-                            let traffic =
-                                newValue.traffic != undefined
-                                    ? newValue.traffic
-                                    : "0";
-                            let revenue =
-                                newValue.revenue != undefined
-                                    ? newValue.revenue
-                                    : "0";
-                            let transaction =
-                                newValue.transaction != undefined
-                                    ? newValue.transaction
-                                    : "0";
-                            let conversion =
-                                newValue.conversion != undefined
-                                    ? `${newValue.conversion}%`
-                                    : "0%";
-
-                            result += `${
-                                newValue.i18n.label
-                            }, ${temperature}<br>`;
-                            result += `${
-                                newValue.i18n.traffic
-                            }: ${traffic}<br>`;
-                            result += `${
-                                newValue.i18n.revenue
-                            }: ${revenue}<br>`;
-                            result += `${
-                                newValue.i18n.transaction
-                            }: ${transaction}<br>`;
-                            result += `${
-                                newValue.i18n.conversion
-                            }: ${conversion}<br>`;
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    }
-                    return result;
-                }
-            },
-            series: tempSeries
-        };
-
-        this.mountChart = true;
-    }
-
-    ////////////////////////// day X site 1 //////////////////////////
-
-    initDayXSite1() {
-        let tempValues = JSON.parse(JSON.stringify(this.value));
-        let tempCategories: string[] = [];
-        let tempSeries: any = [
-            {
-                name: this._("w_ReportTraffic_TrafficRevenue"),
-                type: "column",
-                yAxis: 1,
-                data: []
-            },
-            {
-                name: this._("w_ReportTraffic_TrafficTraffic"),
-                type: "spline",
-                data: []
-            }
-        ];
-
-        // set data
-        for (let categorie of this.categories) {
-            let newCategorie: string = "";
-            let traffic: number = 0;
-            let revenue: number = 0;
-            let i18n: any = this.i18nItem();
-            i18n.label = categorie;
-
-            for (let i in tempValues) {
-                let iNumber = parseInt(i);
-                let value: ITrafficData = tempValues[iNumber];
-                value.datetime = new Date(value.datetime);
-                let datetimeString = Datetime.DateTime2String(
-                    value.datetime,
-                    "YYYY/MM/DD"
-                );
-
-                if (datetimeString == categorie) {
-                    let weatherIcon = HighChartsService.weatherIcon(
-                        value.weather
-                    );
-                    value.i18n = i18n;
-                    value.conversion = this.formatFloat(
-                        value.conversion * 100,
-                        this.mathRoundLength
-                    );
-                    traffic = value.traffic;
-                    revenue = value.revenue;
-                    newCategorie = `${datetimeString} ${weatherIcon}<span style='display:none;'>${JSON.stringify(
-                        value
-                    )}</span>`;
-                    tempValues.splice(iNumber, 1);
-                    break;
-                }
-            }
-
-            let weatherIcon = HighChartsService.weatherIcon(EWeather.none);
-            if (newCategorie == "") {
-                newCategorie = `${categorie} ${weatherIcon}<span style='display:none;'>${JSON.stringify(
-                    { i18n: i18n }
-                )}</span>`;
-            }
-
-            tempSeries[0].data.push(revenue);
-            tempSeries[1].data.push(traffic);
-            tempCategories.push(newCategorie);
-        }
-
-        // set chart options
-        this.chartOptions = {
-            chart: { zoomType: "xy" },
+            chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: " " },
             subtitle: { text: " " },
@@ -596,42 +543,25 @@ export class HighchartsTraffic extends Vue {
                             );
                             let newValue: any = JSON.parse(valueJson);
 
-                            let temperature =
-                                newValue.temperature != undefined
-                                    ? `${newValue.temperature}°C`
-                                    : "0°C";
-                            let traffic =
-                                newValue.traffic != undefined
-                                    ? newValue.traffic
-                                    : "0";
-                            let revenue =
-                                newValue.revenue != undefined
-                                    ? newValue.revenue
-                                    : "0";
-                            let transaction =
-                                newValue.transaction != undefined
-                                    ? newValue.transaction
-                                    : "0";
-                            let conversion =
-                                newValue.conversion != undefined
-                                    ? `${newValue.conversion}%`
-                                    : "0%";
-
-                            result += `${
-                                newValue.i18n.label
-                            }, ${temperature}<br>`;
-                            result += `${
-                                newValue.i18n.traffic
-                            }: ${traffic}<br>`;
-                            result += `${
-                                newValue.i18n.revenue
-                            }: ${revenue}<br>`;
-                            result += `${
-                                newValue.i18n.transaction
-                            }: ${transaction}<br>`;
-                            result += `${
-                                newValue.i18n.conversion
-                            }: ${conversion}<br>`;
+                            result += `${newValue.dateString}<br>`;
+                            result += `${newValue.i18n.temperature}: ${
+                                newValue.temperature
+                            }°C<br>`;
+                            result += `${newValue.i18n.traffic}: ${
+                                newValue.traffic
+                            }<br>`;
+                            result += `${newValue.i18n.revenue}: ${
+                                newValue.revenue
+                            }<br>`;
+                            result += `${newValue.i18n.transaction}: ${
+                                newValue.transaction
+                            }<br>`;
+                            result += `${newValue.i18n.conversion}: ${
+                                newValue.conversionPercentage
+                            }%<br>`;
+                            result += `${newValue.i18n.asp}: ${
+                                newValue.asp
+                            }<br>`;
                         } catch (e) {
                             console.log(e);
                         }
@@ -668,7 +598,7 @@ export class HighchartsTraffic extends Vue {
                     value.datetime = new Date(value.datetime);
                     let datetimeString = Datetime.DateTime2String(
                         value.datetime,
-                        "YYYY/MM/DD"
+                        this.dateFormat
                     );
                     if (
                         value.siteId == site.objectId &&
@@ -702,7 +632,7 @@ export class HighchartsTraffic extends Vue {
                 value.datetime = new Date(value.datetime);
                 let datetimeString = Datetime.DateTime2String(
                     value.datetime,
-                    "YYYY/MM/DD"
+                    this.dateFormat
                 );
                 if (datetimeString == categorie) {
                     let siteName = "";
@@ -738,6 +668,7 @@ export class HighchartsTraffic extends Vue {
         }
 
         this.chartOptions = {
+            chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: " " },
             subtitle: { text: " " },
@@ -853,6 +784,97 @@ export class HighchartsTraffic extends Vue {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private categorieString(showString: string, value: IChartTrafficData) {
+        return `${showString} <span style='display:none;'>${JSON.stringify(
+            value
+        )}</span>`;
+    }
+
+    private trafficValueDefault(): IChartTrafficData {
+        let value: IChartTrafficData = {
+            date: new Date(),
+            siteObjectId: "",
+            temperature: 0,
+            traffic: 0,
+            revenue: 0,
+            transaction: 0,
+            conversion: 0,
+            asp: 0,
+            weather: EWeather.none,
+            i18n: this.i18nItem(),
+            siteName: "",
+            timeMode: ETimeMode.none,
+            trafficAVG: 0,
+            conversionPercentage: 0,
+            weatherIcon: Datetime.DateTime2String(new Date(), this.dateFormat),
+            dateStart: new Date(),
+            dateEnd: new Date(),
+            timeString: Datetime.DateTime2String(new Date(), this.timeFormat),
+            dateString: Datetime.DateTime2String(new Date(), this.dateFormat),
+            dateStartString: Datetime.DateTime2String(
+                new Date(),
+                this.dateFormat
+            ),
+            dateEndString: Datetime.DateTime2String(new Date(), this.dateFormat)
+        };
+        return value;
+    }
+
+    private trafficValue(item: IChartTrafficData): IChartTrafficData {
+        let value = JSON.parse(JSON.stringify(item));
+        value.date = new Date(value.date);
+        for (let site of this.sites) {
+            if (site.objectId == value.siteObjectId) {
+                value.siteName = site.name;
+                break;
+            }
+        }
+
+        switch (this.timeMode) {
+            case ETimeMode.year:
+                break;
+            case ETimeMode.quarter:
+                break;
+            case ETimeMode.month:
+                break;
+            case ETimeMode.week:
+                break;
+            case ETimeMode.day:
+            case ETimeMode.hour:
+            case ETimeMode.none:
+            default:
+                value.dateStart = value.date;
+                value.dateEnd = value.date;
+                break;
+        }
+
+        value.conversionPercentage = this.formatFloat(
+            value.conversion * 100,
+            this.mathRoundLength
+        );
+        value.i18n = this.i18nItem();
+        value.timeMode = this.timeMode;
+        value.trafficAVG = 0;
+        value.weatherIcon = HighChartsService.weatherIcon(value.weather);
+        value.timeString = Datetime.DateTime2String(
+            value.date,
+            this.timeFormat
+        );
+        value.dateString = Datetime.DateTime2String(
+            value.date,
+            this.dateFormat
+        );
+        value.dateStartString = Datetime.DateTime2String(
+            value.dateStart,
+            this.dateFormat
+        );
+        value.dateEndString = Datetime.DateTime2String(
+            value.dateEnd,
+            this.dateFormat
+        );
+        return value;
+    }
+
     private formatFloat(num: number, pos: number) {
         var size = Math.pow(10, pos);
         return Math.round(num * size) / size;
@@ -864,6 +886,7 @@ export class HighchartsTraffic extends Vue {
             date: this._("w_ReportTraffic_TrafficDate"),
             temperature: this._("w_ReportTraffic_TrafficTemperature"),
             traffic: this._("w_ReportTraffic_TrafficTraffic"),
+            trafficAVG: this._("w_ReportTraffic_TrafficTrafficAVG"),
             revenue: this._("w_ReportTraffic_TrafficRevenue"),
             transaction: this._("w_ReportTraffic_TrafficTransaction"),
             conversion: this._("w_ReportTraffic_TrafficConversion"),
@@ -971,7 +994,7 @@ export class HighchartsTraffic extends Vue {
             let tempDate = new Date();
             tempDate.setTime(i);
             this.categories.push(
-                Datetime.DateTime2String(tempDate, "YYYY/MM/DD")
+                Datetime.DateTime2String(tempDate, this.dateFormat)
             );
         }
     }

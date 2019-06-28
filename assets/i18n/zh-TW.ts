@@ -755,6 +755,10 @@ export default class LangObject implements ILang {
     w_ReportTraffic_TrafficWeather = 'Weather';
     w_ReportTraffic_TrafficASP = 'ASP';
 
+    w_ReportTraffic_ErrorDateStart = 'Start date error';
+    w_ReportTraffic_ErrorDateEnd = 'End date error';
+    w_ReportTraffic_ErrorChartMode = 'No Find Chart Mode';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';
