@@ -22,14 +22,14 @@
                 </analysis_filter_in_out>
 
                 <!-- Morris -->
-                <traffic-chart
+                <highcharts-traffic
                     :startDate="startDate"
                     :endDate="endDate"
                     :timeMode="timeMode"
                     :sites="sites"
                     :value="value"
                 >
-                </traffic-chart>
+                </highcharts-traffic>
 
             </iv-card>
 
@@ -46,7 +46,7 @@ import Dialog from "@/services/Dialog/Dialog";
 import { EDeviceMode } from "@/components/Reports/models/EReport";
 
 // Morris
-import TrafficChart from "@/components/HighCharts/TrafficChart.vue";
+import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import FilterCondition from "@/components/Reports/FilterCondition.vue";
 import {
     ETimeMode,
@@ -54,7 +54,7 @@ import {
     ISite,
     IDayRange,
     ITrafficData
-} from "@/components/HighCharts";
+} from "@/components/Reports";
 
 enum EPageStep {
     none = "none"
@@ -62,7 +62,7 @@ enum EPageStep {
 
 @Component({
     components: {
-        TrafficChart
+        HighchartsTraffic
     }
 })
 export default class ReportTraffic extends Vue {
@@ -99,14 +99,14 @@ export default class ReportTraffic extends Vue {
     // Morris //
     initChartDeveloper() {
         // single day
-        // this.startDate = new Date("2019-06-26T08:00:00.000Z");
-        // this.endDate = new Date("2019-06-26T14:00:00.000Z");
+        this.startDate = new Date("2019-06-26T08:00:00.000Z");
+        this.endDate = new Date("2019-06-26T14:00:00.000Z");
 
         // multipe day
         this.startDate = new Date("2019-06-01T08:00:00.000Z");
         this.endDate = new Date("2019-06-03T14:00:00.000Z");
 
-        for (let j = 0; j < 10; j++) {
+        for (let j = 0; j < 5; j++) {
             let tempJ = j + 1;
             this.sites.push({
                 objectId: "site-" + tempJ.toString(),

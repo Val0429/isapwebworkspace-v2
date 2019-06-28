@@ -21,7 +21,7 @@ import { toEnumInterface } from "@/../core";
 import {
     ReportTableData,
     IPeckTimeRange,
-    IReportDashboard,
+    ReportDashboard,
     EPageType,
     ESign
 } from "@/components/Reports";
@@ -43,73 +43,7 @@ export default class DemoReportComponent extends Vue {
         body: []
     };
 
-    dData: IReportDashboard = {
-        pageType: EPageType.none,
-        traffic: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        },
-        averageOccupancy: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        },
-        averageDwellTime: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        },
-        demographic: {
-            sign: ESign.none,
-            value: -1,
-            valueRatio: -1,
-            sign2: ESign.none,
-            value2: -1,
-            valueRatio2: -1
-        },
-        vipBlacklist: {
-            sign: ESign.none,
-            value: -1,
-            valueRatio: -1,
-            sign2: ESign.none,
-            value2: -1,
-            valueRatio2: -1
-        },
-        repeatCustomer: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        },
-        revenue: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        },
-        transaction: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        },
-        conversion: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        },
-        asp: {
-            sign: ESign.none,
-            total: -1,
-            value: -1,
-            valueRatio: -1
-        }
-    };
+    dData = new ReportDashboard();
 
     site = "dfgsadg";
 
