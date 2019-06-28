@@ -238,7 +238,7 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import ResponseFilter from "@/services/ResponseFilter";
@@ -1112,7 +1112,7 @@ export default class Demographic extends Vue {
         ) {
             return this._("w_VSDemographic_EditisapUseFRSManger");
         }
-        return '';
+        return "";
     }
 
     ITableList() {

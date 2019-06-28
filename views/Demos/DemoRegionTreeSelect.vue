@@ -38,7 +38,7 @@ import {
     ERegionType,
     IRegionItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 
 enum EPageStep {
     showResult,

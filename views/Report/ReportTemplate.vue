@@ -79,16 +79,19 @@
                 </template>
 
                 <template #selectPeriodAddWay="{ $attrs, $listeners }">
-                        <b-col cols="3" class="mb-3">
-                            <b-form-radio-group
-                                v-model="selectPeriodAddWay"
-                                :options="addPeriodSelectItem"
-                                buttons
-                                button-variant="outline-success"
-                                name="radio-btn-outline"
-                                @change="changeAddPeriodSelect"
-                            ></b-form-radio-group>
-                        </b-col>
+                    <b-col
+                        cols="3"
+                        class="mb-3"
+                    >
+                        <b-form-radio-group
+                            v-model="selectPeriodAddWay"
+                            :options="addPeriodSelectItem"
+                            buttons
+                            button-variant="outline-success"
+                            name="radio-btn-outline"
+                            @change="changeAddPeriodSelect"
+                        ></b-form-radio-group>
+                    </b-col>
                 </template>
 
                 <template #sendReportTimeTitle="{ $attrs, $listeners }">
@@ -109,7 +112,6 @@
                                     :options="timeSelectItem.weeks"
                                 ></b-form-select>
                             </b-col>
-
 
                             <b-col cols="4">
                                 <b-form-select
@@ -225,14 +227,16 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import { EAddPeriodSelect, EDesignationPeriod } from '@/components/Reports/models/EReport';
+import {
+    EAddPeriodSelect,
+    EDesignationPeriod
+} from "@/components/Reports/models/EReport";
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
-
 
 enum EPageStep {
     list = "list",
@@ -261,13 +265,12 @@ enum EWeeks {
     Wednesday = "Wednesday",
     Thursday = "Thursday",
     Friday = "Friday",
-    Saturday = "Saturday",
+    Saturday = "Saturday"
 }
-
 
 const timeItem = {
     week: "1",
-    hour: "22",
+    hour: "22"
 };
 
 @Component({
@@ -289,7 +292,7 @@ export default class ReportTemplate extends Vue {
         heatmap: ECameraMode.heatmap,
         dwellTime: ECameraMode.dwellTime,
         demographic: ECameraMode.demographic,
-        visitor: ECameraMode.visitor,
+        visitor: ECameraMode.visitor
     };
     userSelectItem: any = {};
 
@@ -303,13 +306,16 @@ export default class ReportTemplate extends Vue {
             { value: "5", text: EWeeks.Friday },
             { value: "6", text: EWeeks.Saturday }
         ],
-        hours: [],
+        hours: []
     };
 
-    addPeriodSelectItem: any =[
+    addPeriodSelectItem: any = [
         { value: EAddPeriodSelect.period, text: EAddPeriodSelect.period },
-        { value: EAddPeriodSelect.designation, text: EAddPeriodSelect.designation }
-        ];
+        {
+            value: EAddPeriodSelect.designation,
+            text: EAddPeriodSelect.designation
+        }
+    ];
 
     designationPeriodSelectItem: any = {
         today: EDesignationPeriod.today,
@@ -323,7 +329,7 @@ export default class ReportTemplate extends Vue {
         q2: EDesignationPeriod.q2,
         q3: EDesignationPeriod.q3,
         q4: EDesignationPeriod.q4,
-        thisYear: EDesignationPeriod.thisYear,
+        thisYear: EDesignationPeriod.thisYear
     };
 
     // tree 相關
@@ -332,11 +338,8 @@ export default class ReportTemplate extends Vue {
     selecteds: IRegionTreeSelected[] = [];
 
     inputFormData: any = {};
-    sendReportTime: any = [
-        { week: '1', hour: '22' }
-    ];
+    sendReportTime: any = [{ week: "1", hour: "22" }];
     selectPeriodAddWay: string = EAddPeriodSelect.period;
-
 
     created() {}
 
@@ -358,7 +361,6 @@ export default class ReportTemplate extends Vue {
     }
 
     async initSelectItemSite() {
-
         this.sitesSelectItem = {};
 
         const readAllSiteParam: {
@@ -411,7 +413,6 @@ export default class ReportTemplate extends Vue {
     }
 
     async initSelectItemUsers() {
-
         this.userSelectItem = {};
 
         await this.$server
@@ -420,8 +421,9 @@ export default class ReportTemplate extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
-                        this.userSelectItem[returnValue.objectId] =
-                            `${returnValue.username} : ${returnValue.email}`;
+                        this.userSelectItem[returnValue.objectId] = `${
+                            returnValue.username
+                        } : ${returnValue.email}`;
                     }
                 }
             })
@@ -517,7 +519,7 @@ export default class ReportTemplate extends Vue {
         this.pageStep = EPageStep.duplicate;
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
-        this.inputFormData.name = '';
+        this.inputFormData.name = "";
         this.selecteds = [];
         this.inputFormData.stepType = stepType;
     }
@@ -532,7 +534,9 @@ export default class ReportTemplate extends Vue {
         this.inputFormData.stepType = stepType;
 
         this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(this.inputFormData.siteIds.map(item => item.objectId))
+            JSON.stringify(
+                this.inputFormData.siteIds.map(item => item.objectId)
+            )
         );
         this.inputFormData.regionIds = JSON.parse(
             JSON.stringify(
@@ -607,7 +611,7 @@ export default class ReportTemplate extends Vue {
 
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
-        this.inputFormData.designationPeriod = 'today';
+        this.inputFormData.designationPeriod = "today";
         this.inputFormData.startDate = new Date();
         this.inputFormData.endDate = new Date();
     }
@@ -781,7 +785,6 @@ export default class ReportTemplate extends Vue {
         }
     }
 
-
     getWeekText(value: any): string {
         return !isNaN(value) && value > -1 && value < 7
             ? this._(`w_Week_${value.toString()}` as any)
@@ -857,7 +860,8 @@ export default class ReportTemplate extends Vue {
                  * @uiLabel - ${this._("w_ReportTemplate_Name")}
                  * @uiPlaceHolder - ${this._("w_ReportTemplate_Name")}
                  * @uiType - ${
-                     (this.inputFormData.stepType === EPageStep.add || this.inputFormData.stepType === EPageStep.duplicate)
+                     this.inputFormData.stepType === EPageStep.add ||
+                     this.inputFormData.stepType === EPageStep.duplicate
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
@@ -889,7 +893,9 @@ export default class ReportTemplate extends Vue {
                 * @uiColumnGroup - date
                 * @uiType - iv-form-date
                 * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation ? "true" : "false"
+                    this.selectPeriodAddWay === EAddPeriodSelect.designation
+                        ? "true"
+                        : "false"
                 }
                  */
                 startDate?: any;
@@ -901,7 +907,9 @@ export default class ReportTemplate extends Vue {
                 * @uiColumnGroup - date
                 * @uiType - iv-form-date
                 * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation ? "true" : "false"
+                    this.selectPeriodAddWay === EAddPeriodSelect.designation
+                        ? "true"
+                        : "false"
                 }
                  */
                 endDate?: any;
@@ -909,9 +917,16 @@ export default class ReportTemplate extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_DesignationPeriod")}
-                 * @uiHidden - ${this.selectPeriodAddWay === EAddPeriodSelect.period ? "true" : "false"}
+                 * @uiHidden - ${
+                     this.selectPeriodAddWay === EAddPeriodSelect.period
+                         ? "true"
+                         : "false"
+                 }
                  */
-                designationPeriod?: ${toEnumInterface(this.designationPeriodSelectItem as any, false)};
+                designationPeriod?: ${toEnumInterface(
+                    this.designationPeriodSelectItem as any,
+                    false
+                )};
 
 
                 sendReportTimeTitle: any;

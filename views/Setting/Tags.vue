@@ -156,7 +156,7 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import RegionAPI from "@/services/RegionAPI";
@@ -233,7 +233,6 @@ export default class Tags extends Vue {
     }
 
     async initSelectItemSite() {
-
         this.sitesSelectItem = {};
 
         const readAllSiteParam: {
@@ -403,7 +402,9 @@ export default class Tags extends Vue {
         this.inputFormData.type = type;
 
         this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(this.inputFormData.siteIds.map(item => item.objectId))
+            JSON.stringify(
+                this.inputFormData.siteIds.map(item => item.objectId)
+            )
         );
         this.inputFormData.regionIds = JSON.parse(
             JSON.stringify(

@@ -243,7 +243,7 @@
         IRegionItem,
         RegionTreeItem,
         IRegionTreeSelected
-    } from "@/components/RegionTree/models";
+    } from "@/components/RegionTree";
     import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
     import ResponseFilter from "@/services/ResponseFilter";

@@ -134,7 +134,7 @@ import {
     ERegionType,
     IRegionItem,
     RegionTreeItem
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";

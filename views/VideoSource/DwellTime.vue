@@ -238,7 +238,7 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import ResponseFilter from "@/services/ResponseFilter";
@@ -1075,7 +1075,7 @@ export default class DwellTime extends Vue {
         ) {
             return this._("w_VSDwellTime_EditisapUseFRSManger");
         }
-        return '';
+        return "";
     }
 
     ITableList() {

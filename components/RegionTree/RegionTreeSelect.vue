@@ -57,7 +57,7 @@ import {
     IRegionTreeTag,
     IRegionItem,
     RegionTreeItem
-} from "./models";
+} from "./";
 
 enum EPageStep {
     none,

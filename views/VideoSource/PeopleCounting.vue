@@ -349,7 +349,7 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import ResponseFilter from "@/services/ResponseFilter";
@@ -606,9 +606,7 @@ export default class PeopleCounting extends Vue {
         }
 
         if (this.inputFormData.serverId !== "") {
-            this.selectSourceIdAndLocation(
-                this.inputFormData.serverId
-            );
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
         }
     }
 
@@ -1382,7 +1380,7 @@ export default class PeopleCounting extends Vue {
             return this._("w_VSPeopleCounting_EditisapUseFRSManger");
         }
 
-        return '';
+        return "";
     }
 
     ITableList() {

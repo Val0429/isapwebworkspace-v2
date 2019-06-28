@@ -345,7 +345,7 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import ResponseFilter from "@/services/ResponseFilter";
@@ -593,9 +593,7 @@ export default class CMS extends Vue {
         }
 
         if (this.inputFormData.serverId !== "") {
-            this.selectSourceIdAndLocation(
-                this.inputFormData.serverId
-            );
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
         }
     }
 
@@ -1075,7 +1073,7 @@ export default class CMS extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid,
+            sourceid: data.sourceid
         };
 
         if (this.inputFormData.brand === EAddStep.isapFrs) {

@@ -149,7 +149,7 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import ResponseFilter from "@/services/ResponseFilter";
@@ -238,7 +238,6 @@ export default class CampaignSetting extends Vue {
     }
 
     async initSelectItemSite() {
-
         this.sitesSelectItem = {};
 
         const readAllSiteParam: {
@@ -374,9 +373,7 @@ export default class CampaignSetting extends Vue {
         this.inputFormData.stepType = stepType;
 
         this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.sites.map(item => item.objectId)
-            )
+            JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
         );
     }
 

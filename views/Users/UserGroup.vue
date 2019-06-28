@@ -147,7 +147,7 @@ import {
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 import { IUserGroupAdd, IUserGroupEdit } from "@/config/default/api/interfaces";
 
@@ -226,7 +226,6 @@ export default class UserGroup extends Vue {
     }
 
     async initSelectItemSite() {
-
         this.sitesSelectItem = {};
 
         const readAllSiteParam: {

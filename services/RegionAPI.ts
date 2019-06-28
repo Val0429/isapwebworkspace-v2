@@ -1,4 +1,4 @@
-import { IRegionItem, RegionTreeItem, ERegionType } from '@/components/RegionTree/models';
+import { IRegionItem, RegionTreeItem, ERegionType } from '@/components/RegionTree';
 import ServerConfig from '@/services/ServerConfig';
 
 export class RegionAPI {
