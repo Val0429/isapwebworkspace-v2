@@ -28,8 +28,8 @@ import {
 
 @Component
 export default class DemoReportComponent extends Vue {
-    PageType = EPageType;
-    sign = ESign;
+    ePageType = EPageType;
+    eESign = ESign;
 
     siteItem = [
         { value: "dfgsadg", text: "台北店" },
