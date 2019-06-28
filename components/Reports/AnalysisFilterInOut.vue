@@ -142,7 +142,8 @@ export class AnalysisFilterInOut extends Vue {
     deviceFilter: any = [];
 
     // chart 相關
-    trafficChartData: IChartTrafficData = {
+    // trafficChartData: IChartTrafficData = {
+    trafficChartData: any = {
         // date: null,
         // siteObjectId: '',
         // temperature: 0,
