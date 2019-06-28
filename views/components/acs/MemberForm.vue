@@ -33,11 +33,11 @@
                 </template>
 
                 <template #StartDate="{$attrs}">
-                    {{ dateToYYYY_MM_DD($attrs.value) }}
+                    {{ $attrs.value === '' ? '' : dateToYYYY_MM_DD($attrs.value) }}
                 </template>
 
                 <template #EndDate="{$attrs}">
-                    {{ dateToYYYY_MM_DD($attrs.value) }}
+                    {{ $attrs.value === '' ? '' : dateToYYYY_MM_DD($attrs.value) }}
                 </template>
 
                 <template #Department="{$attrs}">
@@ -309,7 +309,7 @@ export default class MemberForm extends Vue {
     // // Master
     // objectId                     objectId
     // premissionSelected           AccessRules (premissionTableAPI: tableid => ObjectToken, show: ObjectName)
-    // personType                   PrimaryWorkgroupId
+    // personType                   PrimaryWorkgroupName
     // cardType                     * CustomFields -> CustomDropdownControl1__CF
     // employeeNumber               EmployeeNumber
     // chineseName                  LastName
@@ -436,7 +436,7 @@ export default class MemberForm extends Vue {
         lastEditPerson: "",
         lastEditTime: "",
         cardCertificate: "",
-        deviceNumber: "",
+        deviceNumber: 0,
 
         // tab1
         extensionNumber: "",
@@ -523,7 +523,7 @@ export default class MemberForm extends Vue {
             lastEditPerson: "",
             lastEditTime: "",
             cardCertificate: "",
-            deviceNumber: "",
+            deviceNumber: 0,
 
             // tab1
             extensionNumber: "",
@@ -608,8 +608,8 @@ export default class MemberForm extends Vue {
                         this.workGroupSelectItem[returnValue.groupname] =
                             returnValue.groupname;
 
-                        this.workGroupIdSelectItem[returnValue.groupid] =
-                            returnValue.objectId;
+                        // this.workGroupIdSelectItem[returnValue.groupid] =
+                        //     returnValue.groupname;
                     }
                 }
             })
@@ -701,9 +701,29 @@ export default class MemberForm extends Vue {
                 }
             }
 
-            if (detailData.PrimaryWorkgroupId != undefined) {
-                this.inputFormData.personType = detailData.PrimaryWorkgroupId;
+            if (detailData.PrimaryWorkgroupName != undefined) {
+                this.inputFormData.personType = detailData.PrimaryWorkgroupName;
             }
+
+            // if (detailData.PrimaryWorkgroupName != undefined) {
+            //     for (const detail in this.workGroupIdSelectItem) {
+            //         if (detailData.PrimaryWorkgroupName.toString() == detail) {
+            //             this.inputFormData.personType = this.workGroupIdSelectItem[
+            //                 detail
+            //                 ];
+            //             this.inputFormData.cardType = this.workGroupIdSelectItem[
+            //                 detail
+            //                 ];
+            //         }
+            //         for (const detail in this.workGroupSelectItem) {
+            //             if (this.inputFormData.cardType == detail) {
+            //                 this.inputFormData.cardType = this.workGroupSelectItem[
+            //                     detail
+            //                     ];
+            //             }
+            //         }
+            //     }
+            // }
 
             if (detailData.EmployeeNumber != undefined) {
                 this.inputFormData.employeeNumber = detailData.EmployeeNumber.toString();
@@ -732,6 +752,7 @@ export default class MemberForm extends Vue {
                 detailData.Credentials[0].ProfileId != undefined
             ) {
                 this.inputFormData.cardCertificate = detailData.Credentials[0].ProfileId.toString();
+                console.log(' - ', this.inputFormData.cardCertificate);
             }
 
             if (
@@ -739,7 +760,7 @@ export default class MemberForm extends Vue {
                 detailData.Credentials[0] != undefined &&
                 detailData.Credentials[0].FacilityCode != undefined
             ) {
-                this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode.toString();
+                this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode;
             }
 
             if (
@@ -1181,8 +1202,12 @@ export default class MemberForm extends Vue {
                     }
                 }
             }
+
+            console.log('let detailData - ', detailData)
+
         }
-        this.pageToAdd();
+
+        // this.pageToAdd();
     }
 
     tempSaveInputData(data) {
@@ -1196,7 +1221,6 @@ export default class MemberForm extends Vue {
                 break;
             case "personType":
                 this.inputFormData.personType = data.value;
-                console.log('this.inputFormData.personType - ', this.inputFormData.personType);
                 break;
             case "employeeNumber":
                 this.inputFormData.employeeNumber = data.value;
@@ -1417,6 +1441,7 @@ export default class MemberForm extends Vue {
 
     pageToAdd() {
         this.pageStep = EPageStep.add;
+        this.clearInputData();
         this.initPremission();
     }
 
@@ -1469,7 +1494,7 @@ export default class MemberForm extends Vue {
 
     async pageToEdit() {
         this.getInputData();
-        this.pageStep = EPageStep.add;
+        this.pageStep = EPageStep.edit;
     }
 
     pageToView() {
@@ -1517,14 +1542,81 @@ export default class MemberForm extends Vue {
                 JSON.stringify(this.selectedDetail[0].Credentials)
             );
             tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
-            tempCredentials[0].FacilityCode = this.inputFormData.deviceNumber;
-            tempCredentials[0].ProfileId = parseInt(this.inputFormData.cardCertificate);
+            tempCredentials[0].FacilityCode = parseInt(this.inputFormData.deviceNumber);
+
+            // console.log('switch 1  - s ', );
+            // switch (this.inputFormData.ProfileId) {
+            //     case "35 bit":
+            //         tempCredentials[0].FacilityCode = 1;
+            //         break;
+            //     case "26 bit":
+            //         tempCredentials[0].FacilityCode = 2;
+            //         break;
+            //     case "mifare32":
+            //         tempCredentials[0].FacilityCode = 3;
+            //         break;
+            //     case undefined:
+            //         tempCredentials[0].FacilityCode = 0;
+            //         break;
+            // }
+
+            tempCredentials[0].ProfileId = !isNaN(
+                parseInt(this.inputFormData.cardCertificate)
+            )
+                ? parseInt(this.inputFormData.cardCertificate)
+                : 0;
+
         } else {
+            // console.log('switch 2  - s ', );
+            //
+            // switch (this.inputFormData.ProfileId) {
+            //     case "35 bit":
+            //         tempCredentials = [
+            //             {
+            //                 CardNumber: this.inputFormData.cardNumber,
+            //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
+            //                 ProfileId: 1
+            //             }
+            //         ];
+            //         break;
+            //     case "26 bit":
+            //         tempCredentials = [
+            //             {
+            //                 CardNumber: this.inputFormData.cardNumber,
+            //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
+            //                 ProfileId: 2
+            //             }
+            //         ];
+            //         break;
+            //     case "mifare32":
+            //         tempCredentials = [
+            //             {
+            //                 CardNumber: this.inputFormData.cardNumber,
+            //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
+            //                 ProfileId: 3
+            //             }
+            //         ];
+            //         break;
+            //     default:
+            //
+            //     tempCredentials = [
+            //             {
+            //                 CardNumber: this.inputFormData.cardNumber,
+            //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
+            //                 ProfileId: 0
+            //             }
+            //         ];
+            //         break;
+            // }
             tempCredentials = [
                 {
                     CardNumber: this.inputFormData.cardNumber,
-                    FacilityCode: this.inputFormData.cardNumber,
-                    ProfileId: this.inputFormData.cardCertificate,
+                    FacilityCode: parseInt(this.inputFormData.deviceNumber),
+                    ProfileId: !isNaN(
+                        parseInt(this.inputFormData.cardCertificate)
+                    )
+                        ? parseInt(this.inputFormData.cardCertificate)
+                        : 0,
                 }
             ];
         }
@@ -1839,8 +1931,8 @@ export default class MemberForm extends Vue {
             // master
             editParam.objectId = this.inputFormData.objectId;
             editParam.AccessRules = this.inputFormData.premissionSelected;
-            editParam.PrimaryWorkgroupId = this.inputFormData.personType;
-            // editParam.PrimaryWorkgroupId = !isNaN(
+            editParam.PrimaryWorkgroupName = this.inputFormData.personType;
+            // editParam.PrimaryWorkgroupName = !isNaN(
             //     parseInt(this.inputFormData.personType)
             // )
             //     ? parseInt(this.inputFormData.personType)
@@ -1848,8 +1940,8 @@ export default class MemberForm extends Vue {
             editParam.EmployeeNumber = this.inputFormData.employeeNumber;
             editParam.LastName = this.inputFormData.chineseName;
             editParam.FirstName = this.inputFormData.englishName;
-            editParam.StartDate = this.inputFormData.startDate;
-            editParam.EndDate = this.inputFormData.endDate;
+            editParam.StartDate = this.inputFormData.startDate === null ? '' : this.inputFormData.startDate;
+            editParam.EndDate = this.inputFormData.endDate === null ? '' : this.inputFormData.endDate;
 
             // tab1
             editParam.extensionNumber = this.inputFormData.PhoneNumber;
@@ -1883,12 +1975,13 @@ export default class MemberForm extends Vue {
                 // master
                 objectId: this.inputFormData.objectId,
                 AccessRules: this.inputFormData.premissionSelected,
-                PrimaryWorkgroupId: this.inputFormData.personType,
+                PrimaryWorkgroupName: this.inputFormData.personType,
                 EmployeeNumber: this.inputFormData.employeeNumber,
                 LastName: this.inputFormData.chineseName,
                 FirstName: this.inputFormData.englishName,
-                StartDate: this.inputFormData.startDate,
-                EndDate: this.inputFormData.endDate,
+                StartDate: this.inputFormData.startDate === null ? '' : this.inputFormData.startDate,
+                EndDate: this.inputFormData.endDate === null ? '' : this.inputFormData.endDate,
+                // EndDate: this.inputFormData.EndDate,
 
                 // tab1
                 extensionNumber: this.inputFormData.PhoneNumber,
@@ -1901,10 +1994,6 @@ export default class MemberForm extends Vue {
                 PersonalDetails: tempPersonalDetails,
                 CustomFields: tempCustomFieldsList
             };
-
-            console.log('addParam - ', addParam);
-
-            return false;
 
             await this.$server
                 .C("/acs/member", addParam)
@@ -1922,6 +2011,7 @@ export default class MemberForm extends Vue {
                     console.log(e);
                     return false;
                 });
+
         }
     }
 
@@ -2209,11 +2299,11 @@ export default class MemberForm extends Vue {
                  * @uiType - ${
                         this.pageStep === EPageStep.add ||
                         this.pageStep === EPageStep.edit
-                            ? "iv-form-string"
+                            ? "iv-form-number"
                             : "iv-form-label"
                         }
                  */
-                deviceNumber?: string;
+                deviceNumber?: number;
 
 
                /**
@@ -2226,7 +2316,6 @@ export default class MemberForm extends Vue {
 
                 /**
                 * @uiLabel - ${this._("w_Member_StartDate")}
-                * @uiPlaceHolder - ${this._("w_Member_StartDate")}
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
                 * @uiDisabled - ${
@@ -2240,7 +2329,6 @@ export default class MemberForm extends Vue {
 
                 /**
                 * @uiLabel - ${this._("w_Member_EndDate")}
-                * @uiPlaceHolder - ${this._("w_Member_EndDate")}
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
                 * @uiDisabled - ${
@@ -2254,7 +2342,6 @@ export default class MemberForm extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Member_LastEditPerson")}
-                 * @uiPlaceHolder - ${this._("w_Member_LastEditPerson")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-label
                  */
@@ -2262,7 +2349,6 @@ export default class MemberForm extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Member_LastEditTime")}
-                 * @uiPlaceHolder - ${this._("w_Member_LastEditTime")}
                  * @uiColumnGroup - row6
                  * @uiType - iv-form-label
                  */
