@@ -53,7 +53,7 @@ import {
     EWeather,
     ISite,
     IDayRange,
-    ITrafficData
+    IChartTrafficData
 } from "@/components/Reports";
 
 enum EPageStep {
@@ -73,7 +73,7 @@ export default class ReportTraffic extends Vue {
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     sites: ISite[] = [];
-    value: ITrafficData[] = [];
+    value: IChartTrafficData[] = [];
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -104,12 +104,14 @@ export default class ReportTraffic extends Vue {
 
         // multipe day
         this.startDate = new Date("2019-06-01T08:00:00.000Z");
-        this.endDate = new Date("2019-06-03T14:00:00.000Z");
+        this.endDate = new Date("2019-06-10T14:00:00.000Z");
 
-        for (let j = 0; j < 5; j++) {
+        let siteLength = 1;
+
+        for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
             this.sites.push({
-                objectId: "site-" + tempJ.toString(),
+                objectId: "site" + tempJ.toString(),
                 name: "Site " + tempJ.toString(),
                 officeHour: [
                     {
@@ -138,15 +140,15 @@ export default class ReportTraffic extends Vue {
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
                 let tempDate = new Date(`2019-06-${iString10}T12:00:00.000Z`);
-                let trafficChartData: ITrafficData = {
-                    datetime: tempDate,
-                    siteId: "site-" + (j + 1).toString(),
+                let trafficChartData: IChartTrafficData = {
+                    date: tempDate,
+                    siteObjectId: "site" + (j + 1).toString(),
                     temperature: iNumber,
                     traffic: Math.floor(Math.random() * 500),
                     revenue: Math.floor(Math.random() * 1000),
                     transaction: Math.floor(Math.random() * 50),
                     conversion: Math.floor(Math.random() * 100) / 100,
-                    asp: "Unknow",
+                    asp: Math.floor(Math.random() * 500),
                     weather: weather
                 };
                 this.value.push(trafficChartData);

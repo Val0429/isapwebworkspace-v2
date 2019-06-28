@@ -1,4 +1,4 @@
-import { EWeather } from './EHighCharts';
+import { EWeather, ETimeMode } from './EHighCharts';
 
 interface IDayRange {
     startDay: string;
@@ -15,21 +15,35 @@ interface ISite {
 
 interface IDate {
     date: Date;
-    dateString: string;
+    dateStart?: Date;
+    dateEnd?: Date;
+    dateString?: string;
+    dateStartString?: string;
+    dateEndString?: string;
 }
 
-interface ITrafficData {
-    datetime: Date;
-    siteId: string;
+interface IChartTrafficData {
+    date: Date;
+    siteObjectId: string;
     temperature: number;
     traffic: number;
     revenue: number;
     transaction: number;
     conversion: number;
-    asp: string;
+    asp: number;
     weather: EWeather;
     i18n?: any;
+    siteName?: string;
+    timeMode?: ETimeMode;
+    trafficAVG?: number;
+    conversionPercentage?: number;
     weatherIcon?: string;
+    dateStart?: Date;
+    dateEnd?: Date;
+    timeString?: string;
+    dateString?: string;
+    dateStartString?: string;
+    dateEndString?: string;
 }
 
-export { ISite, IDate, IDayRange, ITrafficData };
+export { ISite, IDate, IDayRange, IChartTrafficData };
