@@ -4,6 +4,7 @@
             :interface="IAnalysisFilterForm()"
             @update:areaId="whenSelectedAreaId($event)"
             @update:groupId="whenSelectedGroupId($event)"
+            @update:deviceId="whenSelectedDeviceId($event)"
         >
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
@@ -59,7 +60,6 @@
                 ></b-form-radio-group>
             </template>
 
-
         </iv-form>
 
     </div>
@@ -76,7 +76,7 @@ import {
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { ECountType } from "@/components/Reports/models/EReport";
-import ResponseFilter from "@/services/ResponseFilter";
+import { IChartTrafficData } from "@/components/Reports";import ResponseFilter from "@/services/ResponseFilter";
 let config = require("@/config/default/debug");
 
 enum EType {
@@ -100,6 +100,17 @@ export class AnalysisFilterInOut extends Vue {
     })
     deviceMode: string;
 
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: () => {
+            return {
+                peakHours: [],
+                summaryDatas: []
+            };
+        }
+    })
+    showReportData: any;
+
     // select 相關
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
@@ -113,7 +124,7 @@ export class AnalysisFilterInOut extends Vue {
         day: ECountType.day,
         week: ECountType.week,
         month: ECountType.month,
-        season: ECountType.season,
+        season: ECountType.quarter,
         year: ECountType.year
     };
 
@@ -125,13 +136,32 @@ export class AnalysisFilterInOut extends Vue {
         inOrOut: "in"
     };
 
+    // 整理 showReportData 相關
+    areaFilter: any = [];
+    deviceGroupFilter: any = [];
+    deviceFilter: any = [];
+
+    // chart 相關
+    trafficChartData: IChartTrafficData = {
+        // date: null,
+        // siteObjectId: '',
+        // temperature: 0,
+        // traffic: 0,
+        // revenue: 0,
+        // transaction: 0,
+        // conversion: 0,
+        // asp: 0,
+        // weather: '',
+    };
+
     created() {}
 
     mounted() {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
-
+        this.filterSiteData();
+        // console.log('showReportData - ', this.showReportData);
     }
 
     @Watch("firstSiteId", { deep: true })
@@ -140,6 +170,20 @@ export class AnalysisFilterInOut extends Vue {
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
     }
+
+    // clearTrafficChartData()  {
+    //     this.trafficChartData = {
+    //     date: null,
+    //     siteObjectId: '',
+    //     temperature: 0,
+    //     traffic: 0,
+    //     revenue: 0,
+    //     transaction: 0,
+    //     conversion: 0,
+    //     asp: 0,
+    //     weather: '',
+    //     }
+    // };
 
     async initSelectItemArea() {
         let tempAreaSelectItem = {};
@@ -350,11 +394,117 @@ export class AnalysisFilterInOut extends Vue {
         }
     }
 
+    filterSiteData() {
+        console.log("filterSiteData - ", this.showReportData.summaryDatas);
+
+       //  this.clearTrafficChartData();
+
+        for (const singleData of this.showReportData.summaryDatas) {
+            // TODO: wait Min api
+            // temperature: number; --->
+            // revenue: number; ---> singleData.in
+            // transaction: number; ---> singleData.in
+            // conversion: number; ---> singleData.in
+            // asp: number; ---> singleData.in
+            // weather: number; ---> singleData.in
+
+            // date: Date; ---> singleData.date
+            // siteObjectId: string; ---> singleData.site.name
+            // traffic: number; ---> singleData.in
+
+            for (const detailKey in singleData) {
+                const tempSingleData = singleData[detailKey];
+                switch (detailKey) {
+                    case "date":
+                        this.trafficChartData.date = tempSingleData;
+                        break;
+                    case "in":
+                        this.trafficChartData.traffic = tempSingleData;
+                        break;
+                    case "site":
+                        this.trafficChartData.siteObjectId = tempSingleData.objectId;
+                        break;
+                    // case "":
+                    //     this.trafficChartData.temperature = tempSingleData.;
+                    //     break;
+                    // case "":
+                    //     this.trafficChartData.revenue = tempSingleData.;
+                    //     break;
+                    // case "":
+                    //     this.trafficChartData.transaction = tempSingleData.;
+                    //     break;
+                    // case "":
+                    //     this.trafficChartData.conversion = tempSingleData.;
+                    //     break;
+                    // case "":
+                    //     this.trafficChartData.asp = tempSingleData.;
+                    //     break;
+                    // case "":
+                    //     this.trafficChartData.weather = tempSingleData.;
+                    //     break;
+                }
+
+            }
+            //console.log(" - ", this.trafficChartData);
+        }
+    }
+
     async whenSelectedAreaId() {
+
+        this.areaFilter = [];
+
+        // console.log(' - ', this.inputFormData.areaId);
+
+       //  this.clearTrafficChartData();
+
         if (
             this.inputFormData.areaId !== undefined ||
             this.inputFormData.areaId !== ""
         ) {
+            // 整理為chart需要的資料格式
+            for (const singleData of this.showReportData.summaryDatas) {
+                // TODO: wait Min api
+                // temperature: number; --->
+                // revenue: number; ---> singleData.in
+                // transaction: number; ---> singleData.in
+                // conversion: number; ---> singleData.in
+                // asp: number; ---> singleData.in
+                // weather: number; ---> singleData.in
+
+                // date: Date; ---> singleData.date
+                // siteObjectId: string; ---> singleData.site.name
+                // traffic: number; ---> singleData.in
+
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === 'area') {
+                        if (this.inputFormData.areaId === tempSingleData.objectId) {
+                           // console.log('!!!! - ', singleData);
+
+                            this.areaFilter.push(singleData) ;
+
+                            this.trafficChartData.date = singleData.date;
+                            this.trafficChartData.traffic = singleData.in;
+                            this.trafficChartData.siteObjectId = singleData.site.objectId;
+                            // this.trafficChartData.temperature = singleData.;
+                            // this.trafficChartData.revenue = singleData.;
+                            // this.trafficChartData.transaction = singleData.;
+                            // this.trafficChartData.conversion = singleData.;
+                            // this.trafficChartData.asp = singleData.;
+                            // this.trafficChartData.weather = singleData.;
+
+
+                        }
+                    }
+
+                }
+               //console.log(" - ", this.areaFilter);
+               //console.log("trafficChartData - ", this.trafficChartData);
+            }
+
+
+
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
             await this.initSelectItemDeviceGroup();
@@ -365,10 +515,64 @@ export class AnalysisFilterInOut extends Vue {
     }
 
     async whenSelectedGroupId() {
+
+        this.deviceGroupFilter = [];
+
         if (
             this.inputFormData.groupId !== undefined ||
             this.inputFormData.groupId !== ""
         ) {
+            // 整理為chart需要的資料格式
+            for (const singleData of this.areaFilter) {
+
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === 'deviceGroups') {
+                        if (this.inputFormData.groupId === tempSingleData[0].objectId) {
+                            this.deviceGroupFilter.push(singleData) ;
+                        }
+                    }
+
+                }
+               //  console.log(" - ", this.trafficChartData);
+            }
+
+
+            for (const singleData of this.deviceGroupFilter) {
+                // TODO: wait Min api
+                // temperature: number; --->
+                // revenue: number; ---> singleData.in
+                // transaction: number; ---> singleData.in
+                // conversion: number; ---> singleData.in
+                // asp: number; ---> singleData.in
+                // weather: number; ---> singleData.in
+
+                // date: Date; ---> singleData.date
+                // siteObjectId: string; ---> singleData.site.name
+                // traffic: number; ---> singleData.in
+
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === 'deviceGroups') {
+                        if (this.inputFormData.groupId === tempSingleData[0].objectId) {
+
+                            this.trafficChartData.date = singleData.date;
+                            this.trafficChartData.traffic = singleData.in;
+                            this.trafficChartData.siteObjectId = singleData.site.objectId;
+                            // this.trafficChartData.temperature = tempSingleData.;
+                            // this.trafficChartData.revenue = tempSingleData.;
+                            // this.trafficChartData.transaction = tempSingleData.;
+                            // this.trafficChartData.conversion = tempSingleData.;
+                            // this.trafficChartData.asp = tempSingleData.;
+                            // this.trafficChartData.weather = tempSingleData.;
+                        }
+                    }
+                }
+                  console.log(" - ", this.trafficChartData);
+            }
+
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
         } else {
@@ -376,8 +580,9 @@ export class AnalysisFilterInOut extends Vue {
         }
     }
 
+    whenSelectedDeviceId() {}
+
     doSubmit() {
-        // TODO: wait api
         this.$emit("submit-data", this.inputFormData);
         this.inputFormData = {
             areaId: []

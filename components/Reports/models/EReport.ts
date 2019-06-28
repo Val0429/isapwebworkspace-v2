@@ -35,7 +35,7 @@ enum ECountType {
     day = 'day',
     week = 'week',
     month = 'month',
-    season = 'season',
+    quarter = 'quarter',
     year = 'year',
 }
 

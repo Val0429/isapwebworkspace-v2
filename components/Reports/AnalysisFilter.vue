@@ -86,7 +86,7 @@ export class AnalysisFilter extends Vue {
         day: ECountType.day,
         week: ECountType.week,
         month: ECountType.month,
-        season: ECountType.season,
+        season: ECountType.quarter,
         year: ECountType.year,
     };
 
