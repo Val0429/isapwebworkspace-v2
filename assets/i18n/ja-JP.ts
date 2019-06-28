@@ -452,6 +452,7 @@ export default class LangObject implements ILang {
     w_Member_PersonPic = '人員照片：';
     w_Member_UpLoadPersonPic = '上傳照片：';
     w_Member_CardVoucherType = '卡片憑證類型：';
+    w_Member_deviceNumber = '設備碼：';
 
     w_Member_Info = '資訊狀態：';
     w_Member_StartDate = '起始日期：';

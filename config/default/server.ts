@@ -30,6 +30,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/acs/member': [any, any, true];
         '/acs/workgroup': [any, any, true];
         '/acs/permissiontable': [any, any, true];
+        '/acs/cardprofile': [any, any, true];
+        '/acs/profileId': [any, any, true];
     };
 
     Put: {
@@ -55,8 +57,8 @@ interface RestfulRequest extends ApisRequestBase {
     };
 }
 
-export class SmartCommunityServer extends iSAPServerBase<RestfulRequest> {}
-export default SmartCommunityServer;
+export default class SmartCommunityServer extends iSAPServerBase<RestfulRequest> {}
+// export default SmartCommunityServer;
 
 /// /users/login - All /////////////////////////////////////
 declare namespace UsersLoginAll {

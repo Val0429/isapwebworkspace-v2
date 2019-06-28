@@ -310,18 +310,20 @@ export default class MemberForm extends Vue {
     // objectId                     objectId
     // premissionSelected           AccessRules (premissionTableAPI: tableid => ObjectToken, show: ObjectName)
     // personType                   PrimaryWorkgroupId
-    // personType1                  PrimaryWorkgroupId
+    // cardType                     * CustomFields -> CustomDropdownControl1__CF
     // employeeNumber               EmployeeNumber
     // chineseName                  LastName
     // englishName                  FirstName
     // cardNumber                   Credentials[0]CardNumber
     // cardAllNumber                Credentials[0]CardNumber
+    // cardCertificate              * Credentials[0]ProfileId
     // startDate                    StartDate
     // endDate                      EndDate
     // companyName                  CustomFields -> CustomTextBoxControl6__CF
     // cardCustodian                CustomFields -> CustomTextBoxControl2__CF
     // lastEditPerson               CustomFields -> CustomTextBoxControl3__CF
     // lastEditTime                 CustomFields -> CustomDateControl2__CF
+    // deviceNumber                 * Credentials[0]FacilityCode
 
     // // tab1
     // extensionNumber              PhoneNumber
@@ -402,6 +404,7 @@ export default class MemberForm extends Vue {
     };
     workGroupIdSelectItem: any = {};
     cardCertificateItem: any = {};
+    cardTypeItem: any = {};
 
     inputTestEmail: string = "";
     newImg = new Image();
@@ -418,7 +421,7 @@ export default class MemberForm extends Vue {
         objectId: "",
         premissionSelected: [],
         personType: "",
-        personType1: "",
+        cardType: "",
         employeeNumber: "",
         chineseName: "",
         englishName: "",
@@ -433,6 +436,7 @@ export default class MemberForm extends Vue {
         lastEditPerson: "",
         lastEditTime: "",
         cardCertificate: "",
+        deviceNumber: "",
 
         // tab1
         extensionNumber: "",
@@ -504,7 +508,7 @@ export default class MemberForm extends Vue {
             objectId: "",
             premissionSelected: [],
             personType: "",
-            personType1: "",
+            cardType: "",
             employeeNumber: "",
             chineseName: "",
             englishName: "",
@@ -519,6 +523,7 @@ export default class MemberForm extends Vue {
             lastEditPerson: "",
             lastEditTime: "",
             cardCertificate: "",
+            deviceNumber: "",
 
             // tab1
             extensionNumber: "",
@@ -588,6 +593,8 @@ export default class MemberForm extends Vue {
 
     mounted() {
         this.initSelectItemWorkGroup();
+        this.initSelectItemCardCertificate();
+        this.initSelectItemCardType();
     }
 
     async initSelectItemWorkGroup() {
@@ -618,16 +625,37 @@ export default class MemberForm extends Vue {
     async initSelectItemCardCertificate() {
         this.cardCertificateItem = {};
         await this.$server
-            .R("/acs/workgroup")
+            .R("/acs/profileId")
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.cardCertificateItem[returnValue.objectId] =
-                            returnValue.groupname;
+                            returnValue.name;
 
-                        this.workGroupIdSelectItem[returnValue.groupid] =
-                            returnValue.objectId;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemCardType() {
+        this.cardTypeItem = {};
+        await this.$server
+            .R("/acs/cardprofile")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.cardTypeItem[returnValue.objectId] =
+                            returnValue.name;
+
                     }
                 }
             })
@@ -680,17 +708,17 @@ export default class MemberForm extends Vue {
                         this.inputFormData.personType = this.workGroupIdSelectItem[
                             detail
                         ];
-                        this.inputFormData.personType1 = this.workGroupIdSelectItem[
-                            detail
-                        ];
+                        // this.inputFormData.personType1 = this.workGroupIdSelectItem[
+                        //     detail
+                        // ];
                     }
-                    for (const detail in this.workGroupSelectItem) {
-                        if (this.inputFormData.personType1 == detail) {
-                            this.inputFormData.personType1 = this.workGroupSelectItem[
-                                detail
-                            ];
-                        }
-                    }
+                    // for (const detail in this.workGroupSelectItem) {
+                    //     if (this.inputFormData.personType1 == detail) {
+                    //         this.inputFormData.personType1 = this.workGroupSelectItem[
+                    //             detail
+                    //         ];
+                    //     }
+                    // }
                 }
             }
 
@@ -713,6 +741,22 @@ export default class MemberForm extends Vue {
             ) {
                 this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber.toString();
                 this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber.toString();
+            }
+
+            if (
+                detailData.Credentials != undefined &&
+                detailData.Credentials[0] != undefined &&
+                detailData.Credentials[0].ProfileId != undefined
+            ) {
+                this.inputFormData.ProfileId = detailData.Credentials[0].ProfileId.toString();
+            }
+
+            if (
+                detailData.Credentials != undefined &&
+                detailData.Credentials[0] != undefined &&
+                detailData.Credentials[0].FacilityCode != undefined
+            ) {
+                this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode.toString();
             }
 
             if (
@@ -798,6 +842,9 @@ export default class MemberForm extends Vue {
                         }
                         if (content.FiledName == "CustomDateControl2__CF") {
                             this.inputFormData.lastEditTime = content.FieldValue.toString();
+                        }
+                        if (content.FiledName == "CustomDropdownControl1__CF") {
+                            this.inputFormData.cardType = content.FieldValue.toString();
                         }
 
                         // tab1
@@ -1166,12 +1213,12 @@ export default class MemberForm extends Vue {
                 break;
             case "personType":
                 this.inputFormData.personType = data.value;
-                for (const detail in this.workGroupSelectItem) {
-                    if (data.value === detail)
-                        this.inputFormData.personType1 = this.workGroupSelectItem[
-                            detail
-                        ];
-                }
+                // for (const detail in this.workGroupSelectItem) {
+                //     if (data.value === detail)
+                //         this.inputFormData.personType1 = this.workGroupSelectItem[
+                //             detail
+                //         ];
+                // }
                 break;
             case "employeeNumber":
                 this.inputFormData.employeeNumber = data.value;
@@ -1469,7 +1516,6 @@ export default class MemberForm extends Vue {
         }
     }
 
-
     async saveAddOrEdit() {
         let tempCredentials: any = [];
         let tempPersonalDetails: any = {};
@@ -1484,10 +1530,14 @@ export default class MemberForm extends Vue {
                 JSON.stringify(this.selectedDetail[0].Credentials)
             );
             tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
+            tempCredentials[0].ProfileId = this.inputFormData.cardCertificate;
+            tempCredentials[0].FacilityCode = this.inputFormData.deviceNumber;
         } else {
             tempCredentials = [
                 {
-                    CardNumber: this.inputFormData.cardNumber
+                    CardNumber: this.inputFormData.cardNumber,
+                    ProfileId: this.inputFormData.cardCertificate,
+                    FacilityCode: this.inputFormData.deviceNumber,
                 }
             ];
         }
@@ -1533,6 +1583,10 @@ export default class MemberForm extends Vue {
         tempCustomFieldsList.push({
             FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
             FieldValue: this.inputFormData.lastEditTime.toString()
+        });
+        tempCustomFieldsList.push({
+            FiledName: "CustomDropdownControl1__CF",
+            FieldValue: this.inputFormData.cardType.toString()
         });
 
         // tab1
@@ -2103,9 +2157,17 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CardType")}
                  * @uiColumnGroup - row3
-                 * @uiType - iv-form-label
+                 * @uiDisabled - ${
+                        this.pageStep === EPageStep.add ||
+                        this.pageStep === EPageStep.edit
+                            ? "false"
+                            : "true"
+                        }
                  */
-                personType1?: string;
+                cardType??: ${toEnumInterface(
+                    this.cardTypeItem as any,
+                    false
+                )};
 
 
                 /**
@@ -2153,10 +2215,25 @@ export default class MemberForm extends Vue {
                 */
                 personPhoto?: string;
 
+
+                /**
+                 * @uiLabel - ${this._("w_Member_deviceNumber")}
+                 * @uiColumnGroup - row13
+                 * @uiType - ${
+                        this.pageStep === EPageStep.add ||
+                        this.pageStep === EPageStep.edit
+                            ? "iv-form-string"
+                            : "iv-form-label"
+                        }
+                 */
+                deviceNumber?: string;
+
+
                /**
                 * @uiColumnGroup - row13
                 */
                 imageSrc?:any;
+
 
                 info?: any;
 
