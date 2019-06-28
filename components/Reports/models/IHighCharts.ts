@@ -40,6 +40,8 @@ interface IChartTrafficData {
     weatherIcon?: string;
     dateStart?: Date;
     dateEnd?: Date;
+    weekNumber?: number;
+    quarterNumber?: number;
     timeString?: string;
     dateString?: string;
     dateStartString?: string;

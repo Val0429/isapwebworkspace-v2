@@ -5,7 +5,6 @@ enum DatetimeFormat {
 }
 
 class Datetime {
-
     private _formats: string[] = ['dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'];
     private _days: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     private _months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -200,13 +199,149 @@ class Datetime {
                     break;
             }
         }
-
         return new Date(year, month, day, hour, minute, second);
     }
 
+    // Year
+    YearStart(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setMonth(0);
+        date.setDate(1);
+        return this.DateToZero(date);
+    }
+
+    YearEnd(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setFullYear(date.getFullYear() + 1);
+        date.setMonth(0);
+        date.setDate(1);
+        date = this.DateToZero(date);
+        date.setSeconds(date.getSeconds() - 1);
+        return date;
+    }
+
+    // Quarter
+    QuarterNumber(value: Date): number {
+        let date: Date = new Date(value.getTime());
+        let month: number = Math.floor(date.getMonth() / 3) + 1;
+        return month > 4 ? month - 4 : month;
+    }
+
+    QuarterStart(value: Date): Date {
+        let date = new Date(value.getTime());
+        let quarterNumber = this.QuarterNumber(value);
+        let quartStartMonth = (quarterNumber - 1) * 3;
+        date.setMonth(quartStartMonth);
+        date.setDate(1);
+        return this.DateToZero(date);
+    }
+
+    QuarterEnd(value: Date): Date {
+        let date = new Date(value.getTime());
+        let quarterNumber = this.QuarterNumber(value);
+        let quartNextStartMonth = quarterNumber * 3;
+        date.setMonth(quartNextStartMonth);
+        date.setDate(1);
+        date = this.DateToZero(date);
+        date.setSeconds(date.getSeconds() - 1);
+        return date;
+    }
+
+    // Month
+    MonthStart(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setDate(1);
+        return this.DateToZero(date);
+    }
+
+    MonthEnd(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setMonth(date.getMonth() + 1);
+        date.setDate(1);
+        date = this.DateToZero(date);
+        date.setSeconds(date.getSeconds() - 1);
+        return date;
+    }
+
+    // Week
+    WeekNumber(value: Date): number {
+        let date = new Date(value.getTime());
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+
+    WeekStart(value: Date, start: number = 0): Date {
+        let date = new Date(value.getTime());
+        if (start == 0) {
+            date = this.WeekThisSunday(date);
+        } else if (start == 1) {
+            date = this.WeekThisMonday(date);
+        }
+        return date;
+    }
+
+    WeekEnd(value: Date, start: number = 0): Date {
+        let date = new Date(value.getTime());
+        if (start == 0) {
+            date = this.WeekNextSunday(date);
+        } else if (start == 1) {
+            date = this.WeekNextMonday(date);
+        }
+        date.setSeconds(date.getSeconds() - 1);
+        return date;
+    }
+
+    WeekPrevSunday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day - 7;
+        return this.DateToZero(new Date(date.setDate(diff)));
+    }
+
+    WeekThisSunday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day;
+        return this.DateToZero(new Date(date.setDate(diff)));
+    }
+
+    WeekNextSunday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day + 7;
+        return this.DateToZero(new Date(date.setDate(diff)));
+    }
+
+    WeekPrevMonday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day + (day == 0 ? -13 : -6);
+        return this.DateToZero(new Date(date.setDate(diff)));
+    }
+
+    WeekThisMonday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day + (day == 0 ? -6 : 1);
+        return this.DateToZero(new Date(date.setDate(diff)));
+    }
+
+    WeekNextMonday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day + (day == 0 ? 1 : 8);
+        return this.DateToZero(new Date(date.setDate(diff)));
+    }
+
+    // set Date to 00:00:00
+    DateToZero(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        return date;
+    }
 }
 
 export default new Datetime();
-
-
-

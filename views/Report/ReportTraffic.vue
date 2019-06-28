@@ -68,10 +68,9 @@ enum EPageStep {
 export default class ReportTraffic extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
-
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
-    timeMode: ETimeMode = ETimeMode.none;
+    timeMode: ETimeMode = ETimeMode.week;
     sites: ISite[] = [];
     value: IChartTrafficData[] = [];
 
@@ -106,7 +105,7 @@ export default class ReportTraffic extends Vue {
         this.startDate = new Date("2019-06-01T08:00:00.000Z");
         this.endDate = new Date("2019-06-10T14:00:00.000Z");
 
-        let siteLength = 1;
+        let siteLength = 5;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
@@ -139,7 +138,7 @@ export default class ReportTraffic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-06-${iString10}T12:00:00.000Z`);
+                let tempDate = new Date(`2019-07-${iString10}T12:00:00.000Z`);
                 let trafficChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
