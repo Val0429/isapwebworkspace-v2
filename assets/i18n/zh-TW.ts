@@ -94,6 +94,13 @@ export default class LangObject implements ILang {
     w_Description = 'Description';
     w_Sites = 'Site(s)';
     w_Site = 'Site';
+    w_Group = 'Group';
+    w_Item = 'Item';
+    w_Total = 'Ttoal';
+    w_TrafficIn = 'Traffic IN';
+    w_TrafficOut = 'Traffic OUT';
+    w_TrafficInTotal = 'Traffic-in Total';
+    w_TrafficOutTotal = 'Traffic-out Total';
     w_Tag = 'Tag(s)';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';

@@ -8,22 +8,24 @@
             <thead>
                 <tr class="title">
                     <th v-if="reportTableData._body[0].site">
-                        Site
+                        {{ _('w_Site')}}
                     </th>
                     <th v-if="reportTableData._body[0].area">
-                        Area
+                        {{ _('w_Area')}}
                     </th>
                     <th v-if="reportTableData._body[0].group">
-                        Group
+                        {{ _('w_Group')}}
+
                     </th>
                     <th>
-                        Item
+                        {{ _('w_Item')}}
+
                     </th>
                     <th v-for="(item, key, index) in reportTableData._head">
                         {{item}}
                     </th>
                     <th>
-                        Total
+                        {{ _('w_Total')}}
                     </th>
                 </tr>
             </thead>
