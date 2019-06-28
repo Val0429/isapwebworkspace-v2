@@ -3,7 +3,7 @@ import { EWeather } from './EHighCharts';
 class HighChartsService {
     weatherIcon(weather: EWeather): string {
         let result = '';
-        let style = 'font-size:1.1rem;';
+        let style = 'font-size:1.1rem; color:#924da3;';
         switch (weather) {
             case EWeather.sunny:
                 result = `<i class="wi wi-day-sunny" style="${style}"></i>`;
