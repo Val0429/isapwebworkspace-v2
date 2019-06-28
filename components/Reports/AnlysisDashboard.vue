@@ -274,8 +274,8 @@
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import {
     IReportDashboard,
-    PageType,
-    Sign
+    EPageType,
+    ESign
 } from "../../components/Reports/models";
 
 @Component({
@@ -288,67 +288,67 @@ export class AnlysisDashboard extends Vue {
         type: Object,
         default: function() {
             return {
-                pageType: PageType.none,
+                pageType: EPageType.none,
                 traffic: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 averageOccupancy: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 averageDwellTime: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 demographic: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     value: -1,
                     valueRatio: -1,
-                    sign2: Sign.none,
+                    sign2: ESign.none,
                     value2: -1,
                     valueRatio2: -1
                 },
                 vipBlacklist: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     value: -1,
                     valueRatio: -1,
-                    sign2: Sign.none,
+                    sign2: ESign.none,
                     value2: -1,
                     valueRatio2: -1
                 },
                 repeatCustomer: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 revenue: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 transaction: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 conversion: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
                 },
                 asp: {
-                    sign: Sign.none,
+                    sign: ESign.none,
                     total: -1,
                     value: -1,
                     valueRatio: -1
@@ -358,8 +358,8 @@ export class AnlysisDashboard extends Vue {
     })
     anlysisData: IReportDashboard;
 
-    sign = Sign;
-    pageType = PageType;
+    sign = ESign;
+    pageType = EPageType;
 
     created() {}
 

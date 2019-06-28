@@ -22,14 +22,14 @@ import {
     ReportTableData,
     IPeckTimeRange,
     IReportDashboard,
-    PageType,
-    Sign
+    EPageType,
+    ESign
 } from "../../components/Reports/models";
 
 @Component
 export default class DemoReportComponent extends Vue {
-    pageType = PageType;
-    sign = Sign;
+    PageType = EPageType;
+    sign = ESign;
 
     siteItem = [
         { value: "dfgsadg", text: "台北店" },
@@ -44,67 +44,67 @@ export default class DemoReportComponent extends Vue {
     };
 
     dData: IReportDashboard = {
-        pageType: PageType.none,
+        pageType: EPageType.none,
         traffic: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
         },
         averageOccupancy: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
         },
         averageDwellTime: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
         },
         demographic: {
-            sign: Sign.none,
+            sign: ESign.none,
             value: -1,
             valueRatio: -1,
-            sign2: Sign.none,
+            sign2: ESign.none,
             value2: -1,
             valueRatio2: -1
         },
         vipBlacklist: {
-            sign: Sign.none,
+            sign: ESign.none,
             value: -1,
             valueRatio: -1,
-            sign2: Sign.none,
+            sign2: ESign.none,
             value2: -1,
             valueRatio2: -1
         },
         repeatCustomer: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
         },
         revenue: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
         },
         transaction: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
         },
         conversion: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
         },
         asp: {
-            sign: Sign.none,
+            sign: ESign.none,
             total: -1,
             value: -1,
             valueRatio: -1
@@ -141,64 +141,64 @@ export default class DemoReportComponent extends Vue {
                 area: "1F精品區",
                 group: "N/A",
                 in: [
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.negative, value: 2, valueRatio: -0.02 }
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.negative, value: 2, valueRatio: -0.02 }
                 ],
                 out: [
-                    { sign: Sign.negative, value: 3, valueRatio: -0.03 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 4, valueRatio: 0.05 }
+                    { sign: ESign.negative, value: 3, valueRatio: -0.03 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 4, valueRatio: 0.05 }
                 ]
             },
             {
                 area: "2F生活用品",
                 group: "Group01",
                 in: [
-                    { sign: Sign.positive, value: 5, valueRatio: 0.06 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.negative, value: 6, valueRatio: -0.07 }
+                    { sign: ESign.positive, value: 5, valueRatio: 0.06 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.negative, value: 6, valueRatio: -0.07 }
                 ],
                 out: [
-                    { sign: Sign.negative, value: 7, valueRatio: -0.08 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: Sign.negative, value: 8, valueRatio: -0.09 }
+                    { sign: ESign.negative, value: 7, valueRatio: -0.08 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                    { sign: ESign.negative, value: 8, valueRatio: -0.09 }
                 ]
             }
         ];
@@ -304,67 +304,67 @@ export default class DemoReportComponent extends Vue {
 
     initAnlyDashboardData() {
         this.dData = {
-            pageType: PageType.traffic,
+            pageType: EPageType.traffic,
             traffic: {
-                sign: Sign.negative,
+                sign: ESign.negative,
                 total: 43250,
                 value: 10,
                 valueRatio: 0.156
             },
             averageOccupancy: {
-                sign: Sign.negative,
+                sign: ESign.negative,
                 total: 10,
                 value: 1,
                 valueRatio: 0.099
             },
             averageDwellTime: {
-                sign: Sign.positive,
+                sign: ESign.positive,
                 total: 25,
                 value: 2,
                 valueRatio: 0.01
             },
             demographic: {
-                sign: Sign.positive,
+                sign: ESign.positive,
                 value: 11,
                 valueRatio: 0.099,
-                sign2: Sign.negative,
+                sign2: ESign.negative,
                 value2: 11,
                 valueRatio2: 0.099
             },
             vipBlacklist: {
-                sign: Sign.positive,
+                sign: ESign.positive,
                 value: 11,
                 valueRatio: 0.099,
-                sign2: Sign.negative,
+                sign2: ESign.negative,
                 value2: 11,
                 valueRatio2: 0.099
             },
             repeatCustomer: {
-                sign: Sign.negative,
+                sign: ESign.negative,
                 total: 0.36,
                 value: 9,
                 valueRatio: 0.11
             },
             revenue: {
-                sign: Sign.positive,
+                sign: ESign.positive,
                 total: 9999999,
                 value: 11,
                 valueRatio: 0.099
             },
             transaction: {
-                sign: Sign.negative,
+                sign: ESign.negative,
                 total: 666,
                 value: 11,
                 valueRatio: 0.099
             },
             conversion: {
-                sign: Sign.positive,
+                sign: ESign.positive,
                 total: 0.18,
                 value: 2,
                 valueRatio: 0.01
             },
             asp: {
-                sign: Sign.positive,
+                sign: ESign.positive,
                 total: 1235,
                 value: 2,
                 valueRatio: 0.01

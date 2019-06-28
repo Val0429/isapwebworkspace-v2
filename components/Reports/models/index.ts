@@ -1,5 +1,5 @@
 // enum
-export { Sign, PageType } from './IReportDashboard';
+export { ESign, EPageType } from './EReport';
 
 // interface
 export { IPeckTimeRange } from './IPeckTimeRange';

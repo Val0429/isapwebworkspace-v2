@@ -1,88 +1,70 @@
-enum PageType {
-    traffic = 'traffic',
-    averageOccupancy = 'averageOccupancy',
-    averageDwellTime = 'averageDwellTime',
-    demographic = 'demographic',
-    vipBlacklist = 'vipBlacklist',
-    repeatCustomer = 'repeatCustomer',
-    revenue = 'revenue',
-    transaction = 'transaction',
-    conversion = 'conversion',
-    asp = 'asp',
-    none = 'none',
-}
-
-enum Sign {
-    positive = 'positive',
-    negative = 'negative',
-    none = 'none',
-}
+import { EPageType, ESign } from './EReport';
 
 interface IReportDashboard {
-    pageType: PageType;
+    pageType: EPageType;
     traffic: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     averageOccupancy: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     averageDwellTime: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     demographic: {
-        sign: Sign;
+        sign: ESign;
         value: number;
         valueRatio: number;
-        sign2: Sign;
+        sign2: ESign;
         value2: number;
         valueRatio2: number;
     };
     vipBlacklist: {
-        sign: Sign;
+        sign: ESign;
         value: number;
         valueRatio: number;
-        sign2: Sign;
+        sign2: ESign;
         value2: number;
         valueRatio2: number;
     };
     repeatCustomer: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     revenue: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     transaction: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     conversion: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
     asp: {
-        sign: Sign;
+        sign: ESign;
         total: number;
         value: number;
         valueRatio: number;
     };
 }
-export { IReportDashboard, Sign, PageType };
+export { IReportDashboard };
