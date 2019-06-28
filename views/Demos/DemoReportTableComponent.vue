@@ -56,184 +56,188 @@ export default class DemoReportComponent extends Vue {
     }
 
     initReportTable() {
-        this.rData.head = [
-            "2019-06-24T09:00:00.000Z",
-            "2019-06-24T10:00:00.000Z",
-            "2019-06-24T11:00:00.000Z",
-            "2019-06-24T12:00:00.000Z",
-            "2019-06-24T13:00:00.000Z",
-            "2019-06-24T14:00:00.000Z",
-            "2019-06-24T16:00:00.000Z",
-            "2019-06-24T17:00:00.000Z",
-            "2019-06-24T18:00:00.000Z",
-            "2019-06-24T19:00:00.000Z",
-            "2019-06-24T20:00:00.000Z",
-            "2019-06-24T21:00:00.000Z"
-        ];
-        this.rData.body = [
-            {
-                area: "1F精品區",
-                group: "N/A",
-                in: [
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.negative, value: 2, valueRatio: -0.02 }
-                ],
-                out: [
-                    { sign: ESign.negative, value: 3, valueRatio: -0.03 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 4, valueRatio: 0.05 }
-                ]
-            },
-            {
-                area: "2F生活用品",
-                group: "Group01",
-                in: [
-                    { sign: ESign.positive, value: 5, valueRatio: 0.06 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.negative, value: 6, valueRatio: -0.07 }
-                ],
-                out: [
-                    { sign: ESign.negative, value: 7, valueRatio: -0.08 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                    { sign: ESign.negative, value: 8, valueRatio: -0.09 }
-                ]
-            }
-        ];
+        setTimeout(() => {
+            this.rData.head = [
+                "2019-06-24T09:00:00.000Z",
+                "2019-06-24T10:00:00.000Z",
+                "2019-06-24T11:00:00.000Z",
+                "2019-06-24T12:00:00.000Z",
+                "2019-06-24T13:00:00.000Z",
+                "2019-06-24T14:00:00.000Z",
+                "2019-06-24T16:00:00.000Z",
+                "2019-06-24T17:00:00.000Z",
+                "2019-06-24T18:00:00.000Z",
+                "2019-06-24T19:00:00.000Z",
+                "2019-06-24T20:00:00.000Z",
+                "2019-06-24T21:00:00.000Z"
+            ];
+            this.rData.body = [
+                {
+                    area: "1F精品區",
+                    group: "N/A",
+                    in: [
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.negative, value: 2, valueRatio: -0.02 }
+                    ],
+                    out: [
+                        { sign: ESign.negative, value: 3, valueRatio: -0.03 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 4, valueRatio: 0.05 }
+                    ]
+                },
+                {
+                    area: "2F生活用品",
+                    group: "Group01",
+                    in: [
+                        { sign: ESign.positive, value: 5, valueRatio: 0.06 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.negative, value: 6, valueRatio: -0.07 }
+                    ],
+                    out: [
+                        { sign: ESign.negative, value: 7, valueRatio: -0.08 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
+                        { sign: ESign.negative, value: 8, valueRatio: -0.09 }
+                    ]
+                }
+            ];
+        }, 4000);
     }
 
     initPeakTimeRange() {
-        if (this.site == "dfgsadg") {
-            this.pData = {
-                head: [
-                    "2019-06-24T09:00:00.000Z",
-                    "2019-06-24T10:00:00.000Z",
-                    "2019-06-24T11:00:00.000Z",
-                    "2019-06-24T12:00:00.000Z",
-                    "2019-06-24T13:00:00.000Z",
-                    "2019-06-24T14:00:00.000Z",
-                    "2019-06-24T16:00:00.000Z",
-                    "2019-06-24T17:00:00.000Z",
-                    "2019-06-24T18:00:00.000Z",
-                    "2019-06-24T19:00:00.000Z",
-                    "2019-06-24T20:00:00.000Z",
-                    "2019-06-24T21:00:00.000Z"
-                ],
-                body: [
-                    {
-                        title: "2019-06-24T09:00:00.000Z",
-                        context: [1, 2, 3, 4, 5, 1, 4, 5, 1, 1, 4, 1]
-                    },
-                    {
-                        title: "2019-06-25T09:00:00.000Z",
-                        context: [5, 4, 5, 3, 2, 1, 4, 5, 1, 2, 4, 1]
-                    },
-                    {
-                        title: "2019-06-26T09:00:00.000Z",
-                        context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
-                    },
-                    {
-                        title: "2019-06-27T09:00:00.000Z",
-                        context: [1, 3, 4, 4, 2, 1, 3, 4, 5, 1, 4, 1]
-                    },
-                    {
-                        title: "2019-06-28T09:00:00.000Z",
-                        context: [1, 3, 5, 4, 5, 1, 4, 2, 1, 3, 2, 2]
-                    },
-                    {
-                        title: "2019-06-29T09:00:00.000Z",
-                        context: [1, 2, 1, 4, 4, 5, 1, 2, 1, 3, 3, 1]
-                    },
-                    {
-                        title: "2019-06-30T09:00:00.000Z",
-                        context: [1, 1, 1, 2, 2, 4, 5, 1, 1, 3, 4, 1]
-                    }
-                ]
-            };
-        } else {
-            this.pData = {
-                head: [
-                    "2019-06-24T09:00:00.000Z",
-                    "2019-06-24T10:00:00.000Z",
-                    "2019-06-24T11:00:00.000Z",
-                    "2019-06-24T12:00:00.000Z",
-                    "2019-06-24T13:00:00.000Z",
-                    "2019-06-24T14:00:00.000Z",
-                    "2019-06-24T16:00:00.000Z",
-                    "2019-06-24T17:00:00.000Z",
-                    "2019-06-24T18:00:00.000Z",
-                    "2019-06-24T19:00:00.000Z",
-                    "2019-06-24T20:00:00.000Z",
-                    "2019-06-24T21:00:00.000Z"
-                ],
-                body: [
-                    {
-                        title: "2019-06-24T09:00:00.000Z",
-                        context: [4, 2, 5, 4, 5, 1, 4, 1, 2, 1, 4, 2]
-                    },
-                    {
-                        title: "2019-06-25T09:00:00.000Z",
-                        context: [5, 4, 4, 5, 1, 5, 3, 4, 1, 2, 5, 1]
-                    },
-                    {
-                        title: "2019-06-26T09:00:00.000Z",
-                        context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
-                    },
-                    {
-                        title: "2019-06-27T09:00:00.000Z",
-                        context: [1, 1, 4, 5, 1, 4, 4, 3, 1, 3, 4, 1]
-                    },
-                    {
-                        title: "2019-06-28T09:00:00.000Z",
-                        context: [1, 3, 1, 4, 2, 1, 4, 5, 1, 5, 2, 2]
-                    },
-                    {
-                        title: "2019-06-29T09:00:00.000Z",
-                        context: [1, 2, 1, 2, 4, 5, 1, 2, 1, 3, 3, 1]
-                    },
-                    {
-                        title: "2019-06-30T09:00:00.000Z",
-                        context: [1, 1, 1, 2, 4, 5, 1, 5, 2, 3, 4, 1]
-                    }
-                ]
-            };
-        }
+        setTimeout(() => {
+            if (this.site == "dfgsadg") {
+                this.pData = {
+                    head: [
+                        "2019-06-24T09:00:00.000Z",
+                        "2019-06-24T10:00:00.000Z",
+                        "2019-06-24T11:00:00.000Z",
+                        "2019-06-24T12:00:00.000Z",
+                        "2019-06-24T13:00:00.000Z",
+                        "2019-06-24T14:00:00.000Z",
+                        "2019-06-24T16:00:00.000Z",
+                        "2019-06-24T17:00:00.000Z",
+                        "2019-06-24T18:00:00.000Z",
+                        "2019-06-24T19:00:00.000Z",
+                        "2019-06-24T20:00:00.000Z",
+                        "2019-06-24T21:00:00.000Z"
+                    ],
+                    body: [
+                        {
+                            title: "2019-06-24T09:00:00.000Z",
+                            context: [1, 2, 3, 4, 5, 1, 4, 5, 1, 1, 4, 1]
+                        },
+                        {
+                            title: "2019-06-25T09:00:00.000Z",
+                            context: [5, 4, 5, 3, 2, 1, 4, 5, 1, 2, 4, 1]
+                        },
+                        {
+                            title: "2019-06-26T09:00:00.000Z",
+                            context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
+                        },
+                        {
+                            title: "2019-06-27T09:00:00.000Z",
+                            context: [1, 3, 4, 4, 2, 1, 3, 4, 5, 1, 4, 1]
+                        },
+                        {
+                            title: "2019-06-28T09:00:00.000Z",
+                            context: [1, 3, 5, 4, 5, 1, 4, 2, 1, 3, 2, 2]
+                        },
+                        {
+                            title: "2019-06-29T09:00:00.000Z",
+                            context: [1, 2, 1, 4, 4, 5, 1, 2, 1, 3, 3, 1]
+                        },
+                        {
+                            title: "2019-06-30T09:00:00.000Z",
+                            context: [1, 1, 1, 2, 2, 4, 5, 1, 1, 3, 4, 1]
+                        }
+                    ]
+                };
+            } else {
+                this.pData = {
+                    head: [
+                        "2019-06-24T09:00:00.000Z",
+                        "2019-06-24T10:00:00.000Z",
+                        "2019-06-24T11:00:00.000Z",
+                        "2019-06-24T12:00:00.000Z",
+                        "2019-06-24T13:00:00.000Z",
+                        "2019-06-24T14:00:00.000Z",
+                        "2019-06-24T16:00:00.000Z",
+                        "2019-06-24T17:00:00.000Z",
+                        "2019-06-24T18:00:00.000Z",
+                        "2019-06-24T19:00:00.000Z",
+                        "2019-06-24T20:00:00.000Z",
+                        "2019-06-24T21:00:00.000Z"
+                    ],
+                    body: [
+                        {
+                            title: "2019-06-24T09:00:00.000Z",
+                            context: [4, 2, 5, 4, 5, 1, 4, 1, 2, 1, 4, 2]
+                        },
+                        {
+                            title: "2019-06-25T09:00:00.000Z",
+                            context: [5, 4, 4, 5, 1, 5, 3, 4, 1, 2, 5, 1]
+                        },
+                        {
+                            title: "2019-06-26T09:00:00.000Z",
+                            context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
+                        },
+                        {
+                            title: "2019-06-27T09:00:00.000Z",
+                            context: [1, 1, 4, 5, 1, 4, 4, 3, 1, 3, 4, 1]
+                        },
+                        {
+                            title: "2019-06-28T09:00:00.000Z",
+                            context: [1, 3, 1, 4, 2, 1, 4, 5, 1, 5, 2, 2]
+                        },
+                        {
+                            title: "2019-06-29T09:00:00.000Z",
+                            context: [1, 2, 1, 2, 4, 5, 1, 2, 1, 3, 3, 1]
+                        },
+                        {
+                            title: "2019-06-30T09:00:00.000Z",
+                            context: [1, 1, 1, 2, 4, 5, 1, 5, 2, 3, 4, 1]
+                        }
+                    ]
+                };
+            }
+        }, 3000);
     }
 
     initAnlyDashboardData() {
@@ -305,7 +309,7 @@ export default class DemoReportComponent extends Vue {
                     valueRatio: 0.01
                 }
             };
-        }, 3000);
+        }, 2000);
     }
 
     changeSite(site) {
