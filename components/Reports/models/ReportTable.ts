@@ -75,8 +75,17 @@ class ReportTableData {
         return total;
     }
 
+    translationDataFormat() {
+        this._head = this._head.map((x) => new Date(x).getUTCHours() + ':00 - ' + (new Date(x).getUTCHours() + 1) + ':00');
+    }
+
     set head(value: string[]) {
         this._head = value;
+        this.translationDataFormat();
+    }
+
+    get head() {
+        return this._head;
     }
 
     set body(value: IReportTableDataBody[]) {

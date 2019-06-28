@@ -15,13 +15,13 @@
                         ></b-form-select>
                     </th>
                     <th v-for="(item, key, index) in timeRangeData.head">
-                        {{item}}
+                        {{(new Date(item)).getUTCHours() + ":00"}} - {{(new Date(item)).getUTCHours() + 1 + ":00"}}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(items, key, index) in timeRangeData.body">
-                    <td>{{items.title}}</td>
+                    <td> {{(new Date(items.title)).getFullYear() + "/" + (new Date(items.title)).getMonth() + "/" + (new Date(items.title)).getDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
                         :class="showHoursRange(item)"
@@ -35,6 +35,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { IPeckTimeRange } from "@/components/Reports";
+import Datetime from "@/services/Datetime.vue";
 
 @Component({
     components: {}
@@ -65,6 +66,32 @@ export class PeakTimeRange extends Vue {
     created() {}
 
     mounted() {}
+
+    showWeek(data) {
+        switch (data) {
+            case 1:
+                return "Mon";
+                break;
+            case 2:
+                return "Tue";
+                break;
+            case 3:
+                return "Wed";
+                break;
+            case 4:
+                return "Thu";
+                break;
+            case 5:
+                return "Fri";
+                break;
+            case 6:
+                return "Sat";
+                break;
+            case 0:
+                return "Sun";
+                break;
+        }
+    }
 
     showHoursRange(data) {
         switch (data) {

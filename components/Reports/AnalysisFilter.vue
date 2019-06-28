@@ -7,7 +7,6 @@
         >
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -17,7 +16,6 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -27,7 +25,6 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -37,31 +34,11 @@
 
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.type"
                 >
                 </iv-form-selection>
-            </template>
-
-            <template #clickButtonsSubmit>
-                <b-button
-                    class="h-25 ml-3 click_button submit col-md-1"
-                    @click="doSubmit"
-                >
-                    {{ _('wb_Submit') }}
-                </b-button>
-
-            </template>
-
-            <template #clickButtonsReset>
-                <b-button
-                    class="h-25 ml-2 click_button reset col-md-1"
-                    @click="doReset"
-                >
-                    {{ _('wb_Reset') }}
-                </b-button>
             </template>
 
         </iv-form>
@@ -109,7 +86,7 @@ export class AnalysisFilter extends Vue {
         day: ECountType.day,
         week: ECountType.week,
         month: ECountType.month,
-        season: ECountType.season,
+        season: ECountType.quarter,
         year: ECountType.year,
     };
 
@@ -438,18 +415,6 @@ export class AnalysisFilter extends Vue {
                     false
                 )};
 
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                clickButtonsSubmit?: any;
-
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                clickButtonsReset?: any;
-
             }
         `;
     }
@@ -460,15 +425,4 @@ Vue.component("analysis_filter", AnalysisFilter);
 </script>
 
 <style lang="scss" scoped>
-.click_button {
-    margin-top: 27px;
-}
-.submit {
-    background-color: #5c7895;
-    border: 1px solid #5c7895;
-}
-.reset {
-    background-color: #d7d7d7;
-    border: 1px solid #d7d7d7;
-}
 </style>
