@@ -110,7 +110,7 @@ export class AnalysisFilterInOut extends Vue {
         type: String, // Boolean, Number, String, Array, Object
         default: ""
     })
-    siteIds0: string;
+    firstSiteId: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
@@ -152,8 +152,8 @@ export class AnalysisFilterInOut extends Vue {
 
     }
 
-    @Watch("siteIds0", { deep: true })
-    private onSiteIds0Changed(newVal, oldVal) {
+    @Watch("firstSiteId", { deep: true })
+    private onfirstSiteIdChanged(newVal, oldVal) {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
@@ -165,10 +165,10 @@ export class AnalysisFilterInOut extends Vue {
         const readParam: {
             siteId: string;
         } = {
-            siteId: this.siteIds0
+            siteId: this.firstSiteId
         };
 
-        if (!this.siteIds0) {
+        if (!this.firstSiteId) {
             return false;
         } else {
             await this.$server
@@ -202,14 +202,14 @@ export class AnalysisFilterInOut extends Vue {
             areaId?: string;
             mode: string;
         } = {
-            siteId: this.siteIds0,
+            siteId: this.firstSiteId,
             mode: this.deviceMode
         };
 
-        if (!this.siteIds0) {
+        if (!this.firstSiteId) {
             return false;
         } else if (
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId === undefined ||
                 this.inputFormData.areaId === "")
         ) {
@@ -234,7 +234,7 @@ export class AnalysisFilterInOut extends Vue {
                 });
         } else if (
             // 選擇site和area
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId !== undefined ||
                 this.inputFormData.areaId !== "")
         ) {
@@ -271,15 +271,15 @@ export class AnalysisFilterInOut extends Vue {
             groupId?: string;
             mode: string;
         } = {
-            siteId: this.siteIds0,
+            siteId: this.firstSiteId,
             mode: this.deviceMode
         };
 
-        if (!this.siteIds0) {
+        if (!this.firstSiteId) {
             return false;
         } else if (
             // 只選擇site
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId === undefined ||
                 this.inputFormData.areaId === "") &&
             (this.inputFormData.groupId === undefined ||
@@ -306,7 +306,7 @@ export class AnalysisFilterInOut extends Vue {
                 });
         } else if (
             // 選擇site和area
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId !== undefined ||
                 this.inputFormData.areaId !== "") &&
             (this.inputFormData.groupId === undefined ||
@@ -335,7 +335,7 @@ export class AnalysisFilterInOut extends Vue {
                 });
         } else if (
             // 選擇site和area和device group
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId !== undefined ||
                 this.inputFormData.areaId !== "") &&
             (this.inputFormData.groupId !== undefined ||

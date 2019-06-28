@@ -7,6 +7,7 @@
         >
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -16,6 +17,7 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -25,6 +27,7 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -42,23 +45,9 @@
                 </iv-form-selection>
             </template>
 
-            <template #selectInOrOut="{ $attrs, $listeners }">
-
-                <b-form-radio-group
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.type"
-                    class="h-25 click_button"
-                    buttons
-                    button-variant="outline-success"
-                    name="radio-btn-outline"
-                    :options="typeSelectItem"
-                ></b-form-radio-group>
-            </template>
-
             <template #clickButtonsSubmit>
                 <b-button
-                    class="h-25 ml-3 click_button submit"
+                    class="h-25 ml-3 click_button submit col-md-1"
                     @click="doSubmit"
                 >
                     {{ _('wb_Submit') }}
@@ -68,7 +57,7 @@
 
             <template #clickButtonsReset>
                 <b-button
-                    class="h-25 ml-3 click_button reset"
+                    class="h-25 ml-2 click_button reset col-md-1"
                     @click="doReset"
                 >
                     {{ _('wb_Reset') }}
@@ -103,7 +92,7 @@ export class AnalysisFilter extends Vue {
         type: String, // Boolean, Number, String, Array, Object
         default: ""
     })
-    siteIds0: string;
+    firstSiteId: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
@@ -131,17 +120,16 @@ export class AnalysisFilter extends Vue {
         type: "",
     };
 
-    created() {
+    created() {}
+
+    mounted() {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
-        console.log('deviceGroupSelectItem - ', this.deviceGroupSelectItem);
     }
 
-    mounted() {}
-
-    @Watch("siteIds0", { deep: true })
-    private onSiteIds0Changed(newVal, oldVal) {
+    @Watch("firstSiteId", { deep: true })
+    private onfirstSiteIdChanged(newVal, oldVal) {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
@@ -153,10 +141,10 @@ export class AnalysisFilter extends Vue {
         const readParam: {
             siteId: string;
         } = {
-            siteId: this.siteIds0
+            siteId: this.firstSiteId
         };
 
-        if (!this.siteIds0) {
+        if (!this.firstSiteId) {
             return false;
         } else {
             await this.$server
@@ -190,14 +178,14 @@ export class AnalysisFilter extends Vue {
             areaId?: string;
             mode: string;
         } = {
-            siteId: this.siteIds0,
+            siteId: this.firstSiteId,
             mode: this.deviceMode
         };
 
-        if (!this.siteIds0) {
+        if (!this.firstSiteId) {
             return false;
         } else if (
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId === undefined ||
                 this.inputFormData.areaId === "")
         ) {
@@ -222,7 +210,7 @@ export class AnalysisFilter extends Vue {
                 });
         } else if (
             // 選擇site和area
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId !== undefined ||
                 this.inputFormData.areaId !== "")
         ) {
@@ -259,15 +247,15 @@ export class AnalysisFilter extends Vue {
             groupId?: string;
             mode: string;
         } = {
-            siteId: this.siteIds0,
+            siteId: this.firstSiteId,
             mode: this.deviceMode
         };
 
-        if (!this.siteIds0) {
+        if (!this.firstSiteId) {
             return false;
         } else if (
             // 只選擇site
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId === undefined ||
                 this.inputFormData.areaId === "") &&
             (this.inputFormData.groupId === undefined ||
@@ -294,7 +282,7 @@ export class AnalysisFilter extends Vue {
                 });
         } else if (
             // 選擇site和area
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId !== undefined ||
                 this.inputFormData.areaId !== "") &&
             (this.inputFormData.groupId === undefined ||
@@ -323,7 +311,7 @@ export class AnalysisFilter extends Vue {
                 });
         } else if (
             // 選擇site和area和device group
-            this.siteIds0 &&
+            this.firstSiteId &&
             (this.inputFormData.areaId !== undefined ||
                 this.inputFormData.areaId !== "") &&
             (this.inputFormData.groupId !== undefined ||
