@@ -59,24 +59,6 @@
                 ></b-form-radio-group>
             </template>
 
-            <template #clickButtonsSubmit>
-                <b-button
-                    class="h-25 ml-3 click_button submit col-md-1"
-                    @click="doSubmit"
-                >
-                    {{ _('wb_Submit') }}
-                </b-button>
-
-            </template>
-
-            <template #clickButtonsReset>
-                <b-button
-                    class="h-25 ml-2 click_button reset col-md-1"
-                    @click="doReset"
-                >
-                    {{ _('wb_Reset') }}
-                </b-button>
-            </template>
 
         </iv-form>
 
@@ -461,18 +443,6 @@ export class AnalysisFilterInOut extends Vue {
                  */
                 selectInOrOut?: any;
 
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                clickButtonsSubmit?: any;
-
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                clickButtonsReset?: any;
-
             }
         `;
     }
@@ -485,13 +455,5 @@ Vue.component("analysis_filter_in_out", AnalysisFilterInOut);
 <style lang="scss" scoped>
 .click_button {
     margin-top: 27px;
-}
-.submit {
-    background-color: #5c7895;
-    border: 1px solid #5c7895;
-}
-.reset {
-    background-color: #d7d7d7;
-    border: 1px solid #d7d7d7;
 }
 </style>
