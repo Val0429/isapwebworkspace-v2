@@ -1,6 +1,9 @@
 var config: Config = {
     // Tui
-    ip: '172.16.10.178',
+    ip: '172.16.10.59',
+
+    // 原本
+    // ip: '172.16.10.178',
 
     // localhost
     // ip: 'localhost',
