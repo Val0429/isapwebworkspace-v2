@@ -16,7 +16,7 @@
                 <analysis_filter_in_out
                     class="mb-5 mt-3 ml-4"
                     v-if="filterData.siteIds && filterData.siteIds.length === 1"
-                    :siteIds0="filterData.siteIds0"
+                    :firstSiteId="filterData.firstSiteId"
                     :deviceMode="deviceMode"
                 >
                 </analysis_filter_in_out>
@@ -160,7 +160,7 @@ export default class ReportTraffic extends Vue {
     receiveFilterData(filterData, responseData) {
         this.filterData = filterData;
         this.responseData = responseData;
-        Vue.set(this.filterData, "siteIds0", filterData.siteIds[0]);
+        Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
     }
