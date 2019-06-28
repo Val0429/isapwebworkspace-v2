@@ -42,7 +42,7 @@ import HighChartsService from "./models/HighChartsService";
 @Component({
     components: {}
 })
-export class TrafficChart extends Vue {
+export class HighchartsTraffic extends Vue {
     // Prop
     @Prop({
         type: Date,
@@ -977,8 +977,8 @@ export class TrafficChart extends Vue {
     }
 }
 
-export default TrafficChart;
-Vue.component("traffic-chart", TrafficChart);
+export default HighchartsTraffic;
+Vue.component("highcharts-traffic", HighchartsTraffic);
 </script>
 
 <style lang="scss" scoped>
