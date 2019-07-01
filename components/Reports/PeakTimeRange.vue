@@ -203,6 +203,7 @@ export class PeakTimeRange extends Vue {
 
     changeSite() {
         this.$emit("changeSite", this.site);
+        this.initData();
     }
 }
 

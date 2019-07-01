@@ -223,8 +223,6 @@ export default class DemoReportComponent extends Vue {
                     ]
                 }
             ];
-
-            this.site = this.pData[0].site.objectId;
         }, 3000);
     }
 
