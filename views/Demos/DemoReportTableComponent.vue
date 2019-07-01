@@ -4,7 +4,7 @@
         <anlysis-dashboard :anlysisData="dData">
         </anlysis-dashboard>
         <peak-time-range
-            :timeRangeData="apipData"
+            :timeRangeData="pData"
             :siteItem="siteItem"
             v-on:changeSite="changeSite"
         >
@@ -42,12 +42,7 @@ export default class DemoReportComponent extends Vue {
 
     dData = new ReportDashboard();
 
-    pData: IPeckTimeRange = {
-        head: [],
-        body: []
-    };
-
-    apipData = [];
+    pData = [];
 
     created() {}
 
@@ -144,7 +139,7 @@ export default class DemoReportComponent extends Vue {
 
     initPeakTimeRange() {
         setTimeout(() => {
-            this.apipData = [
+            this.pData = [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -229,7 +224,7 @@ export default class DemoReportComponent extends Vue {
                 }
             ];
 
-            this.site = this.apipData[0].site.objectId;
+            this.site = this.pData[0].site.objectId;
         }, 3000);
     }
 

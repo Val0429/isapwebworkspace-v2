@@ -111,7 +111,82 @@ export default class ReportTraffic extends Vue {
         this.initChartDeveloper();
     }
 
-    mounted() {}
+    mounted() {
+        this.initDashboardData();
+    }
+
+    // Ben //
+    initDashboardData() {
+        setTimeout(() => {
+            this.dData = {
+                pageType: EPageType.traffic,
+                traffic: {
+                    sign: ESign.negative,
+                    total: 43250,
+                    value: 10,
+                    valueRatio: 0.156
+                },
+                averageOccupancy: {
+                    sign: ESign.negative,
+                    total: 10,
+                    value: 1,
+                    valueRatio: 0.099
+                },
+                averageDwellTime: {
+                    sign: ESign.positive,
+                    total: 25,
+                    value: 2,
+                    valueRatio: 0.01
+                },
+                demographic: {
+                    sign: ESign.positive,
+                    value: 11,
+                    valueRatio: 0.099,
+                    sign2: ESign.negative,
+                    value2: 11,
+                    valueRatio2: 0.099
+                },
+                vipBlacklist: {
+                    sign: ESign.positive,
+                    value: 11,
+                    valueRatio: 0.099,
+                    sign2: ESign.negative,
+                    value2: 11,
+                    valueRatio2: 0.099
+                },
+                repeatCustomer: {
+                    sign: ESign.negative,
+                    total: 0.36,
+                    value: 9,
+                    valueRatio: 0.11
+                },
+                revenue: {
+                    sign: ESign.positive,
+                    total: 9999999,
+                    value: 11,
+                    valueRatio: 0.099
+                },
+                transaction: {
+                    sign: ESign.negative,
+                    total: 666,
+                    value: 11,
+                    valueRatio: 0.099
+                },
+                conversion: {
+                    sign: ESign.positive,
+                    total: 0.18,
+                    value: 2,
+                    valueRatio: 0.01
+                },
+                asp: {
+                    sign: ESign.positive,
+                    total: 1235,
+                    value: 2,
+                    valueRatio: 0.01
+                }
+            };
+        }, 2000);
+    }
 
     // Morris //
     initChartDeveloper() {
