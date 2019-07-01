@@ -76,7 +76,8 @@ import {
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { ECountType } from "@/components/Reports/models/EReport";
-import { IChartTrafficData } from "@/components/Reports";import ResponseFilter from "@/services/ResponseFilter";
+import { IChartTrafficData } from "@/components/Reports";
+import ResponseFilter from "@/services/ResponseFilter";
 let config = require("@/config/default/debug");
 
 enum EType {

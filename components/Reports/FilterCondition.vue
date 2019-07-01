@@ -135,6 +135,7 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import DateCount from "@/components/Reports/models/dateCount";
+import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog/Dialog";
 
 enum EPageStep {
@@ -411,9 +412,9 @@ export class FilterCondition extends Vue {
         // 選擇 period
         if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
             if (
-                DateCount.checkDate(
-                    DateCount.formatDate(this.inputFormData.startDate),
-                    DateCount.formatDate(this.inputFormData.endDate)
+                Datetime.CheckDate(
+                    Datetime.DateTime2String(this.inputFormData.startDate, 'YYYY-MM-DD'),
+                    Datetime.DateTime2String(this.inputFormData.endDate,  'YYYY-MM-DD')
                 )
             ) {
                 Dialog.error(this._("w_ReportDateError"));
@@ -423,25 +424,17 @@ export class FilterCondition extends Vue {
             }
 
             if (
-                DateCount.checkTheSameDate(
-                    DateCount.formatDate(this.inputFormData.startDate),
-                    DateCount.formatDate(this.inputFormData.endDate)
+                Datetime.CheckTheSameDate(
+                    Datetime.DateTime2String(this.inputFormData.startDate, 'YYYY-MM-DD'),
+                    Datetime.DateTime2String(this.inputFormData.endDate, 'YYYY-MM-DD')
                 )
             ) {
-                doSubmitParam.startDate = DateCount.formatDate(
-                    this.inputFormData.startDate
-                );
-                doSubmitParam.endDate = DateCount.formatDate(
-                    this.inputFormData.endDate
-                );
+                doSubmitParam.startDate = Datetime.DateTime2String(this.inputFormData.startDate, 'YYYY-MM-DD');
+                doSubmitParam.endDate = Datetime.DateTime2String(this.inputFormData.endDate, 'YYYY-MM-DD');
                 doSubmitParam.type = ECountType.hour;
             } else {
-                doSubmitParam.startDate = DateCount.formatDate(
-                    this.inputFormData.startDate
-                );
-                doSubmitParam.endDate = DateCount.formatDate(
-                    this.inputFormData.endDate
-                );
+                doSubmitParam.startDate = Datetime.DateTime2String(this.inputFormData.startDate, 'YYYY-MM-DD');
+                doSubmitParam.endDate = Datetime.DateTime2String(this.inputFormData.endDate, 'YYYY-MM-DD');
                 doSubmitParam.type = ECountType.day;
             }
 
@@ -449,15 +442,15 @@ export class FilterCondition extends Vue {
         } else if (this.selectPeriodAddWay === EAddPeriodSelect.designation) {
             switch (this.inputFormData.designationPeriod) {
                 case "today":
-                    doSubmitParam.startDate = DateCount.getDateStr(0);
-                    doSubmitParam.endDate = DateCount.getDateStr(0);
+                    doSubmitParam.startDate = Datetime.CountDateNumber(0);
+                    doSubmitParam.endDate = Datetime.CountDateNumber(0);
                     doSubmitParam.type = ECountType.hour;
                     console.log("startDate today - ", doSubmitParam.startDate);
                     console.log("endDate today - ", doSubmitParam.endDate);
                     break;
                 case "yesterday":
-                    doSubmitParam.startDate = DateCount.getDateStr(-1);
-                    doSubmitParam.endDate = DateCount.getDateStr(-1);
+                    doSubmitParam.startDate = Datetime.CountDateNumber(-1);
+                    doSubmitParam.endDate = Datetime.CountDateNumber(-1);
                     doSubmitParam.type = ECountType.hour;
                     console.log(
                         "startDate yesterday - ",
@@ -466,8 +459,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate yesterday - ", doSubmitParam.endDate);
                     break;
                 case "last7days":
-                    doSubmitParam.startDate = DateCount.getDateStr(-6);
-                    doSubmitParam.endDate = DateCount.getDateStr(0);
+                    doSubmitParam.startDate = Datetime.CountDateNumber(-6);
+                    doSubmitParam.endDate = Datetime.CountDateNumber(0);
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate last7days - ",
@@ -476,8 +469,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate last7days - ", doSubmitParam.endDate);
                     break;
                 case "thisWeek":
-                    doSubmitParam.startDate = DateCount.getWeekStartDate();
-                    doSubmitParam.endDate = DateCount.getWeekEndDate();
+                    doSubmitParam.startDate = Datetime.ThisWeekStartDate();
+                    doSubmitParam.endDate = Datetime.ThisWeekEndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate thisWeek - ",
@@ -486,8 +479,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate thisWeek - ", doSubmitParam.endDate);
                     break;
                 case "lastWeek":
-                    doSubmitParam.startDate = DateCount.getLastWeekStartDate();
-                    doSubmitParam.endDate = DateCount.getLastWeekEndDate();
+                    doSubmitParam.startDate = Datetime.LastWeekStartDate();
+                    doSubmitParam.endDate = Datetime.LastWeekEndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate lastWeek - ",
@@ -496,8 +489,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate lastWeek - ", doSubmitParam.endDate);
                     break;
                 case "thisMonth":
-                    doSubmitParam.startDate = DateCount.getMonthStartDate();
-                    doSubmitParam.endDate = DateCount.getMonthEndDate();
+                    doSubmitParam.startDate = Datetime.ThisMonthStartDate();
+                    doSubmitParam.endDate = Datetime.ThisMonthEndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate thisMonth - ",
@@ -506,8 +499,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate thisMonth - ", doSubmitParam.endDate);
                     break;
                 case "lastMonth":
-                    doSubmitParam.startDate = DateCount.getLastMonthStartDate();
-                    doSubmitParam.endDate = DateCount.getLastMonthEndDate();
+                    doSubmitParam.startDate = Datetime.LastMonthStartDate();
+                    doSubmitParam.endDate = Datetime.LastMonthEndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate lastMonth - ",
@@ -516,36 +509,36 @@ export class FilterCondition extends Vue {
                     console.log("endDate lastMonth - ", doSubmitParam.endDate);
                     break;
                 case "q1":
-                    doSubmitParam.startDate = DateCount.getQ1StartDate();
-                    doSubmitParam.endDate = DateCount.getQ1EndDate();
+                    doSubmitParam.startDate = Datetime.Q1StartDate();
+                    doSubmitParam.endDate = Datetime.Q1EndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q1 - ", doSubmitParam.startDate);
                     console.log("endDate q1 - ", doSubmitParam.endDate);
                     break;
                 case "q2":
-                    doSubmitParam.startDate = DateCount.getQ2StartDate();
-                    doSubmitParam.endDate = DateCount.getQ2EndDate();
+                    doSubmitParam.startDate = Datetime.Q2StartDate();
+                    doSubmitParam.endDate = Datetime.Q2EndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q2 - ", doSubmitParam.startDate);
                     console.log("endDate q2 - ", doSubmitParam.endDate);
                     break;
                 case "q3":
-                    doSubmitParam.startDate = DateCount.getQ3StartDate();
-                    doSubmitParam.endDate = DateCount.getQ3EndDate();
+                    doSubmitParam.startDate = Datetime.Q3StartDate();
+                    doSubmitParam.endDate = Datetime.Q3EndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q3 - ", doSubmitParam.startDate);
                     console.log("endDate q3 - ", doSubmitParam.endDate);
                     break;
                 case "q4":
-                    doSubmitParam.startDate = DateCount.getQ4StartDate();
-                    doSubmitParam.endDate = DateCount.getQ4EndDate();
+                    doSubmitParam.startDate = Datetime.Q4StartDate();
+                    doSubmitParam.endDate = Datetime.Q4EndDate();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q4 - ", doSubmitParam.startDate);
                     console.log("endDate q4 - ", doSubmitParam.endDate);
                     break;
                 case "thisYear":
-                    doSubmitParam.startDate = DateCount.getThisYearStartDate();
-                    doSubmitParam.endDate = DateCount.getLastYearEndDate();
+                    doSubmitParam.startDate = Datetime.DateTime2String(Datetime.YearStart(new Date()), 'YYYY-MM-DD');
+                    doSubmitParam.endDate = Datetime.DateTime2String(Datetime.YearEnd(new Date()), 'YYYY-MM-DD');
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate thisYear - ",
@@ -555,6 +548,7 @@ export class FilterCondition extends Vue {
                     break;
             }
         }
+
 
         await this.$server
             .C("/report/people-counting/summary", doSubmitParam)
