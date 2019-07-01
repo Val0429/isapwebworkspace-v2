@@ -21,7 +21,7 @@
             </thead>
             <tbody>
                 <tr v-for="(items, key, index) in data.body">
-                    <td> {{(new Date(items.title)).getFullYear() + "/" + (new Date(items.title)).getMonth() + "/" + (new Date(items.title)).getDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                    <td> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
                         :class="showHoursRange(item)"
@@ -86,11 +86,11 @@ export class PeakTimeRange extends Vue {
 
     initData() {
         // Data format conversion
+        this.data.body = [];
         for (let item of this.timeRangeData) {
             if (item.site.objectId == this.site) {
                 let head = [];
                 let levels: number[] = [];
-                this.data.body = [];
                 for (let subItem of item.peakHourDatas) {
                     levels.push(subItem.level);
                     head.push(subItem.date);

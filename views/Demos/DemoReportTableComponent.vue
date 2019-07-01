@@ -150,7 +150,7 @@ export default class DemoReportComponent extends Vue {
                         objectId: "iVTCTzctbF",
                         name: "台北店"
                     },
-                    date: "2019-06-24T16:00:00.000Z",
+                    date: "2019-06-25T16:00:00.000Z",
                     peakHourDatas: [
                         {
                             date: "2019-06-25T01:00:00.000Z",
@@ -183,6 +183,47 @@ export default class DemoReportComponent extends Vue {
                         {
                             date: "2019-06-25T08:00:00.000Z",
                             level: 2
+                        }
+                    ]
+                },
+                {
+                    site: {
+                        objectId: "iVTCTzctbF",
+                        name: "台北店"
+                    },
+                    date: "2019-06-26T16:00:00.000Z",
+                    peakHourDatas: [
+                        {
+                            date: "2019-06-25T01:00:00.000Z",
+                            level: 1
+                        },
+                        {
+                            date: "2019-06-25T02:00:00.000Z",
+                            level: 4
+                        },
+                        {
+                            date: "2019-06-25T03:00:00.000Z",
+                            level: 5
+                        },
+                        {
+                            date: "2019-06-25T04:00:00.000Z",
+                            level: 2
+                        },
+                        {
+                            date: "2019-06-25T05:00:00.000Z",
+                            level: 5
+                        },
+                        {
+                            date: "2019-06-25T06:00:00.000Z",
+                            level: 4
+                        },
+                        {
+                            date: "2019-06-25T07:00:00.000Z",
+                            level: 1
+                        },
+                        {
+                            date: "2019-06-25T08:00:00.000Z",
+                            level: 0
                         }
                     ]
                 }
