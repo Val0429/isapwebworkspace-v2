@@ -88,7 +88,7 @@ enum EType {
 @Component({
     components: {}
 })
-export class AnalysisFilterInOut extends Vue {
+export class AnalysisFilterInOutTraffic extends Vue {
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
         default: ""
@@ -727,8 +727,8 @@ export class AnalysisFilterInOut extends Vue {
     }
 }
 
-export default AnalysisFilterInOut;
-Vue.component("analysis_filter_in_out", AnalysisFilterInOut);
+export default AnalysisFilterInOutTraffic;
+Vue.component("analysis_filter_in_out_traffic", AnalysisFilterInOutTraffic);
 </script>
 
 <style lang="scss" scoped>

@@ -11,13 +11,13 @@
         <div class="h-25"></div>
 
 
-        <analysis_filter_in_out
+        <analysis_filter_in_out_traffic
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
             :firstSiteId="filterData.firstSiteId"
             :deviceMode="deviceMode"
             :showReportData="responseData"
         >
-        </analysis_filter_in_out>
+        </analysis_filter_in_out_traffic>
 
         <analysis_filter
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
