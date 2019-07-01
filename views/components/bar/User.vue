@@ -458,7 +458,7 @@ export default class User extends Vue {
 
     tempSaveInputData(data) {
         switch (data.key) {
-            case "account":
+            case "username":
                 this.inputFormData.username = data.value;
                 break;
             case "password":
