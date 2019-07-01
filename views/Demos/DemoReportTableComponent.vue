@@ -4,7 +4,7 @@
         <anlysis-dashboard :anlysisData="dData">
         </anlysis-dashboard>
         <peak-time-range
-            :timeRangeData="pData"
+            :timeRangeData="apipData"
             :siteItem="siteItem"
             v-on:changeSite="changeSite"
         >
@@ -46,6 +46,8 @@ export default class DemoReportComponent extends Vue {
         head: [],
         body: []
     };
+
+    apipData = [];
 
     created() {}
 
@@ -142,7 +144,7 @@ export default class DemoReportComponent extends Vue {
 
     initPeakTimeRange() {
         setTimeout(() => {
-            let apiData = [
+            this.apipData = [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -186,123 +188,7 @@ export default class DemoReportComponent extends Vue {
                 }
             ];
 
-            this.site = apiData[0].site.objectId;
-
-            // Data format conversion
-            for (let item of apiData) {
-                if (item.site.objectId == this.site) {
-                    let head = [];
-                    let levels: number[] = [];
-                    this.pData.body = [];
-                    for (let subItem of item.peakHourDatas) {
-                        levels.push(subItem.level);
-                        head.push(subItem.date);
-                    }
-
-                    let body = {
-                        title: item.date,
-                        context: levels
-                    };
-                    this.pData.head = head;
-                    this.pData.body.push(body);
-                }
-            }
-
-            // if (this.site == "dfgsadg") {
-            //     this.pData = {
-            //         head: [
-            //             "2019-06-24T09:00:00.000Z",
-            //             "2019-06-24T10:00:00.000Z",
-            //             "2019-06-24T11:00:00.000Z",
-            //             "2019-06-24T12:00:00.000Z",
-            //             "2019-06-24T13:00:00.000Z",
-            //             "2019-06-24T14:00:00.000Z",
-            //             "2019-06-24T16:00:00.000Z",
-            //             "2019-06-24T17:00:00.000Z",
-            //             "2019-06-24T18:00:00.000Z",
-            //             "2019-06-24T19:00:00.000Z",
-            //             "2019-06-24T20:00:00.000Z",
-            //             "2019-06-24T21:00:00.000Z"
-            //         ],
-            //         body: [
-            //             {
-            //                 title: "2019-06-24T09:00:00.000Z",
-            //                 context: [1, 2, 3, 4, 5, 1, 4, 5, 1, 1, 4, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-25T09:00:00.000Z",
-            //                 context: [5, 4, 5, 3, 2, 1, 4, 5, 1, 2, 4, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-26T09:00:00.000Z",
-            //                 context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-27T09:00:00.000Z",
-            //                 context: [1, 3, 4, 4, 2, 1, 3, 4, 5, 1, 4, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-28T09:00:00.000Z",
-            //                 context: [1, 3, 5, 4, 5, 1, 4, 2, 1, 3, 2, 2]
-            //             },
-            //             {
-            //                 title: "2019-06-29T09:00:00.000Z",
-            //                 context: [1, 2, 1, 4, 4, 5, 1, 2, 1, 3, 3, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-30T09:00:00.000Z",
-            //                 context: [1, 1, 1, 2, 2, 4, 5, 1, 1, 3, 4, 1]
-            //             }
-            //         ]
-            //     };
-            // } else {
-            //     this.pData = {
-            //         head: [
-            //             "2019-06-24T09:00:00.000Z",
-            //             "2019-06-24T10:00:00.000Z",
-            //             "2019-06-24T11:00:00.000Z",
-            //             "2019-06-24T12:00:00.000Z",
-            //             "2019-06-24T13:00:00.000Z",
-            //             "2019-06-24T14:00:00.000Z",
-            //             "2019-06-24T16:00:00.000Z",
-            //             "2019-06-24T17:00:00.000Z",
-            //             "2019-06-24T18:00:00.000Z",
-            //             "2019-06-24T19:00:00.000Z",
-            //             "2019-06-24T20:00:00.000Z",
-            //             "2019-06-24T21:00:00.000Z"
-            //         ],
-            //         body: [
-            //             {
-            //                 title: "2019-06-24T09:00:00.000Z",
-            //                 context: [4, 2, 5, 4, 5, 1, 4, 1, 2, 1, 4, 2]
-            //             },
-            //             {
-            //                 title: "2019-06-25T09:00:00.000Z",
-            //                 context: [5, 4, 4, 5, 1, 5, 3, 4, 1, 2, 5, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-26T09:00:00.000Z",
-            //                 context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-27T09:00:00.000Z",
-            //                 context: [1, 1, 4, 5, 1, 4, 4, 3, 1, 3, 4, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-28T09:00:00.000Z",
-            //                 context: [1, 3, 1, 4, 2, 1, 4, 5, 1, 5, 2, 2]
-            //             },
-            //             {
-            //                 title: "2019-06-29T09:00:00.000Z",
-            //                 context: [1, 2, 1, 2, 4, 5, 1, 2, 1, 3, 3, 1]
-            //             },
-            //             {
-            //                 title: "2019-06-30T09:00:00.000Z",
-            //                 context: [1, 1, 1, 2, 4, 5, 1, 5, 2, 3, 4, 1]
-            //             }
-            //         ]
-            //     };
-            // }
+            this.site = this.apipData[0].site.objectId;
         }, 3000);
     }
 

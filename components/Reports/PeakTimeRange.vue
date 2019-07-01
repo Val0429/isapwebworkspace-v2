@@ -3,7 +3,7 @@
         <title>Peak hours</title>
         <table
             class="table table-bordered"
-            v-if="timeRangeData.head.length > 0"
+            v-if="data.head.length > 0"
         >
             <thead>
                 <tr>
@@ -14,13 +14,13 @@
                             @change="changeSite()"
                         ></b-form-select>
                     </th>
-                    <th v-for="(item, key, index) in timeRangeData.head">
+                    <th v-for="(item, key, index) in data.head">
                         {{(new Date(item)).getUTCHours() + ":00"}} - {{(new Date(item)).getUTCHours() + 1 + ":00"}}
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(items, key, index) in timeRangeData.body">
+                <tr v-for="(items, key, index) in data.body">
                     <td> {{(new Date(items.title)).getFullYear() + "/" + (new Date(items.title)).getMonth() + "/" + (new Date(items.title)).getDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
@@ -32,8 +32,16 @@
     </div>
 </template>
 
+
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Watch,
+    Model
+} from "vue-property-decorator";
 import { IPeckTimeRange } from "@/components/Reports";
 import Datetime from "@/services/Datetime.vue";
 
@@ -51,21 +59,98 @@ export class PeakTimeRange extends Vue {
     siteItem: [];
 
     @Prop({
-        type: Object,
+        type: Array,
         default: function() {
-            return {
-                head: [],
-                body: []
-            };
+            return [];
         }
     })
-    timeRangeData: IPeckTimeRange;
+    timeRangeData: any[];
+
+    @Watch("timeRangeData", { deep: true })
+    private timeRangeDataChanged(newVal, oldVal) {
+        this.initData();
+    }
+
+    data: IPeckTimeRange = {
+        head: [],
+        body: []
+    };
 
     site = "iVTCTzctbF";
 
     created() {}
 
     mounted() {
+        this.initData();
+    }
+
+    initData() {
+        // Data format conversion
+        for (let item of this.timeRangeData) {
+            if (item.site.objectId == this.site) {
+                let head = [];
+                let levels: number[] = [];
+                this.data.body = [];
+                for (let subItem of item.peakHourDatas) {
+                    levels.push(subItem.level);
+                    head.push(subItem.date);
+                }
+
+                let body = {
+                    title: item.date,
+                    context: levels
+                };
+                this.data.head = head;
+                this.data.body.push(body);
+            }
+        }
+
+        //     this.pData = {
+        //         head: [
+        //             "2019-06-24T09:00:00.000Z",
+        //             "2019-06-24T10:00:00.000Z",
+        //             "2019-06-24T11:00:00.000Z",
+        //             "2019-06-24T12:00:00.000Z",
+        //             "2019-06-24T13:00:00.000Z",
+        //             "2019-06-24T14:00:00.000Z",
+        //             "2019-06-24T16:00:00.000Z",
+        //             "2019-06-24T17:00:00.000Z",
+        //             "2019-06-24T18:00:00.000Z",
+        //             "2019-06-24T19:00:00.000Z",
+        //             "2019-06-24T20:00:00.000Z",
+        //             "2019-06-24T21:00:00.000Z"
+        //         ],
+        //         body: [
+        //             {
+        //                 title: "2019-06-24T09:00:00.000Z",
+        //                 context: [1, 2, 3, 4, 5, 1, 4, 5, 1, 1, 4, 1]
+        //             },
+        //             {
+        //                 title: "2019-06-25T09:00:00.000Z",
+        //                 context: [5, 4, 5, 3, 2, 1, 4, 5, 1, 2, 4, 1]
+        //             },
+        //             {
+        //                 title: "2019-06-26T09:00:00.000Z",
+        //                 context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
+        //             },
+        //             {
+        //                 title: "2019-06-27T09:00:00.000Z",
+        //                 context: [1, 3, 4, 4, 2, 1, 3, 4, 5, 1, 4, 1]
+        //             },
+        //             {
+        //                 title: "2019-06-28T09:00:00.000Z",
+        //                 context: [1, 3, 5, 4, 5, 1, 4, 2, 1, 3, 2, 2]
+        //             },
+        //             {
+        //                 title: "2019-06-29T09:00:00.000Z",
+        //                 context: [1, 2, 1, 4, 4, 5, 1, 2, 1, 3, 3, 1]
+        //             },
+        //             {
+        //                 title: "2019-06-30T09:00:00.000Z",
+        //                 context: [1, 1, 1, 2, 2, 4, 5, 1, 1, 3, 4, 1]
+        //             }
+        //         ]
+        //     };
     }
 
     showWeek(data) {
