@@ -47,7 +47,7 @@
                             rowspan="2"
                             class="title"
                         >{{items.group}}</td>
-                        <td class="title">Tarffic - IN</td>
+                        <td class="title"> {{ _('w_TrafficIn')}}</td>
                         <td v-for="(itemIn, key, index) in items.in">
                             <span>{{ itemIn.value}}</span>
                             <span :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''">{{ " (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
@@ -60,7 +60,7 @@
 
                     </tr>
                     <tr>
-                        <td class="title">Tarffic - OUT</td>
+                        <td class="title"> {{ _('w_TrafficOut')}}</td>
                         <td v-for="(itemOut, key, index) in items.out">
                             <span>{{ itemOut.value }}</span>
                             <span :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
@@ -89,7 +89,7 @@
                         rowspan="2"
                         class="title"
                     ></td>
-                    <td class="title">Tarffic-in Total</td>
+                    <td class="title"> {{ _('w_TrafficInTotal')}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.inTotal.value}}</span>
                         <span :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
@@ -97,7 +97,7 @@
 
                 </tr>
                 <tr>
-                    <td class="title">Tarffic-out Total</td>
+                    <td class="title"> {{ _('w_TrafficOutTotal')}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.outTotal.value }}</span>
                         <span :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
