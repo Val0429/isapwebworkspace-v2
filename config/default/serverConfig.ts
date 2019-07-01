@@ -1,9 +1,9 @@
 var config: Config = {
     // Tui
-    ip: '172.16.10.178',
+    // ip: '172.16.10.21',
 
     // localhost
-    // ip: 'localhost',
+    ip: 'localhost',
 
     port: 6060,
     ssl: false,
