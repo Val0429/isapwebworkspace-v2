@@ -334,6 +334,20 @@ class Datetime {
         return this.DateToZero(new Date(date.setDate(diff)));
     }
 
+    // date
+    DateStart(value: Date): Date {
+        let date = new Date(value.getTime());
+        return this.DateToZero(date);
+    }
+
+    DateEnd(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setDate(date.getDate() + 1);
+        date = this.DateToZero(date);
+        date.setSeconds(date.getSeconds() - 1);
+        return date;
+    }
+
     // set Date to 00:00:00
     DateToZero(value: Date): Date {
         let date = new Date(value.getTime());
@@ -343,28 +357,28 @@ class Datetime {
         return date;
     }
 
+    /////////////////////////////////////////////
+
     // 檢查日期的結束時間不能小於開始值間
     CheckDate(startDate: string, endDate: string) {
-        if (Date.parse(endDate) < Date.parse(startDate))
-            return false;
+        if (Date.parse(endDate) < Date.parse(startDate)) return false;
     }
 
     // 檢查日期的開始和結束時間是否為同一天
     CheckTheSameDate(startDate: string, endDate: string) {
-        if (Date.parse(endDate) === Date.parse(startDate))
-            return true;
+        if (Date.parse(endDate) === Date.parse(startDate)) return true;
     }
 
     // 以今天為基準，計算往前、往後的幾天
     CountDateNumber(addDayCount: number): string {
         const today = new Date();
-        today.setDate(today.getDate() + addDayCount);   //獲取addDayCount天後的日期
+        today.setDate(today.getDate() + addDayCount); //獲取addDayCount天後的日期
         const year = today.getFullYear();
-        const month = today.getMonth() + 1;   //獲取當前月份的日期
+        const month = today.getMonth() + 1; //獲取當前月份的日期
         const day = today.getDate();
         const formatMonth = month < 10 ? `0${month}` : month;
         const formatDay = day < 10 ? `0${day}` : day;
-        return `${year}-${formatMonth}-${formatDay}`
+        return `${year}-${formatMonth}-${formatDay}`;
     }
 
     //獲得本月的天數
@@ -373,12 +387,11 @@ class Datetime {
 
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-
 
         const thisMonthDays = new Date(nowYear, nowMonth + 1, 0).getDate();
         return thisMonthDays;
@@ -390,14 +403,14 @@ class Datetime {
 
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
         const lastMonthDays = new Date(nowYear, nowMonth, 0).getDate();
-        return lastMonthDays
+        return lastMonthDays;
     }
 
     //獲得本周的開始日期
@@ -407,7 +420,7 @@ class Datetime {
         const nowDay = now.getDate(); //當前日
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -419,13 +432,12 @@ class Datetime {
 
     //獲得本周的結束日期
     ThisWeekEndDate(): string {
-
         const now = new Date(); //當前日期
         const nowDayOfWeek = now.getDay(); //今天本周的第幾天 0（周日） 到 6（周六）
         const nowDay = now.getDate(); //當前日
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -437,13 +449,12 @@ class Datetime {
 
     //獲得上周的開始日期
     LastWeekStartDate(): string {
-
         const now = new Date(); //當前日期
         const nowDayOfWeek = now.getDay(); //今天本周的第幾天 0（周日） 到 6（周六）
         const nowDay = now.getDate(); //當前日
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -452,15 +463,15 @@ class Datetime {
         const weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 7);
         return this.DateTime2String(weekStartDate, 'YYYY-MM-DD');
     }
+
     //獲得上周的結束日期
     LastWeekEndDate(): string {
-
         const now = new Date(); //當前日期
         const nowDayOfWeek = now.getDay(); //今天本周的第幾天 0（周日） 到 6（周六）
         const nowDay = now.getDate(); //當前日
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -472,11 +483,10 @@ class Datetime {
 
     //獲得本月的開始日期
     ThisMonthStartDate(): string {
-
         const now = new Date(); //當前日期
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -488,11 +498,10 @@ class Datetime {
 
     //獲得本月的結束日期
     ThisMonthEndDate(): string {
-
         const now = new Date(); //當前日期
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -504,10 +513,9 @@ class Datetime {
 
     //獲得上月開始日期
     LastMonthStartDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -521,11 +529,10 @@ class Datetime {
 
     //獲得上月結束日期
     LastMonthEndDate(): string {
-
         const now = new Date(); //當前日期
         const nowMonth = now.getMonth(); //當前月 0（1月）到 11（12月）
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         let lastMonthDate = new Date(); //上月日期
         lastMonthDate.setDate(1);
@@ -538,10 +545,9 @@ class Datetime {
 
     //獲得Q1開始日期
     Q1StartDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q1StartDate = new Date(nowYear, 0, 1);
         return this.DateTime2String(Q1StartDate, 'YYYY-MM-DD');
@@ -549,10 +555,9 @@ class Datetime {
 
     //獲得Q1結束日期
     Q1EndDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q1EndDate = new Date(nowYear, 2, 31);
         return this.DateTime2String(Q1EndDate, 'YYYY-MM-DD');
@@ -560,10 +565,9 @@ class Datetime {
 
     //獲得Q2開始日期
     Q2StartDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q2StartDate = new Date(nowYear, 3, 1);
         return this.DateTime2String(Q2StartDate, 'YYYY-MM-DD');
@@ -571,10 +575,9 @@ class Datetime {
 
     //獲得Q2結束日期
     Q2EndDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q2EndDate = new Date(nowYear, 5, 30);
         return this.DateTime2String(Q2EndDate, 'YYYY-MM-DD');
@@ -582,10 +585,9 @@ class Datetime {
 
     //獲得Q3開始日期
     Q3StartDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q3StartDate = new Date(nowYear, 6, 1);
         return this.DateTime2String(Q3StartDate, 'YYYY-MM-DD');
@@ -593,10 +595,9 @@ class Datetime {
 
     //獲得Q3結束日期
     Q3EndDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q3EndDate = new Date(nowYear, 8, 30);
         return this.DateTime2String(Q3EndDate, 'YYYY-MM-DD');
@@ -604,10 +605,9 @@ class Datetime {
 
     //獲得Q4開始日期
     Q4StartDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q4StartDate = new Date(nowYear, 9, 1);
         return this.DateTime2String(Q4StartDate, 'YYYY-MM-DD');
@@ -615,15 +615,13 @@ class Datetime {
 
     //獲得Q4結束日期
     Q4EndDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q4EndDate = new Date(nowYear, 11, 31);
         return this.DateTime2String(Q4EndDate, 'YYYY-MM-DD');
     }
-
 }
 
 export default new Datetime();

@@ -24,9 +24,16 @@ enum ETimeMode {
 
 enum EWeather {
     none = 'none',
-    sunny = 'sunny',
-    cloudy = 'cloudy',
+    clearDay = 'clearDay',
+    clearNight = 'clearNight',
     rain = 'rain',
+    snow = 'snow',
+    sleet = 'sleet',
+    wind = 'wind',
+    fog = 'fog',
+    cloudy = 'cloudy',
+    partlyCloudyDay = 'partlyCloudyDay',
+    partlyCloudyNight = 'partlyCloudyNight',
 }
 
 export { ETimeMode, EChartMode, EAreaMode, EWeather };

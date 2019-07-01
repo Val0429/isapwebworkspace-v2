@@ -29,8 +29,18 @@ exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
 // custom import
-import { ETimeMode, EAreaMode, EChartMode, EWeather } from "./models/EHighCharts";
-import { IDate, ISite, IChartTrafficData } from "./models/IHighCharts";
+import {
+    ETimeMode,
+    EAreaMode,
+    EChartMode,
+    EWeather
+} from "./models/EHighCharts";
+import {
+    IDate,
+    IDatetimeGroup,
+    ISite,
+    IChartTrafficData
+} from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
 import Weather from "../../views/Setting/Weather.vue";
@@ -93,7 +103,6 @@ export class HighchartsTraffic extends Vue {
     mountChart: boolean = false;
     chartMode: EChartMode = EChartMode.none;
     chartOptions: any = {};
-    categories: string[] = [];
 
     datetimeFormat = {
         year: "YYYY",
@@ -146,18 +155,15 @@ export class HighchartsTraffic extends Vue {
     initChart() {
         switch (this.chartMode) {
             case EChartMode.day1Site1:
-                this.officeHourCategories();
                 this.initDay1Site1();
                 break;
             case EChartMode.day1SiteX:
                 this.initDay1SiteX();
                 break;
             case EChartMode.dayXSite1:
-                this.dateCategories();
                 this.initDayXSite1();
                 break;
             case EChartMode.dayXSiteX:
-                this.dateCategories();
                 this.initDayXSiteX();
                 break;
             default:
@@ -171,6 +177,7 @@ export class HighchartsTraffic extends Vue {
         let tempValues = JSON.parse(JSON.stringify(this.value));
         let tempCategories: string[] = [];
         let tempResult: IChartTrafficData[] = [];
+        let categories: string[] = [];
         let tempSeries: any = [
             {
                 name: this._("w_ReportTraffic_TrafficRevenue"),
@@ -185,8 +192,67 @@ export class HighchartsTraffic extends Vue {
             }
         ];
 
+        //// office hour group ////
+        if (this.chartMode != EChartMode.day1Site1) {
+            return false;
+        }
+        if (this.sites.length != 1) {
+            return false;
+        }
+
+        let site = this.sites[0];
+
+        // start
+        let weekDay = this.startDate.getDay();
+        let startHour = 25;
+        let endHour = -1;
+        for (let dayRange of site.officeHour) {
+            let inday: boolean = this.inDay(
+                weekDay,
+                parseInt(dayRange.startDay),
+                parseInt(dayRange.endDay)
+            );
+            if (inday) {
+                let indayStartDate = new Date(dayRange.startDate);
+                let indayEndDate = new Date(dayRange.endDate);
+                if (isNaN(indayStartDate.getTime())) {
+                    break;
+                }
+                if (isNaN(indayEndDate.getTime())) {
+                    break;
+                }
+                let indayStartHour = indayStartDate.getHours();
+                let indayEndHour = indayEndDate.getHours();
+
+                if (indayStartHour >= indayEndHour) {
+                    startHour = 0;
+                    endHour = 23;
+                } else {
+                    if (startHour > indayStartHour) {
+                        startHour = indayStartHour;
+                    }
+                    if (endHour < indayEndHour) {
+                        endHour = indayEndHour;
+                    }
+                }
+                if (startHour <= 0 && endHour >= 23) {
+                    break;
+                }
+            }
+        }
+        if (startHour > endHour) {
+            startHour = 0;
+            endHour = 23;
+        }
+        for (let i = startHour; i <= endHour; i++) {
+            let hourString = i < 10 ? `0${i.toString()}` : i.toString();
+            categories.push(`${hourString}:00`);
+        }
+
+        //// office hour group ////
+
         // set data
-        for (let categorie of this.categories) {
+        for (let categorie of categories) {
             let haveValue = false;
             for (let loopValue of tempValues) {
                 let value: IChartTrafficData = this.trafficValue(loopValue);
@@ -314,7 +380,6 @@ export class HighchartsTraffic extends Vue {
 
         for (let site of this.sites) {
             let haveValue = false;
-            this.categories.push(site.name);
             for (let loopValue of tempValues) {
                 let value: IChartTrafficData = this.trafficValue(loopValue);
                 if (value.siteObjectId == site.objectId) {
@@ -346,7 +411,10 @@ export class HighchartsTraffic extends Vue {
             tempSeries[1].data.push(result.traffic);
             tempSeries[2].data.push(trafficAVG);
             tempCategories.push(
-                this.categorieStringWithJSON(result.siteName, result)
+                this.categorieStringWithJSON(
+                    `${result.siteName} ${result.weatherIcon}`,
+                    result
+                )
             );
         }
 
@@ -420,7 +488,7 @@ export class HighchartsTraffic extends Vue {
                                 newValue.transaction
                             }<br>`;
                             result += `${newValue.i18n.conversion}: ${
-                                newValue.conversionPercentage
+                                newValue.conversion
                             }%<br>`;
                         } catch (e) {
                             console.log(e);
@@ -462,49 +530,224 @@ export class HighchartsTraffic extends Vue {
             }
         ];
 
-        // TODO: value change to timeMode
-        switch (this.timeMode) {
-            case ETimeMode.year:
-                break;
-            case ETimeMode.quarter:
-                break;
-            case ETimeMode.month:
-                break;
-            case ETimeMode.week:
-                break;
-            case ETimeMode.day:
-            case ETimeMode.hour:
-            case ETimeMode.none:
-            default:
-                break;
+        // 避免時間相反造成無窮迴圈
+        if (this.startDate.getTime() > this.endDate.getTime()) {
+            let tempDate = new Date(this.startDate.getTime());
+            this.startDate = new Date(this.endDate.getTime());
+            this.endDate = new Date(tempDate.getTime());
         }
 
-        // set data
-        for (let categorie of this.categories) {
-            let haveValue = false;
+        // 設置最大值避免無窮迴圈
+        let categorieMaxlength = 10000;
+        let categorieNowlength = 0;
 
-            for (let loopValue of tempValues) {
-                let value: IChartTrafficData = this.trafficValue(loopValue);
-                if (value.dateString == categorie) {
-                    haveValue = true;
-                    tempResult.push(value);
+        // 時間累加判斷用
+        let tempTimestamp: number = this.startDate.getTime();
+        let endTimestamp: number = this.endDate.getTime();
+        let tempDate: Date = new Date(tempTimestamp);
+        let dateGap: number = Math.ceil(
+            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
+                86400000
+        );
+
+        while (
+            tempTimestamp <= endTimestamp &&
+            categorieNowlength < categorieMaxlength
+        ) {
+            let tempChartData: IChartTrafficData = this.trafficValueDefault();
+
+            // set site
+            if (this.sites[0].objectId != undefined) {
+                tempChartData.siteObjectId = this.sites[0].objectId;
+                tempChartData.siteName = this.sites[0].name;
+            }
+
+            switch (this.timeMode) {
+                case ETimeMode.year:
+                    tempChartData.date = Datetime.YearStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateStart = Datetime.YearStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateEnd = Datetime.YearEnd(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateString = Datetime.DateTime2String(
+                        tempChartData.date,
+                        this.datetimeFormat.year
+                    );
+                    tempChartData.dateStartString = Datetime.DateTime2String(
+                        tempChartData.dateStart,
+                        this.datetimeFormat.year
+                    );
+                    tempChartData.dateEndString = Datetime.DateTime2String(
+                        tempChartData.dateEnd,
+                        this.datetimeFormat.year
+                    );
                     break;
+                case ETimeMode.quarter:
+                    tempChartData.date = Datetime.QuarterStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateStart = Datetime.QuarterStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateEnd = Datetime.QuarterEnd(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateString = Datetime.DateTime2String(
+                        tempChartData.date,
+                        this.datetimeFormat.month
+                    );
+                    tempChartData.dateStartString = Datetime.DateTime2String(
+                        tempChartData.dateStart,
+                        this.datetimeFormat.month
+                    );
+                    tempChartData.dateEndString = Datetime.DateTime2String(
+                        tempChartData.dateEnd,
+                        this.datetimeFormat.month
+                    );
+                    break;
+                case ETimeMode.month:
+                    tempChartData.date = Datetime.MonthStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateStart = Datetime.MonthStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateEnd = Datetime.MonthEnd(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateString = Datetime.DateTime2String(
+                        tempChartData.date,
+                        this.datetimeFormat.month
+                    );
+                    tempChartData.dateStartString = Datetime.DateTime2String(
+                        tempChartData.dateStart,
+                        this.datetimeFormat.month
+                    );
+                    tempChartData.dateEndString = Datetime.DateTime2String(
+                        tempChartData.dateEnd,
+                        this.datetimeFormat.month
+                    );
+                    break;
+                case ETimeMode.week:
+                    tempChartData.date = Datetime.WeekStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateStart = Datetime.WeekStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateEnd = Datetime.WeekEnd(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateString = Datetime.DateTime2String(
+                        tempChartData.date,
+                        this.datetimeFormat.date
+                    );
+                    tempChartData.dateStartString = Datetime.DateTime2String(
+                        tempChartData.dateStart,
+                        this.datetimeFormat.date
+                    );
+                    tempChartData.dateEndString = Datetime.DateTime2String(
+                        tempChartData.dateEnd,
+                        this.datetimeFormat.date
+                    );
+                    break;
+                case ETimeMode.day:
+                case ETimeMode.hour:
+                case ETimeMode.none:
+                default:
+                    tempChartData.date = Datetime.DateStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateStart = Datetime.DateStart(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateEnd = Datetime.DateEnd(
+                        new Date(tempTimestamp)
+                    );
+                    tempChartData.dateString = Datetime.DateTime2String(
+                        tempChartData.date,
+                        this.datetimeFormat.date
+                    );
+                    tempChartData.dateStartString = Datetime.DateTime2String(
+                        tempChartData.dateStart,
+                        this.datetimeFormat.date
+                    );
+                    tempChartData.dateEndString = Datetime.DateTime2String(
+                        tempChartData.dateEnd,
+                        this.datetimeFormat.date
+                    );
+                    break;
+            }
+
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
+            let tempEndTimestamp = tempChartData.dateEnd.getTime();
+
+            tempChartData.timeString = Datetime.DateTime2String(
+                tempChartData.dateStart,
+                this.datetimeFormat.time
+            );
+            tempChartData.quarterNumber = Datetime.QuarterNumber(
+                tempChartData.dateStart
+            );
+            tempChartData.weekNumber = Datetime.WeekNumber(
+                tempChartData.dateStart
+            );
+
+            for (let val of tempValues) {
+                let value: IChartTrafficData = this.trafficValue(val);
+                let valTimestamp = value.date.getTime();
+                if (
+                    value.siteObjectId == tempChartData.siteObjectId &&
+                    valTimestamp >= tempStartTimestamp &&
+                    valTimestamp <= tempEndTimestamp
+                ) {
+                    tempChartData.traffic += value.traffic;
+                    tempChartData.revenue += value.revenue;
+                    tempChartData.transaction += value.transaction;
+                    tempChartData.temperature += value.temperature;
+                    tempChartData.weather = value.weather;
+                    tempChartData.weatherIcon = HighChartsService.weatherIcon(
+                        value.weather
+                    );
+
+                    // for calculate AVG
+                    trafficTotal += tempChartData.traffic;
                 }
             }
 
-            if (!haveValue) {
-                let defaultValue = this.trafficValueDefault();
-                defaultValue.dateString = categorie;
-                tempResult.push(defaultValue);
+            // calculate conversion & ASP
+            if (tempChartData.traffic != 0) {
+                tempChartData.conversion = this.formatFloat(
+                    (tempChartData.transaction / tempChartData.traffic) * 100,
+                    this.mathRoundLength
+                );
             }
+
+            if (tempChartData.transaction > 0) {
+                tempChartData.asp = this.formatFloat(
+                    tempChartData.revenue / tempChartData.transaction,
+                    this.mathRoundLength
+                );
+            }
+
+            // push single series data
+            tempResult.push(tempChartData);
+
+            // set loop value
+            categorieNowlength++;
+            tempTimestamp = tempChartData.dateEnd.getTime() + 1000;
         }
 
         // calculate avg
-        if (tempResult.length > 0) {
-            for (let result of tempResult) {
-                trafficTotal += result.traffic;
-            }
-            trafficAVG = trafficTotal / tempResult.length;
+        if (dateGap > 0) {
+            trafficAVG = this.formatFloat(
+                trafficTotal / dateGap,
+                this.mathRoundLength
+            );
         }
 
         // set result
@@ -513,9 +756,41 @@ export class HighchartsTraffic extends Vue {
             tempSeries[0].data.push(result.revenue);
             tempSeries[1].data.push(result.traffic);
             tempSeries[2].data.push(trafficAVG);
-            tempCategories.push(
-                this.categorieStringWithJSON(result.dateString, result)
-            );
+            switch (this.timeMode) {
+                case ETimeMode.year:
+                case ETimeMode.month:
+                    tempCategories.push(
+                        this.categorieStringWithJSON(result.dateString, result)
+                    );
+                    break;
+                case ETimeMode.quarter:
+                    tempCategories.push(
+                        this.categorieStringWithJSON(
+                            this.categoriesQuarter(result.date),
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.week:
+                    tempCategories.push(
+                        this.categorieStringWithJSON(
+                            this.categoriesWeek(result.date),
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.day:
+                case ETimeMode.hour:
+                case ETimeMode.none:
+                default:
+                    tempCategories.push(
+                        this.categorieStringWithJSON(
+                            `${result.dateString} ${result.weatherIcon}`,
+                            result
+                        )
+                    );
+                    break;
+            }
         }
 
         // set chart options
@@ -584,7 +859,7 @@ export class HighchartsTraffic extends Vue {
                                 newValue.transaction
                             }<br>`;
                             result += `${newValue.i18n.conversion}: ${
-                                newValue.conversionPercentage
+                                newValue.conversion
                             }%<br>`;
                             result += `${newValue.i18n.asp}: ${
                                 newValue.asp
@@ -637,60 +912,60 @@ export class HighchartsTraffic extends Vue {
             let site = this.sites[iNumber];
             let tempData: number[] = [];
 
-            for (let categorie of this.categories) {
-                let haveValue = false;
-                let traffic: number = 0;
-
-                for (let loopValue of tempValues) {
-                    let value = this.trafficValue(loopValue);
-                    if (
-                        value.siteObjectId == site.objectId &&
-                        value.dateString == categorie
-                    ) {
-                        haveValue = true;
-                        tempData.push(value.traffic);
-                        break;
-                    }
-                }
-
-                if (!haveValue) {
-                    tempData.push(0);
-                }
-            }
-
             tempSeries.push({
                 name: this.categorieStringNotJSON(site.name, site.objectId),
                 data: tempData
             });
+
+            // for (let categorie of this.categories) {
+            //     let haveValue = false;
+            //     let traffic: number = 0;
+
+            //     for (let loopValue of tempValues) {
+            //         let value = this.trafficValue(loopValue);
+            //         if (
+            //             value.siteObjectId == site.objectId &&
+            //             value.dateString == categorie
+            //         ) {
+            //             haveValue = true;
+            //             tempData.push(value.traffic);
+            //             break;
+            //         }
+            //     }
+
+            //     if (!haveValue) {
+            //         tempData.push(0);
+            //     }
+            // }
         }
 
-        for (let categorie of this.categories) {
-            let tempValueForCategorie = {
-                categorie: categorie,
-                siteValues: []
-            };
-            for (let site of this.sites) {
-                let haveSite = false;
-                for (let loopValue of tempValues) {
-                    let value = this.trafficValue(loopValue);
-                    if (
-                        value.dateString == categorie &&
-                        value.siteObjectId == site.objectId
-                    ) {
-                        haveSite = true;
-                        tempValueForCategorie.siteValues.push(value);
-                        break;
-                    }
-                }
-                if (!haveSite) {
-                    let defaultValue = this.trafficValueDefault();
-                    defaultValue.siteObjectId = site.objectId;
-                    defaultValue.siteName = site.name;
-                    tempValueForCategorie.siteValues.push(defaultValue);
-                }
-            }
-            tempResult.push(tempValueForCategorie);
-        }
+        // for (let categorie of this.categories) {
+        //     let tempValueForCategorie = {
+        //         categorie: categorie,
+        //         siteValues: []
+        //     };
+        //     for (let site of this.sites) {
+        //         let haveSite = false;
+        //         for (let loopValue of tempValues) {
+        //             let value = this.trafficValue(loopValue);
+        //             if (
+        //                 value.dateString == categorie &&
+        //                 value.siteObjectId == site.objectId
+        //             ) {
+        //                 haveSite = true;
+        //                 tempValueForCategorie.siteValues.push(value);
+        //                 break;
+        //             }
+        //         }
+        //         if (!haveSite) {
+        //             let defaultValue = this.trafficValueDefault();
+        //             defaultValue.siteObjectId = site.objectId;
+        //             defaultValue.siteName = site.name;
+        //             tempValueForCategorie.siteValues.push(defaultValue);
+        //         }
+        //     }
+        //     tempResult.push(tempValueForCategorie);
+        // }
 
         // set result
         for (let result of tempResult) {
@@ -773,7 +1048,7 @@ export class HighchartsTraffic extends Vue {
                                         value.transaction
                                     }<br>`;
                                     result += `${value.i18n.conversion}: ${
-                                        value.conversionPercentage
+                                        value.conversion
                                     }%<br>`;
                                     result += `${value.i18n.asp}: ${
                                         value.asp
@@ -817,14 +1092,14 @@ export class HighchartsTraffic extends Vue {
             traffic: 0,
             revenue: 0,
             transaction: 0,
-            conversion: 0,
-            asp: 0,
             weather: EWeather.none,
             i18n: this.i18nItem(),
             siteName: "",
-            timeMode: ETimeMode.none,
+            timeMode: this.timeMode,
+            areaMode: this.areaMode,
+            conversion: 0,
+            asp: 0,
             trafficAVG: 0,
-            conversionPercentage: 0,
             weatherIcon: HighChartsService.weatherIcon(EWeather.none),
             dateStart: new Date(),
             dateEnd: new Date(),
@@ -886,12 +1161,18 @@ export class HighchartsTraffic extends Vue {
                 break;
         }
 
-        value.conversionPercentage = this.formatFloat(
-            value.conversion * 100,
-            this.mathRoundLength
-        );
+        // TODO: calcul conversion & asp
+        value.conversion = 0;
+        value.asp = 0;
+
+        // value.conversionPercentage = this.formatFloat(
+        //     value.conversion * 100,
+        //     this.mathRoundLength
+        // );
+
         value.i18n = this.i18nItem();
         value.timeMode = this.timeMode;
+        value.areaMode = this.areaMode;
         value.trafficAVG = 0;
         value.weatherIcon = HighChartsService.weatherIcon(value.weather);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
@@ -936,66 +1217,6 @@ export class HighchartsTraffic extends Vue {
         return result;
     }
 
-    // Only for day1Site1
-    private officeHourCategories() {
-        this.categories = [];
-        if (this.chartMode != EChartMode.day1Site1) {
-            return false;
-        }
-        if (this.sites.length != 1) {
-            return false;
-        }
-
-        let site = this.sites[0];
-
-        // start
-        let weekDay = this.startDate.getDay();
-        let startHour = 25;
-        let endHour = -1;
-        for (let dayRange of site.officeHour) {
-            let inday: boolean = this.inDay(
-                weekDay,
-                parseInt(dayRange.startDay),
-                parseInt(dayRange.endDay)
-            );
-            if (inday) {
-                let indayStartDate = new Date(dayRange.startDate);
-                let indayEndDate = new Date(dayRange.endDate);
-                if (isNaN(indayStartDate.getTime())) {
-                    break;
-                }
-                if (isNaN(indayEndDate.getTime())) {
-                    break;
-                }
-                let indayStartHour = indayStartDate.getHours();
-                let indayEndHour = indayEndDate.getHours();
-
-                if (indayStartHour >= indayEndHour) {
-                    startHour = 0;
-                    endHour = 23;
-                } else {
-                    if (startHour > indayStartHour) {
-                        startHour = indayStartHour;
-                    }
-                    if (endHour < indayEndHour) {
-                        endHour = indayEndHour;
-                    }
-                }
-                if (startHour <= 0 && endHour >= 23) {
-                    break;
-                }
-            }
-        }
-        if (startHour > endHour) {
-            startHour = 0;
-            endHour = 23;
-        }
-        for (let i = startHour; i <= endHour; i++) {
-            let hourString = i < 10 ? `0${i.toString()}` : i.toString();
-            this.categories.push(`${hourString}:00`);
-        }
-    }
-
     // check day in range
     private inDay(weekDay: number, startDay: number, endDay: number): boolean {
         let result = false;
@@ -1031,86 +1252,6 @@ export class HighchartsTraffic extends Vue {
         result += `${date.getFullYear()}-W${weekNumber}`;
         return result;
     }
-
-    // only for dayX
-    private dateCategories() {
-        // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
-
-        // 設置最大值避免無窮迴圈
-        let categorieMaxlength = 10000;
-        let categorieNowlength = 0;
-
-        // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
-        let tempDate: Date = new Date(tempTimestamp);
-
-        while (
-            tempTimestamp <= endTimestamp &&
-            categorieNowlength < categorieMaxlength
-        ) {
-            categorieNowlength++;
-            switch (this.timeMode) {
-                case ETimeMode.year:
-                    this.categories.push(
-                        Datetime.DateTime2String(
-                            new Date(tempTimestamp),
-                            this.datetimeFormat.year
-                        )
-                    );
-                    tempDate = new Date(tempTimestamp);
-                    tempDate.setFullYear(tempDate.getFullYear() + 1);
-                    tempTimestamp = tempDate.getTime();
-                    break;
-                case ETimeMode.quarter:
-                    this.categories.push(
-                        this.categoriesQuarter(new Date(tempTimestamp))
-                    );
-                    tempDate = Datetime.QuarterStart(new Date(tempTimestamp));
-                    tempDate.setMonth(tempDate.getMonth() + 3);
-                    tempTimestamp = tempDate.getTime();
-                    break;
-                case ETimeMode.month:
-                    this.categories.push(
-                        Datetime.DateTime2String(
-                            new Date(tempTimestamp),
-                            this.datetimeFormat.month
-                        )
-                    );
-                    tempDate = new Date(tempTimestamp);
-                    tempDate.setMonth(tempDate.getMonth() + 1);
-                    tempTimestamp = tempDate.getTime();
-                    break;
-                case ETimeMode.week:
-                    this.categories.push(
-                        this.categoriesWeek(new Date(tempTimestamp))
-                    );
-                    tempDate = Datetime.WeekStart(new Date(tempTimestamp));
-                    tempDate.setDate(tempDate.getDate() + 7);
-                    tempTimestamp = tempDate.getTime();
-                    break;
-                case ETimeMode.day:
-                case ETimeMode.hour:
-                case ETimeMode.none:
-                default:
-                    this.categories.push(
-                        Datetime.DateTime2String(
-                            new Date(tempTimestamp),
-                            this.datetimeFormat.date
-                        )
-                    );
-                    tempDate = new Date(tempTimestamp);
-                    tempDate.setDate(tempDate.getDate() + 1);
-                    tempTimestamp = tempDate.getTime();
-                    break;
-            }
-        }
-    }
 }
 
 export default HighchartsTraffic;
@@ -1118,4 +1259,8 @@ Vue.component("highcharts-traffic", HighchartsTraffic);
 </script>
 
 <style lang="scss" scoped>
+.weather-icon {
+    font-size: 1.1rem;
+    color: #924da3;
+}
 </style>

@@ -100,17 +100,18 @@ export default class ReportTraffic extends Vue {
 
     // Morris //
     initChartDeveloper() {
-        this.timeMode = ETimeMode.week;
+        this.timeMode = ETimeMode.day;
+        this.areaMode = EAreaMode.all;
 
         // single day
         this.startDate = new Date("2019-07-01T08:00:00.000Z");
         this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
         // multipe day
-        this.startDate = new Date("2015-01-20T08:00:00.000Z");
-        this.endDate = new Date("2019-10-10T14:00:00.000Z");
+        this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
-        let siteLength = 1;
+        let siteLength = 3;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
@@ -129,14 +130,28 @@ export default class ReportTraffic extends Vue {
 
             for (let i = 1; i < 30; i++) {
                 let weather = EWeather.none;
-
                 let tmepWeatherNumber = Math.floor(Math.random() * 300);
-                if (tmepWeatherNumber % 3 == 0) {
-                    weather = EWeather.sunny;
-                } else if (tmepWeatherNumber % 3 == 1) {
-                    weather = EWeather.cloudy;
-                } else if (tmepWeatherNumber % 3 == 2) {
+
+                if (tmepWeatherNumber % 10 == 0) {
+                    weather = EWeather.clearDay;
+                } else if (tmepWeatherNumber % 10 == 1) {
+                    weather = EWeather.clearNight;
+                } else if (tmepWeatherNumber % 10 == 2) {
                     weather = EWeather.rain;
+                } else if (tmepWeatherNumber % 10 == 3) {
+                    weather = EWeather.snow;
+                } else if (tmepWeatherNumber % 10 == 4) {
+                    weather = EWeather.sleet;
+                } else if (tmepWeatherNumber % 10 == 5) {
+                    weather = EWeather.wind;
+                } else if (tmepWeatherNumber % 10 == 6) {
+                    weather = EWeather.fog;
+                } else if (tmepWeatherNumber % 10 == 7) {
+                    weather = EWeather.cloudy;
+                } else if (tmepWeatherNumber % 10 == 8) {
+                    weather = EWeather.partlyCloudyDay;
+                } else if (tmepWeatherNumber % 10 == 9) {
+                    weather = EWeather.partlyCloudyNight;
                 }
 
                 let tempI = i;
