@@ -8,6 +8,12 @@ enum EDeviceMode {
     humanDetection = 'humanDetection',
 }
 
+// report site
+enum EIfAllSelected {
+    all = 'all',
+    select = 'select'
+}
+
 // report date
 enum EAddPeriodSelect {
     period = 'period',
@@ -60,4 +66,4 @@ enum EPageType {
 }
 
 export { ESign, EPageType };
-export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType };
+export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected };

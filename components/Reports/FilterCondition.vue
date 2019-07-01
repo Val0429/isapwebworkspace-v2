@@ -11,6 +11,20 @@
                 @submit="doSubmit($event)"
             >
 
+                <template #ifAllSites="{ $attrs, $listeners }">
+                    <b-form-radio-group
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="selectAllSites"
+                        class="h-25 select_date_button mb-3"
+                        buttons
+                        button-variant="outline-success"
+                        name="radio-btn-outline"
+                        :options="ifAllSitesSelectItem"
+                        @change="changeAllSitesSelect"
+                    ></b-form-radio-group>
+                </template>
+
                 <template #siteIds="{ $attrs, $listeners }">
                     <iv-form-selection
                         v-bind="$attrs"
@@ -23,14 +37,15 @@
                 <template #selectTree="{ $attrs, $listeners }">
 
                     <div class="ml-3 select_report_period_button">
-                        <b-button @click="pageToChooseTree">
+                        <b-button
+                            v-if="selectAllSites === 'select'"
+                            @click="pageToChooseTree"
+                        >
                             {{ _('w_SelectSiteTree') }}
                         </b-button>
                     </div>
                 </template>
 
-                <template #ReportPeriodTitle="{ $attrs, $listeners }">
-                </template>
 
                 <template #selectPeriodAddWay="{ $attrs, $listeners }">
                     <b-form-radio-group
@@ -105,7 +120,7 @@
         </iv-card>
 
         <region-tree-select
-            v-if="pageStep === ePageStep.chooseTree"
+            v-if="pageStep === ePageStep.chooseTree && selectAllSites === 'select'"
             :multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
@@ -130,18 +145,19 @@ import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 import {
     EAddPeriodSelect,
     ECountType,
-    EDesignationPeriod
+    EDesignationPeriod, EIfAllSelected
 } from "@/components/Reports/models/EReport";
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
-import DateCount from "@/components/Reports/models/dateCount";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog/Dialog";
 
 enum EPageStep {
     none = "none",
     showResult = "showResult",
-    chooseTree = "chooseTree"
+    chooseTree = "chooseTree",
+    select = "select",
+    all = "all",
 }
 
 @Component({
@@ -150,6 +166,10 @@ enum EPageStep {
 export class FilterCondition extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+
+    // site 相關
+    selectAllSites: string = EIfAllSelected.select;
+    ifAllSitesSelectItem: any = [];
 
     // select 相關
     sitesSelectItem: any = {};
@@ -163,28 +183,9 @@ export class FilterCondition extends Vue {
     // date 相關
     selectPeriodAddWay: string = EAddPeriodSelect.period;
 
-    addPeriodSelectItem: any = [
-        { value: EAddPeriodSelect.period, text: EAddPeriodSelect.period },
-        {
-            value: EAddPeriodSelect.designation,
-            text: EAddPeriodSelect.designation
-        }
-    ];
+    addPeriodSelectItem: any = [];
 
-    designationPeriodSelectItem: any = {
-        today: EDesignationPeriod.today,
-        yesterday: EDesignationPeriod.yesterday,
-        last7days: EDesignationPeriod.last7days,
-        thisWeek: EDesignationPeriod.thisWeek,
-        lastWeek: EDesignationPeriod.lastWeek,
-        thisMonth: EDesignationPeriod.thisMonth,
-        lastMonth: EDesignationPeriod.lastMonth,
-        q1: EDesignationPeriod.q1,
-        q2: EDesignationPeriod.q2,
-        q3: EDesignationPeriod.q3,
-        q4: EDesignationPeriod.q4,
-        thisYear: EDesignationPeriod.thisYear
-    };
+    designationPeriodSelectItem: any = [];
 
     inputFormData: any = {
         siteIds: [],
@@ -194,7 +195,7 @@ export class FilterCondition extends Vue {
         startDate: new Date(),
         endDate: new Date(),
         type: "",
-        designationPeriod: "today"
+        designationPeriod: EDesignationPeriod.today
     };
 
     // response 相關
@@ -202,21 +203,52 @@ export class FilterCondition extends Vue {
 
     created() {
         // this.initSelectItemSite();
+        this.initSelectItem();
+
+    }
+
+    mounted() {
         this.initSelectItemTag();
         this.initSelectItemTree();
         this.initRegionTreeSelect();
         this.siteFilterPermission();
     }
 
-    mounted() {}
-
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();
         this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
+    initSelectItem() {
+        this.ifAllSitesSelectItem = [
+            { value: EIfAllSelected.all, text: this._('w_AllSites')},
+            { value: EIfAllSelected.select, text: this._('w_SelectSites') },
+        ];
+
+        this.addPeriodSelectItem = [
+            { value: EAddPeriodSelect.period, text: this._('w_period')},
+            { value: EAddPeriodSelect.designation, text: this._('w_Designation') },
+        ];
+
+        this.designationPeriodSelectItem = {
+            today: this._('w_Today'),
+            yesterday: this._('w_Yesterday'),
+            last7days: this._('w_last7days'),
+            thisWeek: this._('w_thisWeek'),
+            lastWeek: this._('w_lastWeek'),
+            thisMonth: this._('w_thisMonth'),
+            lastMonth: this._('w_lastMonth'),
+            q1: this._('w_q1'),
+            q2: this._('w_q2'),
+            q3: this._('w_q3'),
+            q4: this._('w_q4'),
+            thisYear: this._('w_thisYear'),
+        };
+
+    }
+
     siteFilterPermission() {
-        let tempSitesSelectItem = { all: this._("w_All") };
+        let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
             tempSitesSelectItem[detail.objectId] = detail.name;
             this.inputFormData.allSiteIds.push(detail.objectId);
@@ -323,16 +355,6 @@ export class FilterCondition extends Vue {
 
         this.selecteds = [];
 
-        for (const singleSiteIds of this.inputFormData.siteIds) {
-            if (
-                singleSiteIds === "all" ||
-                (singleSiteIds === "all" &&
-                    this.inputFormData.siteIds.length > 1)
-            ) {
-                this.inputFormData.siteIds = this.inputFormData.allSiteIds;
-            }
-        }
-
         for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {
@@ -375,6 +397,20 @@ export class FilterCondition extends Vue {
         }
     }
 
+    changeAllSitesSelect(selected: string) {
+        this.inputFormData.siteIds = [];
+        this.selecteds = [];
+        this.selectAllSites = selected;
+        if (this.selectAllSites === EIfAllSelected.all) {
+            this.inputFormData.siteIds = [];
+            this.selecteds = [];
+            this.inputFormData.siteIds = this.inputFormData.allSiteIds;
+        } else {
+            this.inputFormData.siteIds = [];
+            this.selecteds = [];
+        }
+    }
+
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
         this.inputFormData.designationPeriod = "today";
@@ -398,19 +434,15 @@ export class FilterCondition extends Vue {
 
         if (this.inputFormData.siteIds.length === 0) return false;
 
-        for (const singleSiteIds of this.inputFormData.siteIds) {
-            if (
-                singleSiteIds === "all" ||
-                (singleSiteIds === "all" &&
-                    this.inputFormData.siteIds.length > 1)
-            ) {
+            if (this.selectAllSites === 'all') {
                 this.inputFormData.siteIds = this.inputFormData.allSiteIds;
             }
-        }
+
         doSubmitParam.siteIds = this.inputFormData.siteIds;
 
+
         // 選擇 period
-        if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
+        if (this.selectPeriodAddWay === 'period') {
             if (
                 Datetime.CheckDate(
                     Datetime.DateTime2String(this.inputFormData.startDate, 'YYYY-MM-DD'),
@@ -439,7 +471,7 @@ export class FilterCondition extends Vue {
             }
 
             // 選擇 designation
-        } else if (this.selectPeriodAddWay === EAddPeriodSelect.designation) {
+        } else if (this.selectPeriodAddWay === 'designation') {
             switch (this.inputFormData.designationPeriod) {
                 case "today":
                     doSubmitParam.startDate = Datetime.CountDateNumber(0);
@@ -549,6 +581,7 @@ export class FilterCondition extends Vue {
             }
         }
 
+        // console.log(' - ', doSubmitParam); return false;
 
         await this.$server
             .C("/report/people-counting/summary", doSubmitParam)
@@ -583,14 +616,31 @@ export class FilterCondition extends Vue {
             interface {
 
                 /**
+                 * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
+                 * @uiColumnGroup - site
+                 */
+                 ifAllSites?: any;
+
+
+                /**
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
+                 * @uiHidden - ${
+                        this.selectAllSites === EIfAllSelected.all
+                            ? "true"
+                            : "false"
+                        }
                  */
                 siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
 
                 /**
                  * @uiColumnGroup - site
+                 * @uiHidden - ${
+                        this.selectAllSites === EIfAllSelected.all
+                            ? "true"
+                            : "false"
+                        }
                  */
                  selectTree?: any;
 
@@ -608,7 +658,7 @@ export class FilterCondition extends Vue {
                 * @uiColumnGroup - date
                 * @uiType - iv-form-date
                 * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation
+                    this.selectPeriodAddWay ===  EAddPeriodSelect.designation
                         ? "true"
                         : "false"
                 }
@@ -668,6 +718,7 @@ Vue.component("filter_condition", FilterCondition);
 <style lang="scss" scoped>
 .select_report_period_button {
     margin-top: 27px;
+    margin-bottom: 16px;
 }
 
 .select_date_button {
