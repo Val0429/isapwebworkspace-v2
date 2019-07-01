@@ -45,7 +45,7 @@ export class PeakTimeRange extends Vue {
     @Prop({
         type: Array,
         default: function() {
-            return {};
+            return [];
         }
     })
     siteItem: [];
@@ -61,11 +61,12 @@ export class PeakTimeRange extends Vue {
     })
     timeRangeData: IPeckTimeRange;
 
-    site = "dfgsadg";
+    site = "iVTCTzctbF";
 
     created() {}
 
-    mounted() {}
+    mounted() {
+    }
 
     showWeek(data) {
         switch (data) {

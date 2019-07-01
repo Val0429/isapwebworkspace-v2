@@ -21,6 +21,10 @@
                 >
                 </analysis_filter_in_out>
 
+                <!-- Ben -->
+                <anlysis-dashboard :anlysisData="dData">
+                </anlysis-dashboard>
+
                 <!-- Morris -->
                 <highcharts-traffic
                     :startDate="startDate"
@@ -57,6 +61,14 @@ import {
     IDayRange,
     IChartTrafficData
 } from "@/components/Reports";
+// Ben
+import {
+    ReportTableData,
+    IPeckTimeRange,
+    ReportDashboard,
+    EPageType,
+    ESign
+} from "@/components/Reports";
 
 enum EPageStep {
     none = "none"
@@ -91,6 +103,9 @@ export default class ReportTraffic extends Vue {
     userData: any = [];
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
+
+    //Dashboard 相關
+    dData = new ReportDashboard();
 
     created() {
         this.initChartDeveloper();
