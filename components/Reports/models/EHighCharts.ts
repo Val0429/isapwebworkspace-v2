@@ -6,6 +6,12 @@ enum EChartMode {
     dayXSiteX = 'dayXSiteX',
 }
 
+enum EAreaMode {
+    none = 'none',
+    all = 'all',
+    single = 'single',
+}
+
 enum ETimeMode {
     none = 'none',
     hour = 'hour',
@@ -23,4 +29,4 @@ enum EWeather {
     rain = 'rain',
 }
 
-export { ETimeMode, EChartMode, EWeather };
+export { ETimeMode, EChartMode, EAreaMode, EWeather };

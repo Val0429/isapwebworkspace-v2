@@ -26,6 +26,7 @@
                     :startDate="startDate"
                     :endDate="endDate"
                     :timeMode="timeMode"
+                    :areaMode="areaMode"
                     :sites="sites"
                     :value="value"
                 >
@@ -50,6 +51,7 @@ import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import FilterCondition from "@/components/Reports/FilterCondition.vue";
 import {
     ETimeMode,
+    EAreaMode,
     EWeather,
     ISite,
     IDayRange,
@@ -70,7 +72,8 @@ export default class ReportTraffic extends Vue {
     pageStep: EPageStep = EPageStep.none;
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
-    timeMode: ETimeMode = ETimeMode.week;
+    timeMode: ETimeMode = ETimeMode.none;
+    areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     value: IChartTrafficData[] = [];
 
@@ -97,15 +100,17 @@ export default class ReportTraffic extends Vue {
 
     // Morris //
     initChartDeveloper() {
+        this.timeMode = ETimeMode.week;
+
         // single day
-        this.startDate = new Date("2019-06-26T08:00:00.000Z");
-        this.endDate = new Date("2019-06-26T14:00:00.000Z");
+        this.startDate = new Date("2019-07-01T08:00:00.000Z");
+        this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
         // multipe day
-        this.startDate = new Date("2019-06-01T08:00:00.000Z");
-        this.endDate = new Date("2019-06-10T14:00:00.000Z");
+        this.startDate = new Date("2015-01-20T08:00:00.000Z");
+        this.endDate = new Date("2019-10-10T14:00:00.000Z");
 
-        let siteLength = 5;
+        let siteLength = 1;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
