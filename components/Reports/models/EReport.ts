@@ -9,7 +9,7 @@ enum EDeviceMode {
 }
 
 // report site
-enum EIfAllSites {
+enum EIfAllSelected {
     all = 'all',
     select = 'select'
 }
@@ -66,4 +66,4 @@ enum EPageType {
 }
 
 export { ESign, EPageType };
-export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSites };
+export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected };
