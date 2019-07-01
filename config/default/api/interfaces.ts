@@ -58,10 +58,13 @@ export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap, 
 
 // User
 interface IUser {
-    role?: string; // RoleList.Admin | RoleList.User;
+    apiroles?: string[];
+    roles?: string[];     // RoleList.Admin | RoleList.User;
     name?: string;
-    email?: string;
+    email?: string;    
+    publicEmailAddress?: string;
     phone?: string;
+    data?: {};    
     siteIds?: any;
     groupIds?: IObjectIdAndName[];
 }

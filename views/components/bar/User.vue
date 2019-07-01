@@ -29,26 +29,26 @@
                 ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ path: '/user/user' }"
+                :server="{ path: '/users' }"
                 @selected="selectedItem($event)"
             >
-                <template #email="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
+                <template #roles="{$attrs}">
+                    {{ $attrs.value.map(v => v.name).join(", ") }}
+                </template>
+
+                <!-- <template #email="{$attrs}">
                     {{ show30Words($attrs.value) }}
                 </template>
 
                 <template #sites="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
                     {{ showFirst($attrs.value) }}
                 </template>
 
                 <template #groups="{$attrs}">
-                    <!--                {{ $attrs.value.map(item => item.name).join(', ')}}-->
                     {{ showFirst($attrs.value) }}
-                </template>
+                </template> -->
 
                 <template #Actions="{$attrs, $listeners}">
-
                     <iv-toolbox-more
                         size="sm"
                         :disabled="isSelected.length !== 1"
@@ -69,35 +69,28 @@
             :label="_('w_User_AddUser')"
         >
             <template #toolbox>
-
                 <iv-toolbox-back @click="pageToList()" />
-
             </template>
 
             <iv-form
                 :interface="IAddForm()"
                 :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAdd($event)"
+                 @submit="saveAdd($event)"
             >
                 <template #test="{ $attrs, $listeners }">
-
                     <div class="mt-2 ml-3 mb-3">
                         <b-button @click="pageToEmailTest($event)">{{ _('w_User_TestEmail') }}
                         </b-button>
                     </div>
-
                 </template>
 
-                <template #selectTree="{ $attrs, $listeners }">
-
+                <!-- <template #selectTree="{ $attrs, $listeners }">
                     <div class="mt-2 ml-3">
                         <b-button @click="pageToChooseTree">
                             {{ _('w_SelectSiteTree') }}
                         </b-button>
                     </div>
-                </template>
-
+                </template> -->
             </iv-form>
 
             <template #footer-before>
@@ -315,17 +308,18 @@ export default class User extends Vue {
     inputFormData: inputFormData = {
         objectId: "",
         username: "",
-        role: "",
-        name: "",
+        roles: [],
+        // name: "",
         email: "",
+        publicEmailAddress: "",
         phone: "",
         password: "",
-        employeeId: "",
-        siteIdsText: "",
-        groupIdsText: "",
+        // employeeId: "",
+        // siteIdsText: "",
+        // groupIdsText: "",
         type: "add",
-        siteIds: [],
-        groupIds: []
+        // siteIds: [],
+        // groupIds: []
     };
 
     created() {}
@@ -336,17 +330,18 @@ export default class User extends Vue {
         this.inputFormData = {
             objectId: "",
             username: "",
-            role: "User",
-            name: "",
+            roles: ["User"],
+            // name: "",
             email: "",
+            publicEmailAddress: "",
             phone: "",
             password: "",
-            employeeId: "",
-            siteIdsText: "",
-            groupIdsText: "",
+            // employeeId: "",
+            // siteIdsText: null,
+            // groupIdsText: null,
             type: "",
-            siteIds: [],
-            groupIds: []
+            // siteIds: [],
+            // groupIds: []
         };
     }
 
@@ -364,70 +359,70 @@ export default class User extends Vue {
             type: "all"
         };
 
-        await this.$server
-            .R("/location/site/all" as any, readAllSiteParam)
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
-                        this.sitesSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            returnValue
-                        );
-                    }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        // await this.$server
+        //     .R("/location/site/all" as any, readAllSiteParam)
+        //     .then((response: any) => {
+        //         if (response != undefined) {
+        //             for (const returnValue of response) {
+        //                 // 自定義 sitesSelectItem 的 key 的方式
+        //                 this.sitesSelectItem[returnValue.objectId] =
+        //                     returnValue.name;
+        //                 this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+        //                     returnValue
+        //                 );
+        //             }
+        //         }
+        //     })
+        //     .catch((e: any) => {
+        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //             return ResponseFilter.base(this, e);
+        //         }
+        //         console.log(e);
+        //         return false;
+        //     });
     }
 
     async initSelectItemTree() {
-        await this.$server
-            .R("/location/tree" as any)
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        // await this.$server
+        //     .R("/location/tree" as any)
+        //     .then((response: any) => {
+        //         if (response != undefined) {
+        //             this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+        //                 response
+        //             );
+        //             this.regionTreeItem.region = this.regionTreeItem.tree;
+        //         }
+        //     })
+        //     .catch((e: any) => {
+        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //             return ResponseFilter.base(this, e);
+        //         }
+        //         console.log(e);
+        //         return false;
+        //     });
     }
 
     async initSelectItemUserGroup() {
         this.userGroupSelectItem = {};
 
-        await this.$server
-            .R("/user/group/all" as any)
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 userGroupSelectItem 的 key 的方式
-                        this.userGroupSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        // await this.$server
+        //     .R("/user/group/all" as any)
+        //     .then((response: any) => {
+        //         if (response != undefined) {
+        //             for (const returnValue of response) {
+        //                 // 自定義 userGroupSelectItem 的 key 的方式
+        //                 this.userGroupSelectItem[returnValue.objectId] =
+        //                     returnValue.name;
+        //             }
+        //         }
+        //     })
+        //     .catch((e: any) => {
+        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //             return ResponseFilter.base(this, e);
+        //         }
+        //         console.log(e);
+        //         return false;
+        //     });
     }
 
     selectedItem(data) {
@@ -441,16 +436,17 @@ export default class User extends Vue {
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
-                employeeId: param.employeeId,
+                // employeeId: param.employeeId,
                 username: param.username,
-                role: param.role,
-                name: param.name,
+                roles: param.roles,
+                // name: param.name,
                 email: param.email,
-                phone: param.phone,
-                siteIdsText: this.idsToText(param.sites),
-                groupIdsText: this.idsToText(param.groups),
-                siteIds: param.sites,
-                groupIds: param.groups,
+                publicEmailAddress: param.publicEmailAddress,
+                // phone: param.phone,
+                // siteIdsText: this.idsToText(param.sites),
+                // groupIdsText: this.idsToText(param.groups),
+                // siteIds: param.sites,
+                // groupIds: param.groups,
                 type: ""
             };
         }
@@ -467,26 +463,29 @@ export default class User extends Vue {
             case "confirmPassword":
                 this.inputFormData.confirmPassword = data.value;
                 break;
-            case "employeeId":
-                this.inputFormData.employeeId = data.value;
-                break;
-            case "name":
-                this.inputFormData.name = data.value;
-                break;
             case "email":
                 this.inputFormData.email = data.value;
+                break;
+            // case "employeeId":
+            //     this.inputFormData.employeeId = data.value;
+            //     break;
+            // case "name":
+            //     this.inputFormData.name = data.value;
+            //     break;
+            case "publicEmailAddress":
+                this.inputFormData.publicEmailAddress = data.value;
                 break;
             case "phone":
                 this.inputFormData.phone = data.value;
                 break;
-            case "siteIds":
-                this.inputFormData.siteIds = data.value;
-                break;
-            case "groupIds":
-                this.inputFormData.groupIds = data.value;
-                break;
-            case "role":
-                this.inputFormData.role = data.value;
+            // case "siteIds":
+            //     this.inputFormData.siteIds = data.value;
+            //     break;
+            // case "groupIds":
+            //     this.inputFormData.groupIds = data.value;
+            //     break;
+            case "roles":
+                this.inputFormData.roles = data.value;
                 break;
         }
 
@@ -518,22 +517,22 @@ export default class User extends Vue {
     async pageToEdit(type: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
-        await this.initSelectItemSite();
-        await this.initSelectItemUserGroup();
-        this.selecteds = [];
+        // await this.initSelectItemSite();
+        // await this.initSelectItemUserGroup();
+        // this.selecteds = [];
 
-        this.inputFormData.type = type;
+        // this.inputFormData.type = type;
 
-        this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.siteIds.map(item => item.objectId)
-            )
-        );
-        this.inputFormData.groupIds = JSON.parse(
-            JSON.stringify(
-                this.inputFormData.groupIds.map(item => item.objectId)
-            )
-        );
+        // this.inputFormData.siteIds = JSON.parse(
+        //     JSON.stringify(
+        //         this.inputFormData.siteIds.map(item => item.objectId)
+        //     )
+        // );
+        // this.inputFormData.groupIds = JSON.parse(
+        //     JSON.stringify(
+        //         this.inputFormData.groupIds.map(item => item.objectId)
+        //     )
+        // );
     }
 
     pageToView() {
@@ -626,14 +625,16 @@ export default class User extends Vue {
         const datas: IUserAddData[] = [
             {
                 username: data.username,
-                role: data.role,
-                name: data.name,
+                roles: [data.roles],
+                // name: data.name,
                 email: data.email,
+                publicEmailAddress: data.publicEmailAddress,
                 phone: data.phone,
                 password: data.password,
-                employeeId: data.employeeId,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : []
+                data: {}
+                // employeeId: data.employeeId,
+                // siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                // groupIds: data.groupIds !== undefined ? data.groupIds : []
             }
         ];
 
@@ -642,18 +643,10 @@ export default class User extends Vue {
         };
 
         await this.$server
-            .C("/user/user" as any, addParam)
+            .C("/users" as any, datas[0])
             .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_AddUserSuccess"));
-                        this.pageToList();
-                    }
-                    if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_AddUserFailed"));
-                        return false;
-                    }
-                }
+                Dialog.success(this._("w_User_AddUserSuccess"));
+                this.pageToList();
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
@@ -671,12 +664,14 @@ export default class User extends Vue {
     async saveEdit(data) {
         const datas: IUserEditData[] = [
             {
-                role: data.role,
-                name: data.name,
+                roles: [data.roles],
+                // name: data.name,
                 email: data.email,
+                publicEmailAddress: data.publicEmailAddress,
                 phone: data.phone,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                data: {},
+                // siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                // groupIds: data.groupIds !== undefined ? data.groupIds : [],
                 objectId: data.objectId
             }
         ];
@@ -686,18 +681,10 @@ export default class User extends Vue {
         };
 
         await this.$server
-            .U("/user/user" as any, editParam)
+            .U("/users" as any, datas[0])
             .then((response: any) => {
-                for (const returnValue of response) {
-                    if (returnValue.statusCode === 200) {
-                        Dialog.success(this._("w_User_EditUserSuccess"));
-                        this.pageToList();
-                    }
-                    if (returnValue.statusCode === 500) {
-                        Dialog.error(this._("w_User_EditUserFailed"));
-                        return false;
-                    }
-                }
+                Dialog.success(this._("w_User_EditUserSuccess"));
+                this.pageToList();
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
@@ -725,17 +712,9 @@ export default class User extends Vue {
                     };
 
                     this.$server
-                        .D("/user/user" as any, deleteParam)
+                        .D("/users" as any, { objectId: param.objectId})
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
-                                    this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                            this.pageToList();
                         })
                         .catch((e: any) => {
                             if (
@@ -819,41 +798,15 @@ export default class User extends Vue {
                  */
                 username: string;
 
-
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 */
-                name: string;
-
-
                 /**
                  * @uiLabel - ${this._("w_User_Role")}
                  */
-                role: string;
-
+                roles: any;
 
                 /**
                  * @uiLabel - ${this._("w_Email")}
                  */
-                email: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_Group")}
-                 */
-                groups: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_ManagedSites")}
-                 */
-                sites: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_AppInstalled")}
-                 */
-                isAppBinding: string;
+                emailaddress: string;
 
                 Actions?: any;
 
@@ -892,60 +845,23 @@ export default class User extends Vue {
                 confirmPassword: string;
 
 
-                /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiPlaceHolder - ${this._("w_User_ID")}
-                 */
-                employeeId: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Email")}
                  * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
                  */
-                email: string;
+                emailaddress: string;
 
                 test?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                 */
-                 phone?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_User_Role")}
                  */
-                role: ${toEnumInterface({
+                roles: ${toEnumInterface({
                     Admin: this._("w_User_UserGroup_Admin"),
                     User: this._("w_User_UserGroup_User")
                 })};
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                selectTree?: any;
-
             }
         `;
     }
@@ -963,60 +879,21 @@ export default class User extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_User_FullName")}
-                 * @uiPlaceHolder - ${this._("w_User_FullName")}
-                 */
-                name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiPlaceHolder - ${this._("w_User_ID")}
-                 * @uiType - iv-form-label
-                 */
-                employeeId: string;
-
-
-                /**
                  * @uiLabel - ${this._("w_Email")}
                  * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
                  */
-                email: string;
+                emailaddress: string;
 
                 test?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiPlaceHolder - ${this._("w_Phone_Placeholder")}
-                 */
-                 phone?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_User_Role")}
                  */
-                role: ${toEnumInterface({
+                roles: ${toEnumInterface({
                     Admin: this._("w_User_UserGroup_Admin"),
                     User: this._("w_User_UserGroup_User")
                 })};
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                selectTree?: any;
-
             }
         `;
     }
@@ -1031,55 +908,17 @@ export default class User extends Vue {
                  */
                 username?: string;
 
-
-                /**
-                 * @uiLabel - ${this._("w_Name")}
-                 * @uiType - iv-form-label
-                 */
-                name?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_ID")}
-                 * @uiType - iv-form-label
-                 */
-                employeeId?: string;
-
-
                 /**
                  * @uiLabel - ${this._("w_Email")}
                  * @uiType - iv-form-label
                  */
-                email?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Phone")}
-                 * @uiType - iv-form-label
-                 */
-                phone?: string;
-
+                emailaddress?: string;
 
                 /**
                  * @uiLabel - ${this._("w_User_Role")}
                  * @uiType - iv-form-label
                  */
-                role?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_User_UserGroup")}
-                 * @uiType - iv-form-label
-                 */
-                groupIdsText?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiType - iv-form-label
-                 */
-                siteIdsText: string;
-
+                roles?: string;
             }
         `;
     }

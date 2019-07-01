@@ -6,6 +6,7 @@ import { ModalResponse } from '@/../components/modal';
 @RegisterLoginRouter({
     name: "_('wb_Login')",
     path: "/login",
+    // permission: "/user/user/login",
     disableContainer: true
 })
 @Component
