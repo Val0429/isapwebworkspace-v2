@@ -145,11 +145,10 @@ import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 import {
     EAddPeriodSelect,
     ECountType,
-    EDesignationPeriod, EIfAllSites
+    EDesignationPeriod, EIfAllSelected
 } from "@/components/Reports/models/EReport";
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
-import DateCount from "@/components/Reports/models/dateCount";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog/Dialog";
 
@@ -169,7 +168,7 @@ export class FilterCondition extends Vue {
     pageStep: EPageStep = EPageStep.none;
 
     // site 相關
-    selectAllSites: string = EIfAllSites.select;
+    selectAllSites: string = EIfAllSelected.select;
     ifAllSitesSelectItem: any = [];
 
     // select 相關
@@ -222,8 +221,8 @@ export class FilterCondition extends Vue {
 
     initSelectItem() {
         this.ifAllSitesSelectItem = [
-            { value: EIfAllSites.all, text: this._('w_AllSites')},
-            { value: EIfAllSites.select, text: this._('w_SelectSites') },
+            { value: EIfAllSelected.all, text: this._('w_AllSites')},
+            { value: EIfAllSelected.select, text: this._('w_SelectSites') },
         ];
 
         this.addPeriodSelectItem = [
@@ -402,16 +401,14 @@ export class FilterCondition extends Vue {
         this.inputFormData.siteIds = [];
         this.selecteds = [];
         this.selectAllSites = selected;
-        if (this.selectAllSites === EIfAllSites.all) {
+        if (this.selectAllSites === EIfAllSelected.all) {
             this.inputFormData.siteIds = [];
             this.selecteds = [];
             this.inputFormData.siteIds = this.inputFormData.allSiteIds;
         } else {
             this.inputFormData.siteIds = [];
             this.selecteds = [];
-
         }
-
     }
 
     changeAddPeriodSelect(selected: string) {
@@ -629,7 +626,7 @@ export class FilterCondition extends Vue {
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
                  * @uiHidden - ${
-                        this.selectAllSites === EIfAllSites.all
+                        this.selectAllSites === EIfAllSelected.all
                             ? "true"
                             : "false"
                         }
@@ -640,7 +637,7 @@ export class FilterCondition extends Vue {
                 /**
                  * @uiColumnGroup - site
                  * @uiHidden - ${
-                        this.selectAllSites === EIfAllSites.all
+                        this.selectAllSites === EIfAllSelected.all
                             ? "true"
                             : "false"
                         }
