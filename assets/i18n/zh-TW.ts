@@ -132,7 +132,22 @@ export default class LangObject implements ILang {
     w_Location = 'Location';
     w_Areas = 'Area(s)';
     w_Devices = 'Device(s)';
-    w_All = 'All';
+    w_SelectSites = 'Select Site(s)';
+    w_AllSites = 'All Sites';
+    w_period = 'Period';
+    w_Designation = 'Designation';
+    w_Today = 'Today';
+    w_Yesterday = 'Yesterday';
+    w_last7days = 'Last 7 days';
+    w_thisWeek = 'This Week';
+    w_lastWeek = 'Last Week';
+    w_thisMonth = 'This Month';
+    w_lastMonth = 'Last Month';
+    w_q1 = 'Q1';
+    w_q2 = 'Q2';
+    w_q3 = 'Q3';
+    w_q4 = 'Q4';
+    w_thisYear = 'This Year';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';

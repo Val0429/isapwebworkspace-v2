@@ -39,6 +39,7 @@
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
+                    v-if="countType !== 'hour'"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.type"
@@ -94,6 +95,12 @@ export class AnalysisFilterInOutTraffic extends Vue {
         default: ""
     })
     firstSiteId: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: ""
+    })
+    countType: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
