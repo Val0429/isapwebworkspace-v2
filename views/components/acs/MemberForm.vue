@@ -13,6 +13,8 @@
                     :disabled="isSelected.length !== 1"
                     @click="pageToEdit()"
                 />
+
+
                 <iv-toolbox-delete
                     :disabled="isSelected.length === 0"
                     @click="doDelete"
