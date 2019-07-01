@@ -44,6 +44,7 @@
                 >
                 </peak-time-range>
 
+                <!-- Ben -->
                 <report-table :reportTableData="rData">
                 </report-table>
 

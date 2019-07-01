@@ -221,9 +221,50 @@ export default class DemoReportComponent extends Vue {
                             level: 0
                         }
                     ]
+                },
+                {
+                    site: {
+                        objectId: "pfLGgj8Hf5",
+                        name: "台中店"
+                    },
+                    date: "2019-06-26T16:00:00.000Z",
+                    peakHourDatas: [
+                        {
+                            date: "2019-06-25T01:00:00.000Z",
+                            level: 2
+                        },
+                        {
+                            date: "2019-06-25T02:00:00.000Z",
+                            level: 2
+                        },
+                        {
+                            date: "2019-06-25T03:00:00.000Z",
+                            level: 3
+                        },
+                        {
+                            date: "2019-06-25T04:00:00.000Z",
+                            level: 4
+                        },
+                        {
+                            date: "2019-06-25T05:00:00.000Z",
+                            level: 5
+                        },
+                        {
+                            date: "2019-06-25T06:00:00.000Z",
+                            level: 3
+                        },
+                        {
+                            date: "2019-06-25T07:00:00.000Z",
+                            level: 2
+                        },
+                        {
+                            date: "2019-06-25T08:00:00.000Z",
+                            level: 1
+                        }
+                    ]
                 }
             ];
-        }, 3000);
+        }, 2000);
     }
 
     initAnlyDashboardData() {
