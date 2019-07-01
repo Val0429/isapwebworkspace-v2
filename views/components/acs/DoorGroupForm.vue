@@ -7,9 +7,6 @@
         <template #view.site="{$attrs, $listeners}">
             {{$attrs.row.area && $attrs.row.area.site ? $attrs.row.area.site.name : ''}}
         </template>
-        <template #view.elevators="{$attrs, $listeners}">
-            {{ !$attrs.value || $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId, options)).join(', ') }}
-        </template>
         <template #view.readerscount="{$attrs, $listeners}">
             {{ getReadersCount($attrs.row.doors)}}
         </template>  

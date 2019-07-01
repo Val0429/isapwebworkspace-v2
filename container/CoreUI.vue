@@ -24,7 +24,6 @@
                 <SidebarNavItem url="/region" />
                 <SidebarNavItem url="/member" />
                 <SidebarNavItem url="/user" />
-                <SidebarNavItem url="/user_group" />
                 <SidebarNavItem url="/door" />
                 <SidebarNavItem url="/doorgroup" />
                 <SidebarNavItem url="/elevator" />

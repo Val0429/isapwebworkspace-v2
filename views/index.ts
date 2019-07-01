@@ -36,7 +36,6 @@ import VisitorCardReport from './components/acs/reports/VisitorCardReport.vue';
 
 import User from './components/bar/User.vue';
 import Site from './components/bar/Site.vue';
-import UserGroup from './components/bar/UserGroup.vue';
 import Region from './components/bar/Region.vue';
 
 // Demos
@@ -62,7 +61,6 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     
 // Users
 $({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);
-$({ path: '/user_group', name: "_('w_Navigation_Users_UserGroup')", icon: 'fa-user' })(UserGroup);
 
 // Sites
 $({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
