@@ -67,7 +67,7 @@
         <iv-auto-card
             v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view"
             :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_Member_Add') : pageStep === ePageStep.edit ? _('w_Member_Edit') :  _('w_Member_View')"
+            :label="showLabel()"
         >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
@@ -81,9 +81,15 @@
                 @submit="saveAddOrEdit($event)"
             >
 
-                <template #info="{ $attr }">
+                <template #infoCard="{ $attr }">
                     <h4 class="ml-3 mt-4 font-weight-bold">
                         {{ _('w_Member_Info') }}
+                    </h4>
+                </template>
+
+                <template #info="{ $attr }">
+                    <h4 class="ml-3 mt-4 font-weight-bold">
+                        {{ _('w_Member_CardInfo') }}
                     </h4>
                 </template>
 
@@ -324,6 +330,7 @@ export default class MemberForm extends Vue {
     // lastEditPerson               CustomFields -> CustomTextBoxControl3__CF
     // lastEditTime                 CustomFields -> CustomDateControl2__CF
     // deviceNumber                 * Credentials[0]FacilityCode
+    // pin                          * Pin
 
     // // tab1
     // extensionNumber              PhoneNumber
@@ -437,6 +444,7 @@ export default class MemberForm extends Vue {
         lastEditTime: "",
         cardCertificate: "",
         deviceNumber: "",
+        pin: "",
 
         // tab1
         extensionNumber: "",
@@ -524,6 +532,7 @@ export default class MemberForm extends Vue {
             lastEditTime: "",
             cardCertificate: "",
             deviceNumber: "",
+            pin: "",
 
             // tab1
             extensionNumber: "",
@@ -595,6 +604,7 @@ export default class MemberForm extends Vue {
         this.initSelectItemWorkGroup();
         this.initSelectItemCardCertificate();
         this.initSelectItemCardType();
+        console.log('this.cardTypeItem  - ', this.cardTypeItem );
     }
 
     async initSelectItemWorkGroup() {
@@ -758,6 +768,11 @@ export default class MemberForm extends Vue {
             ) {
                 this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode.toString();
             }
+
+            if (detailData.Pin != undefined) {
+                this.inputFormData.pin = detailData.Pin.toString();
+            }
+
 
             if (
                 detailData.StartDate != undefined &&
@@ -1254,6 +1269,9 @@ export default class MemberForm extends Vue {
             case "lastEditTime":
                 this.inputFormData.lastEditTime = data.value;
                 break;
+                case "pin":
+                this.inputFormData.pin = data.value;
+                break;
 
             // tab1
             case "extensionNumber":
@@ -1482,7 +1500,7 @@ export default class MemberForm extends Vue {
 
     async pageToEdit() {
         this.getInputData();
-        this.pageStep = EPageStep.add;
+        this.pageStep = EPageStep.edit;
     }
 
     pageToView() {
@@ -1862,6 +1880,7 @@ export default class MemberForm extends Vue {
             editParam.FirstName = this.inputFormData.englishName;
             editParam.StartDate = this.inputFormData.startDate;
             editParam.EndDate = this.inputFormData.endDate;
+            editParam.Pin = this.inputFormData.pin;
 
             // tab1
             editParam.extensionNumber = this.inputFormData.PhoneNumber;
@@ -1905,6 +1924,7 @@ export default class MemberForm extends Vue {
                 FirstName: this.inputFormData.englishName,
                 StartDate: this.inputFormData.startDate,
                 EndDate: this.inputFormData.endDate,
+                Pin: this.inputFormData.pin,
 
                 // tab1
                 extensionNumber: this.inputFormData.PhoneNumber,
@@ -1974,6 +1994,17 @@ export default class MemberForm extends Vue {
 
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+    }
+
+    showLabel() {
+        switch (this.pageStep) {
+            case EPageStep.add:
+                return this._('w_Member_Add');
+            case EPageStep.edit:
+                return this._('w_Member_Edit');
+            case EPageStep.view:
+                return this._('w_Member_View');
+        }
     }
 
     // CardNumber: CustomTextBoxControl1__CF
@@ -2143,20 +2174,8 @@ export default class MemberForm extends Vue {
                 englishName?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardNumber")}
-                 * @uiColumnGroup - row2
-                 * @uiType - ${
-                     this.pageStep === EPageStep.add ||
-                     this.pageStep === EPageStep.edit
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
-                 */
-                cardNumber?: string;
-
-                /**
                  * @uiLabel - ${this._("w_Member_CardType")}
-                 * @uiColumnGroup - row3
+                 * @uiColumnGroup - row2
                  * @uiDisabled - ${
                         this.pageStep === EPageStep.add ||
                         this.pageStep === EPageStep.edit
@@ -2164,10 +2183,25 @@ export default class MemberForm extends Vue {
                             : "true"
                         }
                  */
-                cardType??: ${toEnumInterface(
+                cardType?: ${toEnumInterface(
                     this.cardTypeItem as any,
                     false
                 )};
+
+
+
+               /**
+                * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
+                * @uiColumnGroup - row3
+                * @uiType - iv-form-file
+                * @uiHidden - ${
+                        this.pageStep === EPageStep.add ||
+                        this.pageStep === EPageStep.edit
+                            ? "false"
+                            : "true"
+                        }
+                */
+                personPhoto?: string;
 
 
                 /**
@@ -2185,9 +2219,41 @@ export default class MemberForm extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardVoucherType")}
                  * @uiColumnGroup - row3
-                 * @uiType - iv-form-label
+                 * @uiHidden - true
+                 */
+                row3?: string;
+
+
+               /**
+                * @uiColumnGroup - row13
+                */
+                imageSrc?:any;
+
+
+
+                ////////////////////////////////////////////////////////////////////////////////////
+
+
+                infoCard?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardNumber")}
+                 * @uiColumnGroup - row33
+                 * @uiType - ${
+                        this.pageStep === EPageStep.add ||
+                        this.pageStep === EPageStep.edit
+                            ? "iv-form-string"
+                            : "iv-form-label"
+                        }
+                 */
+                cardNumber?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Member_CardVoucherType")}
+                 * @uiColumnGroup - row33
                  * @uiDisabled - ${
                         this.pageStep === EPageStep.add ||
                         this.pageStep === EPageStep.edit
@@ -2201,24 +2267,9 @@ export default class MemberForm extends Vue {
                 )};
 
 
-
-               /**
-                * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
-                * @uiColumnGroup - row13
-                * @uiType - iv-form-file
-                * @uiHidden - ${
-                    this.pageStep === EPageStep.add ||
-                    this.pageStep === EPageStep.edit
-                        ? "false"
-                        : "true"
-                }
-                */
-                personPhoto?: string;
-
-
                 /**
                  * @uiLabel - ${this._("w_Member_deviceNumber")}
-                 * @uiColumnGroup - row13
+                 * @uiColumnGroup - row33
                  * @uiType - ${
                         this.pageStep === EPageStep.add ||
                         this.pageStep === EPageStep.edit
@@ -2229,10 +2280,37 @@ export default class MemberForm extends Vue {
                 deviceNumber?: string;
 
 
-               /**
-                * @uiColumnGroup - row13
-                */
-                imageSrc?:any;
+
+                /**
+                 * @uiLabel - ${this._("w_Member_pin")}
+                 * @uiColumnGroup - row173
+                 * @uiType - ${
+                        this.pageStep === EPageStep.add ||
+                        this.pageStep === EPageStep.edit
+                            ? "iv-form-string"
+                            : "iv-form-label"
+                        }
+                 */
+                pin?: string;
+
+
+
+                /**
+                 * @uiColumnGroup - row173
+                 * @uiHidden - true
+                 */
+                row173?: string;
+
+
+
+                /**
+                 * @uiColumnGroup - row173
+                 * @uiHidden - true
+                 */
+                row173?: string;
+
+
+                ////////////////////////////////////////////////////////////////////////////////////
 
 
                 info?: any;
