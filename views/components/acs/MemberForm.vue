@@ -8,10 +8,14 @@
                 <iv-toolbox-view
                     :disabled="isSelected.length !== 1"
                     @click="pageToView"
+
                 />
                 <iv-toolbox-edit
+
                     :disabled="isSelected.length !== 1"
+
                     @click="pageToEdit()"
+                    
                 />
                 <iv-toolbox-delete
                     :disabled="isSelected.length === 0"
@@ -772,8 +776,12 @@
                     this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode;
                 }
 
-                if (detailData.Pin != undefined) {
-                    this.inputFormData.pin = detailData.Pin.toString();
+                if (
+                    detailData.Credentials != undefined &&
+                    detailData.Credentials[0] != undefined &&
+                    detailData.Credentials[0].Pin != undefined
+                ) {
+                    this.inputFormData.pin = detailData.Credentials[0].Pin;
                 }
 
                 if (
@@ -1557,6 +1565,7 @@
                     JSON.stringify(this.selectedDetail[0].Credentials)
                 );
                 tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
+                tempCredentials[0].Pin = this.inputFormData.pin;
                 tempCredentials[0].FacilityCode = parseInt(this.inputFormData.deviceNumber);
 
                 // console.log('switch 1  - s ', );
@@ -1626,6 +1635,7 @@
                 tempCredentials = [
                     {
                         CardNumber: this.inputFormData.cardNumber,
+                        Pin: this.inputFormData.pin,
                         FacilityCode: parseInt(this.inputFormData.deviceNumber),
                         ProfileId: !isNaN(
                             parseInt(this.inputFormData.cardCertificate)
@@ -1955,7 +1965,6 @@
                 editParam.EmployeeNumber = this.inputFormData.employeeNumber;
                 editParam.LastName = this.inputFormData.chineseName;
                 editParam.FirstName = this.inputFormData.englishName;
-                editParam.Pin = this.inputFormData.pin;
                 editParam.StartDate = this.inputFormData.startDate === null ? '' : this.inputFormData.startDate;
                 editParam.EndDate = this.inputFormData.endDate === null ? '' : this.inputFormData.endDate;
 
@@ -1995,7 +2004,6 @@
                     EmployeeNumber: this.inputFormData.employeeNumber,
                     LastName: this.inputFormData.chineseName,
                     FirstName: this.inputFormData.englishName,
-                    Pin: this.inputFormData.pin,
                     StartDate: this.inputFormData.startDate === null ? '' : this.inputFormData.startDate,
                     EndDate: this.inputFormData.endDate === null ? '' : this.inputFormData.endDate,
                     // EndDate: this.inputFormData.EndDate,
