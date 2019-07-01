@@ -43,7 +43,7 @@ export class BasicReport extends Vue{
     selectedColumns: any[]=[];
     
     data: any[]=[];
-
+    showTable:boolean=false;
     isMounted:boolean=false;
     doMounted(){
         this.isMounted=true;        
@@ -87,8 +87,9 @@ export class BasicReport extends Vue{
             this.sortedFields.push(this.fields.find(x=>x.key==key));
         }    
     }
-    onSubmit($event:any){
-        this.$emit("input", $event);
+    onSubmit($event:any){        
+        this.showTable = true;
+        this.$emit("input", $event);        
     }
 }
 export default BasicReport

@@ -26,16 +26,18 @@
         <template v-if="isMounted" >            
             <div class="float-right">
                 <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
-                <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onSubmit()">{{ _("wb_Reset") }}</b-button>
-                <b-button class="btn-filter" size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
-                
+                <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onSubmit()">{{ _("wb_Reset") }}</b-button>                
             </div>
         </template>
         </iv-card>
         
         <iv-card            
-            :label="title">        
-        
+            :label="title"
+            v-if="showTable">
+        <div class="float-right">                
+                <b-button class="btn-filter" size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
+                
+            </div>
            <b-table striped hover 
                 :items="records" 
                 :fields="sortedFields" 
