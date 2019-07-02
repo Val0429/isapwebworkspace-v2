@@ -29,9 +29,9 @@
                 <highcharts-traffic
                     :startDate="startDate"
                     :endDate="endDate"
+                    :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
-                    :sites="sites"
                     :value="value"
                 >
                 </highcharts-traffic>
@@ -437,18 +437,18 @@ export default class ReportTraffic extends Vue {
 
     // Morris //
     initChartDeveloper() {
-        this.timeMode = ETimeMode.day;
-        this.areaMode = EAreaMode.all;
+        this.timeMode = ETimeMode.week;
+        this.areaMode = EAreaMode.single;
 
         // single day
         this.startDate = new Date("2019-07-01T08:00:00.000Z");
         this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
         // multipe day
-        this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        this.endDate = new Date("2019-08-10T14:00:00.000Z");
+        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        // this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
-        let siteLength = 3;
+        let siteLength = 1;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
@@ -495,7 +495,7 @@ export default class ReportTraffic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-07-${iString10}T12:00:00.000Z`);
+                let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
                 let trafficChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
@@ -503,8 +503,6 @@ export default class ReportTraffic extends Vue {
                     traffic: Math.floor(Math.random() * 500),
                     revenue: Math.floor(Math.random() * 1000),
                     transaction: Math.floor(Math.random() * 50),
-                    conversion: Math.floor(Math.random() * 100) / 100,
-                    asp: Math.floor(Math.random() * 500),
                     weather: weather
                 };
                 this.value.push(trafficChartData);

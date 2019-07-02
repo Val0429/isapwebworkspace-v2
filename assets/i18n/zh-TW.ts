@@ -153,7 +153,6 @@ export default class LangObject implements ILang {
     w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDevices = 'All Devices';
 
-
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
     w_Phone_Placeholder = 'ex : +xxxxxxxxxx';
@@ -781,6 +780,8 @@ export default class LangObject implements ILang {
     w_ReportTraffic_TrafficTemperature = 'Temperature';
     w_ReportTraffic_TrafficWeather = 'Weather';
     w_ReportTraffic_TrafficASP = 'ASP';
+    w_ReportTraffic_TrafficStartDate = 'Start Date';
+    w_ReportTraffic_TrafficEndDate = 'End Date';
 
     w_ReportTraffic_ErrorDateStart = 'Start date error';
     w_ReportTraffic_ErrorDateEnd = 'End date error';
