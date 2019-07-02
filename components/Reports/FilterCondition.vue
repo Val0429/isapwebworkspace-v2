@@ -147,6 +147,7 @@ import {
     ECountType,
     EDesignationPeriod, EIfAllSelected
 } from "@/components/Reports/models/EReport";
+import { IChartTrafficData } from "@/components/Reports";
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
@@ -164,6 +165,68 @@ enum EPageStep {
     components: {}
 })
 export class FilterCondition extends Vue {
+	// @Prop({
+	// 	type: Date, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return new Date();
+	// 	}
+	// })
+	// startDate: any;
+	//
+	// @Prop({
+	// 	type: Date, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return new Date();
+	// 	}
+	// })
+	// endDate: any;
+	//
+	// @Prop({
+	// 	type: Array, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return [];
+	// 	}
+	// })
+	// sites: any;
+	//
+	// @Prop({
+	// 	type: String, // Boolean, Number, String, Array, Object
+	// 	default: 'hour'
+	// })
+	// timeMode: any;
+	//
+	// @Prop({
+	// 	type: String, // Boolean, Number, String, Array, Object
+	// 	default: 'all'
+	// })
+	// areaMode: any;
+	//
+	// @Prop({
+	// 	type: Array, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return [];
+	// 	}
+	// })
+	// chartDatas: any;
+
+	@Prop({
+		type: Object, // Boolean, Number, String, Array, Object
+		default: {}
+	})
+	sitesSelectItem: object;
+
+	@Prop({
+		type: Object, // Boolean, Number, String, Array, Object
+		default: {}
+	})
+	tagSelectItem: object;
+
+	@Prop({
+		type: Object, // Boolean, Number, String, Array, Object
+		default: {}
+	})
+	regionTreeItem: object;
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
@@ -172,12 +235,9 @@ export class FilterCondition extends Vue {
     ifAllSitesSelectItem: any = [];
 
     // select 相關
-    sitesSelectItem: any = {};
-    tagSelectItem: any = {};
 
     // tree
     selectType = ERegionType.site;
-    regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
     // date 相關
@@ -201,7 +261,6 @@ export class FilterCondition extends Vue {
     // response 相關
     responseData: any = {};
 
-    isMounted: boolean = false;
 
     created() {
         // this.initSelectItemSite();
@@ -210,19 +269,16 @@ export class FilterCondition extends Vue {
     }
 
     mounted() {
-        this.initSelectItemTag();
-        this.initSelectItemTree();
-        this.initRegionTreeSelect();
-        this.siteFilterPermission();
-
-        this.isMounted = true;
-        console.log('FC - ', );
+        // this.initSelectItemTag();
+        // this.initSelectItemTree();
+        // this.initRegionTreeSelect();
+	    this.siteFilterPermission();
     }
 
-    initRegionTreeSelect() {
-        this.regionTreeItem = new RegionTreeItem();
-        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
-    }
+    // initRegionTreeSelect() {
+    //     this.regionTreeItem = new RegionTreeItem();
+    //     this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    // }
 
     initSelectItem() {
         this.ifAllSitesSelectItem = [
@@ -253,12 +309,9 @@ export class FilterCondition extends Vue {
     }
 
     siteFilterPermission() {
-        let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
-            tempSitesSelectItem[detail.objectId] = detail.name;
             this.inputFormData.allSiteIds.push(detail.objectId);
         }
-        this.sitesSelectItem = tempSitesSelectItem;
     }
 
     // async initSelectItemSite() {
@@ -294,56 +347,58 @@ export class FilterCondition extends Vue {
     //         });
     // }
 
-    async initSelectItemTag() {
-        let tempTagSelectItem = {};
-        await this.$server
-            .R("/tag/all")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 tagSelectItem 的 key 的方式
-                        tempTagSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        this.inputFormData.allTagIds.push(returnValue.objectId);
-                    }
-                    this.tagSelectItem = tempTagSelectItem;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
+    // async initSelectItemTag() {
+    //     let tempTagSelectItem = {};
+    //     await this.$server
+    //         .R("/tag/all")
+    //         .then((response: any) => {
+    //             if (response != undefined) {
+    //                 for (const returnValue of response) {
+    //                     // 自定義 tagSelectItem 的 key 的方式
+    //                     tempTagSelectItem[returnValue.objectId] =
+    //                         returnValue.name;
+    //                     this.inputFormData.allTagIds.push(returnValue.objectId);
+    //                 }
+    //                 this.tagSelectItem = tempTagSelectItem;
+    //             }
+    //         })
+    //         .catch((e: any) => {
+    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+    //                 return ResponseFilter.base(this, e);
+    //             }
+    //             console.log(e);
+    //             return false;
+    //         });
+    // }
 
-    async initSelectItemTree() {
-        await this.$server
-            .R("/location/tree")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
-                        response,
-                        this.$user.allowSites
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
+    // async initSelectItemTree() {
+    //     await this.$server
+    //         .R("/location/tree")
+    //         .then((response: any) => {
+    //             if (response != undefined) {
+    //                 this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
+    //                     response,
+    //                     this.$user.allowSites
+    //                 );
+    //                 this.regionTreeItem.region = this.regionTreeItem.tree;
+    //             }
+    //         })
+    //         .catch((e: any) => {
+    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+    //                 return ResponseFilter.base(this, e);
+    //             }
+    //             console.log(e);
+    //             return false;
+    //         });
+    // }
 
     tempSaveInputData(data) {
         switch (data.key) {
             case "siteIds":
                 this.inputFormData.siteIds = data.value;
-                break;
+                // console.log(' - ', this.inputFormData.siteIds);
+	            // this.$emit("chart-sites", this.sites);
+	            break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
                 break;
@@ -589,22 +644,8 @@ export class FilterCondition extends Vue {
 
         // console.log(' - ', doSubmitParam); return false;
 
-        await this.$server
-            .C("/report/people-counting/summary", doSubmitParam)
-            .then((response: any) => {
-                if (response !== undefined) {
-                    this.responseData = response;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
 
-        this.$emit("submit-data", doSubmitParam, this.responseData);
+        this.$emit("submit-data", doSubmitParam);
     }
 
     doReset() {
