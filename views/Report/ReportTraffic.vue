@@ -27,7 +27,7 @@
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
-                    ;countSelectItem="countSelectItem"
+                    :countSelectItem="countSelectItem"
                     @traffic-chart-data="receiveTrafficChartData"
                 >
                 </analysis_filter_in_out_traffic>
@@ -173,6 +173,14 @@ export default class ReportTraffic extends Vue {
         month: ECountType.month,
         season: ECountType.quarter,
         year: ECountType.year
+    };
+
+    inputFormData: any = {
+        areaId: "",
+        groupId: "",
+        deviceId: "",
+        type: "",
+        inOrOut: "in"
     };
 
     //// Analysis Filter End ////
@@ -737,8 +745,6 @@ export default class ReportTraffic extends Vue {
                 console.log(e);
                 return false;
             });
-        console.log(" - ", this.officeHourItem);
-        console.log(" - ", this.officeHourItemDetail);
     }
 
     async initSelectItemArea() {
@@ -747,10 +753,10 @@ export default class ReportTraffic extends Vue {
         const readParam: {
             siteId: string;
         } = {
-            siteId: this.firstSiteId
+            siteId: this.filterData.firstSiteId
         };
 
-        if (!this.firstSiteId) {
+        if (!this.filterData.firstSiteId) {
             return false;
         } else {
             await this.$server
