@@ -60,7 +60,5 @@
 <script lang="ts" src="./basic-report.vue.ts" />
 
 <style lang="scss" scoped>
-.btn-filter{
-    margin: 15px 5px;
-}
+
 </style>
