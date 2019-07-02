@@ -31,7 +31,7 @@ interface IDatetimeGroup {
 interface IChartTrafficData {
     date: Date;
     siteObjectId: string;
-    temperature: number;
+
     temperatureMin: number;
     temperatureMax: number;
     traffic: number;
@@ -44,6 +44,7 @@ interface IChartTrafficData {
     areaMode?: EAreaMode;
     conversion?: number;
     asp?: number;
+    temperature?: number;
     trafficAVG?: number;
     weatherIcon?: string;
     dateStart?: Date;
