@@ -207,7 +207,7 @@ export class HighchartsTraffic extends Vue {
         let startHour = 25;
         let endHour = -1;
         for (let dayRange of site.officeHour) {
-            let inday: boolean = this.inDay(
+            let inday: boolean = Datetime.WeekinDay(
                 weekDay,
                 parseInt(dayRange.startDay),
                 parseInt(dayRange.endDay)
@@ -274,7 +274,10 @@ export class HighchartsTraffic extends Vue {
             tempSeries[0].data.push(result.revenue);
             tempSeries[1].data.push(result.traffic);
             tempCategories.push(
-                this.categorieStringWithJSON(result.timeString, result)
+                HighChartsService.categorieStringWithJSON(
+                    result.timeString,
+                    result
+                )
             );
         }
 
@@ -469,7 +472,7 @@ export class HighchartsTraffic extends Vue {
             tempSeries[1].data.push(result.traffic);
             tempSeries[2].data.push(trafficAVG);
             tempCategories.push(
-                this.categorieStringWithJSON(
+                HighChartsService.categorieStringWithJSON(
                     `${result.siteName} ${result.weatherIcon}`,
                     result
                 )
@@ -770,16 +773,14 @@ export class HighchartsTraffic extends Vue {
 
             // calculate conversion & ASP
             if (tempChartData.traffic != 0) {
-                tempChartData.conversion = this.formatFloat(
-                    (tempChartData.transaction / tempChartData.traffic) * 100,
-                    HighChartsService.mathRoundLength
+                tempChartData.conversion = HighChartsService.formatFloat(
+                    (tempChartData.transaction / tempChartData.traffic) * 100
                 );
             }
 
             if (tempChartData.transaction > 0) {
-                tempChartData.asp = this.formatFloat(
-                    tempChartData.revenue / tempChartData.transaction,
-                    HighChartsService.mathRoundLength
+                tempChartData.asp = HighChartsService.formatFloat(
+                    tempChartData.revenue / tempChartData.transaction
                 );
             }
 
@@ -793,10 +794,7 @@ export class HighchartsTraffic extends Vue {
 
         // calculate avg
         if (dateGap > 0) {
-            trafficAVG = this.formatFloat(
-                trafficTotal / dateGap,
-                HighChartsService.mathRoundLength
-            );
+            trafficAVG = HighChartsService.formatFloat(trafficTotal / dateGap);
         }
 
         // set result
@@ -809,12 +807,15 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.year:
                 case ETimeMode.month:
                     tempCategories.push(
-                        this.categorieStringWithJSON(result.dateString, result)
+                        HighChartsService.categorieStringWithJSON(
+                            result.dateString,
+                            result
+                        )
                     );
                     break;
                 case ETimeMode.quarter:
                     tempCategories.push(
-                        this.categorieStringWithJSON(
+                        HighChartsService.categorieStringWithJSON(
                             this.categoriesQuarter(result.date),
                             result
                         )
@@ -822,7 +823,7 @@ export class HighchartsTraffic extends Vue {
                     break;
                 case ETimeMode.week:
                     tempCategories.push(
-                        this.categorieStringWithJSON(
+                        HighChartsService.categorieStringWithJSON(
                             this.categoriesWeek(result.date),
                             result
                         )
@@ -833,7 +834,7 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.none:
                 default:
                     tempCategories.push(
-                        this.categorieStringWithJSON(
+                        HighChartsService.categorieStringWithJSON(
                             `${result.dateString} ${result.weatherIcon}`,
                             result
                         )
@@ -1189,7 +1190,10 @@ export class HighchartsTraffic extends Vue {
                 }
             }
             tempSeries.push({
-                name: this.categorieStringNotJSON(site.name, site.objectId),
+                name: HighChartsService.categorieStringNotJSON(
+                    site.name,
+                    site.objectId
+                ),
                 data: tempData
             });
         }
@@ -1208,16 +1212,14 @@ export class HighchartsTraffic extends Vue {
             }
 
             if (trafficTotal != 0) {
-                result.conversion = this.formatFloat(
-                    (transactionTotal / trafficTotal) * 100,
-                    HighChartsService.mathRoundLength
+                result.conversion = HighChartsService.formatFloat(
+                    (transactionTotal / trafficTotal) * 100
                 );
             }
 
             if (transactionTotal > 0) {
-                result.asp = this.formatFloat(
-                    revenueTotal / transactionTotal,
-                    HighChartsService.mathRoundLength
+                result.asp = HighChartsService.formatFloat(
+                    revenueTotal / transactionTotal
                 );
             }
 
@@ -1225,17 +1227,26 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.year:
                 case ETimeMode.month:
                     tempCategories.push(
-                        this.categorieStringWithJSON(result.categorie, result)
+                        HighChartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
                     );
                     break;
                 case ETimeMode.quarter:
                     tempCategories.push(
-                        this.categorieStringWithJSON(result.categorie, result)
+                        HighChartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
                     );
                     break;
                 case ETimeMode.week:
                     tempCategories.push(
-                        this.categorieStringWithJSON(result.categorie, result)
+                        HighChartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
                     );
                     break;
                 case ETimeMode.day:
@@ -1243,7 +1254,10 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.none:
                 default:
                     tempCategories.push(
-                        this.categorieStringWithJSON(result.categorie, result)
+                        HighChartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
                     );
                     break;
             }
@@ -1349,19 +1363,6 @@ export class HighchartsTraffic extends Vue {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private categorieStringNotJSON(showString: string, value: string) {
-        return `${showString} <span style='display:none;'>__${value}__</span>`;
-    }
-
-    private categorieStringWithJSON(
-        showString: string,
-        value: IChartTrafficData
-    ) {
-        return `${showString} <span style='display:none;'>${JSON.stringify(
-            value
-        )}</span>`;
-    }
 
     private trafficValueDefault(): IChartTrafficData {
         let value: IChartTrafficData = {
@@ -1471,9 +1472,18 @@ export class HighchartsTraffic extends Vue {
         return value;
     }
 
-    private formatFloat(num: number, pos: number) {
-        var size = Math.pow(10, pos);
-        return Math.round(num * size) / size;
+    private categoriesQuarter(date: Date): string {
+        let result = "";
+        let quarterNumber = Datetime.QuarterNumber(date);
+        result += `${date.getFullYear()}-Q${quarterNumber}`;
+        return result;
+    }
+
+    private categoriesWeek(date: Date): string {
+        let result = "";
+        let weekNumber = Datetime.WeekNumber(date);
+        result += `${date.getFullYear()}-W${weekNumber}`;
+        return result;
     }
 
     private i18nItem() {
@@ -1493,42 +1503,6 @@ export class HighchartsTraffic extends Vue {
             weather: this._("w_ReportTraffic_TrafficWeather"),
             asp: this._("w_ReportTraffic_TrafficASP")
         };
-        return result;
-    }
-
-    // check day in range
-    private inDay(weekDay: number, startDay: number, endDay: number): boolean {
-        let result = false;
-        let have7 = false;
-        let inRange = false;
-        let startDayHave7 = startDay - 7;
-        let endDayHave7 = endDay + 7;
-        if (startDay > endDay) {
-            have7 = true;
-        }
-        if (weekDay >= startDay && weekDay <= endDay) {
-            result = true;
-        }
-        if (have7 && weekDay >= startDayHave7 && weekDay <= endDay) {
-            result = true;
-        }
-        if (have7 && weekDay >= startDay && weekDay <= endDayHave7) {
-            result = true;
-        }
-        return result;
-    }
-
-    private categoriesQuarter(date: Date): string {
-        let result = "";
-        let quarterNumber = Datetime.QuarterNumber(date);
-        result += `${date.getFullYear()}-Q${quarterNumber}`;
-        return result;
-    }
-
-    private categoriesWeek(date: Date): string {
-        let result = "";
-        let weekNumber = Datetime.WeekNumber(date);
-        result += `${date.getFullYear()}-W${weekNumber}`;
         return result;
     }
 }

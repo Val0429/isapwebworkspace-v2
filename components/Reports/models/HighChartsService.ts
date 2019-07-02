@@ -3,14 +3,26 @@ import Datetime from '@/services/Datetime';
 import { ISite } from './IHighCharts';
 
 class HighChartsService {
-    mathRoundLength = 2;
-
-    datetimeFormat = {
+    readonly mathRoundLength = 2;
+    readonly datetimeFormat = {
         year: 'YYYY',
         month: 'YYYY/MM',
         date: 'YYYY/MM/DD',
         time: 'HH:mm',
     };
+
+    categorieStringNotJSON(showString: string, value: string) {
+        return `${showString} <span style='display:none;'>__${value}__</span>`;
+    }
+
+    categorieStringWithJSON(showString: string, value: any) {
+        return `${showString} <span style='display:none;'>${JSON.stringify(value)}</span>`;
+    }
+
+    formatFloat(num: number) {
+        var size = Math.pow(10, this.mathRoundLength);
+        return Math.round(num * size) / size;
+    }
 
     chartMode(startDate: Date, endDate: Date, sites: ISite[]): EChartMode {
         let result = EChartMode.none;
