@@ -138,9 +138,9 @@ export class AnalysisFilterInOut extends Vue {
     };
 
     // 整理 showReportData 相關
-    areaFilter: any = [];
-    deviceGroupFilter: any = [];
-    deviceFilter: any = [];
+    areaSummaryFilter: any = [];
+    deviceGroupSummaryFilter: any = [];
+    deviceSummaryFilter: any = [];
 
     // chart 相關
     // trafficChartData: IChartTrafficData = {
@@ -453,7 +453,7 @@ export class AnalysisFilterInOut extends Vue {
 
     async whenSelectedAreaId() {
 
-        this.areaFilter = [];
+        this.areaSummaryFilter = [];
 
         // console.log(' - ', this.inputFormData.areaId);
 
@@ -484,18 +484,18 @@ export class AnalysisFilterInOut extends Vue {
                         if (this.inputFormData.areaId === tempSingleData.objectId) {
                            // console.log('!!!! - ', singleData);
 
-                            this.areaFilter.push(singleData) ;
+                            this.areaSummaryFilter.push(singleData) ;
                         }
                     }
 
                 }
-               // console.log(" - ", this.areaFilter);
+               // console.log(" - ", this.areaSummaryFilter);
                //console.log("trafficChartData - ", this.trafficChartData);
             }
 
 
             // 整理為Morris需要的資料格式
-            for (const singleData of this.areaFilter) {
+            for (const singleData of this.areaSummaryFilter) {
                 // TODO: wait Min api
                 // temperature: number; --->
                 // revenue: number; ---> singleData.in
@@ -541,29 +541,29 @@ export class AnalysisFilterInOut extends Vue {
 
     async whenSelectedGroupId() {
 
-        this.deviceGroupFilter = [];
+        this.deviceGroupSummaryFilter = [];
 
         if (
             this.inputFormData.groupId !== undefined ||
             this.inputFormData.groupId !== ""
         ) {
             // 依照deviceGroup篩選
-            for (const singleData of this.areaFilter) {
+            for (const singleData of this.areaSummaryFilter) {
 
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === 'deviceGroups') {
                         if (this.inputFormData.groupId === tempSingleData[0].objectId) {
-                            this.deviceGroupFilter.push(singleData) ;
+                            this.deviceGroupSummaryFilter.push(singleData) ;
                         }
                     }
                 }
-                 console.log(" - ", this.deviceGroupFilter);
+                 console.log(" - ", this.deviceGroupSummaryFilter);
             }
 
             // 整理為Morris需要的資料格式
-            for (const singleData of this.deviceGroupFilter) {
+            for (const singleData of this.deviceGroupSummaryFilter) {
                 // TODO: wait Min api
                 // temperature: number; --->
                 // revenue: number; ---> singleData.in
@@ -606,22 +606,22 @@ export class AnalysisFilterInOut extends Vue {
 
     whenSelectedDeviceId() {
         // 依照devic篩選
-        for (const singleData of this.deviceGroupFilter) {
+        for (const singleData of this.deviceGroupSummaryFilter) {
 
             for (const detailKey in singleData) {
                 const tempSingleData = singleData[detailKey];
 
                 if (detailKey === 'device') {
                     if (this.inputFormData.deviceId === tempSingleData.objectId) {
-                        this.deviceFilter.push(singleData) ;
+                        this.deviceSummaryFilter.push(singleData) ;
                     }
                 }
             }
-            console.log(" - ", this.deviceFilter);
+            console.log(" - ", this.deviceSummaryFilter);
         }
 
         // 整理為Morris需要的資料格式
-        for (const singleData of this.deviceFilter) {
+        for (const singleData of this.deviceSummaryFilter) {
             // TODO: wait Min api
             // temperature: number; --->
             // revenue: number; ---> singleData.in
