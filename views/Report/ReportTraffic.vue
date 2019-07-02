@@ -472,27 +472,27 @@ export default class ReportTraffic extends Vue {
 
             for (let i = 1; i < 30; i++) {
                 let weather = EWeather.none;
-                let tmepWeatherNumber = Math.floor(Math.random() * 300);
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
 
-                if (tmepWeatherNumber % 10 == 0) {
+                if (tempWeatherNumber % 10 == 0) {
                     weather = EWeather.clearDay;
-                } else if (tmepWeatherNumber % 10 == 1) {
+                } else if (tempWeatherNumber % 10 == 1) {
                     weather = EWeather.clearNight;
-                } else if (tmepWeatherNumber % 10 == 2) {
+                } else if (tempWeatherNumber % 10 == 2) {
                     weather = EWeather.rain;
-                } else if (tmepWeatherNumber % 10 == 3) {
+                } else if (tempWeatherNumber % 10 == 3) {
                     weather = EWeather.snow;
-                } else if (tmepWeatherNumber % 10 == 4) {
+                } else if (tempWeatherNumber % 10 == 4) {
                     weather = EWeather.sleet;
-                } else if (tmepWeatherNumber % 10 == 5) {
+                } else if (tempWeatherNumber % 10 == 5) {
                     weather = EWeather.wind;
-                } else if (tmepWeatherNumber % 10 == 6) {
+                } else if (tempWeatherNumber % 10 == 6) {
                     weather = EWeather.fog;
-                } else if (tmepWeatherNumber % 10 == 7) {
+                } else if (tempWeatherNumber % 10 == 7) {
                     weather = EWeather.cloudy;
-                } else if (tmepWeatherNumber % 10 == 8) {
+                } else if (tempWeatherNumber % 10 == 8) {
                     weather = EWeather.partlyCloudyDay;
-                } else if (tmepWeatherNumber % 10 == 9) {
+                } else if (tempWeatherNumber % 10 == 9) {
                     weather = EWeather.partlyCloudyNight;
                 }
 

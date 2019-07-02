@@ -103,6 +103,31 @@ export class HighchartsTraffic extends Vue {
     chartMode: EChartMode = EChartMode.none;
     chartOptions: any = {};
 
+    // @Watch("startDate")
+    // private onStartDateChanged(newval: Date, oldval: Date) {
+    //     this.start();
+    // }
+
+    // @Watch("endDate")
+    // private onEndDateChanged(newval: Date, oldval: Date) {
+    //     this.start();
+    // }
+
+    // @Watch("timeMode")
+    // private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
+    //     this.start();
+    // }
+
+    // @Watch("areaMode")
+    // private onAreaModeChanged(newval: EAreaMode, oldval: EAreaMode) {
+    //     this.start();
+    // }
+
+    // @Watch("sites")
+    // private onSitesChanged(newval: ISite[], oldval: ISite[]) {
+    //     this.start();
+    // }
+
     created() {
         this.start();
     }
@@ -110,41 +135,24 @@ export class HighchartsTraffic extends Vue {
     mounted() {}
 
     start() {
+        this.chartMode = HighChartsService.chartMode(
+            this.startDate,
+            this.endDate,
+            this.sites
+        );
         if (isNaN(this.startDate.getTime())) {
             this.errorMessage = this._("w_ReportTraffic_ErrorDateStart");
             return false;
         }
-
         if (isNaN(this.endDate.getTime())) {
             this.errorMessage = this._("w_ReportTraffic_ErrorDateEnd");
             return false;
         }
-
-        let startDateString = Datetime.DateTime2String(
-            this.startDate,
-            HighChartsService.datetimeFormat.date
-        );
-        let endDateString = Datetime.DateTime2String(
-            this.endDate,
-            HighChartsService.datetimeFormat.date
-        );
-
-        if (startDateString == endDateString && this.sites.length == 1) {
-            this.chartMode = EChartMode.day1Site1;
-        } else if (startDateString == endDateString && this.sites.length > 1) {
-            this.chartMode = EChartMode.day1SiteX;
-        } else if (startDateString != endDateString && this.sites.length == 1) {
-            this.chartMode = EChartMode.dayXSite1;
-        } else if (startDateString != endDateString && this.sites.length > 1) {
-            this.chartMode = EChartMode.dayXSiteX;
-        } else {
+        if (this.chartMode == EChartMode.none) {
             this.errorMessage = this._("w_ReportTraffic_ErrorChartMode");
+            return false;
         }
 
-        this.initChart();
-    }
-
-    initChart() {
         switch (this.chartMode) {
             case EChartMode.day1Site1:
                 this.initDay1Site1();

@@ -1,4 +1,6 @@
-import { EWeather } from './EHighCharts';
+import { EWeather, EChartMode } from './EHighCharts';
+import Datetime from '@/services/Datetime';
+import { ISite } from './IHighCharts';
 
 class HighChartsService {
     mathRoundLength = 2;
@@ -9,6 +11,22 @@ class HighChartsService {
         date: 'YYYY/MM/DD',
         time: 'HH:mm',
     };
+
+    chartMode(startDate: Date, endDate: Date, sites: ISite[]): EChartMode {
+        let result = EChartMode.none;
+        let startDateString = Datetime.DateTime2String(startDate, this.datetimeFormat.date);
+        let endDateString = Datetime.DateTime2String(endDate, this.datetimeFormat.date);
+        if (startDateString == endDateString && sites.length == 1) {
+            result = EChartMode.day1Site1;
+        } else if (startDateString == endDateString && sites.length > 1) {
+            result = EChartMode.day1SiteX;
+        } else if (startDateString != endDateString && sites.length == 1) {
+            result = EChartMode.dayXSite1;
+        } else if (startDateString != endDateString && sites.length > 1) {
+            result = EChartMode.dayXSiteX;
+        }
+        return result;
+    }
 
     weatherIcon(weather: EWeather, style: string = 'font-size:1.1rem; color:#924da3;'): string {
         let result = '';
