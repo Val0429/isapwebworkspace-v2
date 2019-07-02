@@ -1,7 +1,21 @@
 <template>
     <div class="animated fadeIn">
         <div v-show="pageStep === ePageStep.none">
-            Demographic
+            <iv-card>
+
+                <!-- Morris -->
+                <highcharts-demographic
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :sites="sites"
+                    :timeMode="timeMode"
+                    :areaMode="areaMode"
+                    :value="value"
+                >
+                </highcharts-demographic>
+                <!-- Morris -->
+
+            </iv-card>
         </div>
 
     </div>
@@ -10,6 +24,8 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
+
+// Morris
 import {
     ETimeMode,
     EAreaMode,
@@ -18,6 +34,7 @@ import {
     IDayRange,
     IChartTrafficData
 } from "@/components/Reports";
+import HighchartsDemographic from "@/components/Reports/HighchartsDemographic.vue";
 
 enum EPageStep {
     none = "none"
