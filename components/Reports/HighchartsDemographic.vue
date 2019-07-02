@@ -75,7 +75,6 @@ import {
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
-import Weather from "../../views/Setting/Weather.vue";
 
 @Component({
     components: {}
@@ -404,7 +403,7 @@ export class HighchartsDemographic extends Vue {
             default:
                 break;
         }
-        console.log(this.chartMode);
+        console.log(this.value);
     }
 
     ////////////////////////// day 1 site 1 //////////////////////////

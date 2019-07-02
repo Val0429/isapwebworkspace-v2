@@ -43,7 +43,6 @@ import {
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
-import Weather from "../../views/Setting/Weather.vue";
 
 @Component({
     components: {}
@@ -103,30 +102,30 @@ export class HighchartsTraffic extends Vue {
     chartMode: EChartMode = EChartMode.none;
     chartOptions: any = {};
 
-    // @Watch("startDate")
-    // private onStartDateChanged(newval: Date, oldval: Date) {
-    //     this.start();
-    // }
+    @Watch("startDate")
+    private onStartDateChanged(newval: Date, oldval: Date) {
+        this.start();
+    }
 
-    // @Watch("endDate")
-    // private onEndDateChanged(newval: Date, oldval: Date) {
-    //     this.start();
-    // }
+    @Watch("endDate")
+    private onEndDateChanged(newval: Date, oldval: Date) {
+        this.start();
+    }
 
-    // @Watch("timeMode")
-    // private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
-    //     this.start();
-    // }
+    @Watch("timeMode")
+    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
+        this.start();
+    }
 
-    // @Watch("areaMode")
-    // private onAreaModeChanged(newval: EAreaMode, oldval: EAreaMode) {
-    //     this.start();
-    // }
+    @Watch("areaMode")
+    private onAreaModeChanged(newval: EAreaMode, oldval: EAreaMode) {
+        this.start();
+    }
 
-    // @Watch("sites")
-    // private onSitesChanged(newval: ISite[], oldval: ISite[]) {
-    //     this.start();
-    // }
+    @Watch("sites")
+    private onSitesChanged(newval: ISite[], oldval: ISite[]) {
+        this.start();
+    }
 
     created() {
         this.start();
