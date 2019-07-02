@@ -147,9 +147,17 @@ export class AnalysisFilterInOutTraffic extends Vue {
     };
 
     // 整理 showReportData 相關
-    areaFilter: any = [];
-    deviceGroupFilter: any = [];
-    deviceFilter: any = [];
+    areaSummaryFilter: any = [];
+    deviceGroupSummaryFilter: any = [];
+    deviceSummaryFilter: any = [];
+
+    areaSalesRecordsFilter: any = [];
+    deviceGroupSalesRecordsFilter: any = [];
+    deviceSalesRecordsFilter: any = [];
+
+    areaWeathersFilter: any = [];
+    deviceGroupWeathersFilter: any = [];
+    deviceWeathersFilter: any = [];
 
     // chart 相關
     // trafficChartData: IChartTrafficData = {
@@ -544,24 +552,15 @@ export class AnalysisFilterInOutTraffic extends Vue {
         for (const singleData of this.showReportData.summaryDatas) {
             // TODO: wait Min api
             // temperature: number; --->
-            // revenue: number; ---> singleData.in
-            // transaction: number; ---> singleData.in
-            // conversion: number; ---> singleData.in
-            // asp: number; ---> singleData.in
             // weather: number; ---> singleData.in
 
-            // date: Date; ---> singleData.date
-            // siteObjectId: string; ---> singleData.site.name
-            // traffic: number; ---> singleData.in
 
+            // 取得date、siteObjectId資料
             for (const detailKey in singleData) {
                 const tempSingleData = singleData[detailKey];
                 switch (detailKey) {
                     case "date":
                         this.trafficChartData.date = tempSingleData;
-                        break;
-                    case "in":
-                        this.trafficChartData.traffic = tempSingleData;
                         break;
                     case "site":
                         this.trafficChartData.siteObjectId = tempSingleData.objectId;
@@ -587,13 +586,40 @@ export class AnalysisFilterInOutTraffic extends Vue {
                 }
 
             }
-            //console.log(" - ", this.trafficChartData);
+
+            // 取得traffic、revenue、transaction資料
+            // revenue: number; ---> singleData.in
+            // transaction: number; ---> singleData.in
+            for (const singleData of this.showReportData.salesRecords) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+                    switch (detailKey) {
+                        case "revenue":
+                            this.trafficChartData.revenue = tempSingleData;
+                            break;
+                        case "traffic":
+                            this.trafficChartData.traffic = tempSingleData;
+                            break;
+                        case "transaction":
+                            this.trafficChartData.transaction = tempSingleData;
+                            break;
+                    }
+
+                }
+
+
+
+
+            }
+
+
+            console.log(" - ", this.trafficChartData);
         }
     }
 
     async whenSelectedAreaId() {
 
-        this.areaFilter = [];
+        this.areaSummaryFilter = [];
 
         // console.log(' - ', this.inputFormData.areaId);
 
@@ -606,8 +632,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
                 // temperature: number; --->
                 // revenue: number; ---> singleData.in
                 // transaction: number; ---> singleData.in
-                // conversion: number; ---> singleData.in
-                // asp: number; ---> singleData.in
                 // weather: number; ---> singleData.in
 
                 // date: Date; ---> singleData.date
@@ -620,22 +644,20 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     if (detailKey === 'area') {
                         if (this.inputFormData.areaId === tempSingleData.objectId) {
                            // console.log('!!!! - ', singleData);
-                            this.areaFilter.push(singleData) ;
+                            this.areaSummaryFilter.push(singleData) ;
                         }
                     }
                 }
-               // console.log(" - ", this.areaFilter);
+               // console.log(" - ", this.areaSummaryFilter);
                //console.log("trafficChartData - ", this.trafficChartData);
             }
 
             // 整理為Morris需要的資料格式
-            for (const singleData of this.areaFilter) {
+            for (const singleData of this.areaSummaryFilter) {
                 // TODO: wait Min api
                 // temperature: number; --->
                 // revenue: number; ---> singleData.in
                 // transaction: number; ---> singleData.in
-                // conversion: number; ---> singleData.in
-                // asp: number; ---> singleData.in
                 // weather: number; ---> singleData.in
 
                 // date: Date; ---> singleData.date
@@ -649,13 +671,10 @@ export class AnalysisFilterInOutTraffic extends Vue {
                         if (this.inputFormData.areaId === tempSingleData.objectId) {
 
                             this.trafficChartData.date = singleData.date;
-                            this.trafficChartData.traffic = singleData.in;
                             this.trafficChartData.siteObjectId = singleData.site.objectId;
                             // this.trafficChartData.temperature = tempSingleData.;
                             // this.trafficChartData.revenue = tempSingleData.;
                             // this.trafficChartData.transaction = tempSingleData.;
-                            // this.trafficChartData.conversion = tempSingleData.;
-                            // this.trafficChartData.asp = tempSingleData.;
                             // this.trafficChartData.weather = tempSingleData.;
                         }
                     }
@@ -702,32 +721,30 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
     async whenSelectedGroupId() {
 
-        this.deviceGroupFilter = [];
+        this.deviceGroupSummaryFilter = [];
 
         if (this.inputFormData.groupId && this.inputFormData.groupId !== 'all') {
             // 依照單一deviceGroup篩選
-            for (const singleData of this.areaFilter) {
+            for (const singleData of this.areaSummaryFilter) {
 
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === 'deviceGroups') {
                         if (this.inputFormData.groupId === tempSingleData[0].objectId) {
-                            this.deviceGroupFilter.push(singleData) ;
+                            this.deviceGroupSummaryFilter.push(singleData) ;
                         }
                     }
                 }
-                 // console.log(" - ", this.deviceGroupFilter);
+                 // console.log(" - ", this.deviceGroupSummaryFilter);
             }
 
             // 整理為Morris需要的資料格式
-            for (const singleData of this.deviceGroupFilter) {
+            for (const singleData of this.deviceGroupSummaryFilter) {
                 // TODO: wait Min api
                 // temperature: number; --->
                 // revenue: number; ---> singleData.in
                 // transaction: number; ---> singleData.in
-                // conversion: number; ---> singleData.in
-                // asp: number; ---> singleData.in
                 // weather: number; ---> singleData.in
 
                 // date: Date; ---> singleData.date
@@ -741,13 +758,10 @@ export class AnalysisFilterInOutTraffic extends Vue {
                         if (this.inputFormData.groupId === tempSingleData[0].objectId) {
 
                             this.trafficChartData.date = singleData.date;
-                            this.trafficChartData.traffic = singleData.in;
                             this.trafficChartData.siteObjectId = singleData.site.objectId;
                             // this.trafficChartData.temperature = tempSingleData.;
                             // this.trafficChartData.revenue = tempSingleData.;
                             // this.trafficChartData.transaction = tempSingleData.;
-                            // this.trafficChartData.conversion = tempSingleData.;
-                            // this.trafficChartData.asp = tempSingleData.;
                             // this.trafficChartData.weather = tempSingleData.;
                         }
                     }
@@ -768,7 +782,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
             // 清除deviceGroups篩選
         } else if (this.inputFormData.areaId && !this.inputFormData.groupId) {
-            
+
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
 
@@ -779,28 +793,26 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
     whenSelectedDeviceId() {
         // 依照device篩選
-        for (const singleData of this.deviceGroupFilter) {
+        for (const singleData of this.deviceGroupSummaryFilter) {
 
             for (const detailKey in singleData) {
                 const tempSingleData = singleData[detailKey];
 
                 if (detailKey === 'device') {
                     if (this.inputFormData.deviceId === tempSingleData.objectId) {
-                        this.deviceFilter.push(singleData) ;
+                        this.deviceSummaryFilter.push(singleData) ;
                     }
                 }
             }
-            console.log(" - ", this.deviceFilter);
+            console.log(" - ", this.deviceSummaryFilter);
         }
 
         // 整理為Morris需要的資料格式
-        for (const singleData of this.deviceFilter) {
+        for (const singleData of this.deviceSummaryFilter) {
             // TODO: wait Min api
             // temperature: number; --->
             // revenue: number; ---> singleData.in
             // transaction: number; ---> singleData.in
-            // conversion: number; ---> singleData.in
-            // asp: number; ---> singleData.in
             // weather: number; ---> singleData.in
 
             // date: Date; ---> singleData.date
@@ -814,13 +826,10 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     if (this.inputFormData.deviceId === tempSingleData.objectId) {
 
                         this.trafficChartData.date = singleData.date;
-                        this.trafficChartData.traffic = singleData.in;
                         this.trafficChartData.siteObjectId = singleData.site.objectId;
                         // this.trafficChartData.temperature = tempSingleData.;
                         // this.trafficChartData.revenue = tempSingleData.;
                         // this.trafficChartData.transaction = tempSingleData.;
-                        // this.trafficChartData.conversion = tempSingleData.;
-                        // this.trafficChartData.asp = tempSingleData.;
                         // this.trafficChartData.weather = tempSingleData.;
                     }
                 }
