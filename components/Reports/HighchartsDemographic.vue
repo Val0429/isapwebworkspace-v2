@@ -71,11 +71,10 @@ import {
     IDate,
     IDatetimeGroup,
     ISite,
-    IChartDemographic
+    IChartDemographicData
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
-import Weather from "../../views/Setting/Weather.vue";
 
 @Component({
     components: {}
@@ -128,7 +127,40 @@ export class HighchartsDemographic extends Vue {
             return [];
         }
     })
-    value: IChartDemographic[];
+    value: IChartDemographicData[];
+
+    @Watch("startDate")
+    private onStartDateChanged(newval: Date, oldval: Date) {
+        this.start();
+    }
+
+    @Watch("endDate")
+    private onEndDateChanged(newval: Date, oldval: Date) {
+        this.start();
+    }
+
+    @Watch("timeMode")
+    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
+        this.start();
+    }
+
+    @Watch("areaMode")
+    private onAreaModeChanged(newval: EAreaMode, oldval: EAreaMode) {
+        this.start();
+    }
+
+    @Watch("sites")
+    private onSitesChanged(newval: ISite[], oldval: ISite[]) {
+        this.start();
+    }
+
+    @Watch("value", { deep: true })
+    private onValueChanged(
+        newval: IChartDemographicData[],
+        oldval: IChartDemographicData[]
+    ) {
+        this.start();
+    }
 
     errorMessage: string = "";
     mountChart: boolean = false;
@@ -404,7 +436,7 @@ export class HighchartsDemographic extends Vue {
             default:
                 break;
         }
-        console.log(this.chartMode);
+        console.log(this.value);
     }
 
     ////////////////////////// day 1 site 1 //////////////////////////

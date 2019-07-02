@@ -625,10 +625,9 @@ class Datetime {
 
     //獲得ThisYear開始日期
     ThisYearStartDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const thisYearStartDate = new Date(nowYear, 0, 1);
         return this.DateTime2String(thisYearStartDate);
@@ -636,10 +635,9 @@ class Datetime {
 
     //獲得ThisYear結束日期
     ThisYearEndDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const lastYearEndDate = new Date(nowYear, 11, 31);
         return this.DateTime2String(lastYearEndDate);
