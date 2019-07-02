@@ -351,7 +351,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
             return false;
 
             // 只選擇site
-        } else if (this.firstSiteId && !this.inputFormData.areaId && ! this.inputFormData.groupId) {
+        } else if (this.firstSiteId && !this.inputFormData.areaId && !this.inputFormData.groupId) {
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -371,12 +371,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-
-
-
-
-
-
 
             // 選擇site和單一area
         } else if (
@@ -496,8 +490,34 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     return false;
                 });
 
-            // 只有site
-        } else if (this.firstSiteId && !this.inputFormData.areaId && ! this.inputFormData.groupId) {
+            //
+        } else if (
+            this.firstSiteId &&
+            this.inputFormData.areaId && this.inputFormData.areaId === 'all' &&
+            (this.inputFormData.groupId !== undefined || this.inputFormData.groupId !== "") && this.inputFormData.groupId !== 'all'
+
+        ) {
+            await this.$server
+                .R("/device", readParam)
+                .then((response: any) => {
+                    if (response.results.length > 0) {
+                        for (const returnValue of response.results) {
+                            // 自定義 tempDeviceSelectItem 的 key 的方式
+                            tempDeviceSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceSelectItem = tempDeviceSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else if (this.firstSiteId &&
+            this.inputFormData.areaId && this.inputFormData.areaId !== 'all') {
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -648,10 +668,16 @@ export class AnalysisFilterInOutTraffic extends Vue {
                 console.log(" - ", this.trafficChartData);
             }
 
-            this.inputFormData.groupId = "";
-            this.inputFormData.deviceId = "";
+            console.log(' - ', this.inputFormData.groupId);
+            console.log(' - ', this.inputFormData.deviceId);
+
+            // this.inputFormData.groupId = "";
+            // this.inputFormData.deviceId = "";
             await this.initSelectItemDeviceGroup();
             await this.initSelectItemDevice();
+
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
 
             // 依照all area篩選
         } else if (this.inputFormData.areaId && this.inputFormData.areaId === 'all') {
@@ -662,7 +688,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
-
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
