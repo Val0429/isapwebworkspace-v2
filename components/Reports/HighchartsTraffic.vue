@@ -531,7 +531,8 @@ export class HighchartsTraffic extends Vue {
                             ///////// tooltip /////////
                             result += `${newValue.siteName}<br>`;
                             result += `${newValue.i18n.date}: ${newValue.dateString}<br>`;
-                            result += `${newValue.i18n.temperature}: ${newValue.temperature}°C<br>`;
+                            result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                            result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
                             result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
                             result += `${newValue.i18n.trafficAVG}: ${newValue.trafficAVG}<br>`;
                             result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
@@ -910,7 +911,8 @@ export class HighchartsTraffic extends Vue {
                                 case ETimeMode.hour:
                                 default:
                                     result += `${newValue.dateString}<br>`;
-                                    result += `${newValue.i18n.temperature}: ${newValue.temperature}°C<br>`;
+                                    result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                                    result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
                                     result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
                                     result += `${newValue.i18n.trafficAVG}: ${newValue.trafficAVG}<br>`;
                                     result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
@@ -1323,7 +1325,8 @@ export class HighchartsTraffic extends Vue {
                                         default:
                                             result += `${site.siteName}<br>`;
                                             result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                            result += `${newValue.i18n.temperature}: ${site.temperature}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
                                             result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
                                             result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
                                             result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
@@ -1368,6 +1371,8 @@ export class HighchartsTraffic extends Vue {
             date: new Date(),
             siteObjectId: "",
             temperature: 0,
+            temperatureMin: 0,
+            temperatureMax: 0,
             traffic: 0,
             revenue: 0,
             transaction: 0,
@@ -1446,6 +1451,7 @@ export class HighchartsTraffic extends Vue {
         value.timeMode = this.timeMode;
         value.areaMode = this.areaMode;
         value.trafficAVG = 0;
+        value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
         value.weatherIcon = HighChartsService.weatherIcon(value.weather);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
         value.weekNumber = Datetime.WeekNumber(value.date);
@@ -1480,6 +1486,8 @@ export class HighchartsTraffic extends Vue {
             startDate: this._("w_ReportTraffic_TrafficStartDate"),
             endDate: this._("w_ReportTraffic_TrafficEndDate"),
             temperature: this._("w_ReportTraffic_TrafficTemperature"),
+            temperatureMin: this._("w_ReportTraffic_TrafficTemperatureMin"),
+            temperatureMax: this._("w_ReportTraffic_TrafficTemperatureMax"),
             traffic: this._("w_ReportTraffic_TrafficTraffic"),
             trafficAVG: this._("w_ReportTraffic_TrafficTrafficAVG"),
             revenue: this._("w_ReportTraffic_TrafficRevenue"),

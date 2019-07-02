@@ -500,6 +500,8 @@ export default class ReportTraffic extends Vue {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
                     temperature: iNumber,
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
                     traffic: Math.floor(Math.random() * 500),
                     revenue: Math.floor(Math.random() * 1000),
                     transaction: Math.floor(Math.random() * 50),

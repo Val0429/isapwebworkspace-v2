@@ -772,16 +772,18 @@ export default class LangObject implements ILang {
     // Report Traffic
     w_ReportTraffic_TrafficTime = 'Time';
     w_ReportTraffic_TrafficDate = 'Date';
+    w_ReportTraffic_TrafficStartDate = 'Start Date';
+    w_ReportTraffic_TrafficEndDate = 'End Date';
     w_ReportTraffic_TrafficTraffic = 'Traffic';
     w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
     w_ReportTraffic_TrafficRevenue = 'Revenue';
     w_ReportTraffic_TrafficTransaction = 'Transaction';
     w_ReportTraffic_TrafficConversion = 'Conversion';
     w_ReportTraffic_TrafficTemperature = 'Temperature';
+    w_ReportTraffic_TrafficTemperatureMin = 'Temperature Min';
+    w_ReportTraffic_TrafficTemperatureMax = 'Temperature Max';
     w_ReportTraffic_TrafficWeather = 'Weather';
     w_ReportTraffic_TrafficASP = 'ASP';
-    w_ReportTraffic_TrafficStartDate = 'Start Date';
-    w_ReportTraffic_TrafficEndDate = 'End Date';
 
     w_ReportTraffic_ErrorDateStart = 'Start date error';
     w_ReportTraffic_ErrorDateEnd = 'End date error';
