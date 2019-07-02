@@ -26,7 +26,7 @@
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
-                    ;countSelectItem="countSelectItem"
+                    :countSelectItem="countSelectItem"
                     @traffic-chart-data="receiveTrafficChartData"
                 >
                 </analysis_filter_in_out_traffic>
@@ -173,6 +173,14 @@ export default class ReportTraffic extends Vue {
         month: ECountType.month,
         season: ECountType.quarter,
         year: ECountType.year
+    };
+
+    inputFormData: any = {
+        areaId: "",
+        groupId: "",
+        deviceId: "",
+        type: "",
+        inOrOut: "in"
     };
 
     //// Analysis Filter End ////
@@ -731,48 +739,45 @@ export default class ReportTraffic extends Vue {
                 console.log(e);
                 return false;
             });
-        console.log(" - ", this.officeHourItem);
-        console.log(" - ", this.officeHourItemDetail);
     }
 
     async initSelectItemArea() {
-        // let tempAreaSelectItem = { all: this._("w_AllAreas") };
+        let tempAreaSelectItem = { all: this._("w_AllAreas") };
 
-        // const readParam: {
-        //     siteId: string;
-        // } = {
-        //     siteId: this.firstSiteId
-        // };
+        const readParam: {
+            siteId: string;
+        } = {
+            siteId: this.filterData.firstSiteId
+        };
 
-        // if (!this.firstSiteId) {
-        //     return false;
-        // } else {
-        //     await this.$server
-        //         .R("/location/area/all", readParam)
-        //         .then((response: any) => {
-        //             if (response != undefined) {
-        //                 for (const returnValue of response) {
-        //                     // 自定義 sitesSelectItem 的 key 的方式
-        //                     tempAreaSelectItem[returnValue.objectId] =
-        //                         returnValue.name;
-        //                     // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
-        //                 }
-        //                 this.areaSelectItem = tempAreaSelectItem;
-        //             }
-        //         })
-        //         .catch((e: any) => {
-        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-        //                 return ResponseFilter.base(this, e);
-        //             }
-        //             console.log(e);
-        //             return false;
-        //         });
-        // }
+        if (!this.filterData.firstSiteId) {
+            return false;
+        } else {
+            await this.$server
+                .R("/location/area/all", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 sitesSelectItem 的 key 的方式
+                            tempAreaSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                            // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                        }
+                        this.areaSelectItem = tempAreaSelectItem;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
     }
 
     async initSelectItemDeviceGroup() {
         // let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
-
         // let readParam: {
         //     siteId: string;
         //     areaId?: string;
@@ -781,10 +786,8 @@ export default class ReportTraffic extends Vue {
         //     siteId: this.filterData.firstSiteId,
         //     mode: this.deviceMode
         // };
-
         // if (!this.filterData.firstSiteId) {
         //     return false;
-
         //     // 只選擇site
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -811,7 +814,6 @@ export default class ReportTraffic extends Vue {
         //             console.log(e);
         //             return false;
         //         });
-
         //     // 選擇site和單一area
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -819,7 +821,6 @@ export default class ReportTraffic extends Vue {
         //     this.inputFormData.areaId !== "all"
         // ) {
         //     readParam.areaId = this.inputFormData.areaId;
-
         //     await this.$server
         //         .R("/device/group/all", readParam)
         //         .then((response: any) => {
@@ -839,7 +840,6 @@ export default class ReportTraffic extends Vue {
         //             console.log(e);
         //             return false;
         //         });
-
         //     // 選擇site和all area
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -870,9 +870,7 @@ export default class ReportTraffic extends Vue {
 
     async initSelectItemDevice() {
         // let tempDeviceSelectItem = {};
-
         // tempDeviceSelectItem = { all: this._("w_AllDevices") };
-
         // const readParam: {
         //     siteId: string;
         //     areaId?: string;
@@ -882,10 +880,8 @@ export default class ReportTraffic extends Vue {
         //     siteId: this.filterData.firstSiteId,
         //     mode: this.deviceMode
         // };
-
         // if (!this.filterData.firstSiteId) {
         //     return false;
-
         //     // 只選擇site
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -911,7 +907,6 @@ export default class ReportTraffic extends Vue {
         //             console.log(e);
         //             return false;
         //         });
-
         //     // 選擇site和單一area
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -922,7 +917,6 @@ export default class ReportTraffic extends Vue {
         //     this.inputFormData.groupId !== "all"
         // ) {
         //     readParam.areaId = this.inputFormData.areaId;
-
         //     await this.$server
         //         .R("/device", readParam)
         //         .then((response: any) => {
@@ -942,7 +936,6 @@ export default class ReportTraffic extends Vue {
         //             console.log(e);
         //             return false;
         //         });
-
         //     // 選擇site和單一area和單一device group
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -952,7 +945,6 @@ export default class ReportTraffic extends Vue {
         //     this.inputFormData.groupId !== "all"
         // ) {
         //     readParam.groupId = this.inputFormData.groupId;
-
         //     await this.$server
         //         .R("/device", readParam)
         //         .then((response: any) => {
@@ -975,7 +967,6 @@ export default class ReportTraffic extends Vue {
         //             console.log(e);
         //             return false;
         //         });
-
         //     // 選擇site和all area
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -986,7 +977,6 @@ export default class ReportTraffic extends Vue {
         //     this.inputFormData.groupId !== "all"
         // ) {
         //     readParam.areaId = "";
-
         //     await this.$server
         //         .R("/device", readParam)
         //         .then((response: any) => {
@@ -1006,7 +996,6 @@ export default class ReportTraffic extends Vue {
         //             console.log(e);
         //             return false;
         //         });
-
         //     // 選擇site和all area和all device group
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -1016,7 +1005,6 @@ export default class ReportTraffic extends Vue {
         //     this.inputFormData.groupId === "all"
         // ) {
         //     readParam.groupId = this.inputFormData.groupId;
-
         //     await this.$server
         //         .R("/device", readParam)
         //         .then((response: any) => {
@@ -1039,7 +1027,6 @@ export default class ReportTraffic extends Vue {
         //             console.log(e);
         //             return false;
         //         });
-
         //     // 選擇site和單一area和all device group
         // } else if (
         //     this.filterData.firstSiteId &&
@@ -1050,7 +1037,6 @@ export default class ReportTraffic extends Vue {
         // ) {
         //     readParam.areaId = this.inputFormData.areaId;
         //     readParam.groupId = "";
-
         //     await this.$server
         //         .R("/device", readParam)
         //         .then((response: any) => {
