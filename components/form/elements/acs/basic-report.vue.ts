@@ -6,7 +6,7 @@ export class BasicReport extends Vue{
     @Model('input', {        
         required: false
     })
-    value!: any;
+    value!:any;
     @Prop({        
         type: Array,
         required: true
@@ -50,11 +50,11 @@ export class BasicReport extends Vue{
         this.options=this.fields.map(x=>{return{value:x.key,text:x.label}});
         this.selectedColumns = this.fields.map(x=>x.key);
         this.sortedFields = Object.assign([], this.fields);
-        console.log(this.options.length);
+        //console.log(this.options.length);
         
     }
     created(){
-
+            
     }
     mounted(){
 

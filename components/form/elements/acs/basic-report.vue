@@ -9,10 +9,10 @@
             ref="form"
             class="col-md-9"
             @mounted="doMounted"
-            :interface="inf"
-           
+            :interface="inf"            
+            :value="value"
             @submit="onSubmit($event)">
-
+            
             </iv-form> 
 
         <iv-sort-select
