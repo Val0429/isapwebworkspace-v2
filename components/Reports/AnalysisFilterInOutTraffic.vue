@@ -78,7 +78,7 @@ import {
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { ECountType } from "@/components/Reports/models/EReport";
-import { IChartTrafficData } from "@/components/Reports";
+import { IChartTrafficData, EWeather } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
 let config = require("@/config/default/debug");
 
@@ -205,12 +205,11 @@ export class AnalysisFilterInOutTraffic extends Vue {
     //     this.trafficChartData = {
     //     date: null,
     //     siteObjectId: '',
-    //     temperature: 0,
+    //     temperatureMin: 0,
+    //     temperatureMax: 0,
     //     traffic: 0,
     //     revenue: 0,
     //     transaction: 0,
-    //     conversion: 0,
-    //     asp: 0,
     //     weather: '',
     //     }
     // };
@@ -547,13 +546,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
     filterSiteData() {
         console.log("filterSiteData - ", this.showReportData.summaryDatas);
 
-       //  this.clearTrafficChartData();
-
         for (const singleData of this.showReportData.summaryDatas) {
-            // TODO: wait Min api
-            // temperature: number; --->
-            // weather: number; ---> singleData.in
-
 
             // 取得date、siteObjectId資料
             for (const detailKey in singleData) {
@@ -565,31 +558,10 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     case "site":
                         this.trafficChartData.siteObjectId = tempSingleData.objectId;
                         break;
-                    // case "":
-                    //     this.trafficChartData.temperature = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.revenue = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.transaction = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.conversion = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.asp = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.weather = tempSingleData.;
-                    //     break;
                 }
-
             }
 
             // 取得traffic、revenue、transaction資料
-            // revenue: number; ---> singleData.in
-            // transaction: number; ---> singleData.in
             for (const singleData of this.showReportData.salesRecords) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
@@ -604,15 +576,26 @@ export class AnalysisFilterInOutTraffic extends Vue {
                             this.trafficChartData.transaction = tempSingleData;
                             break;
                     }
-
                 }
-
-
-
-
             }
 
-
+            // 取得weather、temperatureMin、temperatureMax
+            for (const singleData of this.showReportData.weathers) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+                    switch (detailKey) {
+                        case "icon":
+                            this.trafficChartData.weather = this.weatherIcon(tempSingleData);
+                            break;
+                        case "temperatureMin":
+                            this.trafficChartData.temperatureMin = tempSingleData;
+                            break;
+                        case "temperatureMax":
+                            this.trafficChartData.temperatureMax = tempSingleData;
+                            break;
+                    }
+                }
+            }
             console.log(" - ", this.trafficChartData);
         }
     }
@@ -859,6 +842,33 @@ export class AnalysisFilterInOutTraffic extends Vue {
         await this.initSelectItemArea();
         await this.initSelectItemDeviceGroup();
         await this.initSelectItemDevice();
+    }
+
+    weatherIcon(icon: string): string {
+        switch (icon) {
+            case 'clear-day':
+                return EWeather.clearDay;
+            case 'clear-night':
+                return EWeather.clearNight;
+            case 'rain':
+                return EWeather.rain;
+            case 'snow':
+                return EWeather.snow;
+            case 'sleet':
+                return EWeather.sleet;
+            case 'wind':
+                return EWeather.wind;
+            case 'fog':
+                return EWeather.fog;
+            case 'cloudy':
+                return EWeather.cloudy;
+            case 'partly-cloudy-day':
+                return EWeather.partlyCloudyDay;
+            case 'partly-cloudy-night':
+                return EWeather.partlyCloudyNight;
+            default:
+                return EWeather.none;
+        }
     }
 
     IAnalysisFilterForm() {
