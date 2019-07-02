@@ -37,7 +37,7 @@
                     :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
-                    :chartDatas="chartDatas"
+                    :value="chartDatas"
                 >
                 </highcharts-traffic>
 
@@ -128,6 +128,9 @@ export default class ReportTraffic extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
+    // OfficeHour 相關
+    officeHourItem: any = {};
+    officeHourItemDetail: any = {};
 
     // recipient 相關
     modalShow: boolean = false;
@@ -166,6 +169,7 @@ export default class ReportTraffic extends Vue {
         this.initSelectItemSite();
         this.initSelectItemTag();
         this.initSelectItemTree();
+        this.initOfficeHour();
         this.initRegionTreeSelect();
         this.siteFilterPermission();
     }
@@ -636,6 +640,46 @@ export default class ReportTraffic extends Vue {
             });
     }
 
+    async initOfficeHour() {
+        let tempOfficeHourItem = {};
+
+        await this.$server
+            .R("/office-hour/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 tagSelectItem 的 key 的方式
+                        tempOfficeHourItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.officeHourItem = tempOfficeHourItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        await this.$server
+            .R("/office-hour")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.officeHourItemDetail = response.results;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+        console.log(" - ", this.officeHourItem);
+        console.log(" - ", this.officeHourItemDetail);
+    }
 
     // @Watch("sites", { deep: true })
     // private onFirstSiteIdChanged(newVal, oldVal) {
@@ -643,7 +687,6 @@ export default class ReportTraffic extends Vue {
     // }
 
     async receiveFilterData(filterData) {
-
         await this.$server
             .C("/report/people-counting/summary", filterData)
             .then((response: any) => {
@@ -663,6 +706,55 @@ export default class ReportTraffic extends Vue {
         Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
+
+        //this.sites = filterData.siteIds;
+
+        let tempISite: any = {};
+        let tempOfficeHours = [];
+
+        for (const detail of this.officeHourItemDetail) {
+            console.log("detail - ", detail);
+            for (const officeHourSiteId of detail.sites) {
+                console.log("officeHourSiteId - ", officeHourSiteId);
+
+                if (this.filterData.firstSiteId === officeHourSiteId.objectId) {
+                    console.log(" - ", this.filterData.firstSiteId);
+                    console.log(" - ", officeHourSiteId.objectId);
+
+                    for (const dayRangesValue of detail.dayRanges) {
+                        console.log("dayRangesValue - ", dayRangesValue);
+
+                        let tempOfficeHour: any = {};
+
+                        tempOfficeHour = {
+                            startDay: dayRangesValue.startDay,
+                            endDay: dayRangesValue.endDay,
+                            startDate: dayRangesValue.startDate,
+                            endDate: dayRangesValue.endDate
+                        };
+                        tempOfficeHours.push(tempOfficeHour);
+                    }
+
+                    tempISite = {
+                        objectId: officeHourSiteId.objectId,
+                        name: officeHourSiteId.name,
+                        officeHour: tempOfficeHours
+                    };
+                }
+            }
+        }
+
+        console.log("tempISite - ", [tempISite]);
+        this.sites = [tempISite];
+        this.sortChartData();
+
+        // console.log('tempOfficeHour - ', tempOfficeHours);
+
+        // console.log('startDate - ', this.startDate);
+        // console.log('endDate - ', this.endDate);
+        // console.log('timeMode - ', this.timeMode);
+        // console.log('sites - ', this.sites);
+        // console.log('areaMode - ', this.areaMode);
     }
 
     receiveUserData(data) {
@@ -681,7 +773,14 @@ export default class ReportTraffic extends Vue {
     receiveTrafficChartData(chartData) {
         this.chartDatas = chartData;
 
-        //console.log('chartData - ', chartData);
+        console.log("chartData - ", this.chartDatas);
+    }
+
+    sortChartData() {
+        this.startDate = new Date(this.filterData.startDate);
+        this.endDate = new Date(this.filterData.endDate);
+        this.timeMode = this.filterData.type;
+        this.areaMode = EAreaMode.all;
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
