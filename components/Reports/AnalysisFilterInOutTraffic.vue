@@ -166,7 +166,8 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
     // chart 相關
     // trafficChartData: IChartTrafficData = {
-    trafficChartData: any = {
+    trafficChartData: any = []
+        // {
         // date: null,
         // siteObjectId: '',
         // temperature: 0,
@@ -176,7 +177,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
         // conversion: 0,
         // asp: 0,
         // weather: '',
-    };
+    // };
 
     created() {}
 
@@ -190,7 +191,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
     }
 
     @Watch("firstSiteId", { deep: true })
-    private onfirstSiteIdChanged(newVal, oldVal) {
+    private onFirstSiteIdChanged(newVal, oldVal) {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
@@ -564,6 +565,8 @@ export class AnalysisFilterInOutTraffic extends Vue {
     filterSiteData() {
         console.log("filterSiteData - ", this.showReportData.summaryDatas);
 
+        let tempChartData: any = {};
+
         // 取得date、siteObjectId資料
         for (const singleData of this.showReportData.summaryDatas) {
             for (const detailKey in singleData) {
@@ -571,18 +574,18 @@ export class AnalysisFilterInOutTraffic extends Vue {
                 const tempSingleData = singleData[detailKey];
                 switch (detailKey) {
                     case "date":
-                        this.trafficChartData.date = tempSingleData;
+                        tempChartData.date = tempSingleData;
                         break;
                     case "site":
-                        this.trafficChartData.siteObjectId =
-                            tempSingleData.objectId;
+                        tempChartData.siteObjectId = tempSingleData.objectId;
                         break;
                     case "in":
-                        this.trafficChartData.traffic = tempSingleData;
+                        tempChartData.traffic = tempSingleData;
                         break;
                 }
             }
 
+            this.trafficChartData.push(tempChartData);
             // console.log(" - ", this.trafficChartData);
             this.$emit("traffic-chart-data", this.trafficChartData);
         }
@@ -593,10 +596,10 @@ export class AnalysisFilterInOutTraffic extends Vue {
                 const tempSingleData = singleData[detailKey];
                 switch (detailKey) {
                     case "revenue":
-                        this.trafficChartData.revenue = tempSingleData;
+                        tempChartData.revenue = tempSingleData;
                         break;
                     case "transaction":
-                        this.trafficChartData.transaction = tempSingleData;
+                        tempChartData.transaction = tempSingleData;
                         break;
                 }
             }
@@ -611,15 +614,15 @@ export class AnalysisFilterInOutTraffic extends Vue {
                 const tempSingleData = singleData[detailKey];
                 switch (detailKey) {
                     case "icon":
-                        this.trafficChartData.weather = this.weatherIcon(
+                        tempChartData.weather = this.weatherIcon(
                             tempSingleData
                         );
                         break;
                     case "temperatureMin":
-                        this.trafficChartData.temperatureMin = tempSingleData;
+                        tempChartData.temperatureMin = tempSingleData;
                         break;
                     case "temperatureMax":
-                        this.trafficChartData.temperatureMax = tempSingleData;
+                        tempChartData.temperatureMax = tempSingleData;
                         break;
                 }
             }

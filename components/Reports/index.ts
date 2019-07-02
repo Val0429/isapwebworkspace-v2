@@ -1,8 +1,8 @@
 // enum
-export { ESign, EPageType, ECountType, EDeviceMode, EDesignationPeriod, EAddPeriodSelect } from './models/EReport';
+export { ESign, EPageType, EDayXSiteX, ECountType, EDeviceMode, EDesignationPeriod, EAddPeriodSelect } from './models/EReport';
 
 // interface
-export { IPeckTimeRange } from './models/IPeckTimeRange';
+export { IPeckTimeRange, ISiteItems } from './models/IPeckTimeRange';
 
 // class
 export { ReportTableData } from './models/ReportTable';

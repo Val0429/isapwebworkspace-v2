@@ -1,8 +1,10 @@
 <template>
     <div>
-
         <!-- Tina -->
         <filter_condition
+            :sitesSelectItem="sitesSelectItem"
+            :tagSelectItem="tagSelectItem"
+            :regionTreeItem="regionTreeItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
@@ -14,6 +16,7 @@
 
                 <!-- Tina -->
                 <analysis_filter_in_out_traffic
+                    class="mb-4"
                     v-if="filterData.siteIds && filterData.siteIds.length === 1"
                     :firstSiteId="filterData.firstSiteId"
                     :countType="filterData.type"
@@ -34,17 +37,16 @@
                     :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
-                    :value="value"
+                    :chartDatas="chartDatas"
                 >
                 </highcharts-traffic>
 
                 <!-- Ben -->
-                <peak-time-range
-                    :timeRangeData="pData"
-                    :siteItem="pSiteItem"
-                    v-on:changeSite="changeSite"
-                >
-                </peak-time-range>
+                  <peak-time-range
+                        :siteItems="siteItem"
+                        :dayXSiteX="pDayXxSiteX"
+                        :timeRangeData="pData"> 
+                         </peak-time-range>
 
                 <!-- Ben -->
                 <report-table :reportTableData="rData">
@@ -58,11 +60,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
 // Tina
 import { EDeviceMode } from "@/components/Reports/models/EReport";
+import {
+    ERegionType,
+    RegionTreeItem,
+    IRegionTreeSelected
+} from "@/components/RegionTree";
+
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
 
 // Morris
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
@@ -81,7 +91,9 @@ import {
     IPeckTimeRange,
     ReportDashboard,
     EPageType,
-    ESign
+    ESign,
+        EDayXSiteX,
+    ISiteItems
 } from "@/components/Reports";
 
 enum EPageStep {
@@ -103,10 +115,20 @@ export default class ReportTraffic extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    value: IChartTrafficData[] = [];
+    chartDatas: IChartTrafficData[] = [];
     ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    // select 相關
+    sitesSelectItem: any = {};
+    tagSelectItem: any = {};
+
+    // tree
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
+
 
     // recipient 相關
     modalShow: boolean = false;
@@ -125,21 +147,28 @@ export default class ReportTraffic extends Vue {
     dData = new ReportDashboard();
 
     //PickTimeRange 相關
-    pSite = "";
-    pSiteItem = [];
-    pData = [];
+    pData:IPeckTimeRange[] = [];
+    pDayXxSiteX:EDayXSiteX = EDayXSiteX.none;
+    siteItem:ISiteItems[] = [];
 
     //ReportTable 相關
     rData = new ReportTableData();
 
     created() {
-        this.initChartDeveloper();
+        // this.initChartDeveloper();
     }
 
     mounted() {
         this.initDashboardData();
         this.initPeakTimeRange();
         this.initReportTable();
+
+        // Tina
+        this.initSelectItemSite();
+        this.initSelectItemTag();
+        this.initSelectItemTree();
+        this.initRegionTreeSelect();
+        this.siteFilterPermission();
     }
 
     // Ben //
@@ -215,14 +244,17 @@ export default class ReportTraffic extends Vue {
         }, 2000);
     }
 
-    initPeakTimeRange() {
+   initPeakTimeRange() {
         setTimeout(() => {
-            this.pSiteItem = [
-                { value: "iVTCTzctbF", text: "台北店" },
-                { value: "pfLGgj8Hf5", text: "台中店" }
+
+           this.pDayXxSiteX = EDayXSiteX.dayXSiteX
+
+            this.siteItem= [
+               { value: "iVTCTzctbF", text: "台北店" },
+               { value: "pfLGgj8Hf5", text: "台中店" }
             ];
 
-            this.pData = [
+           let apipData= [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -347,12 +379,34 @@ export default class ReportTraffic extends Vue {
                     ]
                 }
             ];
-        }, 2000);
-    }
 
-    changeSite(site) {
-        this.pSite = site;
-        // this.initPeakTimeRange();
+ 
+        // Data format conversion
+        for (let item of apipData) {
+                let pDatum:IPeckTimeRange = {
+                    site:"",
+                    head:[],
+                    body:[]
+                }
+                let head = [];
+                let levels: number[] = [];
+                for (let subItem of item.peakHourDatas) {
+                    levels.push(subItem.level);
+                    head.push(subItem.date);
+                }
+
+                let body = {
+                    title: item.date,
+                    context: levels
+                };
+                pDatum.site = item.site.objectId;
+                pDatum.head = head;
+                pDatum.body.push(body);
+                this.pData.push(pDatum);
+        }
+
+        }, 2000);
+
     }
 
     initReportTable() {
@@ -512,7 +566,7 @@ export default class ReportTraffic extends Vue {
                     transaction: Math.floor(Math.random() * 50),
                     weather: weather
                 };
-                this.value.push(trafficChartData);
+                this.chartDatas.push(trafficChartData);
             }
         }
     }
@@ -520,12 +574,121 @@ export default class ReportTraffic extends Vue {
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
-    receiveFilterData(filterData, responseData) {
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
+
+    siteFilterPermission() {
+        let tempSitesSelectItem = {};
+        for (const detail of this.$user.allowSites) {
+            tempSitesSelectItem[detail.objectId] = detail.name;
+        }
+        this.sitesSelectItem = tempSitesSelectItem;
+    }
+
+    async initSelectItemSite() {
+        let tempSitesSelectItem = {};
+
+        const readAllSiteParam: {
+            type: string;
+        } = {
+            type: "all"
+        };
+
+        await this.$server
+            .R("/location/site/all", readAllSiteParam)
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        tempSitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.sitesSelectItem = tempSitesSelectItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemTag() {
+        let tempTagSelectItem = {};
+
+        await this.$server
+            .R("/tag/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 tagSelectItem 的 key 的方式
+                        tempTagSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.tagSelectItem = tempTagSelectItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemTree() {
+        await this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
+                        response,
+                        this.$user.allowSites
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+
+    // @Watch("sites", { deep: true })
+    // private onFirstSiteIdChanged(newVal, oldVal) {
+    //     console.log(" - ", this.sites);
+    // }
+
+    async receiveFilterData(filterData) {
+
+        await this.$server
+            .C("/report/people-counting/summary", filterData)
+            .then((response: any) => {
+                if (response !== undefined) {
+                    this.responseData = response;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
         this.filterData = filterData;
-        this.responseData = responseData;
         Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
         console.log("this.filterData  - ", this.filterData);
-        // console.log("this.responseData  - ", this.responseData);
+        console.log("this.responseData  - ", this.responseData);
     }
 
     receiveUserData(data) {
@@ -537,8 +700,14 @@ export default class ReportTraffic extends Vue {
         this.modalShow = data;
     }
 
+    // receiveChartSites(chartSites) {
+    //     this.sites = chartSites;
+    // }
+
     receiveTrafficChartData(chartData) {
-        console.log('chartData - ', chartData);
+        this.chartDatas = chartData;
+
+        //console.log('chartData - ', chartData);
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
