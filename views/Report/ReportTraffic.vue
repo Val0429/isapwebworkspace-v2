@@ -45,7 +45,7 @@
                   <peak-time-range
                         :siteItems="siteItem"
                         :dayXSiteX="pDayXxSiteX"
-                        :timeRangeData="pData"> 
+                        :timeRangeData="pData">
                          </peak-time-range>
 
                 <!-- Ben -->
@@ -384,7 +384,7 @@ export default class ReportTraffic extends Vue {
                 }
             ];
 
- 
+
         // Data format conversion
         for (let item of apipData) {
                 let pDatum:IPeckTimeRange = {
@@ -732,55 +732,41 @@ export default class ReportTraffic extends Vue {
         Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
-
-        //this.sites = filterData.siteIds;
-
+        
         let tempISite: any = {};
         let tempOfficeHours = [];
 
-        for (const detail of this.officeHourItemDetail) {
-            console.log("detail - ", detail);
-            for (const officeHourSiteId of detail.sites) {
-                console.log("officeHourSiteId - ", officeHourSiteId);
-
-                if (this.filterData.firstSiteId === officeHourSiteId.objectId) {
-                    console.log(" - ", this.filterData.firstSiteId);
-                    console.log(" - ", officeHourSiteId.objectId);
-
-                    for (const dayRangesValue of detail.dayRanges) {
-                        console.log("dayRangesValue - ", dayRangesValue);
-
-                        let tempOfficeHour: any = {};
-
-                        tempOfficeHour = {
-                            startDay: dayRangesValue.startDay,
-                            endDay: dayRangesValue.endDay,
-                            startDate: dayRangesValue.startDate,
-                            endDate: dayRangesValue.endDate
+        for (const filterSiteId of this.filterData.siteIds) {
+            for (const detail of this.officeHourItemDetail) {
+                for (const officeHourSiteId of detail.sites) {
+                    if (filterSiteId === officeHourSiteId.objectId) {
+                        for (const dayRangesValue of detail.dayRanges) {
+                            let tempOfficeHour: any = {};
+                            tempOfficeHour = {
+                                startDay: dayRangesValue.startDay,
+                                endDay: dayRangesValue.endDay,
+                                startDate: dayRangesValue.startDate,
+                                endDate: dayRangesValue.endDate
+                            };
+                            tempOfficeHours.push(tempOfficeHour);
+                        }
+                        tempISite = {
+                            objectId: officeHourSiteId.objectId,
+                            name: officeHourSiteId.name,
+                            officeHour: tempOfficeHours
                         };
-                        tempOfficeHours.push(tempOfficeHour);
                     }
-
-                    tempISite = {
-                        objectId: officeHourSiteId.objectId,
-                        name: officeHourSiteId.name,
-                        officeHour: tempOfficeHours
-                    };
                 }
             }
         }
 
-        console.log("tempISite - ", [tempISite]);
-        this.sites = [tempISite];
-        this.sortChartData();
 
-        // console.log('tempOfficeHour - ', tempOfficeHours);
+        this.sites.push(tempISite);
+        this.startDate = new Date(this.filterData.startDate);
+        this.endDate = new Date(this.filterData.endDate);
+        this.timeMode = this.filterData.type;
+        this.areaMode = EAreaMode.all;
 
-        // console.log('startDate - ', this.startDate);
-        // console.log('endDate - ', this.endDate);
-        // console.log('timeMode - ', this.timeMode);
-        // console.log('sites - ', this.sites);
-        // console.log('areaMode - ', this.areaMode);
     }
 
     receiveUserData(data) {
@@ -800,13 +786,6 @@ export default class ReportTraffic extends Vue {
         this.chartDatas = chartData;
 
         console.log("chartData - ", this.chartDatas);
-    }
-
-    sortChartData() {
-        this.startDate = new Date(this.filterData.startDate);
-        this.endDate = new Date(this.filterData.endDate);
-        this.timeMode = this.filterData.type;
-        this.areaMode = EAreaMode.all;
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
