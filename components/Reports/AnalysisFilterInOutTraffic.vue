@@ -147,6 +147,11 @@ export class AnalysisFilterInOutTraffic extends Vue {
     };
 
     // 整理 showReportData 相關
+
+    siteSummaryFilter: any = [];
+    siteSalesRecordsFilter: any = [];
+    siteWeathersFilter: any = [];
+
     areaSummaryFilter: any = [];
     deviceGroupSummaryFilter: any = [];
     deviceSummaryFilter: any = [];
@@ -546,9 +551,8 @@ export class AnalysisFilterInOutTraffic extends Vue {
     filterSiteData() {
         console.log("filterSiteData - ", this.showReportData.summaryDatas);
 
+        // 取得date、siteObjectId資料
         for (const singleData of this.showReportData.summaryDatas) {
-
-            // 取得date、siteObjectId資料
             for (const detailKey in singleData) {
                 const tempSingleData = singleData[detailKey];
                 switch (detailKey) {
@@ -558,45 +562,47 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     case "site":
                         this.trafficChartData.siteObjectId = tempSingleData.objectId;
                         break;
+                    case "in":
+                        this.trafficChartData.traffic = tempSingleData;
+                        break;
                 }
             }
+        }
 
-            // 取得traffic、revenue、transaction資料
-            for (const singleData of this.showReportData.salesRecords) {
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-                    switch (detailKey) {
-                        case "revenue":
-                            this.trafficChartData.revenue = tempSingleData;
-                            break;
-                        case "traffic":
-                            this.trafficChartData.traffic = tempSingleData;
-                            break;
-                        case "transaction":
-                            this.trafficChartData.transaction = tempSingleData;
-                            break;
-                    }
+        // 取得traffic、revenue、transaction資料
+        for (const singleData of this.showReportData.salesRecords) {
+            for (const detailKey in singleData) {
+                const tempSingleData = singleData[detailKey];
+                switch (detailKey) {
+                    case "revenue":
+                        this.trafficChartData.revenue = tempSingleData;
+                        break;
+                    case "transaction":
+                        this.trafficChartData.transaction = tempSingleData;
+                        break;
                 }
             }
+        }
 
-            // 取得weather、temperatureMin、temperatureMax
-            for (const singleData of this.showReportData.weathers) {
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-                    switch (detailKey) {
-                        case "icon":
-                            this.trafficChartData.weather = this.weatherIcon(tempSingleData);
-                            break;
-                        case "temperatureMin":
-                            this.trafficChartData.temperatureMin = tempSingleData;
-                            break;
-                        case "temperatureMax":
-                            this.trafficChartData.temperatureMax = tempSingleData;
-                            break;
-                    }
+        // 取得weather、temperatureMin、temperatureMax
+        for (const singleData of this.showReportData.weathers) {
+            // if (singleData.site.objectId === this.firstSiteId) {
+            //     this.siteWeathersFilter.push(singleData);
+            // }
+            for (const detailKey in singleData) {
+                const tempSingleData = singleData[detailKey];
+                switch (detailKey) {
+                    case "icon":
+                        this.trafficChartData.weather = this.weatherIcon(tempSingleData);
+                        break;
+                    case "temperatureMin":
+                        this.trafficChartData.temperatureMin = tempSingleData;
+                        break;
+                    case "temperatureMax":
+                        this.trafficChartData.temperatureMax = tempSingleData;
+                        break;
                 }
             }
-            console.log(" - ", this.trafficChartData);
         }
     }
 
