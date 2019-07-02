@@ -34,10 +34,10 @@
         <iv-card            
             :label="title"
             v-if="showTable">
-        <div class="float-right">                
-                <b-button class="btn-filter" size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
+            <template #toolbox>
+                <iv-toolbox-export @click="exportToExcel()"/>
                 
-            </div>
+            </template>        
            <b-table striped hover 
                 :items="records" 
                 :fields="sortedFields" 
@@ -61,6 +61,6 @@
 
 <style lang="scss" scoped>
 .btn-filter{
-    margin: 0 5px;
+    margin: 15px 5px;
 }
 </style>
