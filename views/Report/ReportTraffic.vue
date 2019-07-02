@@ -94,12 +94,15 @@ enum EPageStep {
 export default class ReportTraffic extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+
+    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     value: IChartTrafficData[] = [];
+    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
