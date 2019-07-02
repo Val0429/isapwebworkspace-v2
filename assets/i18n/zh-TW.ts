@@ -484,6 +484,7 @@ export default class LangObject implements ILang {
     w_Member_WorkArea1 = '工作地區';
     w_Member_RegistrationDate = '報到日期：';
     w_Member_ResignationDate = '離職日期：';
+    w_Member_ResignationDate1 = '離職日期';
 
     w_Member_General = '一般';
     w_Member_CarLicenseData = '車證資料';
@@ -554,4 +555,13 @@ export default class LangObject implements ILang {
     w_CardExpirationReport = 'Card Report';
     w_AttendanceRecord = 'Attendance Record';
     w_VisitorCardReport = 'Visitor Card Report';
+
+    w_Report_DateStart="Date Start";
+    w_Report_DateEnd="Date End";
+    w_Report_StartTime = "起始時間";
+    w_Report_DoorNumberStart ="起始門號";
+    w_Report_EndTime ="日終時間";
+    w_Report_DoorNumberEnd="日終門號";
+    w_Report_WorkTime = "工作時長";
+    w_Report_DateOccurred = "出勤日期";
 }
