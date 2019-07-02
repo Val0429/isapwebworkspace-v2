@@ -39,7 +39,8 @@ import {
     IDate,
     IDatetimeGroup,
     ISite,
-    IChartTrafficData
+    IChartTrafficData,
+    ISiteOfficeHourItem
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
@@ -128,7 +129,10 @@ export class HighchartsTraffic extends Vue {
     }
 
     @Watch("value", { deep: true })
-    private onValueChanged(newval: IChartTrafficData[], IChartTrafficData: IChartTrafficData[]) {
+    private onValueChanged(
+        newval: IChartTrafficData[],
+        IChartTrafficData: IChartTrafficData[]
+    ) {
         this.start();
     }
 
@@ -204,62 +208,24 @@ export class HighchartsTraffic extends Vue {
             return false;
         }
 
-        let site = this.sites[0];
-
-        // start
         let weekDay = this.startDate.getDay();
-        let startHour = 25;
-        let endHour = -1;
-        for (let dayRange of site.officeHour) {
-            let inday: boolean = Datetime.WeekinDay(
-                weekDay,
-                parseInt(dayRange.startDay),
-                parseInt(dayRange.endDay)
-            );
-            if (inday) {
-                let indayStartDate = new Date(dayRange.startDate);
-                let indayEndDate = new Date(dayRange.endDate);
-                if (isNaN(indayStartDate.getTime())) {
-                    break;
-                }
-                if (isNaN(indayEndDate.getTime())) {
-                    break;
-                }
-                let indayStartHour = indayStartDate.getHours();
-                let indayEndHour = indayEndDate.getHours();
-
-                if (indayStartHour >= indayEndHour) {
-                    startHour = 0;
-                    endHour = 23;
-                } else {
-                    if (startHour > indayStartHour) {
-                        startHour = indayStartHour;
-                    }
-                    if (endHour < indayEndHour) {
-                        endHour = indayEndHour;
-                    }
-                }
-                if (startHour <= 0 && endHour >= 23) {
-                    break;
-                }
-            }
-        }
-        if (startHour > endHour) {
-            startHour = 0;
-            endHour = 23;
-        }
-        for (let i = startHour; i <= endHour; i++) {
+        let officeHour: ISiteOfficeHourItem = HighChartsService.siteOfficeHour(
+            weekDay,
+            this.sites[0].officeHour
+        );
+        for (let i = officeHour.startHour; i <= officeHour.endHour; i++) {
             let hourString = i < 10 ? `0${i.toString()}` : i.toString();
             categories.push(`${hourString}:00`);
         }
-
         //// office hour group ////
 
         // set data
+        console.log(categories, tempValues);
         for (let categorie of categories) {
             let haveValue = false;
             for (let loopValue of tempValues) {
                 let value: IChartTrafficData = this.trafficValue(loopValue);
+                console.log(value.timeString);
                 if (value.timeString == categorie) {
                     haveValue = true;
                     tempResult.push(value);

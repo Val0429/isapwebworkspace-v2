@@ -1,6 +1,6 @@
 import { EWeather, EChartMode } from './EHighCharts';
 import Datetime from '@/services/Datetime';
-import { ISite } from './IHighCharts';
+import { ISite, ISiteOfficeHourItem, IDayRange } from './IHighCharts';
 
 class HighChartsService {
     readonly mathRoundLength = 2;
@@ -10,6 +10,50 @@ class HighChartsService {
         date: 'YYYY/MM/DD',
         time: 'HH:mm',
     };
+
+    siteOfficeHour(weekDay: number, officeHour: IDayRange[]): ISiteOfficeHourItem {
+        let result: ISiteOfficeHourItem = {
+            startHour: 25,
+            endHour: -1,
+        };
+        for (let dayRange of officeHour) {
+            let inday: boolean = this.WeekinDay(weekDay, parseInt(dayRange.startDay), parseInt(dayRange.endDay));
+            if (inday) {
+                let indayStartDate = new Date(dayRange.startDate);
+                let indayEndDate = new Date(dayRange.endDate);
+                if (isNaN(indayStartDate.getTime())) {
+                    break;
+                }
+                if (isNaN(indayEndDate.getTime())) {
+                    break;
+                }
+                let indayStartHour = indayStartDate.getHours();
+                let indayEndHour = indayEndDate.getHours();
+
+                if (indayStartHour >= indayEndHour) {
+                    result.startHour = 0;
+                    result.endHour = 23;
+                } else {
+                    if (result.startHour > indayStartHour) {
+                        result.startHour = indayStartHour;
+                    }
+                    if (result.endHour < indayEndHour) {
+                        result.endHour = indayEndHour;
+                    }
+                }
+                if (result.startHour <= 0 && result.endHour >= 23) {
+                    break;
+                }
+            }
+        }
+
+        if (result.startHour > result.endHour) {
+            result.startHour = 0;
+            result.endHour = 23;
+        }
+
+        return result;
+    }
 
     categorieStringNotJSON(showString: string, value: string) {
         return `${showString} <span style='display:none;'>__${value}__</span>`;
@@ -87,6 +131,28 @@ class HighChartsService {
             default:
                 result = `<i class="fa fa-question" style="${style}"></i>`;
                 break;
+        }
+        return result;
+    }
+
+    // check day in range
+    WeekinDay(weekDay: number, startDay: number, endDay: number): boolean {
+        let result = false;
+        let have7 = false;
+        let inRange = false;
+        let startDayHave7 = startDay - 7;
+        let endDayHave7 = endDay + 7;
+        if (startDay > endDay) {
+            have7 = true;
+        }
+        if (weekDay >= startDay && weekDay <= endDay) {
+            result = true;
+        }
+        if (have7 && weekDay >= startDayHave7 && weekDay <= endDay) {
+            result = true;
+        }
+        if (have7 && weekDay >= startDay && weekDay <= endDayHave7) {
+            result = true;
         }
         return result;
     }

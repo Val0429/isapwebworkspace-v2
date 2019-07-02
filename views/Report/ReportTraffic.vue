@@ -37,16 +37,17 @@
                     :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
-                    :chartDatas="chartDatas"
+                    :value="chartDatas"
                 >
                 </highcharts-traffic>
 
                 <!-- Ben -->
-                  <peak-time-range
-                        :siteItems="siteItem"
-                        :dayXSiteX="pDayXxSiteX"
-                        :timeRangeData="pData"> 
-                         </peak-time-range>
+                <peak-time-range
+                    :siteItems="siteItem"
+                    :dayXSiteX="pDayXxSiteX"
+                    :timeRangeData="pData"
+                >
+                </peak-time-range>
 
                 <!-- Ben -->
                 <report-table :reportTableData="rData">
@@ -92,7 +93,7 @@ import {
     ReportDashboard,
     EPageType,
     ESign,
-        EDayXSiteX,
+    EDayXSiteX,
     ISiteItems
 } from "@/components/Reports";
 
@@ -129,7 +130,6 @@ export default class ReportTraffic extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-
     // recipient 相關
     modalShow: boolean = false;
 
@@ -147,9 +147,9 @@ export default class ReportTraffic extends Vue {
     dData = new ReportDashboard();
 
     //PickTimeRange 相關
-    pData:IPeckTimeRange[] = [];
-    pDayXxSiteX:EDayXSiteX = EDayXSiteX.none;
-    siteItem:ISiteItems[] = [];
+    pData: IPeckTimeRange[] = [];
+    pDayXxSiteX: EDayXSiteX = EDayXSiteX.none;
+    siteItem: ISiteItems[] = [];
 
     //ReportTable 相關
     rData = new ReportTableData();
@@ -162,7 +162,6 @@ export default class ReportTraffic extends Vue {
         this.initDashboardData();
         this.initPeakTimeRange();
         this.initReportTable();
-
         // Tina
         this.initSelectItemSite();
         this.initSelectItemTag();
@@ -244,17 +243,16 @@ export default class ReportTraffic extends Vue {
         }, 2000);
     }
 
-   initPeakTimeRange() {
+    initPeakTimeRange() {
         setTimeout(() => {
+            this.pDayXxSiteX = EDayXSiteX.dayXSiteX;
 
-           this.pDayXxSiteX = EDayXSiteX.dayXSiteX
-
-            this.siteItem= [
-               { value: "iVTCTzctbF", text: "台北店" },
-               { value: "pfLGgj8Hf5", text: "台中店" }
+            this.siteItem = [
+                { value: "iVTCTzctbF", text: "台北店" },
+                { value: "pfLGgj8Hf5", text: "台中店" }
             ];
 
-           let apipData= [
+            let apipData = [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -380,14 +378,13 @@ export default class ReportTraffic extends Vue {
                 }
             ];
 
- 
-        // Data format conversion
-        for (let item of apipData) {
-                let pDatum:IPeckTimeRange = {
-                    site:"",
-                    head:[],
-                    body:[]
-                }
+            // Data format conversion
+            for (let item of apipData) {
+                let pDatum: IPeckTimeRange = {
+                    site: "",
+                    head: [],
+                    body: []
+                };
                 let head = [];
                 let levels: number[] = [];
                 for (let subItem of item.peakHourDatas) {
@@ -403,10 +400,8 @@ export default class ReportTraffic extends Vue {
                 pDatum.head = head;
                 pDatum.body.push(body);
                 this.pData.push(pDatum);
-        }
-
+            }
         }, 2000);
-
     }
 
     initReportTable() {
@@ -496,7 +491,7 @@ export default class ReportTraffic extends Vue {
 
     // Morris //
     initChartDeveloper() {
-        this.timeMode = ETimeMode.week;
+        this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
 
         // single day
@@ -504,8 +499,8 @@ export default class ReportTraffic extends Vue {
         this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
         // multipe day
-        this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        this.endDate = new Date("2019-08-10T14:00:00.000Z");
+        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        // this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
         let siteLength = 1;
 
@@ -554,7 +549,7 @@ export default class ReportTraffic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-07-${iString10}T00:00:00.000Z`);
+                let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
                 let trafficChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
@@ -662,14 +657,12 @@ export default class ReportTraffic extends Vue {
             });
     }
 
-
     // @Watch("sites", { deep: true })
     // private onFirstSiteIdChanged(newVal, oldVal) {
     //     console.log(" - ", this.sites);
     // }
 
     async receiveFilterData(filterData) {
-
         await this.$server
             .C("/report/people-counting/summary", filterData)
             .then((response: any) => {
