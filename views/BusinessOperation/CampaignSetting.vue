@@ -439,8 +439,8 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: data.startDate,
-                    endDate: data.endDate,
+                    startDate: (data.startDate).toISOString(),
+                    endDate: (data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : []
                 }
             ];
@@ -484,8 +484,8 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: data.startDate,
-                    endDate: data.endDate,
+                    startDate: (data.startDate).toISOString(),
+                    endDate: (data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : []
                 }
             ];

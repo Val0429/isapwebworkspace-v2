@@ -1,5 +1,5 @@
 <template>
-    <div class="animated fadeIn">
+    <div>
 
         <!-- Tina -->
         <filter_condition
@@ -19,6 +19,7 @@
                     :countType="filterData.type"
                     :deviceMode="deviceMode"
                     :showReportData="responseData"
+                    @traffic-chart-data="receiveTrafficChartData"
                 >
                 </analysis_filter_in_out_traffic>
 
@@ -534,6 +535,10 @@ export default class ReportTraffic extends Vue {
 
     receiveModalShowData(data) {
         this.modalShow = data;
+    }
+
+    receiveTrafficChartData(chartData) {
+        console.log('chartData - ', chartData);
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
