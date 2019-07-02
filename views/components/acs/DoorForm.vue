@@ -175,7 +175,7 @@ export default class DoorForm extends Vue implements IFormQuick {
         return this.postAddEdit(row);        
     }
     postAddEdit(row){
-        row.system = parseInt(row.system);
+        
         row.readerin= [];        
         if(row.sipassin){row.readerin.push(row.sipassin);row.sipassin=undefined;}
         if(row.ccurein){row.readerin.push(row.ccurein);row.ccurein=undefined;}
