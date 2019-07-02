@@ -209,9 +209,9 @@ export class AnalysisFilterInOutTraffic extends Vue {
     created() {}
 
     mounted() {
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+        // this.initSelectItemArea();
+        // this.initSelectItemDeviceGroup();
+        // this.initSelectItemDevice();
         this.filterSiteData();
         this.clearInputFormData();
         // console.log('showReportData - ', this.showReportData);
