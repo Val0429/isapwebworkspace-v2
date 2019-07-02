@@ -50,7 +50,7 @@
                   <peak-time-range
                     :siteItems="siteItem"
                     :dayXSiteX="pDayXxSiteX"
-                    :timeRangeData="pData"> 
+                    :timeRangeData="pData">
                     </peak-time-range>
 
                 <!-- Ben -->
@@ -202,7 +202,7 @@ export default class ReportTraffic extends Vue {
     }
 
     mounted() {
-
+        this.initDatas()
     }
 
     async initDatas(){
