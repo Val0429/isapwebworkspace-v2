@@ -278,8 +278,6 @@ export class HighchartsTraffic extends Vue {
             );
         }
 
-        console.log(tempSeries);
-
         switch (this.areaMode) {
             case EAreaMode.single:
                 let singleSeries = [];

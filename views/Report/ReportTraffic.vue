@@ -441,15 +441,15 @@ export default class ReportTraffic extends Vue {
     // Morris //
     initChartDeveloper() {
         this.timeMode = ETimeMode.week;
-        this.areaMode = EAreaMode.single;
+        this.areaMode = EAreaMode.all;
 
         // single day
         this.startDate = new Date("2019-07-01T08:00:00.000Z");
         this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
         // multipe day
-        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        // this.endDate = new Date("2019-08-10T14:00:00.000Z");
+        this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
         let siteLength = 1;
 
@@ -498,7 +498,7 @@ export default class ReportTraffic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
+                let tempDate = new Date(`2019-07-${iString10}T00:00:00.000Z`);
                 let trafficChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
