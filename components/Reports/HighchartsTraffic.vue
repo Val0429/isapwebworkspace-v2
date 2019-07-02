@@ -127,6 +127,11 @@ export class HighchartsTraffic extends Vue {
         this.start();
     }
 
+    @Watch("value", { deep: true })
+    private onValueChanged(newval: IChartTrafficData[], IChartTrafficData: IChartTrafficData[]) {
+        this.start();
+    }
+
     created() {
         this.start();
     }
