@@ -283,8 +283,8 @@ export class HighchartsTraffic extends Vue {
                 this.chartOptions = {
                     chart: { zoomType: "x" },
                     exporting: { enabled: false },
-                    title: { text: " " },
-                    subtitle: { text: " " },
+                    title: { text: null },
+                    subtitle: { text: null },
                     xAxis: {
                         crosshair: true,
                         categories: tempCategories,
@@ -337,11 +337,10 @@ export class HighchartsTraffic extends Vue {
                 this.chartOptions = {
                     chart: { zoomType: "x" },
                     exporting: { enabled: false },
-                    title: { text: " " },
-                    subtitle: { text: " " },
+                    title: { text: null },
+                    subtitle: { text: null },
                     xAxis: [
                         {
-                            crosshair: true,
                             categories: tempCategories,
                             labels: { useHTML: true }
                         }
@@ -473,8 +472,8 @@ export class HighchartsTraffic extends Vue {
         this.chartOptions = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
-            title: { text: " " },
-            subtitle: { text: " " },
+            title: { text: null },
+            subtitle: { text: null },
             xAxis: [
                 {
                     crosshair: true,
@@ -839,8 +838,8 @@ export class HighchartsTraffic extends Vue {
         this.chartOptions = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
-            title: { text: " " },
-            subtitle: { text: " " },
+            title: { text: null },
+            subtitle: { text: null },
             xAxis: [
                 {
                     crosshair: true,
@@ -1245,8 +1244,8 @@ export class HighchartsTraffic extends Vue {
         this.chartOptions = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
-            title: { text: " " },
-            subtitle: { text: " " },
+            title: { text: null },
+            subtitle: { text: null },
             xAxis: {
                 categories: tempCategories,
                 labels: { useHTML: true }
