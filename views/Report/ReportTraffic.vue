@@ -1,5 +1,5 @@
 <template>
-    <div class="animated fadeIn">
+    <div>
 
         <!-- Tina -->
         <filter_condition
@@ -13,13 +13,15 @@
             <iv-card>
 
                 <!-- Tina -->
-                <analysis_filter_in_out
-                    class="mb-5 mt-3 ml-4"
+                <analysis_filter_in_out_traffic
                     v-if="filterData.siteIds && filterData.siteIds.length === 1"
                     :firstSiteId="filterData.firstSiteId"
+                    :countType="filterData.type"
                     :deviceMode="deviceMode"
+                    :showReportData="responseData"
+                    @traffic-chart-data="receiveTrafficChartData"
                 >
-                </analysis_filter_in_out>
+                </analysis_filter_in_out_traffic>
 
                 <!-- Ben -->
                 <anlysis-dashboard :anlysisData="dData">
@@ -523,7 +525,7 @@ export default class ReportTraffic extends Vue {
         this.responseData = responseData;
         Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
         console.log("this.filterData  - ", this.filterData);
-        console.log("this.responseData  - ", this.responseData);
+        // console.log("this.responseData  - ", this.responseData);
     }
 
     receiveUserData(data) {
@@ -533,6 +535,10 @@ export default class ReportTraffic extends Vue {
 
     receiveModalShowData(data) {
         this.modalShow = data;
+    }
+
+    receiveTrafficChartData(chartData) {
+        console.log('chartData - ', chartData);
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
