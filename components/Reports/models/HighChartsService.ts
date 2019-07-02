@@ -1,6 +1,15 @@
 import { EWeather } from './EHighCharts';
 
 class HighChartsService {
+    mathRoundLength = 2;
+
+    datetimeFormat = {
+        year: 'YYYY',
+        month: 'YYYY/MM',
+        date: 'YYYY/MM/DD',
+        time: 'HH:mm',
+    };
+
     weatherIcon(weather: EWeather, style: string = 'font-size:1.1rem; color:#924da3;'): string {
         let result = '';
         switch (weather) {

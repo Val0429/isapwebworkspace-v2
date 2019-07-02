@@ -147,6 +147,7 @@ import {
     ECountType,
     EDesignationPeriod, EIfAllSelected
 } from "@/components/Reports/models/EReport";
+import { IChartTrafficData } from "@/components/Reports";
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
@@ -164,6 +165,68 @@ enum EPageStep {
     components: {}
 })
 export class FilterCondition extends Vue {
+	// @Prop({
+	// 	type: Date, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return new Date();
+	// 	}
+	// })
+	// startDate: any;
+	//
+	// @Prop({
+	// 	type: Date, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return new Date();
+	// 	}
+	// })
+	// endDate: any;
+	//
+	// @Prop({
+	// 	type: Array, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return [];
+	// 	}
+	// })
+	// sites: any;
+	//
+	// @Prop({
+	// 	type: String, // Boolean, Number, String, Array, Object
+	// 	default: 'hour'
+	// })
+	// timeMode: any;
+	//
+	// @Prop({
+	// 	type: String, // Boolean, Number, String, Array, Object
+	// 	default: 'all'
+	// })
+	// areaMode: any;
+	//
+	// @Prop({
+	// 	type: Array, // Boolean, Number, String, Array, Object
+	// 	default: () => {
+	// 		return [];
+	// 	}
+	// })
+	// chartDatas: any;
+
+	@Prop({
+		type: Object, // Boolean, Number, String, Array, Object
+		default: {}
+	})
+	sitesSelectItem: object;
+
+	@Prop({
+		type: Object, // Boolean, Number, String, Array, Object
+		default: {}
+	})
+	tagSelectItem: object;
+
+	@Prop({
+		type: Object, // Boolean, Number, String, Array, Object
+		default: {}
+	})
+	regionTreeItem: object;
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
@@ -172,12 +235,9 @@ export class FilterCondition extends Vue {
     ifAllSitesSelectItem: any = [];
 
     // select 相關
-    sitesSelectItem: any = {};
-    tagSelectItem: any = {};
 
     // tree
     selectType = ERegionType.site;
-    regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
     // date 相關
@@ -201,6 +261,7 @@ export class FilterCondition extends Vue {
     // response 相關
     responseData: any = {};
 
+
     created() {
         // this.initSelectItemSite();
         this.initSelectItem();
@@ -208,16 +269,16 @@ export class FilterCondition extends Vue {
     }
 
     mounted() {
-        this.initSelectItemTag();
-        this.initSelectItemTree();
-        this.initRegionTreeSelect();
-        this.siteFilterPermission();
+        // this.initSelectItemTag();
+        // this.initSelectItemTree();
+        // this.initRegionTreeSelect();
+	    this.siteFilterPermission();
     }
 
-    initRegionTreeSelect() {
-        this.regionTreeItem = new RegionTreeItem();
-        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
-    }
+    // initRegionTreeSelect() {
+    //     this.regionTreeItem = new RegionTreeItem();
+    //     this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    // }
 
     initSelectItem() {
         this.ifAllSitesSelectItem = [
@@ -248,12 +309,9 @@ export class FilterCondition extends Vue {
     }
 
     siteFilterPermission() {
-        let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
-            tempSitesSelectItem[detail.objectId] = detail.name;
             this.inputFormData.allSiteIds.push(detail.objectId);
         }
-        this.sitesSelectItem = tempSitesSelectItem;
     }
 
     // async initSelectItemSite() {
@@ -289,56 +347,58 @@ export class FilterCondition extends Vue {
     //         });
     // }
 
-    async initSelectItemTag() {
-        let tempTagSelectItem = {};
-        await this.$server
-            .R("/tag/all")
-            .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response) {
-                        // 自定義 tagSelectItem 的 key 的方式
-                        tempTagSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        this.inputFormData.allTagIds.push(returnValue.objectId);
-                    }
-                    this.tagSelectItem = tempTagSelectItem;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
+    // async initSelectItemTag() {
+    //     let tempTagSelectItem = {};
+    //     await this.$server
+    //         .R("/tag/all")
+    //         .then((response: any) => {
+    //             if (response != undefined) {
+    //                 for (const returnValue of response) {
+    //                     // 自定義 tagSelectItem 的 key 的方式
+    //                     tempTagSelectItem[returnValue.objectId] =
+    //                         returnValue.name;
+    //                     this.inputFormData.allTagIds.push(returnValue.objectId);
+    //                 }
+    //                 this.tagSelectItem = tempTagSelectItem;
+    //             }
+    //         })
+    //         .catch((e: any) => {
+    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+    //                 return ResponseFilter.base(this, e);
+    //             }
+    //             console.log(e);
+    //             return false;
+    //         });
+    // }
 
-    async initSelectItemTree() {
-        await this.$server
-            .R("/location/tree")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
-                        response,
-                        this.$user.allowSites
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
+    // async initSelectItemTree() {
+    //     await this.$server
+    //         .R("/location/tree")
+    //         .then((response: any) => {
+    //             if (response != undefined) {
+    //                 this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
+    //                     response,
+    //                     this.$user.allowSites
+    //                 );
+    //                 this.regionTreeItem.region = this.regionTreeItem.tree;
+    //             }
+    //         })
+    //         .catch((e: any) => {
+    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+    //                 return ResponseFilter.base(this, e);
+    //             }
+    //             console.log(e);
+    //             return false;
+    //         });
+    // }
 
     tempSaveInputData(data) {
         switch (data.key) {
             case "siteIds":
                 this.inputFormData.siteIds = data.value;
-                break;
+                // console.log(' - ', this.inputFormData.siteIds);
+	            // this.$emit("chart-sites", this.sites);
+	            break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
                 break;
@@ -432,14 +492,15 @@ export class FilterCondition extends Vue {
                     : this.inputFormData.tagIds
         };
 
-        if (this.inputFormData.siteIds.length === 0) return false;
+        if (this.inputFormData.siteIds.length === 0) {
+            return false;
+        }
 
-            if (this.selectAllSites === 'all') {
-                this.inputFormData.siteIds = this.inputFormData.allSiteIds;
-            }
+        if (this.selectAllSites === 'all') {
+            this.inputFormData.siteIds = this.inputFormData.allSiteIds;
+        }
 
         doSubmitParam.siteIds = this.inputFormData.siteIds;
-
 
         // 選擇 period
         if (this.selectPeriodAddWay === 'period') {
@@ -461,12 +522,12 @@ export class FilterCondition extends Vue {
                     Datetime.DateTime2String(this.inputFormData.endDate, 'YYYY-MM-DD')
                 )
             ) {
-                doSubmitParam.startDate = Datetime.DateTime2String(this.inputFormData.startDate, 'YYYY-MM-DD');
-                doSubmitParam.endDate = Datetime.DateTime2String(this.inputFormData.endDate, 'YYYY-MM-DD');
+                doSubmitParam.startDate = this.inputFormData.startDate.toISOString();
+                doSubmitParam.endDate = this.inputFormData.endDate.toISOString();
                 doSubmitParam.type = ECountType.hour;
             } else {
-                doSubmitParam.startDate = Datetime.DateTime2String(this.inputFormData.startDate, 'YYYY-MM-DD');
-                doSubmitParam.endDate = Datetime.DateTime2String(this.inputFormData.endDate, 'YYYY-MM-DD');
+                doSubmitParam.startDate = this.inputFormData.startDate.toISOString();
+                doSubmitParam.endDate = this.inputFormData.endDate.toISOString();
                 doSubmitParam.type = ECountType.day;
             }
 
@@ -474,15 +535,15 @@ export class FilterCondition extends Vue {
         } else if (this.selectPeriodAddWay === 'designation') {
             switch (this.inputFormData.designationPeriod) {
                 case "today":
-                    doSubmitParam.startDate = Datetime.CountDateNumber(0);
-                    doSubmitParam.endDate = Datetime.CountDateNumber(0);
+                    doSubmitParam.startDate = new Date(Datetime.CountDateNumber(0)).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.CountDateNumber(0)).toISOString();
                     doSubmitParam.type = ECountType.hour;
                     console.log("startDate today - ", doSubmitParam.startDate);
                     console.log("endDate today - ", doSubmitParam.endDate);
                     break;
                 case "yesterday":
-                    doSubmitParam.startDate = Datetime.CountDateNumber(-1);
-                    doSubmitParam.endDate = Datetime.CountDateNumber(-1);
+                    doSubmitParam.startDate = new Date(Datetime.CountDateNumber(-1)).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.CountDateNumber(-1)).toISOString();
                     doSubmitParam.type = ECountType.hour;
                     console.log(
                         "startDate yesterday - ",
@@ -491,8 +552,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate yesterday - ", doSubmitParam.endDate);
                     break;
                 case "last7days":
-                    doSubmitParam.startDate = Datetime.CountDateNumber(-6);
-                    doSubmitParam.endDate = Datetime.CountDateNumber(0);
+                    doSubmitParam.startDate = new Date(Datetime.CountDateNumber(-6)).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.CountDateNumber(0)).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate last7days - ",
@@ -501,8 +562,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate last7days - ", doSubmitParam.endDate);
                     break;
                 case "thisWeek":
-                    doSubmitParam.startDate = Datetime.ThisWeekStartDate();
-                    doSubmitParam.endDate = Datetime.ThisWeekEndDate();
+                    doSubmitParam.startDate = new Date(Datetime.ThisWeekStartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.ThisWeekEndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate thisWeek - ",
@@ -511,8 +572,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate thisWeek - ", doSubmitParam.endDate);
                     break;
                 case "lastWeek":
-                    doSubmitParam.startDate = Datetime.LastWeekStartDate();
-                    doSubmitParam.endDate = Datetime.LastWeekEndDate();
+                    doSubmitParam.startDate = new Date(Datetime.LastWeekStartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.LastWeekEndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate lastWeek - ",
@@ -521,8 +582,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate lastWeek - ", doSubmitParam.endDate);
                     break;
                 case "thisMonth":
-                    doSubmitParam.startDate = Datetime.ThisMonthStartDate();
-                    doSubmitParam.endDate = Datetime.ThisMonthEndDate();
+                    doSubmitParam.startDate = new Date(Datetime.ThisMonthStartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.ThisMonthEndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate thisMonth - ",
@@ -531,8 +592,8 @@ export class FilterCondition extends Vue {
                     console.log("endDate thisMonth - ", doSubmitParam.endDate);
                     break;
                 case "lastMonth":
-                    doSubmitParam.startDate = Datetime.LastMonthStartDate();
-                    doSubmitParam.endDate = Datetime.LastMonthEndDate();
+                    doSubmitParam.startDate = new Date(Datetime.LastMonthStartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.LastMonthEndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate lastMonth - ",
@@ -541,36 +602,36 @@ export class FilterCondition extends Vue {
                     console.log("endDate lastMonth - ", doSubmitParam.endDate);
                     break;
                 case "q1":
-                    doSubmitParam.startDate = Datetime.Q1StartDate();
-                    doSubmitParam.endDate = Datetime.Q1EndDate();
+                    doSubmitParam.startDate = new Date(Datetime.Q1StartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.Q1EndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q1 - ", doSubmitParam.startDate);
                     console.log("endDate q1 - ", doSubmitParam.endDate);
                     break;
                 case "q2":
-                    doSubmitParam.startDate = Datetime.Q2StartDate();
-                    doSubmitParam.endDate = Datetime.Q2EndDate();
+                    doSubmitParam.startDate = new Date(Datetime.Q2StartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.Q2EndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q2 - ", doSubmitParam.startDate);
                     console.log("endDate q2 - ", doSubmitParam.endDate);
                     break;
                 case "q3":
-                    doSubmitParam.startDate = Datetime.Q3StartDate();
-                    doSubmitParam.endDate = Datetime.Q3EndDate();
+                    doSubmitParam.startDate = new Date(Datetime.Q3StartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.Q3EndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q3 - ", doSubmitParam.startDate);
                     console.log("endDate q3 - ", doSubmitParam.endDate);
                     break;
                 case "q4":
-                    doSubmitParam.startDate = Datetime.Q4StartDate();
-                    doSubmitParam.endDate = Datetime.Q4EndDate();
+                    doSubmitParam.startDate = new Date(Datetime.Q4StartDate()).toISOString();
+                    doSubmitParam.endDate = new Date(Datetime.Q4EndDate()).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log("startDate q4 - ", doSubmitParam.startDate);
                     console.log("endDate q4 - ", doSubmitParam.endDate);
                     break;
                 case "thisYear":
-                    doSubmitParam.startDate = Datetime.DateTime2String(Datetime.YearStart(new Date()), 'YYYY-MM-DD');
-                    doSubmitParam.endDate = Datetime.DateTime2String(Datetime.YearEnd(new Date()), 'YYYY-MM-DD');
+                    doSubmitParam.startDate = new Date(Datetime.ThisYearStartDate()).toISOString();
+                    doSubmitParam.endDate = (new Date(Datetime.ThisYearEndDate())).toISOString();
                     doSubmitParam.type = ECountType.day;
                     console.log(
                         "startDate thisYear - ",
@@ -583,22 +644,8 @@ export class FilterCondition extends Vue {
 
         // console.log(' - ', doSubmitParam); return false;
 
-        await this.$server
-            .C("/report/people-counting/summary", doSubmitParam)
-            .then((response: any) => {
-                if (response !== undefined) {
-                    this.responseData = response;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
 
-        this.$emit("submit-data", doSubmitParam, this.responseData);
+        this.$emit("submit-data", doSubmitParam);
     }
 
     doReset() {
