@@ -5,7 +5,7 @@
             :visible="filterVisible"
             v-on:input="onFilterSubmit($event)"
         />
-    <iv-form-quick v-on:viewChange="viewChange($event)">
+    <ivc-form-quick v-on:viewChange="viewChange($event)">
         <!-- 5) custom view templates with <template #view.* /> -->
         
         <template #view.readerscount="{$attrs, $listeners}">
@@ -51,18 +51,18 @@
         <template #view.site="{$attrs, $listeners}">
             {{getInfo($attrs.row).site}}
         </template>
-    </iv-form-quick>
+    </ivc-form-quick>
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
-import { EFormQuick, IFormQuick } from '@/../components/form';
 import { System } from '@/config/default/api/interfaces';
-
+import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
 @Component
 /// 1) class name
-export default class DoorForm extends Vue implements IFormQuick {    
+export default class DoorForm extends Vue implements IFormQuick2 {    
     filterVisible:boolean=true;
     /// 2) cgi path
     path: string = "/acs/door";

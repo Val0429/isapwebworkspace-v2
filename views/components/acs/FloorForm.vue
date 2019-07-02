@@ -1,5 +1,11 @@
 <template>
-    <iv-form-quick>
+<div>
+    <ivc-filter-form
+            :inf="filterInterface()"
+            :visible="filterVisible"
+            v-on:input="onFilterSubmit($event)"
+        />
+        <ivc-form-quick v-on:viewChange="viewChange($event)">    
         <!-- 5) custom view templates with <template #view.* /> -->
 
         
@@ -8,16 +14,36 @@
             <b-img v-bind:src="$attrs.value" fluid class="floor-image"/>
         </template>  -->
 
-    </iv-form-quick>
+    </ivc-form-quick>
+    </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
-import { EFormQuick, IFormQuick } from '@/../components/form';
+import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
 
 @Component
 /// 1) class name
-export default class FloorForm extends Vue implements IFormQuick {
+export default class FloorForm extends Vue implements IFormQuick2 {
+  params:any = {};
+  onFilterSubmit($event?: any): void {
+     this.params = $event || {};
+  }
+  filterVisible: boolean=true;
+  viewChange($event: any): void {
+      console.log("view", $event)
+    this.filterVisible = $event == 'view';
+  } 
+  filterInterface():string{
+      return `interface {
+            /**
+            * @uiLabel - ${this._("name")}
+            */
+            name?:string;
+        }`;
+  } 
+    
     /// 2) cgi path
     path: string = "/acs/floor";
     /// 3) i18n - view / edit / add

@@ -1,5 +1,11 @@
 <template>
-    <iv-form-quick>
+<div>
+    <ivc-filter-form
+            :inf="filterInterface()"
+            :visible="filterVisible"
+            v-on:input="onFilterSubmit($event)"
+        />
+    <ivc-form-quick v-on:viewChange="viewChange($event)">
         <!-- 5) custom view templates with <template #view.* /> -->
 
         <template #view.reader="{$attrs, $listeners}">
@@ -66,16 +72,39 @@
         </template>
         
 
-    </iv-form-quick>
+    </ivc-form-quick>
+    </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
-import { EFormQuick, IFormQuick } from '@/../components/form';
+import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
 
 @Component
 /// 1) class name
-export default class AccessLevelForm extends Vue implements IFormQuick {   
+export default class AccessLevelForm extends Vue implements IFormQuick2 {
+    params:any = {};
+  onFilterSubmit($event?: any): void {
+     this.params = $event || {};
+  }
+  filterVisible: boolean=true;
+  viewChange($event: any): void {
+      console.log("view", $event)
+    this.filterVisible = $event == 'view';
+  } 
+  filterInterface():string{
+      return `interface {
+            /**
+            * @uiLabel - ${this._("doorname")}
+            */
+            doorname?:string;
+            /**
+            * @uiLabel - ${this._("timename")}
+            */
+            timename?:string;
+        }`;
+  }  
     
     /// 2) cgi path
     path: string = "/acs/accesslevel";
