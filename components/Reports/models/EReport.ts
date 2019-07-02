@@ -45,6 +45,11 @@ enum ECountType {
     year = 'year',
 }
 
+enum EType {
+    in = "in",
+    out = "out"
+}
+
 enum ESign {
     positive = 'positive',
     negative = 'negative',
@@ -74,4 +79,4 @@ enum EDayXSiteX {
 }
 
 export { ESign, EPageType, EDayXSiteX };
-export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected };
+export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, EType };

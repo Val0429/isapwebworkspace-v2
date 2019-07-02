@@ -77,15 +77,11 @@ import {
     Watch
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { ECountType } from "@/components/Reports/models/EReport";
+import { ECountType, EType } from "@/components/Reports/models/EReport";
 import { IChartTrafficData, EWeather } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
 let config = require("@/config/default/debug");
 
-enum EType {
-    in = "in",
-    out = "out"
-}
 
 @Component({
     components: {}
@@ -120,6 +116,37 @@ export class AnalysisFilterInOutTraffic extends Vue {
         }
     })
     showReportData: any;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    areaSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    deviceGroupSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    deviceSelectItem: object;
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: []
+    })
+    typeSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    countSelectItem: object;
+    
 
     // select 相關
     areaSelectItem: any = {};
@@ -166,7 +193,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
     // chart 相關
     // trafficChartData: IChartTrafficData = {
-    trafficChartData: any = []
+    trafficChartData: any = [];
         // {
         // date: null,
         // siteObjectId: '',
