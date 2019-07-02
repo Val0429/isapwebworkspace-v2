@@ -262,7 +262,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
             // 只選擇site
         } else if (
             this.firstSiteId &&
-            (this.inputFormData.areaId === undefined || this.inputFormData.areaId === "") &&  this.inputFormData.areaId !== 'all'
+            (this.inputFormData.areaId === undefined || this.inputFormData.areaId === "") && this.inputFormData.areaId !== 'all'
         ) {
             await this.$server
                 .R("/device/group/all", readParam)
@@ -286,6 +286,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
             // 選擇site和單一area
         } else if (this.firstSiteId && this.inputFormData.areaId && this.inputFormData.areaId !== 'all') {
+
             readParam.areaId = this.inputFormData.areaId;
 
             await this.$server
@@ -357,8 +358,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
             // 只選擇site
         } else if (this.firstSiteId && !this.inputFormData.areaId && !this.inputFormData.groupId) {
 
-            console.log('只選擇site - ', this.inputFormData.areaId, this.inputFormData.groupId);
-
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -386,12 +385,7 @@ export class AnalysisFilterInOutTraffic extends Vue {
             (this.inputFormData.groupId === undefined || this.inputFormData.groupId === "") && this.inputFormData.groupId !== 'all'
         ) {
 
-            console.log('選擇site和單一area - ', this.inputFormData.areaId, this.inputFormData.groupId);
-
-
             readParam.areaId = this.inputFormData.areaId;
-
-            console.log('選擇site和單一area - ', readParam);
 
             await this.$server
                 .R("/device", readParam)
@@ -413,17 +407,12 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     return false;
                 });
 
-            console.log(' this.deviceSelectItem - ',  this.deviceSelectItem);
-
             // 選擇site和單一area和單一device group
         } else if (
             this.firstSiteId &&
             this.inputFormData.areaId && this.inputFormData.areaId !== 'all' &&
             this.inputFormData.groupId && this.inputFormData.groupId !== 'all'
         ) {
-
-            console.log('選擇site和單一area和單一device group - ', this.inputFormData.areaId, this.inputFormData.groupId);
-
 
             readParam.groupId = this.inputFormData.groupId;
 
@@ -457,8 +446,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
             (this.inputFormData.groupId === undefined || this.inputFormData.groupId === "") && this.inputFormData.groupId !== 'all'
         ) {
 
-            console.log('選擇site和all area - areaId - groupId', this.inputFormData.areaId, this.inputFormData.groupId);
-
             readParam.areaId = '';
 
             await this.$server
@@ -487,7 +474,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
             this.inputFormData.areaId && this.inputFormData.areaId === 'all' &&
             this.inputFormData.groupId && this.inputFormData.groupId === 'all'
         ) {
-            console.log('選擇site和all area和all device group - ', this.inputFormData.areaId, this.inputFormData.groupId);
 
             readParam.groupId = this.inputFormData.groupId;
 
@@ -514,15 +500,15 @@ export class AnalysisFilterInOutTraffic extends Vue {
                     return false;
                 });
 
-            //
+            // 選擇site和單一area和all device group
         } else if (
             this.firstSiteId &&
-            this.inputFormData.areaId && this.inputFormData.areaId === 'all' &&
-            (this.inputFormData.groupId !== undefined || this.inputFormData.groupId !== "") && this.inputFormData.groupId !== 'all'
-
+            this.inputFormData.areaId && this.inputFormData.areaId !== 'all' &&
+            this.inputFormData.groupId && this.inputFormData.groupId === 'all'
         ) {
 
-            console.log('其他 - ', this.inputFormData.areaId, this.inputFormData.groupId);
+            readParam.areaId = this.inputFormData.areaId;
+            readParam.groupId = '';
 
             await this.$server
                 .R("/device", readParam)
@@ -535,26 +521,8 @@ export class AnalysisFilterInOutTraffic extends Vue {
                         }
                         this.deviceSelectItem = tempDeviceSelectItem;
                     }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        } else if (this.firstSiteId &&
-            this.inputFormData.areaId && this.inputFormData.areaId !== 'all') {
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
+                    if (response.results.length === 0) {
+                        this.deviceSelectItem = {};
                     }
                 })
                 .catch((e: any) => {
@@ -695,12 +663,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
                 console.log(" - ", this.trafficChartData);
             }
 
-            console.log('依照單一area篩選 - ', );
-
-
-            console.log('groupId - ', this.inputFormData.groupId);
-            console.log('deviceId - ', this.inputFormData.deviceId);
-
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
@@ -712,9 +674,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
             // 依照all area篩選
         } else if (this.inputFormData.areaId && this.inputFormData.areaId === 'all') {
-
-            console.log('依照all area篩選 - ', );
-
 
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -728,11 +687,16 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
+
             await this.initSelectItemArea();
             await this.initSelectItemDeviceGroup();
             await this.initSelectItemDevice();
+
+        } else {
+            return false;
         }
     }
 
@@ -740,11 +704,8 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
         this.deviceGroupFilter = [];
 
-        if (
-            this.inputFormData.groupId !== undefined ||
-            this.inputFormData.groupId !== ""
-        ) {
-            // 依照deviceGroup篩選
+        if (this.inputFormData.groupId && this.inputFormData.groupId !== 'all') {
+            // 依照單一deviceGroup篩選
             for (const singleData of this.areaFilter) {
 
                 for (const detailKey in singleData) {
@@ -796,6 +757,21 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
+            this.inputFormData.deviceId = "all";
+
+            // 依照all deviceGroups篩選
+        } else if (this.inputFormData.areaId && this.inputFormData.groupId && this.inputFormData.groupId === 'all') {
+
+            this.inputFormData.deviceId = "";
+            await this.initSelectItemDevice();
+            this.inputFormData.deviceId = "all";
+
+            // 清除deviceGroups篩選
+        } else if (this.inputFormData.areaId && !this.inputFormData.groupId) {
+            
+            this.inputFormData.deviceId = "";
+            await this.initSelectItemDevice();
+
         } else {
             return false;
         }
