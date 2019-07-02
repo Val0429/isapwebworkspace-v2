@@ -32,7 +32,8 @@ import {
     EWeather,
     ISite,
     IDayRange,
-    IChartTrafficData
+    IChartDemographic,
+    EAgeRange
 } from "@/components/Reports";
 import HighchartsDemographic from "@/components/Reports/HighchartsDemographic.vue";
 
@@ -53,7 +54,7 @@ export default class ReportDemographic extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    value: IChartTrafficData[] = [];
+    value: IChartDemographic[] = [];
     ////////////////////////////////////// Morris End //////////////////////////////////////
 
     created() {
@@ -93,29 +94,21 @@ export default class ReportDemographic extends Vue {
             });
 
             for (let i = 1; i < 30; i++) {
-                let weather = EWeather.none;
-                let tmepWeatherNumber = Math.floor(Math.random() * 300);
+                let ageRange = EAgeRange.none;
+                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
 
-                if (tmepWeatherNumber % 10 == 0) {
-                    weather = EWeather.clearDay;
-                } else if (tmepWeatherNumber % 10 == 1) {
-                    weather = EWeather.clearNight;
-                } else if (tmepWeatherNumber % 10 == 2) {
-                    weather = EWeather.rain;
-                } else if (tmepWeatherNumber % 10 == 3) {
-                    weather = EWeather.snow;
-                } else if (tmepWeatherNumber % 10 == 4) {
-                    weather = EWeather.sleet;
-                } else if (tmepWeatherNumber % 10 == 5) {
-                    weather = EWeather.wind;
-                } else if (tmepWeatherNumber % 10 == 6) {
-                    weather = EWeather.fog;
-                } else if (tmepWeatherNumber % 10 == 7) {
-                    weather = EWeather.cloudy;
-                } else if (tmepWeatherNumber % 10 == 8) {
-                    weather = EWeather.partlyCloudyDay;
-                } else if (tmepWeatherNumber % 10 == 9) {
-                    weather = EWeather.partlyCloudyNight;
+                if (tempAgeRangeNumber % 10 == 0) {
+                    ageRange = EAgeRange.low20;
+                } else if (tempAgeRangeNumber % 10 == 1) {
+                    ageRange = EAgeRange.m21_30;
+                } else if (tempAgeRangeNumber % 10 == 2) {
+                    ageRange = EAgeRange.m31_40;
+                } else if (tempAgeRangeNumber % 10 == 3) {
+                    ageRange = EAgeRange.m41_50;
+                } else if (tempAgeRangeNumber % 10 == 4) {
+                    ageRange = EAgeRange.m51_60;
+                } else if (tempAgeRangeNumber % 10 == 5) {
+                    ageRange = EAgeRange.upp61;
                 }
 
                 let tempI = i;
@@ -123,16 +116,10 @@ export default class ReportDemographic extends Vue {
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
                 let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
-                let trafficChartData: IChartTrafficData = {
+                let trafficChartData: IChartDemographic = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    temperature: iNumber,
-                    temperatureMin: iNumber,
-                    temperatureMax: iNumber,
-                    traffic: Math.floor(Math.random() * 500),
-                    revenue: Math.floor(Math.random() * 1000),
-                    transaction: Math.floor(Math.random() * 50),
-                    weather: weather
+                    ageRange: ageRange
                 };
                 this.value.push(trafficChartData);
             }

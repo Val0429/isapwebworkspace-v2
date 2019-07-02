@@ -22,11 +22,13 @@
             ></highcharts>
         </div>
         <div>
+            <b-form-select></b-form-select>
             <highcharts
                 ref="chartDwellTime"
                 v-if="mountChart"
                 :options="chartOptionsDwellTime"
             ></highcharts>
+
             <highcharts
                 ref="chartGender"
                 v-if="mountChart"
@@ -69,11 +71,10 @@ import {
     IDate,
     IDatetimeGroup,
     ISite,
-    IChartTrafficData
+    IChartDemographic
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
-import Weather from "../../views/Setting/Weather.vue";
 
 @Component({
     components: {}
@@ -126,7 +127,7 @@ export class HighchartsDemographic extends Vue {
             return [];
         }
     })
-    value: IChartTrafficData[];
+    value: IChartDemographic[];
 
     errorMessage: string = "";
     mountChart: boolean = false;
@@ -205,7 +206,7 @@ export class HighchartsDemographic extends Vue {
     chartOptionsGenderTime: any = {
         chart: { type: "column", zoomType: "x" },
         exporting: { enabled: false },
-       title: { text: null },
+        title: { text: null },
         subtitle: { text: null },
         xAxis: {
             labels: { useHTML: true },
@@ -275,14 +276,13 @@ export class HighchartsDemographic extends Vue {
     chartOptionsAge: any = {
         chart: { zoomType: "x" },
         exporting: { enabled: false },
-       title: { text: null },
+        title: { text: null },
         subtitle: { text: null },
         tooltip: { enabled: false },
         plotOptions: {
             pie: {
                 dataLabels: {
                     enabled: true,
-                    // distance: -50,
                     style: {
                         fontWeight: "bold",
                         color: "white"
@@ -351,7 +351,7 @@ export class HighchartsDemographic extends Vue {
     chartOptionsGender: any = {
         chart: { zoomType: "x" },
         exporting: { enabled: false },
-       title: { text: null },
+        title: { text: null },
         subtitle: { text: null },
         tooltip: { enabled: false },
         series: [
@@ -364,10 +364,71 @@ export class HighchartsDemographic extends Vue {
     };
 
     created() {
-        this.mountChart = true;
+        this.start();
     }
 
     mounted() {}
+
+    start() {
+        this.chartMode = HighChartsService.chartMode(
+            this.startDate,
+            this.endDate,
+            this.sites
+        );
+        if (isNaN(this.startDate.getTime())) {
+            this.errorMessage = this._("w_ReportTraffic_ErrorDateStart");
+            return false;
+        }
+        if (isNaN(this.endDate.getTime())) {
+            this.errorMessage = this._("w_ReportTraffic_ErrorDateEnd");
+            return false;
+        }
+        if (this.chartMode == EChartMode.none) {
+            this.errorMessage = this._("w_ReportTraffic_ErrorChartMode");
+            return false;
+        }
+        switch (this.chartMode) {
+            case EChartMode.day1Site1:
+                this.initDay1Site1();
+                break;
+            case EChartMode.day1SiteX:
+                this.initDay1SiteX();
+                break;
+            case EChartMode.dayXSite1:
+                this.initDayXSite1();
+                break;
+            case EChartMode.dayXSiteX:
+                this.initDayXSiteX();
+                break;
+            default:
+                break;
+        }
+        console.log(this.value);
+    }
+
+    ////////////////////////// day 1 site 1 //////////////////////////
+
+    initDay1Site1() {
+        this.mountChart = true;
+    }
+
+    ////////////////////////// day 1 site X //////////////////////////
+
+    initDay1SiteX() {
+        this.mountChart = true;
+    }
+
+    ////////////////////////// day X site 1 //////////////////////////
+
+    initDayXSite1() {
+        this.mountChart = true;
+    }
+
+    ////////////////////////// day X site X //////////////////////////
+
+    initDayXSiteX() {
+        this.mountChart = true;
+    }
 }
 
 export default HighchartsDemographic;

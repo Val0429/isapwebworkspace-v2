@@ -42,12 +42,11 @@
                 </highcharts-traffic>
 
                 <!-- Ben -->
-                <peak-time-range
-                    :timeRangeData="pData"
-                    :siteItem="pSiteItem"
-                    v-on:changeSite="changeSite"
-                >
-                </peak-time-range>
+                  <peak-time-range
+                        :siteItems="siteItem"
+                        :dayXSiteX="pDayXxSiteX"
+                        :timeRangeData="pData"> 
+                         </peak-time-range>
 
                 <!-- Ben -->
                 <report-table :reportTableData="rData">
@@ -92,7 +91,9 @@ import {
     IPeckTimeRange,
     ReportDashboard,
     EPageType,
-    ESign
+    ESign,
+        EDayXSiteX,
+    ISiteItems
 } from "@/components/Reports";
 
 enum EPageStep {
@@ -149,9 +150,9 @@ export default class ReportTraffic extends Vue {
     dData = new ReportDashboard();
 
     //PickTimeRange 相關
-    pSite = "";
-    pSiteItem = [];
-    pData = [];
+    pData:IPeckTimeRange[] = [];
+    pDayXxSiteX:EDayXSiteX = EDayXSiteX.none;
+    siteItem:ISiteItems[] = [];
 
     //ReportTable 相關
     rData = new ReportTableData();
@@ -247,14 +248,17 @@ export default class ReportTraffic extends Vue {
         }, 2000);
     }
 
-    initPeakTimeRange() {
+   initPeakTimeRange() {
         setTimeout(() => {
-            this.pSiteItem = [
-                { value: "iVTCTzctbF", text: "台北店" },
-                { value: "pfLGgj8Hf5", text: "台中店" }
+
+           this.pDayXxSiteX = EDayXSiteX.dayXSiteX
+
+            this.siteItem= [
+               { value: "iVTCTzctbF", text: "台北店" },
+               { value: "pfLGgj8Hf5", text: "台中店" }
             ];
 
-            this.pData = [
+           let apipData= [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -379,12 +383,34 @@ export default class ReportTraffic extends Vue {
                     ]
                 }
             ];
-        }, 2000);
-    }
 
-    changeSite(site) {
-        this.pSite = site;
-        // this.initPeakTimeRange();
+ 
+        // Data format conversion
+        for (let item of apipData) {
+                let pDatum:IPeckTimeRange = {
+                    site:"",
+                    head:[],
+                    body:[]
+                }
+                let head = [];
+                let levels: number[] = [];
+                for (let subItem of item.peakHourDatas) {
+                    levels.push(subItem.level);
+                    head.push(subItem.date);
+                }
+
+                let body = {
+                    title: item.date,
+                    context: levels
+                };
+                pDatum.site = item.site.objectId;
+                pDatum.head = head;
+                pDatum.body.push(body);
+                this.pData.push(pDatum);
+        }
+
+        }, 2000);
+
     }
 
     initReportTable() {
@@ -504,27 +530,27 @@ export default class ReportTraffic extends Vue {
 
             for (let i = 1; i < 30; i++) {
                 let weather = EWeather.none;
-                let tmepWeatherNumber = Math.floor(Math.random() * 300);
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
 
-                if (tmepWeatherNumber % 10 == 0) {
+                if (tempWeatherNumber % 10 == 0) {
                     weather = EWeather.clearDay;
-                } else if (tmepWeatherNumber % 10 == 1) {
+                } else if (tempWeatherNumber % 10 == 1) {
                     weather = EWeather.clearNight;
-                } else if (tmepWeatherNumber % 10 == 2) {
+                } else if (tempWeatherNumber % 10 == 2) {
                     weather = EWeather.rain;
-                } else if (tmepWeatherNumber % 10 == 3) {
+                } else if (tempWeatherNumber % 10 == 3) {
                     weather = EWeather.snow;
-                } else if (tmepWeatherNumber % 10 == 4) {
+                } else if (tempWeatherNumber % 10 == 4) {
                     weather = EWeather.sleet;
-                } else if (tmepWeatherNumber % 10 == 5) {
+                } else if (tempWeatherNumber % 10 == 5) {
                     weather = EWeather.wind;
-                } else if (tmepWeatherNumber % 10 == 6) {
+                } else if (tempWeatherNumber % 10 == 6) {
                     weather = EWeather.fog;
-                } else if (tmepWeatherNumber % 10 == 7) {
+                } else if (tempWeatherNumber % 10 == 7) {
                     weather = EWeather.cloudy;
-                } else if (tmepWeatherNumber % 10 == 8) {
+                } else if (tempWeatherNumber % 10 == 8) {
                     weather = EWeather.partlyCloudyDay;
-                } else if (tmepWeatherNumber % 10 == 9) {
+                } else if (tempWeatherNumber % 10 == 9) {
                     weather = EWeather.partlyCloudyNight;
                 }
 

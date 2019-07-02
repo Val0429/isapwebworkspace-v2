@@ -1,4 +1,4 @@
-import { EWeather, ETimeMode, EAreaMode } from './EHighCharts';
+import { EWeather, ETimeMode, EAreaMode, EAgeRange } from './EHighCharts';
 
 interface IDayRange {
     startDay: string;
@@ -31,7 +31,6 @@ interface IDatetimeGroup {
 interface IChartTrafficData {
     date: Date;
     siteObjectId: string;
-
     temperatureMin: number;
     temperatureMax: number;
     traffic: number;
@@ -57,4 +56,12 @@ interface IChartTrafficData {
     dateEndString?: string;
 }
 
-export { ISite, IDate, IDatetimeGroup, IDayRange, IChartTrafficData };
+interface IChartDemographic {
+    date: Date;
+    siteObjectId: string;
+    ageRange: EAgeRange;
+    siteName?: string;
+}
+
+export { ISite, IDate, IDatetimeGroup, IDayRange };
+export { IChartTrafficData, IChartDemographic };

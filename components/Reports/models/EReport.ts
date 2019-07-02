@@ -11,7 +11,7 @@ enum EDeviceMode {
 // report site
 enum EIfAllSelected {
     all = 'all',
-    select = 'select'
+    select = 'select',
 }
 
 // report date
@@ -65,5 +65,13 @@ enum EPageType {
     none = 'none',
 }
 
-export { ESign, EPageType };
+enum EDayXSiteX {
+    day1Site1 = 'Day1Site1',
+    dayXSite1 = 'DayXSite1',
+    day1SiteX = 'Day1SiteX',
+    dayXSiteX = 'DayXSiteX',
+    none = 'none',
+}
+
+export { ESign, EPageType, EDayXSiteX };
 export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected };

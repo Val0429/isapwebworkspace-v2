@@ -334,6 +334,28 @@ class Datetime {
         return this.DateToZero(new Date(date.setDate(diff)));
     }
 
+    // check day in range
+    WeekinDay(weekDay: number, startDay: number, endDay: number): boolean {
+        let result = false;
+        let have7 = false;
+        let inRange = false;
+        let startDayHave7 = startDay - 7;
+        let endDayHave7 = endDay + 7;
+        if (startDay > endDay) {
+            have7 = true;
+        }
+        if (weekDay >= startDay && weekDay <= endDay) {
+            result = true;
+        }
+        if (have7 && weekDay >= startDayHave7 && weekDay <= endDay) {
+            result = true;
+        }
+        if (have7 && weekDay >= startDay && weekDay <= endDayHave7) {
+            result = true;
+        }
+        return result;
+    }
+
     // date
     DateStart(value: Date): Date {
         let date = new Date(value.getTime());
@@ -625,10 +647,9 @@ class Datetime {
 
     //獲得ThisYear開始日期
     ThisYearStartDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const thisYearStartDate = new Date(nowYear, 0, 1);
         return this.DateTime2String(thisYearStartDate);
@@ -636,10 +657,9 @@ class Datetime {
 
     //獲得ThisYear結束日期
     ThisYearEndDate(): string {
-
         const now = new Date(); //當前日期
         let nowYear = now.getFullYear(); //當前年
-        nowYear += (nowYear < 2000) ? 1900 : 0;
+        nowYear += nowYear < 2000 ? 1900 : 0;
 
         const lastYearEndDate = new Date(nowYear, 11, 31);
         return this.DateTime2String(lastYearEndDate);
