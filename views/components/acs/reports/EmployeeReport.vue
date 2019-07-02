@@ -129,7 +129,7 @@ export default class EmployeeReport extends Vue  {
             newItem.StartTime = timeStart.format("HH:mm");
             newItem.DateOccurred = timeStart.format("YYYY-MM-DD");
             newItem.EndTime = timeEnd.format("HH:mm");
-            newItem.WorkTime = moment.utc(timeEnd.diff(timeStart)).format("HH[h ]mm[m]");
+            newItem.WorkTime = moment.utc(timeEnd.diff(timeStart)).format("H[h ]m[m]");
             this.records.push(newItem);
             
         }
