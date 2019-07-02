@@ -32,6 +32,8 @@ interface IChartTrafficData {
     date: Date;
     siteObjectId: string;
     temperature: number;
+    temperatureMin: number;
+    temperatureMax: number;
     traffic: number;
     revenue: number;
     transaction: number;
