@@ -43,10 +43,10 @@
 
                 <!-- Ben -->
                   <peak-time-range
-                        :siteItems="siteItem"
-                        :dayXSiteX="pDayXxSiteX"
-                        :timeRangeData="pData"> 
-                         </peak-time-range>
+                    :siteItems="siteItem"
+                    :dayXSiteX="pDayXxSiteX"
+                    :timeRangeData="pData"> 
+                    </peak-time-range>
 
                 <!-- Ben -->
                 <report-table :reportTableData="rData">
@@ -430,64 +430,64 @@ export default class ReportTraffic extends Vue {
                     area: "1F精品區",
                     group: "N/A",
                     in: [
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.negative, value: 2, valueRatio: -0.02 }
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: -0.01 },
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: -0.01 },
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: 0.01 },
+                        {value: 1, valueRatio: -0.01 },
+                        {value: 2, valueRatio: -0.02 }
                     ],
                     out: [
-                        { sign: ESign.negative, value: 3, valueRatio: -0.03 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 4, valueRatio: 0.05 }
+                        { value: 3, valueRatio: -0.03 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 4, valueRatio: 0.05 }
                     ]
                 },
                 {
                     area: "2F生活用品",
                     group: "Group01",
                     in: [
-                        { sign: ESign.positive, value: 5, valueRatio: 0.06 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.negative, value: 6, valueRatio: -0.07 }
+                        { value: 5, valueRatio: 0.06 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 6, valueRatio: -0.07 }
                     ],
                     out: [
-                        { sign: ESign.negative, value: 7, valueRatio: -0.08 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 1, valueRatio: -0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.positive, value: 1, valueRatio: 0.01 },
-                        { sign: ESign.negative, value: 8, valueRatio: -0.09 }
+                        {  value: 7, valueRatio: -0.08 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 1, valueRatio: -0.01 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 1, valueRatio: -0.01 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 1, valueRatio: 0.01 },
+                        {  value: 8, valueRatio: -0.09 }
                     ]
                 }
             ];
