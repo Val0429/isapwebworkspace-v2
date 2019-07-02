@@ -1,9 +1,12 @@
 <template>
-    <iv-form-quick>
+    <div>
+        <ivc-filter-form
+            :inf="filterInterface()"
+            :visible="filterVisible"
+            v-on:input="onFilterSubmit($event)"
+        />
+    <iv-form-quick v-on:viewChange="viewChange($event)">
         <!-- 5) custom view templates with <template #view.* /> -->
-        <!-- <template #view="{$attrs, $listeners}">
-            {{$attrs.row}}
-        </template> -->
         
         <template #view.readerscount="{$attrs, $listeners}">
             {{ getReadersCount($attrs.row) }}
@@ -49,6 +52,7 @@
             {{getInfo($attrs.row).site}}
         </template>
     </iv-form-quick>
+    </div>
 </template>
 
 <script lang="ts">
@@ -59,8 +63,10 @@ import { System } from '@/config/default/api/interfaces';
 @Component
 /// 1) class name
 export default class DoorForm extends Vue implements IFormQuick {    
+    filterVisible:boolean=true;
     /// 2) cgi path
     path: string = "/acs/door";
+    params:any = {};
     /// 3) i18n - view / edit / add
     tView: string = "w_Door";
     tAdd: string = "w_DoorAdd";
@@ -145,6 +151,19 @@ export default class DoorForm extends Vue implements IFormQuick {
         row.ccurein = props.ccurein;
         row.ccureout = props.ccureout;
         return row;
+    }
+    filterInterface(){
+         return `interface {
+            /**
+            * @uiLabel - ${this._("doorname")}
+            */
+            name:string;
+        }`;
+    }
+    viewChange($event){
+        
+        console.log("ViewChange", $event);
+        this.filterVisible = $event == 'view';
     }
     getReaderInfo(row: any) {
      let{sipassin, sipassout, ccurein, ccureout}={} as any;
@@ -232,6 +251,12 @@ export default class DoorForm extends Vue implements IFormQuick {
         
         return count;
     }
+    onFilterSubmit($event?){
+        console.log("$event", $event);
+        console.log("params", this.params);
+        this.params = $event || {};
+    }
+    
 }
 </script>
 
