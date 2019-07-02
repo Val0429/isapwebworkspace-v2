@@ -14,7 +14,6 @@
 
             <iv-card>
 
-
                 <!-- Tina -->
                 <analysis_filter_in_out_traffic
                     class="mb-4"
@@ -48,11 +47,12 @@
                 </highcharts-traffic>
 
                 <!-- Ben -->
-                  <peak-time-range
-                        :siteItems="siteItem"
-                        :dayXSiteX="pDayXxSiteX"
-                        :timeRangeData="pData">
-                         </peak-time-range>
+                <peak-time-range
+                    :siteItems="siteItem"
+                    :dayXSiteX="pDayXxSiteX"
+                    :timeRangeData="pData"
+                >
+                </peak-time-range>
 
                 <!-- Ben -->
                 <report-table :reportTableData="rData">
@@ -70,7 +70,11 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
 // Tina
-import { EDeviceMode, ECountType, EType } from "@/components/Reports/models/EReport";
+import {
+    EDeviceMode,
+    ECountType,
+    EType
+} from "@/components/Reports/models/EReport";
 import {
     ERegionType,
     RegionTreeItem,
@@ -98,7 +102,7 @@ import {
     ReportDashboard,
     EPageType,
     ESign,
-        EDayXSiteX,
+    EDayXSiteX,
     ISiteItems
 } from "@/components/Reports";
 
@@ -140,11 +144,8 @@ export default class ReportTraffic extends Vue {
     // OfficeHour 相關
     officeHourItem: any = {};
     officeHourItemDetail: any = {};
-
     // recipient 相關
     modalShow: boolean = false;
-
-
 
     // 接收 Filter Condition 資料 相關
     filterData: any = {};
@@ -185,16 +186,15 @@ export default class ReportTraffic extends Vue {
 
     //// Analysis Filter End ////
 
-
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     //Dashboard 相關
     dData = new ReportDashboard();
 
     //PickTimeRange 相關
-    pData:IPeckTimeRange[] = [];
-    pDayXxSiteX:EDayXSiteX = EDayXSiteX.none;
-    siteItem:ISiteItems[] = [];
+    pData: IPeckTimeRange[] = [];
+    pDayXxSiteX: EDayXSiteX = EDayXSiteX.none;
+    siteItem: ISiteItems[] = [];
 
     //ReportTable 相關
     rData = new ReportTableData();
@@ -207,7 +207,6 @@ export default class ReportTraffic extends Vue {
         this.initDashboardData();
         this.initPeakTimeRange();
         this.initReportTable();
-
         // Tina
         this.initSelectItemSite();
         this.initSelectItemTag();
@@ -290,17 +289,16 @@ export default class ReportTraffic extends Vue {
         }, 2000);
     }
 
-   initPeakTimeRange() {
+    initPeakTimeRange() {
         setTimeout(() => {
+            this.pDayXxSiteX = EDayXSiteX.dayXSiteX;
 
-           this.pDayXxSiteX = EDayXSiteX.dayXSiteX
-
-            this.siteItem= [
-               { value: "iVTCTzctbF", text: "台北店" },
-               { value: "pfLGgj8Hf5", text: "台中店" }
+            this.siteItem = [
+                { value: "iVTCTzctbF", text: "台北店" },
+                { value: "pfLGgj8Hf5", text: "台中店" }
             ];
 
-           let apipData= [
+            let apipData = [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -426,14 +424,13 @@ export default class ReportTraffic extends Vue {
                 }
             ];
 
-
-        // Data format conversion
-        for (let item of apipData) {
-                let pDatum:IPeckTimeRange = {
-                    site:"",
-                    head:[],
-                    body:[]
-                }
+            // Data format conversion
+            for (let item of apipData) {
+                let pDatum: IPeckTimeRange = {
+                    site: "",
+                    head: [],
+                    body: []
+                };
                 let head = [];
                 let levels: number[] = [];
                 for (let subItem of item.peakHourDatas) {
@@ -449,10 +446,8 @@ export default class ReportTraffic extends Vue {
                 pDatum.head = head;
                 pDatum.body.push(body);
                 this.pData.push(pDatum);
-        }
-
+            }
         }, 2000);
-
     }
 
     initReportTable() {
@@ -542,7 +537,7 @@ export default class ReportTraffic extends Vue {
 
     // Morris //
     initChartDeveloper() {
-        this.timeMode = ETimeMode.week;
+        this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
 
         // single day
@@ -550,8 +545,8 @@ export default class ReportTraffic extends Vue {
         this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
         // multipe day
-        this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        this.endDate = new Date("2019-08-10T14:00:00.000Z");
+        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        // this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
         let siteLength = 1;
 
@@ -600,7 +595,7 @@ export default class ReportTraffic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-07-${iString10}T00:00:00.000Z`);
+                let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
                 let trafficChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
@@ -783,309 +778,289 @@ export default class ReportTraffic extends Vue {
     }
 
     async initSelectItemDeviceGroup() {
-        let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
-
-        let readParam: {
-            siteId: string;
-            areaId?: string;
-            mode: string;
-        } = {
-            siteId: this.filterData.firstSiteId,
-            mode: this.deviceMode
-        };
-
-        if (!this.filterData.firstSiteId) {
-            return false;
-
-            // 只選擇site
-        } else if (
-            this.filterData.firstSiteId &&
-            (this.inputFormData.areaId === undefined ||
-                this.inputFormData.areaId === "") &&
-            this.inputFormData.areaId !== "all"
-        ) {
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 選擇site和單一area
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all"
-        ) {
-            readParam.areaId = this.inputFormData.areaId;
-
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 選擇site和all area
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId === "all"
-        ) {
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+        // let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
+        // let readParam: {
+        //     siteId: string;
+        //     areaId?: string;
+        //     mode: string;
+        // } = {
+        //     siteId: this.filterData.firstSiteId,
+        //     mode: this.deviceMode
+        // };
+        // if (!this.filterData.firstSiteId) {
+        //     return false;
+        //     // 只選擇site
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     (this.inputFormData.areaId === undefined ||
+        //         this.inputFormData.areaId === "") &&
+        //     this.inputFormData.areaId !== "all"
+        // ) {
+        //     await this.$server
+        //         .R("/device/group/all", readParam)
+        //         .then((response: any) => {
+        //             if (response != undefined) {
+        //                 for (const returnValue of response) {
+        //                     // 自定義 tempDeviceGroupSelectItem 的 key 的方式
+        //                     tempDeviceGroupSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        //     // 選擇site和單一area
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     this.inputFormData.areaId &&
+        //     this.inputFormData.areaId !== "all"
+        // ) {
+        //     readParam.areaId = this.inputFormData.areaId;
+        //     await this.$server
+        //         .R("/device/group/all", readParam)
+        //         .then((response: any) => {
+        //             if (response != undefined) {
+        //                 for (const returnValue of response) {
+        //                     // 自定義 tempDeviceGroupSelectItem 的 key 的方式
+        //                     tempDeviceGroupSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        //     // 選擇site和all area
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     this.inputFormData.areaId &&
+        //     this.inputFormData.areaId === "all"
+        // ) {
+        //     await this.$server
+        //         .R("/device/group/all", readParam)
+        //         .then((response: any) => {
+        //             if (response != undefined) {
+        //                 for (const returnValue of response) {
+        //                     // 自定義 tempDeviceGroupSelectItem 的 key 的方式
+        //                     tempDeviceGroupSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        // }
     }
 
     async initSelectItemDevice() {
-        let tempDeviceSelectItem = {};
-
-        tempDeviceSelectItem = { all: this._("w_AllDevices") };
-
-        const readParam: {
-            siteId: string;
-            areaId?: string;
-            groupId?: string;
-            mode: string;
-        } = {
-            siteId: this.filterData.firstSiteId,
-            mode: this.deviceMode
-        };
-
-        if (!this.filterData.firstSiteId) {
-            return false;
-
-            // 只選擇site
-        } else if (
-            this.filterData.firstSiteId &&
-            !this.inputFormData.areaId &&
-            !this.inputFormData.groupId
-        ) {
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 選擇site和單一area
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all" &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "") &&
-            this.inputFormData.groupId !== "all"
-        ) {
-            readParam.areaId = this.inputFormData.areaId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 選擇site和單一area和單一device group
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all" &&
-            this.inputFormData.groupId &&
-            this.inputFormData.groupId !== "all"
-        ) {
-            readParam.groupId = this.inputFormData.groupId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 選擇site和all area
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId === "all" &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "") &&
-            this.inputFormData.groupId !== "all"
-        ) {
-            readParam.areaId = "";
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 選擇site和all area和all device group
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId === "all" &&
-            this.inputFormData.groupId &&
-            this.inputFormData.groupId === "all"
-        ) {
-            readParam.groupId = this.inputFormData.groupId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-
-            // 選擇site和單一area和all device group
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all" &&
-            this.inputFormData.groupId &&
-            this.inputFormData.groupId === "all"
-        ) {
-            readParam.areaId = this.inputFormData.areaId;
-            readParam.groupId = "";
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+        // let tempDeviceSelectItem = {};
+        // tempDeviceSelectItem = { all: this._("w_AllDevices") };
+        // const readParam: {
+        //     siteId: string;
+        //     areaId?: string;
+        //     groupId?: string;
+        //     mode: string;
+        // } = {
+        //     siteId: this.filterData.firstSiteId,
+        //     mode: this.deviceMode
+        // };
+        // if (!this.filterData.firstSiteId) {
+        //     return false;
+        //     // 只選擇site
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     !this.inputFormData.areaId &&
+        //     !this.inputFormData.groupId
+        // ) {
+        //     await this.$server
+        //         .R("/device", readParam)
+        //         .then((response: any) => {
+        //             if (response.results.length > 0) {
+        //                 for (const returnValue of response.results) {
+        //                     // 自定義 tempDeviceSelectItem 的 key 的方式
+        //                     tempDeviceSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceSelectItem = tempDeviceSelectItem;
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        //     // 選擇site和單一area
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     this.inputFormData.areaId &&
+        //     this.inputFormData.areaId !== "all" &&
+        //     (this.inputFormData.groupId === undefined ||
+        //         this.inputFormData.groupId === "") &&
+        //     this.inputFormData.groupId !== "all"
+        // ) {
+        //     readParam.areaId = this.inputFormData.areaId;
+        //     await this.$server
+        //         .R("/device", readParam)
+        //         .then((response: any) => {
+        //             if (response.results.length > 0) {
+        //                 for (const returnValue of response.results) {
+        //                     // 自定義 tempDeviceSelectItem 的 key 的方式
+        //                     tempDeviceSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceSelectItem = tempDeviceSelectItem;
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        //     // 選擇site和單一area和單一device group
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     this.inputFormData.areaId &&
+        //     this.inputFormData.areaId !== "all" &&
+        //     this.inputFormData.groupId &&
+        //     this.inputFormData.groupId !== "all"
+        // ) {
+        //     readParam.groupId = this.inputFormData.groupId;
+        //     await this.$server
+        //         .R("/device", readParam)
+        //         .then((response: any) => {
+        //             if (response.results.length > 0) {
+        //                 for (const returnValue of response.results) {
+        //                     // 自定義 tempDeviceSelectItem 的 key 的方式
+        //                     tempDeviceSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceSelectItem = tempDeviceSelectItem;
+        //             }
+        //             if (response.results.length === 0) {
+        //                 this.deviceSelectItem = {};
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        //     // 選擇site和all area
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     this.inputFormData.areaId &&
+        //     this.inputFormData.areaId === "all" &&
+        //     (this.inputFormData.groupId === undefined ||
+        //         this.inputFormData.groupId === "") &&
+        //     this.inputFormData.groupId !== "all"
+        // ) {
+        //     readParam.areaId = "";
+        //     await this.$server
+        //         .R("/device", readParam)
+        //         .then((response: any) => {
+        //             if (response.results.length > 0) {
+        //                 for (const returnValue of response.results) {
+        //                     // 自定義 tempDeviceSelectItem 的 key 的方式
+        //                     tempDeviceSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceSelectItem = tempDeviceSelectItem;
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        //     // 選擇site和all area和all device group
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     this.inputFormData.areaId &&
+        //     this.inputFormData.areaId === "all" &&
+        //     this.inputFormData.groupId &&
+        //     this.inputFormData.groupId === "all"
+        // ) {
+        //     readParam.groupId = this.inputFormData.groupId;
+        //     await this.$server
+        //         .R("/device", readParam)
+        //         .then((response: any) => {
+        //             if (response.results.length > 0) {
+        //                 for (const returnValue of response.results) {
+        //                     // 自定義 tempDeviceSelectItem 的 key 的方式
+        //                     tempDeviceSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceSelectItem = tempDeviceSelectItem;
+        //             }
+        //             if (response.results.length === 0) {
+        //                 this.deviceSelectItem = {};
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        //     // 選擇site和單一area和all device group
+        // } else if (
+        //     this.filterData.firstSiteId &&
+        //     this.inputFormData.areaId &&
+        //     this.inputFormData.areaId !== "all" &&
+        //     this.inputFormData.groupId &&
+        //     this.inputFormData.groupId === "all"
+        // ) {
+        //     readParam.areaId = this.inputFormData.areaId;
+        //     readParam.groupId = "";
+        //     await this.$server
+        //         .R("/device", readParam)
+        //         .then((response: any) => {
+        //             if (response.results.length > 0) {
+        //                 for (const returnValue of response.results) {
+        //                     // 自定義 tempDeviceSelectItem 的 key 的方式
+        //                     tempDeviceSelectItem[returnValue.objectId] =
+        //                         returnValue.name;
+        //                 }
+        //                 this.deviceSelectItem = tempDeviceSelectItem;
+        //             }
+        //             if (response.results.length === 0) {
+        //                 this.deviceSelectItem = {};
+        //             }
+        //         })
+        //         .catch((e: any) => {
+        //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //                 return ResponseFilter.base(this, e);
+        //             }
+        //             console.log(e);
+        //             return false;
+        //         });
+        // }
     }
 
     // @Watch("sites", { deep: true })
@@ -1147,7 +1122,6 @@ export default class ReportTraffic extends Vue {
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
-
     }
 
     receiveUserData(data) {

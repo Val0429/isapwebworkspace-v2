@@ -32,7 +32,7 @@ import {
     EWeather,
     ISite,
     IDayRange,
-    IChartDemographic,
+    IChartDemographicData,
     EAgeRange
 } from "@/components/Reports";
 import HighchartsDemographic from "@/components/Reports/HighchartsDemographic.vue";
@@ -54,7 +54,7 @@ export default class ReportDemographic extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    value: IChartDemographic[] = [];
+    value: IChartDemographicData[] = [];
     ////////////////////////////////////// Morris End //////////////////////////////////////
 
     created() {
@@ -116,7 +116,7 @@ export default class ReportDemographic extends Vue {
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
                 let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
-                let trafficChartData: IChartDemographic = {
+                let trafficChartData: IChartDemographicData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
                     ageRange: ageRange

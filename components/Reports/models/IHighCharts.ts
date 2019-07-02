@@ -28,6 +28,11 @@ interface IDatetimeGroup {
     categories: string;
 }
 
+interface ISiteOfficeHourItem {
+    startHour: number;
+    endHour: number;
+}
+
 interface IChartTrafficData {
     date: Date;
     siteObjectId: string;
@@ -56,12 +61,12 @@ interface IChartTrafficData {
     dateEndString?: string;
 }
 
-interface IChartDemographic {
+interface IChartDemographicData {
     date: Date;
     siteObjectId: string;
     ageRange: EAgeRange;
     siteName?: string;
 }
 
-export { ISite, IDate, IDatetimeGroup, IDayRange };
-export { IChartTrafficData, IChartDemographic };
+export { ISite, IDate, ISiteOfficeHourItem, IDatetimeGroup, IDayRange };
+export { IChartTrafficData, IChartDemographicData };

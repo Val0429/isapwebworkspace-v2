@@ -334,28 +334,6 @@ class Datetime {
         return this.DateToZero(new Date(date.setDate(diff)));
     }
 
-    // check day in range
-    WeekinDay(weekDay: number, startDay: number, endDay: number): boolean {
-        let result = false;
-        let have7 = false;
-        let inRange = false;
-        let startDayHave7 = startDay - 7;
-        let endDayHave7 = endDay + 7;
-        if (startDay > endDay) {
-            have7 = true;
-        }
-        if (weekDay >= startDay && weekDay <= endDay) {
-            result = true;
-        }
-        if (have7 && weekDay >= startDayHave7 && weekDay <= endDay) {
-            result = true;
-        }
-        if (have7 && weekDay >= startDay && weekDay <= endDayHave7) {
-            result = true;
-        }
-        return result;
-    }
-
     // date
     DateStart(value: Date): Date {
         let date = new Date(value.getTime());
