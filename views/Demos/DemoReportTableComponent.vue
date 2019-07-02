@@ -4,9 +4,9 @@
         <anlysis-dashboard :anlysisData="dData">
         </anlysis-dashboard>
         <peak-time-range
+            :siteItems="siteItem"
+            :dayXSiteX="pDayXxSiteX"
             :timeRangeData="pData"
-            :siteItem="siteItem"
-            v-on:changeSite="changeSite"
         >
         </peak-time-range>
         <report-table :reportTableData="rData">
@@ -23,7 +23,9 @@ import {
     IPeckTimeRange,
     ReportDashboard,
     EPageType,
-    ESign
+    ESign,
+    EDayXSiteX,
+    ISiteItems
 } from "@/components/Reports";
 
 @Component
@@ -31,18 +33,17 @@ export default class DemoReportComponent extends Vue {
     ePageType = EPageType;
     eESign = ESign;
 
-    siteItem = [
-        { value: "iVTCTzctbF", text: "台北店" },
-        { value: "pfLGgj8Hf5", text: "台中店" }
-    ];
-
-    site = "";
-
     rData = new ReportTableData();
 
     dData = new ReportDashboard();
 
-    pData = [];
+    pData:IPeckTimeRange[] = [];
+    
+    pDayXxSiteX:EDayXSiteX = EDayXSiteX.none;
+
+    siteItem:ISiteItems[] = [
+    ];
+
 
     created() {}
 
@@ -139,7 +140,15 @@ export default class DemoReportComponent extends Vue {
 
     initPeakTimeRange() {
         setTimeout(() => {
-            this.pData = [
+
+           this.pDayXxSiteX = EDayXSiteX.dayXSiteX
+
+            this.siteItem= [
+               { value: "iVTCTzctbF", text: "台北店" },
+               { value: "pfLGgj8Hf5", text: "台中店" }
+            ];
+
+           let apipData= [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -264,6 +273,32 @@ export default class DemoReportComponent extends Vue {
                     ]
                 }
             ];
+
+ 
+        // Data format conversion
+        for (let item of apipData) {
+                let pDatum:IPeckTimeRange = {
+                    site:"",
+                    head:[],
+                    body:[]
+                }
+                let head = [];
+                let levels: number[] = [];
+                for (let subItem of item.peakHourDatas) {
+                    levels.push(subItem.level);
+                    head.push(subItem.date);
+                }
+
+                let body = {
+                    title: item.date,
+                    context: levels
+                };
+                pDatum.site = item.site.objectId;
+                pDatum.head = head;
+                pDatum.body.push(body);
+                this.pData.push(pDatum);
+        }
+
         }, 2000);
     }
 
@@ -339,9 +374,5 @@ export default class DemoReportComponent extends Vue {
         }, 2000);
     }
 
-    changeSite(site) {
-        this.site = site;
-        this.initPeakTimeRange();
-    }
 }
 </script>

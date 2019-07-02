@@ -1,4 +1,10 @@
+interface ISiteItems {
+    value: string; //ObjectId
+    text: string; //Site Name
+}
+
 interface IPeckTimeRange {
+    site: string;
     head: string[];
     body: IPeckTimeRangeBody[];
 }
@@ -8,4 +14,4 @@ interface IPeckTimeRangeBody {
     context: number[];
 }
 
-export { IPeckTimeRange };
+export { IPeckTimeRange, ISiteItems };

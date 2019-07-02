@@ -37,12 +37,11 @@
                 </highcharts-traffic>
 
                 <!-- Ben -->
-                <peak-time-range
-                    :timeRangeData="pData"
-                    :siteItem="pSiteItem"
-                    v-on:changeSite="changeSite"
-                >
-                </peak-time-range>
+                  <peak-time-range
+                        :siteItems="siteItem"
+                        :dayXSiteX="pDayXxSiteX"
+                        :timeRangeData="pData"> 
+                         </peak-time-range>
 
                 <!-- Ben -->
                 <report-table :reportTableData="rData">
@@ -79,7 +78,9 @@ import {
     IPeckTimeRange,
     ReportDashboard,
     EPageType,
-    ESign
+    ESign,
+        EDayXSiteX,
+    ISiteItems
 } from "@/components/Reports";
 
 enum EPageStep {
@@ -123,9 +124,9 @@ export default class ReportTraffic extends Vue {
     dData = new ReportDashboard();
 
     //PickTimeRange 相關
-    pSite = "";
-    pSiteItem = [];
-    pData = [];
+    pData:IPeckTimeRange[] = [];
+    pDayXxSiteX:EDayXSiteX = EDayXSiteX.none;
+    siteItem:ISiteItems[] = [];
 
     //ReportTable 相關
     rData = new ReportTableData();
@@ -213,14 +214,17 @@ export default class ReportTraffic extends Vue {
         }, 2000);
     }
 
-    initPeakTimeRange() {
+   initPeakTimeRange() {
         setTimeout(() => {
-            this.pSiteItem = [
-                { value: "iVTCTzctbF", text: "台北店" },
-                { value: "pfLGgj8Hf5", text: "台中店" }
+
+           this.pDayXxSiteX = EDayXSiteX.dayXSiteX
+
+            this.siteItem= [
+               { value: "iVTCTzctbF", text: "台北店" },
+               { value: "pfLGgj8Hf5", text: "台中店" }
             ];
 
-            this.pData = [
+           let apipData= [
                 {
                     site: {
                         objectId: "iVTCTzctbF",
@@ -345,12 +349,34 @@ export default class ReportTraffic extends Vue {
                     ]
                 }
             ];
-        }, 2000);
-    }
 
-    changeSite(site) {
-        this.pSite = site;
-        // this.initPeakTimeRange();
+ 
+        // Data format conversion
+        for (let item of apipData) {
+                let pDatum:IPeckTimeRange = {
+                    site:"",
+                    head:[],
+                    body:[]
+                }
+                let head = [];
+                let levels: number[] = [];
+                for (let subItem of item.peakHourDatas) {
+                    levels.push(subItem.level);
+                    head.push(subItem.date);
+                }
+
+                let body = {
+                    title: item.date,
+                    context: levels
+                };
+                pDatum.site = item.site.objectId;
+                pDatum.head = head;
+                pDatum.body.push(body);
+                this.pData.push(pDatum);
+        }
+
+        }, 2000);
+
     }
 
     initReportTable() {

@@ -3,25 +3,27 @@
         <title>Peak hours</title>
         <table
             class="table table-bordered"
-            v-if="data.head.length > 0"
+            v-if="pData &&  pData.head && pData.head.length > 0"
         >
             <thead>
                 <tr>
                     <th>
                         <b-form-select
+                            v-if="dayXSiteX == eDayXSiteX.dayXSiteX"
                             v-model="site"
-                            :options="siteItem"
+                            :options="siteItems"
                             @change="changeSite()"
                         ></b-form-select>
                     </th>
-                    <th v-for="(item, key, index) in data.head">
+                    <th v-for="(item, key, index) in pData.head">
                         {{(new Date(item)).getUTCHours() + ":00"}} - {{(new Date(item)).getUTCHours() + 1 + ":00"}}
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(items, key, index) in data.body">
-                    <td> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                <tr v-for="(items, key, index) in pData.body">
+                    <td v-if="dayXSiteX != eDayXSiteX.day1SiteX">   {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                    <td v-if="dayXSiteX == eDayXSiteX.day1SiteX"> {{items.title}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
                         :class="showHoursRange(item)"
@@ -42,8 +44,9 @@ import {
     Watch,
     Model
 } from "vue-property-decorator";
-import { IPeckTimeRange } from "@/components/Reports";
+import { IPeckTimeRange,EDayXSiteX,ISiteItems } from "@/components/Reports";
 import Datetime from "@/services/Datetime.vue";
+
 
 @Component({
     components: {}
@@ -51,12 +54,12 @@ import Datetime from "@/services/Datetime.vue";
 export class PeakTimeRange extends Vue {
     // Prop
     @Prop({
-        type: Array,
+        type: String,
         default: function() {
-            return [];
+            return EDayXSiteX.none;
         }
     })
-    siteItem: [];
+    dayXSiteX: EDayXSiteX;
 
     @Prop({
         type: Array,
@@ -64,17 +67,28 @@ export class PeakTimeRange extends Vue {
             return [];
         }
     })
-    timeRangeData: any[];
+    siteItems: ISiteItems[];
+
+    @Prop({
+        type: Array,
+        default: function() {
+            return [];
+        }
+    })
+    timeRangeData: IPeckTimeRange[];
 
     @Watch("timeRangeData", { deep: true })
     private timeRangeDataChanged(newVal, oldVal) {
         this.initData();
     }
 
-    data: IPeckTimeRange = {
+    eDayXSiteX = EDayXSiteX;
+
+    pData: IPeckTimeRange = {
+        site: "",
         head: [],
         body: []
-    };
+        };
 
     site = "iVTCTzctbF";
 
@@ -85,72 +99,94 @@ export class PeakTimeRange extends Vue {
     }
 
     initData() {
-        // Data format conversion
-        this.data.body = [];
-        for (let item of this.timeRangeData) {
-            if (item.site.objectId == this.site) {
-                let head = [];
-                let levels: number[] = [];
-                for (let subItem of item.peakHourDatas) {
-                    levels.push(subItem.level);
-                    head.push(subItem.date);
-                }
+        switch(this.dayXSiteX){
+            case EDayXSiteX.day1Site1:
+            this.generateDay1Ste1();
+            break;
+             case EDayXSiteX.dayXSite1:
+            this.generateDayXSte1();
+            break;
+             case EDayXSiteX.day1SiteX:
+            this.generateDay1SteX();
+            break;
+             case EDayXSiteX.dayXSiteX:
+            this.generateDayXSteX();
+            break;
+            default:
+            break;
 
-                let body = {
-                    title: item.date,
-                    context: levels
-                };
-                this.data.head = head;
-                this.data.body.push(body);
-            }
         }
 
-        //     this.pData = {
-        //         head: [
-        //             "2019-06-24T09:00:00.000Z",
-        //             "2019-06-24T10:00:00.000Z",
-        //             "2019-06-24T11:00:00.000Z",
-        //             "2019-06-24T12:00:00.000Z",
-        //             "2019-06-24T13:00:00.000Z",
-        //             "2019-06-24T14:00:00.000Z",
-        //             "2019-06-24T16:00:00.000Z",
-        //             "2019-06-24T17:00:00.000Z",
-        //             "2019-06-24T18:00:00.000Z",
-        //             "2019-06-24T19:00:00.000Z",
-        //             "2019-06-24T20:00:00.000Z",
-        //             "2019-06-24T21:00:00.000Z"
-        //         ],
-        //         body: [
-        //             {
-        //                 title: "2019-06-24T09:00:00.000Z",
-        //                 context: [1, 2, 3, 4, 5, 1, 4, 5, 1, 1, 4, 1]
-        //             },
-        //             {
-        //                 title: "2019-06-25T09:00:00.000Z",
-        //                 context: [5, 4, 5, 3, 2, 1, 4, 5, 1, 2, 4, 1]
-        //             },
-        //             {
-        //                 title: "2019-06-26T09:00:00.000Z",
-        //                 context: [1, 3, 4, 5, 1, 5, 4, 2, 1, 2, 1, 1]
-        //             },
-        //             {
-        //                 title: "2019-06-27T09:00:00.000Z",
-        //                 context: [1, 3, 4, 4, 2, 1, 3, 4, 5, 1, 4, 1]
-        //             },
-        //             {
-        //                 title: "2019-06-28T09:00:00.000Z",
-        //                 context: [1, 3, 5, 4, 5, 1, 4, 2, 1, 3, 2, 2]
-        //             },
-        //             {
-        //                 title: "2019-06-29T09:00:00.000Z",
-        //                 context: [1, 2, 1, 4, 4, 5, 1, 2, 1, 3, 3, 1]
-        //             },
-        //             {
-        //                 title: "2019-06-30T09:00:00.000Z",
-        //                 context: [1, 1, 1, 2, 2, 4, 5, 1, 1, 3, 4, 1]
-        //             }
-        //         ]
-        //     };
+    }
+
+    generateDay1Ste1(){
+        console.log('generateDay1Ste1', this.timeRangeData);
+        this.pData = {      
+            site: "",
+            head: [],
+            body: []
+        };
+        this.pData = this.timeRangeData[0];
+
+    }
+
+     generateDayXSte1(){
+        console.log('generateDayXSte1', this.timeRangeData);
+        this.pData = {      
+            site: "",
+            head: [],
+            body: []
+        };
+         for(let item of this.timeRangeData){
+             if(item.site == this.site){
+                  this.pData.site = item.site;
+                  this.pData.head = item.head;
+                  this.pData.body.push(item.body[0]);
+             }
+         }
+          
+    }
+
+     generateDay1SteX(){
+        console.log('generateDay1SteX', this.timeRangeData);
+           this.pData = {      
+            site: "",
+            head: [],
+            body: []
+        };
+         for(let item of this.timeRangeData){
+        
+                  this.pData.site = item.site;
+                  this.pData.head = item.head;
+           
+                  for(let siteItem of this.siteItems){
+                      if(siteItem.value == item.site){
+                                let body = {
+                                title:siteItem.text,
+                                context: item.body[0].context
+                                    };
+                           this.pData.body.push(body);
+                      }
+                  }
+           
+             }
+    }
+
+     generateDayXSteX(){
+        console.log('generateDayXSteX', this.timeRangeData);
+         this.pData = {      
+            site: "",
+            head: [],
+            body: []
+        };
+         for(let item of this.timeRangeData){
+             if(item.site == this.site){
+                  this.pData.site = item.site;
+                  this.pData.head = item.head;
+                  this.pData.body.push(item.body[0]);
+             }
+         }
+       
     }
 
     showWeek(data) {
@@ -202,7 +238,6 @@ export class PeakTimeRange extends Vue {
     }
 
     changeSite() {
-        this.$emit("changeSite", this.site);
         this.initData();
     }
 }
