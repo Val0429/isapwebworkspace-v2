@@ -233,12 +233,13 @@ export default class ReportTraffic extends Vue {
     async initDatas(){
 
         // Tina
+        await this.initRegionTreeSelect();
+        await this.siteFilterPermission();
         await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
        // await this.initOfficeHour();
-        await this.initRegionTreeSelect();
-        await this.siteFilterPermission();
+
 
         // Ben
         this.initDashboardData();
@@ -1095,9 +1096,119 @@ export default class ReportTraffic extends Vue {
 
     //// 以下為 analysis filter ////
 
+    async receiveFilterData(filterData) {
+
+        this.inputFormData = {
+            areaId: "",
+            groupId: "",
+            deviceId: "",
+            type: "",
+            inOrOut: ""
+        };
+
+        await this.$server
+            .C("/report/people-counting/summary", filterData)
+            .then((response: any) => {
+                if (response !== undefined) {
+                    this.responseData = response;
+                    this.officeHourItemDetail = this.responseData.officeHours;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        this.filterData = filterData;
+        Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
+        console.log("this.filterData  - ", this.filterData);
+        console.log("this.responseData  - ", this.responseData);
+
+        // get office hour data
+        let tempISite: any = {};
+        this.sites = [];
+
+        for (const filterSiteId of this.filterData.siteIds) {
+            for (const detail of this.officeHourItemDetail) {
+                for (const officeHourSiteId of detail.sites) {
+                    if (filterSiteId === officeHourSiteId.objectId) {
+                        let tempOfficeHours = [];
+                        for (const dayRangesValue of detail.dayRanges) {
+                            let tempOfficeHour: any = {};
+                            tempOfficeHour = {
+                                startDay: dayRangesValue.startDay,
+                                endDay: dayRangesValue.endDay,
+                                startDate: dayRangesValue.startDate,
+                                endDate: dayRangesValue.endDate
+                            };
+                            tempOfficeHours.push(tempOfficeHour);
+                        }
+                        tempISite = {
+                            objectId: officeHourSiteId.objectId,
+                            name: officeHourSiteId.name,
+                            officeHour: tempOfficeHours
+                        };
+                        break;
+                    }
+                }
+            }
+        }
+
+        /*
+		   for (const filterSiteId of this.filterData.siteIds) {
+			for (const detail of this.officeHourItemDetail) {
+				for (const officeHourSiteId of detail.sites) {
+					if (filterSiteId === officeHourSiteId.objectId) {
+						tempISite = {
+							objectId: officeHourSiteId.objectId,
+							name: officeHourSiteId.name,
+							officeHour: []
+						};
+
+						for (const dayRangesValue of detail.dayRanges) {
+							tempISite.officeHour.push({
+								startDay: dayRangesValue.startDay,
+								endDay: dayRangesValue.endDay,
+								startDate: dayRangesValue.startDate,
+								endDate: dayRangesValue.endDate
+							});
+						}
+
+						break;
+					}
+				}
+			}
+		}
+		*/
+
+        this.sites.push(tempISite);
+        this.startDate = new Date(this.filterData.startDate);
+        this.endDate = new Date(this.filterData.endDate);
+        this.timeMode = this.filterData.type;
+        this.areaMode = EAreaMode.all;
+
+        this.initSelectItemArea();
+        this.initSelectItemDeviceGroup();
+        this.initSelectItemDevice();
+        this.clearInputFormData();
+        this.filterSiteData();
+
+        console.log(' - ', this.sites);
+        console.log(' - ', this.startDate);
+        console.log(' - ', this.endDate);
+        console.log(' - ', this.timeMode);
+        console.log(' - ', this.areaMode);
+        console.log(' - ', this.chartDatas);
+    }
+
+
     filterSiteData() {
         console.log("summaryDatas - ", this.responseData.summaryDatas);
 
+        this.chartDatas = [];
         let tempChartData: any = {};
 
         // 取得date、siteObjectId資料
@@ -1118,7 +1229,7 @@ export default class ReportTraffic extends Vue {
                 }
             }
             // console.log('tempChartData - ', tempChartData);
-            this.trafficChartData.push(tempChartData);
+            this.chartDatas.push(tempChartData);
             // console.log("trafficChartData - ", this.trafficChartData);
 
         }
@@ -1158,104 +1269,6 @@ export default class ReportTraffic extends Vue {
             }
         }
         // console.log('trafficChartData - ', this.trafficChartData);
-    }
-
-    async receiveFilterData(filterData) {
-        await this.$server
-            .C("/report/people-counting/summary", filterData)
-            .then((response: any) => {
-                if (response !== undefined) {
-                    this.responseData = response;
-                    this.officeHourItemDetail = this.responseData.officeHours;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-
-        this.filterData = filterData;
-        Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
-        console.log("this.filterData  - ", this.filterData);
-        console.log("this.responseData  - ", this.responseData);
-
-        // get office hour data
-        let tempISite: any = {};
-
-        for (const filterSiteId of this.filterData.siteIds) {
-            for (const detail of this.officeHourItemDetail) {
-                for (const officeHourSiteId of detail.sites) {
-                    if (filterSiteId === officeHourSiteId.objectId) {
-                        let tempOfficeHours = [];
-                        for (const dayRangesValue of detail.dayRanges) {
-                            let tempOfficeHour: any = {};
-                            tempOfficeHour = {
-                                startDay: dayRangesValue.startDay,
-                                endDay: dayRangesValue.endDay,
-                                startDate: dayRangesValue.startDate,
-                                endDate: dayRangesValue.endDate
-                            };
-                            tempOfficeHours.push(tempOfficeHour);
-                        }
-                        tempISite = {
-                            objectId: officeHourSiteId.objectId,
-                            name: officeHourSiteId.name,
-                            officeHour: tempOfficeHours
-                        };
-                        break;
-                    }
-                }
-            }
-        }
-
-            /*
-			   for (const filterSiteId of this.filterData.siteIds) {
-				for (const detail of this.officeHourItemDetail) {
-					for (const officeHourSiteId of detail.sites) {
-						if (filterSiteId === officeHourSiteId.objectId) {
-							tempISite = {
-								objectId: officeHourSiteId.objectId,
-								name: officeHourSiteId.name,
-								officeHour: []
-							};
-
-							for (const dayRangesValue of detail.dayRanges) {
-								tempISite.officeHour.push({
-									startDay: dayRangesValue.startDay,
-									endDay: dayRangesValue.endDay,
-									startDate: dayRangesValue.startDate,
-									endDate: dayRangesValue.endDate
-								});
-							}
-
-							break;
-						}
-					}
-				}
-			}
-			*/
-
-        this.sites.push(tempISite);
-        this.startDate = new Date(this.filterData.startDate);
-        this.endDate = new Date(this.filterData.endDate);
-        this.timeMode = this.filterData.type;
-        this.areaMode = EAreaMode.all;
-
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
-        this.clearInputFormData();
-        this.filterSiteData();
-
-        console.log(' - ', this.sites);
-        console.log(' - ', this.startDate);
-        console.log(' - ', this.endDate);
-        console.log(' - ', this.timeMode);
-        console.log(' - ', this.areaMode);
-        console.log(' - ', this.trafficChartData);
     }
 
     async receiveAreaId(areaId) {
