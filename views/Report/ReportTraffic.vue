@@ -1,3 +1,4 @@
+import {EAreaMode} from "../../components/Reports";
 <template>
     <div>
         <!-- Tina -->
@@ -21,7 +22,7 @@
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
-                    :countSelectItem="countSelectItem"
+                    :timeModeSelectItem="timeModeSelectItem"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"
@@ -71,48 +72,33 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import Dialog from "@/services/Dialog/Dialog";
+    import {Component, Vue} from "vue-property-decorator";
+    // Tina
+    import {ECountType, EDeviceMode, EType} from "@/components/Reports/models/EReport";
+    import {ERegionType, IRegionTreeSelected, RegionTreeItem} from "@/components/RegionTree";
 
-// Tina
-import {
-    EDeviceMode,
-    ECountType,
-    EType
-} from "@/components/Reports/models/EReport";
-import {
-    ERegionType,
-    RegionTreeItem,
-    IRegionTreeSelected
-} from "@/components/RegionTree";
+    import RegionAPI from "@/services/RegionAPI";
+    import ResponseFilter from "@/services/ResponseFilter";
+    import Datetime from "@/services/Datetime";
+    // Morris
+    import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
+    // Ben
+    import {
+        EAreaMode,
+        EDayXSiteX,
+        EPageType,
+        ESign,
+        ETimeMode,
+        EWeather,
+        IChartTrafficData,
+        IPeckTimeRange,
+        ISite,
+        ISiteItems,
+        ReportDashboard,
+        ReportTableData
+    } from "@/components/Reports";
 
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Datetime from "@/services/Datetime";
-
-// Morris
-import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
-import FilterCondition from "@/components/Reports/FilterCondition.vue";
-import {
-    ETimeMode,
-    EAreaMode,
-    EWeather,
-    ISite,
-    IDayRange,
-    IChartTrafficData
-} from "@/components/Reports";
-// Ben
-import {
-    ReportTableData,
-    IPeckTimeRange,
-    ReportDashboard,
-    EPageType,
-    ESign,
-    EDayXSiteX,
-    ISiteItems
-} from "@/components/Reports";
-
-enum EPageStep {
+    enum EPageStep {
     none = "none"
 }
 
@@ -171,12 +157,11 @@ export default class ReportTraffic extends Vue {
         { value: EType.in, text: EType.in },
         { value: EType.out, text: EType.out }
     ];
-    countSelectItem: any = {
-        hour: ECountType.hour,
+    timeModeSelectItem: any = {
         day: ECountType.day,
         week: ECountType.week,
         month: ECountType.month,
-        season: ECountType.quarter,
+        quarter: ECountType.quarter,
         year: ECountType.year
     };
 
@@ -192,22 +177,9 @@ export default class ReportTraffic extends Vue {
     trafficChartData: any = [];
 
     // 整理 showReportData 相關
-
-    siteSummaryFilter: any = [];
-    siteSalesRecordsFilter: any = [];
-    siteWeathersFilter: any = [];
-
     areaSummaryFilter: any = [];
     deviceGroupSummaryFilter: any = [];
     deviceSummaryFilter: any = [];
-
-    areaSalesRecordsFilter: any = [];
-    deviceGroupSalesRecordsFilter: any = [];
-    deviceSalesRecordsFilter: any = [];
-
-    areaWeathersFilter: any = [];
-    deviceGroupWeathersFilter: any = [];
-    deviceWeathersFilter: any = [];
 
     //// Analysis Filter End ////
 
@@ -932,9 +904,7 @@ export default class ReportTraffic extends Vue {
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all" &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "") &&
-            this.inputFormData.groupId !== "all"
+            !this.inputFormData.groupId
         ) {
             readParam.areaId = this.inputFormData.areaId;
             await this.$server
@@ -965,6 +935,40 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId !== "all"
         ) {
             readParam.groupId = this.inputFormData.groupId;
+            await this.$server
+                .R("/device", readParam)
+                .then((response: any) => {
+                    if (response.results.length > 0) {
+                        for (const returnValue of response.results) {
+                            // 自定義 tempDeviceSelectItem 的 key 的方式
+                            tempDeviceSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceSelectItem = tempDeviceSelectItem;
+                    }
+                    if (response.results.length === 0) {
+                        this.deviceSelectItem = {};
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+
+            // 選擇site和單一area和單一device group和 all device
+        } else if (
+            this.filterData.firstSiteId &&
+            this.inputFormData.areaId &&
+            this.inputFormData.areaId !== "all" &&
+            this.inputFormData.groupId &&
+            this.inputFormData.groupId !== "all" &&
+            this.inputFormData.deviceId === "all"
+        ) {
+            readParam.groupId = this.inputFormData.groupId;
+
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -1099,7 +1103,7 @@ export default class ReportTraffic extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            inOrOut: ""
+            inOrOut: "in"
         };
 
         await this.$server
@@ -1185,12 +1189,19 @@ export default class ReportTraffic extends Vue {
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
+        this.sortOutChartData(this.responseData.summaryDatas);
 
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
-        this.clearInputFormData();
-        this.filterSiteData();
+
+        this.inputFormData = {
+            areaId: "all",
+            groupId: "all",
+            deviceId: "all",
+            type: this.filterData.type,
+            inOrOut: "in"
+        };
 
         console.log(" - ", this.sites);
         console.log(" - ", this.startDate);
@@ -1200,31 +1211,28 @@ export default class ReportTraffic extends Vue {
         console.log(" - ", this.chartDatas);
     }
 
-    checkPramary(
+    checkDateAndSite(
         date1: Date | string,
         date2: Date | string,
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 == "string" ? new Date(date1) : date1;
-        let tempDate2 = typeof date2 == "string" ? new Date(date2) : date2;
+        let tempDate1 = typeof date1 === "string" ? new Date(date1) : date1;
+        let tempDate2 = typeof date2 === "string" ? new Date(date2) : date2;
 
         return (
-            Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ==
+            Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
                 Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
-            siteId1 == siteId2
+            siteId1 === siteId2
         );
     }
 
-    filterSiteData() {
-        console.log("summaryDatas - ", this.responseData.summaryDatas);
-
+    sortOutChartData(array: any) {
         let tempChartDatas: IChartTrafficData[] = [];
         this.chartDatas = [];
 
         // 取得date、siteObjectId資料
-        for (const summary of this.responseData.summaryDatas) {
-            console.log("summary", summary.date);
+        for (const summary of array) {
             let tempChartData: IChartTrafficData = {
                 date: summary.date,
                 siteObjectId: summary.site.objectId,
@@ -1238,9 +1246,8 @@ export default class ReportTraffic extends Vue {
 
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
-                console.log("loopChartData", loopChartData.date);
                 if (
-                    this.checkPramary(
+                    this.checkDateAndSite(
                         loopChartData.date,
                         summary.date,
                         loopChartData.siteObjectId,
@@ -1252,14 +1259,18 @@ export default class ReportTraffic extends Vue {
                     break;
                 }
             }
-            tempChartData.traffic += summary.in;
+
+            if (this.inputFormData.inOrOut === EType.in) {
+                tempChartData.traffic += summary.in;
+            } else if (this.inputFormData.inOrOut === EType.out) {
+                tempChartData.traffic += summary.out;
+            }
 
             if (!haveSummary) {
                 // 取得revenue、transaction資料
                 for (const saleRecord of this.responseData.salesRecords) {
-                    console.log("saleRecord", saleRecord.date);
                     if (
-                        this.checkPramary(
+                        this.checkDateAndSite(
                             tempChartData.date,
                             saleRecord.date,
                             tempChartData.siteObjectId,
@@ -1274,9 +1285,8 @@ export default class ReportTraffic extends Vue {
 
                 // 取得weather、temperatureMin、temperatureMax
                 for (const weather of this.responseData.weathers) {
-                    console.log("weather", weather.date);
                     if (
-                        this.checkPramary(
+                        this.checkDateAndSite(
                             tempChartData.date,
                             weather.date,
                             tempChartData.siteObjectId,
@@ -1294,7 +1304,83 @@ export default class ReportTraffic extends Vue {
             tempChartDatas.push(tempChartData);
         }
 
-        // console.log('trafficChartData - ', this.trafficChartData);
+        this.chartDatas = tempChartDatas;
+    }
+
+    filterSiteData() {
+        console.log("summaryDatas - ", this.responseData.summaryDatas);
+
+        let tempChartDatas: IChartTrafficData[] = [];
+        this.chartDatas = [];
+
+        // 取得date、siteObjectId資料
+        for (const summary of this.responseData.summaryDatas) {
+            let tempChartData: IChartTrafficData = {
+                date: summary.date,
+                siteObjectId: summary.site.objectId,
+                temperatureMin: 0,
+                temperatureMax: 0,
+                traffic: 0,
+                revenue: 0,
+                transaction: 0,
+                weather: EWeather.none
+            };
+
+            let haveSummary = false;
+            for (let loopChartData of tempChartDatas) {
+                if (
+                    this.checkDateAndSite(
+                        loopChartData.date,
+                        summary.date,
+                        loopChartData.siteObjectId,
+                        summary.site.objectId
+                    )
+                ) {
+                    haveSummary = true;
+                    tempChartData = loopChartData;
+                    break;
+                }
+            }
+            tempChartData.traffic += summary.in;
+
+            if (!haveSummary) {
+                // 取得revenue、transaction資料
+                for (const saleRecord of this.responseData.salesRecords) {
+                    if (
+                        this.checkDateAndSite(
+                            tempChartData.date,
+                            saleRecord.date,
+                            tempChartData.siteObjectId,
+                            saleRecord.site.objectId
+                        )
+                    ) {
+                        tempChartData.revenue = saleRecord.revenue;
+                        tempChartData.transaction = saleRecord.transaction;
+                        break;
+                    }
+                }
+
+                // 取得weather、temperatureMin、temperatureMax
+                for (const weather of this.responseData.weathers) {
+                    if (
+                        this.checkDateAndSite(
+                            tempChartData.date,
+                            weather.date,
+                            tempChartData.siteObjectId,
+                            weather.site.objectId
+                        )
+                    ) {
+                        tempChartData.weather = this.weatherIcon(weather.icon);
+                        tempChartData.temperatureMin = weather.temperatureMin;
+                        tempChartData.temperatureMax = weather.temperatureMax;
+                        break;
+                    }
+                }
+            }
+
+            tempChartDatas.push(tempChartData);
+        }
+
         console.log(" - ", this.chartDatas);
 
         this.chartDatas = tempChartDatas;
@@ -1322,68 +1408,17 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                 }
-                // console.log(" - ", this.areaSummaryFilter);
-                //console.log("trafficChartData - ", this.trafficChartData);
             }
 
-            // 整理為Morris需要的資料格式
-            for (const singleData of this.areaSummaryFilter) {
-                console.log("1298 - ", singleData.date);
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
+            this.sortOutChartData(this.areaSummaryFilter);
+            this.areaMode = EAreaMode.single;
 
-                    if (detailKey === "area") {
-                        if (
-                            this.inputFormData.areaId ===
-                            tempSingleData.objectId
-                        ) {
-                            tempChartData.date = singleData.date;
-                            tempChartData.siteObjectId =
-                                singleData.site.objectId;
-                            tempChartData.traffic = singleData.in;
-                        }
-                    }
-                }
-                this.chartDatas.push(tempChartData);
-                // console.log(" - ", this.trafficChartData);
-            }
-
-            // 取得revenue、transaction資料
-            for (const singleData of this.responseData.salesRecords) {
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-                    switch (detailKey) {
-                        case "revenue":
-                            tempChartData.revenue = tempSingleData;
-                            break;
-                        case "transaction":
-                            tempChartData.transaction = tempSingleData;
-                            break;
-                    }
-                }
-            }
-
-            // 取得weather、temperatureMin、temperatureMax
-            for (const singleData of this.responseData.weathers) {
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-                    switch (detailKey) {
-                        case "icon":
-                            tempChartData.weather = this.weatherIcon(
-                                tempSingleData
-                            );
-                            break;
-                        case "temperatureMin":
-                            tempChartData.temperatureMin = tempSingleData;
-                            break;
-                        case "temperatureMax":
-                            tempChartData.temperatureMax = tempSingleData;
-                            break;
-                    }
-                }
-            }
-
-            // console.log(this.trafficChartData);
+            console.log(" - ", this.sites);
+            console.log(" - ", this.startDate);
+            console.log(" - ", this.endDate);
+            console.log(" - ", this.timeMode);
+            console.log(" - ", this.areaMode);
+            console.log(" - ", this.chartDatas);
 
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -1394,13 +1429,14 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
 
-            console.log(" - ", this.chartDatas);
-
             // 依照all area篩選
         } else if (
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+            this.areaMode = EAreaMode.all;
+
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
@@ -1413,6 +1449,9 @@ export default class ReportTraffic extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+            this.areaMode = EAreaMode.all;
+
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -1421,8 +1460,9 @@ export default class ReportTraffic extends Vue {
             await this.initSelectItemDeviceGroup();
             await this.initSelectItemDevice();
 
-            this.inputFormData.groupId = "";
-            this.inputFormData.deviceId = "";
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
         } else {
             return false;
         }
@@ -1455,38 +1495,7 @@ export default class ReportTraffic extends Vue {
                 // console.log(" - ", this.deviceGroupSummaryFilter);
             }
 
-            // 整理為Morris需要的資料格式
-            for (const singleData of this.deviceGroupSummaryFilter) {
-                // TODO: wait Min api
-                // temperature: number; --->
-                // revenue: number; ---> singleData.in
-                // transaction: number; ---> singleData.in
-                // weather: number; ---> singleData.in
-
-                // date: Date; ---> singleData.date
-                // siteObjectId: string; ---> singleData.site.name
-                // traffic: number; ---> singleData.in
-
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-
-                    if (detailKey === "deviceGroups") {
-                        if (
-                            this.inputFormData.groupId ===
-                            tempSingleData[0].objectId
-                        ) {
-                            this.trafficChartData.date = singleData.date;
-                            this.trafficChartData.siteObjectId =
-                                singleData.site.objectId;
-                            // this.trafficChartData.temperature = tempSingleData.;
-                            // this.trafficChartData.revenue = tempSingleData.;
-                            // this.trafficChartData.transaction = tempSingleData.;
-                            // this.trafficChartData.weather = tempSingleData.;
-                        }
-                    }
-                }
-                //  console.log(" - ", this.trafficChartData);
-            }
+            this.sortOutChartData(this.deviceGroupSummaryFilter);
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
@@ -1498,83 +1507,93 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            this.sortOutChartData(this.areaSummaryFilter);
+
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
+            this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
 
             // 清除deviceGroups篩選
         } else if (this.inputFormData.areaId && !this.inputFormData.groupId) {
+            this.sortOutChartData(this.areaSummaryFilter);
+
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
+
         } else {
             return false;
         }
     }
 
-    receiveDeviceId(deviceId) {
+    async receiveDeviceId(deviceId) {
         this.inputFormData.deviceId = deviceId;
         console.log("deviceId - ", this.inputFormData.deviceId);
 
-        //
-        // // 依照device篩選
-        // for (const singleData of this.deviceGroupSummaryFilter) {
-        //     for (const detailKey in singleData) {
-        //         const tempSingleData = singleData[detailKey];
-        //
-        //         if (detailKey === "device") {
-        //             if (
-        //                 this.inputFormData.deviceId === tempSingleData.objectId
-        //             ) {
-        //                 this.deviceSummaryFilter.push(singleData);
-        //             }
-        //         }
-        //     }
-        //     console.log(" - ", this.deviceSummaryFilter);
-        // }
-        //
-        // // 整理為Morris需要的資料格式
-        // for (const singleData of this.deviceSummaryFilter) {
-        //     // TODO: wait Min api
-        //     // temperature: number; --->
-        //     // revenue: number; ---> singleData.in
-        //     // transaction: number; ---> singleData.in
-        //     // weather: number; ---> singleData.in
-        //
-        //     // date: Date; ---> singleData.date
-        //     // siteObjectId: string; ---> singleData.site.name
-        //     // traffic: number; ---> singleData.in
-        //
-        //     for (const detailKey in singleData) {
-        //         const tempSingleData = singleData[detailKey];
-        //
-        //         if (detailKey === "device") {
-        //             if (
-        //                 this.inputFormData.deviceId === tempSingleData.objectId
-        //             ) {
-        //                 this.trafficChartData.date = singleData.date;
-        //                 this.trafficChartData.siteObjectId =
-        //                     singleData.site.objectId;
-        //                 // this.trafficChartData.temperature = tempSingleData.;
-        //                 // this.trafficChartData.revenue = tempSingleData.;
-        //                 // this.trafficChartData.transaction = tempSingleData.;
-        //                 // this.trafficChartData.weather = tempSingleData.;
-        //             }
-        //         }
-        //     }
-        //     console.log(" - ", this.trafficChartData);
-        // }
+        this.deviceSummaryFilter = [];
+
+        // 依照device篩選
+        for (const singleData of this.deviceGroupSummaryFilter) {
+            for (const detailKey in singleData) {
+                const tempSingleData = singleData[detailKey];
+
+                if (detailKey === "device") {
+                    if (
+                        this.inputFormData.deviceId === tempSingleData.objectId
+                    ) {
+                        this.deviceSummaryFilter.push(singleData);
+                    }
+                }
+            }
+            console.log(" - ", this.deviceSummaryFilter);
+        }
+
+        this.sortOutChartData(this.deviceSummaryFilter);
+
+        // 清除device篩選
+        if (
+            this.inputFormData.areaId &&
+            this.inputFormData.groupId &&
+            !this.inputFormData.deviceId
+        ) {
+            this.sortOutChartData(this.deviceGroupSummaryFilter);
+
+            this.inputFormData.deviceId = "";
+            await this.initSelectItemDevice();
+            this.inputFormData.deviceId = "all";
+
+            // 依照all device篩選
+        } else if (
+            this.inputFormData.areaId &&
+            this.inputFormData.groupId &&
+            this.inputFormData.deviceId === "all"
+        ) {
+            this.sortOutChartData(this.deviceGroupSummaryFilter);
+
+            this.inputFormData.deviceId = "";
+            await this.initSelectItemDevice();
+            this.inputFormData.deviceId = "all";
+        } else {
+            return false;
+        }
     }
 
     receiveType(type) {
         this.inputFormData.type = type;
-
+        this.timeMode = type;
         console.log("type - ", this.inputFormData.type);
     }
 
     receiveInOrOut(inOrOut) {
         this.inputFormData.inOrOut = inOrOut;
-
         console.log("inOrOut - ", this.inputFormData.inOrOut);
+
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+        }
     }
 
     weatherIcon(icon: string): EWeather {

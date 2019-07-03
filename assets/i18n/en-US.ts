@@ -823,7 +823,7 @@ export default class LangObject {
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
     w_ReportDateError = 'EndDate must greater or equal than startDate.';
-    w_countSelect = 'Count Select';
+    w_countSelect = 'Time Mode';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';
