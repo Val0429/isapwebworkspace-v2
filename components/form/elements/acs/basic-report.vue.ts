@@ -91,5 +91,9 @@ export class BasicReport extends Vue{
         this.showTable = true;
         this.$emit("input", $event);        
     }
+    onReset(){        
+        this.showTable = false;
+        this.$emit("input", undefined);        
+    }
 }
 export default BasicReport
