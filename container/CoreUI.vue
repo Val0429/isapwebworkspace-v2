@@ -20,6 +20,20 @@
         <template #nav>
             <SidebarHeader label="Menu" />
             <SidebarNav>
+                
+                <SidebarNavItem url="/attendance" />      
+                <SidebarNavItem url="/doorreport" />
+                <SidebarNavItem url="/doorgroupreport" />
+                <SidebarNavItem url="/cardreport" />          
+                <SidebarNavItem url="/contractorreport" />
+                <SidebarNavItem url="/demographicreport" />
+                
+                <SidebarNavItem url="/employeereport" />
+                
+                <SidebarNavItem url="/visitorreport" />
+                
+                
+
                 <SidebarNavItem url="/site" />
                 <SidebarNavItem url="/region" />
                 <SidebarNavItem url="/member" />
@@ -33,16 +47,9 @@
                 <!-- <SidebarNavItem url="/timeschedule" /> -->
                 <SidebarNavItem url="/permissiontable" />                
                 <SidebarNavItem url="/syncreceiver" />
-                <SidebarNavItem url="/accesslevel" />
+                <!-- <SidebarNavItem url="/accesslevel" /> -->
 
-                <SidebarNavItem url="/attendance" />
-                <SidebarNavItem url="/employeereport" />
-                <SidebarNavItem url="/doorreport" />
-                <SidebarNavItem url="/doorgroupreport" />
-                <SidebarNavItem url="/contractorreport" />
-                <SidebarNavItem url="/demographicreport" />
-                <SidebarNavItem url="/cardreport" />
-                <SidebarNavItem url="/visitorreport" />
+                
                 
             </SidebarNav>
         </template>
