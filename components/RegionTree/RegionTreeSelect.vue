@@ -120,7 +120,9 @@ export class RegionTreeSelect extends Vue {
         this.initRegionTreeItem();
     }
 
-    mounted() {}
+    mounted() {
+        console.log('select tree - ', this.regionTreeItem);
+    }
 
     initRegionTreeItem() {
         this.focusTree(this.regionTreeItem.tree);
