@@ -120,7 +120,7 @@ export class AnalysisFilterInOut extends Vue {
         { value: EType.in, text: EType.in },
         { value: EType.out, text: EType.out }
     ];
-    countSelectItem: any = {
+    timeModeSelectItem: any = {
         hour: ECountType.hour,
         day: ECountType.day,
         week: ECountType.week,
@@ -714,7 +714,7 @@ export class AnalysisFilterInOut extends Vue {
                  * @uiLabel - ${this._("w_countSelect")}
                  * @uiColumnGroup - analysis
                  */
-                type?: ${toEnumInterface(this.countSelectItem as any, false)};
+                type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
 
 
                 /**
