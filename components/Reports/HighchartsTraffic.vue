@@ -182,10 +182,12 @@ export class HighchartsTraffic extends Vue {
     ////////////////////////// day 1 site 1 //////////////////////////
 
     initDay1Site1() {
-        let tempValues = JSON.parse(JSON.stringify(this.value));
+        let tempValues: IChartTrafficData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
+        let tempHourStrings: string[] = [];
         let tempCategories: string[] = [];
         let tempResult: IChartTrafficData[] = [];
-        let categories: string[] = [];
         let tempSeries: any = [
             {
                 name: this._("w_ReportTraffic_TrafficRevenue"),
@@ -215,13 +217,12 @@ export class HighchartsTraffic extends Vue {
         );
         for (let i = officeHour.startHour; i <= officeHour.endHour; i++) {
             let hourString = i < 10 ? `0${i.toString()}` : i.toString();
-            categories.push(`${hourString}:00`);
+            tempHourStrings.push(`${hourString}:00`);
         }
         //// office hour group ////
 
         // set data
-        console.log(categories, tempValues);
-        for (let categorie of categories) {
+        for (let categorie of tempHourStrings) {
             let haveValue = false;
             for (let loopValue of tempValues) {
                 let value: IChartTrafficData = this.trafficValue(loopValue);
@@ -387,7 +388,9 @@ export class HighchartsTraffic extends Vue {
     initDay1SiteX() {
         let trafficAVG = 0;
         let trafficTotal = 0;
-        let tempValues = JSON.parse(JSON.stringify(this.value));
+        let tempValues: IChartTrafficData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
         let tempResult: IChartTrafficData[] = [];
         let tempCategories: string[] = [];
         let tempSeries: any = [
@@ -526,7 +529,9 @@ export class HighchartsTraffic extends Vue {
     initDayXSite1() {
         let trafficAVG = 0;
         let trafficTotal = 0;
-        let tempValues = JSON.parse(JSON.stringify(this.value));
+        let tempValues: IChartTrafficData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
         let tempResult: IChartTrafficData[] = [];
         let tempCategories: string[] = [];
         let tempSeries: any = [
@@ -905,7 +910,9 @@ export class HighchartsTraffic extends Vue {
     ////////////////////////// day X site X //////////////////////////
 
     initDayXSiteX() {
-        let tempValues = JSON.parse(JSON.stringify(this.value));
+        let tempValues: IChartTrafficData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
         let tempResult: any[] = [];
         let tempCategories: string[] = [];
         let tempSeries: {
@@ -1332,7 +1339,7 @@ export class HighchartsTraffic extends Vue {
         this.mountChart = true;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private trafficValueDefault(): IChartTrafficData {
         let value: IChartTrafficData = {

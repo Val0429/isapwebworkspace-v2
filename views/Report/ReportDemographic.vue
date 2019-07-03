@@ -10,7 +10,7 @@
                     :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
-                    :value="value"
+                    :value="chartDatas"
                 >
                 </highcharts-demographic>
                 <!-- Morris -->
@@ -54,7 +54,7 @@ export default class ReportDemographic extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    value: IChartDemographicData[] = [];
+    chartDatas: IChartDemographicData[] = [];
     ////////////////////////////////////// Morris End //////////////////////////////////////
 
     created() {
@@ -98,7 +98,7 @@ export default class ReportDemographic extends Vue {
                 let tempAgeRangeNumber = Math.floor(Math.random() * 300);
 
                 if (tempAgeRangeNumber % 10 == 0) {
-                    ageRange = EAgeRange.low20;
+                    ageRange = EAgeRange.lower20;
                 } else if (tempAgeRangeNumber % 10 == 1) {
                     ageRange = EAgeRange.m21_30;
                 } else if (tempAgeRangeNumber % 10 == 2) {
@@ -108,7 +108,7 @@ export default class ReportDemographic extends Vue {
                 } else if (tempAgeRangeNumber % 10 == 4) {
                     ageRange = EAgeRange.m51_60;
                 } else if (tempAgeRangeNumber % 10 == 5) {
-                    ageRange = EAgeRange.upp61;
+                    ageRange = EAgeRange.upper61;
                 }
 
                 let tempI = i;
@@ -116,12 +116,14 @@ export default class ReportDemographic extends Vue {
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
                 let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
-                let trafficChartData: IChartDemographicData = {
+                let tempChartData: IChartDemographicData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    ageRange: ageRange
+                    ageRange: ageRange,
+                    maleCount: Math.floor(Math.random() * 300),
+                    femaleCount: Math.floor(Math.random() * 300)
                 };
-                this.value.push(trafficChartData);
+                this.chartDatas.push(tempChartData);
             }
         }
     }
