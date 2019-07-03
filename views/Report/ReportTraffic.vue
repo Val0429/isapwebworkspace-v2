@@ -37,7 +37,16 @@
                 </analysis_filter_in_out_traffic>
 
                 <!-- Ben -->
-                <anlysis-dashboard :anlysisData="dData">
+                <anlysis-dashboard 
+                ref="anlysisDashboard"
+                :startDate="dStartDate"
+                :endDate="dEndDate"
+                :type ="dTimeMode"
+                :siteIds ="dSites"
+                :tagIds ="dTags"
+                :weather ="dWeather"
+                :pageType ="dPageType"
+              >
                 </anlysis-dashboard>
 
                 <!-- Morris -->
@@ -121,6 +130,9 @@ enum EPageStep {
 })
 export default class ReportTraffic extends Vue {
     ePageStep = EPageStep;
+    ePageType = EPageType;
+    eWeather = EWeather;
+
     pageStep: EPageStep = EPageStep.none;
 
     ////////////////////////////////////// Morris Start //////////////////////////////////////
@@ -211,8 +223,16 @@ export default class ReportTraffic extends Vue {
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
-    //Dashboard 相關
-    dData = new ReportDashboard();
+    //ReportDashboard 相關
+    dStartDate: Date = new Date();
+    dEndDate: Date = new Date();
+    dPageType: EPageType = EPageType.traffic;
+    dTimeMode: ETimeMode = ETimeMode.day;
+    dWeather: EWeather = EWeather.none;
+    dSites = [];
+    dTags= [];
+         
+    
 
     //PickTimeRange 相關
     pData: IPeckTimeRange[] = [];
@@ -240,83 +260,20 @@ export default class ReportTraffic extends Vue {
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
 
-        // Ben
-        this.initDashboardData();
-        this.initPeakTimeRange();
-        this.initReportTable();
+       
     }
 
     // Ben //
     initDashboardData() {
-        setTimeout(() => {
-            this.dData = {
-                pageType: EPageType.traffic,
-                traffic: {
-                    sign: ESign.negative,
-                    total: 43250,
-                    value: 10,
-                    valueRatio: 0.156
-                },
-                averageOccupancy: {
-                    sign: ESign.negative,
-                    total: 10,
-                    value: 1,
-                    valueRatio: 0.099
-                },
-                averageDwellTime: {
-                    sign: ESign.positive,
-                    total: 25,
-                    value: 2,
-                    valueRatio: 0.01
-                },
-                demographic: {
-                    sign: ESign.positive,
-                    value: 11,
-                    valueRatio: 0.099,
-                    sign2: ESign.negative,
-                    value2: 11,
-                    valueRatio2: 0.099
-                },
-                vipBlacklist: {
-                    sign: ESign.positive,
-                    value: 11,
-                    valueRatio: 0.099,
-                    sign2: ESign.negative,
-                    value2: 11,
-                    valueRatio2: 0.099
-                },
-                repeatCustomer: {
-                    sign: ESign.negative,
-                    total: 0.36,
-                    value: 9,
-                    valueRatio: 0.11
-                },
-                revenue: {
-                    sign: ESign.positive,
-                    total: 9999999,
-                    value: 11,
-                    valueRatio: 0.099
-                },
-                transaction: {
-                    sign: ESign.negative,
-                    total: 666,
-                    value: 11,
-                    valueRatio: 0.099
-                },
-                conversion: {
-                    sign: ESign.positive,
-                    total: 0.18,
-                    value: 2,
-                    valueRatio: 0.01
-                },
-                asp: {
-                    sign: ESign.positive,
-                    total: 1235,
-                    value: 2,
-                    valueRatio: 0.01
-                }
-            };
-        }, 2000);
+        this.dWeather = EWeather.none;
+        this.dTimeMode = ETimeMode.day;
+        this.dStartDate =  new Date();
+        this.dEndDate =  new Date();
+        this.dSites = [];
+        this.dTags= [];
+        console.log('initDashboardData')
+        let anlysisDashboard:any = this.$refs.anlysisDashboard;
+        anlysisDashboard.initData();
     }
 
     initPeakTimeRange() {
@@ -482,6 +439,7 @@ export default class ReportTraffic extends Vue {
 
     initReportTable() {
         setTimeout(() => {
+            this.rData.head  = [];
             this.rData.head = [
                 "2019-06-24T09:00:00.000Z",
                 "2019-06-24T10:00:00.000Z",
@@ -496,6 +454,8 @@ export default class ReportTraffic extends Vue {
                 "2019-06-24T20:00:00.000Z",
                 "2019-06-24T21:00:00.000Z"
             ];
+
+            this.rData.body  = [];
             this.rData.body = [
                 {
                     area: "1F精品區",
@@ -1252,6 +1212,10 @@ export default class ReportTraffic extends Vue {
         this.initSelectItemDevice();
         this.clearInputFormData();
         this.filterSiteData();
+         // Ben
+        this.initDashboardData();
+        this.initPeakTimeRange();
+        this.initReportTable();
 
         console.log(' - ', this.sites);
         console.log(' - ', this.startDate);

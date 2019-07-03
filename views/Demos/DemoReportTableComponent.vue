@@ -51,6 +51,7 @@ export default class DemoReportComponent extends Vue {
         this.initAnlyDashboardData();
         this.initPeakTimeRange();
         this.initReportTable();
+        
     }
 
     initReportTable() {
