@@ -273,7 +273,6 @@ export class FilterCondition extends Vue {
         // this.initSelectItemTree();
         // this.initRegionTreeSelect();
 	    // this.siteFilterPermission();
-        console.log('son - ', this.regionTreeItem);
     }
 
     // initRegionTreeSelect() {
@@ -429,7 +428,6 @@ export class FilterCondition extends Vue {
     }
 
     async pageToChooseTree() {
-        console.log('pageToChooseTree - ', this.regionTreeItem);
         this.pageStep = EPageStep.chooseTree;
         this.selecteds = [];
         for (const id of this.inputFormData.siteIds) {

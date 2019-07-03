@@ -6,6 +6,12 @@ enum EChartMode {
     siteXDayX = 'siteXDayX',
 }
 
+enum EGender {
+    none = 'none',
+    male = 'male',
+    female = 'female',
+}
+
 enum EAreaMode {
     none = 'none',
     all = 'all',
@@ -47,4 +53,4 @@ enum EWeather {
     partlyCloudyNight = 'partlyCloudyNight',
 }
 
-export { ETimeMode, EChartMode, EAreaMode, EWeather, EAgeRange };
+export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange };

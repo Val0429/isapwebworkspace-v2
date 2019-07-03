@@ -81,7 +81,7 @@ export class AnalysisFilter extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
-    countSelectItem: any = {
+    timeModeSelectItem: any = {
         hour: ECountType.hour,
         day: ECountType.day,
         week: ECountType.week,
@@ -411,7 +411,7 @@ export class AnalysisFilter extends Vue {
                  * @uiColumnGroup - analysis
                  */
                 type?: ${toEnumInterface(
-                    this.countSelectItem as any,
+                    this.timeModeSelectItem as any,
                     false
                 )};
 
