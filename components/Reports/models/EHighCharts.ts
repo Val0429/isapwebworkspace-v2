@@ -1,9 +1,9 @@
 enum EChartMode {
     none = 'none',
-    day1Site1 = 'day1Site1',
-    day1SiteX = 'day1SiteX',
-    dayXSite1 = 'dayXSite1',
-    dayXSiteX = 'dayXSiteX',
+    site1Day1 = 'site1Day1',
+    site1DayX = 'site1DayX',
+    siteXDay1 = 'siteXDay1',
+    siteXDayX = 'siteXDayX',
 }
 
 enum EAreaMode {

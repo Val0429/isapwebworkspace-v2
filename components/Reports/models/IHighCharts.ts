@@ -36,25 +36,29 @@ interface ISiteOfficeHourItem {
 interface IChartTrafficData {
     date: Date;
     siteObjectId: string;
-    temperatureMin: number;
-    temperatureMax: number;
     traffic: number;
     revenue: number;
+    temperatureMin: number;
+    temperatureMax: number;
     transaction: number;
     weather: EWeather;
-    i18n?: any;
+
+    // not outside
+    conversion?: number;
+    asp?: number;
+    trafficAVG?: number;
+
+    // every report
     siteName?: string;
     timeMode?: ETimeMode;
     areaMode?: EAreaMode;
-    conversion?: number;
-    asp?: number;
+    i18n?: any;
     temperature?: number;
-    trafficAVG?: number;
     weatherIcon?: string;
-    dateStart?: Date;
-    dateEnd?: Date;
     weekNumber?: number;
     quarterNumber?: number;
+    dateStart?: Date;
+    dateEnd?: Date;
     timeString?: string;
     dateString?: string;
     dateStartString?: string;
@@ -67,7 +71,29 @@ interface IChartDemographicData {
     ageRange: EAgeRange;
     maleCount: number;
     femaleCount: number;
+    temperatureMin: number;
+    temperatureMax: number;
+    weather: EWeather;
+
+    // not outside
+    maleCountPercent?: number;
+    femaleCountPercent?: number;
+
+    // every report
     siteName?: string;
+    timeMode?: ETimeMode;
+    areaMode?: EAreaMode;
+    i18n?: any;
+    temperature?: number;
+    weatherIcon?: string;
+    weekNumber?: number;
+    quarterNumber?: number;
+    dateStart?: Date;
+    dateEnd?: Date;
+    timeString?: string;
+    dateString?: string;
+    dateStartString?: string;
+    dateEndString?: string;
 }
 
 export { ISite, IDate, ISiteOfficeHourItem, IDatetimeGroup, IDayRange };

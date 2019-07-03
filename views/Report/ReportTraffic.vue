@@ -52,11 +52,12 @@
                 </highcharts-traffic>
 
                 <!-- Ben -->
-                  <peak-time-range
+                <peak-time-range
                     :siteItems="siteItem"
                     :dayXSiteX="pDayXxSiteX"
-                    :timeRangeData="pData">
-                    </peak-time-range>
+                    :timeRangeData="pData"
+                >
+                </peak-time-range>
 
                 <!-- Ben -->
                 <report-table :reportTableData="rData">
@@ -227,16 +228,15 @@ export default class ReportTraffic extends Vue {
     }
 
     mounted() {
-        this.initDatas()
+        this.initDatas();
     }
 
-    async initDatas(){
-
+    async initDatas() {
         // Tina
         await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
-       // await this.initOfficeHour();
+        // await this.initOfficeHour();
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
 
@@ -501,18 +501,18 @@ export default class ReportTraffic extends Vue {
                     area: "1F精品區",
                     group: "N/A",
                     in: [
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: -0.01 },
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: -0.01 },
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: 0.01 },
-                        {value: 1, valueRatio: -0.01 },
-                        {value: 2, valueRatio: -0.02 }
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 2, valueRatio: -0.02 }
                     ],
                     out: [
                         { value: 3, valueRatio: -0.03 },
@@ -547,18 +547,18 @@ export default class ReportTraffic extends Vue {
                         { value: 6, valueRatio: -0.07 }
                     ],
                     out: [
-                        {  value: 7, valueRatio: -0.08 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 1, valueRatio: -0.01 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 1, valueRatio: -0.01 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 1, valueRatio: 0.01 },
-                        {  value: 8, valueRatio: -0.09 }
+                        { value: 7, valueRatio: -0.08 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: -0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 1, valueRatio: 0.01 },
+                        { value: 8, valueRatio: -0.09 }
                     ]
                 }
             ];
@@ -625,16 +625,18 @@ export default class ReportTraffic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
                 let trafficChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    temperature: iNumber,
-                    temperatureMin: iNumber,
-                    temperatureMax: iNumber,
                     traffic: Math.floor(Math.random() * 500),
                     revenue: Math.floor(Math.random() * 1000),
                     transaction: Math.floor(Math.random() * 50),
+                    temperature: iNumber,
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
                     weather: weather
                 };
                 this.chartDatas.push(trafficChartData);
@@ -742,11 +744,10 @@ export default class ReportTraffic extends Vue {
                 return false;
             });
 
-        console.log('father - ', this.regionTreeItem);
+        console.log("father - ", this.regionTreeItem);
     }
 
     async initOfficeHour() {
-
         await this.$server
             .R("/office-hour")
             .then((response: any) => {
@@ -1102,7 +1103,7 @@ export default class ReportTraffic extends Vue {
 
         // 取得date、siteObjectId資料
         for (const singleData of this.responseData.summaryDatas) {
-            console.log('singleData - ', singleData);
+            console.log("singleData - ", singleData);
             for (const detailKey in singleData) {
                 const tempSingleData = singleData[detailKey];
                 switch (detailKey) {
@@ -1120,7 +1121,6 @@ export default class ReportTraffic extends Vue {
             // console.log('tempChartData - ', tempChartData);
             this.trafficChartData.push(tempChartData);
             // console.log("trafficChartData - ", this.trafficChartData);
-
         }
 
         // 取得traffic、revenue、transaction資料
@@ -1214,7 +1214,7 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-            /*
+        /*
 			   for (const filterSiteId of this.filterData.siteIds) {
 				for (const detail of this.officeHourItemDetail) {
 					for (const officeHourSiteId of detail.sites) {
@@ -1253,12 +1253,12 @@ export default class ReportTraffic extends Vue {
         this.clearInputFormData();
         this.filterSiteData();
 
-        console.log(' - ', this.sites);
-        console.log(' - ', this.startDate);
-        console.log(' - ', this.endDate);
-        console.log(' - ', this.timeMode);
-        console.log(' - ', this.areaMode);
-        console.log(' - ', this.trafficChartData);
+        console.log(" - ", this.sites);
+        console.log(" - ", this.startDate);
+        console.log(" - ", this.endDate);
+        console.log(" - ", this.timeMode);
+        console.log(" - ", this.areaMode);
+        console.log(" - ", this.trafficChartData);
     }
 
     async receiveAreaId(areaId) {
@@ -1269,9 +1269,7 @@ export default class ReportTraffic extends Vue {
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
-
             for (const singleData of this.responseData.summaryDatas) {
-
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
@@ -1288,11 +1286,10 @@ export default class ReportTraffic extends Vue {
                 //console.log("trafficChartData - ", this.trafficChartData);
             }
 
-            console.log('1291 - ', this.areaSummaryFilter);
+            console.log("1291 - ", this.areaSummaryFilter);
 
             // 整理為Morris需要的資料格式
             for (const singleData of this.areaSummaryFilter) {
-
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
@@ -1302,7 +1299,8 @@ export default class ReportTraffic extends Vue {
                             tempSingleData.objectId
                         ) {
                             this.trafficChartData.date = singleData.date;
-                            this.trafficChartData.siteObjectId = singleData.site.objectId;
+                            this.trafficChartData.siteObjectId =
+                                singleData.site.objectId;
                             this.trafficChartData.traffic = singleData.in;
                             // this.trafficChartData.temperature = tempSingleData.;
                             // this.trafficChartData.revenue = tempSingleData.;
@@ -1311,7 +1309,7 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                 }
-                 console.log(" - ", this.trafficChartData);
+                console.log(" - ", this.trafficChartData);
             }
 
             this.inputFormData.groupId = "";
@@ -1340,7 +1338,6 @@ export default class ReportTraffic extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -1351,7 +1348,6 @@ export default class ReportTraffic extends Vue {
 
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
-
         } else {
             return false;
         }
@@ -1414,7 +1410,7 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                 }
-               //  console.log(" - ", this.trafficChartData);
+                //  console.log(" - ", this.trafficChartData);
             }
 
             this.inputFormData.deviceId = "";
@@ -1505,7 +1501,6 @@ export default class ReportTraffic extends Vue {
 
         console.log("inOrOut - ", this.inputFormData.inOrOut);
     }
-
 
     weatherIcon(icon: string): string {
         switch (icon) {

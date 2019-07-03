@@ -769,27 +769,31 @@ export default class LangObject implements ILang {
     w_VSVIP_Stranger_Visitor_EditFailed = 'VIP, Stranger, Frequent Visitor Device edit failed, please try again.';
     w_VSVIP_Stranger_Visitor_DeleteConfirm = 'Are you sure to delete selected VIP, Stranger, Frequent Visitor Device(s)?';
 
+    // Report All
+    w_Report_Time = 'Time';
+    w_Report_Date = 'Date';
+    w_Report_StartDate = 'Start Date';
+    w_Report_EndDate = 'End Date';
+    w_Report_Temperature = 'Temperature';
+    w_Report_TemperatureMin = 'Temperature Min';
+    w_Report_TemperatureMax = 'Temperature Max';
+    w_Report_Weather = 'Weather';
+    w_Report_Percent = 'Percent';
+
+    w_Report_ErrorDateStart = 'Start date error';
+    w_Report_ErrorDateEnd = 'End date error';
+    w_Report_ErrorChartMode = 'No Find Chart Mode';
+
     // Report Traffic
-    w_ReportTraffic_TrafficTime = 'Time';
-    w_ReportTraffic_TrafficDate = 'Date';
-    w_ReportTraffic_TrafficStartDate = 'Start Date';
-    w_ReportTraffic_TrafficEndDate = 'End Date';
     w_ReportTraffic_TrafficTraffic = 'Traffic';
     w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
     w_ReportTraffic_TrafficRevenue = 'Revenue';
     w_ReportTraffic_TrafficTransaction = 'Transaction';
     w_ReportTraffic_TrafficConversion = 'Conversion';
-    w_ReportTraffic_TrafficTemperature = 'Temperature';
-    w_ReportTraffic_TrafficTemperatureMin = 'Temperature Min';
-    w_ReportTraffic_TrafficTemperatureMax = 'Temperature Max';
-    w_ReportTraffic_TrafficWeather = 'Weather';
     w_ReportTraffic_TrafficASP = 'ASP';
 
-    w_ReportTraffic_ErrorDateStart = 'Start date error';
-    w_ReportTraffic_ErrorDateEnd = 'End date error';
-    w_ReportTraffic_ErrorChartMode = 'No Find Chart Mode';
-
     // Report Demographic
+    w_ReportDemographic_Gender = 'Gender';
     w_ReportDemographic_GenderMale = 'Male';
     w_ReportDemographic_GenderFemale = 'Female';
 

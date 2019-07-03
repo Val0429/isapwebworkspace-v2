@@ -11,6 +11,20 @@ class HighChartsService {
         time: 'HH:mm',
     };
 
+    categoriesQuarter(date: Date): string {
+        let result = '';
+        let quarterNumber = Datetime.QuarterNumber(date);
+        result += `${date.getFullYear()}-Q${quarterNumber}`;
+        return result;
+    }
+
+    categoriesWeek(date: Date): string {
+        let result = '';
+        let weekNumber = Datetime.WeekNumber(date);
+        result += `${date.getFullYear()}-W${weekNumber}`;
+        return result;
+    }
+
     siteOfficeHour(weekDay: number, officeHour: IDayRange[]): ISiteOfficeHourItem {
         let result: ISiteOfficeHourItem = {
             startHour: 25,
@@ -72,14 +86,14 @@ class HighChartsService {
         let result = EChartMode.none;
         let startDateString = Datetime.DateTime2String(startDate, this.datetimeFormat.date);
         let endDateString = Datetime.DateTime2String(endDate, this.datetimeFormat.date);
-        if (startDateString == endDateString && sites.length == 1) {
-            result = EChartMode.day1Site1;
-        } else if (startDateString == endDateString && sites.length > 1) {
-            result = EChartMode.day1SiteX;
-        } else if (startDateString != endDateString && sites.length == 1) {
-            result = EChartMode.dayXSite1;
-        } else if (startDateString != endDateString && sites.length > 1) {
-            result = EChartMode.dayXSiteX;
+        if (sites.length == 1 && startDateString == endDateString) {
+            result = EChartMode.site1Day1;
+        } else if (sites.length == 1 && startDateString != endDateString) {
+            result = EChartMode.site1DayX;
+        } else if (sites.length > 1 && startDateString == endDateString) {
+            result = EChartMode.siteXDay1;
+        } else if (sites.length > 1 && startDateString != endDateString) {
+            result = EChartMode.siteXDayX;
         }
         return result;
     }
