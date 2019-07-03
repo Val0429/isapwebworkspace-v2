@@ -31,12 +31,12 @@ export default class EmployeeReport extends Vue  {
         [            
             {
                 key:"FirstName",
-                label: this._('w_Member_ChineseName1'),
+                label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
             {  
                 key:"LastName",
-                label: this._('w_Member_EnglishName1'),
+                label: this._('w_Member_ChineseName1'),
                 sortable: true
             },
             {
@@ -145,6 +145,16 @@ export default class EmployeeReport extends Vue  {
     inf():string{
         return `interface {
             /**
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
+             */
+            EmployeeNumber?: string;
+            /**
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_Member_CardNumber1')}
+             */
+            CardNumber?: string;
+            /**
              * @uiColumnGroup - name
              * @uiLabel - ${this._('w_Member_ChineseName1')}
              */
@@ -154,16 +164,7 @@ export default class EmployeeReport extends Vue  {
              * @uiLabel - ${this._('w_Member_EnglishName1')}
              */
             LastName?: string;
-            /**
-             * @uiColumnGroup - number
-             * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
-             */
-            EmployeeNumber?: string;
-            /**
-             * @uiColumnGroup - number
-             * @uiLabel - ${this._('w_Member_CardNumber1')}
-             */
-            CardNumber?: string;
+            
             /**
              * @uiColumnGroup - area
              * @uiLabel - ${this._('w_Member_Department1')}
@@ -174,11 +175,6 @@ export default class EmployeeReport extends Vue  {
              * @uiLabel - ${this._('w_Member_CostCenter1')}
              */
             CostCenterName?:string;
-            /**
-             * @uiColumnGroup - area
-             * @uiLabel - ${this._('w_Member_WorkArea1')}
-             */
-            WorkAreaName?:string;
             /**
              * @uiColumnGroup - datefilter
              * @uiType - iv-form-date

@@ -39,12 +39,12 @@ export default class CardExpirationReport extends Vue  {
             },
             {
                 key:"FirstName",
-                label: this._('w_Member_ChineseName1'),
+                label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
             {  
                 key:"LastName",
-                label: this._('w_Member_EnglishName1'),
+                label: this._('w_Member_ChineseName1'),
                 sortable: true
             },
             {
@@ -69,12 +69,17 @@ export default class CardExpirationReport extends Vue  {
     }
     
   private async getData() { 
+      try{
       if(!this.filter)return;
       if(this.filter.End)this.filter.EndDate = this.filter.End.toISOString();
         this.isBusy=true;            
         let resp: any=await this.$server.R("/report/memberrecord" as any, this.filter);        
         this.records = resp.results;
+      }catch(err){
+          console.error(err);
+      }finally{
         this.isBusy=false;
+      }
   }
 
 
@@ -82,55 +87,31 @@ export default class CardExpirationReport extends Vue  {
         return `interface {
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_ChineseName1')}
+             * @uiLabel - ${this._('w_Member_CardCustodian1')}
              */
-            FirstName?: string;
+            CardCustodian?:string;
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_EnglishName1')}
-             */
-            LastName?: string;
-            /**
-             * @uiColumnGroup - row2
-             * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
-             */
-            EmployeeNumber?: string;
-            /**
-             * @uiColumnGroup - row2
              * @uiLabel - ${this._('w_Member_CardNumber1')}
              */
             CardNumber?: string;
             /**
-             * @uiColumnGroup - row3
-             * @uiLabel - ${this._('w_Member_Department1')}
+             * @uiColumnGroup - row2
+             * @uiLabel - ${this._('w_Member_ChineseName1')}
              */
-            DepartmentName?:string;
+            FirstName?: string;
             /**
-             * @uiColumnGroup - row3
-             * @uiLabel - ${this._('w_Member_CostCenter1')}
+             * @uiColumnGroup - row2
+             * @uiLabel - ${this._('w_Member_EnglishName1')}
              */
-            CostCenterName?:string;
-            /**
-             * @uiColumnGroup - row4
-             * @uiLabel - ${this._('w_Member_WorkArea1')}
-             */
-            WorkAreaName?:string;
+            LastName?: string;
             /**
              * @uiColumnGroup - row4
              * @uiLabel - ${this._('w_Member_CompanyName1')}
              */
             CompanyName?:string;
-            /**
-             * @uiColumnGroup - row5
-             * @uiLabel - ${this._('w_Member_CardCustodian1')}
-             */
-            CardCustodian?:string;
-            /**
-             * @uiColumnGroup - row5
-             * @uiType - iv-form-date
-             * @uiLabel - ${this._('w_Member_EndDate1')}
-             */
-            End?:Date;
+            
+            
         }`;
             
     }
