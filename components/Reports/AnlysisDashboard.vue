@@ -11,7 +11,7 @@
                     <div :class="ePageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
-                            <span v-html="weather" class="weather">{{weather}}</span>
+                            <span v-html="showWeather()" class="weather"></span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
@@ -300,7 +300,7 @@ export class AnlysisDashboard extends Vue {
     @Prop({
         type: String,
         default: function() {
-            return ETimeMode.day;
+            return ETimeMode.none;
         }
     })
     type: ETimeMode;
@@ -313,7 +313,7 @@ export class AnlysisDashboard extends Vue {
     })
     siteIds: [];
 
-        @Prop({
+    @Prop({
         type: Array,
         default: function() {
             return [];
@@ -332,10 +332,39 @@ export class AnlysisDashboard extends Vue {
     @Prop({
         type: String,
         default: function() {
-            return HighChartsService.weatherIcon(EWeather.none);
+            return EWeather.none;
         }
     })
     weather: EWeather;
+
+   @Watch("startDate", { deep: true })
+    private watchStartDate(newVal, oldVal) {
+        console.log('startDate',this.startDate);
+    }
+   @Watch("endDate", { deep: true })
+    private watchEndDate(newVal, oldVal) {
+        console.log('endDate',this.endDate);
+    }
+       @Watch("type", { deep: true })
+    private watchType(newVal, oldVal) {
+        console.log('type',this.type);
+    }
+   @Watch("siteIds", { deep: true })
+    private watchSiteIds(newVal, oldVal) {
+        console.log('siteIds',this.siteIds);
+    }
+   @Watch("tagIds", { deep: true })
+    private watchTagIds(newVal, oldVal) {
+        console.log('tagIds',this.tagIds);
+    }
+   @Watch("pageType", { deep: true })
+    private watchPageType(newVal, oldVal) {
+        console.log('pageType',this.pageType);
+    }
+    @Watch("weather", { deep: true })
+    private watchWeather(newVal, oldVal) {
+        console.log('weather',this.weather);
+    }
     
     anlysisData = new ReportDashboard();
     eSign = ESign;
@@ -344,11 +373,11 @@ export class AnlysisDashboard extends Vue {
     created() {}
 
     async mounted() {
-        // this.initData();
+          console.log('mounted',this.startDate,this.endDate,this.type, this.siteIds);
     }
 
     async initData(){
-        console.log('initData');
+        console.log('initData',this.startDate,this.endDate,this.type, this.siteIds);
         const readParam: {
             startDate: Date,
             endDate: Date,
@@ -470,6 +499,14 @@ export class AnlysisDashboard extends Vue {
         str += "%";
         return str;
     }
+
+    showWeather(){
+        let result = HighChartsService.weatherIcon(this.weather);
+        console.log(result);
+        return result;
+    }
+        
+    
 }
 
 export default AnlysisDashboard;

@@ -41,8 +41,8 @@
                     ref="anlysisDashboard"
                     :startDate="startDate"
                     :endDate="endDate"
-                    :type="timeMode"
-                    :siteIds="sites"
+                    :type="dTimeMode"
+                    :siteIds="pSiteIds"
                     :tagIds="tags"
                     :weather="dWeather"
                     :pageType="dPageType"
@@ -97,6 +97,7 @@ import {
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
+import HighChartsService from "@../../../components/Reports/models/HighChartsService";
 
 // Morris
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
@@ -228,8 +229,10 @@ export default class ReportTraffic extends Vue {
     //ReportDashboard 相關
     dPageType: EPageType = EPageType.none;
     dWeather: EWeather = EWeather.none;
+    dTimeMode: ETimeMode = ETimeMode.none;
 
     //PickTimeRange 相關
+    pSiteIds = []
     pData: IPeckTimeRange[] = [];
     pDayXxSiteX: EDayXSiteX = EDayXSiteX.none;
     siteItem: ISiteItems[] = [];
@@ -257,10 +260,17 @@ export default class ReportTraffic extends Vue {
 
     // Ben //
     initDashboardData() {
+        this.dTimeMode = ETimeMode.day;
         this.dPageType = EPageType.traffic;
-        this.dWeather = EWeather.none;
+        this.dWeather =  EWeather.rain;  
+
+     
+
+        setTimeout(() => {
         let anlysisDashboard: any = this.$refs.anlysisDashboard;
+        console.log('initDashboardData',this.filterData);
         anlysisDashboard.initData();
+          }, 300);
     }
 
     initPeakTimeRange() {
@@ -1131,6 +1141,7 @@ export default class ReportTraffic extends Vue {
 		*/
 
         this.sites.push(tempISite);
+        this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);
         this.endDate = new Date(this.filterData.endDate);
@@ -1501,7 +1512,7 @@ export default class ReportTraffic extends Vue {
         console.log("inOrOut - ", this.inputFormData.inOrOut);
     }
 
-    weatherIcon(icon: string): string {
+    weatherIcon(icon: string): EWeather {
         switch (icon) {
             case "clear-day":
                 return EWeather.clearDay;
