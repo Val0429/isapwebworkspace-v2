@@ -1,4 +1,14 @@
-import { EWeather, ETimeMode, EAreaMode, EAgeRange } from './EHighCharts';
+import { EWeather, ETimeMode, EAreaMode, EAgeRange, EGender } from './EHighCharts';
+
+interface IValSelectItem {
+    id: string;
+    text: string;
+}
+
+interface IBootstrapSelectItem {
+    value: string;
+    text: string;
+}
 
 interface IDayRange {
     startDay: string;
@@ -31,6 +41,14 @@ interface IDatetimeGroup {
 interface ISiteOfficeHourItem {
     startHour: number;
     endHour: number;
+}
+
+interface IDemographicMount {
+    genderAge: boolean;
+    genderTime: boolean;
+    age: boolean;
+    dwellTime: boolean;
+    gender: boolean;
 }
 
 interface IChartTrafficData {
@@ -97,4 +115,6 @@ interface IChartDemographicData {
 }
 
 export { ISite, IDate, ISiteOfficeHourItem, IDatetimeGroup, IDayRange };
+export { IValSelectItem, IBootstrapSelectItem };
+export { IDemographicMount };
 export { IChartTrafficData, IChartDemographicData };
