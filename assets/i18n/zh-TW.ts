@@ -448,6 +448,7 @@ export default class LangObject implements ILang {
     w_Member_CardNumber = '卡號：';
     w_Member_CardNumber1 = '卡號';
     w_Member_CardType = '證卡類型：';
+    w_Member_CardType1 = '證卡類型'; 
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
     w_Member_CardCustodian1 = '證卡保管人';
@@ -570,4 +571,5 @@ export default class LangObject implements ILang {
     w_Report_DoorNumberEnd="日終門號";
     w_Report_WorkTime = "工作時長";
     w_Report_DateOccurred = "出勤日期";
+    w_Report_InOutDailyCount = "總進出天數";
 }

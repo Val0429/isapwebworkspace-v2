@@ -24,7 +24,19 @@ export default class DemographicReport extends Vue  {
     filter:any={};
     async created(){        
         this.fields = 
-        [            
+        [     
+            {
+                key:"CardNumber",
+                label: this._('w_Member_CardNumber1')
+            },
+            {
+                key:"DepartmentName",
+                label: this._("w_Member_Department1")
+            },            
+            {
+                key:"CostCenterName",
+                label: this._("w_Member_CostCenter1")
+            },
             {
                 key:"FirstName",
                 label: this._('w_Member_ChineseName1'),
@@ -36,35 +48,43 @@ export default class DemographicReport extends Vue  {
                 sortable: true
             },
             {
-                key: "EmployeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
+                key: "CompanyName",
+                label: this._('w_Member_CompanyName1')
             },
             {
-                key:"CardNumber",
-                label: this._('w_Member_CardNumber1')
+                key: "WorkArea",
+                label: this._('w_Member_WorkArea1')
             },
             {
-                key:"DepartmentName",
-                label: this._("w_Member_Department1")
+                key: "CardType",
+                label: this._('w_Member_CardType1')
             },
             {
-                key:"CostCenterName",
-                label: this._("w_Member_CostCenter1")
+                key: "StartDate",
+                label: this._('w_Member_StartDate1')
             },
             {
-                key:"WorkAreaName",
-                label: this._("w_Member_WorkArea1")
+                key: "EndDate",
+                label: this._('w_Member_EndDate1')
             },
             {
-                key:"PermissionList",
-                label: this._("w_Permission_PermissionList")
+                key: "CardCustodian",
+                label: this._('w_Member_CardCustodian1')
+            },
+            {
+                key: "InOutDailyCount",
+                label: this._('w_Report_InOutDailyCount')
             }
+
         ];
 
-        await this.getData();
+        this.filter.DateStart = new Date();
+        this.filter.DateEnd = new Date();
     }
     
-  private async getData() {        
+  private async getData() { 
+      if(!this.filter)return;
+      if(this.filter.End)this.filter.EndDate = this.filter.End.toISOString();
         this.isBusy=true;            
         let resp: any=await this.$server.R("/report/memberrecord" as any, this.filter);        
         this.records = resp.results;
@@ -75,40 +95,67 @@ export default class DemographicReport extends Vue  {
     inf():string{
         return `interface {
             /**
-             * @uiColumnGroup - name
+             * @uiColumnGroup - row1
              * @uiLabel - ${this._('w_Member_ChineseName1')}
              */
             FirstName?: string;
             /**
-             * @uiColumnGroup - name
+             * @uiColumnGroup - row1
              * @uiLabel - ${this._('w_Member_EnglishName1')}
              */
             LastName?: string;
             /**
-             * @uiColumnGroup - number
+             * @uiColumnGroup - row2
              * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
              */
             EmployeeNumber?: string;
             /**
-             * @uiColumnGroup - number
+             * @uiColumnGroup - row2
              * @uiLabel - ${this._('w_Member_CardNumber1')}
              */
             CardNumber?: string;
             /**
-             * @uiColumnGroup - area
+             * @uiColumnGroup - row3
              * @uiLabel - ${this._('w_Member_Department1')}
              */
             DepartmentName?:string;
             /**
-             * @uiColumnGroup - area
+             * @uiColumnGroup - row3
              * @uiLabel - ${this._('w_Member_CostCenter1')}
              */
             CostCenterName?:string;
             /**
-             * @uiColumnGroup - area
+             * @uiColumnGroup - row4
              * @uiLabel - ${this._('w_Member_WorkArea1')}
              */
             WorkAreaName?:string;
+            /**
+             * @uiColumnGroup - row4
+             * @uiLabel - ${this._('w_Member_CompanyName1')}
+             */
+            CompanyName?:string;
+            /**
+             * @uiColumnGroup - row5
+             * @uiLabel - ${this._('w_Member_CardType1')}
+             */
+            CardType?:string;
+            /**
+             * @uiColumnGroup - row5
+             * @uiLabel - ${this._('w_Member_CardCustodian1')}
+             */
+            CardCustodian?:string;
+            /**
+             * @uiColumnGroup - row6
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Member_StartDate1')}
+             */
+            Start:Date;
+            /**
+             * @uiColumnGroup - row6
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Member_EndDate1')}
+             */
+            End:Date;
         }`;
             
     }
