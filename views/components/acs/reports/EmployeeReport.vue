@@ -90,12 +90,17 @@ export default class EmployeeReport extends Vue  {
         
     }
     
-  private async getData() {        
-        this.isBusy=true;   
-        
+  private async getData() {    
+      try{    
+        if(!this.filter)return;
+        this.isBusy=true;           
         await this.getMemberData();
         await this.getAttendanceRecord();
+      }catch(err){
+          console.error(err);
+      }finally{
         this.isBusy=false;
+      }
   }
   private async getMemberData() {
     let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter);
@@ -106,7 +111,8 @@ export default class EmployeeReport extends Vue  {
     }
   }
 
-    async getAttendanceRecord(){
+    async getAttendanceRecord(){   
+        
         this.filter.DateStart.setHours(0,0,0,0);        
         this.filter.DateEnd.setHours(23,59,59,999);
         // let card_no = this.filter.CardNumber;
