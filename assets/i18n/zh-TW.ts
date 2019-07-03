@@ -457,7 +457,7 @@ export default class LangObject implements ILang {
     w_Member_UpLoadPersonPic = '上傳照片：';
     w_Member_CardVoucherType = '卡片憑證類型：';
     w_Member_deviceNumber = '設備碼：';
-
+    w_Member_Status="狀態";
     w_Member_CardInfo = '卡片資訊';
     w_Member_pin = 'PIN：';
 
@@ -572,4 +572,8 @@ export default class LangObject implements ILang {
     w_Report_WorkTime = "工作時長";
     w_Report_DateOccurred = "出勤日期";
     w_Report_InOutDailyCount = "總進出天數";
+
+    w_Report_Month1 = "近三個月進出天數";
+    w_Report_Month2 = "近二個月進出天數";
+    w_Report_Month3 = "近一個月進出天數";
 }
