@@ -73,6 +73,10 @@ export default class DemographicReport extends Vue  {
                 label: this._('w_Member_CardCustodian1')
             },
             {
+                key: "Status",
+                label: this._("w_Member_Status")
+            },
+            {
                 key: "InOutDailyCount",
                 label: this._('w_Report_InOutDailyCount')
             }
