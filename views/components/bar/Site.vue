@@ -2,6 +2,22 @@
     <div class="animated fadeIn">
         <!--Site List-->
         <div v-show="pageStep === ePageStep.siteList">
+            <iv-card :label="_('w_Filter')">
+                <iv-form 
+                    ref="filterForm"
+                    class="col-md-9"
+                    @mounted="doMounted"
+                    :interface="filterInterface()"            
+                    :value="getParams"                            
+                    @submit="onFilter($event)">            
+                    </iv-form> 
+                <template v-if="isMounted" >            
+                    <div class="float-right">
+                        <b-button class="btn-filter" size="lg" v-bind="$refs.filterForm.submitBindings.$attrs" v-on="$refs.filterForm.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                        <b-button class="btn-filter" size="lg" v-bind="$refs.filterForm.resetBindings.$attrs" v-on="$refs.filterForm.resetBindings.$listeners" @click="getParams={}">{{ _("wb_Reset") }}</b-button>                
+                    </div>
+                </template>
+            </iv-card>   
             <iv-card :label="_('w_Site_SiteList')">
 
                 <template #toolbox>
@@ -23,12 +39,13 @@
                     <iv-toolbox-add @click="pageToSiteAdd()" />
 
                 </template>
-
+            
                 <iv-table
                     ref="siteTable"
                     :interface="ISiteList()"
                     @selected="selectedSite($event)"
                     :server="{ path: '/location/site' }"
+                    :params="getParams"
                     :multiple="tableMultiple"
                 >
 
@@ -378,8 +395,29 @@ export default class Site extends Vue {
         console.log("!!! clickDevice", event, data);
     }
 
-    
-    
+    filterInterface(){
+        return ` interface {
+            /**
+             * @uiLabel - ${this._("w_Navigation_Region")}
+             * @uiColumnGroup - row1
+            */
+            regionname?:string;
+            /**
+             * @uiLabel - ${this._("w_Site")}
+             * @uiColumnGroup - row1
+            */
+            sitename?:string;
+        }
+        
+        `;
+    }
+    async onFilter($event){
+        this.getParams=$event;
+        
+    }
+    doMounted(){
+        this.isMounted=true;
+    }
     pageToAreaList() {
         this.pageStep = EPageStep.areaList;
         (this.$refs.areaTable as any).reload();
@@ -414,7 +452,7 @@ export default class Site extends Vue {
         this.pageStep = EPageStep.areaEdit;
     }
 
-
+    getParams:any={};
  
 
    
