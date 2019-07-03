@@ -105,10 +105,7 @@ export default class EmployeeReport extends Vue  {
   private async getMemberData() {
     let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter);
     this.members=resp.results;
-    for(let item of this.members) {
-      if(item.ResignationDate)
-        item.ResignationDate=item.ResignationDate.split('T')[0];
-    }
+    
   }
 
     async getAttendanceRecord(){   
@@ -125,7 +122,7 @@ export default class EmployeeReport extends Vue  {
             let item = resp.results[i];
             let item2 = resp.results[i+1];
             i+=2;
-            let member = this.members.find(x=>x.CardNumber == item.card_no);
+            let member = this.members.find(x=>x.CardNumber && x.CardNumber == item.card_no);
             if(!member)continue;
             let newItem = Object.assign(item, member);
             newItem.date_time_occurred_end = item2.date_time_occurred;
