@@ -10,7 +10,7 @@
                     :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
-                    :value="value"
+                    :value="chartDatas"
                 >
                 </highcharts-demographic>
                 <!-- Morris -->
@@ -54,7 +54,7 @@ export default class ReportDemographic extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    value: IChartDemographicData[] = [];
+    chartDatas: IChartDemographicData[] = [];
     ////////////////////////////////////// Morris End //////////////////////////////////////
 
     created() {
@@ -116,12 +116,14 @@ export default class ReportDemographic extends Vue {
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
                 let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
-                let trafficChartData: IChartDemographicData = {
+                let tempChartData: IChartDemographicData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    ageRange: ageRange
+                    ageRange: ageRange,
+                    maleCount: Math.floor(Math.random() * 300),
+                    femaleCount: Math.floor(Math.random() * 300)
                 };
-                this.value.push(trafficChartData);
+                this.chartDatas.push(tempChartData);
             }
         }
     }

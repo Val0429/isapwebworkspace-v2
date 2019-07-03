@@ -789,6 +789,10 @@ export default class LangObject implements ILang {
     w_ReportTraffic_ErrorDateEnd = 'End date error';
     w_ReportTraffic_ErrorChartMode = 'No Find Chart Mode';
 
+    // Report Demographic
+    w_ReportDemographic_GenderMale = 'Male';
+    w_ReportDemographic_GenderFemale = 'Female';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';

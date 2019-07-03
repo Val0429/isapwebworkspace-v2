@@ -65,6 +65,8 @@ interface IChartDemographicData {
     date: Date;
     siteObjectId: string;
     ageRange: EAgeRange;
+    maleCount: number;
+    femaleCount: number;
     siteName?: string;
 }
 
