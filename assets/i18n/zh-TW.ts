@@ -436,6 +436,7 @@ export default class LangObject implements ILang {
     w_Member_View = '查看人員資訊';
 
     w_Member_CompanyName = '公司名稱：';
+    w_Member_CompanyName1 = '公司名稱';
     w_Member_PersonType = '人員類型：';
     w_Member_PersonType1 = '人員類型';
     w_Member_EmployeeNumber = '工號：';
@@ -449,6 +450,7 @@ export default class LangObject implements ILang {
     w_Member_CardType = '證卡類型：';
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
+    w_Member_CardCustodian1 = '證卡保管人';
     w_Member_Actions = '功能';
     w_Member_PersonPic = '人員照片：';
     w_Member_UpLoadPersonPic = '上傳照片：';
@@ -550,14 +552,15 @@ export default class LangObject implements ILang {
     w_Member_AddFailed = '新增失敗';
     w_Member_ErrorUploadFile = '上傳失敗';
 
-    w_ContractorReport = "Contractor Report";
-    w_DoorReport = 'Door Report';
-    w_DoorGroupReport= 'Door Group Report';
-    w_DemographicReport = "Demographic Report";
-    w_EmployeeReport = 'Employee Report';
-    w_CardExpirationReport = 'Card Report';
-    w_AttendanceRecord = 'Attendance Record';
-    w_VisitorCardReport = 'Visitor Card Report';
+    w_AttendanceRecord = '人員報表';
+    w_DoorReport = '門號報表';
+    w_DoorGroupReport= '門號群組';
+    w_CardExpirationReport = '證卡到期查詢';
+    w_ContractorReport = "契約商報表";    
+    w_DemographicReport = "人口統計報表";
+    w_EmployeeReport = '差勤紀錄查詢';        
+    w_VisitorCardReport = '訪客卡號紀錄';
+    
 
     w_Report_DateStart="Date Start";
     w_Report_DateEnd="Date End";

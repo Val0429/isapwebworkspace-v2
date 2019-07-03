@@ -435,6 +435,7 @@ export default class LangObject implements ILang {
     w_Member_View = '查看人員資訊';
 
     w_Member_CompanyName = '公司名稱：';
+    w_Member_CompanyName1 = '公司名稱';
     w_Member_PersonType = '人員類型：';
     w_Member_PersonType1 = '人員類型';
     w_Member_EmployeeNumber = '工號：';
@@ -448,6 +449,7 @@ export default class LangObject implements ILang {
     w_Member_CardType = '證卡類型：';
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
+    w_Member_CardCustodian1 = '證卡保管人';
     w_Member_Actions = '功能';
     w_Member_PersonPic = '人員照片：';
     w_Member_UpLoadPersonPic = '上傳照片：';
