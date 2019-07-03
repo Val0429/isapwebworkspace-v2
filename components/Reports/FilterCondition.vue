@@ -272,7 +272,8 @@ export class FilterCondition extends Vue {
         // this.initSelectItemTag();
         // this.initSelectItemTree();
         // this.initRegionTreeSelect();
-	    this.siteFilterPermission();
+	    // this.siteFilterPermission();
+        console.log('son - ', this.regionTreeItem);
     }
 
     // initRegionTreeSelect() {
@@ -396,8 +397,6 @@ export class FilterCondition extends Vue {
         switch (data.key) {
             case "siteIds":
                 this.inputFormData.siteIds = data.value;
-                // console.log(' - ', this.inputFormData.siteIds);
-	            // this.$emit("chart-sites", this.sites);
 	            break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
@@ -430,6 +429,7 @@ export class FilterCondition extends Vue {
     }
 
     async pageToChooseTree() {
+        console.log('pageToChooseTree - ', this.regionTreeItem);
         this.pageStep = EPageStep.chooseTree;
         this.selecteds = [];
         for (const id of this.inputFormData.siteIds) {
