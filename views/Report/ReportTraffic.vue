@@ -38,7 +38,16 @@ import {EAreaMode} from "../../components/Reports";
                 </analysis_filter_in_out_traffic>
 
                 <!-- Ben -->
-                <anlysis-dashboard :anlysisData="dData">
+                <anlysis-dashboard
+                    ref="anlysisDashboard"
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :type="timeMode"
+                    :siteIds="sites"
+                    :tagIds="tags"
+                    :weather="dWeather"
+                    :pageType="dPageType"
+                >
                 </anlysis-dashboard>
 
                 <!-- Morris -->
@@ -72,33 +81,41 @@ import {EAreaMode} from "../../components/Reports";
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    // Tina
-    import {ECountType, EDeviceMode, EType} from "@/components/Reports/models/EReport";
-    import {ERegionType, IRegionTreeSelected, RegionTreeItem} from "@/components/RegionTree";
+import { Component, Vue } from "vue-property-decorator";
+// Tina
+import {
+    ECountType,
+    EDeviceMode,
+    EType
+} from "@/components/Reports/models/EReport";
+import {
+    ERegionType,
+    IRegionTreeSelected,
+    RegionTreeItem
+} from "@/components/RegionTree";
 
-    import RegionAPI from "@/services/RegionAPI";
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Datetime from "@/services/Datetime";
-    // Morris
-    import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
-    // Ben
-    import {
-        EAreaMode,
-        EDayXSiteX,
-        EPageType,
-        ESign,
-        ETimeMode,
-        EWeather,
-        IChartTrafficData,
-        IPeckTimeRange,
-        ISite,
-        ISiteItems,
-        ReportDashboard,
-        ReportTableData
-    } from "@/components/Reports";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+// Morris
+import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
+// Ben
+import {
+    EAreaMode,
+    EDayXSiteX,
+    EPageType,
+    ESign,
+    ETimeMode,
+    EWeather,
+    IChartTrafficData,
+    IPeckTimeRange,
+    ISite,
+    ISiteItems,
+    ReportDashboard,
+    ReportTableData
+} from "@/components/Reports";
 
-    enum EPageStep {
+enum EPageStep {
     none = "none"
 }
 
@@ -109,6 +126,9 @@ import {EAreaMode} from "../../components/Reports";
 })
 export default class ReportTraffic extends Vue {
     ePageStep = EPageStep;
+    ePageType = EPageType;
+    eWeather = EWeather;
+
     pageStep: EPageStep = EPageStep.none;
 
     ////////////////////////////////////// Morris Start //////////////////////////////////////
@@ -127,6 +147,7 @@ export default class ReportTraffic extends Vue {
     // select 相關
     sitesSelectItem: any = {};
     tagSelectItem: any = {};
+    tags = [];
 
     // tree
     selectType = ERegionType.site;
@@ -185,8 +206,9 @@ export default class ReportTraffic extends Vue {
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
-    //Dashboard 相關
-    dData = new ReportDashboard();
+    //ReportDashboard 相關
+    dPageType: EPageType = EPageType.none;
+    dWeather: EWeather = EWeather.none;
 
     //PickTimeRange 相關
     pData: IPeckTimeRange[] = [];
@@ -221,75 +243,10 @@ export default class ReportTraffic extends Vue {
 
     // Ben //
     initDashboardData() {
-        setTimeout(() => {
-            this.dData = {
-                pageType: EPageType.traffic,
-                traffic: {
-                    sign: ESign.negative,
-                    total: 43250,
-                    value: 10,
-                    valueRatio: 0.156
-                },
-                averageOccupancy: {
-                    sign: ESign.negative,
-                    total: 10,
-                    value: 1,
-                    valueRatio: 0.099
-                },
-                averageDwellTime: {
-                    sign: ESign.positive,
-                    total: 25,
-                    value: 2,
-                    valueRatio: 0.01
-                },
-                demographic: {
-                    sign: ESign.positive,
-                    value: 11,
-                    valueRatio: 0.099,
-                    sign2: ESign.negative,
-                    value2: 11,
-                    valueRatio2: 0.099
-                },
-                vipBlacklist: {
-                    sign: ESign.positive,
-                    value: 11,
-                    valueRatio: 0.099,
-                    sign2: ESign.negative,
-                    value2: 11,
-                    valueRatio2: 0.099
-                },
-                repeatCustomer: {
-                    sign: ESign.negative,
-                    total: 0.36,
-                    value: 9,
-                    valueRatio: 0.11
-                },
-                revenue: {
-                    sign: ESign.positive,
-                    total: 9999999,
-                    value: 11,
-                    valueRatio: 0.099
-                },
-                transaction: {
-                    sign: ESign.negative,
-                    total: 666,
-                    value: 11,
-                    valueRatio: 0.099
-                },
-                conversion: {
-                    sign: ESign.positive,
-                    total: 0.18,
-                    value: 2,
-                    valueRatio: 0.01
-                },
-                asp: {
-                    sign: ESign.positive,
-                    total: 1235,
-                    value: 2,
-                    valueRatio: 0.01
-                }
-            };
-        }, 2000);
+        this.dPageType = EPageType.traffic;
+        this.dWeather = EWeather.none;
+        let anlysisDashboard: any = this.$refs.anlysisDashboard;
+        anlysisDashboard.initData();
     }
 
     initPeakTimeRange() {
@@ -455,6 +412,7 @@ export default class ReportTraffic extends Vue {
 
     initReportTable() {
         setTimeout(() => {
+            this.rData.head = [];
             this.rData.head = [
                 "2019-06-24T09:00:00.000Z",
                 "2019-06-24T10:00:00.000Z",
@@ -469,6 +427,8 @@ export default class ReportTraffic extends Vue {
                 "2019-06-24T20:00:00.000Z",
                 "2019-06-24T21:00:00.000Z"
             ];
+
+            this.rData.body = [];
             this.rData.body = [
                 {
                     area: "1F精品區",
@@ -598,16 +558,18 @@ export default class ReportTraffic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
                 let trafficChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    temperature: iNumber,
-                    temperatureMin: iNumber,
-                    temperatureMax: iNumber,
                     traffic: Math.floor(Math.random() * 500),
                     revenue: Math.floor(Math.random() * 1000),
                     transaction: Math.floor(Math.random() * 50),
+                    temperature: iNumber,
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
                     weather: weather
                 };
                 this.chartDatas.push(trafficChartData);
@@ -1185,6 +1147,7 @@ export default class ReportTraffic extends Vue {
 		*/
 
         this.sites.push(tempISite);
+        this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
@@ -1522,7 +1485,6 @@ export default class ReportTraffic extends Vue {
             await this.initSelectItemDevice();
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
-
         } else {
             return false;
         }

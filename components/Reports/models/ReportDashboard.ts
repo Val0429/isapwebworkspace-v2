@@ -72,67 +72,67 @@ class ReportDashboard {
     pageType = EPageType.none;
     traffic = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
     averageOccupancy = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
     averageDwellTime = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
     demographic = {
         sign: ESign.none,
-        value: -1,
-        valueRatio: -1,
+        value: null,
+        valueRatio: null,
         sign2: ESign.none,
-        value2: -1,
-        valueRatio2: -1,
+        value2: null,
+        valueRatio2: null,
     };
     vipBlacklist = {
         sign: ESign.none,
-        value: -1,
-        valueRatio: -1,
+        value: null,
+        valueRatio: null,
         sign2: ESign.none,
-        value2: -1,
-        valueRatio2: -1,
+        value2: null,
+        valueRatio2: null,
     };
     repeatCustomer = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
     revenue = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
     transaction = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
     conversion = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
     asp = {
         sign: ESign.none,
-        total: -1,
-        value: -1,
-        valueRatio: -1,
+        total: null,
+        value: null,
+        valueRatio: null,
     };
 }
 export { ReportDashboard };

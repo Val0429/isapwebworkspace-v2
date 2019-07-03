@@ -5,6 +5,7 @@
 
                 <!-- Morris -->
                 <highcharts-demographic
+                    ref="test"
                     :startDate="startDate"
                     :endDate="endDate"
                     :sites="sites"
@@ -65,7 +66,7 @@ export default class ReportDemographic extends Vue {
 
     // Morris //
     initChartDeveloper() {
-        this.timeMode = ETimeMode.week;
+        this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.single;
 
         // single day
@@ -76,7 +77,7 @@ export default class ReportDemographic extends Vue {
         // this.startDate = new Date("2019-06-20T08:00:00.000Z");
         // this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
-        let siteLength = 1;
+        let siteLength = 3;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
@@ -97,17 +98,42 @@ export default class ReportDemographic extends Vue {
                 let ageRange = EAgeRange.none;
                 let tempAgeRangeNumber = Math.floor(Math.random() * 300);
 
-                if (tempAgeRangeNumber % 10 == 0) {
+                let weather = EWeather.none;
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
+
+                if (tempWeatherNumber % 10 == 0) {
+                    weather = EWeather.clearDay;
+                } else if (tempWeatherNumber % 10 == 1) {
+                    weather = EWeather.clearNight;
+                } else if (tempWeatherNumber % 10 == 2) {
+                    weather = EWeather.rain;
+                } else if (tempWeatherNumber % 10 == 3) {
+                    weather = EWeather.snow;
+                } else if (tempWeatherNumber % 10 == 4) {
+                    weather = EWeather.sleet;
+                } else if (tempWeatherNumber % 10 == 5) {
+                    weather = EWeather.wind;
+                } else if (tempWeatherNumber % 10 == 6) {
+                    weather = EWeather.fog;
+                } else if (tempWeatherNumber % 10 == 7) {
+                    weather = EWeather.cloudy;
+                } else if (tempWeatherNumber % 10 == 8) {
+                    weather = EWeather.partlyCloudyDay;
+                } else if (tempWeatherNumber % 10 == 9) {
+                    weather = EWeather.partlyCloudyNight;
+                }
+
+                if (tempAgeRangeNumber % 6 == 0) {
                     ageRange = EAgeRange.lower20;
-                } else if (tempAgeRangeNumber % 10 == 1) {
+                } else if (tempAgeRangeNumber % 6 == 1) {
                     ageRange = EAgeRange.m21_30;
-                } else if (tempAgeRangeNumber % 10 == 2) {
+                } else if (tempAgeRangeNumber % 6 == 2) {
                     ageRange = EAgeRange.m31_40;
-                } else if (tempAgeRangeNumber % 10 == 3) {
+                } else if (tempAgeRangeNumber % 6 == 3) {
                     ageRange = EAgeRange.m41_50;
-                } else if (tempAgeRangeNumber % 10 == 4) {
+                } else if (tempAgeRangeNumber % 6 == 4) {
                     ageRange = EAgeRange.m51_60;
-                } else if (tempAgeRangeNumber % 10 == 5) {
+                } else if (tempAgeRangeNumber % 6 == 5) {
                     ageRange = EAgeRange.upper61;
                 }
 
@@ -115,15 +141,23 @@ export default class ReportDemographic extends Vue {
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(`2019-07-02T${iString10}:00:00.000Z`);
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
                 let tempChartData: IChartDemographicData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
                     ageRange: ageRange,
                     maleCount: Math.floor(Math.random() * 300),
-                    femaleCount: Math.floor(Math.random() * 300)
+                    femaleCount: Math.floor(Math.random() * 300),
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
+                    weather: weather
                 };
-                this.chartDatas.push(tempChartData);
+
+                if (!isNaN(tempChartData.date.getTime())) {
+                    this.chartDatas.push(tempChartData);
+                }
             }
         }
     }
