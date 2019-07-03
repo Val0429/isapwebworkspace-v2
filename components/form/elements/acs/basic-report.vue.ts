@@ -50,14 +50,13 @@ export class BasicReport extends Vue{
         this.options=this.fields.map(x=>{return{value:x.key,text:x.label}});
         this.selectedColumns = this.fields.map(x=>x.key);
         this.sortedFields = Object.assign([], this.fields);
-        //console.log(this.options.length);
-        
+        //console.log(this.options.length);        
     }
-    created(){
-            
-    }
-    mounted(){
 
+    onUpdate(value: any) {
+        if (value) {            
+            this.$emit("update", value);
+        }
     }
     exportToExcel(){
         let headers= this.sortedFields;

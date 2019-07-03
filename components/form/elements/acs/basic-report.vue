@@ -10,7 +10,8 @@
             class="col-md-9"
             @mounted="doMounted"
             :interface="inf"            
-            :value="value"
+            :value="value"        
+            @update:*="onUpdate($event)"    
             @submit="onSubmit($event)">
             
             </iv-form> 
