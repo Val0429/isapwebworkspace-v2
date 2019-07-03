@@ -24,13 +24,16 @@ class ReportTableData {
         }
 
         //column total
-        for (let index in this._head) {
-            let total: IReportTableDataTotal = {
-                inTotal: this.showColTotal(this._body, index, 'in'),
-                outTotal: this.showColTotal(this._body, index, 'out'),
-            };
+        if (this._body && this._body.length > 0) {
+            this._foot = [];
+            for (let index in this._head) {
+                let total: IReportTableDataTotal = {
+                    inTotal: this.showColTotal(this._body, index, 'in'),
+                    outTotal: this.showColTotal(this._body, index, 'out'),
+                };
 
-            this._foot.push(total);
+                this._foot.push(total);
+            }
         }
 
         //all total
