@@ -267,51 +267,9 @@ export class HighchartsDemographic extends Vue {
 
     chartOptionsAge: any = {};
 
-    chartOptionsDwellTime: any = {
-        chart: {
-            type: "bar",
-            zoomType: "x"
-        },
-        exporting: { enabled: false },
-        title: { text: null },
-        subtitle: { text: null },
-        xAxis: {
-            categories: ["Africa", "America", "Asia", "Europe", "Oceania"]
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: null,
-                align: "high"
-            }
-        },
-        credits: { enabled: false },
-        series: [
-            {
-                name: "Male",
-                data: [107, 31, 635, 203, 2]
-            },
-            {
-                name: "Female",
-                data: [133, 156, 947, 408, 6]
-            }
-        ]
-    };
+    chartOptionsDwellTime: any = {};
 
-    chartOptionsGender: any = {
-        chart: { zoomType: "x" },
-        exporting: { enabled: false },
-        title: { text: null },
-        subtitle: { text: null },
-        tooltip: { enabled: false },
-        series: [
-            {
-                type: "pie",
-                innerSize: "50%",
-                data: [["Male", 58.9], ["Female", 13.29]]
-            }
-        ]
-    };
+    chartOptionsGender: any = {};
 
     created() {
         this.initSelectItem();
@@ -646,9 +604,57 @@ export class HighchartsDemographic extends Vue {
         }
     }
 
-    drawChartDwellTime() {}
+    drawChartDwellTime() {
+        this.chartOptionsDwellTime = {
+            chart: {
+                type: "bar",
+                zoomType: "x"
+            },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                categories: ["Africa", "America", "Asia", "Europe", "Oceania"]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null,
+                    align: "high"
+                }
+            },
+            credits: { enabled: false },
+            series: [
+                {
+                    name: "Male",
+                    data: [107, 31, 635, 203, 2]
+                },
+                {
+                    name: "Female",
+                    data: [133, 156, 947, 408, 6]
+                }
+            ]
+        };
+        this.mountChart.dwellTime = true;
+    }
 
-    drawChartGender() {}
+    drawChartGender() {
+        this.chartOptionsGender = {
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            tooltip: { enabled: false },
+            series: [
+                {
+                    type: "pie",
+                    innerSize: "50%",
+                    data: [["Male", 58.9], ["Female", 13.29]]
+                }
+            ]
+        };
+        this.mountChart.gender = true;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
