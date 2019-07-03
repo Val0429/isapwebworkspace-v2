@@ -13,6 +13,14 @@ class ReportTableData {
         for (let item of this._body) {
             item.inTotal = this.showRowTotal(item.in);
             item.outTotal = this.showRowTotal(item.out);
+
+            for (let subItem of item.in) {
+                subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+            }
+
+            for (let subItem of item.out) {
+                subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+            }
         }
 
         //column total

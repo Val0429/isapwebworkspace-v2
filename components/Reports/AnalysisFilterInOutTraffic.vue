@@ -143,27 +143,27 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
-        default: {}
+        default:{}
     })
     countSelectItem: object;
-    
+
 
     // select 相關
-    areaSelectItem: any = {};
-    deviceGroupSelectItem: any = {};
-    deviceSelectItem: any = {};
-    typeSelectItem: any = [
-        { value: EType.in, text: EType.in },
-        { value: EType.out, text: EType.out }
-    ];
-    countSelectItem: any = {
-        hour: ECountType.hour,
-        day: ECountType.day,
-        week: ECountType.week,
-        month: ECountType.month,
-        season: ECountType.quarter,
-        year: ECountType.year
-    };
+    // areaSelectItem: any = {};
+    // deviceGroupSelectItem: any = {};
+    // deviceSelectItem: any = {};
+    // typeSelectItem: any = [
+    //     { value: EType.in, text: EType.in },
+    //     { value: EType.out, text: EType.out }
+    // ];
+    // countSelectItem: any = {
+    //     hour: ECountType.hour,
+    //     day: ECountType.day,
+    //     week: ECountType.week,
+    //     month: ECountType.month,
+    //     season: ECountType.quarter,
+    //     year: ECountType.year
+    // };
 
     inputFormData: any = {
         areaId: "",
@@ -209,9 +209,9 @@ export class AnalysisFilterInOutTraffic extends Vue {
     created() {}
 
     mounted() {
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+        // this.initSelectItemArea();
+        // this.initSelectItemDeviceGroup();
+        // this.initSelectItemDevice();
         this.filterSiteData();
         this.clearInputFormData();
         // console.log('showReportData - ', this.showReportData);
