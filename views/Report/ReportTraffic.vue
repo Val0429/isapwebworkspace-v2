@@ -39,11 +39,11 @@
                 <!-- Ben -->
                 <anlysis-dashboard 
                 ref="anlysisDashboard"
-                :startDate="dStartDate"
-                :endDate="dEndDate"
-                :type ="dTimeMode"
-                :siteIds ="dSites"
-                :tagIds ="dTags"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type ="timeMode"
+                :siteIds ="sites"
+                :tagIds ="tags"
                 :weather ="dWeather"
                 :pageType ="dPageType"
               >
@@ -151,6 +151,7 @@ export default class ReportTraffic extends Vue {
     // select 相關
     sitesSelectItem: any = {};
     tagSelectItem: any = {};
+    tags = []
 
     // tree
     selectType = ERegionType.site;
@@ -224,13 +225,8 @@ export default class ReportTraffic extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     //ReportDashboard 相關
-    dStartDate: Date = new Date();
-    dEndDate: Date = new Date();
-    dPageType: EPageType = EPageType.traffic;
-    dTimeMode: ETimeMode = ETimeMode.day;
+    dPageType: EPageType = EPageType.none;
     dWeather: EWeather = EWeather.none;
-    dSites = [];
-    dTags= [];
          
     
 
@@ -266,13 +262,8 @@ export default class ReportTraffic extends Vue {
 
     // Ben //
     initDashboardData() {
+        this.dPageType = EPageType.traffic;
         this.dWeather = EWeather.none;
-        this.dTimeMode = ETimeMode.day;
-        this.dStartDate =  new Date();
-        this.dEndDate =  new Date();
-        this.dSites = [];
-        this.dTags= [];
-        console.log('initDashboardData')
         let anlysisDashboard:any = this.$refs.anlysisDashboard;
         anlysisDashboard.initData();
     }
@@ -1145,6 +1136,7 @@ export default class ReportTraffic extends Vue {
 		*/
 
         this.sites.push(tempISite);
+        this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
