@@ -98,7 +98,7 @@ export default class ReportDemographic extends Vue {
                 let tempAgeRangeNumber = Math.floor(Math.random() * 300);
 
                 if (tempAgeRangeNumber % 10 == 0) {
-                    ageRange = EAgeRange.low20;
+                    ageRange = EAgeRange.lower20;
                 } else if (tempAgeRangeNumber % 10 == 1) {
                     ageRange = EAgeRange.m21_30;
                 } else if (tempAgeRangeNumber % 10 == 2) {
@@ -108,7 +108,7 @@ export default class ReportDemographic extends Vue {
                 } else if (tempAgeRangeNumber % 10 == 4) {
                     ageRange = EAgeRange.m51_60;
                 } else if (tempAgeRangeNumber % 10 == 5) {
-                    ageRange = EAgeRange.upp61;
+                    ageRange = EAgeRange.upper61;
                 }
 
                 let tempI = i;

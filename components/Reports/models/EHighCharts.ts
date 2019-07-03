@@ -24,12 +24,13 @@ enum ETimeMode {
 
 enum EAgeRange {
     none = 'none',
-    low20 = 'low20',
+    all = 'all',
+    lower20 = 'lower20',
     m21_30 = 'm21_30',
     m31_40 = 'm31_40',
     m41_50 = 'm41_50',
     m51_60 = 'm51_60',
-    upp61 = 'upp61',
+    upper61 = 'upper61',
 }
 
 enum EWeather {

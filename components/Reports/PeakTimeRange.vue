@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 <tr v-for="(items, key, index) in pData.body">
-                    <td v-if="dayXSiteX != eDayXSiteX.day1SiteX">   {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                    <td v-if="dayXSiteX != eDayXSiteX.day1SiteX"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
                     <td v-if="dayXSiteX == eDayXSiteX.day1SiteX"> {{items.title}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
@@ -44,9 +44,8 @@ import {
     Watch,
     Model
 } from "vue-property-decorator";
-import { IPeckTimeRange,EDayXSiteX,ISiteItems } from "@/components/Reports";
+import { IPeckTimeRange, EDayXSiteX, ISiteItems } from "@/components/Reports";
 import Datetime from "@/services/Datetime.vue";
-
 
 @Component({
     components: {}
@@ -88,7 +87,7 @@ export class PeakTimeRange extends Vue {
         site: "",
         head: [],
         body: []
-        };
+    };
 
     site = "iVTCTzctbF";
 
@@ -99,94 +98,87 @@ export class PeakTimeRange extends Vue {
     }
 
     initData() {
-        switch(this.dayXSiteX){
+        switch (this.dayXSiteX) {
             case EDayXSiteX.day1Site1:
-            this.generateDay1Ste1();
-            break;
-             case EDayXSiteX.dayXSite1:
-            this.generateDayXSte1();
-            break;
-             case EDayXSiteX.day1SiteX:
-            this.generateDay1SteX();
-            break;
-             case EDayXSiteX.dayXSiteX:
-            this.generateDayXSteX();
-            break;
+                this.generateDay1Ste1();
+                break;
+            case EDayXSiteX.dayXSite1:
+                this.generateDayXSte1();
+                break;
+            case EDayXSiteX.day1SiteX:
+                this.generateDay1SteX();
+                break;
+            case EDayXSiteX.dayXSiteX:
+                this.generateDayXSteX();
+                break;
             default:
-            break;
-
+                break;
         }
-
     }
 
-    generateDay1Ste1(){
-        console.log('generateDay1Ste1', this.timeRangeData);
-        this.pData = {      
+    generateDay1Ste1() {
+        console.log("generateDay1Ste1", this.timeRangeData);
+        this.pData = {
             site: "",
             head: [],
             body: []
         };
         this.pData = this.timeRangeData[0];
-
     }
 
-     generateDayXSte1(){
-        console.log('generateDayXSte1', this.timeRangeData);
-        this.pData = {      
+    generateDayXSte1() {
+        console.log("generateDayXSte1", this.timeRangeData);
+        this.pData = {
             site: "",
             head: [],
             body: []
         };
-         for(let item of this.timeRangeData){
-             if(item.site == this.site){
-                  this.pData.site = item.site;
-                  this.pData.head = item.head;
-                  this.pData.body.push(item.body[0]);
-             }
-         }
-          
+        for (let item of this.timeRangeData) {
+            if (item.site == this.site) {
+                this.pData.site = item.site;
+                this.pData.head = item.head;
+                this.pData.body.push(item.body[0]);
+            }
+        }
     }
 
-     generateDay1SteX(){
-        console.log('generateDay1SteX', this.timeRangeData);
-           this.pData = {      
+    generateDay1SteX() {
+        console.log("generateDay1SteX", this.timeRangeData);
+        this.pData = {
             site: "",
             head: [],
             body: []
         };
-         for(let item of this.timeRangeData){
-        
-                  this.pData.site = item.site;
-                  this.pData.head = item.head;
-           
-                  for(let siteItem of this.siteItems){
-                      if(siteItem.value == item.site){
-                                let body = {
-                                title:siteItem.text,
-                                context: item.body[0].context
-                                    };
-                           this.pData.body.push(body);
-                      }
-                  }
-           
-             }
+        for (let item of this.timeRangeData) {
+            this.pData.site = item.site;
+            this.pData.head = item.head;
+
+            for (let siteItem of this.siteItems) {
+                if (siteItem.value == item.site) {
+                    let body = {
+                        title: siteItem.text,
+                        context: item.body[0].context
+                    };
+                    this.pData.body.push(body);
+                }
+            }
+        }
     }
 
-     generateDayXSteX(){
-        console.log('generateDayXSteX', this.timeRangeData);
-         this.pData = {      
+    generateDayXSteX() {
+        console.log("generateDayXSteX", this.timeRangeData);
+        this.pData = {
             site: "",
             head: [],
             body: []
         };
-         for(let item of this.timeRangeData){
-             if(item.site == this.site){
-                  this.pData.site = item.site;
-                  this.pData.head = item.head;
-                  this.pData.body.push(item.body[0]);
-             }
-         }
-       
+        for (let item of this.timeRangeData) {
+            if (item.site == this.site) {
+                this.pData.site = item.site;
+                this.pData.head = item.head;
+                this.pData.body.push(item.body[0]);
+            }
+        }
     }
 
     showWeek(data) {

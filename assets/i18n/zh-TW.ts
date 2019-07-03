@@ -793,6 +793,14 @@ export default class LangObject implements ILang {
     w_ReportDemographic_GenderMale = 'Male';
     w_ReportDemographic_GenderFemale = 'Female';
 
+    w_ReportDemographic_AgeAll = 'All';
+    w_ReportDemographic_AgeLow20 = '<20';
+    w_ReportDemographic_AgeM21_30 = '21-30';
+    w_ReportDemographic_AgeM31_40 = '31-40';
+    w_ReportDemographic_AgeM41_50 = '41-50';
+    w_ReportDemographic_AgeM51_60 = '51-60';
+    w_ReportDemographic_AgeUpp61 = '>61';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';

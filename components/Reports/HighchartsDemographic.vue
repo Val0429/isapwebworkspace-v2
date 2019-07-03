@@ -22,13 +22,16 @@
             ></highcharts>
         </div>
         <div>
-            <b-form-select></b-form-select>
+            <iv-form-selection
+                :value="ageSelection"
+                :options="selectItem"
+                @input="changeAge"
+            ></iv-form-selection>
             <highcharts
                 ref="chartDwellTime"
                 v-if="mountChart.dwellTime"
                 :options="chartOptionsDwellTime"
             ></highcharts>
-
             <highcharts
                 ref="chartGender"
                 v-if="mountChart.gender"
@@ -84,6 +87,11 @@ interface IDemographicMount {
     age: boolean;
     dwellTime: boolean;
     gender: boolean;
+}
+
+interface ISelectItem {
+    id: string;
+    text: string;
 }
 
 @Component({
@@ -173,6 +181,7 @@ export class HighchartsDemographic extends Vue {
     }
 
     errorMessage: string = "";
+    chartMode: EChartMode = EChartMode.none;
     mountChart: IDemographicMount = {
         genderAge: false,
         time: false,
@@ -180,8 +189,10 @@ export class HighchartsDemographic extends Vue {
         dwellTime: false,
         gender: false
     };
-    chartMode: EChartMode = EChartMode.none;
+    ageSelection: EAgeRange = EAgeRange.all;
+    selectItem: ISelectItem[] = [];
 
+    // chart options
     chartOptionsGenderAge: any = {};
 
     chartOptionsGenderTime: any = {
@@ -303,12 +314,48 @@ export class HighchartsDemographic extends Vue {
     };
 
     created() {
+        this.initSelectItem();
         this.start();
     }
 
     mounted() {}
 
+    initSelectItem() {
+        this.selectItem = [
+            {
+                id: EAgeRange.all,
+                text: this._("w_ReportDemographic_AgeAll")
+            },
+            {
+                id: EAgeRange.lower20,
+                text: this._("w_ReportDemographic_AgeLow20")
+            },
+            {
+                id: EAgeRange.m21_30,
+                text: this._("w_ReportDemographic_AgeM21_30")
+            },
+            {
+                id: EAgeRange.m31_40,
+                text: this._("w_ReportDemographic_AgeM31_40")
+            },
+            {
+                id: EAgeRange.m41_50,
+                text: this._("w_ReportDemographic_AgeM41_50")
+            },
+            {
+                id: EAgeRange.m51_60,
+                text: this._("w_ReportDemographic_AgeM51_60")
+            },
+            {
+                id: EAgeRange.upper61,
+                text: this._("w_ReportDemographic_AgeUpp61")
+            }
+        ];
+    }
+
     start() {
+        this.errorMessage = "";
+
         this.mountChart = {
             genderAge: false,
             time: false,
@@ -316,10 +363,6 @@ export class HighchartsDemographic extends Vue {
             dwellTime: false,
             gender: false
         };
-
-        // set same chart
-        this.genderAgeChart();
-        this.ageChart();
 
         this.chartMode = HighChartsService.chartMode(
             this.startDate,
@@ -338,24 +381,31 @@ export class HighchartsDemographic extends Vue {
             this.errorMessage = this._("w_ReportTraffic_ErrorChartMode");
             return false;
         }
-        switch (this.chartMode) {
-            case EChartMode.day1Site1:
-                this.initDay1Site1();
-                break;
-            case EChartMode.day1SiteX:
-                this.initDay1SiteX();
-                break;
-            case EChartMode.dayXSite1:
-                this.initDayXSite1();
-                break;
-            case EChartMode.dayXSiteX:
-                this.initDayXSiteX();
-                break;
-            default:
-                break;
-        }
 
-        console.log(this.value);
+        // set same chart
+        this.drawChartGenderAge();
+        this.drawChartAge();
+        this.drawChartDwellTime();
+        this.drawChartGender();
+
+        // switch (this.chartMode) {
+        //     case EChartMode.day1Site1:
+        //         this.initDay1Site1();
+        //         break;
+        //     case EChartMode.day1SiteX:
+        //         this.initDay1SiteX();
+        //         break;
+        //     case EChartMode.dayXSite1:
+        //         this.initDayXSite1();
+        //         break;
+        //     case EChartMode.dayXSiteX:
+        //         this.initDayXSiteX();
+        //         break;
+        //     default:
+        //         break;
+        // }
+
+        // console.log(this.value);
     }
 
     ////////////////////////// day 1 site 1 //////////////////////////
@@ -393,11 +443,11 @@ export class HighchartsDemographic extends Vue {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    genderAgeChart() {
+    drawChartGenderAge() {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories = ["<20", "21-30", "31-40", "41-50", "51-60", ">61"];
+        let categories: string[] = this.getAgeList();
         let tempTotalCount: number = 0;
         let series: any = [
             {
@@ -415,7 +465,7 @@ export class HighchartsDemographic extends Vue {
         for (let value of tempValues) {
             let tempAgeIndex = -1;
             switch (value.ageRange) {
-                case EAgeRange.low20:
+                case EAgeRange.lower20:
                     tempAgeIndex = 0;
                     break;
                 case EAgeRange.m21_30:
@@ -430,7 +480,7 @@ export class HighchartsDemographic extends Vue {
                 case EAgeRange.m51_60:
                     tempAgeIndex = 4;
                     break;
-                case EAgeRange.upp61:
+                case EAgeRange.upper61:
                     tempAgeIndex = 5;
                     break;
                 case EAgeRange.none:
@@ -449,7 +499,9 @@ export class HighchartsDemographic extends Vue {
                 series[0].countData[tempAgeIndex] += value.maleCount;
                 series[1].countData[tempAgeIndex] += value.femaleCount;
             }
+        }
 
+        if (tempTotalCount > 0) {
             for (let i in series) {
                 let iNumber = parseInt(i);
                 for (let j in series[i].countData) {
@@ -457,143 +509,165 @@ export class HighchartsDemographic extends Vue {
                     if (series[i].data[j] == undefined) {
                         series[i].data[j] = 0;
                     }
-                    if (tempTotalCount > 0) {
-                        series[i].data[j] =
-                            (series[i].countData[j] / tempTotalCount) * 100;
-                    }
+                    series[i].data[j] = HighChartsService.formatFloat(
+                        (series[i].countData[j] / tempTotalCount) * 100
+                    );
                 }
             }
-        }
 
-        // set chart options
-        this.chartOptionsGenderAge = {
-            chart: { type: "column", zoomType: "x" },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            xAxis: {
-                labels: { useHTML: true },
-                categories: categories
-            },
-            yAxis: {
-                min: 0,
-                labels: {
-                    style: { color: "#000" },
-                    formatter: function() {
-                        let self: any = this;
-                        return self.value + "%";
-                    }
+            // set chart options
+            this.chartOptionsGenderAge = {
+                chart: { type: "column", zoomType: "x" },
+                exporting: { enabled: false },
+                title: { text: null },
+                subtitle: { text: null },
+                xAxis: {
+                    labels: { useHTML: true },
+                    categories: categories
                 },
-                title: { text: null }
-            },
-            tooltip: {
-                useHTML: true,
-                enabled: false
-            },
-            series: series
-        };
+                yAxis: {
+                    min: 0,
+                    labels: {
+                        style: { color: "#000" },
+                        formatter: function() {
+                            let self: any = this;
+                            return self.value + "%";
+                        }
+                    },
+                    title: { text: null }
+                },
+                tooltip: {
+                    useHTML: true,
+                    enabled: false
+                },
+                series: series
+            };
 
-        this.mountChart.genderAge = true;
+            this.mountChart.genderAge = true;
+        }
     }
 
-    ageChart() {
+    drawChartAge() {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories = ["<20", "21-30", "31-40", "41-50", "51-60", ">61"];
+        let categories: string[] = this.getAgeList();
         let tempTotalCount: number = 0;
         let series: any = [
             {
                 type: "pie",
                 name: "Browser share",
                 innerSize: "50%",
-                data: [
-                    ["<20", 58.9],
-                    ["21-30", 13.29],
-                    ["31-40", 13],
-                    ["41-50", 3.78],
-                    ["51-60", 3.42],
-                    [">61", 3.42]
-                ]
+                data: [],
+                countData: []
             }
         ];
 
-        // for (let value of tempValues) {
-        //     let tempAgeIndex = -1;
-        //     switch (value.ageRange) {
-        //         case EAgeRange.low20:
-        //             tempAgeIndex = 0;
-        //             break;
-        //         case EAgeRange.m21_30:
-        //             tempAgeIndex = 1;
-        //             break;
-        //         case EAgeRange.m31_40:
-        //             tempAgeIndex = 2;
-        //             break;
-        //         case EAgeRange.m41_50:
-        //             tempAgeIndex = 3;
-        //             break;
-        //         case EAgeRange.m51_60:
-        //             tempAgeIndex = 4;
-        //             break;
-        //         case EAgeRange.upp61:
-        //             tempAgeIndex = 5;
-        //             break;
-        //         case EAgeRange.none:
-        //         default:
-        //             break;
-        //     }
-        //     if (tempAgeIndex > -1) {
-        //         if (series[0].countData[tempAgeIndex] == undefined) {
-        //             series[0].countData[tempAgeIndex] = 0;
-        //         }
-        //         if (series[1].countData[tempAgeIndex] == undefined) {
-        //             series[1].countData[tempAgeIndex] = 0;
-        //         }
-        //         tempTotalCount += value.maleCount;
-        //         tempTotalCount += value.femaleCount;
-        //         series[0].countData[tempAgeIndex] += value.maleCount;
-        //         series[1].countData[tempAgeIndex] += value.femaleCount;
-        //     }
+        for (let categorie of categories) {
+            series[0].data.push([categorie, 0]);
+            series[0].countData.push(0);
+        }
 
-        //     for (let i in series) {
-        //         let iNumber = parseInt(i);
-        //         for (let j in series[i].countData) {
-        //             let jNumber = parseInt(j);
-        //             if (series[i].data[j] == undefined) {
-        //                 series[i].data[j] = 0;
-        //             }
-        //             if (tempTotalCount > 0) {
-        //                 series[i].data[j] =
-        //                     (series[i].countData[j] / tempTotalCount) * 100;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // set chart options
-        this.chartOptionsAge = {
-            chart: { zoomType: "x" },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: "pointer",
-                    dataLabels: {
-                        enabled: true
-                    },
-                    showInLegend: true,
-                    center: ["50%", "50%"],
-                    size: "100%"
+        for (let value of tempValues) {
+            let tempAgeIndex = -1;
+            switch (value.ageRange) {
+                case EAgeRange.lower20:
+                    tempAgeIndex = 0;
+                    break;
+                case EAgeRange.m21_30:
+                    tempAgeIndex = 1;
+                    break;
+                case EAgeRange.m31_40:
+                    tempAgeIndex = 2;
+                    break;
+                case EAgeRange.m41_50:
+                    tempAgeIndex = 3;
+                    break;
+                case EAgeRange.m51_60:
+                    tempAgeIndex = 4;
+                    break;
+                case EAgeRange.upper61:
+                    tempAgeIndex = 5;
+                    break;
+                case EAgeRange.none:
+                default:
+                    break;
+            }
+            if (tempAgeIndex > -1) {
+                if (series[0].data[tempAgeIndex][1] == undefined) {
+                    series[0].data[tempAgeIndex][1] = 0;
                 }
-            },
-            tooltip: { enabled: false },
-            series: series
-        };
+                if (series[0].countData[tempAgeIndex] == undefined) {
+                    series[0].countData[tempAgeIndex] = 0;
+                }
+                series[0].countData[tempAgeIndex] += value.maleCount;
+                series[0].countData[tempAgeIndex] += value.femaleCount;
+                tempTotalCount += value.maleCount;
+                tempTotalCount += value.femaleCount;
+            }
+        }
 
-        this.mountChart.age = true;
+        if (tempTotalCount > 0) {
+            // set data
+            for (let i in series[0].data) {
+                let iNumber = parseInt(i);
+                series[0].data[iNumber][1] = HighChartsService.formatFloat(
+                    (series[0].countData[iNumber] / tempTotalCount) * 100
+                );
+            }
+
+            // set chart options
+            this.chartOptionsAge = {
+                chart: { zoomType: "x" },
+                exporting: { enabled: false },
+                title: { text: null },
+                subtitle: { text: null },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: "pointer",
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                let self: any = this;
+                                return `${self.y}%`;
+                            }
+                        },
+                        showInLegend: true,
+                        center: ["50%", "50%"],
+                        size: "100%"
+                    }
+                },
+                tooltip: { enabled: false },
+                series: series
+            };
+
+            this.mountChart.age = true;
+        }
+    }
+
+    drawChartDwellTime() {}
+
+    drawChartGender() {}
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    changeAge(value: EAgeRange) {
+        this.ageSelection = value;
+        this.drawChartDwellTime();
+        this.drawChartGender();
+    }
+
+    private getAgeList(): string[] {
+        let result: string[] = [
+            this._("w_ReportDemographic_AgeLow20"),
+            this._("w_ReportDemographic_AgeM21_30"),
+            this._("w_ReportDemographic_AgeM31_40"),
+            this._("w_ReportDemographic_AgeM41_50"),
+            this._("w_ReportDemographic_AgeM51_60"),
+            this._("w_ReportDemographic_AgeUpp61")
+        ];
+        return result;
     }
 }
 
