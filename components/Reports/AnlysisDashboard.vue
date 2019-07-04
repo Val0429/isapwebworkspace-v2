@@ -11,7 +11,7 @@
                     <div :class="ePageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
-                            <span v-html="showWeather()" class="weather"></span>
+                            <span v-if="eWeather.none != this.weather" v-html="showWeather()" class="weather"></span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
@@ -329,14 +329,6 @@ export class AnlysisDashboard extends Vue {
     })
     pageType: EPageType;
 
-    @Prop({
-        type: String,
-        default: function() {
-            return EWeather.none;
-        }
-    })
-    weather: EWeather;
-
    @Watch("startDate", { deep: true })
     private watchStartDate(newVal, oldVal) {
         console.log('startDate',this.startDate);
@@ -361,23 +353,21 @@ export class AnlysisDashboard extends Vue {
     private watchPageType(newVal, oldVal) {
         console.log('pageType',this.pageType);
     }
-    @Watch("weather", { deep: true })
-    private watchWeather(newVal, oldVal) {
-        console.log('weather',this.weather);
-    }
+
     
+    weather: EWeather = EWeather.none;
     anlysisData = new ReportDashboard();
+
     eSign = ESign;
     ePageType = EPageType;
+    eWeather = EWeather;
     
     created() {}
 
     async mounted() {
-          console.log('mounted',this.startDate,this.endDate,this.type, this.siteIds);
     }
 
     async initData(){
-        console.log('initData',this.startDate,this.endDate,this.type, this.siteIds);
         const readParam: {
             startDate: Date,
             endDate: Date,
@@ -394,9 +384,13 @@ export class AnlysisDashboard extends Vue {
         
           await this.$server.C("/report/complex", readParam)
             .then((response: any) => {
-     
                 if (response != undefined) {
                     this.anlysisData.pageType= this.pageType;
+
+                    if(response.weather){
+                          this.weather = response.weather.icon;
+                    }
+
                         if(response.peopleCounting){
                           this.anlysisData.traffic = {
                             sign: response.peopleCounting.variety == null ? ESign.none : (response.peopleCounting.variety > 0 ? ESign.positive : ESign.negative) ,
@@ -502,7 +496,6 @@ export class AnlysisDashboard extends Vue {
 
     showWeather(){
         let result = HighChartsService.weatherIcon(this.weather);
-        console.log(result);
         return result;
     }
         

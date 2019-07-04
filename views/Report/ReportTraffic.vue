@@ -60,7 +60,6 @@ import {EAreaMode} from "../../components/Reports";
                     :type="dTimeMode"
                     :siteIds="pSiteIds"
                     :tagIds="tags"
-                    :weather="dWeather"
                     :pageType="dPageType"
                 >
                 </anlysis-dashboard>
@@ -228,7 +227,6 @@ export default class ReportTraffic extends Vue {
 
     //ReportDashboard 相關
     dPageType: EPageType = EPageType.none;
-    dWeather: EWeather = EWeather.none;
     dTimeMode: ETimeMode = ETimeMode.none;
 
     //PickTimeRange 相關
@@ -256,24 +254,14 @@ export default class ReportTraffic extends Vue {
         await this.initSelectItemTag();
         await this.initSelectItemTree();
         // await this.initOfficeHour();
-
-        // Ben
-        this.initDashboardData();
-        this.initPeakTimeRange();
-        this.initReportTable();
     }
 
     // Ben //
     initDashboardData() {
         this.dTimeMode = ETimeMode.day;
         this.dPageType = EPageType.traffic;
-        this.dWeather =  EWeather.rain;
-
-
-
         setTimeout(() => {
         let anlysisDashboard: any = this.$refs.anlysisDashboard;
-        console.log('initDashboardData',this.filterData);
         anlysisDashboard.initData();
           }, 300);
     }
@@ -1219,6 +1207,10 @@ export default class ReportTraffic extends Vue {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
+        // Ben
+        this.initDashboardData();
+        this.initPeakTimeRange();
+        this.initReportTable();
 
         this.inputFormData = {
             areaId: "all",
