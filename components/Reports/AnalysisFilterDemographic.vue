@@ -6,7 +6,6 @@
             @update:groupId="whenSelectedGroupId($event)"
             @update:deviceId="whenSelectedDeviceId($event)"
             @update:type="whenSelectedType($event)"
-            @update:selectInOrOut="whenSelectedInOrOut($event)"
         >
 
             <template #areaId="{ $attrs, $listeners }">
@@ -50,20 +49,6 @@
                 </iv-form-selection>
             </template>
 
-            <template #selectInOrOut="{ $attrs, $listeners }">
-
-                <b-form-radio-group
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.inOrOut"
-                    class="h-25 click_button col-md-1"
-                    buttons
-                    button-variant="outline-success"
-                    name="radio-btn-outline"
-                    :options="typeSelectItem"
-                ></b-form-radio-group>
-            </template>
-
         </iv-form>
 
     </div>
@@ -88,7 +73,7 @@ let config = require("@/config/default/debug");
 @Component({
     components: {}
 })
-export class AnalysisFilterInOutTraffic extends Vue {
+export class AnalysisFilterDemographic extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -143,12 +128,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
     })
     type: string;
 
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: "in"
-    })
-    inOrOut: string;
-
     inputFormData: any = {
         areaId: "all",
         groupId: "all",
@@ -181,11 +160,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
         this.inputFormData.type = newVal;
     }
 
-    @Watch("inOrOut", { deep: true })
-    private inOrOutChanged(newVal, oldVal) {
-        this.inputFormData.inOrOut = newVal;
-    }
-
     async whenSelectedAreaId() {
         this.$emit("area_id", this.inputFormData.areaId);
     }
@@ -201,11 +175,6 @@ export class AnalysisFilterInOutTraffic extends Vue {
     whenSelectedType() {
         this.$emit("type", this.inputFormData.type);
     }
-
-    whenSelectedInOrOut() {
-        this.$emit("in_or_out", this.inputFormData.inOrOut);
-    }
-
 
     IAnalysisFilterForm() {
         return `
@@ -244,19 +213,13 @@ export class AnalysisFilterInOutTraffic extends Vue {
                  */
                 type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
 
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                selectInOrOut?: any;
-
             }
         `;
     }
 }
 
-export default AnalysisFilterInOutTraffic;
-Vue.component("analysis_filter_in_out_traffic", AnalysisFilterInOutTraffic);
+export default AnalysisFilterDemographic;
+Vue.component("analysis_filter_demographic", AnalysisFilterDemographic);
 </script>
 
 <style lang="scss" scoped>
