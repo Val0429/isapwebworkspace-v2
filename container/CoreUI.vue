@@ -20,32 +20,34 @@
         <template #nav>
             <SidebarHeader label="Menu" />
             <SidebarNav>
-                <SidebarNavItem url="/site" />
-                <SidebarNavItem url="/region" />
-                <SidebarNavItem url="/member" />
-                <SidebarNavItem url="/user" />
-                <SidebarNavItem url="/user_group" />
-                <SidebarNavItem url="/door" />
-                <SidebarNavItem url="/doorgroup" />
-                <SidebarNavItem url="/elevator" />
-                <SidebarNavItem url="/elevatorgroup" />
-                <SidebarNavItem url="/floor" />
-                <SidebarNavItem url="/reader" />
-                <!-- <SidebarNavItem url="/timeschedule" /> -->
-                <SidebarNavItem url="/permissiontable" />                
-                <SidebarNavItem url="/syncreceiver" />
-                <SidebarNavItem url="/accesslevel" />
-
-                <SidebarNavItem url="/attendance" />
+                
                 <SidebarNavItem url="/employeereport" />
                 <SidebarNavItem url="/doorreport" />
                 <SidebarNavItem url="/doorgroupreport" />
+                <SidebarNavItem url="/cardreport" />          
                 <SidebarNavItem url="/contractorreport" />
                 <SidebarNavItem url="/demographicreport" />
-                <SidebarNavItem url="/cardreport" />
+                <SidebarNavItem url="/attendance" />      
+                <SidebarNavItem url="/visitorreport" />
+                
+                <SidebarNavItem url="/permissiontable" />
+                <SidebarNavItem url="/member" />
+                <SidebarNavItem url="/region" />
+                <SidebarNavItem url="/site" />
+                <SidebarNavItem url="/doorgroup" />
+                <SidebarNavItem url="/door" />
+                <SidebarNavItem url="/reader" />
                 
                 
+                <SidebarNavItem url="/elevatorgroup" />
+                <SidebarNavItem url="/elevator" />
                 
+                <SidebarNavItem url="/floor" />
+                <SidebarNavItem url="/syncreceiver" />
+                <SidebarNavItem url="/user" />
+
+                <!-- <SidebarNavItem url="/timeschedule" /> -->
+                <!-- <SidebarNavItem url="/accesslevel" /> -->                
                 
             </SidebarNav>
         </template>

@@ -2,6 +2,22 @@
     <div class="animated fadeIn">
         <!--Site List-->
         <div v-show="pageStep === ePageStep.siteList">
+            <iv-card :label="_('w_Filter')">
+                <iv-form 
+                    ref="filterForm"
+                    class="col-md-9"
+                    @mounted="doMounted"
+                    :interface="filterInterface()"            
+                    :value="getParams"                            
+                    @submit="onFilter($event)">            
+                    </iv-form> 
+                <template v-if="isMounted" >            
+                    <div class="float-right">
+                        <b-button class="btn-filter" size="lg" v-bind="$refs.filterForm.submitBindings.$attrs" v-on="$refs.filterForm.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                        <b-button class="btn-filter" size="lg" v-bind="$refs.filterForm.resetBindings.$attrs" v-on="$refs.filterForm.resetBindings.$listeners" @click="getParams={}">{{ _("wb_Reset") }}</b-button>                
+                    </div>
+                </template>
+            </iv-card>   
             <iv-card :label="_('w_Site_SiteList')">
 
                 <template #toolbox>
@@ -23,19 +39,18 @@
                     <iv-toolbox-add @click="pageToSiteAdd()" />
 
                 </template>
-
+            
                 <iv-table
                     ref="siteTable"
                     :interface="ISiteList()"
                     @selected="selectedSite($event)"
                     :server="{ path: '/location/site' }"
+                    :params="getParams"
                     :multiple="tableMultiple"
                 >
-
-                    <template #areaName="{$attrs, $listeners}">
-                        {{showArea($attrs.row.objectId)}}
+                    <template #regionname="{$attrs, $listeners}">
+                        {{$attrs.row.region ? $attrs.row.region.name: ''}}
                     </template>
-
 
                     <template #Actions="{$attrs, $listeners}">                        
                             <iv-toolbox-area :disabled="!isSelectSite"
@@ -354,7 +369,6 @@ export default class Site extends Vue {
     areas = {};
     area: any = {};
     areaParams = {};
-    areaAll = [];
 
     //options
     managerItem = [];
@@ -378,8 +392,28 @@ export default class Site extends Vue {
         console.log("!!! clickDevice", event, data);
     }
 
-    
-    
+    filterInterface(){
+        return ` interface {
+            /**
+             * @uiLabel - ${this._("w_Region")}
+             * @uiColumnGroup - row1
+            */
+            regionname?:string;
+            /**
+             * @uiLabel - ${this._("w_Site")}
+             * @uiColumnGroup - row1
+            */
+            sitename?:string;
+        }
+        
+        `;
+    }
+    onFilter($event){
+        this.getParams=$event;        
+    }
+    doMounted(){
+        this.isMounted=true;
+    }
     pageToAreaList() {
         this.pageStep = EPageStep.areaList;
         (this.$refs.areaTable as any).reload();
@@ -414,27 +448,15 @@ export default class Site extends Vue {
         this.pageStep = EPageStep.areaEdit;
     }
 
-
+    getParams:any={};
  
 
    
-    async initSiteListArea() {
-        this.areaAll = [];
-
-        await this.$server
-            .R("/location/area/all" as any, {})
-            .then((response: any) => {
-                this.areaAll = response;
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
-    }
+    
 
 
 
     pageToSiteList() {
-        this.initSiteListArea();
         this.clearAreaData();
         this.pageStep = EPageStep.siteList;
         (this.$refs.siteTable as any).reload();
@@ -709,16 +731,7 @@ export default class Site extends Vue {
         }
     }
 
-    showArea(data) {
-        let areas = [];
-        for (let area of this.areaAll) {
-            if (area.site.objectId == data) {
-                areas.push(area.name);
-            }
-        }
-
-        return this.showFirst(areas);
-    }
+    
 
     
 
@@ -727,24 +740,32 @@ export default class Site extends Vue {
     ISiteList() {
         return `interface {
                 /**
+                * @uiLabel - ${this._("w_Region")}
+                */
+                regionname: string;
+                /**
                 * @uiLabel - ${this._("w_Site_SiteName")}
                 */
                 name: string;
 
                 /**
-                * @uiLabel - ${this._("w_Site_Address")}
+                * @uiLabel - ${this._("w_Area_Count")}
                 */
-                address?: string;
+                areaCount?: number;
 
                 /**
-                * @uiLabel - ${this._("w_Site_Latitude")}
+                * @uiLabel - ${this._("w_DoorGroup_Count")}
                 */
-                latitude?: number;
+                doorGroupCount?: number;
 
                 /**
-                * @uiLabel - ${this._("w_Site_Longitude")}
+                * @uiLabel - ${this._("w_Door_Count")}
                 */
-                longitude?: number;
+                doorCount?: number;
+                /**
+                * @uiLabel - ${this._("w_Reader_Count")}
+                */
+                readerCount?: number;
                 /**
                 * @uiLabel -
                 */

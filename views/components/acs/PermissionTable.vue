@@ -206,11 +206,11 @@
                     <thead>
                         <tr>
                             <th v-show="pageStep ==='remove'"></th>
-                            <th v-for="value in inputFormData.title">{{ value }}</th>
+                            <th v-for="(value, index) in inputFormData.title" v-bind:key="index">{{ value }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(value, index) in inputFormData.data">
+                        <tr v-for="(value, index) in inputFormData.data" v-bind:key="index">
                             <td>{{ value.deviceType }}</td>
                             <td>{{ value.deviceName.text }}</td>
                             <td>{{ value.area.text}}</td>
@@ -248,7 +248,6 @@
 import { Component, Vue } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
-import PermissionTableForm from "./PermissionTableForm.vue";
 import Dialog from "@/services/Dialog/Dialog";
 
 enum EPageStep {
@@ -281,7 +280,7 @@ interface ISelectItem {
 }
 
 @Component({
-    components: { PermissionTableForm }
+    components: { }
 })
 export default class PermissionTable extends Vue {
     ePageStep = EPageStep;
@@ -407,20 +406,14 @@ export default class PermissionTable extends Vue {
     }
 
     async initSelectItem() {
-        let param = {
-            paging: {
-                page: 1,
-                pageSize: 10000
-            }
-        };
-
+        
         this.selectItem.timeSchedule = { "0": this._("w_Select") };
         this.selectItem.doorDevice = { "0": this._("w_Select") };
         this.selectItem.doorGroupDevice = { "0": this._("w_Select") };
         this.selectItem.elevatorDevice = { "0": this._("w_Select") };
 
         await this.$server
-            .R("/acs/timeschedule", param)
+            .R("/acs/timeschedule", {"paging.all":"true"})
             .then((response: any) => {
                 if (response != undefined && response.results != undefined) {
                     for (let tempItem of response.results) {
@@ -443,7 +436,7 @@ export default class PermissionTable extends Vue {
             });
 
         await this.$server
-            .R("/acs/door", param)
+            .R("/acs/door", {"paging.all":"true"})
             .then((response: any) => {
                 if (response != undefined && response.results != undefined) {
                     for (let tempItem of response.results) {
@@ -466,7 +459,7 @@ export default class PermissionTable extends Vue {
             });
 
         await this.$server
-            .R("/acs/doorgroup", param)
+            .R("/acs/doorgroup",  {"paging.all":"true"})
             .then((response: any) => {
                 for (let tempItem of response.results) {
                     if (
@@ -487,7 +480,7 @@ export default class PermissionTable extends Vue {
             });
 
         await this.$server
-            .R("/acs/elevator", param)
+            .R("/acs/elevator",  {"paging.all":"true"})
             .then((response: any) => {
                 for (let tempItem of response.results) {
                     if (

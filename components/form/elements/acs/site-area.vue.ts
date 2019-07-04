@@ -26,8 +26,8 @@ export class SiteArea extends Vue {
     async created(){        
         this.areaObjectId = this.value ? this.value.objectId : "";
         console.log("created");
-        let resp:any = await this.$server.R("/location/site" as any, {"paging.all":"true"});
-        this.sites = resp.results.map(item=>{return{key:item.objectId, value:item.name}});
+        let resp:any = await this.$server.R("/location/site/all" as any, {"type":"all"});
+        this.sites = resp.map(item=>{return{key:item.objectId, value:item.name}});
         if(this.areaObjectId && this.value.site){
             this.siteObjectId = this.value.site.objectId;
             this.updateArea();
@@ -38,8 +38,12 @@ export class SiteArea extends Vue {
     }
     async updateArea(){
         console.log("siteObjectId", this.siteObjectId);
-        let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true", "siteId":this.siteObjectId});
-        this.areas =  resp.results.map(item=>{return{key:item.objectId, value:item.name}});
+        if(this.siteObjectId){
+            let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true", "siteId":this.siteObjectId});
+            this.areas =  resp.results.map(item=>{return{key:item.objectId, value:item.name}});
+        }else{
+            this.areas = [];
+        }
         console.log("areas", this.areas);
         if(!this.areaObjectId || !this.value.site || this.value.site.objectId!=this.siteObjectId) this.areaObjectId = this.areas.length>0?this.areas[0].key:"";
         this.update();

@@ -1,9 +1,12 @@
 <template>
-    <iv-form-quick>
+    <div>
+        <ivc-filter-form
+            :inf="filterInterface()"
+            :visible="filterVisible"
+            v-on:input="onFilterSubmit($event)"
+        />
+    <ivc-form-quick v-on:viewChange="viewChange($event)">
         <!-- 5) custom view templates with <template #view.* /> -->
-        <!-- <template #view="{$attrs, $listeners}">
-            {{$attrs.row}}
-        </template> -->
         
         <template #view.readerscount="{$attrs, $listeners}">
             {{ getReadersCount($attrs.row) }}
@@ -48,19 +51,22 @@
         <template #view.site="{$attrs, $listeners}">
             {{getInfo($attrs.row).site}}
         </template>
-    </iv-form-quick>
+    </ivc-form-quick>
+    </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
-import { EFormQuick, IFormQuick } from '@/../components/form';
 import { System } from '@/config/default/api/interfaces';
-
+import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
 @Component
 /// 1) class name
-export default class DoorForm extends Vue implements IFormQuick {    
+export default class DoorForm extends Vue implements IFormQuick2 {    
+    filterVisible:boolean=true;
     /// 2) cgi path
     path: string = "/acs/door";
+    params:any = {};
     /// 3) i18n - view / edit / add
     tView: string = "w_Door";
     tAdd: string = "w_DoorAdd";
@@ -146,6 +152,19 @@ export default class DoorForm extends Vue implements IFormQuick {
         row.ccureout = props.ccureout;
         return row;
     }
+    filterInterface(){
+         return `interface {
+            /**
+            * @uiLabel - ${this._("doorname")}
+            */
+            name:string;
+        }`;
+    }
+    viewChange($event){
+        
+        console.log("ViewChange", $event);
+        this.filterVisible = $event == 'view';
+    }
     getReaderInfo(row: any) {
      let{sipassin, sipassout, ccurein, ccureout}={} as any;
     if(row.readerin&&row.readerin.length>0) {
@@ -175,7 +194,7 @@ export default class DoorForm extends Vue implements IFormQuick {
         return this.postAddEdit(row);        
     }
     postAddEdit(row){
-        row.system = parseInt(row.system);
+        
         row.readerin= [];        
         if(row.sipassin){row.readerin.push(row.sipassin);row.sipassin=undefined;}
         if(row.ccurein){row.readerin.push(row.ccurein);row.ccurein=undefined;}
@@ -232,6 +251,12 @@ export default class DoorForm extends Vue implements IFormQuick {
         
         return count;
     }
+    onFilterSubmit($event?){
+        console.log("$event", $event);
+        console.log("params", this.params);
+        this.params = $event || {};
+    }
+    
 }
 </script>
 

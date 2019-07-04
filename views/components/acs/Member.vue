@@ -15,9 +15,6 @@ import MemberForm from "./MemberForm.vue";
     components: { MemberForm }
 })
 export default class Member extends Vue {
-    private isMounted: boolean = false;
-    private doMounted() {
-        this.isMounted = true;
-    }
+    
 }
 </script>

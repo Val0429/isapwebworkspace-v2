@@ -25,17 +25,17 @@ import SyncReceiver from './components/acs/SyncReceiver.vue';
 import AccessLevel from './components/acs/AccessLevel.vue';
 import Floor from './components/acs/Floor.vue';
 import ElevatorGroup from './components/acs/ElevatorGroup.vue';
-import AttendanceRecord from './components/acs/reports/AttendanceRecord.vue';
+import AttendanceReport from './components/acs/reports/AttendanceReport.vue';
 import EmployeeReport from './components/acs/reports/EmployeeReport.vue';
 import DoorReport from './components/acs/reports/DoorReport.vue';
 import DoorGroupReport from './components/acs/reports/DoorGroupReport.vue';
 import ContractorReport from './components/acs/reports/ContractorReport.vue';
 import DemographicReport from './components/acs/reports/DemographicReport.vue';
 import CardExpirationReport from './components/acs/reports/CardExpirationReport.vue';
+import VisitorCardReport from './components/acs/reports/VisitorCardReport.vue';
 
 import User from './components/bar/User.vue';
 import Site from './components/bar/Site.vue';
-import UserGroup from './components/bar/UserGroup.vue';
 import Region from './components/bar/Region.vue';
 
 // Demos
@@ -50,17 +50,17 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
     $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);    
     $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
-    $({ path: '/attendance', name: "_('w_AttendanceRecord')", icon: 'fa-building' })(AttendanceRecord);
+    $({ path: '/attendance', name: "_('w_AttendanceReport')", icon: 'fa-building' })(AttendanceReport);
     $({ path: '/employeereport', name: "_('w_EmployeeReport')", icon: 'fa-building' })(EmployeeReport);
     $({ path: '/doorreport', name: "_('w_DoorReport')", icon: 'fa-building' })(DoorReport);
     $({ path: '/doorgroupreport', name: "_('w_DoorGroupReport')", icon: 'fa-building' })(DoorGroupReport);
     $({ path: '/contractorreport', name: "_('w_ContractorReport')", icon: 'fa-building' })(ContractorReport);
     $({ path: '/demographicreport', name: "_('w_DemographicReport')", icon: 'fa-building' })(DemographicReport);
     $({ path: '/cardreport', name: "_('w_CardExpirationReport')", icon: 'fa-building' })(CardExpirationReport);
+    $({ path: '/visitorreport', name: "_('w_VisitorCardReport')", icon: 'fa-building' })(VisitorCardReport);
     
 // Users
 $({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);
-$({ path: '/user_group', name: "_('w_Navigation_Users_UserGroup')", icon: 'fa-user' })(UserGroup);
 
 // Sites
 $({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);

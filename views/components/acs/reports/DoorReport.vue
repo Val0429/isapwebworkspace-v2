@@ -1,148 +1,35 @@
 <template >
 
-     <div key="main">
-        <iv-card            
-            :label="_('w_Filter')"
-        >
-            <iv-form 
-            ref="form"
-            @mounted="doMounted"
-            :interface="inf()"
-           
-            @submit="onSubmit($event)">
-
-            </iv-form>
-            
-        
-        <template v-if="isMounted">
-            <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
-            <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onSubmit()">{{ _("wb_Reset") }}</b-button>
-            <b-button class="btn-filter" size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
-        </template>
-        </iv-card>
-         <iv-card            
-            :label="_('w_ColumnSelection')"
-        >
-        <template>
-             <iv-sort-select  
-                v-if="options.length>0"                      
-                v-model="selectedColumns"
-                class="col-md-12"
-                :options="options"
-            />
-            
-        </template>
-
-        </iv-card>
-        <iv-card            
-            :label="tableTitle">        
-        
-           <b-table striped hover 
-                :items="records" 
-                :fields="fields.filter(x=> selectedColumns.find(y=>y==x.key))" 
-                :per-page="perPage"
-                :busy="isBusy"
-                :current-page="currentPage"
-           ></b-table>
-           <b-pagination
-            v-model="currentPage"
-            :total-rows="records.length"
-            :per-page="perPage"
-            aria-controls="my-table"
-            ></b-pagination>
-        </iv-card>
-        
-    </div>
+     <ivc-basic-report      
+        :inf="inf()"
+        :title="_('w_DoorReport')"
+        :records="records"
+        :isBusy="isBusy"
+        :fields="fields"
+        v-model="filter"
+        v-on:input="onSubmit()"
+     />          
 </template>
            
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from '@/../core';
 import { RegisterRouter } from '@/../core/router';
-import { BasicReport, BasicReportImpl } from './BasicReport';
-import { config } from 'rxjs';
 
 @Component
-export default class DoorReport extends BasicReportImpl  {
-    
-    
-    async created(){
-        this.tableTitle= this._('w_DoorReport');        
-        await this.getData();
-    }
-    
-    
-  private async getData(filter?:any) {        
-        this.isBusy=true;            
-        let resp: any=await this.$server.R("/report/memberrecord" as any, filter);
-        this.data = resp.results;
-        this.records = resp.results;
-        this.isBusy=false;
-  }
-
-
-    inf(){
-        return `interface {
-                /**
-                 * @uiColumnGroup - name
-                 * @uiLabel - ${this._('w_Member_ChineseName1')}
-                 */
-                FirstName?: string;
-                /**
-                 * @uiColumnGroup - name
-                 * @uiLabel - ${this._('w_Member_EnglishName1')}
-                 */
-                LastName?: string;
-                /**
-                 * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
-                 */
-                EmployeeNumber?: string;
-                /**
-                 * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_CardNumber1')}
-                 */
-                CardNumber?: string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_Department1')}
-                 */
-                DepartmentName?:string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_CostCenter1')}
-                 */
-                CostCenterName?:string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_WorkArea1')}
-                 */
-                WorkAreaName?:string;
-            }`;
-            
-    }
-    isMounted:boolean=false;
-    doMounted(){
+export default class DoorReport extends Vue  {
+    records:any[]=[];
+    fields:any[] =[];
+    isBusy:boolean=false;
+    filter:any={};
+    permissions:any[]=[];
+    created(){        
         this.fields = 
-        [            
-            {
-                key:"FirstName",
-                label: this._('w_Member_ChineseName1'),
-                sortable: true
-            },
-            {  
-                key:"LastName",
-                label: this._('w_Member_EnglishName1'),
-                sortable: true
-            },
-            {
-                key: "EmployeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
-            },
+       [       
             {
                 key:"CardNumber",
                 label: this._('w_Member_CardNumber1')
-            },
+            },                
             {
                 key:"DepartmentName",
                 label: this._("w_Member_Department1")
@@ -150,28 +37,121 @@ export default class DoorReport extends BasicReportImpl  {
             {
                 key:"CostCenterName",
                 label: this._("w_Member_CostCenter1")
+            },  
+            {
+                key:"LastName",
+                label: this._('w_Member_ChineseName1'),
+                sortable: true
             },
+            {  
+                key:"FirstName",
+                label: this._('w_Member_EnglishName1'),
+                sortable: true
+            },
+            {
+                key:"CompanyName",
+                label: this._("w_Member_CompanyName1")
+            },           
             {
                 key:"WorkAreaName",
                 label: this._("w_Member_WorkArea1")
+            },           
+            {
+                key: "EmployeeNumber",
+                label: this._('w_Member_EmployeeNumber1')
             },
             {
-                key:"PermissionList",
-                label: this._("w_Permission_PermissionList")
+                key: "ResignationDate",
+                label: this._('w_Member_ResignationDate1')
+            },
+            {
+                key: "Status",
+                label: this._('w_Member_Status')
+            },
+            {
+                key:"PermissionName",
+                label: this._("w_PermissionTable")
+            },
+            {
+                key:"DoorGroupName",
+                label: this._("w_DoorGroup")
+            },
+            {
+                key:"DoorName",
+                label: this._("w_Door")
+            },
+            {
+                key:"TimeSchedule",
+                label: this._("w_TimeSchedule")
             }
         ];
-        this.isMounted=true;
-        this.options=this.fields.map(x=>{return{value:x.key,text:x.label}});
-        this.selectedColumns = this.fields.map(x=>x.key);
-        console.log(this.options.length);
+
+        
     }
-    onSubmit($events){        
-        this.getData($events);
+    
+  private async getData() {        
+        try{    
+            this.isBusy=true;
+            await this.getPermissiontable();
+            await this.getMember();
+        }catch(err){
+            console.error(err);
+        }finally{
+            this.isBusy=false;
+        }
+  }
+
+
+  private async getMember() {
+    if(this.filter && this.filter.ResignDate)
+      this.filter.ResignationDate=this.filter.ResignDate.toISOString();
+    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter||{});
+    this.records=[];
+    for(let member of resp.results){
+        for(let tableid of member.PermissionTable){
+            let newMember = Object.assign({},member);
+            let permission = this.permissions.find(x=>x.tableid==tableid);
+            if(!permission)continue;
+            for(let access of permission.accesslevels){
+                newMember.PermissionName = permission.tablename;
+                newMember.TimeSchedule = access.timeschedule.timename;
+                newMember.DoorName = access.door?access.door.doorname:'';
+                newMember.DoorGroupName = access.doorgroup?access.doorgroup.groupname:'';
+                
+                this.records.push(newMember);
+            }
+            
+        }
+    }
+  }
+   private async getPermissiontable() {    
+    let resp: any=await this.$server.R("/acs/permissiontable" as any, Object.assign({"paging.all":"true"}, this.filter));
+    this.permissions=resp.results;
+  }
+
+
+    inf():string{
+        return `interface {
+            /**
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_Door')}
+             */
+            doorname?: string;
+            
+            /**
+             * @uiColumnGroup - row1
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Member_ResignationDate1')}
+             */
+            ResignDate?:Date;
+        }`;
+            
+    }
+    
+    async onSubmit(){      
+        console.log("filter", this.filter) ;
+        await this.getData();
     }
 }
 </script>
-<style lang="scss" scoped>
-.btn-filter{
-    margin: 0 10px;
-}
-</style>
+

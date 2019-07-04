@@ -226,6 +226,7 @@ export default class LangObject implements ILang {
     w_Dialog_SuccessTitle = 'Success';
 
     // common
+    w_Interval="間隔";
     w_ColumnSelection ="Column Selection";
     w_Filter = "Filter";
     w_Error = 'Error';
@@ -436,6 +437,7 @@ export default class LangObject implements ILang {
     w_Member_View = '查看人員資訊';
 
     w_Member_CompanyName = '公司名稱：';
+    w_Member_CompanyName1 = '公司名稱';
     w_Member_PersonType = '人員類型：';
     w_Member_PersonType1 = '人員類型';
     w_Member_EmployeeNumber = '工號：';
@@ -447,14 +449,16 @@ export default class LangObject implements ILang {
     w_Member_CardNumber = '卡號：';
     w_Member_CardNumber1 = '卡號';
     w_Member_CardType = '證卡類型：';
+    w_Member_CardType1 = '證卡類型'; 
     w_Member_CardAllNumber = '證卡全碼：';
     w_Member_CardCustodian = '證卡保管人：';
+    w_Member_CardCustodian1 = '證卡保管人';
     w_Member_Actions = '功能';
     w_Member_PersonPic = '人員照片：';
     w_Member_UpLoadPersonPic = '上傳照片：';
     w_Member_CardVoucherType = '卡片憑證類型：';
     w_Member_deviceNumber = '設備碼：';
-
+    w_Member_Status="狀態";
     w_Member_CardInfo = '卡片資訊';
     w_Member_pin = 'PIN：';
 
@@ -487,6 +491,7 @@ export default class LangObject implements ILang {
     w_Member_WorkArea1 = '工作地區';
     w_Member_RegistrationDate = '報到日期：';
     w_Member_ResignationDate = '離職日期：';
+    w_Member_ResignationDate1 = '離職日期';
 
     w_Member_General = '一般';
     w_Member_CarLicenseData = '車證資料';
@@ -549,11 +554,33 @@ export default class LangObject implements ILang {
     w_Member_AddFailed = '新增失敗';
     w_Member_ErrorUploadFile = '上傳失敗';
 
-    w_ContractorReport = "Contractor Report";
-    w_DoorReport = 'Door Report';
-    w_DoorGroupReport= 'Door Group Report';
-    w_DemographicReport = "Demographic Report";
-    w_EmployeeReport = 'Employee Report';
-    w_CardExpirationReport = 'Card Report';
-    w_AttendanceRecord = 'Attendance Record';
+    w_AttendanceReport = '差勤紀錄查詢';
+    w_DoorReport = '門號報表';
+    w_DoorGroupReport= '門號群組';
+    w_CardExpirationReport = '證卡到期查詢';
+    w_ContractorReport = "契約商報表";    
+    w_DemographicReport = "人口統計報表";
+    w_EmployeeReport = '人員報表';
+    w_VisitorCardReport = '訪客卡號紀錄';
+    
+
+    w_Report_DateStart="Date Start";
+    w_Report_DateEnd="Date End";
+    w_Report_StartTime = "起始時間";
+    w_Report_DoorNumberStart ="起始門號";
+    w_Report_EndTime ="日終時間";
+    w_Report_DoorNumberEnd="日終門號";
+    w_Report_WorkTime = "工作時長";
+    w_Report_DateOccurred = "出勤日期";
+    w_Report_InOutDailyCount = "總進出天數";
+
+    w_Report_Month1 = "近三個月進出天數";
+    w_Report_Month2 = "近二個月進出天數";
+    w_Report_Month3 = "近一個月進出天數";
+
+    w_Area_Count = "區域數量";
+    w_DoorGroup_Count = "門號群組數量";
+    w_Door_Count = "門號數量";
+    w_Reader_Count = "讀卡機數量";
+    w_Region = "地區名稱";
 }

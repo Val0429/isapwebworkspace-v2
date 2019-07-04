@@ -1,5 +1,11 @@
 <template>
-    <iv-form-quick>
+   <div>
+    <ivc-filter-form
+            :inf="filterInterface()"
+            :visible="filterVisible"
+            v-on:input="onFilterSubmit($event)"
+        />
+    <ivc-form-quick v-on:viewChange="viewChange($event)">    
         <!-- 5) custom view templates with <template #view.* /> -->
         <template #view.system="{$attrs, $listeners}">
             {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
@@ -25,17 +31,39 @@
             />
         </template>
         
-    </iv-form-quick>
+    </ivc-form-quick>
+   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
-import { EFormQuick, IFormQuick } from '@/../components/form';
+import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
 import { System } from '@/config/default/api/interfaces';
 
 @Component
 /// 1) class name
-export default class ElevatorForm extends Vue implements IFormQuick {
+export default class ElevatorForm extends Vue implements IFormQuick2 {
+
+ params:any = {};
+  onFilterSubmit($event?: any): void {
+     this.params = $event || {};
+  }
+  filterVisible: boolean=true;
+  viewChange($event: any): void {
+      console.log("view", $event)
+    this.filterVisible = $event == 'view';
+  } 
+  filterInterface():string{
+      return `interface {
+            /**
+            * @uiLabel - ${this._("name")}
+            */
+            name?:string;
+        }`;
+  } 
+    
+
     system = System;
     /// 2) cgi path
     path: string = "/acs/elevator";

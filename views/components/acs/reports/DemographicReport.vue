@@ -1,144 +1,31 @@
 <template >
 
-     <div key="main">
-        <iv-card            
-            :label="_('w_Filter')"
-        >
-            <iv-form 
-            ref="form"
-            @mounted="doMounted"
-            :interface="inf()"
-           
-            @submit="onSubmit($event)">
-
-            </iv-form>
-            
-        
-        <template v-if="isMounted">
-            <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
-            <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onSubmit()">{{ _("wb_Reset") }}</b-button>
-            <b-button class="btn-filter" size="lg" @click="exportToExcel()" >{{ _("wb_Export") }}</b-button>            
-        </template>
-        </iv-card>
-         <iv-card            
-            :label="_('w_ColumnSelection')"
-        >
-        <template>
-             <iv-sort-select  
-                v-if="options.length>0"                      
-                v-model="selectedColumns"
-                class="col-md-12"
-                :options="options"
-            />
-            
-        </template>
-
-        </iv-card>
-        <iv-card            
-            :label="tableTitle">        
-        
-           <b-table striped hover 
-                :items="records" 
-                :fields="fields.filter(x=> selectedColumns.find(y=>y==x.key))" 
-                :per-page="perPage"
-                :busy="isBusy"
-                :current-page="currentPage"
-           ></b-table>
-           <b-pagination
-            v-model="currentPage"
-            :total-rows="records.length"
-            :per-page="perPage"
-            aria-controls="my-table"
-            ></b-pagination>
-        </iv-card>
-        
-    </div>
+     <ivc-basic-report      
+        :inf="inf()"
+        :title="_('w_DemographicReport')"
+        :records="records"
+        :isBusy="isBusy"
+        :fields="fields"
+        v-model="filter"
+        v-on:input="onSubmit()"
+     />                  
+     
 </template>
            
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from '@/../core';
 import { RegisterRouter } from '@/../core/router';
-import { BasicReport, BasicReportImpl } from './BasicReport';
-import { config } from 'rxjs';
-
+import moment from 'moment';
 @Component
-export default class DemographicReport extends BasicReportImpl  {
-    
-    
-    async created(){
-        this.tableTitle= this._('w_DemographicReport');        
-        await this.getData();
-    }
-    
-    
-  private async getData(filter?:any) {        
-        this.isBusy=true;            
-        let resp: any=await this.$server.R("/report/memberrecord" as any, filter);
-        this.data = resp.results;
-        this.records = resp.results;
-        this.isBusy=false;
-  }
-
-
-    inf(){
-        return `interface {
-                /**
-                 * @uiColumnGroup - name
-                 * @uiLabel - ${this._('w_Member_ChineseName1')}
-                 */
-                FirstName?: string;
-                /**
-                 * @uiColumnGroup - name
-                 * @uiLabel - ${this._('w_Member_EnglishName1')}
-                 */
-                LastName?: string;
-                /**
-                 * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
-                 */
-                EmployeeNumber?: string;
-                /**
-                 * @uiColumnGroup - number
-                 * @uiLabel - ${this._('w_Member_CardNumber1')}
-                 */
-                CardNumber?: string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_Department1')}
-                 */
-                DepartmentName?:string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_CostCenter1')}
-                 */
-                CostCenterName?:string;
-                /**
-                 * @uiColumnGroup - area
-                 * @uiLabel - ${this._('w_Member_WorkArea1')}
-                 */
-                WorkAreaName?:string;
-            }`;
-            
-    }
-    isMounted:boolean=false;
-    doMounted(){
+export default class DemographicReport extends Vue  {
+    records:any[]=[];
+    fields:any[] =[];
+    isBusy:boolean=false;
+    filter:any={};
+    async created(){        
         this.fields = 
-        [            
-            {
-                key:"FirstName",
-                label: this._('w_Member_ChineseName1'),
-                sortable: true
-            },
-            {  
-                key:"LastName",
-                label: this._('w_Member_EnglishName1'),
-                sortable: true
-            },
-            {
-                key: "EmployeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
-            },
+        [     
             {
                 key:"CardNumber",
                 label: this._('w_Member_CardNumber1')
@@ -146,32 +33,169 @@ export default class DemographicReport extends BasicReportImpl  {
             {
                 key:"DepartmentName",
                 label: this._("w_Member_Department1")
-            },
+            },            
             {
                 key:"CostCenterName",
                 label: this._("w_Member_CostCenter1")
             },
             {
-                key:"WorkAreaName",
-                label: this._("w_Member_WorkArea1")
+                key:"FirstName",
+                label: this._('w_Member_EnglishName1'),
+                sortable: true
+            },
+            {  
+                key:"LastName",
+                label: this._('w_Member_ChineseName1'),
+                sortable: true
             },
             {
-                key:"PermissionList",
-                label: this._("w_Permission_PermissionList")
+                key: "CompanyName",
+                label: this._('w_Member_CompanyName1')
+            },
+            {
+                key: "WorkArea",
+                label: this._('w_Member_WorkArea1')
+            },
+            {
+                key: "CardType",
+                label: this._('w_Member_CardType1')
+            },
+            {
+                key: "StartDate",
+                label: this._('w_Member_StartDate1')
+            },
+            {
+                key: "EndDate",
+                label: this._('w_Member_EndDate1')
+            },
+            {
+                key: "CardCustodian",
+                label: this._('w_Member_CardCustodian1')
+            },
+            {
+                key: "Status",
+                label: this._("w_Member_Status")
+            },
+            {
+                key: "InOutDailyCount",
+                label: this._('w_Report_InOutDailyCount')
             }
+
         ];
-        this.isMounted=true;
-        this.options=this.fields.map(x=>{return{value:x.key,text:x.label}});
-        this.selectedColumns = this.fields.map(x=>x.key);
-        console.log(this.options.length);
+
+        this.filter.Start = new Date();
+        this.filter.End = new Date();
     }
-    onSubmit($events){        
-        this.getData($events);
+    
+  private async getData() { 
+      try{    
+        if(!this.filter)return;
+        this.isBusy=true;           
+        await this.getMemberData();
+        await this.getAttendanceRecord();
+      }catch(err){
+          console.error(err);
+      }finally{
+        this.isBusy=false;
+      }
+  }
+  async getMemberData() {
+    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter);
+    this.records=resp.results;
+    
+  }
+async getAttendanceRecord(){   
+        
+        this.filter.Start.setHours(0,0,0,0);        
+        this.filter.End.setHours(23,59,59,999);
+        // let card_no = this.filter.CardNumber;
+        let start = this.filter.Start.toISOString();
+        let end = this.filter.End.toISOString();
+        let resp: any=await this.$server.R("/report/attendancerecord" as any, Object.assign(this.filter, {start, end}));
+        
+        let i=0;
+        while(i<resp.results.length){            
+            let item = resp.results[i];
+            let item2 = resp.results[i+1];
+            i+=2;
+            let member = this.records.find(x=>x.CardNumber == item.card_no);
+            if(!member)continue;
+            if(!member.InOutDailyCount)member.InOutDailyCount=0;
+            if(member.LastDateOccured !== item.date_occurred){
+                member.LastDateOccured = item.date_occurred;
+                member.InOutDailyCount +=1;            
+            }
+        }
+        
+    }
+
+    inf():string{
+        return `interface {
+            /**
+             * @uiColumnGroup - row0
+             * @uiLabel - ${this._('w_Member_CardCustodian1')}
+             */
+            CardCustodian?:string;
+            /**
+             * @uiColumnGroup - row0
+             * @uiLabel - ${this._('w_Member_CardNumber1')}
+             */
+            CardNumber?: string;
+            /**
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_Member_ChineseName1')}
+             */
+            LastName?: string;
+            /**
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_Member_EnglishName1')}
+             */
+            FirstName?: string;
+            /**
+             * @uiColumnGroup - row2
+             * @uiLabel - ${this._('w_Member_CardType1')}
+             */
+            CardType?:string;
+            /**
+             * @uiColumnGroup - row2
+             * @uiLabel - ${this._('w_Member_CompanyName1')}
+             */
+            CompanyName?:string;
+            /**
+             * @uiColumnGroup - row3
+             * @uiLabel - ${this._('w_Member_Department1')}
+             */
+            DepartmentName?:string;
+            /**
+             * @uiColumnGroup - row3
+             * @uiLabel - ${this._('w_Member_CostCenter1')}
+             */
+            CostCenterName?:string;
+            /**
+             * @uiColumnGroup - row4
+             * @uiLabel - ${this._('w_Member_WorkArea1')}
+             */
+            WorkAreaName?:string;
+            /**
+             * @uiColumnGroup - row4
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Member_StartDate1')}
+             */
+            Start:Date;
+            /**
+             * @uiColumnGroup - row4
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Member_EndDate1')}
+             */
+            End:Date;
+        }`;
+            
+    }
+    
+    async onSubmit(){      
+        console.log("filter", this.filter) ;
+        await this.getData();
     }
 }
 </script>
-<style lang="scss" scoped>
-.btn-filter{
-    margin: 0 10px;
-}
-</style>
+
