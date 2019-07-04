@@ -1,14 +1,18 @@
 <template>
     <div class="chart">
         <b-form-group v-if="errorMessage == ''">
-             <highcharts
+            <highcharts
                 ref="chart"
                 v-if="mountChart"
                 :options="chartOptions"
             ></highcharts>
         </b-form-group>
-     
-         <b-form-group v-if="errorMessage != ''" class="chart-error-message" :label="errorMessage">
+
+        <b-form-group
+            v-if="errorMessage != ''"
+            class="chart-error-message"
+            :label="errorMessage"
+        >
         </b-form-group>
     </div>
 </template>
@@ -120,13 +124,20 @@ export class HighchartsTraffic extends Vue {
     mounted() {}
 
     start() {
-        this.errorMessage = '';
+        this.errorMessage = "";
         this.chartMode = HighChartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
         );
-        console.log("chart : ", this.chartMode, this.startDate, this.endDate, this.sites, this.value);
+        console.log(
+            "chart : ",
+            this.chartMode,
+            this.startDate,
+            this.endDate,
+            this.sites,
+            this.value
+        );
         if (isNaN(this.startDate.getTime())) {
             this.errorMessage = this._("w_Report_ErrorDateStart");
             return false;
@@ -1275,6 +1286,8 @@ export class HighchartsTraffic extends Vue {
                             let newValue: any = JSON.parse(valueJson);
 
                             for (let site of newValue.sites) {
+                                console.log(site);
+
                                 if (site.siteObjectId == siteId) {
                                     switch (newValue.timeMode) {
                                         case ETimeMode.year:
@@ -1295,8 +1308,8 @@ export class HighchartsTraffic extends Vue {
                                         default:
                                             result += `${site.siteName}<br>`;
                                             result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                            result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
-                                            result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
                                             result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
                                             result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
                                             result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
@@ -1460,7 +1473,7 @@ Vue.component("highcharts-traffic", HighchartsTraffic);
 </script>
 
 <style lang="scss" scoped>
-.chart-error-message{
+.chart-error-message {
     text-align: center;
 }
 </style>
