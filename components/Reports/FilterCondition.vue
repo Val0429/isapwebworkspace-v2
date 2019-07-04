@@ -317,12 +317,14 @@ export class FilterCondition extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "siteIds":
-                console.log('data.value - ', data.value[1]);
-
-                // if (data.value[1])
-
-                this.inputFormData.siteIds = data.value;
-	            break;
+                for (const siteId of data.value) {
+                    if (!siteId) {
+                        this.inputFormData.siteIds = []
+                    } else {
+                        this.inputFormData.siteIds = data.value;
+                    }
+                }
+                break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
                 break;
