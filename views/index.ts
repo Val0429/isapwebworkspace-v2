@@ -42,7 +42,7 @@ import Region from './components/bar/Region.vue';
 import DemoFETCardPrint from './Demos/DemoFETCardPrint.vue';
 $({ path: '/demos/fet_card_print', name: 'FET ID Card Print', icon: 'fa-print', permission: false })(DemoFETCardPrint);
 
-$({ path: '/', name: 'Home', redirect: '/member' })();
+$({ path: '/', name: 'Home', redirect: '/employeereport' })();
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
 $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);

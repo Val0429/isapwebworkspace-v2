@@ -20,7 +20,7 @@
         <template #nav>
             <SidebarHeader label="Menu" />
             <SidebarNav>
-                
+                <SidebarNavItem url="/user" />
                 <SidebarNavItem url="/employeereport" />
                 <SidebarNavItem url="/doorreport" />
                 <SidebarNavItem url="/doorgroupreport" />
@@ -44,7 +44,7 @@
                 
                 <SidebarNavItem url="/floor" />
                 <SidebarNavItem url="/syncreceiver" />
-                <SidebarNavItem url="/user" />
+                
 
                 <!-- <SidebarNavItem url="/timeschedule" /> -->
                 <!-- <SidebarNavItem url="/accesslevel" /> -->                
