@@ -74,10 +74,10 @@ export default class ReportDemographic extends Vue {
         this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
         // multipe day
-        this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        this.endDate = new Date("2019-07-10T14:00:00.000Z");
+        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        // this.endDate = new Date("2019-07-10T14:00:00.000Z");
 
-        let siteLength = 5;
+        let siteLength = 1;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;

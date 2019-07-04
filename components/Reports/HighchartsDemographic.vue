@@ -1,54 +1,81 @@
 <template>
     <div class="chart">
-        <div>
-            <highcharts
-                ref="chartGenderAge"
-                v-if="mountChart.genderAge"
-                :options="chartOptionsGenderAge"
-            ></highcharts>
-        </div>
-        <div>
-            <b-form-radio-group
-                v-if="chartMode == eChartMode.siteXDayX"
-                v-model="selection.gender"
-                class="h-25 click_button col-md-1"
-                buttons
-                button-variant="outline-success"
-                name="radio-btn-outline"
-                :options="selectItem.gender"
-                @change="changeGender"
-            ></b-form-radio-group>
-            <highcharts
-                ref="chartGenderTime"
-                v-if="mountChart.genderTime"
-                :options="chartOptionsGenderTime"
-            ></highcharts>
-        </div>
-        <div>
-            <highcharts
-                ref="chartAge"
-                v-if="mountChart.age"
-                :options="chartOptionsAge"
-            ></highcharts>
-        </div>
-        <div>
-            <iv-form-selection
-                :value="selection.ageRange"
-                :options="selectItem.ageRange"
-                @input="changeAge"
-            ></iv-form-selection>
-            <highcharts
-                ref="chartDwellTime"
-                v-if="mountChart.dwellTime"
-                :options="chartOptionsDwellTime"
-            ></highcharts>
-            <highcharts
-                ref="chartGender"
-                v-if="mountChart.gender"
-                :options="chartOptionsGender"
-            ></highcharts>
-        </div>
+            
+        <div v-if="errorMessage == ''">
 
+            <b-row>
+                <b-col cols="12">
+                    <highcharts
+                        ref="chartGenderAge"
+                        v-if="mountChart.genderAge"
+                        :options="chartOptionsGenderAge"
+                    ></highcharts>
+                </b-col>
+            </b-row>
+
+            <b-row>
+                <b-col cols='12'>
+                    <b-form-group :label="'Demographic by Gender'"></b-form-group>
+                    <b-form-radio-group
+                        v-if="chartMode == eChartMode.siteXDayX"
+                        v-model="selection.gender"
+                        class="h-25 click_button col-md-1"
+                        buttons
+                        button-variant="outline-success"
+                        name="radio-btn-outline"
+                        :options="selectItem.gender"
+                        @change="changeGender"
+                    ></b-form-radio-group>
+                    <highcharts
+                        ref="chartGenderTime"
+                        v-if="mountChart.genderTime"
+                        :options="chartOptionsGenderTime"
+                    ></highcharts>
+                </b-col>
+            </b-row>
+
+            <b-row>
+                <b-col cols="12">
+                     <b-form-group :label="'Demographic by Age'"></b-form-group>
+                </b-col>
+               
+                <b-col cols="6">
+                    <highcharts
+                        ref="chartAge"
+                        v-if="mountChart.age"
+                        :options="chartOptionsAge"
+                    ></highcharts>
+                </b-col>
+                <b-col cols="6">
+                    <b-row>
+                        <b-col cols="12">
+                            <iv-form-selection
+                                class='col-md-12'
+                                :value="selection.ageRange"
+                                :options="selectItem.ageRange"
+                                @input="changeAge"
+                            ></iv-form-selection>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col cols="6">
+                            <highcharts
+                                ref="chartDwellTime"
+                                v-if="mountChart.dwellTime"
+                                :options="chartOptionsDwellTime"
+                            ></highcharts>
+                        </b-col>
+                        <b-col cols="6">
+                            <highcharts
+                                ref="chartGender"
+                                v-if="mountChart.gender"
+                                :options="chartOptionsGender"
+                            ></highcharts>
+                        </b-col>
+                    </b-row>
+                </b-col>
+            </b-row>
+        </div>
         <div v-if="errorMessage != ''">
             {{ errorMessage }}
         </div>
@@ -313,7 +340,7 @@ export class HighchartsDemographic extends Vue {
                 break;
         }
 
-        console.log(JSON.stringify(this.value));
+        // console.log(JSON.stringify(this.value));
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////

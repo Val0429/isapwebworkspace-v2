@@ -1,10 +1,12 @@
 <template>
     <div class="chart">
-        <highcharts
-            ref="chart"
-            v-if="mountChart"
-            :options="chartOptions"
-        ></highcharts>
+        <div v-if="errorMessage == ''">
+            <highcharts
+                ref="chart"
+                v-if="mountChart"
+                :options="chartOptions"
+            ></highcharts>
+        </div>
         <div v-if="errorMessage != ''">
             {{ errorMessage }}
         </div>
@@ -301,12 +303,8 @@ export class HighchartsTraffic extends Vue {
                                     let newValue: any = JSON.parse(valueJson);
 
                                     // set value
-                                    result += `${newValue.i18n.time}:${
-                                        newValue.timeString
-                                    }<br>`;
-                                    result += `${newValue.i18n.traffic}: ${
-                                        newValue.traffic
-                                    }<br>`;
+                                    result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
+                                    result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -370,15 +368,9 @@ export class HighchartsTraffic extends Vue {
                                     let newValue: any = JSON.parse(valueJson);
 
                                     // set value
-                                    result += `${newValue.i18n.time}:${
-                                        newValue.timeString
-                                    }<br>`;
-                                    result += `${newValue.i18n.traffic}: ${
-                                        newValue.traffic
-                                    }<br>`;
-                                    result += `${newValue.i18n.revenue}: ${
-                                        newValue.revenue
-                                    }<br>`;
+                                    result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
+                                    result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
+                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -742,56 +734,26 @@ export class HighchartsTraffic extends Vue {
                                 case ETimeMode.quarter:
                                 case ETimeMode.month:
                                 case ETimeMode.week:
-                                    result += `${newValue.i18n.startDate}: ${
-                                        newValue.dateStartString
-                                    }<br>`;
-                                    result += `${newValue.i18n.endDate}: ${
-                                        newValue.dateEndString
-                                    }<br>`;
-                                    result += `${newValue.i18n.traffic}: ${
-                                        newValue.traffic
-                                    }<br>`;
-                                    result += `${newValue.i18n.revenue}: ${
-                                        newValue.revenue
-                                    }<br>`;
-                                    result += `${newValue.i18n.transaction}: ${
-                                        newValue.transaction
-                                    }<br>`;
-                                    result += `${newValue.i18n.conversion}: ${
-                                        newValue.conversion
-                                    }%<br>`;
-                                    result += `${newValue.i18n.asp}: ${
-                                        newValue.asp
-                                    }<br>`;
+                                    result += `${newValue.i18n.startDate}: ${newValue.dateStartString}<br>`;
+                                    result += `${newValue.i18n.endDate}: ${newValue.dateEndString}<br>`;
+                                    result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
+                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                    result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
                                     break;
                                 case ETimeMode.day:
                                 case ETimeMode.hour:
                                 default:
                                     result += `${newValue.dateString}<br>`;
-                                    result += `${
-                                        newValue.i18n.temperatureMin
-                                    }: ${newValue.temperatureMin}°C<br>`;
-                                    result += `${
-                                        newValue.i18n.temperatureMax
-                                    }: ${newValue.temperatureMax}°C<br>`;
-                                    result += `${newValue.i18n.traffic}: ${
-                                        newValue.traffic
-                                    }<br>`;
-                                    result += `${newValue.i18n.trafficAVG}: ${
-                                        newValue.trafficAVG
-                                    }<br>`;
-                                    result += `${newValue.i18n.revenue}: ${
-                                        newValue.revenue
-                                    }<br>`;
-                                    result += `${newValue.i18n.transaction}: ${
-                                        newValue.transaction
-                                    }<br>`;
-                                    result += `${newValue.i18n.conversion}: ${
-                                        newValue.conversion
-                                    }%<br>`;
-                                    result += `${newValue.i18n.asp}: ${
-                                        newValue.asp
-                                    }<br>`;
+                                    result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                                    result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                                    result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
+                                    result += `${newValue.i18n.trafficAVG}: ${newValue.trafficAVG}<br>`;
+                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                    result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
                                     break;
                             }
                         } catch (e) {
@@ -929,30 +891,14 @@ export class HighchartsTraffic extends Vue {
 
                             ///////// tooltip /////////
                             result += `${newValue.siteName}<br>`;
-                            result += `${newValue.i18n.date}: ${
-                                newValue.dateString
-                            }<br>`;
-                            result += `${newValue.i18n.temperatureMin}: ${
-                                newValue.temperatureMin
-                            }°C<br>`;
-                            result += `${newValue.i18n.temperatureMax}: ${
-                                newValue.temperatureMax
-                            }°C<br>`;
-                            result += `${newValue.i18n.traffic}: ${
-                                newValue.traffic
-                            }<br>`;
-                            result += `${newValue.i18n.trafficAVG}: ${
-                                newValue.trafficAVG
-                            }<br>`;
-                            result += `${newValue.i18n.revenue}: ${
-                                newValue.revenue
-                            }<br>`;
-                            result += `${newValue.i18n.transaction}: ${
-                                newValue.transaction
-                            }<br>`;
-                            result += `${newValue.i18n.conversion}: ${
-                                newValue.conversion
-                            }%<br>`;
+                            result += `${newValue.i18n.date}: ${newValue.dateString}<br>`;
+                            result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                            result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                            result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
+                            result += `${newValue.i18n.trafficAVG}: ${newValue.trafficAVG}<br>`;
+                            result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                            result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                            result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
                         } catch (e) {
                             console.log(e);
                         }
@@ -1359,63 +1305,27 @@ export class HighchartsTraffic extends Vue {
                                         case ETimeMode.month:
                                         case ETimeMode.week:
                                             result += `${site.siteName}<br>`;
-                                            result += `${
-                                                newValue.i18n.startDate
-                                            }: ${site.dateStartString}<br>`;
-                                            result += `${
-                                                newValue.i18n.endDate
-                                            }: ${site.dateEndString}<br>`;
-                                            result += `${
-                                                newValue.i18n.traffic
-                                            }: ${site.traffic}<br>`;
-                                            result += `${
-                                                newValue.i18n.revenue
-                                            }: ${site.revenue}<br>`;
-                                            result += `${
-                                                newValue.i18n.transaction
-                                            }: ${site.transaction}<br>`;
-                                            result += `${
-                                                newValue.i18n.conversion
-                                            }: ${newValue.conversion}%<br>`;
-                                            result += `${newValue.i18n.asp}: ${
-                                                newValue.asp
-                                            }<br>`;
+                                            result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
+                                            result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
+                                            result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
+                                            result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
+                                            result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
+                                            result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                            result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
                                             break;
                                         case ETimeMode.day:
                                         case ETimeMode.hour:
                                         default:
                                             result += `${site.siteName}<br>`;
-                                            result += `${newValue.i18n.date}: ${
-                                                newValue.categorie
-                                            }<br>`;
-                                            result += `${
-                                                newValue.i18n.temperatureMin
-                                            }: ${
-                                                newValue.temperatureMin
-                                            }°C<br>`;
-                                            result += `${
-                                                newValue.i18n.temperatureMax
-                                            }: ${
-                                                newValue.temperatureMax
-                                            }°C<br>`;
-                                            result += `${
-                                                newValue.i18n.weather
-                                            }: ${site.weatherIcon}<br>`;
-                                            result += `${
-                                                newValue.i18n.traffic
-                                            }: ${site.traffic}<br>`;
-                                            result += `${
-                                                newValue.i18n.revenue
-                                            }: ${site.revenue}<br>`;
-                                            result += `${
-                                                newValue.i18n.transaction
-                                            }: ${site.transaction}<br>`;
-                                            result += `${
-                                                newValue.i18n.conversion
-                                            }: ${newValue.conversion}%<br>`;
-                                            result += `${newValue.i18n.asp}: ${
-                                                newValue.asp
-                                            }<br>`;
+                                            result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
+                                            result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                                            result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
+                                            result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
+                                            result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
+                                            result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
+                                            result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                            result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
                                             break;
                                     }
                                     break;
