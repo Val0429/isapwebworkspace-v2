@@ -1189,7 +1189,7 @@ export default class ReportTraffic extends Vue {
         console.log(" - ", this.endDate);
         console.log(" - ", this.timeMode);
         console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
+        console.log(" chartDatas - ", this.chartDatas);
     }
 
     checkDateAndSite(

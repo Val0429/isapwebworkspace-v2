@@ -1,15 +1,15 @@
 <template>
     <div class="chart">
-        <div v-if="errorMessage == ''">
-            <highcharts
+        <b-form-group v-if="errorMessage == ''">
+             <highcharts
                 ref="chart"
                 v-if="mountChart"
                 :options="chartOptions"
             ></highcharts>
-        </div>
-        <div v-if="errorMessage != ''">
-            {{ errorMessage }}
-        </div>
+        </b-form-group>
+     
+         <b-form-group v-if="errorMessage != ''" class="chart-error-message" :label="errorMessage">
+        </b-form-group>
     </div>
 </template>
 
@@ -105,31 +105,6 @@ export class HighchartsTraffic extends Vue {
     chartMode: EChartMode = EChartMode.none;
     chartOptions: any = {};
 
-    @Watch("startDate")
-    private onStartDateChanged(newval: Date, oldval: Date) {
-        this.start();
-    }
-
-    @Watch("endDate")
-    private onEndDateChanged(newval: Date, oldval: Date) {
-        this.start();
-    }
-
-    @Watch("timeMode")
-    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
-        this.start();
-    }
-
-    @Watch("areaMode")
-    private onAreaModeChanged(newval: EAreaMode, oldval: EAreaMode) {
-        this.start();
-    }
-
-    @Watch("sites")
-    private onSitesChanged(newval: ISite[], oldval: ISite[]) {
-        this.start();
-    }
-
     @Watch("value", { deep: true })
     private onValueChanged(
         newval: IChartTrafficData[],
@@ -145,11 +120,13 @@ export class HighchartsTraffic extends Vue {
     mounted() {}
 
     start() {
+        this.errorMessage = '';
         this.chartMode = HighChartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
         );
+        console.log("chart : ", this.chartMode, this.startDate, this.endDate, this.sites, this.value);
         if (isNaN(this.startDate.getTime())) {
             this.errorMessage = this._("w_Report_ErrorDateStart");
             return false;
@@ -1483,4 +1460,7 @@ Vue.component("highcharts-traffic", HighchartsTraffic);
 </script>
 
 <style lang="scss" scoped>
+.chart-error-message{
+    text-align: center;
+}
 </style>

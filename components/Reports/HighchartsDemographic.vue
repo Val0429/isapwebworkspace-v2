@@ -1,8 +1,7 @@
 <template>
     <div class="chart">
-            
-        <div v-if="errorMessage == ''">
 
+        <b-form-group v-if="errorMessage == ''">
             <b-row>
                 <b-col cols="12">
                     <highcharts
@@ -36,9 +35,9 @@
 
             <b-row>
                 <b-col cols="12">
-                     <b-form-group :label="'Demographic by Age'"></b-form-group>
+                    <b-form-group :label="'Demographic by Age'"></b-form-group>
                 </b-col>
-               
+
                 <b-col cols="6">
                     <highcharts
                         ref="chartAge"
@@ -75,10 +74,13 @@
                     </b-row>
                 </b-col>
             </b-row>
-        </div>
-        <div v-if="errorMessage != ''">
-            {{ errorMessage }}
-        </div>
+        </b-form-group>
+
+        <b-form-group
+            v-if="errorMessage != ''"
+            :label="errorMessage"
+        >
+        </b-form-group>
     </div>
 </template>
 
@@ -174,31 +176,6 @@ export class HighchartsDemographic extends Vue {
         }
     })
     value: IChartDemographicData[];
-
-    @Watch("startDate")
-    private onStartDateChanged(newval: Date, oldval: Date) {
-        this.start();
-    }
-
-    @Watch("endDate")
-    private onEndDateChanged(newval: Date, oldval: Date) {
-        this.start();
-    }
-
-    @Watch("timeMode")
-    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
-        this.start();
-    }
-
-    @Watch("areaMode")
-    private onAreaModeChanged(newval: EAreaMode, oldval: EAreaMode) {
-        this.start();
-    }
-
-    @Watch("sites")
-    private onSitesChanged(newval: ISite[], oldval: ISite[]) {
-        this.start();
-    }
 
     @Watch("value", { deep: true })
     private onValueChanged(
@@ -1411,13 +1388,13 @@ export class HighchartsDemographic extends Vue {
         let series: any = [
             {
                 name: this._("w_ReportDemographic_GenderMale"),
-                countData: [],
-                data: []
+                countData: [0, 0, 0, 0, 0, 0],
+                data: [0, 0, 0, 0, 0, 0]
             },
             {
                 name: this._("w_ReportDemographic_GenderFemale"),
-                countData: [],
-                data: []
+                countData: [0, 0, 0, 0, 0, 0],
+                data: [0, 0, 0, 0, 0, 0]
             }
         ];
 
@@ -1839,5 +1816,8 @@ Vue.component("highcharts-demographic", HighchartsDemographic);
 </script>
 
 <style lang="scss" scoped>
+.chart-error-message {
+    text-align: center;
+}
 </style>
 
