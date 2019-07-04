@@ -99,12 +99,12 @@ export default class CardExpirationReport extends Vue  {
              * @uiColumnGroup - row2
              * @uiLabel - ${this._('w_Member_ChineseName1')}
              */
-            FirstName?: string;
+            LastName?: string;
             /**
              * @uiColumnGroup - row2
              * @uiLabel - ${this._('w_Member_EnglishName1')}
              */
-            LastName?: string;
+            FirstName?: string;
             /**
              * @uiColumnGroup - row4
              * @uiLabel - ${this._('w_Member_CompanyName1')}

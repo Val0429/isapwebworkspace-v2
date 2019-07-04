@@ -23,7 +23,7 @@ export default class AttendanceReport extends Vue  {
     isBusy:boolean=false;
     filter:any={};
     permissions: any[];
-    async created(){        
+    created(){        
         this.fields = 
         [       
             {
@@ -93,7 +93,7 @@ export default class AttendanceReport extends Vue  {
 
 
   private async getMember() {
-    if(this.filter.ResignDate)
+    if(this.filter && this.filter.ResignDate)
       this.filter.ResignationDate=this.filter.ResignDate.toISOString();
     let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter||{});
     this.records=[];
@@ -135,12 +135,12 @@ export default class AttendanceReport extends Vue  {
              * @uiColumnGroup - name
              * @uiLabel - ${this._('w_Member_ChineseName1')}
              */
-            FirstName?: string;
+            LastName?: string;
             /**
              * @uiColumnGroup - name
              * @uiLabel - ${this._('w_Member_EnglishName1')}
              */
-            LastName?: string;
+            FirstName?: string;
             /**
              * @uiColumnGroup - row4
              * @uiType - iv-form-date

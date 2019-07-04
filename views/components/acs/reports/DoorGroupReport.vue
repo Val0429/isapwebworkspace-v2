@@ -22,27 +22,22 @@ export default class DoorGroupReport extends Vue  {
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
-    async created(){        
+    permissions:any[]=[];
+    created(){        
         this.fields = 
-        [            
+       [       
             {
-                key:"FirstName",
-                label: this._('w_Member_ChineseName1'),
-                sortable: true
-            },
-            {  
-                key:"LastName",
-                label: this._('w_Member_EnglishName1'),
-                sortable: true
+                key:"DoorGroupName",
+                label: this._("w_DoorGroup")
             },
             {
-                key: "EmployeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
+                key:"DoorName",
+                label: this._("w_Door")
             },
             {
                 key:"CardNumber",
                 label: this._('w_Member_CardNumber1')
-            },
+            },                
             {
                 key:"DepartmentName",
                 label: this._("w_Member_Department1")
@@ -50,65 +45,106 @@ export default class DoorGroupReport extends Vue  {
             {
                 key:"CostCenterName",
                 label: this._("w_Member_CostCenter1")
+            },  
+            {
+                key:"LastName",
+                label: this._('w_Member_ChineseName1'),
+                sortable: true
             },
+            {  
+                key:"FirstName",
+                label: this._('w_Member_EnglishName1'),
+                sortable: true
+            },
+            {
+                key:"CompanyName",
+                label: this._("w_Member_CompanyName1")
+            },           
             {
                 key:"WorkAreaName",
                 label: this._("w_Member_WorkArea1")
+            },           
+            {
+                key: "EmployeeNumber",
+                label: this._('w_Member_EmployeeNumber1')
             },
             {
-                key:"PermissionList",
-                label: this._("w_Permission_PermissionList")
+                key: "ResignationDate",
+                label: this._('w_Member_ResignationDate1')
+            },
+            {
+                key: "Status",
+                label: this._('w_Member_Status')
+            },
+            {
+                key:"PermissionName",
+                label: this._("w_PermissionTable")
+            },
+            
+            {
+                key:"TimeSchedule",
+                label: this._("w_TimeSchedule")
             }
         ];
 
-        await this.getData();
+        
     }
     
   private async getData() {        
-        this.isBusy=true;            
-        let resp: any=await this.$server.R("/report/memberrecord" as any, this.filter);        
-        this.records = resp.results;
-        this.isBusy=false;
+        try{    
+            this.isBusy=true;
+            await this.getPermissiontable();
+            await this.getMember();
+        }catch(err){
+            console.error(err);
+        }finally{
+            this.isBusy=false;
+        }
+  }
+
+
+  private async getMember() {
+    if(this.filter && this.filter.ResignDate)
+      this.filter.ResignationDate=this.filter.ResignDate.toISOString();
+    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter||{});
+    this.records=[];
+    for(let member of resp.results){
+        for(let tableid of member.PermissionTable){
+            let newMember = Object.assign({},member);
+            let permission = this.permissions.find(x=>x.tableid==tableid);
+            if(!permission)continue;
+            for(let access of permission.accesslevels){
+                newMember.PermissionName = permission.tablename;
+                newMember.TimeSchedule = access.timeschedule.timename;
+                newMember.DoorName = access.door?access.door.doorname:'';
+                newMember.DoorGroupName = access.doorgroup?access.doorgroup.groupname:'';
+                
+                this.records.push(newMember);
+            }
+            
+        }
+    }
+  }
+   private async getPermissiontable() {    
+    let resp: any=await this.$server.R("/acs/permissiontable" as any, Object.assign({"paging.all":"true"}, this.filter));
+    this.permissions=resp.results;
   }
 
 
     inf():string{
         return `interface {
             /**
-             * @uiColumnGroup - name
-             * @uiLabel - ${this._('w_Member_ChineseName1')}
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_DoorGroup')}
              */
-            FirstName?: string;
+            doorgroupname?: string;
+            
             /**
-             * @uiColumnGroup - name
-             * @uiLabel - ${this._('w_Member_EnglishName1')}
+             * @uiColumnGroup - row1
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Member_ResignationDate1')}
              */
-            LastName?: string;
-            /**
-             * @uiColumnGroup - number
-             * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
-             */
-            EmployeeNumber?: string;
-            /**
-             * @uiColumnGroup - number
-             * @uiLabel - ${this._('w_Member_CardNumber1')}
-             */
-            CardNumber?: string;
-            /**
-             * @uiColumnGroup - area
-             * @uiLabel - ${this._('w_Member_Department1')}
-             */
-            DepartmentName?:string;
-            /**
-             * @uiColumnGroup - area
-             * @uiLabel - ${this._('w_Member_CostCenter1')}
-             */
-            CostCenterName?:string;
-            /**
-             * @uiColumnGroup - area
-             * @uiLabel - ${this._('w_Member_WorkArea1')}
-             */
-            WorkAreaName?:string;
+            ResignDate?:Date;
         }`;
             
     }

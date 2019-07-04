@@ -147,12 +147,12 @@ export default class EmployeeReport extends Vue  {
              * @uiColumnGroup - name
              * @uiLabel - ${this._('w_Member_ChineseName1')}
              */
-            FirstName?: string;
+            LastName?: string;
             /**
              * @uiColumnGroup - name
              * @uiLabel - ${this._('w_Member_EnglishName1')}
              */
-            LastName?: string;
+            FirstName?: string;
             
             /**
              * @uiColumnGroup - area
