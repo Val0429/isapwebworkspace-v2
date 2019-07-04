@@ -553,13 +553,13 @@ export default class LangObject implements ILang {
     w_Member_AddFailed = '新增失敗';
     w_Member_ErrorUploadFile = '上傳失敗';
 
-    w_AttendanceRecord = '人員報表';
+    w_AttendanceReport = '差勤紀錄查詢';
     w_DoorReport = '門號報表';
     w_DoorGroupReport= '門號群組';
     w_CardExpirationReport = '證卡到期查詢';
     w_ContractorReport = "契約商報表";    
     w_DemographicReport = "人口統計報表";
-    w_EmployeeReport = '差勤紀錄查詢';        
+    w_EmployeeReport = '人員報表';
     w_VisitorCardReport = '訪客卡號紀錄';
     
 

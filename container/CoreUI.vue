@@ -21,15 +21,13 @@
             <SidebarHeader label="Menu" />
             <SidebarNav>
                 
-                <SidebarNavItem url="/attendance" />      
+                <SidebarNavItem url="/employeereport" />
                 <SidebarNavItem url="/doorreport" />
                 <SidebarNavItem url="/doorgroupreport" />
                 <SidebarNavItem url="/cardreport" />          
                 <SidebarNavItem url="/contractorreport" />
                 <SidebarNavItem url="/demographicreport" />
-                
-                <SidebarNavItem url="/employeereport" />
-                
+                <SidebarNavItem url="/attendance" />      
                 <SidebarNavItem url="/visitorreport" />
                 
                 

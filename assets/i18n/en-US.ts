@@ -562,7 +562,7 @@ export default class LangObject {
     w_DemographicReport = "Demographic Report";
     w_EmployeeReport = 'Employee Report';
     w_CardExpirationReport = 'Card Report';
-    w_AttendanceRecord = 'Attendance Record';
+    w_AttendanceReport = 'Attendance Report';
     w_VisitorCardReport = 'Visitor Card Report';
 
     w_Report_DateStart="Date Start";

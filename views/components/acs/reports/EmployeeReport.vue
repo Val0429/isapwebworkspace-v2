@@ -1,6 +1,6 @@
 <template >
-<div>
-     <ivc-basic-report          
+
+     <ivc-basic-report      
         :inf="inf()"
         :title="_('w_EmployeeReport')"
         :records="records"
@@ -9,44 +9,26 @@
         v-model="filter"
         v-on:input="onSubmit()"
      />          
-     
-</div>
 </template>
            
 
 <script lang="ts">
 import { Component, Vue } from '@/../core';
 import { RegisterRouter } from '@/../core/router';
-import moment from 'moment';
+
 @Component
-export default class EmployeeReport extends Vue  {
+export default class AttendanceReport extends Vue  {
     records:any[]=[];
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
-    
-  members: any[];
-    created(){        
+    async created(){        
         this.fields = 
-        [            
-            {
-                key:"FirstName",
-                label: this._('w_Member_EnglishName1'),
-                sortable: true
-            },
-            {  
-                key:"LastName",
-                label: this._('w_Member_ChineseName1'),
-                sortable: true
-            },
-            {
-                key: "EmployeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
-            },
+        [       
             {
                 key:"CardNumber",
                 label: this._('w_Member_CardNumber1')
-            },
+            },    
             {
                 key:"DepartmentName",
                 label: this._("w_Member_Department1")
@@ -54,90 +36,49 @@ export default class EmployeeReport extends Vue  {
             {
                 key:"CostCenterName",
                 label: this._("w_Member_CostCenter1")
+            },             
+            {
+                key:"FirstName",
+                label: this._('w_Member_ChineseName1'),
+                sortable: true
+            },
+            {  
+                key:"LastName",
+                label: this._('w_Member_EnglishName1'),
+                sortable: true
+            },
+            {
+                key:"CompanyName",
+                label: this._("w_Member_CompanyName1")
             },
             {
                 key:"WorkAreaName",
                 label: this._("w_Member_WorkArea1")
             },
             {
-                key:"DateOccurred",
-                label: this._("w_Report_DateOccurred")
+                key: "EmployeeNumber",
+                label: this._('w_Member_EmployeeNumber1')
             },
             {
-                key:"StartTime",
-                label: this._("w_Report_StartTime")
-            },
-            {
-                key:"at_id",
-                label: this._("w_Report_DoorNumberStart")
-            },
-            {
-                key:"EndTime",
-                label: this._("w_Report_EndTime")
-            },
-            {
-                key:"at_id_end",
-                label: this._("w_Report_DoorNumberEnd")
-            },
-            {
-                key:"WorkTime",
-                label: this._("w_Report_WorkTime")
+                key: "ResignationDate",
+                label: this._('w_Member_ResignationDate1')
             }
-
         ];
-        this.filter.DateStart = new Date();
-        this.filter.DateEnd = new Date();
-        
     }
     
-  private async getData() {    
-      try{    
-        if(!this.filter)return;
-        this.isBusy=true;           
-        await this.getMemberData();
-        await this.getAttendanceRecord();
-      }catch(err){
-          console.error(err);
-      }finally{
-        this.isBusy=false;
-      }
-  }
-  private async getMemberData() {
-    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter);
-    this.members=resp.results;
-    
+  private async getData() {        
+        try{    
+            this.isBusy=true;
+            if(this.filter.ResignDate)this.filter.ResignationDate = this.filter.ResignDate.toISOString();            
+            let resp: any=await this.$server.R("/report/memberrecord" as any, this.filter || {});        
+            this.records = resp.results;
+        }catch(err){
+            console.error(err);
+        }finally{
+            this.isBusy=false;
+        }
   }
 
-    async getAttendanceRecord(){   
-        
-        this.filter.DateStart.setHours(0,0,0,0);        
-        this.filter.DateEnd.setHours(23,59,59,999);
-        // let card_no = this.filter.CardNumber;
-        let start = this.filter.DateStart.toISOString();
-        let end = this.filter.DateEnd.toISOString();
-        let resp: any=await this.$server.R("/report/attendancerecord" as any, Object.assign(this.filter, {start, end}));
-        this.records=[];
-        let i=0;
-        while(i<resp.results.length){            
-            let item = resp.results[i];
-            let item2 = resp.results[i+1];
-            i+=2;
-            let member = this.members.find(x=>x.CardNumber && x.CardNumber == item.card_no);
-            if(!member)continue;
-            let newItem = Object.assign(item, member);
-            newItem.date_time_occurred_end = item2.date_time_occurred;
-            newItem.at_id_end = item2.at_id;
-            let timeStart = moment(newItem.date_time_occurred);
-            let timeEnd = moment(newItem.date_time_occurred_end);
-            newItem.StartTime = timeStart.format("HH:mm");
-            newItem.DateOccurred = timeStart.format("YYYY-MM-DD");
-            newItem.EndTime = timeEnd.format("HH:mm");
-            newItem.WorkTime = moment.utc(timeEnd.diff(timeStart)).format("H[h ]m[m]");
-            this.records.push(newItem);
-            
-        }
-        console.log("this.records", this.records);
-    }
 
     inf():string{
         return `interface {
@@ -161,7 +102,17 @@ export default class EmployeeReport extends Vue  {
              * @uiLabel - ${this._('w_Member_EnglishName1')}
              */
             LastName?: string;
-            
+            /**
+             * @uiColumnGroup - row4
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Member_ResignationDate1')}
+             */
+            ResignDate?:Date;
+            /**
+             * @uiColumnGroup - row4             
+             * @uiLabel - ${this._('w_Member_CompanyName1')}
+             */
+            CompanyName?:string;
             /**
              * @uiColumnGroup - area
              * @uiLabel - ${this._('w_Member_Department1')}
@@ -172,18 +123,7 @@ export default class EmployeeReport extends Vue  {
              * @uiLabel - ${this._('w_Member_CostCenter1')}
              */
             CostCenterName?:string;
-            /**
-             * @uiColumnGroup - datefilter
-             * @uiType - iv-form-date
-             * @uiLabel - ${this._('w_Report_DateStart')}
-             */
-            DateStart:Date;
-            /**
-             * @uiColumnGroup - datefilter
-             * @uiType - iv-form-date
-             * @uiLabel - ${this._('w_Report_DateEnd')}
-             */
-            DateEnd:Date;
+            
         }`;
             
     }
