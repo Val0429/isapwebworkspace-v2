@@ -27,7 +27,6 @@ import Datetime from "@/services/Datetime";
 import HighchartRepeatVisitor from "@/components/Reports/HighchartRepeatVisitor.vue";
 import {
     EAreaMode,
-    EDayXSiteX,
     EPageType,
     ESign,
     ETimeMode,
