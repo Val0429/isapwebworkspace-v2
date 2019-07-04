@@ -3,7 +3,7 @@
         <div v-show="pageStep === ePageStep.none">
 
             <!-- Morris -->
-            <highcharts-occupancy
+            <highcharts-repeat-visitor
                 :startDate="startDate"
                 :endDate="endDate"
                 :sites="sites"
@@ -11,7 +11,7 @@
                 :areaMode="areaMode"
                 :value="chartDatas"
             >
-            </highcharts-occupancy>
+            </highcharts-repeat-visitor>
             <!-- Morris -->
 
         </div>
@@ -24,7 +24,7 @@ import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
 import Datetime from "@/services/Datetime";
-import HighchartOccupancy from "@/components/Reports/HighchartOccupancy.vue";
+import HighchartRepeatVisitor from "@/components/Reports/HighchartRepeatVisitor.vue";
 import {
     EAreaMode,
     EDayXSiteX,
@@ -47,7 +47,7 @@ enum EPageStep {
 @Component({
     components: {}
 })
-export default class ReportOccupancy extends Vue {
+export default class ReportRepeatVisitor extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 

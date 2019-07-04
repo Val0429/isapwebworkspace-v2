@@ -10,11 +10,9 @@ interface IBootstrapSelectItem {
     text: string;
 }
 
-interface IDayRange {
-    startDay: string;
-    endDay: string;
-    startDate: string;
-    endDate: string;
+interface IArea {
+    objectId: string;
+    name: string;
 }
 
 interface ISite {
@@ -23,24 +21,20 @@ interface ISite {
     officeHour: IDayRange[];
 }
 
-interface IDate {
-    date: Date;
-    dateStart?: Date;
-    dateEnd?: Date;
-    dateString?: string;
-    dateStartString?: string;
-    dateEndString?: string;
-}
-
-interface IDatetimeGroup {
-    start: Date;
-    end: Date;
-    categories: string;
+interface ISiteAreas extends ISite {
+    areas: IArea[];
 }
 
 interface ISiteOfficeHourItem {
     startHour: number;
     endHour: number;
+}
+
+interface IDayRange {
+    startDay: string;
+    endDay: string;
+    startDate: string;
+    endDate: string;
 }
 
 interface IDemographicMount {
@@ -51,70 +45,57 @@ interface IDemographicMount {
     gender: boolean;
 }
 
-interface IChartTrafficData {
+interface IChart {
     date: Date;
     siteObjectId: string;
-    traffic: number;
-    revenue: number;
     temperatureMin: number;
     temperatureMax: number;
-    transaction: number;
     weather: EWeather;
 
-    // not outside
+    siteName?: string;
+    timeMode?: ETimeMode;
+    areaMode?: EAreaMode;
+    i18n?: any;
+    temperature?: number;
+    weatherIcon?: string;
+    weekNumber?: number;
+    quarterNumber?: number;
+    dateStart?: Date;
+    dateEnd?: Date;
+    timeString?: string;
+    dateString?: string;
+    dateStartString?: string;
+    dateEndString?: string;
+}
+
+interface IChartTrafficData extends IChart {
+    traffic: number;
+    revenue: number;
+    transaction: number;
+
     conversion?: number;
     asp?: number;
     trafficAVG?: number;
-
-    // every report
-    siteName?: string;
-    timeMode?: ETimeMode;
-    areaMode?: EAreaMode;
-    i18n?: any;
-    temperature?: number;
-    weatherIcon?: string;
-    weekNumber?: number;
-    quarterNumber?: number;
-    dateStart?: Date;
-    dateEnd?: Date;
-    timeString?: string;
-    dateString?: string;
-    dateStartString?: string;
-    dateEndString?: string;
 }
 
-interface IChartDemographicData {
-    date: Date;
-    siteObjectId: string;
+interface IChartDemographicData extends IChart {
     ageRange: EAgeRange;
     maleCount: number;
     femaleCount: number;
-    temperatureMin: number;
-    temperatureMax: number;
-    weather: EWeather;
 
-    // not outside
     maleCountPercent?: number;
     femaleCountPercent?: number;
-
-    // every report
-    siteName?: string;
-    timeMode?: ETimeMode;
-    areaMode?: EAreaMode;
-    i18n?: any;
-    temperature?: number;
-    weatherIcon?: string;
-    weekNumber?: number;
-    quarterNumber?: number;
-    dateStart?: Date;
-    dateEnd?: Date;
-    timeString?: string;
-    dateString?: string;
-    dateStartString?: string;
-    dateEndString?: string;
 }
 
-export { ISite, IDate, ISiteOfficeHourItem, IDatetimeGroup, IDayRange };
+interface IChartOccupancyData extends IChart {
+    areaId: string;
+    occupancy: number;
+
+    areaName?: string;
+}
+
 export { IValSelectItem, IBootstrapSelectItem };
+export { ISite, IArea, ISiteAreas, ISiteOfficeHourItem };
+export { IDayRange };
 export { IDemographicMount };
-export { IChartTrafficData, IChartDemographicData };
+export { IChartTrafficData, IChartDemographicData, IChartOccupancyData };

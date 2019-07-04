@@ -250,8 +250,8 @@ export default class LangObject implements ILang {
     w_Navigation_Report_Demographic = 'Demographic';
     w_Navigation_Report_Heatmap = 'Heatmap';
     w_Navigation_Report_Occupancy = 'Occupancy';
-    w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_RepeatVisitor = 'Repeat Visitor';
+    w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_Campaign = 'Campaign';
 
     // 401
@@ -807,6 +807,10 @@ export default class LangObject implements ILang {
     w_ReportDemographic_AgeM41_50 = '41-50';
     w_ReportDemographic_AgeM51_60 = '51-60';
     w_ReportDemographic_AgeUpp61 = '>61';
+
+    // Report Occupancy
+    w_ReportOccupancy_Occupancy = 'Occupancy';
+    w_ReportOccupancy_OccupancyAVG = 'AVG Occupancy';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';

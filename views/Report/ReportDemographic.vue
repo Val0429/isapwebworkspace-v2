@@ -16,14 +16,17 @@
 
                 <template #toolbox>
                     <!-- Ben -->
-                    <iv-toolbox-export-excel size="lg"/>
-                    <iv-toolbox-export-csv size="lg"/>
+                    <iv-toolbox-export-excel size="lg" />
+                    <iv-toolbox-export-csv size="lg" />
 
                     <!-- Morris -->
-                    <iv-toolbox-export-pdf size="lg"/>
+                    <iv-toolbox-export-pdf size="lg" />
 
                     <!-- Tina -->
-                    <iv-toolbox-send-mail size="lg" @click="modalShow = !modalShow"/>
+                    <iv-toolbox-send-mail
+                        size="lg"
+                        @click="modalShow = !modalShow"
+                    />
                 </template>
 
                 <!-- Tina -->
@@ -97,7 +100,7 @@ import {
     EAgeRange
 } from "@/components/Reports";
 import HighchartsDemographic from "@/components/Reports/HighchartsDemographic.vue";
-import WeatherService from '@/components/Reports/models/WeatherService';
+import WeatherService from "@/components/Reports/models/WeatherService";
 
 enum EPageStep {
     none = "none"
@@ -168,11 +171,8 @@ export default class ReportDemographic extends Vue {
         areaId: "",
         groupId: "",
         deviceId: "",
-        type: "",
+        type: ""
     };
-
-    // chart 相關
-    trafficChartData: any = [];
 
     // 整理 showReportData 相關
     areaSummaryFilter: any = [];
@@ -184,12 +184,10 @@ export default class ReportDemographic extends Vue {
     // send user 相關
     userSelectItem: any = {};
 
-
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
-
     created() {
-        this.initChartDeveloper();
+        // this.initChartDeveloper();
     }
 
     mounted() {
@@ -288,12 +286,12 @@ export default class ReportDemographic extends Vue {
                 let tempChartData: IChartDemographicData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    ageRange: ageRange,
-                    maleCount: Math.floor(Math.random() * 300),
-                    femaleCount: Math.floor(Math.random() * 300),
                     temperatureMin: iNumber,
                     temperatureMax: iNumber,
-                    weather: weather
+                    weather: weather,
+                    ageRange: ageRange,
+                    maleCount: Math.floor(Math.random() * 300),
+                    femaleCount: Math.floor(Math.random() * 300)
                 };
 
                 if (!isNaN(tempChartData.date.getTime())) {
@@ -311,7 +309,7 @@ export default class ReportDemographic extends Vue {
             areaId: "all",
             groupId: "all",
             deviceId: "all",
-            type: "hour",
+            type: "hour"
         };
     }
 
@@ -757,7 +755,6 @@ export default class ReportDemographic extends Vue {
     }
 
     async initSelectItemUsers() {
-
         let tempUserSelectItem = {};
 
         await this.$server
@@ -766,8 +763,9 @@ export default class ReportDemographic extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
-                        tempUserSelectItem[returnValue.objectId] =
-                            `${returnValue.username} - ${returnValue.email}`;
+                        tempUserSelectItem[
+                            returnValue.objectId
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -786,7 +784,7 @@ export default class ReportDemographic extends Vue {
         this.userData = data;
         console.log("this.userData - ", this.userData);
 
-        await this.initSelectItemUsers()
+        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
@@ -800,11 +798,11 @@ export default class ReportDemographic extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
-            type: "",
+            type: ""
         };
 
         await this.$server
-            .C("/report/people-counting/summary", filterData)
+            .C("/report/demographic/summary", filterData)
             .then((response: any) => {
                 if (response !== undefined) {
                     this.responseData = response;
@@ -832,8 +830,8 @@ export default class ReportDemographic extends Vue {
             for (const detail of this.officeHourItemDetail) {
                 for (const officeHourSiteId of detail.sites) {
                     if (filterSiteId === officeHourSiteId.objectId) {
-                        console.log('filterSiteId - ', filterSiteId);
-                        console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
+                        // console.log('filterSiteId - ', filterSiteId);
+                        // console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
                         let tempOfficeHours = [];
                         for (const dayRangesValue of detail.dayRanges) {
                             let tempOfficeHour: any = {};
@@ -900,7 +898,7 @@ export default class ReportDemographic extends Vue {
             areaId: "all",
             groupId: "all",
             deviceId: "all",
-            type: this.filterData.type,
+            type: this.filterData.type
         };
 
         console.log(" - ", this.sites);
@@ -922,9 +920,28 @@ export default class ReportDemographic extends Vue {
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
+    }
+
+    switchAgeRange(index) {
+        switch (index) {
+            case "0":
+                return EAgeRange.lower20;
+            case "1":
+                return EAgeRange.m21_30;
+            case "2":
+                return EAgeRange.m31_40;
+            case "3":
+                return EAgeRange.m41_50;
+            case "4":
+                return EAgeRange.m51_60;
+            case "5":
+                return EAgeRange.upper61;
+            default:
+                return EAgeRange.none;
+        }
     }
 
     sortOutChartData(array: any) {
@@ -943,7 +960,9 @@ export default class ReportDemographic extends Vue {
                 temperatureMax: 0,
                 weather: EWeather.none
             };
+            console.log("summary - ", summary);
 
+            // 判斷date, site 兩個是否相同
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
                 if (
@@ -960,29 +979,7 @@ export default class ReportDemographic extends Vue {
                 }
             }
 
-            if (this.inputFormData.inOrOut === EType.in) {
-                tempChartData.traffic += summary.in;
-            } else if (this.inputFormData.inOrOut === EType.out) {
-                tempChartData.traffic += summary.out;
-            }
-
             if (!haveSummary) {
-                // 取得revenue、transaction資料
-                for (const saleRecord of this.responseData.salesRecords) {
-                    if (
-                        this.checkDateAndSite(
-                            tempChartData.date,
-                            saleRecord.date,
-                            tempChartData.siteObjectId,
-                            saleRecord.site.objectId
-                        )
-                    ) {
-                        tempChartData.revenue = saleRecord.revenue;
-                        tempChartData.transaction = saleRecord.transaction;
-                        break;
-                    }
-                }
-
                 // 取得weather、temperatureMin、temperatureMax
                 for (const weather of this.responseData.weathers) {
                     if (
@@ -993,8 +990,10 @@ export default class ReportDemographic extends Vue {
                             weather.site.objectId
                         )
                     ) {
-                        console.log(' - ', weather.icon);
-                        tempChartData.weather = WeatherService.WeatherIcon(weather.icon);
+                        console.log(" - ", weather.icon);
+                        tempChartData.weather = WeatherService.WeatherIcon(
+                            weather.icon
+                        );
                         tempChartData.temperatureMin = weather.temperatureMin;
                         tempChartData.temperatureMax = weather.temperatureMax;
                         break;
@@ -1002,10 +1001,38 @@ export default class ReportDemographic extends Vue {
                 }
             }
 
-            tempChartDatas.push(tempChartData);
+            //跑maleRange、 femaleRange
+            for (let index = 0; index < 6; index++) {
+                if (summary.maleRanges[index] == undefined) {
+                    break;
+                }
+
+                if (summary.femaleRanges[index] == undefined) {
+                    break;
+                }
+
+                let tempData = JSON.parse(JSON.stringify(tempChartData));
+                tempData.ageRange = this.switchAgeRange(index.toString());
+                tempData.maleCount = summary.maleRanges[index];
+                tempData.femaleCount = summary.femaleRanges[index];
+
+                // console.log(
+                //     index,
+                //     " //分開跑maleRange",
+                //     JSON.parse(JSON.stringify(tempChartDatas)),
+                //     JSON.parse(JSON.stringify(tempChartData)),
+                //     tempData.ageRange
+                // );
+
+                tempChartDatas.push(tempData);
+            }
         }
 
+        console.log("tempChartDatas", tempChartDatas);
+
         this.chartDatas = tempChartDatas;
+
+        console.log(" - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {

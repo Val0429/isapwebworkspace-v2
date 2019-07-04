@@ -77,8 +77,8 @@ import ReportDwellTime from './Report/ReportDwellTime.vue';
 import ReportDemographic from './Report/ReportDemographic.vue';
 import ReportHeatmap from './Report/ReportHeatmap.vue';
 import ReportOccupancy from './Report/ReportOccupancy.vue';
+import ReportRepeatVisitor from './Report/ReportRepeatVisitor.vue';
 import ReportVIPTracking from './Report/ReportVIPTracking.vue';
-import RepeatVisitor from './Report/RepeatVisitor.vue';
 import ReportCampaign from './Report/ReportCampaign.vue';
 
 // ============================================================= //
@@ -130,7 +130,7 @@ $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", 
 $({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-close' })(ReportHeatmap);
 $({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-close' })(ReportOccupancy);
 $({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-close' })(ReportVIPTracking);
-$({ path: '/reports/report_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-close' })(RepeatVisitor);
+$({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-close' })(ReportRepeatVisitor);
 $({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-close' })(ReportCampaign);
 
 // Users
