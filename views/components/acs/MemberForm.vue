@@ -2,6 +2,25 @@
     <div class="animated fadeIn">
         <iv-card
             v-show="pageStep === ePageStep.list"
+            :label="_('w_Filter')"
+        >
+            <iv-form 
+                    ref="filterForm"
+                    class="col-md-9"
+                    @mounted="doMounted"
+                    :interface="filterInterface()"            
+                    :value="getParams"                            
+                    @submit="onFilter($event)">            
+                    </iv-form> 
+                <template v-if="isMounted" >            
+                    <div class="float-right">
+                        <b-button class="btn-filter" size="lg" v-bind="$refs.filterForm.submitBindings.$attrs" v-on="$refs.filterForm.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                        <b-button class="btn-filter" size="lg" v-bind="$refs.filterForm.resetBindings.$attrs" v-on="$refs.filterForm.resetBindings.$listeners" @click="getParams={}">{{ _("wb_Reset") }}</b-button>                
+                    </div>
+                </template>
+        </iv-card>
+        <iv-card
+            v-show="pageStep === ePageStep.list"
             :label="_('w_Member_List')"
         >
             <template #toolbox>
@@ -22,10 +41,13 @@
                 <iv-toolbox-divider />
                 <iv-toolbox-add @click="pageToAdd(ePageStep.add)" /> </template>
 
+                
+            
             <iv-table
                 ref="listTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
+                :params="getParams"
                 :server="{ path: '/acs/member' }"
                 @selected="selectedItem($event)"
             >
@@ -3215,6 +3237,89 @@ export default class MemberForm extends Vue {
 
     IViewForm() {
         return `interface{}`;
+    }
+    filterInterface():string{
+        return `interface {
+            /**
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
+             */
+            EmployeeNumber?: string;
+            /**
+             * @uiColumnGroup - row1
+             * @uiLabel - ${this._('w_Member_CardNumber1')}
+             */
+            CardNumber?: string;
+             /**
+             * @uiColumnGroup - row2
+             * @uiLabel - ${this._('w_Member_CardType1')}
+             */
+            CardType?: string;
+            /**
+             * @uiColumnGroup - row2
+             * @uiLabel - ${this._('w_Member_ChineseName1')}
+             */
+            LastName?: string;
+            /**
+             * @uiColumnGroup - row3
+             * @uiLabel - ${this._('w_Member_EnglishName1')}
+             */
+            FirstName?: string;
+            /**
+             * @uiColumnGroup - row3
+             * @uiLabel - ${this._('w_Member_Department1')}
+             */
+            DepartmentName?:string;
+            /**
+             * @uiColumnGroup - row4
+             * @uiLabel - ${this._('w_Member_CostCenter1')}
+             */
+            CostCenterName?:string;
+            /**
+             * @uiColumnGroup - row4
+             * @uiLabel - ${this._('w_Member_WorkArea1')}
+             */
+            WorkAreaName?:string;
+            /**
+             * @uiColumnGroup - datefilter
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Report_DateStart')}
+             */
+            StartDateStart?:Date;
+            /**
+             * @uiColumnGroup - datefilter
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Interval')}
+             */
+            StartDateEnd?:Date;
+            /**
+             * @uiColumnGroup - datefilter
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Report_DateEnd')}
+             */
+            EndDateStart?:Date;
+            /**
+             * @uiColumnGroup - datefilter
+             * @uiType - iv-form-date
+             * @uiLabel - ${this._('w_Interval')}
+             */
+            EndDateEnd?:Date;
+        }`;
+            
+    }
+    private isMounted: boolean = false;
+    getParams:any={};
+    private doMounted() {
+        this.isMounted = true;
+    }
+    onFilter($event){
+        if($event.StartDateStart)$event.start1=$event.StartDateStart.toISOString();
+        if($event.StartDateEnd)$event.end1=$event.StartDateEnd.toISOString();
+        if($event.EndDateStart)$event.start2=$event.EndDateStart.toISOString();
+        if($event.EndDateEnd)$event.end2=$event.EndDateEnd.toISOString();
+            
+        
+        this.getParams=$event;        
     }
 }
 </script>
