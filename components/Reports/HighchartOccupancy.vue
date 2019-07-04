@@ -158,16 +158,16 @@ export class HighchartsOccupancy extends Vue {
                 break;
         }
 
-        // console.log(
-        //     "chart prop: ",
-        //     this.chartMode,
-        //     this.startDate,
-        //     this.endDate,
-        //     this.timeMode,
-        //     this.areaMode,
-        //     this.sites,
-        //     this.value
-        // );
+        console.log(
+            "chart prop: ",
+            this.chartMode,
+            this.startDate,
+            this.endDate,
+            this.timeMode,
+            this.areaMode,
+            this.sites,
+            this.value
+        );
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
