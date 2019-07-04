@@ -17,14 +17,17 @@ import {EAreaMode} from "../../components/Reports";
 
                 <template #toolbox>
                     <!-- Ben -->
-                    <iv-toolbox-export-excel size="lg"/>
-                    <iv-toolbox-export-csv size="lg"/>
+                    <iv-toolbox-export-excel size="lg" />
+                    <iv-toolbox-export-csv size="lg" />
 
                     <!-- Morris -->
-                    <iv-toolbox-export-pdf size="lg"/>
+                    <iv-toolbox-export-pdf size="lg" />
 
                     <!-- Tina -->
-                    <iv-toolbox-send-mail size="lg" @click="modalShow = !modalShow"/>
+                    <iv-toolbox-send-mail
+                        size="lg"
+                        @click="modalShow = !modalShow"
+                    />
                 </template>
 
                 <!-- Tina -->
@@ -58,7 +61,6 @@ import {EAreaMode} from "../../components/Reports";
                     :type="dTimeMode"
                     :siteIds="pSiteIds"
                     :tagIds="tags"
-                    :weather="dWeather"
                     :pageType="dPageType"
                 >
                 </anlysis-dashboard>
@@ -227,12 +229,10 @@ export default class ReportTraffic extends Vue {
     // send user 相關
     userSelectItem: any = {};
 
-
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     //ReportDashboard 相關
     dPageType: EPageType = EPageType.none;
-    dWeather: EWeather = EWeather.none;
     dTimeMode: ETimeMode = ETimeMode.none;
 
     //PickTimeRange 相關
@@ -259,26 +259,16 @@ export default class ReportTraffic extends Vue {
         await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
-
-        // Ben
-        this.initDashboardData();
-        this.initPeakTimeRange();
-        this.initReportTable();
     }
 
     // Ben //
     initDashboardData() {
         this.dTimeMode = ETimeMode.day;
         this.dPageType = EPageType.traffic;
-        this.dWeather =  EWeather.rain;
-
-
-
         setTimeout(() => {
-        let anlysisDashboard: any = this.$refs.anlysisDashboard;
-        console.log('initDashboardData',this.filterData);
-        anlysisDashboard.initData();
-          }, 300);
+            let anlysisDashboard: any = this.$refs.anlysisDashboard;
+            anlysisDashboard.initData();
+        }, 300);
     }
 
     initPeakTimeRange() {
@@ -1064,7 +1054,6 @@ export default class ReportTraffic extends Vue {
     }
 
     async initSelectItemUsers() {
-
         let tempUserSelectItem = {};
 
         await this.$server
@@ -1073,8 +1062,9 @@ export default class ReportTraffic extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
-                        tempUserSelectItem[returnValue.objectId] =
-                            `${returnValue.username} - ${returnValue.email}`;
+                        tempUserSelectItem[returnValue.objectId] = `${
+                            returnValue.username
+                        } - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -1093,7 +1083,7 @@ export default class ReportTraffic extends Vue {
         this.userData = data;
         console.log("this.userData - ", this.userData);
 
-        await this.initSelectItemUsers()
+        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
@@ -1135,13 +1125,16 @@ export default class ReportTraffic extends Vue {
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
-        
+
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
                 for (const officeHourSiteId of detail.sites) {
                     if (filterSiteId === officeHourSiteId.objectId) {
-                        console.log('filterSiteId - ', filterSiteId);
-                        console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
+                        console.log("filterSiteId - ", filterSiteId);
+                        console.log(
+                            "officeHourSiteId.objectId - ",
+                            officeHourSiteId.objectId
+                        );
                         let tempOfficeHours = [];
                         for (const dayRangesValue of detail.dayRanges) {
                             let tempOfficeHour: any = {};
@@ -1204,6 +1197,10 @@ export default class ReportTraffic extends Vue {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
+        // Ben
+        this.initDashboardData();
+        this.initPeakTimeRange();
+        this.initReportTable();
 
         this.inputFormData = {
             areaId: "all",
@@ -1303,8 +1300,10 @@ export default class ReportTraffic extends Vue {
                             weather.site.objectId
                         )
                     ) {
-                        console.log(' - ', weather.icon);
-                        tempChartData.weather = WeatherService.WeatherIcon(weather.icon);
+                        console.log(" - ", weather.icon);
+                        tempChartData.weather = WeatherService.WeatherIcon(
+                            weather.icon
+                        );
                         tempChartData.temperatureMin = weather.temperatureMin;
                         tempChartData.temperatureMax = weather.temperatureMax;
                         break;
