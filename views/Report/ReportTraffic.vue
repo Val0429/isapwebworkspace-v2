@@ -18,15 +18,12 @@ import {EAreaMode} from "../../components/Reports";
                 <template #toolbox>
 
                     <!-- Ben -->
-                    <iv-toolbox-export-excel size="lg"/>
-                    <iv-toolbox-export-csv size="lg"/>
-
-                    <!-- Morris -->
-                    <iv-toolbox-export-pdf size="lg"/>
-
+                    <iv-toolbox-export-excel size="lg" />
+                    <iv-toolbox-export-csv size="lg" />
+                    <iv-toolbox-export-pdf size="lg" />
 
                     <!-- Tina -->
-                    <iv-toolbox-send-mail size="lg"/>
+                    <iv-toolbox-send-mail size="lg" />
                 </template>
 
                 <!-- Tina -->
@@ -114,9 +111,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import HighChartsService from "@../../../components/Reports/models/HighChartsService";
 
 import Datetime from "@/services/Datetime";
-// Morris
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
-// Ben
 import {
     EAreaMode,
     EDayXSiteX,
@@ -223,7 +218,6 @@ export default class ReportTraffic extends Vue {
     // send user 相關
     userSelectItem: any = {};
 
-
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     //ReportDashboard 相關
@@ -232,7 +226,7 @@ export default class ReportTraffic extends Vue {
     dTimeMode: ETimeMode = ETimeMode.none;
 
     //PickTimeRange 相關
-    pSiteIds = []
+    pSiteIds = [];
     pData: IPeckTimeRange[] = [];
     pDayXxSiteX: EDayXSiteX = EDayXSiteX.none;
     siteItem: ISiteItems[] = [];
@@ -267,15 +261,13 @@ export default class ReportTraffic extends Vue {
     initDashboardData() {
         this.dTimeMode = ETimeMode.day;
         this.dPageType = EPageType.traffic;
-        this.dWeather =  EWeather.rain;
-
-
+        this.dWeather = EWeather.rain;
 
         setTimeout(() => {
-        let anlysisDashboard: any = this.$refs.anlysisDashboard;
-        console.log('initDashboardData',this.filterData);
-        anlysisDashboard.initData();
-          }, 300);
+            let anlysisDashboard: any = this.$refs.anlysisDashboard;
+            console.log("initDashboardData", this.filterData);
+            anlysisDashboard.initData();
+        }, 300);
     }
 
     initPeakTimeRange() {
@@ -590,18 +582,17 @@ export default class ReportTraffic extends Vue {
                 let tempDate = new Date(
                     `2019-07-${iString10}T${iString10}:00:00.000Z`
                 );
-                let trafficChartData: IChartTrafficData = {
+                let tempChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
+                    weather: weather,
                     traffic: Math.floor(Math.random() * 500),
                     revenue: Math.floor(Math.random() * 1000),
                     transaction: Math.floor(Math.random() * 50),
-                    temperature: iNumber,
-                    temperatureMin: iNumber,
-                    temperatureMax: iNumber,
-                    weather: weather
                 };
-                this.chartDatas.push(trafficChartData);
+                this.chartDatas.push(tempChartData);
             }
         }
     }
@@ -1078,7 +1069,6 @@ export default class ReportTraffic extends Vue {
     }
 
     async initSelectItemUsers() {
-
         let tempUserSelectItem = {};
 
         await this.$server
@@ -1087,8 +1077,9 @@ export default class ReportTraffic extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
-                        tempUserSelectItem[returnValue.objectId] =
-                            `${returnValue.username} - ${returnValue.email}`;
+                        tempUserSelectItem[
+                            returnValue.objectId
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -1106,7 +1097,7 @@ export default class ReportTraffic extends Vue {
         this.userData = data;
         console.log("this.userData - ", this.userData);
 
-        await this.initSelectItemUsers()
+        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
@@ -1149,14 +1140,17 @@ export default class ReportTraffic extends Vue {
         let tempISite: any = {};
         this.sites = [];
 
-        console.log('this.filterData.siteIds - ', this.filterData.siteIds);
+        console.log("this.filterData.siteIds - ", this.filterData.siteIds);
 
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
                 for (const officeHourSiteId of detail.sites) {
                     if (filterSiteId === officeHourSiteId.objectId) {
-                        console.log('filterSiteId - ', filterSiteId);
-                        console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
+                        console.log("filterSiteId - ", filterSiteId);
+                        console.log(
+                            "officeHourSiteId.objectId - ",
+                            officeHourSiteId.objectId
+                        );
                         let tempOfficeHours = [];
                         for (const dayRangesValue of detail.dayRanges) {
                             let tempOfficeHour: any = {};
@@ -1318,7 +1312,7 @@ export default class ReportTraffic extends Vue {
                             weather.site.objectId
                         )
                     ) {
-                        console.log(' - ', weather.icon);
+                        console.log(" - ", weather.icon);
                         tempChartData.weather = this.weatherIcon(weather.icon);
                         tempChartData.temperatureMin = weather.temperatureMin;
                         tempChartData.temperatureMax = weather.temperatureMax;

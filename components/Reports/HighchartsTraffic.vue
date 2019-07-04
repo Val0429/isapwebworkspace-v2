@@ -42,8 +42,6 @@ import {
     EWeather
 } from "./models/EHighCharts";
 import {
-    IDate,
-    IDatetimeGroup,
     ISite,
     IChartTrafficData,
     ISiteOfficeHourItem
@@ -130,14 +128,6 @@ export class HighchartsTraffic extends Vue {
             this.endDate,
             this.sites
         );
-        console.log(
-            "chart : ",
-            this.chartMode,
-            this.startDate,
-            this.endDate,
-            this.sites,
-            this.value
-        );
         if (isNaN(this.startDate.getTime())) {
             this.errorMessage = this._("w_Report_ErrorDateStart");
             return false;
@@ -167,6 +157,17 @@ export class HighchartsTraffic extends Vue {
             default:
                 break;
         }
+
+        console.log(
+            "chart prop: ",
+            this.chartMode,
+            this.startDate,
+            this.endDate,
+            this.timeMode,
+            this.areaMode,
+            this.sites,
+            this.value
+        );
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
@@ -1129,7 +1130,7 @@ export class HighchartsTraffic extends Vue {
                         tempSiteValue.traffic += value.traffic;
                         tempSiteValue.revenue += value.revenue;
                         tempSiteValue.transaction += value.transaction;
-                        tempSiteValue.temperature += value.temperature;
+                        tempSiteValue.temperature = value.temperature;
                         tempSiteValue.weather = value.weather;
                         tempSiteValue.weatherIcon = HighChartsService.weatherIcon(
                             value.weather
@@ -1286,8 +1287,6 @@ export class HighchartsTraffic extends Vue {
                             let newValue: any = JSON.parse(valueJson);
 
                             for (let site of newValue.sites) {
-                                console.log(site);
-
                                 if (site.siteObjectId == siteId) {
                                     switch (newValue.timeMode) {
                                         case ETimeMode.year:

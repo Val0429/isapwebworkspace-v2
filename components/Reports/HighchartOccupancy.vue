@@ -1,89 +1,21 @@
 <template>
     <div class="chart">
-
         <b-form-group v-if="errorMessage == ''">
-            <b-row>
-                <b-col cols="12">
-                    <highcharts
-                        ref="chartGenderAge"
-                        v-if="mountChart.genderAge"
-                        :options="chartOptionsGenderAge"
-                    ></highcharts>
-                </b-col>
-            </b-row>
-
-            <b-row>
-                <b-col cols='12'>
-                    <b-form-group :label="'Demographic by Gender'"></b-form-group>
-                    <b-form-radio-group
-                        v-if="chartMode == eChartMode.siteXDayX"
-                        v-model="selection.gender"
-                        class="h-25 click_button col-md-1"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="selectItem.gender"
-                        @change="changeGender"
-                    ></b-form-radio-group>
-                    <highcharts
-                        ref="chartGenderTime"
-                        v-if="mountChart.genderTime"
-                        :options="chartOptionsGenderTime"
-                    ></highcharts>
-                </b-col>
-            </b-row>
-
-            <b-row>
-                <b-col cols="12">
-                    <b-form-group :label="'Demographic by Age'"></b-form-group>
-                </b-col>
-
-                <b-col cols="6">
-                    <highcharts
-                        ref="chartAge"
-                        v-if="mountChart.age"
-                        :options="chartOptionsAge"
-                    ></highcharts>
-                </b-col>
-                <b-col cols="6">
-                    <b-row>
-                        <b-col cols="12">
-                            <iv-form-selection
-                                class='col-md-12'
-                                :value="selection.ageRange"
-                                :options="selectItem.ageRange"
-                                @input="changeAge"
-                            ></iv-form-selection>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col cols="6">
-                            <highcharts
-                                ref="chartDwellTime"
-                                v-if="mountChart.dwellTime"
-                                :options="chartOptionsDwellTime"
-                            ></highcharts>
-                        </b-col>
-                        <b-col cols="6">
-                            <highcharts
-                                ref="chartGender"
-                                v-if="mountChart.gender"
-                                :options="chartOptionsGender"
-                            ></highcharts>
-                        </b-col>
-                    </b-row>
-                </b-col>
-            </b-row>
+            <highcharts
+                ref="chart"
+                v-if="mountChart"
+                :options="chartOptions"
+            ></highcharts>
         </b-form-group>
 
         <b-form-group
             v-if="errorMessage != ''"
+            class="chart-error-message"
             :label="errorMessage"
         >
         </b-form-group>
     </div>
 </template>
-
 
 <script lang="ts">
 import {
@@ -107,17 +39,12 @@ import {
     ETimeMode,
     EAreaMode,
     EChartMode,
-    EWeather,
-    EAgeRange,
-    EGender
+    EWeather
 } from "./models/EHighCharts";
 import {
-    IValSelectItem,
-    IBootstrapSelectItem,
-    ISite,
-    IDemographicMount,
-    ISiteOfficeHourItem,
-    IChartDemographicData
+    ISiteAreas,
+    IChartOccupancyData,
+    ISiteOfficeHourItem
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighChartsService from "./models/HighChartsService";
@@ -125,7 +52,7 @@ import HighChartsService from "./models/HighChartsService";
 @Component({
     components: {}
 })
-export class HighchartsDemographic extends Vue {
+export class HighchartsOccupancy extends Vue {
     // Prop
     @Prop({
         type: Date,
@@ -165,7 +92,7 @@ export class HighchartsDemographic extends Vue {
             return [];
         }
     })
-    sites: ISite[];
+    sites: ISiteAreas[];
 
     @Prop({
         type: Array,
@@ -173,107 +100,29 @@ export class HighchartsDemographic extends Vue {
             return [];
         }
     })
-    value: IChartDemographicData[];
+    value: IChartOccupancyData[];
+
+    errorMessage: string = "";
+    mountChart: boolean = false;
+    chartMode: EChartMode = EChartMode.none;
+    chartOptions: any = {};
 
     @Watch("value", { deep: true })
     private onValueChanged(
-        newval: IChartDemographicData[],
-        oldval: IChartDemographicData[]
+        newval: IChartOccupancyData[],
+        IChartOccupancyData: IChartOccupancyData[]
     ) {
         this.start();
     }
 
-    eChartMode = EChartMode;
-    errorMessage: string = "";
-    chartMode: EChartMode = EChartMode.none;
-
-    mountChart: IDemographicMount = {
-        genderAge: false,
-        genderTime: false,
-        age: false,
-        dwellTime: false,
-        gender: false
-    };
-
-    selection: { gender: EGender; ageRange: EAgeRange } = {
-        gender: EGender.male,
-        ageRange: EAgeRange.all
-    };
-    selectItem: {
-        gender: IBootstrapSelectItem[];
-        ageRange: IValSelectItem[];
-    } = {
-        gender: [],
-        ageRange: []
-    };
-
-    // chart options
-    chartOptionsGenderAge: any = {};
-    chartOptionsGenderTime: any = {};
-    chartOptionsAge: any = {};
-    chartOptionsDwellTime: any = {};
-    chartOptionsGender: any = {};
-
     created() {
-        this.initSelectItem();
         this.start();
     }
 
     mounted() {}
 
-    initSelectItem() {
-        this.selectItem.gender = [
-            {
-                value: EGender.male,
-                text: this._("w_ReportDemographic_GenderMale")
-            },
-            {
-                value: EGender.female,
-                text: this._("w_ReportDemographic_GenderFemale")
-            }
-        ];
-        this.selectItem.ageRange = [
-            {
-                id: EAgeRange.all,
-                text: this._("w_ReportDemographic_AgeAll")
-            },
-            {
-                id: EAgeRange.lower20,
-                text: this._("w_ReportDemographic_AgeLow20")
-            },
-            {
-                id: EAgeRange.m21_30,
-                text: this._("w_ReportDemographic_AgeM21_30")
-            },
-            {
-                id: EAgeRange.m31_40,
-                text: this._("w_ReportDemographic_AgeM31_40")
-            },
-            {
-                id: EAgeRange.m41_50,
-                text: this._("w_ReportDemographic_AgeM41_50")
-            },
-            {
-                id: EAgeRange.m51_60,
-                text: this._("w_ReportDemographic_AgeM51_60")
-            },
-            {
-                id: EAgeRange.upper61,
-                text: this._("w_ReportDemographic_AgeUpp61")
-            }
-        ];
-    }
-
     start() {
         this.errorMessage = "";
-        this.mountChart = {
-            genderAge: false,
-            genderTime: false,
-            age: false,
-            dwellTime: false,
-            gender: false
-        };
-
         this.chartMode = HighChartsService.chartMode(
             this.startDate,
             this.endDate,
@@ -292,12 +141,6 @@ export class HighchartsDemographic extends Vue {
             return false;
         }
 
-        // set same chart
-        this.drawChartGenderAge();
-        this.drawChartAge();
-        this.drawChartDwellTime();
-        this.drawChartGender();
-
         switch (this.chartMode) {
             case EChartMode.site1Day1:
                 this.initSite1Day1();
@@ -315,38 +158,28 @@ export class HighchartsDemographic extends Vue {
                 break;
         }
 
-         console.log(
-            "chart prop: ",
-            this.chartMode,
-            this.startDate,
-            this.endDate,
-            this.timeMode,
-            this.areaMode,
-            this.sites,
-            this.value
-        );
+        // console.log(
+        //     "chart prop: ",
+        //     this.chartMode,
+        //     this.startDate,
+        //     this.endDate,
+        //     this.timeMode,
+        //     this.areaMode,
+        //     this.sites,
+        //     this.value
+        // );
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
 
     initSite1Day1() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartOccupancyData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let tempHourStrings: string[] = [];
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
-        let tempSeries: any = [
-            {
-                name: this._("w_ReportDemographic_GenderMale"),
-                data: []
-            },
-            {
-                name: this._("w_ReportDemographic_GenderFemale"),
-                data: []
-            }
-        ];
-        let tempTotalCount: number = 0;
+        let tempResult: IChartOccupancyData[] = [];
+        let tempSeries: any = [];
 
         //// office hour group ////
         if (this.chartMode != EChartMode.site1Day1) {
@@ -361,75 +194,75 @@ export class HighchartsDemographic extends Vue {
             weekDay,
             this.sites[0].officeHour
         );
-
         for (let i = officeHour.startHour; i <= officeHour.endHour; i++) {
             let hourString = i < 10 ? `0${i.toString()}` : i.toString();
             tempHourStrings.push(`${hourString}:00`);
         }
         //// office hour group ////
 
-        for (let categorie of tempHourStrings) {
+        // set areas
+        for (let site of this.sites) {
+            for (let area of site.areas) {
+                tempSeries.push({
+                    areaId: area.objectId,
+                    areaName: area.name,
+                    data: []
+                });
+            }
+        }
+
+        // anysisly result
+        for (let i in tempHourStrings) {
+            let categorie = tempHourStrings[i];
             let haveValue = false;
+
+            // set area data length
+            for (let serie of tempSeries) {
+                serie.data.push(0);
+            }
+
             for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
+                let value: IChartOccupancyData = this.anysislyChartValue(
                     loopValue
                 );
-                if (value.timeString == categorie) {
-                    haveValue = true;
-                    tempResult.push(value);
-                    tempTotalCount += value.maleCount;
-                    tempTotalCount += value.femaleCount;
-                    break;
-                }
-            }
-            if (!haveValue) {
-                let defaultValue = this.anysislyChartValueDefault();
-                defaultValue.timeString = categorie;
-                tempResult.push(defaultValue);
-            }
-        }
 
-        // set data
-        if (tempTotalCount > 0) {
-            for (let categorie of tempHourStrings) {
-                let haveValue = false;
-                for (let loopValue of tempValues) {
-                    let value: IChartDemographicData = this.anysislyChartValue(
-                        loopValue
-                    );
-                    if (value.timeString == categorie) {
-                        haveValue = true;
-                        tempResult.push(value);
-                        break;
+                let tempValueHour = Datetime.DateTime2String(
+                    value.date,
+                    "HH:mm"
+                );
+
+                if (tempValueHour == categorie) {
+                    for (let serie of tempSeries) {
+                        if (value.areaId == serie.areaId) {
+                            serie.data[i] += value.occupancy;
+                        }
                     }
                 }
-                if (!haveValue) {
-                    let defaultValue = this.anysislyChartValueDefault();
-                    defaultValue.timeString = categorie;
-                    tempResult.push(defaultValue);
-                }
             }
 
-            // set result
-            for (let result of tempResult) {
-                result.maleCountPercent = HighChartsService.formatFloat(
-                    (result.maleCount / tempTotalCount) * 100
-                );
-                result.femaleCountPercent = HighChartsService.formatFloat(
-                    (result.femaleCount / tempTotalCount) * 100
-                );
-                tempSeries[0].data.push(result.maleCountPercent);
-                tempSeries[1].data.push(result.femaleCountPercent);
-                tempCategories.push(
-                    HighChartsService.categorieStringWithJSON(
-                        result.timeString,
-                        result
-                    )
-                );
+            let tempCategorieData = {
+                i18n: this.i18nItem(),
+                datas: []
+            };
+
+            for (let serie of tempSeries) {
+                tempCategorieData.datas.push({
+                    areaId: serie.areaId,
+                    areaName: serie.areaName,
+                    occupancy: serie.data[i]
+                });
             }
+
+            tempCategories.push(
+                HighChartsService.categorieStringWithJSON(
+                    categorie,
+                    tempCategorieData
+                )
+            );
         }
 
-        this.chartOptionsGenderTime = {
+        // set chart options
+        this.chartOptions = {
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -441,19 +274,13 @@ export class HighchartsDemographic extends Vue {
             yAxis: {
                 min: 0,
                 labels: {
-                    style: { color: "#000" },
-                    formatter: function() {
-                        let self: any = this;
-                        return `${self.value}%`;
-                    }
+                    style: { color: "#000" }
                 },
-                title: {
-                    text: null
-                }
+                title: { text: null }
             },
             tooltip: {
                 useHTML: true,
-                formatter: function() {
+                formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
                     if (self.x != undefined) {
@@ -466,16 +293,10 @@ export class HighchartsDemographic extends Vue {
                                 endIndex + 1
                             );
                             let newValue: any = JSON.parse(valueJson);
-
-                            // set value
-                            result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
-                            result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
-                            if (self.series.name == newValue.i18n.male) {
-                                result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
-                            } else {
-                                result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
+                            let seriesIndex = self.series.index;
+                            for (let data of newValue.datas) {
+                                result += `${data.areaName}:${data.occupancy}<br>`;
                             }
-                            return result;
                         } catch (e) {
                             console.log(e);
                         }
@@ -486,28 +307,30 @@ export class HighchartsDemographic extends Vue {
             series: tempSeries
         };
 
-        this.mountChart.genderTime = true;
+        this.mountChart = true;
     }
 
     ////////////////////////// site 1 day X //////////////////////////
 
     initSite1DayX() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartOccupancyData[] = JSON.parse(
             JSON.stringify(this.value)
         );
+        let tempHourStrings: string[] = [];
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
-        let tempSeries: any = [
-            {
-                name: this._("w_ReportDemographic_GenderMale"),
-                data: []
-            },
-            {
-                name: this._("w_ReportDemographic_GenderFemale"),
-                data: []
+        let tempResult: IChartOccupancyData[] = [];
+        let tempSeries: any = [];
+
+        // set areas
+        for (let site of this.sites) {
+            for (let area of site.areas) {
+                tempSeries.push({
+                    areaId: area.objectId,
+                    areaName: area.name,
+                    data: []
+                });
             }
-        ];
-        let tempTotalCount: number = 0;
+        }
 
         // 避免時間相反造成無窮迴圈
         if (this.startDate.getTime() > this.endDate.getTime()) {
@@ -533,13 +356,7 @@ export class HighchartsDemographic extends Vue {
             tempTimestamp <= endTimestamp &&
             categorieNowlength < categorieMaxlength
         ) {
-            let tempChartData: IChartDemographicData = this.anysislyChartValueDefault();
-
-            // set site
-            if (this.sites[0].objectId != undefined) {
-                tempChartData.siteObjectId = this.sites[0].objectId;
-                tempChartData.siteName = this.sites[0].name;
-            }
+            let tempChartData: IChartOccupancyData = this.anysislyChartValueDefault();
 
             switch (this.timeMode) {
                 case ETimeMode.year:
@@ -665,7 +482,6 @@ export class HighchartsDemographic extends Vue {
                     );
                     break;
             }
-
             let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime();
 
@@ -680,90 +496,57 @@ export class HighchartsDemographic extends Vue {
                 tempChartData.dateStart
             );
 
-            for (let val of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(val);
-                let valTimestamp = value.date.getTime();
-                if (
-                    value.siteObjectId == tempChartData.siteObjectId &&
-                    valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
-                ) {
-                    tempChartData.maleCount += value.maleCount;
-                    tempChartData.femaleCount += value.femaleCount;
-                    tempChartData.weather = value.weather;
-                    tempChartData.weatherIcon = HighChartsService.weatherIcon(
-                        value.weather
-                    );
+            for (let serie of tempSeries) {
+                serie.data.push(0);
+                let dataIndex = serie.data.length - 1;
 
-                    tempTotalCount += value.maleCount;
-                    tempTotalCount += value.femaleCount;
+                for (let value of tempValues) {
+                    let tempValue = this.anysislyChartValue(value);
+                    let valTimestamp = tempValue.date.getTime();
+                    if (
+                        tempValue.areaId == serie.areaId &&
+                        valTimestamp >= tempStartTimestamp &&
+                        valTimestamp <= tempEndTimestamp
+                    ) {
+                        serie.data[dataIndex] += value.occupancy;
+                        break;
+                    }
                 }
             }
 
-            // push single series data
-            tempResult.push(tempChartData);
+            tempHourStrings.push(tempChartData.dateString);
 
             // set loop value
             categorieNowlength++;
             tempTimestamp = tempChartData.dateEnd.getTime() + 1000;
         }
 
-        // set data
-        if (tempTotalCount > 0) {
-            // set result
-            for (let result of tempResult) {
-                result.maleCountPercent = HighChartsService.formatFloat(
-                    (result.maleCount / tempTotalCount) * 100
-                );
-                result.femaleCountPercent = HighChartsService.formatFloat(
-                    (result.femaleCount / tempTotalCount) * 100
-                );
-                tempSeries[0].data.push(result.maleCountPercent);
-                tempSeries[1].data.push(result.femaleCountPercent);
-                switch (this.timeMode) {
-                    case ETimeMode.year:
-                    case ETimeMode.month:
-                        tempCategories.push(
-                            HighChartsService.categorieStringWithJSON(
-                                result.dateString,
-                                result
-                            )
-                        );
-                        break;
-                    case ETimeMode.quarter:
-                        tempCategories.push(
-                            HighChartsService.categorieStringWithJSON(
-                                HighChartsService.categoriesQuarter(
-                                    result.date
-                                ),
-                                result
-                            )
-                        );
-                        break;
-                    case ETimeMode.week:
-                        tempCategories.push(
-                            HighChartsService.categorieStringWithJSON(
-                                HighChartsService.categoriesWeek(result.date),
-                                result
-                            )
-                        );
-                        break;
-                    case ETimeMode.day:
-                    case ETimeMode.hour:
-                    case ETimeMode.none:
-                    default:
-                        tempCategories.push(
-                            HighChartsService.categorieStringWithJSON(
-                                `${result.dateString} ${result.weatherIcon}`,
-                                result
-                            )
-                        );
-                        break;
-                }
+        for (let i in tempHourStrings) {
+            let categorie = tempHourStrings[i];
+
+            let tempCategorieData = {
+                i18n: this.i18nItem(),
+                datas: []
+            };
+
+            for (let serie of tempSeries) {
+                tempCategorieData.datas.push({
+                    areaId: serie.areaId,
+                    areaName: serie.areaName,
+                    occupancy: serie.data[i]
+                });
             }
+
+            tempCategories.push(
+                HighChartsService.categorieStringWithJSON(
+                    categorie,
+                    tempCategorieData
+                )
+            );
         }
 
-        this.chartOptionsGenderTime = {
+        // set chart options
+        this.chartOptions = {
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -775,19 +558,107 @@ export class HighchartsDemographic extends Vue {
             yAxis: {
                 min: 0,
                 labels: {
-                    style: { color: "#000" },
-                    formatter: function() {
-                        let self: any = this;
-                        return `${self.value}%`;
-                    }
+                    style: { color: "#000" }
                 },
-                title: {
-                    text: null
-                }
+                title: { text: null }
             },
             tooltip: {
                 useHTML: true,
-                formatter: function() {
+                formatter: function(tooltip: any) {
+                    let self: any = this;
+                    let result = "";
+                    if (self.x != undefined) {
+                        try {
+                            // anysisly JSON
+                            let startIndex = self.x.indexOf(">{");
+                            let endIndex = self.x.indexOf("}<");
+                            let valueJson = self.x.substring(
+                                startIndex + 1,
+                                endIndex + 1
+                            );
+                            let newValue: any = JSON.parse(valueJson);
+                            let seriesIndex = self.series.index;
+                            for (let data of newValue.datas) {
+                                result += `${data.areaName}:${data.occupancy}<br>`;
+                            }
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    return result;
+                }
+            },
+            series: tempSeries
+        };
+
+        this.mountChart = true;
+    }
+
+    ////////////////////////// site X day 1 //////////////////////////
+
+    initSiteXDay1() {
+        let tempValues: IChartOccupancyData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
+        let tempCategories: string[] = [];
+        let tempSeries: any = [
+            {
+                name: this._("w_ReportOccupancy_OccupancyAVG"),
+                data: []
+            }
+        ];
+
+        for (let i in this.sites) {
+            let site = this.sites[i];
+            let tempDate = new Date();
+            let tempWeatherIcon = HighChartsService.weatherIcon(EWeather.none);
+            tempSeries[0].data.push(0);
+
+            for (let val of tempValues) {
+                let tempValue = this.anysislyChartValue(val);
+                if (tempValue.siteObjectId == site.objectId) {
+                    tempDate = tempValue.date;
+                    tempWeatherIcon = HighChartsService.weatherIcon(
+                        tempValue.weather
+                    );
+                    tempSeries[0].data[i] += val.occupancy;
+                }
+            }
+
+            let categorieItem = {
+                i18n: this.i18nItem(),
+                siteObjectId: site.objectId,
+                siteName: site.name,
+                date: tempDate,
+                dateString: Datetime.DateTime2String(tempDate, "YYYY/MM/DD"),
+                occupancy: tempSeries[0].data[i]
+            };
+            tempCategories.push(
+                HighChartsService.categorieStringWithJSON(
+                    `${site.name} ${tempWeatherIcon}`,
+                    categorieItem
+                )
+            );
+        }
+
+        // set chart options
+        this.chartOptions = {
+            chart: { type: "column", zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                labels: { useHTML: true },
+                categories: tempCategories
+            },
+            yAxis: {
+                min: 0,
+                labels: { style: { color: "#000" } },
+                title: { text: null }
+            },
+            tooltip: {
+                useHTML: true,
+                formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
                     if (self.x != undefined) {
@@ -801,15 +672,9 @@ export class HighchartsDemographic extends Vue {
                             );
                             let newValue: any = JSON.parse(valueJson);
 
-                            // set value
+                            result += `${newValue.siteName}<br>`;
                             result += `${newValue.i18n.date}:${newValue.dateString}<br>`;
-                            result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
-                            if (self.series.name == newValue.i18n.male) {
-                                result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
-                            } else {
-                                result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
-                            }
-                            return result;
+                            result += `${newValue.i18n.occupancy}:${newValue.occupancy}<br>`;
                         } catch (e) {
                             console.log(e);
                         }
@@ -819,149 +684,21 @@ export class HighchartsDemographic extends Vue {
             },
             series: tempSeries
         };
-
-        this.mountChart.genderTime = true;
-    }
-
-    ////////////////////////// site X day 1 //////////////////////////
-
-    initSiteXDay1() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
-            JSON.stringify(this.value)
-        );
-        let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
-        let tempSeries: any = [
-            {
-                name: this._("w_ReportDemographic_GenderMale"),
-                data: []
-            },
-            {
-                name: this._("w_ReportDemographic_GenderFemale"),
-                data: []
-            }
-        ];
-        let tempTotalCount: number = 0;
-
-        for (let site of this.sites) {
-            let haveValue = false;
-            for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
-                    loopValue
-                );
-                if (value.siteObjectId == site.objectId) {
-                    haveValue = true;
-                    tempTotalCount += value.maleCount;
-                    tempTotalCount += value.femaleCount;
-                    tempResult.push(value);
-                    break;
-                }
-            }
-
-            if (!haveValue) {
-                let defaultValue = this.anysislyChartValueDefault();
-                defaultValue.siteName = site.name;
-                tempResult.push(defaultValue);
-            }
-        }
-
-        if (tempTotalCount > 0) {
-            // set result
-            for (let result of tempResult) {
-                result.maleCountPercent = HighChartsService.formatFloat(
-                    (result.maleCount / tempTotalCount) * 100
-                );
-                result.femaleCountPercent = HighChartsService.formatFloat(
-                    (result.femaleCount / tempTotalCount) * 100
-                );
-                tempSeries[0].data.push(result.maleCountPercent);
-                tempSeries[1].data.push(result.femaleCountPercent);
-                tempCategories.push(
-                    HighChartsService.categorieStringWithJSON(
-                        `${result.siteName} ${result.weatherIcon}`,
-                        result
-                    )
-                );
-            }
-
-            this.chartOptionsGenderTime = {
-                chart: { type: "column", zoomType: "x" },
-                exporting: { enabled: false },
-                title: { text: null },
-                subtitle: { text: null },
-                xAxis: {
-                    labels: { useHTML: true },
-                    categories: tempCategories
-                },
-                yAxis: {
-                    min: 0,
-                    labels: {
-                        style: { color: "#000" },
-                        formatter: function() {
-                            let self: any = this;
-                            return `${self.value}%`;
-                        }
-                    },
-                    title: {
-                        text: null
-                    }
-                },
-                tooltip: {
-                    useHTML: true,
-                    formatter: function() {
-                        let self: any = this;
-                        let result = "";
-                        if (self.x != undefined) {
-                            try {
-                                // anysisly JSON
-                                let startIndex = self.x.indexOf(">{");
-                                let endIndex = self.x.indexOf("}<");
-                                let valueJson = self.x.substring(
-                                    startIndex + 1,
-                                    endIndex + 1
-                                );
-                                let newValue: any = JSON.parse(valueJson);
-
-                                // set value
-                                result += `${newValue.siteName}<br>`;
-                                result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
-                                result += `${newValue.i18n.date}:${newValue.dateString}<br>`;
-                                if (self.series.name == newValue.i18n.male) {
-                                    result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
-                                } else {
-                                    result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
-                                }
-                                return result;
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        }
-                        return result;
-                    }
-                },
-                series: tempSeries
-            };
-
-            this.mountChart.genderTime = true;
-        }
+        this.mountChart = true;
     }
 
     ////////////////////////// site X day X //////////////////////////
 
     initSiteXDayX() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartOccupancyData[] = JSON.parse(
             JSON.stringify(this.value)
         );
+        let tempResult: any[] = [];
         let tempCategories: string[] = [];
-        let tempResult: any = [];
         let tempSeries: {
             name: string;
             data: number[];
         }[] = [];
-
-        let tempTotalMaleCount: number = 0;
-        let tempTotalFemaleCount: number = 0;
-        let tempTotalCount: number = 0;
 
         // 避免時間相反造成無窮迴圈
         if (this.startDate.getTime() > this.endDate.getTime()) {
@@ -987,14 +724,15 @@ export class HighchartsDemographic extends Vue {
             tempTimestamp <= endTimestamp &&
             categorieNowlength < categorieMaxlength
         ) {
-            let tempChartData: IChartDemographicData = this.anysislyChartValueDefault();
+            let tempChartData: IChartOccupancyData = this.anysislyChartValueDefault();
             let tempResultItem = {
                 categorie: "",
                 i18n: this.i18nItem(),
                 sites: [],
+                conversion: 0,
+                asp: 0,
                 timeMode: this.timeMode,
-                areaMode: this.areaMode,
-                genderMode: this.selection.gender
+                areaMode: this.areaMode
             };
             tempChartData.i18n = null;
             tempChartData.timeMode = null;
@@ -1167,7 +905,7 @@ export class HighchartsDemographic extends Vue {
                 tempSiteValue.siteName = site.name;
 
                 for (let val of tempValues) {
-                    let value: IChartDemographicData = this.anysislyChartValue(
+                    let value: IChartOccupancyData = this.anysislyChartValue(
                         val
                     );
                     let valTimestamp = value.date.getTime();
@@ -1177,19 +915,12 @@ export class HighchartsDemographic extends Vue {
                         valTimestamp >= tempStartTimestamp &&
                         valTimestamp <= tempEndTimestamp
                     ) {
-                        tempSiteValue.maleCount += value.maleCount;
-                        tempSiteValue.femaleCount += value.femaleCount;
-                        tempSiteValue.temperature += value.temperature;
+                        tempSiteValue.occupancy += value.occupancy;
+                        tempSiteValue.temperature = value.temperature;
                         tempSiteValue.weather = value.weather;
                         tempSiteValue.weatherIcon = HighChartsService.weatherIcon(
                             value.weather
                         );
-
-                        tempTotalCount += value.maleCount;
-                        tempTotalCount += value.femaleCount;
-
-                        tempTotalMaleCount += value.maleCount;
-                        tempTotalFemaleCount += value.femaleCount;
                     }
                 }
 
@@ -1210,27 +941,7 @@ export class HighchartsDemographic extends Vue {
             for (let tempItems of tempResult) {
                 for (let tempItem of tempItems.sites) {
                     if (tempItem.siteObjectId == site.objectId) {
-                        if (tempTotalMaleCount != 0) {
-                            tempItem.maleCountPercent = HighChartsService.formatFloat(
-                                (tempItem.maleCount / tempTotalMaleCount) * 100
-                            );
-                        }
-                        if (tempTotalFemaleCount != 0) {
-                            tempItem.femaleCountPercent = HighChartsService.formatFloat(
-                                (tempItem.femaleCount / tempTotalFemaleCount) *
-                                    100
-                            );
-                        }
-
-                        switch (this.selection.gender) {
-                            case EGender.male:
-                                tempData.push(tempItem.maleCountPercent);
-                                break;
-                            case EGender.female:
-                                tempData.push(tempItem.femaleCountPercent);
-                                break;
-                        }
-
+                        tempData.push(tempItem.occupancy);
                         break;
                     }
                 }
@@ -1286,7 +997,7 @@ export class HighchartsDemographic extends Vue {
             }
         }
 
-        this.chartOptionsGenderTime = {
+        this.chartOptions = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1298,7 +1009,7 @@ export class HighchartsDemographic extends Vue {
             yAxis: {
                 labels: { style: { color: "#000" } },
                 title: {
-                    text: null,
+                    text: this._("w_ReportOccupancy_OccupancyAVG"),
                     style: { color: "#000" }
                 }
             },
@@ -1348,26 +1059,17 @@ export class HighchartsDemographic extends Vue {
                                             result += `${site.siteName}<br>`;
                                             result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
                                             result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
-                                            if (newValue.genderMode == "male") {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
-                                            } else {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
-                                            }
+                                            result += `${newValue.i18n.occupancy}: ${site.occupancy}<br>`;
                                             break;
                                         case ETimeMode.day:
                                         case ETimeMode.hour:
                                         default:
                                             result += `${site.siteName}<br>`;
                                             result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                            if (newValue.genderMode == "male") {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
-                                            } else {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
-                                            }
+                                            result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
+                                            result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
+                                            result += `${newValue.i18n.occupancy}: ${site.occupancy}<br>`;
                                             break;
                                     }
                                     break;
@@ -1382,290 +1084,25 @@ export class HighchartsDemographic extends Vue {
             },
             series: tempSeries
         };
-        this.mountChart.genderTime = true;
+
+        this.mountChart = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    drawChartGenderAge() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
-            JSON.stringify(this.value)
-        );
-        let categories: string[] = this.getAgeList();
-        let tempTotalCount: number = 0;
-        let series: any = [
-            {
-                name: this._("w_ReportDemographic_GenderMale"),
-                countData: [0, 0, 0, 0, 0, 0],
-                data: [0, 0, 0, 0, 0, 0]
-            },
-            {
-                name: this._("w_ReportDemographic_GenderFemale"),
-                countData: [0, 0, 0, 0, 0, 0],
-                data: [0, 0, 0, 0, 0, 0]
-            }
-        ];
-
-        for (let value of tempValues) {
-            let tempAgeIndex = -1;
-            switch (value.ageRange) {
-                case EAgeRange.lower20:
-                    tempAgeIndex = 0;
-                    break;
-                case EAgeRange.m21_30:
-                    tempAgeIndex = 1;
-                    break;
-                case EAgeRange.m31_40:
-                    tempAgeIndex = 2;
-                    break;
-                case EAgeRange.m41_50:
-                    tempAgeIndex = 3;
-                    break;
-                case EAgeRange.m51_60:
-                    tempAgeIndex = 4;
-                    break;
-                case EAgeRange.upper61:
-                    tempAgeIndex = 5;
-                    break;
-                case EAgeRange.none:
-                default:
-                    break;
-            }
-            if (tempAgeIndex > -1) {
-                if (series[0].countData[tempAgeIndex] == undefined) {
-                    series[0].countData[tempAgeIndex] = 0;
-                }
-                if (series[1].countData[tempAgeIndex] == undefined) {
-                    series[1].countData[tempAgeIndex] = 0;
-                }
-                tempTotalCount += value.maleCount;
-                tempTotalCount += value.femaleCount;
-                series[0].countData[tempAgeIndex] += value.maleCount;
-                series[1].countData[tempAgeIndex] += value.femaleCount;
-            }
-        }
-
-        if (tempTotalCount > 0) {
-            for (let i in series) {
-                let iNumber = parseInt(i);
-                for (let j in series[i].countData) {
-                    let jNumber = parseInt(j);
-                    if (series[i].data[j] == undefined) {
-                        series[i].data[j] = 0;
-                    }
-                    series[i].data[j] = HighChartsService.formatFloat(
-                        (series[i].countData[j] / tempTotalCount) * 100
-                    );
-                }
-            }
-
-            // set chart options
-            this.chartOptionsGenderAge = {
-                chart: { type: "column", zoomType: "x" },
-                exporting: { enabled: false },
-                title: { text: null },
-                subtitle: { text: null },
-                xAxis: {
-                    labels: { useHTML: true },
-                    categories: categories
-                },
-                yAxis: {
-                    min: 0,
-                    labels: {
-                        style: { color: "#000" },
-                        formatter: function() {
-                            let self: any = this;
-                            return self.value + "%";
-                        }
-                    },
-                    title: { text: null }
-                },
-                tooltip: {
-                    useHTML: true,
-                    enabled: false
-                },
-                series: series
-            };
-
-            this.mountChart.genderAge = true;
-        }
-    }
-
-    drawChartAge() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
-            JSON.stringify(this.value)
-        );
-        let categories: string[] = this.getAgeList();
-        let tempTotalCount: number = 0;
-        let series: any = [
-            {
-                type: "pie",
-                name: "Browser share",
-                innerSize: "50%",
-                data: [],
-                countData: []
-            }
-        ];
-
-        for (let categorie of categories) {
-            series[0].data.push([categorie, 0]);
-            series[0].countData.push(0);
-        }
-
-        for (let value of tempValues) {
-            let tempAgeIndex = -1;
-            switch (value.ageRange) {
-                case EAgeRange.lower20:
-                    tempAgeIndex = 0;
-                    break;
-                case EAgeRange.m21_30:
-                    tempAgeIndex = 1;
-                    break;
-                case EAgeRange.m31_40:
-                    tempAgeIndex = 2;
-                    break;
-                case EAgeRange.m41_50:
-                    tempAgeIndex = 3;
-                    break;
-                case EAgeRange.m51_60:
-                    tempAgeIndex = 4;
-                    break;
-                case EAgeRange.upper61:
-                    tempAgeIndex = 5;
-                    break;
-                case EAgeRange.none:
-                default:
-                    break;
-            }
-            if (tempAgeIndex > -1) {
-                if (series[0].data[tempAgeIndex][1] == undefined) {
-                    series[0].data[tempAgeIndex][1] = 0;
-                }
-                if (series[0].countData[tempAgeIndex] == undefined) {
-                    series[0].countData[tempAgeIndex] = 0;
-                }
-                series[0].countData[tempAgeIndex] += value.maleCount;
-                series[0].countData[tempAgeIndex] += value.femaleCount;
-                tempTotalCount += value.maleCount;
-                tempTotalCount += value.femaleCount;
-            }
-        }
-
-        if (tempTotalCount > 0) {
-            // set data
-            for (let i in series[0].data) {
-                let iNumber = parseInt(i);
-                series[0].data[iNumber][1] = HighChartsService.formatFloat(
-                    (series[0].countData[iNumber] / tempTotalCount) * 100
-                );
-            }
-
-            // set chart options
-            this.chartOptionsAge = {
-                chart: { zoomType: "x" },
-                exporting: { enabled: false },
-                title: { text: null },
-                subtitle: { text: null },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: "pointer",
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                                let self: any = this;
-                                return `${self.y}%`;
-                            }
-                        },
-                        showInLegend: true,
-                        center: ["50%", "50%"],
-                        size: "100%"
-                    }
-                },
-                tooltip: { enabled: false },
-                series: series
-            };
-
-            this.mountChart.age = true;
-        }
-    }
-
-    // TODO: No dwelltime API
-    drawChartDwellTime() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
-            JSON.stringify(this.value)
-        );
-        let categories: string[] = this.getPersonCountList();
-
-        this.chartOptionsDwellTime = {
-            chart: {
-                type: "bar",
-                zoomType: "x"
-            },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            xAxis: {
-                categories: categories
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: null,
-                    align: "high"
-                }
-            },
-            credits: { enabled: false },
-            series: [
-                {
-                    name: "Male",
-                    data: [107, 31, 635, 203, 2, 0]
-                },
-                {
-                    name: "Female",
-                    data: [133, 156, 947, 408, 6, 12]
-                }
-            ]
-        };
-        this.mountChart.dwellTime = true;
-    }
-
-    // TODO: No dwelltime API
-    drawChartGender() {
-        this.chartOptionsGender = {
-            chart: { zoomType: "x" },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            tooltip: { enabled: false },
-            series: [
-                {
-                    type: "pie",
-                    innerSize: "50%",
-                    data: [["Male", 58.9], ["Female", 13.29]]
-                }
-            ]
-        };
-        this.mountChart.gender = true;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private anysislyChartValueDefault(): IChartDemographicData {
-        let value: IChartDemographicData = {
+    private anysislyChartValueDefault(): IChartOccupancyData {
+        let value: IChartOccupancyData = {
             date: new Date(),
             siteObjectId: "",
-            ageRange: EAgeRange.none,
-            maleCount: 0,
-            femaleCount: 0,
+
+            areaId: "",
+            areaName: "",
+            occupancy: 0,
+
+            // every report
             temperatureMin: 0,
             temperatureMax: 0,
             weather: EWeather.none,
-
-            maleCountPercent: 0,
-            femaleCountPercent: 0,
-
-            // every report
             siteName: "",
             timeMode: this.timeMode,
             areaMode: this.areaMode,
@@ -1696,22 +1133,24 @@ export class HighchartsDemographic extends Vue {
         return value;
     }
 
-    private anysislyChartValue(
-        item: IChartDemographicData
-    ): IChartDemographicData {
+    private anysislyChartValue(item: IChartOccupancyData): IChartOccupancyData {
         let value = JSON.parse(JSON.stringify(item));
         value.date = new Date(value.date);
-
-        value.maleCountPercent = 0;
-        value.femaleCountPercent = 0;
 
         // every report
         for (let site of this.sites) {
             if (site.objectId == value.siteObjectId) {
                 value.siteName = site.name;
+                for (let area of site.areas) {
+                    if (area.objectId == value.areaId) {
+                        value.areaName = area.name;
+                        break;
+                    }
+                }
                 break;
             }
         }
+
         value.timeMode = this.timeMode;
         value.areaMode = this.areaMode;
         value.i18n = this.i18nItem();
@@ -1763,43 +1202,6 @@ export class HighchartsDemographic extends Vue {
         return value;
     }
 
-    private changeGender(value: EGender) {
-        this.selection.gender = value;
-        if (this.chartMode == EChartMode.siteXDayX) {
-            this.initSiteXDayX();
-        }
-    }
-
-    private changeAge(value: EAgeRange) {
-        this.selection.ageRange = value;
-        this.drawChartDwellTime();
-        this.drawChartGender();
-    }
-
-    private getAgeList(): string[] {
-        let result: string[] = [
-            this._("w_ReportDemographic_AgeLow20"),
-            this._("w_ReportDemographic_AgeM21_30"),
-            this._("w_ReportDemographic_AgeM31_40"),
-            this._("w_ReportDemographic_AgeM41_50"),
-            this._("w_ReportDemographic_AgeM51_60"),
-            this._("w_ReportDemographic_AgeUpp61")
-        ];
-        return result;
-    }
-
-    private getPersonCountList(): string[] {
-        let result: string[] = [
-            "<5",
-            "5-15",
-            "15-30",
-            "30-60",
-            "60-120",
-            ">120"
-        ];
-        return result;
-    }
-
     private i18nItem() {
         let result: any = {
             time: this._("w_Report_Time"),
@@ -1810,17 +1212,15 @@ export class HighchartsDemographic extends Vue {
             temperatureMin: this._("w_Report_TemperatureMin"),
             temperatureMax: this._("w_Report_TemperatureMax"),
             weather: this._("w_Report_Weather"),
-            gender: this._("w_ReportDemographic_Gender"),
-            male: this._("w_ReportDemographic_GenderMale"),
-            female: this._("w_ReportDemographic_GenderFemale"),
-            percent: this._("w_Report_Percent")
+            occupancy: this._("w_ReportOccupancy_Occupancy"),
+            avgOccupancy: this._("w_ReportOccupancy_OccupancyAVG")
         };
         return result;
     }
 }
 
-export default HighchartsDemographic;
-Vue.component("highcharts-demographic", HighchartsDemographic);
+export default HighchartsOccupancy;
+Vue.component("highcharts-occupancy", HighchartsOccupancy);
 </script>
 
 <style lang="scss" scoped>
@@ -1828,4 +1228,3 @@ Vue.component("highcharts-demographic", HighchartsDemographic);
     text-align: center;
 }
 </style>
-
