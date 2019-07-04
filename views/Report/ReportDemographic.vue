@@ -1186,7 +1186,7 @@ export default class ReportDemographic extends Vue {
         this.deviceSummaryFilter = [];
 
         // 依照device篩選
-        for (const singleData of this.deviceGroupSummaryFilter) {
+        for (const singleData of this.areaSummaryFilter) {
             for (const detailKey in singleData) {
                 const tempSingleData = singleData[detailKey];
 
@@ -1209,7 +1209,7 @@ export default class ReportDemographic extends Vue {
             this.inputFormData.groupId &&
             !this.inputFormData.deviceId
         ) {
-            this.sortOutChartData(this.deviceGroupSummaryFilter);
+            this.sortOutChartData(this.areaSummaryFilter);
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
@@ -1221,7 +1221,7 @@ export default class ReportDemographic extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.deviceId === "all"
         ) {
-            this.sortOutChartData(this.deviceGroupSummaryFilter);
+            this.sortOutChartData(this.areaSummaryFilter);
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();

@@ -70,6 +70,7 @@ import {EAreaMode} from "../../components/Reports";
 
                 <!-- Morris -->
                 <highcharts-traffic
+                    ref="highcharts"
                     :startDate="startDate"
                     :endDate="endDate"
                     :sites="sites"
@@ -111,7 +112,8 @@ import { Component, Vue } from "vue-property-decorator";
 import {
     ECountType,
     EDeviceMode,
-    EType, EIncludedEmployee
+    EType,
+    EIncludedEmployee
 } from "@/components/Reports/models/EReport";
 import {
     ERegionType,
@@ -212,7 +214,7 @@ export default class ReportTraffic extends Vue {
     };
     isIncludedEmployeeSelectItem: any = {
         yes: EIncludedEmployee.yes,
-        no: EIncludedEmployee.no,
+        no: EIncludedEmployee.no
     };
 
     inputFormData: any = {
@@ -221,7 +223,7 @@ export default class ReportTraffic extends Vue {
         deviceId: "",
         type: "",
         inOrOut: "in",
-        isIncludedEmployee: 'no'
+        isIncludedEmployee: "no"
     };
 
     // chart 相關
@@ -280,54 +282,56 @@ export default class ReportTraffic extends Vue {
     }
 
     initPeakTimeRange() {
-            // Data format conversion
-            this.siteItem =[];
-            this.pData = [];
+        // Data format conversion
+        this.siteItem = [];
+        this.pData = [];
 
-            let chartMode = HighChartsService.chartMode(
+        let chartMode = HighChartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
-            );
+        );
 
-            this.pDayXxSiteX = chartMode;
-            
-            for(let site of this.sites){
-                let item = {value:site.objectId,text:site.name,officeHour:site.officeHour}
-                this.siteItem.push(item);
-            }
-            
-            for (let item of this.responseData.peakHours) {
-                let pDatum: IPeckTimeRange = {
-                    site: "",
-                    head: [],
-                    body: []
-                };
-                let head = [];
-                let levels = [];
-                for (let subItem of item.peakHourDatas) {
-                    let level = {
-                        time: subItem.date,
-                        value: subItem.level
-                    }
+        this.pDayXxSiteX = chartMode;
 
-                    levels.push(level);
-                    head.push(subItem.date);
-                }
+        for (let site of this.sites) {
+            let item = {
+                value: site.objectId,
+                text: site.name,
+                officeHour: site.officeHour
+            };
+            this.siteItem.push(item);
+        }
 
-                let body = {
-                    title: item.date,
-                    context: levels
+        for (let item of this.responseData.peakHours) {
+            let pDatum: IPeckTimeRange = {
+                site: "",
+                head: [],
+                body: []
+            };
+            let head = [];
+            let levels = [];
+            for (let subItem of item.peakHourDatas) {
+                let level = {
+                    time: subItem.date,
+                    value: subItem.level
                 };
 
-                pDatum.site = item.site.objectId;
-                pDatum.head = head;
-
-                pDatum.body.push(body);
-                this.pData.push(pDatum);
+                levels.push(level);
+                head.push(subItem.date);
             }
-             
-       
+
+            let body = {
+                title: item.date,
+                context: levels
+            };
+
+            pDatum.site = item.site.objectId;
+            pDatum.head = head;
+
+            pDatum.body.push(body);
+            this.pData.push(pDatum);
+        }
     }
 
     initReportTable() {
@@ -947,6 +951,14 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
+            //     // 選擇all area, all group, 單一 device
+            // } else if (
+            //     this.filterData.firstSiteId &&
+            //     this.inputFormData.areaId &&
+            //     this.inputFormData.areaId === "all" &&
+            //     this.inputFormData.groupId &&
+            //     this.inputFormData.groupId === "all"
+            // ) {
         }
     }
 
@@ -996,7 +1008,7 @@ export default class ReportTraffic extends Vue {
             deviceId: "",
             type: "",
             inOrOut: "in",
-            isIncludedEmployee: 'no'
+            isIncludedEmployee: "no"
         };
 
         await this.$server
@@ -1106,7 +1118,7 @@ export default class ReportTraffic extends Vue {
             deviceId: "all",
             type: this.filterData.type,
             inOrOut: "in",
-            isIncludedEmployee: 'no'
+            isIncludedEmployee: "no"
         };
 
         console.log(" - ", this.sites);
@@ -1411,9 +1423,23 @@ export default class ReportTraffic extends Vue {
     }
 
     receiveType(type) {
+        let chartRef: any = this.$refs.highcharts;
         this.inputFormData.type = type;
         this.timeMode = type;
+
+        if (chartRef != undefined) {
+            console.log("ready to start");
+            chartRef.start();
+        }
+
         console.log("type - ", this.inputFormData.type);
+
+        console.log(" - ", this.sites);
+        console.log(" - ", this.startDate);
+        console.log(" - ", this.endDate);
+        console.log(" - ", this.timeMode);
+        console.log(" - ", this.areaMode);
+        console.log(" chartDatas - ", this.chartDatas);
     }
 
     receiveInOrOut(inOrOut) {
@@ -1428,9 +1454,11 @@ export default class ReportTraffic extends Vue {
 
     receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
-        console.log("isIncludedEmployee - ", this.inputFormData.isIncludedEmployee);
+        console.log(
+            "isIncludedEmployee - ",
+            this.inputFormData.isIncludedEmployee
+        );
     }
-
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 }
