@@ -174,9 +174,6 @@ export default class ReportDemographic extends Vue {
         type: ""
     };
 
-    // chart 相關
-    trafficChartData: any = [];
-
     // 整理 showReportData 相關
     areaSummaryFilter: any = [];
     deviceGroupSummaryFilter: any = [];
@@ -190,7 +187,7 @@ export default class ReportDemographic extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
-        this.initChartDeveloper();
+        // this.initChartDeveloper();
     }
 
     mounted() {
@@ -928,8 +925,8 @@ export default class ReportDemographic extends Vue {
         );
     }
 
-    swtichAge(data) {
-        switch (data) {
+    switchAgeRange(index) {
+        switch (index) {
             case "0":
                 return EAgeRange.lower20;
             case "1":
@@ -942,6 +939,8 @@ export default class ReportDemographic extends Vue {
                 return EAgeRange.m51_60;
             case "5":
                 return EAgeRange.upper61;
+            default:
+                return EAgeRange.none;
         }
     }
 
@@ -980,22 +979,6 @@ export default class ReportDemographic extends Vue {
                 }
             }
 
-            //分開跑maleRange
-            for (const index in summary.maleRanges) {
-                tempChartData.ageRange = this.swtichAge(index);
-                tempChartData.maleCount = summary.maleRanges[index];
-                tempChartData.femaleCount = summary.femaleRanges[index];
-                console.log(
-                    " //分開跑maleRange",
-                    JSON.parse(JSON.stringify(tempChartDatas)),
-                    JSON.parse(JSON.stringify(tempChartData)),
-                    tempChartData.ageRange
-                );
-                let tempDate = JSON.parse(JSON.stringify(tempChartData));
-
-                tempChartDatas.push(tempDate);
-            }
-
             if (!haveSummary) {
                 // 取得weather、temperatureMin、temperatureMax
                 for (const weather of this.responseData.weathers) {
@@ -1016,6 +999,32 @@ export default class ReportDemographic extends Vue {
                         break;
                     }
                 }
+            }
+
+            //跑maleRange、 femaleRange
+            for (let index = 0; index < 6; index++) {
+                if (summary.maleRanges[index] == undefined) {
+                    break;
+                }
+
+                if (summary.femaleRanges[index] == undefined) {
+                    break;
+                }
+
+                let tempData = JSON.parse(JSON.stringify(tempChartData));
+                tempData.ageRange = this.switchAgeRange(index.toString());
+                tempData.maleCount = summary.maleRanges[index];
+                tempData.femaleCount = summary.femaleRanges[index];
+
+                // console.log(
+                //     index,
+                //     " //分開跑maleRange",
+                //     JSON.parse(JSON.stringify(tempChartDatas)),
+                //     JSON.parse(JSON.stringify(tempChartData)),
+                //     tempData.ageRange
+                // );
+
+                tempChartDatas.push(tempData);
             }
         }
 
