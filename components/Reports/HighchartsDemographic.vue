@@ -1500,7 +1500,7 @@ export class HighchartsDemographic extends Vue {
         let series: any = [
             {
                 type: "pie",
-                name: "Browser share",
+                name: null,
                 innerSize: "50%",
                 data: [],
                 countData: []

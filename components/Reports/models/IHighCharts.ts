@@ -94,8 +94,18 @@ interface IChartOccupancyData extends IChart {
     areaName?: string;
 }
 
+interface IChartRepeatVisitorData extends IChart {
+    repeatCount: number;
+    ageRange: EAgeRange;
+    maleCount: number;
+    femaleCount: number;
+
+    maleCountPercent?: number;
+    femaleCountPercent?: number;
+}
+
 export { IValSelectItem, IBootstrapSelectItem };
 export { ISite, IArea, ISiteAreas, ISiteOfficeHourItem };
 export { IDayRange };
 export { IDemographicMount };
-export { IChartTrafficData, IChartDemographicData, IChartOccupancyData };
+export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData };

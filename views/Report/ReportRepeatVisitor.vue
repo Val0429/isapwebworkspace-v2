@@ -32,7 +32,8 @@ import {
     ESign,
     ETimeMode,
     EWeather,
-    IChartOccupancyData,
+    EAgeRange,
+    IChartRepeatVisitorData,
     IPeckTimeRange,
     ISiteAreas,
     ISiteItems,
@@ -57,7 +58,7 @@ export default class ReportRepeatVisitor extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISiteAreas[] = [];
-    chartDatas: IChartOccupancyData[] = [];
+    chartDatas: IChartRepeatVisitorData[] = [];
     ////////////////////////////////////// Morris End //////////////////////////////////////
 
     created() {
@@ -79,7 +80,7 @@ export default class ReportRepeatVisitor extends Vue {
         this.startDate = new Date("2019-06-20T08:00:00.000Z");
         this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
-        let siteLength = 3;
+        let siteLength = 10;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
@@ -119,6 +120,8 @@ export default class ReportRepeatVisitor extends Vue {
             });
 
             for (let i = 1; i < 30; i++) {
+                let ageRange = EAgeRange.none;
+                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
                 let weather = EWeather.none;
                 let tempWeatherNumber = Math.floor(Math.random() * 300);
 
@@ -144,6 +147,20 @@ export default class ReportRepeatVisitor extends Vue {
                     weather = EWeather.partlyCloudyNight;
                 }
 
+                if (tempAgeRangeNumber % 7 == 0) {
+                    ageRange = EAgeRange.lower20;
+                } else if (tempAgeRangeNumber % 7 == 1) {
+                    ageRange = EAgeRange.m21_30;
+                } else if (tempAgeRangeNumber % 7 == 2) {
+                    ageRange = EAgeRange.m31_40;
+                } else if (tempAgeRangeNumber % 7 == 3) {
+                    ageRange = EAgeRange.m41_50;
+                } else if (tempAgeRangeNumber % 7 == 4) {
+                    ageRange = EAgeRange.m51_60;
+                } else if (tempAgeRangeNumber % 7 == 5) {
+                    ageRange = EAgeRange.upper61;
+                }
+
                 let tempI = i;
                 let iNumber = tempI;
                 let iString = tempI.toString();
@@ -153,14 +170,16 @@ export default class ReportRepeatVisitor extends Vue {
                 );
 
                 for (let area of this.sites[j].areas) {
-                    let tempChartData: IChartOccupancyData = {
+                    let tempChartData: IChartRepeatVisitorData = {
                         date: tempDate,
                         siteObjectId: "site" + (j + 1).toString(),
                         temperatureMin: iNumber,
                         temperatureMax: iNumber,
                         weather: weather,
-                        areaId: area.objectId,
-                        occupancy: Math.floor(Math.random() * 50)
+                        repeatCount: Math.floor(Math.random() * 6) + 1,
+                        ageRange: ageRange,
+                        maleCount: Math.floor(Math.random() * 50),
+                        femaleCount: Math.floor(Math.random() * 50)
                     };
                     if (!isNaN(tempChartData.date.getTime())) {
                         this.chartDatas.push(tempChartData);

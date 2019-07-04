@@ -814,6 +814,9 @@ export default class LangObject {
     w_ReportOccupancy_Occupancy = 'Occupancy';
     w_ReportOccupancy_OccupancyAVG = 'AVG Occupancy';
 
+    // Report Repeat Visitor
+    w_ReportRepeatVisitor_NumberOfVisit = 'Number of Visit ';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';
