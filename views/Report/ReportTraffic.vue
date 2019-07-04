@@ -1248,6 +1248,7 @@ export default class ReportTraffic extends Vue {
                 weather: EWeather.none
             };
 
+            // 判斷date, site 兩個是否相同
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
                 if (
