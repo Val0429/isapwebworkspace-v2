@@ -33,13 +33,13 @@ import {EAreaMode} from "../../components/Reports";
                 <!-- Tina -->
                 <analysis_filter_in_out_traffic
                     class="mb-4"
-                    v-if="filterData.siteIds && filterData.siteIds.length === 1"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
                     :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                    :siteIds="filterData.siteIds"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"

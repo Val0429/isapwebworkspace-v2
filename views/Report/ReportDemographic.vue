@@ -32,13 +32,13 @@
                 <!-- Tina -->
                 <analysis_filter_demographic
                     class="mb-4"
-                    v-if="filterData.siteIds && filterData.siteIds.length === 1"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
                     :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                    :siteIds="filterData.siteIds"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"

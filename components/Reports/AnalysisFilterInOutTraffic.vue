@@ -13,6 +13,7 @@
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
+                    v-if="siteIds && siteIds.length === 1"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -22,6 +23,7 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    v-if="siteIds && siteIds.length === 1"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -32,6 +34,7 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    v-if="siteIds && siteIds.length === 1"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -43,17 +46,19 @@
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
-                    v-if="type !== 'hour'"
+                    v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.type"
                 >
                 </iv-form-selection>
+
             </template>
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-1"
+                    v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.isIncludedEmployee"
@@ -64,6 +69,7 @@
             <template #selectInOrOut="{ $attrs, $listeners }">
 
                 <b-form-radio-group
+                    v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.inOrOut"
@@ -137,6 +143,14 @@ export class AnalysisFilterInOutTraffic extends Vue {
     })
     isIncludedEmployeeSelectItem: object;
 
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: () => []
+    })
+    siteIds: object;
+
+
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
         default: "all"
@@ -184,8 +198,8 @@ export class AnalysisFilterInOutTraffic extends Vue {
 
     created() {}
 
-    mounted() {
-    }
+    mounted() {}
+
     @Watch("areaId", { deep: true })
     private areaIdChanged(newVal, oldVal) {
         this.inputFormData.areaId = newVal;
