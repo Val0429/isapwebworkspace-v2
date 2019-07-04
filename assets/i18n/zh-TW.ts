@@ -69,7 +69,10 @@ export default class LangObject implements ILang {
     w_Options = '可用選項';
     w_Chooses = '已選擇';
     w_AllChoose = '全選';
-
+    w_SendMail = 'Send Mail';
+    w_ExportPDF = 'Export PDF';
+    w_ExportExcel = 'Export Excel';
+    w_ExportCSV = 'Export CSV';
     // date
     w_Week_0 = 'Sunday';
     w_Week_1 = 'Monday';

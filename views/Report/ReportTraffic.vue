@@ -14,6 +14,21 @@ import {EAreaMode} from "../../components/Reports";
         <div v-show="pageStep === ePageStep.none">
 
             <iv-card>
+
+                <template #toolbox>
+
+                    <!-- Ben -->
+                    <iv-toolbox-export-excel size="lg"/>
+                    <iv-toolbox-export-csv size="lg"/>
+
+                    <!-- Morris -->
+                    <iv-toolbox-export-pdf size="lg"/>
+
+
+                    <!-- Tina -->
+                    <iv-toolbox-send-mail size="lg"/>
+                </template>
+
                 <!-- Tina -->
                 <analysis_filter_in_out_traffic
                     class="mb-4"
@@ -167,7 +182,6 @@ export default class ReportTraffic extends Vue {
     //// Filter Condition End ////
 
     //// Analysis Filter Start ////
-
     deviceMode: string = EDeviceMode.peopleCounting;
 
     // select 相關
@@ -203,6 +217,10 @@ export default class ReportTraffic extends Vue {
     deviceSummaryFilter: any = [];
 
     //// Analysis Filter End ////
+
+    // send user 相關
+    userSelectItem: any = {};
+
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
@@ -1048,9 +1066,36 @@ export default class ReportTraffic extends Vue {
         }
     }
 
-    receiveUserData(data) {
+    async initSelectItemUsers() {
+
+        let tempUserSelectItem = {};
+
+        await this.$server
+            .R("/user/user")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 userSelectItem 的 key 的方式
+                        tempUserSelectItem[returnValue.objectId] =
+                            `${returnValue.username} - ${returnValue.email}`;
+                    }
+                    this.userSelectItem = tempUserSelectItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async receiveUserData(data) {
         this.userData = data;
         console.log("this.userData - ", this.userData);
+
+        await this.initSelectItemUsers()
     }
 
     receiveModalShowData(data) {
