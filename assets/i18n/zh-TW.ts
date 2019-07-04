@@ -73,6 +73,7 @@ export default class LangObject implements ILang {
     w_ExportPDF = 'Export PDF';
     w_ExportExcel = 'Export Excel';
     w_ExportCSV = 'Export CSV';
+
     // date
     w_Week_0 = 'Sunday';
     w_Week_1 = 'Monday';
@@ -834,6 +835,7 @@ export default class LangObject implements ILang {
     w_ReportFilterConditionComponent_ = 'Filter Condition';
     w_ReportDateError = 'EndDate must greater or equal than startDate.';
     w_countSelect = 'Time Mode';
+    w_isIncludedEmployee = 'Is Included Employee';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';

@@ -39,16 +39,19 @@ import {EAreaMode} from "../../components/Reports";
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
+                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"
                     :type="inputFormData.type"
                     :inOrOut="inputFormData.inOrOut"
+                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
                     @area_id="receiveAreaId"
                     @group_id="receiveGroupId"
                     @device_id="receiveDeviceId"
                     @type="receiveType"
                     @in_or_out="receiveInOrOut"
+                    @is_included_employee="receiveIsIncludedEmployee"
                 >
 
                 </analysis_filter_in_out_traffic>
@@ -108,7 +111,7 @@ import { Component, Vue } from "vue-property-decorator";
 import {
     ECountType,
     EDeviceMode,
-    EType
+    EType, EIncludedEmployee
 } from "@/components/Reports/models/EReport";
 import {
     ERegionType,
@@ -205,13 +208,18 @@ export default class ReportTraffic extends Vue {
         quarter: ECountType.quarter,
         year: ECountType.year
     };
+    isIncludedEmployeeSelectItem: any = {
+        yes: EIncludedEmployee.yes,
+        no: EIncludedEmployee.no,
+    };
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
         type: "",
-        inOrOut: "in"
+        inOrOut: "in",
+        isIncludedEmployee: 'no'
     };
 
     // chart 相關
@@ -1095,7 +1103,8 @@ export default class ReportTraffic extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            inOrOut: "in"
+            inOrOut: "in",
+            isIncludedEmployee: 'no'
         };
 
         await this.$server
@@ -1204,7 +1213,8 @@ export default class ReportTraffic extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            inOrOut: "in"
+            inOrOut: "in",
+            isIncludedEmployee: 'no'
         };
 
         console.log(" - ", this.sites);
@@ -1523,6 +1533,12 @@ export default class ReportTraffic extends Vue {
             this.sortOutChartData(this.responseData.summaryDatas);
         }
     }
+
+    receiveIsIncludedEmployee(isIncludedEmployee) {
+        this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+        console.log("isIncludedEmployee - ", this.inputFormData.isIncludedEmployee);
+    }
+
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 }

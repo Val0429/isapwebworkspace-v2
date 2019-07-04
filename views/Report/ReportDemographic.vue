@@ -38,14 +38,17 @@
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
+                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"
                     :type="inputFormData.type"
+                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
                     @area_id="receiveAreaId"
                     @group_id="receiveGroupId"
                     @device_id="receiveDeviceId"
                     @type="receiveType"
+                    @is_included_employee="receiveIsIncludedEmployee"
                 >
 
                 </analysis_filter_demographic>
@@ -77,7 +80,7 @@ import Dialog from "@/services/Dialog/Dialog";
 import {
     ECountType,
     EDeviceMode,
-    EType
+    EType, EIncludedEmployee
 } from "@/components/Reports/models/EReport";
 import {
     ERegionType,
@@ -149,7 +152,7 @@ export default class ReportDemographic extends Vue {
     //// Filter Condition End ////
 
     //// Analysis Filter Start ////
-    deviceMode: string = EDeviceMode.peopleCounting;
+    deviceMode: string = EDeviceMode.demographic;
 
     // select 相關
     areaSelectItem: any = {};
@@ -166,12 +169,17 @@ export default class ReportDemographic extends Vue {
         quarter: ECountType.quarter,
         year: ECountType.year
     };
+    isIncludedEmployeeSelectItem: any = {
+        yes: EIncludedEmployee.yes,
+        no: EIncludedEmployee.no,
+    };
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
-        type: ""
+        type: "",
+        isIncludedEmployee: 'no'
     };
 
     // 整理 showReportData 相關
@@ -303,15 +311,6 @@ export default class ReportDemographic extends Vue {
     // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
-
-    clearInputFormData() {
-        this.inputFormData = {
-            areaId: "all",
-            groupId: "all",
-            deviceId: "all",
-            type: "hour"
-        };
-    }
 
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();
@@ -798,7 +797,8 @@ export default class ReportDemographic extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
-            type: ""
+            type: "",
+            isIncludedEmployee: 'no'
         };
 
         await this.$server
@@ -898,7 +898,8 @@ export default class ReportDemographic extends Vue {
             areaId: "all",
             groupId: "all",
             deviceId: "all",
-            type: this.filterData.type
+            type: this.filterData.type,
+            isIncludedEmployee: 'no'
         };
 
         console.log(" - ", this.sites);
@@ -960,7 +961,6 @@ export default class ReportDemographic extends Vue {
                 temperatureMax: 0,
                 weather: EWeather.none
             };
-            console.log("summary - ", summary);
 
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
@@ -1129,10 +1129,13 @@ export default class ReportDemographic extends Vue {
         ) {
             // 依照單一deviceGroup篩選
             for (const singleData of this.areaSummaryFilter) {
+
+                console.log('singleData - ', singleData);
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
+                        console.log('tempSingleData[0].objectId - ', tempSingleData[0].objectId);
                         if (
                             this.inputFormData.groupId ===
                             tempSingleData[0].objectId
@@ -1233,6 +1236,12 @@ export default class ReportDemographic extends Vue {
         this.timeMode = type;
         console.log("type - ", this.inputFormData.type);
     }
+
+    receiveIsIncludedEmployee(isIncludedEmployee) {
+        this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+        console.log("isIncludedEmployee - ", this.inputFormData.isIncludedEmployee);
+    }
+
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 }
