@@ -16,7 +16,6 @@ import {EAreaMode} from "../../components/Reports";
             <iv-card>
 
                 <template #toolbox>
-
                     <!-- Ben -->
                     <iv-toolbox-export-excel size="lg"/>
                     <iv-toolbox-export-csv size="lg"/>
@@ -24,9 +23,8 @@ import {EAreaMode} from "../../components/Reports";
                     <!-- Morris -->
                     <iv-toolbox-export-pdf size="lg"/>
 
-
                     <!-- Tina -->
-                    <iv-toolbox-send-mail size="lg"/>
+                    <iv-toolbox-send-mail size="lg" @click="modalShow = !modalShow"/>
                 </template>
 
                 <!-- Tina -->
@@ -90,6 +88,13 @@ import {EAreaMode} from "../../components/Reports";
             </iv-card>
 
         </div>
+
+        <!-- Tina -->
+        <recipient
+            :modalShow="modalShow"
+            @user-data="receiveUserData"
+            @return-modalShow="receiveModalShowData"
+        ></recipient>
 
     </div>
 </template>
@@ -230,7 +235,7 @@ export default class ReportTraffic extends Vue {
     dTimeMode: ETimeMode = ETimeMode.none;
 
     //PickTimeRange 相關
-    pSiteIds = []
+    pSiteIds = [];
     pData: IPeckTimeRange[] = [];
     pDayXxSiteX: EDayXSiteX = EDayXSiteX.none;
     siteItem: ISiteItems[] = [];
@@ -1091,6 +1096,7 @@ export default class ReportTraffic extends Vue {
     }
 
     async receiveUserData(data) {
+        this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
 
