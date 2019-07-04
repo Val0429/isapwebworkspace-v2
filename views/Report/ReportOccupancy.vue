@@ -27,7 +27,6 @@ import Datetime from "@/services/Datetime";
 import HighchartOccupancy from "@/components/Reports/HighchartOccupancy.vue";
 import {
     EAreaMode,
-    EDayXSiteX,
     EPageType,
     ESign,
     ETimeMode,
