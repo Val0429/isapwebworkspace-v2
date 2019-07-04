@@ -251,8 +251,8 @@ export default class LangObject implements ILang {
     w_Navigation_Report_Demographic = 'Demographic';
     w_Navigation_Report_Heatmap = 'Heatmap';
     w_Navigation_Report_Occupancy = 'Occupancy';
-    w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_RepeatVisitor = 'Repeat Visitor';
+    w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_Campaign = 'Campaign';
 
     // 401
