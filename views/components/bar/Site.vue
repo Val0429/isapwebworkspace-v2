@@ -408,9 +408,8 @@ export default class Site extends Vue {
         
         `;
     }
-    async onFilter($event){
-        this.getParams=$event;
-        
+    onFilter($event){
+        this.getParams=$event;        
     }
     doMounted(){
         this.isMounted=true;

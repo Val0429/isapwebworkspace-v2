@@ -30,24 +30,24 @@
                 <SidebarNavItem url="/attendance" />      
                 <SidebarNavItem url="/visitorreport" />
                 
-                
-
-                <SidebarNavItem url="/site" />
-                <SidebarNavItem url="/region" />
+                <SidebarNavItem url="/permissiontable" />
                 <SidebarNavItem url="/member" />
-                <SidebarNavItem url="/user" />
-                <SidebarNavItem url="/door" />
+                <SidebarNavItem url="/region" />
+                <SidebarNavItem url="/site" />
                 <SidebarNavItem url="/doorgroup" />
-                <SidebarNavItem url="/elevator" />
-                <SidebarNavItem url="/elevatorgroup" />
-                <SidebarNavItem url="/floor" />
+                <SidebarNavItem url="/door" />
                 <SidebarNavItem url="/reader" />
-                <!-- <SidebarNavItem url="/timeschedule" /> -->
-                <SidebarNavItem url="/permissiontable" />                
-                <SidebarNavItem url="/syncreceiver" />
-                <!-- <SidebarNavItem url="/accesslevel" /> -->
-
                 
+                
+                <SidebarNavItem url="/elevatorgroup" />
+                <SidebarNavItem url="/elevator" />
+                
+                <SidebarNavItem url="/floor" />
+                <SidebarNavItem url="/syncreceiver" />
+                <SidebarNavItem url="/user" />
+
+                <!-- <SidebarNavItem url="/timeschedule" /> -->
+                <!-- <SidebarNavItem url="/accesslevel" /> -->                
                 
             </SidebarNav>
         </template>
