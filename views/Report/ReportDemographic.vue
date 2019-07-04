@@ -289,12 +289,12 @@ export default class ReportDemographic extends Vue {
                 let tempChartData: IChartDemographicData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    ageRange: ageRange,
-                    maleCount: Math.floor(Math.random() * 300),
-                    femaleCount: Math.floor(Math.random() * 300),
                     temperatureMin: iNumber,
                     temperatureMax: iNumber,
-                    weather: weather
+                    weather: weather,
+                    ageRange: ageRange,
+                    maleCount: Math.floor(Math.random() * 300),
+                    femaleCount: Math.floor(Math.random() * 300)
                 };
 
                 if (!isNaN(tempChartData.date.getTime())) {

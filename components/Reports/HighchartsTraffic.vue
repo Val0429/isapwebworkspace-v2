@@ -1,15 +1,19 @@
 <template>
     <div class="chart">
-        <div v-if="errorMessage == ''">
+        <b-form-group v-if="errorMessage == ''">
             <highcharts
                 ref="chart"
                 v-if="mountChart"
                 :options="chartOptions"
             ></highcharts>
-        </div>
-        <div v-if="errorMessage != ''">
-            {{ errorMessage }}
-        </div>
+        </b-form-group>
+
+        <b-form-group
+            v-if="errorMessage != ''"
+            class="chart-error-message"
+            :label="errorMessage"
+        >
+        </b-form-group>
     </div>
 </template>
 
@@ -38,8 +42,6 @@ import {
     EWeather
 } from "./models/EHighCharts";
 import {
-    IDate,
-    IDatetimeGroup,
     ISite,
     IChartTrafficData,
     ISiteOfficeHourItem
@@ -105,31 +107,6 @@ export class HighchartsTraffic extends Vue {
     chartMode: EChartMode = EChartMode.none;
     chartOptions: any = {};
 
-    @Watch("startDate")
-    private onStartDateChanged(newval: Date, oldval: Date) {
-        this.start();
-    }
-
-    @Watch("endDate")
-    private onEndDateChanged(newval: Date, oldval: Date) {
-        this.start();
-    }
-
-    @Watch("timeMode")
-    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
-        this.start();
-    }
-
-    @Watch("areaMode")
-    private onAreaModeChanged(newval: EAreaMode, oldval: EAreaMode) {
-        this.start();
-    }
-
-    @Watch("sites")
-    private onSitesChanged(newval: ISite[], oldval: ISite[]) {
-        this.start();
-    }
-
     @Watch("value", { deep: true })
     private onValueChanged(
         newval: IChartTrafficData[],
@@ -145,6 +122,7 @@ export class HighchartsTraffic extends Vue {
     mounted() {}
 
     start() {
+        this.errorMessage = "";
         this.chartMode = HighChartsService.chartMode(
             this.startDate,
             this.endDate,
@@ -179,6 +157,17 @@ export class HighchartsTraffic extends Vue {
             default:
                 break;
         }
+
+        console.log(
+            "chart prop: ",
+            this.chartMode,
+            this.startDate,
+            this.endDate,
+            this.timeMode,
+            this.areaMode,
+            this.sites,
+            this.value
+        );
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
@@ -1141,7 +1130,7 @@ export class HighchartsTraffic extends Vue {
                         tempSiteValue.traffic += value.traffic;
                         tempSiteValue.revenue += value.revenue;
                         tempSiteValue.transaction += value.transaction;
-                        tempSiteValue.temperature += value.temperature;
+                        tempSiteValue.temperature = value.temperature;
                         tempSiteValue.weather = value.weather;
                         tempSiteValue.weatherIcon = HighChartsService.weatherIcon(
                             value.weather
@@ -1318,8 +1307,8 @@ export class HighchartsTraffic extends Vue {
                                         default:
                                             result += `${site.siteName}<br>`;
                                             result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                            result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
-                                            result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
+                                            result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
                                             result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
                                             result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
                                             result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
@@ -1483,4 +1472,7 @@ Vue.component("highcharts-traffic", HighchartsTraffic);
 </script>
 
 <style lang="scss" scoped>
+.chart-error-message {
+    text-align: center;
+}
 </style>

@@ -810,6 +810,10 @@ export default class LangObject {
     w_ReportDemographic_AgeM51_60 = '51-60';
     w_ReportDemographic_AgeUpp61 = '>61';
 
+    // Report Occupancy
+    w_ReportOccupancy_Occupancy = 'Occupancy';
+    w_ReportOccupancy_OccupancyAVG = 'AVG Occupancy';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';

@@ -120,9 +120,7 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
-// Morris
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
-// Ben
 import {
     EAreaMode,
     EDayXSiteX,
@@ -583,18 +581,17 @@ export default class ReportTraffic extends Vue {
                 let tempDate = new Date(
                     `2019-07-${iString10}T${iString10}:00:00.000Z`
                 );
-                let trafficChartData: IChartTrafficData = {
+                let tempChartData: IChartTrafficData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
-                    traffic: Math.floor(Math.random() * 500),
-                    revenue: Math.floor(Math.random() * 1000),
-                    transaction: Math.floor(Math.random() * 50),
-                    temperature: iNumber,
                     temperatureMin: iNumber,
                     temperatureMax: iNumber,
-                    weather: weather
+                    weather: weather,
+                    traffic: Math.floor(Math.random() * 500),
+                    revenue: Math.floor(Math.random() * 1000),
+                    transaction: Math.floor(Math.random() * 50)
                 };
-                this.chartDatas.push(trafficChartData);
+                this.chartDatas.push(tempChartData);
             }
         }
     }
@@ -1062,9 +1059,9 @@ export default class ReportTraffic extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
-                        tempUserSelectItem[returnValue.objectId] = `${
-                            returnValue.username
-                        } - ${returnValue.email}`;
+                        tempUserSelectItem[
+                            returnValue.objectId
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -1215,7 +1212,7 @@ export default class ReportTraffic extends Vue {
         console.log(" - ", this.endDate);
         console.log(" - ", this.timeMode);
         console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
+        console.log(" chartDatas - ", this.chartDatas);
     }
 
     checkDateAndSite(
