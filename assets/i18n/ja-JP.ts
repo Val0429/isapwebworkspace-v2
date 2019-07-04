@@ -574,4 +574,10 @@ export default class LangObject implements ILang {
     w_Report_Month1 = "Month 1";
     w_Report_Month2 = "Month 2";
     w_Report_Month3 = "Month 3";
+
+    w_Area_Count = "Area Count";
+    w_DoorGroup_Count = "Door Group Count";
+    w_Door_Count = "Door Count";
+    w_Reader_Count = "Reader Count";
+    w_Region = "Region";
 }

@@ -48,11 +48,9 @@
                     :params="getParams"
                     :multiple="tableMultiple"
                 >
-
-                    <template #areaName="{$attrs, $listeners}">
-                        {{showArea($attrs.row.objectId)}}
+                    <template #regionname="{$attrs, $listeners}">
+                        {{$attrs.row.region ? $attrs.row.region.name: ''}}
                     </template>
-
 
                     <template #Actions="{$attrs, $listeners}">                        
                             <iv-toolbox-area :disabled="!isSelectSite"
@@ -371,7 +369,6 @@ export default class Site extends Vue {
     areas = {};
     area: any = {};
     areaParams = {};
-    areaAll = [];
 
     //options
     managerItem = [];
@@ -398,7 +395,7 @@ export default class Site extends Vue {
     filterInterface(){
         return ` interface {
             /**
-             * @uiLabel - ${this._("w_Navigation_Region")}
+             * @uiLabel - ${this._("w_Region")}
              * @uiColumnGroup - row1
             */
             regionname?:string;
@@ -456,23 +453,11 @@ export default class Site extends Vue {
  
 
    
-    async initSiteListArea() {
-        this.areaAll = [];
-
-        await this.$server
-            .R("/location/area/all" as any, {})
-            .then((response: any) => {
-                this.areaAll = response;
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
-    }
+    
 
 
 
     pageToSiteList() {
-        this.initSiteListArea();
         this.clearAreaData();
         this.pageStep = EPageStep.siteList;
         (this.$refs.siteTable as any).reload();
@@ -747,16 +732,7 @@ export default class Site extends Vue {
         }
     }
 
-    showArea(data) {
-        let areas = [];
-        for (let area of this.areaAll) {
-            if (area.site.objectId == data) {
-                areas.push(area.name);
-            }
-        }
-
-        return this.showFirst(areas);
-    }
+    
 
     
 
@@ -765,24 +741,32 @@ export default class Site extends Vue {
     ISiteList() {
         return `interface {
                 /**
+                * @uiLabel - ${this._("w_Region")}
+                */
+                regionname: string;
+                /**
                 * @uiLabel - ${this._("w_Site_SiteName")}
                 */
                 name: string;
 
                 /**
-                * @uiLabel - ${this._("w_Site_Address")}
+                * @uiLabel - ${this._("w_Area_Count")}
                 */
-                address?: string;
+                areaCount?: number;
 
                 /**
-                * @uiLabel - ${this._("w_Site_Latitude")}
+                * @uiLabel - ${this._("w_DoorGroup_Count")}
                 */
-                latitude?: number;
+                doorGroupCount?: number;
 
                 /**
-                * @uiLabel - ${this._("w_Site_Longitude")}
+                * @uiLabel - ${this._("w_Door_Count")}
                 */
-                longitude?: number;
+                doorCount?: number;
+                /**
+                * @uiLabel - ${this._("w_Reader_Count")}
+                */
+                readerCount?: number;
                 /**
                 * @uiLabel -
                 */

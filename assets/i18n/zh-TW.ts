@@ -576,4 +576,10 @@ export default class LangObject implements ILang {
     w_Report_Month1 = "近三個月進出天數";
     w_Report_Month2 = "近二個月進出天數";
     w_Report_Month3 = "近一個月進出天數";
+
+    w_Area_Count = "區域數量";
+    w_DoorGroup_Count = "門號群組數量";
+    w_Door_Count = "門號數量";
+    w_Reader_Count = "讀卡機數量";
+    w_Region = "地區名稱";
 }

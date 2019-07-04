@@ -205,6 +205,7 @@ export default class LangObject {
     w_SourceId = 'Source Id';
     w_SourceIdAndLocation = 'Source Id and Location ';
     w_Location = 'Location';
+    
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
@@ -576,4 +577,10 @@ export default class LangObject {
     w_Report_Month1 = "Month 1";
     w_Report_Month2 = "Month 2";
     w_Report_Month3 = "Month 3";
+
+    w_Area_Count = "Area Count";
+    w_DoorGroup_Count = "Door Group Count";
+    w_Door_Count = "Door Count";
+    w_Reader_Count = "Reader Count";
+    w_Region = "Region";
 }
