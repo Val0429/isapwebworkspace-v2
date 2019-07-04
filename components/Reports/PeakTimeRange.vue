@@ -3,30 +3,29 @@
         <title>Peak hours</title>
         <table
             class="table table-bordered"
-            v-if="pData &&  pData.head && pData.head.length > 0"
         >
             <thead>
                 <tr>
                     <th>
                         <b-form-select
-                            v-if="dayXSiteX == eDayXSiteX.dayXSiteX"
+                            v-if="dayXSiteX == eDayXSiteX.siteXDayX"
                             v-model="site"
                             :options="siteItems"
                             @change="changeSite()"
                         ></b-form-select>
                     </th>
                     <th v-for="(item, key, index) in pData.head">
-                        {{(new Date(item)).getUTCHours() + ":00"}} - {{(new Date(item)).getUTCHours() + 1 + ":00"}}
+                        {{item + ":00"}} - {{(item + 1) + ":00"}}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(items, key, index) in pData.body">
-                    <td v-if="dayXSiteX != eDayXSiteX.day1SiteX"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
-                    <td v-if="dayXSiteX == eDayXSiteX.day1SiteX"> {{items.title}}</td>
+                    <td v-if="dayXSiteX != eDayXSiteX.siteXDay1"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                    <td v-if="dayXSiteX == eDayXSiteX.siteXDay1"> {{items.title}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
-                        :class="showHoursRange(item)"
+                        :class="showHoursRange(item.value)"
                     ></td>
                 </tr>
             </tbody>
@@ -44,8 +43,9 @@ import {
     Watch,
     Model
 } from "vue-property-decorator";
-import { IPeckTimeRange, EDayXSiteX, ISiteItems } from "@/components/Reports";
+import { IPeckTimeRange,IPeckTimeRangeBody, EChartMode, ISiteItems } from "@/components/Reports";
 import Datetime from "@/services/Datetime.vue";
+import HighChartsService from "./models/HighChartsService";
 
 @Component({
     components: {}
@@ -55,10 +55,10 @@ export class PeakTimeRange extends Vue {
     @Prop({
         type: String,
         default: function() {
-            return EDayXSiteX.none;
+            return EChartMode.none;
         }
     })
-    dayXSiteX: EDayXSiteX;
+    dayXSiteX: EChartMode;
 
     @Prop({
         type: Array,
@@ -81,7 +81,7 @@ export class PeakTimeRange extends Vue {
         this.initData();
     }
 
-    eDayXSiteX = EDayXSiteX;
+    eDayXSiteX = EChartMode;
 
     pData: IPeckTimeRange = {
         site: "",
@@ -99,16 +99,16 @@ export class PeakTimeRange extends Vue {
 
     initData() {
         switch (this.dayXSiteX) {
-            case EDayXSiteX.day1Site1:
+            case EChartMode.site1Day1:
                 this.generateDay1Ste1();
                 break;
-            case EDayXSiteX.dayXSite1:
+            case EChartMode.site1DayX:
                 this.generateDayXSte1();
                 break;
-            case EDayXSiteX.day1SiteX:
+            case EChartMode.siteXDay1:
                 this.generateDay1SteX();
                 break;
-            case EDayXSiteX.dayXSiteX:
+            case EChartMode.siteXDayX:
                 this.generateDayXSteX();
                 break;
             default:
@@ -118,48 +118,198 @@ export class PeakTimeRange extends Vue {
 
     generateDay1Ste1() {
         console.log("generateDay1Ste1", this.timeRangeData);
+        
+        if(!this.timeRangeData){
+            return;
+        }
+
+
         this.pData = {
             site: "",
             head: [],
             body: []
         };
-        this.pData = this.timeRangeData[0];
+
+        //site
+        this.pData.site = this.timeRangeData[0].site ;
+
+        //haed
+        let sTime = null;
+        let eTime = null;
+        for(let officeHourItem of this.siteItems[0].officeHour){
+            if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
+                sTime = new Date(officeHourItem.startDate).getUTCHours();
+            }
+            if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
+                eTime = new Date(officeHourItem.endDate).getUTCHours();
+            }
+        }   
+      this.pData.head = [];
+       while(sTime <= eTime){
+            this.pData.head.push(sTime);
+            sTime++
+       }
+
+ 
+        //body
+        for(let bodyItme of this.timeRangeData[0].body){
+            let contexts = [];
+            for(let headItem of this.pData.head){
+                let context = {
+                        time: "",
+                        value: 0
+                }
+                for(let contextItem of bodyItme.context){
+                    if(headItem == new Date(contextItem.time).getUTCHours()){
+                         context = {
+                            time: contextItem.time,
+                            value: contextItem.value
+                        }
+                        break;
+                    }
+                }
+                contexts.push(context);
+            }
+
+             let thisBody:IPeckTimeRangeBody = {
+                title: bodyItme.title,
+                context: contexts
+             }
+             this.pData.body.push(thisBody);
+        }   
+        
+     
     }
 
     generateDayXSte1() {
         console.log("generateDayXSte1", this.timeRangeData);
+
+        if(!this.timeRangeData){
+            return;
+        }
+
         this.pData = {
             site: "",
             head: [],
             body: []
         };
-        for (let item of this.timeRangeData) {
-            if (item.site == this.site) {
-                this.pData.site = item.site;
-                this.pData.head = item.head;
-                this.pData.body.push(item.body[0]);
+        
+        for (let timeRangeDataItem of this.timeRangeData) {
+            if (timeRangeDataItem.site == this.site) {
+                //site
+                this.pData.site = timeRangeDataItem.site;
+
+             
+                //haed
+                let sTime = null;
+                let eTime = null;
+                for(let officeHourItem of this.siteItems[0].officeHour){
+                    if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
+                        sTime = new Date(officeHourItem.startDate).getUTCHours();
+                    }
+                    if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
+                        eTime = new Date(officeHourItem.endDate).getUTCHours();
+                    }
+                }   
+                
+                 this.pData.head = [];
+                 while(sTime <= eTime){
+                      this.pData.head.push(sTime);
+                      sTime++
+                 }
+
+                 //body
+                for(let bodyItme of timeRangeDataItem.body){
+                    let contexts = [];
+                    for(let headItem of this.pData.head){
+                        let context = {
+                                time: "",
+                                value: 0
+                        }
+                        for(let contextItem of bodyItme.context){
+                            if(headItem == new Date(contextItem.time).getUTCHours()){
+                                 context = {
+                                    time: contextItem.time,
+                                    value: contextItem.value
+                                }
+                                break;
+                            }
+                        }
+                        contexts.push(context);
+                    }
+
+                     let thisBody:IPeckTimeRangeBody = {
+                        title: bodyItme.title,
+                        context: contexts
+                     }
+                     this.pData.body.push(thisBody);
+                }   
             }
         }
     }
 
     generateDay1SteX() {
         console.log("generateDay1SteX", this.timeRangeData);
+        
+        if(!this.timeRangeData){
+            return;
+        }
+
         this.pData = {
             site: "",
             head: [],
             body: []
         };
-        for (let item of this.timeRangeData) {
-            this.pData.site = item.site;
-            this.pData.head = item.head;
+        for (let timeRangeDataItem of this.timeRangeData) {
+               //site
+                this.pData.site = timeRangeDataItem.site;
+           
+            //haed
+                let sTime = null;
+                let eTime = null;
+                for(let officeHourItem of this.siteItems[0].officeHour){
+                    if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
+                        sTime = new Date(officeHourItem.startDate).getUTCHours();
+                    }
+                    if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
+                        eTime = new Date(officeHourItem.endDate).getUTCHours();
+                    }
+                }   
+                
+                 this.pData.head = [];
+                 while(sTime <= eTime){
+                      this.pData.head.push(sTime);
+                      sTime++
+                 }
 
+            //body 
             for (let siteItem of this.siteItems) {
-                if (siteItem.value == item.site) {
-                    let body = {
+                if (siteItem.value == timeRangeDataItem.site) {
+                   for(let bodyItme of timeRangeDataItem.body){
+                    let contexts = [];
+                    for(let headItem of this.pData.head){
+                        let context = {
+                                time: "",
+                                value: 0
+                        }
+                        for(let contextItem of bodyItme.context){
+                            if(headItem == new Date(contextItem.time).getUTCHours()){
+                                 context = {
+                                    time: contextItem.time,
+                                    value: contextItem.value
+                                }
+                                break;
+                            }
+                        }
+                        contexts.push(context);
+                    }
+
+                     let thisBody:IPeckTimeRangeBody = {
                         title: siteItem.text,
-                        context: item.body[0].context
-                    };
-                    this.pData.body.push(body);
+                        context: contexts
+                     }
+                     this.pData.body.push(thisBody);
+                }   
                 }
             }
         }
@@ -167,16 +317,67 @@ export class PeakTimeRange extends Vue {
 
     generateDayXSteX() {
         console.log("generateDayXSteX", this.timeRangeData);
+
+        if(!this.timeRangeData){
+            return;
+        }
+
         this.pData = {
             site: "",
             head: [],
             body: []
         };
-        for (let item of this.timeRangeData) {
-            if (item.site == this.site) {
-                this.pData.site = item.site;
-                this.pData.head = item.head;
-                this.pData.body.push(item.body[0]);
+        
+        for (let timeRangeDataItem of this.timeRangeData) {
+            if (timeRangeDataItem.site == this.site) {
+                //site
+                this.pData.site = timeRangeDataItem.site;
+
+             
+                //haed
+                let sTime = null;
+                let eTime = null;
+                for(let officeHourItem of this.siteItems[0].officeHour){
+                    if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
+                        sTime = new Date(officeHourItem.startDate).getUTCHours();
+                    }
+                    if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
+                        eTime = new Date(officeHourItem.endDate).getUTCHours();
+                    }
+                }   
+                
+                 this.pData.head = [];
+                 while(sTime <= eTime){
+                      this.pData.head.push(sTime);
+                      sTime++
+                 }
+
+                 //body
+                for(let bodyItme of timeRangeDataItem.body){
+                    let contexts = [];
+                    for(let headItem of this.pData.head){
+                        let context = {
+                                time: "",
+                                value: 0
+                        }
+                        for(let contextItem of bodyItme.context){
+                            if(headItem == new Date(contextItem.time).getUTCHours()){
+                                 context = {
+                                    time: contextItem.time,
+                                    value: contextItem.value
+                                }
+                                break;
+                            }
+                        }
+                        contexts.push(context);
+                    }
+
+                     let thisBody:IPeckTimeRangeBody = {
+                        title: bodyItme.title,
+                        context: contexts
+                     }
+                     this.pData.body.push(thisBody);
+                }   
             }
         }
     }
