@@ -1,17 +1,23 @@
 interface ISiteItems {
     value: string; //ObjectId
     text: string; //Site Name
+    officeHour: any[]; //officeTime
 }
 
 interface IPeckTimeRange {
     site: string;
-    head: string[];
+    head: number[];
     body: IPeckTimeRangeBody[];
 }
 
 interface IPeckTimeRangeBody {
     title: string;
-    context: number[];
+    context: context[];
 }
 
-export { IPeckTimeRange, ISiteItems };
+interface context {
+    time: string;
+    value: number;
+}
+
+export { IPeckTimeRange, IPeckTimeRangeBody, ISiteItems };

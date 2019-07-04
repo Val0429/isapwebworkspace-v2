@@ -46,8 +46,13 @@ enum ECountType {
 }
 
 enum EType {
-    in = "in",
-    out = "out"
+    in = 'in',
+    out = 'out',
+}
+
+enum EIncludedEmployee {
+    yes = 'yes',
+    no = 'no',
 }
 
 enum ESign {
@@ -70,13 +75,13 @@ enum EPageType {
     none = 'none',
 }
 
-enum EDayXSiteX {
-    day1Site1 = 'Day1Site1',
-    dayXSite1 = 'DayXSite1',
-    day1SiteX = 'Day1SiteX',
-    dayXSiteX = 'DayXSiteX',
+enum EChartMode {
     none = 'none',
+    site1Day1 = 'site1Day1',
+    site1DayX = 'site1DayX',
+    siteXDay1 = 'siteXDay1',
+    siteXDayX = 'siteXDayX',
 }
 
-export { ESign, EPageType, EDayXSiteX };
-export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, EType };
+export { ESign, EPageType, EChartMode };
+export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, EType, EIncludedEmployee };

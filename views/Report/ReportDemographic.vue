@@ -38,14 +38,17 @@
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
+                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"
                     :type="inputFormData.type"
+                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
                     @area_id="receiveAreaId"
                     @group_id="receiveGroupId"
                     @device_id="receiveDeviceId"
                     @type="receiveType"
+                    @is_included_employee="receiveIsIncludedEmployee"
                 >
 
                 </analysis_filter_demographic>
@@ -77,7 +80,7 @@ import Dialog from "@/services/Dialog/Dialog";
 import {
     ECountType,
     EDeviceMode,
-    EType
+    EType, EIncludedEmployee
 } from "@/components/Reports/models/EReport";
 import {
     ERegionType,
@@ -149,7 +152,7 @@ export default class ReportDemographic extends Vue {
     //// Filter Condition End ////
 
     //// Analysis Filter Start ////
-    deviceMode: string = EDeviceMode.peopleCounting;
+    deviceMode: string = EDeviceMode.demographic;
 
     // select 相關
     areaSelectItem: any = {};
@@ -166,16 +169,18 @@ export default class ReportDemographic extends Vue {
         quarter: ECountType.quarter,
         year: ECountType.year
     };
+    isIncludedEmployeeSelectItem: any = {
+        yes: EIncludedEmployee.yes,
+        no: EIncludedEmployee.no,
+    };
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
-        type: ""
+        type: "",
+        isIncludedEmployee: 'no'
     };
-
-    // chart 相關
-    trafficChartData: any = [];
 
     // 整理 showReportData 相關
     areaSummaryFilter: any = [];
@@ -190,7 +195,7 @@ export default class ReportDemographic extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
-        this.initChartDeveloper();
+        // this.initChartDeveloper();
     }
 
     mounted() {
@@ -306,15 +311,6 @@ export default class ReportDemographic extends Vue {
     // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
-
-    clearInputFormData() {
-        this.inputFormData = {
-            areaId: "all",
-            groupId: "all",
-            deviceId: "all",
-            type: "hour"
-        };
-    }
 
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();
@@ -801,7 +797,8 @@ export default class ReportDemographic extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
-            type: ""
+            type: "",
+            isIncludedEmployee: 'no'
         };
 
         await this.$server
@@ -901,7 +898,8 @@ export default class ReportDemographic extends Vue {
             areaId: "all",
             groupId: "all",
             deviceId: "all",
-            type: this.filterData.type
+            type: this.filterData.type,
+            isIncludedEmployee: 'no'
         };
 
         console.log(" - ", this.sites);
@@ -928,8 +926,8 @@ export default class ReportDemographic extends Vue {
         );
     }
 
-    swtichAge(data) {
-        switch (data) {
+    switchAgeRange(index) {
+        switch (index) {
             case "0":
                 return EAgeRange.lower20;
             case "1":
@@ -942,6 +940,8 @@ export default class ReportDemographic extends Vue {
                 return EAgeRange.m51_60;
             case "5":
                 return EAgeRange.upper61;
+            default:
+                return EAgeRange.none;
         }
     }
 
@@ -961,7 +961,6 @@ export default class ReportDemographic extends Vue {
                 temperatureMax: 0,
                 weather: EWeather.none
             };
-            console.log("summary - ", summary);
 
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
@@ -978,22 +977,6 @@ export default class ReportDemographic extends Vue {
                     tempChartData = loopChartData;
                     break;
                 }
-            }
-
-            //分開跑maleRange
-            for (const index in summary.maleRanges) {
-                tempChartData.ageRange = this.swtichAge(index);
-                tempChartData.maleCount = summary.maleRanges[index];
-                tempChartData.femaleCount = summary.femaleRanges[index];
-                console.log(
-                    " //分開跑maleRange",
-                    JSON.parse(JSON.stringify(tempChartDatas)),
-                    JSON.parse(JSON.stringify(tempChartData)),
-                    tempChartData.ageRange
-                );
-                let tempDate = JSON.parse(JSON.stringify(tempChartData));
-
-                tempChartDatas.push(tempDate);
             }
 
             if (!haveSummary) {
@@ -1016,6 +999,32 @@ export default class ReportDemographic extends Vue {
                         break;
                     }
                 }
+            }
+
+            //跑maleRange、 femaleRange
+            for (let index = 0; index < 6; index++) {
+                if (summary.maleRanges[index] == undefined) {
+                    break;
+                }
+
+                if (summary.femaleRanges[index] == undefined) {
+                    break;
+                }
+
+                let tempData = JSON.parse(JSON.stringify(tempChartData));
+                tempData.ageRange = this.switchAgeRange(index.toString());
+                tempData.maleCount = summary.maleRanges[index];
+                tempData.femaleCount = summary.femaleRanges[index];
+
+                // console.log(
+                //     index,
+                //     " //分開跑maleRange",
+                //     JSON.parse(JSON.stringify(tempChartDatas)),
+                //     JSON.parse(JSON.stringify(tempChartData)),
+                //     tempData.ageRange
+                // );
+
+                tempChartDatas.push(tempData);
             }
         }
 
@@ -1120,10 +1129,13 @@ export default class ReportDemographic extends Vue {
         ) {
             // 依照單一deviceGroup篩選
             for (const singleData of this.areaSummaryFilter) {
+
+                console.log('singleData - ', singleData);
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
+                        console.log('tempSingleData[0].objectId - ', tempSingleData[0].objectId);
                         if (
                             this.inputFormData.groupId ===
                             tempSingleData[0].objectId
@@ -1224,6 +1236,12 @@ export default class ReportDemographic extends Vue {
         this.timeMode = type;
         console.log("type - ", this.inputFormData.type);
     }
+
+    receiveIsIncludedEmployee(isIncludedEmployee) {
+        this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+        console.log("isIncludedEmployee - ", this.inputFormData.isIncludedEmployee);
+    }
+
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 }

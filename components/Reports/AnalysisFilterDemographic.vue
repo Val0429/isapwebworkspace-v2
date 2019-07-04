@@ -6,6 +6,7 @@
             @update:groupId="whenSelectedGroupId($event)"
             @update:deviceId="whenSelectedDeviceId($event)"
             @update:type="whenSelectedType($event)"
+            @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
         >
 
             <template #areaId="{ $attrs, $listeners }">
@@ -45,6 +46,16 @@
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.type"
+                >
+                </iv-form-selection>
+            </template>
+
+            <template #isIncludedEmployee="{ $attrs, $listeners }">
+                <iv-form-selection
+                    class="col-md-2"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.isIncludedEmployee"
                 >
                 </iv-form-selection>
             </template>
@@ -105,6 +116,12 @@ export class AnalysisFilterDemographic extends Vue {
     timeModeSelectItem: object;
 
     @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    isIncludedEmployeeSelectItem: object;
+
+    @Prop({
         type: String, // Boolean, Number, String, Array, Object
         default: "all"
     })
@@ -128,12 +145,19 @@ export class AnalysisFilterDemographic extends Vue {
     })
     type: string;
 
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "no"
+    })
+    isIncludedEmployee: string;
+
     inputFormData: any = {
         areaId: "all",
         groupId: "all",
         deviceId: "all",
         type: "day",
-        inOrOut: "in"
+        inOrOut: "in",
+        isIncludedEmployee: 'no'
     };
 
     created() {}
@@ -160,6 +184,11 @@ export class AnalysisFilterDemographic extends Vue {
         this.inputFormData.type = newVal;
     }
 
+    @Watch("isIncludedEmployee", { deep: true })
+    private isIncludedEmployeeChanged(newVal, oldVal) {
+        this.inputFormData.is = newVal;
+    }
+
     async whenSelectedAreaId() {
         this.$emit("area_id", this.inputFormData.areaId);
     }
@@ -174,6 +203,10 @@ export class AnalysisFilterDemographic extends Vue {
 
     whenSelectedType() {
         this.$emit("type", this.inputFormData.type);
+    }
+
+    whenSelectedIsIncludedEmployee() {
+        this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
     }
 
     IAnalysisFilterForm() {
@@ -212,6 +245,14 @@ export class AnalysisFilterDemographic extends Vue {
                  * @uiColumnGroup - analysis
                  */
                 type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_isIncludedEmployee")}
+                 * @uiColumnGroup - analysis
+                 */
+                isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
+
 
             }
         `;

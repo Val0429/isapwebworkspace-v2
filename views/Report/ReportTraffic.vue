@@ -39,16 +39,19 @@ import {EAreaMode} from "../../components/Reports";
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
+                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"
                     :type="inputFormData.type"
                     :inOrOut="inputFormData.inOrOut"
+                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
                     @area_id="receiveAreaId"
                     @group_id="receiveGroupId"
                     @device_id="receiveDeviceId"
                     @type="receiveType"
                     @in_or_out="receiveInOrOut"
+                    @is_included_employee="receiveIsIncludedEmployee"
                 >
 
                 </analysis_filter_in_out_traffic>
@@ -108,7 +111,7 @@ import { Component, Vue } from "vue-property-decorator";
 import {
     ECountType,
     EDeviceMode,
-    EType
+    EType, EIncludedEmployee
 } from "@/components/Reports/models/EReport";
 import {
     ERegionType,
@@ -120,10 +123,12 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
+// Morris
+import HighChartsService from "@/components/Reports/models/HighChartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import {
     EAreaMode,
-    EDayXSiteX,
+    EChartMode,
     EPageType,
     ESign,
     ETimeMode,
@@ -205,13 +210,18 @@ export default class ReportTraffic extends Vue {
         quarter: ECountType.quarter,
         year: ECountType.year
     };
+    isIncludedEmployeeSelectItem: any = {
+        yes: EIncludedEmployee.yes,
+        no: EIncludedEmployee.no,
+    };
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
         type: "",
-        inOrOut: "in"
+        inOrOut: "in",
+        isIncludedEmployee: 'no'
     };
 
     // chart 相關
@@ -236,7 +246,7 @@ export default class ReportTraffic extends Vue {
     //PickTimeRange 相關
     pSiteIds = [];
     pData: IPeckTimeRange[] = [];
-    pDayXxSiteX: EDayXSiteX = EDayXSiteX.none;
+    pDayXxSiteX: EChartMode = EChartMode.none;
     siteItem: ISiteItems[] = [];
 
     //ReportTable 相關
@@ -270,151 +280,38 @@ export default class ReportTraffic extends Vue {
     }
 
     initPeakTimeRange() {
-        setTimeout(() => {
-            this.pDayXxSiteX = EDayXSiteX.dayXSiteX;
-
-            this.siteItem = [
-                { value: "iVTCTzctbF", text: "台北店" },
-                { value: "pfLGgj8Hf5", text: "台中店" }
-            ];
-
-            let apipData = [
-                {
-                    site: {
-                        objectId: "iVTCTzctbF",
-                        name: "台北店"
-                    },
-                    date: "2019-06-25T16:00:00.000Z",
-                    peakHourDatas: [
-                        {
-                            date: "2019-06-25T01:00:00.000Z",
-                            level: 4
-                        },
-                        {
-                            date: "2019-06-25T02:00:00.000Z",
-                            level: 5
-                        },
-                        {
-                            date: "2019-06-25T03:00:00.000Z",
-                            level: 1
-                        },
-                        {
-                            date: "2019-06-25T04:00:00.000Z",
-                            level: 5
-                        },
-                        {
-                            date: "2019-06-25T05:00:00.000Z",
-                            level: 3
-                        },
-                        {
-                            date: "2019-06-25T06:00:00.000Z",
-                            level: 0
-                        },
-                        {
-                            date: "2019-06-25T07:00:00.000Z",
-                            level: 3
-                        },
-                        {
-                            date: "2019-06-25T08:00:00.000Z",
-                            level: 2
-                        }
-                    ]
-                },
-                {
-                    site: {
-                        objectId: "iVTCTzctbF",
-                        name: "台北店"
-                    },
-                    date: "2019-06-26T16:00:00.000Z",
-                    peakHourDatas: [
-                        {
-                            date: "2019-06-25T01:00:00.000Z",
-                            level: 1
-                        },
-                        {
-                            date: "2019-06-25T02:00:00.000Z",
-                            level: 4
-                        },
-                        {
-                            date: "2019-06-25T03:00:00.000Z",
-                            level: 5
-                        },
-                        {
-                            date: "2019-06-25T04:00:00.000Z",
-                            level: 2
-                        },
-                        {
-                            date: "2019-06-25T05:00:00.000Z",
-                            level: 5
-                        },
-                        {
-                            date: "2019-06-25T06:00:00.000Z",
-                            level: 4
-                        },
-                        {
-                            date: "2019-06-25T07:00:00.000Z",
-                            level: 1
-                        },
-                        {
-                            date: "2019-06-25T08:00:00.000Z",
-                            level: 0
-                        }
-                    ]
-                },
-                {
-                    site: {
-                        objectId: "pfLGgj8Hf5",
-                        name: "台中店"
-                    },
-                    date: "2019-06-26T16:00:00.000Z",
-                    peakHourDatas: [
-                        {
-                            date: "2019-06-25T01:00:00.000Z",
-                            level: 2
-                        },
-                        {
-                            date: "2019-06-25T02:00:00.000Z",
-                            level: 2
-                        },
-                        {
-                            date: "2019-06-25T03:00:00.000Z",
-                            level: 3
-                        },
-                        {
-                            date: "2019-06-25T04:00:00.000Z",
-                            level: 4
-                        },
-                        {
-                            date: "2019-06-25T05:00:00.000Z",
-                            level: 5
-                        },
-                        {
-                            date: "2019-06-25T06:00:00.000Z",
-                            level: 3
-                        },
-                        {
-                            date: "2019-06-25T07:00:00.000Z",
-                            level: 2
-                        },
-                        {
-                            date: "2019-06-25T08:00:00.000Z",
-                            level: 1
-                        }
-                    ]
-                }
-            ];
-
             // Data format conversion
-            for (let item of apipData) {
+            this.siteItem =[];
+            this.pData = [];
+
+            let chartMode = HighChartsService.chartMode(
+            this.startDate,
+            this.endDate,
+            this.sites
+            );
+
+            this.pDayXxSiteX = chartMode;
+            
+            for(let site of this.sites){
+                let item = {value:site.objectId,text:site.name,officeHour:site.officeHour}
+                this.siteItem.push(item);
+            }
+            
+            for (let item of this.responseData.peakHours) {
                 let pDatum: IPeckTimeRange = {
                     site: "",
                     head: [],
                     body: []
                 };
                 let head = [];
-                let levels: number[] = [];
+                let levels = [];
                 for (let subItem of item.peakHourDatas) {
-                    levels.push(subItem.level);
+                    let level = {
+                        time: subItem.date,
+                        value: subItem.level
+                    }
+
+                    levels.push(level);
                     head.push(subItem.date);
                 }
 
@@ -422,12 +319,15 @@ export default class ReportTraffic extends Vue {
                     title: item.date,
                     context: levels
                 };
+
                 pDatum.site = item.site.objectId;
                 pDatum.head = head;
+
                 pDatum.body.push(body);
                 this.pData.push(pDatum);
             }
-        }, 2000);
+             
+       
     }
 
     initReportTable() {
@@ -1095,7 +995,8 @@ export default class ReportTraffic extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            inOrOut: "in"
+            inOrOut: "in",
+            isIncludedEmployee: 'no'
         };
 
         await this.$server
@@ -1204,7 +1105,8 @@ export default class ReportTraffic extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            inOrOut: "in"
+            inOrOut: "in",
+            isIncludedEmployee: 'no'
         };
 
         console.log(" - ", this.sites);
@@ -1523,6 +1425,12 @@ export default class ReportTraffic extends Vue {
             this.sortOutChartData(this.responseData.summaryDatas);
         }
     }
+
+    receiveIsIncludedEmployee(isIncludedEmployee) {
+        this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+        console.log("isIncludedEmployee - ", this.inputFormData.isIncludedEmployee);
+    }
+
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 }
