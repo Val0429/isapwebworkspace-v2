@@ -267,9 +267,9 @@ export default class ReportTraffic extends Vue {
     initDashboardData() {
         this.dTimeMode = ETimeMode.day;
         this.dPageType = EPageType.traffic;
-        this.dWeather =  EWeather.rain;  
+        this.dWeather =  EWeather.rain;
 
-     
+
 
         setTimeout(() => {
         let anlysisDashboard: any = this.$refs.anlysisDashboard;
@@ -1174,7 +1174,6 @@ export default class ReportTraffic extends Vue {
                             officeHour: tempOfficeHours
                         };
                         this.sites.push(tempISite);
-                        console.log('tempISite - ', tempISite);
                         break;
                     }
                 }
@@ -1208,7 +1207,7 @@ export default class ReportTraffic extends Vue {
 		}
 		*/
 
-        this.sites.push(tempISite);
+        // this.sites.push(tempISite);
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);

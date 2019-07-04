@@ -314,87 +314,13 @@ export class FilterCondition extends Vue {
         }
     }
 
-    // async initSelectItemSite() {
-    //     let tempSitesSelectItem = { all: this._("w_All") };
-    //
-    //     const readAllSiteParam: {
-    //         type: string;
-    //     } = {
-    //         type: "all"
-    //     };
-    //
-    //     await this.$server
-    //         .R("/location/site/all", readAllSiteParam)
-    //         .then((response: any) => {
-    //             if (response != undefined) {
-    //                 for (const returnValue of response) {
-    //                     // 自定義 sitesSelectItem 的 key 的方式
-    //                     tempSitesSelectItem[returnValue.objectId] =
-    //                         returnValue.name;
-    //                     this.inputFormData.allSiteIds.push(
-    //                         returnValue.objectId
-    //                     );
-    //                 }
-    //                 this.sitesSelectItem = tempSitesSelectItem;
-    //             }
-    //         })
-    //         .catch((e: any) => {
-    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-    //                 return ResponseFilter.base(this, e);
-    //             }
-    //             console.log(e);
-    //             return false;
-    //         });
-    // }
-
-    // async initSelectItemTag() {
-    //     let tempTagSelectItem = {};
-    //     await this.$server
-    //         .R("/tag/all")
-    //         .then((response: any) => {
-    //             if (response != undefined) {
-    //                 for (const returnValue of response) {
-    //                     // 自定義 tagSelectItem 的 key 的方式
-    //                     tempTagSelectItem[returnValue.objectId] =
-    //                         returnValue.name;
-    //                     this.inputFormData.allTagIds.push(returnValue.objectId);
-    //                 }
-    //                 this.tagSelectItem = tempTagSelectItem;
-    //             }
-    //         })
-    //         .catch((e: any) => {
-    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-    //                 return ResponseFilter.base(this, e);
-    //             }
-    //             console.log(e);
-    //             return false;
-    //         });
-    // }
-
-    // async initSelectItemTree() {
-    //     await this.$server
-    //         .R("/location/tree")
-    //         .then((response: any) => {
-    //             if (response != undefined) {
-    //                 this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
-    //                     response,
-    //                     this.$user.allowSites
-    //                 );
-    //                 this.regionTreeItem.region = this.regionTreeItem.tree;
-    //             }
-    //         })
-    //         .catch((e: any) => {
-    //             if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-    //                 return ResponseFilter.base(this, e);
-    //             }
-    //             console.log(e);
-    //             return false;
-    //         });
-    // }
-
     tempSaveInputData(data) {
         switch (data.key) {
             case "siteIds":
+                console.log('data.value - ', data.value[1]);
+
+                // if (data.value[1])
+
                 this.inputFormData.siteIds = data.value;
 	            break;
             case "tagIds":
