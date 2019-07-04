@@ -11,7 +11,7 @@
                     <div :class="ePageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
-                            <span v-html="showWeather()" class="weather"></span>
+                            <span v-if="eWeather.none != this.weather" v-html="showWeather()" class="weather"></span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
@@ -329,14 +329,6 @@ export class AnlysisDashboard extends Vue {
     })
     pageType: EPageType;
 
-    @Prop({
-        type: String,
-        default: function() {
-            return EWeather.none;
-        }
-    })
-    weather: EWeather;
-
    @Watch("startDate", { deep: true })
     private watchStartDate(newVal, oldVal) {
         console.log('startDate',this.startDate);
@@ -361,23 +353,21 @@ export class AnlysisDashboard extends Vue {
     private watchPageType(newVal, oldVal) {
         console.log('pageType',this.pageType);
     }
-    @Watch("weather", { deep: true })
-    private watchWeather(newVal, oldVal) {
-        console.log('weather',this.weather);
-    }
+
     
+    weather: EWeather = EWeather.none;
     anlysisData = new ReportDashboard();
+
     eSign = ESign;
     ePageType = EPageType;
+    eWeather = EWeather;
     
     created() {}
 
     async mounted() {
-          console.log('mounted',this.startDate,this.endDate,this.type, this.siteIds);
     }
 
     async initData(){
-        console.log('initData',this.startDate,this.endDate,this.type, this.siteIds);
         const readParam: {
             startDate: Date,
             endDate: Date,
@@ -394,14 +384,18 @@ export class AnlysisDashboard extends Vue {
         
           await this.$server.C("/report/complex", readParam)
             .then((response: any) => {
-     
                 if (response != undefined) {
                     this.anlysisData.pageType= this.pageType;
+
+                    if(response.weather){
+                          this.weather = response.weather.icon;
+                    }
+
                         if(response.peopleCounting){
                           this.anlysisData.traffic = {
                             sign: response.peopleCounting.variety == null ? ESign.none : (response.peopleCounting.variety > 0 ? ESign.positive : ESign.negative) ,
                             total:response.peopleCounting.value,
-                            value: response.peopleCounting.value,
+                            value:  response.peopleCounting.variety ? response.peopleCounting.value * response.peopleCounting.variety : null,
                             valueRatio: response.peopleCounting.variety
                         }
                           }
@@ -409,7 +403,7 @@ export class AnlysisDashboard extends Vue {
                             this.anlysisData.averageOccupancy = {
                             sign: response.averageOccupancy.variety == null ? ESign.none : (response.averageOccupancy.variety > 0 ? ESign.positive : ESign.negative) ,
                             total: response.averageOccupancy.value,
-                            value: response.averageOccupancy.value,
+                            value: response.averageOccupancy.variety ? response.averageOccupancy.value * response.averageOccupancy.variety : null,
                             valueRatio: response.averageOccupancy.variety
                             }
                         }
@@ -418,7 +412,7 @@ export class AnlysisDashboard extends Vue {
                           this.anlysisData.averageDwellTime= {
                          sign: response.averageDwellTime.variety  == null ? ESign.none : (response.averageDwellTime.variety > 0 ? ESign.positive : ESign.negative) ,
                             total: response.averageDwellTime.value,
-                            value: response.averageDwellTime.value,
+                            value: response.averageDwellTime.variety ? response.averageDwellTime.value * response.averageDwellTime.variety : null,
                             valueRatio: response.averageDwellTime.variety
                         }
                          }
@@ -426,55 +420,55 @@ export class AnlysisDashboard extends Vue {
                               if(response.demographic){
                           this.anlysisData.demographic= {
                                 sign: response.demographic.maleVariety  == null ? ESign.none : (response.demographic.maleVariety > 0 ? ESign.positive : ESign.negative) ,
-                            value:  response.demographic.malePercent,
-                            valueRatio:  response.demographic.maleVariety,
+                            value:  response.demographic.maleVariety,
+                            valueRatio:  response.demographic.malePercent,
                             sign2: response.demographic.femaleVariety  == null ? ESign.none : (response.demographic.femaleVariety > 0 ? ESign.positive : ESign.negative) ,
-                            value2: response.demographic.femalePercent,
-                            valueRatio2:   response.demographic.femaleVariety
+                            value2: response.demographic.femaleVariety,
+                            valueRatio2:   response.demographic.femalePercent
                         }
                               }
                                 if(response.vipBlacklist){
                             this.anlysisData.vipBlacklist= {
                                 sign: response.vipBlacklist.variety  == null ? ESign.none : (response.vipBlacklist.variety > 0 ? ESign.positive : ESign.negative) ,
-                              value: response.vipBlacklist.value,
-                              valueRatio:  response.vipBlacklist.variety,
+                              value: response.vipBlacklist.vpiVariety,
+                              valueRatio:  response.vipBlacklist.vpiPercent,
                              sign2: response.vipBlacklist.variety  == null ? ESign.none : (response.vipBlacklist.variety > 0 ? ESign.positive : ESign.negative) ,
-                              value2: response.vipBlacklist.value,
-                              valueRatio2: response.vipBlacklist.variety
+                              value2: response.vipBlacklist.blacklistVariety,
+                              valueRatio2: response.vipBlacklist.blacklistPercent
                           } }
                              if(response.repeatCustomer){
                             this.anlysisData.repeatCustomer= {
-                                   sign: response.repeatCustomer.variety  == null ? ESign.none : (response.repeatCustomer.variety > 0 ? ESign.positive : ESign.negative) ,
+                              sign: response.repeatCustomer.variety  == null ? ESign.none : (response.repeatCustomer.variety > 0 ? ESign.positive : ESign.negative) ,
                               total: response.repeatCustomer.value,
-                              value: response.repeatCustomer.value,
+                               value: response.repeatCustomer.variety ? response.repeatCustomer.value * response.repeatCustomer.variety : null,
                               valueRatio: response.repeatCustomer.variety
                           }}
                              if(response.revenue){
                           this.anlysisData.revenue= {
                               sign: response.revenue.variety  == null ? ESign.none : (response.revenue.variety > 0 ? ESign.positive : ESign.negative) ,
                             total:  response.revenue.value,
-                            value:  response.revenue.value,
+                            value:   response.revenue.variety ? response.revenue.value * response.revenue.variety : null,
                             valueRatio: response.revenue.variety
                                 }}
                              if(response.transaction){
                           this.anlysisData.transaction= {
                                 sign: response.transaction.variety  == null ? ESign.none : (response.transaction.variety > 0 ? ESign.positive : ESign.negative) ,
                             total: response.transaction.value,
-                            value:  response.transaction.value,
+                            value: response.transaction.variety ? response.transaction.value * response.transaction.variety : null,
                             valueRatio: response.transaction.variety
                              }}
                              if(response.conversion){
                           this.anlysisData.conversion= {
                                sign: response.conversion.variety  == null ? ESign.none : (response.conversion.variety > 0 ? ESign.positive : ESign.negative) ,
                             total:  response.conversion.value,
-                            value:  response.conversion.value,
+                               value: response.conversion.variety ? response.conversion.value * response.conversion.variety : null,
                             valueRatio: response.conversion.variety
                               }}
                              if(response.asp){
                           this.anlysisData.asp = {
                                  sign: response.asp.variety  == null ? ESign.none : (response.asp.variety > 0 ? ESign.positive : ESign.negative) ,
                             total: response.asp.value,
-                            value:  response.asp.value,
+                                 value: response.asp.variety ? response.asp.value * response.asp.variety : null,
                             valueRatio: response.asp.variety
                          }
                     }
@@ -491,18 +485,17 @@ export class AnlysisDashboard extends Vue {
     }
 
     numberWithCommas(number) {
-        return number.toString().replace(/\B(?=(\d{3})+\b)/g, ",");
+        return Math.abs(number).toFixed(0).toString().replace(/\B(?=(\d{3})+\b)/g, ",");
     }
 
     toPercent(point, fixed) {
-        var str = Number(point * 100).toFixed(fixed);
+        var str = Number(Math.abs(point) * 100).toFixed(fixed);
         str += "%";
         return str;
     }
 
     showWeather(){
         let result = HighChartsService.weatherIcon(this.weather);
-        console.log(result);
         return result;
     }
         

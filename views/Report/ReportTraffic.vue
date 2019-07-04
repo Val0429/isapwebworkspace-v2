@@ -16,14 +16,18 @@ import {EAreaMode} from "../../components/Reports";
             <iv-card>
 
                 <template #toolbox>
-
                     <!-- Ben -->
                     <iv-toolbox-export-excel size="lg" />
                     <iv-toolbox-export-csv size="lg" />
+
+                    <!-- Morris -->
                     <iv-toolbox-export-pdf size="lg" />
 
                     <!-- Tina -->
-                    <iv-toolbox-send-mail size="lg" />
+                    <iv-toolbox-send-mail
+                        size="lg"
+                        @click="modalShow = !modalShow"
+                    />
                 </template>
 
                 <!-- Tina -->
@@ -57,7 +61,6 @@ import {EAreaMode} from "../../components/Reports";
                     :type="dTimeMode"
                     :siteIds="pSiteIds"
                     :tagIds="tags"
-                    :weather="dWeather"
                     :pageType="dPageType"
                 >
                 </anlysis-dashboard>
@@ -89,6 +92,13 @@ import {EAreaMode} from "../../components/Reports";
 
         </div>
 
+        <!-- Tina -->
+        <recipient
+            :modalShow="modalShow"
+            @user-data="receiveUserData"
+            @return-modalShow="receiveModalShowData"
+        ></recipient>
+
     </div>
 </template>
 
@@ -108,8 +118,7 @@ import {
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
-import HighChartsService from "@../../../components/Reports/models/HighChartsService";
-
+import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import {
@@ -222,7 +231,6 @@ export default class ReportTraffic extends Vue {
 
     //ReportDashboard 相關
     dPageType: EPageType = EPageType.none;
-    dWeather: EWeather = EWeather.none;
     dTimeMode: ETimeMode = ETimeMode.none;
 
     //PickTimeRange 相關
@@ -249,23 +257,14 @@ export default class ReportTraffic extends Vue {
         await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
-        // await this.initOfficeHour();
-
-        // Ben
-        this.initDashboardData();
-        this.initPeakTimeRange();
-        this.initReportTable();
     }
 
     // Ben //
     initDashboardData() {
         this.dTimeMode = ETimeMode.day;
         this.dPageType = EPageType.traffic;
-        this.dWeather = EWeather.rain;
-
         setTimeout(() => {
             let anlysisDashboard: any = this.$refs.anlysisDashboard;
-            console.log("initDashboardData", this.filterData);
             anlysisDashboard.initData();
         }, 300);
     }
@@ -590,7 +589,7 @@ export default class ReportTraffic extends Vue {
                     weather: weather,
                     traffic: Math.floor(Math.random() * 500),
                     revenue: Math.floor(Math.random() * 1000),
-                    transaction: Math.floor(Math.random() * 50),
+                    transaction: Math.floor(Math.random() * 50)
                 };
                 this.chartDatas.push(tempChartData);
             }
@@ -687,23 +686,6 @@ export default class ReportTraffic extends Vue {
                         this.$user.allowSites
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-    }
-
-    async initOfficeHour() {
-        await this.$server
-            .R("/office-hour")
-            .then((response: any) => {
-                if (response != undefined) {
-                    this.officeHourItemDetail = response.results;
                 }
             })
             .catch((e: any) => {
@@ -1094,6 +1076,7 @@ export default class ReportTraffic extends Vue {
     }
 
     async receiveUserData(data) {
+        this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
 
@@ -1139,8 +1122,6 @@ export default class ReportTraffic extends Vue {
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
-
-        console.log("this.filterData.siteIds - ", this.filterData.siteIds);
 
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
@@ -1213,6 +1194,10 @@ export default class ReportTraffic extends Vue {
         this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
+        // Ben
+        this.initDashboardData();
+        this.initPeakTimeRange();
+        this.initReportTable();
 
         this.inputFormData = {
             areaId: "all",
@@ -1313,7 +1298,9 @@ export default class ReportTraffic extends Vue {
                         )
                     ) {
                         console.log(" - ", weather.icon);
-                        tempChartData.weather = this.weatherIcon(weather.icon);
+                        tempChartData.weather = WeatherService.WeatherIcon(
+                            weather.icon
+                        );
                         tempChartData.temperatureMin = weather.temperatureMin;
                         tempChartData.temperatureMax = weather.temperatureMax;
                         break;
@@ -1326,85 +1313,6 @@ export default class ReportTraffic extends Vue {
 
         this.chartDatas = tempChartDatas;
     }
-
-    // filterSiteData() {
-    //     console.log("summaryDatas - ", this.responseData.summaryDatas);
-    //
-    //     let tempChartDatas: IChartTrafficData[] = [];
-    //     this.chartDatas = [];
-    //
-    //     // 取得date、siteObjectId資料
-    //     for (const summary of this.responseData.summaryDatas) {
-    //         let tempChartData: IChartTrafficData = {
-    //             date: summary.date,
-    //             siteObjectId: summary.site.objectId,
-    //             temperatureMin: 0,
-    //             temperatureMax: 0,
-    //             traffic: 0,
-    //             revenue: 0,
-    //             transaction: 0,
-    //             weather: EWeather.none
-    //         };
-    //
-    //         let haveSummary = false;
-    //         for (let loopChartData of tempChartDatas) {
-    //             if (
-    //                 this.checkDateAndSite(
-    //                     loopChartData.date,
-    //                     summary.date,
-    //                     loopChartData.siteObjectId,
-    //                     summary.site.objectId
-    //                 )
-    //             ) {
-    //                 haveSummary = true;
-    //                 tempChartData = loopChartData;
-    //                 break;
-    //             }
-    //         }
-    //         tempChartData.traffic += summary.in;
-    //
-    //         if (!haveSummary) {
-    //             // 取得revenue、transaction資料
-    //             for (const saleRecord of this.responseData.salesRecords) {
-    //                 if (
-    //                     this.checkDateAndSite(
-    //                         tempChartData.date,
-    //                         saleRecord.date,
-    //                         tempChartData.siteObjectId,
-    //                         saleRecord.site.objectId
-    //                     )
-    //                 ) {
-    //                     tempChartData.revenue = saleRecord.revenue;
-    //                     tempChartData.transaction = saleRecord.transaction;
-    //                     break;
-    //                 }
-    //             }
-    //
-    //             // 取得weather、temperatureMin、temperatureMax
-    //             for (const weather of this.responseData.weathers) {
-    //                 if (
-    //                     this.checkDateAndSite(
-    //                         tempChartData.date,
-    //                         weather.date,
-    //                         tempChartData.siteObjectId,
-    //                         weather.site.objectId
-    //                     )
-    //                 ) {
-    //                     tempChartData.weather = this.weatherIcon(weather.icon);
-    //                     tempChartData.temperatureMin = weather.temperatureMin;
-    //                     tempChartData.temperatureMax = weather.temperatureMax;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //
-    //         tempChartDatas.push(tempChartData);
-    //     }
-    //
-    //     console.log(" - ", this.chartDatas);
-    //
-    //     this.chartDatas = tempChartDatas;
-    // }
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
@@ -1612,33 +1520,6 @@ export default class ReportTraffic extends Vue {
         // 單一site
         if (this.filterData.firstSiteId) {
             this.sortOutChartData(this.responseData.summaryDatas);
-        }
-    }
-
-    weatherIcon(icon: string): EWeather {
-        switch (icon) {
-            case "clear-day":
-                return EWeather.clearDay;
-            case "clear-night":
-                return EWeather.clearNight;
-            case "rain":
-                return EWeather.rain;
-            case "snow":
-                return EWeather.snow;
-            case "sleet":
-                return EWeather.sleet;
-            case "wind":
-                return EWeather.wind;
-            case "fog":
-                return EWeather.fog;
-            case "cloudy":
-                return EWeather.cloudy;
-            case "partly-cloudy-day":
-                return EWeather.partlyCloudyDay;
-            case "partly-cloudy-night":
-                return EWeather.partlyCloudyNight;
-            default:
-                return EWeather.none;
         }
     }
 
