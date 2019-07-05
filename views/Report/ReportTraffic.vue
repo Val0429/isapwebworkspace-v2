@@ -89,7 +89,10 @@ import {EAreaMode} from "../../components/Reports";
                 </peak-time-range>
 
                 <!-- Ben -->
-                <report-table :reportTableData="rData">
+                <report-table 
+                :reportTableData="rData"
+                :reportTableTitle="reportTableTitle"
+                >
                 </report-table>
 
             </iv-card>
@@ -244,15 +247,16 @@ export default class ReportTraffic extends Vue {
     //ReportDashboard 相關
     dPageType: EPageType = EPageType.none;
     dTimeMode: ETimeMode = ETimeMode.none;
+    pSiteIds = [];
 
     //PickTimeRange 相關
-    pSiteIds = [];
     pData: IPeckTimeRange[] = [];
     pDayXxSiteX: EChartMode = EChartMode.none;
     siteItem: ISiteItems[] = [];
 
     //ReportTable 相關
     rData = new ReportTableData();
+    reportTableTitle = {}
 
     created() {
         // this.initChartDeveloper();
@@ -360,6 +364,13 @@ export default class ReportTraffic extends Vue {
                 this.sites
             );
             this.rData.chartMode = chartMode;
+
+            this.reportTableTitle = {
+               inTitle: this._('w_TrafficIn'),
+               outTitle: this._('w_TrafficOut'),
+               inTotalTitle: this._('w_TrafficInTotal'),
+               outTotalTitle: this._('w_TrafficOutTotal')
+            }
             
             //head
             this.rData.head = [];
