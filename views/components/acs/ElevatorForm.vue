@@ -40,29 +40,11 @@ import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, t
 import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
 import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
 import { System } from '@/config/default/api/interfaces';
-
+import { BasicFormQuick } from './basic-form-quick';
+import { PermissionName} from '@/../src/constants/permissions';
 @Component
 /// 1) class name
-export default class ElevatorForm extends Vue implements IFormQuick2 {
-
- params:any = {};
-  onFilterSubmit($event?: any): void {
-     this.params = $event || {};
-  }
-  filterVisible: boolean=true;
-  viewChange($event: any): void {
-      console.log("view", $event)
-    this.filterVisible = $event == 'view';
-  } 
-  filterInterface():string{
-      return `interface {
-            /**
-            * @uiLabel - ${this._("name")}
-            */
-            name?:string;
-        }`;
-  } 
-    
+export default class ElevatorForm extends BasicFormQuick implements IFormQuick2 {
 
     system = System;
     /// 2) cgi path
@@ -71,10 +53,8 @@ export default class ElevatorForm extends Vue implements IFormQuick2 {
     tView: string = "w_Elevator";
     tAdd: string = "w_ElevatorAdd";
     tEdit: string = "w_ElevatorEdit";
-    /// 4) possibility - edit / add / delete
-    canAdd: boolean = true;
-    canEdit: boolean = true;
-    canDelete: boolean = true;
+    
+    
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
@@ -150,6 +130,7 @@ export default class ElevatorForm extends Vue implements IFormQuick2 {
     floorOptions=[];
     elevatorGroups =[];
     async created(){
+        this.permissionName = PermissionName.elevator;
         await Promise.all([this.getFloorOptions(),this.getElevatorGroups()]);
     }
     private async getFloorOptions() {
@@ -171,10 +152,7 @@ export default class ElevatorForm extends Vue implements IFormQuick2 {
         let site = group && group.area && group.area.site ? group.area.site.name : "";
         return {elevatorgroup, area, site};
     }
-    getName(key:any, options:{key:any, value:any}[]){
-        let item = options.find(x=>x.key==key);
-        return item?item.value:'';
-    }
+    
 }
 </script>
 

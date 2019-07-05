@@ -32,27 +32,12 @@ import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, t
 import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
 import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts';
 import { System } from '@/config/default/api/interfaces';
+import { BasicFormQuick } from './basic-form-quick';
+import { PermissionName} from '@/../src/constants/permissions';
 @Component
 /// 1) class name
-export default class ReaderForm extends Vue implements IFormQuick2 {
-     params:any = {};
-  onFilterSubmit($event?: any): void {
-     this.params = $event || {};
-  }
-  filterVisible: boolean=true;
-  viewChange($event: any): void {
-      console.log("view", $event)
-    this.filterVisible = $event == 'view';
-  } 
-  filterInterface():string{
-      return `interface {
-            /**
-            * @uiLabel - ${this._("name")}
-            */
-            name?:string;
-        }`;
-  } 
-    
+export default class ReaderForm extends BasicFormQuick implements IFormQuick2 {
+
     system = System;
     /// 2) cgi path
     path: string = "/acs/reader";
@@ -60,10 +45,7 @@ export default class ReaderForm extends Vue implements IFormQuick2 {
     tView: string = "w_Reader";
     tAdd: string = "w_ReaderAdd";
     tEdit: string = "w_ReaderEdit";
-    /// 4) possibility - edit / add / delete
-    canAdd: boolean = false;
-    canEdit: boolean = false;
-    canDelete: boolean = false;
+
     selectedOptions=[];
     options :{key:any, value:any}[]=[];
     /// 4) interfaces - view / edit / add
@@ -135,15 +117,12 @@ export default class ReaderForm extends Vue implements IFormQuick2 {
     postEdit(row) {
         return;
     }
-    /// Done
-    getName(key:any){
-        let item = this.options.find(x=>x.key==key);        
-        return item?item.value:'';
-    }
+    
     doors:any[]=[];
     doorGroups:any[]=[];
     async created(){
-         await Promise.all([
+        this.permissionName = PermissionName.reader;
+        await Promise.all([
         this.getDoorOptions(),
         this.getDoorGroupOptions()]);
     }

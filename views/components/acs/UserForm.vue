@@ -37,27 +37,11 @@ import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, t
 import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
 import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts';
 import { System } from '@/config/default/api/interfaces';
+import { BasicFormQuick } from './basic-form-quick';
+import { PermissionName} from '@/../src/constants/permissions';
 @Component
-/// 1) class name
-export default class UserForm extends Vue implements IFormQuick2 {
-     params:any = {};
-  onFilterSubmit($event?: any): void {
-     this.params = $event || {};
-  }
-  filterVisible: boolean=true;
-  viewChange($event: any): void {
-      console.log("view", $event)
-    this.filterVisible = $event == 'view';
-  } 
-  filterInterface():string{
-      return `interface {
-            /**
-            * @uiLabel - ${this._("name")}
-            */
-            name?:string;
-        }`;
-  } 
-    
+export default class UserForm extends BasicFormQuick implements IFormQuick2 {
+   
     system = System;
     /// 2) cgi path
     path: string = "/users";
@@ -66,9 +50,9 @@ export default class UserForm extends Vue implements IFormQuick2 {
     tAdd: string = "w_UserAdd";
     tEdit: string = "w_UserEdit";
     /// 4) possibility - edit / add / delete
-    canAdd: boolean = true;
-    canEdit: boolean = true;
-    canDelete: boolean = true;
+    // canAdd: boolean = true;
+    // canEdit: boolean = true;
+    // canDelete: boolean = true;
     roleOptions :{key:any, value:any}[]=[];
     apiRoleOptions :{key:any, value:any}[]=[];
     /// 4) interfaces - view / edit / add
@@ -150,6 +134,7 @@ export default class UserForm extends Vue implements IFormQuick2 {
         return;
     }
     async created(){
+        this.permissionName = PermissionName.user;
         await this.getApiRoles();
         this.roleOptions = [{key:"Admin", value:"Admin"},{key:"User", value:"User"}];
     }
@@ -158,11 +143,7 @@ export default class UserForm extends Vue implements IFormQuick2 {
         this.apiRoleOptions=resp.results.map(x=>{return {key:x.objectId, value:x.identifier} });
         console.log("apiRoleOptions", this.apiRoleOptions)    
     }
-    /// Done
-    getName(key:any, options:any[]){
-        let item = options.find(x=>x.key==key);        
-        return item?item.value:'';
-    }
+    
     
     
         

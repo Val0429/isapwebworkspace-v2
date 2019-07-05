@@ -1,5 +1,11 @@
 <template>
-    <iv-form-quick>
+<div>
+    <ivc-filter-form
+            :inf="filterInterface()"
+            :visible="filterVisible"
+            v-on:input="onFilterSubmit($event)"
+        />
+        <ivc-form-quick v-on:viewChange="viewChange($event)">  
         <!-- 5) custom view templates with <template #view.* /> -->
 
         <template #view.name="{$attrs, $listeners}" >            
@@ -20,16 +26,34 @@
         </template> 
         <!-- 6) custom edit / add template with <template #add.* /> -->
         
-    </iv-form-quick>
+    </ivc-form-quick>
+</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
-import { EFormQuick, IFormQuick } from '@/../components/form';
+import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts';
+import { BasicFormQuick } from './basic-form-quick';
+import { PermissionName} from '@/../src/constants/permissions';
 
 @Component
 /// 1) class name
-export default class SyncReceiverForm extends Vue implements IFormQuick {
+export default class SyncReceiverForm extends BasicFormQuick implements IFormQuick2 {
+    filterInterface(){
+        return `
+                interface {                    
+                    /**
+                    * @uiLabel - ${this._("name")}
+                    */
+                    name?: string;
+                    /**
+                    * @uiLabel - ${this._("w_Email")}
+                    */
+                    email?: string;     
+                }
+                `;
+    }
     /// 2) cgi path
     path: string = "/acs/syncreceiver";
     /// 3) i18n - view / edit / add
