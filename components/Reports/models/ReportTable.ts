@@ -1,7 +1,8 @@
-import { ESign } from './EReport';
+import { ESign, EChartMode } from './EReport';
 import { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut } from './IReportTable';
 
 class ReportTableData {
+    _chartMode: EChartMode = EChartMode.none;
     _head: string[] = [];
     _body: IReportTableDataBody[] = [];
     _foot: IReportTableDataTotal[] = [];
@@ -87,7 +88,18 @@ class ReportTableData {
     }
 
     translationDataFormat() {
-        this._head = this._head.map((x) => new Date(x).getUTCHours() + ':00 - ' + (new Date(x).getUTCHours() + 1) + ':00');
+        switch (this._chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                break;
+        }
+    }
+
+    set chartMode(value: EChartMode) {
+        this._chartMode = value;
     }
 
     set head(value: string[]) {

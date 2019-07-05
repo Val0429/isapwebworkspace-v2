@@ -322,92 +322,154 @@ export default class ReportTraffic extends Vue {
        
     }
 
-    initReportTable() {
-        setTimeout(() => {
-            this.rData.head = [];
-            this.rData.head = [
-                "2019-06-24T09:00:00.000Z",
-                "2019-06-24T10:00:00.000Z",
-                "2019-06-24T11:00:00.000Z",
-                "2019-06-24T12:00:00.000Z",
-                "2019-06-24T13:00:00.000Z",
-                "2019-06-24T14:00:00.000Z",
-                "2019-06-24T16:00:00.000Z",
-                "2019-06-24T17:00:00.000Z",
-                "2019-06-24T18:00:00.000Z",
-                "2019-06-24T19:00:00.000Z",
-                "2019-06-24T20:00:00.000Z",
-                "2019-06-24T21:00:00.000Z"
-            ];
+        showWeek(data) {
+        switch (data) {
+            case 1:
+                return 'Mon';
+            case 2:
+                return 'Tue';
+            case 3:
+                return 'Wed';
+            case 4:
+                return 'Thu';
+            case 5:
+                return 'Fri';
+            case 6:
+                return 'Sat';
+            case 0:
+                return 'Sun';
+        }
+    }
 
-            this.rData.body = [];
-            this.rData.body = [
-                {
-                    area: "1F精品區",
-                    group: "N/A",
-                    in: [
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 2, valueRatio: -0.02 }
-                    ],
-                    out: [
-                        { value: 3, valueRatio: -0.03 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 4, valueRatio: 0.05 }
-                    ]
-                },
-                {
-                    area: "2F生活用品",
-                    group: "Group01",
-                    in: [
-                        { value: 5, valueRatio: 0.06 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 6, valueRatio: -0.07 }
-                    ],
-                    out: [
-                        { value: 7, valueRatio: -0.08 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 8, valueRatio: -0.09 }
-                    ]
+    initReportTable() {
+
+            let chartMode = HighChartsService.chartMode(
+            this.startDate,
+            this.endDate,
+            this.sites
+            );
+
+            this.rData.chartMode = chartMode;
+            
+            this.rData.head = [];
+
+            let sTime = null;
+            let eTime = null;
+            switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                 for(let siteItem of this.sites){
+                    for(let officeHourItem of siteItem.officeHour){
+                        if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
+                            sTime = new Date(officeHourItem.startDate).getUTCHours();
+                        }
+                        if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
+                            eTime = new Date(officeHourItem.endDate).getUTCHours();
+                        }
+                    }
+              
+                }   
+                while(sTime <= eTime){
+                    this.rData.head.push(sTime);
+                    sTime++
                 }
-            ];
-        }, 2000);
+                this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                let sDate = new Date(this.startDate); 
+                let eDate =  new Date(this.endDate);  
+                while(sDate <= eDate){ 
+                this.rData.head.push(sDate.toString());
+                sDate.setDate(sDate.getDate() + 1)
+                }
+                this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                break;
+            }
+           
+            console.log('reportTaeble',this.responseData.summaryDatas)
+            this.rData.body = [];
+            for(let summaryData of this.responseData.summaryDatas){
+                for(let deviceGroup of summaryData.deviceGroups){
+                    let body = {
+                        site: summaryData.site,
+                        area: summaryData.area,
+                        group: deviceGroup.deviceGroup,
+                        in:[],
+                        out:[]
+                    }
+                    this.rData.body.push(body);
+                }
+            }
+
+            // this.rData.body = [
+            //     {
+            //        site: {objectId:"abdsdgfc",name:"紐約店"},
+            //         area: {objectId:"safsadf",name:"1F生活用品"},
+            //         group: {objectId:"",name:"N/A"},
+            //         in: [
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 2, valueRatio: -0.02 }
+            //         ],
+            //         out: [
+            //             { value: 3, valueRatio: -0.03 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 4, valueRatio: 0.05 }
+            //         ]
+            //     },
+            //     {
+            //         site: {objectId:"abdsfc",name:"台北店"},
+            //         area: {objectId:"safsaf",name:"2F生活用品"},
+            //         group: {objectId:"afrewgg",name:"Group01"},
+            //         in: [
+            //             { value: 5, valueRatio: 0.06 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 6, valueRatio: -0.07 }
+            //         ],
+            //         out: [
+            //             { value: 7, valueRatio: -0.08 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: -0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 1, valueRatio: 0.01 },
+            //             { value: 8, valueRatio: -0.09 }
+            //         ]
+            //     }
+            // ];
     }
 
     // Morris //
