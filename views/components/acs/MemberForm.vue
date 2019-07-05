@@ -28,18 +28,18 @@
                     :disabled="isSelected.length !== 1"
                     @click="pageToView"
                 />
-                <iv-toolbox-edit
+                <iv-toolbox-edit v-show="canEdit"
                     :disabled="isSelected.length !== 1"
                     @click="pageToEdit()"
                 />
 
 
-                <iv-toolbox-delete
+                <iv-toolbox-delete v-show="canDelete"
                     :disabled="isSelected.length === 0"
                     @click="doDelete"
                 />
                 <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" /> </template>
+                <iv-toolbox-add v-show="canAdd" @click="pageToAdd(ePageStep.add)" /> </template>
 
                 
             
@@ -79,8 +79,8 @@
                         :disabled="isSelected.length !== 1"
                     >
                         <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit()" />
-                        <iv-toolbox-delete @click="doDelete" />
+                        <iv-toolbox-edit v-show="canEdit" @click="pageToEdit()" />
+                        <iv-toolbox-delete v-show="canDelete" @click="doDelete" />
                     </iv-toolbox-more>
                 </template>
 
@@ -311,7 +311,7 @@ import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
 import ImageBase64 from "@/services/ImageBase64";
 import CardTemplateBase64 from "@/components/FET_Card/models/cardTemplateBase64";
-
+import { PermissionName} from '@/../src/constants/permissions';
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
 import SortSelect from "@/components/SortSelect/SortSelect.vue";
@@ -336,6 +336,18 @@ enum ITemplateCard {
     }
 })
 export default class MemberForm extends Vue {
+    beforeMount(){
+        if(!this.$user || !this.$user.permissions)return;
+        this.permissionName = PermissionName.member;
+        this.canAdd = this.$user.permissions.find(x=>x.access.C === true && x.of.identifier == this.permissionName) != undefined;
+        this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
+        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
+    }
+    canAdd:boolean;
+    canEdit:boolean;
+    canDelete:boolean;
+    permissionName:string;
+
     // // Master
     // objectId                     objectId
     // premissionSelected           AccessRules (premissionTableAPI: tableid => ObjectToken, show: ObjectName)
@@ -419,6 +431,7 @@ export default class MemberForm extends Vue {
     // dateOfViolation3             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
 
     ////////////////////////////////////////////////////////////////
+    
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
