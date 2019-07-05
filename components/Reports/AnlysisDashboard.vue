@@ -331,27 +331,21 @@ export class AnlysisDashboard extends Vue {
 
    @Watch("startDate", { deep: true })
     private watchStartDate(newVal, oldVal) {
-        console.log('startDate',this.startDate);
     }
    @Watch("endDate", { deep: true })
     private watchEndDate(newVal, oldVal) {
-        console.log('endDate',this.endDate);
     }
        @Watch("type", { deep: true })
     private watchType(newVal, oldVal) {
-        console.log('type',this.type);
     }
    @Watch("siteIds", { deep: true })
     private watchSiteIds(newVal, oldVal) {
-        console.log('siteIds',this.siteIds);
     }
    @Watch("tagIds", { deep: true })
     private watchTagIds(newVal, oldVal) {
-        console.log('tagIds',this.tagIds);
     }
    @Watch("pageType", { deep: true })
     private watchPageType(newVal, oldVal) {
-        console.log('pageType',this.pageType);
     }
 
     
