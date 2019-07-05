@@ -30,8 +30,8 @@ interface RestfulRequest extends ApisRequestBase {
         '/acs/member': [any, any, true];
         '/acs/workgroup': [any, any, true];
         '/acs/permissiontable': [any, any, true];
-        '/acs/cardprofile': [any, any, true];
-        '/acs/profileId': [any, any, true];
+        '/acs/dropdownlist?type=Certification': [any, any, true];
+        '/acs/dropdownlist?type=ProfileId': [any, any, true];
     };
 
     Put: {
