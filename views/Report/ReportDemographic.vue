@@ -842,7 +842,7 @@ export default class ReportDemographic extends Vue {
     // Ben //
     initDashboardData() {
         this.dTimeMode = ETimeMode.day;
-        this.dPageType = EPageType.traffic;
+        this.dPageType = EPageType.demographic;
         setTimeout(() => {
             let anlysisDashboard: any = this.$refs.anlysisDashboard;
             anlysisDashboard.initData();
