@@ -56,7 +56,7 @@ import { HumanDetectionCheck, HumanDetectionRead, HumanDetectionUpdate } from '@
 import { CMSRead, CMSUpdate, CMSDelete, CMSCreate } from '@/config/default/api/ServerCMS';
 
 // import Server FRS
-import { FRSUpdate, FRSCreate, FRSDelete, FRSRead, FRSReadDevice } from '@/config/default/api/ServerFRS';
+import { FRSUpdate, FRSCreate, FRSDelete, FRSRead, FRSReadDevice, FRSReadUserGroup } from '@/config/default/api/ServerFRS';
 
 // import Business Operation Office Hour
 import { OfficeHourCreate, OfficeHourDelete, OfficeHourRead, OfficeHourReadAll, OfficeHourUpdate } from '@/config/default/api/BusinessOperationOfficeHour';
@@ -151,6 +151,7 @@ interface RestfulRequest extends ApisRequestBase {
         // Server FRS
         '/partner/frs': [FRSCreate.Input, FRSCreate.Output, false];
         '/partner/frs/device': [FRSReadDevice.Input, FRSReadDevice.Output, false];
+        '/partner/frs/user-group': [FRSReadUserGroup.Input, FRSReadUserGroup.Output, false];
 
         // Server HD
         '/partner/human-detection': [any, any, false];

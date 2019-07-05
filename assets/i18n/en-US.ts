@@ -156,6 +156,11 @@ export default class LangObject {
     w_AllAreas = 'All Areas';
     w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDevices = 'All Devices';
+    w_Employee = 'Employee';
+    w_VIP = 'VIP';
+    w_Blacklist = 'Blacklist';
+    w_SetUserGroupInFRS = '* Set User Group In FRS';
+    w_SetUserGroupInFRS1 = 'Set User Group In FRS';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
@@ -171,6 +176,8 @@ export default class LangObject {
     w_ErrorLatitude = 'Latitude only -90~90';
     w_ErrorReadData = 'Read data failed, please try again.';
     w_ErrorRecognize = 'Recognize failed, please try again.';
+    w_ErrorConfig = 'Required IP, Port, WSPort, Protocol, Account and Password';
+    w_WrongConfig = 'Please check IP, Port, WSPort, Protocol, Account and Password again';
 
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
@@ -596,7 +603,7 @@ export default class LangObject {
     w_ServerFRS_AddSuccess = 'FRS Server add success.';
     w_ServerFRS_ADDFailed = 'Add failed! Can not found the FRS Server, please try again.';
     w_ServerFRS_ADDDuplicate = 'Add failed! FRS Server is duplicate, please try again.';
-    w_ServerFRS_EditSuccess = 'CMS Server edit success.';
+    w_ServerFRS_EditSuccess = 'FRS Server edit success.';
     w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
     w_ServerFRS_EditDuplicate = 'Edit failed! FRS Server is duplicate, please try again.';
     w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
