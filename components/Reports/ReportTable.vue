@@ -1,5 +1,5 @@
 <template>
-    <div class="animated fadeIn">
+    <div class="animated fadeIn overflow">
         <title>Report Table</title>
         <table
             class="table table-bordered"
@@ -164,4 +164,10 @@ Vue.component("report-table", ReportTable);
     color: #1bbc9b;
     font-size: 10px;
 }
+
+.overflow{
+    overflow-y:auto;
+}
+
 </style>
+
