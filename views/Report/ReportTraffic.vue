@@ -89,7 +89,7 @@ import {EAreaMode} from "../../components/Reports";
                 </peak-time-range>
 
                 <!-- Ben -->
-                <report-table 
+                <report-table
                 :reportTableData="rData"
                 :reportTableTitle="reportTableTitle"
                 >
@@ -256,7 +256,7 @@ export default class ReportTraffic extends Vue {
 
     //ReportTable 相關
     rData = new ReportTableData();
-    reportTableTitle = {}
+    reportTableTitle = {};
 
     created() {
         // this.initChartDeveloper();
@@ -371,7 +371,7 @@ export default class ReportTraffic extends Vue {
                inTotalTitle: this._('w_TrafficInTotal'),
                outTotalTitle: this._('w_TrafficOutTotal')
             }
-            
+
             //head
             this.rData.head = [];
             let sTime = null;
@@ -388,8 +388,8 @@ export default class ReportTraffic extends Vue {
                             eTime = new Date(officeHourItem.endDate).getUTCHours();
                         }
                     }
-              
-                }   
+
+                }
                 while(sTime <= eTime){
                     this.rData.head.push(sTime);
                     sTime++
@@ -398,16 +398,16 @@ export default class ReportTraffic extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                let sDate = new Date(this.startDate); 
-                let eDate =  new Date(this.endDate);  
-                while(sDate <= eDate){ 
+                let sDate = new Date(this.startDate);
+                let eDate =  new Date(this.endDate);
+                while(sDate <= eDate){
                 this.rData.head.push(sDate.toString());
                 sDate.setDate(sDate.getDate() + 1)
                 }
                 // this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
                 break;
             }
-           
+
             //body
             console.log('reportTaeble',this.responseData.summaryDatas)
             this.rData.body = [];
@@ -433,7 +433,7 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                     tempArray.push(body);
-                   
+
                 }
             }
 
@@ -480,9 +480,9 @@ export default class ReportTraffic extends Vue {
                         let inCount = { value: 0, valueRatio: 0}
                         let outCount = { value: 0, valueRatio: 0}
                         for(let summaryData of this.responseData.summaryDatas){
-                            if(new Date(summaryData.date).getFullYear()!= new Date(head).getFullYear() ||  
-                               new Date(summaryData.date).getUTCMonth()!= new Date(head).getUTCMonth() ||  
-                               new Date(summaryData.date).getUTCDate()!= new Date(head).getUTCDate() 
+                            if(new Date(summaryData.date).getFullYear()!= new Date(head).getFullYear() ||
+                               new Date(summaryData.date).getUTCMonth()!= new Date(head).getUTCMonth() ||
+                               new Date(summaryData.date).getUTCDate()!= new Date(head).getUTCDate()
                             ){
                                 continue;
                             }
@@ -608,16 +608,6 @@ export default class ReportTraffic extends Vue {
     // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
-
-    clearInputFormData() {
-        this.inputFormData = {
-            areaId: "all",
-            groupId: "all",
-            deviceId: "all",
-            type: "hour",
-            inOrOut: "in"
-        };
-    }
 
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();

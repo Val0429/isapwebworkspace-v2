@@ -108,12 +108,6 @@ export class AnalysisFilter extends Vue {
     deviceSelectItem: object;
 
     @Prop({
-        type: Array, // Boolean, Number, String, Array, Object
-        default: []
-    })
-    typeSelectItem: object;
-
-    @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default:{}
     })

@@ -35,7 +35,6 @@
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
-                    :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
                     :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
                     :siteIds="filterData.siteIds"
@@ -53,7 +52,7 @@
 
                 </analysis_filter>
 
-                
+
                 <!-- Ben -->
                 <anlysis-dashboard
                     ref="anlysisDashboard"
@@ -198,10 +197,7 @@ export default class ReportDemographic extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
-    typeSelectItem: any = [
-        { value: EType.in, text: EType.in },
-        { value: EType.out, text: EType.out }
-    ];
+
     timeModeSelectItem: any = {
         day: ECountType.day,
         week: ECountType.week,
@@ -358,6 +354,207 @@ export default class ReportDemographic extends Vue {
         }
     }
     // Morris //
+
+    // Ben //
+    initDashboardData() {
+        this.dTimeMode = ETimeMode.day;
+        this.dPageType = EPageType.demographic;
+        setTimeout(() => {
+            let anlysisDashboard: any = this.$refs.anlysisDashboard;
+            anlysisDashboard.initData();
+        }, 300);
+    }
+
+    initReportTable() {
+            let chartMode = HighChartsService.chartMode(
+                this.startDate,
+                this.endDate,
+                this.sites
+            );
+            this.rData.chartMode = chartMode;
+
+
+            this.reportTableTitle = {
+               inTitle: this._('w_Male'),
+               outTitle: this._('w_FeMale'),
+               inTotalTitle: this._('w_MaleTotal'),
+               outTotalTitle: this._('w_FeMaleTotal')
+            }
+
+            //head
+            this.rData.head = [];
+            let sTime = null;
+            let eTime = null;
+            switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                 for(let siteItem of this.sites){
+                    for(let officeHourItem of siteItem.officeHour){
+                        if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
+                            sTime = new Date(officeHourItem.startDate).getUTCHours();
+                        }
+                        if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
+                            eTime = new Date(officeHourItem.endDate).getUTCHours();
+                        }
+                    }
+
+                }
+                while(sTime <= eTime){
+                    this.rData.head.push(sTime);
+                    sTime++
+                }
+                //  this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                let sDate = new Date(this.startDate);
+                let eDate =  new Date(this.endDate);
+                while(sDate <= eDate){
+                this.rData.head.push(sDate.toString());
+                sDate.setDate(sDate.getDate() + 1)
+                }
+                // this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                break;
+            }
+
+            //body
+            console.log('reportTaeble',this.responseData.summaryDatas)
+            this.rData.body = [];
+            let tempArray = [];
+            //篩選出所有店
+            for(let summaryData of this.responseData.summaryDatas){
+                for(let deviceGroup of summaryData.deviceGroups){
+                    let body = {
+                        site: summaryData.site,
+                        area: summaryData.area,
+                        group: deviceGroup.deviceGroup,
+                        in:[],
+                        out:[]
+                    }
+
+                    if(body.group != undefined){
+                        if(tempArray.some(t => t.group.objectId == body.group.objectId)){
+                            continue;
+                        }
+                    }else{
+                        if(tempArray.some(t => t.area.objectId == body.area.objectId)){
+                            continue;
+                        }
+                    }
+                    tempArray.push(body);
+
+                }
+            }
+
+            //填入資料
+            switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                for(let index in tempArray){
+                    for(let head of  this.rData.head){
+                        let inCount = { value: 0, valueRatio: 0}
+                        let outCount = { value: 0, valueRatio: 0}
+                        for(let summaryData of this.responseData.summaryDatas){
+                            if(new Date(summaryData.date).getUTCHours().toString() != head){
+                                continue;
+                            }
+                            for(let deviceGroup of summaryData.deviceGroups){
+                                if( tempArray[index].group != undefined){
+                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
+                                         inCount.value += summaryData.maleTotal
+                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
+                                        outCount.value += summaryData.femaleTotal
+                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
+                                    }
+                                }else{
+                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
+                                          inCount.value += summaryData.maleTotal
+                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
+                                        outCount.value += summaryData.femaleTotal
+                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
+                                    }
+                                }
+                            }
+                        }
+                        tempArray[index].in.push(inCount);
+                        tempArray[index].out.push(outCount)
+                    }
+                }
+                this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                for(let index in tempArray){
+                    for(let head of  this.rData.head){
+                        let inCount = { value: 0, valueRatio: 0}
+                        let outCount = { value: 0, valueRatio: 0}
+                        for(let summaryData of this.responseData.summaryDatas){
+                            if(new Date(summaryData.date).getFullYear()!= new Date(head).getFullYear() ||
+                               new Date(summaryData.date).getUTCMonth()!= new Date(head).getUTCMonth() ||
+                               new Date(summaryData.date).getUTCDate()!= new Date(head).getUTCDate()
+                            ){
+                                continue;
+                            }
+                            for(let deviceGroup of summaryData.deviceGroups){
+                                if( tempArray[index].group != undefined){
+                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
+                                        inCount.value += summaryData.maleTotal
+                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
+                                        outCount.value += summaryData.femaleTotal
+                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
+                                    }
+                                }else{
+                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
+                                          inCount.value += summaryData.maleTotal
+                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
+                                        outCount.value += summaryData.femaleTotal
+                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
+                                    }
+                                }
+                            }
+                        }
+                        tempArray[index].in.push(inCount);
+                        tempArray[index].out.push(outCount)
+                    }
+                }
+                this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                break;
+            }
+
+            this.rData.body = tempArray
+    }
+
+    countRatio(value,prevValue){
+        if(value == undefined || prevValue == undefined){
+             return 0;
+        }
+        if(value > prevValue){
+            return prevValue / value;
+        }else if(value < prevValue){
+            return -(value / prevValue);
+        }else{
+            return 0;
+        }
+    }
+
+     showWeek(data) {
+        switch (data) {
+            case 1:
+                return 'Mon';
+            case 2:
+                return 'Tue';
+            case 3:
+                return 'Wed';
+            case 4:
+                return 'Thu';
+            case 5:
+                return 'Fri';
+            case 6:
+                return 'Sat';
+            case 0:
+                return 'Sun';
+        }
+     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -813,7 +1010,7 @@ export default class ReportDemographic extends Vue {
                         // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
                             returnValue.objectId
-                        ] = `${returnValue.username} - ${returnValue.email}`;
+                            ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -839,206 +1036,6 @@ export default class ReportDemographic extends Vue {
         this.modalShow = data;
     }
 
-    // Ben //
-    initDashboardData() {
-        this.dTimeMode = ETimeMode.day;
-        this.dPageType = EPageType.demographic;
-        setTimeout(() => {
-            let anlysisDashboard: any = this.$refs.anlysisDashboard;
-            anlysisDashboard.initData();
-        }, 300);
-    }
-
-    initReportTable() {
-            let chartMode = HighChartsService.chartMode(
-                this.startDate,
-                this.endDate,
-                this.sites
-            );
-            this.rData.chartMode = chartMode;
-
-            
-            this.reportTableTitle = {
-               inTitle: this._('w_Male'),
-               outTitle: this._('w_FeMale'),
-               inTotalTitle: this._('w_MaleTotal'),
-               outTotalTitle: this._('w_FeMaleTotal')
-            }
-            
-            //head
-            this.rData.head = [];
-            let sTime = null;
-            let eTime = null;
-            switch (chartMode) {
-            case EChartMode.site1Day1:
-            case EChartMode.siteXDay1:
-                 for(let siteItem of this.sites){
-                    for(let officeHourItem of siteItem.officeHour){
-                        if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
-                            sTime = new Date(officeHourItem.startDate).getUTCHours();
-                        }
-                        if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
-                            eTime = new Date(officeHourItem.endDate).getUTCHours();
-                        }
-                    }
-              
-                }   
-                while(sTime <= eTime){
-                    this.rData.head.push(sTime);
-                    sTime++
-                }
-                //  this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
-                break;
-            case EChartMode.site1DayX:
-            case EChartMode.siteXDayX:
-                let sDate = new Date(this.startDate); 
-                let eDate =  new Date(this.endDate);  
-                while(sDate <= eDate){ 
-                this.rData.head.push(sDate.toString());
-                sDate.setDate(sDate.getDate() + 1)
-                }
-                // this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
-                break;
-            }
-           
-            //body
-            console.log('reportTaeble',this.responseData.summaryDatas)
-            this.rData.body = [];
-            let tempArray = [];
-            //篩選出所有店
-            for(let summaryData of this.responseData.summaryDatas){
-                for(let deviceGroup of summaryData.deviceGroups){
-                    let body = {
-                        site: summaryData.site,
-                        area: summaryData.area,
-                        group: deviceGroup.deviceGroup,
-                        in:[],
-                        out:[]
-                    }
-
-                    if(body.group != undefined){
-                        if(tempArray.some(t => t.group.objectId == body.group.objectId)){
-                            continue;
-                        }
-                    }else{
-                        if(tempArray.some(t => t.area.objectId == body.area.objectId)){
-                            continue;
-                        }
-                    }
-                    tempArray.push(body);
-                   
-                }
-            }
-
-            //填入資料
-            switch (chartMode) {
-            case EChartMode.site1Day1:
-            case EChartMode.siteXDay1:
-                for(let index in tempArray){
-                    for(let head of  this.rData.head){
-                        let inCount = { value: 0, valueRatio: 0}
-                        let outCount = { value: 0, valueRatio: 0}
-                        for(let summaryData of this.responseData.summaryDatas){
-                            if(new Date(summaryData.date).getUTCHours().toString() != head){
-                                continue;
-                            }
-                            for(let deviceGroup of summaryData.deviceGroups){
-                                if( tempArray[index].group != undefined){
-                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
-                                         inCount.value += summaryData.maleTotal
-                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
-                                        outCount.value += summaryData.femaleTotal
-                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
-                                    }
-                                }else{
-                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
-                                          inCount.value += summaryData.maleTotal
-                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
-                                        outCount.value += summaryData.femaleTotal
-                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
-                                    }
-                                }
-                            }
-                        }
-                        tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount)
-                    }
-                }
-                this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
-                break;
-            case EChartMode.site1DayX:
-            case EChartMode.siteXDayX:
-                for(let index in tempArray){
-                    for(let head of  this.rData.head){
-                        let inCount = { value: 0, valueRatio: 0}
-                        let outCount = { value: 0, valueRatio: 0}
-                        for(let summaryData of this.responseData.summaryDatas){
-                            if(new Date(summaryData.date).getFullYear()!= new Date(head).getFullYear() ||  
-                               new Date(summaryData.date).getUTCMonth()!= new Date(head).getUTCMonth() ||  
-                               new Date(summaryData.date).getUTCDate()!= new Date(head).getUTCDate() 
-                            ){
-                                continue;
-                            }
-                            for(let deviceGroup of summaryData.deviceGroups){
-                                if( tempArray[index].group != undefined){
-                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
-                                        inCount.value += summaryData.maleTotal
-                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
-                                        outCount.value += summaryData.femaleTotal
-                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
-                                    }
-                                }else{
-                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
-                                          inCount.value += summaryData.maleTotal
-                                        inCount.valueRatio += this.countRatio(summaryData.maleTotal,summaryData.prevMaleTotal)
-                                        outCount.value += summaryData.femaleTotal
-                                        outCount.valueRatio += this.countRatio(summaryData.femaleTotal,summaryData.prevFemaleTotal)
-                                    }
-                                }
-                            }
-                        }
-                        tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount)
-                    }
-                }
-                this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
-                break;
-            }
-
-            this.rData.body = tempArray
-    }
-
-    countRatio(value,prevValue){
-        if(value == undefined || prevValue == undefined){
-             return 0;
-        }
-        if(value > prevValue){
-            return prevValue / value;
-        }else if(value < prevValue){
-            return -(value / prevValue);
-        }else{
-            return 0;
-        }
-    }
-    
-     showWeek(data) {
-        switch (data) {
-            case 1:
-                return 'Mon';
-            case 2:
-                return 'Tue';
-            case 3:
-                return 'Wed';
-            case 4:
-                return 'Thu';
-            case 5:
-                return 'Fri';
-            case 6:
-                return 'Sat';
-            case 0:
-                return 'Sun';
-        }
-     }
 
     //// 以下為 analysis filter ////
 
