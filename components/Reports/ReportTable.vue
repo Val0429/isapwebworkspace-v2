@@ -36,17 +36,17 @@
                             v-if="items.site"
                             rowspan="2"
                             class="title"
-                        >{{items.site}}</td>
+                        >{{items.site.name}}</td>
                         <td
                             v-if="items.area"
                             rowspan="2"
                             class="title"
-                        >{{items.area}}</td>
+                        >{{items.area.name}}</td>
                         <td
                             v-if="items.group"
                             rowspan="2"
                             class="title"
-                        >{{items.group}}</td>
+                        >{{items.group.name}}</td>
                         <td class="title"> {{ _('w_TrafficIn')}}</td>
                         <td v-for="(itemIn, key, index) in items.in">
                             <span>{{ itemIn.value}}</span>

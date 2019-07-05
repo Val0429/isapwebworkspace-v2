@@ -1,7 +1,8 @@
-import { ESign } from './EReport';
+import { ESign, EChartMode } from './EReport';
 import { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut } from './IReportTable';
 
 class ReportTableData {
+    _chartMode: EChartMode = EChartMode.none;
     _head: string[] = [];
     _body: IReportTableDataBody[] = [];
     _foot: IReportTableDataTotal[] = [];
@@ -15,11 +16,17 @@ class ReportTableData {
             item.outTotal = this.showRowTotal(item.out);
 
             for (let subItem of item.in) {
-                subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                subItem.sign = ESign.none;
+                if (subItem.valueRatio != 0) {
+                    subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                }
             }
 
             for (let subItem of item.out) {
-                subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                subItem.sign = ESign.none;
+                if (subItem.valueRatio != 0) {
+                    subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                }
             }
         }
 
@@ -44,7 +51,9 @@ class ReportTableData {
         };
         intTotal.value = this._foot.reduce((ty, u) => ty + u.inTotal.value, 0);
         intTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.inTotal.valueRatio, 0);
-        intTotal.sign = intTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
+        if (intTotal.valueRatio) {
+            intTotal.sign = intTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
+        }
 
         let outTotal: IReportTableDataBodyInOut = {
             sign: ESign.none,
@@ -53,7 +62,9 @@ class ReportTableData {
         };
         outTotal.value = this._foot.reduce((ty, u) => ty + u.outTotal.value, 0);
         outTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.outTotal.valueRatio, 0);
-        outTotal.sign = outTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
+        if (intTotal.valueRatio) {
+            outTotal.sign = outTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
+        }
 
         let allTotal: IReportTableDataTotal = {
             inTotal: intTotal,
@@ -70,7 +81,10 @@ class ReportTableData {
         };
         total.value = data.reduce((ty, u) => ty + u.value, 0);
         total.valueRatio = data.reduce((ty, u) => ty + u.valueRatio, 0);
-        total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
+        if (total.valueRatio != 0) {
+            total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
+        }
+
         return total;
     }
 
@@ -82,12 +96,25 @@ class ReportTableData {
         };
         total.value = data.reduce((ty, u) => ty + u[key][index].value, 0);
         total.valueRatio = data.reduce((ty, u) => ty + u[key][index].valueRatio, 0);
-        total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
+        if (total.valueRatio != 0) {
+            total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
+        }
         return total;
     }
 
     translationDataFormat() {
-        this._head = this._head.map((x) => new Date(x).getUTCHours() + ':00 - ' + (new Date(x).getUTCHours() + 1) + ':00');
+        switch (this._chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                break;
+        }
+    }
+
+    set chartMode(value: EChartMode) {
+        this._chartMode = value;
     }
 
     set head(value: string[]) {

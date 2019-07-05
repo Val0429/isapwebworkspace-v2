@@ -334,92 +334,187 @@ export default class ReportTraffic extends Vue {
         }
     }
 
-    initReportTable() {
-        setTimeout(() => {
-            this.rData.head = [];
-            this.rData.head = [
-                "2019-06-24T09:00:00.000Z",
-                "2019-06-24T10:00:00.000Z",
-                "2019-06-24T11:00:00.000Z",
-                "2019-06-24T12:00:00.000Z",
-                "2019-06-24T13:00:00.000Z",
-                "2019-06-24T14:00:00.000Z",
-                "2019-06-24T16:00:00.000Z",
-                "2019-06-24T17:00:00.000Z",
-                "2019-06-24T18:00:00.000Z",
-                "2019-06-24T19:00:00.000Z",
-                "2019-06-24T20:00:00.000Z",
-                "2019-06-24T21:00:00.000Z"
-            ];
+        showWeek(data) {
+        switch (data) {
+            case 1:
+                return 'Mon';
+            case 2:
+                return 'Tue';
+            case 3:
+                return 'Wed';
+            case 4:
+                return 'Thu';
+            case 5:
+                return 'Fri';
+            case 6:
+                return 'Sat';
+            case 0:
+                return 'Sun';
+        }
+    }
 
-            this.rData.body = [];
-            this.rData.body = [
-                {
-                    area: "1F精品區",
-                    group: "N/A",
-                    in: [
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 2, valueRatio: -0.02 }
-                    ],
-                    out: [
-                        { value: 3, valueRatio: -0.03 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 4, valueRatio: 0.05 }
-                    ]
-                },
-                {
-                    area: "2F生活用品",
-                    group: "Group01",
-                    in: [
-                        { value: 5, valueRatio: 0.06 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 6, valueRatio: -0.07 }
-                    ],
-                    out: [
-                        { value: 7, valueRatio: -0.08 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: -0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 1, valueRatio: 0.01 },
-                        { value: 8, valueRatio: -0.09 }
-                    ]
+    initReportTable() {
+            let chartMode = HighChartsService.chartMode(
+                this.startDate,
+                this.endDate,
+                this.sites
+            );
+            this.rData.chartMode = chartMode;
+            
+            //head
+            this.rData.head = [];
+            let sTime = null;
+            let eTime = null;
+            switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                 for(let siteItem of this.sites){
+                    for(let officeHourItem of siteItem.officeHour){
+                        if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
+                            sTime = new Date(officeHourItem.startDate).getUTCHours();
+                        }
+                        if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
+                            eTime = new Date(officeHourItem.endDate).getUTCHours();
+                        }
+                    }
+              
+                }   
+                while(sTime <= eTime){
+                    this.rData.head.push(sTime);
+                    sTime++
                 }
-            ];
-        }, 2000);
+                //  this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                let sDate = new Date(this.startDate); 
+                let eDate =  new Date(this.endDate);  
+                while(sDate <= eDate){ 
+                this.rData.head.push(sDate.toString());
+                sDate.setDate(sDate.getDate() + 1)
+                }
+                // this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                break;
+            }
+           
+            //body
+            console.log('reportTaeble',this.responseData.summaryDatas)
+            this.rData.body = [];
+            let tempArray = [];
+            //篩選出所有店
+            for(let summaryData of this.responseData.summaryDatas){
+                for(let deviceGroup of summaryData.deviceGroups){
+                    let body = {
+                        site: summaryData.site,
+                        area: summaryData.area,
+                        group: deviceGroup.deviceGroup,
+                        in:[],
+                        out:[]
+                    }
+
+                    if(body.group != undefined){
+                        if(tempArray.some(t => t.group.objectId == body.group.objectId)){
+                            continue;
+                        }
+                    }else{
+                        if(tempArray.some(t => t.area.objectId == body.area.objectId)){
+                            continue;
+                        }
+                    }
+                    tempArray.push(body);
+                   
+                }
+            }
+
+            //填入資料
+            switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                for(let index in tempArray){
+                    for(let head of  this.rData.head){
+                        let inCount = { value: 0, valueRatio: 0}
+                        let outCount = { value: 0, valueRatio: 0}
+                        for(let summaryData of this.responseData.summaryDatas){
+                            if(new Date(summaryData.date).getUTCHours().toString() != head){
+                                continue;
+                            }
+                            for(let deviceGroup of summaryData.deviceGroups){
+                                if( tempArray[index].group != undefined){
+                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.out
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }else{
+                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.out
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }
+                            }
+                        }
+                        tempArray[index].in.push(inCount);
+                        tempArray[index].out.push(outCount)
+                    }
+                }
+                this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                for(let index in tempArray){
+                    for(let head of  this.rData.head){
+                        let inCount = { value: 0, valueRatio: 0}
+                        let outCount = { value: 0, valueRatio: 0}
+                        for(let summaryData of this.responseData.summaryDatas){
+                            if(new Date(summaryData.date).getFullYear()!= new Date(head).getFullYear() ||  
+                               new Date(summaryData.date).getUTCMonth()!= new Date(head).getUTCMonth() ||  
+                               new Date(summaryData.date).getUTCDate()!= new Date(head).getUTCDate() 
+                            ){
+                                continue;
+                            }
+                            for(let deviceGroup of summaryData.deviceGroups){
+                                if( tempArray[index].group != undefined){
+                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.outCount
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }else{
+                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.out
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }
+                            }
+                        }
+                        tempArray[index].in.push(inCount);
+                        tempArray[index].out.push(outCount)
+                    }
+                }
+                this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                break;
+            }
+
+            this.rData.body = tempArray
+    }
+
+    countRatio(value,prevValue){
+        if(value == undefined || prevValue == undefined){
+             return 0;
+        }
+        if(value > prevValue){
+            return  prevValue / value;
+        }else if((value < prevValue)){
+            return value / prevValue;
+        }else{
+            return 0;
+        }
     }
 
     // Morris //

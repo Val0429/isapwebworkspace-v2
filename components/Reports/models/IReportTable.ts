@@ -5,10 +5,15 @@ interface IReportTableDataTotal {
     outTotal?: IReportTableDataBodyInOut;
 }
 
+interface stratum {
+    objectId: string;
+    name: string;
+}
+
 interface IReportTableDataBody extends IReportTableDataTotal {
-    site?: string;
-    area?: string;
-    group?: string;
+    site?: stratum;
+    area?: stratum;
+    group?: stratum;
     in: IReportTableDataBodyInOut[];
     out: IReportTableDataBodyInOut[];
 }
