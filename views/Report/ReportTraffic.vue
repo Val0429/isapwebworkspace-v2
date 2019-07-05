@@ -31,7 +31,7 @@ import {EAreaMode} from "../../components/Reports";
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_in_out_traffic
+                <analysis_filter_in_out
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -54,7 +54,7 @@ import {EAreaMode} from "../../components/Reports";
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_in_out_traffic>
+                </analysis_filter_in_out>
 
                 <!-- Ben -->
                 <anlysis-dashboard

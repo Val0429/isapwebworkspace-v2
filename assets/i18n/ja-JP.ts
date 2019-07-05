@@ -839,6 +839,7 @@ export default class LangObject implements ILang {
     w_ReportDateError = 'EndDate must greater or equal than startDate.';
     w_countSelect = 'Time Mode';
     w_isIncludedEmployee = 'Is Included Employee';
+    w_PleaseSelectSites = 'Please Select Site(s)';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';

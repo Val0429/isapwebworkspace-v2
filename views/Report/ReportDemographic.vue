@@ -30,7 +30,7 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_demographic
+                <analysis_filter
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -51,7 +51,7 @@
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_demographic>
+                </analysis_filter>
 
                 <!-- Morris -->
                 <highcharts-demographic
@@ -68,6 +68,13 @@
 
             </iv-card>
         </div>
+
+        <!-- Tina -->
+        <recipient
+            :modalShow="modalShow"
+            @user-data="receiveUserData"
+            @return-modalShow="receiveModalShowData"
+        ></recipient>
 
     </div>
 </template>
