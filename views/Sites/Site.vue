@@ -1408,6 +1408,7 @@ export default class Site extends Vue {
                 .C("/location/site", addSiteParam)
                 .then((response: any) => {
                     if (response != undefined) {
+                        data.objectId = response[0].objectId;
                         Dialog.success(this._("w_Site_AddSiteSuccess"));
                         this.pageToSiteList();
                     }
@@ -1685,8 +1686,7 @@ export default class Site extends Vue {
     }
 
     async deleteGroupDevice() {
-
-        console.log('objectId - ', this.deviceGroup.objectId);
+        console.log("objectId - ", this.deviceGroup.objectId);
 
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
             const body: {
@@ -1702,7 +1702,10 @@ export default class Site extends Vue {
                             if (returnValue.statusCode === 200) {
                                 (this.$refs.deviceGroupTable as any).reload();
                             }
-                            if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
                                 Dialog.error(this._("w_DeleteFailed"));
                                 return false;
                             }
@@ -1794,7 +1797,6 @@ export default class Site extends Vue {
         } else {
             this.clearDeviceData();
         }
-
     }
 
     selectedArea(data) {

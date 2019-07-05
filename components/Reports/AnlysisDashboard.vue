@@ -11,7 +11,11 @@
                     <div :class="ePageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
-                            <span v-if="eWeather.none != this.weather" v-html="showWeather()" class="weather"></span>
+                            <span
+                                v-if="eWeather.none != this.weather"
+                                v-html="showWeather()"
+                                class="weather"
+                            ></span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
@@ -270,8 +274,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model,Watch } from "vue-property-decorator";
-import { ReportDashboard, EPageType, ESign,ETimeMode } from "@/components/Reports";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
+import {
+    ReportDashboard,
+    EPageType,
+    ESign,
+    ETimeMode
+} from "@/components/Reports";
 import { EWeather } from "./models/EHighCharts";
 import HighChartsService from "./models/HighChartsService";
 import ResponseFilter from "@/services/ResponseFilter";
@@ -281,7 +297,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 })
 export class AnlysisDashboard extends Vue {
     // Prop
-     @Prop({
+    @Prop({
         type: Date,
         default: function() {
             return new Date();
@@ -296,7 +312,7 @@ export class AnlysisDashboard extends Vue {
         }
     })
     endDate: Date;
-    
+
     @Prop({
         type: String,
         default: function() {
@@ -321,59 +337,45 @@ export class AnlysisDashboard extends Vue {
     })
     tagIds: [];
 
-     @Prop({
+    @Prop({
         type: String,
         default: function() {
-             return EPageType.none;
+            return EPageType.none;
         }
     })
     pageType: EPageType;
 
-   @Watch("startDate", { deep: true })
-    private watchStartDate(newVal, oldVal) {
-        console.log('startDate',this.startDate);
-    }
-   @Watch("endDate", { deep: true })
-    private watchEndDate(newVal, oldVal) {
-        console.log('endDate',this.endDate);
-    }
-       @Watch("type", { deep: true })
-    private watchType(newVal, oldVal) {
-        console.log('type',this.type);
-    }
-   @Watch("siteIds", { deep: true })
-    private watchSiteIds(newVal, oldVal) {
-        console.log('siteIds',this.siteIds);
-    }
-   @Watch("tagIds", { deep: true })
-    private watchTagIds(newVal, oldVal) {
-        console.log('tagIds',this.tagIds);
-    }
-   @Watch("pageType", { deep: true })
-    private watchPageType(newVal, oldVal) {
-        console.log('pageType',this.pageType);
-    }
+    @Watch("startDate", { deep: true })
+    private watchStartDate(newVal, oldVal) {}
+    @Watch("endDate", { deep: true })
+    private watchEndDate(newVal, oldVal) {}
+    @Watch("type", { deep: true })
+    private watchType(newVal, oldVal) {}
+    @Watch("siteIds", { deep: true })
+    private watchSiteIds(newVal, oldVal) {}
+    @Watch("tagIds", { deep: true })
+    private watchTagIds(newVal, oldVal) {}
+    @Watch("pageType", { deep: true })
+    private watchPageType(newVal, oldVal) {}
 
-    
     weather: EWeather = EWeather.none;
     anlysisData = new ReportDashboard();
 
     eSign = ESign;
     ePageType = EPageType;
     eWeather = EWeather;
-    
+
     created() {}
 
-    async mounted() {
-    }
+    async mounted() {}
 
-    async initData(){
+    async initData() {
         const readParam: {
-            startDate: Date,
-            endDate: Date,
-            type:string,
-            siteIds: string[],
-            tagIds: string[]
+            startDate: Date;
+            endDate: Date;
+            type: string;
+            siteIds: string[];
+            tagIds: string[];
         } = {
             startDate: this.startDate,
             endDate: this.endDate,
@@ -381,99 +383,200 @@ export class AnlysisDashboard extends Vue {
             siteIds: this.siteIds,
             tagIds: this.tagIds
         };
-        
-          await this.$server.C("/report/complex", readParam)
+
+        await this.$server
+            .C("/report/complex", readParam)
             .then((response: any) => {
                 if (response != undefined) {
-                    this.anlysisData.pageType= this.pageType;
+                    this.anlysisData.pageType = this.pageType;
 
-                    if(response.weather){
-                          this.weather = response.weather.icon;
+                    if (response.weather) {
+                        this.weather = response.weather.icon;
                     }
 
-                        if(response.peopleCounting){
-                          this.anlysisData.traffic = {
-                            sign: response.peopleCounting.variety == null ? ESign.none : (response.peopleCounting.variety > 0 ? ESign.positive : ESign.negative) ,
-                            total:response.peopleCounting.value,
-                            value:  response.peopleCounting.variety ? response.peopleCounting.value * response.peopleCounting.variety : null,
+                    if (response.peopleCounting) {
+                        this.anlysisData.traffic = {
+                            sign:
+                                      response.peopleCounting.variety == null ||
+                                response.peopleCounting.variety == 0
+                                    ? ESign.none
+                                    : response.peopleCounting.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            total: response.peopleCounting.value,
+                            value: response.peopleCounting.variety
+                                ? response.peopleCounting.value *
+                                  response.peopleCounting.variety
+                                : null,
                             valueRatio: response.peopleCounting.variety
-                        }
-                          }
-                        if(response.averageOccupancy){
-                            this.anlysisData.averageOccupancy = {
-                            sign: response.averageOccupancy.variety == null ? ESign.none : (response.averageOccupancy.variety > 0 ? ESign.positive : ESign.negative) ,
+                        };
+                    }
+                    if (response.averageOccupancy) {
+                        this.anlysisData.averageOccupancy = {
+                            sign:
+                                          response.averageOccupancy.variety == null ||
+                                response.averageOccupancy.variety == 0
+                                    ? ESign.none
+                                    : response.averageOccupancy.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
                             total: response.averageOccupancy.value,
-                            value: response.averageOccupancy.variety ? response.averageOccupancy.value * response.averageOccupancy.variety : null,
+                            value: response.averageOccupancy.variety
+                                ? response.averageOccupancy.value *
+                                  response.averageOccupancy.variety
+                                : null,
                             valueRatio: response.averageOccupancy.variety
-                            }
-                        }
-                        
-                          if(response.averageDwellTime){
-                          this.anlysisData.averageDwellTime= {
-                         sign: response.averageDwellTime.variety  == null ? ESign.none : (response.averageDwellTime.variety > 0 ? ESign.positive : ESign.negative) ,
-                            total: response.averageDwellTime.value,
-                            value: response.averageDwellTime.variety ? response.averageDwellTime.value * response.averageDwellTime.variety : null,
-                            valueRatio: response.averageDwellTime.variety
-                        }
-                         }
+                        };
+                    }
 
-                              if(response.demographic){
-                          this.anlysisData.demographic= {
-                                sign: response.demographic.maleVariety  == null ? ESign.none : (response.demographic.maleVariety > 0 ? ESign.positive : ESign.negative) ,
-                            value:  response.demographic.maleVariety,
-                            valueRatio:  response.demographic.malePercent,
-                            sign2: response.demographic.femaleVariety  == null ? ESign.none : (response.demographic.femaleVariety > 0 ? ESign.positive : ESign.negative) ,
+                    if (response.averageDwellTime) {
+                        this.anlysisData.averageDwellTime = {
+                            sign:
+                                 response.averageDwellTime.variety == null ||
+                                response.averageDwellTime.variety == 0
+                                    ? ESign.none
+                                    : response.averageDwellTime.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            total: response.averageDwellTime.value,
+                            value: response.averageDwellTime.variety
+                                ? response.averageDwellTime.value *
+                                  response.averageDwellTime.variety
+                                : null,
+                            valueRatio: response.averageDwellTime.variety
+                        };
+                    }
+
+                    if (response.demographic) {
+                        this.anlysisData.demographic = {
+                            sign:
+                                response.demographic.malePercent == null ||
+                                response.demographic.malePercent == 0
+                                    ? ESign.none
+                                    : response.demographic.maleVariety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            value: response.demographic.maleVariety,
+                            valueRatio: response.demographic.malePercent,
+                            sign2:
+                                response.demographic.femalePercent == null ||
+                                response.demographic.femalePercent == 0
+                                    ? ESign.none
+                                    : response.demographic.femaleVariety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
                             value2: response.demographic.femaleVariety,
-                            valueRatio2:   response.demographic.femalePercent
-                        }
-                              }
-                                if(response.vipBlacklist){
-                            this.anlysisData.vipBlacklist= {
-                                sign: response.vipBlacklist.variety  == null ? ESign.none : (response.vipBlacklist.variety > 0 ? ESign.positive : ESign.negative) ,
-                              value: response.vipBlacklist.vpiVariety,
-                              valueRatio:  response.vipBlacklist.vpiPercent,
-                             sign2: response.vipBlacklist.variety  == null ? ESign.none : (response.vipBlacklist.variety > 0 ? ESign.positive : ESign.negative) ,
-                              value2: response.vipBlacklist.blacklistVariety,
-                              valueRatio2: response.vipBlacklist.blacklistPercent
-                          } }
-                             if(response.repeatCustomer){
-                            this.anlysisData.repeatCustomer= {
-                              sign: response.repeatCustomer.variety  == null ? ESign.none : (response.repeatCustomer.variety > 0 ? ESign.positive : ESign.negative) ,
-                              total: response.repeatCustomer.value,
-                               value: response.repeatCustomer.variety ? response.repeatCustomer.value * response.repeatCustomer.variety : null,
-                              valueRatio: response.repeatCustomer.variety
-                          }}
-                             if(response.revenue){
-                          this.anlysisData.revenue= {
-                              sign: response.revenue.variety  == null ? ESign.none : (response.revenue.variety > 0 ? ESign.positive : ESign.negative) ,
-                            total:  response.revenue.value,
-                            value:   response.revenue.variety ? response.revenue.value * response.revenue.variety : null,
+                            valueRatio2: response.demographic.femalePercent
+                        };
+                    }
+                    if (response.vipBlacklist) {
+                        this.anlysisData.vipBlacklist = {
+                            sign:
+                                response.vipBlacklist.vpiPercent == null ||
+                                response.vipBlacklist.vpiPercent == 0
+                                    ? ESign.none
+                                    : response.vipBlacklist.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            value: response.vipBlacklist.vpiVariety,
+                            valueRatio: response.vipBlacklist.vpiPercent,
+                            sign2:
+                                response.vipBlacklist.blacklistPercent ==
+                                    null ||
+                                response.vipBlacklist.blacklistPercent == 0
+                                    ? ESign.none
+                                    : response.vipBlacklist.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            value2: response.vipBlacklist.blacklistVariety,
+                            valueRatio2: response.vipBlacklist.blacklistPercent
+                        };
+                    }
+                    if (response.repeatCustomer) {
+                        this.anlysisData.repeatCustomer = {
+                            sign:
+                                response.repeatCustomer.variety == null ||
+                                response.repeatCustomer.variety == 0
+                                    ? ESign.none
+                                    : response.repeatCustomer.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            total: response.repeatCustomer.value,
+                            value: response.repeatCustomer.variety
+                                ? response.repeatCustomer.value *
+                                  response.repeatCustomer.variety
+                                : null,
+                            valueRatio: response.repeatCustomer.variety
+                        };
+                    }
+                    if (response.revenue) {
+                        this.anlysisData.revenue = {
+                            sign:
+                                response.revenue.variety == null ||
+                                response.revenue.variety == 0
+                                    ? ESign.none
+                                    : response.revenue.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            total: response.revenue.value,
+                            value: response.revenue.variety
+                                ? response.revenue.value *
+                                  response.revenue.variety
+                                : null,
                             valueRatio: response.revenue.variety
-                                }}
-                             if(response.transaction){
-                          this.anlysisData.transaction= {
-                                sign: response.transaction.variety  == null ? ESign.none : (response.transaction.variety > 0 ? ESign.positive : ESign.negative) ,
+                        };
+                    }
+                    if (response.transaction) {
+                        this.anlysisData.transaction = {
+                            sign:
+                                response.transaction.variety == null ||
+                                response.transaction.variety == 0
+                                    ? ESign.none
+                                    : response.transaction.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
                             total: response.transaction.value,
-                            value: response.transaction.variety ? response.transaction.value * response.transaction.variety : null,
+                            value: response.transaction.variety
+                                ? response.transaction.value *
+                                  response.transaction.variety
+                                : null,
                             valueRatio: response.transaction.variety
-                             }}
-                             if(response.conversion){
-                          this.anlysisData.conversion= {
-                               sign: response.conversion.variety  == null ? ESign.none : (response.conversion.variety > 0 ? ESign.positive : ESign.negative) ,
-                            total:  response.conversion.value,
-                               value: response.conversion.variety ? response.conversion.value * response.conversion.variety : null,
+                        };
+                    }
+                    if (response.conversion) {
+                        this.anlysisData.conversion = {
+                            sign:
+                                response.conversion.variety == null ||
+                                response.conversion.variety == 0
+                                    ? ESign.none
+                                    : response.conversion.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
+                            total: response.conversion.value,
+                            value: response.conversion.variety
+                                ? response.conversion.value *
+                                  response.conversion.variety
+                                : null,
                             valueRatio: response.conversion.variety
-                              }}
-                             if(response.asp){
-                          this.anlysisData.asp = {
-                                 sign: response.asp.variety  == null ? ESign.none : (response.asp.variety > 0 ? ESign.positive : ESign.negative) ,
+                        };
+                    }
+                    if (response.asp) {
+                        this.anlysisData.asp = {
+                            sign:
+                                response.asp.variety == null ||
+                                response.asp.variety == 0
+                                    ? ESign.none
+                                    : response.asp.variety > 0
+                                    ? ESign.positive
+                                    : ESign.negative,
                             total: response.asp.value,
-                                 value: response.asp.variety ? response.asp.value * response.asp.variety : null,
+                            value: response.asp.variety
+                                ? response.asp.value * response.asp.variety
+                                : null,
                             valueRatio: response.asp.variety
-                         }
+                        };
                     }
                 }
-                
             })
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
@@ -485,7 +588,10 @@ export class AnlysisDashboard extends Vue {
     }
 
     numberWithCommas(number) {
-        return Math.abs(number).toFixed(0).toString().replace(/\B(?=(\d{3})+\b)/g, ",");
+        return Math.abs(number)
+            .toFixed(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+\b)/g, ",");
     }
 
     toPercent(point, fixed) {
@@ -494,12 +600,10 @@ export class AnlysisDashboard extends Vue {
         return str;
     }
 
-    showWeather(){
+    showWeather() {
         let result = HighChartsService.weatherIcon(this.weather);
         return result;
     }
-        
-    
 }
 
 export default AnlysisDashboard;
