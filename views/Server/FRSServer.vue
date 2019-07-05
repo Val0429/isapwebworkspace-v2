@@ -364,7 +364,10 @@ export default class FRSServer extends Vue {
         this.getInputData();
         this.inputFormData.type = type;
 
-        await this.initUserGroupInFRS();
+        if (this.groupData.length === 0) {
+            await this.initUserGroupInFRS();
+        }
+
     }
 
     async pageToView() {
@@ -390,7 +393,9 @@ export default class FRSServer extends Vue {
             return false;
         }
 
-        await this.initUserGroupInFRS();
+        if (this.groupData.length === 0) {
+            await this.initUserGroupInFRS();
+        }
     }
 
     async saveAddOrEdit(data) {
