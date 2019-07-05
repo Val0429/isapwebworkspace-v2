@@ -54,7 +54,13 @@ interface IObjectIdAndName {
     name: string;
 }
 
-export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap, IVideoSourceDevice };
+interface IFRSUserGroup {
+    type: string;
+    objectId: string;
+    name: string;
+}
+
+export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap, IVideoSourceDevice, IFRSUserGroup };
 
 // User
 interface IUser {
@@ -329,6 +335,7 @@ interface IAddFRSServer extends IAnalysis {
     customId: string;
     name: string;
     protocol: string;
+    userGroups: IFRSUserGroup[];
 }
 
 interface IEditFRSServer extends IAnalysis {
@@ -344,7 +351,11 @@ interface IFRSServerResults extends IAnalysis {
     protocol: string;
 }
 
-export { IAddFRSServer, IEditFRSServer, IFRSServerResults };
+interface IFRSServerReadUserGroup extends IAnalysis {
+    protocol: string;
+}
+
+export { IAddFRSServer, IEditFRSServer, IFRSServerResults, IFRSServerReadUserGroup };
 
 // Business Operation Campaign
 interface IBusinessOperationCampaign {
