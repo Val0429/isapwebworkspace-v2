@@ -65,10 +65,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
                          * @uiLabel - ${this._("w_Username")}
                         */
                       username:string;
-                      /**
-                         * @uiLabel - ${this._("w_Roles")}
-                        */
-                      roles:string;
+                      
                       /**
                          * @uiLabel - ${this._("w_ApiRoles")}
                         */
@@ -94,7 +91,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
                       /**
                          * @uiLabel - ${this._("w_Roles")}
                         */
-                      roles:any;
+                      roles?:any;
                       /**
                          * @uiLabel - ${this._("w_ApiRoles")}
                         */
@@ -116,7 +113,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
                       /**                        
                        * @uiLabel - ${this._("w_Roles")}
                         */
-                      roles:any;
+                      roles?:any;
                 }
                 `;
         }
@@ -128,6 +125,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
     /// 8) post-add 寫入新增前要做甚麼調整
     postAdd(row) {
         row.data={};
+        row.roles = this.roleOptions.map(x=>x.key);
         return row;
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
@@ -149,11 +147,11 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
         this.apiRoleOptions=resp.results.map(x=>{return {key:x.objectId, value:x.identifier} });
         console.log("apiRoleOptions", this.apiRoleOptions)    
     }
-    viewChange($event: any): void {
-        console.log("view", $event)
-      this.filterVisible = $event == 'view';
-      this.roleVisible= $event == 'add';
-    } 
+    // viewChange($event: any): void {
+    //     console.log("view", $event)
+    //   this.filterVisible = $event == 'view';
+    //   this.roleVisible= $event == 'add';
+    // } 
     roleVisible:boolean=false;
     
         
