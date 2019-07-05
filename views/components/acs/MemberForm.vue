@@ -671,7 +671,7 @@ export default class MemberForm extends Vue {
     async initSelectItemCardCertificate() {
         this.cardCertificateItem = {};
         await this.$server
-            .R("/acs/profileId")
+            .R("/acs/dropdownlist?type=ProfileId")
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
@@ -693,7 +693,7 @@ export default class MemberForm extends Vue {
     async initSelectItemCardType() {
         this.cardTypeItem = {};
         await this.$server
-            .R("/acs/cardprofile")
+            .R("/acs/dropdownlist?type=Certification")
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
