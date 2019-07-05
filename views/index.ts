@@ -33,8 +33,8 @@ import ContractorReport from './components/acs/reports/ContractorReport.vue';
 import DemographicReport from './components/acs/reports/DemographicReport.vue';
 import CardExpirationReport from './components/acs/reports/CardExpirationReport.vue';
 import VisitorCardReport from './components/acs/reports/VisitorCardReport.vue';
-
-import User from './components/bar/User.vue';
+import Redirector from '@/../src/components/login/redirector.vue';
+import User from './components/acs/User.vue';
 import Site from './components/bar/Site.vue';
 import Region from './components/bar/Region.vue';
 
@@ -42,7 +42,8 @@ import Region from './components/bar/Region.vue';
 import DemoFETCardPrint from './Demos/DemoFETCardPrint.vue';
 $({ path: '/demos/fet_card_print', name: 'FET ID Card Print', icon: 'fa-print', permission: false })(DemoFETCardPrint);
 
-$({ path: '/', name: 'Home', redirect: '/member' })();
+$({ path: '/', name: 'Home', redirect: '/redirector' })();
+$({ path: '/redirector', name: 'redirector' })(Redirector);
 $({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
 $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);

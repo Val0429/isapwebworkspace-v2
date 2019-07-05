@@ -14,12 +14,13 @@ export default class Login extends Vue {
     private version = `${ServerName} ${ServerVersion}`;
     private username: string = '';
     private password: string = '';
-
+        
     async Login() {
-        await this.$login({
+        let result = await this.$login({
             username: this.username,
             password: this.password
         });
-        this.$router.push("/");
+        this.$router.push("/redirector");
+        
     }
 }

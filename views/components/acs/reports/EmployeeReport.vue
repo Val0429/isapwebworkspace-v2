@@ -24,6 +24,7 @@ export default class AttendanceReport extends Vue  {
     filter:any={};
     permissions: any[];
     created(){        
+        
         this.fields = 
         [       
             {

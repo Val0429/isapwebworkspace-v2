@@ -22,38 +22,20 @@
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
 import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
 import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
-
+import { BasicFormQuick } from './basic-form-quick';
+import { PermissionName} from '@/../src/constants/permissions';
 @Component
 /// 1) class name
-export default class FloorForm extends Vue implements IFormQuick2 {
-  params:any = {};
-  onFilterSubmit($event?: any): void {
-     this.params = $event || {};
-  }
-  filterVisible: boolean=true;
-  viewChange($event: any): void {
-      console.log("view", $event)
-    this.filterVisible = $event == 'view';
-  } 
-  filterInterface():string{
-      return `interface {
-            /**
-            * @uiLabel - ${this._("name")}
-            */
-            name?:string;
-        }`;
-  } 
-    
+export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
+      
     /// 2) cgi path
     path: string = "/acs/floor";
     /// 3) i18n - view / edit / add
     tView: string = "w_Floor";
     tAdd: string = "w_FloorAdd";
     tEdit: string = "w_FloorEdit";
-    /// 4) possibility - edit / add / delete
-    canAdd: boolean = true;
-    canEdit: boolean = true;
-    canDelete: boolean = true;
+    
+    
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
@@ -100,7 +82,9 @@ export default class FloorForm extends Vue implements IFormQuick2 {
         return;
     }
     /// Done
-     
+     created(){
+         this.permissionName = PermissionName.floor;
+     }
     
 }
 </script>

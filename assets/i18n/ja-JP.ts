@@ -14,7 +14,8 @@ export default class LangObject implements ILang {
     w_Multi = '複数';
 
     w_Username = '使用者名稱';
-    w_Roles = '權限';
+    w_Roles = '權限';    
+    w_ApiRoles = "API Roles";
     w_Email = 'Email';
     w_CreatedAt = '建立日期';
     w_UpdatedAt = '修改日期';

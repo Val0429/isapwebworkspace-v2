@@ -59,22 +59,21 @@
 import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
 import { System } from '@/config/default/api/interfaces';
 import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
-import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts';
+import { BasicFormQuick } from './basic-form-quick';
+import { PermissionName} from '@/../src/constants/permissions';
+
 @Component
 /// 1) class name
-export default class DoorForm extends Vue implements IFormQuick2 {    
-    filterVisible:boolean=true;
+export default class DoorForm extends BasicFormQuick implements IFormQuick2 {    
+    
     /// 2) cgi path
-    path: string = "/acs/door";
-    params:any = {};
+    path: string = "/acs/door";    
     /// 3) i18n - view / edit / add
     tView: string = "w_Door";
     tAdd: string = "w_DoorAdd";
     tEdit: string = "w_DoorEdit";
-    /// 4) possibility - edit / add / delete
-    canAdd: boolean = true;
-    canEdit: boolean = true;
-    canDelete: boolean = true;
+    
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
@@ -160,11 +159,7 @@ export default class DoorForm extends Vue implements IFormQuick2 {
             name:string;
         }`;
     }
-    viewChange($event){
-        
-        console.log("ViewChange", $event);
-        this.filterVisible = $event == 'view';
-    }
+    
     getReaderInfo(row: any) {
      let{sipassin, sipassout, ccurein, ccureout}={} as any;
     if(row.readerin&&row.readerin.length>0) {
@@ -210,6 +205,7 @@ export default class DoorForm extends Vue implements IFormQuick2 {
     private doorGroups:any[]=[];
     private areas:any[]=[];
     async created() {
+        this.permissionName = PermissionName.door;
         await Promise.all([this.getOptions(),
         this.getDoorGroups()]);
 
@@ -239,11 +235,7 @@ export default class DoorForm extends Vue implements IFormQuick2 {
         let site = group && group.area && group.area.site ? group.area.site.name : "";
         return {doorgroup, area, site};
     }
-    getName(obj:any, options:{key:any, value:any}[]){
-        if (!obj)return'';
-        let item = options.find(x=>x.key==obj.objectId);
-        return item?item.value:'';
-    }
+    
     getReadersCount(door:any){
         if(!door)return 0;
         let count = door.readerin ? door.readerin.length : 0;
@@ -251,11 +243,7 @@ export default class DoorForm extends Vue implements IFormQuick2 {
         
         return count;
     }
-    onFilterSubmit($event?){
-        console.log("$event", $event);
-        console.log("params", this.params);
-        this.params = $event || {};
-    }
+    
     
 }
 </script>

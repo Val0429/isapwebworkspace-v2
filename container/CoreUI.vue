@@ -19,46 +19,21 @@
 
         <template #nav>
             <SidebarHeader label="Menu" />
-            <SidebarNav>
+            <SidebarNav> 
                 
-                <SidebarNavItem url="/employeereport" />
-                <SidebarNavItem url="/doorreport" />
-                <SidebarNavItem url="/doorgroupreport" />
-                <SidebarNavItem url="/cardreport" />          
-                <SidebarNavItem url="/contractorreport" />
-                <SidebarNavItem url="/demographicreport" />
-                <SidebarNavItem url="/attendance" />      
-                <SidebarNavItem url="/visitorreport" />
+                    <SidebarNavItem v-for="(item,index) in menuNavigations" v-bind:key="index" :url="item"/>
                 
-                <SidebarNavItem url="/permissiontable" />
-                <SidebarNavItem url="/member" />
-                <SidebarNavItem url="/region" />
-                <SidebarNavItem url="/site" />
-                <SidebarNavItem url="/doorgroup" />
-                <SidebarNavItem url="/door" />
-                <SidebarNavItem url="/reader" />
-                
-                
-                <SidebarNavItem url="/elevatorgroup" />
-                <SidebarNavItem url="/elevator" />
-                
-                <SidebarNavItem url="/floor" />
-                <SidebarNavItem url="/syncreceiver" />
-                <SidebarNavItem url="/user" />
-
-                <!-- <SidebarNavItem url="/timeschedule" /> -->
-                <!-- <SidebarNavItem url="/accesslevel" /> -->                
-                
-            </SidebarNav>
+             </SidebarNav> 
         </template>
     </CoreUIBase>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { CoreUI as CoreUIBase,
     SidebarHeader, SidebarNav, SidebarNavTitle, SidebarNavDivider, SidebarNavItem
 } from '@/../containers/CoreUI';
+import { PermissionName, PermissionList} from '@/../src/constants/permissions';
 
 @Component({
     components: {
@@ -67,7 +42,11 @@ import { CoreUI as CoreUIBase,
     }
 })
 export default class CoreUI extends Vue {
+
+    menuNavigations = [];
+    
     async logout() {
+        //this.checkPermission();
         try{
             let sessionId=this.$server.getSessionId();
             await this.$server.C("/users/logout",{sessionId})
@@ -79,6 +58,21 @@ export default class CoreUI extends Vue {
             this.$router.push({ path: "/login" });
         }
     }
+    checkPermission(){
+         this.menuNavigations=[];
+        //console.log("checkPermission user", this.$user);
+        if(!this.$user || !this.$user.permissions)return;
+        for(let perm of PermissionList.filter(x=>x.route)){
+            let menu = this.$user.permissions.find(x=>x.access.R === true && x.of.identifier == perm.key);
+            if(!menu)continue;
+            this.menuNavigations.push(perm.route);
+        }
+    }
+    @Watch('$route', {immediate:true, deep: true })
+    onRouteChange(to, from){
+        this.checkPermission();
+    }
+
 }
 </script>
 <style lang="scss" scoped>

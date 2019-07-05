@@ -19,15 +19,18 @@
                         @click="pageToView"
                     />
                     <iv-toolbox-edit
+                        v-show="canEdit"
                         :disabled="isSelected.length !== 1"
                         @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
+                    v-show="canDelete"
                         :disabled="isSelected.length === 0"
                         @click="doDelete"
                     />
                     <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToAdd()" />
+                    <iv-toolbox-add v-show="canAdd"
+                    @click="pageToAdd()" />
 
                 </template>
 
@@ -45,8 +48,8 @@
                             :disabled="isSelected.length !== 1"
                         >
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit()" />
-                            <iv-toolbox-delete @click="doDelete" />
+                            <iv-toolbox-edit v-show="canEdit" @click="pageToEdit()" />
+                            <iv-toolbox-delete v-show="canDelete"@click="doDelete" />
                         </iv-toolbox-more>
                     </template>
 
@@ -249,6 +252,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog/Dialog";
+import { PermissionName} from '@/../src/constants/permissions';
 
 enum EPageStep {
     list = "list",
@@ -283,6 +287,19 @@ interface ISelectItem {
     components: { }
 })
 export default class PermissionTable extends Vue {
+    beforeMount(){
+        if(!this.$user || !this.$user.permissions)return;
+        this.permissionName = PermissionName.member;
+        this.canAdd = this.$user.permissions.find(x=>x.access.C === true && x.of.identifier == this.permissionName) != undefined;
+        this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
+        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
+    }
+    canAdd:boolean;
+    canEdit:boolean;
+    canDelete:boolean;
+    permissionName:string;
+
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     eDeviceType = EDeviceType;
