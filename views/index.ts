@@ -45,44 +45,44 @@ $({ path: '/demos/fet_card_print', name: 'FET ID Card Print', icon: 'fa-print', 
 
 $({ path: '/', name: 'Home', redirect: '/redirector' })();
 $({ path: '/redirector', name: 'redirector' })(Redirector);
-$({ path: '/elevator', name: "_('w_Elevator')", icon: 'fa-building' })(Elevator);
-$({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
-    $({ path: '/door', name: "_('w_Door')", icon: 'fa-building' })(Door);
-    $({ path: '/permissiontable', name: "_('w_PermissionTable')", icon: 'fa-building' })(PermissionTable);
-    $({ path: '/doorgroup', name: "_('w_DoorGroup')", icon: 'fa-building' })(DoorGroup);
-    $({ path: '/timeschedule', name: "_('w_TimeSchedule')", icon: 'fa-building' })(TimeSchedule);    
-    $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')", icon: 'fa-building' })(ElevatorGroup);
-    $({ path: '/attendance', name: "_('w_AttendanceReport')", icon: 'fa-building' })(AttendanceReport);
-    $({ path: '/employeereport', name: "_('w_EmployeeReport')", icon: 'fa-building' })(EmployeeReport);
-    $({ path: '/doorreport', name: "_('w_DoorReport')", icon: 'fa-building' })(DoorReport);
-    $({ path: '/doorgroupreport', name: "_('w_DoorGroupReport')", icon: 'fa-building' })(DoorGroupReport);
-    $({ path: '/contractorreport', name: "_('w_ContractorReport')", icon: 'fa-building' })(ContractorReport);
-    $({ path: '/demographicreport', name: "_('w_DemographicReport')", icon: 'fa-building' })(DemographicReport);
-    $({ path: '/cardreport', name: "_('w_CardExpirationReport')", icon: 'fa-building' })(CardExpirationReport);
-    $({ path: '/visitorreport', name: "_('w_VisitorCardReport')", icon: 'fa-building' })(VisitorCardReport);
+$({ path: '/elevator', name: "_('w_Elevator')"})(Elevator);
+$({ path: '/floor', name: "_('w_Floor')"})(Floor);
+    $({ path: '/door', name: "_('w_Door')"})(Door);
+    $({ path: '/permissiontable', name: "_('w_PermissionTable')"})(PermissionTable);
+    $({ path: '/doorgroup', name: "_('w_DoorGroup')"  })(DoorGroup);
+    $({ path: '/timeschedule', name: "_('w_TimeSchedule')"})(TimeSchedule);    
+    $({ path: '/elevatorgroup', name: "_('w_ElevatorGroup')"})(ElevatorGroup);
+    $({ path: '/attendance', name: "_('w_AttendanceReport')"})(AttendanceReport);
+    $({ path: '/employeereport', name: "_('w_EmployeeReport')"})(EmployeeReport);
+    $({ path: '/doorreport', name: "_('w_DoorReport')"})(DoorReport);
+    $({ path: '/doorgroupreport', name: "_('w_DoorGroupReport')"})(DoorGroupReport);
+    $({ path: '/contractorreport', name: "_('w_ContractorReport')"})(ContractorReport);
+    $({ path: '/demographicreport', name: "_('w_DemographicReport')"})(DemographicReport);
+    $({ path: '/cardreport', name: "_('w_CardExpirationReport')"})(CardExpirationReport);
+    $({ path: '/visitorreport', name: "_('w_VisitorCardReport')"})(VisitorCardReport);
     
 // Users
 
-$({ path: '/userpermission', name: "_('w_UserPermission')", icon: 'fa-user' })(UserPermission);
-$({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);
+$({ path: '/userpermission', name: "_('w_UserPermission')" })(UserPermission);
+$({ path: '/user', name: "_('w_Navigation_Users_User')" })(User);
 
 // Sites
-$({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
+$({ path: '/site', name: "_('w_Navigation_Site')" })(Site);
 
 // Regions
-$({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Region);
+$({ path: '/region', name: "_('w_Navigation_Region')" })(Region);
 
-$({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
-$({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
-$({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
-$({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
-$({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
+$({ path: '/member', name: "_('w_Member')" })(Member);
+$({ path: '/user', name: "_('w_User')" })(User);
+$({ path: '/reader', name: "_('w_Reader')"})(Reader);
+$({ path: '/syncreceiver', name: "_('w_SyncReceiver')"})(SyncReceiver);
+$({ path: '/accesslevel', name: "_('w_AccessLevel')"})(AccessLevel);
 
-$({ path: '/member', name: "_('w_Member')", icon: 'fa-user' })(Member);
-$({ path: '/user', name: "_('w_User')", icon: 'fa-user' })(User);
-$({ path: '/reader', name: "_('w_Reader')", icon: 'fa-building' })(Reader);
-$({ path: '/syncreceiver', name: "_('w_SyncReceiver')", icon: 'fa-building' })(SyncReceiver);
-$({ path: '/accesslevel', name: "_('w_AccessLevel')", icon: 'fa-building' })(AccessLevel);
+$({ path: '/member', name: "_('w_Member')" })(Member);
+$({ path: '/user', name: "_('w_User')" })(User);
+$({ path: '/reader', name: "_('w_Reader')"})(Reader);
+$({ path: '/syncreceiver', name: "_('w_SyncReceiver')"})(SyncReceiver);
+$({ path: '/accesslevel', name: "_('w_AccessLevel')"})(AccessLevel);
 
 $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
 
