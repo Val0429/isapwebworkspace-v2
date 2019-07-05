@@ -62,7 +62,7 @@ class ReportTableData {
         };
         outTotal.value = this._foot.reduce((ty, u) => ty + u.outTotal.value, 0);
         outTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.outTotal.valueRatio, 0);
-        if (intTotal.valueRatio) {
+        if (outTotal.valueRatio) {
             outTotal.sign = outTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
         }
 

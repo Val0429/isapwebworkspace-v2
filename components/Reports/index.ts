@@ -3,7 +3,7 @@ export { ESign, EPageType, EChartMode, ECountType, EDeviceMode, EDesignationPeri
 
 // interface
 export { IPeckTimeRange, IPeckTimeRangeBody, ISiteItems } from './models/IPeckTimeRange';
-export { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut } from './models/IReportTable';
+export { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut, IReportTableTitle } from './models/IReportTable';
 
 // class
 export { ReportTableData } from './models/ReportTable';

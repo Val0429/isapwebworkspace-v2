@@ -261,8 +261,8 @@ export class PeakTimeRange extends Vue {
             body: []
         };
         for (let timeRangeDataItem of this.timeRangeData) {
-               //site
-                this.pData.site = timeRangeDataItem.site;
+            //site
+            this.pData.site = timeRangeDataItem.site;
            
             //haed
                 let sTime = null;

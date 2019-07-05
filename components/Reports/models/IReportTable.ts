@@ -24,4 +24,11 @@ interface IReportTableDataBodyInOut {
     valueRatio: number;
 }
 
-export { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut };
+interface IReportTableTitle {
+    inTitle: string;
+    outTitle: string;
+    inTotalTitle: string;
+    outTotalTitle: string;
+}
+
+export { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut, IReportTableTitle };
