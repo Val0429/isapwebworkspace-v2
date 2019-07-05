@@ -1,11 +1,64 @@
 <template>
     <div class="chart">
         <b-form-group v-if="errorMessage == ''">
-            <highcharts
-                ref="chart"
-                v-if="mountChart"
-                :options="chartOptions"
-            ></highcharts>
+            <b-row>
+
+                <b-col cols="6">
+                    <b-form-radio-group
+                        v-model="selection.chartType"
+                        class="h-10 click_button col-md-2"
+                        buttons
+                        button-variant="outline-success"
+                        name="radio-btn-outline"
+                        style="margin-bottom: 10px;"
+                        :options="selectItem.chartType"
+                        @input="changeChartType"
+                    ></b-form-radio-group>
+                    <div v-show="selection.chartType == 'bar'">
+                        <highcharts
+                            ref="chart"
+                            v-if="mountChart"
+                            :options="chartOptionsBar"
+                        ></highcharts>
+                    </div>
+                    <div v-show="selection.chartType == 'pie'">
+                        <highcharts
+                            ref="chart"
+                            v-if="mountChart"
+                            :options="chartOptionsPie"
+                        ></highcharts>
+                    </div>
+                </b-col>
+
+                <b-col cols="6">
+                    <iv-form-selection
+                        class='col-md-12'
+                        :value="selection.repeatCount"
+                        :options="selectItem.repeatCount"
+                        @input="changeRepeatCount"
+                    ></iv-form-selection>
+                    <b-row>
+                        <b-col cols="6">
+                            <highcharts
+                                ref="chart"
+                                v-if="mountDetailChart"
+                                :options="chartOptionsDetailBar"
+                            ></highcharts>
+                        </b-col>
+
+                        <b-col cols="6">
+                            <highcharts
+                                ref="chart"
+                                v-if="mountDetailChart"
+                                :options="chartOptionsDetailPie"
+                            ></highcharts>
+                        </b-col>
+                    </b-row>
+
+                </b-col>
+
+            </b-row>
+
         </b-form-group>
 
         <b-form-group
@@ -38,12 +91,12 @@ Vue.use(HighchartsVue);
 import {
     ETimeMode,
     EAreaMode,
-    EChartMode,
+    EAgeRange,
     EWeather
 } from "./models/EHighCharts";
 import {
     ISiteAreas,
-    IChartOccupancyData,
+    IChartRepeatVisitorData,
     ISiteOfficeHourItem
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
@@ -100,67 +153,63 @@ export class HighchartsRepeatVisitor extends Vue {
             return [];
         }
     })
-    value: IChartOccupancyData[];
+    value: IChartRepeatVisitorData[];
+
+    selection = {
+        chartType: "bar",
+        repeatCount: "all"
+    };
+    selectItem = {
+        chartType: [],
+        repeatCount: []
+    };
 
     errorMessage: string = "";
     mountChart: boolean = false;
-    chartMode: EChartMode = EChartMode.none;
-    chartOptions: any = {};
+    mountDetailChart = false;
+    chartOptionsBar: any = {};
+    chartOptionsPie: any = {};
+    chartOptionsDetailBar: any = {};
+    chartOptionsDetailPie: any = {};
 
     @Watch("value", { deep: true })
     private onValueChanged(
-        newval: IChartOccupancyData[],
-        IChartOccupancyData: IChartOccupancyData[]
+        newval: IChartRepeatVisitorData[],
+        IChartOccupancyData: IChartRepeatVisitorData[]
     ) {
         this.start();
     }
 
     created() {
+        this.initSelectItem();
         this.start();
     }
 
     mounted() {}
 
+    initSelectItem() {
+        this.selectItem.chartType = [
+            { value: "bar", text: "Bar" },
+            { value: "pie", text: "Pie" }
+        ];
+        this.selectItem.repeatCount = [
+            { id: "all", text: "All" },
+            { id: "1", text: "1" },
+            { id: "2", text: "2" },
+            { id: "3", text: "3" },
+            { id: "4", text: "4" },
+            { id: "5+", text: "5+" }
+        ];
+    }
+
     start() {
         this.errorMessage = "";
-        this.chartMode = HighChartsService.chartMode(
-            this.startDate,
-            this.endDate,
-            this.sites
-        );
-        if (isNaN(this.startDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateStart");
-            return false;
-        }
-        if (isNaN(this.endDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateEnd");
-            return false;
-        }
-        if (this.chartMode == EChartMode.none) {
-            this.errorMessage = this._("w_Report_ErrorChartMode");
-            return false;
-        }
 
-        switch (this.chartMode) {
-            case EChartMode.site1Day1:
-                this.initSite1Day1();
-                break;
-            case EChartMode.site1DayX:
-                this.initSite1DayX();
-                break;
-            case EChartMode.siteXDay1:
-                this.initSiteXDay1();
-                break;
-            case EChartMode.siteXDayX:
-                this.initSiteXDayX();
-                break;
-            default:
-                break;
-        }
+        this.initChart();
+        this.initDetailChart();
 
         console.log(
             "chart prop: ",
-            this.chartMode,
             this.startDate,
             this.endDate,
             this.timeMode,
@@ -172,484 +221,70 @@ export class HighchartsRepeatVisitor extends Vue {
 
     ////////////////////////// site 1 day 1 //////////////////////////
 
-    initSite1Day1() {
-        let tempValues: IChartOccupancyData[] = JSON.parse(
+    initChart() {
+        let tempValues: IChartRepeatVisitorData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let tempHourStrings: string[] = [];
-        let tempCategories: string[] = [];
-        let tempResult: IChartOccupancyData[] = [];
-        let tempSeries: any = [];
-
-        //// office hour group ////
-        if (this.chartMode != EChartMode.site1Day1) {
-            return false;
-        }
-        if (this.sites.length != 1) {
-            return false;
-        }
-
-        let weekDay = this.startDate.getDay();
-        let officeHour: ISiteOfficeHourItem = HighChartsService.siteOfficeHour(
-            weekDay,
-            this.sites[0].officeHour
-        );
-        for (let i = officeHour.startHour; i <= officeHour.endHour; i++) {
-            let hourString = i < 10 ? `0${i.toString()}` : i.toString();
-            tempHourStrings.push(`${hourString}:00`);
-        }
-        //// office hour group ////
-
-        // set areas
-        for (let site of this.sites) {
-            for (let area of site.areas) {
-                tempSeries.push({
-                    areaId: area.objectId,
-                    areaName: area.name,
-                    data: []
-                });
-            }
-        }
-
-        // anysisly result
-        for (let i in tempHourStrings) {
-            let categorie = tempHourStrings[i];
-            let haveValue = false;
-
-            // set area data length
-            for (let serie of tempSeries) {
-                serie.data.push(0);
-            }
-
-            for (let loopValue of tempValues) {
-                let value: IChartOccupancyData = this.anysislyChartValue(
-                    loopValue
-                );
-
-                let tempValueHour = Datetime.DateTime2String(
-                    value.date,
-                    "HH:mm"
-                );
-
-                if (tempValueHour == categorie) {
-                    for (let serie of tempSeries) {
-                        if (value.areaId == serie.areaId) {
-                            serie.data[i] += value.occupancy;
-                        }
-                    }
-                }
-            }
-
-            let tempCategorieData = {
-                i18n: this.i18nItem(),
-                datas: []
-            };
-
-            for (let serie of tempSeries) {
-                tempCategorieData.datas.push({
-                    areaId: serie.areaId,
-                    areaName: serie.areaName,
-                    occupancy: serie.data[i]
-                });
-            }
-
-            tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
-                    categorie,
-                    tempCategorieData
-                )
-            );
-        }
-
-        // set chart options
-        this.chartOptions = {
-            chart: { type: "column", zoomType: "x" },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            xAxis: {
-                labels: { useHTML: true },
-                categories: tempCategories
-            },
-            yAxis: {
-                min: 0,
-                labels: {
-                    style: { color: "#000" }
-                },
-                title: { text: null }
-            },
-            tooltip: {
-                useHTML: true,
-                formatter: function(tooltip: any) {
-                    let self: any = this;
-                    let result = "";
-                    if (self.x != undefined) {
-                        try {
-                            // anysisly JSON
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
-                            let seriesIndex = self.series.index;
-                            for (let data of newValue.datas) {
-                                result += `${data.areaName}:${data.occupancy}<br>`;
-                            }
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    }
-                    return result;
-                }
-            },
-            series: tempSeries
+        let tempCategories: {
+            bar: string[];
+            pie: string[];
+        } = {
+            bar: ["1", "2", "3", "4", "5+"],
+            pie: []
         };
 
-        this.mountChart = true;
-    }
-
-    ////////////////////////// site 1 day X //////////////////////////
-
-    initSite1DayX() {
-        let tempValues: IChartOccupancyData[] = JSON.parse(
-            JSON.stringify(this.value)
-        );
-        let tempHourStrings: string[] = [];
-        let tempCategories: string[] = [];
-        let tempResult: IChartOccupancyData[] = [];
-        let tempSeries: any = [];
-
-        // set areas
-        for (let site of this.sites) {
-            for (let area of site.areas) {
-                tempSeries.push({
-                    areaId: area.objectId,
-                    areaName: area.name,
-                    data: []
-                });
-            }
-        }
-
-        // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
-
-        // 設置最大值避免無窮迴圈
-        let categorieMaxlength = 10000;
-        let categorieNowlength = 0;
-
-        // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
-        let tempDate: Date = new Date(tempTimestamp);
-        let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
-        );
-
-        while (
-            tempTimestamp <= endTimestamp &&
-            categorieNowlength < categorieMaxlength
-        ) {
-            let tempChartData: IChartOccupancyData = this.anysislyChartValueDefault();
-
-            switch (this.timeMode) {
-                case ETimeMode.year:
-                    tempChartData.date = Datetime.YearStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.YearStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.YearEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.year
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.year
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.year
-                    );
-                    break;
-
-                case ETimeMode.quarter:
-                    tempChartData.date = Datetime.QuarterStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.QuarterStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.QuarterEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    break;
-
-                case ETimeMode.month:
-                    tempChartData.date = Datetime.MonthStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.MonthStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.MonthEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    break;
-
-                case ETimeMode.week:
-                    tempChartData.date = Datetime.WeekStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.WeekStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.WeekEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    break;
-
-                case ETimeMode.day:
-                case ETimeMode.hour:
-                case ETimeMode.none:
-                default:
-                    tempChartData.date = Datetime.DateStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.DateStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.DateEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    break;
-            }
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
-
-            tempChartData.timeString = Datetime.DateTime2String(
-                tempChartData.dateStart,
-                HighChartsService.datetimeFormat.time
-            );
-            tempChartData.quarterNumber = Datetime.QuarterNumber(
-                tempChartData.dateStart
-            );
-            tempChartData.weekNumber = Datetime.WeekNumber(
-                tempChartData.dateStart
-            );
-
-            for (let serie of tempSeries) {
-                serie.data.push(0);
-                let dataIndex = serie.data.length - 1;
-
-                for (let value of tempValues) {
-                    let tempValue = this.anysislyChartValue(value);
-                    let valTimestamp = tempValue.date.getTime();
-                    if (
-                        tempValue.areaId == serie.areaId &&
-                        valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
-                    ) {
-                        serie.data[dataIndex] += value.occupancy;
-                        break;
-                    }
+        let tempSeries: {
+            bar: any;
+            pie: any;
+        } = {
+            bar: [
+                {
+                    name: this._("w_ReportRepeatVisitor_NumberOfVisit"),
+                    data: [0, 0, 0, 0, 0]
                 }
-            }
-
-            tempHourStrings.push(tempChartData.dateString);
-
-            // set loop value
-            categorieNowlength++;
-            tempTimestamp = tempChartData.dateEnd.getTime() + 1000;
-        }
-
-        for (let i in tempHourStrings) {
-            let categorie = tempHourStrings[i];
-
-            let tempCategorieData = {
-                i18n: this.i18nItem(),
-                datas: []
-            };
-
-            for (let serie of tempSeries) {
-                tempCategorieData.datas.push({
-                    areaId: serie.areaId,
-                    areaName: serie.areaName,
-                    occupancy: serie.data[i]
-                });
-            }
-
-            tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
-                    categorie,
-                    tempCategorieData
-                )
-            );
-        }
-
-        // set chart options
-        this.chartOptions = {
-            chart: { type: "column", zoomType: "x" },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            xAxis: {
-                labels: { useHTML: true },
-                categories: tempCategories
-            },
-            yAxis: {
-                min: 0,
-                labels: {
-                    style: { color: "#000" }
-                },
-                title: { text: null }
-            },
-            tooltip: {
-                useHTML: true,
-                formatter: function(tooltip: any) {
-                    let self: any = this;
-                    let result = "";
-                    if (self.x != undefined) {
-                        try {
-                            // anysisly JSON
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
-                            let seriesIndex = self.series.index;
-                            for (let data of newValue.datas) {
-                                result += `${data.areaName}:${data.occupancy}<br>`;
-                            }
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    }
-                    return result;
+            ],
+            pie: [
+                {
+                    type: "pie",
+                    name: null,
+                    innerSize: "50%",
+                    data: [["1", 0], ["2", 0], ["3", 0], ["4", 0], ["5+", 0]]
                 }
-            },
-            series: tempSeries
+            ]
         };
 
-        this.mountChart = true;
-    }
+        let tempTotalCunt = 0;
 
-    ////////////////////////// site X day 1 //////////////////////////
-
-    initSiteXDay1() {
-        let tempValues: IChartOccupancyData[] = JSON.parse(
-            JSON.stringify(this.value)
-        );
-        let tempCategories: string[] = [];
-        let tempSeries: any = [
-            {
-                name: this._("w_ReportOccupancy_OccupancyAVG"),
-                data: []
+        for (let val of tempValues) {
+            let barIndex = 0;
+            if (val.repeatCount <= 0) {
+                barIndex = 0;
+            } else if (val.repeatCount >= 5) {
+                barIndex = 4;
+            } else {
+                barIndex = val.repeatCount - 1;
             }
-        ];
+            tempSeries.bar[0].data[barIndex] += val.maleCount;
+            tempSeries.bar[0].data[barIndex] += val.femaleCount;
+            tempTotalCunt += val.maleCount;
+            tempTotalCunt += val.femaleCount;
+        }
 
-        for (let i in this.sites) {
-            let site = this.sites[i];
-            let tempDate = new Date();
-            let tempWeatherIcon = HighChartsService.weatherIcon(EWeather.none);
-            tempSeries[0].data.push(0);
-
-            for (let val of tempValues) {
-                let tempValue = this.anysislyChartValue(val);
-                if (tempValue.siteObjectId == site.objectId) {
-                    tempDate = tempValue.date;
-                    tempWeatherIcon = HighChartsService.weatherIcon(
-                        tempValue.weather
-                    );
-                    tempSeries[0].data[i] += val.occupancy;
-                }
-            }
-
-            let categorieItem = {
-                i18n: this.i18nItem(),
-                siteObjectId: site.objectId,
-                siteName: site.name,
-                date: tempDate,
-                dateString: Datetime.DateTime2String(tempDate, "YYYY/MM/DD"),
-                occupancy: tempSeries[0].data[i]
-            };
-            tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
-                    `${site.name} ${tempWeatherIcon}`,
-                    categorieItem
-                )
+        for (let i = 0; i < 5; i++) {
+            tempSeries.pie[0].data[i][1] = HighChartsService.formatFloat(
+                (tempSeries.bar[0].data[i] / tempTotalCunt) * 100
             );
         }
 
-        // set chart options
-        this.chartOptions = {
+        // bar
+        this.chartOptionsBar = {
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
             xAxis: {
                 labels: { useHTML: true },
-                categories: tempCategories
+                categories: tempCategories.bar
             },
             yAxis: {
                 min: 0,
@@ -658,446 +293,366 @@ export class HighchartsRepeatVisitor extends Vue {
             },
             tooltip: {
                 useHTML: true,
-                formatter: function(tooltip: any) {
-                    let self: any = this;
-                    let result = "";
-                    if (self.x != undefined) {
-                        try {
-                            // anysisly JSON
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
-
-                            result += `${newValue.siteName}<br>`;
-                            result += `${newValue.i18n.date}:${newValue.dateString}<br>`;
-                            result += `${newValue.i18n.occupancy}:${newValue.occupancy}<br>`;
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    }
-                    return result;
-                }
+                enabled: false
             },
-            series: tempSeries
+            series: tempSeries.bar
         };
-        this.mountChart = true;
-    }
 
-    ////////////////////////// site X day X //////////////////////////
-
-    initSiteXDayX() {
-        let tempValues: IChartOccupancyData[] = JSON.parse(
-            JSON.stringify(this.value)
-        );
-        let tempResult: any[] = [];
-        let tempCategories: string[] = [];
-        let tempSeries: {
-            name: string;
-            data: number[];
-        }[] = [];
-
-        // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
-
-        // 設置最大值避免無窮迴圈
-        let categorieMaxlength = 10000;
-        let categorieNowlength = 0;
-
-        // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
-        let tempDate: Date = new Date(tempTimestamp);
-        let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
-        );
-
-        while (
-            tempTimestamp <= endTimestamp &&
-            categorieNowlength < categorieMaxlength
-        ) {
-            let tempChartData: IChartOccupancyData = this.anysislyChartValueDefault();
-            let tempResultItem = {
-                categorie: "",
-                i18n: this.i18nItem(),
-                sites: [],
-                conversion: 0,
-                asp: 0,
-                timeMode: this.timeMode,
-                areaMode: this.areaMode
-            };
-            tempChartData.i18n = null;
-            tempChartData.timeMode = null;
-            tempChartData.areaMode = null;
-
-            switch (this.timeMode) {
-                case ETimeMode.year:
-                    tempChartData.date = Datetime.YearStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.YearStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.YearEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.year
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.year
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.year
-                    );
-                    tempResultItem.categorie = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.year
-                    );
-                    break;
-
-                case ETimeMode.quarter:
-                    tempChartData.date = Datetime.QuarterStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.QuarterStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.QuarterEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempResultItem.categorie = HighChartsService.categoriesQuarter(
-                        tempChartData.date
-                    );
-                    break;
-
-                case ETimeMode.month:
-                    tempChartData.date = Datetime.MonthStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.MonthStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.MonthEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    tempResultItem.categorie = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.month
-                    );
-                    break;
-
-                case ETimeMode.week:
-                    tempChartData.date = Datetime.WeekStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.WeekStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.WeekEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempResultItem.categorie = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempResultItem.categorie = HighChartsService.categoriesWeek(
-                        tempChartData.date
-                    );
-                    break;
-
-                case ETimeMode.day:
-                case ETimeMode.hour:
-                case ETimeMode.none:
-                default:
-                    tempChartData.date = Datetime.DateStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateStart = Datetime.DateStart(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateEnd = Datetime.DateEnd(
-                        new Date(tempTimestamp)
-                    );
-                    tempChartData.dateString = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateStartString = Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempChartData.dateEndString = Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    tempResultItem.categorie = Datetime.DateTime2String(
-                        tempChartData.date,
-                        HighChartsService.datetimeFormat.date
-                    );
-                    break;
-            }
-
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
-
-            tempChartData.timeString = Datetime.DateTime2String(
-                tempChartData.dateStart,
-                HighChartsService.datetimeFormat.time
-            );
-            tempChartData.quarterNumber = Datetime.QuarterNumber(
-                tempChartData.dateStart
-            );
-            tempChartData.weekNumber = Datetime.WeekNumber(
-                tempChartData.dateStart
-            );
-
-            for (let site of this.sites) {
-                let tempSiteValue = JSON.parse(JSON.stringify(tempChartData));
-                tempSiteValue.siteObjectId = site.objectId;
-                tempSiteValue.siteName = site.name;
-
-                for (let val of tempValues) {
-                    let value: IChartOccupancyData = this.anysislyChartValue(
-                        val
-                    );
-                    let valTimestamp = value.date.getTime();
-
-                    if (
-                        value.siteObjectId == tempSiteValue.siteObjectId &&
-                        valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
-                    ) {
-                        tempSiteValue.occupancy += value.occupancy;
-                        tempSiteValue.temperature = value.temperature;
-                        tempSiteValue.weather = value.weather;
-                        tempSiteValue.weatherIcon = HighChartsService.weatherIcon(
-                            value.weather
-                        );
-                    }
-                }
-
-                tempResultItem.sites.push(tempSiteValue);
-            }
-
-            // push single series data
-            tempResult.push(tempResultItem);
-
-            // set loop value
-            categorieNowlength++;
-            tempTimestamp = tempChartData.dateEnd.getTime() + 1000;
-        }
-
-        // set series
-        for (let site of this.sites) {
-            let tempData: number[] = [];
-            for (let tempItems of tempResult) {
-                for (let tempItem of tempItems.sites) {
-                    if (tempItem.siteObjectId == site.objectId) {
-                        tempData.push(tempItem.occupancy);
-                        break;
-                    }
-                }
-            }
-            tempSeries.push({
-                name: HighChartsService.categorieStringNotJSON(
-                    site.name,
-                    site.objectId
-                ),
-                data: tempData
-            });
-        }
-
-        // set result
-        for (let result of tempResult) {
-            switch (this.timeMode) {
-                case ETimeMode.year:
-                case ETimeMode.month:
-                    tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-                case ETimeMode.quarter:
-                    tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-                case ETimeMode.week:
-                    tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-                case ETimeMode.day:
-                case ETimeMode.hour:
-                case ETimeMode.none:
-                default:
-                    tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-            }
-        }
-
-        this.chartOptions = {
+        // pie
+        this.chartOptionsPie = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
-            xAxis: {
-                categories: tempCategories,
-                labels: { useHTML: true }
-            },
-            yAxis: {
-                labels: { style: { color: "#000" } },
-                title: {
-                    text: this._("w_ReportOccupancy_OccupancyAVG"),
-                    style: { color: "#000" }
-                }
-            },
-            tooltip: {
-                enabled: true,
-                useHTML: true,
-                backgroundColor: "#333",
-                style: { color: "#fff" },
-                formatter: function(tooltip: any) {
-                    let self: any = this;
-                    let result = "";
-                    let siteId = "";
-                    if (
-                        self.point != undefined &&
-                        self.point.series != undefined &&
-                        self.point.series.name != undefined
-                    ) {
-                        let startIndex = self.point.series.name.indexOf(">__");
-                        let endIndex = self.point.series.name.indexOf("__<");
-                        siteId = self.point.series.name.substring(
-                            startIndex + 3,
-                            endIndex
-                        );
-                    }
-
-                    if (
-                        siteId != undefined &&
-                        siteId != "" &&
-                        self.x != undefined
-                    ) {
-                        try {
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
-
-                            for (let site of newValue.sites) {
-                                if (site.siteObjectId == siteId) {
-                                    switch (newValue.timeMode) {
-                                        case ETimeMode.year:
-                                        case ETimeMode.quarter:
-                                        case ETimeMode.month:
-                                        case ETimeMode.week:
-                                            result += `${site.siteName}<br>`;
-                                            result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
-                                            result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
-                                            result += `${newValue.i18n.occupancy}: ${site.occupancy}<br>`;
-                                            break;
-                                        case ETimeMode.day:
-                                        case ETimeMode.hour:
-                                        default:
-                                            result += `${site.siteName}<br>`;
-                                            result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                            result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
-                                            result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
-                                            result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
-                                            result += `${newValue.i18n.occupancy}: ${site.occupancy}<br>`;
-                                            break;
-                                    }
-                                    break;
-                                }
-                            }
-                        } catch (e) {
-                            console.log(e);
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: "pointer",
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            let self: any = this;
+                            return `${self.y}%`;
                         }
-                    }
-                    return result;
+                    },
+                    showInLegend: true,
+                    center: ["50%", "50%"],
+                    size: "100%"
                 }
             },
-            series: tempSeries
+            tooltip: { enabled: false },
+            series: tempSeries.pie
         };
 
         this.mountChart = true;
     }
 
+    initDetailChart() {
+        let tempValues: IChartRepeatVisitorData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
+
+        let tempCategories: {
+            bar: string[];
+            pie: string[];
+        } = {
+            bar: [
+                this._("w_ReportDemographic_AgeUpp61"),
+                this._("w_ReportDemographic_AgeM51_60"),
+                this._("w_ReportDemographic_AgeM41_50"),
+                this._("w_ReportDemographic_AgeM31_40"),
+                this._("w_ReportDemographic_AgeM21_30"),
+                this._("w_ReportDemographic_AgeLow20")
+            ],
+            pie: []
+        };
+
+        let tempSeries: {
+            bar: any;
+            pie: any;
+        } = {
+            bar: [
+                {
+                    name: null,
+                    data: [0, 0, 0, 0, 0, 0]
+                }
+            ],
+            pie: [
+                [this._("w_ReportDemographic_GenderMale"), 0],
+                [this._("w_ReportDemographic_GenderFemale"), 0]
+            ]
+        };
+
+        let totalCount = 0;
+        let maleCount = 0;
+        let femaleCount = 0;
+
+        for (let val of tempValues) {
+            switch (this.selection.repeatCount) {
+                case "1":
+                    if (val.repeatCount == 1) {
+                        totalCount += val.maleCount;
+                        totalCount += val.femaleCount;
+                        maleCount += val.maleCount;
+                        femaleCount += val.femaleCount;
+
+                        switch (val.ageRange) {
+                            case EAgeRange.upper61:
+                                tempSeries.bar[0].data[0] += val.maleCount;
+                                tempSeries.bar[0].data[0] += val.femaleCount;
+                                break;
+                            case EAgeRange.m51_60:
+                                tempSeries.bar[0].data[1] += val.maleCount;
+                                tempSeries.bar[0].data[1] += val.femaleCount;
+                                break;
+                            case EAgeRange.m41_50:
+                                tempSeries.bar[0].data[2] += val.maleCount;
+                                tempSeries.bar[0].data[2] += val.femaleCount;
+                                break;
+                            case EAgeRange.m31_40:
+                                tempSeries.bar[0].data[3] += val.maleCount;
+                                tempSeries.bar[0].data[3] += val.femaleCount;
+                                break;
+                            case EAgeRange.m21_30:
+                                tempSeries.bar[0].data[4] += val.maleCount;
+                                tempSeries.bar[0].data[4] += val.femaleCount;
+                                break;
+                            case EAgeRange.lower20:
+                                tempSeries.bar[0].data[5] += val.maleCount;
+                                tempSeries.bar[0].data[5] += val.femaleCount;
+                                break;
+                        }
+                    }
+                    break;
+
+                case "2":
+                    if (val.repeatCount == 2) {
+                        totalCount += val.maleCount;
+                        totalCount += val.femaleCount;
+                        maleCount += val.maleCount;
+                        femaleCount += val.femaleCount;
+
+                        switch (val.ageRange) {
+                            case EAgeRange.upper61:
+                                tempSeries.bar[0].data[0] += val.maleCount;
+                                tempSeries.bar[0].data[0] += val.femaleCount;
+                                break;
+                            case EAgeRange.m51_60:
+                                tempSeries.bar[0].data[1] += val.maleCount;
+                                tempSeries.bar[0].data[1] += val.femaleCount;
+                                break;
+                            case EAgeRange.m41_50:
+                                tempSeries.bar[0].data[2] += val.maleCount;
+                                tempSeries.bar[0].data[2] += val.femaleCount;
+                                break;
+                            case EAgeRange.m31_40:
+                                tempSeries.bar[0].data[3] += val.maleCount;
+                                tempSeries.bar[0].data[3] += val.femaleCount;
+                                break;
+                            case EAgeRange.m21_30:
+                                tempSeries.bar[0].data[4] += val.maleCount;
+                                tempSeries.bar[0].data[4] += val.femaleCount;
+                                break;
+                            case EAgeRange.lower20:
+                                tempSeries.bar[0].data[5] += val.maleCount;
+                                tempSeries.bar[0].data[5] += val.femaleCount;
+                                break;
+                        }
+                    }
+                    break;
+
+                case "3":
+                    if (val.repeatCount == 3) {
+                        totalCount += val.maleCount;
+                        totalCount += val.femaleCount;
+                        maleCount += val.maleCount;
+                        femaleCount += val.femaleCount;
+
+                        switch (val.ageRange) {
+                            case EAgeRange.upper61:
+                                tempSeries.bar[0].data[0] += val.maleCount;
+                                tempSeries.bar[0].data[0] += val.femaleCount;
+                                break;
+                            case EAgeRange.m51_60:
+                                tempSeries.bar[0].data[1] += val.maleCount;
+                                tempSeries.bar[0].data[1] += val.femaleCount;
+                                break;
+                            case EAgeRange.m41_50:
+                                tempSeries.bar[0].data[2] += val.maleCount;
+                                tempSeries.bar[0].data[2] += val.femaleCount;
+                                break;
+                            case EAgeRange.m31_40:
+                                tempSeries.bar[0].data[3] += val.maleCount;
+                                tempSeries.bar[0].data[3] += val.femaleCount;
+                                break;
+                            case EAgeRange.m21_30:
+                                tempSeries.bar[0].data[4] += val.maleCount;
+                                tempSeries.bar[0].data[4] += val.femaleCount;
+                                break;
+                            case EAgeRange.lower20:
+                                tempSeries.bar[0].data[5] += val.maleCount;
+                                tempSeries.bar[0].data[5] += val.femaleCount;
+                                break;
+                        }
+                    }
+                    break;
+
+                case "4":
+                    if (val.repeatCount == 4) {
+                        totalCount += val.maleCount;
+                        totalCount += val.femaleCount;
+                        maleCount += val.maleCount;
+                        femaleCount += val.femaleCount;
+
+                        switch (val.ageRange) {
+                            case EAgeRange.upper61:
+                                tempSeries.bar[0].data[0] += val.maleCount;
+                                tempSeries.bar[0].data[0] += val.femaleCount;
+                                break;
+                            case EAgeRange.m51_60:
+                                tempSeries.bar[0].data[1] += val.maleCount;
+                                tempSeries.bar[0].data[1] += val.femaleCount;
+                                break;
+                            case EAgeRange.m41_50:
+                                tempSeries.bar[0].data[2] += val.maleCount;
+                                tempSeries.bar[0].data[2] += val.femaleCount;
+                                break;
+                            case EAgeRange.m31_40:
+                                tempSeries.bar[0].data[3] += val.maleCount;
+                                tempSeries.bar[0].data[3] += val.femaleCount;
+                                break;
+                            case EAgeRange.m21_30:
+                                tempSeries.bar[0].data[4] += val.maleCount;
+                                tempSeries.bar[0].data[4] += val.femaleCount;
+                                break;
+                            case EAgeRange.lower20:
+                                tempSeries.bar[0].data[5] += val.maleCount;
+                                tempSeries.bar[0].data[5] += val.femaleCount;
+                                break;
+                        }
+                    }
+                    break;
+
+                case "5+":
+                    if (val.repeatCount > 5) {
+                        totalCount += val.maleCount;
+                        totalCount += val.femaleCount;
+                        maleCount += val.maleCount;
+                        femaleCount += val.femaleCount;
+
+                        switch (val.ageRange) {
+                            case EAgeRange.upper61:
+                                tempSeries.bar[0].data[0] += val.maleCount;
+                                tempSeries.bar[0].data[0] += val.femaleCount;
+                                break;
+                            case EAgeRange.m51_60:
+                                tempSeries.bar[0].data[1] += val.maleCount;
+                                tempSeries.bar[0].data[1] += val.femaleCount;
+                                break;
+                            case EAgeRange.m41_50:
+                                tempSeries.bar[0].data[2] += val.maleCount;
+                                tempSeries.bar[0].data[2] += val.femaleCount;
+                                break;
+                            case EAgeRange.m31_40:
+                                tempSeries.bar[0].data[3] += val.maleCount;
+                                tempSeries.bar[0].data[3] += val.femaleCount;
+                                break;
+                            case EAgeRange.m21_30:
+                                tempSeries.bar[0].data[4] += val.maleCount;
+                                tempSeries.bar[0].data[4] += val.femaleCount;
+                                break;
+                            case EAgeRange.lower20:
+                                tempSeries.bar[0].data[5] += val.maleCount;
+                                tempSeries.bar[0].data[5] += val.femaleCount;
+                                break;
+                        }
+                    }
+                    break;
+
+                case "all":
+                default:
+                    totalCount += val.maleCount;
+                    totalCount += val.femaleCount;
+                    maleCount += val.maleCount;
+                    femaleCount += val.femaleCount;
+
+                    switch (val.ageRange) {
+                        case EAgeRange.upper61:
+                            tempSeries.bar[0].data[0] += val.maleCount;
+                            tempSeries.bar[0].data[0] += val.femaleCount;
+                            break;
+                        case EAgeRange.m51_60:
+                            tempSeries.bar[0].data[1] += val.maleCount;
+                            tempSeries.bar[0].data[1] += val.femaleCount;
+                            break;
+                        case EAgeRange.m41_50:
+                            tempSeries.bar[0].data[2] += val.maleCount;
+                            tempSeries.bar[0].data[2] += val.femaleCount;
+                            break;
+                        case EAgeRange.m31_40:
+                            tempSeries.bar[0].data[3] += val.maleCount;
+                            tempSeries.bar[0].data[3] += val.femaleCount;
+                            break;
+                        case EAgeRange.m21_30:
+                            tempSeries.bar[0].data[4] += val.maleCount;
+                            tempSeries.bar[0].data[4] += val.femaleCount;
+                            break;
+                        case EAgeRange.lower20:
+                            tempSeries.bar[0].data[5] += val.maleCount;
+                            tempSeries.bar[0].data[5] += val.femaleCount;
+                            break;
+                    }
+
+                    break;
+            }
+        }
+
+        if (totalCount > 0) {
+            tempSeries.pie[0][1] = HighChartsService.formatFloat(
+                (maleCount / totalCount) * 100
+            );
+            tempSeries.pie[1][1] = HighChartsService.formatFloat(
+                (femaleCount / totalCount) * 100
+            );
+        }
+
+        // detail bar
+        this.chartOptionsDetailBar = {
+            chart: {
+                type: "bar",
+                zoomType: "x"
+            },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                categories: tempCategories.bar
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null,
+                    align: "high"
+                }
+            },
+            credits: { enabled: false },
+            tooltip: { enabled: false },
+            legend: { enabled: false },
+            series: tempSeries.bar
+        };
+
+        // detail pie
+        this.chartOptionsDetailPie = {
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            tooltip: { enabled: false },
+            series: [
+                {
+                    type: "pie",
+                    innerSize: "50%",
+                    data: tempSeries.pie
+                }
+            ]
+        };
+
+        this.mountDetailChart = true;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private anysislyChartValueDefault(): IChartOccupancyData {
-        let value: IChartOccupancyData = {
+    private anysislyChartValueDefault(): IChartRepeatVisitorData {
+        let value: IChartRepeatVisitorData = {
             date: new Date(),
             siteObjectId: "",
 
-            areaId: "",
-            areaName: "",
-            occupancy: 0,
+            repeatCount: 0,
+            ageRange: EAgeRange.none,
+            maleCount: 0,
+            femaleCount: 0,
+            maleCountPercent: 0,
+            femaleCountPercent: 0,
 
             // every report
             temperatureMin: 0,
@@ -1133,9 +688,14 @@ export class HighchartsRepeatVisitor extends Vue {
         return value;
     }
 
-    private anysislyChartValue(item: IChartOccupancyData): IChartOccupancyData {
+    private anysislyChartValue(
+        item: IChartRepeatVisitorData
+    ): IChartRepeatVisitorData {
         let value = JSON.parse(JSON.stringify(item));
         value.date = new Date(value.date);
+
+        value.maleCountPercent = 0;
+        value.femaleCountPercent = 0;
 
         // every report
         for (let site of this.sites) {
@@ -1211,11 +771,18 @@ export class HighchartsRepeatVisitor extends Vue {
             temperature: this._("w_Report_Temperature"),
             temperatureMin: this._("w_Report_TemperatureMin"),
             temperatureMax: this._("w_Report_TemperatureMax"),
-            weather: this._("w_Report_Weather"),
-            occupancy: this._("w_ReportOccupancy_Occupancy"),
-            avgOccupancy: this._("w_ReportOccupancy_OccupancyAVG")
+            weather: this._("w_Report_Weather")
         };
         return result;
+    }
+
+    private changeChartType(value: string) {
+        this.selection.chartType = value;
+    }
+
+    private changeRepeatCount(value: string) {
+        this.selection.repeatCount = value;
+        this.initDetailChart();
     }
 }
 

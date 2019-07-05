@@ -419,6 +419,7 @@ export class FilterCondition extends Vue {
         };
 
         if (this.inputFormData.siteIds.length === 0) {
+            Dialog.error(this._("w_PleaseSelectSites"));
             return false;
         }
 

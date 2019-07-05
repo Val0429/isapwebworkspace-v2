@@ -73,6 +73,7 @@ export default class LangObject implements ILang {
     w_ExportPDF = 'Export PDF';
     w_ExportExcel = 'Export Excel';
     w_ExportCSV = 'Export CSV';
+
     // date
     w_Week_0 = 'Sunday';
     w_Week_1 = 'Monday';
@@ -812,6 +813,9 @@ export default class LangObject implements ILang {
     w_ReportOccupancy_Occupancy = 'Occupancy';
     w_ReportOccupancy_OccupancyAVG = 'AVG Occupancy';
 
+    // Report Repeat Visitor
+    w_ReportRepeatVisitor_NumberOfVisit = 'Number of Visit ';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';
@@ -834,6 +838,8 @@ export default class LangObject implements ILang {
     w_ReportFilterConditionComponent_ = 'Filter Condition';
     w_ReportDateError = 'EndDate must greater or equal than startDate.';
     w_countSelect = 'Time Mode';
+    w_isIncludedEmployee = 'Is Included Employee';
+    w_PleaseSelectSites = 'Please Select Site(s)';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';

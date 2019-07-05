@@ -4,9 +4,15 @@
             :interface="IAnalysisFilterForm()"
             @update:areaId="whenSelectedAreaId($event)"
             @update:groupId="whenSelectedGroupId($event)"
+            @update:deviceId="whenSelectedDeviceId($event)"
+            @update:type="whenSelectedType($event)"
+            @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
         >
+
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
+                    v-if="siteIds && siteIds.length === 1"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -16,6 +22,8 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    v-if="siteIds && siteIds.length === 1"
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -25,6 +33,8 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    v-if="siteIds && siteIds.length === 1"
+                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -34,9 +44,22 @@
 
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
+                    class="col-md-2"
+                    v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.type"
+                >
+                </iv-form-selection>
+            </template>
+
+            <template #isIncludedEmployee="{ $attrs, $listeners }">
+                <iv-form-selection
+                    class="col-md-2"
+                    v-if="siteIds.length !== 0"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.isIncludedEmployee"
                 >
                 </iv-form-selection>
             </template>
@@ -56,322 +79,144 @@ import {
     Watch
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { ECountType } from '@/components/Reports/models/EReport';
+import { ECountType, EType } from "@/components/Reports/models/EReport";
+import { IChartTrafficData, EWeather } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
+let config = require("@/config/default/debug");
 
 
 @Component({
     components: {}
 })
 export class AnalysisFilter extends Vue {
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    areaSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    deviceGroupSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    deviceSelectItem: object;
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: []
+    })
+    typeSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    timeModeSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    isIncludedEmployeeSelectItem: object;
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: () => []
+    })
+    siteIds: object;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
-        default: ""
+        default: "all"
     })
-    firstSiteId: string;
+    areaId: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
-        default: ""
+        default: "all"
     })
-    deviceMode: string;
+    groupId: string;
 
-    // select 相關
-    areaSelectItem: any = {};
-    deviceGroupSelectItem: any = {};
-    deviceSelectItem: any = {};
-    timeModeSelectItem: any = {
-        hour: ECountType.hour,
-        day: ECountType.day,
-        week: ECountType.week,
-        month: ECountType.month,
-        season: ECountType.quarter,
-        year: ECountType.year,
-    };
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "all"
+    })
+    deviceId: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "hour"
+    })
+    type: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "no"
+    })
+    isIncludedEmployee: string;
 
     inputFormData: any = {
-        areaId: "",
-        groupId: "",
-        deviceId: "",
-        type: "",
+        areaId: "all",
+        groupId: "all",
+        deviceId: "all",
+        type: "day",
+        inOrOut: "in",
+        isIncludedEmployee: 'no'
     };
 
     created() {}
 
-    mounted() {
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+    mounted() {}
+
+    @Watch("areaId", { deep: true })
+    private areaIdChanged(newVal, oldVal) {
+        this.inputFormData.areaId = newVal;
     }
 
-    @Watch("firstSiteId", { deep: true })
-    private onfirstSiteIdChanged(newVal, oldVal) {
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+    @Watch("groupId", { deep: true })
+    private groupIdChanged(newVal, oldVal) {
+        this.inputFormData.groupId = newVal;
     }
 
-    async initSelectItemArea() {
-        let tempAreaSelectItem = {};
-
-        const readParam: {
-            siteId: string;
-        } = {
-            siteId: this.firstSiteId
-        };
-
-        if (!this.firstSiteId) {
-            return false;
-        } else {
-            await this.$server
-                .R("/location/area/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 sitesSelectItem 的 key 的方式
-                            tempAreaSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                            // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
-                        }
-                        this.areaSelectItem = tempAreaSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+    @Watch("deviceId", { deep: true })
+    private deviceIdChanged(newVal, oldVal) {
+        this.inputFormData.deviceId = newVal;
     }
 
-    async initSelectItemDeviceGroup() {
-        let tempDeviceGroupSelectItem = {};
-
-        let readParam: {
-            siteId: string;
-            areaId?: string;
-            mode: string;
-        } = {
-            siteId: this.firstSiteId,
-            mode: this.deviceMode
-        };
-
-        if (!this.firstSiteId) {
-            return false;
-        } else if (
-            this.firstSiteId &&
-            (this.inputFormData.areaId === undefined ||
-                this.inputFormData.areaId === "")
-        ) {
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        } else if (
-            // 選擇site和area
-            this.firstSiteId &&
-            (this.inputFormData.areaId !== undefined ||
-                this.inputFormData.areaId !== "")
-        ) {
-            readParam.areaId = this.inputFormData.areaId;
-
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+    @Watch("type", { deep: true })
+    private typeChanged(newVal, oldVal) {
+        this.inputFormData.type = newVal;
     }
 
-    async initSelectItemDevice() {
-        let tempDeviceSelectItem = {};
-
-        const readParam: {
-            siteId: string;
-            areaId?: string;
-            groupId?: string;
-            mode: string;
-        } = {
-            siteId: this.firstSiteId,
-            mode: this.deviceMode
-        };
-
-        if (!this.firstSiteId) {
-            return false;
-        } else if (
-            // 只選擇site
-            this.firstSiteId &&
-            (this.inputFormData.areaId === undefined ||
-                this.inputFormData.areaId === "") &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "")
-        ) {
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        } else if (
-            // 選擇site和area
-            this.firstSiteId &&
-            (this.inputFormData.areaId !== undefined ||
-                this.inputFormData.areaId !== "") &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "")
-        ) {
-            readParam.areaId = this.inputFormData.areaId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        } else if (
-            // 選擇site和area和device group
-            this.firstSiteId &&
-            (this.inputFormData.areaId !== undefined ||
-                this.inputFormData.areaId !== "") &&
-            (this.inputFormData.groupId !== undefined ||
-                this.inputFormData.groupId !== "")
-        ) {
-            readParam.groupId = this.inputFormData.groupId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+    @Watch("isIncludedEmployee", { deep: true })
+    private isIncludedEmployeeChanged(newVal, oldVal) {
+        this.inputFormData.is = newVal;
     }
 
     async whenSelectedAreaId() {
-        if (
-            this.inputFormData.areaId !== undefined ||
-            this.inputFormData.areaId !== ""
-        ) {
-            this.inputFormData.groupId = "";
-            this.inputFormData.deviceId = "";
-            await this.initSelectItemDeviceGroup();
-            await this.initSelectItemDevice();
-        } else {
-            return false;
-        }
+        this.$emit("area_id", this.inputFormData.areaId);
     }
 
     async whenSelectedGroupId() {
-        console.log(
-            "this.inputFormData.groupId - ",
-            this.inputFormData.groupId
-        );
-        if (
-            this.inputFormData.groupId !== undefined ||
-            this.inputFormData.groupId !== ""
-        ) {
-            this.inputFormData.deviceId = "";
-            await this.initSelectItemDevice();
-        } else {
-            return false;
-        }
+        this.$emit("group_id", this.inputFormData.groupId);
     }
 
-    doSubmit() {
-        // TODO: wait api
-        this.$emit("submit-data", this.inputFormData);
-        this.inputFormData = {
-            areaId: []
-        };
+    async whenSelectedDeviceId() {
+        this.$emit("device_id", this.inputFormData.deviceId);
     }
 
-    async doReset() {
-        this.inputFormData = {
-            areaId: "",
-            groupId: "",
-            deviceId: "",
-            type: "",
-        };
+    whenSelectedType() {
+        this.$emit("type", this.inputFormData.type);
+    }
 
-        this.inputFormData.groupId = "";
-        this.inputFormData.deviceId = "";
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
-        await this.initSelectItemDevice();
+    whenSelectedIsIncludedEmployee() {
+        this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
     }
 
     IAnalysisFilterForm() {
@@ -405,15 +250,19 @@ export class AnalysisFilter extends Vue {
                 )};
 
 
-
                 /**
                  * @uiLabel - ${this._("w_countSelect")}
                  * @uiColumnGroup - analysis
                  */
-                type?: ${toEnumInterface(
-                    this.timeModeSelectItem as any,
-                    false
-                )};
+                type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_isIncludedEmployee")}
+                 * @uiColumnGroup - analysis
+                 */
+                isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
+
 
             }
         `;
@@ -425,4 +274,7 @@ Vue.component("analysis_filter", AnalysisFilter);
 </script>
 
 <style lang="scss" scoped>
+.click_button {
+    margin-top: 27px;
+}
 </style>

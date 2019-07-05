@@ -18,7 +18,7 @@
                     <b-form-radio-group
                         v-if="chartMode == eChartMode.siteXDayX"
                         v-model="selection.gender"
-                        class="h-25 click_button col-md-1"
+                        class="select-gender mb-4"
                         buttons
                         button-variant="outline-success"
                         name="radio-btn-outline"
@@ -1500,7 +1500,7 @@ export class HighchartsDemographic extends Vue {
         let series: any = [
             {
                 type: "pie",
-                name: "Browser share",
+                name: null,
                 innerSize: "50%",
                 data: [],
                 countData: []
@@ -1827,5 +1827,8 @@ Vue.component("highcharts-demographic", HighchartsDemographic);
 .chart-error-message {
     text-align: center;
 }
+    .select-gender {
+        height: 36px;
+    }
 </style>
 

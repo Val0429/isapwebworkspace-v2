@@ -50,6 +50,11 @@ enum EType {
     out = 'out',
 }
 
+enum EIncludedEmployee {
+    yes = 'yes',
+    no = 'no',
+}
+
 enum ESign {
     positive = 'positive',
     negative = 'negative',
@@ -79,4 +84,4 @@ enum EChartMode {
 }
 
 export { ESign, EPageType, EChartMode };
-export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, EType };
+export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, EType, EIncludedEmployee };

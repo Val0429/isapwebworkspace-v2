@@ -31,27 +31,30 @@ import {EAreaMode} from "../../components/Reports";
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_in_out_traffic
+                <analysis_filter_in_out
                     class="mb-4"
-                    v-if="filterData.siteIds && filterData.siteIds.length === 1"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
                     :typeSelectItem="typeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
+                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                    :siteIds="filterData.siteIds"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
                     :deviceId="inputFormData.deviceId"
                     :type="inputFormData.type"
                     :inOrOut="inputFormData.inOrOut"
+                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
                     @area_id="receiveAreaId"
                     @group_id="receiveGroupId"
                     @device_id="receiveDeviceId"
                     @type="receiveType"
                     @in_or_out="receiveInOrOut"
+                    @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_in_out_traffic>
+                </analysis_filter_in_out>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -67,6 +70,7 @@ import {EAreaMode} from "../../components/Reports";
 
                 <!-- Morris -->
                 <highcharts-traffic
+                    ref="highcharts"
                     :startDate="startDate"
                     :endDate="endDate"
                     :sites="sites"
@@ -108,7 +112,8 @@ import { Component, Vue } from "vue-property-decorator";
 import {
     ECountType,
     EDeviceMode,
-    EType
+    EType,
+    EIncludedEmployee
 } from "@/components/Reports/models/EReport";
 import {
     ERegionType,
@@ -207,13 +212,18 @@ export default class ReportTraffic extends Vue {
         quarter: ECountType.quarter,
         year: ECountType.year
     };
+    isIncludedEmployeeSelectItem: any = {
+        yes: EIncludedEmployee.yes,
+        no: EIncludedEmployee.no
+    };
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
         type: "",
-        inOrOut: "in"
+        inOrOut: "in",
+        isIncludedEmployee: "no"
     };
 
     // chart 相關
@@ -272,54 +282,56 @@ export default class ReportTraffic extends Vue {
     }
 
     initPeakTimeRange() {
-            // Data format conversion
-            this.siteItem =[];
-            this.pData = [];
+        // Data format conversion
+        this.siteItem = [];
+        this.pData = [];
 
-            let chartMode = HighChartsService.chartMode(
+        let chartMode = HighChartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
-            );
+        );
 
-            this.pDayXxSiteX = chartMode;
-            
-            for(let site of this.sites){
-                let item = {value:site.objectId,text:site.name,officeHour:site.officeHour}
-                this.siteItem.push(item);
-            }
-            
-            for (let item of this.responseData.peakHours) {
-                let pDatum: IPeckTimeRange = {
-                    site: "",
-                    head: [],
-                    body: []
-                };
-                let head = [];
-                let levels = [];
-                for (let subItem of item.peakHourDatas) {
-                    let level = {
-                        time: subItem.date,
-                        value: subItem.level
-                    }
+        this.pDayXxSiteX = chartMode;
 
-                    levels.push(level);
-                    head.push(subItem.date);
-                }
+        for (let site of this.sites) {
+            let item = {
+                value: site.objectId,
+                text: site.name,
+                officeHour: site.officeHour
+            };
+            this.siteItem.push(item);
+        }
 
-                let body = {
-                    title: item.date,
-                    context: levels
+        for (let item of this.responseData.peakHours) {
+            let pDatum: IPeckTimeRange = {
+                site: "",
+                head: [],
+                body: []
+            };
+            let head = [];
+            let levels = [];
+            for (let subItem of item.peakHourDatas) {
+                let level = {
+                    time: subItem.date,
+                    value: subItem.level
                 };
 
-                pDatum.site = item.site.objectId;
-                pDatum.head = head;
-
-                pDatum.body.push(body);
-                this.pData.push(pDatum);
+                levels.push(level);
+                head.push(subItem.date);
             }
-             
-       
+
+            let body = {
+                title: item.date,
+                context: levels
+            };
+
+            pDatum.site = item.site.objectId;
+            pDatum.head = head;
+
+            pDatum.body.push(body);
+            this.pData.push(pDatum);
+        }
     }
 
         showWeek(data) {
@@ -1001,6 +1013,14 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
+            //     // 選擇all area, all group, 單一 device
+            // } else if (
+            //     this.filterData.firstSiteId &&
+            //     this.inputFormData.areaId &&
+            //     this.inputFormData.areaId === "all" &&
+            //     this.inputFormData.groupId &&
+            //     this.inputFormData.groupId === "all"
+            // ) {
         }
     }
 
@@ -1049,7 +1069,8 @@ export default class ReportTraffic extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            inOrOut: "in"
+            inOrOut: "in",
+            isIncludedEmployee: "no"
         };
 
         await this.$server
@@ -1158,7 +1179,8 @@ export default class ReportTraffic extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            inOrOut: "in"
+            inOrOut: "in",
+            isIncludedEmployee: "no"
         };
 
         console.log(" - ", this.sites);
@@ -1463,9 +1485,23 @@ export default class ReportTraffic extends Vue {
     }
 
     receiveType(type) {
+        let chartRef: any = this.$refs.highcharts;
         this.inputFormData.type = type;
         this.timeMode = type;
+
+        if (chartRef != undefined) {
+            console.log("ready to start");
+            chartRef.start();
+        }
+
         console.log("type - ", this.inputFormData.type);
+
+        console.log(" - ", this.sites);
+        console.log(" - ", this.startDate);
+        console.log(" - ", this.endDate);
+        console.log(" - ", this.timeMode);
+        console.log(" - ", this.areaMode);
+        console.log(" chartDatas - ", this.chartDatas);
     }
 
     receiveInOrOut(inOrOut) {
@@ -1476,6 +1512,14 @@ export default class ReportTraffic extends Vue {
         if (this.filterData.firstSiteId) {
             this.sortOutChartData(this.responseData.summaryDatas);
         }
+    }
+
+    receiveIsIncludedEmployee(isIncludedEmployee) {
+        this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+        console.log(
+            "isIncludedEmployee - ",
+            this.inputFormData.isIncludedEmployee
+        );
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

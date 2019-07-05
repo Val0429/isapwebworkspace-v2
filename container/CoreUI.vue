@@ -69,7 +69,7 @@
                     />
                     <SidebarNavItem
                         :label="_('w_Navigation_Report_RepeatVisitor')"
-                        url="/reports/report_visitor"
+                        url="/reports/repeat_visitor"
                     />
                     <SidebarNavItem
                         :label="_('w_Navigation_Report_Campaign')"

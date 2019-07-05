@@ -5,10 +5,15 @@
             @update:areaId="whenSelectedAreaId($event)"
             @update:groupId="whenSelectedGroupId($event)"
             @update:deviceId="whenSelectedDeviceId($event)"
+            @update:type="whenSelectedType($event)"
+            @update:selectInOrOut="whenSelectedInOrOut($event)"
+            @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
         >
+
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
+                    v-if="siteIds && siteIds.length === 1"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -18,6 +23,7 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    v-if="siteIds && siteIds.length === 1"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -28,6 +34,7 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
+                    v-if="siteIds && siteIds.length === 1"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -39,9 +46,22 @@
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
+                    v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.type"
+                >
+                </iv-form-selection>
+
+            </template>
+
+            <template #isIncludedEmployee="{ $attrs, $listeners }">
+                <iv-form-selection
+                    class="col-md-1"
+                    v-if="siteIds.length !== 0"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.isIncludedEmployee"
                 >
                 </iv-form-selection>
             </template>
@@ -49,6 +69,7 @@
             <template #selectInOrOut="{ $attrs, $listeners }">
 
                 <b-form-radio-group
+                    v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.inOrOut"
@@ -59,6 +80,7 @@
                     :options="typeSelectItem"
                 ></b-form-radio-group>
             </template>
+
 
         </iv-form>
 
@@ -75,608 +97,161 @@ import {
     Watch
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { ECountType } from "@/components/Reports/models/EReport";
-import { IChartTrafficData } from "@/components/Reports";
+import { ECountType, EType } from "@/components/Reports/models/EReport";
+import { IChartTrafficData, EWeather } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
 let config = require("@/config/default/debug");
 
-enum EType {
-    in = "in",
-    out = "out"
-}
 
 @Component({
     components: {}
 })
 export class AnalysisFilterInOut extends Vue {
     @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
     })
-    firstSiteId: string;
-
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
-    })
-    deviceMode: string;
+    areaSelectItem: object;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
-        default: () => {
-            return {
-                peakHours: [],
-                summaryDatas: []
-            };
-        }
+        default: {}
     })
-    showReportData: any;
+    deviceGroupSelectItem: object;
 
-    // select 相關
-    areaSelectItem: any = {};
-    deviceGroupSelectItem: any = {};
-    deviceSelectItem: any = {};
-    typeSelectItem: any = [
-        { value: EType.in, text: EType.in },
-        { value: EType.out, text: EType.out }
-    ];
-    timeModeSelectItem: any = {
-        hour: ECountType.hour,
-        day: ECountType.day,
-        week: ECountType.week,
-        month: ECountType.month,
-        season: ECountType.quarter,
-        year: ECountType.year
-    };
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    deviceSelectItem: object;
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: []
+    })
+    typeSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    timeModeSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    isIncludedEmployeeSelectItem: object;
+
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: () => []
+    })
+    siteIds: object;
+
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "all"
+    })
+    areaId: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "all"
+    })
+    groupId: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "all"
+    })
+    deviceId: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "hour"
+    })
+    type: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "in"
+    })
+    inOrOut: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "no"
+    })
+    isIncludedEmployee: string;
 
     inputFormData: any = {
-        areaId: "",
-        groupId: "",
-        deviceId: "",
-        type: "",
-        inOrOut: "in"
-    };
-
-    // 整理 showReportData 相關
-    areaSummaryFilter: any = [];
-    deviceGroupSummaryFilter: any = [];
-    deviceSummaryFilter: any = [];
-
-    // chart 相關
-    // trafficChartData: IChartTrafficData = {
-    trafficChartData: any = {
-        // date: null,
-        // siteObjectId: '',
-        // temperature: 0,
-        // traffic: 0,
-        // revenue: 0,
-        // transaction: 0,
-        // conversion: 0,
-        // asp: 0,
-        // weather: '',
+        areaId: "all",
+        groupId: "all",
+        deviceId: "all",
+        type: "day",
+        inOrOut: "in",
+        isIncludedEmployee: 'no'
     };
 
     created() {}
 
-    mounted() {
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
-        this.filterSiteData();
-        // console.log('showReportData - ', this.showReportData);
+    mounted() {}
+
+    @Watch("areaId", { deep: true })
+    private areaIdChanged(newVal, oldVal) {
+        this.inputFormData.areaId = newVal;
     }
 
-    @Watch("firstSiteId", { deep: true })
-    private onfirstSiteIdChanged(newVal, oldVal) {
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+    @Watch("groupId", { deep: true })
+    private groupIdChanged(newVal, oldVal) {
+        this.inputFormData.groupId = newVal;
     }
 
-    // clearTrafficChartData()  {
-    //     this.trafficChartData = {
-    //     date: null,
-    //     siteObjectId: '',
-    //     temperature: 0,
-    //     traffic: 0,
-    //     revenue: 0,
-    //     transaction: 0,
-    //     conversion: 0,
-    //     asp: 0,
-    //     weather: '',
-    //     }
-    // };
-
-    async initSelectItemArea() {
-        let tempAreaSelectItem = {};
-
-        const readParam: {
-            siteId: string;
-        } = {
-            siteId: this.firstSiteId
-        };
-
-        if (!this.firstSiteId) {
-            return false;
-        } else {
-            await this.$server
-                .R("/location/area/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 sitesSelectItem 的 key 的方式
-                            tempAreaSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                            // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
-                        }
-                        this.areaSelectItem = tempAreaSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+    @Watch("deviceId", { deep: true })
+    private deviceIdChanged(newVal, oldVal) {
+        this.inputFormData.deviceId = newVal;
     }
 
-    async initSelectItemDeviceGroup() {
-        let tempDeviceGroupSelectItem = {};
-
-        let readParam: {
-            siteId: string;
-            areaId?: string;
-            mode: string;
-        } = {
-            siteId: this.firstSiteId,
-            mode: this.deviceMode
-        };
-
-        if (!this.firstSiteId) {
-            return false;
-        } else if (
-            this.firstSiteId &&
-            (this.inputFormData.areaId === undefined ||
-                this.inputFormData.areaId === "")
-        ) {
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        } else if (
-            // 選擇site和area
-            this.firstSiteId &&
-            (this.inputFormData.areaId !== undefined ||
-                this.inputFormData.areaId !== "")
-        ) {
-            readParam.areaId = this.inputFormData.areaId;
-
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+    @Watch("type", { deep: true })
+    private typeChanged(newVal, oldVal) {
+        this.inputFormData.type = newVal;
     }
 
-    async initSelectItemDevice() {
-        let tempDeviceSelectItem = {};
-
-        const readParam: {
-            siteId: string;
-            areaId?: string;
-            groupId?: string;
-            mode: string;
-        } = {
-            siteId: this.firstSiteId,
-            mode: this.deviceMode
-        };
-
-        if (!this.firstSiteId) {
-            return false;
-        } else if (
-            // 只選擇site
-            this.firstSiteId &&
-            (this.inputFormData.areaId === undefined ||
-                this.inputFormData.areaId === "") &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "")
-        ) {
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        } else if (
-            // 選擇site和area
-            this.firstSiteId &&
-            (this.inputFormData.areaId !== undefined ||
-                this.inputFormData.areaId !== "") &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "")
-        ) {
-            readParam.areaId = this.inputFormData.areaId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        } else if (
-            // 選擇site和area和device group
-            this.firstSiteId &&
-            (this.inputFormData.areaId !== undefined ||
-                this.inputFormData.areaId !== "") &&
-            (this.inputFormData.groupId !== undefined ||
-                this.inputFormData.groupId !== "")
-        ) {
-            readParam.groupId = this.inputFormData.groupId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+    @Watch("inOrOut", { deep: true })
+    private inOrOutChanged(newVal, oldVal) {
+        this.inputFormData.inOrOut = newVal;
     }
 
-    filterSiteData() {
-        console.log("filterSiteData - ", this.showReportData.summaryDatas);
-
-       //  this.clearTrafficChartData();
-
-        for (const singleData of this.showReportData.summaryDatas) {
-            // TODO: wait Min api
-            // temperature: number; --->
-            // revenue: number; ---> singleData.in
-            // transaction: number; ---> singleData.in
-            // conversion: number; ---> singleData.in
-            // asp: number; ---> singleData.in
-            // weather: number; ---> singleData.in
-
-            // date: Date; ---> singleData.date
-            // siteObjectId: string; ---> singleData.site.name
-            // traffic: number; ---> singleData.in
-
-            for (const detailKey in singleData) {
-                const tempSingleData = singleData[detailKey];
-                switch (detailKey) {
-                    case "date":
-                        this.trafficChartData.date = tempSingleData;
-                        break;
-                    case "in":
-                        this.trafficChartData.traffic = tempSingleData;
-                        break;
-                    case "site":
-                        this.trafficChartData.siteObjectId = tempSingleData.objectId;
-                        break;
-                    // case "":
-                    //     this.trafficChartData.temperature = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.revenue = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.transaction = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.conversion = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.asp = tempSingleData.;
-                    //     break;
-                    // case "":
-                    //     this.trafficChartData.weather = tempSingleData.;
-                    //     break;
-                }
-
-            }
-            //console.log(" - ", this.trafficChartData);
-        }
+    @Watch("isIncludedEmployee", { deep: true })
+    private isIncludedEmployeeChanged(newVal, oldVal) {
+        this.inputFormData.is = newVal;
     }
 
     async whenSelectedAreaId() {
-
-        this.areaSummaryFilter = [];
-
-        // console.log(' - ', this.inputFormData.areaId);
-
-       //  this.clearTrafficChartData();
-
-        if (
-            this.inputFormData.areaId !== undefined ||
-            this.inputFormData.areaId !== ""
-        ) {
-            // 依照area篩選
-            for (const singleData of this.showReportData.summaryDatas) {
-                // TODO: wait Min api
-                // temperature: number; --->
-                // revenue: number; ---> singleData.in
-                // transaction: number; ---> singleData.in
-                // conversion: number; ---> singleData.in
-                // asp: number; ---> singleData.in
-                // weather: number; ---> singleData.in
-
-                // date: Date; ---> singleData.date
-                // siteObjectId: string; ---> singleData.site.name
-                // traffic: number; ---> singleData.in
-
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-
-                    if (detailKey === 'area') {
-                        if (this.inputFormData.areaId === tempSingleData.objectId) {
-                           // console.log('!!!! - ', singleData);
-
-                            this.areaSummaryFilter.push(singleData) ;
-                        }
-                    }
-
-                }
-               // console.log(" - ", this.areaSummaryFilter);
-               //console.log("trafficChartData - ", this.trafficChartData);
-            }
-
-
-            // 整理為Morris需要的資料格式
-            for (const singleData of this.areaSummaryFilter) {
-                // TODO: wait Min api
-                // temperature: number; --->
-                // revenue: number; ---> singleData.in
-                // transaction: number; ---> singleData.in
-                // conversion: number; ---> singleData.in
-                // asp: number; ---> singleData.in
-                // weather: number; ---> singleData.in
-
-                // date: Date; ---> singleData.date
-                // siteObjectId: string; ---> singleData.site.name
-                // traffic: number; ---> singleData.in
-
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-
-                    if (detailKey === 'area') {
-                        if (this.inputFormData.areaId === tempSingleData.objectId) {
-
-                            this.trafficChartData.date = singleData.date;
-                            this.trafficChartData.traffic = singleData.in;
-                            this.trafficChartData.siteObjectId = singleData.site.objectId;
-                            // this.trafficChartData.temperature = tempSingleData.;
-                            // this.trafficChartData.revenue = tempSingleData.;
-                            // this.trafficChartData.transaction = tempSingleData.;
-                            // this.trafficChartData.conversion = tempSingleData.;
-                            // this.trafficChartData.asp = tempSingleData.;
-                            // this.trafficChartData.weather = tempSingleData.;
-                        }
-                    }
-                }
-                console.log(" - ", this.trafficChartData);
-            }
-
-
-            this.inputFormData.groupId = "";
-            this.inputFormData.deviceId = "";
-            await this.initSelectItemDeviceGroup();
-            await this.initSelectItemDevice();
-        } else {
-            return false;
-        }
+        this.$emit("area_id", this.inputFormData.areaId);
     }
 
     async whenSelectedGroupId() {
-
-        this.deviceGroupSummaryFilter = [];
-
-        if (
-            this.inputFormData.groupId !== undefined ||
-            this.inputFormData.groupId !== ""
-        ) {
-            // 依照deviceGroup篩選
-            for (const singleData of this.areaSummaryFilter) {
-
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-
-                    if (detailKey === 'deviceGroups') {
-                        if (this.inputFormData.groupId === tempSingleData[0].objectId) {
-                            this.deviceGroupSummaryFilter.push(singleData) ;
-                        }
-                    }
-                }
-                 console.log(" - ", this.deviceGroupSummaryFilter);
-            }
-
-            // 整理為Morris需要的資料格式
-            for (const singleData of this.deviceGroupSummaryFilter) {
-                // TODO: wait Min api
-                // temperature: number; --->
-                // revenue: number; ---> singleData.in
-                // transaction: number; ---> singleData.in
-                // conversion: number; ---> singleData.in
-                // asp: number; ---> singleData.in
-                // weather: number; ---> singleData.in
-
-                // date: Date; ---> singleData.date
-                // siteObjectId: string; ---> singleData.site.name
-                // traffic: number; ---> singleData.in
-
-                for (const detailKey in singleData) {
-                    const tempSingleData = singleData[detailKey];
-
-                    if (detailKey === 'deviceGroups') {
-                        if (this.inputFormData.groupId === tempSingleData[0].objectId) {
-
-                            this.trafficChartData.date = singleData.date;
-                            this.trafficChartData.traffic = singleData.in;
-                            this.trafficChartData.siteObjectId = singleData.site.objectId;
-                            // this.trafficChartData.temperature = tempSingleData.;
-                            // this.trafficChartData.revenue = tempSingleData.;
-                            // this.trafficChartData.transaction = tempSingleData.;
-                            // this.trafficChartData.conversion = tempSingleData.;
-                            // this.trafficChartData.asp = tempSingleData.;
-                            // this.trafficChartData.weather = tempSingleData.;
-                        }
-                    }
-                }
-                  console.log(" - ", this.trafficChartData);
-            }
-
-            this.inputFormData.deviceId = "";
-            await this.initSelectItemDevice();
-        } else {
-            return false;
-        }
+        this.$emit("group_id", this.inputFormData.groupId);
     }
 
-    whenSelectedDeviceId() {
-        // 依照devic篩選
-        for (const singleData of this.deviceGroupSummaryFilter) {
-
-            for (const detailKey in singleData) {
-                const tempSingleData = singleData[detailKey];
-
-                if (detailKey === 'device') {
-                    if (this.inputFormData.deviceId === tempSingleData.objectId) {
-                        this.deviceSummaryFilter.push(singleData) ;
-                    }
-                }
-            }
-            console.log(" - ", this.deviceSummaryFilter);
-        }
-
-        // 整理為Morris需要的資料格式
-        for (const singleData of this.deviceSummaryFilter) {
-            // TODO: wait Min api
-            // temperature: number; --->
-            // revenue: number; ---> singleData.in
-            // transaction: number; ---> singleData.in
-            // conversion: number; ---> singleData.in
-            // asp: number; ---> singleData.in
-            // weather: number; ---> singleData.in
-
-            // date: Date; ---> singleData.date
-            // siteObjectId: string; ---> singleData.site.name
-            // traffic: number; ---> singleData.in
-
-            for (const detailKey in singleData) {
-                const tempSingleData = singleData[detailKey];
-
-                if (detailKey === 'device') {
-                    if (this.inputFormData.deviceId === tempSingleData.objectId) {
-
-                        this.trafficChartData.date = singleData.date;
-                        this.trafficChartData.traffic = singleData.in;
-                        this.trafficChartData.siteObjectId = singleData.site.objectId;
-                        // this.trafficChartData.temperature = tempSingleData.;
-                        // this.trafficChartData.revenue = tempSingleData.;
-                        // this.trafficChartData.transaction = tempSingleData.;
-                        // this.trafficChartData.conversion = tempSingleData.;
-                        // this.trafficChartData.asp = tempSingleData.;
-                        // this.trafficChartData.weather = tempSingleData.;
-                    }
-                }
-            }
-            console.log(" - ", this.trafficChartData);
-        }
+    async whenSelectedDeviceId() {
+        this.$emit("device_id", this.inputFormData.deviceId);
     }
 
-    doSubmit() {
-        this.$emit("submit-data", this.inputFormData);
-        this.inputFormData = {
-            areaId: []
-        };
+    whenSelectedType() {
+        this.$emit("type", this.inputFormData.type);
     }
 
-    async doReset() {
-        this.inputFormData = {
-            areaId: "",
-            groupId: "",
-            deviceId: "",
-            type: "",
-            inOrOut: "in"
-        };
+    whenSelectedInOrOut() {
+        this.$emit("in_or_out", this.inputFormData.inOrOut);
+    }
 
-        this.inputFormData.groupId = "";
-        this.inputFormData.deviceId = "";
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
-        await this.initSelectItemDevice();
+    whenSelectedIsIncludedEmployee() {
+        this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
     }
 
     IAnalysisFilterForm() {
@@ -718,9 +293,17 @@ export class AnalysisFilterInOut extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_isIncludedEmployee")}
+                 * @uiColumnGroup - analysis
+                 */
+                isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
+
+
+                /**
                  * @uiColumnGroup - analysis
                  */
                 selectInOrOut?: any;
+
 
             }
         `;
