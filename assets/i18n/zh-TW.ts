@@ -586,4 +586,8 @@ export default class LangObject implements ILang {
     w_Door_Count = "門號數量";
     w_Reader_Count = "讀卡機數量";
     w_Region = "地區名稱";
+
+    w_Permission="Permission";
+    w_Setting="Setting";    
+    w_Report="Report";
 }

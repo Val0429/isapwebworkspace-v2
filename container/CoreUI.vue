@@ -20,9 +20,18 @@
         <template #nav>
             <SidebarHeader label="Menu" />
             <SidebarNav> 
-                
-                    <SidebarNavItem v-for="(item,index) in menuNavigations" v-bind:key="index" :url="item"/>
-                
+                <SidebarNavItem :label="_('w_Permission')">
+                    <SidebarNavItem v-for="(item,index) in menuNavigations.filter(x=>x.group=='Permission')" v-bind:key="index" :url="item.url"/>
+                </SidebarNavItem>
+                <SidebarNavItem :label="_('w_Report')">
+                    <SidebarNavItem v-for="(item,index) in menuNavigations.filter(x=>x.group=='Report')" v-bind:key="b+index" :url="item.url"/>
+                </SidebarNavItem>
+                <SidebarNavItem :label="_('w_AccessLevel')">
+                    <SidebarNavItem v-for="(item,index) in menuNavigations.filter(x=>x.group=='AccessLevel')" v-bind:key="c+index" :url="item.url"/>
+                </SidebarNavItem>
+                <SidebarNavItem :label="_('w_Setting')">
+                    <SidebarNavItem v-for="(item,index) in menuNavigations.filter(x=>x.group=='Setting')" v-bind:key="d+index" :url="item.url"/>
+                </SidebarNavItem>
              </SidebarNav> 
         </template>
     </CoreUIBase>
@@ -65,7 +74,7 @@ export default class CoreUI extends Vue {
         for(let perm of PermissionList.filter(x=>x.route)){
             let menu = this.$user.permissions.find(x=>x.access.R === true && x.of.identifier == perm.key);
             if(!menu)continue;
-            this.menuNavigations.push(perm.route);
+            this.menuNavigations.push({url:perm.route, group:perm.group});
         }
     }
     @Watch('$route', {immediate:true, deep: true })

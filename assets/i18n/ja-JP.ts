@@ -584,4 +584,8 @@ export default class LangObject implements ILang {
     w_Door_Count = "Door Count";
     w_Reader_Count = "Reader Count";
     w_Region = "Region";
+
+    w_Permission="Permission";
+    w_Setting="Setting";    
+    w_Report="Report";
 }
