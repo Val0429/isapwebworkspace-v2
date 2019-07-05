@@ -52,10 +52,10 @@
                     <b-button
                         class="button"
                         variant="default"
-                        :disabled="disableChooseToOption()"
-                        @click="chooseToOption"
+                        :disabled="disableOptionToChoose()"
+                        @click="optionToChoose"
                     >
-                        <i class="fa fa-arrow-left" />
+                        <i class="fa fa-arrow-right" />
                     </b-button>
                 </b-col>
                 <b-col
@@ -65,12 +65,13 @@
                     <b-button
                         class="button"
                         variant="default"
-                        :disabled="disableOptionToChoose()"
-                        @click="optionToChoose"
+                        :disabled="disableChooseToOption()"
+                        @click="chooseToOption"
                     >
-                        <i class="fa fa-arrow-right" />
+                        <i class="fa fa-arrow-left" />
                     </b-button>
                 </b-col>
+                
             </b-row>
         </div>
         <div class="select-option-frame">
