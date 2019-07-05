@@ -1,1 +1,24 @@
 @import './bootstrap-variables';
+$sidebar-bg: #C5A88B;
+//$sidebar-nav-link-active-color: #E45253;
+//$sidebar-nav-link-active-bg:#fff;
+$sidebar-nav-link-hover-color: #E45253;
+$sidebar-nav-link-hover-bg:#F8F9FA;
+.sidebar .nav-dropdown.open {
+    background: #C5A88B;
+    /*color:#F8F9FA;*/
+    color: unset;
+}
+.sidebar .nav-dropdown.open .active{
+    background: #F8F9FA;
+    color:#E45253;
+}
+.sidebar .nav-link.active {
+    color: unset;
+    background: #F8F9FA;
+}
+ 
+.sidebar .nav-dropdown.open .nav-link:hover {
+    color: #E45253;
+  
+}

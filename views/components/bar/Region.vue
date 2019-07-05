@@ -2,8 +2,8 @@
     <div class="animated fadeIn">
 
         <!-- region tree -->
-        <region-tree-setup
-            v-show="pageStep == ePageStep.tree"
+        <region-tree-setup 
+            v-show="pageStep == ePageStep.tree && canAdd && canEdit && canDelete"
             v-on:click-binding-site="pageToBindingSite"
             v-on:click-add-next-layer-region="pageToEdit"
             v-on:click-add-same-layer-region="pageToEdit"
@@ -140,7 +140,7 @@ import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
-
+import { PermissionName} from '@/../src/constants/permissions';
 enum EPageStep {
     none,
     tree,
@@ -155,6 +155,19 @@ enum EPageStep {
     }
 })
 export default class Region extends Vue {
+    beforeMount(){
+        if(!this.$user || !this.$user.permissions)return;
+        this.permissionName = PermissionName.region;
+        this.canAdd = this.$user.permissions.find(x=>x.access.C === true && x.of.identifier == this.permissionName) != undefined;
+        this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
+        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
+    }
+    canAdd:boolean;
+    canEdit:boolean;
+    canDelete:boolean;
+    permissionName:string;
+
+
     ePageStep = EPageStep;
 
     pageStep: EPageStep = EPageStep.tree;

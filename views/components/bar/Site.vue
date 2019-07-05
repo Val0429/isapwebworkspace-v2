@@ -26,17 +26,17 @@
                         :disabled="!isSelectSite"
                         @click="pageToSiteView()"
                     />
-                    <iv-toolbox-edit
+                    <iv-toolbox-edit v-show="canEdit"
                         :disabled="!isSelectSite"
                         @click="pageToSiteEdit()"
                     />
-                    <iv-toolbox-delete
+                    <iv-toolbox-delete v-show="canDelete"
                         :disabled="!isSelectSite"
                         @click="deleteSite()"
                     />
 
                     <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToSiteAdd()" />
+                    <iv-toolbox-add @click="pageToSiteAdd()" v-show="canAdd"/>
 
                 </template>
             
@@ -326,6 +326,7 @@ import {
     IAreaAddData,
     IAreaEditData
 } from "@/config/default/api/interfaces";
+import { PermissionName} from '@/../src/constants/permissions';
 
 enum EPageStep {
     siteList = "siteList",
@@ -347,6 +348,18 @@ enum EPageStep {
     components: {}
 })
 export default class Site extends Vue {
+    beforeMount(){
+        if(!this.$user || !this.$user.permissions)return;
+        this.permissionName = PermissionName.site;
+        this.canAdd = this.$user.permissions.find(x=>x.access.C === true && x.of.identifier == this.permissionName) != undefined;
+        this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
+        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
+    }
+    canAdd:boolean;
+    canEdit:boolean;
+    canDelete:boolean;
+    permissionName:string;
+
     serverUrl = ServerConfig.url;
     newImg = new Image();
     newImgSrc = "";
