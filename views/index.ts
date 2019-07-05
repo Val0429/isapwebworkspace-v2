@@ -34,7 +34,7 @@ import DemographicReport from './components/acs/reports/DemographicReport.vue';
 import CardExpirationReport from './components/acs/reports/CardExpirationReport.vue';
 import VisitorCardReport from './components/acs/reports/VisitorCardReport.vue';
 import Redirector from '@/../src/components/login/redirector.vue';
-import User from './components/bar/User.vue';
+import User from './components/acs/User.vue';
 import Site from './components/bar/Site.vue';
 import Region from './components/bar/Region.vue';
 

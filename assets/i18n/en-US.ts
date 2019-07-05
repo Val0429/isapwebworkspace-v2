@@ -15,7 +15,8 @@ export default class LangObject {
     w_Multi = 'Multi';
 
     w_Username = 'User Name';
-    w_Roles = 'Rolese';
+    w_Roles = 'Roles';
+    w_ApiRoles = "API Roles";
     w_Email = 'Email';
     w_CreatedAt = 'Created At';
     w_UpdatedAt = 'Updated At';
