@@ -509,9 +509,9 @@ export default class ReportTraffic extends Vue {
              return 0;
         }
         if(value > prevValue){
-            return  prevValue / value;
-        }else if((value < prevValue)){
-            return value / prevValue;
+            return prevValue / value;
+        }else if(value < prevValue){
+            return -(value / prevValue);
         }else{
             return 0;
         }
