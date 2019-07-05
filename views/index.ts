@@ -35,6 +35,7 @@ import CardExpirationReport from './components/acs/reports/CardExpirationReport.
 import VisitorCardReport from './components/acs/reports/VisitorCardReport.vue';
 import Redirector from '@/../src/components/login/redirector.vue';
 import User from './components/acs/User.vue';
+import UserPermission from './components/acs/UserPermission.vue';
 import Site from './components/bar/Site.vue';
 import Region from './components/bar/Region.vue';
 
@@ -61,6 +62,8 @@ $({ path: '/floor', name: "_('w_Floor')", icon: 'fa-building' })(Floor);
     $({ path: '/visitorreport', name: "_('w_VisitorCardReport')", icon: 'fa-building' })(VisitorCardReport);
     
 // Users
+
+$({ path: '/userpermission', name: "_('w_UserPermission')", icon: 'fa-user' })(UserPermission);
 $({ path: '/user', name: "_('w_Navigation_Users_User')", icon: 'fa-user' })(User);
 
 // Sites

@@ -12,7 +12,9 @@ export default class LangObject implements ILang {
     w_Password = 'パスワード';
     w_Selection = '選択';
     w_Multi = '複数';
-
+    w_UserPermission="User Permission";
+    w_UserPermissionAdd="Add User Permission";
+    w_UserPermissionEdit="Edit User Permission";
     w_Username = '使用者名稱';
     w_Roles = '權限';    
     w_ApiRoles = "API Roles";

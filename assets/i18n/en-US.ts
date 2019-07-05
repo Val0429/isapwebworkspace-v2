@@ -13,7 +13,9 @@ export default class LangObject {
     w_Password = 'Password';
     w_Selection = 'Selection';
     w_Multi = 'Multi';
-
+    w_UserPermission="User Permission";
+    w_UserPermissionAdd="Add User Permission";
+    w_UserPermissionEdit="Edit User Permission";
     w_Username = 'User Name';
     w_Roles = 'Roles';
     w_ApiRoles = "API Roles";
