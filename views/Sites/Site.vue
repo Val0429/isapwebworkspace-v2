@@ -609,7 +609,7 @@
 
                 </iv-form>
 
-                <template #footer-before>
+                <template #footer>
                     <b-button
                         variant="secondary"
                         size="lg"
