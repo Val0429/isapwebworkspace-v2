@@ -354,17 +354,15 @@ export default class ReportTraffic extends Vue {
     }
 
     initReportTable() {
-
             let chartMode = HighChartsService.chartMode(
-            this.startDate,
-            this.endDate,
-            this.sites
+                this.startDate,
+                this.endDate,
+                this.sites
             );
-
             this.rData.chartMode = chartMode;
             
+            //head
             this.rData.head = [];
-
             let sTime = null;
             let eTime = null;
             switch (chartMode) {
@@ -385,7 +383,7 @@ export default class ReportTraffic extends Vue {
                     this.rData.head.push(sTime);
                     sTime++
                 }
-                this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                //  this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
@@ -395,12 +393,15 @@ export default class ReportTraffic extends Vue {
                 this.rData.head.push(sDate.toString());
                 sDate.setDate(sDate.getDate() + 1)
                 }
-                this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                // this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
                 break;
             }
            
+            //body
             console.log('reportTaeble',this.responseData.summaryDatas)
             this.rData.body = [];
+            let tempArray = [];
+            //篩選出所有店
             for(let summaryData of this.responseData.summaryDatas){
                 for(let deviceGroup of summaryData.deviceGroups){
                     let body = {
@@ -410,78 +411,110 @@ export default class ReportTraffic extends Vue {
                         in:[],
                         out:[]
                     }
-                    this.rData.body.push(body);
+
+                    if(body.group != undefined){
+                        if(tempArray.some(t => t.group.objectId == body.group.objectId)){
+                            continue;
+                        }
+                    }else{
+                        if(tempArray.some(t => t.area.objectId == body.area.objectId)){
+                            continue;
+                        }
+                    }
+                    tempArray.push(body);
+                   
                 }
             }
 
-            // this.rData.body = [
-            //     {
-            //        site: {objectId:"abdsdgfc",name:"紐約店"},
-            //         area: {objectId:"safsadf",name:"1F生活用品"},
-            //         group: {objectId:"",name:"N/A"},
-            //         in: [
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 2, valueRatio: -0.02 }
-            //         ],
-            //         out: [
-            //             { value: 3, valueRatio: -0.03 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 4, valueRatio: 0.05 }
-            //         ]
-            //     },
-            //     {
-            //         site: {objectId:"abdsfc",name:"台北店"},
-            //         area: {objectId:"safsaf",name:"2F生活用品"},
-            //         group: {objectId:"afrewgg",name:"Group01"},
-            //         in: [
-            //             { value: 5, valueRatio: 0.06 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 6, valueRatio: -0.07 }
-            //         ],
-            //         out: [
-            //             { value: 7, valueRatio: -0.08 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: -0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 1, valueRatio: 0.01 },
-            //             { value: 8, valueRatio: -0.09 }
-            //         ]
-            //     }
-            // ];
+            //填入資料
+            switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                for(let index in tempArray){
+                    for(let head of  this.rData.head){
+                        let inCount = { value: 0, valueRatio: 0}
+                        let outCount = { value: 0, valueRatio: 0}
+                        for(let summaryData of this.responseData.summaryDatas){
+                            if(new Date(summaryData.date).getUTCHours().toString() != head){
+                                continue;
+                            }
+                            for(let deviceGroup of summaryData.deviceGroups){
+                                if( tempArray[index].group != undefined){
+                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.out
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }else{
+                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.out
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }
+                            }
+                        }
+                        tempArray[index].in.push(inCount);
+                        tempArray[index].out.push(outCount)
+                    }
+                }
+                this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                for(let index in tempArray){
+                    for(let head of  this.rData.head){
+                        let inCount = { value: 0, valueRatio: 0}
+                        let outCount = { value: 0, valueRatio: 0}
+                        for(let summaryData of this.responseData.summaryDatas){
+                            if(new Date(summaryData.date).getFullYear()!= new Date(head).getFullYear() ||  
+                               new Date(summaryData.date).getUTCMonth()!= new Date(head).getUTCMonth() ||  
+                               new Date(summaryData.date).getUTCDate()!= new Date(head).getUTCDate() 
+                            ){
+                                continue;
+                            }
+                            for(let deviceGroup of summaryData.deviceGroups){
+                                if( tempArray[index].group != undefined){
+                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.outCount
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }else{
+                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
+                                        inCount.value += summaryData.in
+                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
+                                        outCount.value += summaryData.out
+                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                    }
+                                }
+                            }
+                        }
+                        tempArray[index].in.push(inCount);
+                        tempArray[index].out.push(outCount)
+                    }
+                }
+                this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                break;
+            }
+
+            this.rData.body = tempArray
+    }
+
+    countRatio(value,prevValue){
+        if(value == undefined || prevValue == undefined){
+             return 0;
+        }
+        if(value > prevValue){
+            return  prevValue / value;
+        }else if((value < prevValue)){
+            return value / prevValue;
+        }else{
+            return 0;
+        }
     }
 
     // Morris //
