@@ -135,14 +135,10 @@ import {
     ISite,
     ReportTableData
 } from "@/components/Reports";
-<<<<<<< HEAD
 import WeatherService from "@/components/Reports/models/WeatherService";
 import ReportService from "@/components/Reports/models/ReportService";
 import HighChartsService from "@/components/Reports/models/HighChartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
-=======
-
->>>>>>> cfbae5b68856f7efa24ce6a9cd684a4ce435b0a6
 
 enum EPageStep {
     none = "none"
@@ -905,8 +901,6 @@ export default class ReportOccupancy extends Vue {
         //     });
         // });
 
-
-
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
@@ -931,13 +925,13 @@ export default class ReportOccupancy extends Vue {
                             tempISite = {
                                 objectId: officeHourSiteId.objectId,
                                 name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours,
+                                officeHour: tempOfficeHours
                             };
 
                             this.siteAreaItem = {
                                 objectId: officeHourSiteId.objectId,
                                 name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours,
+                                officeHour: tempOfficeHours
                             };
 
                             if (filterSiteId === singleArea.site.objectId) {
@@ -948,10 +942,8 @@ export default class ReportOccupancy extends Vue {
                                 };
                                 tempAreas.push(tempArea);
                             }
-
                         }
                     }
-
                 }
             }
             tempISite.areas = tempAreas;
@@ -1498,12 +1490,10 @@ export default class ReportOccupancy extends Vue {
                 }
             }
             tempChartDatas.push(tempChartData);
-
         }
 
-
         this.chartDatas = tempChartDatas;
-        console.log('this.chartDatas - ', this.chartDatas);
+        console.log("this.chartDatas - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {
@@ -1541,7 +1531,7 @@ export default class ReportOccupancy extends Vue {
                         };
                         tempAreas.push(tempArea);
                     }
-                })
+                });
             });
             this.siteAreaItem.areas = tempAreas;
             this.sites = [];
