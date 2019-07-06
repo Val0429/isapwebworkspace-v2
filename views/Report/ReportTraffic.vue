@@ -278,7 +278,6 @@ export default class ReportTraffic extends Vue {
 
     // Ben //
     initDashboardData() {
-        this.dTimeMode = ETimeMode.day;
         this.dPageType = EPageType.traffic;
         setTimeout(() => {
             let anlysisDashboard: any = this.$refs.anlysisDashboard;
@@ -1193,6 +1192,7 @@ export default class ReportTraffic extends Vue {
 		*/
 
         // this.sites.push(tempISite);
+          this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);
