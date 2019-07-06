@@ -1275,25 +1275,6 @@ export default class ReportDemographic extends Vue {
         );
     }
 
-    switchAgeRange(index) {
-        switch (index) {
-            case "0":
-                return EAgeRange.lower20;
-            case "1":
-                return EAgeRange.m21_30;
-            case "2":
-                return EAgeRange.m31_40;
-            case "3":
-                return EAgeRange.m41_50;
-            case "4":
-                return EAgeRange.m51_60;
-            case "5":
-                return EAgeRange.upper61;
-            default:
-                return EAgeRange.none;
-        }
-    }
-
     sortOutChartData(array: any) {
         let tempChartDatas: IChartDemographicData[] = [];
         this.chartDatas = [];
@@ -1361,7 +1342,7 @@ export default class ReportDemographic extends Vue {
                 }
 
                 let tempData = JSON.parse(JSON.stringify(tempChartData));
-                tempData.ageRange = this.switchAgeRange(index.toString());
+                tempData.ageRange = ReportService.SwitchAgeRange(index.toString());
                 tempData.maleCount = summary.maleRanges[index];
                 tempData.femaleCount = summary.femaleRanges[index];
 
