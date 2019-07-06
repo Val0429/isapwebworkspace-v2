@@ -856,7 +856,6 @@ export default class ReportOccupancy extends Vue {
 
         console.log("this.allAreaItem  - ", this.allAreaItem);
 
-
         this.inputFormData = {
             areaId: "all",
             groupId: "all",
@@ -871,30 +870,46 @@ export default class ReportOccupancy extends Vue {
 
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
-                for (const officeHourSiteId of detail.sites) {
-                    if (filterSiteId === officeHourSiteId.objectId) {
-                        // console.log('filterSiteId - ', filterSiteId);
-                        // console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
-                        let tempOfficeHours = [];
-                        for (const dayRangesValue of detail.dayRanges) {
-                            let tempOfficeHour: any = {};
-                            tempOfficeHour = {
-                                startDay: dayRangesValue.startDay,
-                                endDay: dayRangesValue.endDay,
-                                startDate: dayRangesValue.startDate,
-                                endDate: dayRangesValue.endDate
-                            };
-                            tempOfficeHours.push(tempOfficeHour);
+                for (const singleArea of this.allAreaItem) {
+                    for (const officeHourSiteId of detail.sites) {
+                        if (filterSiteId === officeHourSiteId.objectId) {
+                            // console.log('filterSiteId - ', filterSiteId);
+                            // console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
+                            let tempOfficeHours = [];
+                            for (const dayRangesValue of detail.dayRanges) {
+                                let tempOfficeHour: any = {};
+                                tempOfficeHour = {
+                                    startDay: dayRangesValue.startDay,
+                                    endDay: dayRangesValue.endDay,
+                                    startDate: dayRangesValue.startDate,
+                                    endDate: dayRangesValue.endDate
+                                };
+                                tempOfficeHours.push(tempOfficeHour);
+                            }
+
+                            if (filterSiteId === singleArea.site.objectId) {
+                                let tempAreas = [];
+                                let tempArea: any = {};
+                                tempArea = {
+                                    name: singleArea.name,
+                                    objectId: singleArea.objectId,
+                                };
+                                tempAreas.push(tempArea);
+
+                                tempISite = {
+                                    objectId: officeHourSiteId.objectId,
+                                    name: officeHourSiteId.name,
+                                    officeHour: tempOfficeHours,
+                                    areas:tempAreas
+                                };
+                            }
+
+                            this.sites.push(tempISite);
+                            break;
                         }
-                        tempISite = {
-                            objectId: officeHourSiteId.objectId,
-                            name: officeHourSiteId.name,
-                            officeHour: tempOfficeHours
-                        };
-                        this.sites.push(tempISite);
-                        break;
                     }
                 }
+
             }
         }
 
@@ -934,7 +949,7 @@ export default class ReportOccupancy extends Vue {
         this.areaMode = EAreaMode.all;
         this.sortOutChartData(this.responseData.summaryChartDatas);
 
-        console.log(" - ", this.sites);
+        console.log("this.sites - ", this.sites);
         console.log(" - ", this.startDate);
         console.log(" - ", this.endDate);
         console.log(" - ", this.timeMode);
@@ -1043,9 +1058,10 @@ export default class ReportOccupancy extends Vue {
         this.inputFormData.areaId = areaId;
         // console.log("areaId - ", this.inputFormData.areaId);
 
+        console.log('this.sites - ', this.sites);
+
         this.areaSummaryFilter = [];
         this.chartDatas = [];
-        let tempChartData: any = {};
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
@@ -1062,6 +1078,10 @@ export default class ReportOccupancy extends Vue {
                     }
                 }
             }
+
+            this.sites.map(item => {
+
+            });
 
             this.sortOutChartData(this.areaSummaryFilter);
             this.areaMode = EAreaMode.single;

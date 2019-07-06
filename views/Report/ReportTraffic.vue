@@ -1334,7 +1334,6 @@ export default class ReportTraffic extends Vue {
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
-        let tempChartData: any = {};
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
