@@ -172,6 +172,8 @@ export default class ReportOccupancy extends Vue {
     responseData: any = {};
     userData: any = [];
     allAreaItem: any = [];
+    siteAreaItem: any = {};
+    sitesItem: any = [];
 
     //// Filter Condition End ////
 
@@ -225,7 +227,7 @@ export default class ReportOccupancy extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
-        this.initChartDeveloper();
+        // this.initChartDeveloper();
     }
 
     mounted() {
@@ -863,8 +865,6 @@ export default class ReportOccupancy extends Vue {
         await this.initSelectItemDeviceGroup();
         await this.initSelectItemDevice();
 
-        console.log("this.allAreaItem  - ", this.allAreaItem);
-
         this.inputFormData = {
             areaId: "all",
             groupId: "all",
@@ -873,17 +873,34 @@ export default class ReportOccupancy extends Vue {
             isIncludedEmployee: "no"
         };
 
+        // let finalAreas = [];
+        // this.filterData.siteIds.map(siteIds => {
+        //     this.allAreaItem.map(area => {
+        //         if (area.site.objectId === siteIds) {
+        //            //  let tempAreas = [];
+        //             let tempArea: any = {};
+        //             tempArea = {
+        //                 name: area.name,
+        //                 objectId: area.objectId
+        //             };
+        //             finalAreas.push(tempArea);
+        //             console.log('887 finalAreas - ', finalAreas);
+        //         }
+        //     });
+        // });
+
+
+
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
+        let tempAreas = [];
 
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
                 for (const singleArea of this.allAreaItem) {
                     for (const officeHourSiteId of detail.sites) {
                         if (filterSiteId === officeHourSiteId.objectId) {
-                            // console.log('filterSiteId - ', filterSiteId);
-                            // console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
                             let tempOfficeHours = [];
                             for (const dayRangesValue of detail.dayRanges) {
                                 let tempOfficeHour: any = {};
@@ -895,30 +912,35 @@ export default class ReportOccupancy extends Vue {
                                 };
                                 tempOfficeHours.push(tempOfficeHour);
                             }
+                            tempISite = {
+                                objectId: officeHourSiteId.objectId,
+                                name: officeHourSiteId.name,
+                                officeHour: tempOfficeHours,
+                            };
+
+                            this.siteAreaItem = {
+                                objectId: officeHourSiteId.objectId,
+                                name: officeHourSiteId.name,
+                                officeHour: tempOfficeHours,
+                            };
 
                             if (filterSiteId === singleArea.site.objectId) {
-                                let tempAreas = [];
                                 let tempArea: any = {};
                                 tempArea = {
                                     name: singleArea.name,
                                     objectId: singleArea.objectId
                                 };
                                 tempAreas.push(tempArea);
-
-                                tempISite = {
-                                    objectId: officeHourSiteId.objectId,
-                                    name: officeHourSiteId.name,
-                                    officeHour: tempOfficeHours,
-                                    areas: tempAreas
-                                };
                             }
 
-                            this.sites.push(tempISite);
-                            break;
                         }
                     }
+
                 }
             }
+            tempISite.areas = tempAreas;
+            this.sites.push(tempISite);
+            this.sitesItem.push(tempISite);
         }
 
         /*
@@ -961,6 +983,7 @@ export default class ReportOccupancy extends Vue {
         // Ben
         this.initDashboardData();
 
+        console.log("this.sites - ", this.sites);
         console.log(" - ", this.startDate);
         console.log(" - ", this.endDate);
         console.log(" - ", this.timeMode);
@@ -1026,6 +1049,11 @@ export default class ReportOccupancy extends Vue {
                 }
             }
 
+            tempChartData.occupancy += summary.total;
+            // tempChartData.occupancy += summary.count;
+
+            console.log('!!! - ', tempChartData);
+
             if (!haveSummary) {
                 // 取得weather、temperatureMin、temperatureMax
                 for (const weather of this.responseData.weathers) {
@@ -1047,37 +1075,18 @@ export default class ReportOccupancy extends Vue {
                     }
                 }
             }
+            tempChartDatas.push(tempChartData);
 
-            //跑maleRange、 femaleRange
-            // for (let index = 0; index < 6; index++) {
-            //     if (summary.maleRanges[index] == undefined) {
-            //         break;
-            //     }
-            //
-            //     if (summary.femaleRanges[index] == undefined) {
-            //         break;
-            //     }
-            //
-            //     let tempData = JSON.parse(JSON.stringify(tempChartData));
-            //    // tempData.ageRange = this.switchAgeRange(index.toString());
-            //     tempData.maleCount = summary.maleRanges[index];
-            //     tempData.femaleCount = summary.femaleRanges[index];
-            //
-            //
-            //     tempChartDatas.push(tempData);
-            // }
         }
 
-        this.chartDatas = tempChartDatas;
 
-        console.log(" - ", this.chartDatas);
+        this.chartDatas = tempChartDatas;
+        console.log('this.chartDatas - ', this.chartDatas);
     }
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
         // console.log("areaId - ", this.inputFormData.areaId);
-
-        console.log("this.sites - ", this.sites);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
@@ -1098,17 +1107,26 @@ export default class ReportOccupancy extends Vue {
                 }
             }
 
-            this.sites.map(item => {});
+            let tempAreas = [];
+
+            this.sitesItem.map(item => {
+                item.areas.map(area => {
+                    if (this.inputFormData.areaId === area.objectId) {
+                        let tempArea: any = {};
+                        tempArea = {
+                            name: area.name,
+                            objectId: area.objectId
+                        };
+                        tempAreas.push(tempArea);
+                    }
+                })
+            });
+            this.siteAreaItem.areas = tempAreas;
+            this.sites = [];
+            this.sites.push(this.siteAreaItem);
 
             this.sortOutChartData(this.areaSummaryFilter);
             this.areaMode = EAreaMode.single;
-
-            console.log(" - ", this.sites);
-            console.log(" - ", this.startDate);
-            console.log(" - ", this.endDate);
-            console.log(" - ", this.timeMode);
-            console.log(" - ", this.areaMode);
-            console.log(" - ", this.chartDatas);
 
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -1126,6 +1144,7 @@ export default class ReportOccupancy extends Vue {
         ) {
             this.sortOutChartData(this.responseData.summaryChartDatas);
             this.areaMode = EAreaMode.all;
+            this.sites = this.sitesItem;
 
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -1141,6 +1160,7 @@ export default class ReportOccupancy extends Vue {
         } else if (!this.inputFormData.areaId) {
             this.sortOutChartData(this.responseData.summaryChartDatas);
             this.areaMode = EAreaMode.all;
+            this.sites = this.sitesItem;
 
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
@@ -1156,6 +1176,13 @@ export default class ReportOccupancy extends Vue {
         } else {
             return false;
         }
+
+        console.log("this.sites - ", this.sites);
+        console.log(" - ", this.startDate);
+        console.log(" - ", this.endDate);
+        console.log(" - ", this.timeMode);
+        console.log(" - ", this.areaMode);
+        console.log(" - ", this.chartDatas);
     }
 
     async receiveGroupId(groupId) {
