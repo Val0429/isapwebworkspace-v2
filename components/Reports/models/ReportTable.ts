@@ -2,6 +2,7 @@ import { ESign, EChartMode } from './EReport';
 import { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut } from './IReportTable';
 
 class ReportTableData {
+    _noFoot: boolean = false;
     _chartMode: EChartMode = EChartMode.none;
     _head: string[] = [];
     _body: IReportTableDataBody[] = [];
@@ -12,9 +13,9 @@ class ReportTableData {
     countTotal() {
         //row total
         for (let item of this._body) {
+            //in1 out1
             item.inTotal = this.showRowTotal(item.in);
             item.outTotal = this.showRowTotal(item.out);
-
             for (let subItem of item.in) {
                 subItem.sign = ESign.none;
                 if (subItem.valueRatio != 0) {
@@ -28,6 +29,31 @@ class ReportTableData {
                     subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
                 }
             }
+
+            //in2 out2
+            if (item.in2) {
+                item.inTotal2 = this.showRowTotal(item.in2);
+                for (let subItem of item.in2) {
+                    subItem.sign = ESign.none;
+                    if (subItem.valueRatio != 0) {
+                        subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                    }
+                }
+            }
+
+            if (item.in2) {
+                item.outTotal2 = this.showRowTotal(item.out2);
+                for (let subItem of item.out2) {
+                    subItem.sign = ESign.none;
+                    if (subItem.valueRatio != 0) {
+                        subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                    }
+                }
+            }
+        }
+
+        if (this._noFoot) {
+            return;
         }
 
         //column total
@@ -49,6 +75,7 @@ class ReportTableData {
             value: 0,
             valueRatio: 0,
         };
+
         intTotal.value = this._foot.reduce((ty, u) => ty + u.inTotal.value, 0);
         intTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.inTotal.valueRatio, 0);
         if (intTotal.valueRatio) {
@@ -70,6 +97,7 @@ class ReportTableData {
             inTotal: intTotal,
             outTotal: outTotal,
         };
+
         this._foot.push(allTotal);
     }
 
@@ -79,12 +107,13 @@ class ReportTableData {
             value: 0,
             valueRatio: 0,
         };
-        total.value = data.reduce((ty, u) => ty + u.value, 0);
-        total.valueRatio = data.reduce((ty, u) => ty + u.valueRatio, 0);
-        if (total.valueRatio != 0) {
-            total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
+        if (data) {
+            total.value = data.reduce((ty, u) => ty + u.value, 0);
+            total.valueRatio = data.reduce((ty, u) => ty + u.valueRatio, 0);
+            if (total.valueRatio != 0) {
+                total.sign = total.valueRatio > 0 ? ESign.positive : ESign.negative;
+            }
         }
-
         return total;
     }
 
@@ -129,6 +158,14 @@ class ReportTableData {
     set body(value: IReportTableDataBody[]) {
         this._body = value;
         this.countTotal();
+    }
+
+    set noFoot(value: boolean) {
+        this._noFoot = value;
+    }
+
+    get noFoot() {
+        return this._noFoot;
     }
 
     get foot() {

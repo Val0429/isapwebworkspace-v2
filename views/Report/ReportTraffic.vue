@@ -90,8 +90,8 @@ import {EAreaMode} from "../../components/Reports";
 
                 <!-- Ben -->
                 <report-table
-                :reportTableData="rData"
-                :reportTableTitle="reportTableTitle"
+                    :reportTableData="rData"
+                    :reportTableTitle="reportTableTitle"
                 >
                 </report-table>
 
@@ -145,7 +145,7 @@ import {
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
-import ReportService from '@/components/Reports/models/ReportService';
+import ReportService from "@/components/Reports/models/ReportService";
 
 enum EPageStep {
     none = "none"
@@ -338,193 +338,283 @@ export default class ReportTraffic extends Vue {
         }
     }
 
-        showWeek(data) {
-        switch (data) {
-            case 1:
-                return 'Mon';
-            case 2:
-                return 'Tue';
-            case 3:
-                return 'Wed';
-            case 4:
-                return 'Thu';
-            case 5:
-                return 'Fri';
-            case 6:
-                return 'Sat';
-            case 0:
-                return 'Sun';
-        }
-    }
-
     initReportTable() {
-            let chartMode = HighChartsService.chartMode(
-                this.startDate,
-                this.endDate,
-                this.sites
-            );
-            this.rData.chartMode = chartMode;
+        let chartMode = HighChartsService.chartMode(
+            this.startDate,
+            this.endDate,
+            this.sites
+        );
+        this.rData.chartMode = chartMode;
 
-            this.reportTableTitle = {
-               inTitle: this._('w_TrafficIn'),
-               outTitle: this._('w_TrafficOut'),
-               inTotalTitle: this._('w_TrafficInTotal'),
-               outTotalTitle: this._('w_TrafficOutTotal')
-            }
+        this.reportTableTitle = {
+            titleCount: 2,
+            title1: this._("w_TrafficIn"),
+            title2: this._("w_TrafficOut"),
+            inTotalTitle: this._("w_TrafficInTotal"),
+            outTotalTitle: this._("w_TrafficOutTotal")
+        };
 
-            //head
-            this.rData.head = [];
-            let sTime = null;
-            let eTime = null;
-            switch (chartMode) {
+        //head
+        this.rData.head = [];
+        let sTime = null;
+        let eTime = null;
+        switch (chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
-                 for(let siteItem of this.sites){
-                    for(let officeHourItem of siteItem.officeHour){
-                        if(sTime == null || sTime > new Date(officeHourItem.startDate).getUTCHours()){
-                            sTime = new Date(officeHourItem.startDate).getUTCHours();
+                for (let siteItem of this.sites) {
+                    for (let officeHourItem of siteItem.officeHour) {
+                        if (
+                            sTime == null ||
+                            sTime >
+                                new Date(officeHourItem.startDate).getUTCHours()
+                        ) {
+                            sTime = new Date(
+                                officeHourItem.startDate
+                            ).getUTCHours();
                         }
-                        if(eTime == null || eTime < new Date(officeHourItem.endDate).getUTCHours()){
-                            eTime = new Date(officeHourItem.endDate).getUTCHours();
+                        if (
+                            eTime == null ||
+                            eTime <
+                                new Date(officeHourItem.endDate).getUTCHours()
+                        ) {
+                            eTime = new Date(
+                                officeHourItem.endDate
+                            ).getUTCHours();
                         }
                     }
-
                 }
-                while(sTime <= eTime){
+                while (sTime <= eTime) {
                     this.rData.head.push(sTime);
-                    sTime++
+                    sTime++;
                 }
                 //  this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
                 let sDate = new Date(this.startDate);
-                let eDate =  new Date(this.endDate);
-                while(sDate <= eDate){
-                this.rData.head.push(sDate.toString());
-                sDate.setDate(sDate.getDate() + 1)
+                let eDate = new Date(this.endDate);
+                while (sDate <= eDate) {
+                    this.rData.head.push(sDate.toString());
+                    sDate.setDate(sDate.getDate() + 1);
                 }
                 // this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
                 break;
-            }
+        }
 
-            //body
-            console.log('reportTaeble',this.responseData.summaryDatas)
-            this.rData.body = [];
-            let tempArray = [];
-            //篩選出所有店
-            for(let summaryData of this.responseData.summaryDatas){
-                for(let deviceGroup of summaryData.deviceGroups){
+        //body
+        this.rData.body = [];
+        let tempArray = [];
+        //篩選出所有店
+        for (let summaryData of this.responseData.summaryDatas) {
+            if (summaryData.deviceGroups) {
+                for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
                         area: summaryData.area,
                         group: deviceGroup.deviceGroup,
-                        in:[],
-                        out:[]
-                    }
+                        in: [],
+                        out: []
+                    };
 
-                    if(body.group != undefined){
-                        if(tempArray.some(t => t.group.objectId == body.group.objectId)){
+                    if (body.group != undefined) {
+                        if (
+                            tempArray.some(
+                                t => t.group.objectId == body.group.objectId
+                            )
+                        ) {
                             continue;
                         }
-                    }else{
-                        if(tempArray.some(t => t.area.objectId == body.area.objectId)){
+                    } else {
+                        if (
+                            tempArray.some(
+                                t => t.area.objectId == body.area.objectId
+                            )
+                        ) {
                             continue;
                         }
                     }
                     tempArray.push(body);
-
                 }
-            }
+            } else {
+                let body = {
+                    site: summaryData.site,
+                    area: summaryData.area,
+                    in: [],
+                    out: []
+                };
 
-            //填入資料
-            switch (chartMode) {
+                if (
+                    tempArray.some(t => t.area.objectId == body.area.objectId)
+                ) {
+                    continue;
+                }
+
+                tempArray.push(body);
+            }
+        }
+        //填入資料
+        switch (chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
-                for(let index in tempArray){
-                    for(let head of  this.rData.head){
-                        let inCount = { value: 0, valueRatio: 0}
-                        let outCount = { value: 0, valueRatio: 0}
-                        for(let summaryData of this.responseData.summaryDatas){
-                            if(new Date(summaryData.date).getUTCHours().toString() != head){
+                for (let index in tempArray) {
+                    for (let head of this.rData.head) {
+                        let inCount = { value: 0, valueRatio: 0 };
+                        let outCount = { value: 0, valueRatio: 0 };
+                        for (let summaryData of this.responseData
+                            .summaryDatas) {
+                            if (
+                                new Date(summaryData.date)
+                                    .getUTCHours()
+                                    .toString() != head
+                            ) {
                                 continue;
                             }
-                            for(let deviceGroup of summaryData.deviceGroups){
-                                if( tempArray[index].group != undefined){
-                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
-                                        inCount.value += summaryData.in
-                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
-                                        outCount.value += summaryData.out
-                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                            for (let deviceGroup of summaryData.deviceGroups) {
+                                if (tempArray[index].group != undefined) {
+                                    if (
+                                        tempArray[index].group.objectId ==
+                                        deviceGroup.objectId
+                                    ) {
+                                        inCount.value += summaryData.in;
+                                        inCount.valueRatio += this.countRatio(
+                                            summaryData.in,
+                                            summaryData.prevIn
+                                        );
+                                        outCount.value += summaryData.out;
+                                        outCount.valueRatio += this.countRatio(
+                                            summaryData.out,
+                                            summaryData.prevOut
+                                        );
                                     }
-                                }else{
-                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
-                                        inCount.value += summaryData.in
-                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
-                                        outCount.value += summaryData.out
-                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                } else {
+                                    if (
+                                        tempArray[index].area.objectId ==
+                                        summaryData.area.objectId
+                                    ) {
+                                        inCount.value += summaryData.in;
+                                        inCount.valueRatio += this.countRatio(
+                                            summaryData.in,
+                                            summaryData.prevIn
+                                        );
+                                        outCount.value += summaryData.out;
+                                        outCount.valueRatio += this.countRatio(
+                                            summaryData.out,
+                                            summaryData.prevOut
+                                        );
                                     }
                                 }
                             }
                         }
                         tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount)
+                        tempArray[index].out.push(outCount);
                     }
                 }
-                this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+                this.rData.head = this.rData.head.map(
+                    x => x + ":00 - " + (x + 1) + ":00"
+                );
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                for(let index in tempArray){
-                    for(let head of  this.rData.head){
-                        let inCount = { value: 0, valueRatio: 0}
-                        let outCount = { value: 0, valueRatio: 0}
-                        for(let summaryData of this.responseData.summaryDatas){
-                            if(new Date(summaryData.date).getFullYear()!= new Date(head).getFullYear() ||
-                               new Date(summaryData.date).getUTCMonth()!= new Date(head).getUTCMonth() ||
-                               new Date(summaryData.date).getUTCDate()!= new Date(head).getUTCDate()
-                            ){
+                for (let index in tempArray) {
+                    for (let head of this.rData.head) {
+                        let inCount = { value: 0, valueRatio: 0 };
+                        let outCount = { value: 0, valueRatio: 0 };
+                        for (let summaryData of this.responseData
+                            .summaryDatas) {
+                            if (
+                                new Date(summaryData.date).getFullYear() !=
+                                    new Date(head).getFullYear() ||
+                                new Date(summaryData.date).getUTCMonth() !=
+                                    new Date(head).getUTCMonth() ||
+                                new Date(summaryData.date).getUTCDate() !=
+                                    new Date(head).getUTCDate()
+                            ) {
                                 continue;
                             }
-                            for(let deviceGroup of summaryData.deviceGroups){
-                                if( tempArray[index].group != undefined){
-                                    if(tempArray[index].group.objectId == deviceGroup.objectId){
-                                        inCount.value += summaryData.in
-                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
-                                        outCount.value += summaryData.outCount
-                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                            for (let deviceGroup of summaryData.deviceGroups) {
+                                if (tempArray[index].group != undefined) {
+                                    if (
+                                        tempArray[index].group.objectId ==
+                                        deviceGroup.objectId
+                                    ) {
+                                        inCount.value += summaryData.in;
+                                        inCount.valueRatio += this.countRatio(
+                                            summaryData.in,
+                                            summaryData.prevIn
+                                        );
+                                        outCount.value += summaryData.outCount;
+                                        outCount.valueRatio += this.countRatio(
+                                            summaryData.out,
+                                            summaryData.prevOut
+                                        );
                                     }
-                                }else{
-                                     if(tempArray[index].area.objectId == summaryData.area.objectId){
-                                        inCount.value += summaryData.in
-                                        inCount.valueRatio += this.countRatio(summaryData.in,summaryData.prevIn)
-                                        outCount.value += summaryData.out
-                                        outCount.valueRatio += this.countRatio(summaryData.out,summaryData.prevOut)
+                                } else {
+                                    if (
+                                        tempArray[index].area.objectId ==
+                                        summaryData.area.objectId
+                                    ) {
+                                        inCount.value += summaryData.in;
+                                        inCount.valueRatio += this.countRatio(
+                                            summaryData.in,
+                                            summaryData.prevIn
+                                        );
+                                        outCount.value += summaryData.out;
+                                        outCount.valueRatio += this.countRatio(
+                                            summaryData.out,
+                                            summaryData.prevOut
+                                        );
                                     }
                                 }
                             }
                         }
                         tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount)
+                        tempArray[index].out.push(outCount);
                     }
                 }
-                this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+                this.rData.head = this.rData.head.map(
+                    x =>
+                        new Date(x).getFullYear() +
+                        "/" +
+                        (new Date(x).getUTCMonth() + 1) +
+                        "/" +
+                        new Date(x).getUTCDate() +
+                        " " +
+                        this.showWeek(new Date(x).getDay())
+                );
                 break;
-            }
-
-            this.rData.body = tempArray
+        }
+        this.rData.body = tempArray;
     }
 
-    countRatio(value,prevValue){
-        if(value == undefined || prevValue == undefined){
-             return 0;
-        }
-        if(value > prevValue){
-            return prevValue / value;
-        }else if(value < prevValue){
-            return -(value / prevValue);
-        }else{
+    countRatio(value, prevValue) {
+        if (value == undefined || prevValue == undefined) {
             return 0;
+        }
+        if (value > prevValue) {
+            return prevValue / value;
+        } else if (value < prevValue) {
+            return -(value / prevValue);
+        } else {
+            return 0;
+        }
+    }
+
+    showWeek(data) {
+        switch (data) {
+            case 1:
+                return "Mon";
+            case 2:
+                return "Tue";
+            case 3:
+                return "Wed";
+            case 4:
+                return "Thu";
+            case 5:
+                return "Fri";
+            case 6:
+                return "Sat";
+            case 0:
+                return "Sun";
         }
     }
 
@@ -1128,7 +1218,6 @@ export default class ReportTraffic extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
-
         await this.initSelectItemArea();
         await this.initSelectItemDeviceGroup();
         await this.initSelectItemDevice();
@@ -1206,7 +1295,7 @@ export default class ReportTraffic extends Vue {
 		*/
 
         // this.sites.push(tempISite);
-          this.dTimeMode = this.filterData.type;
+        this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);
@@ -1475,8 +1564,10 @@ export default class ReportTraffic extends Vue {
         this.deviceSummaryFilter = [];
 
         // 判斷沒有 deviceGroup
-        if(ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) && this.inputFormData.groupId === "all") {
-
+        if (
+            ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
+            this.inputFormData.groupId === "all"
+        ) {
             // 依照device篩選
             for (const singleData of this.areaSummaryFilter) {
                 for (const detailKey in singleData) {
@@ -1484,7 +1575,8 @@ export default class ReportTraffic extends Vue {
 
                     if (detailKey === "device") {
                         if (
-                            this.inputFormData.deviceId === tempSingleData.objectId
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
                         ) {
                             this.deviceSummaryFilter.push(singleData);
                         }
@@ -1512,7 +1604,6 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
                 this.sortOutChartData(this.areaSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1526,7 +1617,7 @@ export default class ReportTraffic extends Vue {
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
-            this.inputFormData.groupId === 'all'
+            this.inputFormData.groupId === "all"
         ) {
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
@@ -1535,7 +1626,8 @@ export default class ReportTraffic extends Vue {
 
                     if (detailKey === "device") {
                         if (
-                            this.inputFormData.deviceId === tempSingleData.objectId
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
                         ) {
                             this.deviceSummaryFilter.push(singleData);
                         }
@@ -1563,7 +1655,6 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1577,7 +1668,7 @@ export default class ReportTraffic extends Vue {
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
-            this.inputFormData.groupId !== 'all'
+            this.inputFormData.groupId !== "all"
         ) {
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
@@ -1586,7 +1677,8 @@ export default class ReportTraffic extends Vue {
 
                     if (detailKey === "device") {
                         if (
-                            this.inputFormData.deviceId === tempSingleData.objectId
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
                         ) {
                             this.deviceSummaryFilter.push(singleData);
                         }
@@ -1614,7 +1706,6 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1624,9 +1715,6 @@ export default class ReportTraffic extends Vue {
                 return false;
             }
         }
-
-
-
     }
 
     receiveType(type) {
