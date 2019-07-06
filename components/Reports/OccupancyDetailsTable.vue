@@ -51,8 +51,6 @@
 
 <script lang="ts">
     import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
-    import ResponseFilter from "@/services/ResponseFilter";
     import Datetime from '@/services/Datetime';
 
     @Component({

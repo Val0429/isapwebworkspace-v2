@@ -983,7 +983,7 @@ export default class ReportRepeatVisitor extends Vue {
         this.sortOutChartData(this.responseData.summaryChartDatas);
 
         // Ben
-        this.initDashboardData();
+        //this.initDashboardData();
 
         console.log("this.sites - ", this.sites);
         console.log(" - ", this.startDate);
