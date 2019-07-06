@@ -106,10 +106,11 @@ import {
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
-
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
+import WeatherService from "@/components/Reports/models/WeatherService";
+import ReportService from "@/components/Reports/models/ReportService";
 
 import HighchartOccupancy from "@/components/Reports/HighchartOccupancy.vue";
 import {
@@ -125,8 +126,7 @@ import {
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import ReportService from "@/components/Reports/models/ReportService";
+
 
 enum EPageStep {
     none = "none"
@@ -1051,8 +1051,6 @@ export default class ReportOccupancy extends Vue {
 
             tempChartData.occupancy += summary.total;
             // tempChartData.occupancy += summary.count;
-
-            console.log('!!! - ', tempChartData);
 
             if (!haveSummary) {
                 // 取得weather、temperatureMin、temperatureMax
