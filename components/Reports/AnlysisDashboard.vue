@@ -397,7 +397,7 @@ export class AnlysisDashboard extends Vue {
                     if (response.peopleCounting) {
                         this.anlysisData.traffic = {
                             sign:
-                                      response.peopleCounting.variety == null ||
+                                response.peopleCounting.variety == null ||
                                 response.peopleCounting.variety == 0
                                     ? ESign.none
                                     : response.peopleCounting.variety > 0
@@ -414,7 +414,7 @@ export class AnlysisDashboard extends Vue {
                     if (response.averageOccupancy) {
                         this.anlysisData.averageOccupancy = {
                             sign:
-                                          response.averageOccupancy.variety == null ||
+                                response.averageOccupancy.variety == null ||
                                 response.averageOccupancy.variety == 0
                                     ? ESign.none
                                     : response.averageOccupancy.variety > 0
@@ -432,7 +432,7 @@ export class AnlysisDashboard extends Vue {
                     if (response.averageDwellTime) {
                         this.anlysisData.averageDwellTime = {
                             sign:
-                                 response.averageDwellTime.variety == null ||
+                                response.averageDwellTime.variety == null ||
                                 response.averageDwellTime.variety == 0
                                     ? ESign.none
                                     : response.averageDwellTime.variety > 0

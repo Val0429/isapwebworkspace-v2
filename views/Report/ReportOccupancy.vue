@@ -15,58 +15,69 @@
 
             <iv-card>
 
-            <template #toolbox>
-                <!-- Ben -->
-                <iv-toolbox-export-excel size="lg" />
-                <iv-toolbox-export-csv size="lg" />
+                <template #toolbox>
+                    <!-- Ben -->
+                    <iv-toolbox-export-excel size="lg" />
+                    <iv-toolbox-export-csv size="lg" />
 
-                <!-- Morris -->
-                <iv-toolbox-export-pdf size="lg" />
+                    <!-- Morris -->
+                    <iv-toolbox-export-pdf size="lg" />
+
+                    <!-- Tina -->
+                    <iv-toolbox-send-mail
+                        size="lg"
+                        @click="modalShow = !modalShow"
+                    />
+                </template>
 
                 <!-- Tina -->
-                <iv-toolbox-send-mail
-                    size="lg"
-                    @click="modalShow = !modalShow"
-                />
-            </template>
+                <analysis_filter
+                    class="mb-4"
+                    :areaSelectItem="areaSelectItem"
+                    :deviceGroupSelectItem="deviceGroupSelectItem"
+                    :deviceSelectItem="deviceSelectItem"
+                    :timeModeSelectItem="timeModeSelectItem"
+                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                    :siteIds="filterData.siteIds"
+                    :areaId="inputFormData.areaId"
+                    :groupId="inputFormData.groupId"
+                    :deviceId="inputFormData.deviceId"
+                    :type="inputFormData.type"
+                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                    @area_id="receiveAreaId"
+                    @group_id="receiveGroupId"
+                    @device_id="receiveDeviceId"
+                    @type="receiveType"
+                    @is_included_employee="receiveIsIncludedEmployee"
+                >
 
-            <!-- Tina -->
-            <analysis_filter
-                class="mb-4"
-                :areaSelectItem="areaSelectItem"
-                :deviceGroupSelectItem="deviceGroupSelectItem"
-                :deviceSelectItem="deviceSelectItem"
-                :timeModeSelectItem="timeModeSelectItem"
-                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                :siteIds="filterData.siteIds"
-                :areaId="inputFormData.areaId"
-                :groupId="inputFormData.groupId"
-                :deviceId="inputFormData.deviceId"
-                :type="inputFormData.type"
-                :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                @area_id="receiveAreaId"
-                @group_id="receiveGroupId"
-                @device_id="receiveDeviceId"
-                @type="receiveType"
-                @is_included_employee="receiveIsIncludedEmployee"
-            >
+                </analysis_filter>
 
-            </analysis_filter>
+                <!-- Ben -->
+                <anlysis-dashboard
+                    ref="anlysisDashboard"
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :type="dTimeMode"
+                    :siteIds="pSiteIds"
+                    :tagIds="tags"
+                    :pageType="dPageType"
+                >
+                </anlysis-dashboard>
 
-            <!-- Morris -->
-            <highcharts-occupancy
-                :startDate="startDate"
-                :endDate="endDate"
-                :sites="sites"
-                :timeMode="timeMode"
-                :areaMode="areaMode"
-                :value="chartDatas"
-            >
-            </highcharts-occupancy>
-            <!-- Morris -->
+                <!-- Morris -->
+                <highcharts-occupancy
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :sites="sites"
+                    :timeMode="timeMode"
+                    :areaMode="areaMode"
+                    :value="chartDatas"
+                >
+                </highcharts-occupancy>
+                <!-- Morris -->
 
-
-                </iv-card>
+            </iv-card>
         </div>
 
         <!-- Tina -->
@@ -83,12 +94,12 @@
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog/Dialog";
 
-
 // Tina
 import {
     ECountType,
     EDeviceMode,
-    EType, EIncludedEmployee
+    EType,
+    EIncludedEmployee
 } from "@/components/Reports/models/EReport";
 import {
     ERegionType,
@@ -114,8 +125,8 @@ import {
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
-import WeatherService from '@/components/Reports/models/WeatherService';
-import ReportService from '@/components/Reports/models/ReportService';
+import WeatherService from "@/components/Reports/models/WeatherService";
+import ReportService from "@/components/Reports/models/ReportService";
 
 enum EPageStep {
     none = "none"
@@ -181,7 +192,7 @@ export default class ReportOccupancy extends Vue {
     };
     isIncludedEmployeeSelectItem: any = {
         yes: EIncludedEmployee.yes,
-        no: EIncludedEmployee.no,
+        no: EIncludedEmployee.no
     };
 
     inputFormData: any = {
@@ -189,7 +200,7 @@ export default class ReportOccupancy extends Vue {
         groupId: "",
         deviceId: "",
         type: "",
-        isIncludedEmployee: 'no'
+        isIncludedEmployee: "no"
     };
 
     // 整理 showReportData 相關
@@ -459,7 +470,6 @@ export default class ReportOccupancy extends Vue {
                     return false;
                 });
         }
-
     }
 
     async initSelectItemDeviceGroup() {
@@ -791,7 +801,7 @@ export default class ReportOccupancy extends Vue {
                         // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
                             returnValue.objectId
-                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -817,7 +827,6 @@ export default class ReportOccupancy extends Vue {
         this.modalShow = data;
     }
 
-
     //// 以下為 analysis filter ////
 
     async receiveFilterData(filterData) {
@@ -826,7 +835,7 @@ export default class ReportOccupancy extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            isIncludedEmployee: 'no'
+            isIncludedEmployee: "no"
         };
 
         await this.$server
@@ -861,7 +870,7 @@ export default class ReportOccupancy extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            isIncludedEmployee: 'no'
+            isIncludedEmployee: "no"
         };
 
         // get office hour data
@@ -892,7 +901,7 @@ export default class ReportOccupancy extends Vue {
                                 let tempArea: any = {};
                                 tempArea = {
                                     name: singleArea.name,
-                                    objectId: singleArea.objectId,
+                                    objectId: singleArea.objectId
                                 };
                                 tempAreas.push(tempArea);
 
@@ -900,7 +909,7 @@ export default class ReportOccupancy extends Vue {
                                     objectId: officeHourSiteId.objectId,
                                     name: officeHourSiteId.name,
                                     officeHour: tempOfficeHours,
-                                    areas:tempAreas
+                                    areas: tempAreas
                                 };
                             }
 
@@ -909,7 +918,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-
             }
         }
 
@@ -941,6 +949,7 @@ export default class ReportOccupancy extends Vue {
 		*/
 
         // this.sites.push(tempISite);
+        this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);
@@ -949,12 +958,23 @@ export default class ReportOccupancy extends Vue {
         this.areaMode = EAreaMode.all;
         this.sortOutChartData(this.responseData.summaryChartDatas);
 
-        console.log("this.sites - ", this.sites);
+        // Ben
+        this.initDashboardData();
+
         console.log(" - ", this.startDate);
         console.log(" - ", this.endDate);
         console.log(" - ", this.timeMode);
         console.log(" - ", this.areaMode);
         console.log(" - ", this.chartDatas);
+    }
+
+    // Ben //
+    initDashboardData() {
+        this.dPageType = EPageType.averageOccupancy;
+        setTimeout(() => {
+            let anlysisDashboard: any = this.$refs.anlysisDashboard;
+            anlysisDashboard.initData();
+        }, 300);
     }
 
     checkDateAndSite(
@@ -968,7 +988,7 @@ export default class ReportOccupancy extends Vue {
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
     }
@@ -985,8 +1005,8 @@ export default class ReportOccupancy extends Vue {
                 temperatureMin: 0,
                 temperatureMax: 0,
                 weather: EWeather.none,
-                areaId: '',
-                occupancy: 0,
+                areaId: "",
+                occupancy: 0
             };
 
             // 判斷date, site 兩個是否相同
@@ -1048,7 +1068,6 @@ export default class ReportOccupancy extends Vue {
             // }
         }
 
-
         this.chartDatas = tempChartDatas;
 
         console.log(" - ", this.chartDatas);
@@ -1058,7 +1077,7 @@ export default class ReportOccupancy extends Vue {
         this.inputFormData.areaId = areaId;
         // console.log("areaId - ", this.inputFormData.areaId);
 
-        console.log('this.sites - ', this.sites);
+        console.log("this.sites - ", this.sites);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
@@ -1079,9 +1098,7 @@ export default class ReportOccupancy extends Vue {
                 }
             }
 
-            this.sites.map(item => {
-
-            });
+            this.sites.map(item => {});
 
             this.sortOutChartData(this.areaSummaryFilter);
             this.areaMode = EAreaMode.single;
@@ -1153,13 +1170,15 @@ export default class ReportOccupancy extends Vue {
         ) {
             // 依照單一deviceGroup篩選
             for (const singleData of this.areaSummaryFilter) {
-
-                console.log('singleData - ', singleData);
+                console.log("singleData - ", singleData);
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
-                        console.log('tempSingleData[0].objectId - ', tempSingleData[0].objectId);
+                        console.log(
+                            "tempSingleData[0].objectId - ",
+                            tempSingleData[0].objectId
+                        );
                         if (
                             this.inputFormData.groupId ===
                             tempSingleData[0].objectId
@@ -1210,8 +1229,10 @@ export default class ReportOccupancy extends Vue {
         this.deviceSummaryFilter = [];
 
         // 判斷沒有 deviceGroup
-        if(ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) && this.inputFormData.groupId === "all") {
-
+        if (
+            ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
+            this.inputFormData.groupId === "all"
+        ) {
             // 依照device篩選
             for (const singleData of this.areaSummaryFilter) {
                 for (const detailKey in singleData) {
@@ -1219,7 +1240,8 @@ export default class ReportOccupancy extends Vue {
 
                     if (detailKey === "device") {
                         if (
-                            this.inputFormData.deviceId === tempSingleData.objectId
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
                         ) {
                             this.deviceSummaryFilter.push(singleData);
                         }
@@ -1260,7 +1282,7 @@ export default class ReportOccupancy extends Vue {
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
-            this.inputFormData.groupId === 'all'
+            this.inputFormData.groupId === "all"
         ) {
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
@@ -1269,7 +1291,8 @@ export default class ReportOccupancy extends Vue {
 
                     if (detailKey === "device") {
                         if (
-                            this.inputFormData.deviceId === tempSingleData.objectId
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
                         ) {
                             this.deviceSummaryFilter.push(singleData);
                         }
@@ -1310,7 +1333,7 @@ export default class ReportOccupancy extends Vue {
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
-            this.inputFormData.groupId !== 'all'
+            this.inputFormData.groupId !== "all"
         ) {
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
@@ -1319,7 +1342,8 @@ export default class ReportOccupancy extends Vue {
 
                     if (detailKey === "device") {
                         if (
-                            this.inputFormData.deviceId === tempSingleData.objectId
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
                         ) {
                             this.deviceSummaryFilter.push(singleData);
                         }
@@ -1356,9 +1380,6 @@ export default class ReportOccupancy extends Vue {
                 return false;
             }
         }
-
-
-
     }
 
     receiveType(type) {
@@ -1369,9 +1390,11 @@ export default class ReportOccupancy extends Vue {
 
     receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
-        console.log("isIncludedEmployee - ", this.inputFormData.isIncludedEmployee);
+        console.log(
+            "isIncludedEmployee - ",
+            this.inputFormData.isIncludedEmployee
+        );
     }
-
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 }
