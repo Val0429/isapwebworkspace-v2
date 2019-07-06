@@ -872,4 +872,13 @@ export default class LangObject implements ILang {
     w_Occupancy_Time = 'Time';
     w_Occupancy_NumberDetected = 'Number Detected';
     w_Occupancy_Snapshot = 'Snapshot';
+
+    //Report Visitor
+    w_ReportVisitor_Site = 'Site';
+    w_ReportVisitor_Date = 'Date';
+    w_ReportVisitor_1 = '1';
+    w_ReportVisitor_2 = '2';
+    w_ReportVisitor_3 = '3';
+    w_ReportVisitor_4 = '4';
+    w_ReportVisitor_5 = '5+';
 }

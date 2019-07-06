@@ -77,6 +77,10 @@
                 </highcharts-repeat-visitor>
                 <!-- Morris -->
 
+                <!-- Ben -->
+                <vistor-details-table>
+                </vistor-details-table>
+
             </iv-card>
         </div>
 
