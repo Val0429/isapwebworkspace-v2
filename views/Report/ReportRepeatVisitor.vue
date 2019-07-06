@@ -53,17 +53,17 @@
 
                 </analysis_filter>
 
-            <!-- Morris -->
-            <highcharts-repeat-visitor
-                :startDate="startDate"
-                :endDate="endDate"
-                :sites="sites"
-                :timeMode="timeMode"
-                :areaMode="areaMode"
-                :value="chartDatas"
-            >
-            </highcharts-repeat-visitor>
-            <!-- Morris -->
+                <!-- Morris -->
+                <highcharts-repeat-visitor
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :sites="sites"
+                    :timeMode="timeMode"
+                    :areaMode="areaMode"
+                    :value="chartDatas"
+                >
+                </highcharts-repeat-visitor>
+                <!-- Morris -->
 
             </iv-card>
         </div>
@@ -809,7 +809,7 @@ export default class ReportRepeatVisitor extends Vue {
                         // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
                             returnValue.objectId
-                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -895,8 +895,6 @@ export default class ReportRepeatVisitor extends Vue {
         //     });
         // });
 
-
-
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
@@ -921,13 +919,13 @@ export default class ReportRepeatVisitor extends Vue {
                             tempISite = {
                                 objectId: officeHourSiteId.objectId,
                                 name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours,
+                                officeHour: tempOfficeHours
                             };
 
                             this.siteAreaItem = {
                                 objectId: officeHourSiteId.objectId,
                                 name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours,
+                                officeHour: tempOfficeHours
                             };
 
                             if (filterSiteId === singleArea.site.objectId) {
@@ -938,10 +936,8 @@ export default class ReportRepeatVisitor extends Vue {
                                 };
                                 tempAreas.push(tempArea);
                             }
-
                         }
                     }
-
                 }
             }
             tempISite.areas = tempAreas;
@@ -996,7 +992,15 @@ export default class ReportRepeatVisitor extends Vue {
         console.log(" - ", this.areaMode);
         console.log(" - ", this.chartDatas);
     }
-    
+
+    // Ben //
+    initDashboardData() {
+        this.dPageType = EPageType.averageOccupancy;
+        setTimeout(() => {
+            let anlysisDashboard: any = this.$refs.anlysisDashboard;
+            anlysisDashboard.initData();
+        }, 300);
+    }
 
     checkDateAndSite(
         date1: Date | string,
@@ -1009,7 +1013,7 @@ export default class ReportRepeatVisitor extends Vue {
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
     }
@@ -1085,7 +1089,9 @@ export default class ReportRepeatVisitor extends Vue {
                 }
 
                 let tempData = JSON.parse(JSON.stringify(tempChartData));
-                tempData.ageRange = ReportService.SwitchAgeRange(index.toString());
+                tempData.ageRange = ReportService.SwitchAgeRange(
+                    index.toString()
+                );
                 tempData.maleCount = summary.maleRanges[index];
                 tempData.femaleCount = summary.femaleRanges[index];
 
@@ -1101,12 +1107,10 @@ export default class ReportRepeatVisitor extends Vue {
             }
 
             // tempChartDatas.push(tempChartData);
-
         }
 
-
         this.chartDatas = tempChartDatas;
-        console.log('this.chartDatas - ', this.chartDatas);
+        console.log("this.chartDatas - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {
@@ -1144,7 +1148,7 @@ export default class ReportRepeatVisitor extends Vue {
                         };
                         tempAreas.push(tempArea);
                     }
-                })
+                });
             });
             this.siteAreaItem.areas = tempAreas;
             this.sites = [];

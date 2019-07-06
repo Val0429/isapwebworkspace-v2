@@ -135,8 +135,6 @@ import {
     ISite,
     ReportTableData
 } from "@/components/Reports";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import ReportService from "@/components/Reports/models/ReportService";
 import HighChartsService from "@/components/Reports/models/HighChartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 
