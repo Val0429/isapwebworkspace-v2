@@ -160,6 +160,7 @@ export default class ReportOccupancy extends Vue {
     filterData: any = {};
     responseData: any = {};
     userData: any = [];
+    allAreaItem: any = [];
 
     //// Filter Condition End ////
 
@@ -447,6 +448,7 @@ export default class ReportOccupancy extends Vue {
                             // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                         }
                         this.areaSelectItem = tempAreaSelectItem;
+                        this.allAreaItem = response;
                     }
                 })
                 .catch((e: any) => {
@@ -457,6 +459,7 @@ export default class ReportOccupancy extends Vue {
                     return false;
                 });
         }
+
     }
 
     async initSelectItemDeviceGroup() {
@@ -847,6 +850,21 @@ export default class ReportOccupancy extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemDevice();
+
+        console.log("this.allAreaItem  - ", this.allAreaItem);
+
+
+        this.inputFormData = {
+            areaId: "all",
+            groupId: "all",
+            deviceId: "all",
+            type: this.filterData.type,
+            isIncludedEmployee: 'no'
+        };
+
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
@@ -915,19 +933,6 @@ export default class ReportOccupancy extends Vue {
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
         this.sortOutChartData(this.responseData.summaryChartDatas);
-
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
-
-
-        this.inputFormData = {
-            areaId: "all",
-            groupId: "all",
-            deviceId: "all",
-            type: this.filterData.type,
-            isIncludedEmployee: 'no'
-        };
 
         console.log(" - ", this.sites);
         console.log(" - ", this.startDate);
@@ -1009,33 +1014,25 @@ export default class ReportOccupancy extends Vue {
             }
 
             //跑maleRange、 femaleRange
-            for (let index = 0; index < 6; index++) {
-                if (summary.maleRanges[index] == undefined) {
-                    break;
-                }
-
-                if (summary.femaleRanges[index] == undefined) {
-                    break;
-                }
-
-                let tempData = JSON.parse(JSON.stringify(tempChartData));
-               // tempData.ageRange = this.switchAgeRange(index.toString());
-                tempData.maleCount = summary.maleRanges[index];
-                tempData.femaleCount = summary.femaleRanges[index];
-
-                // console.log(
-                //     index,
-                //     " //分開跑maleRange",
-                //     JSON.parse(JSON.stringify(tempChartDatas)),
-                //     JSON.parse(JSON.stringify(tempChartData)),
-                //     tempData.ageRange
-                // );
-
-                tempChartDatas.push(tempData);
-            }
+            // for (let index = 0; index < 6; index++) {
+            //     if (summary.maleRanges[index] == undefined) {
+            //         break;
+            //     }
+            //
+            //     if (summary.femaleRanges[index] == undefined) {
+            //         break;
+            //     }
+            //
+            //     let tempData = JSON.parse(JSON.stringify(tempChartData));
+            //    // tempData.ageRange = this.switchAgeRange(index.toString());
+            //     tempData.maleCount = summary.maleRanges[index];
+            //     tempData.femaleCount = summary.femaleRanges[index];
+            //
+            //
+            //     tempChartDatas.push(tempData);
+            // }
         }
 
-        console.log("tempChartDatas", tempChartDatas);
 
         this.chartDatas = tempChartDatas;
 
@@ -1230,7 +1227,6 @@ export default class ReportOccupancy extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
                 this.sortOutChartData(this.areaSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1269,8 +1265,6 @@ export default class ReportOccupancy extends Vue {
                 this.inputFormData.groupId &&
                 !this.inputFormData.deviceId
             ) {
-
-                console.log('清除device篩選 - ', );
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1283,9 +1277,6 @@ export default class ReportOccupancy extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
-                console.log('依照all device篩選 - ', );
-
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1324,8 +1315,6 @@ export default class ReportOccupancy extends Vue {
                 this.inputFormData.groupId &&
                 !this.inputFormData.deviceId
             ) {
-
-                console.log('清除device篩選 - ', );
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1338,9 +1327,6 @@ export default class ReportOccupancy extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
-                console.log('依照all device篩選 - ', );
-
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";

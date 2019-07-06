@@ -1129,6 +1129,20 @@ export default class ReportTraffic extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
+
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemDevice();
+
+        this.inputFormData = {
+            areaId: "all",
+            groupId: "all",
+            deviceId: "all",
+            type: this.filterData.type,
+            inOrOut: "in",
+            isIncludedEmployee: "no"
+        };
+
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
@@ -1201,22 +1215,10 @@ export default class ReportTraffic extends Vue {
         this.areaMode = EAreaMode.all;
         this.sortOutChartData(this.responseData.summaryDatas);
 
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
         // Ben
         this.initDashboardData();
         this.initPeakTimeRange();
         this.initReportTable();
-
-        this.inputFormData = {
-            areaId: "all",
-            groupId: "all",
-            deviceId: "all",
-            type: this.filterData.type,
-            inOrOut: "in",
-            isIncludedEmployee: "no"
-        };
 
         console.log(" - ", this.sites);
         console.log(" - ", this.startDate);
@@ -1550,8 +1552,6 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId &&
                 !this.inputFormData.deviceId
             ) {
-
-                console.log('清除device篩選 - ', );
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1564,8 +1564,6 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
-                console.log('依照all device篩選 - ', );
 
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
@@ -1605,8 +1603,6 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId &&
                 !this.inputFormData.deviceId
             ) {
-
-                console.log('清除device篩選 - ', );
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
@@ -1619,8 +1615,6 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-
-                console.log('依照all device篩選 - ', );
 
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
 
