@@ -11,6 +11,10 @@
         >
         </filter_condition>
 
+        <occupancy_details_table>
+
+        </occupancy_details_table>
+
         <div v-show="pageStep === ePageStep.none">
 
             <iv-card>

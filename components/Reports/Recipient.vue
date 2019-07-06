@@ -74,10 +74,11 @@
         userIds: any = [];
 
         created() {
-            this.initSelectItemUsers();
         }
 
-        mounted() {}
+        mounted() {
+            this.initSelectItemUsers();
+        }
 
         @Watch("modalShow", { deep: true })
         private whenModalShowChanged(newVal, oldVal) {}
