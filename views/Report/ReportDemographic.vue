@@ -375,8 +375,9 @@ export default class ReportDemographic extends Vue {
         this.rData.chartMode = chartMode;
 
         this.reportTableTitle = {
-            inTitle: this._("w_Male"),
-            outTitle: this._("w_FeMale"),
+            titleCount: 2,
+            title1: this._("w_Male"),
+            title2: this._("w_FeMale"),
             inTotalTitle: this._("w_MaleTotal"),
             outTotalTitle: this._("w_FeMaleTotal")
         };
@@ -434,32 +435,49 @@ export default class ReportDemographic extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of this.responseData.summaryDatas) {
-            for (let deviceGroup of summaryData.deviceGroups) {
+            if (summaryData.deviceGroups) {
+                for (let deviceGroup of summaryData.deviceGroups) {
+                    let body = {
+                        site: summaryData.site,
+                        area: summaryData.area,
+                        group: deviceGroup.deviceGroup,
+                        in: [],
+                        out: []
+                    };
+
+                    if (body.group != undefined) {
+                        if (
+                            tempArray.some(
+                                t => t.group.objectId == body.group.objectId
+                            )
+                        ) {
+                            continue;
+                        }
+                    } else {
+                        if (
+                            tempArray.some(
+                                t => t.area.objectId == body.area.objectId
+                            )
+                        ) {
+                            continue;
+                        }
+                    }
+                    tempArray.push(body);
+                }
+            } else {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
-                    group: deviceGroup.deviceGroup,
                     in: [],
                     out: []
                 };
 
-                if (body.group != undefined) {
-                    if (
-                        tempArray.some(
-                            t => t.group.objectId == body.group.objectId
-                        )
-                    ) {
-                        continue;
-                    }
-                } else {
-                    if (
-                        tempArray.some(
-                            t => t.area.objectId == body.area.objectId
-                        )
-                    ) {
-                        continue;
-                    }
+                if (
+                    tempArray.some(t => t.area.objectId == body.area.objectId)
+                ) {
+                    continue;
                 }
+
                 tempArray.push(body);
             }
         }

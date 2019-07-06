@@ -102,6 +102,10 @@ export default class LangObject {
     w_Group = 'Group';
     w_Item = 'Item';
     w_Total = 'Total';
+    w_Average_Occupancy = 'Average Occupancy';
+    w_Over_Medium_Threshold = 'Over Medium Threshold';
+    w_Over_High_Threshold = 'Over High Threshold';
+    w_Max_Occupancy = 'Max Occupancy';
     w_TrafficIn = 'Traffic IN';
     w_TrafficOut = 'Traffic OUT';
     w_TrafficInTotal = 'Traffic-in Total';

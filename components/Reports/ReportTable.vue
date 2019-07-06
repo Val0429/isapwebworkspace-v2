@@ -34,20 +34,20 @@
                     <tr>
                         <td
                             v-if="items.site"
-                            rowspan="2"
+                            :rowspan="reportTableTitle.titleCount"
                             class="title"
                         >{{items.site.name}}</td>
                         <td
                             v-if="items.area"
-                            rowspan="2"
+                            :rowspan="reportTableTitle.titleCount"
                             class="title"
                         >{{items.area.name}}</td>
                         <td
                             v-if="items.group"
-                            rowspan="2"
+                            :rowspan="reportTableTitle.titleCount"
                             class="title"
                         >{{items.group.name}}</td>
-                        <td class="title"> {{reportTableTitle.inTitle}}</td>
+                        <td class="title"> {{reportTableTitle.title1}}</td>
                         <td v-for="(itemIn, key, index) in items.in">
                             <span>{{ itemIn.value}}</span>
                             <span :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''">{{ " (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
@@ -60,8 +60,30 @@
 
                     </tr>
                     <tr>
-                        <td class="title"> {{reportTableTitle.outTitle}}</td>
+                        <td class="title"> {{reportTableTitle.title2}}</td>
                         <td v-for="(itemOut, key, index) in items.out">
+                            <span>{{ itemOut.value }}</span>
+                            <span :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
+                        </td>
+                        <td v-if="items.out">
+                            <span>{{ items.outTotal.value }}</span>
+                            <span :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"> {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                        </td>
+                    </tr>
+                    <tr v-if="reportTableTitle.title3">
+                        <td class="title"> {{reportTableTitle.title3}}</td>
+                        <td v-for="(itemOut, key, index) in items.in2">
+                            <span>{{ itemOut.value }}</span>
+                            <span :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
+                        </td>
+                        <td v-if="items.out">
+                            <span>{{ items.outTotal.value }}</span>
+                            <span :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"> {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                        </td>
+                    </tr>
+                    <tr v-if="reportTableTitle.title4">
+                        <td class="title"> {{reportTableTitle.title4}}</td>
+                        <td v-for="(itemOut, key, index) in items.out2">
                             <span>{{ itemOut.value }}</span>
                             <span :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
                         </td>
@@ -72,24 +94,24 @@
                     </tr>
                 </template>
             </tbody>
-            <tfoot>
+            <tfoot v-if="!reportTableData._noFoot">
                 <tr>
                     <td
                         v-if="reportTableData._body[0].site"
-                        rowspan="2"
+                        :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
                     <td
                         v-if="reportTableData._body[0].area"
-                        rowspan="2"
+                        :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
                     <td
                         v-if="reportTableData._body[0].group"
-                        rowspan="2"
+                        :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
-                    <td class="title">  {{reportTableTitle.inTotalTitle}}</td>
+                    <td class="title"> {{reportTableTitle.inTotalTitle}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.inTotal.value}}</span>
                         <span :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
@@ -111,7 +133,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { ReportTableData, IReportTableTitle,ESign } from "./";
+import { ReportTableData, IReportTableTitle, ESign } from "./";
 
 @Component({
     components: {}
@@ -129,7 +151,9 @@ export class ReportTable extends Vue {
     @Prop({
         type: Object,
         default: function() {
-            return {};
+            return {
+                titleCount: 0
+            };
         }
     })
     reportTableTitle: IReportTableTitle;
@@ -165,9 +189,8 @@ Vue.component("report-table", ReportTable);
     font-size: 10px;
 }
 
-.overflow{
-    overflow-y:auto;
+.overflow {
+    overflow-y: auto;
 }
-
 </style>
 
