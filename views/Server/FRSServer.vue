@@ -123,6 +123,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { IFRSServerResults, IAddFRSServer, IEditFRSServer, IFRSServerReadUserGroup, IFRSUserGroup } from "@/config/default/api/interfaces";
+import ReportService from '@/components/Reports/models/ReportService'
 
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
@@ -583,11 +584,6 @@ export default class FRSServer extends Vue {
         );
     }
 
-    checkObject(obj: object): boolean {
-        const result = Object.keys(obj);
-        return result.length === 0;
-    }
-
     ITableList() {
         return `
             interface {
@@ -696,21 +692,21 @@ export default class FRSServer extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Employee")}
-                 * @uiHidden - ${this.checkObject(this.groupEmployee)}
+                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.groupEmployee)}
                  */
                 employee: ${toEnumInterface(this.groupEmployee as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_VIP")}
-                 * @uiHidden - ${this.checkObject(this.groupVIP)}
+                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.groupVIP)}
                  */
                 vip: ${toEnumInterface(this.groupVIP as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist")}
-                 * @uiHidden - ${this.checkObject(this.groupBlacklist)}
+                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.groupBlacklist)}
                  */
                 blacklist: ${toEnumInterface(this.groupBlacklist as any, false)};
 

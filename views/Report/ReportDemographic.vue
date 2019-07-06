@@ -116,6 +116,7 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
+import ReportService from '@/components/Reports/models/ReportService'
 
 // Morris
 
@@ -1436,50 +1437,167 @@ export default class ReportDemographic extends Vue {
 
         this.deviceSummaryFilter = [];
 
-        // 依照device篩選
-        for (const singleData of this.areaSummaryFilter) {
-            for (const detailKey in singleData) {
-                const tempSingleData = singleData[detailKey];
+        // 判斷沒有 deviceGroup
+        if(ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) && this.inputFormData.groupId === "all") {
 
-                if (detailKey === "device") {
-                    if (
-                        this.inputFormData.deviceId === tempSingleData.objectId
-                    ) {
-                        this.deviceSummaryFilter.push(singleData);
+            // 依照device篩選
+            for (const singleData of this.areaSummaryFilter) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === "device") {
+                        if (
+                            this.inputFormData.deviceId === tempSingleData.objectId
+                        ) {
+                            this.deviceSummaryFilter.push(singleData);
+                        }
                     }
                 }
+                console.log(" - ", this.deviceSummaryFilter);
             }
-            console.log(" - ", this.deviceSummaryFilter);
-        }
+            this.sortOutChartData(this.deviceSummaryFilter);
 
-        this.sortOutChartData(this.deviceSummaryFilter);
+            // 清除device篩選
+            if (
+                this.inputFormData.areaId &&
+                this.inputFormData.groupId &&
+                !this.inputFormData.deviceId
+            ) {
+                this.sortOutChartData(this.areaSummaryFilter);
 
-        // 清除device篩選
-        if (
-            this.inputFormData.areaId &&
-            this.inputFormData.groupId &&
-            !this.inputFormData.deviceId
-        ) {
-            this.sortOutChartData(this.areaSummaryFilter);
+                this.inputFormData.deviceId = "";
+                await this.initSelectItemDevice();
+                this.inputFormData.deviceId = "all";
 
-            this.inputFormData.deviceId = "";
-            await this.initSelectItemDevice();
-            this.inputFormData.deviceId = "all";
+                // 依照all device篩選
+            } else if (
+                this.inputFormData.areaId &&
+                this.inputFormData.groupId &&
+                this.inputFormData.deviceId === "all"
+            ) {
 
-            // 依照all device篩選
+                this.sortOutChartData(this.areaSummaryFilter);
+
+                this.inputFormData.deviceId = "";
+                await this.initSelectItemDevice();
+                this.inputFormData.deviceId = "all";
+            } else {
+                return false;
+            }
+
+            // 判斷有 deviceGroup，groupId 為 'all'，
         } else if (
-            this.inputFormData.areaId &&
+            !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
-            this.inputFormData.deviceId === "all"
+            this.inputFormData.groupId === 'all'
         ) {
-            this.sortOutChartData(this.areaSummaryFilter);
+            // 依照device篩選
+            for (const singleData of this.deviceGroupSummaryFilter) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
 
-            this.inputFormData.deviceId = "";
-            await this.initSelectItemDevice();
-            this.inputFormData.deviceId = "all";
-        } else {
-            return false;
+                    if (detailKey === "device") {
+                        if (
+                            this.inputFormData.deviceId === tempSingleData.objectId
+                        ) {
+                            this.deviceSummaryFilter.push(singleData);
+                        }
+                    }
+                }
+                console.log(" - ", this.deviceSummaryFilter);
+            }
+            this.sortOutChartData(this.deviceSummaryFilter);
+
+            // 清除device篩選
+            if (
+                this.inputFormData.areaId &&
+                this.inputFormData.groupId &&
+                !this.inputFormData.deviceId
+            ) {
+
+                console.log('清除device篩選 - ', );
+                this.sortOutChartData(this.deviceGroupSummaryFilter);
+
+                this.inputFormData.deviceId = "";
+                await this.initSelectItemDevice();
+                this.inputFormData.deviceId = "all";
+
+                // 依照all device篩選
+            } else if (
+                this.inputFormData.areaId &&
+                this.inputFormData.groupId &&
+                this.inputFormData.deviceId === "all"
+            ) {
+
+                console.log('依照all device篩選 - ', );
+
+                this.sortOutChartData(this.deviceGroupSummaryFilter);
+
+                this.inputFormData.deviceId = "";
+                await this.initSelectItemDevice();
+                this.inputFormData.deviceId = "all";
+            } else {
+                return false;
+            }
+
+            // 判斷有 deviceGroup，groupId 不為 'all'，
+        } else if (
+            !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
+            this.inputFormData.groupId &&
+            this.inputFormData.groupId !== 'all'
+        ) {
+            // 依照device篩選
+            for (const singleData of this.deviceGroupSummaryFilter) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === "device") {
+                        if (
+                            this.inputFormData.deviceId === tempSingleData.objectId
+                        ) {
+                            this.deviceSummaryFilter.push(singleData);
+                        }
+                    }
+                }
+                console.log(" - ", this.deviceSummaryFilter);
+            }
+            this.sortOutChartData(this.deviceSummaryFilter);
+
+            // 清除device篩選
+            if (
+                this.inputFormData.areaId &&
+                this.inputFormData.groupId &&
+                !this.inputFormData.deviceId
+            ) {
+
+                console.log('清除device篩選 - ', );
+                this.sortOutChartData(this.deviceGroupSummaryFilter);
+
+                this.inputFormData.deviceId = "";
+                await this.initSelectItemDevice();
+                this.inputFormData.deviceId = "all";
+
+                // 依照all device篩選
+            } else if (
+                this.inputFormData.areaId &&
+                this.inputFormData.groupId &&
+                this.inputFormData.deviceId === "all"
+            ) {
+
+                console.log('依照all device篩選 - ', );
+
+                this.sortOutChartData(this.deviceGroupSummaryFilter);
+
+                this.inputFormData.deviceId = "";
+                await this.initSelectItemDevice();
+                this.inputFormData.deviceId = "all";
+            } else {
+                return false;
+            }
         }
+
+
+
     }
 
     receiveType(type) {
