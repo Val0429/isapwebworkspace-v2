@@ -67,7 +67,7 @@
 
                 <template #selectTree="{ $attrs, $listeners }">
 
-                    <div class="mt-2 ml-3">
+                    <div class="mt-2 ml-3 mb-3">
                         <b-button @click="pageToChooseTree">
                             {{ _('w_SelectSiteTree') }}
                         </b-button>
@@ -98,7 +98,7 @@
                     <div class="ml-3 mb-2 w-100">{{ _('w_ReportTemplate_SendReportTime1') }}</div>
                 </template>
 
-                <template #time="{$attrs, $listeners}">
+                <template #sendDates="{$attrs, $listeners}">
                     <b-form-group class="ml-3">
                         <b-row
                             v-for="(value, index) in sendReportTime"
@@ -285,16 +285,11 @@ export default class ReportTemplate extends Vue {
 
     selectedDetail: any = [];
 
+    // select 相關
     sitesSelectItem: any = {};
-    metricSelectItem: any = {
-        peopleCounting: ECameraMode.peopleCounting,
-        humanDetection: ECameraMode.humanDetection,
-        heatmap: ECameraMode.heatmap,
-        dwellTime: ECameraMode.dwellTime,
-        demographic: ECameraMode.demographic,
-        visitor: ECameraMode.visitor
-    };
+    metricSelectItem: any = {};
     userSelectItem: any = {};
+    tagSelectItem: any = {};
 
     timeSelectItem: any = {
         weeks: [
@@ -309,28 +304,8 @@ export default class ReportTemplate extends Vue {
         hours: []
     };
 
-    addPeriodSelectItem: any = [
-        { value: EAddPeriodSelect.period, text: EAddPeriodSelect.period },
-        {
-            value: EAddPeriodSelect.designation,
-            text: EAddPeriodSelect.designation
-        }
-    ];
-
-    designationPeriodSelectItem: any = {
-        today: EDesignationPeriod.today,
-        yesterday: EDesignationPeriod.yesterday,
-        last7days: EDesignationPeriod.last7days,
-        thisWeek: EDesignationPeriod.thisWeek,
-        lastWeek: EDesignationPeriod.lastWeek,
-        thisMonth: EDesignationPeriod.thisMonth,
-        lastMonth: EDesignationPeriod.lastMonth,
-        q1: EDesignationPeriod.q1,
-        q2: EDesignationPeriod.q2,
-        q3: EDesignationPeriod.q3,
-        q4: EDesignationPeriod.q4,
-        thisYear: EDesignationPeriod.thisYear
-    };
+    addPeriodSelectItem: any = [];
+    designationPeriodSelectItem: any = {};
 
     // tree 相關
     selectType = ERegionType.site;
@@ -345,6 +320,7 @@ export default class ReportTemplate extends Vue {
 
     mounted() {
         this.initDayRanges();
+        this.initSelectItem();
     }
 
     clearInputData() {
@@ -358,6 +334,39 @@ export default class ReportTemplate extends Vue {
             regionIdsText: "",
             stepType: ""
         };
+    }
+
+    initSelectItem() {
+
+        this.addPeriodSelectItem = [
+            { value: EAddPeriodSelect.period, text: this._('w_period')},
+            { value: EAddPeriodSelect.designation, text: this._('w_Designation') },
+        ];
+
+        this.designationPeriodSelectItem = {
+            today: this._('w_Today'),
+            yesterday: this._('w_Yesterday'),
+            last7days: this._('w_last7days'),
+            thisWeek: this._('w_thisWeek'),
+            lastWeek: this._('w_lastWeek'),
+            thisMonth: this._('w_thisMonth'),
+            lastMonth: this._('w_lastMonth'),
+            q1: this._('w_q1'),
+            q2: this._('w_q2'),
+            q3: this._('w_q3'),
+            q4: this._('w_q4'),
+            thisYear: this._('w_thisYear'),
+        };
+
+        this.metricSelectItem = {
+            peopleCounting: this._('w_Navigation_VideoSources_PeopleCounting'),
+            humanDetection: this._('w_Navigation_VideoSources_HumanDetection'),
+            heatmap: this._('w_Navigation_VideoSources_Heatmap'),
+            dwellTime: this._('w_Navigation_VideoSources_DwellTime'),
+            demographic: this._('w_Navigation_VideoSources_Demographic'),
+            visitor: this._('w_Navigation_VideoSources_Visitor'),
+        }
+
     }
 
     async initSelectItemSite() {
@@ -401,6 +410,30 @@ export default class ReportTemplate extends Vue {
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    async initSelectItemTag() {
+        let tempTagSelectItem = {};
+
+        await this.$server
+            .R("/tag/all")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response) {
+                        // 自定義 tagSelectItem 的 key 的方式
+                        tempTagSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.tagSelectItem = tempTagSelectItem;
                 }
             })
             .catch((e: any) => {
@@ -510,6 +543,7 @@ export default class ReportTemplate extends Vue {
         this.pageStep = EPageStep.add;
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
+        await this.initSelectItemTag();
         this.clearInputData();
         this.selecteds = [];
         this.inputFormData.stepType = stepType;
@@ -519,6 +553,7 @@ export default class ReportTemplate extends Vue {
         this.pageStep = EPageStep.duplicate;
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
+        await this.initSelectItemTag();
         this.inputFormData.name = "";
         this.selecteds = [];
         this.inputFormData.stepType = stepType;
@@ -529,6 +564,7 @@ export default class ReportTemplate extends Vue {
         this.getInputData();
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
+        await this.initSelectItemTag();
         this.selecteds = [];
 
         this.inputFormData.stepType = stepType;
@@ -874,13 +910,13 @@ export default class ReportTemplate extends Vue {
                  */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
-                selectTreeSite?: any;
+                selectTree?: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Metric")}
                  */
-                metric: ${toEnumInterface(this.metricSelectItem as any, false)};
+                mode: ${toEnumInterface(this.metricSelectItem as any, false)};
 
 
                 ReportPeriodTitle?: any;
@@ -935,13 +971,13 @@ export default class ReportTemplate extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_SendReportTime")}
                  */
-                time: any;
+                sendDates: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipient")}
                  */
-                users: ${toEnumInterface(this.userSelectItem as any, true)};
+                sendUserIds: ${toEnumInterface(this.userSelectItem as any, true)};
 
             }
         `;
@@ -968,29 +1004,36 @@ export default class ReportTemplate extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Metric")}
                  * @uiType - iv-form-label
-                */
-                ?: string;
+                 */
+                mode?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod")}
+                 * @uiLabel - ${this._("w_BOCampaign_StartDate")}
                  * @uiType - iv-form-label
-                */
-                ?: string;
+                 */
+                startDate?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
+                 * @uiType - iv-form-label
+                 */
+                endDate?: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_SendReportTime")}
                  * @uiType - iv-form-label
-                */
-                ?: string;
+                 */
+                sendDates?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipient")}
                  * @uiType - iv-form-label
                 */
-                ?: string;
+                sendUsers?: string;
 
 
             }

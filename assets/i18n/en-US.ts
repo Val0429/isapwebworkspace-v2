@@ -235,6 +235,7 @@ export default class LangObject {
     w_Navigation_VideoSources_CMS = 'CMS';
     w_Navigation_VideoSources_VIP = 'VIP';
     w_Navigation_VideoSources_VIP_Stranger_Visitor = 'VIP / Stranger / Visitor';
+    w_Navigation_VideoSources_Visitor = 'Visitor';
 
     w_Navigation_RulesActions = 'Rules and Action';
 
