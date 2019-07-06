@@ -868,4 +868,9 @@ export default class LangObject {
     w_ReportDashboard_Transaction = 'TRANSACTION';
     w_ReportDashboard_Conversion = 'CONVERSION%';
     w_ReportDashboard_ASP = 'ASP';
+
+    // Report Occupancy
+    w_Occupancy_Time = 'Time';
+    w_Occupancy_NumberDetected = 'Number Detected';
+    w_Occupancy_Snapshot = 'Snapshot';
 }

@@ -87,6 +87,11 @@
             </iv-card>
         </div>
 
+
+        <occupancy_details_table>
+
+        </occupancy_details_table>
+
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
