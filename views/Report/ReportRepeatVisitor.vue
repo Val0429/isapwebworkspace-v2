@@ -53,6 +53,18 @@
 
                 </analysis_filter>
 
+                <!-- Ben -->
+                <anlysis-dashboard
+                    ref="anlysisDashboard"
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :type="dTimeMode"
+                    :siteIds="pSiteIds"
+                    :tagIds="tags"
+                    :pageType="dPageType"
+                >
+                </anlysis-dashboard>
+
                 <!-- Morris -->
                 <highcharts-repeat-visitor
                     :startDate="startDate"
@@ -995,7 +1007,7 @@ export default class ReportRepeatVisitor extends Vue {
 
     // Ben //
     initDashboardData() {
-        this.dPageType = EPageType.averageOccupancy;
+        this.dPageType = EPageType.repeatCustomer;
         setTimeout(() => {
             let anlysisDashboard: any = this.$refs.anlysisDashboard;
             anlysisDashboard.initData();
