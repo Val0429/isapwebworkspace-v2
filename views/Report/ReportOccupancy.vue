@@ -17,8 +17,14 @@
 
                 <template #toolbox>
                     <!-- Ben -->
-                    <iv-toolbox-export-excel size="lg" />
-                    <iv-toolbox-export-csv size="lg" />
+                    <iv-toolbox-export-excel
+                        size="lg"
+                        @click="exportExcel(eFileType.xlsx)"
+                    />
+                    <iv-toolbox-export-csv
+                        size="lg"
+                        @click="exportExcel(eFileType.csv)"
+                    />
 
                     <!-- Morris -->
                     <iv-toolbox-export-pdf
@@ -82,6 +88,7 @@
 
                 <!-- Ben -->
                 <report-table
+                    ref="reportTable"
                     :reportTableData="rData"
                     :reportTableTitle="reportTableTitle"
                 >
@@ -144,6 +151,13 @@ import {
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+enum EFileType {
+    xlsx = "xlsx",
+    xls = "xls",
+    csv = "csv"
+}
 
 ///////////////////////// export /////////////////////////
 import html2Canvas from "html2canvas";
@@ -159,6 +173,7 @@ enum EPageStep {
 export default class ReportOccupancy extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+    eFileType = EFileType;
 
     ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
@@ -1429,8 +1444,7 @@ export default class ReportOccupancy extends Vue {
         date1: Date | string,
         date2: Date | string,
         siteId1: string,
-        siteId2: string,
-
+        siteId2: string
     ): boolean {
         let tempDate1 = typeof date1 === "string" ? new Date(date1) : date1;
         let tempDate2 = typeof date2 === "string" ? new Date(date2) : date2;
@@ -1440,7 +1454,6 @@ export default class ReportOccupancy extends Vue {
             Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss")
         );
     }
-
 
     checkDateAndSiteAndArea(
         date1: Date | string,
@@ -1462,91 +1475,94 @@ export default class ReportOccupancy extends Vue {
     }
 
     sortOutChartData(array: any) {
-        console.log('areaSelectItem - ', this.areaSelectItem);
-        console.log('areaId - ', this.inputFormData.areaId);
-        if ((this.inputFormData.areaId && this.inputFormData.areaId === 'all') || !this.inputFormData.areaId) {
-
-                let tempChartDatas: IChartOccupancyData[] = [];
-                this.chartDatas = [];
-
-                // 取得date、siteObjectId資料
-                for (const summary of array) {
-
-                        let tempChartData: IChartOccupancyData = {
-                            date: summary.date,
-                            siteObjectId: summary.site.objectId,
-                            temperatureMin: 0,
-                            temperatureMax: 0,
-                            weather: EWeather.none,
-                            areaId: '',
-                            occupancy: 0
-                        };
-
-                        let total: any = 0;
-                        let count: any = 0;
-                        let average: any = 0;
-
-
-                    // 判斷date, site 兩個是否相同
-                        let haveSummary = false;
-                        for (let loopChartData of tempChartDatas) {
-                            if (
-                                this.checkDateAndSite(
-                                    loopChartData.date,
-                                    summary.date,
-                                    loopChartData.siteObjectId,
-                                    summary.site.objectId,
-                                    // loopChartData.areaId,
-                                    // summary.area.objectId,
-                                )
-                            ) {
-                                haveSummary = true;
-                                tempChartData = loopChartData;
-                                break;
-                            }
-                        }
-
-                        average = summary.total / summary.count;
-                        tempChartData.occupancy = average;
-
-
-                        if (!haveSummary) {
-                            // 取得weather、temperatureMin、temperatureMax
-                            for (const weather of this.responseData.weathers) {
-                                if (
-                                    this.checkDateAndSite(
-                                        tempChartData.date,
-                                        weather.date,
-                                        tempChartData.siteObjectId,
-                                        weather.site.objectId
-                                    )
-                                ) {
-                                    console.log(" - ", weather.icon);
-                                    tempChartData.weather = WeatherService.WeatherIcon(
-                                        weather.icon
-                                    );
-                                    tempChartData.temperatureMin = weather.temperatureMin;
-                                    tempChartData.temperatureMax = weather.temperatureMax;
-                                    break;
-                                }
-                            }
-                        }
-                        let tempData = JSON.parse(JSON.stringify(tempChartData));
-                        tempData.areaId = summary.area.objectId;
-
-                        tempChartDatas.push(tempData);
-                        this.chartDatas = tempChartDatas;
-
-                    console.log("this.chartDatas - ", this.chartDatas);
-                }
-
-        } else if (this.inputFormData.areaId && this.inputFormData.areaId !== 'all') {
+        console.log("areaSelectItem - ", this.areaSelectItem);
+        console.log("areaId - ", this.inputFormData.areaId);
+        if (
+            (this.inputFormData.areaId &&
+                this.inputFormData.areaId === "all") ||
+            !this.inputFormData.areaId
+        ) {
             let tempChartDatas: IChartOccupancyData[] = [];
             this.chartDatas = [];
 
             // 取得date、siteObjectId資料
             for (const summary of array) {
+                let tempChartData: IChartOccupancyData = {
+                    date: summary.date,
+                    siteObjectId: summary.site.objectId,
+                    temperatureMin: 0,
+                    temperatureMax: 0,
+                    weather: EWeather.none,
+                    areaId: "",
+                    occupancy: 0
+                };
 
+                let total: any = 0;
+                let count: any = 0;
+                let average: any = 0;
+
+                // 判斷date, site 兩個是否相同
+                let haveSummary = false;
+                for (let loopChartData of tempChartDatas) {
+                    if (
+                        this.checkDateAndSite(
+                            loopChartData.date,
+                            summary.date,
+                            loopChartData.siteObjectId,
+                            summary.site.objectId
+                            // loopChartData.areaId,
+                            // summary.area.objectId,
+                        )
+                    ) {
+                        haveSummary = true;
+                        tempChartData = loopChartData;
+                        break;
+                    }
+                }
+
+                average = summary.total / summary.count;
+                tempChartData.occupancy = average;
+
+                if (!haveSummary) {
+                    // 取得weather、temperatureMin、temperatureMax
+                    for (const weather of this.responseData.weathers) {
+                        if (
+                            this.checkDateAndSite(
+                                tempChartData.date,
+                                weather.date,
+                                tempChartData.siteObjectId,
+                                weather.site.objectId
+                            )
+                        ) {
+                            console.log(" - ", weather.icon);
+                            tempChartData.weather = WeatherService.WeatherIcon(
+                                weather.icon
+                            );
+                            tempChartData.temperatureMin =
+                                weather.temperatureMin;
+                            tempChartData.temperatureMax =
+                                weather.temperatureMax;
+                            break;
+                        }
+                    }
+                }
+                let tempData = JSON.parse(JSON.stringify(tempChartData));
+                tempData.areaId = summary.area.objectId;
+
+                tempChartDatas.push(tempData);
+                this.chartDatas = tempChartDatas;
+
+                console.log("this.chartDatas - ", this.chartDatas);
+            }
+        } else if (
+            this.inputFormData.areaId &&
+            this.inputFormData.areaId !== "all"
+        ) {
+            let tempChartDatas: IChartOccupancyData[] = [];
+            this.chartDatas = [];
+
+            // 取得date、siteObjectId資料
+            for (const summary of array) {
                 let tempChartData: IChartOccupancyData = {
                     date: summary.date,
                     siteObjectId: summary.site.objectId,
@@ -1569,7 +1585,7 @@ export default class ReportOccupancy extends Vue {
                             loopChartData.date,
                             summary.date,
                             loopChartData.siteObjectId,
-                            summary.site.objectId,
+                            summary.site.objectId
                             // loopChartData.areaId,
                             // summary.area.objectId,
                         )
@@ -1602,8 +1618,10 @@ export default class ReportOccupancy extends Vue {
                             tempChartData.weather = WeatherService.WeatherIcon(
                                 weather.icon
                             );
-                            tempChartData.temperatureMin = weather.temperatureMin;
-                            tempChartData.temperatureMax = weather.temperatureMax;
+                            tempChartData.temperatureMin =
+                                weather.temperatureMin;
+                            tempChartData.temperatureMax =
+                                weather.temperatureMax;
                             break;
                         }
                     }
@@ -1614,7 +1632,6 @@ export default class ReportOccupancy extends Vue {
                 console.log("this.chartDatas - ", this.chartDatas);
             }
         }
-
     }
 
     async receiveAreaId(areaId) {
@@ -1960,6 +1977,29 @@ export default class ReportOccupancy extends Vue {
 
     ////////////////////////////////////// Export //////////////////////////////////////
 
+    exportExcel(fType) {
+        let reportTable: any = this.$refs.reportTable;
+        let tableData = reportTable.tableToArray();
+        //th
+        let th = [];
+        for (let title of tableData[0]) {
+            th.push(title);
+        }
+
+        //data
+        let data = [];
+        for (let bodys of tableData) {
+            if (tableData.indexOf(bodys) == 0) continue;
+            data.push(bodys);
+        }
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_VideoSources_Demographic"),
+            fType,
+            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
+
     exportPDF() {
         let title = "";
         title += this._("w_Navigation_Report_Occupancy");
@@ -1971,7 +2011,7 @@ export default class ReportOccupancy extends Vue {
 
         html2Canvas(document.querySelector(".container-fluid"), {
             allowTaint: true,
-            useCORS: true,
+            useCORS: true
         }).then(function(canvas) {
             let contentWidth = canvas.width;
             let contentHeight = canvas.height;

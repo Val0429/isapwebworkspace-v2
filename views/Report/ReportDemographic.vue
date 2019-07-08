@@ -16,8 +16,14 @@
 
                 <template #toolbox>
                     <!-- Ben -->
-                    <iv-toolbox-export-excel size="lg" />
-                    <iv-toolbox-export-csv size="lg" />
+                    <iv-toolbox-export-excel
+                        size="lg"
+                        @click="exportExcel(eFileType.xlsx)"
+                    />
+                    <iv-toolbox-export-csv
+                        size="lg"
+                        @click="exportExcel(eFileType.csv)"
+                    />
 
                     <!-- Morris -->
                     <iv-toolbox-export-pdf
@@ -82,6 +88,7 @@
 
                 <!-- Ben -->
                 <report-table
+                    ref="reportTable"
                     :reportTableData="rData"
                     :reportTableTitle="reportTableTitle"
                 >
@@ -145,6 +152,13 @@ import {
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+enum EFileType {
+    xlsx = "xlsx",
+    xls = "xls",
+    csv = "csv"
+}
 
 ///////////////////////// export /////////////////////////
 import html2Canvas from "html2canvas";
@@ -161,6 +175,7 @@ export default class ReportDemographic extends Vue {
     ePageStep = EPageStep;
     ePageType = EPageType;
     eWeather = EWeather;
+    eFileType = EFileType;
 
     pageStep: EPageStep = EPageStep.none;
 
@@ -1747,6 +1762,29 @@ export default class ReportDemographic extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     ////////////////////////////////////// Export //////////////////////////////////////
+
+    exportExcel(fType) {
+        let reportTable: any = this.$refs.reportTable;
+        let tableData = reportTable.tableToArray();
+        //th
+        let th = [];
+        for (let title of tableData[0]) {
+            th.push(title);
+        }
+
+        //data
+        let data = [];
+        for (let bodys of tableData) {
+            if (tableData.indexOf(bodys) == 0) continue;
+            data.push(bodys);
+        }
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_VideoSources_Demographic"),
+            fType,
+            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
 
     exportPDF() {
         let title = "";
