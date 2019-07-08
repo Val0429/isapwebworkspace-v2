@@ -10,21 +10,21 @@
 
         <div class="h-25"></div>
 
-        <analysis_filter_in_out_traffic
+        <analysis-filter-in-out-traffic
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
             :firstSiteId="filterData.firstSiteId"
             :countType="filterData.type"
             :deviceMode="deviceMode"
             :showReportData="responseData"
         >
-        </analysis_filter_in_out_traffic>
+        </analysis-filter-in-out-traffic>
 
-        <analysis_filter
+        <analysis-filter
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
             :firstSiteId="filterData.firstSiteId"
             :deviceMode="deviceMode"
         >
-        </analysis_filter>
+        </analysis-filter>
 
         <b-button @click="modalShow = !modalShow">
             {{ _('w_ReportTemplate_Recipient') }}

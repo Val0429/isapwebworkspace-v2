@@ -39,7 +39,7 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter
+                <analysis-filter
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -59,7 +59,7 @@
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter>
+                </analysis-filter>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -251,7 +251,7 @@ export default class ReportRepeatVisitor extends Vue {
 
     created() {
         this.initDatas();
-        this.initTemplate();
+        // this.initTemplate();
 
         // TODO: Waitting API
         this.initChartDeveloper();
