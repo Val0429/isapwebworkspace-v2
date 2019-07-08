@@ -1004,7 +1004,7 @@ export default class ReportRepeatVisitor extends Vue {
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
-        this.sortOutChartData(this.responseData.summaryChartDatas);
+        this.sortOutChartData(this.responseData.summaryTableDatas);
 
         // Ben
         //this.initDashboardData();
@@ -1146,7 +1146,7 @@ export default class ReportRepeatVisitor extends Vue {
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
-            for (const singleData of this.responseData.summaryChartDatas) {
+            for (const singleData of this.responseData.summaryTableDatas) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
                     if (detailKey === "area") {
@@ -1195,7 +1195,7 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
-            this.sortOutChartData(this.responseData.summaryChartDatas);
+            this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
             this.sites = this.sitesItem;
 
@@ -1211,7 +1211,7 @@ export default class ReportRepeatVisitor extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-            this.sortOutChartData(this.responseData.summaryChartDatas);
+            this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
             this.sites = this.sitesItem;
 
