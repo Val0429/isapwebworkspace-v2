@@ -56,9 +56,9 @@
                     {{ showFirst($attrs.value) }}
                 </template>
 
-                <template #goToReport>
+                <template #goToReport="{$attrs}">
                     <div class="mt-2 ml-3 mb-3">
-                        <b-button>
+                        <b-button @click='goToReport($attrs)'>
                             {{ _('w_ReportTemplate_goToReport') }}
                         </b-button>
                     </div>
@@ -263,6 +263,9 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
 
+import { EWeeks, EVideoSource } from "@/components/Reports";
+import { ITemplate } from "@/components/Reports";
+
 enum EPageStep {
     list = "list",
     add = "add",
@@ -272,25 +275,6 @@ enum EPageStep {
     none = "none",
     showResult = "showResult",
     chooseTree = "chooseTree"
-}
-
-enum ECameraMode {
-    peopleCounting = "People Counting",
-    humanDetection = "Human Detection",
-    heatmap = "Heatmap",
-    dwellTime = "Dwell Time",
-    demographic = "Demographic",
-    visitor = "Visitor"
-}
-
-enum EWeeks {
-    Sunday = "Sunday",
-    Monday = "Monday",
-    Tuesday = "Tuesday",
-    Wednesday = "Wednesday",
-    Thursday = "Thursday",
-    Friday = "Friday",
-    Saturday = "Saturday"
 }
 
 const timeItem = {
@@ -515,13 +499,13 @@ export default class ReportTemplate extends Vue {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
-        console.log(' - ', this.selectedDetail);
+        console.log(" - ", this.selectedDetail);
     }
 
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            console.log('param - ', param);
+            console.log("param - ", param);
 
             this.inputFormData = {
                 objectId: param.objectId,
@@ -869,17 +853,56 @@ export default class ReportTemplate extends Vue {
     }
 
     getReportTime(value): string {
-        let result: string = '';
+        let result: string = "";
 
         value.map(item => {
             switch (item) {
-                
             }
         });
 
-        
-
         return result;
+    }
+
+    goToReport(value: any) {
+        let url = "/reports/";
+
+        switch (value.row.mode) {
+            case EVideoSource.peopleCounting:
+                url += "traffic?";
+                break;
+
+            case EVideoSource.humanDetection:
+                url += "occupancy";
+                break;
+
+            case EVideoSource.demographic:
+                url += "demographic";
+                break;
+
+            case EVideoSource.visitor:
+                url += "repeat_visitor";
+                break;
+
+            case EVideoSource.dwellTime:
+                url += "dwell_time";
+                break;
+
+            case EVideoSource.heatmap:
+                url += "heatmap";
+                break;
+
+            default:
+                break;
+        }
+
+        console.log(value.row);
+
+        this.$router.push({
+            path: url,
+            query: {
+                template: JSON.stringify(value.row)
+            }
+        });
     }
 
     ITableList() {

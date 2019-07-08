@@ -266,12 +266,29 @@ export default class ReportTraffic extends Vue {
     rData = new ReportTableData();
     reportTableTitle = {};
 
-    created() {
-        // this.initChartDeveloper();
-    }
+    created() {}
 
     mounted() {
         this.initDatas();
+        this.initTemplate();
+    }
+
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            let template = ReportService.anysislyTemplate(templateJSON);
+            if (template != null) {
+                console.log(template);
+
+                // this.receiveFilterData.startDate = new Date();
+            }
+        }
+
+        //    :sitesSelectItem="sitesSelectItem"
+        //     :tagSelectItem="tagSelectItem"
+        //     :regionTreeItem="regionTreeItem"
+        //     :label="_('w_ReportFilterConditionComponent_')"
+        //     @submit-data="receiveFilterData"
     }
 
     async initDatas() {
