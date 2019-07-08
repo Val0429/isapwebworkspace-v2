@@ -16,8 +16,14 @@
 
                 <template #toolbox>
                     <!-- Ben -->
-                    <iv-toolbox-export-excel size="lg" />
-                    <iv-toolbox-export-csv size="lg" />
+                    <iv-toolbox-export-excel
+                        size="lg"
+                        @click="getExcelFile(eFileType.xlsx)"
+                    />
+                    <iv-toolbox-export-csv
+                        size="lg"
+                        @click="getExcelFile(eFileType.csv)"
+                    />
 
                     <!-- Morris -->
                     <iv-toolbox-export-pdf size="lg" />
@@ -79,6 +85,7 @@
 
                 <!-- Ben -->
                 <report-table
+                    ref="reportTable"
                     :reportTableData="rData"
                     :reportTableTitle="reportTableTitle"
                 >
@@ -142,6 +149,13 @@ import {
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+enum EFileType {
+    xlsx = "xlsx",
+    xls = "xls",
+    csv = "csv"
+}
 
 enum EPageStep {
     none = "none"
@@ -154,6 +168,7 @@ export default class ReportDemographic extends Vue {
     ePageStep = EPageStep;
     ePageType = EPageType;
     eWeather = EWeather;
+    eFileType = EFileType;
 
     pageStep: EPageStep = EPageStep.none;
 
@@ -1342,7 +1357,9 @@ export default class ReportDemographic extends Vue {
                 }
 
                 let tempData = JSON.parse(JSON.stringify(tempChartData));
-                tempData.ageRange = ReportService.SwitchAgeRange(index.toString());
+                tempData.ageRange = ReportService.SwitchAgeRange(
+                    index.toString()
+                );
                 tempData.maleCount = summary.maleRanges[index];
                 tempData.femaleCount = summary.femaleRanges[index];
 
@@ -1685,6 +1702,29 @@ export default class ReportDemographic extends Vue {
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
+
+    getExcelFile(fType) {
+        let reportTable: any = this.$refs.reportTable;
+        let tableData = reportTable.tableToArray();
+        //th
+        let th = [];
+        for (let title of tableData[0]) {
+            th.push(title);
+        }
+
+        //data
+        let data = [];
+        for (let bodys of tableData) {
+            if (tableData.indexOf(bodys) == 0) continue;
+            data.push(bodys);
+        }
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_VideoSources_Demographic"),
+            fType,
+            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
 }
 </script>
 

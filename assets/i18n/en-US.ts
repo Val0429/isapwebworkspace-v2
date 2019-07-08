@@ -876,6 +876,7 @@ export default class LangObject {
     w_Occupancy_Snapshot = 'Snapshot';
 
     //Report Visitor
+    w_ReportVisitor_Visitor = 'Visitor';
     w_ReportVisitor_Site = 'Site';
     w_ReportVisitor_Date = 'Date';
     w_ReportVisitor_1 = '1';

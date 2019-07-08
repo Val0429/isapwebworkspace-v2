@@ -2,6 +2,7 @@
     <div class="animated fadeIn overflow">
         <title>Report Table</title>
         <table
+            ref="reportTable"
             class="table table-bordered"
             v-if="reportTableData._body && reportTableData._body.length > 0"
         >
@@ -168,6 +169,46 @@ export class ReportTable extends Vue {
         var str = Number(point * 100).toFixed(fixed);
         str += "%";
         return str;
+    }
+
+    tableToArray() {
+        let objTable: any = this.$refs.reportTable;
+        let arrays = [];
+        let rowspans = 0;
+        let rowspanRowCount = 1;
+        for (var i = 0; i < objTable.rows.length; i++) {
+            let array = [];
+            if (rowspanRowCount > 1) {
+                rowspanRowCount--;
+            } else {
+                rowspans = 0;
+            }
+            for (let l = 0; l < rowspans; l++) {
+                array.push("");
+            }
+            for (var j = 0; j < objTable.rows[i].cells.length; j++) {
+                let strings = "";
+                if (objTable.rows[i].cells[j].getAttribute("rowspan")) {
+                    rowspanRowCount = objTable.rows[i].cells[j].getAttribute("rowspan");
+                    rowspans++;
+                }
+                for (
+                    var k = 0;
+                    k < objTable.rows[i].cells[j].childNodes.length;
+                    k++
+                ) {
+                    if (objTable.rows[i].cells[j].childNodes[k].length) {
+                        strings += objTable.rows[i].cells[j].innerHTML;
+                    } else {
+                        strings +=
+                            objTable.rows[i].cells[j].childNodes[k].innerHTML;
+                    }
+                }
+                array.push(strings.trim());
+            }
+            arrays.push(array);
+        }
+        return arrays;
     }
 }
 
