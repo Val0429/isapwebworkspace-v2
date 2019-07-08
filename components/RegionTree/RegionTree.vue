@@ -1,11 +1,11 @@
 <template>
     <iv-tree
         ref="tree"
-        v-if="data.status.showCard"
         :server="server"
         :data="data"
-        :visible="true"
+        :visible="data.status.showCard"
     >
+
         <!-- Pass on all named slots -->
         <slot
             v-for="slot in Object.keys($slots)"
