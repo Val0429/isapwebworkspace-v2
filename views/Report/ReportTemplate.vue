@@ -35,6 +35,15 @@
                 @selected="selectedItem($event)"
             >
 
+                <template #mode="{$attrs}">
+                    {{ getMode($attrs.value) }}
+                </template>
+
+                <template #type="{$attrs}">
+                    {{ getType($attrs.value) }}
+                </template>
+
+
                 <template #startDate="{$attrs}">
                     {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                 </template>
@@ -42,6 +51,13 @@
                 <template #endDate="{$attrs}">
                     {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                 </template>
+
+
+                <template #sendDates="{$attrs}">
+<!--                    <div>{{ $attrs.value }}</div>-->
+                    <div v-html="getReportTime($attrs.value)"></div>
+                </template>
+
 
                 <template #Actions="{$attrs, $listeners}">
                     <iv-toolbox-more :disabled="isSelected.length !== 1">
@@ -275,12 +291,12 @@ enum EPageStep {
 }
 
 enum ECameraMode {
-    peopleCounting = "People Counting",
-    humanDetection = "Human Detection",
-    heatmap = "Heatmap",
-    dwellTime = "Dwell Time",
-    demographic = "Demographic",
-    visitor = "Visitor"
+    peopleCounting = "peopleCounting",
+    humanDetection = "humanDetection",
+    heatmap = "heatmap",
+    dwellTime = "dwellTime",
+    demographic = "demographic",
+    visitor = "visitor"
 }
 
 enum EWeeks {
@@ -868,16 +884,107 @@ export default class ReportTemplate extends Vue {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
-    getReportTime(value): string {
+    getMode(data: string): string {
+
+        switch (data) {
+            case ECameraMode.peopleCounting:
+                return this._("w_Navigation_VideoSources_PeopleCounting");
+            case ECameraMode.humanDetection:
+                return this._("w_Navigation_VideoSources_HumanDetection");
+            case ECameraMode.heatmap:
+                return this._("w_Navigation_VideoSources_Heatmap");
+            case ECameraMode.dwellTime:
+                return this._("w_Navigation_VideoSources_DwellTime");
+            case ECameraMode.demographic:
+                return this._("w_Navigation_VideoSources_Demographic");
+            case ECameraMode.visitor:
+                return this._("w_Navigation_VideoSources_Visitor");
+            default:
+                return '';
+        }
+
+    }
+
+    getType(data: string): string {
+
+        switch (data) {
+            case EDesignationPeriod.today:
+                return this._("w_Today");
+            case EDesignationPeriod.yesterday:
+                return this._("w_Yesterday");
+            case EDesignationPeriod.last7days:
+                return this._("w_last7days");
+            case EDesignationPeriod.thisWeek:
+                return this._("w_thisWeek");
+            case EDesignationPeriod.lastWeek:
+                return this._("w_lastWeek");
+            case EDesignationPeriod.thisMonth:
+                return this._("w_thisMonth");
+            case EDesignationPeriod.lastMonth:
+                return this._("w_lastMonth");
+            case EDesignationPeriod.q1:
+                return this._("w_q1");
+            case EDesignationPeriod.q2:
+                return this._("w_q2");
+            case EDesignationPeriod.q3:
+                return this._("w_q3");
+            case EDesignationPeriod.q4:
+                return this._("w_q4");
+            case EDesignationPeriod.thisYear:
+                return this._("w_thisYear");
+            default:
+                return '';
+        }
+
+    }
+
+    getReportTime(data: any): string {
+
+        let weekDay: string = '';
+        let time: string = '';
         let result: string = '';
 
-        value.map(item => {
-            switch (item) {
-                
-            }
-        });
+        if (data) {
+            for (const item of data) {
 
-        
+                if (item.day === '0') {
+                    weekDay = EWeeks.Sunday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '1') {
+                    weekDay = EWeeks.Monday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '2') {
+                    weekDay = EWeeks.Tuesday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '3') {
+                    weekDay = EWeeks.Wednesday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '4') {
+                    weekDay = EWeeks.Thursday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '5') {
+                    weekDay = EWeeks.Friday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '6') {
+                    weekDay = EWeeks.Saturday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+
+            }
+        }
 
         return result;
     }
