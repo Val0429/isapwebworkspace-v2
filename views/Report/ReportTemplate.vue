@@ -95,6 +95,11 @@
             :label=showLabelTitle()
         >
 
+            <template #toolbox>
+                <iv-toolbox-back @click="pageToList()" />
+            </template>
+
+
             <iv-form
                 :interface="IAddAndEditForm()"
                 :value="inputFormData"
@@ -102,9 +107,6 @@
                 @submit="saveAddOrEdit($event)"
             >
 
-                <template #toolbox>
-                    <iv-toolbox-back @click="pageToList()" />
-                </template>
 
                 <template #selectTree="{ $attrs, $listeners }">
 
@@ -550,9 +552,10 @@ export default class ReportTemplate extends Vue {
                 tagIds: param.tags,
                 stepType: "",
                 mode: param.mode,
-                type: param.type,
-                startDate: new Date(param.startDate),
-                endDate: new Date(param.endDate),
+                type: param.type ? param.type : '',
+                startDate: param.startDate ? new Date(param.startDate) : null,
+                endDate: param.endDate ? new Date(param.endDate) : null,
+                // endDate: new Date(param.endDate),
                 sendDates: param.sendDates,
                 sendUserIds: param.sendUsers,
 
@@ -623,16 +626,73 @@ export default class ReportTemplate extends Vue {
         this.clearInputData();
         this.selecteds = [];
         this.inputFormData.stepType = stepType;
+        this.sendReportTime = [{ week: "1", hour: "22" }];
+
     }
 
     async pageToDuplicate(stepType: string) {
         this.pageStep = EPageStep.duplicate;
+        this.getInputData();
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
         await this.initSelectItemTag();
-        this.inputFormData.name = "";
-        this.selecteds = [];
+
         this.inputFormData.stepType = stepType;
+
+        this.inputFormData.name = '';
+        this.inputFormData.objectId = '';
+        this.selecteds = [];
+        this.sendReportTime = [];
+
+        let hour = "";
+        let week = "";
+
+        // sendDates
+        this.inputFormData.sendDates.map(item => {
+            hour = Datetime.DateTime2String(new Date(item.date), "HH");
+            week = item.day;
+            const tempSendReportTime = {
+                hour, week
+            };
+            this.sendReportTime.push(tempSendReportTime);
+            this.inputFormData.sendDates = JSON.parse(
+                JSON.stringify(this.sendReportTime)
+            );
+        });
+
+        // Select Report Period
+        if (this.inputFormData.type && !this.inputFormData.startDate && !this.inputFormData.endDate) {
+            this.selectPeriodAddWay = EAddPeriodSelect.designation;
+            // this.inputFormData.startDate = JSON.parse(JSON.stringify(this.inputFormData.type));
+        }
+
+        if (!this.inputFormData.type && this.inputFormData.startDate&& this.inputFormData.endDate) {
+            //  console.log(' - ', this.inputFormData.startDate, this.inputFormData.endDate);
+
+            this.selectPeriodAddWay = EAddPeriodSelect.period;
+            // this.inputFormData.startDate = new Date(this.inputFormData.startDate);
+            // this.inputFormData.endDate = new Date(this.inputFormData.endDate);
+
+        }
+
+        // select Ids
+        this.inputFormData.siteIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.siteIds.map(item => item.objectId)
+            )
+        );
+        this.inputFormData.tagIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.tagIds.map(item => item.objectId)
+            )
+        );
+        this.inputFormData.sendUserIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.sendUserIds.map(item => item.objectId)
+            )
+        );
+
+
     }
 
     async pageToEdit(stepType: string) {
@@ -641,10 +701,44 @@ export default class ReportTemplate extends Vue {
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
         await this.initSelectItemTag();
-        this.selecteds = [];
 
         this.inputFormData.stepType = stepType;
 
+        this.selecteds = [];
+        this.sendReportTime = [];
+
+        let hour = "";
+        let week = "";
+
+        // sendDates
+        this.inputFormData.sendDates.map(item => {
+            hour = Datetime.DateTime2String(new Date(item.date), "HH");
+            week = item.day;
+            const tempSendReportTime = {
+                hour, week
+            };
+            this.sendReportTime.push(tempSendReportTime);
+            this.inputFormData.sendDates = JSON.parse(
+                JSON.stringify(this.sendReportTime)
+            );
+        });
+
+        // Select Report Period
+        if (this.inputFormData.type && !this.inputFormData.startDate && !this.inputFormData.endDate) {
+            this.selectPeriodAddWay = EAddPeriodSelect.designation;
+            // this.inputFormData.startDate = JSON.parse(JSON.stringify(this.inputFormData.type));
+        }
+
+        if (!this.inputFormData.type && this.inputFormData.startDate&& this.inputFormData.endDate) {
+           //  console.log(' - ', this.inputFormData.startDate, this.inputFormData.endDate);
+
+            this.selectPeriodAddWay = EAddPeriodSelect.period;
+            // this.inputFormData.startDate = new Date(this.inputFormData.startDate);
+            // this.inputFormData.endDate = new Date(this.inputFormData.endDate);
+
+        }
+
+        // select Ids
         this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(
                 this.inputFormData.siteIds.map(item => item.objectId)
@@ -747,59 +841,80 @@ export default class ReportTemplate extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        if (!this.inputFormData.objectId) {
 
-            if (data.startDate && data.endDate) {
-                const datas: any = [
-                    {
-                        name: data.name,
-                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
-                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
-                        startDate: data.startDate,
-                        endDate: data.endDate,
-                        mode: data.mode,
-                    }
-                ];
-            }
+        //console.log('sendReportTime - ', this.sendReportTime);
 
-            if (data.type) {
-                const datas: any = [
-                    {
-                        name: data.name,
-                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
-                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
-                        startDate: data.startDate,
-                        endDate: data.endDate,
-                        mode: data.mode,
-                    }
-                ];
-            }
+        let date: Date = new Date();
+        let day: string = '';
+        let tempSendDates = [];
 
-            const datas: any = [
-                {
-                    name: data.name,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    tagIds: data.tagIds !== undefined ? data.tagIds : [],
-                    sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
-                }
-            ];
+        this.sendReportTime.map(item => {
+            date = new Date(
+                2000,
+                1,
+                1,
+                item.hour,
+                0
+            );
+            day = item.week;
 
-            const addParam = {
-                datas
+            const sendDatesObject = {
+                date, day
             };
 
+            tempSendDates.push(sendDatesObject);
+
+        });
+
+        let datas = [];
+        let addParam = {};
+        let editParam = {};
+
+        if (!this.inputFormData.objectId) {
+
+            if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
+                const tempDatas: any = [
+                    {
+                        name: data.name,
+                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
+                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
+                        startDate: data.startDate,
+                        endDate: data.endDate,
+                        mode: data.mode,
+                        sendDates: tempSendDates,
+                    }
+                ];
+                datas = tempDatas;
+            }
+
+            if (this.selectPeriodAddWay === EAddPeriodSelect.designation) {
+                const tempDatas: any = [
+                    {
+                        name: data.name,
+                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
+                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
+                        type: data.type,
+                        mode: data.mode,
+                        sendDates: tempSendDates,
+                    }
+                ];
+                datas = tempDatas;
+            }
+
+            addParam = { datas };
+
             await this.$server
-                .C("/tag", addParam)
+                .C("/report/template", addParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_Tag_AddTagSuccess"));
+                            Dialog.success(this._("w_ReportTemplate_AddReportTemplateSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_Tag_AddTagFailed"));
+                            Dialog.error(this._("w_ReportTemplate_AddReportTemplateFailed"));
                             return false;
                         }
                     }
@@ -809,38 +924,59 @@ export default class ReportTemplate extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_Tag_AddTagFailed"));
+                        Dialog.error(this._("w_ReportTemplate_AddReportTemplateFailed"));
                         return false;
                     }
                     console.log(e);
                     return false;
                 });
         }
-        if (this.inputFormData.stepType === EPageStep.edit) {
-            const datas: ITagReadUpdate[] = [
-                {
-                    description: data.description,
-                    regionIds:
-                        data.regionIds !== undefined ? data.regionIds : [],
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    objectId: data.objectId
-                }
-            ];
+        if (this.inputFormData.objectId) {
+            if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
+                const tempDatas: any = [
+                    {
+                        objectId: data.objectId,
+                        name: data.name,
+                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
+                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
+                        startDate: data.startDate,
+                        endDate: data.endDate,
+                        mode: data.mode,
+                        sendDates: tempSendDates,
+                    }
+                ];
+                datas = tempDatas;
+            }
 
-            const editgParam = {
-                datas
-            };
+            if (this.selectPeriodAddWay === EAddPeriodSelect.designation) {
+                const tempDatas: any = [
+                    {
+                        objectId: data.objectId,
+                        name: data.name,
+                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
+                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
+                        type: data.type,
+                        mode: data.mode,
+                        sendDates: tempSendDates,
+                    }
+                ];
+                datas = tempDatas;
+            }
+
+            editParam = { datas };
 
             await this.$server
-                .U("/tag", editgParam)
+                .U("/report/template", editParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_Tag_EditTagSuccess"));
+                            Dialog.success(this._("w_ReportTemplate_EditReportTemplateSuccess"));
                             this.pageToList();
                         }
                         if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_Tag_EditTagFailed"));
+                            Dialog.error(this._("w_ReportTemplate_EditReportTemplateFailed"));
                             return false;
                         }
                     }
@@ -850,7 +986,7 @@ export default class ReportTemplate extends Vue {
                         return ResponseFilter.base(this, e);
                     }
                     if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_Tag_EditTagFailed"));
+                        Dialog.error(this._("w_ReportTemplate_EditReportTemplateFailed"));
                         return false;
                     }
                     console.log(e);
@@ -1247,7 +1383,7 @@ export default class ReportTemplate extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
                 selectTree?: any;
 
@@ -1256,7 +1392,7 @@ export default class ReportTemplate extends Vue {
                  * @uiLabel - ${this._("w_Tag")}
                  * @uiColumnGroup - tag
                  */
-                tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
+                tagIds: ${toEnumInterface(this.tagSelectItem as any, true)};
 
 
                 /**
@@ -1311,13 +1447,13 @@ export default class ReportTemplate extends Vue {
                 )};
 
 
-                sendReportTimeTitle: any;
+                sendReportTimeTitle?: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_SendReportTime")}
                  */
-                sendDates: any;
+                sendDates?: any;
 
 
                 /**

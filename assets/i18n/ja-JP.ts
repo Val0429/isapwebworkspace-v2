@@ -852,6 +852,10 @@ export default class LangObject implements ILang {
     w_ReportTemplate_RecipientSelect = 'Select Recipient(s)';
     w_ReportTemplate_goToReport = 'Go To Report';
     w_ReportTemplate_DeleteConfirm = 'Are you sure to delete Report Template(s)?';
+    w_ReportTemplate_AddReportTemplateSuccess = 'Add Report Template Success';
+    w_ReportTemplate_AddReportTemplateFailed = 'Add Report Template Failed';
+    w_ReportTemplate_EditReportTemplateSuccess = 'Edit Report Template Success';
+    w_ReportTemplate_EditReportTemplateFailed = 'Edit Report Template Failed';
 
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
