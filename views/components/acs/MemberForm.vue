@@ -389,6 +389,14 @@ export default class MemberForm extends Vue {
   cardProfileOptions: any = {};
   certificateOptions: any = {};
   carLicenseOptions: any = {};
+  
+  createReason1Options: any = {};
+  createReason2Options: any = {};
+  createReason3Options: any = {};
+
+  applyReason1Options: any = {};
+  applyReason2Options: any = {};
+  applyReason3Options: any = {};
 
   inputTestEmail: string = "";
   newImg = new Image();
@@ -582,7 +590,14 @@ export default class MemberForm extends Vue {
       this.initSelectItemWorkGroup(),
       this.initDropDownList("Certification").then(res=>this.certificateOptions=res),
       this.initDropDownList("ProfileId","key").then(res=>this.cardProfileOptions=res),
-      this.initDropDownList("License").then(res=>this.carLicenseOptions=res)
+      this.initDropDownList("License").then(res=>this.carLicenseOptions=res),
+      
+      this.initDropDownList("CreateReason1").then(res=>this.createReason1Options=res),
+      this.initDropDownList("CreateReason2").then(res=>this.createReason2Options=res),
+      this.initDropDownList("CreateReason3").then(res=>this.createReason3Options=res),
+      this.initDropDownList("ApplyReason1").then(res=>this.applyReason1Options=res),
+      this.initDropDownList("ApplyReason2").then(res=>this.applyReason2Options=res),
+      this.initDropDownList("ApplyReason3").then(res=>this.applyReason3Options=res)
     ]);
     
   }
@@ -2605,14 +2620,8 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("ReasonForCard1")}
                  * @uiColumnGroup - row2
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                reasonForCard1?: string;
+                reasonForCard1?: ${toEnumInterface(this.createReason1Options, false)};
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard1")}
@@ -2642,14 +2651,8 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("ReasonForCard2")}
                  * @uiColumnGroup - row3
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                reasonForCard2?: string;
+                reasonForCard2?: ${toEnumInterface(this.createReason2Options, false)};
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard2")}
@@ -2679,14 +2682,8 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("ReasonForCard3")}
                  * @uiColumnGroup - row4
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                reasonForCard3?: string;
+                reasonForCard3?: ${toEnumInterface(this.createReason3Options, false)};
 
                 /**
                  * @uiLabel - ${this._("w_Member_HistoryForCard3")}
@@ -2718,14 +2715,8 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication1")}
                  * @uiColumnGroup - row5
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                reasonForApplication1?: string;
+                reasonForApplication1?: ${toEnumInterface(this.applyReason1Options, false)};;
 
                 /**
                  * @uiLabel - ${this._("w_Member_DateForApplication1")}
@@ -2749,14 +2740,8 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
                  * @uiColumnGroup - row6
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                reasonForApplication2?: string;
+                reasonForApplication2?: ${toEnumInterface(this.applyReason2Options, false)};;
 
                 /**
                  * @uiLabel - ${this._("w_Member_DateForApplication2")}
@@ -2780,14 +2765,8 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
                  * @uiColumnGroup - row7
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                reasonForApplication3?: string;
+                reasonForApplication3?: ${toEnumInterface(this.applyReason3Options, false)};;
 
                 /**
                  * @uiLabel - ${this._("w_Member_DateForApplication3")}
