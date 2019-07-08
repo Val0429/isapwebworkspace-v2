@@ -386,6 +386,7 @@ export class FilterCondition extends Vue {
             }
 
             // TODO: Date send api for Tina
+            console.log("!!!! templateItem:", this.templateItem);
 
             this.doSubmit();
         }
