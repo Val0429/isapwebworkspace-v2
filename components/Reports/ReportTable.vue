@@ -51,46 +51,68 @@
                         <td class="title"> {{reportTableTitle.title1}}</td>
                         <td v-for="(itemIn, key, index) in items.in">
                             <span>{{ itemIn.value}}</span>
-                            <span :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''">{{ " (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
+                            <span
+                                v-if="itemIn.valueRatio != 0"
+                                :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''"
+                            >{{ " (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
                         </td>
                         <td v-if="items.in">
                             <span>{{items.inTotal.value }}</span>
-                            <span :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
-
+                            <span
+                                v-if="items.inTotal.valueRatio != 0"
+                                :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''"
+                            >{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
                         </td>
-
                     </tr>
                     <tr>
                         <td class="title"> {{reportTableTitle.title2}}</td>
                         <td v-for="(itemOut, key, index) in items.out">
                             <span>{{ itemOut.value }}</span>
-                            <span :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
+                            <span
+                                v-if="itemOut.valueRatio != 0"
+                                :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''"
+                            >{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
                         </td>
                         <td v-if="items.out">
                             <span>{{ items.outTotal.value }}</span>
-                            <span :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"> {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                            <span
+                                v-if="items.outTotal.valueRatio"
+                                :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"
+                            > {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
                         </td>
                     </tr>
                     <tr v-if="reportTableTitle.title3">
                         <td class="title"> {{reportTableTitle.title3}}</td>
-                        <td v-for="(itemOut, key, index) in items.in2">
-                            <span>{{ itemOut.value }}</span>
-                            <span :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
+                        <td v-for="(itemIn, key, index) in items.in2">
+                            <span>{{ itemIn.value }}</span>
+                            <span
+                                v-if="itemIn.valueRatio != 0"
+                                :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''"
+                            >{{" (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.out">
-                            <span>{{ items.outTotal.value }}</span>
-                            <span :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"> {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                        <td v-if="items.in2">
+                            <span>{{ items.inTotal2.value }}</span>
+                            <span
+                                v-if="items.inTotal2.valueRatio != 0"
+                                :class="eSign.none != items.inTotal2.sign ? (eSign.positive == items.inTotal2.sign ?  'green':'red') : ''"
+                            > {{" (" + toPercent(items.inTotal2.valueRatio,0) + ")"}}</span>
                         </td>
                     </tr>
                     <tr v-if="reportTableTitle.title4">
                         <td class="title"> {{reportTableTitle.title4}}</td>
                         <td v-for="(itemOut, key, index) in items.out2">
                             <span>{{ itemOut.value }}</span>
-                            <span :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''">{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
+                            <span
+                                v-if="itemOut.valueRatio != 0"
+                                :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''"
+                            >{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.out">
-                            <span>{{ items.outTotal.value }}</span>
-                            <span :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"> {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                        <td v-if="items.out2">
+                            <span>{{ items.outTotal2.value }}</span>
+                            <span
+                                v-if="items.outTotal2.valueRatio != 0"
+                                :class="eSign.none != items.outTotal2.sign ? (eSign.positive == items.outTotal2.sign ?  'green':'red') : ''"
+                            > {{" (" + toPercent(items.outTotal2.valueRatio,0) + ")"}}</span>
                         </td>
                     </tr>
                 </template>
@@ -115,7 +137,10 @@
                     <td class="title"> {{reportTableTitle.inTotalTitle}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.inTotal.value}}</span>
-                        <span :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
+                        <span
+                            v-if="items.inTotal.valueRatio != 0"
+                            :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''"
+                        >{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
                     </td>
 
                 </tr>
@@ -123,7 +148,10 @@
                     <td class="title"> {{reportTableTitle.outTotalTitle}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.outTotal.value }}</span>
-                        <span :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''">{{ " (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                        <span
+                            v-if="items.outTotal.valueRatio != 0"
+                            :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"
+                        >{{ " (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
                     </td>
 
                 </tr>
@@ -189,7 +217,9 @@ export class ReportTable extends Vue {
             for (var j = 0; j < objTable.rows[i].cells.length; j++) {
                 let strings = "";
                 if (objTable.rows[i].cells[j].getAttribute("rowspan")) {
-                    rowspanRowCount = objTable.rows[i].cells[j].getAttribute("rowspan");
+                    rowspanRowCount = objTable.rows[i].cells[j].getAttribute(
+                        "rowspan"
+                    );
                     rowspans++;
                 }
                 for (

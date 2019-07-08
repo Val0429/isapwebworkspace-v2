@@ -1184,28 +1184,16 @@ export default class ReportOccupancy extends Vue {
                                             deviceGroup.objectId
                                         ) {
                                             inCount.value += summaryData.total;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.total,
-                                                summaryData.prevTotal
-                                            );
+                                            inCount.valueRatio += 0;
                                             outCount.value +=
                                                 summaryData.mediumThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.mediumThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            inCount.value +=
+                                            outCount.valueRatio += 0;
+                                            in2Count.value +=
                                                 summaryData.highThreshold;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            outCount.value +=
-                                                summaryData.highThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.highThresholdCount
-                                            );
+                                            in2Count.valueRatio += 0;
+                                            out2Count.value +=
+                                                summaryData.maxValue;
+                                            out2Count.valueRatio += 0;
                                         }
                                     } else {
                                         if (
@@ -1213,28 +1201,16 @@ export default class ReportOccupancy extends Vue {
                                             summaryData.area.objectId
                                         ) {
                                             inCount.value += summaryData.total;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.total,
-                                                summaryData.prevTotal
-                                            );
+                                            inCount.valueRatio += 0;
                                             outCount.value +=
                                                 summaryData.mediumThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.mediumThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            inCount.value +=
+                                            outCount.valueRatio += 0;
+                                            in2Count.value +=
                                                 summaryData.highThreshold;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            outCount.value +=
-                                                summaryData.highThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.highThresholdCount
-                                            );
+                                            in2Count.valueRatio += 0;
+                                            out2Count.value +=
+                                                summaryData.maxValue;
+                                            out2Count.valueRatio += 0;
                                         }
                                     }
                                 }
@@ -1244,26 +1220,14 @@ export default class ReportOccupancy extends Vue {
                                     summaryData.area.objectId
                                 ) {
                                     inCount.value += summaryData.total;
-                                    inCount.valueRatio += this.countRatio(
-                                        summaryData.total,
-                                        summaryData.prevTotal
-                                    );
+                                    inCount.valueRatio += 0;
                                     outCount.value +=
                                         summaryData.mediumThreshold;
-                                    outCount.valueRatio += this.countRatio(
-                                        summaryData.mediumThreshold,
-                                        summaryData.mediumThresholdCount
-                                    );
-                                    inCount.value += summaryData.highThreshold;
-                                    inCount.valueRatio += this.countRatio(
-                                        summaryData.highThreshold,
-                                        summaryData.mediumThresholdCount
-                                    );
-                                    outCount.value += summaryData.highThreshold;
-                                    outCount.valueRatio += this.countRatio(
-                                        summaryData.highThreshold,
-                                        summaryData.highThresholdCount
-                                    );
+                                    outCount.valueRatio += 0;
+                                    in2Count.value += summaryData.highThreshold;
+                                    in2Count.valueRatio += 0;
+                                    out2Count.value += summaryData.maxValue;
+                                    out2Count.valueRatio += 0;
                                 }
                             }
                         }
@@ -1304,58 +1268,30 @@ export default class ReportOccupancy extends Vue {
                                             tempArray[index].group.objectId ==
                                             deviceGroup.objectId
                                         ) {
-                                            inCount.value += summaryData.total;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.total,
-                                                summaryData.prevTotal
-                                            );
-                                            outCount.value +=
-                                                summaryData.mediumThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.mediumThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            inCount.value +=
-                                                summaryData.highThreshold;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            outCount.value +=
-                                                summaryData.highThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.highThresholdCount
-                                            );
+                                             inCount.value += summaryData.total;
+                                    inCount.valueRatio += 0;
+                                    outCount.value +=
+                                        summaryData.mediumThreshold;
+                                    outCount.valueRatio += 0;
+                                    in2Count.value += summaryData.highThreshold;
+                                    in2Count.valueRatio += 0;
+                                    out2Count.value += summaryData.maxValue;
+                                    out2Count.valueRatio += 0;
                                         }
                                     } else {
                                         if (
                                             tempArray[index].area.objectId ==
                                             summaryData.area.objectId
                                         ) {
-                                            inCount.value += summaryData.total;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.total,
-                                                summaryData.prevTotal
-                                            );
-                                            outCount.value +=
-                                                summaryData.mediumThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.mediumThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            inCount.value +=
-                                                summaryData.highThreshold;
-                                            inCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.mediumThresholdCount
-                                            );
-                                            outCount.value +=
-                                                summaryData.highThreshold;
-                                            outCount.valueRatio += this.countRatio(
-                                                summaryData.highThreshold,
-                                                summaryData.highThresholdCount
-                                            );
+                                              inCount.value += summaryData.total;
+                                    inCount.valueRatio += 0;
+                                    outCount.value +=
+                                        summaryData.mediumThreshold;
+                                    outCount.valueRatio += 0;
+                                    in2Count.value += summaryData.highThreshold;
+                                    in2Count.valueRatio += 0;
+                                    out2Count.value += summaryData.maxValue;
+                                    out2Count.valueRatio += 0;
                                         }
                                     }
                                 }
@@ -1364,27 +1300,15 @@ export default class ReportOccupancy extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    inCount.value += summaryData.total;
-                                    inCount.valueRatio += this.countRatio(
-                                        summaryData.total,
-                                        summaryData.prevTotal
-                                    );
+                                      inCount.value += summaryData.total;
+                                    inCount.valueRatio += 0;
                                     outCount.value +=
                                         summaryData.mediumThreshold;
-                                    outCount.valueRatio += this.countRatio(
-                                        summaryData.mediumThreshold,
-                                        summaryData.mediumThresholdCount
-                                    );
-                                    inCount.value += summaryData.highThreshold;
-                                    inCount.valueRatio += this.countRatio(
-                                        summaryData.highThreshold,
-                                        summaryData.mediumThresholdCount
-                                    );
-                                    outCount.value += summaryData.highThreshold;
-                                    outCount.valueRatio += this.countRatio(
-                                        summaryData.highThreshold,
-                                        summaryData.highThresholdCount
-                                    );
+                                    outCount.valueRatio += 0;
+                                    in2Count.value += summaryData.highThreshold;
+                                    in2Count.valueRatio += 0;
+                                    out2Count.value += summaryData.maxValue;
+                                    out2Count.valueRatio += 0;
                                 }
                             }
                         }
