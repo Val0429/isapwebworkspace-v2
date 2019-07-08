@@ -18,11 +18,11 @@
                     <!-- Ben -->
                     <iv-toolbox-export-excel
                         size="lg"
-                        @click="getExcelFile(eFileType.xlsx)"
+                        @click="exportExcel(eFileType.xlsx)"
                     />
                     <iv-toolbox-export-csv
                         size="lg"
-                        @click="getExcelFile(eFileType.csv)"
+                        @click="exportExcel(eFileType.csv)"
                     />
 
                     <!-- Morris -->
@@ -1763,7 +1763,7 @@ export default class ReportDemographic extends Vue {
 
     ////////////////////////////////////// Export //////////////////////////////////////
 
-    getExcelFile(fType) {
+    exportExcel(fType) {
         let reportTable: any = this.$refs.reportTable;
         let tableData = reportTable.tableToArray();
         //th

@@ -19,11 +19,11 @@ import {EAreaMode} from "../../components/Reports";
                     <!-- Ben -->
                     <iv-toolbox-export-excel
                         size="lg"
-                        @click="getExcelFile(eFileType.xlsx)"
+                        @click="exportExcel(eFileType.xlsx)"
                     />
                     <iv-toolbox-export-csv
                         size="lg"
-                        @click="getExcelFile(eFileType.csv)"
+                        @click="exportExcel(eFileType.csv)"
                     />
 
                     <!-- Morris -->
@@ -1861,6 +1861,29 @@ export default class ReportTraffic extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     ////////////////////////////////////// Export //////////////////////////////////////
+
+    exportExcel(fType) {
+        let reportTable: any = this.$refs.reportTable;
+        let tableData = reportTable.tableToArray();
+        //th
+        let th = [];
+        for (let title of tableData[0]) {
+            th.push(title);
+        }
+
+        //data
+        let data = [];
+        for (let bodys of tableData) {
+            if (tableData.indexOf(bodys) == 0) continue;
+            data.push(bodys);
+        }
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_VideoSources_Demographic"),
+            fType,
+            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
 
     exportPDF() {
         let title = "";
