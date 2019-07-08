@@ -230,8 +230,11 @@ export class ReportTable extends Vue {
                     if (objTable.rows[i].cells[j].childNodes[k].length) {
                         strings += objTable.rows[i].cells[j].innerHTML;
                     } else {
-                        strings +=
-                            objTable.rows[i].cells[j].childNodes[k].innerHTML;
+                        if (objTable.rows[i].cells[j].childNodes[k].innerHTML) {
+                            strings +=
+                                objTable.rows[i].cells[j].childNodes[k]
+                                    .innerHTML;
+                        }
                     }
                 }
                 array.push(strings.trim());
