@@ -1719,7 +1719,7 @@ export default class ReportDemographic extends Vue {
         console.log("type - ", this.inputFormData.type);
     }
 
-    receiveIsIncludedEmployee(isIncludedEmployee) {
+    async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
         console.log(
             "isIncludedEmployee - ",
@@ -1729,6 +1729,18 @@ export default class ReportDemographic extends Vue {
         // 單一site
         if (this.filterData.firstSiteId) {
             this.sortOutChartData(this.responseData.summaryDatas);
+
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
+
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
         }
     }
 
