@@ -21,7 +21,10 @@ import {EAreaMode} from "../../components/Reports";
                     <iv-toolbox-export-csv size="lg" />
 
                     <!-- Morris -->
-                    <iv-toolbox-export-pdf size="lg" @click="exportPDF" />
+                    <iv-toolbox-export-pdf
+                        size="lg"
+                        @click="exportPDF"
+                    />
 
                     <!-- Tina -->
                     <iv-toolbox-send-mail
@@ -129,7 +132,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
 // Morris
-import HighChartsService from "@/components/Reports/models/HighChartsService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import {
     EAreaMode,
@@ -148,8 +151,8 @@ import {
 import ReportService from "@/components/Reports/models/ReportService";
 
 ///////////////////////// export /////////////////////////
-import html2Canvas from 'html2canvas'
-import JsPDF from 'jspdf'
+import html2Canvas from "html2canvas";
+import JsPDF from "jspdf";
 
 enum EPageStep {
     none = "none"
@@ -294,7 +297,7 @@ export default class ReportTraffic extends Vue {
         this.siteItem = [];
         this.pData = [];
 
-        let chartMode = HighChartsService.chartMode(
+        let chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
@@ -343,7 +346,7 @@ export default class ReportTraffic extends Vue {
     }
 
     initReportTable() {
-        let chartMode = HighChartsService.chartMode(
+        let chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
@@ -1763,11 +1766,50 @@ export default class ReportTraffic extends Vue {
 
     ////////////////////////////////////// Export //////////////////////////////////////
 
-    exportPDF () {
-        
+    exportPDF() {
+        let title = "";
+        title += this._("w_Navigation_Report_Traffic");
+        title += " ";
+        title += Datetime.DateTime2String(
+            this.startDate,
+            HighchartsService.datetimeFormat.date
+        );
+
+        html2Canvas(document.querySelector(".container-fluid"), {
+            allowTaint: true,
+            useCORS: true
+        }).then(function(canvas) {
+            let contentWidth = canvas.width;
+            let contentHeight = canvas.height;
+            let pageHeight = (contentWidth / 592.28) * 841.89;
+            let leftHeight = contentHeight;
+            let position = 0;
+            const imgWidth = 595.28;
+            let imgHeight = (592.28 / contentWidth) * contentHeight;
+            let pageData = canvas.toDataURL("image/jpeg", 1.0);
+            let PDF = new JsPDF("", "pt", "a4");
+            if (leftHeight < pageHeight) {
+                PDF.addImage(pageData, "JPEG", 0, 10, imgWidth, imgHeight);
+            } else {
+                while (leftHeight > 0) {
+                    PDF.addImage(
+                        pageData,
+                        "JPEG",
+                        0,
+                        position,
+                        imgWidth,
+                        imgHeight
+                    );
+                    leftHeight -= pageHeight;
+                    position -= 841.89;
+                    if (leftHeight > 0) {
+                        PDF.addPage();
+                    }
+                }
+            }
+            PDF.save(title + ".pdf");
+        });
     }
-
-
 }
 </script>
 

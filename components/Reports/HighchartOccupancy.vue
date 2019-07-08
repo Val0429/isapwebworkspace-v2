@@ -47,7 +47,7 @@ import {
     ISiteOfficeHourItem
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
-import HighChartsService from "./models/HighChartsService";
+import HighchartsService from "./models/HighchartsService";
 
 @Component({
     components: {}
@@ -123,7 +123,7 @@ export class HighchartsOccupancy extends Vue {
 
     start() {
         this.errorMessage = "";
-        this.chartMode = HighChartsService.chartMode(
+        this.chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
@@ -190,7 +190,7 @@ export class HighchartsOccupancy extends Vue {
         }
 
         let weekDay = this.startDate.getDay();
-        let officeHour: ISiteOfficeHourItem = HighChartsService.siteOfficeHour(
+        let officeHour: ISiteOfficeHourItem = HighchartsService.siteOfficeHour(
             weekDay,
             this.sites[0].officeHour
         );
@@ -254,7 +254,7 @@ export class HighchartsOccupancy extends Vue {
             }
 
             tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
+                HighchartsService.categorieStringWithJSON(
                     categorie,
                     tempCategorieData
                 )
@@ -371,15 +371,15 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     break;
 
@@ -395,15 +395,15 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     break;
 
@@ -419,15 +419,15 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     break;
 
@@ -443,15 +443,15 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     break;
 
@@ -470,15 +470,15 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     break;
             }
@@ -487,7 +487,7 @@ export class HighchartsOccupancy extends Vue {
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
-                HighChartsService.datetimeFormat.time
+                HighchartsService.datetimeFormat.time
             );
             tempChartData.quarterNumber = Datetime.QuarterNumber(
                 tempChartData.dateStart
@@ -538,7 +538,7 @@ export class HighchartsOccupancy extends Vue {
             }
 
             tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
+                HighchartsService.categorieStringWithJSON(
                     categorie,
                     tempCategorieData
                 )
@@ -611,14 +611,14 @@ export class HighchartsOccupancy extends Vue {
         for (let i in this.sites) {
             let site = this.sites[i];
             let tempDate = new Date();
-            let tempWeatherIcon = HighChartsService.weatherIcon(EWeather.none);
+            let tempWeatherIcon = HighchartsService.weatherIcon(EWeather.none);
             tempSeries[0].data.push(0);
 
             for (let val of tempValues) {
                 let tempValue = this.anysislyChartValue(val);
                 if (tempValue.siteObjectId == site.objectId) {
                     tempDate = tempValue.date;
-                    tempWeatherIcon = HighChartsService.weatherIcon(
+                    tempWeatherIcon = HighchartsService.weatherIcon(
                         tempValue.weather
                     );
                     tempSeries[0].data[i] += val.occupancy;
@@ -634,7 +634,7 @@ export class HighchartsOccupancy extends Vue {
                 occupancy: tempSeries[0].data[i]
             };
             tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
+                HighchartsService.categorieStringWithJSON(
                     `${site.name} ${tempWeatherIcon}`,
                     categorieItem
                 )
@@ -751,19 +751,19 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     break;
 
@@ -779,17 +779,17 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
-                    tempResultItem.categorie = HighChartsService.categoriesQuarter(
+                    tempResultItem.categorie = HighchartsService.categoriesQuarter(
                         tempChartData.date
                     );
                     break;
@@ -806,19 +806,19 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     break;
 
@@ -834,21 +834,21 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
-                    tempResultItem.categorie = HighChartsService.categoriesWeek(
+                    tempResultItem.categorie = HighchartsService.categoriesWeek(
                         tempChartData.date
                     );
                     break;
@@ -868,19 +868,19 @@ export class HighchartsOccupancy extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     break;
             }
@@ -890,7 +890,7 @@ export class HighchartsOccupancy extends Vue {
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
-                HighChartsService.datetimeFormat.time
+                HighchartsService.datetimeFormat.time
             );
             tempChartData.quarterNumber = Datetime.QuarterNumber(
                 tempChartData.dateStart
@@ -918,7 +918,7 @@ export class HighchartsOccupancy extends Vue {
                         tempSiteValue.occupancy += value.occupancy;
                         tempSiteValue.temperature = value.temperature;
                         tempSiteValue.weather = value.weather;
-                        tempSiteValue.weatherIcon = HighChartsService.weatherIcon(
+                        tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
                             value.weather
                         );
                     }
@@ -947,7 +947,7 @@ export class HighchartsOccupancy extends Vue {
                 }
             }
             tempSeries.push({
-                name: HighChartsService.categorieStringNotJSON(
+                name: HighchartsService.categorieStringNotJSON(
                     site.name,
                     site.objectId
                 ),
@@ -961,7 +961,7 @@ export class HighchartsOccupancy extends Vue {
                 case ETimeMode.year:
                 case ETimeMode.month:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -969,7 +969,7 @@ export class HighchartsOccupancy extends Vue {
                     break;
                 case ETimeMode.quarter:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -977,7 +977,7 @@ export class HighchartsOccupancy extends Vue {
                     break;
                 case ETimeMode.week:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -988,7 +988,7 @@ export class HighchartsOccupancy extends Vue {
                 case ETimeMode.none:
                 default:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -1108,26 +1108,26 @@ export class HighchartsOccupancy extends Vue {
             areaMode: this.areaMode,
             i18n: this.i18nItem(),
             temperature: 0,
-            weatherIcon: HighChartsService.weatherIcon(EWeather.none),
+            weatherIcon: HighchartsService.weatherIcon(EWeather.none),
             weekNumber: Datetime.WeekNumber(new Date()),
             quarterNumber: Datetime.QuarterNumber(new Date()),
             dateStart: new Date(),
             dateEnd: new Date(),
             timeString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.time
+                HighchartsService.datetimeFormat.time
             ),
             dateString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             ),
             dateStartString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             ),
             dateEndString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             )
         };
         return value;
@@ -1155,7 +1155,7 @@ export class HighchartsOccupancy extends Vue {
         value.areaMode = this.areaMode;
         value.i18n = this.i18nItem();
         value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
-        value.weatherIcon = HighChartsService.weatherIcon(value.weather);
+        value.weatherIcon = HighchartsService.weatherIcon(value.weather);
         value.weekNumber = Datetime.WeekNumber(value.date);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
         switch (this.timeMode) {
@@ -1185,19 +1185,19 @@ export class HighchartsOccupancy extends Vue {
         }
         value.timeString = Datetime.DateTime2String(
             value.date,
-            HighChartsService.datetimeFormat.time
+            HighchartsService.datetimeFormat.time
         );
         value.dateString = Datetime.DateTime2String(
             value.date,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         value.dateStartString = Datetime.DateTime2String(
             value.dateStart,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         value.dateEndString = Datetime.DateTime2String(
             value.dateEnd,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         return value;
     }
