@@ -83,7 +83,6 @@
 
                 <template #5-title>{{ _('w_BOSalesRecords_Step5') }}</template>
                 <template #5>
-                    TODO: Waitting API
                 </template>
 
             </iv-step-progress>
@@ -561,7 +560,6 @@ export default class SalesRecords extends Vue {
     }
 
     async sendRecordFile() {
-        // TODO: waitting API
         this.pageTo5();
     }
 
