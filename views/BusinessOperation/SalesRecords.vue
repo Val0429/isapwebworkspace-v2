@@ -496,7 +496,7 @@ export default class SalesRecords extends Vue {
     }
 
     async sendRecordFile() {
-        // TODO: waitting API
+        
         let param: {
             datas: IBusinessOperationSalesRecord[];
         } = {

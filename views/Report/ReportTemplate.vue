@@ -291,7 +291,7 @@ import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
 
 import { EWeeks, EVideoSource } from "@/components/Reports";
-import { ITemplate } from "@/components/Reports";
+import { ITemplateItem } from "@/components/Reports";
 
 enum EPageStep {
     list = "list",

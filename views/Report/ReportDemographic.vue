@@ -6,6 +6,7 @@
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
@@ -25,7 +26,6 @@
                         @click="exportExcel(eFileType.csv)"
                     />
 
-                    <!-- Morris -->
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
@@ -73,7 +73,6 @@
                 >
                 </anlysis-dashboard>
 
-                <!-- Morris -->
                 <highcharts-demographic
                     ref="test"
                     :startDate="startDate"
@@ -84,7 +83,6 @@
                     :value="chartDatas"
                 >
                 </highcharts-demographic>
-                <!-- Morris -->
 
                 <!-- Ben -->
                 <report-table
@@ -128,9 +126,6 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
 import ReportService from "@/components/Reports/models/ReportService";
-
-// Morris
-
 import HighchartsDemographic from "@/components/Reports/HighchartsDemographic.vue";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
@@ -149,6 +144,7 @@ import {
     IPeckTimeRange,
     ISite,
     ISiteItems,
+    ITemplateItem,
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
@@ -178,15 +174,14 @@ export default class ReportDemographic extends Vue {
     eFileType = EFileType;
 
     pageStep: EPageStep = EPageStep.none;
+    templateItem: ITemplateItem | null = null;
 
-    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     chartDatas: IChartDemographicData[] = [];
-    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -264,12 +259,11 @@ export default class ReportDemographic extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
-        // this.initChartDeveloper();
+        this.initDatas();
+        this.initTemplate();
     }
 
-    mounted() {
-        this.initDatas();
-    }
+    mounted() {}
 
     async initDatas() {
         // Tina
@@ -280,7 +274,13 @@ export default class ReportDemographic extends Vue {
         await this.initSelectItemTree();
     }
 
-    // Morris //
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+        }
+    }
+
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.single;
@@ -377,7 +377,6 @@ export default class ReportDemographic extends Vue {
             }
         }
     }
-    // Morris //
 
     // Ben //
     initDashboardData() {

@@ -131,7 +131,6 @@ export default class MyProfile extends Vue {
     created() {}
 
     mounted() {
-        // TODO: wait Val how to get data from session
         this.initUserDetail();
     }
 

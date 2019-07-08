@@ -2,14 +2,15 @@
     <div class="animated fadeIn">
 
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
 
@@ -26,13 +27,11 @@
                         @click="exportExcel(eFileType.csv)"
                     />
 
-                    <!-- Morris -->
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
                     />
 
-                    <!-- Tina -->
                     <iv-toolbox-send-mail
                         size="lg"
                         @click="modalShow = !modalShow"
@@ -40,7 +39,7 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter
+                <analysis-filter
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -60,7 +59,7 @@
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter>
+                </analysis-filter>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -74,7 +73,6 @@
                 >
                 </anlysis-dashboard>
 
-                <!-- Morris -->
                 <highcharts-repeat-visitor
                     :startDate="startDate"
                     :endDate="endDate"
@@ -84,7 +82,6 @@
                     :value="chartDatas"
                 >
                 </highcharts-repeat-visitor>
-                <!-- Morris -->
 
                 <!-- Ben -->
                 <vistor-details-table ref="reportTable">
@@ -138,6 +135,7 @@ import {
     IPeckTimeRange,
     ISiteAreas,
     ISiteItems,
+    ITemplateItem,
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
@@ -163,16 +161,15 @@ enum EPageStep {
 export default class ReportRepeatVisitor extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+    templateItem: ITemplateItem | null = null;
     eFileType = EFileType;
 
-    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISiteAreas[] = [];
     chartDatas: IChartRepeatVisitorData[] = [];
-    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -253,12 +250,14 @@ export default class ReportRepeatVisitor extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
+        this.initDatas();
+        // this.initTemplate();
+
+        // TODO: Waitting API
         this.initChartDeveloper();
     }
 
-    mounted() {
-        this.initDatas();
-    }
+    mounted() {}
 
     async initDatas() {
         // Tina
@@ -269,7 +268,13 @@ export default class ReportRepeatVisitor extends Vue {
         await this.initSelectItemTree();
     }
 
-    // Morris //
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+        }
+    }
+
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
@@ -306,18 +311,6 @@ export default class ReportRepeatVisitor extends Vue {
                         objectId: "area2" + tempJ.toString(),
                         name: "Area 2" + tempJ.toString()
                     }
-                    // {
-                    //     objectId: "area3" + tempJ.toString(),
-                    //     name: "Area 3" + tempJ.toString()
-                    // },
-                    // {
-                    //     objectId: "area4" + tempJ.toString(),
-                    //     name: "Area 4" + tempJ.toString()
-                    // },
-                    // {
-                    //     objectId: "area5" + tempJ.toString(),
-                    //     name: "Area 5" + tempJ.toString()
-                    // }
                 ]
             });
 
@@ -390,7 +383,6 @@ export default class ReportRepeatVisitor extends Vue {
             }
         }
     }
-    // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 

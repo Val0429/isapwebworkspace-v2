@@ -2,28 +2,28 @@
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
-    w_Name = '名稱';
-    w_Enabled = '有效';
-    w_Value = '值';
-    w_Startdate = '起始日期';
-    w_Enddate = '結束日期';
-    w_Password = '密碼';
-    w_Selection = '選擇';
-    w_Multi = '多選';
+    w_Name = 'Name';
+    w_Enabled = 'Enabled';
+    w_Value = 'Value';
+    w_Startdate = 'Start Date';
+    w_Enddate = 'End Date';
+    w_Password = 'Password';
+    w_Selection = 'Selection';
+    w_Multi = 'Multi';
 
-    w_Username = '使用者名稱';
-    w_Roles = '權限';
+    w_Username = 'User name';
+    w_Roles = 'Role';
     w_Email = 'Email';
-    w_CreatedAt = '建立日期';
-    w_UpdatedAt = '修改日期';
-    w_Actions = '動作';
-    w_ConfirmPassword = '重複輸入密碼';
+    w_CreatedAt = 'Created date';
+    w_UpdatedAt = 'Updated date';
+    w_Actions = 'Actions';
+    w_ConfirmPassword = 'Confirm password';
 
-    w_User = '使用者';
-    w_UserAdd = '新增使用者';
-    w_UserEdit = '修改使用者';
+    w_User = 'User';
+    w_UserAdd = 'Add user';
+    w_UserEdit = 'Edit user';
 
-    m_PasswordShouldBeSame = '兩個密碼必須相同';
+    m_PasswordShouldBeSame = 'Password should be same';
 
     /////////////////////////////////////////////
 
@@ -66,9 +66,9 @@ export default class LangObject implements ILang {
     w_Snapshot = 'Snapshot';
     w_Gender = 'Gender';
     w_Age = 'Age Range';
-    w_Options = '可用選項';
-    w_Chooses = '已選擇';
-    w_AllChoose = '全選';
+    w_Options = 'Options';
+    w_Chooses = 'Choose';
+    w_AllChoose = 'All';
     w_SendMail = 'Send Mail';
     w_ExportPDF = 'Export PDF';
     w_ExportExcel = 'Export Excel';
@@ -97,6 +97,7 @@ export default class LangObject implements ILang {
     w_ManagedSites = 'Managed sites';
     w_Description = 'Description';
     w_Sites = 'Site(s)';
+    w_Tag = 'Tag(s)';
     w_Site = 'Site';
     w_Group = 'Group';
     w_Item = 'Item';
@@ -113,7 +114,6 @@ export default class LangObject implements ILang {
     w_FeMale = 'FeMale';
     w_MaleTotal = 'MaleTotal';
     w_FeMaleTotal = 'FeMale Total';
-    w_Tag = 'Tag(s)';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';
     w_CurrentPassword = 'Current Password';
@@ -753,6 +753,7 @@ export default class LangObject implements ILang {
     w_VSHumanDetection_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
     w_VSHumanDetection_PageToHDServerAlter = 'Data will not be stored, Are you sure to HD Server Page?';
     w_VSHumanDetection_DeleteConfirm = 'Are you sure to delete selected Device(s)?';
+
     // DwellTime
     w_VSDwellTime_List = 'Dwell Time Device List';
     w_VSDwellTime_Add = 'Add Dwell Time Device';

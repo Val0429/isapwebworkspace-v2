@@ -34,7 +34,7 @@
 <style lang="scss" scoped>
 $animation-duration: 0.2s;
 
-* /deep/ .ps__scrollbar-y-rail {
+* .ps__scrollbar-y-rail {
     width: 10px !important;
 
     .ps__scrollbar-y {
