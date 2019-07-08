@@ -343,20 +343,40 @@ export default class ReportTemplate extends Vue {
             { value: EAddPeriodSelect.designation, text: this._('w_Designation') },
         ];
 
-        this.designationPeriodSelectItem = {
-            today: this._('w_Today'),
-            yesterday: this._('w_Yesterday'),
-            last7days: this._('w_last7days'),
-            thisWeek: this._('w_thisWeek'),
-            lastWeek: this._('w_lastWeek'),
-            thisMonth: this._('w_thisMonth'),
-            lastMonth: this._('w_lastMonth'),
-            q1: this._('w_q1'),
-            q2: this._('w_q2'),
-            q3: this._('w_q3'),
-            q4: this._('w_q4'),
-            thisYear: this._('w_thisYear'),
-        };
+        // this.designationPeriodSelectItem = {
+        //     today: this._('w_Today'),
+        //     yesterday: this._('w_Yesterday'),
+        //     last7days: this._('w_last7days'),
+        //     thisWeek: this._('w_thisWeek'),
+        //     lastWeek: this._('w_lastWeek'),
+        //     thisMonth: this._('w_thisMonth'),
+        //     lastMonth: this._('w_lastMonth'),
+        //     q1: this._('w_q1'),
+        //     q2: this._('w_q2'),
+        //     q3: this._('w_q3'),
+        //     q4: this._('w_q4'),
+        //     thisYear: this._('w_thisYear'),
+        //
+        // };
+
+        this.designationPeriodSelectItem = [
+            { id: EDesignationPeriod.today, text: this._('w_Today')},
+            // today: this._('w_Today'),
+            // yesterday: this._('w_Yesterday'),
+            // last7days: this._('w_last7days'),
+            // thisWeek: this._('w_thisWeek'),
+            // lastWeek: this._('w_lastWeek'),
+            // thisMonth: this._('w_thisMonth'),
+            // lastMonth: this._('w_lastMonth'),
+            // q1: this._('w_q1'),
+            // q2: this._('w_q2'),
+            // q3: this._('w_q3'),
+            // q4: this._('w_q4'),
+            // thisYear: this._('w_thisYear'),
+
+        ];
+
+        // EDesignationPeriod
 
         this.metricSelectItem = {
             peopleCounting: this._('w_Navigation_VideoSources_PeopleCounting'),
