@@ -388,6 +388,20 @@ export class FilterCondition extends Vue {
             // TODO: Date send api for Tina
             console.log("!!!! templateItem:", this.templateItem);
 
+            // Select Report Period
+            if (this.templateItem.type && !this.templateItem.startDate && !this.templateItem.endDate) {
+                this.selectPeriodAddWay = EAddPeriodSelect.designation;
+                this.inputFormData.designationPeriod = this.templateItem.type;
+            }
+
+            if (!this.templateItem.type && this.templateItem.startDate && this.templateItem.endDate) {
+
+                this.selectPeriodAddWay = EAddPeriodSelect.period;
+                this.inputFormData.startDate = this.templateItem.startDate;
+                this.inputFormData.endDate = this.templateItem.endDate;
+
+            }
+
             this.doSubmit();
         }
     }
