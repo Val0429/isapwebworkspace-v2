@@ -748,7 +748,7 @@ export class FilterCondition extends Vue {
 }
 
 export default FilterCondition;
-Vue.component("filter_condition", FilterCondition);
+Vue.component("filter-condition", FilterCondition);
 </script>
 
 <style lang="scss" scoped>

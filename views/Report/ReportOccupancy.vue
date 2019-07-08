@@ -2,14 +2,14 @@
     <div class="animated fadeIn">
 
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
 
@@ -34,7 +34,7 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_demo
+                <analysis-filter-demo
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -54,7 +54,7 @@
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_demo>
+                </analysis-filter-demo>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -1509,7 +1509,7 @@ export default class ReportOccupancy extends Vue {
                         average = summary.total / summary.count;
                         tempChartData.occupancy = average;
 
-                    
+
                         if (!haveSummary) {
                             // 取得weather、temperatureMin、temperatureMax
                             for (const weather of this.responseData.weathers) {

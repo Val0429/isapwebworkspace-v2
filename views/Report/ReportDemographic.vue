@@ -2,14 +2,14 @@
     <div class="animated fadeIn">
 
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
             <iv-card>
@@ -33,7 +33,7 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter
+                <analysis-filter
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -53,7 +53,7 @@
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter>
+                </analysis-filter>
 
                 <!-- Ben -->
                 <anlysis-dashboard

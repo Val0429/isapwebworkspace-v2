@@ -2,14 +2,14 @@ import {EAreaMode} from "../../components/Reports";
 <template>
     <div>
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
 
@@ -34,7 +34,7 @@ import {EAreaMode} from "../../components/Reports";
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_in_out
+                <analysis-filter-in-out
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -57,7 +57,7 @@ import {EAreaMode} from "../../components/Reports";
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_in_out>
+                </analysis-filter-in-out>
 
                 <!-- Ben -->
                 <anlysis-dashboard
