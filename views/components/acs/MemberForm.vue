@@ -386,8 +386,9 @@ export default class MemberForm extends Vue {
     contract: ITemplateCard.contract
   };
   workGroupIdSelectItem: any = {};
-  cardCertificateItem: any = {};
-  cardTypeItem: any = {};
+  cardProfileOptions: any = {};
+  certificateOptions: any = {};
+  carLicenseOptions: any = {};
 
   inputTestEmail: string = "";
   newImg = new Image();
@@ -576,10 +577,14 @@ export default class MemberForm extends Vue {
 
   created() {}
 
-  mounted() {
-    this.initSelectItemWorkGroup();
-    this.initSelectItemCardCertificate();
-    this.initSelectItemCardType();
+  async mounted() {
+    await Promise.all([
+      this.initSelectItemWorkGroup(),
+      this.initDropDownList("Certification").then(res=>this.certificateOptions=res),
+      this.initDropDownList("ProfileId","key").then(res=>this.cardProfileOptions=res),
+      this.initDropDownList("License").then(res=>this.carLicenseOptions=res)
+    ]);
+    
   }
 
   async initSelectItemWorkGroup() {
@@ -606,48 +611,17 @@ export default class MemberForm extends Vue {
         return false;
       });
   }
+  async initDropDownList(type:string,key:string="name", value:string="name") {     
+      let resp:any = await this.$server .R("/acs/dropdownlist", { type });
+      let result = {};
+       for(let res of resp.results){
+         result[res[key]]=res[value];
+       }
+       return result;
+    }
+    
 
-  async initSelectItemCardCertificate() {
-    this.cardCertificateItem = {};
-    await this.$server
-      .R("/acs/dropdownlist", { type: "ProfileId" })
-      .then((response: any) => {
-        if (response != undefined) {
-          for (const returnValue of response.results) {
-            // 自定義 sitesSelectItem 的 key 的方式
-            this.cardCertificateItem[returnValue.profileid] = returnValue.name;
-          }
-        }
-      })
-      .catch((e: any) => {
-        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-          return ResponseFilter.base(this, e);
-        }
-        console.log(e);
-        return false;
-      });
-  }
-
-  async initSelectItemCardType() {
-    this.cardTypeItem = {};
-    await this.$server
-      .R("/acs/dropdownlist", { type: "Certification" })
-      .then((response: any) => {
-        if (response != undefined) {
-          for (const returnValue of response.results) {
-            // 自定義 sitesSelectItem 的 key 的方式
-            this.cardTypeItem[returnValue.name] = returnValue.name;
-          }
-        }
-      })
-      .catch((e: any) => {
-        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-          return ResponseFilter.base(this, e);
-        }
-        console.log(e);
-        return false;
-      });
-  }
+  
 
   selectedItem(data) {
     this.isSelected = data;
@@ -2139,7 +2113,7 @@ export default class MemberForm extends Vue {
                      : "true"
                  }
                  */
-                cardType?: ${toEnumInterface(this.cardTypeItem as any, false)};
+                cardType?: ${toEnumInterface(this.certificateOptions as any, false)};
 
 
 
@@ -2215,7 +2189,7 @@ export default class MemberForm extends Vue {
                  }
                  */
                 cardCertificate?: ${toEnumInterface(
-                  this.cardCertificateItem as any,
+                  this.cardProfileOptions as any,
                   false
                 )};
 
@@ -2501,14 +2475,8 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_CarLicenseCategory")}
                  * @uiColumnGroup - row1
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                carLicenseCategory?: string;
+                carLicenseCategory?: ${toEnumInterface(this.carLicenseOptions, false)};
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardLicense")}
@@ -3110,7 +3078,7 @@ export default class MemberForm extends Vue {
              * @uiColumnGroup - row2
              * @uiLabel - ${this._("w_Member_CardType1")}
              */
-            CardType?: string;
+            CardType?: ${toEnumInterface(this.certificateOptions as any, false)};
             /**
              * @uiColumnGroup - row2
              * @uiLabel - ${this._("w_Member_ChineseName1")}
