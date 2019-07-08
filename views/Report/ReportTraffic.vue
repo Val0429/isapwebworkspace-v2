@@ -21,7 +21,7 @@ import {EAreaMode} from "../../components/Reports";
                     <iv-toolbox-export-csv size="lg" />
 
                     <!-- Morris -->
-                    <iv-toolbox-export-pdf size="lg" />
+                    <iv-toolbox-export-pdf size="lg" @click="exportPDF" />
 
                     <!-- Tina -->
                     <iv-toolbox-send-mail
@@ -146,6 +146,10 @@ import {
     ReportTableData
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
+
+///////////////////////// export /////////////////////////
+import html2Canvas from 'html2canvas'
+import JsPDF from 'jspdf'
 
 enum EPageStep {
     none = "none"
@@ -1756,6 +1760,14 @@ export default class ReportTraffic extends Vue {
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
+
+    ////////////////////////////////////// Export //////////////////////////////////////
+
+    exportPDF () {
+        
+    }
+
+
 }
 </script>
 
