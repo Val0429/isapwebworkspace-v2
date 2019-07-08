@@ -666,8 +666,8 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
+            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
@@ -1147,8 +1147,8 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
+            let tempStartTimestamp = tempChartData.dateStart.getTime()-1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() +1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,

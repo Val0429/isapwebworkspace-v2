@@ -561,8 +561,8 @@ export class HighchartsTraffic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
+            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
@@ -578,6 +578,7 @@ export class HighchartsTraffic extends Vue {
             for (let val of tempValues) {
                 let value: IChartTrafficData = this.anysislyChartValue(val);
                 let valTimestamp = value.date.getTime();
+
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
@@ -1099,8 +1100,8 @@ export class HighchartsTraffic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
+            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
