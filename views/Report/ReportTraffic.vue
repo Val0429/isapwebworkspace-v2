@@ -1354,6 +1354,13 @@ export default class ReportTraffic extends Vue {
                 weather: EWeather.none
             };
 
+            let inNotIncludeEmployee: number = 0;
+            let outNotIncludeEmployee: number = 0;
+            let inTotal: number = 0;
+            let outTotal: number = 0;
+            let inEmployee: number = 0;
+            let outEmployee: number = 0;
+
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
@@ -1372,10 +1379,27 @@ export default class ReportTraffic extends Vue {
             }
 
             if (this.inputFormData.inOrOut === EType.in) {
-                tempChartData.traffic += summary.in;
+                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                    inTotal += summary.in;
+                    inEmployee += summary.inEmployee;
+                    inNotIncludeEmployee = inTotal- inEmployee;
+                    tempChartData.traffic = inNotIncludeEmployee;
+                } else if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.yes) {
+                    inTotal += summary.in;
+                    tempChartData.traffic = inTotal;
+                }
             } else if (this.inputFormData.inOrOut === EType.out) {
-                tempChartData.traffic += summary.out;
+                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                    outTotal += summary.out;
+                    outEmployee += summary.inEmployee;
+                    outNotIncludeEmployee = outTotal- outEmployee;
+                    tempChartData.traffic = outNotIncludeEmployee;
+                } else if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.yes) {
+                    outTotal += summary.out;
+                    tempChartData.traffic = outTotal;
+                }
             }
+
 
             if (!haveSummary) {
                 // 取得revenue、transaction資料
@@ -1741,22 +1765,51 @@ export default class ReportTraffic extends Vue {
         console.log(" chartDatas - ", this.chartDatas);
     }
 
-    receiveInOrOut(inOrOut) {
+    async receiveInOrOut(inOrOut) {
         this.inputFormData.inOrOut = inOrOut;
         console.log("inOrOut - ", this.inputFormData.inOrOut);
 
         // 單一site
         if (this.filterData.firstSiteId) {
             this.sortOutChartData(this.responseData.summaryDatas);
+
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
+
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
         }
     }
 
-    receiveIsIncludedEmployee(isIncludedEmployee) {
+    async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
         console.log(
             "isIncludedEmployee - ",
             this.inputFormData.isIncludedEmployee
         );
+
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
+
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
+        }
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
@@ -1764,7 +1817,7 @@ export default class ReportTraffic extends Vue {
     ////////////////////////////////////// Export //////////////////////////////////////
 
     exportPDF () {
-        
+
     }
 
 

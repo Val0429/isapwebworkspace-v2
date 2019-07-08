@@ -31,9 +31,17 @@
                 ref="tagTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ path: '/tag' }"
+                :server="{ path: '/report/template' }"
                 @selected="selectedItem($event)"
             >
+
+                <template #startDate="{$attrs}">
+                    {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                </template>
+
+                <template #endDate="{$attrs}">
+                    {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                </template>
 
                 <template #Actions="{$attrs, $listeners}">
                     <iv-toolbox-more :disabled="isSelected.length !== 1">
@@ -46,6 +54,14 @@
 
                 <template #sites="{$attrs}">
                     {{ showFirst($attrs.value) }}
+                </template>
+
+                <template #goToReport>
+                    <div class="mt-2 ml-3 mb-3">
+                        <b-button>
+                            {{ _('w_ReportTemplate_goToReport') }}
+                        </b-button>
+                    </div>
                 </template>
 
             </iv-table>
@@ -93,6 +109,14 @@
                         ></b-form-radio-group>
                     </b-col>
                 </template>
+
+                <iv-form-selection
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    :multiple="false"
+                    :options="designationPeriodSelectItem"
+                >
+                </iv-form-selection>
 
                 <template #sendReportTimeTitle="{ $attrs, $listeners }">
                     <div class="ml-3 mb-2 w-100">{{ _('w_ReportTemplate_SendReportTime1') }}</div>
@@ -237,6 +261,7 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
+import Datetime from "@/services/Datetime";
 
 enum EPageStep {
     list = "list",
@@ -337,56 +362,37 @@ export default class ReportTemplate extends Vue {
     }
 
     initSelectItem() {
-
         this.addPeriodSelectItem = [
-            { value: EAddPeriodSelect.period, text: this._('w_period')},
-            { value: EAddPeriodSelect.designation, text: this._('w_Designation') },
+            { value: EAddPeriodSelect.period, text: this._("w_period") },
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
         ];
 
-        // this.designationPeriodSelectItem = {
-        //     today: this._('w_Today'),
-        //     yesterday: this._('w_Yesterday'),
-        //     last7days: this._('w_last7days'),
-        //     thisWeek: this._('w_thisWeek'),
-        //     lastWeek: this._('w_lastWeek'),
-        //     thisMonth: this._('w_thisMonth'),
-        //     lastMonth: this._('w_lastMonth'),
-        //     q1: this._('w_q1'),
-        //     q2: this._('w_q2'),
-        //     q3: this._('w_q3'),
-        //     q4: this._('w_q4'),
-        //     thisYear: this._('w_thisYear'),
-        //
-        // };
-
-        this.designationPeriodSelectItem = [
-            { id: EDesignationPeriod.today, text: this._('w_Today')},
-            // today: this._('w_Today'),
-            // yesterday: this._('w_Yesterday'),
-            // last7days: this._('w_last7days'),
-            // thisWeek: this._('w_thisWeek'),
-            // lastWeek: this._('w_lastWeek'),
-            // thisMonth: this._('w_thisMonth'),
-            // lastMonth: this._('w_lastMonth'),
-            // q1: this._('w_q1'),
-            // q2: this._('w_q2'),
-            // q3: this._('w_q3'),
-            // q4: this._('w_q4'),
-            // thisYear: this._('w_thisYear'),
-
-        ];
-
-        // EDesignationPeriod
+        this.designationPeriodSelectItem = {
+            today: this._("w_Today"),
+            yesterday: this._("w_Yesterday"),
+            last7days: this._("w_last7days"),
+            thisWeek: this._("w_thisWeek"),
+            lastWeek: this._("w_lastWeek"),
+            thisMonth: this._("w_thisMonth"),
+            lastMonth: this._("w_lastMonth"),
+            q1: this._("w_q1"),
+            q2: this._("w_q2"),
+            q3: this._("w_q3"),
+            q4: this._("w_q4"),
+            thisYear: this._("w_thisYear")
+        };
 
         this.metricSelectItem = {
-            peopleCounting: this._('w_Navigation_VideoSources_PeopleCounting'),
-            humanDetection: this._('w_Navigation_VideoSources_HumanDetection'),
-            heatmap: this._('w_Navigation_VideoSources_Heatmap'),
-            dwellTime: this._('w_Navigation_VideoSources_DwellTime'),
-            demographic: this._('w_Navigation_VideoSources_Demographic'),
-            visitor: this._('w_Navigation_VideoSources_Visitor'),
-        }
-
+            peopleCounting: this._("w_Navigation_VideoSources_PeopleCounting"),
+            humanDetection: this._("w_Navigation_VideoSources_HumanDetection"),
+            heatmap: this._("w_Navigation_VideoSources_Heatmap"),
+            dwellTime: this._("w_Navigation_VideoSources_DwellTime"),
+            demographic: this._("w_Navigation_VideoSources_Demographic"),
+            visitor: this._("w_Navigation_VideoSources_Visitor")
+        };
     }
 
     async initSelectItemSite() {
@@ -474,9 +480,9 @@ export default class ReportTemplate extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
-                        this.userSelectItem[returnValue.objectId] = `${
-                            returnValue.username
-                        } : ${returnValue.email}`;
+                        this.userSelectItem[
+                            returnValue.objectId
+                        ] = `${returnValue.username} : ${returnValue.email}`;
                     }
                 }
             })
@@ -509,11 +515,14 @@ export default class ReportTemplate extends Vue {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
+        console.log(' - ', this.selectedDetail);
     }
 
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
+            console.log('param - ', param);
+
             this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
@@ -855,6 +864,24 @@ export default class ReportTemplate extends Vue {
         return result;
     }
 
+    dateToYYYY_MM_DD(value) {
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+    }
+
+    getReportTime(value): string {
+        let result: string = '';
+
+        value.map(item => {
+            switch (item) {
+                
+            }
+        });
+
+        
+
+        return result;
+    }
+
     ITableList() {
         return `
             interface {
@@ -881,28 +908,41 @@ export default class ReportTemplate extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Metric")}
                  */
-                ?: string;
+                mode: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod")}
                  */
-                ?: string;
+                type: string;
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_StartDate")}
+                 */
+                startDate: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
+                 */
+                endDate: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_SendReportTime")}
                  */
-                ?: string;
+                sendDates: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipient")}
                  */
-                ?: string;
+                sendUsers: string;
 
 
                 Actions?: any;
+
+                goToReport?: any;
 
             }
         `;
@@ -997,7 +1037,10 @@ export default class ReportTemplate extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipient")}
                  */
-                sendUserIds: ${toEnumInterface(this.userSelectItem as any, true)};
+                sendUserIds: ${toEnumInterface(
+                    this.userSelectItem as any,
+                    true
+                )};
 
             }
         `;

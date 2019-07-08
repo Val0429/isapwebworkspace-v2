@@ -1292,6 +1292,13 @@ export default class ReportDemographic extends Vue {
                 weather: EWeather.none
             };
 
+            let maleNotIncludeEmployee: number = 0;
+            let femaleNotIncludeEmployee: number = 0;
+            let maleTotal: number = 0;
+            let femaleTotal: number = 0;
+            let maleEmployee: number = 0;
+            let femaleEmployee: number = 0;
+
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
@@ -1341,10 +1348,32 @@ export default class ReportDemographic extends Vue {
                     break;
                 }
 
-                let tempData = JSON.parse(JSON.stringify(tempChartData));
-                tempData.ageRange = ReportService.SwitchAgeRange(index.toString());
-                tempData.maleCount = summary.maleRanges[index];
-                tempData.femaleCount = summary.femaleRanges[index];
+                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                    let tempData = JSON.parse(JSON.stringify(tempChartData));
+                    maleTotal = summary.maleRanges[index];
+                    femaleTotal = summary.femaleRanges[index];
+                    maleEmployee = summary.maleEmployeeRanges[index];
+                    femaleEmployee = summary.femaleEmployeeRanges[index];
+                    maleNotIncludeEmployee = maleTotal - maleEmployee;
+                    femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
+
+                    tempData.maleCount = maleNotIncludeEmployee;
+                    tempData.femaleCount = femaleNotIncludeEmployee;
+                    tempData.ageRange = ReportService.SwitchAgeRange(index.toString());
+
+                    tempChartDatas.push(tempData);
+
+                } else if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.yes) {
+                    let tempData = JSON.parse(JSON.stringify(tempChartData));
+                    maleTotal = summary.maleRanges[index];
+                    femaleTotal = summary.femaleRanges[index];
+
+                    tempData.maleCount = maleTotal;
+                    tempData.femaleCount = femaleTotal;
+                    tempData.ageRange = ReportService.SwitchAgeRange(index.toString());
+
+                    tempChartDatas.push(tempData);
+                }
 
                 // console.log(
                 //     index,
@@ -1354,7 +1383,6 @@ export default class ReportDemographic extends Vue {
                 //     tempData.ageRange
                 // );
 
-                tempChartDatas.push(tempData);
             }
         }
 
@@ -1682,6 +1710,12 @@ export default class ReportDemographic extends Vue {
             "isIncludedEmployee - ",
             this.inputFormData.isIncludedEmployee
         );
+
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+        }
+
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
