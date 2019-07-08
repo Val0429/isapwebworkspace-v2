@@ -100,7 +100,7 @@ import {
     ISiteOfficeHourItem
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
-import HighChartsService from "./models/HighChartsService";
+import HighchartsService from "./models/HighchartsService";
 
 @Component({
     components: {}
@@ -271,7 +271,7 @@ export class HighchartsRepeatVisitor extends Vue {
         }
 
         for (let i = 0; i < 5; i++) {
-            tempSeries.pie[0].data[i][1] = HighChartsService.formatFloat(
+            tempSeries.pie[0].data[i][1] = HighchartsService.formatFloat(
                 (tempSeries.bar[0].data[i] / tempTotalCunt) * 100
             );
         }
@@ -588,10 +588,10 @@ export class HighchartsRepeatVisitor extends Vue {
         }
 
         if (totalCount > 0) {
-            tempSeries.pie[0][1] = HighChartsService.formatFloat(
+            tempSeries.pie[0][1] = HighchartsService.formatFloat(
                 (maleCount / totalCount) * 100
             );
-            tempSeries.pie[1][1] = HighChartsService.formatFloat(
+            tempSeries.pie[1][1] = HighchartsService.formatFloat(
                 (femaleCount / totalCount) * 100
             );
         }
@@ -663,26 +663,26 @@ export class HighchartsRepeatVisitor extends Vue {
             areaMode: this.areaMode,
             i18n: this.i18nItem(),
             temperature: 0,
-            weatherIcon: HighChartsService.weatherIcon(EWeather.none),
+            weatherIcon: HighchartsService.weatherIcon(EWeather.none),
             weekNumber: Datetime.WeekNumber(new Date()),
             quarterNumber: Datetime.QuarterNumber(new Date()),
             dateStart: new Date(),
             dateEnd: new Date(),
             timeString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.time
+                HighchartsService.datetimeFormat.time
             ),
             dateString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             ),
             dateStartString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             ),
             dateEndString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             )
         };
         return value;
@@ -715,7 +715,7 @@ export class HighchartsRepeatVisitor extends Vue {
         value.areaMode = this.areaMode;
         value.i18n = this.i18nItem();
         value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
-        value.weatherIcon = HighChartsService.weatherIcon(value.weather);
+        value.weatherIcon = HighchartsService.weatherIcon(value.weather);
         value.weekNumber = Datetime.WeekNumber(value.date);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
         switch (this.timeMode) {
@@ -745,19 +745,19 @@ export class HighchartsRepeatVisitor extends Vue {
         }
         value.timeString = Datetime.DateTime2String(
             value.date,
-            HighChartsService.datetimeFormat.time
+            HighchartsService.datetimeFormat.time
         );
         value.dateString = Datetime.DateTime2String(
             value.date,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         value.dateStartString = Datetime.DateTime2String(
             value.dateStart,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         value.dateEndString = Datetime.DateTime2String(
             value.dateEnd,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         return value;
     }

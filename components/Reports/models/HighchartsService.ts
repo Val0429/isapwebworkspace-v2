@@ -2,7 +2,7 @@ import { EWeather, EChartMode } from './EHighCharts';
 import Datetime from '@/services/Datetime';
 import { ISite, ISiteOfficeHourItem, IDayRange } from './IHighCharts';
 
-class HighChartsService {
+class HighchartsService {
     readonly mathRoundLength = 2;
     readonly datetimeFormat = {
         year: 'YYYY',
@@ -172,4 +172,4 @@ class HighChartsService {
     }
 }
 
-export default new HighChartsService();
+export default new HighchartsService();

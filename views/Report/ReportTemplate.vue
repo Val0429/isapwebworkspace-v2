@@ -31,9 +31,33 @@
                 ref="tagTable"
                 :interface="ITableList()"
                 :multiple="tableMultiple"
-                :server="{ path: '/tag' }"
+                :server="{ path: '/report/template' }"
                 @selected="selectedItem($event)"
             >
+
+                <template #mode="{$attrs}">
+                    {{ getMode($attrs.value) }}
+                </template>
+
+                <template #type="{$attrs}">
+                    {{ getType($attrs.value) }}
+                </template>
+
+
+                <template #startDate="{$attrs}">
+                    {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                </template>
+
+                <template #endDate="{$attrs}">
+                    {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                </template>
+
+
+                <template #sendDates="{$attrs}">
+<!--                    <div>{{ $attrs.value }}</div>-->
+                    <div v-html="getReportTime($attrs.value)"></div>
+                </template>
+
 
                 <template #Actions="{$attrs, $listeners}">
                     <iv-toolbox-more :disabled="isSelected.length !== 1">
@@ -46,6 +70,14 @@
 
                 <template #sites="{$attrs}">
                     {{ showFirst($attrs.value) }}
+                </template>
+
+                <template #goToReport="{$attrs}">
+                    <div class="mt-2 ml-3 mb-3">
+                        <b-button @click='goToReport($attrs)'>
+                            {{ _('w_ReportTemplate_goToReport') }}
+                        </b-button>
+                    </div>
                 </template>
 
             </iv-table>
@@ -93,6 +125,14 @@
                         ></b-form-radio-group>
                     </b-col>
                 </template>
+
+                <iv-form-selection
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    :multiple="false"
+                    :options="designationPeriodSelectItem"
+                >
+                </iv-form-selection>
 
                 <template #sendReportTimeTitle="{ $attrs, $listeners }">
                     <div class="ml-3 mb-2 w-100">{{ _('w_ReportTemplate_SendReportTime1') }}</div>
@@ -237,6 +277,10 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog/Dialog";
+import Datetime from "@/services/Datetime";
+
+import { EWeeks, EVideoSource } from "@/components/Reports";
+import { ITemplate } from "@/components/Reports";
 
 enum EPageStep {
     list = "list",
@@ -247,25 +291,6 @@ enum EPageStep {
     none = "none",
     showResult = "showResult",
     chooseTree = "chooseTree"
-}
-
-enum ECameraMode {
-    peopleCounting = "People Counting",
-    humanDetection = "Human Detection",
-    heatmap = "Heatmap",
-    dwellTime = "Dwell Time",
-    demographic = "Demographic",
-    visitor = "Visitor"
-}
-
-enum EWeeks {
-    Sunday = "Sunday",
-    Monday = "Monday",
-    Tuesday = "Tuesday",
-    Wednesday = "Wednesday",
-    Thursday = "Thursday",
-    Friday = "Friday",
-    Saturday = "Saturday"
 }
 
 const timeItem = {
@@ -337,36 +362,37 @@ export default class ReportTemplate extends Vue {
     }
 
     initSelectItem() {
-
         this.addPeriodSelectItem = [
-            { value: EAddPeriodSelect.period, text: this._('w_period')},
-            { value: EAddPeriodSelect.designation, text: this._('w_Designation') },
+            { value: EAddPeriodSelect.period, text: this._("w_period") },
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
         ];
 
         this.designationPeriodSelectItem = {
-            today: this._('w_Today'),
-            yesterday: this._('w_Yesterday'),
-            last7days: this._('w_last7days'),
-            thisWeek: this._('w_thisWeek'),
-            lastWeek: this._('w_lastWeek'),
-            thisMonth: this._('w_thisMonth'),
-            lastMonth: this._('w_lastMonth'),
-            q1: this._('w_q1'),
-            q2: this._('w_q2'),
-            q3: this._('w_q3'),
-            q4: this._('w_q4'),
-            thisYear: this._('w_thisYear'),
+            today: this._("w_Today"),
+            yesterday: this._("w_Yesterday"),
+            last7days: this._("w_last7days"),
+            thisWeek: this._("w_thisWeek"),
+            lastWeek: this._("w_lastWeek"),
+            thisMonth: this._("w_thisMonth"),
+            lastMonth: this._("w_lastMonth"),
+            q1: this._("w_q1"),
+            q2: this._("w_q2"),
+            q3: this._("w_q3"),
+            q4: this._("w_q4"),
+            thisYear: this._("w_thisYear")
         };
 
         this.metricSelectItem = {
-            peopleCounting: this._('w_Navigation_VideoSources_PeopleCounting'),
-            humanDetection: this._('w_Navigation_VideoSources_HumanDetection'),
-            heatmap: this._('w_Navigation_VideoSources_Heatmap'),
-            dwellTime: this._('w_Navigation_VideoSources_DwellTime'),
-            demographic: this._('w_Navigation_VideoSources_Demographic'),
-            visitor: this._('w_Navigation_VideoSources_Visitor'),
-        }
-
+            peopleCounting: this._("w_Navigation_VideoSources_PeopleCounting"),
+            humanDetection: this._("w_Navigation_VideoSources_HumanDetection"),
+            heatmap: this._("w_Navigation_VideoSources_Heatmap"),
+            dwellTime: this._("w_Navigation_VideoSources_DwellTime"),
+            demographic: this._("w_Navigation_VideoSources_Demographic"),
+            visitor: this._("w_Navigation_VideoSources_Visitor")
+        };
     }
 
     async initSelectItemSite() {
@@ -454,9 +480,9 @@ export default class ReportTemplate extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
-                        this.userSelectItem[returnValue.objectId] = `${
-                            returnValue.username
-                        } : ${returnValue.email}`;
+                        this.userSelectItem[
+                            returnValue.objectId
+                        ] = `${returnValue.username} : ${returnValue.email}`;
                     }
                 }
             })
@@ -489,11 +515,14 @@ export default class ReportTemplate extends Vue {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
+        console.log(" - ", this.selectedDetail);
     }
 
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
+            console.log("param - ", param);
+
             this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
@@ -835,6 +864,157 @@ export default class ReportTemplate extends Vue {
         return result;
     }
 
+    dateToYYYY_MM_DD(value) {
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+    }
+
+    getMode(data: string): string {
+
+        switch (data) {
+            case EVideoSource.peopleCounting:
+                return this._("w_Navigation_VideoSources_PeopleCounting");
+            case EVideoSource.humanDetection:
+                return this._("w_Navigation_VideoSources_HumanDetection");
+            case EVideoSource.heatmap:
+                return this._("w_Navigation_VideoSources_Heatmap");
+            case EVideoSource.dwellTime:
+                return this._("w_Navigation_VideoSources_DwellTime");
+            case EVideoSource.demographic:
+                return this._("w_Navigation_VideoSources_Demographic");
+            case EVideoSource.visitor:
+                return this._("w_Navigation_VideoSources_Visitor");
+            default:
+                return '';
+        }
+
+    }
+
+    getType(data: string): string {
+
+        switch (data) {
+            case EDesignationPeriod.today:
+                return this._("w_Today");
+            case EDesignationPeriod.yesterday:
+                return this._("w_Yesterday");
+            case EDesignationPeriod.last7days:
+                return this._("w_last7days");
+            case EDesignationPeriod.thisWeek:
+                return this._("w_thisWeek");
+            case EDesignationPeriod.lastWeek:
+                return this._("w_lastWeek");
+            case EDesignationPeriod.thisMonth:
+                return this._("w_thisMonth");
+            case EDesignationPeriod.lastMonth:
+                return this._("w_lastMonth");
+            case EDesignationPeriod.q1:
+                return this._("w_q1");
+            case EDesignationPeriod.q2:
+                return this._("w_q2");
+            case EDesignationPeriod.q3:
+                return this._("w_q3");
+            case EDesignationPeriod.q4:
+                return this._("w_q4");
+            case EDesignationPeriod.thisYear:
+                return this._("w_thisYear");
+            default:
+                return '';
+        }
+
+    }
+
+    getReportTime(data: any): string {
+
+        let weekDay: string = '';
+        let time: string = '';
+        let result: string = '';
+
+        if (data) {
+            for (const item of data) {
+
+                if (item.day === '0') {
+                    weekDay = EWeeks.Sunday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '1') {
+                    weekDay = EWeeks.Monday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '2') {
+                    weekDay = EWeeks.Tuesday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '3') {
+                    weekDay = EWeeks.Wednesday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '4') {
+                    weekDay = EWeeks.Thursday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '5') {
+                    weekDay = EWeeks.Friday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+                if (item.day === '6') {
+                    weekDay = EWeeks.Saturday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} <br>`;
+                }
+
+            }
+        }
+
+        return result;
+    }
+
+    goToReport(value: any) {
+        let url = "/reports/";
+
+        switch (value.row.mode) {
+            case EVideoSource.peopleCounting:
+                url += "traffic?";
+                break;
+
+            case EVideoSource.humanDetection:
+                url += "occupancy";
+                break;
+
+            case EVideoSource.demographic:
+                url += "demographic";
+                break;
+
+            case EVideoSource.visitor:
+                url += "repeat_visitor";
+                break;
+
+            case EVideoSource.dwellTime:
+                url += "dwell_time";
+                break;
+
+            case EVideoSource.heatmap:
+                url += "heatmap";
+                break;
+
+            default:
+                break;
+        }
+
+        console.log(value.row);
+
+        this.$router.push({
+            path: url,
+            query: {
+                template: JSON.stringify(value.row)
+            }
+        });
+    }
+
     ITableList() {
         return `
             interface {
@@ -861,28 +1041,41 @@ export default class ReportTemplate extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Metric")}
                  */
-                ?: string;
+                mode: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod")}
                  */
-                ?: string;
+                type: string;
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_StartDate")}
+                 */
+                startDate: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
+                 */
+                endDate: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_SendReportTime")}
                  */
-                ?: string;
+                sendDates: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipient")}
                  */
-                ?: string;
+                sendUsers: string;
 
 
                 Actions?: any;
+
+                goToReport?: any;
 
             }
         `;
@@ -977,7 +1170,10 @@ export default class ReportTemplate extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipient")}
                  */
-                sendUserIds: ${toEnumInterface(this.userSelectItem as any, true)};
+                sendUserIds: ${toEnumInterface(
+                    this.userSelectItem as any,
+                    true
+                )};
 
             }
         `;

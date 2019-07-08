@@ -27,7 +27,10 @@
                     />
 
                     <!-- Morris -->
-                    <iv-toolbox-export-pdf size="lg" />
+                    <iv-toolbox-export-pdf
+                        size="lg"
+                        @click="exportPDF"
+                    />
 
                     <!-- Tina -->
                     <iv-toolbox-send-mail
@@ -120,6 +123,7 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import ReportService from "@/components/Reports/models/ReportService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
 
 import Datetime from "@/services/Datetime";
 import HighchartRepeatVisitor from "@/components/Reports/HighchartRepeatVisitor.vue";
@@ -144,6 +148,10 @@ enum EFileType {
     xls = "xls",
     csv = "csv"
 }
+
+///////////////////////// export /////////////////////////
+import html2Canvas from "html2canvas";
+import JsPDF from "jspdf";
 
 enum EPageStep {
     none = "none"
@@ -1010,7 +1018,7 @@ export default class ReportRepeatVisitor extends Vue {
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
-        this.sortOutChartData(this.responseData.summaryChartDatas);
+        this.sortOutChartData(this.responseData.summaryTableDatas);
 
         // Ben
         //this.initDashboardData();
@@ -1152,7 +1160,7 @@ export default class ReportRepeatVisitor extends Vue {
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
-            for (const singleData of this.responseData.summaryChartDatas) {
+            for (const singleData of this.responseData.summaryTableDatas) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
                     if (detailKey === "area") {
@@ -1201,7 +1209,7 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
-            this.sortOutChartData(this.responseData.summaryChartDatas);
+            this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
             this.sites = this.sitesItem;
 
@@ -1217,7 +1225,7 @@ export default class ReportRepeatVisitor extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-            this.sortOutChartData(this.responseData.summaryChartDatas);
+            this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
             this.sites = this.sitesItem;
 
@@ -1484,27 +1492,51 @@ export default class ReportRepeatVisitor extends Vue {
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
-    getExcelFile(fType) {
-        let reportTable: any = this.$refs.reportTable;
-        let tableData = reportTable.tableToArray();
-        //th
-        let th = [];
-        for (let title of tableData[0]) {
-            th.push(title);
-        }
+    ////////////////////////////////////// Export //////////////////////////////////////
 
-        //data
-        let data = [];
-        for (let bodys of tableData) {
-            if (tableData.indexOf(bodys) == 0) continue;
-            data.push(bodys);
-        }
-        let [fileName, fileType, sheetName] = [
-            this._("w_ReportVisitor_Visitor"),
-            fType,
-            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
-        ];
-        toExcel({ th, data, fileName, fileType, sheetName });
+    exportPDF() {
+        let title = "";
+        title += this._("w_Navigation_Report_RepeatVisitor");
+        title += " ";
+        title += Datetime.DateTime2String(
+            this.startDate,
+            HighchartsService.datetimeFormat.date
+        );
+
+        html2Canvas(document.querySelector(".container-fluid"), {
+            allowTaint: true,
+            useCORS: true
+        }).then(function(canvas) {
+            let contentWidth = canvas.width;
+            let contentHeight = canvas.height;
+            let pageHeight = (contentWidth / 592.28) * 841.89;
+            let leftHeight = contentHeight;
+            let position = 0;
+            const imgWidth = 595.28;
+            let imgHeight = (592.28 / contentWidth) * contentHeight;
+            let pageData = canvas.toDataURL("image/jpeg", 1.0);
+            let PDF = new JsPDF("", "pt", "a4");
+            if (leftHeight < pageHeight) {
+                PDF.addImage(pageData, "JPEG", 0, 10, imgWidth, imgHeight);
+            } else {
+                while (leftHeight > 0) {
+                    PDF.addImage(
+                        pageData,
+                        "JPEG",
+                        0,
+                        position,
+                        imgWidth,
+                        imgHeight
+                    );
+                    leftHeight -= pageHeight;
+                    position -= 841.89;
+                    if (leftHeight > 0) {
+                        PDF.addPage();
+                    }
+                }
+            }
+            PDF.save(title + ".pdf");
+        });
     }
 }
 </script>

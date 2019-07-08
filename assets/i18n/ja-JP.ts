@@ -849,6 +849,7 @@ export default class LangObject implements ILang {
     w_ReportTemplate_Recipient = 'Recipient';
     w_ReportTemplate_Recipients = 'Recipient(s)';
     w_ReportTemplate_RecipientSelect = 'Select Recipient(s)';
+    w_ReportTemplate_goToReport = 'Go To Report';
 
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';

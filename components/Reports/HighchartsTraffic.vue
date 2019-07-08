@@ -47,7 +47,7 @@ import {
     ISiteOfficeHourItem
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
-import HighChartsService from "./models/HighChartsService";
+import HighchartsService from "./models/HighchartsService";
 
 @Component({
     components: {}
@@ -123,7 +123,7 @@ export class HighchartsTraffic extends Vue {
 
     start() {
         this.errorMessage = "";
-        this.chartMode = HighChartsService.chartMode(
+        this.chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
@@ -202,7 +202,7 @@ export class HighchartsTraffic extends Vue {
         }
 
         let weekDay = this.startDate.getDay();
-        let officeHour: ISiteOfficeHourItem = HighChartsService.siteOfficeHour(
+        let officeHour: ISiteOfficeHourItem = HighchartsService.siteOfficeHour(
             weekDay,
             this.sites[0].officeHour
         );
@@ -237,7 +237,7 @@ export class HighchartsTraffic extends Vue {
             tempSeries[0].data.push(result.revenue);
             tempSeries[1].data.push(result.traffic);
             tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
+                HighchartsService.categorieStringWithJSON(
                     result.timeString,
                     result
                 )
@@ -449,15 +449,15 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     break;
 
@@ -473,15 +473,15 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     break;
 
@@ -497,15 +497,15 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     break;
 
@@ -521,15 +521,15 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     break;
 
@@ -548,25 +548,25 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
+            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
-                HighChartsService.datetimeFormat.time
+                HighchartsService.datetimeFormat.time
             );
             tempChartData.quarterNumber = Datetime.QuarterNumber(
                 tempChartData.dateStart
@@ -578,6 +578,7 @@ export class HighchartsTraffic extends Vue {
             for (let val of tempValues) {
                 let value: IChartTrafficData = this.anysislyChartValue(val);
                 let valTimestamp = value.date.getTime();
+
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
@@ -588,7 +589,7 @@ export class HighchartsTraffic extends Vue {
                     tempChartData.transaction += value.transaction;
                     tempChartData.temperature += value.temperature;
                     tempChartData.weather = value.weather;
-                    tempChartData.weatherIcon = HighChartsService.weatherIcon(
+                    tempChartData.weatherIcon = HighchartsService.weatherIcon(
                         value.weather
                     );
 
@@ -599,13 +600,13 @@ export class HighchartsTraffic extends Vue {
 
             // calculate conversion & ASP
             if (tempChartData.traffic != 0) {
-                tempChartData.conversion = HighChartsService.formatFloat(
+                tempChartData.conversion = HighchartsService.formatFloat(
                     (tempChartData.transaction / tempChartData.traffic) * 100
                 );
             }
 
             if (tempChartData.transaction > 0) {
-                tempChartData.asp = HighChartsService.formatFloat(
+                tempChartData.asp = HighchartsService.formatFloat(
                     tempChartData.revenue / tempChartData.transaction
                 );
             }
@@ -620,7 +621,7 @@ export class HighchartsTraffic extends Vue {
 
         // calculate avg
         if (dateGap > 0) {
-            trafficAVG = HighChartsService.formatFloat(trafficTotal / dateGap);
+            trafficAVG = HighchartsService.formatFloat(trafficTotal / dateGap);
         }
 
         // set result
@@ -633,7 +634,7 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.year:
                 case ETimeMode.month:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.dateString,
                             result
                         )
@@ -641,16 +642,16 @@ export class HighchartsTraffic extends Vue {
                     break;
                 case ETimeMode.quarter:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
-                            HighChartsService.categoriesQuarter(result.date),
+                        HighchartsService.categorieStringWithJSON(
+                            HighchartsService.categoriesQuarter(result.date),
                             result
                         )
                     );
                     break;
                 case ETimeMode.week:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
-                            HighChartsService.categoriesWeek(result.date),
+                        HighchartsService.categorieStringWithJSON(
+                            HighchartsService.categoriesWeek(result.date),
                             result
                         )
                     );
@@ -660,7 +661,7 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.none:
                 default:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             `${result.dateString} ${result.weatherIcon}`,
                             result
                         )
@@ -822,7 +823,7 @@ export class HighchartsTraffic extends Vue {
             tempSeries[1].data.push(result.traffic);
             tempSeries[2].data.push(trafficAVG);
             tempCategories.push(
-                HighChartsService.categorieStringWithJSON(
+                HighchartsService.categorieStringWithJSON(
                     `${result.siteName} ${result.weatherIcon}`,
                     result
                 )
@@ -965,19 +966,19 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.year
+                        HighchartsService.datetimeFormat.year
                     );
                     break;
 
@@ -993,17 +994,17 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
-                    tempResultItem.categorie = HighChartsService.categoriesQuarter(
+                    tempResultItem.categorie = HighchartsService.categoriesQuarter(
                         tempChartData.date
                     );
                     break;
@@ -1020,19 +1021,19 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.month
+                        HighchartsService.datetimeFormat.month
                     );
                     break;
 
@@ -1048,21 +1049,21 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
-                    tempResultItem.categorie = HighChartsService.categoriesWeek(
+                    tempResultItem.categorie = HighchartsService.categoriesWeek(
                         tempChartData.date
                     );
                     break;
@@ -1082,29 +1083,29 @@ export class HighchartsTraffic extends Vue {
                     );
                     tempChartData.dateString = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateStartString = Datetime.DateTime2String(
                         tempChartData.dateStart,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempChartData.dateEndString = Datetime.DateTime2String(
                         tempChartData.dateEnd,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     tempResultItem.categorie = Datetime.DateTime2String(
                         tempChartData.date,
-                        HighChartsService.datetimeFormat.date
+                        HighchartsService.datetimeFormat.date
                     );
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime();
-            let tempEndTimestamp = tempChartData.dateEnd.getTime();
+            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
-                HighChartsService.datetimeFormat.time
+                HighchartsService.datetimeFormat.time
             );
             tempChartData.quarterNumber = Datetime.QuarterNumber(
                 tempChartData.dateStart
@@ -1132,7 +1133,7 @@ export class HighchartsTraffic extends Vue {
                         tempSiteValue.transaction += value.transaction;
                         tempSiteValue.temperature = value.temperature;
                         tempSiteValue.weather = value.weather;
-                        tempSiteValue.weatherIcon = HighChartsService.weatherIcon(
+                        tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
                             value.weather
                         );
                     }
@@ -1161,7 +1162,7 @@ export class HighchartsTraffic extends Vue {
                 }
             }
             tempSeries.push({
-                name: HighChartsService.categorieStringNotJSON(
+                name: HighchartsService.categorieStringNotJSON(
                     site.name,
                     site.objectId
                 ),
@@ -1183,13 +1184,13 @@ export class HighchartsTraffic extends Vue {
             }
 
             if (trafficTotal != 0) {
-                result.conversion = HighChartsService.formatFloat(
+                result.conversion = HighchartsService.formatFloat(
                     (transactionTotal / trafficTotal) * 100
                 );
             }
 
             if (transactionTotal > 0) {
-                result.asp = HighChartsService.formatFloat(
+                result.asp = HighchartsService.formatFloat(
                     revenueTotal / transactionTotal
                 );
             }
@@ -1198,7 +1199,7 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.year:
                 case ETimeMode.month:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -1206,7 +1207,7 @@ export class HighchartsTraffic extends Vue {
                     break;
                 case ETimeMode.quarter:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -1214,7 +1215,7 @@ export class HighchartsTraffic extends Vue {
                     break;
                 case ETimeMode.week:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -1225,7 +1226,7 @@ export class HighchartsTraffic extends Vue {
                 case ETimeMode.none:
                 default:
                     tempCategories.push(
-                        HighChartsService.categorieStringWithJSON(
+                        HighchartsService.categorieStringWithJSON(
                             result.categorie,
                             result
                         )
@@ -1356,26 +1357,26 @@ export class HighchartsTraffic extends Vue {
             areaMode: this.areaMode,
             i18n: this.i18nItem(),
             temperature: 0,
-            weatherIcon: HighChartsService.weatherIcon(EWeather.none),
+            weatherIcon: HighchartsService.weatherIcon(EWeather.none),
             weekNumber: Datetime.WeekNumber(new Date()),
             quarterNumber: Datetime.QuarterNumber(new Date()),
             dateStart: new Date(),
             dateEnd: new Date(),
             timeString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.time
+                HighchartsService.datetimeFormat.time
             ),
             dateString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             ),
             dateStartString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             ),
             dateEndString: Datetime.DateTime2String(
                 new Date(),
-                HighChartsService.datetimeFormat.date
+                HighchartsService.datetimeFormat.date
             )
         };
         return value;
@@ -1399,7 +1400,7 @@ export class HighchartsTraffic extends Vue {
         value.areaMode = this.areaMode;
         value.i18n = this.i18nItem();
         value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
-        value.weatherIcon = HighChartsService.weatherIcon(value.weather);
+        value.weatherIcon = HighchartsService.weatherIcon(value.weather);
         value.weekNumber = Datetime.WeekNumber(value.date);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
         switch (this.timeMode) {
@@ -1429,19 +1430,19 @@ export class HighchartsTraffic extends Vue {
         }
         value.timeString = Datetime.DateTime2String(
             value.date,
-            HighChartsService.datetimeFormat.time
+            HighchartsService.datetimeFormat.time
         );
         value.dateString = Datetime.DateTime2String(
             value.date,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         value.dateStartString = Datetime.DateTime2String(
             value.dateStart,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         value.dateEndString = Datetime.DateTime2String(
             value.dateEnd,
-            HighChartsService.datetimeFormat.date
+            HighchartsService.datetimeFormat.date
         );
         return value;
     }

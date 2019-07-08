@@ -27,7 +27,10 @@ import {EAreaMode} from "../../components/Reports";
                     />
 
                     <!-- Morris -->
-                    <iv-toolbox-export-pdf size="lg" />
+                    <iv-toolbox-export-pdf
+                        size="lg"
+                        @click="exportPDF"
+                    />
 
                     <!-- Tina -->
                     <iv-toolbox-send-mail
@@ -136,7 +139,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
 // Morris
-import HighChartsService from "@/components/Reports/models/HighChartsService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import {
     EAreaMode,
@@ -160,6 +163,10 @@ enum EFileType {
     xls = "xls",
     csv = "csv"
 }
+
+///////////////////////// export /////////////////////////
+import html2Canvas from "html2canvas";
+import JsPDF from "jspdf";
 
 enum EPageStep {
     none = "none"
@@ -274,12 +281,29 @@ export default class ReportTraffic extends Vue {
     rData = new ReportTableData();
     reportTableTitle = {};
 
-    created() {
-        // this.initChartDeveloper();
-    }
+    created() {}
 
     mounted() {
         this.initDatas();
+        this.initTemplate();
+    }
+
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            let template = ReportService.anysislyTemplate(templateJSON);
+            if (template != null) {
+                console.log(template);
+
+                // this.receiveFilterData.startDate = new Date();
+            }
+        }
+
+        //    :sitesSelectItem="sitesSelectItem"
+        //     :tagSelectItem="tagSelectItem"
+        //     :regionTreeItem="regionTreeItem"
+        //     :label="_('w_ReportFilterConditionComponent_')"
+        //     @submit-data="receiveFilterData"
     }
 
     async initDatas() {
@@ -305,7 +329,7 @@ export default class ReportTraffic extends Vue {
         this.siteItem = [];
         this.pData = [];
 
-        let chartMode = HighChartsService.chartMode(
+        let chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
@@ -354,7 +378,7 @@ export default class ReportTraffic extends Vue {
     }
 
     initReportTable() {
-        let chartMode = HighChartsService.chartMode(
+        let chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
             this.sites
@@ -1365,6 +1389,13 @@ export default class ReportTraffic extends Vue {
                 weather: EWeather.none
             };
 
+            let inNotIncludeEmployee: number = 0;
+            let outNotIncludeEmployee: number = 0;
+            let inTotal: number = 0;
+            let outTotal: number = 0;
+            let inEmployee: number = 0;
+            let outEmployee: number = 0;
+
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
@@ -1383,9 +1414,37 @@ export default class ReportTraffic extends Vue {
             }
 
             if (this.inputFormData.inOrOut === EType.in) {
-                tempChartData.traffic += summary.in;
+                if (
+                    this.inputFormData.isIncludedEmployee ===
+                    EIncludedEmployee.no
+                ) {
+                    inTotal += summary.in;
+                    inEmployee += summary.inEmployee;
+                    inNotIncludeEmployee = inTotal - inEmployee;
+                    tempChartData.traffic = inNotIncludeEmployee;
+                } else if (
+                    this.inputFormData.isIncludedEmployee ===
+                    EIncludedEmployee.yes
+                ) {
+                    inTotal += summary.in;
+                    tempChartData.traffic = inTotal;
+                }
             } else if (this.inputFormData.inOrOut === EType.out) {
-                tempChartData.traffic += summary.out;
+                if (
+                    this.inputFormData.isIncludedEmployee ===
+                    EIncludedEmployee.no
+                ) {
+                    outTotal += summary.out;
+                    outEmployee += summary.inEmployee;
+                    outNotIncludeEmployee = outTotal - outEmployee;
+                    tempChartData.traffic = outNotIncludeEmployee;
+                } else if (
+                    this.inputFormData.isIncludedEmployee ===
+                    EIncludedEmployee.yes
+                ) {
+                    outTotal += summary.out;
+                    tempChartData.traffic = outTotal;
+                }
             }
 
             if (!haveSummary) {
@@ -1752,47 +1811,100 @@ export default class ReportTraffic extends Vue {
         console.log(" chartDatas - ", this.chartDatas);
     }
 
-    receiveInOrOut(inOrOut) {
+    async receiveInOrOut(inOrOut) {
         this.inputFormData.inOrOut = inOrOut;
         console.log("inOrOut - ", this.inputFormData.inOrOut);
 
         // 單一site
         if (this.filterData.firstSiteId) {
             this.sortOutChartData(this.responseData.summaryDatas);
+
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
+
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
         }
     }
 
-    receiveIsIncludedEmployee(isIncludedEmployee) {
+    async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
         console.log(
             "isIncludedEmployee - ",
             this.inputFormData.isIncludedEmployee
         );
+
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
+
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
+        }
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
-    getExcelFile(fType) {
-        let reportTable: any = this.$refs.reportTable;
-        let tableData = reportTable.tableToArray();
-        //th
-        let th = [];
-        for (let title of tableData[0]) {
-            th.push(title);
-        }
+    ////////////////////////////////////// Export //////////////////////////////////////
 
-        //data
-        let data = [];
-        for (let bodys of tableData) {
-            if (tableData.indexOf(bodys) == 0) continue;
-            data.push(bodys);
-        }
-        let [fileName, fileType, sheetName] = [
-            this._("w_ReportTraffic_TrafficTraffic"),
-            fType,
-            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
-        ];
-        toExcel({ th, data, fileName, fileType, sheetName });
+    exportPDF() {
+        let title = "";
+        title += this._("w_Navigation_Report_Traffic");
+        title += " ";
+        title += Datetime.DateTime2String(
+            this.startDate,
+            HighchartsService.datetimeFormat.date
+        );
+
+        html2Canvas(document.querySelector(".container-fluid"), {
+            allowTaint: true,
+            useCORS: true
+        }).then(function(canvas) {
+            let contentWidth = canvas.width;
+            let contentHeight = canvas.height;
+            let pageHeight = (contentWidth / 592.28) * 841.89;
+            let leftHeight = contentHeight;
+            let position = 0;
+            const imgWidth = 595.28;
+            let imgHeight = (592.28 / contentWidth) * contentHeight;
+            let pageData = canvas.toDataURL("image/jpeg", 1.0);
+            let PDF = new JsPDF("", "pt", "a4");
+            if (leftHeight < pageHeight) {
+                PDF.addImage(pageData, "JPEG", 0, 10, imgWidth, imgHeight);
+            } else {
+                while (leftHeight > 0) {
+                    PDF.addImage(
+                        pageData,
+                        "JPEG",
+                        0,
+                        position,
+                        imgWidth,
+                        imgHeight
+                    );
+                    leftHeight -= pageHeight;
+                    position -= 841.89;
+                    if (leftHeight > 0) {
+                        PDF.addPage();
+                    }
+                }
+            }
+            PDF.save(title + ".pdf");
+        });
     }
 }
 </script>

@@ -187,6 +187,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/report/demographic/summary': [any, any, false];
         '/report/human-detection/summary': [any, any, false];
         '/report/complex': [any, any, false];
+        '/report/template': [any, any, false];
     };
 
     // read
@@ -286,6 +287,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Business Operation Campaign
         '/event/campaign': [CampaignRead.Input, CampaignRead.Output, false];
+
+        // report
+        '/report/template': [any, any, false];
     };
 
     // update
@@ -371,6 +375,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Video Source VIP Stranger Visitor
         '/device/visitor': [VSVIPStrangerVisitorUpdate.Input, VSVIPStrangerVisitorUpdate.Output, false];
+
+        // report
+        '/report/template': [any, any, false];
     };
 
     // delete
@@ -426,6 +433,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         //device
         '/device': [any, any, false];
+
+        // report
+        '/report/template': [any, any, false];
     };
 
     // web socket

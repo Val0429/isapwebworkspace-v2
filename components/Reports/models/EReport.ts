@@ -21,18 +21,18 @@ enum EAddPeriodSelect {
 }
 
 enum EDesignationPeriod {
-    today = 'Today',
-    yesterday = 'Yesterday',
-    last7days = 'Last 7 days',
-    thisWeek = 'This Week',
-    lastWeek = 'Last Week',
-    thisMonth = 'This Month',
-    lastMonth = 'Last Month',
-    q1 = 'Q1',
-    q2 = 'Q2',
-    q3 = 'Q3',
-    q4 = 'Q4',
-    thisYear = 'This Year',
+    today = 'today',
+    yesterday = 'yesterday',
+    last7days = 'last7days',
+    thisWeek = 'thisWeek',
+    lastWeek = 'lastWeek',
+    thisMonth = 'thisMonth',
+    lastMonth = 'lastMonth',
+    q1 = 'q1',
+    q2 = 'q2',
+    q3 = 'q3',
+    q4 = 'q4',
+    thisYear = 'thisYear',
 }
 
 // count type
