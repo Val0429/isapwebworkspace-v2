@@ -27,13 +27,11 @@
                         @click="exportExcel(eFileType.csv)"
                     />
 
-                    <!-- Morris -->
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
                     />
 
-                    <!-- Tina -->
                     <iv-toolbox-send-mail
                         size="lg"
                         @click="modalShow = !modalShow"
@@ -75,7 +73,6 @@
                 >
                 </anlysis-dashboard>
 
-                <!-- Morris -->
                 <highcharts-repeat-visitor
                     :startDate="startDate"
                     :endDate="endDate"
@@ -85,7 +82,6 @@
                     :value="chartDatas"
                 >
                 </highcharts-repeat-visitor>
-                <!-- Morris -->
 
                 <!-- Ben -->
                 <vistor-details-table ref="reportTable">
@@ -168,14 +164,12 @@ export default class ReportRepeatVisitor extends Vue {
     templateItem: ITemplateItem | null = null;
     eFileType = EFileType;
 
-    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISiteAreas[] = [];
     chartDatas: IChartRepeatVisitorData[] = [];
-    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -281,7 +275,6 @@ export default class ReportRepeatVisitor extends Vue {
         }
     }
 
-    // Morris //
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
@@ -318,18 +311,6 @@ export default class ReportRepeatVisitor extends Vue {
                         objectId: "area2" + tempJ.toString(),
                         name: "Area 2" + tempJ.toString()
                     }
-                    // {
-                    //     objectId: "area3" + tempJ.toString(),
-                    //     name: "Area 3" + tempJ.toString()
-                    // },
-                    // {
-                    //     objectId: "area4" + tempJ.toString(),
-                    //     name: "Area 4" + tempJ.toString()
-                    // },
-                    // {
-                    //     objectId: "area5" + tempJ.toString(),
-                    //     name: "Area 5" + tempJ.toString()
-                    // }
                 ]
             });
 
@@ -402,7 +383,6 @@ export default class ReportRepeatVisitor extends Vue {
             }
         }
     }
-    // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 

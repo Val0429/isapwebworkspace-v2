@@ -26,7 +26,6 @@
                         @click="exportExcel(eFileType.csv)"
                     />
 
-                    <!-- Morris -->
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
@@ -74,7 +73,6 @@
                 >
                 </anlysis-dashboard>
 
-                <!-- Morris -->
                 <highcharts-demographic
                     ref="test"
                     :startDate="startDate"
@@ -85,7 +83,6 @@
                     :value="chartDatas"
                 >
                 </highcharts-demographic>
-                <!-- Morris -->
 
                 <!-- Ben -->
                 <report-table
@@ -129,9 +126,6 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
 import ReportService from "@/components/Reports/models/ReportService";
-
-// Morris
-
 import HighchartsDemographic from "@/components/Reports/HighchartsDemographic.vue";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
@@ -182,14 +176,12 @@ export default class ReportDemographic extends Vue {
     pageStep: EPageStep = EPageStep.none;
     templateItem: ITemplateItem | null = null;
 
-    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     chartDatas: IChartDemographicData[] = [];
-    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -271,9 +263,7 @@ export default class ReportDemographic extends Vue {
         this.initTemplate();
     }
 
-    mounted() {
-        
-    }
+    mounted() {}
 
     async initDatas() {
         // Tina
@@ -291,7 +281,6 @@ export default class ReportDemographic extends Vue {
         }
     }
 
-    // Morris //
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.single;
@@ -388,7 +377,6 @@ export default class ReportDemographic extends Vue {
             }
         }
     }
-    // Morris //
 
     // Ben //
     initDashboardData() {

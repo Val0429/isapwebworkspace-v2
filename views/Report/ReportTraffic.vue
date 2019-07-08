@@ -27,7 +27,6 @@ import {EAreaMode} from "../../components/Reports";
                         @click="exportExcel(eFileType.csv)"
                     />
 
-                    <!-- Morris -->
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
@@ -78,7 +77,6 @@ import {EAreaMode} from "../../components/Reports";
                 >
                 </anlysis-dashboard>
 
-                <!-- Morris -->
                 <highcharts-traffic
                     ref="highcharts"
                     :startDate="startDate"
@@ -139,7 +137,6 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
-// Morris
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import {
@@ -188,14 +185,12 @@ export default class ReportTraffic extends Vue {
     pageStep: EPageStep = EPageStep.none;
     templateItem: ITemplateItem | null = null;
 
-    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     chartDatas: IChartTrafficData[] = [];
-    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -649,7 +644,6 @@ export default class ReportTraffic extends Vue {
         }
     }
 
-    // Morris //
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
@@ -726,7 +720,6 @@ export default class ReportTraffic extends Vue {
             }
         }
     }
-    // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
