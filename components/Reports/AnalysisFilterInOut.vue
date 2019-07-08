@@ -311,7 +311,7 @@ export class AnalysisFilterInOut extends Vue {
 }
 
 export default AnalysisFilterInOut;
-Vue.component("analysis_filter_in_out", AnalysisFilterInOut);
+Vue.component("analysis-filter-in-out", AnalysisFilterInOut);
 </script>
 
 <style lang="scss" scoped>

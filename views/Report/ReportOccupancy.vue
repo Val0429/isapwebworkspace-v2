@@ -18,8 +18,14 @@
 
                 <template #toolbox>
                     <!-- Ben -->
-                    <iv-toolbox-export-excel size="lg" />
-                    <iv-toolbox-export-csv size="lg" />
+                    <iv-toolbox-export-excel
+                        size="lg"
+                        @click="exportExcel(eFileType.xlsx)"
+                    />
+                    <iv-toolbox-export-csv
+                        size="lg"
+                        @click="exportExcel(eFileType.csv)"
+                    />
 
                     <!-- Morris -->
                     <iv-toolbox-export-pdf
@@ -35,7 +41,7 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_demo
+                <analysis-filter-demo
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -55,7 +61,7 @@
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_demo>
+                </analysis-filter-demo>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -83,6 +89,7 @@
 
                 <!-- Ben -->
                 <report-table
+                    ref="reportTable"
                     :reportTableData="rData"
                     :reportTableTitle="reportTableTitle"
                 >
@@ -146,6 +153,13 @@ import {
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+enum EFileType {
+    xlsx = "xlsx",
+    xls = "xls",
+    csv = "csv"
+}
 
 ///////////////////////// export /////////////////////////
 import html2Canvas from "html2canvas";
@@ -162,6 +176,7 @@ export default class ReportOccupancy extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     templateItem: ITemplateItem | null = null;
+    eFileType = EFileType;
 
     ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
@@ -255,9 +270,7 @@ export default class ReportOccupancy extends Vue {
         this.initTemplate();
     }
 
-    mounted() {
-        
-    }
+    mounted() {}
 
     initTemplate() {
         if (this.$route.query.template != undefined) {
@@ -1972,6 +1985,29 @@ export default class ReportOccupancy extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     ////////////////////////////////////// Export //////////////////////////////////////
+
+    exportExcel(fType) {
+        let reportTable: any = this.$refs.reportTable;
+        let tableData = reportTable.tableToArray();
+        //th
+        let th = [];
+        for (let title of tableData[0]) {
+            th.push(title);
+        }
+
+        //data
+        let data = [];
+        for (let bodys of tableData) {
+            if (tableData.indexOf(bodys) == 0) continue;
+            data.push(bodys);
+        }
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_VideoSources_Demographic"),
+            fType,
+            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
 
     exportPDF() {
         let title = "";

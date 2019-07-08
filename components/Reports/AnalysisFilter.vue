@@ -264,7 +264,7 @@ export class AnalysisFilter extends Vue {
 }
 
 export default AnalysisFilter;
-Vue.component("analysis_filter", AnalysisFilter);
+Vue.component("analysis-filter", AnalysisFilter);
 </script>
 
 <style lang="scss" scoped>

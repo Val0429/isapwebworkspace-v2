@@ -851,6 +851,7 @@ export default class LangObject {
     w_ReportTemplate_Recipients = 'Recipient(s)';
     w_ReportTemplate_RecipientSelect = 'Select Recipient(s)';
     w_ReportTemplate_goToReport = 'Go To Report';
+    w_ReportTemplate_DeleteConfirm = 'Are you sure to delete Report Template(s)?';
 
     // Report Filter Condition Component
     w_ReportFilterConditionComponent_ = 'Filter Condition';
@@ -877,6 +878,7 @@ export default class LangObject {
     w_Occupancy_Snapshot = 'Snapshot';
 
     //Report Visitor
+    w_ReportVisitor_Visitor = 'Visitor';
     w_ReportVisitor_Site = 'Site';
     w_ReportVisitor_Date = 'Date';
     w_ReportVisitor_1 = '1';

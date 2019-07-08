@@ -165,50 +165,6 @@ enum EPageStep {
     components: {}
 })
 export class FilterCondition extends Vue {
-    // @Prop({
-    // 	type: Date, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return new Date();
-    // 	}
-    // })
-    // startDate: any;
-    //
-    // @Prop({
-    // 	type: Date, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return new Date();
-    // 	}
-    // })
-    // endDate: any;
-    //
-    // @Prop({
-    // 	type: Array, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return [];
-    // 	}
-    // })
-    // sites: any;
-    //
-    // @Prop({
-    // 	type: String, // Boolean, Number, String, Array, Object
-    // 	default: 'hour'
-    // })
-    // timeMode: any;
-    //
-    // @Prop({
-    // 	type: String, // Boolean, Number, String, Array, Object
-    // 	default: 'all'
-    // })
-    // areaMode: any;
-    //
-    // @Prop({
-    // 	type: Array, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return [];
-    // 	}
-    // })
-    // chartDatas: any;
-
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -227,13 +183,11 @@ export class FilterCondition extends Vue {
     })
     regionTreeItem: object;
 
-    // Morris
     @Prop({
         type: Object,
         default: null
     })
     templateItem: ITemplateItem | null;
-    // Morris
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
@@ -414,7 +368,6 @@ export class FilterCondition extends Vue {
     }
 
     initTemplate() {
-
         if (this.templateItem != null) {
             if (this.templateItem.type != undefined) {
                 this.inputFormData.type = this.templateItem.type;
