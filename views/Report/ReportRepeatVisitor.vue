@@ -2,14 +2,15 @@
     <div class="animated fadeIn">
 
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
 
@@ -132,6 +133,7 @@ import {
     IPeckTimeRange,
     ISiteAreas,
     ISiteItems,
+    ITemplateItem,
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
@@ -150,6 +152,7 @@ enum EPageStep {
 export default class ReportRepeatVisitor extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+    templateItem: ITemplateItem | null = null;
 
     ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
@@ -239,12 +242,14 @@ export default class ReportRepeatVisitor extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
+        this.initDatas();
+        this.initTemplate();
+
+        // TODO: Waitting API
         this.initChartDeveloper();
     }
 
-    mounted() {
-        this.initDatas();
-    }
+    mounted() {}
 
     async initDatas() {
         // Tina
@@ -253,6 +258,13 @@ export default class ReportRepeatVisitor extends Vue {
         await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+    }
+
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+        }
     }
 
     // Morris //
@@ -1491,7 +1503,7 @@ export default class ReportRepeatVisitor extends Vue {
 
         html2Canvas(document.querySelector(".container-fluid"), {
             allowTaint: true,
-            useCORS: true,
+            useCORS: true
         }).then(function(canvas) {
             let contentWidth = canvas.width;
             let contentHeight = canvas.height;

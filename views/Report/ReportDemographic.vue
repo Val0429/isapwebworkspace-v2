@@ -2,14 +2,15 @@
     <div class="animated fadeIn">
 
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
             <iv-card>
@@ -142,6 +143,7 @@ import {
     IPeckTimeRange,
     ISite,
     ISiteItems,
+    ITemplateItem,
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
@@ -163,6 +165,7 @@ export default class ReportDemographic extends Vue {
     eWeather = EWeather;
 
     pageStep: EPageStep = EPageStep.none;
+    templateItem: ITemplateItem | null = null;
 
     ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
@@ -249,11 +252,12 @@ export default class ReportDemographic extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
-        // this.initChartDeveloper();
+        this.initDatas();
+        this.initTemplate();
     }
 
     mounted() {
-        this.initDatas();
+        
     }
 
     async initDatas() {
@@ -263,6 +267,13 @@ export default class ReportDemographic extends Vue {
         await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+    }
+
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+        }
     }
 
     // Morris //

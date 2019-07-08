@@ -2,14 +2,13 @@
     <div>
 
         <!-- 父元件的data='傳到子元件的data' -->
-        <filter_condition
+        <filter-condition
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div class="h-25"></div>
-
 
         <analysis_filter_in_out_traffic
             v-if="filterData.siteIds && filterData.siteIds.length === 1"
