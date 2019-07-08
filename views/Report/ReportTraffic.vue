@@ -2,14 +2,15 @@ import {EAreaMode} from "../../components/Reports";
 <template>
     <div>
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
 
@@ -26,7 +27,6 @@ import {EAreaMode} from "../../components/Reports";
                         @click="exportExcel(eFileType.csv)"
                     />
 
-                    <!-- Morris -->
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
@@ -40,7 +40,7 @@ import {EAreaMode} from "../../components/Reports";
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_in_out
+                <analysis-filter-in-out
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -63,7 +63,7 @@ import {EAreaMode} from "../../components/Reports";
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_in_out>
+                </analysis-filter-in-out>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -77,7 +77,6 @@ import {EAreaMode} from "../../components/Reports";
                 >
                 </anlysis-dashboard>
 
-                <!-- Morris -->
                 <highcharts-traffic
                     ref="highcharts"
                     :startDate="startDate"
@@ -138,7 +137,6 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
-// Morris
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 import {
@@ -153,7 +151,8 @@ import {
     ISite,
     ISiteItems,
     ReportDashboard,
-    ReportTableData
+    ReportTableData,
+    ITemplateItem
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
 import toExcel from "@/services/Excel/json2excel";
@@ -184,15 +183,14 @@ export default class ReportTraffic extends Vue {
     eFileType = EFileType;
 
     pageStep: EPageStep = EPageStep.none;
+    templateItem: ITemplateItem | null = null;
 
-    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     chartDatas: IChartTrafficData[] = [];
-    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -281,29 +279,18 @@ export default class ReportTraffic extends Vue {
     rData = new ReportTableData();
     reportTableTitle = {};
 
-    created() {}
-
-    mounted() {
+    created() {
         this.initDatas();
         this.initTemplate();
     }
 
+    mounted() {}
+
     initTemplate() {
         if (this.$route.query.template != undefined) {
             let templateJSON: string = this.$route.query.template as string;
-            let template = ReportService.anysislyTemplate(templateJSON);
-            if (template != null) {
-                console.log(template);
-
-                // this.receiveFilterData.startDate = new Date();
-            }
+            this.templateItem = ReportService.anysislyTemplate(templateJSON);
         }
-
-        //    :sitesSelectItem="sitesSelectItem"
-        //     :tagSelectItem="tagSelectItem"
-        //     :regionTreeItem="regionTreeItem"
-        //     :label="_('w_ReportFilterConditionComponent_')"
-        //     @submit-data="receiveFilterData"
     }
 
     async initDatas() {
@@ -657,7 +644,6 @@ export default class ReportTraffic extends Vue {
         }
     }
 
-    // Morris //
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
@@ -734,7 +720,6 @@ export default class ReportTraffic extends Vue {
             }
         }
     }
-    // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 

@@ -147,7 +147,7 @@ import {
     EDesignationPeriod,
     EIfAllSelected
 } from "@/components/Reports/models/EReport";
-import { IChartTrafficData } from "@/components/Reports";
+import { ITemplateItem } from "@/components/Reports";
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
@@ -165,50 +165,6 @@ enum EPageStep {
     components: {}
 })
 export class FilterCondition extends Vue {
-    // @Prop({
-    // 	type: Date, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return new Date();
-    // 	}
-    // })
-    // startDate: any;
-    //
-    // @Prop({
-    // 	type: Date, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return new Date();
-    // 	}
-    // })
-    // endDate: any;
-    //
-    // @Prop({
-    // 	type: Array, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return [];
-    // 	}
-    // })
-    // sites: any;
-    //
-    // @Prop({
-    // 	type: String, // Boolean, Number, String, Array, Object
-    // 	default: 'hour'
-    // })
-    // timeMode: any;
-    //
-    // @Prop({
-    // 	type: String, // Boolean, Number, String, Array, Object
-    // 	default: 'all'
-    // })
-    // areaMode: any;
-    //
-    // @Prop({
-    // 	type: Array, // Boolean, Number, String, Array, Object
-    // 	default: () => {
-    // 		return [];
-    // 	}
-    // })
-    // chartDatas: any;
-
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -227,8 +183,11 @@ export class FilterCondition extends Vue {
     })
     regionTreeItem: object;
 
-    // Morris
-    // Morris
+    @Prop({
+        type: Object,
+        default: null
+    })
+    templateItem: ITemplateItem | null;
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
@@ -274,6 +233,7 @@ export class FilterCondition extends Vue {
         // this.initSelectItemTree();
         // this.initRegionTreeSelect();
         // this.siteFilterPermission();
+        this.initTemplate();
     }
 
     // initRegionTreeSelect() {
@@ -405,6 +365,30 @@ export class FilterCondition extends Vue {
         this.inputFormData.designationPeriod = "today";
         this.inputFormData.startDate = new Date();
         this.inputFormData.endDate = new Date();
+    }
+
+    initTemplate() {
+        if (this.templateItem != null) {
+            if (this.templateItem.type != undefined) {
+                this.inputFormData.type = this.templateItem.type;
+            }
+
+            if (this.templateItem.sites != undefined) {
+                for (let site of this.templateItem.sites) {
+                    this.inputFormData.siteIds.push(site.objectId);
+                }
+            }
+
+            if (this.templateItem.tags != undefined) {
+                for (let tag of this.templateItem.tags) {
+                    this.inputFormData.tagIds.push(tag.objectId);
+                }
+            }
+
+            // TODO: Date send api for Tina
+
+            this.doSubmit();
+        }
     }
 
     async doSubmit() {
@@ -748,7 +732,7 @@ export class FilterCondition extends Vue {
 }
 
 export default FilterCondition;
-Vue.component("filter_condition", FilterCondition);
+Vue.component("filter-condition", FilterCondition);
 </script>
 
 <style lang="scss" scoped>

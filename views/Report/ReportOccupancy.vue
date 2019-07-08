@@ -2,14 +2,15 @@
     <div class="animated fadeIn">
 
         <!-- Tina -->
-        <filter_condition
+        <filter-condition
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
-        </filter_condition>
+        </filter-condition>
 
         <div v-show="pageStep === ePageStep.none">
 
@@ -26,7 +27,6 @@
                         @click="exportExcel(eFileType.csv)"
                     />
 
-                    <!-- Morris -->
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
@@ -40,7 +40,7 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis_filter_demo
+                <analysis-filter-demo
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -60,7 +60,7 @@
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
 
-                </analysis_filter_demo>
+                </analysis-filter-demo>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -74,7 +74,6 @@
                 >
                 </anlysis-dashboard>
 
-                <!-- Morris -->
                 <highcharts-occupancy
                     :startDate="startDate"
                     :endDate="endDate"
@@ -84,7 +83,6 @@
                     :value="chartDatas"
                 >
                 </highcharts-occupancy>
-                <!-- Morris -->
 
                 <!-- Ben -->
                 <report-table
@@ -147,6 +145,7 @@ import {
     ReportDashboard,
     EChartMode,
     ISite,
+    ITemplateItem,
     ReportTableData
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
@@ -173,16 +172,15 @@ enum EPageStep {
 export default class ReportOccupancy extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
+    templateItem: ITemplateItem | null = null;
     eFileType = EFileType;
 
-    ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISiteAreas[] = [];
     chartDatas: IChartOccupancyData[] = [];
-    ////////////////////////////////////// Morris End //////////////////////////////////////
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -263,11 +261,17 @@ export default class ReportOccupancy extends Vue {
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
-        // this.initChartDeveloper();
+        this.initDatas();
+        this.initTemplate();
     }
 
-    mounted() {
-        this.initDatas();
+    mounted() {}
+
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+        }
     }
 
     async initDatas() {
@@ -279,7 +283,6 @@ export default class ReportOccupancy extends Vue {
         await this.initSelectItemTree();
     }
 
-    // Morris //
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
@@ -382,7 +385,6 @@ export default class ReportOccupancy extends Vue {
             }
         }
     }
-    // Morris //
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 

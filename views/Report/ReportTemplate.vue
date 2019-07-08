@@ -35,6 +35,10 @@
                 @selected="selectedItem($event)"
             >
 
+                <template #sites="{$attrs}">
+                    {{ showFirst($attrs.value) }}
+                </template>
+
                 <template #mode="{$attrs}">
                     {{ getMode($attrs.value) }}
                 </template>
@@ -54,10 +58,13 @@
 
 
                 <template #sendDates="{$attrs}">
-<!--                    <div>{{ $attrs.value }}</div>-->
-                    <div v-html="getReportTime($attrs.value)"></div>
+                    <div v-html="getReportTimeTable($attrs.value)"></div>
                 </template>
 
+
+                <template #sendUsers="{$attrs}">
+                    {{ showFirst($attrs.value) }}
+                </template>
 
                 <template #Actions="{$attrs, $listeners}">
                     <iv-toolbox-more :disabled="isSelected.length !== 1">
@@ -68,9 +75,7 @@
                     </iv-toolbox-more>
                 </template>
 
-                <template #sites="{$attrs}">
-                    {{ showFirst($attrs.value) }}
-                </template>
+
 
                 <template #goToReport="{$attrs}">
                     <div class="mt-2 ml-3 mb-3">
@@ -96,6 +101,10 @@
                 @update:*="tempSaveInputData($event)"
                 @submit="saveAddOrEdit($event)"
             >
+
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
 
                 <template #selectTree="{ $attrs, $listeners }">
 
@@ -280,7 +289,7 @@ import Dialog from "@/services/Dialog/Dialog";
 import Datetime from "@/services/Datetime";
 
 import { EWeeks, EVideoSource } from "@/components/Reports";
-import { ITemplate } from "@/components/Reports";
+import { ITemplateItem } from "@/components/Reports";
 
 enum EPageStep {
     list = "list",
@@ -352,12 +361,25 @@ export default class ReportTemplate extends Vue {
         this.inputFormData = {
             objectId: "",
             name: "",
-            description: "",
             siteIds: [],
-            designationPeriod: "today",
+            tagIds: [],
+            type: EDesignationPeriod.today,
+            mode: "",
+            endDate: new Date(),
+            startDate: new Date(),
+            sendDates: '',
+            sendUserIds: [],
+
+            stepType: "",
+
             siteIdsText: "",
-            regionIdsText: "",
-            stepType: ""
+            tagIdsText: "",
+            modeText: '',
+            typeText: '',
+            startDateText: '',
+            endDateText: '',
+            sendDatesText: '',
+            sendUsersText: '',
         };
     }
 
@@ -515,41 +537,66 @@ export default class ReportTemplate extends Vue {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
-        console.log(" - ", this.selectedDetail);
     }
 
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-            console.log("param - ", param);
 
             this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
-                description: param.description,
                 siteIds: param.sites,
-                regionIds: param.regions,
+                tagIds: param.tags,
+                stepType: "",
+                mode: param.mode,
+                type: param.type,
+                startDate: new Date(param.startDate),
+                endDate: new Date(param.endDate),
+                sendDates: param.sendDates,
+                sendUserIds: param.sendUsers,
+
                 siteIdsText: this.idsToText(param.sites),
-                regionIdsText: this.idsToText(param.regions),
-                stepType: ""
+                tagIdsText: this.idsToText(param.tags),
+                modeText: this.getMode(param.mode),
+                typeText: this.getType(param.type),
+                startDateText: param.startDate ? this.dateToYYYY_MM_DD(param.startDate) : '',
+                endDateText: param.endDate ? this.dateToYYYY_MM_DD(param.endDate) : '',
+                sendDatesText: this.getReportTimeView(param.sendDates),
+                sendUsersText: this.idsToText(param.sendUsers)
             };
         }
+
     }
 
     tempSaveInputData(data) {
         switch (data.key) {
+
             case "name":
                 this.inputFormData.name = data.value;
                 break;
-            case "description":
-                this.inputFormData.description = data.value;
+            case "tagIds":
+                this.inputFormData.tagIds = data.value;
                 break;
             case "siteIds":
                 this.inputFormData.siteIds = data.value;
                 break;
-            case "regionIds":
-                this.inputFormData.regionIds = data.value;
+            case "type":
+                this.inputFormData.type = data.value;
                 break;
+            case "mode":
+                this.inputFormData.mode = data.value;
+                break;
+            case "startDate":
+                this.inputFormData.startDate = data.value;
+                break;
+            case "endDate":
+                this.inputFormData.endDate = data.value;
+                break;
+            case "sendUserIds":
+                this.inputFormData.sendUserIds = data.value;
+                break;
+
         }
 
         this.selecteds = [];
@@ -603,9 +650,14 @@ export default class ReportTemplate extends Vue {
                 this.inputFormData.siteIds.map(item => item.objectId)
             )
         );
-        this.inputFormData.regionIds = JSON.parse(
+        this.inputFormData.tagIds = JSON.parse(
             JSON.stringify(
-                this.inputFormData.regionIds.map(item => item.objectId)
+                this.inputFormData.tagIds.map(item => item.objectId)
+            )
+        );
+        this.inputFormData.sendUserIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.sendUserIds.map(item => item.objectId)
             )
         );
     }
@@ -641,7 +693,8 @@ export default class ReportTemplate extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputFormData.type === EPageStep.edit) {
+
+        if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
             // siteIds clear
             this.inputFormData.siteIds = [];
@@ -652,8 +705,20 @@ export default class ReportTemplate extends Vue {
             }
         }
 
-        if (this.inputFormData.type === EPageStep.add) {
+        if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
+
+            // siteIds clear
+            this.inputFormData.siteIds = [];
+
+            // from selecteds push siteIds
+            for (const item of this.selecteds) {
+                this.inputFormData.siteIds.push(item.objectId);
+            }
+        }
+
+        if (this.inputFormData.stepType === EPageStep.duplicate) {
+            this.pageStep = EPageStep.duplicate;
 
             // siteIds clear
             this.inputFormData.siteIds = [];
@@ -676,20 +741,48 @@ export default class ReportTemplate extends Vue {
 
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
-        this.inputFormData.designationPeriod = "today";
+        this.inputFormData.type = "today";
         this.inputFormData.startDate = new Date();
         this.inputFormData.endDate = new Date();
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputFormData.stepType === EPageStep.add) {
-            const datas: ITag[] = [
+        if (!this.inputFormData.objectId) {
+
+            if (data.startDate && data.endDate) {
+                const datas: any = [
+                    {
+                        name: data.name,
+                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
+                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
+                        startDate: data.startDate,
+                        endDate: data.endDate,
+                        mode: data.mode,
+                    }
+                ];
+            }
+
+            if (data.type) {
+                const datas: any = [
+                    {
+                        name: data.name,
+                        siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                        tagIds: data.tagIds !== undefined ? data.tagIds : [],
+                        sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
+                        startDate: data.startDate,
+                        endDate: data.endDate,
+                        mode: data.mode,
+                    }
+                ];
+            }
+
+            const datas: any = [
                 {
                     name: data.name,
-                    description: data.description,
-                    regionIds:
-                        data.regionIds !== undefined ? data.regionIds : [],
-                    siteIds: data.siteIds !== undefined ? data.siteIds : []
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    tagIds: data.tagIds !== undefined ? data.tagIds : [],
+                    sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
                 }
             ];
 
@@ -768,7 +861,7 @@ export default class ReportTemplate extends Vue {
 
     async doDelete() {
         Dialog.confirm(
-            this._("w_Tag_DeleteConfirm"),
+            this._("w_ReportTemplate_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const param of this.selectedDetail) {
@@ -779,7 +872,7 @@ export default class ReportTemplate extends Vue {
                     };
 
                     this.$server
-                        .D("/tag", deleteUserParam)
+                        .D("/report/template", deleteUserParam)
                         .then((response: any) => {
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
@@ -922,7 +1015,7 @@ export default class ReportTemplate extends Vue {
 
     }
 
-    getReportTime(data: any): string {
+    getReportTimeTable(data: any): string {
 
         let weekDay: string = '';
         let time: string = '';
@@ -972,6 +1065,58 @@ export default class ReportTemplate extends Vue {
 
         return result;
     }
+
+    getReportTimeView(data: any): string {
+
+        let weekDay: string = '';
+        let time: string = '';
+        let result: string = '';
+
+        if (data) {
+            for (const item of data) {
+
+                if (item.day === '0') {
+                    weekDay = EWeeks.Sunday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} ; `;
+                }
+                if (item.day === '1') {
+                    weekDay = EWeeks.Monday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} ; `;
+                }
+                if (item.day === '2') {
+                    weekDay = EWeeks.Tuesday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} ; `;
+                }
+                if (item.day === '3') {
+                    weekDay = EWeeks.Wednesday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} ; `;
+                }
+                if (item.day === '4') {
+                    weekDay = EWeeks.Thursday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} ; `;
+                }
+                if (item.day === '5') {
+                    weekDay = EWeeks.Friday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} ; `;
+                }
+                if (item.day === '6') {
+                    weekDay = EWeeks.Saturday;
+                    time = Datetime.DateTime2String(new Date(item.date), "HH:mm");
+                    result += `${weekDay}, ${time} ; `;
+                }
+
+            }
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
 
     goToReport(value: any) {
         let url = "/reports/";
@@ -1049,6 +1194,7 @@ export default class ReportTemplate extends Vue {
                  */
                 type: string;
 
+
                 /**
                  * @uiLabel - ${this._("w_BOCampaign_StartDate")}
                  */
@@ -1107,6 +1253,13 @@ export default class ReportTemplate extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_Tag")}
+                 * @uiColumnGroup - tag
+                 */
+                tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
+
+
+                /**
                  * @uiLabel - ${this._("w_ReportTemplate_Metric")}
                  */
                 mode: ${toEnumInterface(this.metricSelectItem as any, false)};
@@ -1152,7 +1305,7 @@ export default class ReportTemplate extends Vue {
                          : "false"
                  }
                  */
-                designationPeriod?: ${toEnumInterface(
+                type?: ${toEnumInterface(
                     this.designationPeriodSelectItem as any,
                     false
                 )};
@@ -1198,39 +1351,53 @@ export default class ReportTemplate extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_Tag")}
+                 * @uiType - iv-form-label
+                 */
+                tagIdsText: string;
+
+
+                /**
                  * @uiLabel - ${this._("w_ReportTemplate_Metric")}
                  * @uiType - iv-form-label
                  */
-                mode?: string;
+                modeText?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod")}
+                 * @uiType - iv-form-label
+                 */
+                typeText?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_BOCampaign_StartDate")}
                  * @uiType - iv-form-label
+                 * @uiColumnGroup - date
                  */
-                startDate?: any;
+                startDateText?: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
                  * @uiType - iv-form-label
+                 * @uiColumnGroup - date
                  */
-                endDate?: any;
+                endDateText?: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_SendReportTime")}
                  * @uiType - iv-form-label
                  */
-                sendDates?: string;
+                sendDatesText?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Recipient")}
                  * @uiType - iv-form-label
                 */
-                sendUsers?: string;
-
+                sendUsersText?: string;
 
             }
         `;

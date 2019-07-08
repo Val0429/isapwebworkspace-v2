@@ -185,7 +185,7 @@ export class AnalysisFilterDemo extends Vue {
 }
 
 export default AnalysisFilterDemo;
-Vue.component("analysis_filter_demo", AnalysisFilterDemo);
+Vue.component("analysis-filter-demo", AnalysisFilterDemo);
 </script>
 
 <style lang="scss" scoped>
