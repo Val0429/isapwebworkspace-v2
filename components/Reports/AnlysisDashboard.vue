@@ -289,7 +289,7 @@ import {
     ETimeMode
 } from "@/components/Reports";
 import { EWeather } from "./models/EHighCharts";
-import HighChartsService from "./models/HighChartsService";
+import HighchartsService from "./models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
@@ -601,7 +601,7 @@ export class AnlysisDashboard extends Vue {
     }
 
     showWeather() {
-        let result = HighChartsService.weatherIcon(this.weather);
+        let result = HighchartsService.weatherIcon(this.weather);
         return result;
     }
 }

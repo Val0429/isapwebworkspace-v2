@@ -48,7 +48,7 @@ import {
     ISiteItems
 } from "@/components/Reports";
 import Datetime from "@/services/Datetime.vue";
-import HighChartsService from "./models/HighChartsService";
+import HighchartsService from "./models/HighchartsService";
 
 @Component({
     components: {}
