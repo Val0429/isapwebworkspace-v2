@@ -185,7 +185,6 @@ export class HighchartsRepeatVisitor extends Vue {
         this.start();
     }
 
-
     created() {
         this.initSelectItem();
         this.start();
@@ -520,7 +519,7 @@ export class HighchartsRepeatVisitor extends Vue {
                     break;
 
                 case "5+":
-                    if (val.repeatCount > 5) {
+                    if (val.repeatCount >= 5) {
                         totalCount += val.maleCount;
                         totalCount += val.femaleCount;
                         maleCount += val.maleCount;
