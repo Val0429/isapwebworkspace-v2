@@ -8,13 +8,13 @@
         >
             <thead>
                 <tr class="title">
-                    <th v-if="reportTableData._body[0].site">
+                    <th v-if="reportTableData._body &&  reportTableData._body[0]">
                         {{ _('w_Site')}}
                     </th>
-                    <th v-if="reportTableData._body[0].area">
+                    <th v-if="reportTableData._body && reportTableData._body[0] && reportTableData._body[0].area">
                         {{ _('w_Area')}}
                     </th>
-                    <th v-if="reportTableData._body[0].group">
+                    <th v-if="reportTableData._body && reportTableData._body[0] && reportTableData._body[0].group">
                         {{ _('w_Group')}}
 
                     </th>
@@ -50,14 +50,20 @@
                         >{{items.group.name}}</td>
                         <td class="title"> {{reportTableTitle.title1}}</td>
                         <td v-for="(itemIn, key, index) in items.in">
-                            <span>{{ itemIn.value}}</span>
+
+                            <a
+                                v-if="itemIn.link && itemIn.value != 0"
+                                href="#"
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'in')"
+                            >{{ itemIn.value}}</a>
+                            <span v-else>{{ itemIn.value}}</span>
                             <span
                                 v-if="itemIn.valueRatio != 0"
                                 :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''"
                             >{{ " (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
                         </td>
                         <td v-if="items.in">
-                            <span>{{items.inTotal.value }}</span>
+                            <a>{{items.inTotal.value }}</a>
                             <span
                                 v-if="items.inTotal.valueRatio != 0"
                                 :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''"
@@ -67,7 +73,12 @@
                     <tr>
                         <td class="title"> {{reportTableTitle.title2}}</td>
                         <td v-for="(itemOut, key, index) in items.out">
-                            <span>{{ itemOut.value }}</span>
+                            <a
+                                v-if="itemOut.link && itemOut.value != 0"
+                                href="#"
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'out')"
+                            >{{ itemOut.value }}</a>
+                            <span v-else>{{ itemOut.value}}</span>
                             <span
                                 v-if="itemOut.valueRatio != 0"
                                 :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''"
@@ -84,7 +95,12 @@
                     <tr v-if="reportTableTitle.title3">
                         <td class="title"> {{reportTableTitle.title3}}</td>
                         <td v-for="(itemIn, key, index) in items.in2">
-                            <span>{{ itemIn.value }}</span>
+                            <a
+                                v-if="itemIn.link && itemIn.value != 0"
+                                href="#"
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'in2')"
+                            >{{ itemIn.value }}</a>
+                            <span v-else>{{ itemIn.value}}</span>
                             <span
                                 v-if="itemIn.valueRatio != 0"
                                 :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''"
@@ -101,7 +117,12 @@
                     <tr v-if="reportTableTitle.title4">
                         <td class="title"> {{reportTableTitle.title4}}</td>
                         <td v-for="(itemOut, key, index) in items.out2">
-                            <span>{{ itemOut.value }}</span>
+                            <a
+                                v-if="itemOut.link && itemOut.value != 0"
+                                href="#"
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'out2')"
+                            >{{ itemOut.value }}</a>
+                            <span v-else>{{ itemOut.value}}</span>
                             <span
                                 v-if="itemOut.valueRatio != 0"
                                 :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''"
@@ -242,6 +263,17 @@ export class ReportTable extends Vue {
             arrays.push(array);
         }
         return arrays;
+    }
+
+    clickItem(time, site, area, rowName) {
+        this.$emit(
+            "clickItem",
+            this.reportTableData.thatDay,
+            time,
+            site,
+            area,
+            rowName
+        );
     }
 }
 

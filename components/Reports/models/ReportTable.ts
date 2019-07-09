@@ -2,6 +2,7 @@ import { ESign, EChartMode } from './EReport';
 import { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut } from './IReportTable';
 
 class ReportTableData {
+    _thatDay?: Date;
     _noFoot: boolean = false;
     _chartMode: EChartMode = EChartMode.none;
     _head: string[] = [];
@@ -170,6 +171,13 @@ class ReportTableData {
 
     get foot() {
         return this._foot;
+    }
+
+    set thatDay(value: Date) {
+        this._thatDay = value;
+    }
+    get thatDay() {
+        return this._thatDay;
     }
 }
 
