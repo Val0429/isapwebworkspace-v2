@@ -353,7 +353,7 @@ import {
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 import RegionAPI from "@/services/RegionAPI";
 
 enum EPageStep {

@@ -111,7 +111,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 // Tina
 import {

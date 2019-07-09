@@ -287,7 +287,7 @@ import {
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 
 import { EWeeks, EVideoSource } from "@/components/Reports";

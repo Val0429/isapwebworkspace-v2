@@ -1,4 +1,4 @@
-import Dialog from "./Dialog/Dialog";
+import Dialog from './Dialog';
 
 export class ResponseFilter {
     constructor() {}
@@ -18,8 +18,8 @@ export class ResponseFilter {
         return true;
     }
 
-    customMessage (viewItem: any, e: any, message: string) {
-         if (!e.res) {
+    customMessage(viewItem: any, e: any, message: string) {
+        if (!e.res) {
             return false;
         }
         if (!e.res.statusCode) {
@@ -30,7 +30,7 @@ export class ResponseFilter {
             return true;
         }
         if (e.res.statusCode == 400) {
-             Dialog.error(message);
+            Dialog.error(message);
             return true;
         }
         return true;

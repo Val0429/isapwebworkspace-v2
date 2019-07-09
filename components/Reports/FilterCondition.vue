@@ -145,7 +145,7 @@ import {EDesignationPeriod} from "./models/EReport";
     } from "@/components/Reports/models/EReport";
     import {ITemplateItem} from "@/components/Reports";
     import Datetime from "@/services/Datetime";
-    import Dialog from "@/services/Dialog/Dialog";
+    import Dialog from "@/services/Dialog";
 
     enum EPageStep {
     none = "none",

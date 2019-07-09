@@ -84,7 +84,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 interface IinputFormData {
     id: string;
