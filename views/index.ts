@@ -38,6 +38,7 @@ import User from './components/acs/User.vue';
 import UserPermission from './components/acs/UserPermission.vue';
 import Site from './components/bar/Site.vue';
 import Region from './components/bar/Region.vue';
+import License from './components/bar/License.vue';
 
 // Demos
 import DemoFETCardPrint from './Demos/DemoFETCardPrint.vue';
@@ -60,6 +61,7 @@ $({ path: '/floor', name: "_('w_Floor')"})(Floor);
     $({ path: '/demographicreport', name: "_('w_DemographicReport')"})(DemographicReport);
     $({ path: '/cardreport', name: "_('w_CardExpirationReport')"})(CardExpirationReport);
     $({ path: '/visitorreport', name: "_('w_VisitorCardReport')"})(VisitorCardReport);
+    $({ path: '/license', name: "_('w_License')"})(License);
     
 // Users
 

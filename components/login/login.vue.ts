@@ -16,6 +16,7 @@ export default class Login extends Vue {
     private password: string = '';
         
     async Login() {
+        if(!this.username || !this.password)return;
         let result = await this.$login({
             username: this.username,
             password: this.password

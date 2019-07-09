@@ -19,6 +19,7 @@
                                         </div>
 
                                         <input
+                                            v-on:keyup.enter="Login()"
                                             type="text"
                                             class="form-control"
                                             v-model="username"
@@ -34,6 +35,7 @@
                                         </div>
 
                                         <input
+                                            v-on:keyup.enter="Login()"
                                             type="password"
                                             class="form-control"
                                             v-model="password"
@@ -51,6 +53,7 @@
                                                 style="margin-top: 3px"
                                                 variant="primary"
                                                 class="px-4"
+                                                
                                                 @click="Login()"
                                             >{{ _("wb_Login") }}</b-button>
                                         </b-col>

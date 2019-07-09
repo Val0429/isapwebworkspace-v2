@@ -590,4 +590,26 @@ export default class LangObject implements ILang {
     w_Permission="Permission";
     w_Setting="Setting";    
     w_Report="Report";
+
+    w_License="License";
+    w_License_List = 'License List';
+    w_License_Add = 'Add License';
+    w_License_LicenseKey = 'LicenseKey';
+    w_License_Mac = 'Mac';
+    w_License_productName = 'ProductName';
+    w_License_Quantity = 'Quantity';
+    w_License_Trial = 'Trial';
+    w_License_RegisterDate = 'RegisterDate';
+    w_License_ExpireDate = 'ExpireDate';
+    w_License_License_Key = 'License Key';
+    w_License_UploadOfflineKey = 'Upload offline key';
+    w_License_UploadOfflineKey1 = '* Upload offline key';
+
+    w_License_License_KeyPlaceholder = 'License Key. Input 25 digits.  English alphabet or number only.  Format: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx';
+
+    w_License_Setting_Success = 'License set success.';
+    w_License_Setting_Fail = 'License set failed.';
+
+    w_License_Step1_mac = 'Add by license key and mac';
+    w_License_Step1_offline = 'Add by upload offline key';
 }

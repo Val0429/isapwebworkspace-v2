@@ -134,8 +134,15 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
                 `;
         }
     }
-    /// 7) pre-add 新增欄位的default值
-    preAdd() {
+    
+    async viewChange($event: any){
+        console.log("view", $event)
+        this.filterVisible = $event == 'view';
+        //update options
+        if($event=='add') await this.getOptions();
+    } 
+    
+    preAdd() {    
         return;
     }
     /// 8) post-add 寫入新增前要做甚麼調整
@@ -143,12 +150,15 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         return this.postAddEdit(row);     
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
-    preEdit(row) {
+    async preEdit(row) {
         let props = this.getReaderInfo(row);
         row.sipassin = props.sipassin;
         row.sipassout = props.sipassout;
         row.ccurein = props.ccurein;
         row.ccureout = props.ccureout;
+        console.log("row.readerin", row.readerin);
+        console.log("row.readerout", row.readerout);
+        await this.getOptions(row.readerin,row.readerout);        
         return row;
     }
     filterInterface(){
@@ -206,11 +216,8 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
     private areas:any[]=[];
     async created() {
         this.permissionName = PermissionName.door;
-        await Promise.all([this.getOptions(),
-        this.getDoorGroups()]);
-
-        console.log("sipassOptions", this.sipassOptions);
-        console.log("ccureOptions", this.ccureOptions);
+        await this.getDoorGroups();
+        //await this.getOptions();
     }
     private async getDoorGroups(){
         let resp: any=await this.$server.R("/acs/doorgroup" as any,{ "paging.all": "true" });
@@ -222,11 +229,17 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         this.areas =  resp.results;
     }
 
-    private async getOptions() {
-        let resp: any=await this.$server.R("/acs/reader" as any,{ "paging.all": "true" });
-        this.options=resp.results.map(item => { return { key: item.objectId,value: item.readername,system: item.system }; });
+    private async getOptions(readerin?:any[],readerout?:any[]):Promise<void> {
+        let resp: any=await this.$server.R("/acs/reader" as any,{ "paging.all": "true", "vacant":"true" });
+        let tempOptions=resp.results;        
+        if(readerin)tempOptions.push(...readerin);
+        if(readerout)tempOptions.push(...readerout);        
+        this.options=tempOptions.map(item => { return { key: item.objectId,value: item.readername,system: item.system }; });
         this.sipassOptions=this.options.filter(x => x.system==System.SIPASS);
         this.ccureOptions=this.options.filter(x => x.system==System.CCURE);
+        
+        console.log("sipassOptions", this.sipassOptions);
+        console.log("ccureOptions", this.ccureOptions);
     }
     getInfo(door:any){
         let group = this.doorGroups.find(x=>x.doors.find(y=>y.objectId==door.objectId));

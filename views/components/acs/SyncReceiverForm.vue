@@ -44,10 +44,12 @@ export default class SyncReceiverForm extends BasicFormQuick implements IFormQui
         return `
                 interface {                    
                     /**
+                     * @uiColumnGroup - row4
                     * @uiLabel - ${this._("name")}
                     */
                     name?: string;
                     /**
+                     * @uiColumnGroup - row4
                     * @uiLabel - ${this._("w_Email")}
                     */
                     email?: string;     

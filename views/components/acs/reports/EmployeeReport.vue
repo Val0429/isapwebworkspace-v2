@@ -149,7 +149,7 @@ export default class AttendanceReport extends Vue  {
              */
             ResignDate?:Date;
             /**
-             * @uiColumnGroup - row4             
+             * @uiColumnGroup - row4
              * @uiLabel - ${this._('w_Member_CompanyName1')}
              */
             CompanyName?:string;

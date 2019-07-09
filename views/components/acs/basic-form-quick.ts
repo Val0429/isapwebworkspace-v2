@@ -17,7 +17,7 @@ export class BasicFormQuick extends Vue {
               /**
               * @uiLabel - ${this._("name")}
               */
-              name?:string;
+              name:string;
           }`;
     } 
 
