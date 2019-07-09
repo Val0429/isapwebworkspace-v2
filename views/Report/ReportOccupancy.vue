@@ -1483,10 +1483,10 @@ export default class ReportOccupancy extends Vue {
                             if (
                                 new Date(summaryData.date).getFullYear() !=
                                     new Date(head).getFullYear() ||
-                                new Date(summaryData.date).getUTCMonth() !=
-                                    new Date(head).getUTCMonth() ||
-                                new Date(summaryData.date).getUTCDate() !=
-                                    new Date(head).getUTCDate()
+                                new Date(summaryData.date).getMonth() !=
+                                    new Date(head).getMonth() ||
+                                new Date(summaryData.date).getDate() !=
+                                    new Date(head).getDate()
                             ) {
                                 continue;
                             }
@@ -1563,9 +1563,9 @@ export default class ReportOccupancy extends Vue {
                     x =>
                         new Date(x).getFullYear() +
                         "/" +
-                        (new Date(x).getUTCMonth() + 1) +
+                        (new Date(x).getMonth() + 1) +
                         "/" +
-                        new Date(x).getUTCDate() +
+                        new Date(x).getDate() +
                         " " +
                         this.showWeek(new Date(x).getDay())
                 );
@@ -1580,13 +1580,13 @@ export default class ReportOccupancy extends Vue {
             let tempDate = new Date(sunTime.split(" ")[0]); //去掉星期
             let sDate = new Date(
                 tempDate.getFullYear(),
-                tempDate.getUTCMonth(),
-                tempDate.getUTCDate() + 1
+                tempDate.getMonth(),
+                tempDate.getDate() + 1
             ).toISOString();
             let eDate = new Date(
                 tempDate.getFullYear(),
-                tempDate.getUTCMonth(),
-                tempDate.getUTCDate() + 1
+                tempDate.getMonth(),
+                tempDate.getDate() + 1
             ).toISOString();
             let filterData = {
                 startDate: sDate,
@@ -1631,14 +1631,14 @@ export default class ReportOccupancy extends Vue {
 
         let tempSDate = new Date(
             thatDay.getFullYear(),
-            thatDay.getUTCMonth(),
-            thatDay.getUTCDate(),
+            thatDay.getMonth(),
+            thatDay.getDate(),
             tempTime
         ).toISOString();
         let tempEDate = new Date(
             thatDay.getFullYear(),
-            thatDay.getUTCMonth(),
-            thatDay.getUTCDate(),
+            thatDay.getMonth(),
+            thatDay.getDate(),
             tempTime + 1
         ).toISOString();
 
