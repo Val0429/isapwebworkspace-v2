@@ -1423,16 +1423,15 @@ export default class ReportDemographic extends Vue {
             }
         }
 
-        console.log("tempChartDatas", tempChartDatas);
+       // console.log("tempChartDatas", tempChartDatas);
 
         this.chartDatas = tempChartDatas;
-
         console.log(" - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        // console.log("areaId - ", this.inputFormData.areaId);
+        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];

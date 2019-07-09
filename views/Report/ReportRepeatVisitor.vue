@@ -1190,7 +1190,7 @@ export default class ReportRepeatVisitor extends Vue {
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        // console.log("areaId - ", this.inputFormData.areaId);
+        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
@@ -1513,18 +1513,52 @@ export default class ReportRepeatVisitor extends Vue {
         }
     }
 
-    receiveType(type) {
+    async receiveType(type) {
         this.inputFormData.type = type;
         this.timeMode = type;
         console.log("type - ", this.inputFormData.type);
+
+	    // 單一site
+	    if (this.filterData.firstSiteId) {
+		    this.sortOutChartData(this.responseData.summaryDatas);
+
+		    this.inputFormData.areaId = "";
+		    this.inputFormData.groupId = "";
+		    this.inputFormData.deviceId = "";
+
+		    await this.initSelectItemArea();
+		    await this.initSelectItemDeviceGroup();
+		    await this.initSelectItemDevice();
+
+		    this.inputFormData.areaId = "all";
+		    this.inputFormData.groupId = "all";
+		    this.inputFormData.deviceId = "all";
+	    }
     }
 
-    receiveIsIncludedEmployee(isIncludedEmployee) {
+    async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
         console.log(
             "isIncludedEmployee - ",
             this.inputFormData.isIncludedEmployee
         );
+
+	    // 單一site
+	    if (this.filterData.firstSiteId) {
+		    this.sortOutChartData(this.responseData.summaryDatas);
+
+		    this.inputFormData.areaId = "";
+		    this.inputFormData.groupId = "";
+		    this.inputFormData.deviceId = "";
+
+		    await this.initSelectItemArea();
+		    await this.initSelectItemDeviceGroup();
+		    await this.initSelectItemDevice();
+
+		    this.inputFormData.areaId = "all";
+		    this.inputFormData.groupId = "all";
+		    this.inputFormData.deviceId = "all";
+	    }
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

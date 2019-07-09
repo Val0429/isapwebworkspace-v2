@@ -1477,7 +1477,7 @@ export default class ReportTraffic extends Vue {
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        // console.log("areaId - ", this.inputFormData.areaId);
+        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
