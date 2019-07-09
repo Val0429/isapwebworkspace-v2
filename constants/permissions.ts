@@ -56,7 +56,7 @@ export const PermissionList = [
     {key:PermissionName.syncreceiver, route :"/syncreceiver", group:"Setting", access:{C:true,R:true,U:true,D:true}},
 
     {key:PermissionName.humanResource, route :"", group:"Setting", access:{C:false,R:false,U:false,D:false}},
-    {key:PermissionName.systemLicense, route :"", group:"Setting", access:{C:false,R:false,U:false,D:false}},
-    {key:PermissionName.operationLog, route :"", group:"Setting", access:{C:false,R:false,U:false,D:false}}
+    {key:PermissionName.systemLicense, route :"/license", group:"Setting", access:{C:true,R:true,U:true,D:true}},
+    {key:PermissionName.operationLog, route :"", group:"Setting", access:{C:false,R:true,U:false,D:false}}
     
 ];
