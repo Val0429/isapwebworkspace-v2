@@ -538,7 +538,7 @@ export class HighchartsOccupancy extends Vue {
                 tempCategorieData.datas.push({
                     areaId: serie.areaId,
                     areaName: serie.areaName,
-                    occupancy: serie.data[i]
+                    occupancy: HighchartsService.formatFloat(serie.data[i])
                 });
             }
 
@@ -946,7 +946,7 @@ export class HighchartsOccupancy extends Vue {
             for (let tempItems of tempResult) {
                 for (let tempItem of tempItems.sites) {
                     if (tempItem.siteObjectId == site.objectId) {
-                        tempData.push(tempItem.occupancy);
+                        tempData.push(HighchartsService.formatFloat(tempItem.occupancy));
                         break;
                     }
                 }
