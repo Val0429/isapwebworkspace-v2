@@ -183,6 +183,11 @@ export class HighchartsDemographic extends Vue {
         this.start();
     }
 
+    @Watch("timeMode")
+    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
+        this.start();
+    }
+
     eChartMode = EChartMode;
     errorMessage: string = "";
     chartMode: EChartMode = EChartMode.none;
