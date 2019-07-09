@@ -24,6 +24,9 @@
         <!-- 6) custom edit / add template with <template #add.* /> -->
         
     </ivc-form-quick>
+    <div class="float-right">                
+        <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync()">{{_("w_Manual_Sync")}}</b-button>
+    </div>
     </div>
 </template>
 

@@ -20,7 +20,19 @@ export class BasicFormQuick extends Vue {
               name:string;
           }`;
     } 
-
+    syncEnabled:boolean = true;
+    async manualSync(){
+        try{
+            this.syncEnabled=false;
+            await this.$server.R("/acs/acssync" as any, {});
+            //refresh
+            this.params={};
+        }catch(err){
+            console.error(err);
+        }finally{
+            this.syncEnabled=true;
+        }
+    }
     beforeMount(){
         if(!this.$user || !this.$user.permissions)return;
         this.canAdd = this.$user.permissions.find(x=>x.access.C === true && x.of.identifier == this.permissionName) != undefined;

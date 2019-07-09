@@ -612,4 +612,5 @@ export default class LangObject implements ILang {
 
     w_License_Step1_mac = 'Add by license key and mac';
     w_License_Step1_offline = 'Add by upload offline key';
+    w_Manual_Sync = "同步所有讀卡機";
 }
