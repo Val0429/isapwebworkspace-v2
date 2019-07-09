@@ -1048,134 +1048,144 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     sortOutChartData(array: any) {
-        let tempChartDatas: IChartRepeatVisitorData[] = [];
-        this.chartDatas = [];
+	    let tempChartDatas: IChartRepeatVisitorData[] = [];
+	    this.chartDatas = [];
 
-        // 取得date、siteObjectId資料
-        for (const summary of array) {
-            let tempChartData: IChartRepeatVisitorData = {
-                date: summary.date,
-                siteObjectId: summary.site.objectId,
-                temperatureMin: 0,
-                temperatureMax: 0,
-                weather: EWeather.none,
-                repeatCount: 0,
-                ageRange: EAgeRange.none,
-                maleCount: 0,
-                femaleCount: 0
-            };
+	    // 取得date、siteObjectId資料
+	    for (const summary of array) {
+		    let tempChartData: IChartRepeatVisitorData = {
+			    date: summary.date,
+			    siteObjectId: summary.site.objectId,
+			    temperatureMin: 0,
+			    temperatureMax: 0,
+			    weather: EWeather.none,
+			    repeatCount: 0,
+			    ageRange: EAgeRange.none,
+			    maleCount: 0,
+			    femaleCount: 0
+		    };
 
-            let maleNotIncludeEmployee: number = 0;
-            let femaleNotIncludeEmployee: number = 0;
-            let maleTotal: number = 0;
-            let femaleTotal: number = 0;
-            let maleEmployee: number = 0;
-            let femaleEmployee: number = 0;
+		    let maleNotIncludeEmployee: number = 0;
+		    let femaleNotIncludeEmployee: number = 0;
+		    let maleTotal: number = 0;
+		    let femaleTotal: number = 0;
+		    let maleEmployee: number = 0;
+		    let femaleEmployee: number = 0;
 
-            // 判斷date, site 兩個是否相同
-            let haveSummary = false;
-            for (let loopChartData of tempChartDatas) {
-                if (
-                    this.checkDateAndSite(
-                        loopChartData.date,
-                        summary.date,
-                        loopChartData.siteObjectId,
-                        summary.site.objectId
-                    )
-                ) {
-                    haveSummary = true;
-                    tempChartData = loopChartData;
-                    break;
-                }
-            }
+		    // 判斷date, site 兩個是否相同
+		    let haveSummary = false;
+		    for (let loopChartData of tempChartDatas) {
+			    if (
+				    this.checkDateAndSite(
+					    loopChartData.date,
+					    summary.date,
+					    loopChartData.siteObjectId,
+					    summary.site.objectId
+				    )
+			    ) {
+				    haveSummary = true;
+				    tempChartData = loopChartData;
+				    break;
+			    }
+		    }
 
-            tempChartData.repeatCount += summary.total;
-            // tempChartData.occupancy += summary.count;
+		    tempChartData.repeatCount += summary.total;
+		    // tempChartData.occupancy += summary.count;
 
-            if (!haveSummary) {
-                // 取得weather、temperatureMin、temperatureMax
-                for (const weather of this.responseData.weathers) {
-                    if (
-                        this.checkDateAndSite(
-                            tempChartData.date,
-                            weather.date,
-                            tempChartData.siteObjectId,
-                            weather.site.objectId
-                        )
-                    ) {
-                        console.log(" - ", weather.icon);
-                        tempChartData.weather = WeatherService.WeatherIcon(
-                            weather.icon
-                        );
-                        tempChartData.temperatureMin = weather.temperatureMin;
-                        tempChartData.temperatureMax = weather.temperatureMax;
-                        break;
-                    }
-                }
-            }
+		    if (!haveSummary) {
+			    // 取得weather、temperatureMin、temperatureMax
+			    for (const weather of this.responseData.weathers) {
+				    if (
+					    this.checkDateAndSite(
+						    tempChartData.date,
+						    weather.date,
+						    tempChartData.siteObjectId,
+						    weather.site.objectId
+					    )
+				    ) {
+					    console.log(" - ", weather.icon);
+					    tempChartData.weather = WeatherService.WeatherIcon(
+						    weather.icon
+					    );
+					    tempChartData.temperatureMin = weather.temperatureMin;
+					    tempChartData.temperatureMax = weather.temperatureMax;
+					    break;
+				    }
+			    }
+		    }
 
-            //跑maleRange、 femaleRange
-            for (let index = 0; index < 6; index++) {
-                if (summary.maleRanges[index] == undefined) {
-                    break;
-                }
+		    //跑maleRange、 femaleRange
+		    for (let index = 0; index < 6; index++) {
+			    for (let index = 0; index < 6; index++) {
+				    if (summary.maleRanges[index] === null) {
+					    break;
+				    }
 
-                if (summary.femaleRanges[index] == undefined) {
-                    break;
-                }
+				    if (summary.femaleRanges[index] === null) {
+					    break;
+				    }
 
-                if (
-                    this.inputFormData.isIncludedEmployee ===
-                    EIncludedEmployee.no
-                ) {
-                    let tempData = JSON.parse(JSON.stringify(tempChartData));
-                    maleTotal = summary.maleRanges[index];
-                    femaleTotal = summary.femaleRanges[index];
-                    maleEmployee = summary.maleEmployeeRanges[index];
-                    femaleEmployee = summary.femaleEmployeeRanges[index];
-                    maleNotIncludeEmployee = maleTotal - maleEmployee;
-                    femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
+				    if (summary.maleEmployeeRanges[index] === null) {
+					    break;
+				    }
 
-                    tempData.maleCount = maleNotIncludeEmployee;
-                    tempData.femaleCount = femaleNotIncludeEmployee;
-                    tempData.ageRange = ReportService.SwitchAgeRange(
-                        index.toString()
-                    );
+				    if (summary.femaleEmployeeRanges[index] === null) {
+					    break;
+				    }
 
-                    tempChartDatas.push(tempData);
-                } else if (
-                    this.inputFormData.isIncludedEmployee ===
-                    EIncludedEmployee.yes
-                ) {
-                    let tempData = JSON.parse(JSON.stringify(tempChartData));
-                    maleTotal = summary.maleRanges[index];
-                    femaleTotal = summary.femaleRanges[index];
+				    if (
+					    this.inputFormData.isIncludedEmployee ===
+					    EIncludedEmployee.no
+				    ) {
+					    let tempData = JSON.parse(JSON.stringify(tempChartData));
+					    maleTotal = summary.maleRanges[index];
+					    femaleTotal = summary.femaleRanges[index];
+					    maleEmployee = summary.maleEmployeeRanges[index];
+					    femaleEmployee = summary.femaleEmployeeRanges[index];
+					    maleNotIncludeEmployee = maleTotal - maleEmployee;
+					    femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
 
-                    tempData.maleCount = maleTotal;
-                    tempData.femaleCount = femaleTotal;
-                    tempData.ageRange = ReportService.SwitchAgeRange(
-                        index.toString()
-                    );
+					    tempData.maleCount = maleNotIncludeEmployee;
+					    tempData.femaleCount = femaleNotIncludeEmployee;
+					    tempData.ageRange = ReportService.SwitchAgeRange(
+						    index.toString()
+					    );
 
-                    tempChartDatas.push(tempData);
-                }
+					    tempChartDatas.push(tempData);
+				    } else if (
+					    this.inputFormData.isIncludedEmployee ===
+					    EIncludedEmployee.yes
+				    ) {
+					    let tempData = JSON.parse(JSON.stringify(tempChartData));
+					    maleTotal = summary.maleRanges[index];
+					    femaleTotal = summary.femaleRanges[index];
 
-                // console.log(
-                //     index,
-                //     " //分開跑maleRange",
-                //     JSON.parse(JSON.stringify(tempChartDatas)),
-                //     JSON.parse(JSON.stringify(tempChartData)),
-                //     tempData.ageRange
-                // );
+					    tempData.maleCount = maleTotal;
+					    tempData.femaleCount = femaleTotal;
+					    tempData.ageRange = ReportService.SwitchAgeRange(
+						    index.toString()
+					    );
 
-                tempChartDatas.push(tempData);
-            }
+					    tempChartDatas.push(tempData);
+				    }
 
-            // tempChartDatas.push(tempChartData);
-        }
+				    // console.log(
+				    //     index,
+				    //     " //分開跑maleRange",
+				    //     JSON.parse(JSON.stringify(tempChartDatas)),
+				    //     JSON.parse(JSON.stringify(tempChartData)),
+				    //     tempData.ageRange
+				    // );
 
-        this.chartDatas = tempChartDatas;
-        console.log("this.chartDatas - ", this.chartDatas);
+				    // tempChartDatas.push(tempData);
+			    }
+
+			    // tempChartDatas.push(tempChartData);
+		    }
+
+		    this.chartDatas = tempChartDatas;
+		    console.log("this.chartDatas - ", this.chartDatas);
+	    }
     }
 
     async receiveAreaId(areaId) {

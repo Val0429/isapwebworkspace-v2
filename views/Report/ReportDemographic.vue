@@ -1361,11 +1361,19 @@ export default class ReportDemographic extends Vue {
 
             //跑maleRange、 femaleRange
             for (let index = 0; index < 6; index++) {
-                if (summary.maleRanges[index] == undefined) {
+                if (summary.maleRanges[index] === null) {
                     break;
                 }
 
-                if (summary.femaleRanges[index] == undefined) {
+                if (summary.femaleRanges[index] === null) {
+                    break;
+                }
+
+                if (summary.maleEmployeeRanges[index] === null) {
+                    break;
+                }
+
+                if (summary.femaleEmployeeRanges[index] === null) {
                     break;
                 }
 
