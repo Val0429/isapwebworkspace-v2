@@ -1,10 +1,51 @@
 <template>
 <div>
-    <ivc-filter-form
-            :inf="filterInterface()"
-            :visible="filterVisible"
-            v-on:input="onFilterSubmit($event)"
-        />
+    <iv-card
+        v-show="filterVisible" 
+            :label="_('w_Filter')"
+        >
+    <iv-form
+            ref="form"
+            class="col-md-9"
+            :value="params"
+            @mounted="doMounted"
+            :interface="filterInterface()"
+            @submit="onFilterSubmit($event)"
+            :visible="true"
+        >
+        <template #readersystem="{$attrs,$listeners}">                   
+            <b-form-group :label="_('system')" 
+            class="col-md-6">     
+                <b-input-group>               
+                    <b-form-radio inline v-model="readersystem" name="system" value="">{{_("w_Not_Selected")}}</b-form-radio>
+                    <b-form-radio inline v-model="readersystem" name="system" value="1">SIPASS</b-form-radio>
+                    <b-form-radio inline v-model="readersystem" name="system" value="800">CCURE</b-form-radio>
+                </b-input-group>    
+            </b-form-group>
+        </template>
+        <template #readerIO="{$attrs,$listeners}">                   
+            <b-form-group :label="_('readerIO')" 
+            class="col-md-6">     
+                <b-input-group>               
+                    <b-form-radio inline v-model="readerIO" name="readerIO" value="">{{_("w_Not_Selected")}}</b-form-radio>
+                    <b-form-radio inline v-model="readerIO" name="readerIO" value="IN">IN</b-form-radio>
+                    <b-form-radio inline v-model="readerIO" name="readerIO" value="OUT">OUT</b-form-radio>
+                </b-input-group>    
+            </b-form-group>
+        </template>
+            
+            </iv-form> 
+
+        <div class="col-md-12">
+            <template v-if="isMounted" >            
+                <div class="float-right">
+                    <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                    <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onFilterSubmit()">{{ _("wb_Reset") }}</b-button>                
+                </div>
+            </template>
+        </div>
+        </iv-card>
+        
         <ivc-form-quick v-on:viewChange="viewChange($event)">  
     
         <!-- 5) custom view templates with <template #view.* /> -->
@@ -24,7 +65,8 @@
         <!-- 6) custom edit / add template with <template #add.* /> -->
         
     </ivc-form-quick>
-    <div class="float-right">                
+    
+    <div class="float-right" v-show="filterVisible" >                
         <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync()">{{_("w_Manual_Sync")}}</b-button>
     </div>
     </div>
@@ -40,7 +82,8 @@ import { PermissionName} from '@/../src/constants/permissions';
 @Component
 /// 1) class name
 export default class ReaderForm extends BasicFormQuick implements IFormQuick2 {
-
+    readersystem:string="";
+    readerIO:string="";
     system = System;
     /// 2) cgi path
     path: string = "/acs/reader";
@@ -156,9 +199,57 @@ export default class ReaderForm extends BasicFormQuick implements IFormQuick2 {
         let groupname = groupin ? groupin.groupname : groupout ? groupout.groupname : "";
         return {io,doorname,groupname};
     }
-    
-    
+    isMounted:boolean=false;
+    doMounted(){
+        this.isMounted=true;
         
+    }
+    filterInterface():string{
+        return `interface {
+              /**
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Site")}
+              */
+             sitename?:string;
+             /**
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Area")}
+              */
+             areaname?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_DoorGroup")}
+              */
+             doorgroup?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_Door")}
+              */
+             doorname?:string;
+              /**
+              * @uiLabel - ${this._("name")}
+              */
+              name?:string;
+             /**
+             * @uiColumnGroup - row4
+             * @uiLabel - ${this._("readerIO")}
+             */
+            readerIO?: string; 
+              /**
+              * @uiColumnGroup - row4
+              * @uiLabel - ${this._("system")}
+              */
+              readersystem?:string;
+          }`;
+    } 
+    onFilterSubmit($event?: any): void {
+      if(!$event){this.readersystem="";this.readerIO="";}
+
+       let params = $event || {};
+       if(this.readersystem) params.system=this.readersystem;
+       if(this.readerIO) params.readerIO=this.readerIO;
+       this.params = params;
+    }
 }
 </script>
 
