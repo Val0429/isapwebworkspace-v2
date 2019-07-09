@@ -320,7 +320,7 @@ export class HighchartsDemographic extends Vue {
                 break;
         }
 
-         console.log(
+        console.log(
             "chart prop: ",
             this.chartMode,
             this.startDate,
@@ -1152,8 +1152,8 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime()-1000;
-            let tempEndTimestamp = tempChartData.dateEnd.getTime() +1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
@@ -1795,12 +1795,12 @@ export class HighchartsDemographic extends Vue {
 
     private getPersonCountList(): string[] {
         let result: string[] = [
-            "<5",
-            "5-15",
-            "15-30",
-            "30-60",
+            ">120",
             "60-120",
-            ">120"
+            "30-60",
+            "15-30",
+            "5-15",
+            "<5"
         ];
         return result;
     }
@@ -1832,8 +1832,8 @@ Vue.component("highcharts-demographic", HighchartsDemographic);
 .chart-error-message {
     text-align: center;
 }
-    .select-gender {
-        height: 36px;
-    }
+.select-gender {
+    height: 36px;
+}
 </style>
 
