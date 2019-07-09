@@ -1040,13 +1040,33 @@ export default class ReportTraffic extends Vue {
     }
 
     async initSelectItemTree() {
+
+        let tempTree = {};
+
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
+                tempTree = response;
+                console.log('this.$user.allowSites - ', this.$user.allowSites);
+
+                if (this.$user.allowSites.length > 0) {
+                    this.$user.allowSites.map(site => {
+                        if (response.childrens.length > 0) {
+                            response.childrens.map(item => {
+                                if (item.objectId === site.objectId) {
+                                    let tempTreeData = JSON.parse(JSON.stringify(tempTree));
+                                    tempTreeData.childrens = [];
+                                    tempTreeData.childrens.push(item);
+                                    tempTree = tempTreeData
+                                }
+                            })
+                        }
+                    })
+                }
+
                 if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
-                        response,
-                        this.$user.allowSites
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        tempTree,
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
                 }
