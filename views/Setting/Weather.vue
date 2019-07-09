@@ -100,7 +100,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { IWeatherResults } from "@/config/default/api/interfaces";
 
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 interface IDataFromApi extends IWeatherResults {
     latitude: number;

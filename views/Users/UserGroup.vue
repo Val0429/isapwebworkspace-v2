@@ -153,7 +153,7 @@ import { IUserGroupAdd, IUserGroupEdit } from "@/config/default/api/interfaces";
 
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 interface inputFormData extends IUserGroupAdd, IUserGroupEdit {
     users: any;

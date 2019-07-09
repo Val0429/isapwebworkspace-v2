@@ -1,4 +1,4 @@
-import { Vue, Component, Prop, Model, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
 
 @Component
 export class DialogAlert extends Vue {

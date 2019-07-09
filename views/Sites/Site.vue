@@ -629,7 +629,7 @@ import { Vue, Component } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import ImageBase64 from "@/services/ImageBase64";
 import ServerConfig from "@/services/ServerConfig";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
 import {
