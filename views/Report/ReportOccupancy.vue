@@ -95,9 +95,9 @@
             </iv-card>
         </div>
 
-        <occupancy_details_table>
+<!--        <occupancy-details-table>-->
 
-        </occupancy_details_table>
+<!--        </occupancy-details-table>-->
 
         <!-- Tina -->
         <recipient
