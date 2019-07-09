@@ -930,8 +930,7 @@ export default class ReportTemplate extends Vue {
                     console.log(e);
                     return false;
                 });
-        }
-        if (this.inputFormData.objectId) {
+        } else if (this.inputFormData.objectId) {
             if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
                 const tempDatas: any = [
                     {

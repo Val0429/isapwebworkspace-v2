@@ -2,7 +2,7 @@ import { EAgeRange } from './EHighCharts';
 import { ITemplateItem } from './ITemplateItem';
 
 class ReportService {
-    anysislyTemplate(json: string): ITemplateItem | null {
+    analysisTemplate(json: string): ITemplateItem | null {
         let result: ITemplateItem | null = null;
         try {
             let tempTemplate = JSON.parse(json);

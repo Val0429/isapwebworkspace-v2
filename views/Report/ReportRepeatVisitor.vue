@@ -271,7 +271,7 @@ export default class ReportRepeatVisitor extends Vue {
     initTemplate() {
         if (this.$route.query.template != undefined) {
             let templateJSON: string = this.$route.query.template as string;
-            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+            this.templateItem = ReportService.analysisTemplate(templateJSON);
         }
     }
 

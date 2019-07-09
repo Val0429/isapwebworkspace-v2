@@ -1,3 +1,4 @@
+import {EDesignationPeriod} from "./models/EReport";
 <template>
     <div>
         <iv-card
@@ -133,27 +134,20 @@
 
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
-import {
-    ERegionType,
-    RegionTreeItem,
-    IRegionTreeSelected
-} from "@/components/RegionTree";
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import {
-    EAddPeriodSelect,
-    ECountType,
-    EDesignationPeriod,
-    EIfAllSelected
-} from "@/components/Reports/models/EReport";
-import { ITemplateItem } from "@/components/Reports";
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Datetime from "@/services/Datetime";
-import Dialog from "@/services/Dialog/Dialog";
+    import {Component, Prop, Vue} from "vue-property-decorator";
+    import {toEnumInterface} from "@/../core";
+    import {ERegionType, IRegionTreeSelected} from "@/components/RegionTree";
+    import {
+        EAddPeriodSelect,
+        ECountType,
+        EDesignationPeriod,
+        EIfAllSelected
+    } from "@/components/Reports/models/EReport";
+    import {ITemplateItem} from "@/components/Reports";
+    import Datetime from "@/services/Datetime";
+    import Dialog from "@/services/Dialog/Dialog";
 
-enum EPageStep {
+    enum EPageStep {
     none = "none",
     showResult = "showResult",
     chooseTree = "chooseTree",
@@ -362,7 +356,7 @@ export class FilterCondition extends Vue {
 
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
-        this.inputFormData.designationPeriod = "today";
+        this.inputFormData.designationPeriod = EDesignationPeriod.today;
         this.inputFormData.startDate = new Date();
         this.inputFormData.endDate = new Date();
     }
