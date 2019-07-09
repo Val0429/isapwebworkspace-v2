@@ -226,7 +226,7 @@ export class FilterCondition extends Vue {
         // this.initSelectItemTag();
         // this.initSelectItemTree();
         // this.initRegionTreeSelect();
-        // this.siteFilterPermission();
+        this.siteFilterPermission();
         this.initTemplate();
     }
 
@@ -379,7 +379,6 @@ export class FilterCondition extends Vue {
                 }
             }
 
-            // TODO: Date send api for Tina
             console.log("!!!! templateItem:", this.templateItem);
 
             // Select Report Period
@@ -418,6 +417,8 @@ export class FilterCondition extends Vue {
             Dialog.error(this._("w_PleaseSelectSites"));
             return false;
         }
+
+        console.log(' - ', );
 
         if (this.selectAllSites === "all") {
             this.inputFormData.siteIds = this.inputFormData.allSiteIds;

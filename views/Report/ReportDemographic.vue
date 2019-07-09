@@ -98,6 +98,7 @@
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
@@ -271,6 +272,7 @@ export default class ReportDemographic extends Vue {
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+        await this.initSelectItemUsers();
     }
 
     initTemplate() {
@@ -1146,7 +1148,6 @@ export default class ReportDemographic extends Vue {
         this.userData = data;
         console.log("this.userData - ", this.userData);
 
-        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
@@ -1360,11 +1361,19 @@ export default class ReportDemographic extends Vue {
 
             //跑maleRange、 femaleRange
             for (let index = 0; index < 6; index++) {
-                if (summary.maleRanges[index] == undefined) {
+                if (summary.maleRanges[index] === null) {
                     break;
                 }
 
-                if (summary.femaleRanges[index] == undefined) {
+                if (summary.femaleRanges[index] === null) {
+                    break;
+                }
+
+                if (summary.maleEmployeeRanges[index] === null) {
+                    break;
+                }
+
+                if (summary.femaleEmployeeRanges[index] === null) {
                     break;
                 }
 
@@ -1414,16 +1423,15 @@ export default class ReportDemographic extends Vue {
             }
         }
 
-        console.log("tempChartDatas", tempChartDatas);
+       // console.log("tempChartDatas", tempChartDatas);
 
         this.chartDatas = tempChartDatas;
-
         console.log(" - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        // console.log("areaId - ", this.inputFormData.areaId);
+        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
