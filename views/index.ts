@@ -26,20 +26,33 @@ import DemoFilterConditionComponent from './Demos/DemoFilterConditionComponent.v
 // Guest
 import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
 
+// MyProfile
+import MyProfile from './MyProfile/MyProfile.vue';
+
+// Dashboard
+
+// Analysis
+
+// Report
+import ReportTemplate from './Report/ReportTemplate.vue';
+import ReportTraffic from './Report/ReportTraffic.vue';
+import ReportDwellTime from './Report/ReportDwellTime.vue';
+import ReportDemographic from './Report/ReportDemographic.vue';
+import ReportHeatmap from './Report/ReportHeatmap.vue';
+import ReportOccupancy from './Report/ReportOccupancy.vue';
+import ReportRepeatVisitor from './Report/ReportRepeatVisitor.vue';
+import ReportVIPTracking from './Report/ReportVIPTracking.vue';
+import ReportCampaign from './Report/ReportCampaign.vue';
+
 // Users
 import User from './Users/User.vue';
 import UserGroup from './Users/UserGroup.vue';
 
-// BusinessOperation
-import CampaignSetting from './BusinessOperation/CampaignSetting.vue';
-import SalesRecords from './BusinessOperation/SalesRecords.vue';
-import GeneralOfficeHour from './BusinessOperation/GeneralOfficeHour.vue';
+// Sites
+import Site from './Sites/Site.vue';
 
 // Regions
 import Region from './Regions/Region.vue';
-
-// Sites
-import Site from './Sites/Site.vue';
 
 // Server
 import CMSServer from './Server/CMSServer.vue';
@@ -58,6 +71,13 @@ import CMS from './VideoSource/CMS.vue';
 import VIP from './VideoSource/VIP.vue';
 import VIP_Stranger_Visitor from './VideoSource/VIP_Stranger_Visitor.vue';
 
+// Rules and Action
+
+// BusinessOperation
+import CampaignSetting from './BusinessOperation/CampaignSetting.vue';
+import SalesRecords from './BusinessOperation/SalesRecords.vue';
+import GeneralOfficeHour from './BusinessOperation/GeneralOfficeHour.vue';
+
 // Setting
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
@@ -66,20 +86,6 @@ import Backup from './Setting/Backup.vue';
 import Restore from './Setting/Restore.vue';
 import License from './Setting/License.vue';
 import Tag from './Setting/Tags.vue';
-
-// MyProfile
-import MyProfile from './MyProfile/MyProfile.vue';
-
-// Report
-import ReportTemplate from './Report/ReportTemplate.vue';
-import ReportTraffic from './Report/ReportTraffic.vue';
-import ReportDwellTime from './Report/ReportDwellTime.vue';
-import ReportDemographic from './Report/ReportDemographic.vue';
-import ReportHeatmap from './Report/ReportHeatmap.vue';
-import ReportOccupancy from './Report/ReportOccupancy.vue';
-import ReportRepeatVisitor from './Report/ReportRepeatVisitor.vue';
-import ReportVIPTracking from './Report/ReportVIPTracking.vue';
-import ReportCampaign from './Report/ReportCampaign.vue';
 
 // ============================================================= //
 
@@ -122,16 +128,16 @@ $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-questio
 $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-question', redirect: '/login' })();
 
 // Report
-$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-close', redirect: '/reports/report_template' })();
-$({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-close' })(ReportTemplate);
-$({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-close' })(ReportTraffic);
-$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-close' })(ReportDwellTime);
-$({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-close' })(ReportDemographic);
-$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-close' })(ReportHeatmap);
-$({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-close' })(ReportOccupancy);
-$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-close' })(ReportVIPTracking);
-$({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-close' })(ReportRepeatVisitor);
-$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-close' })(ReportCampaign);
+$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-code', redirect: '/reports/report_template' })();
+$({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-check' })(ReportTraffic);
+$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-question' })(ReportDwellTime);
+$({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-code' })(ReportDemographic);
+$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-question' })(ReportHeatmap);
+$({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-check' })(ReportOccupancy);
+$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-question' })(ReportVIPTracking);
+$({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-code' })(ReportRepeatVisitor);
+$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-question' })(ReportCampaign);
+$({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-check' })(ReportTemplate);
 
 // Users
 $({ path: '/users', name: "_('w_Navigation_Users')", icon: 'fa-check', redirect: '/users/user' })();
@@ -144,16 +150,24 @@ $({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
 // Regions
 $({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Region);
 
+// Server
+$({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-code', redirect: '/server/cms_server' })();
+$({ path: '/server/cms_server', name: "_('w_Navigation_Server_CMSServer')", icon: 'fa-check' })(CMSServer);
+$({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-question', redirect: '/login' })();
+$({ path: '/server/frs_server', name: "_('w_Navigation_Server_FRSServer')", icon: 'fa-check' })(FRSServer);
+$({ path: '/server/demographic_server', name: "_('w_Navigation_Server_DemographicServer')", icon: 'fa-check' })(DemographicServer);
+$({ path: '/server/hd_server', name: "_('w_Navigation_Server_HDServer')", icon: 'fa-check' })(HumanDetectionServer);
+
 // Video Source (c)
-$({ path: '/video_sources', name: 'VideoSources', icon: 'fa-close', redirect: '/login' })();
+$({ path: '/video_sources', name: 'VideoSources', icon: 'fa-code', redirect: '/login' })();
 $({ path: '/video_sources/people_counting', name: 'VideoSources_PeopleCounting', icon: 'fa-check' })(PeopleCounting);
 $({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 'fa-check' })(Demographic);
+$({ path: '/video_sources/dwell_time', name: 'VideoSources_DwellTime', icon: 'fa-check' })(DwellTime);
 $({ path: '/video_sources/human_detection', name: 'VideoSources_HumanDetection', icon: 'fa-check' })(HumanDetection);
 $({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-check' })(Heatmap);
-$({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-close', redirect: '/login' })(FaceRecognition);
-$({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-close', redirect: '/login' })(CMS);
-$({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-close', redirect: '/login' })(VIP);
-$({ path: '/video_sources/dwell_time', name: 'VideoSources_DwellTime', icon: 'fa-check' })(DwellTime);
+$({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-question', redirect: '/login' })(FaceRecognition);
+$({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-question', redirect: '/login' })(CMS);
+$({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-question', redirect: '/login' })(VIP);
 $({ path: '/video_sources/vip_stranger_visitor', name: 'VideoSources_VIP_Stranger_Visitor', icon: 'fa-check' })(VIP_Stranger_Visitor);
 
 // Rules and Action (?)
@@ -166,7 +180,7 @@ $({ path: '/business_operations/sales_records', name: "_('w_Navigation_BO_SalesR
 $({ path: '/business_operations/general_office_hour', name: "_('w_Navigation_BO_GeneralOfficeHour')", icon: 'fa-check' })(GeneralOfficeHour);
 
 // Setting
-$({ path: '/setting', name: "_('w_Navigation_Setting')", icon: 'fa-bug', redirect: '/setting/mail_server' })();
+$({ path: '/setting', name: "_('w_Navigation_Setting')", icon: 'fa-code', redirect: '/setting/mail_server' })();
 $({ path: '/setting/mail_server', name: "_('w_Navigation_Setting_MailServer')", icon: 'fa-check' })(MailServer);
 $({ path: '/setting/sms', name: "_('w_Navigation_Setting_SMS')", icon: 'fa-check' })(SMS);
 $({ path: '/setting/weather', name: "_('w_Navigation_Setting_Weather')", icon: 'fa-check' })(Weather);
@@ -174,11 +188,3 @@ $({ path: '/setting/backup', name: "_('w_Navigation_Setting_Backup')", icon: 'fa
 $({ path: '/setting/restore', name: "_('w_Navigation_Setting_Restore')", icon: 'fa-question' })(Restore);
 $({ path: '/setting/license', name: "_('w_Navigation_Setting_License')", icon: 'fa-check' })(License);
 $({ path: '/setting/tag', name: "_('w_Navigation_Setting_Tag')", icon: 'fa-check' })(Tag);
-
-// Server
-$({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-bug', redirect: '/server/cms_server' })();
-$({ path: '/server/cms_server', name: "_('w_Navigation_Server_CMSServer')", icon: 'fa-check' })(CMSServer);
-$({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-close', redirect: '/login' })();
-$({ path: '/server/frs_server', name: "_('w_Navigation_Server_FRSServer')", icon: 'fa-check' })(FRSServer);
-$({ path: '/server/demographic_server', name: "_('w_Navigation_Server_DemographicServer')", icon: 'fa-check' })(DemographicServer);
-$({ path: '/server/hd_server', name: "_('w_Navigation_Server_HDServer')", icon: 'fa-check' })(HumanDetectionServer);

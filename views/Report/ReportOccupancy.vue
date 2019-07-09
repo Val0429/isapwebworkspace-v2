@@ -125,6 +125,7 @@
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
@@ -134,7 +135,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 // Tina
 import {
@@ -310,7 +311,7 @@ export default class ReportOccupancy extends Vue {
     initTemplate() {
         if (this.$route.query.template != undefined) {
             let templateJSON: string = this.$route.query.template as string;
-            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+            this.templateItem = ReportService.analysisTemplate(templateJSON);
         }
     }
 
@@ -318,9 +319,9 @@ export default class ReportOccupancy extends Vue {
         // Tina
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
-        await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+        await this.initSelectItemUsers();
     }
 
     initChartDeveloper() {
@@ -899,8 +900,6 @@ export default class ReportOccupancy extends Vue {
         this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
-
-        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
@@ -1737,6 +1736,8 @@ export default class ReportOccupancy extends Vue {
     sortOutChartData(array: any) {
         console.log("areaSelectItem - ", this.areaSelectItem);
         console.log("areaId - ", this.inputFormData.areaId);
+
+        // all area
         if (
             (this.inputFormData.areaId &&
                 this.inputFormData.areaId === "all") ||
@@ -1749,7 +1750,7 @@ export default class ReportOccupancy extends Vue {
             for (const summary of array) {
                 let tempChartData: IChartOccupancyData = {
                     date: summary.date,
-                    siteObjectId: summary.site.objectId,
+                    siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
@@ -1808,12 +1809,15 @@ export default class ReportOccupancy extends Vue {
                 }
                 let tempData = JSON.parse(JSON.stringify(tempChartData));
                 tempData.areaId = summary.area.objectId;
+                tempData.siteObjectId = summary.site.objectId;
 
                 tempChartDatas.push(tempData);
                 this.chartDatas = tempChartDatas;
 
                 console.log("this.chartDatas - ", this.chartDatas);
             }
+
+            // 單一 area
         } else if (
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all"
@@ -1825,7 +1829,7 @@ export default class ReportOccupancy extends Vue {
             for (const summary of array) {
                 let tempChartData: IChartOccupancyData = {
                     date: summary.date,
-                    siteObjectId: summary.site.objectId,
+                    siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
@@ -1859,7 +1863,6 @@ export default class ReportOccupancy extends Vue {
                 // total += summary.total;
                 // count += summary.count;
                 average = summary.total / summary.count;
-
                 tempChartData.occupancy = average;
                 // tempChartData.occupancy += summary.count;
 
@@ -1886,6 +1889,11 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
+
+                let tempData = JSON.parse(JSON.stringify(tempChartData));
+                tempData.areaId = summary.area.objectId;
+                tempData.siteObjectId = summary.site.objectId;
+
                 tempChartDatas.push(tempChartData);
                 this.chartDatas = tempChartDatas;
 
@@ -1896,7 +1904,7 @@ export default class ReportOccupancy extends Vue {
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        // console.log("areaId - ", this.inputFormData.areaId);
+        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];

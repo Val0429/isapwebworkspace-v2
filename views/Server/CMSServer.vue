@@ -109,7 +109,7 @@ import { toEnumInterface } from "@/../core";
 import { IAddCMSServer, IEditCMSServer } from "@/config/default/api/interfaces";
 
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 interface IinputFormData extends IAddCMSServer, IEditCMSServer {
     type?: string;

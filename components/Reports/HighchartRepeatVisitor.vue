@@ -175,8 +175,13 @@ export class HighchartsRepeatVisitor extends Vue {
     @Watch("value", { deep: true })
     private onValueChanged(
         newval: IChartRepeatVisitorData[],
-        IChartOccupancyData: IChartRepeatVisitorData[]
+        oldval: IChartRepeatVisitorData[]
     ) {
+        this.start();
+    }
+
+    @Watch("timeMode")
+    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
         this.start();
     }
 
@@ -514,7 +519,7 @@ export class HighchartsRepeatVisitor extends Vue {
                     break;
 
                 case "5+":
-                    if (val.repeatCount > 5) {
+                    if (val.repeatCount >= 5) {
                         totalCount += val.maleCount;
                         totalCount += val.femaleCount;
                         maleCount += val.maleCount;

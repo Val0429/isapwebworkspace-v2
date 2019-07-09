@@ -131,6 +131,7 @@ import {EAreaMode} from "../../components/Reports";
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
@@ -322,7 +323,7 @@ export default class ReportTraffic extends Vue {
     initTemplate() {
         if (this.$route.query.template != undefined) {
             let templateJSON: string = this.$route.query.template as string;
-            this.templateItem = ReportService.anysislyTemplate(templateJSON);
+            this.templateItem = ReportService.analysisTemplate(templateJSON);
         }
     }
 
@@ -330,9 +331,9 @@ export default class ReportTraffic extends Vue {
         // Tina
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
-        await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+        await this.initSelectItemUsers();
     }
 
     // Ben //
@@ -1449,8 +1450,6 @@ export default class ReportTraffic extends Vue {
         this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
-
-        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
@@ -1726,7 +1725,7 @@ export default class ReportTraffic extends Vue {
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        // console.log("areaId - ", this.inputFormData.areaId);
+        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];

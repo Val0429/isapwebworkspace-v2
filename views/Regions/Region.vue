@@ -139,7 +139,8 @@ import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
+import { Loading } from "@/services/Loading";
 
 enum EPageStep {
     none,

@@ -110,8 +110,13 @@ export class HighchartsTraffic extends Vue {
     @Watch("value", { deep: true })
     private onValueChanged(
         newval: IChartTrafficData[],
-        IChartTrafficData: IChartTrafficData[]
+        oldval: IChartTrafficData[]
     ) {
+        this.start();
+    }
+
+    @Watch("timeMode")
+    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
         this.start();
     }
 
@@ -419,10 +424,11 @@ export class HighchartsTraffic extends Vue {
         let tempTimestamp: number = this.startDate.getTime();
         let endTimestamp: number = this.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
-        let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
-        );
+        let dateGap: number =
+            Math.floor(
+                Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
+                    86400000
+            ) + 1;
 
         while (
             tempTimestamp <= endTimestamp &&
@@ -592,11 +598,11 @@ export class HighchartsTraffic extends Vue {
                     tempChartData.weatherIcon = HighchartsService.weatherIcon(
                         value.weather
                     );
-
-                    // for calculate AVG
-                    trafficTotal += tempChartData.traffic;
                 }
             }
+
+            // for calculate AVG
+            trafficTotal += tempChartData.traffic;
 
             // calculate conversion & ASP
             if (tempChartData.traffic != 0) {

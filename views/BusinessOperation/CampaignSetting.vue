@@ -153,7 +153,7 @@ import {
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 import RegionAPI from "@/services/RegionAPI";
 
 interface IinputFormData
@@ -439,8 +439,8 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: (data.startDate).toISOString(),
-                    endDate: (data.endDate).toISOString(),
+                    startDate: Datetime.DateToZero(data.startDate).toISOString(),
+                    endDate: Datetime.DateToZero(data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : []
                 }
             ];
@@ -484,8 +484,8 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: (data.startDate).toISOString(),
-                    endDate: (data.endDate).toISOString(),
+                    startDate: Datetime.DateToZero(data.startDate).toISOString(),
+                    endDate: Datetime.DateToZero(data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : []
                 }
             ];

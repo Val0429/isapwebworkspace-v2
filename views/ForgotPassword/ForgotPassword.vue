@@ -136,7 +136,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 interface IInputForgetPassword {
     account: string;

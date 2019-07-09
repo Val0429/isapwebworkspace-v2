@@ -110,8 +110,13 @@ export class HighchartsOccupancy extends Vue {
     @Watch("value", { deep: true })
     private onValueChanged(
         newval: IChartOccupancyData[],
-        IChartOccupancyData: IChartOccupancyData[]
+        oldval: IChartOccupancyData[]
     ) {
+        this.start();
+    }
+
+    @Watch("timeMode")
+    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
         this.start();
     }
 
@@ -533,7 +538,7 @@ export class HighchartsOccupancy extends Vue {
                 tempCategorieData.datas.push({
                     areaId: serie.areaId,
                     areaName: serie.areaName,
-                    occupancy: serie.data[i]
+                    occupancy: HighchartsService.formatFloat(serie.data[i])
                 });
             }
 
@@ -885,8 +890,8 @@ export class HighchartsOccupancy extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() -1000;
-            let tempEndTimestamp = tempChartData.dateEnd.getTime() +1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
                 tempChartData.dateStart,
@@ -941,7 +946,7 @@ export class HighchartsOccupancy extends Vue {
             for (let tempItems of tempResult) {
                 for (let tempItem of tempItems.sites) {
                     if (tempItem.siteObjectId == site.objectId) {
-                        tempData.push(tempItem.occupancy);
+                        tempData.push(HighchartsService.formatFloat(tempItem.occupancy));
                         break;
                     }
                 }

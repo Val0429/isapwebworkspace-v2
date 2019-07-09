@@ -126,7 +126,7 @@ import { IFRSServerResults, IAddFRSServer, IEditFRSServer, IFRSServerReadUserGro
 import ReportService from '@/components/Reports/models/ReportService'
 
 import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 interface IInputFormData extends IFRSServerResults {
     type?: string;
@@ -289,7 +289,6 @@ export default class FRSServer extends Vue {
 
     getInputData() {
         this.clearInputData();
-        console.log('this.selectedDetail - ', this.selectedDetail);
         for (const param of this.selectedDetail) {
 
             this.inputFormData = {

@@ -69,7 +69,13 @@
         })
         modalShow: boolean;
 
-        userSelectItem: any = {};
+        @Prop({
+            type: Object, // Boolean, Number, String, Array, Object
+            default: {}
+        })
+        userSelectItem: object;
+
+        // userSelectItem: any = {};
 
         userIds: any = [];
 
@@ -77,7 +83,7 @@
         }
 
         mounted() {
-            this.initSelectItemUsers();
+            // this.initSelectItemUsers();
         }
 
         @Watch("modalShow", { deep: true })
