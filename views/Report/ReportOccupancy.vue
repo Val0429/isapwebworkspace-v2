@@ -1402,6 +1402,8 @@ export default class ReportOccupancy extends Vue {
     sortOutChartData(array: any) {
         console.log("areaSelectItem - ", this.areaSelectItem);
         console.log("areaId - ", this.inputFormData.areaId);
+
+        // all area
         if (
             (this.inputFormData.areaId &&
                 this.inputFormData.areaId === "all") ||
@@ -1414,7 +1416,7 @@ export default class ReportOccupancy extends Vue {
             for (const summary of array) {
                 let tempChartData: IChartOccupancyData = {
                     date: summary.date,
-                    siteObjectId: summary.site.objectId,
+                    siteObjectId: '',
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
@@ -1473,12 +1475,15 @@ export default class ReportOccupancy extends Vue {
                 }
                 let tempData = JSON.parse(JSON.stringify(tempChartData));
                 tempData.areaId = summary.area.objectId;
+                tempData.siteObjectId = summary.site.objectId;
 
                 tempChartDatas.push(tempData);
                 this.chartDatas = tempChartDatas;
 
                 console.log("this.chartDatas - ", this.chartDatas);
             }
+
+            // 單一 area
         } else if (
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all"
@@ -1490,7 +1495,7 @@ export default class ReportOccupancy extends Vue {
             for (const summary of array) {
                 let tempChartData: IChartOccupancyData = {
                     date: summary.date,
-                    siteObjectId: summary.site.objectId,
+                    siteObjectId: '',
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
@@ -1524,7 +1529,6 @@ export default class ReportOccupancy extends Vue {
                 // total += summary.total;
                 // count += summary.count;
                 average = summary.total / summary.count;
-
                 tempChartData.occupancy = average;
                 // tempChartData.occupancy += summary.count;
 
@@ -1551,6 +1555,11 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
+                
+                let tempData = JSON.parse(JSON.stringify(tempChartData));
+                tempData.areaId = summary.area.objectId;
+                tempData.siteObjectId = summary.site.objectId;
+
                 tempChartDatas.push(tempChartData);
                 this.chartDatas = tempChartDatas;
 
