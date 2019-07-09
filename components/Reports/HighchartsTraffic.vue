@@ -110,8 +110,13 @@ export class HighchartsTraffic extends Vue {
     @Watch("value", { deep: true })
     private onValueChanged(
         newval: IChartTrafficData[],
-        IChartTrafficData: IChartTrafficData[]
+        oldval: IChartTrafficData[]
     ) {
+        this.start();
+    }
+
+    @Watch("timeMode")
+    private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
         this.start();
     }
 
