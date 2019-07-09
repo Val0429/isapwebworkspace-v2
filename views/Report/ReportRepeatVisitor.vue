@@ -39,27 +39,27 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis-filter
-                    class="mb-4"
-                    :areaSelectItem="areaSelectItem"
-                    :deviceGroupSelectItem="deviceGroupSelectItem"
-                    :deviceSelectItem="deviceSelectItem"
-                    :timeModeSelectItem="timeModeSelectItem"
-                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                    :siteIds="filterData.siteIds"
-                    :areaId="inputFormData.areaId"
-                    :groupId="inputFormData.groupId"
-                    :deviceId="inputFormData.deviceId"
-                    :type="inputFormData.type"
-                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                    @area_id="receiveAreaId"
-                    @group_id="receiveGroupId"
-                    @device_id="receiveDeviceId"
-                    @type="receiveType"
-                    @is_included_employee="receiveIsIncludedEmployee"
-                >
+<!--                <analysis-filter-->
+<!--                    class="mb-4"-->
+<!--                    :areaSelectItem="areaSelectItem"-->
+<!--                    :deviceGroupSelectItem="deviceGroupSelectItem"-->
+<!--                    :deviceSelectItem="deviceSelectItem"-->
+<!--                    :timeModeSelectItem="timeModeSelectItem"-->
+<!--                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"-->
+<!--                    :siteIds="filterData.siteIds"-->
+<!--                    :areaId="inputFormData.areaId"-->
+<!--                    :groupId="inputFormData.groupId"-->
+<!--                    :deviceId="inputFormData.deviceId"-->
+<!--                    :type="inputFormData.type"-->
+<!--                    :isIncludedEmployee="inputFormData.isIncludedEmployee"-->
+<!--                    @area_id="receiveAreaId"-->
+<!--                    @group_id="receiveGroupId"-->
+<!--                    @device_id="receiveDeviceId"-->
+<!--                    @type="receiveType"-->
+<!--                    @is_included_employee="receiveIsIncludedEmployee"-->
+<!--                >-->
 
-                </analysis-filter>
+<!--                </analysis-filter>-->
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -255,7 +255,7 @@ export default class ReportRepeatVisitor extends Vue {
         // this.initTemplate();
 
         // TODO: Waitting API
-        this.initChartDeveloper();
+        // this.initChartDeveloper();
     }
 
     mounted() {}
@@ -876,7 +876,7 @@ export default class ReportRepeatVisitor extends Vue {
         };
 
         await this.$server
-            .C("/report/human-detection/summary", filterData)
+            .C("/report/repeat-visitor/summary", filterData)
             .then((response: any) => {
                 if (response !== undefined) {
                     this.responseData = response;
@@ -896,17 +896,17 @@ export default class ReportRepeatVisitor extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
-        await this.initSelectItemDevice();
+        // await this.initSelectItemArea();
+        // await this.initSelectItemDeviceGroup();
+        // await this.initSelectItemDevice();
 
-        this.inputFormData = {
-            areaId: "all",
-            groupId: "all",
-            deviceId: "all",
-            type: this.filterData.type,
-            isIncludedEmployee: "no"
-        };
+        // this.inputFormData = {
+        //     areaId: "all",
+        //     groupId: "all",
+        //     deviceId: "all",
+        //     type: this.filterData.type,
+        //     isIncludedEmployee: "no"
+        // };
 
         // let finalAreas = [];
         // this.filterData.siteIds.map(siteIds => {
@@ -926,53 +926,60 @@ export default class ReportRepeatVisitor extends Vue {
 
         // get office hour data
         let tempISite: any = {};
-        this.sites = [];
+        this.sites = [
+            {
+                objectId: '',
+                name: '',
+                officeHour: [],
+                areas: []
+            }
+        ];
         let tempAreas = [];
 
-        for (const filterSiteId of this.filterData.siteIds) {
-            for (const detail of this.officeHourItemDetail) {
-                for (const singleArea of this.allAreaItem) {
-                    for (const officeHourSiteId of detail.sites) {
-                        if (filterSiteId === officeHourSiteId.objectId) {
-                            let tempOfficeHours = [];
-                            for (const dayRangesValue of detail.dayRanges) {
-                                let tempOfficeHour: any = {};
-                                tempOfficeHour = {
-                                    startDay: dayRangesValue.startDay,
-                                    endDay: dayRangesValue.endDay,
-                                    startDate: dayRangesValue.startDate,
-                                    endDate: dayRangesValue.endDate
-                                };
-                                tempOfficeHours.push(tempOfficeHour);
-                            }
-                            tempISite = {
-                                objectId: officeHourSiteId.objectId,
-                                name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours
-                            };
-
-                            this.siteAreaItem = {
-                                objectId: officeHourSiteId.objectId,
-                                name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours
-                            };
-
-                            if (filterSiteId === singleArea.site.objectId) {
-                                let tempArea: any = {};
-                                tempArea = {
-                                    name: singleArea.name,
-                                    objectId: singleArea.objectId
-                                };
-                                tempAreas.push(tempArea);
-                            }
-                        }
-                    }
-                }
-            }
-            tempISite.areas = tempAreas;
-            this.sites.push(tempISite);
-            this.sitesItem.push(tempISite);
-        }
+        // for (const filterSiteId of this.filterData.siteIds) {
+        //     for (const detail of this.officeHourItemDetail) {
+        //         for (const singleArea of this.allAreaItem) {
+        //             for (const officeHourSiteId of detail.sites) {
+        //                 if (filterSiteId === officeHourSiteId.objectId) {
+        //                     let tempOfficeHours = [];
+        //                     for (const dayRangesValue of detail.dayRanges) {
+        //                         let tempOfficeHour: any = {};
+        //                         tempOfficeHour = {
+        //                             startDay: dayRangesValue.startDay,
+        //                             endDay: dayRangesValue.endDay,
+        //                             startDate: dayRangesValue.startDate,
+        //                             endDate: dayRangesValue.endDate
+        //                         };
+        //                         tempOfficeHours.push(tempOfficeHour);
+        //                     }
+        //                     tempISite = {
+        //                         objectId: officeHourSiteId.objectId,
+        //                         name: officeHourSiteId.name,
+        //                         officeHour: tempOfficeHours
+        //                     };
+        //
+        //                     this.siteAreaItem = {
+        //                         objectId: officeHourSiteId.objectId,
+        //                         name: officeHourSiteId.name,
+        //                         officeHour: tempOfficeHours
+        //                     };
+        //
+        //                     if (filterSiteId === singleArea.site.objectId) {
+        //                         let tempArea: any = {};
+        //                         tempArea = {
+        //                             name: singleArea.name,
+        //                             objectId: singleArea.objectId
+        //                         };
+        //                         tempAreas.push(tempArea);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     tempISite.areas = tempAreas;
+        //     this.sites.push(tempISite);
+        //     this.sitesItem.push(tempISite);
+        // }
 
         /*
 		   for (const filterSiteId of this.filterData.siteIds) {
@@ -1009,7 +1016,7 @@ export default class ReportRepeatVisitor extends Vue {
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
-        this.sortOutChartData(this.responseData.summaryTableDatas);
+        this.sortOutChartData(this.responseData.summaryChartDatas);
 
         // Ben
         //this.initDashboardData();
@@ -1051,68 +1058,68 @@ export default class ReportRepeatVisitor extends Vue {
 	    let tempChartDatas: IChartRepeatVisitorData[] = [];
 	    this.chartDatas = [];
 
+
 	    // 取得date、siteObjectId資料
 	    for (const summary of array) {
-		    let tempChartData: IChartRepeatVisitorData = {
-			    date: summary.date,
-			    siteObjectId: summary.site.objectId,
+
+            console.log('summary - ', summary);
+
+            let tempChartData: IChartRepeatVisitorData = {
+			    date: new Date(),
+			    siteObjectId: this.filterData.firstSiteId,
 			    temperatureMin: 0,
 			    temperatureMax: 0,
 			    weather: EWeather.none,
-			    repeatCount: 0,
+			    repeatCount: summary.total,
 			    ageRange: EAgeRange.none,
 			    maleCount: 0,
 			    femaleCount: 0
 		    };
 
-		    let maleNotIncludeEmployee: number = 0;
-		    let femaleNotIncludeEmployee: number = 0;
 		    let maleTotal: number = 0;
 		    let femaleTotal: number = 0;
-		    let maleEmployee: number = 0;
-		    let femaleEmployee: number = 0;
 
 		    // 判斷date, site 兩個是否相同
-		    let haveSummary = false;
-		    for (let loopChartData of tempChartDatas) {
-			    if (
-				    this.checkDateAndSite(
-					    loopChartData.date,
-					    summary.date,
-					    loopChartData.siteObjectId,
-					    summary.site.objectId
-				    )
-			    ) {
-				    haveSummary = true;
-				    tempChartData = loopChartData;
-				    break;
-			    }
-		    }
-
-		    tempChartData.repeatCount += summary.total;
-		    // tempChartData.occupancy += summary.count;
-
-		    if (!haveSummary) {
-			    // 取得weather、temperatureMin、temperatureMax
-			    for (const weather of this.responseData.weathers) {
-				    if (
-					    this.checkDateAndSite(
-						    tempChartData.date,
-						    weather.date,
-						    tempChartData.siteObjectId,
-						    weather.site.objectId
-					    )
-				    ) {
-					    console.log(" - ", weather.icon);
-					    tempChartData.weather = WeatherService.WeatherIcon(
-						    weather.icon
-					    );
-					    tempChartData.temperatureMin = weather.temperatureMin;
-					    tempChartData.temperatureMax = weather.temperatureMax;
-					    break;
-				    }
-			    }
-		    }
+		    // let haveSummary = false;
+		    // for (let loopChartData of tempChartDatas) {
+			//     if (
+			// 	    this.checkDateAndSite(
+			// 		    loopChartData.date,
+			// 		    summary.date,
+			// 		    loopChartData.siteObjectId,
+			// 		    summary.site.objectId
+			// 	    )
+			//     ) {
+			// 	    haveSummary = true;
+			// 	    tempChartData = loopChartData;
+			// 	    break;
+			//     }
+		    // }
+            //
+		    // // tempChartData.repeatCount += summary.total;
+		    // // tempChartData.occupancy += summary.count;
+            //
+		    // if (!haveSummary) {
+			//     // 取得weather、temperatureMin、temperatureMax
+			//     for (const weather of this.responseData.weathers) {
+			// 	    if (
+			// 		    this.checkDateAndSite(
+			// 			    tempChartData.date,
+			// 			    weather.date,
+			// 			    tempChartData.siteObjectId,
+			// 			    weather.site.objectId
+			// 		    )
+			// 	    ) {
+			// 		    console.log(" - ", weather.icon);
+			// 		    tempChartData.weather = WeatherService.WeatherIcon(
+			// 			    weather.icon
+			// 		    );
+			// 		    tempChartData.temperatureMin = weather.temperatureMin;
+			// 		    tempChartData.temperatureMax = weather.temperatureMax;
+			// 		    break;
+			// 	    }
+			//     }
+		    // }
 
 		    //跑maleRange、 femaleRange
 		    for (let index = 0; index < 6; index++) {
@@ -1125,49 +1132,23 @@ export default class ReportRepeatVisitor extends Vue {
 					    break;
 				    }
 
-				    if (summary.maleEmployeeRanges[index] === null) {
-					    break;
-				    }
 
-				    if (summary.femaleEmployeeRanges[index] === null) {
-					    break;
-				    }
+                    let tempData = JSON.parse(JSON.stringify(tempChartData));
+                    maleTotal = summary.maleRanges[index];
+                    femaleTotal = summary.femaleRanges[index];
 
-				    if (
-					    this.inputFormData.isIncludedEmployee ===
-					    EIncludedEmployee.no
-				    ) {
-					    let tempData = JSON.parse(JSON.stringify(tempChartData));
-					    maleTotal = summary.maleRanges[index];
-					    femaleTotal = summary.femaleRanges[index];
-					    maleEmployee = summary.maleEmployeeRanges[index];
-					    femaleEmployee = summary.femaleEmployeeRanges[index];
-					    maleNotIncludeEmployee = maleTotal - maleEmployee;
-					    femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
+                    tempData.maleCount = maleTotal;
+                    tempData.femaleCount = femaleTotal;
+                    tempData.ageRange = ReportService.SwitchAgeRange(
+                        index.toString()
+                    );
 
-					    tempData.maleCount = maleNotIncludeEmployee;
-					    tempData.femaleCount = femaleNotIncludeEmployee;
-					    tempData.ageRange = ReportService.SwitchAgeRange(
-						    index.toString()
-					    );
+                    // if (tempData.maleCount > 0) {
+                    //     console.log(tempData);
+                    // }
 
-					    tempChartDatas.push(tempData);
-				    } else if (
-					    this.inputFormData.isIncludedEmployee ===
-					    EIncludedEmployee.yes
-				    ) {
-					    let tempData = JSON.parse(JSON.stringify(tempChartData));
-					    maleTotal = summary.maleRanges[index];
-					    femaleTotal = summary.femaleRanges[index];
-
-					    tempData.maleCount = maleTotal;
-					    tempData.femaleCount = femaleTotal;
-					    tempData.ageRange = ReportService.SwitchAgeRange(
-						    index.toString()
-					    );
-
-					    tempChartDatas.push(tempData);
-				    }
+                    tempChartDatas.push(tempData);
+                }
 
 				    // console.log(
 				    //     index,
@@ -1178,13 +1159,13 @@ export default class ReportRepeatVisitor extends Vue {
 				    // );
 
 				    // tempChartDatas.push(tempData);
-			    }
+            }
 
 			    // tempChartDatas.push(tempChartData);
-		    }
+
 
 		    this.chartDatas = tempChartDatas;
-		    console.log("this.chartDatas - ", this.chartDatas);
+		    // console.log("this.chartDatas - ", this.chartDatas);
 	    }
     }
 
@@ -1197,7 +1178,7 @@ export default class ReportRepeatVisitor extends Vue {
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
-            for (const singleData of this.responseData.summaryTableDatas) {
+            for (const singleData of this.responseData.summaryChartDatas) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
                     if (detailKey === "area") {
@@ -1246,7 +1227,7 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
-            this.sortOutChartData(this.responseData.summaryTableDatas);
+            this.sortOutChartData(this.responseData.summaryChartDatas);
             this.areaMode = EAreaMode.all;
             this.sites = this.sitesItem;
 
@@ -1262,7 +1243,7 @@ export default class ReportRepeatVisitor extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-            this.sortOutChartData(this.responseData.summaryTableDatas);
+            this.sortOutChartData(this.responseData.summaryChartDatas);
             this.areaMode = EAreaMode.all;
             this.sites = this.sitesItem;
 
