@@ -39,27 +39,27 @@
                 </template>
 
                 <!-- Tina -->
-<!--                <analysis-filter-->
-<!--                    class="mb-4"-->
-<!--                    :areaSelectItem="areaSelectItem"-->
-<!--                    :deviceGroupSelectItem="deviceGroupSelectItem"-->
-<!--                    :deviceSelectItem="deviceSelectItem"-->
-<!--                    :timeModeSelectItem="timeModeSelectItem"-->
-<!--                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"-->
-<!--                    :siteIds="filterData.siteIds"-->
-<!--                    :areaId="inputFormData.areaId"-->
-<!--                    :groupId="inputFormData.groupId"-->
-<!--                    :deviceId="inputFormData.deviceId"-->
-<!--                    :type="inputFormData.type"-->
-<!--                    :isIncludedEmployee="inputFormData.isIncludedEmployee"-->
-<!--                    @area_id="receiveAreaId"-->
-<!--                    @group_id="receiveGroupId"-->
-<!--                    @device_id="receiveDeviceId"-->
-<!--                    @type="receiveType"-->
-<!--                    @is_included_employee="receiveIsIncludedEmployee"-->
-<!--                >-->
+                <!--                <analysis-filter-->
+                <!--                    class="mb-4"-->
+                <!--                    :areaSelectItem="areaSelectItem"-->
+                <!--                    :deviceGroupSelectItem="deviceGroupSelectItem"-->
+                <!--                    :deviceSelectItem="deviceSelectItem"-->
+                <!--                    :timeModeSelectItem="timeModeSelectItem"-->
+                <!--                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"-->
+                <!--                    :siteIds="filterData.siteIds"-->
+                <!--                    :areaId="inputFormData.areaId"-->
+                <!--                    :groupId="inputFormData.groupId"-->
+                <!--                    :deviceId="inputFormData.deviceId"-->
+                <!--                    :type="inputFormData.type"-->
+                <!--                    :isIncludedEmployee="inputFormData.isIncludedEmployee"-->
+                <!--                    @area_id="receiveAreaId"-->
+                <!--                    @group_id="receiveGroupId"-->
+                <!--                    @device_id="receiveDeviceId"-->
+                <!--                    @type="receiveType"-->
+                <!--                    @is_included_employee="receiveIsIncludedEmployee"-->
+                <!--                >-->
 
-<!--                </analysis-filter>-->
+                <!--                </analysis-filter>-->
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -84,7 +84,10 @@
                 </highcharts-repeat-visitor>
 
                 <!-- Ben -->
-                <vistor-details-table ref="reportTable">
+                <vistor-details-table
+                    :thresholdDetailTableContent="rData"
+                    ref="reportTable"
+                >
                 </vistor-details-table>
 
             </iv-card>
@@ -245,7 +248,7 @@ export default class ReportRepeatVisitor extends Vue {
     pSiteIds = [];
 
     //ReportTable 相關
-    rData = new ReportTableData();
+    rData = [];
     reportTableTitle = {};
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
@@ -928,8 +931,8 @@ export default class ReportRepeatVisitor extends Vue {
         let tempISite: any = {};
         this.sites = [
             {
-                objectId: '',
-                name: '',
+                objectId: "",
+                name: "",
                 officeHour: [],
                 areas: []
             }
@@ -1019,7 +1022,8 @@ export default class ReportRepeatVisitor extends Vue {
         this.sortOutChartData(this.responseData.summaryChartDatas);
 
         // Ben
-        //this.initDashboardData();
+        this.initDashboardData();
+         this.initReportTableData();
 
         console.log("this.sites - ", this.sites);
         console.log(" - ", this.startDate);
@@ -1030,6 +1034,11 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     // Ben //
+     initReportTableData() {
+        this.rData = this.responseData.summaryTableDatas;
+    }
+
+    
     initDashboardData() {
         this.dPageType = EPageType.repeatCustomer;
         setTimeout(() => {
@@ -1055,83 +1064,80 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     sortOutChartData(array: any) {
-	    let tempChartDatas: IChartRepeatVisitorData[] = [];
-	    this.chartDatas = [];
+        let tempChartDatas: IChartRepeatVisitorData[] = [];
+        this.chartDatas = [];
 
-
-	    // 取得date、siteObjectId資料
-	    for (const summary of array) {
-
-            console.log('summary - ', summary);
+        // 取得date、siteObjectId資料
+        for (const summary of array) {
+            console.log("summary - ", summary);
 
             let tempChartData: IChartRepeatVisitorData = {
-			    date: new Date(),
-			    siteObjectId: this.filterData.firstSiteId,
-			    temperatureMin: 0,
-			    temperatureMax: 0,
-			    weather: EWeather.none,
-			    repeatCount: summary.total,
-			    ageRange: EAgeRange.none,
-			    maleCount: 0,
-			    femaleCount: 0
-		    };
+                date: new Date(),
+                siteObjectId: this.filterData.firstSiteId,
+                temperatureMin: 0,
+                temperatureMax: 0,
+                weather: EWeather.none,
+                repeatCount: summary.total,
+                ageRange: EAgeRange.none,
+                maleCount: 0,
+                femaleCount: 0
+            };
 
-		    let maleTotal: number = 0;
-		    let femaleTotal: number = 0;
+            let maleTotal: number = 0;
+            let femaleTotal: number = 0;
 
-		    // 判斷date, site 兩個是否相同
-		    // let haveSummary = false;
-		    // for (let loopChartData of tempChartDatas) {
-			//     if (
-			// 	    this.checkDateAndSite(
-			// 		    loopChartData.date,
-			// 		    summary.date,
-			// 		    loopChartData.siteObjectId,
-			// 		    summary.site.objectId
-			// 	    )
-			//     ) {
-			// 	    haveSummary = true;
-			// 	    tempChartData = loopChartData;
-			// 	    break;
-			//     }
-		    // }
+            // 判斷date, site 兩個是否相同
+            // let haveSummary = false;
+            // for (let loopChartData of tempChartDatas) {
+            //     if (
+            // 	    this.checkDateAndSite(
+            // 		    loopChartData.date,
+            // 		    summary.date,
+            // 		    loopChartData.siteObjectId,
+            // 		    summary.site.objectId
+            // 	    )
+            //     ) {
+            // 	    haveSummary = true;
+            // 	    tempChartData = loopChartData;
+            // 	    break;
+            //     }
+            // }
             //
-		    // // tempChartData.repeatCount += summary.total;
-		    // // tempChartData.occupancy += summary.count;
+            // // tempChartData.repeatCount += summary.total;
+            // // tempChartData.occupancy += summary.count;
             //
-		    // if (!haveSummary) {
-			//     // 取得weather、temperatureMin、temperatureMax
-			//     for (const weather of this.responseData.weathers) {
-			// 	    if (
-			// 		    this.checkDateAndSite(
-			// 			    tempChartData.date,
-			// 			    weather.date,
-			// 			    tempChartData.siteObjectId,
-			// 			    weather.site.objectId
-			// 		    )
-			// 	    ) {
-			// 		    console.log(" - ", weather.icon);
-			// 		    tempChartData.weather = WeatherService.WeatherIcon(
-			// 			    weather.icon
-			// 		    );
-			// 		    tempChartData.temperatureMin = weather.temperatureMin;
-			// 		    tempChartData.temperatureMax = weather.temperatureMax;
-			// 		    break;
-			// 	    }
-			//     }
-		    // }
+            // if (!haveSummary) {
+            //     // 取得weather、temperatureMin、temperatureMax
+            //     for (const weather of this.responseData.weathers) {
+            // 	    if (
+            // 		    this.checkDateAndSite(
+            // 			    tempChartData.date,
+            // 			    weather.date,
+            // 			    tempChartData.siteObjectId,
+            // 			    weather.site.objectId
+            // 		    )
+            // 	    ) {
+            // 		    console.log(" - ", weather.icon);
+            // 		    tempChartData.weather = WeatherService.WeatherIcon(
+            // 			    weather.icon
+            // 		    );
+            // 		    tempChartData.temperatureMin = weather.temperatureMin;
+            // 		    tempChartData.temperatureMax = weather.temperatureMax;
+            // 		    break;
+            // 	    }
+            //     }
+            // }
 
-		    //跑maleRange、 femaleRange
-		    for (let index = 0; index < 6; index++) {
-			    for (let index = 0; index < 6; index++) {
-				    if (summary.maleRanges[index] === null) {
-					    break;
-				    }
+            //跑maleRange、 femaleRange
+            for (let index = 0; index < 6; index++) {
+                for (let index = 0; index < 6; index++) {
+                    if (summary.maleRanges[index] === null) {
+                        break;
+                    }
 
-				    if (summary.femaleRanges[index] === null) {
-					    break;
-				    }
-
+                    if (summary.femaleRanges[index] === null) {
+                        break;
+                    }
 
                     let tempData = JSON.parse(JSON.stringify(tempChartData));
                     maleTotal = summary.maleRanges[index];
@@ -1150,23 +1156,22 @@ export default class ReportRepeatVisitor extends Vue {
                     tempChartDatas.push(tempData);
                 }
 
-				    // console.log(
-				    //     index,
-				    //     " //分開跑maleRange",
-				    //     JSON.parse(JSON.stringify(tempChartDatas)),
-				    //     JSON.parse(JSON.stringify(tempChartData)),
-				    //     tempData.ageRange
-				    // );
+                // console.log(
+                //     index,
+                //     " //分開跑maleRange",
+                //     JSON.parse(JSON.stringify(tempChartDatas)),
+                //     JSON.parse(JSON.stringify(tempChartData)),
+                //     tempData.ageRange
+                // );
 
-				    // tempChartDatas.push(tempData);
+                // tempChartDatas.push(tempData);
             }
 
-			    // tempChartDatas.push(tempChartData);
+            // tempChartDatas.push(tempChartData);
 
-
-		    this.chartDatas = tempChartDatas;
-		    // console.log("this.chartDatas - ", this.chartDatas);
-	    }
+            this.chartDatas = tempChartDatas;
+            // console.log("this.chartDatas - ", this.chartDatas);
+        }
     }
 
     async receiveAreaId(areaId) {
@@ -1499,22 +1504,22 @@ export default class ReportRepeatVisitor extends Vue {
         this.timeMode = type;
         console.log("type - ", this.inputFormData.type);
 
-	    // 單一site
-	    if (this.filterData.firstSiteId) {
-		    this.sortOutChartData(this.responseData.summaryDatas);
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
 
-		    this.inputFormData.areaId = "";
-		    this.inputFormData.groupId = "";
-		    this.inputFormData.deviceId = "";
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
 
-		    await this.initSelectItemArea();
-		    await this.initSelectItemDeviceGroup();
-		    await this.initSelectItemDevice();
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
 
-		    this.inputFormData.areaId = "all";
-		    this.inputFormData.groupId = "all";
-		    this.inputFormData.deviceId = "all";
-	    }
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
+        }
     }
 
     async receiveIsIncludedEmployee(isIncludedEmployee) {
@@ -1524,22 +1529,22 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.isIncludedEmployee
         );
 
-	    // 單一site
-	    if (this.filterData.firstSiteId) {
-		    this.sortOutChartData(this.responseData.summaryDatas);
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
 
-		    this.inputFormData.areaId = "";
-		    this.inputFormData.groupId = "";
-		    this.inputFormData.deviceId = "";
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
 
-		    await this.initSelectItemArea();
-		    await this.initSelectItemDeviceGroup();
-		    await this.initSelectItemDevice();
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
 
-		    this.inputFormData.areaId = "all";
-		    this.inputFormData.groupId = "all";
-		    this.inputFormData.deviceId = "all";
-	    }
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
+        }
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
