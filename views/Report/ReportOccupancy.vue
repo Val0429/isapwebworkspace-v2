@@ -278,7 +278,6 @@ export default class ReportOccupancy extends Vue {
         // Tina
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
-        await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
     }

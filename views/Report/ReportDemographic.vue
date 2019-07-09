@@ -269,7 +269,6 @@ export default class ReportDemographic extends Vue {
         // Tina
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
-        await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
     }

@@ -649,7 +649,7 @@ export default class ReportTemplate extends Vue {
 
         // sendDates
         this.inputFormData.sendDates.map(item => {
-            hour = Datetime.DateTime2String(new Date(item.date), "HH");
+            hour = Datetime.DateTime2String(new Date(item.date), "H");
             week = item.day;
             const tempSendReportTime = {
                 hour, week
@@ -712,7 +712,7 @@ export default class ReportTemplate extends Vue {
 
         // sendDates
         this.inputFormData.sendDates.map(item => {
-            hour = Datetime.DateTime2String(new Date(item.date), "HH");
+            hour = Datetime.DateTime2String(new Date(item.date), "H");
             week = item.day;
             const tempSendReportTime = {
                 hour, week
