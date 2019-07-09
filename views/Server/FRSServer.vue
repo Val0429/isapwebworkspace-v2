@@ -289,7 +289,6 @@ export default class FRSServer extends Vue {
 
     getInputData() {
         this.clearInputData();
-        console.log('this.selectedDetail - ', this.selectedDetail);
         for (const param of this.selectedDetail) {
 
             this.inputFormData = {

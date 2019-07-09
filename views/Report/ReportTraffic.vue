@@ -111,6 +111,7 @@ import {EAreaMode} from "../../components/Reports";
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
@@ -299,6 +300,7 @@ export default class ReportTraffic extends Vue {
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+        await this.initSelectItemUsers();
     }
 
     // Ben //
@@ -1200,8 +1202,6 @@ export default class ReportTraffic extends Vue {
         this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
-
-        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {

@@ -98,6 +98,7 @@
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
@@ -271,6 +272,7 @@ export default class ReportDemographic extends Vue {
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+        await this.initSelectItemUsers();
     }
 
     initTemplate() {
@@ -1146,7 +1148,6 @@ export default class ReportDemographic extends Vue {
         this.userData = data;
         console.log("this.userData - ", this.userData);
 
-        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {

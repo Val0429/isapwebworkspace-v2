@@ -93,6 +93,7 @@
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
@@ -263,9 +264,9 @@ export default class ReportRepeatVisitor extends Vue {
         // Tina
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
-        await this.initSelectItemSite();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+        await this.initSelectItemUsers();
     }
 
     initTemplate() {
@@ -857,8 +858,6 @@ export default class ReportRepeatVisitor extends Vue {
         this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
-
-        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
@@ -1066,6 +1065,13 @@ export default class ReportRepeatVisitor extends Vue {
                 femaleCount: 0
             };
 
+            let maleNotIncludeEmployee: number = 0;
+            let femaleNotIncludeEmployee: number = 0;
+            let maleTotal: number = 0;
+            let femaleTotal: number = 0;
+            let maleEmployee: number = 0;
+            let femaleEmployee: number = 0;
+
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
@@ -1118,12 +1124,41 @@ export default class ReportRepeatVisitor extends Vue {
                     break;
                 }
 
-                let tempData = JSON.parse(JSON.stringify(tempChartData));
-                tempData.ageRange = ReportService.SwitchAgeRange(
-                    index.toString()
-                );
-                tempData.maleCount = summary.maleRanges[index];
-                tempData.femaleCount = summary.femaleRanges[index];
+                if (
+                    this.inputFormData.isIncludedEmployee ===
+                    EIncludedEmployee.no
+                ) {
+                    let tempData = JSON.parse(JSON.stringify(tempChartData));
+                    maleTotal = summary.maleRanges[index];
+                    femaleTotal = summary.femaleRanges[index];
+                    maleEmployee = summary.maleEmployeeRanges[index];
+                    femaleEmployee = summary.femaleEmployeeRanges[index];
+                    maleNotIncludeEmployee = maleTotal - maleEmployee;
+                    femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
+
+                    tempData.maleCount = maleNotIncludeEmployee;
+                    tempData.femaleCount = femaleNotIncludeEmployee;
+                    tempData.ageRange = ReportService.SwitchAgeRange(
+                        index.toString()
+                    );
+
+                    tempChartDatas.push(tempData);
+                } else if (
+                    this.inputFormData.isIncludedEmployee ===
+                    EIncludedEmployee.yes
+                ) {
+                    let tempData = JSON.parse(JSON.stringify(tempChartData));
+                    maleTotal = summary.maleRanges[index];
+                    femaleTotal = summary.femaleRanges[index];
+
+                    tempData.maleCount = maleTotal;
+                    tempData.femaleCount = femaleTotal;
+                    tempData.ageRange = ReportService.SwitchAgeRange(
+                        index.toString()
+                    );
+
+                    tempChartDatas.push(tempData);
+                }
 
                 // console.log(
                 //     index,

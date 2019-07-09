@@ -102,6 +102,7 @@
         <!-- Tina -->
         <recipient
             :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
             @user-data="receiveUserData"
             @return-modalShow="receiveModalShowData"
         ></recipient>
@@ -280,6 +281,7 @@ export default class ReportOccupancy extends Vue {
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
+        await this.initSelectItemUsers();
     }
 
     initChartDeveloper() {
@@ -858,8 +860,6 @@ export default class ReportOccupancy extends Vue {
         this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
-
-        await this.initSelectItemUsers();
     }
 
     receiveModalShowData(data) {
