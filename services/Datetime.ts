@@ -360,8 +360,8 @@ class Datetime {
     /////////////////////////////////////////////
 
     // 檢查日期的結束時間不能小於開始值間
-    CheckDate(startDate: string, endDate: string) {
-        return Date.parse(endDate) >= Date.parse(startDate);
+    CheckDate(startDate: Date, endDate: Date) {
+        return this.DateToZero(endDate).getTime() >= this.DateToZero(startDate).getTime();
     }
 
     // 檢查日期的開始和結束時間是否為同一天

@@ -134,20 +134,20 @@ import {EDesignationPeriod} from "./models/EReport";
 
 
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
-    import {toEnumInterface} from "@/../core";
-    import {ERegionType, IRegionTreeSelected} from "@/components/RegionTree";
-    import {
-        EAddPeriodSelect,
-        ECountType,
-        EDesignationPeriod,
-        EIfAllSelected
-    } from "@/components/Reports/models/EReport";
-    import {ITemplateItem} from "@/components/Reports";
-    import Datetime from "@/services/Datetime";
-    import Dialog from "@/services/Dialog";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import { ERegionType, IRegionTreeSelected } from "@/components/RegionTree";
+import {
+    EAddPeriodSelect,
+    ECountType,
+    EDesignationPeriod,
+    EIfAllSelected
+} from "@/components/Reports/models/EReport";
+import { ITemplateItem } from "@/components/Reports";
+import Datetime from "@/services/Datetime";
+import Dialog from "@/services/Dialog";
 
-    enum EPageStep {
+enum EPageStep {
     none = "none",
     showResult = "showResult",
     chooseTree = "chooseTree",
@@ -382,17 +382,23 @@ export class FilterCondition extends Vue {
             console.log("!!!! templateItem:", this.templateItem);
 
             // Select Report Period
-            if (this.templateItem.type && !this.templateItem.startDate && !this.templateItem.endDate) {
+            if (
+                this.templateItem.type &&
+                !this.templateItem.startDate &&
+                !this.templateItem.endDate
+            ) {
                 this.selectPeriodAddWay = EAddPeriodSelect.designation;
                 this.inputFormData.designationPeriod = this.templateItem.type;
             }
 
-            if (!this.templateItem.type && this.templateItem.startDate && this.templateItem.endDate) {
-
+            if (
+                !this.templateItem.type &&
+                this.templateItem.startDate &&
+                this.templateItem.endDate
+            ) {
                 this.selectPeriodAddWay = EAddPeriodSelect.period;
                 this.inputFormData.startDate = this.templateItem.startDate;
                 this.inputFormData.endDate = this.templateItem.endDate;
-
             }
 
             this.doSubmit();
@@ -418,7 +424,7 @@ export class FilterCondition extends Vue {
             return false;
         }
 
-        console.log(' - ', );
+        console.log(" - ");
 
         if (this.selectAllSites === "all") {
             this.inputFormData.siteIds = this.inputFormData.allSiteIds;
@@ -429,15 +435,9 @@ export class FilterCondition extends Vue {
         // 選擇 period
         if (this.selectPeriodAddWay === "period") {
             if (
-                Datetime.CheckDate(
-                    Datetime.DateTime2String(
-                        this.inputFormData.startDate,
-                        "YYYY-MM-DD"
-                    ),
-                    Datetime.DateTime2String(
-                        this.inputFormData.endDate,
-                        "YYYY-MM-DD"
-                    )
+                !Datetime.CheckDate(
+                    this.inputFormData.startDate,
+                    this.inputFormData.endDate
                 )
             ) {
                 Dialog.error(this._("w_ReportDateError"));

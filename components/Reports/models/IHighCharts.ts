@@ -42,7 +42,6 @@ interface IDemographicMount {
     genderTime: boolean;
     age: boolean;
     dwellTime: boolean;
-    gender: boolean;
 }
 
 interface IChart {
