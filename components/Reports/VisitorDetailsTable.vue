@@ -19,14 +19,9 @@
                     v-for="(value,index) in thresholdDetailTableContent"
                     :key="'tableDataFromApi__' + index"
                 >
-
-                    <td>{{ value.title }}</td>
-                    <td>{{ value.time }}</td>
-                    <td>{{ value.oneTime }}</td>
-                    <td>{{ value.twoTime }}</td>
-                    <td>{{ value.threeTime }}</td>
-                    <td>{{ value.fourTime }}</td>
-                    <td>{{ value.upFiveTime }}</td>
+                    <td>{{ value.site.name }}</td>
+                    <td>{{ showTime(value.date) }}</td>
+                    <td v-for="(item,index) in value.frequencyRanges">{{ item }}</td>
                 </tr>
             </tbody>
         </table>
@@ -49,15 +44,14 @@ import Datetime from "@/services/Datetime";
     components: {}
 })
 export class VisitorDetailsTable extends Vue {
-    // Prop
-    // @Prop({
-    //     type: Array, // Boolean, Number, String, Array, Object
-    //     default: () => []
-    // })
-    // thresholdDetailTableContent: object;
+    Prop;
+    @Prop({
+        type: Array,
+        default: () => []
+    })
+    thresholdDetailTableContent: [];
 
     thresholdDetailTableTitle: any = [];
-    thresholdDetailTableContent: any = [];
 
     created() {
         this.initDate();
@@ -75,27 +69,13 @@ export class VisitorDetailsTable extends Vue {
             this._("w_ReportVisitor_4"),
             this._("w_ReportVisitor_5")
         ];
-
-        // 假資料
-
-        for (let i = 0; i < 5; i++) {
-            let dat = new Date();
-            dat.setDate(dat.getDate() + i); // (2)
-
-            let detailObject = {
-                title: "京站店",
-                time: Datetime.DateTime2String(dat, "YYYY/MM/DD"),
-                oneTime: i % 1,
-                twoTime: i % 2,
-                threeTime: i % 3,
-                fourTime: i % 4,
-                upFiveTime: i % 5
-            };
-            this.thresholdDetailTableContent.push(detailObject);
-        }
     }
 
     doCancel() {}
+
+    showTime(time) {
+        return Datetime.DateTime2String(new Date(time), "YYYY-MM-DD");
+    }
 
     tableToArray() {
         let objTable: any = this.$refs.reportTable;
@@ -115,7 +95,9 @@ export class VisitorDetailsTable extends Vue {
             for (var j = 0; j < objTable.rows[i].cells.length; j++) {
                 let strings = "";
                 if (objTable.rows[i].cells[j].getAttribute("rowspan")) {
-                    rowspanRowCount = objTable.rows[i].cells[j].getAttribute("rowspan");
+                    rowspanRowCount = objTable.rows[i].cells[j].getAttribute(
+                        "rowspan"
+                    );
                     rowspans++;
                 }
                 for (

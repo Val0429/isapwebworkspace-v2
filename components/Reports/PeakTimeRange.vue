@@ -19,7 +19,7 @@
             </thead>
             <tbody>
                 <tr v-for="(items, key, index) in pData.body">
-                    <td v-if="dayXSiteX != eDayXSiteX.siteXDay1"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getUTCMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                    <td v-if="dayXSiteX != eDayXSiteX.siteXDay1"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
                     <td v-if="dayXSiteX == eDayXSiteX.siteXDay1"> {{items.title}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
