@@ -105,7 +105,7 @@
     }
 
     export default OccupancyDetailsTable;
-    Vue.component("occupancy_details_table", OccupancyDetailsTable);
+    Vue.component("occupancy-details-table", OccupancyDetailsTable);
 </script>
 
 <style lang="scss" scoped>
