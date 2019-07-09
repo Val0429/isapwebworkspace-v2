@@ -108,6 +108,34 @@
                     url="/region"
                 />
 
+                <!-- Server -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Server')"
+                    url="/server"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_CMSServer')"
+                        url="/server/cms_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_FRSServer')"
+                        url="/server/frs_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_FRSManagerServer')"
+                        url="/server/frs_manager_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_DemographicServer')"
+                        url="/server/demographic_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_HDServer')"
+                        url="/server/hd_server"
+                    />
+
+                </SidebarNavItem>
+
                 <!-- Video Source -->
                 <SidebarNavItem
                     :label="_('w_Navigation_VideoSources')"
@@ -174,34 +202,6 @@
                         :label="_('w_Navigation_BO_GeneralOfficeHour')"
                         url="/business_operations/general_office_hour"
                     />
-                </SidebarNavItem>
-
-                <!-- Server -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_Server')"
-                    url="/server"
-                >
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_CMSServer')"
-                        url="/server/cms_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_FRSServer')"
-                        url="/server/frs_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_FRSManagerServer')"
-                        url="/server/frs_manager_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_DemographicServer')"
-                        url="/server/demographic_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_HDServer')"
-                        url="/server/hd_server"
-                    />
-
                 </SidebarNavItem>
 
                 <!-- Setting -->
