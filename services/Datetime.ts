@@ -360,13 +360,13 @@ class Datetime {
     /////////////////////////////////////////////
 
     // 檢查日期的結束時間不能小於開始值間
-    CheckDate(startDate: string, endDate: string) {
-        if (Date.parse(endDate) < Date.parse(startDate)) return false;
+    CheckDate(startDate: Date, endDate: Date) {
+        return this.DateToZero(endDate).getTime() >= this.DateToZero(startDate).getTime();
     }
 
     // 檢查日期的開始和結束時間是否為同一天
     CheckTheSameDate(startDate: string, endDate: string) {
-        if (Date.parse(endDate) === Date.parse(startDate)) return true;
+        return Date.parse(endDate) === Date.parse(startDate);
     }
 
     // 以今天為基準，計算往前、往後的幾天

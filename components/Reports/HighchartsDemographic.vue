@@ -61,14 +61,14 @@
                             <highcharts
                                 ref="chartDwellTime"
                                 v-if="mountChart.dwellTime"
-                                :options="chartOptionsDwellTime"
+                                :options="chartOptionsDwellTimeBar"
                             ></highcharts>
                         </b-col>
                         <b-col cols="6">
                             <highcharts
                                 ref="chartGender"
-                                v-if="mountChart.gender"
-                                :options="chartOptionsGender"
+                                v-if="mountChart.dwellTime"
+                                :options="chartOptionsDwellTimePie"
                             ></highcharts>
                         </b-col>
                     </b-row>
@@ -196,8 +196,7 @@ export class HighchartsDemographic extends Vue {
         genderAge: false,
         genderTime: false,
         age: false,
-        dwellTime: false,
-        gender: false
+        dwellTime: false
     };
 
     selection: { gender: EGender; ageRange: EAgeRange } = {
@@ -216,8 +215,8 @@ export class HighchartsDemographic extends Vue {
     chartOptionsGenderAge: any = {};
     chartOptionsGenderTime: any = {};
     chartOptionsAge: any = {};
-    chartOptionsDwellTime: any = {};
-    chartOptionsGender: any = {};
+    chartOptionsDwellTimeBar: any = {};
+    chartOptionsDwellTimePie: any = {};
 
     created() {
         this.initSelectItem();
@@ -275,8 +274,7 @@ export class HighchartsDemographic extends Vue {
             genderAge: false,
             genderTime: false,
             age: false,
-            dwellTime: false,
-            gender: false
+            dwellTime: false
         };
 
         this.chartMode = HighchartsService.chartMode(
@@ -301,7 +299,6 @@ export class HighchartsDemographic extends Vue {
         this.drawChartGenderAge();
         this.drawChartAge();
         this.drawChartDwellTime();
-        this.drawChartGender();
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
@@ -330,6 +327,9 @@ export class HighchartsDemographic extends Vue {
             this.sites,
             this.value
         );
+
+        // TODO: For Demo
+        this.deomRandomValue();
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
@@ -1595,6 +1595,120 @@ export class HighchartsDemographic extends Vue {
         }
     }
 
+    ////////////////////////////// TODO: //////////////////////////////
+
+    demoRandomData: any = [
+        [
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 }
+        ],
+        [
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 }
+        ],
+        [
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 }
+        ],
+        [
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 }
+        ],
+        [
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 }
+        ],
+        [
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 },
+            { male: 0, female: 0 }
+        ]
+    ];
+
+    // TODO: No dwelltime API
+    deomRandomValue() {
+        let tempValues: IChartDemographicData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
+
+        //
+        for (let value of tempValues) {
+            let tempAgeIndex = 0;
+            switch (value.ageRange) {
+                case EAgeRange.lower20:
+                    tempAgeIndex = 0;
+                    break;
+                case EAgeRange.m21_30:
+                    tempAgeIndex = 1;
+                    break;
+                case EAgeRange.m31_40:
+                    tempAgeIndex = 2;
+                    break;
+                case EAgeRange.m41_50:
+                    tempAgeIndex = 3;
+                    break;
+                case EAgeRange.m51_60:
+                    tempAgeIndex = 4;
+                    break;
+                case EAgeRange.upper61:
+                    tempAgeIndex = 5;
+                    break;
+                case EAgeRange.none:
+                default:
+                    break;
+            }
+
+            for (let i = 0; i < 5; i++) {
+                let randomMale = Math.floor(Math.random() * value.maleCount);
+                let randomFemale = Math.floor(
+                    Math.random() * value.femaleCount
+                );
+                if (value.maleCount - randomMale > 0) {
+                    this.demoRandomData[tempAgeIndex][i].male += randomMale;
+                    value.maleCount -= randomMale;
+                } else {
+                    this.demoRandomData[tempAgeIndex][i].male +=
+                        value.maleCount;
+                    value.maleCount = 0;
+                }
+
+                if (value.femaleCount - randomFemale > 0) {
+                    this.demoRandomData[tempAgeIndex][i].female += randomFemale;
+                    value.femaleCount -= randomFemale;
+                } else {
+                    this.demoRandomData[tempAgeIndex][i].female +=
+                        value.femaleCount;
+                    value.femaleCount = 0;
+                }
+            }
+            this.demoRandomData[tempAgeIndex][5].male = value.maleCount;
+            this.demoRandomData[tempAgeIndex][5].female = value.femaleCount;
+        }
+    }
+
     // TODO: No dwelltime API
     drawChartDwellTime() {
         let tempValues: IChartDemographicData[] = JSON.parse(
@@ -1602,7 +1716,104 @@ export class HighchartsDemographic extends Vue {
         );
         let categories: string[] = this.getPersonCountList();
 
-        this.chartOptionsDwellTime = {
+        let barSeries = [
+            {
+                name: this._("w_Male"),
+                data: [0, 0, 0, 0, 0, 0]
+            },
+            {
+                name: this._("w_FeMale"),
+                data: [0, 0, 0, 0, 0, 0]
+            }
+        ];
+
+        let pieSeriesData = [[this._("w_Male"), 0], [this._("w_FeMale"), 0]];
+
+        switch (this.selection.ageRange) {
+            case EAgeRange.all:
+                for (let i in this.demoRandomData) {
+                    let demoAge = this.demoRandomData[i];
+                    for (let j in demoAge) {
+                        let demoData = demoAge[j];
+                        barSeries[0].data[i] += demoData.male;
+                        barSeries[1].data[i] += demoData.female;
+                        pieSeriesData[0][1] += demoData.male;
+                        pieSeriesData[1][1] += demoData.female;
+                    }
+                }
+                break;
+            case EAgeRange.lower20:
+                let demoAgeIndex0 = 0;
+                let demoAge0 = this.demoRandomData[demoAgeIndex0];
+                for (let j in demoAge0) {
+                    let demoData = demoAge0[j];
+                    barSeries[0].data[j] += demoData.male;
+                    barSeries[1].data[j] += demoData.female;
+                    pieSeriesData[0][1] += demoData.male;
+                    pieSeriesData[1][1] += demoData.female;
+                }
+                break;
+            case EAgeRange.m21_30:
+                let demoAgeIndex1 = 1;
+                let demoAge1 = this.demoRandomData[demoAgeIndex1];
+                for (let j in demoAge1) {
+                    let demoData = demoAge1[j];
+                    barSeries[0].data[j] += demoData.male;
+                    barSeries[1].data[j] += demoData.female;
+                    pieSeriesData[0][1] += demoData.male;
+                    pieSeriesData[1][1] += demoData.female;
+                }
+                break;
+            case EAgeRange.m31_40:
+                let demoAgeIndex2 = 2;
+                let demoAge2 = this.demoRandomData[demoAgeIndex2];
+                for (let j in demoAge2) {
+                    let demoData = demoAge2[j];
+                    barSeries[0].data[j] += demoData.male;
+                    barSeries[1].data[j] += demoData.female;
+                    pieSeriesData[0][1] += demoData.male;
+                    pieSeriesData[1][1] += demoData.female;
+                }
+                break;
+            case EAgeRange.m41_50:
+                let demoAgeIndex3 = 3;
+                let demoAge3 = this.demoRandomData[demoAgeIndex3];
+                for (let j in demoAge3) {
+                    let demoData = demoAge3[j];
+                    barSeries[0].data[j] += demoData.male;
+                    barSeries[1].data[j] += demoData.female;
+                    pieSeriesData[0][1] += demoData.male;
+                    pieSeriesData[1][1] += demoData.female;
+                }
+                break;
+            case EAgeRange.m51_60:
+                let demoAgeIndex4 = 4;
+                let demoAge4 = this.demoRandomData[demoAgeIndex4];
+                for (let j in demoAge4) {
+                    let demoData = demoAge4[j];
+                    barSeries[0].data[j] += demoData.male;
+                    barSeries[1].data[j] += demoData.female;
+                    pieSeriesData[0][1] += demoData.male;
+                    pieSeriesData[1][1] += demoData.female;
+                }
+                break;
+            case EAgeRange.upper61:
+                let demoAgeIndex5 = 5;
+                let demoAge5 = this.demoRandomData[demoAgeIndex5];
+                for (let j in demoAge5) {
+                    let demoData = demoAge5[j];
+                    barSeries[0].data[j] += demoData.male;
+                    barSeries[1].data[j] += demoData.female;
+                    pieSeriesData[0][1] += demoData.male;
+                    pieSeriesData[1][1] += demoData.female;
+                }
+                break;
+            case EAgeRange.none:
+            default:
+                break;
+        }
+
+        this.chartOptionsDwellTimeBar = {
             chart: {
                 type: "bar",
                 zoomType: "x"
@@ -1621,23 +1832,10 @@ export class HighchartsDemographic extends Vue {
                 }
             },
             credits: { enabled: false },
-            series: [
-                {
-                    name: "Male",
-                    data: [107, 31, 635, 203, 2, 0]
-                },
-                {
-                    name: "Female",
-                    data: [133, 156, 947, 408, 6, 12]
-                }
-            ]
+            series: barSeries
         };
-        this.mountChart.dwellTime = true;
-    }
 
-    // TODO: No dwelltime API
-    drawChartGender() {
-        this.chartOptionsGender = {
+        this.chartOptionsDwellTimePie = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1647,11 +1845,12 @@ export class HighchartsDemographic extends Vue {
                 {
                     type: "pie",
                     innerSize: "50%",
-                    data: [["Male", 58.9], ["Female", 13.29]]
+                    data: pieSeriesData
                 }
             ]
         };
-        this.mountChart.gender = true;
+
+        this.mountChart.dwellTime = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1778,7 +1977,6 @@ export class HighchartsDemographic extends Vue {
     private changeAge(value: EAgeRange) {
         this.selection.ageRange = value;
         this.drawChartDwellTime();
-        this.drawChartGender();
     }
 
     private getAgeList(): string[] {

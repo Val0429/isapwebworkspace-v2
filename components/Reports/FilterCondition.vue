@@ -435,15 +435,9 @@ export class FilterCondition extends Vue {
         // 選擇 period
         if (this.selectPeriodAddWay === "period") {
             if (
-                Datetime.CheckDate(
-                    Datetime.DateTime2String(
-                        this.inputFormData.startDate,
-                        "YYYY-MM-DD"
-                    ),
-                    Datetime.DateTime2String(
-                        this.inputFormData.endDate,
-                        "YYYY-MM-DD"
-                    )
+                !Datetime.CheckDate(
+                    this.inputFormData.startDate,
+                    this.inputFormData.endDate
                 )
             ) {
                 Dialog.error(this._("w_ReportDateError"));
