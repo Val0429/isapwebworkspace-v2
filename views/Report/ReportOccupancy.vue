@@ -86,18 +86,41 @@
 
                 <!-- Ben -->
                 <report-table
+                    v-show="tableStep === eTableStep.mainTable"
                     ref="reportTable"
                     :reportTableData="rData"
                     :reportTableTitle="reportTableTitle"
+                    @clickItem="toSunReportTable"
                 >
                 </report-table>
 
+                <report-table
+                    v-show="tableStep === eTableStep.sunTable"
+                    ref="sunReportTable"
+                    :reportTableData="sunRData"
+                    :reportTableTitle="reportTableTitle"
+                    @clickItem="toDetailReportTable"
+                >
+                </report-table>
+
+                <occupancy-details-table
+                    v-show="tableStep === eTableStep.detailTable"
+                    :thresholdDetailTableContent="detailRData"
+                >
+                </occupancy-details-table>
+
+                <div class="col-md-12">
+                    <b-button
+                        v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
+                        variant="secondary"
+                        size="lg"
+                        @click="reportTableBack"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </div>
+
             </iv-card>
         </div>
-
-<!--        <occupancy-details-table>-->
-
-<!--        </occupancy-details-table>-->
 
         <!-- Tina -->
         <recipient
@@ -167,10 +190,21 @@ enum EPageStep {
     none = "none"
 }
 
+enum ETableStep {
+    mainTable = "mainTable",
+    sunTable = "sunTable",
+    detailTable = "detailTable",
+    none = "none"
+}
+
 @Component({
     components: {}
 })
 export default class ReportOccupancy extends Vue {
+    lastTableStep: ETableStep = ETableStep.none;
+    tableStep: ETableStep = ETableStep.none;
+    eTableStep = ETableStep;
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     templateItem: ITemplateItem | null = null;
@@ -258,6 +292,12 @@ export default class ReportOccupancy extends Vue {
     //ReportTable 相關
     rData = new ReportTableData();
     reportTableTitle = {};
+
+    //Sun ReportTable 相關
+    sunRData = new ReportTableData();
+
+    ///deatal ReportTable 相關
+    detailRData = [];
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
@@ -1026,6 +1066,11 @@ export default class ReportOccupancy extends Vue {
     }
 
     // Ben //
+    reportTableBack() {
+        this.tableStep = this.lastTableStep;
+        this.lastTableStep = ETableStep.mainTable;
+    }
+
     initDashboardData() {
         this.dPageType = EPageType.averageOccupancy;
         setTimeout(() => {
@@ -1034,7 +1079,181 @@ export default class ReportOccupancy extends Vue {
         }, 300);
     }
 
+    initSunReportTable(summaryTableDatas) {
+        this.lastTableStep = this.tableStep;
+        this.tableStep = ETableStep.sunTable;
+        let chartMode = EChartMode.site1Day1;
+
+        this.sunRData.chartMode = chartMode;
+        this.sunRData.noFoot = true;
+        this.sunRData.thatDay = this.startDate; //單天記錄時間日期
+
+        //head
+        this.sunRData.head = [];
+        let sTime = null;
+        let eTime = null;
+        for (let siteItem of this.sites) {
+            for (let officeHourItem of siteItem.officeHour) {
+                if (
+                    sTime == null ||
+                    sTime > new Date(officeHourItem.startDate).getHours()
+                ) {
+                    sTime = new Date(officeHourItem.startDate).getHours();
+                }
+                if (
+                    eTime == null ||
+                    eTime < new Date(officeHourItem.endDate).getHours()
+                ) {
+                    eTime = new Date(officeHourItem.endDate).getHours();
+                }
+            }
+        }
+        while (sTime <= eTime) {
+            this.sunRData.head.push(sTime);
+            sTime++;
+        }
+
+        //body
+        this.sunRData.body = [];
+        let tempArray = [];
+        //篩選出所有店
+        for (let summaryData of summaryTableDatas) {
+            if (summaryData.deviceGroups) {
+                for (let deviceGroup of summaryData.deviceGroups) {
+                    let body = {
+                        site: summaryData.site,
+                        area: summaryData.area,
+                        group: deviceGroup.deviceGroup,
+                        in: [],
+                        out: [],
+                        in2: [],
+                        out2: []
+                    };
+
+                    if (body.group != undefined) {
+                        if (
+                            tempArray.some(
+                                t => t.group.objectId == body.group.objectId
+                            )
+                        ) {
+                            continue;
+                        }
+                    } else {
+                        if (
+                            tempArray.some(
+                                t => t.area.objectId == body.area.objectId
+                            )
+                        ) {
+                            continue;
+                        }
+                    }
+                    tempArray.push(body);
+                }
+            } else {
+                let body = {
+                    site: summaryData.site,
+                    area: summaryData.area,
+                    in: [],
+                    out: [],
+                    in2: [],
+                    out2: []
+                };
+
+                if (
+                    tempArray.some(t => t.area.objectId == body.area.objectId)
+                ) {
+                    continue;
+                }
+
+                tempArray.push(body);
+            }
+        }
+
+        //填入資料
+        for (let index in tempArray) {
+            for (let head of this.sunRData.head) {
+                let inCount = { value: 0, valueRatio: 0, link: false };
+                let outCount = { value: 0, valueRatio: 0, link: true };
+                let in2Count = { value: 0, valueRatio: 0, link: true };
+                let out2Count = { value: 0, valueRatio: 0, link: false };
+                for (let summaryData of summaryTableDatas) {
+                    if (
+                        new Date(summaryData.date).getHours().toString() != head
+                    ) {
+                        continue;
+                    }
+                    if (summaryData.deviceGroups) {
+                        for (let deviceGroup of summaryData.deviceGroups) {
+                            if (tempArray[index].group != undefined) {
+                                if (
+                                    tempArray[index].group.objectId ==
+                                    deviceGroup.objectId
+                                ) {
+                                    inCount.value += Math.round(
+                                        summaryData.total / summaryData.count
+                                    );
+                                    inCount.valueRatio += 0;
+                                    outCount.value +=
+                                        summaryData.mediumThreshold;
+                                    outCount.valueRatio += 0;
+                                    in2Count.value += summaryData.highThreshold;
+                                    in2Count.valueRatio += 0;
+                                    out2Count.value += summaryData.maxValue;
+                                    out2Count.valueRatio += 0;
+                                }
+                            } else {
+                                if (
+                                    tempArray[index].area.objectId ==
+                                    summaryData.area.objectId
+                                ) {
+                                    inCount.value += Math.round(
+                                        summaryData.total / summaryData.count
+                                    );
+                                    inCount.valueRatio += 0;
+                                    outCount.value +=
+                                        summaryData.mediumThreshold;
+                                    outCount.valueRatio += 0;
+                                    in2Count.value += summaryData.highThreshold;
+                                    in2Count.valueRatio += 0;
+                                    out2Count.value += summaryData.maxValue;
+                                    out2Count.valueRatio += 0;
+                                }
+                            }
+                        }
+                    } else {
+                        if (
+                            tempArray[index].area.objectId ==
+                            summaryData.area.objectId
+                        ) {
+                            inCount.value += Math.round(
+                                summaryData.total / summaryData.count
+                            );
+                            inCount.valueRatio += 0;
+                            outCount.value += summaryData.mediumThreshold;
+                            outCount.valueRatio += 0;
+                            in2Count.value += summaryData.highThreshold;
+                            in2Count.valueRatio += 0;
+                            out2Count.value += summaryData.maxValue;
+                            out2Count.valueRatio += 0;
+                        }
+                    }
+                }
+                tempArray[index].in.push(inCount);
+                tempArray[index].out.push(outCount);
+                tempArray[index].in2.push(in2Count);
+                tempArray[index].out2.push(out2Count);
+            }
+            this.sunRData.body = tempArray;
+        }
+        //調整head時間格式
+        this.sunRData.head = this.sunRData.head.map(
+            x => x + ":00 - " + (x + 1) + ":00"
+        );
+    }
+
     initReportTable() {
+        this.lastTableStep = this.tableStep;
+        this.tableStep = ETableStep.mainTable;
         let chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
@@ -1058,25 +1277,23 @@ export default class ReportOccupancy extends Vue {
         switch (chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
+                this.rData.thatDay = this.startDate; //單天記錄時間日期
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
                             sTime == null ||
                             sTime >
-                                new Date(officeHourItem.startDate).getUTCHours()
+                                new Date(officeHourItem.startDate).getHours()
                         ) {
                             sTime = new Date(
                                 officeHourItem.startDate
-                            ).getUTCHours();
+                            ).getHours();
                         }
                         if (
                             eTime == null ||
-                            eTime <
-                                new Date(officeHourItem.endDate).getUTCHours()
+                            eTime < new Date(officeHourItem.endDate).getHours()
                         ) {
-                            eTime = new Date(
-                                officeHourItem.endDate
-                            ).getUTCHours();
+                            eTime = new Date(officeHourItem.endDate).getHours();
                         }
                     }
                 }
@@ -1084,22 +1301,22 @@ export default class ReportOccupancy extends Vue {
                     this.rData.head.push(sTime);
                     sTime++;
                 }
-                //  this.rData.head =  this.rData.head.map((x) => x + ':00 - ' + (x + 1) + ':00');
+
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
+                this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
                 while (sDate <= eDate) {
                     this.rData.head.push(sDate.toString());
                     sDate.setDate(sDate.getDate() + 1);
                 }
-                // this.rData.head =  this.rData.head.map((x) => new Date(x).getFullYear() + '/' + (new Date(x).getUTCMonth() + 1) + '/' + new Date(x).getUTCDate() + ' ' + this.showWeek(new Date(x).getDay()));
+
                 break;
         }
 
         //body
-        console.log("reportTaeble", this.responseData.summaryTableDatas);
         this.rData.body = [];
         let tempArray = [];
         //篩選出所有店
@@ -1154,7 +1371,6 @@ export default class ReportOccupancy extends Vue {
                 tempArray.push(body);
             }
         }
-        console.log("reportTaeble2", tempArray);
 
         //填入資料
         switch (chartMode) {
@@ -1162,15 +1378,19 @@ export default class ReportOccupancy extends Vue {
             case EChartMode.siteXDay1:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let inCount = { value: 0, valueRatio: 0 };
-                        let outCount = { value: 0, valueRatio: 0 };
-                        let in2Count = { value: 0, valueRatio: 0 };
-                        let out2Count = { value: 0, valueRatio: 0 };
+                        let inCount = { value: 0, valueRatio: 0, link: false };
+                        let outCount = { value: 0, valueRatio: 0, link: true };
+                        let in2Count = { value: 0, valueRatio: 0, link: true };
+                        let out2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
                         for (let summaryData of this.responseData
                             .summaryTableDatas) {
                             if (
                                 new Date(summaryData.date)
-                                    .getUTCHours()
+                                    .getHours()
                                     .toString() != head
                             ) {
                                 continue;
@@ -1182,7 +1402,10 @@ export default class ReportOccupancy extends Vue {
                                             tempArray[index].group.objectId ==
                                             deviceGroup.objectId
                                         ) {
-                                            inCount.value += summaryData.total;
+                                            inCount.value += Math.round(
+                                                summaryData.total /
+                                                    summaryData.count
+                                            );
                                             inCount.valueRatio += 0;
                                             outCount.value +=
                                                 summaryData.mediumThreshold;
@@ -1199,7 +1422,10 @@ export default class ReportOccupancy extends Vue {
                                             tempArray[index].area.objectId ==
                                             summaryData.area.objectId
                                         ) {
-                                            inCount.value += summaryData.total;
+                                            inCount.value += Math.round(
+                                                summaryData.total /
+                                                    summaryData.count
+                                            );
                                             inCount.valueRatio += 0;
                                             outCount.value +=
                                                 summaryData.mediumThreshold;
@@ -1244,10 +1470,14 @@ export default class ReportOccupancy extends Vue {
             case EChartMode.siteXDayX:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let inCount = { value: 0, valueRatio: 0 };
-                        let outCount = { value: 0, valueRatio: 0 };
-                        let in2Count = { value: 0, valueRatio: 0 };
-                        let out2Count = { value: 0, valueRatio: 0 };
+                        let inCount = { value: 0, valueRatio: 0, link: false };
+                        let outCount = { value: 0, valueRatio: 0, link: true };
+                        let in2Count = { value: 0, valueRatio: 0, link: true };
+                        let out2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
                         for (let summaryData of this.responseData
                             .summaryTableDatas) {
                             if (
@@ -1267,30 +1497,40 @@ export default class ReportOccupancy extends Vue {
                                             tempArray[index].group.objectId ==
                                             deviceGroup.objectId
                                         ) {
-                                             inCount.value += summaryData.total;
-                                    inCount.valueRatio += 0;
-                                    outCount.value +=
-                                        summaryData.mediumThreshold;
-                                    outCount.valueRatio += 0;
-                                    in2Count.value += summaryData.highThreshold;
-                                    in2Count.valueRatio += 0;
-                                    out2Count.value += summaryData.maxValue;
-                                    out2Count.valueRatio += 0;
+                                            inCount.value += Math.round(
+                                                summaryData.total /
+                                                    summaryData.count
+                                            );
+                                            inCount.valueRatio += 0;
+                                            outCount.value +=
+                                                summaryData.mediumThreshold;
+                                            outCount.valueRatio += 0;
+                                            in2Count.value +=
+                                                summaryData.highThreshold;
+                                            in2Count.valueRatio += 0;
+                                            out2Count.value +=
+                                                summaryData.maxValue;
+                                            out2Count.valueRatio += 0;
                                         }
                                     } else {
                                         if (
                                             tempArray[index].area.objectId ==
                                             summaryData.area.objectId
                                         ) {
-                                              inCount.value += summaryData.total;
-                                    inCount.valueRatio += 0;
-                                    outCount.value +=
-                                        summaryData.mediumThreshold;
-                                    outCount.valueRatio += 0;
-                                    in2Count.value += summaryData.highThreshold;
-                                    in2Count.valueRatio += 0;
-                                    out2Count.value += summaryData.maxValue;
-                                    out2Count.valueRatio += 0;
+                                            inCount.value += Math.round(
+                                                summaryData.total /
+                                                    summaryData.count
+                                            );
+                                            inCount.valueRatio += 0;
+                                            outCount.value +=
+                                                summaryData.mediumThreshold;
+                                            outCount.valueRatio += 0;
+                                            in2Count.value +=
+                                                summaryData.highThreshold;
+                                            in2Count.valueRatio += 0;
+                                            out2Count.value +=
+                                                summaryData.maxValue;
+                                            out2Count.valueRatio += 0;
                                         }
                                     }
                                 }
@@ -1299,7 +1539,9 @@ export default class ReportOccupancy extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                      inCount.value += summaryData.total;
+                                    inCount.value += Math.round(
+                                        summaryData.total / summaryData.count
+                                    );
                                     inCount.valueRatio += 0;
                                     outCount.value +=
                                         summaryData.mediumThreshold;
@@ -1331,6 +1573,98 @@ export default class ReportOccupancy extends Vue {
         }
 
         this.rData.body = tempArray;
+    }
+
+    async toSunReportTable(thatDay, sunTime, sunSite, sunArea, rowName) {
+        if (!thatDay) {
+            let tempDate = new Date(sunTime.split(" ")[0]); //去掉星期
+            let sDate = new Date(
+                tempDate.getFullYear(),
+                tempDate.getUTCMonth(),
+                tempDate.getUTCDate() + 1
+            ).toISOString();
+            let eDate = new Date(
+                tempDate.getFullYear(),
+                tempDate.getUTCMonth(),
+                tempDate.getUTCDate() + 1
+            ).toISOString();
+            let filterData = {
+                startDate: sDate,
+                endDate: eDate,
+                type: "hour",
+                siteIds: [sunSite],
+                tagIds: []
+            };
+
+            let summaryTableDatas;
+            let officeHours;
+            await this.$server
+                .C("/report/human-detection/summary", filterData)
+                .then((response: any) => {
+                    if (response !== undefined) {
+                        summaryTableDatas = response.summaryTableDatas;
+                        this.initSunReportTable(summaryTableDatas);
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else {
+            this.toDetailReportTable(
+                thatDay,
+                sunTime,
+                sunSite,
+                sunArea,
+                rowName
+            );
+        }
+    }
+
+    async toDetailReportTable(thatDay, sunTime, sunSite, sunArea, rowName) {
+        this.lastTableStep = this.tableStep;
+        this.tableStep = ETableStep.detailTable;
+        let tempTime = parseInt(sunTime.split(":")[0]);
+
+        let tempSDate = new Date(
+            thatDay.getFullYear(),
+            thatDay.getUTCMonth(),
+            thatDay.getUTCDate(),
+            tempTime
+        ).toISOString();
+        let tempEDate = new Date(
+            thatDay.getFullYear(),
+            thatDay.getUTCMonth(),
+            thatDay.getUTCDate(),
+            tempTime + 1
+        ).toISOString();
+
+        let filterData = {
+            startDate: tempSDate,
+            endDate: tempEDate,
+            type: rowName == "out" ? "medium" : "high",
+            areaId: sunArea
+        };
+
+        let summaryTableDatas;
+        let officeHours;
+        await this.$server
+            .C("/report/human-detection/summary-threshold", filterData)
+            .then((response: any) => {
+                if (response !== undefined) {
+                    this.detailRData = response;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
     }
 
     countRatio(value, prevValue) {
@@ -1416,7 +1750,7 @@ export default class ReportOccupancy extends Vue {
             for (const summary of array) {
                 let tempChartData: IChartOccupancyData = {
                     date: summary.date,
-                    siteObjectId: '',
+                    siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
@@ -1495,7 +1829,7 @@ export default class ReportOccupancy extends Vue {
             for (const summary of array) {
                 let tempChartData: IChartOccupancyData = {
                     date: summary.date,
-                    siteObjectId: '',
+                    siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
@@ -1555,7 +1889,7 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                
+
                 let tempData = JSON.parse(JSON.stringify(tempChartData));
                 tempData.areaId = summary.area.objectId;
                 tempData.siteObjectId = summary.site.objectId;

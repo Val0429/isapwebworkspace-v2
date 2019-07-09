@@ -24,6 +24,7 @@ interface IReportTableDataBody extends IReportTableDataTotal {
 
 interface IReportTableDataBodyInOut {
     sign?: ESign;
+    link?: boolean;
     value: number;
     valueRatio: number;
 }

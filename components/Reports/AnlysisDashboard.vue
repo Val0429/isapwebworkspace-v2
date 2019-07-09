@@ -411,21 +411,21 @@ export class AnlysisDashboard extends Vue {
                             valueRatio: response.peopleCounting.variety
                         };
                     }
-                    if (response.averageOccupancy) {
+                    if (response.humanDetection) {
                         this.anlysisData.averageOccupancy = {
                             sign:
-                                response.averageOccupancy.variety == null ||
-                                response.averageOccupancy.variety == 0
+                                response.humanDetection.variety == null ||
+                                response.humanDetection.variety == 0
                                     ? ESign.none
-                                    : response.averageOccupancy.variety > 0
+                                    : response.humanDetection.variety > 0
                                     ? ESign.positive
                                     : ESign.negative,
-                            total: response.averageOccupancy.value,
-                            value: response.averageOccupancy.variety
-                                ? response.averageOccupancy.value *
-                                  response.averageOccupancy.variety
+                            total: response.humanDetection.value,
+                            value: response.humanDetection.variety
+                                ? response.humanDetection.value *
+                                  response.humanDetection.variety
                                 : null,
-                            valueRatio: response.averageOccupancy.variety
+                            valueRatio: response.humanDetection.variety
                         };
                     }
 

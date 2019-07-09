@@ -1,3 +1,4 @@
+import {EDesignationPeriod} from "../../components/Reports";
 <template>
     <div class="animated fadeIn">
         <iv-card
@@ -270,30 +271,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
-import { ITag, ITagReadUpdate } from "@/config/default/api/interfaces";
-import {
-    ERegionType,
-    IRegionItem,
-    RegionTreeItem,
-    IRegionTreeSelected
-} from "@/components/RegionTree";
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import {
-    EAddPeriodSelect,
-    EDesignationPeriod
-} from "@/components/Reports/models/EReport";
+    import {Component, Vue} from "vue-property-decorator";
+    import {toEnumInterface} from "@/../core";
+    import {ERegionType, IRegionTreeSelected, RegionTreeItem} from "@/components/RegionTree";
+    import {EAddPeriodSelect, EDesignationPeriod} from "@/components/Reports/models/EReport";
 
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime";
+    import RegionAPI from "@/services/RegionAPI";
+    import ResponseFilter from "@/services/ResponseFilter";
+    import Dialog from "@/services/Dialog";
+    import Datetime from "@/services/Datetime";
 
-import { EWeeks, EVideoSource } from "@/components/Reports";
-import { ITemplateItem } from "@/components/Reports";
+    import {EVideoSource, EWeeks} from "@/components/Reports";
 
-enum EPageStep {
+    enum EPageStep {
     list = "list",
     add = "add",
     edit = "edit",
@@ -835,7 +825,7 @@ export default class ReportTemplate extends Vue {
 
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
-        this.inputFormData.type = "today";
+        this.inputFormData.type = EDesignationPeriod.today;
         this.inputFormData.startDate = new Date();
         this.inputFormData.endDate = new Date();
     }
@@ -879,8 +869,8 @@ export default class ReportTemplate extends Vue {
                         siteIds: data.siteIds !== undefined ? data.siteIds : [],
                         tagIds: data.tagIds !== undefined ? data.tagIds : [],
                         sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
-                        startDate: data.startDate,
-                        endDate: data.endDate,
+                        startDate: Datetime.DateToZero(data.startDate).toISOString(),
+                        endDate: Datetime.DateToZero(data.endDate).toISOString(),
                         mode: data.mode,
                         sendDates: tempSendDates,
                     }
@@ -939,8 +929,8 @@ export default class ReportTemplate extends Vue {
                         siteIds: data.siteIds !== undefined ? data.siteIds : [],
                         tagIds: data.tagIds !== undefined ? data.tagIds : [],
                         sendUserIds: data.sendUserIds !== undefined ? data.sendUserIds : [],
-                        startDate: data.startDate,
-                        endDate: data.endDate,
+                        startDate: Datetime.DateToZero(data.startDate).toISOString(),
+                        endDate: Datetime.DateToZero(data.endDate).toISOString(),
                         mode: data.mode,
                         sendDates: tempSendDates,
                     }
