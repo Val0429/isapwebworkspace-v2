@@ -829,12 +829,12 @@ export default class ReportTraffic extends Vue {
             let sDate = new Date(
                 tempDate.getFullYear(),
                 tempDate.getMonth(),
-                tempDate.getDate() + 1
+                tempDate.getDate()
             ).toISOString();
             let eDate = new Date(
                 tempDate.getFullYear(),
                 tempDate.getMonth(),
-                tempDate.getDate() + 1
+                tempDate.getDate()
             ).toISOString();
             let filterData = {
                 startDate: sDate,
@@ -1045,7 +1045,6 @@ export default class ReportTraffic extends Vue {
     }
 
     async initSelectItemTree() {
-
         let tempTree = {};
         let tempChildrenArray = [];
 
@@ -1059,19 +1058,21 @@ export default class ReportTraffic extends Vue {
                             if (response.childrens.length > 0) {
                                 response.childrens.map(item => {
                                     if (item.objectId === site.objectId) {
-                                        let tempTreeData = JSON.parse(JSON.stringify(tempTree));
+                                        let tempTreeData = JSON.parse(
+                                            JSON.stringify(tempTree)
+                                        );
                                         tempTreeData.childrens = [];
                                         tempChildrenArray.push(item);
                                         tempTreeData.childrens = tempChildrenArray;
                                         tempTree = tempTreeData;
                                     }
-                                })
+                                });
                             }
-                        })
+                        });
                     }
 
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        tempTree,
+                        tempTree
                     );
 
                     this.regionTreeItem.region = this.regionTreeItem.tree;
@@ -1515,9 +1516,9 @@ export default class ReportTraffic extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
-         this.initSelectItemArea();
-         this.initSelectItemDeviceGroup();
-         this.initSelectItemDevice();
+        this.initSelectItemArea();
+        this.initSelectItemDeviceGroup();
+        this.initSelectItemDevice();
 
         this.inputFormData = {
             areaId: "all",
