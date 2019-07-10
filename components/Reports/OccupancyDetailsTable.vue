@@ -75,9 +75,7 @@ export class OccupancyDetailsTable extends Vue {
     }
 
     showTime(time) {
-        return (
-            new Date(time).getUTCHours() + ":" + new Date(time).getUTCMinutes()
-        );
+        return new Date(time).getHours() + ":" + new Date(time).getMinutes();
     }
 
     doCancel() {}
