@@ -164,9 +164,25 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
     filterInterface(){
          return `interface {
             /**
-            * @uiLabel - ${this._("doorname")}
-            */
-            name:string;
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Site")}
+              */
+             sitename?:string;
+             /**
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Area")}
+              */
+             areaname?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_DoorGroup")}
+              */
+             doorgroup?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_Door")}
+              */
+             name?:string;
         }`;
     }
     
