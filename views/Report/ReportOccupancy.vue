@@ -1269,12 +1269,7 @@ export default class ReportOccupancy extends Vue {
         }
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
-            x =>
-                Datetime.DateTime2String(this.startDate, "YYYY/MM/DD ") +
-                x +
-                ":00 - " +
-                (x + 1) +
-                ":00"
+            x => x + ":00 - " + (x + 1) + ":00"
         );
     }
 
@@ -1655,6 +1650,15 @@ export default class ReportOccupancy extends Vue {
         this.lastTableStep = this.tableStep;
         this.tableStep = ETableStep.detailTable;
         let tempTime = parseInt(sunTime.split(":")[0]);
+        console.log(
+            "toDetailReportTable",
+            thatDay,
+            sunTime,
+            sunSite,
+            sunArea,
+            rowName,
+            tempTime
+        );
 
         let tempSDate = new Date(
             thatDay.getFullYear(),

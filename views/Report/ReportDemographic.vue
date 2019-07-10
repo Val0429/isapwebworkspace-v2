@@ -588,7 +588,6 @@ export default class ReportDemographic extends Vue {
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
             x =>
-                Datetime.DateTime2String(this.startDate, "YYYY/MM/DD ") +
                 x +
                 ":00 - " +
                 (x + 1) +
