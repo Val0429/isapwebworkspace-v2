@@ -47,7 +47,7 @@
                             v-if="items.group"
                             :rowspan="reportTableTitle.titleCount"
                             class="title"
-                        >{{items.group.name}}</td>
+                        >{{items.group.objectId}}</td>
                         <td class="title"> {{reportTableTitle.title1}}</td>
                         <td v-for="(itemIn, key, index) in items.in">
 

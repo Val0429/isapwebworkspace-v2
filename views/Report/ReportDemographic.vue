@@ -237,7 +237,7 @@ export default class ReportDemographic extends Vue {
     filterData: IFilterCondition = {
         startDate: new Date(),
         endDate: new Date(),
-        firstSiteId: '',
+        firstSiteId: "",
         siteIds: [],
         tagIds: [],
         type: ETimeMode.none
@@ -472,41 +472,36 @@ export default class ReportDemographic extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
-             if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+            if (
+                summaryData.deviceGroups &&
+                summaryData.deviceGroups.length > 0
+            ) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
                         area: summaryData.area,
-                        group: deviceGroup.deviceGroup,
+                        group: deviceGroup,
                         in: [],
                         out: [],
                         in2: [],
                         out2: []
                     };
 
-                    if (body.group != undefined) {
-                        if (
-                            tempArray.some(
-                                t => t.group.objectId == body.group.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    } else {
-                        if (
-                            tempArray.some(
-                                t => t.area.objectId == body.area.objectId
-                            )
-                        ) {
-                            continue;
-                        }
+                    if (
+                        tempArray.every(
+                            t =>
+                                t.group == undefined ||
+                                t.group.objectId != body.group.objectId
+                        )
+                    ) {
+                        tempArray.push(body);
                     }
-                    tempArray.push(body);
                 }
             } else {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                     group: null,
                     in: [],
                     out: [],
                     in2: [],
@@ -514,12 +509,14 @@ export default class ReportDemographic extends Vue {
                 };
 
                 if (
-                    tempArray.some(t => t.area.objectId == body.area.objectId)
+                    tempArray.every(
+                        t =>
+                            t.area == undefined ||
+                            t.area.objectId != body.area.objectId
+                    )
                 ) {
-                    continue;
+                    tempArray.push(body);
                 }
-
-                tempArray.push(body);
             }
         }
 
@@ -534,7 +531,10 @@ export default class ReportDemographic extends Vue {
                     ) {
                         continue;
                     }
-                     if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+                    if (
+                        summaryData.deviceGroups &&
+                        summaryData.deviceGroups.length > 0
+                    ) {
                         for (let deviceGroup of summaryData.deviceGroups) {
                             if (tempArray[index].group != undefined) {
                                 if (
@@ -624,6 +624,7 @@ export default class ReportDemographic extends Vue {
         switch (chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
+                this.rData.thatDay = this.startDate; //單天記錄時間日期
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
@@ -650,6 +651,7 @@ export default class ReportDemographic extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
+                this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
                 while (sDate <= eDate) {
@@ -664,34 +666,28 @@ export default class ReportDemographic extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of this.responseData.summaryDatas) {
-            if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+            if (
+                summaryData.deviceGroups &&
+                summaryData.deviceGroups.length > 0
+            ) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
                         area: summaryData.area,
-                        group: deviceGroup.deviceGroup,
+                        group: deviceGroup,
                         in: [],
                         out: []
                     };
-
-                    if (body.group != undefined) {
-                        if (
-                            tempArray.some(
-                                t => t.group.objectId == body.group.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    } else {
-                        if (
-                            tempArray.some(
-                                t => t.area.objectId == body.area.objectId
-                            )
-                        ) {
-                            continue;
-                        }
+                    console.log("group", body.group);
+                    if (
+                        tempArray.every(
+                            t =>
+                                t.group == undefined ||
+                                t.group.objectId != body.group.objectId
+                        )
+                    ) {
+                        tempArray.push(body);
                     }
-                    tempArray.push(body);
                 }
             } else {
                 let body = {
@@ -700,14 +696,16 @@ export default class ReportDemographic extends Vue {
                     in: [],
                     out: []
                 };
-
+                console.log("area", body.area);
                 if (
-                    tempArray.some(t => t.area.objectId == body.area.objectId)
+                    tempArray.every(
+                        t =>
+                            t.area == undefined ||
+                            t.area.objectId != body.area.objectId
+                    )
                 ) {
-                    continue;
+                    tempArray.push(body);
                 }
-
-                tempArray.push(body);
             }
         }
 
@@ -715,7 +713,6 @@ export default class ReportDemographic extends Vue {
         switch (chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
-                this.rData.thatDay = this.startDate; //單天記錄時間日期
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
                         let inCount = { value: 0, valueRatio: 0, link: true };
@@ -777,7 +774,6 @@ export default class ReportDemographic extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                this.rData.thatDay = null; //多天無當天時間
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
                         let inCount = { value: 0, valueRatio: 0, link: true };
@@ -1561,8 +1557,14 @@ export default class ReportDemographic extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
-        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
+        let tempDate1 =
+            typeof date1 === "string"
+                ? Datetime.DateToZero(new Date(date1))
+                : Datetime.DateToZero(date1);
+        let tempDate2 =
+            typeof date2 === "string"
+                ? Datetime.DateToZero(new Date(date2))
+                : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
@@ -1576,10 +1578,8 @@ export default class ReportDemographic extends Vue {
         let finalChartDatas: IChartDemographicData[] = [];
         this.chartDatas = [];
 
-
         switch (this.filterData.type) {
             case ETimeMode.hour:
-
         }
 
         // TODO: Remove

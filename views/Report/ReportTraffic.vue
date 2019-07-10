@@ -463,14 +463,13 @@ export default class ReportTraffic extends Vue {
                         out: []
                     };
                     if (
-                        tempArray.some(
+                        tempArray.every(
                             t =>
                                 t.group == undefined ||
-                                t.group.objectId == body.group.objectId
+                                t.group.objectId != body.group.objectId
                         )
                     )
-                        continue;
-                    tempArray.push(body);
+                        tempArray.push(body);
                 }
             } else {
                 let body = {
@@ -480,15 +479,13 @@ export default class ReportTraffic extends Vue {
                     out: []
                 };
                 if (
-                    tempArray.some(
+                    tempArray.every(
                         t =>
-                            t.group == undefined ||
-                            t.area.objectId == body.area.objectId
+                            t.area == undefined ||
+                            t.area.objectId != body.area.objectId
                     )
                 )
-                    continue;
-
-                tempArray.push(body);
+                    tempArray.push(body);
             }
         }
 
@@ -634,14 +631,13 @@ export default class ReportTraffic extends Vue {
                     };
 
                     if (
-                        tempArray.some(
+                        tempArray.every(
                             t =>
                                 t.group == undefined ||
-                                t.group.objectId == body.group.objectId
+                                t.group.objectId != body.group.objectId
                         )
                     )
-                        continue;
-                    tempArray.push(body);
+                        tempArray.push(body);
                 }
             } else {
                 let body = {
@@ -652,14 +648,13 @@ export default class ReportTraffic extends Vue {
                 };
 
                 if (
-                    tempArray.some(
+                    tempArray.every(
                         t =>
                             t.area == undefined ||
-                            t.area.objectId == body.area.objectId
+                            t.area.objectId != body.area.objectId
                     )
                 )
-                    continue;
-                tempArray.push(body);
+                    tempArray.push(body);
             }
         }
         //填入資料
@@ -1599,8 +1594,14 @@ export default class ReportTraffic extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
-        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
+        let tempDate1 =
+            typeof date1 === "string"
+                ? Datetime.DateToZero(new Date(date1))
+                : Datetime.DateToZero(date1);
+        let tempDate2 =
+            typeof date2 === "string"
+                ? Datetime.DateToZero(new Date(date2))
+                : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
