@@ -993,10 +993,10 @@ export default class ReportOccupancy extends Vue {
         this.sites = [];
         let tempAreas = [];
 
-        console.log('siteIds - ', this.filterData.siteIds);
-        console.log('officeHourItemDetail - ', this.officeHourItemDetail);
-        console.log('allAreaItem - ', this.allAreaItem);
-        console.log(' - ', );
+        console.log("siteIds - ", this.filterData.siteIds);
+        console.log("officeHourItemDetail - ", this.officeHourItemDetail);
+        console.log("allAreaItem - ", this.allAreaItem);
+        console.log(" - ");
 
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
@@ -1145,7 +1145,10 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
-               if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+            if (
+                summaryData.deviceGroups &&
+                summaryData.deviceGroups.length > 0
+            ) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -1209,7 +1212,10 @@ export default class ReportOccupancy extends Vue {
                     ) {
                         continue;
                     }
-                    if (summaryData.deviceGroups) {
+                    if (
+                        summaryData.deviceGroups &&
+                        summaryData.deviceGroups.length > 0
+                    ) {
                         for (let deviceGroup of summaryData.deviceGroups) {
                             if (tempArray[index].group != undefined) {
                                 if (
@@ -1348,7 +1354,10 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of this.responseData.summaryTableDatas) {
-                if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+            if (
+                summaryData.deviceGroups &&
+                summaryData.deviceGroups.length > 0
+            ) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -1422,7 +1431,10 @@ export default class ReportOccupancy extends Vue {
                             ) {
                                 continue;
                             }
-                            if (summaryData.deviceGroups) {
+                            if (
+                                summaryData.deviceGroups &&
+                                summaryData.deviceGroups.length > 0
+                            ) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (tempArray[index].group != undefined) {
                                         if (
@@ -1517,7 +1529,10 @@ export default class ReportOccupancy extends Vue {
                             ) {
                                 continue;
                             }
-                            if (summaryData.deviceGroups) {
+                            if (
+                                summaryData.deviceGroups &&
+                                summaryData.deviceGroups.length > 0
+                            ) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (tempArray[index].group != undefined) {
                                         if (
