@@ -1616,12 +1616,12 @@ export default class ReportTraffic extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? new Date(date1) : date1;
-        let tempDate2 = typeof date2 === "string" ? new Date(date2) : date2;
+        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
+        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
     }
