@@ -66,16 +66,15 @@ export class RegionAPI {
                     regionItem.type = ERegionType.site;
                     if (this.regionTreeItem.toggleStatus.site || this.regionTreeItem.toggleStatus.area) {
                         regionItem.status.showCard = true;
-                        regionItem.status.showBar = true;
                     } else {
                         regionItem.status.showCard = false;
-                        regionItem.status.showBar = false;
                     }
                     break;
                 case 'area':
                     regionItem.type = ERegionType.area;
                     if (this.regionTreeItem.toggleStatus.site) {
                         regionItem.status.showCard = true;
+                        regionItem.status.showBar = false;
                     } else {
                         regionItem.status.showCard = false;
                     }

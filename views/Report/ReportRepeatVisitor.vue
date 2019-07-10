@@ -458,14 +458,35 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     async initSelectItemTree() {
+
+        let tempTree = {};
+        let tempChildrenArray = [];
+
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
                 if (response != undefined) {
-                    this.regionTreeItem.tree = RegionAPI.analysisRegionTreeFilterSite(
-                        response,
-                        this.$user.allowSites
+                    tempTree = response;
+                    if (this.$user.allowSites.length > 0) {
+                        this.$user.allowSites.map(site => {
+                            if (response.childrens.length > 0) {
+                                response.childrens.map(item => {
+                                    if (item.objectId === site.objectId) {
+                                        let tempTreeData = JSON.parse(JSON.stringify(tempTree));
+                                        tempTreeData.childrens = [];
+                                        tempChildrenArray.push(item);
+                                        tempTreeData.childrens = tempChildrenArray;
+                                        tempTree = tempTreeData;
+                                    }
+                                })
+                            }
+                        })
+                    }
+
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        tempTree,
                     );
+
                     this.regionTreeItem.region = this.regionTreeItem.tree;
                 }
             })
@@ -1038,7 +1059,7 @@ export default class ReportRepeatVisitor extends Vue {
         this.rData = this.responseData.summaryTableDatas;
     }
 
-    
+
     initDashboardData() {
         this.dPageType = EPageType.repeatCustomer;
         setTimeout(() => {
@@ -1129,7 +1150,6 @@ export default class ReportRepeatVisitor extends Vue {
             // }
 
             //跑maleRange、 femaleRange
-            for (let index = 0; index < 6; index++) {
                 for (let index = 0; index < 6; index++) {
                     if (summary.maleRanges[index] === null) {
                         break;
@@ -1149,23 +1169,17 @@ export default class ReportRepeatVisitor extends Vue {
                         index.toString()
                     );
 
-                    // if (tempData.maleCount > 0) {
-                    //     console.log(tempData);
-                    // }
-
                     tempChartDatas.push(tempData);
+
+                    // console.log(
+                    //     index,
+                    //     JSON.parse(JSON.stringify(tempChartDatas)),
+                    //     JSON.parse(JSON.stringify(tempChartData)),
+                    //     tempData.ageRange
+                    // );
                 }
 
-                // console.log(
-                //     index,
-                //     " //分開跑maleRange",
-                //     JSON.parse(JSON.stringify(tempChartDatas)),
-                //     JSON.parse(JSON.stringify(tempChartData)),
-                //     tempData.ageRange
-                // );
-
                 // tempChartDatas.push(tempData);
-            }
 
             // tempChartDatas.push(tempChartData);
 
