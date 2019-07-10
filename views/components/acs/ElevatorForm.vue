@@ -11,7 +11,7 @@
             {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
         </template>
         <template #view.reader="{$attrs, $listeners}">
-            {{ $attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x => getName(x.objectId, floorOptions)).join(', '):'' }}
+            {{ $attrs.value ? $attrs.value.length : 0 }}
         </template>
         <template #view.elevatorgroup="{$attrs, $listeners}">
             {{getInfo($attrs.row).elevatorgroup}}
@@ -82,7 +82,7 @@ export default class ElevatorForm extends BasicFormQuick implements IFormQuick2 
                     */
                     elevatorname: string;
                     /**
-                    * @uiLabel - ${this._("reader")}
+                    * @uiLabel - ${this._("w_Reader_Count")}
                     */
                     reader:string;                    
                     
@@ -152,7 +152,32 @@ export default class ElevatorForm extends BasicFormQuick implements IFormQuick2 
         let site = group && group.area && group.area.site ? group.area.site.name : "";
         return {elevatorgroup, area, site};
     }
-    
+    filterInterface(){
+        return `
+            interface {
+                /**
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Site")}
+              */
+             sitename?:string;
+             /**
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Area")}
+              */
+             areaname?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_ElevatorGroup")}
+              */
+             groupname?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_Elevator")}
+              */
+             name?:string;
+            }
+        `;
+    }
 }
 </script>
 
