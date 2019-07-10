@@ -3,7 +3,7 @@
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
     wb_Login = '登入';
-    w_Add = 'Add';
+    w_Add = '新增';
     w_Name = '姓名';
     w_Enabled = '有效';
     w_Value = '値';
@@ -12,12 +12,12 @@ export default class LangObject implements ILang {
     w_Password = '密碼';
     w_Selection = '';
     w_Multi = '';
-    w_UserPermission="User Permission";
-    w_UserPermissionAdd="Add User Permission";
-    w_UserPermissionEdit="Edit User Permission";
+    w_UserPermission="人員權限";
+    w_UserPermissionAdd="新增人員權限";
+    w_UserPermissionEdit="編輯人員權限";
     w_Username = '使用者名稱';
     w_Roles = '角色';    
-    w_ApiRoles = "API Roles";
+    w_ApiRoles = "角色";
     w_Email = 'Email';
     w_CreatedAt = '建立日期';
     w_UpdatedAt = '編輯日期';
@@ -53,24 +53,24 @@ export default class LangObject implements ILang {
     updatedAt = '編輯日期';
 
     w_Door = '門號';
-    w_DoorAdd = 'Add Door';
-    w_DoorEdit = 'Edit Door';
+    w_DoorAdd = '新增門號';
+    w_DoorEdit = '編輯門號';
     system = '門禁系統';
     doorid = '門號ID';
     doorname = '門號名稱';
     unlocktime = 'Unlock Time';
     shunttime = 'Shunt Time';
-    readerin = 'Reader In';
-    readerout = 'Reader Out';
+    readerin = '讀卡機_進';
+    readerout = '讀卡機_出';
 
     w_DoorGroup = '門號群組';
     w_DoorGroupAdd = '新增門號群組';
     w_DoorGroupEdit = '編輯門號群組';
     groupid = '門號群組ID';
     groupname = '門號群組名稱';
-    doors = '';
-    doorscount = 'Doors Count';
-    readerscount = 'Readers Count';
+    doors = '門號';
+    doorscount = '門號數量';
+    readerscount = '讀卡機數量';
 
     w_Elevator = '電梯';
     w_ElevatorAdd = '新增電梯';
@@ -83,90 +83,90 @@ export default class LangObject implements ILang {
     timeid = '時間規格ID';
     timename = '時間規格名稱';
 
-    w_PermissionTable = '權限表';
-    w_PermissionTableAdd = '新增權限表';
-    w_PermissionTableEdit = '編輯權限表';
-    tableid = '權限表ID';
-    tablename = '權限表名稱';
+    w_PermissionTable = '門禁權限表';
+    w_PermissionTableAdd = '新增門禁權限表';
+    w_PermissionTableEdit = '編輯門禁權限表';
+    tableid = '門禁權限表 ID';
+    tablename = '門禁權限表名稱';
 
-    w_Reader = 'Reader';
-    w_ReaderAdd = 'Add Reader';
-    w_ReaderEdit = 'Edit Reader';
-    readerid = 'Reader Id';
-    readername = 'Reader Name';
+    w_Reader = '讀卡機';
+    w_ReaderAdd = '新增讀卡機';
+    w_ReaderEdit = '編輯讀卡機';
+    readerid = '讀卡機 ID';
+    readername = '讀卡機名稱';
 
-    w_SyncReceiver = 'Sync Receiver';
-    w_SyncReceiverAdd = 'Add Sync Receiver';
-    w_SyncReceiverEdit = 'Edit Sync Receiver';
-    receivename = 'Receiver Name';
-    emailaddress = 'Email Address';
+    w_SyncReceiver = '人事同步通知人員';
+    w_SyncReceiverAdd = '新增人事同步通知人員';
+    w_SyncReceiverEdit = '編輯人事同步通知人員';
+    receivename = '姓名';
+    emailaddress = 'Email';
     receivers = 'Receivers';
 
-    w_AccessLevel = 'Access Level';
-    w_AccessLevelAdd = 'Add Access Level';
-    w_AccessLevelEdit = 'Edit Access Level';
+    w_AccessLevel = '門禁權限';
+    w_AccessLevelAdd = '新增門禁權限';
+    w_AccessLevelEdit = '編輯門禁權限';
 
-    levelid = 'Level Id';
-    levelname = 'Level Name';
-    door = 'Door';
-    reader = 'Reader';
-    timeschedule = 'Time Schedule';
+    levelid = '門禁權限 ID';
+    levelname = '門禁權限名稱';
+    door = '門號';
+    reader = '讀卡機';
+    timeschedule = '時間規格';
 
-    PersonalDetails = 'Personal Details';
+    PersonalDetails = '人員詳細資訊';
 
-    w_Floor = 'Floor';
-    w_FloorAdd = 'Add Floor';
-    w_FloorEdit = 'Edit Floor';
+    w_Floor = '樓層';
+    w_FloorAdd = '新增樓層';
+    w_FloorEdit = '編輯樓層';
     name = 'Name';
     image = 'Image';
 
-    floorid = 'Floor Id';
+    floorid = '樓層 ID';
     ccureid = 'CCURE Id';
     ccurename = 'CCURE Name';
     sipassid = 'SIPASS Id';
     sipassname = 'SIPASS Name';
 
-    w_ElevatorGroup = 'Elevator Group';
-    w_ElevatorGroupAdd = 'Add Elevator Group';
-    w_ElevatorGroupEdit = 'Edit Elevator Group';
-    elevators = 'Elevators';
+    w_ElevatorGroup = '電梯群組';
+    w_ElevatorGroupAdd = '新增電梯群組';
+    w_ElevatorGroupEdit = '編輯電梯群組';
+    elevators = '電梯';
 
     // User
-    w_User_UserList = 'User List';
-    w_User_AddUser = 'Add User';
-    w_User_EditUser = 'Edit User';
-    w_User_ViewUser = 'View User';
-    w_User_ID = 'User ID';
-    w_User_FullName = 'Full Name';
-    w_User_Group = 'Group';
-    w_User_UserGroup = 'User Group';
+    w_User_UserList = '使用者列表';
+    w_User_AddUser = '新增使用者';
+    w_User_EditUser = '編輯使用者';
+    w_User_ViewUser = '檢視使用者';
+    w_User_ID = '使用者 ID';
+    w_User_FullName = '使用者姓名';
+    w_User_Group = '角色';
+    w_User_UserGroup = '使用者角色';
     w_User_UserGroup_Admin = 'Admin';
     w_User_UserGroup_User = 'User';
-    w_User_Role = 'Role';
+    w_User_Role = '角色';
     w_User_AppInstalled = 'App Installed';
     w_User_TestEmail = 'Test Email';
-    w_User_AddUserSuccess = 'Add User Success.';
-    w_User_AddUserFailed = 'Add User Failed';
-    w_User_EditUserSuccess = 'Edit User Success';
-    w_User_EditUserFailed = 'Edit User Failed';
-    w_User_DeleteConfirm = 'Are you sure to delete selected user(s)?';
+    w_User_AddUserSuccess = '新增使用者成功';
+    w_User_AddUserFailed = '新增使用者失敗';
+    w_User_EditUserSuccess = '編輯使用者成功';
+    w_User_EditUserFailed = '編輯使用者失敗';
+    w_User_DeleteConfirm = '你確定要刪除已選擇的使用者？';
 
     // UserGroup
-    w_UserGroup_UserGroupList = 'Group List';
-    w_UserGroup_AddGroup = 'Add Group';
-    w_UserGroup_EditGroup = 'Edit Group';
-    w_UserGroup_ViewGroup = 'View Group';
-    w_UserGroup_GroupName = 'Group Name';
-    w_UserGroup_Users = 'Users';
-    w_UserGroup_AddUserGroupSuccess = 'Add User Group Success.';
-    w_UserGroup_AddUserGroupFailed = 'Add User Group Failed';
-    w_UserGroup_EditUserGroupSuccess = 'Edit User Group Success';
-    w_UserGroup_EditUserGroupFailed = 'Edit User Group Failed';
-    w_UserGroup_DeleteConfirm = 'Are you sure to delete selected usergroup(s)?';
+    w_UserGroup_UserGroupList = '角色列表';
+    w_UserGroup_AddGroup = '新增角色';
+    w_UserGroup_EditGroup = '編輯角色';
+    w_UserGroup_ViewGroup = '檢視角色';
+    w_UserGroup_GroupName = '角色名稱';
+    w_UserGroup_Users = '使用者';
+    w_UserGroup_AddUserGroupSuccess = '新增角色成功';
+    w_UserGroup_AddUserGroupFailed = '新增角色失敗';
+    w_UserGroup_EditUserGroupSuccess = '編輯角色成功';
+    w_UserGroup_EditUserGroupFailed = '編輯角色失敗';
+    w_UserGroup_DeleteConfirm = '你確定要刪除已選擇的角色？';
 
     // many page
-    w_Account = 'Account';
-    w_PasswordConfirm = 'PasswordConfirm';
+    w_Account = '帳號';
+    w_PasswordConfirm = '確認密碼';
     w_Protocol = 'Protocol';
     w_Ip = 'Ip';
     w_Port = 'Port';
@@ -176,17 +176,17 @@ export default class LangObject implements ILang {
     w_ManagedSites = 'Managed sites';
     w_Description = 'Description';
     w_Sites = 'Site(s)';
-    w_Site = 'Site';
-    w_Regions = 'Region(s)';
-    w_PreviousPassword = 'Previous Password';
-    w_CurrentPassword = 'Current Password';
-    w_CurrentPasswordConfirm = 'Current PasswordConfirm';
-    w_Longitude = 'Longitude';
-    w_Latitude = 'Latitude';
+    w_Site = '站點';
+    w_Regions = '地區';
+    w_PreviousPassword = '舊密碼';
+    w_CurrentPassword = '新密碼';
+    w_CurrentPasswordConfirm = '確認新密碼';
+    w_Longitude = '經度';
+    w_Latitude = '緯度';
     w_DeviceID = 'Device ID';
     w_ServerName = 'Server Name';
     w_IPAddress = 'IP Address';
-    w_Selected = 'Selected';
+    w_Selected = '已選擇';
     w_RegionTreeSelect = 'Region Tree Select';
     w_SiteTreeSelect = 'Site Tree Select';
     w_Brand = 'Brand';
@@ -198,12 +198,12 @@ export default class LangObject implements ILang {
     w_iSapFRSServer = 'FRS Server';
     w_iSapFRSManager = 'FRS Manager';
     w_iSapFRSManagerServer = 'FRS Manager ';
-    w_In = 'In';
-    w_Out = 'Out';
+    w_In = '進';
+    w_Out = '出';
     w_Direction = 'Direction';
     w_ServerId = 'Server Id';
     w_SourceId = 'Source Id';
-    w_SourceIdAndLocation = 'Source Id and Location ';
+    w_SourceIdAndLocation = 'Source Id and Location';
     w_Location = 'Location';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
@@ -214,27 +214,27 @@ export default class LangObject implements ILang {
     w_SetFRS = 'Not yet set? Go to set FRS Server';
     w_SetFRSManger = 'Not yet set? Go to set FRS Manger Server';
 
-    w_Error_Port = 'Port should be in 1~65535';
-    w_Error_Password = 'Password and PasswordConfirm should be same';
-    w_ErrorLongitude = 'Longitude only -180~180';
-    w_ErrorLatitude = 'Latitude only -90~90';
-    w_ErrorReadData = 'Read data failed, please try again.';
-    w_ErrorRecognize = 'Recognize failed, please try again.';
+    w_Error_Port = 'Port 範圍應在 1~65535 之間';
+    w_Error_Password = '密碼需一致';
+    w_ErrorLongitude = '經度範圍應在 -180~180 之間';
+    w_ErrorLatitude = '緯度範圍應在 -90~90 之間';
+    w_ErrorReadData = '讀取資料失敗，請再試一次';
+    w_ErrorRecognize = '辨識失敗，請再試一次';
 
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
 
     // Dialog
-    w_Dialog_ErrorTitle = 'Something wrong';
-    w_Dialog_SuccessTitle = 'Success';
+    w_Dialog_ErrorTitle = '錯誤';
+    w_Dialog_SuccessTitle = '成功';
 
     // common
     w_Interval="間隔";
     w_ColumnSelection ="Column Selection";
-    w_Filter = "Filter";
-    w_Error = 'Error';
-    w_NextPage = 'Next';
-    w_PreviousPage = 'Prev';
+    w_Filter = "篩選";
+    w_Error = '錯誤';
+    w_NextPage = '下一步';
+    w_PreviousPage = '上一步';
     w_Clear = 'Clear';
     w_Unlink = 'Unlink';
     w_Search = 'Search';
@@ -242,187 +242,187 @@ export default class LangObject implements ILang {
     w_Edit = 'Edit';
     w_View = 'View';
     w_Sliders = 'Sliders';
-    w_Map = 'Map';
-    w_Area = 'Area';
-    w_Device = 'Device';
+    w_Map = '地圖';
+    w_Area = '區域';
+    w_Device = '裝置';
     w_DeviceGroup = 'Device Group';
     w_EditMyProfile = 'Edit My Profile';
-    w_ChangePassword = 'Change Password';
-    w_ForgetPassword = 'Forget Password Step';
+    w_ChangePassword = '修改密碼';
+    w_ForgetPassword = '忘記密碼';
     w_DeleteConfirm = 'Delete Confirm';
     w_UnlinkConfirm = 'Unlink Confirm';
     m_PermanentlyDeleteSelectedItem = 'Permanently delete {count} selected Item?';
     w_RemoveConfirm = 'Remove Confirm';
     m_PermanentlyRemoveSelectedItem = 'Permanently remove {count} selected Item?';
-    w_NoItemSelected = 'No item selected';
-    w_Success = 'Success';
-    w_DeleteFailed = 'Delete Failed';
-    w_LogoutSuccess = 'Sign out Success';
+    w_NoItemSelected = '未選擇任何選項';
+    w_Success = '成功';
+    w_DeleteFailed = '刪除失敗';
+    w_LogoutSuccess = '登出失敗';
     w_Id = 'Id';
     w_Switch = 'Switch';
     w_To = 'To';
     w_StepBackward = 'Step Backward';
     w_ROIClear = 'ROI Clear';
-    w_Upload_Fail = 'Upload Filed';
-    w_Duplicate = 'Duplicate';
+    w_Upload_Fail = '上傳失敗';
+    w_Duplicate = '重複';
     w_Snapshot = 'Snapshot';
-    w_Gender = 'Gender';
+    w_Gender = '性別';
     w_Age = 'Age Range';
     w_Options = '可用選項';
     w_Chooses = '已選擇';
     w_AllChoose = '全選';
-    w_Select = 'Please Select';
+    w_Select = '請選擇';
 
     // date
-    w_Week_0 = 'Sunday';
-    w_Week_1 = 'Monday';
-    w_Week_2 = 'Tuesday';
-    w_Week_3 = 'Wednesday';
-    w_Week_4 = 'Thursday';
-    w_Week_5 = 'Friday';
-    w_Week_6 = 'Saturday';
-    w_Week_7 = 'Sunday';
+    w_Week_0 = '星期日';
+    w_Week_1 = '星期一';
+    w_Week_2 = '星期二';
+    w_Week_3 = '星期三';
+    w_Week_4 = '星期四';
+    w_Week_5 = '星期五';
+    w_Week_6 = '星期六';
+    w_Week_7 = '星期日';
     w_Week_Unknow = 'Unknow';
 
     // Mail Server
-    w_MailServer_Email = 'Email Account';
+    w_MailServer_Email = 'Email 帳號';
     w_MailServer_Enable = 'Mail Server Enable';
-    w_MailServer_Setting = 'Set Mail Server';
+    w_MailServer_Setting = '設定 Mail Server';
     w_MailServer_Test = 'Test Email';
 
-    w_MailServer_Setting_Success = 'Email Server set success.';
-    w_MailServer_Setting_Fail = 'Email Server set failed.';
-    w_MailServer_Test_Success = 'Email Server test success.';
-    w_MailServer_Test_Fail = 'Email Server test failed.';
-    w_MailServer_Read_Fail = 'Mail Server read failed.';
+    w_MailServer_Setting_Success = '設定 Email Server 成功';
+    w_MailServer_Setting_Fail = '設定 Email Server 失敗';
+    w_MailServer_Test_Success = '測試 Email Server 成功';
+    w_MailServer_Test_Fail = '測試 Email Server 失敗';
+    w_MailServer_Read_Fail = '讀取 Mail Server 失敗';
 
     // LocationRegion
-    w_Region_Map = 'Map';
-    w_Region_CardTitle = 'Region';
-    w_Region_ButtonDeleteConfirm = 'Confirm';
-    w_Region_DeleteConfrimTitle = 'Confirm delete';
-    w_Region_DeleteConfrimContent = 'Do you want delete choose region?';
-    w_Region_AddRegionTitle = 'Add a new region';
+    w_Region_Map = '地圖';
+    w_Region_CardTitle = '地區';
+    w_Region_ButtonDeleteConfirm = '刪除';
+    w_Region_DeleteConfrimTitle = '刪除';
+    w_Region_DeleteConfrimContent = '你確定要刪除已選擇的地區？';
+    w_Region_AddRegionTitle = '新增地區';
 
     w_Region_AddSameLayerRegion = 'Add Same Layer';
     w_Region_AddNextLayerRegion = 'Add Next Layer';
     w_Region_BindingSite = 'Binding Site';
     w_Region_BackToTree = 'Back';
 
-    w_Region_Name = 'Name';
-    w_Region_Address = 'Address';
+    w_Region_Name = '名稱';
+    w_Region_Address = '地址';
     w_Region_CustomId = 'ID';
-    w_Region_Photo = 'Photo';
+    w_Region_Photo = '照片';
     w_Region_Image = 'Floor plan';
     w_Region_Location = 'Location';
-    w_Region_Lat = 'Latitude';
-    w_Region_Lng = 'Longitude';
+    w_Region_Lat = '經度';
+    w_Region_Lng = '緯度';
     w_Region_Tags = 'Tag';
     w_Region_Level = 'Level';
-    w_Region_LevelRegion = 'Region';
-    w_Region_LevelSite = 'Site';
-    w_Region_LevelArea = 'Area';
+    w_Region_LevelRegion = '地區';
+    w_Region_LevelSite = '站點';
+    w_Region_LevelArea = '區域';
     w_Region_Sites = 'Sites';
 
-    w_Region_NamePlaceholder = 'Please input name';
-    w_Region_AddressPlaceholder = 'Please input address';
+    w_Region_NamePlaceholder = '請輸入姓名';
+    w_Region_AddressPlaceholder = '請輸入地址';
     w_Region_CustomIdPlaceholder = 'Please input ID';
-    w_Region_PhotoPlaceholder = 'Please upload photo';
+    w_Region_PhotoPlaceholder = '請上傳照片';
     w_Region_ImagePlaceholder = 'Please upload floor plan';
-    w_Region_LatPlaceholder = 'Please input latitude';
-    w_Region_LngPlaceholder = 'Please input longitude';
+    w_Region_LatPlaceholder = '請輸入經度';
+    w_Region_LngPlaceholder = '請輸入緯度';
     w_Region_TagsPlaceholder = 'Please choose tag';
     w_Region_LevelPlaceholder = 'Please choose level';
-    w_Region_SitesPlaceholder = 'Please choose site';
+    w_Region_SitesPlaceholder = '請選擇站點';
 
-    w_Region_ErrorLongitude = 'Longitude only -180~180';
-    w_Region_ErrorLatitude = 'Latitude only -90~90';
-    w_Region_ErrorNoSiteBeBinding = 'No site can be binding';
-    w_Region_ErrorFileToLarge = 'Image max size is 7MB';
+    w_Region_ErrorLongitude = '經度範圍應在 -180~180 之間';
+    w_Region_ErrorLatitude = '緯度範圍應在 -90~90 之間';
+    w_Region_ErrorNoSiteBeBinding = '無可綁定站點';
+    w_Region_ErrorFileToLarge = '照片檔案最大不能超過 7MB';
 
     // Site
-    w_Site_SiteID = 'Site ID';
-    w_Site_SiteName = 'Site Name';
-    w_Site_AreaName = 'Area Name';
+    w_Site_SiteID = '站點 ID';
+    w_Site_SiteName = '站點名稱';
+    w_Site_AreaName = '區域名稱';
     w_Site_GroupName = 'Device Group Name';
-    w_Site_DeviceName = 'Device Name';
-    w_Site_DeviceType = 'Device Type';
-    w_Site_Address = 'Address';
+    w_Site_DeviceName = '裝置名稱';
+    w_Site_DeviceType = '裝置類型';
+    w_Site_Address = '地址';
     w_Site_Establishment = 'Establishment';
     w_Site_PhoneNumber = 'Phone Number';
     w_Site_SquareMeter = 'Square Meter';
     w_Site_Manager = 'Manager';
     w_Site_StaffNumber = 'Staff Number';
     w_Site_OfficeHour = 'Office Hour';
-    w_Site_Area = 'Area';
+    w_Site_Area = '區域';
     w_Site_Tag = 'Tag';
     w_Site_Devices = 'Devices';
     w_Site_DeviceGroup = 'Device Group';
     w_Site_Model = 'Model';
-    w_Site_Photo = 'Photo';
-    w_Site_MapPhoto = 'Map Photo';
-    w_Site_Longitude = 'Longitude';
-    w_Site_Latitude = 'Latitude';
-    w_Site_Longitude_Range = 'Longitude range from 180° to -180°';
-    w_Site_Latitude_Range = 'Latitude range from 90° to -90°';
+    w_Site_Photo = '照片';
+    w_Site_MapPhoto = '地圖照片';
+    w_Site_Longitude = '經度';
+    w_Site_Latitude = '緯度';
+    w_Site_Longitude_Range = '經度範圍應在-180~180之間';
+    w_Site_Latitude_Range = '緯度範圍應在-90~90之間';
     w_Site_Mapping = 'Mapping';
-    w_Site_SiteList = 'Site List';
-    w_Site_ViewSite = 'View Site';
-    w_Site_AddSite = 'Add Site';
-    w_Site_EditSite = 'Edit Site';
-    w_Site_AreaList = 'Area List';
-    w_Site_ViewArea = 'View Area';
-    w_Site_AddArea = 'Add Area';
-    w_Site_EditArea = 'Edit Area';
+    w_Site_SiteList = '站點列表';
+    w_Site_ViewSite = '檢視站點';
+    w_Site_AddSite = '新增站點';
+    w_Site_EditSite = '編輯站點';
+    w_Site_AreaList = '區域列表';
+    w_Site_ViewArea = '檢視區域';
+    w_Site_AddArea = '新增區域';
+    w_Site_EditArea = '編輯區域';
     w_Site_DeviceGroupList = 'Device Group List';
     w_Site_ViewDevice = 'View Device';
     w_Site_AddDevice = 'Add Device';
     w_Site_EditDevice = 'Edit Device';
-    w_Site_AddSiteSuccess = 'Add Site Success';
-    w_Site_AddSiteFailed = 'Add Site Failed';
-    w_Site_EditSiteSuccess = 'Edit Site Success';
-    w_Site_EditSiteFailed = 'Edit Site Failed';
-    w_Site_AddAreaSuccess = 'Add Area Success';
-    w_Site_AddAreaFailed = 'Add Area Failed';
-    w_Site_EditAreaSuccess = 'Edit Area Success';
-    w_Site_EditAreaFailed = 'Edit Area Failed';
+    w_Site_AddSiteSuccess = '新增站點成功';
+    w_Site_AddSiteFailed = '新增站點失敗';
+    w_Site_EditSiteSuccess = '編輯站點成功';
+    w_Site_EditSiteFailed = '編輯站點失敗';
+    w_Site_AddAreaSuccess = '新增區域成功';
+    w_Site_AddAreaFailed = '新增區域失敗';
+    w_Site_EditAreaSuccess = '編輯區域成功';
+    w_Site_EditAreaFailed = '編輯區域失敗';
     w_Site_AddDeviceGroupSuccess = 'Add Device Group Success';
     w_Site_AddDeviceGroupFailed = 'Add Device Group Failed';
     w_Site_EditDeviceGroupSuccess = 'Edit Device Group Success';
     w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
 
     // Permission
-    w_Permission_PermissionManage = 'Permission Manage';
-    w_Permission_PermissionList = 'Permission List';
-    w_Permission_PermissionAdd = 'Permission Add';
-    w_Permission_PermissionEdit = 'Permission Edit';
-    w_Permission_PermissionView = 'Permission View';
-    w_Permission_PermissionName = 'Permission Name';
-    w_Permission_DeviceType = 'Device Type';
-    w_Permission_DeviceName = 'Device Name';
-    w_Permission_DeviceArea = 'Device Area';
-    w_Permission_DeviceTimeFormat = 'Time Format';
-    w_Permission_Door = 'Door Name';
-    w_Permission_Elevator = 'Elevator Name';
-    w_Permission_DoorGroup = 'Door Group Name';
-    w_Permission_DoorAdd = 'Add Door';
-    w_Permission_ElevatorAdd = 'Add Elevator';
-    w_Permission_DoorGroupAdd = 'Add Door Group';
+    w_Permission_PermissionManage = '門禁權限管理';
+    w_Permission_PermissionList = '門禁權限列表';
+    w_Permission_PermissionAdd = '新增門禁權限';
+    w_Permission_PermissionEdit = '編輯門禁權限';
+    w_Permission_PermissionView = '檢視門禁權限';
+    w_Permission_PermissionName = '門禁權限名稱';
+    w_Permission_DeviceType = '裝置類型';
+    w_Permission_DeviceName = '裝置名稱';
+    w_Permission_DeviceArea = '裝置區域';
+    w_Permission_DeviceTimeFormat = '時間格式';
+    w_Permission_Door = '門號名稱';
+    w_Permission_Elevator = '電梯名稱';
+    w_Permission_DoorGroup = '門組名稱';
+    w_Permission_DoorAdd = '新增門號';
+    w_Permission_ElevatorAdd = '新增電梯';
+    w_Permission_DoorGroupAdd = '新增門組';
 
     // button
-    w_Save = 'Save';
-    w_Back = 'Back';
-    w_Cancel = 'Cancel';
-    w_Send = 'Send';
+    w_Save = '儲存';
+    w_Back = '返回';
+    w_Cancel = '取消';
+    w_Send = '發送';
     w_Leave = 'Leave';
     w_Test = 'Test';
     w_Check = 'Check';
-    w_Submit = 'Submit';
-    w_Confirm = 'Confirm';
-    w_Upload = 'Upload';
+    w_Submit = '送出';
+    w_Confirm = '確認';
+    w_Upload = '上傳';
     w_Restart = 'Restart';
-    w_Reset = 'Reset';
-    w_Delete = 'Delete';
+    w_Reset = '清空';
+    w_Delete = '刪除';
     w_ViewData = 'View Device Data';
     readerIO = 'Reader I/O';
 
@@ -552,9 +552,9 @@ export default class LangObject implements ILang {
     w_Member_InfoOfViolation3 = '違規說明III：';
     w_Member_DateOfViolation3 = '違規日期III：';
 
-    w_Member_DeleteConfirm = 'Are you sure to delete selected member(s)?';
-    w_Member_EditFailed = '編輯失敗';
-    w_Member_AddFailed = '新增失敗';
+    w_Member_DeleteConfirm = '你確定要刪除已選擇人員？';
+    w_Member_EditFailed = '編輯人員失敗';
+    w_Member_AddFailed = '新增人員失敗';
     w_Member_ErrorUploadFile = '上傳失敗';
 
     w_AttendanceReport = '差勤紀錄查詢';
@@ -567,8 +567,8 @@ export default class LangObject implements ILang {
     w_VisitorCardReport = '訪客卡號紀錄';
     
 
-    w_Report_DateStart="Date Start";
-    w_Report_DateEnd="Date End";
+    w_Report_DateStart="起始日期";
+    w_Report_DateEnd="結束日期";
     w_Report_StartTime = "起始時間";
     w_Report_DoorNumberStart ="起始門號";
     w_Report_EndTime ="日終時間";
@@ -587,31 +587,32 @@ export default class LangObject implements ILang {
     w_Reader_Count = "讀卡機數量";
     w_Region = "地區名稱";
 
-    w_Permission="Permission";
-    w_Setting="Setting";    
-    w_Report="Report";
+    w_Permission="系統權限";
+    w_Setting="設定";    
+    w_Report="報表";
 
-    w_License="License";
-    w_License_List = 'License List';
-    w_License_Add = 'Add License';
-    w_License_LicenseKey = 'LicenseKey';
-    w_License_Mac = 'Mac';
-    w_License_productName = 'ProductName';
-    w_License_Quantity = 'Quantity';
-    w_License_Trial = 'Trial';
-    w_License_RegisterDate = 'RegisterDate';
-    w_License_ExpireDate = 'ExpireDate';
-    w_License_License_Key = 'License Key';
-    w_License_UploadOfflineKey = 'Upload offline key';
+    w_License="憑證";
+    w_License_List = '憑證列表';
+    w_License_Add = '新增憑證';
+    w_License_LicenseKey = '憑證金鑰';
+    w_License_Mac = 'MAC位址';
+    w_License_productName = '產品名稱';
+    w_License_Quantity = '數量';
+    w_License_Trial = '試用';
+    w_License_RegisterDate = '註冊日';
+    w_License_ExpireDate = '到期日';
+    w_License_License_Key = '憑證金鑰';
+    w_License_UploadOfflineKey = '離線上傳憑證金鑰';
     w_License_UploadOfflineKey1 = '* Upload offline key';
 
-    w_License_License_KeyPlaceholder = 'License Key. Input 25 digits.  English alphabet or number only.  Format: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx';
+    w_License_License_KeyPlaceholder = '憑證金鑰請輸入25位英數字。格式範例：xxxxx-xxxxx-xxxxx-xxxxx-xxxxx';
 
-    w_License_Setting_Success = 'License set success.';
-    w_License_Setting_Fail = 'License set failed.';
+    w_License_Setting_Success = '憑證設定成功';
+    w_License_Setting_Fail = '憑證設定失敗';
 
-    w_License_Step1_mac = 'Add by license key and mac';
-    w_License_Step1_offline = 'Add by upload offline key';
-    w_Manual_Sync = "同步所有讀卡機";
-    w_Not_Selected = "不限";
+    w_License_Step1_mac = '新增憑證金鑰及MAC位址';
+    w_License_Step1_offline = '離線上傳憑證金鑰';
+
+    w_Manual_Sync = "Manual Sync";
+    w_Not_Selected = "Not Specified";
 }
