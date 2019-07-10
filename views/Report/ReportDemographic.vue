@@ -472,7 +472,7 @@ export default class ReportDemographic extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
-                 if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+             if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -534,7 +534,7 @@ export default class ReportDemographic extends Vue {
                     ) {
                         continue;
                     }
-                    if (summaryData.deviceGroups) {
+                     if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
                         for (let deviceGroup of summaryData.deviceGroups) {
                             if (tempArray[index].group != undefined) {
                                 if (
@@ -664,7 +664,7 @@ export default class ReportDemographic extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of this.responseData.summaryDatas) {
-                 if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+            if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,

@@ -464,30 +464,18 @@ export default class ReportTraffic extends Vue {
                     let body = {
                         site: summaryData.site,
                         area: summaryData.area,
-                        group: deviceGroup.deviceGroup,
+                        group: deviceGroup,
                         in: [],
-                        out: [],
-                        in2: [],
-                        out2: []
+                        out: []
                     };
-
-                    if (body.group != undefined) {
-                        if (
-                            tempArray.some(
-                                t => t.group.objectId == body.group.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    } else {
-                        if (
-                            tempArray.some(
-                                t => t.area.objectId == body.area.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    }
+                    if (
+                        tempArray.some(
+                            t =>
+                                t.group == undefined ||
+                                t.group.objectId == body.group.objectId
+                        )
+                    )
+                        continue;
                     tempArray.push(body);
                 }
             } else {
@@ -495,16 +483,16 @@ export default class ReportTraffic extends Vue {
                     site: summaryData.site,
                     area: summaryData.area,
                     in: [],
-                    out: [],
-                    in2: [],
-                    out2: []
+                    out: []
                 };
-
                 if (
-                    tempArray.some(t => t.area.objectId == body.area.objectId)
-                ) {
+                    tempArray.some(
+                        t =>
+                            t.group == undefined ||
+                            t.area.objectId == body.area.objectId
+                    )
+                )
                     continue;
-                }
 
                 tempArray.push(body);
             }
@@ -521,40 +509,23 @@ export default class ReportTraffic extends Vue {
                     ) {
                         continue;
                     }
-                    if (summaryData.deviceGroups) {
+
+                    if (tempArray[index].group != undefined) {
                         for (let deviceGroup of summaryData.deviceGroups) {
-                            if (tempArray[index].group != undefined) {
-                                if (
-                                    tempArray[index].group.objectId ==
-                                    deviceGroup.objectId
-                                ) {
-                                    inCount.value += summaryData.in;
-                                    inCount.valueRatio += this.countRatio(
-                                        summaryData.in,
-                                        summaryData.prevIn
-                                    );
-                                    outCount.value += summaryData.out;
-                                    outCount.valueRatio += this.countRatio(
-                                        summaryData.out,
-                                        summaryData.prevOut
-                                    );
-                                }
-                            } else {
-                                if (
-                                    tempArray[index].area.objectId ==
-                                    summaryData.area.objectId
-                                ) {
-                                    inCount.value += summaryData.in;
-                                    inCount.valueRatio += this.countRatio(
-                                        summaryData.in,
-                                        summaryData.prevIn
-                                    );
-                                    outCount.value += summaryData.out;
-                                    outCount.valueRatio += this.countRatio(
-                                        summaryData.out,
-                                        summaryData.prevOut
-                                    );
-                                }
+                            if (
+                                tempArray[index].group.objectId ==
+                                deviceGroup.objectId
+                            ) {
+                                inCount.value += summaryData.in;
+                                inCount.valueRatio += this.countRatio(
+                                    summaryData.in,
+                                    summaryData.prevIn
+                                );
+                                outCount.value += summaryData.out;
+                                outCount.valueRatio += this.countRatio(
+                                    summaryData.out,
+                                    summaryData.prevOut
+                                );
                             }
                         }
                     } else {
@@ -664,28 +635,19 @@ export default class ReportTraffic extends Vue {
                     let body = {
                         site: summaryData.site,
                         area: summaryData.area,
-                        group: deviceGroup.deviceGroup,
+                        group: deviceGroup,
                         in: [],
                         out: []
                     };
 
-                    if (body.group != undefined) {
-                        if (
-                            tempArray.some(
-                                t => t.group.objectId == body.group.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    } else {
-                        if (
-                            tempArray.some(
-                                t => t.area.objectId == body.area.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    }
+                    if (
+                        tempArray.some(
+                            t =>
+                                t.group == undefined ||
+                                t.group.objectId == body.group.objectId
+                        )
+                    )
+                        continue;
                     tempArray.push(body);
                 }
             } else {
@@ -697,11 +659,13 @@ export default class ReportTraffic extends Vue {
                 };
 
                 if (
-                    tempArray.some(t => t.area.objectId == body.area.objectId)
-                ) {
+                    tempArray.some(
+                        t =>
+                            t.area == undefined ||
+                            t.area.objectId == body.area.objectId
+                    )
+                )
                     continue;
-                }
-
                 tempArray.push(body);
             }
         }
@@ -722,8 +686,9 @@ export default class ReportTraffic extends Vue {
                             ) {
                                 continue;
                             }
-                            for (let deviceGroup of summaryData.deviceGroups) {
-                                if (tempArray[index].group != undefined) {
+
+                            if (tempArray[index].group != undefined) {
+                                for (let deviceGroup of summaryData.deviceGroups) {
                                     if (
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
@@ -739,22 +704,22 @@ export default class ReportTraffic extends Vue {
                                             summaryData.prevOut
                                         );
                                     }
-                                } else {
-                                    if (
-                                        tempArray[index].area.objectId ==
-                                        summaryData.area.objectId
-                                    ) {
-                                        inCount.value += summaryData.in;
-                                        inCount.valueRatio += this.countRatio(
-                                            summaryData.in,
-                                            summaryData.prevIn
-                                        );
-                                        outCount.value += summaryData.out;
-                                        outCount.valueRatio += this.countRatio(
-                                            summaryData.out,
-                                            summaryData.prevOut
-                                        );
-                                    }
+                                }
+                            } else {
+                                if (
+                                    tempArray[index].area.objectId ==
+                                    summaryData.area.objectId
+                                ) {
+                                    inCount.value += summaryData.in;
+                                    inCount.valueRatio += this.countRatio(
+                                        summaryData.in,
+                                        summaryData.prevIn
+                                    );
+                                    outCount.value += summaryData.out;
+                                    outCount.valueRatio += this.countRatio(
+                                        summaryData.out,
+                                        summaryData.prevOut
+                                    );
                                 }
                             }
                         }
@@ -784,27 +749,12 @@ export default class ReportTraffic extends Vue {
                             ) {
                                 continue;
                             }
-                            for (let deviceGroup of summaryData.deviceGroups) {
-                                if (tempArray[index].group != undefined) {
+
+                            if (tempArray[index].group != undefined) {
+                                for (let deviceGroup of summaryData.deviceGroups) {
                                     if (
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
-                                    ) {
-                                        inCount.value += summaryData.in;
-                                        inCount.valueRatio += this.countRatio(
-                                            summaryData.in,
-                                            summaryData.prevIn
-                                        );
-                                        outCount.value += summaryData.outCount;
-                                        outCount.valueRatio += this.countRatio(
-                                            summaryData.out,
-                                            summaryData.prevOut
-                                        );
-                                    }
-                                } else {
-                                    if (
-                                        tempArray[index].area.objectId ==
-                                        summaryData.area.objectId
                                     ) {
                                         inCount.value += summaryData.in;
                                         inCount.valueRatio += this.countRatio(
@@ -817,6 +767,22 @@ export default class ReportTraffic extends Vue {
                                             summaryData.prevOut
                                         );
                                     }
+                                }
+                            } else {
+                                if (
+                                    tempArray[index].area.objectId ==
+                                    summaryData.area.objectId
+                                ) {
+                                    inCount.value += summaryData.in;
+                                    inCount.valueRatio += this.countRatio(
+                                        summaryData.in,
+                                        summaryData.prevIn
+                                    );
+                                    outCount.value += summaryData.out;
+                                    outCount.valueRatio += this.countRatio(
+                                        summaryData.out,
+                                        summaryData.prevOut
+                                    );
                                 }
                             }
                         }
@@ -837,6 +803,7 @@ export default class ReportTraffic extends Vue {
                 break;
         }
         this.rData.body = tempArray;
+        console.log("  this.rData.body", this.rData);
     }
 
     // Author: Ben

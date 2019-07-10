@@ -241,11 +241,12 @@ export default class ReportOccupancy extends Vue {
     filterData: IFilterCondition = {
         startDate: new Date(),
         endDate: new Date(),
-        firstSiteId: '',
+        firstSiteId: "",
         siteIds: [],
         tagIds: [],
         type: ETimeMode.none
-    };    responseData: any = {};
+    };
+    responseData: any = {};
     userData: any = [];
     allAreaItem: any = [];
     siteAreaItem: any = {};
@@ -1148,7 +1149,10 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
-               if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+            if (
+                summaryData.deviceGroups &&
+                summaryData.deviceGroups.length > 0
+            ) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -1212,7 +1216,10 @@ export default class ReportOccupancy extends Vue {
                     ) {
                         continue;
                     }
-                    if (summaryData.deviceGroups) {
+                    if (
+                        summaryData.deviceGroups &&
+                        summaryData.deviceGroups.length > 0
+                    ) {
                         for (let deviceGroup of summaryData.deviceGroups) {
                             if (tempArray[index].group != undefined) {
                                 if (
@@ -1351,7 +1358,10 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of this.responseData.summaryTableDatas) {
-                if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
+            if (
+                summaryData.deviceGroups &&
+                summaryData.deviceGroups.length > 0
+            ) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -1425,7 +1435,10 @@ export default class ReportOccupancy extends Vue {
                             ) {
                                 continue;
                             }
-                            if (summaryData.deviceGroups) {
+                            if (
+                                summaryData.deviceGroups &&
+                                summaryData.deviceGroups.length > 0
+                            ) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (tempArray[index].group != undefined) {
                                         if (
@@ -1520,7 +1533,10 @@ export default class ReportOccupancy extends Vue {
                             ) {
                                 continue;
                             }
-                            if (summaryData.deviceGroups) {
+                            if (
+                                summaryData.deviceGroups &&
+                                summaryData.deviceGroups.length > 0
+                            ) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (tempArray[index].group != undefined) {
                                         if (
@@ -1744,12 +1760,18 @@ export default class ReportOccupancy extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
-        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
+        let tempDate1 =
+            typeof date1 === "string"
+                ? Datetime.DateToZero(new Date(date1))
+                : Datetime.DateToZero(date1);
+        let tempDate2 =
+            typeof date2 === "string"
+                ? Datetime.DateToZero(new Date(date2))
+                : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
     }
