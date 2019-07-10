@@ -1455,9 +1455,9 @@ export default class ReportDemographic extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemDevice();
 
         this.inputFormData = {
             areaId: "all",
@@ -1567,7 +1567,9 @@ export default class ReportDemographic extends Vue {
 
     sortOutChartData(array: any) {
         let tempChartDatas: IChartDemographicData[] = [];
+        let finalChartDatas: IChartDemographicData[] = [];
         this.chartDatas = [];
+
 
         // 取得date、siteObjectId資料
         for (const summary of array) {
@@ -1582,6 +1584,8 @@ export default class ReportDemographic extends Vue {
                 weather: EWeather.none
             };
 
+            tempChartDatas.push(tempChartData);
+
             let maleNotIncludeEmployee: number = 0;
             let femaleNotIncludeEmployee: number = 0;
             let maleTotal: number = 0;
@@ -1589,17 +1593,32 @@ export default class ReportDemographic extends Vue {
             let maleEmployee: number = 0;
             let femaleEmployee: number = 0;
 
+            tempChartDatas.map(item => {
+                if (
+                    this.checkDateAndSite(
+                        item.date,
+                        summary.date,
+                        item.siteObjectId,
+                        summary.site.objectId
+                    )
+                ) {
+
+                }
+            });
+
+
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
             for (let loopChartData of tempChartDatas) {
                 if (
                     this.checkDateAndSite(
-                        loopChartData.date,
+                        tempChartData.date,
                         summary.date,
-                        loopChartData.siteObjectId,
+                        tempChartData.siteObjectId,
                         summary.site.objectId
                     )
                 ) {
+
                     haveSummary = true;
                     tempChartData = loopChartData;
                     break;
@@ -1651,10 +1670,10 @@ export default class ReportDemographic extends Vue {
                     EIncludedEmployee.no
                 ) {
                     let tempData = JSON.parse(JSON.stringify(tempChartData));
-                    maleTotal = summary.maleRanges[index];
-                    femaleTotal = summary.femaleRanges[index];
-                    maleEmployee = summary.maleEmployeeRanges[index];
-                    femaleEmployee = summary.femaleEmployeeRanges[index];
+                    maleTotal += summary.maleRanges[index];
+                    femaleTotal += summary.femaleRanges[index];
+                    maleEmployee += summary.maleEmployeeRanges[index];
+                    femaleEmployee += summary.femaleEmployeeRanges[index];
                     maleNotIncludeEmployee = maleTotal - maleEmployee;
                     femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
 

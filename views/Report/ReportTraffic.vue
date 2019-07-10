@@ -1511,9 +1511,9 @@ export default class ReportTraffic extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemDevice();
 
         this.inputFormData = {
             areaId: "all",

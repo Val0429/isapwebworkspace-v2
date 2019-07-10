@@ -960,9 +960,9 @@ export default class ReportOccupancy extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
-        this.initSelectItemArea();
-        this.initSelectItemDeviceGroup();
-        this.initSelectItemDevice();
+        await this.initSelectItemArea();
+        await this.initSelectItemDeviceGroup();
+        await this.initSelectItemDevice();
 
         this.inputFormData = {
             areaId: "all",
@@ -992,6 +992,11 @@ export default class ReportOccupancy extends Vue {
         let tempISite: any = {};
         this.sites = [];
         let tempAreas = [];
+
+        console.log('siteIds - ', this.filterData.siteIds);
+        console.log('officeHourItemDetail - ', this.officeHourItemDetail);
+        console.log('allAreaItem - ', this.allAreaItem);
+        console.log(' - ', );
 
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
