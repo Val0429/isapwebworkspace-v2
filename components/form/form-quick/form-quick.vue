@@ -15,6 +15,8 @@
                 :canEdit="canEdit"
                 :canPreview="canPreview"
                 :canDelete="canDelete"
+                :allowEdit="allowEdit"
+                @selectedRows="selectedRows($event)"
             >
                 <template v-for="slot in relatedSlots('view', false)" :slot="slot.name">
                     <slot :name="slot.originalName" />
@@ -42,7 +44,7 @@
                 :tPreview="$parent.tPreview"
                 :canAdd="canAdd"
                 :canEdit="canEdit"
-                :canPreview="canPreview"
+                :canPreview="canPreview"                
                 @update:*="emitUpdate"
             >
                 <template v-for="slot in relatedSlots('add', false)" :slot="slot.name">

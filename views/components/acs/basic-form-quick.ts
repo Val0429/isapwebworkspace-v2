@@ -7,6 +7,7 @@ import { Vue, Component } from "@/../core";
 export class BasicFormQuick extends Vue {
     canAdd:boolean;
     canEdit:boolean;
+    canPreview:boolean;
     canDelete:boolean;
     permissionName:string;
     filterVisible: boolean=true;
@@ -36,8 +37,9 @@ export class BasicFormQuick extends Vue {
     beforeMount(){
         if(!this.$user || !this.$user.permissions)return;
         this.canAdd = this.$user.permissions.find(x=>x.access.C === true && x.of.identifier == this.permissionName) != undefined;
+        this.canPreview = this.$user.permissions.find(x=>x.access.R === true && x.of.identifier == this.permissionName) != undefined;        
         this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
-        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
+        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;                
     }
     
     onFilterSubmit($event?: any): void {

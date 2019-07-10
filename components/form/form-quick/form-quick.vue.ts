@@ -1,5 +1,5 @@
 import { Vue, Component, Prop, Model, Watch } from "vue-property-decorator";
-import CustomView from '@/../components/form/helpers/form-quick/lib/list.vue';
+import CustomView from './lib/list.vue';
 import CustomAdd from '@/../components/form/helpers/form-quick/lib/add.vue';
 import { EFormQuick, IFormQuick } from '@/../components/form';
 
@@ -17,21 +17,38 @@ export interface IFormQuick2 extends IFormQuick{
 /// 0) class name
 export class FormQuick extends Vue {
     /// private helpers
-    private canAdd: boolean = true;
-    private canEdit: boolean = true;
-    private canPreview: boolean = false;
-    private canDelete: boolean = true;
+    @Prop({
+        type: Boolean,
+        required: false
+    })
+    private canAdd: boolean;
+    @Prop({
+        type: Boolean,
+        required: false
+    })
+    private canEdit: boolean;
+    @Prop({
+        type: Boolean,
+        required: false
+    })
+    private canPreview: boolean;
+    @Prop({
+        type: Boolean,
+        required: false
+    })
+    private canDelete: boolean;
+    @Prop({
+        type: Boolean,
+        required: false
+    })
+    private allowEdit: boolean;
     private get server() {
         return (this.$parent as any).server || this.$server;
     }
-    private mounted() {
-        let parent: any = this.$parent;
-        this.canAdd = typeof parent.canAdd === 'boolean' ? parent.canAdd : this.canAdd;
-        this.canEdit = typeof parent.canEdit === 'boolean' ? parent.canEdit : this.canEdit;
-        this.canPreview = typeof parent.canPreview === 'boolean' ? parent.canPreview : this.canPreview;
-        this.canDelete = typeof parent.canDelete === 'boolean' ? parent.canDelete : this.canDelete;
+    
+    selectedRows($event){
+        this.$emit("selectedRows", $event);
     }
-
     private view: EFormQuick = EFormQuick.View;
     private editRow: any = null;
     private doAddSuccess() {
