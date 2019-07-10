@@ -501,7 +501,7 @@ export default class ReportDemographic extends Vue {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
-                     group: null,
+                    group: null,
                     in: [],
                     out: [],
                     in2: [],

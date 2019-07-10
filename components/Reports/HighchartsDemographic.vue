@@ -424,6 +424,7 @@ export class HighchartsDemographic extends Vue {
         //// office hour group ////
         for (let categorie of tempHourStrings) {
             let haveValue = false;
+
             for (let loopValue of tempValues) {
                 let value: IChartDemographicData = this.anysislyChartValue(
                     loopValue

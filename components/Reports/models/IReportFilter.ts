@@ -1,12 +1,12 @@
-import {ETimeMode} from "@/components/Reports";
+import { ETimeMode } from '@/components/Reports';
 
 interface IFilterCondition {
-	startDate: string | Date;
-	endDate: string | Date;
-	firstSiteId?: string;
-	siteIds: string[];
-	tagIds: string[];
-	type: ETimeMode;
+    startDate: Date;
+    endDate: Date;
+    firstSiteId?: string;
+    siteIds: string[];
+    tagIds: string[];
+    type: ETimeMode;
 }
 
 export { IFilterCondition };

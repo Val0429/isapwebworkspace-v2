@@ -10,6 +10,8 @@ class Datetime {
     private _months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     private _timeNames: string[] = ['am', 'pm', 'AM', 'PM'];
 
+    private _oneDayTimestamp = 86400000;
+
     /**
      * Convert date to format string like C#
      * @param dateTime
@@ -267,7 +269,7 @@ class Datetime {
     WeekNumber(value: Date): number {
         let date = new Date(value.getTime());
         const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
+        const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / this._oneDayTimestamp;
         return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
     }
 
@@ -355,6 +357,39 @@ class Datetime {
         date.setMinutes(0);
         date.setSeconds(0);
         return date;
+    }
+
+    /////////////////////////////////////////////
+    SortDateGap(startDate: Date, endDate: Date): { startDate: Date; endDate: Date } {
+        let result = { startDate: startDate, endDate: endDate };
+        if (result.startDate.getTime() > result.endDate.getTime()) {
+            let tempDate: number = result.startDate.getTime();
+            result.startDate = new Date(result.endDate.getTime());
+            result.endDate = new Date(tempDate);
+        }
+        return result;
+    }
+
+    IsOneDate(startDate: Date, endDate: Date): boolean {
+        let result: boolean = false;
+        let sortDateItem = this.SortDateGap(startDate, endDate);
+        if (sortDateItem.endDate.getTime() - sortDateItem.startDate.getTime() < this._oneDayTimestamp) {
+            result = true;
+        }
+        return result;
+    }
+
+    DateList(startDate: Date, endDate: Date): Date[] {
+        let result = [];
+        let sortDateItem = this.SortDateGap(startDate, endDate);
+        let loopTimestamp = sortDateItem.startDate.getTime();
+        let endTimeStamp = sortDateItem.endDate.getTime();
+        result.push(new Date(loopTimestamp));
+        while (loopTimestamp < endTimeStamp) {
+            loopTimestamp += this._oneDayTimestamp;
+            result.push(new Date(loopTimestamp));
+        }
+        return result;
     }
 
     /////////////////////////////////////////////

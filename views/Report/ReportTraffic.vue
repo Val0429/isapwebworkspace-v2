@@ -12,7 +12,7 @@ import {EAreaMode} from "../../components/Reports";
         >
         </filter-condition>
 
-        <div v-show="pageStep === ePageStep.none">
+        <div>
 
             <iv-card>
 
@@ -189,10 +189,6 @@ enum EFileType {
 import html2Canvas from "html2canvas";
 import JsPDF from "jspdf";
 
-enum EPageStep {
-    none = "none"
-}
-
 enum ETableStep {
     mainTable = "mainTable",
     sunTable = "sunTable",
@@ -206,17 +202,8 @@ enum ETableStep {
     }
 })
 export default class ReportTraffic extends Vue {
-    lastTableStep: ETableStep = ETableStep.none;
-    tableStep: ETableStep = ETableStep.none;
-    eTableStep = ETableStep;
-    ePageStep = EPageStep;
-    ePageType = EPageType;
-    eWeather = EWeather;
-    eFileType = EFileType;
-
-    pageStep: EPageStep = EPageStep.none;
+    // Author : Morris
     templateItem: ITemplateItem | null = null;
-
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     timeMode: ETimeMode = ETimeMode.none;
@@ -224,9 +211,44 @@ export default class ReportTraffic extends Vue {
     sites: ISite[] = [];
     chartDatas: IChartTrafficData[] = [];
 
+    ////////////////////////////////////// Ben Start //////////////////////////////////////
+
+    // Author : Ben
+    lastTableStep: ETableStep = ETableStep.none;
+    tableStep: ETableStep = ETableStep.none;
+    eTableStep = ETableStep;
+    ePageType = EPageType;
+    eWeather = EWeather;
+    eFileType = EFileType;
+
+    //ReportDashboard 相關
+    dPageType: EPageType = EPageType.none;
+    dTimeMode: ETimeMode = ETimeMode.none;
+    pSiteIds = [];
+
+    //PickTimeRange 相關
+    pData: IPeckTimeRange[] = [];
+    pDayXxSiteX: EChartMode = EChartMode.none;
+    siteItem: ISiteItems[] = [];
+
+    //ReportTable 相關
+    rData = new ReportTableData();
+    reportTableTitle = {};
+
+    //Sun ReportTable 相關
+    sunRData = new ReportTableData();
+
+    ////////////////////////////////////// Ben End //////////////////////////////////////
+
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
     //// Filter Condition Start ////
+
+    selectItem = {
+        site: [],
+        area: [],
+        tags: []
+    };
 
     // select 相關
     sitesSelectItem: any = {};
@@ -289,9 +311,6 @@ export default class ReportTraffic extends Vue {
         isIncludedEmployee: "no"
     };
 
-    // chart 相關
-    trafficChartData: any = [];
-
     // 整理 showReportData 相關
     areaSummaryFilter: any = [];
     deviceGroupSummaryFilter: any = [];
@@ -304,23 +323,6 @@ export default class ReportTraffic extends Vue {
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
-    //ReportDashboard 相關
-    dPageType: EPageType = EPageType.none;
-    dTimeMode: ETimeMode = ETimeMode.none;
-    pSiteIds = [];
-
-    //PickTimeRange 相關
-    pData: IPeckTimeRange[] = [];
-    pDayXxSiteX: EChartMode = EChartMode.none;
-    siteItem: ISiteItems[] = [];
-
-    //ReportTable 相關
-    rData = new ReportTableData();
-    reportTableTitle = {};
-
-    //Sun ReportTable 相關
-    sunRData = new ReportTableData();
-
     created() {
         this.initDatas();
         this.initTemplate();
@@ -328,15 +330,8 @@ export default class ReportTraffic extends Vue {
 
     mounted() {}
 
-    initTemplate() {
-        if (this.$route.query.template != undefined) {
-            let templateJSON: string = this.$route.query.template as string;
-            this.templateItem = ReportService.analysisTemplate(templateJSON);
-        }
-    }
-
+    // Author: Tina
     async initDatas() {
-        // Tina
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
         await this.initSelectItemTag();
@@ -344,12 +339,21 @@ export default class ReportTraffic extends Vue {
         await this.initSelectItemUsers();
     }
 
-    // Ben //
+    // Author: Morris
+    initTemplate() {
+        if (this.$route.query.template != undefined) {
+            let templateJSON: string = this.$route.query.template as string;
+            this.templateItem = ReportService.analysisTemplate(templateJSON);
+        }
+    }
+
+    // Author: Ben
     reportTableBack() {
         this.tableStep = this.lastTableStep;
         this.lastTableStep = ETableStep.mainTable;
     }
 
+    // Author: Ben
     initDashboardData() {
         this.dPageType = EPageType.traffic;
         setTimeout(() => {
@@ -358,6 +362,7 @@ export default class ReportTraffic extends Vue {
         }, 300);
     }
 
+    // Author: Ben
     initPeakTimeRange() {
         // Data format conversion
         this.siteItem = [];
@@ -411,6 +416,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Ben
     initSunReportTable(summaryTableDatas) {
         this.lastTableStep = this.tableStep;
         this.tableStep = ETableStep.sunTable;
@@ -489,7 +495,7 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-        //填入資料
+        // 填入資料
         for (let index in tempArray) {
             for (let head of this.sunRData.head) {
                 let inCount = { value: 0, valueRatio: 0, link: false };
@@ -548,6 +554,7 @@ export default class ReportTraffic extends Vue {
         );
     }
 
+    // Author: Ben
     initReportTable() {
         this.lastTableStep = this.tableStep;
         this.tableStep = ETableStep.mainTable;
@@ -794,6 +801,7 @@ export default class ReportTraffic extends Vue {
         console.log("  this.rData.body", this.rData);
     }
 
+    // Author: Ben
     async toSunReportTable(thatDay, sunTime, sunSite, sunArea) {
         if (!thatDay) {
             let tempDate = new Date(sunTime.split(" ")[0]); //去掉星期
@@ -837,8 +845,24 @@ export default class ReportTraffic extends Vue {
         }
     }
 
-    countRatio(value, prevValue) {
-        if (value == undefined || prevValue == undefined) {
+    // Author: Ben
+    countRatio(value: number, prevValue: number): number {
+        if (value == undefined) {
+            return 0;
+        }
+        if (prevValue == undefined) {
+            return 0;
+        }
+        if (value == null) {
+            return 0;
+        }
+        if (prevValue == null) {
+            return 0;
+        }
+        if (value == 0) {
+            return 0;
+        }
+        if (prevValue == 0) {
             return 0;
         }
         if (value > prevValue) {
@@ -846,10 +870,11 @@ export default class ReportTraffic extends Vue {
         } else if (value < prevValue) {
             return -(value / prevValue);
         } else {
-            return 0;
+            return 1;
         }
     }
 
+    // Author: Ben
     showWeek(data) {
         switch (data) {
             case 1:
@@ -869,90 +894,15 @@ export default class ReportTraffic extends Vue {
         }
     }
 
-    initChartDeveloper() {
-        this.timeMode = ETimeMode.day;
-        this.areaMode = EAreaMode.all;
-
-        // single day
-        this.startDate = new Date("2019-07-01T08:00:00.000Z");
-        this.endDate = new Date("2019-07-01T14:00:00.000Z");
-
-        // multipe day
-        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        // this.endDate = new Date("2019-08-10T14:00:00.000Z");
-
-        let siteLength = 1;
-
-        for (let j = 0; j < siteLength; j++) {
-            let tempJ = j + 1;
-            this.sites.push({
-                objectId: "site" + tempJ.toString(),
-                name: "Site " + tempJ.toString(),
-                officeHour: [
-                    {
-                        startDay: "0",
-                        endDay: "6",
-                        startDate: "2000-01-01T00:00:00.000Z",
-                        endDate: "2000-01-01T14:00:00.000Z"
-                    }
-                ]
-            });
-
-            for (let i = 1; i < 30; i++) {
-                let weather = EWeather.none;
-                let tempWeatherNumber = Math.floor(Math.random() * 300);
-
-                if (tempWeatherNumber % 10 == 0) {
-                    weather = EWeather.clearDay;
-                } else if (tempWeatherNumber % 10 == 1) {
-                    weather = EWeather.clearNight;
-                } else if (tempWeatherNumber % 10 == 2) {
-                    weather = EWeather.rain;
-                } else if (tempWeatherNumber % 10 == 3) {
-                    weather = EWeather.snow;
-                } else if (tempWeatherNumber % 10 == 4) {
-                    weather = EWeather.sleet;
-                } else if (tempWeatherNumber % 10 == 5) {
-                    weather = EWeather.wind;
-                } else if (tempWeatherNumber % 10 == 6) {
-                    weather = EWeather.fog;
-                } else if (tempWeatherNumber % 10 == 7) {
-                    weather = EWeather.cloudy;
-                } else if (tempWeatherNumber % 10 == 8) {
-                    weather = EWeather.partlyCloudyDay;
-                } else if (tempWeatherNumber % 10 == 9) {
-                    weather = EWeather.partlyCloudyNight;
-                }
-
-                let tempI = i;
-                let iNumber = tempI;
-                let iString = tempI.toString();
-                let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(
-                    `2019-07-${iString10}T${iString10}:00:00.000Z`
-                );
-                let tempChartData: IChartTrafficData = {
-                    date: tempDate,
-                    siteObjectId: "site" + (j + 1).toString(),
-                    temperatureMin: iNumber,
-                    temperatureMax: iNumber,
-                    weather: weather,
-                    traffic: Math.floor(Math.random() * 500),
-                    revenue: Math.floor(Math.random() * 1000),
-                    transaction: Math.floor(Math.random() * 50)
-                };
-                this.chartDatas.push(tempChartData);
-            }
-        }
-    }
-
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
+    // Author: Tina
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();
         this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
     }
 
+    // Author: Tina
     siteFilterPermission() {
         let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
@@ -961,6 +911,7 @@ export default class ReportTraffic extends Vue {
         this.sitesSelectItem = tempSitesSelectItem;
     }
 
+    // Author: Tina
     async initSelectItemSite() {
         let tempSitesSelectItem = {};
 
@@ -991,6 +942,7 @@ export default class ReportTraffic extends Vue {
             });
     }
 
+    // Author: Tina
     async initSelectItemTag() {
         let tempTagSelectItem = {};
 
@@ -1015,6 +967,7 @@ export default class ReportTraffic extends Vue {
             });
     }
 
+    // Author: Tina
     async initSelectItemTree() {
         let tempTree = {};
         let tempChildrenArray = [];
@@ -1058,6 +1011,7 @@ export default class ReportTraffic extends Vue {
             });
     }
 
+    // Author: Tina
     async initSelectItemArea() {
         let tempAreaSelectItem = { all: this._("w_AllAreas") };
 
@@ -1093,6 +1047,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Tina
     async initSelectItemDeviceGroup() {
         let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
         this.deviceGroupSelectItem = {};
@@ -1183,6 +1138,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Tina
     async initSelectItemDevice() {
         let tempDeviceSelectItem = { all: this._("w_AllDevices") };
         this.deviceSelectItem = {};
@@ -1419,6 +1375,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Tina
     async initSelectItemUsers() {
         let tempUserSelectItem = {};
 
@@ -1444,18 +1401,21 @@ export default class ReportTraffic extends Vue {
             });
     }
 
+    // Author: Tina
     async receiveUserData(data) {
         this.userData = [];
         this.userData = data;
         console.log("this.userData - ", this.userData);
     }
 
+    // Author: Tina
     receiveModalShowData(data) {
         this.modalShow = data;
     }
 
     //// 以下為 analysis filter ////
 
+    // Author: Tina
     async receiveFilterData(filterData) {
         this.inputFormData = {
             areaId: "",
@@ -1538,34 +1498,6 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-        /*
-		   for (const filterSiteId of this.filterData.siteIds) {
-			for (const detail of this.officeHourItemDetail) {
-				for (const officeHourSiteId of detail.sites) {
-					if (filterSiteId === officeHourSiteId.objectId) {
-						tempISite = {
-							objectId: officeHourSiteId.objectId,
-							name: officeHourSiteId.name,
-							officeHour: []
-						};
-
-						for (const dayRangesValue of detail.dayRanges) {
-							tempISite.officeHour.push({
-								startDay: dayRangesValue.startDay,
-								endDay: dayRangesValue.endDay,
-								startDate: dayRangesValue.startDate,
-								endDate: dayRangesValue.endDate
-							});
-						}
-
-						break;
-					}
-				}
-			}
-		}
-		*/
-
-        // this.sites.push(tempISite);
         this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
@@ -1588,147 +1520,183 @@ export default class ReportTraffic extends Vue {
         console.log(" chartDatas - ", this.chartDatas);
     }
 
-    checkDateAndSite(
-        date1: Date | string,
-        date2: Date | string,
-        siteId1: string,
-        siteId2: string
-    ): boolean {
-        let tempDate1 =
-            typeof date1 === "string"
-                ? Datetime.DateToZero(new Date(date1))
-                : Datetime.DateToZero(date1);
-        let tempDate2 =
-            typeof date2 === "string"
-                ? Datetime.DateToZero(new Date(date2))
-                : Datetime.DateToZero(date2);
-
-        return (
-            Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
-            siteId1 === siteId2
-        );
-    }
-
-    sortOutChartData(array: any) {
+    // Author: Tina & Morris
+    sortOutChartData(datas: any) {
         let tempChartDatas: IChartTrafficData[] = [];
+        let isOneDay = false;
         this.chartDatas = [];
 
+        if (
+            Datetime.IsOneDate(
+                this.filterData.startDate,
+                this.filterData.endDate
+            )
+        ) {
+            isOneDay = true;
+
+            // one day
+            for (let i = 0; i < 24; i++) {
+                let tempDate = Datetime.DateToZero(this.filterData.startDate);
+                tempDate.setHours(i);
+                let tempDateChartData = {
+                    date: tempDate,
+                    siteObjectId: "",
+                    temperatureMin: 0,
+                    temperatureMax: 0,
+                    weather: EWeather.none,
+                    traffic: 0,
+                    revenue: 0,
+                    transaction: 0
+                };
+                for (let siteId of this.filterData.siteIds) {
+                    let tempSiteChartData = JSON.parse(
+                        JSON.stringify(tempDateChartData)
+                    );
+                    tempSiteChartData.date = new Date(tempSiteChartData.date);
+                    tempSiteChartData.siteObjectId = siteId;
+                    tempChartDatas.push(tempSiteChartData);
+                }
+            }
+        } else {
+            // multipe day
+            let dateList = Datetime.DateList(
+                this.filterData.startDate,
+                this.filterData.endDate
+            );
+            for (let dateItem of dateList) {
+                let tempDateChartData = {
+                    date: new Date(dateItem.getTime()),
+                    siteObjectId: "",
+                    temperatureMin: 0,
+                    temperatureMax: 0,
+                    weather: EWeather.none,
+                    traffic: 0,
+                    revenue: 0,
+                    transaction: 0
+                };
+                for (let siteId of this.filterData.siteIds) {
+                    let tempSiteChartData = JSON.parse(
+                        JSON.stringify(tempDateChartData)
+                    );
+                    tempSiteChartData.date = new Date(tempSiteChartData.date);
+                    tempSiteChartData.siteObjectId = siteId;
+                    tempChartDatas.push(tempSiteChartData);
+                }
+            }
+        }
+
         // 取得date、siteObjectId資料
-        for (const summary of array) {
-            let tempChartData: IChartTrafficData = {
-                date: summary.date,
-                siteObjectId: summary.site.objectId,
-                temperatureMin: 0,
-                temperatureMax: 0,
-                traffic: 0,
-                revenue: 0,
-                transaction: 0,
-                weather: EWeather.none
-            };
+        for (let summary of datas) {
+            let summaryDateFormat = isOneDay
+                ? Datetime.DateTime2String(
+                      new Date(summary.date),
+                      "YYYY-MM-DD HH"
+                  )
+                : Datetime.DateTime2String(
+                      new Date(summary.date),
+                      "YYYY-MM-DD"
+                  );
 
-            let inNotIncludeEmployee: number = 0;
-            let outNotIncludeEmployee: number = 0;
-            let inTotal: number = 0;
-            let outTotal: number = 0;
-            let inEmployee: number = 0;
-            let outEmployee: number = 0;
-
-            // 判斷date, site 兩個是否相同
-            let haveSummary = false;
-            for (let loopChartData of tempChartDatas) {
+            for (let tempChartData of tempChartDatas) {
+                let tempDateFormat = isOneDay
+                    ? Datetime.DateTime2String(
+                          tempChartData.date,
+                          "YYYY-MM-DD HH"
+                      )
+                    : Datetime.DateTime2String(
+                          tempChartData.date,
+                          "YYYY-MM-DD"
+                      );
                 if (
-                    this.checkDateAndSite(
-                        loopChartData.date,
-                        summary.date,
-                        loopChartData.siteObjectId,
-                        summary.site.objectId
-                    )
+                    summaryDateFormat == tempDateFormat &&
+                    summary.site.objectId == tempChartData.siteObjectId
                 ) {
-                    haveSummary = true;
-                    tempChartData = loopChartData;
+                    if (this.inputFormData.inOrOut == EType.in) {
+                        tempChartData.traffic += summary.in;
+                        if (
+                            this.inputFormData.isIncludedEmployee ==
+                            EIncludedEmployee.no
+                        ) {
+                            tempChartData.traffic -= summary.inEmployee;
+                        }
+                    } else if (this.inputFormData.inOrOut == EType.out) {
+                        tempChartData.traffic += summary.out;
+                        if (
+                            this.inputFormData.isIncludedEmployee ==
+                            EIncludedEmployee.no
+                        ) {
+                            tempChartData.traffic -= summary.outEmployee;
+                        }
+                    }
                     break;
                 }
             }
-
-            if (this.inputFormData.inOrOut === EType.in) {
-                if (
-                    this.inputFormData.isIncludedEmployee ===
-                    EIncludedEmployee.no
-                ) {
-                    inTotal += summary.in;
-                    inEmployee += summary.inEmployee;
-                    inNotIncludeEmployee = inTotal - inEmployee;
-                    tempChartData.traffic = inNotIncludeEmployee;
-                } else if (
-                    this.inputFormData.isIncludedEmployee ===
-                    EIncludedEmployee.yes
-                ) {
-                    inTotal += summary.in;
-                    tempChartData.traffic = inTotal;
-                }
-            } else if (this.inputFormData.inOrOut === EType.out) {
-                if (
-                    this.inputFormData.isIncludedEmployee ===
-                    EIncludedEmployee.no
-                ) {
-                    outTotal += summary.out;
-                    outEmployee += summary.inEmployee;
-                    outNotIncludeEmployee = outTotal - outEmployee;
-                    tempChartData.traffic = outNotIncludeEmployee;
-                } else if (
-                    this.inputFormData.isIncludedEmployee ===
-                    EIncludedEmployee.yes
-                ) {
-                    outTotal += summary.out;
-                    tempChartData.traffic = outTotal;
-                }
-            }
-
-            if (!haveSummary) {
-                // 取得revenue、transaction資料
-                for (const saleRecord of this.responseData.salesRecords) {
-                    if (
-                        this.checkDateAndSite(
-                            tempChartData.date,
-                            saleRecord.date,
-                            tempChartData.siteObjectId,
-                            saleRecord.site.objectId
-                        )
-                    ) {
-                        tempChartData.revenue = saleRecord.revenue;
-                        tempChartData.transaction = saleRecord.transaction;
-                        break;
-                    }
-                }
-
-                // 取得weather、temperatureMin、temperatureMax
-                for (const weather of this.responseData.weathers) {
-                    if (
-                        this.checkDateAndSite(
-                            tempChartData.date,
-                            weather.date,
-                            tempChartData.siteObjectId,
-                            weather.site.objectId
-                        )
-                    ) {
-                        console.log(" - ", weather.icon);
-                        tempChartData.weather = WeatherService.WeatherIcon(
-                            weather.icon
-                        );
-                        tempChartData.temperatureMin = weather.temperatureMin;
-                        tempChartData.temperatureMax = weather.temperatureMax;
-                        break;
-                    }
-                }
-            }
-
-            tempChartDatas.push(tempChartData);
         }
 
+        for (let saleRecord of this.responseData.salesRecords) {
+            let saleDateFormat = isOneDay
+                ? Datetime.DateTime2String(
+                      new Date(saleRecord.date),
+                      "YYYY-MM-DD HH"
+                  )
+                : Datetime.DateTime2String(
+                      new Date(saleRecord.date),
+                      "YYYY-MM-DD"
+                  );
+            for (let tempChartData of tempChartDatas) {
+                let tempDateFormat = isOneDay
+                    ? Datetime.DateTime2String(
+                          tempChartData.date,
+                          "YYYY-MM-DD HH"
+                      )
+                    : Datetime.DateTime2String(
+                          tempChartData.date,
+                          "YYYY-MM-DD"
+                      );
+                if (
+                    saleDateFormat == tempDateFormat &&
+                    saleRecord.site.objectId == tempChartData.siteObjectId
+                ) {
+                    tempChartData.revenue += saleRecord.revenue;
+                    tempChartData.transaction += saleRecord.transaction;
+                    break;
+                }
+            }
+        }
+
+        for (let tempChartData of tempChartDatas) {
+            let tempDateFormat = isOneDay
+                ? Datetime.DateTime2String(tempChartData.date, "YYYY-MM-DD HH")
+                : Datetime.DateTime2String(tempChartData.date, "YYYY-MM-DD");
+            for (let i in this.responseData.weathers) {
+                let weather = this.responseData.weathers[i];
+                let weatherDateFormat = isOneDay
+                    ? Datetime.DateTime2String(
+                          new Date(weather.date),
+                          "YYYY-MM-DD HH"
+                      )
+                    : Datetime.DateTime2String(
+                          new Date(weather.date),
+                          "YYYY-MM-DD"
+                      );
+                if (
+                    weatherDateFormat == tempDateFormat &&
+                    weather.site.objectId == tempChartData.siteObjectId
+                ) {
+                    tempChartData.weather = WeatherService.WeatherIcon(
+                        weather.icon
+                    );
+                    tempChartData.temperatureMin = weather.temperatureMin;
+                    tempChartData.temperatureMax = weather.temperatureMax;
+                    this.responseData.weathers.splice(i, 1);
+                    break;
+                }
+            }
+        }
         this.chartDatas = tempChartDatas;
     }
 
+    // Author: Tina
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
         console.log("areaId - ", this.inputFormData.areaId);
@@ -1810,6 +1778,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Tina
     async receiveGroupId(groupId) {
         this.inputFormData.groupId = groupId;
         console.log("groupId - ", this.inputFormData.groupId);
@@ -1869,6 +1838,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Tina
     async receiveDeviceId(deviceId) {
         this.inputFormData.deviceId = deviceId;
         console.log("deviceId - ", this.inputFormData.deviceId);
@@ -2029,6 +1999,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Tina
     receiveType(type) {
         let chartRef: any = this.$refs.highcharts;
         this.inputFormData.type = type;
@@ -2049,6 +2020,7 @@ export default class ReportTraffic extends Vue {
         console.log(" chartDatas - ", this.chartDatas);
     }
 
+    // Author: Tina
     async receiveInOrOut(inOrOut) {
         this.inputFormData.inOrOut = inOrOut;
         console.log("inOrOut - ", this.inputFormData.inOrOut);
@@ -2071,6 +2043,7 @@ export default class ReportTraffic extends Vue {
         }
     }
 
+    // Author: Tina
     async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
         console.log(
@@ -2100,6 +2073,7 @@ export default class ReportTraffic extends Vue {
 
     ////////////////////////////////////// Export //////////////////////////////////////
 
+    // Author: Ben
     exportExcel(fType) {
         let reportTable: any = this.$refs.reportTable;
         let tableData = reportTable.tableToArray();
@@ -2123,6 +2097,7 @@ export default class ReportTraffic extends Vue {
         toExcel({ th, data, fileName, fileType, sheetName });
     }
 
+    // Author: Morris
     exportPDF() {
         let title = "";
         title += this._("w_Navigation_Report_Traffic");
@@ -2166,6 +2141,86 @@ export default class ReportTraffic extends Vue {
             }
             PDF.save(title + ".pdf");
         });
+    }
+
+    ///////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        this.timeMode = ETimeMode.day;
+        this.areaMode = EAreaMode.all;
+
+        // single day
+        this.startDate = new Date("2019-07-01T08:00:00.000Z");
+        this.endDate = new Date("2019-07-01T14:00:00.000Z");
+
+        // multipe day
+        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        // this.endDate = new Date("2019-08-10T14:00:00.000Z");
+
+        let siteLength = 1;
+
+        for (let j = 0; j < siteLength; j++) {
+            let tempJ = j + 1;
+            this.sites.push({
+                objectId: "site" + tempJ.toString(),
+                name: "Site " + tempJ.toString(),
+                officeHour: [
+                    {
+                        startDay: "0",
+                        endDay: "6",
+                        startDate: "2000-01-01T00:00:00.000Z",
+                        endDate: "2000-01-01T14:00:00.000Z"
+                    }
+                ]
+            });
+
+            for (let i = 1; i < 30; i++) {
+                let weather = EWeather.none;
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
+
+                if (tempWeatherNumber % 10 == 0) {
+                    weather = EWeather.clearDay;
+                } else if (tempWeatherNumber % 10 == 1) {
+                    weather = EWeather.clearNight;
+                } else if (tempWeatherNumber % 10 == 2) {
+                    weather = EWeather.rain;
+                } else if (tempWeatherNumber % 10 == 3) {
+                    weather = EWeather.snow;
+                } else if (tempWeatherNumber % 10 == 4) {
+                    weather = EWeather.sleet;
+                } else if (tempWeatherNumber % 10 == 5) {
+                    weather = EWeather.wind;
+                } else if (tempWeatherNumber % 10 == 6) {
+                    weather = EWeather.fog;
+                } else if (tempWeatherNumber % 10 == 7) {
+                    weather = EWeather.cloudy;
+                } else if (tempWeatherNumber % 10 == 8) {
+                    weather = EWeather.partlyCloudyDay;
+                } else if (tempWeatherNumber % 10 == 9) {
+                    weather = EWeather.partlyCloudyNight;
+                }
+
+                let tempI = i;
+                let iNumber = tempI;
+                let iString = tempI.toString();
+                let iString10 = iNumber < 10 ? `0${iString}` : iString;
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
+                let tempChartData: IChartTrafficData = {
+                    date: tempDate,
+                    siteObjectId: "site" + (j + 1).toString(),
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
+                    weather: weather,
+                    traffic: Math.floor(Math.random() * 500),
+                    revenue: Math.floor(Math.random() * 1000),
+                    transaction: Math.floor(Math.random() * 50)
+                };
+                this.chartDatas.push(tempChartData);
+            }
+        }
     }
 }
 </script>
