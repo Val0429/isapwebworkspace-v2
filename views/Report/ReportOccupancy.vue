@@ -170,7 +170,8 @@ import {
     EChartMode,
     ISite,
     ITemplateItem,
-    ReportTableData
+    ReportTableData,
+    IFilterCondition
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
@@ -237,8 +238,14 @@ export default class ReportOccupancy extends Vue {
     modalShow: boolean = false;
 
     // 接收 Filter Condition 資料 相關
-    filterData: any = {};
-    responseData: any = {};
+    filterData: IFilterCondition = {
+        startDate: new Date(),
+        endDate: new Date(),
+        firstSiteId: '',
+        siteIds: [],
+        tagIds: [],
+        type: ETimeMode.none
+    };    responseData: any = {};
     userData: any = [];
     allAreaItem: any = [];
     siteAreaItem: any = {};
@@ -956,7 +963,8 @@ export default class ReportOccupancy extends Vue {
             });
 
         this.filterData = filterData;
-        Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
+        this.filterData.startDate = new Date(this.filterData.startDate);
+        this.filterData.endDate = new Date(this.filterData.endDate);
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
@@ -992,11 +1000,6 @@ export default class ReportOccupancy extends Vue {
         let tempISite: any = {};
         this.sites = [];
         let tempAreas = [];
-
-        console.log('siteIds - ', this.filterData.siteIds);
-        console.log('officeHourItemDetail - ', this.officeHourItemDetail);
-        console.log('allAreaItem - ', this.allAreaItem);
-        console.log(' - ', );
 
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
@@ -1145,7 +1148,7 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
-            if (summaryData.deviceGroups) {
+               if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -1348,7 +1351,7 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of this.responseData.summaryTableDatas) {
-            if (summaryData.deviceGroups) {
+                if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -1741,12 +1744,13 @@ export default class ReportOccupancy extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? new Date(date1) : date1;
-        let tempDate2 = typeof date2 === "string" ? new Date(date2) : date2;
+        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
+        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss")
+            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+            siteId1 === siteId2
         );
     }
 

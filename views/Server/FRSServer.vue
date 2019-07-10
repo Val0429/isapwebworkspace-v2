@@ -410,7 +410,6 @@ export default class FRSServer extends Vue {
         let tempUserGroups = JSON.parse(JSON.stringify(userGroups));
 
         this.groupData.map(item => {
-            console.log('item - ', item);
             switch (item.objectId) {
                 case data.employee:
                     tempUserGroups = JSON.parse(JSON.stringify(userGroups));
