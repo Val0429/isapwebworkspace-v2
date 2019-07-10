@@ -1145,7 +1145,7 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
-            if (summaryData.deviceGroups) {
+               if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
@@ -1348,7 +1348,7 @@ export default class ReportOccupancy extends Vue {
         let tempArray = [];
         //篩選出所有店
         for (let summaryData of this.responseData.summaryTableDatas) {
-            if (summaryData.deviceGroups) {
+                if (summaryData.deviceGroups && summaryData.deviceGroups.length > 0) {
                 for (let deviceGroup of summaryData.deviceGroups) {
                     let body = {
                         site: summaryData.site,
