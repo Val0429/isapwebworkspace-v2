@@ -7,7 +7,7 @@
                     <highcharts
                         ref="chartGenderAge"
                         v-if="mountChart.genderAge"
-                        :options="chartOptionsGenderAge"
+                        :options="chartOptions.genderAge"
                     ></highcharts>
                 </b-col>
             </b-row>
@@ -25,11 +25,35 @@
                         :options="selectItem.gender"
                         @change="changeGender"
                     ></b-form-radio-group>
+
+                    <!-- site1Day1 -->
                     <highcharts
-                        ref="chartGenderTime"
-                        v-if="mountChart.genderTime"
-                        :options="chartOptionsGenderTime"
+                        ref="chartSite1Day1"
+                        v-if="mountChart.site1Day1"
+                        :options="chartOptions.site1Day1"
                     ></highcharts>
+
+                    <!-- site1DayX -->
+                    <highcharts
+                        ref="chartSite1DayX"
+                        v-if="mountChart.site1DayX"
+                        :options="chartOptions.site1DayX"
+                    ></highcharts>
+
+                    <!-- siteXDay1 -->
+                    <highcharts
+                        ref="chartSiteXDay1"
+                        v-if="mountChart.siteXDay1"
+                        :options="chartOptions.siteXDay1"
+                    ></highcharts>
+
+                    <!-- siteXDayX -->
+                    <highcharts
+                        ref="chartSiteXDayX"
+                        v-if="mountChart.siteXDayX"
+                        :options="chartOptions.siteXDayX"
+                    ></highcharts>
+
                 </b-col>
             </b-row>
 
@@ -42,7 +66,7 @@
                     <highcharts
                         ref="chartAge"
                         v-if="mountChart.age"
-                        :options="chartOptionsAge"
+                        :options="chartOptions.age"
                     ></highcharts>
                 </b-col>
                 <b-col cols="6">
@@ -61,14 +85,14 @@
                             <highcharts
                                 ref="chartDwellTime"
                                 v-if="mountChart.dwellTime"
-                                :options="chartOptionsDwellTimeBar"
+                                :options="chartOptions.dwellTimeBar"
                             ></highcharts>
                         </b-col>
                         <b-col cols="6">
                             <highcharts
                                 ref="chartGender"
                                 v-if="mountChart.dwellTime"
-                                :options="chartOptionsDwellTimePie"
+                                :options="chartOptions.dwellTimePie"
                             ></highcharts>
                         </b-col>
                     </b-row>
@@ -115,7 +139,6 @@ import {
     IValSelectItem,
     IBootstrapSelectItem,
     ISite,
-    IDemographicMount,
     ISiteOfficeHourItem,
     IChartDemographicData
 } from "./models/IHighCharts";
@@ -192,9 +215,20 @@ export class HighchartsDemographic extends Vue {
     errorMessage: string = "";
     chartMode: EChartMode = EChartMode.none;
 
-    mountChart: IDemographicMount = {
+    mountChart: {
+        site1Day1: boolean;
+        site1DayX: boolean;
+        siteXDay1: boolean;
+        siteXDayX: boolean;
+        genderAge: boolean;
+        age: boolean;
+        dwellTime: boolean;
+    } = {
+        site1Day1: false,
+        site1DayX: false,
+        siteXDay1: false,
+        siteXDayX: false,
         genderAge: false,
-        genderTime: false,
         age: false,
         dwellTime: false
     };
@@ -212,11 +246,25 @@ export class HighchartsDemographic extends Vue {
     };
 
     // chart options
-    chartOptionsGenderAge: any = {};
-    chartOptionsGenderTime: any = {};
-    chartOptionsAge: any = {};
-    chartOptionsDwellTimeBar: any = {};
-    chartOptionsDwellTimePie: any = {};
+    chartOptions: {
+        site1Day1: object;
+        site1DayX: object;
+        siteXDay1: object;
+        siteXDayX: object;
+        genderAge: object;
+        age: object;
+        dwellTimeBar: object;
+        dwellTimePie: object;
+    } = {
+        site1Day1: {},
+        site1DayX: {},
+        siteXDay1: {},
+        siteXDayX: {},
+        genderAge: {},
+        age: {},
+        dwellTimeBar: {},
+        dwellTimePie: {}
+    };
 
     created() {
         this.initSelectItem();
@@ -270,12 +318,14 @@ export class HighchartsDemographic extends Vue {
 
     start() {
         this.errorMessage = "";
-        this.mountChart = {
-            genderAge: false,
-            genderTime: false,
-            age: false,
-            dwellTime: false
-        };
+
+        this.mountChart.site1Day1 = false;
+        this.mountChart.site1DayX = false;
+        this.mountChart.siteXDay1 = false;
+        this.mountChart.siteXDayX = false;
+        this.mountChart.genderAge = false;
+        this.mountChart.age = false;
+        this.mountChart.dwellTime = false;
 
         this.chartMode = HighchartsService.chartMode(
             this.startDate,
@@ -372,19 +422,29 @@ export class HighchartsDemographic extends Vue {
             tempHourStrings.push(`${hourString}:00`);
         }
         //// office hour group ////
-
         for (let categorie of tempHourStrings) {
             let haveValue = false;
             for (let loopValue of tempValues) {
                 let value: IChartDemographicData = this.anysislyChartValue(
                     loopValue
                 );
+
                 if (value.timeString == categorie) {
+                    let haveTempIn = false;
                     haveValue = true;
-                    tempResult.push(value);
                     tempTotalCount += value.maleCount;
                     tempTotalCount += value.femaleCount;
-                    break;
+                    for (let tempIn of tempResult) {
+                        if (tempIn.timeString == categorie) {
+                            haveTempIn = true;
+                            tempIn.maleCount += value.maleCount;
+                            tempIn.femaleCount += value.femaleCount;   
+                            break;      
+                        }
+                    }
+                    if  (!haveTempIn) {
+                        tempResult.push(value);
+                    }
                 }
             }
             if (!haveValue) {
@@ -395,46 +455,50 @@ export class HighchartsDemographic extends Vue {
         }
 
         // set data
-        if (tempTotalCount > 0) {
-            for (let categorie of tempHourStrings) {
-                let haveValue = false;
-                for (let loopValue of tempValues) {
-                    let value: IChartDemographicData = this.anysislyChartValue(
-                        loopValue
-                    );
-                    if (value.timeString == categorie) {
-                        haveValue = true;
-                        tempResult.push(value);
-                        break;
-                    }
-                }
-                if (!haveValue) {
-                    let defaultValue = this.anysislyChartValueDefault();
-                    defaultValue.timeString = categorie;
-                    tempResult.push(defaultValue);
+        for (let categorie of tempHourStrings) {
+            let haveValue = false;
+            for (let loopValue of tempValues) {
+                let value: IChartDemographicData = this.anysislyChartValue(
+                    loopValue
+                );
+                if (value.timeString == categorie) {
+                    haveValue = true;
+                    tempResult.push(value);
+                    break;
                 }
             }
+            if (!haveValue) {
+                let defaultValue = this.anysislyChartValueDefault();
+                defaultValue.timeString = categorie;
+                tempResult.push(defaultValue);
+            }
+        }
 
-            // set result
-            for (let result of tempResult) {
+        // set result
+        for (let result of tempResult) {
+            if (tempTotalCount > 0) {
                 result.maleCountPercent = HighchartsService.formatFloat(
                     (result.maleCount / tempTotalCount) * 100
                 );
                 result.femaleCountPercent = HighchartsService.formatFloat(
                     (result.femaleCount / tempTotalCount) * 100
                 );
-                tempSeries[0].data.push(result.maleCountPercent);
-                tempSeries[1].data.push(result.femaleCountPercent);
-                tempCategories.push(
-                    HighchartsService.categorieStringWithJSON(
-                        result.timeString,
-                        result
-                    )
-                );
+            } else {
+                result.maleCountPercent = 0;
+                result.femaleCountPercent = 0;
             }
+
+            tempSeries[0].data.push(result.maleCountPercent);
+            tempSeries[1].data.push(result.femaleCountPercent);
+            tempCategories.push(
+                HighchartsService.categorieStringWithJSON(
+                    result.timeString,
+                    result
+                )
+            );
         }
 
-        this.chartOptionsGenderTime = {
+        this.chartOptions.site1Day1 = {
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -491,7 +555,7 @@ export class HighchartsDemographic extends Vue {
             series: tempSeries
         };
 
-        this.mountChart.genderTime = true;
+        this.mountChart.site1Day1 = true;
     }
 
     ////////////////////////// site 1 day X //////////////////////////
@@ -768,7 +832,7 @@ export class HighchartsDemographic extends Vue {
             }
         }
 
-        this.chartOptionsGenderTime = {
+        this.chartOptions.site1DayX = {
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -825,7 +889,7 @@ export class HighchartsDemographic extends Vue {
             series: tempSeries
         };
 
-        this.mountChart.genderTime = true;
+        this.mountChart.site1DayX = true;
     }
 
     ////////////////////////// site X day 1 //////////////////////////
@@ -889,7 +953,7 @@ export class HighchartsDemographic extends Vue {
                 );
             }
 
-            this.chartOptionsGenderTime = {
+            this.chartOptions.siteXDay1 = {
                 chart: { type: "column", zoomType: "x" },
                 exporting: { enabled: false },
                 title: { text: null },
@@ -947,7 +1011,7 @@ export class HighchartsDemographic extends Vue {
                 series: tempSeries
             };
 
-            this.mountChart.genderTime = true;
+            this.mountChart.siteXDay1 = true;
         }
     }
 
@@ -1291,7 +1355,7 @@ export class HighchartsDemographic extends Vue {
             }
         }
 
-        this.chartOptionsGenderTime = {
+        this.chartOptions.siteXDayX = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1316,78 +1380,72 @@ export class HighchartsDemographic extends Vue {
                     let self: any = this;
                     let result = "";
                     let siteId = "";
-                    if (
-                        self.point != undefined &&
-                        self.point.series != undefined &&
-                        self.point.series.name != undefined
-                    ) {
-                        let startIndex = self.point.series.name.indexOf(">__");
-                        let endIndex = self.point.series.name.indexOf("__<");
-                        siteId = self.point.series.name.substring(
-                            startIndex + 3,
-                            endIndex
+
+                    try {
+                        let siteStartIndex = self.point.series.name.indexOf(
+                            ">__"
                         );
-                    }
+                        let siteEndIndex = self.point.series.name.indexOf(
+                            "__<"
+                        );
+                        siteId = self.point.series.name.substring(
+                            siteStartIndex + 3,
+                            siteEndIndex
+                        );
 
-                    if (
-                        siteId != undefined &&
-                        siteId != "" &&
-                        self.x != undefined
-                    ) {
-                        try {
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
+                        let valueStartIndex = self.x.indexOf(">{");
+                        let valueEndIndex = self.x.indexOf("}<");
+                        let valueJson = self.x.substring(
+                            valueStartIndex + 1,
+                            valueEndIndex + 1
+                        );
+                        let newValue: any = JSON.parse(valueJson);
 
-                            for (let site of newValue.sites) {
-                                if (site.siteObjectId == siteId) {
-                                    switch (newValue.timeMode) {
-                                        case ETimeMode.year:
-                                        case ETimeMode.quarter:
-                                        case ETimeMode.month:
-                                        case ETimeMode.week:
-                                            result += `${site.siteName}<br>`;
-                                            result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
-                                            result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
-                                            if (newValue.genderMode == "male") {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
-                                            } else {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
-                                            }
-                                            break;
-                                        case ETimeMode.day:
-                                        case ETimeMode.hour:
-                                        default:
-                                            result += `${site.siteName}<br>`;
-                                            result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                            if (newValue.genderMode == "male") {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
-                                            } else {
-                                                result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
-                                                result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
-                                            }
-                                            break;
-                                    }
-                                    break;
+                        for (let site of newValue.sites) {
+                            if (site.siteObjectId == siteId) {
+                                switch (newValue.timeMode) {
+                                    case ETimeMode.year:
+                                    case ETimeMode.quarter:
+                                    case ETimeMode.month:
+                                    case ETimeMode.week:
+                                        result += `${site.siteName}<br>`;
+                                        result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
+                                        result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
+                                        if (newValue.genderMode == "male") {
+                                            result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
+                                            result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
+                                        } else {
+                                            result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
+                                            result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
+                                        }
+                                        break;
+                                    case ETimeMode.day:
+                                    case ETimeMode.hour:
+                                    default:
+                                        result += `${site.siteName}<br>`;
+                                        result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
+                                        if (newValue.genderMode == "male") {
+                                            result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
+                                            result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
+                                        } else {
+                                            result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
+                                            result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
+                                        }
+                                        break;
                                 }
+                                break;
                             }
-                        } catch (e) {
-                            console.log(e);
                         }
+                    } catch (e) {
+                        console.log(e);
                     }
+
                     return result;
                 }
             },
             series: tempSeries
         };
-        this.mountChart.genderTime = true;
+        this.mountChart.siteXDayX = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1465,7 +1523,7 @@ export class HighchartsDemographic extends Vue {
             }
 
             // set chart options
-            this.chartOptionsGenderAge = {
+            this.chartOptions.genderAge = {
                 chart: { type: "column", zoomType: "x" },
                 exporting: { enabled: false },
                 title: { text: null },
@@ -1566,7 +1624,7 @@ export class HighchartsDemographic extends Vue {
             }
 
             // set chart options
-            this.chartOptionsAge = {
+            this.chartOptions.age = {
                 chart: { zoomType: "x" },
                 exporting: { enabled: false },
                 title: { text: null },
@@ -1813,7 +1871,7 @@ export class HighchartsDemographic extends Vue {
                 break;
         }
 
-        this.chartOptionsDwellTimeBar = {
+        this.chartOptions.dwellTimeBar = {
             chart: {
                 type: "bar",
                 zoomType: "x"
@@ -1835,7 +1893,7 @@ export class HighchartsDemographic extends Vue {
             series: barSeries
         };
 
-        this.chartOptionsDwellTimePie = {
+        this.chartOptions.dwellTimePie = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
