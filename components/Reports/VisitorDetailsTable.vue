@@ -74,7 +74,7 @@ export class VisitorDetailsTable extends Vue {
     doCancel() {}
 
     showTime(time) {
-        return Datetime.DateTime2String(new Date(time), "YYYY-MM-DD");
+        return Datetime.DateTime2String(new Date(time), "YYYY-MM-DD HH:mm");
     }
 
     tableToArray() {
