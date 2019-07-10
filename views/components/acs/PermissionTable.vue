@@ -49,7 +49,7 @@
                         >
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit v-show="canEdit" @click="pageToEdit()" />
-                            <iv-toolbox-delete v-show="canDelete"@click="doDelete" />
+                            <iv-toolbox-delete v-show="canDelete" @click="doDelete" />
                         </iv-toolbox-more>
                     </template>
 
@@ -73,7 +73,7 @@
                     @update:deviceType="selectedDeviceType($event)"
                     @update:*="updateInputData($event)"
                 >
-
+                    
                     <!-- door -->
                     <template #doorName="{ $attrs, $listeners }">
                         <iv-form-selection
@@ -502,9 +502,7 @@ export default class PermissionTable extends Vue {
                 for (let tempItem of response.results) {
                     if (
                         tempItem.objectId != undefined &&
-                        tempItem.elevatorid != undefined &&
                         tempItem.elevatorname != undefined &&
-                        typeof tempItem.elevatorid == "string" &&
                         typeof tempItem.elevatorname == "string"
                     ) {
                         this.selectItem.elevatorDevice[tempItem.objectId] =
