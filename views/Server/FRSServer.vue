@@ -277,7 +277,7 @@ export default class FRSServer extends Vue {
                         tempVIP[result.objectId] = result.name;
                         this.groupVIP = tempVIP;
                         break;
-                    case "Visitor":
+                    case "Employee":
                         tempEmployee[result.objectId] = result.name;
                         this.groupEmployee = tempEmployee;
                         break;
@@ -399,47 +399,45 @@ export default class FRSServer extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        console.log('data - ', data);
+
+        let userGroups: IFRSUserGroup = {
+            type: '',
+            objectId: '',
+            name: '',
+        };
+
+        let tempGroups: any = [];
+        let tempUserGroups = JSON.parse(JSON.stringify(userGroups));
+
+        this.groupData.map(item => {
+            console.log('item - ', item);
+            switch (item.objectId) {
+                case data.employee:
+                    tempUserGroups = JSON.parse(JSON.stringify(userGroups));
+                    tempUserGroups.type = EUserGroup.employee;
+                    tempUserGroups.objectId = item.objectId;
+                    tempUserGroups.name = item.name;
+                    tempGroups.push(tempUserGroups);
+                    break;
+                case data.vip:
+                    tempUserGroups = JSON.parse(JSON.stringify(userGroups));
+                    tempUserGroups.type = EUserGroup.vip;
+                    tempUserGroups.objectId = item.objectId;
+                    tempUserGroups.name = item.name;
+                    tempGroups.push(tempUserGroups);
+                    break;
+                case data.blacklist:
+                    tempUserGroups = JSON.parse(JSON.stringify(userGroups));
+                    tempUserGroups.type = EUserGroup.blacklist;
+                    tempUserGroups.objectId = item.objectId;
+                    tempUserGroups.name = item.name;
+                    tempGroups.push(tempUserGroups);
+                    break;
+            }
+        });
 
         // add
         if (this.inputFormData.type === EPageStep.add) {
-
-            let userGroups: IFRSUserGroup = {
-                type: '',
-                objectId: '',
-                name: '',
-            };
-
-            let tempGroups: any = [];
-            let tempUserGroups = JSON.parse(JSON.stringify(userGroups));
-
-            this.groupData.map(item => {
-                console.log('item - ', item);
-                switch (item.objectId) {
-                    case data.employee:
-                        tempUserGroups = JSON.parse(JSON.stringify(userGroups));
-                        tempUserGroups.type = EUserGroup.employee;
-                        tempUserGroups.objectId = item.objectId;
-                        tempUserGroups.name = item.name;
-                        tempGroups.push(tempUserGroups);
-                        break;
-                    case data.vip:
-                        tempUserGroups = JSON.parse(JSON.stringify(userGroups));
-                        tempUserGroups.type = EUserGroup.vip;
-                        tempUserGroups.objectId = item.objectId;
-                        tempUserGroups.name = item.name;
-                        tempGroups.push(tempUserGroups);
-                        break;
-                    case data.blacklist:
-                        tempUserGroups = JSON.parse(JSON.stringify(userGroups));
-                        tempUserGroups.type = EUserGroup.blacklist;
-                        tempUserGroups.objectId = item.objectId;
-                        tempUserGroups.name = item.name;
-                        tempGroups.push(tempUserGroups);
-                        break;
-                }
-            });
-
 
             const datas: IAddFRSServer[] = [
                 {
@@ -503,7 +501,8 @@ export default class FRSServer extends Vue {
                     wsport: data.wsport,
                     account: data.account,
                     password: data.password,
-                    objectId: data.objectId
+                    objectId: data.objectId,
+                    userGroups: tempGroups
                 }
             ];
 

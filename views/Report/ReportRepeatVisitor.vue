@@ -1090,7 +1090,6 @@ export default class ReportRepeatVisitor extends Vue {
 
         // 取得date、siteObjectId資料
         for (const summary of array) {
-            console.log("summary - ", summary);
 
             let tempChartData: IChartRepeatVisitorData = {
                 date: new Date(),

@@ -342,6 +342,7 @@ interface IEditFRSServer extends IAnalysis {
     objectId: string;
     name: string;
     protocol: string;
+    userGroups: IFRSUserGroup[];
 }
 
 interface IFRSServerResults extends IAnalysis {
