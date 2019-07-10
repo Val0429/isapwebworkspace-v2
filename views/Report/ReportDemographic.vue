@@ -587,11 +587,7 @@ export default class ReportDemographic extends Vue {
         }
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
-            x =>
-                x +
-                ":00 - " +
-                (x + 1) +
-                ":00"
+            x => x + ":00 - " + (x + 1) + ":00"
         );
     }
 
@@ -1636,7 +1632,6 @@ export default class ReportDemographic extends Vue {
                             weather.site.objectId
                         )
                     ) {
-                        console.log(" - ", weather.icon);
                         tempChartData.weather = WeatherService.WeatherIcon(
                             weather.icon
                         );
@@ -1700,18 +1695,8 @@ export default class ReportDemographic extends Vue {
 
                     tempChartDatas.push(tempData);
                 }
-
-                // console.log(
-                //     index,
-                //     " //分開跑maleRange",
-                //     JSON.parse(JSON.stringify(tempChartDatas)),
-                //     JSON.parse(JSON.stringify(tempChartData)),
-                //     tempData.ageRange
-                // );
             }
         }
-
-        // console.log("tempChartDatas", tempChartDatas);
 
         this.chartDatas = tempChartDatas;
         console.log(" - ", this.chartDatas);

@@ -39,12 +39,12 @@ import {
     Watch
 } from "vue-property-decorator";
 import Datetime from "@/services/Datetime";
+import { EChartMode } from "@/components/Reports";
 
 @Component({
     components: {}
 })
 export class VisitorDetailsTable extends Vue {
-    Prop;
     @Prop({
         type: Array,
         default: () => []
@@ -52,6 +52,14 @@ export class VisitorDetailsTable extends Vue {
     thresholdDetailTableContent: [];
 
     thresholdDetailTableTitle: any = [];
+
+    @Prop({
+        type: String,
+        default: function() {
+            return EChartMode.none;
+        }
+    })
+    dayXSiteX: EChartMode;
 
     created() {
         this.initDate();
@@ -74,7 +82,17 @@ export class VisitorDetailsTable extends Vue {
     doCancel() {}
 
     showTime(time) {
-        return Datetime.DateTime2String(new Date(time), "YYYY-MM-DD HH:mm");
+        switch (this.dayXSiteX) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                return Datetime.DateTime2String(
+                    new Date(time),
+                    "YYYY-MM-DD HH:mm"
+                );
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                return Datetime.DateTime2String(new Date(time), "YYYY-MM-DD");
+        }
     }
 
     tableToArray() {

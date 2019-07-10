@@ -86,6 +86,7 @@
                 <!-- Ben -->
                 <vistor-details-table
                     :thresholdDetailTableContent="rData"
+                    :dayXSiteX="rDayXxSiteX"
                     ref="reportTable"
                 >
                 </vistor-details-table>
@@ -154,6 +155,7 @@ enum EFileType {
 ///////////////////////// export /////////////////////////
 import html2Canvas from "html2canvas";
 import JsPDF from "jspdf";
+import { EChartMode } from "@/components/Reports";
 
 enum EPageStep {
     none = "none"
@@ -250,6 +252,7 @@ export default class ReportRepeatVisitor extends Vue {
     //ReportTable 相關
     rData = [];
     reportTableTitle = {};
+    rDayXxSiteX: EChartMode = EChartMode.none;
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
@@ -458,7 +461,6 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     async initSelectItemTree() {
-
         let tempTree = {};
         let tempChildrenArray = [];
 
@@ -472,19 +474,21 @@ export default class ReportRepeatVisitor extends Vue {
                             if (response.childrens.length > 0) {
                                 response.childrens.map(item => {
                                     if (item.objectId === site.objectId) {
-                                        let tempTreeData = JSON.parse(JSON.stringify(tempTree));
+                                        let tempTreeData = JSON.parse(
+                                            JSON.stringify(tempTree)
+                                        );
                                         tempTreeData.childrens = [];
                                         tempChildrenArray.push(item);
                                         tempTreeData.childrens = tempChildrenArray;
                                         tempTree = tempTreeData;
                                     }
-                                })
+                                });
                             }
-                        })
+                        });
                     }
 
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        tempTree,
+                        tempTree
                     );
 
                     this.regionTreeItem.region = this.regionTreeItem.tree;
@@ -1044,7 +1048,7 @@ export default class ReportRepeatVisitor extends Vue {
 
         // Ben
         this.initDashboardData();
-         this.initReportTableData();
+        this.initReportTableData();
 
         console.log("this.sites - ", this.sites);
         console.log(" - ", this.startDate);
@@ -1055,10 +1059,17 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     // Ben //
-     initReportTableData() {
+    initReportTableData() {
+        let chartMode = HighchartsService.chartMode(
+            this.startDate,
+            this.endDate,
+            this.sites
+        );
+
+        this.rDayXxSiteX = chartMode;
+
         this.rData = this.responseData.summaryTableDatas;
     }
-
 
     initDashboardData() {
         this.dPageType = EPageType.repeatCustomer;
@@ -1090,7 +1101,6 @@ export default class ReportRepeatVisitor extends Vue {
 
         // 取得date、siteObjectId資料
         for (const summary of array) {
-
             let tempChartData: IChartRepeatVisitorData = {
                 date: new Date(),
                 siteObjectId: this.filterData.firstSiteId,
@@ -1149,36 +1159,36 @@ export default class ReportRepeatVisitor extends Vue {
             // }
 
             //跑maleRange、 femaleRange
-                for (let index = 0; index < 6; index++) {
-                    if (summary.maleRanges[index] === null) {
-                        break;
-                    }
-
-                    if (summary.femaleRanges[index] === null) {
-                        break;
-                    }
-
-                    let tempData = JSON.parse(JSON.stringify(tempChartData));
-                    maleTotal = summary.maleRanges[index];
-                    femaleTotal = summary.femaleRanges[index];
-
-                    tempData.maleCount = maleTotal;
-                    tempData.femaleCount = femaleTotal;
-                    tempData.ageRange = ReportService.SwitchAgeRange(
-                        index.toString()
-                    );
-
-                    tempChartDatas.push(tempData);
-
-                    // console.log(
-                    //     index,
-                    //     JSON.parse(JSON.stringify(tempChartDatas)),
-                    //     JSON.parse(JSON.stringify(tempChartData)),
-                    //     tempData.ageRange
-                    // );
+            for (let index = 0; index < 6; index++) {
+                if (summary.maleRanges[index] === null) {
+                    break;
                 }
 
-                // tempChartDatas.push(tempData);
+                if (summary.femaleRanges[index] === null) {
+                    break;
+                }
+
+                let tempData = JSON.parse(JSON.stringify(tempChartData));
+                maleTotal = summary.maleRanges[index];
+                femaleTotal = summary.femaleRanges[index];
+
+                tempData.maleCount = maleTotal;
+                tempData.femaleCount = femaleTotal;
+                tempData.ageRange = ReportService.SwitchAgeRange(
+                    index.toString()
+                );
+
+                tempChartDatas.push(tempData);
+
+                // console.log(
+                //     index,
+                //     JSON.parse(JSON.stringify(tempChartDatas)),
+                //     JSON.parse(JSON.stringify(tempChartData)),
+                //     tempData.ageRange
+                // );
+            }
+
+            // tempChartDatas.push(tempData);
 
             // tempChartDatas.push(tempChartData);
 

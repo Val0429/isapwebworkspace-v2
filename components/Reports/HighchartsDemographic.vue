@@ -438,11 +438,11 @@ export class HighchartsDemographic extends Vue {
                         if (tempIn.timeString == categorie) {
                             haveTempIn = true;
                             tempIn.maleCount += value.maleCount;
-                            tempIn.femaleCount += value.femaleCount;   
-                            break;      
+                            tempIn.femaleCount += value.femaleCount;
+                            break;
                         }
                     }
-                    if  (!haveTempIn) {
+                    if (!haveTempIn) {
                         tempResult.push(value);
                     }
                 }
@@ -918,12 +918,23 @@ export class HighchartsDemographic extends Vue {
                 let value: IChartDemographicData = this.anysislyChartValue(
                     loopValue
                 );
+
                 if (value.siteObjectId == site.objectId) {
+                    let haveTempIn = false;
                     haveValue = true;
                     tempTotalCount += value.maleCount;
                     tempTotalCount += value.femaleCount;
-                    tempResult.push(value);
-                    break;
+                    for (let tempIn of tempResult) {
+                        if (tempIn.siteObjectId == site.objectId) {
+                            haveTempIn = true;
+                            tempIn.maleCount += value.maleCount;
+                            tempIn.femaleCount += value.femaleCount;
+                            break;
+                        }
+                    }
+                    if (!haveTempIn) {
+                        tempResult.push(value);
+                    }
                 }
             }
 
@@ -934,85 +945,89 @@ export class HighchartsDemographic extends Vue {
             }
         }
 
-        if (tempTotalCount > 0) {
-            // set result
-            for (let result of tempResult) {
+        // set result
+        for (let result of tempResult) {
+            if (tempTotalCount > 0) {
                 result.maleCountPercent = HighchartsService.formatFloat(
                     (result.maleCount / tempTotalCount) * 100
                 );
                 result.femaleCountPercent = HighchartsService.formatFloat(
                     (result.femaleCount / tempTotalCount) * 100
                 );
-                tempSeries[0].data.push(result.maleCountPercent);
-                tempSeries[1].data.push(result.femaleCountPercent);
-                tempCategories.push(
-                    HighchartsService.categorieStringWithJSON(
-                        `${result.siteName} ${result.weatherIcon}`,
-                        result
-                    )
-                );
+            } else {
+                result.maleCountPercent = 0;
+                result.femaleCountPercent = 0;
             }
 
-            this.chartOptions.siteXDay1 = {
-                chart: { type: "column", zoomType: "x" },
-                exporting: { enabled: false },
-                title: { text: null },
-                subtitle: { text: null },
-                xAxis: {
-                    labels: { useHTML: true },
-                    categories: tempCategories
-                },
-                yAxis: {
-                    min: 0,
-                    labels: {
-                        style: { color: "#000" },
-                        formatter: function() {
-                            let self: any = this;
-                            return `${self.value}%`;
-                        }
-                    },
-                    title: {
-                        text: null
-                    }
-                },
-                tooltip: {
-                    useHTML: true,
+            tempSeries[0].data.push(result.maleCountPercent);
+            tempSeries[1].data.push(result.femaleCountPercent);
+            tempCategories.push(
+                HighchartsService.categorieStringWithJSON(
+                    `${result.siteName} ${result.weatherIcon}`,
+                    result
+                )
+            );
+        }
+
+        this.chartOptions.siteXDay1 = {
+            chart: { type: "column", zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                labels: { useHTML: true },
+                categories: tempCategories
+            },
+            yAxis: {
+                min: 0,
+                labels: {
+                    style: { color: "#000" },
                     formatter: function() {
                         let self: any = this;
-                        let result = "";
-                        if (self.x != undefined) {
-                            try {
-                                // anysisly JSON
-                                let startIndex = self.x.indexOf(">{");
-                                let endIndex = self.x.indexOf("}<");
-                                let valueJson = self.x.substring(
-                                    startIndex + 1,
-                                    endIndex + 1
-                                );
-                                let newValue: any = JSON.parse(valueJson);
-
-                                // set value
-                                result += `${newValue.siteName}<br>`;
-                                result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
-                                result += `${newValue.i18n.date}:${newValue.dateString}<br>`;
-                                if (self.series.name == newValue.i18n.male) {
-                                    result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
-                                } else {
-                                    result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
-                                }
-                                return result;
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        }
-                        return result;
+                        return `${self.value}%`;
                     }
                 },
-                series: tempSeries
-            };
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                useHTML: true,
+                formatter: function() {
+                    let self: any = this;
+                    let result = "";
+                    if (self.x != undefined) {
+                        try {
+                            // anysisly JSON
+                            let startIndex = self.x.indexOf(">{");
+                            let endIndex = self.x.indexOf("}<");
+                            let valueJson = self.x.substring(
+                                startIndex + 1,
+                                endIndex + 1
+                            );
+                            let newValue: any = JSON.parse(valueJson);
 
-            this.mountChart.siteXDay1 = true;
-        }
+                            // set value
+                            result += `${newValue.siteName}<br>`;
+                            result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
+                            result += `${newValue.i18n.date}:${newValue.dateString}<br>`;
+                            if (self.series.name == newValue.i18n.male) {
+                                result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
+                            } else {
+                                result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
+                            }
+                            return result;
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    return result;
+                }
+            },
+            series: tempSeries
+        };
+
+        this.mountChart.siteXDay1 = true;
     }
 
     ////////////////////////// site X day X //////////////////////////
