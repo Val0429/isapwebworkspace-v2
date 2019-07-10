@@ -14,7 +14,10 @@
             {{$attrs.row.area && $attrs.row.area.site ? $attrs.row.area.site.name : ''}}
         </template>
         <template #view.elevators="{$attrs, $listeners}">
-            {{ !$attrs.value || $attrs.value.length === 0 ? '' : $attrs.value.map(x => getName(x.objectId, options)).join(', ') }}
+            {{ $attrs.value ? $attrs.value.length : 0  }}
+        </template>
+        <template #view.floors="{$attrs, $listeners}">
+            {{ getReaderCount($attrs.row)  }}
         </template>  
         <!-- 6) custom edit / add template with <template #add.* /> -->
         <template #add.elevators="{$attrs, $listeners}">
@@ -68,7 +71,11 @@ export default class ElevatorGroupForm extends BasicFormQuick implements IFormQu
                     /**
                     * @uiLabel - ${this._("elevators")}
                     */
-                    elevators:string;               
+                    elevators:string; 
+                    /**
+                    * @uiLabel - ${this._("w_Reader_Count")}
+                    */
+                    floors:string;               
                 }
                 `;
             case EFormQuick.Add:
@@ -119,7 +126,14 @@ export default class ElevatorGroupForm extends BasicFormQuick implements IFormQu
         
         console.log("options", this.options)
     }
-    
+    getReaderCount(group:any){
+        let count=0;
+        for(let elevator of group.elevators){
+            if(elevator.reader && elevator.reader.length>0)
+                count+=elevator.reader.length;
+        }
+        return count;
+    }
     
 }
 </script>
