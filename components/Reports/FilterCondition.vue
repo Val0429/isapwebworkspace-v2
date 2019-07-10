@@ -138,12 +138,14 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { ERegionType, IRegionTreeSelected } from "@/components/RegionTree";
 import {
+    IFilterCondition,
+    ITemplateItem,
     EAddPeriodSelect,
     ECountType,
     EDesignationPeriod,
-    EIfAllSelected
-} from "@/components/Reports/models/EReport";
-import { ITemplateItem } from "@/components/Reports";
+    EIfAllSelected,
+    ETimeMode
+} from "@/components/Reports";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
 
@@ -406,17 +408,14 @@ export class FilterCondition extends Vue {
     }
 
     async doSubmit() {
-        const doSubmitParam: {
-            startDate?: string;
-            endDate?: string;
-            type?: string;
-            siteIds?: [];
-            tagIds?: [];
-        } = {
-            tagIds:
-                this.inputFormData.tagIds === []
-                    ? []
-                    : this.inputFormData.tagIds
+        const doSubmitParam: IFilterCondition = {
+            startDate: Datetime.DateToZero(new Date()).toISOString(),
+            endDate: Datetime.DateToZero(new Date()).toISOString(),
+            type: ETimeMode.none,
+            firstSiteId: '',
+            siteIds: [],
+            tagIds:this.inputFormData.tagIds === [] ? [] : this.inputFormData.tagIds,
+
         };
 
         if (this.inputFormData.siteIds.length === 0) {
@@ -424,13 +423,12 @@ export class FilterCondition extends Vue {
             return false;
         }
 
-        console.log(" - ");
-
         if (this.selectAllSites === "all") {
             this.inputFormData.siteIds = this.inputFormData.allSiteIds;
         }
 
         doSubmitParam.siteIds = this.inputFormData.siteIds;
+        doSubmitParam.firstSiteId = doSubmitParam.siteIds[0];
 
         // 選擇 period
         if (this.selectPeriodAddWay === "period") {
@@ -460,11 +458,11 @@ export class FilterCondition extends Vue {
             ) {
                 doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate).toISOString();
                 doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate).toISOString();
-                doSubmitParam.type = ECountType.hour;
+                doSubmitParam.type = ETimeMode.hour;
             } else {
                 doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate).toISOString();
                 doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate).toISOString();
-                doSubmitParam.type = ECountType.day;
+                doSubmitParam.type = ETimeMode.day;
             }
 
             // 選擇 designation
@@ -473,14 +471,14 @@ export class FilterCondition extends Vue {
                 case "today":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0))).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.CountDateNumber(0))).toISOString();
-                    doSubmitParam.type = ECountType.hour;
+                    doSubmitParam.type = ETimeMode.hour;
                     console.log("startDate today - ", doSubmitParam.startDate);
                     console.log("endDate today - ", doSubmitParam.endDate);
                     break;
                 case "yesterday":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1))).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1))).toISOString();
-                    doSubmitParam.type = ECountType.hour;
+                    doSubmitParam.type = ETimeMode.hour;
                     console.log(
                         "startDate yesterday - ",
                         doSubmitParam.startDate
@@ -490,7 +488,7 @@ export class FilterCondition extends Vue {
                 case "last7days":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-6))).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0))).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log(
                         "startDate last7days - ",
                         doSubmitParam.startDate
@@ -500,7 +498,7 @@ export class FilterCondition extends Vue {
                 case "thisWeek":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisWeekStartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.ThisWeekEndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log(
                         "startDate thisWeek - ",
                         doSubmitParam.startDate
@@ -510,7 +508,7 @@ export class FilterCondition extends Vue {
                 case "lastWeek":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastWeekStartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastWeekEndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log(
                         "startDate lastWeek - ",
                         doSubmitParam.startDate
@@ -520,7 +518,7 @@ export class FilterCondition extends Vue {
                 case "thisMonth":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisMonthStartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisMonthEndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log(
                         "startDate thisMonth - ",
                         doSubmitParam.startDate
@@ -530,7 +528,7 @@ export class FilterCondition extends Vue {
                 case "lastMonth":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastMonthStartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastMonthEndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log(
                         "startDate lastMonth - ",
                         doSubmitParam.startDate
@@ -540,35 +538,35 @@ export class FilterCondition extends Vue {
                 case "q1":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q1StartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q1EndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log("startDate q1 - ", doSubmitParam.startDate);
                     console.log("endDate q1 - ", doSubmitParam.endDate);
                     break;
                 case "q2":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q2StartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q2EndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log("startDate q2 - ", doSubmitParam.startDate);
                     console.log("endDate q2 - ", doSubmitParam.endDate);
                     break;
                 case "q3":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q3StartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q3EndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log("startDate q3 - ", doSubmitParam.startDate);
                     console.log("endDate q3 - ", doSubmitParam.endDate);
                     break;
                 case "q4":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q4StartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q4EndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log("startDate q4 - ", doSubmitParam.startDate);
                     console.log("endDate q4 - ", doSubmitParam.endDate);
                     break;
                 case "thisYear":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisYearStartDate())).toISOString();
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisYearEndDate())).toISOString();
-                    doSubmitParam.type = ECountType.day;
+                    doSubmitParam.type = ETimeMode.day;
                     console.log(
                         "startDate thisYear - ",
                         doSubmitParam.startDate

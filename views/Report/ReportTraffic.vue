@@ -173,7 +173,8 @@ import {
     ISiteItems,
     ReportDashboard,
     ReportTableData,
-    ITemplateItem
+    ITemplateItem,
+    IFilterCondition
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
 import toExcel from "@/services/Excel/json2excel";
@@ -243,7 +244,14 @@ export default class ReportTraffic extends Vue {
     modalShow: boolean = false;
 
     // 接收 Filter Condition 資料 相關
-    filterData: any = {};
+    filterData: IFilterCondition = {
+        startDate: new Date(),
+        endDate: new Date(),
+        firstSiteId: '',
+        siteIds: [],
+        tagIds: [],
+        type: ETimeMode.none
+    };
     responseData: any = {};
     userData: any = [];
 
@@ -1481,7 +1489,9 @@ export default class ReportTraffic extends Vue {
             });
 
         this.filterData = filterData;
-        Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
+        this.filterData.startDate = new Date(this.filterData.startDate);
+        this.filterData.endDate = new Date(this.filterData.endDate);
+
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
@@ -1590,12 +1600,12 @@ export default class ReportTraffic extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? new Date(date1) : date1;
-        let tempDate2 = typeof date2 === "string" ? new Date(date2) : date2;
+        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
+        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
     }

@@ -167,7 +167,8 @@ import {
     ISiteItems,
     ITemplateItem,
     ReportDashboard,
-    ReportTableData
+    ReportTableData,
+    IFilterCondition
 } from "@/components/Reports";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
@@ -233,7 +234,14 @@ export default class ReportDemographic extends Vue {
     modalShow: boolean = false;
 
     // 接收 Filter Condition 資料 相關
-    filterData: any = {};
+    filterData: IFilterCondition = {
+        startDate: new Date(),
+        endDate: new Date(),
+        firstSiteId: '',
+        siteIds: [],
+        tagIds: [],
+        type: ETimeMode.none
+    };
     responseData: any = {};
     userData: any = [];
 
@@ -1447,7 +1455,9 @@ export default class ReportDemographic extends Vue {
             });
 
         this.filterData = filterData;
-        Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
+        this.filterData.startDate = new Date(this.filterData.startDate);
+        this.filterData.endDate = new Date(this.filterData.endDate);
+
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
@@ -1551,8 +1561,8 @@ export default class ReportDemographic extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? new Date(date1) : date1;
-        let tempDate2 = typeof date2 === "string" ? new Date(date2) : date2;
+        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
+        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
@@ -1567,6 +1577,34 @@ export default class ReportDemographic extends Vue {
         this.chartDatas = [];
 
 
+        switch (this.filterData.type) {
+            case ETimeMode.hour:
+
+        }
+
+        // TODO: Remove
+        let sampleData: any[] = [];
+        for (let i = 0; i < 24; i++) {
+            let tempDate = Datetime.DateToZero(new Date());
+            tempDate.setHours(i);
+            let tempData = {
+                date: tempDate,
+                siteObjectId: "",
+                maleCount: 0,
+                femaleCount: 0,
+                temperatureMin: 0,
+                temperatureMax: 0
+            };
+
+            for (let site of this.sites) {
+                let tempResult = JSON.parse(JSON.stringify(tempData));
+                tempResult.siteObjectId = site.objectId;
+                sampleData.push(tempResult);
+            }
+        }
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", sampleData);
+        // TODO: Remove
+
         // 取得date、siteObjectId資料
         for (const summary of array) {
             let tempChartData: IChartDemographicData = {
@@ -1580,7 +1618,7 @@ export default class ReportDemographic extends Vue {
                 weather: EWeather.none
             };
 
-            tempChartDatas.push(tempChartData);
+            // tempChartDatas.push(tempChartData);
 
             let maleNotIncludeEmployee: number = 0;
             let femaleNotIncludeEmployee: number = 0;
@@ -1589,19 +1627,18 @@ export default class ReportDemographic extends Vue {
             let maleEmployee: number = 0;
             let femaleEmployee: number = 0;
 
-            tempChartDatas.map(item => {
-                if (
-                    this.checkDateAndSite(
-                        item.date,
-                        summary.date,
-                        item.siteObjectId,
-                        summary.site.objectId
-                    )
-                ) {
-
-                }
-            });
-
+            // tempChartDatas.map(item => {
+            //     if (
+            //         this.checkDateAndSite(
+            //             item.date,
+            //             summary.date,
+            //             item.siteObjectId,
+            //             summary.site.objectId
+            //         )
+            //     ) {
+            //
+            //     }
+            // });
 
             // 判斷date, site 兩個是否相同
             let haveSummary = false;
@@ -1614,7 +1651,6 @@ export default class ReportDemographic extends Vue {
                         summary.site.objectId
                     )
                 ) {
-
                     haveSummary = true;
                     tempChartData = loopChartData;
                     break;
