@@ -36,6 +36,22 @@
         </div>
         </iv-card>
         <ivc-form-quick v-on:viewChange="viewChange($event)">  
+            <!-- 5) custom view templates with <template #view.* /> -->
+            <template #view.system="{$attrs, $listeners}">
+                {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
+            </template>
+            <template #view.elevatorname="{$attrs, $listeners}">
+                {{getInfo($attrs.row).elevatorname}}
+            </template>
+            <template #view.elevatorgroup="{$attrs, $listeners}">
+                {{getInfo($attrs.row).elevatorgroup}}
+            </template>
+            <template #view.areaname="{$attrs, $listeners}">
+                {{getInfo($attrs.row).areaname}}
+            </template>
+            <template #view.sitename="{$attrs, $listeners}">
+                {{getInfo($attrs.row).sitename}}
+            </template>
         </ivc-form-quick>
     <div class="float-right">                
         <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync()">{{_("w_Manual_Sync")}}</b-button>
@@ -49,10 +65,11 @@ import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vu
 import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
 import { BasicFormQuick } from './basic-form-quick';
 import { PermissionName} from '@/../src/constants/permissions';
+import { System } from '@/config/default/api/interfaces';
 @Component
 /// 1) class name
 export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
-      
+      system = System;
     /// 2) cgi path
     path: string = "/acs/floor";
     /// 3) i18n - view / edit / add
@@ -60,21 +77,38 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
     tAdd: string = "w_FloorAdd";
     tEdit: string = "w_FloorEdit";
     
-    
+   
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {             
-                /**
-                * @uiLabel - ${this._("name")}
-                */
-                floorname: string;
-                /**
-                * @uiLabel - ${this._("ccureid")}
-                */
-                
+                    interface {
+                    
+                    /**
+                    * @uiLabel - ${this._("w_Region_LevelSite")}
+                    */
+                    sitename:string;
+                    /**
+                    * @uiLabel - ${this._("w_Region_LevelArea")}
+                    */
+                    areaname:string;
+                    /**
+                    * @uiLabel - ${this._("w_ElevatorGroup")}
+                    */
+                    elevatorgroup:string;
+                    /**
+                    * @uiLabel - ${this._("w_Elevator")}
+                    */
+                    elevatorname: string;                    
+                    /**
+                    * @uiLabel - ${this._("w_Floor")}
+                    */
+                    floorname: string;
+                    /**
+                    * @uiLabel - ${this._("system")}
+                    */    
+                    system:string;
                 }
                 `;
             case EFormQuick.Add:
@@ -107,15 +141,16 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
         return;
     }
     /// Done
-    created(){
-        this.permissionName = PermissionName.floor;
-    }
-    
+  
+    elevatorGroups =[];
+    elevators =[];
     floorsystem:string="";
     isMounted:boolean=false;
     doMounted(){
         this.isMounted=true;
-        
+        this.canEdit=false;
+        this.canDelete=false;
+        this.canAdd=false;
     }
     filterInterface():string{
         return `interface {
@@ -152,6 +187,7 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
               floorsystem?:string;
           }`;
     } 
+    
     onFilterSubmit($event?: any): void {
         
       if(!$event)this.floorsystem="";
@@ -159,6 +195,33 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
        let params = $event || {};
        if(this.floorsystem) params.system=this.floorsystem;
        this.params = params;
+    }
+    private async getElevators(){
+        let resp: any=await this.$server.R("/acs/elevator" as any,{ "paging.all": "true" });
+        this.elevators=resp.results;
+        console.log("elevators", this.elevators)    
+    }
+    private async getElevatorGroups(){
+        let resp: any=await this.$server.R("/acs/elevatorgroup" as any,{ "paging.all": "true" });
+        this.elevatorGroups=resp.results;
+        console.log("elevatorGroups", this.elevatorGroups)    
+    }
+    async created(){
+        this.permissionName = PermissionName.floor;
+        await Promise.all([
+            this.getElevators(),
+            this.getElevatorGroups()
+        ]);
+    }
+     getInfo(floor:any){
+        let elevator = this.elevators.find(x=>x.reader.find(y=> y.objectId == floor.objectId));
+        let elevatorname = elevator ? elevator.elevatorname : "";
+        let group = elevator ? this.elevatorGroups.find(x=>x.elevators.find(y=>y.objectId==elevator.objectId)) : "";
+        let elevatorgroup = group ? group.groupname : "";
+        let areaname = group && group.area ? group.area.name : "";
+        let sitename = group && group.area && group.area.site ? group.area.site.name : "";
+        
+        return {elevatorname, elevatorgroup, areaname, sitename};
     }
 }
 </script>
