@@ -1626,12 +1626,77 @@ export default class ReportTraffic extends Vue {
         );
     }
 
-    sortOutChartData(array: any) {
+    sortOutChartData(datas: any) {
         let tempChartDatas: IChartTrafficData[] = [];
         this.chartDatas = [];
 
+        if (typeof this.filterData.startDate == "string") {
+            this.filterData.startDate = new Date(this.filterData.startDate);
+        }
+
+        if (typeof this.filterData.endDate == "string") {
+            this.filterData.endDate = new Date(this.filterData.endDate);
+        }
+
+        if (
+            Datetime.IsOneDate(
+                this.filterData.startDate,
+                this.filterData.endDate
+            )
+        ) {
+            // one day
+            for (let i = 0; i < 24; i++) {
+                let tempDate = Datetime.DateToZero(this.filterData.startDate);
+                tempDate.setHours(i);
+                let tempDateChartData = {
+                    date: tempDate,
+                    siteObjectId: "",
+                    temperatureMin: 0,
+                    temperatureMax: 0,
+                    weather: EWeather.none,
+                    traffic: 0,
+                    revenue: 0,
+                    transaction: 0
+                };
+                for (let siteId of this.filterData.siteIds) {
+                    let tempSiteChartData = JSON.parse(
+                        JSON.stringify(tempDateChartData)
+                    );
+                    tempSiteChartData.siteObjectId = siteId;
+                    tempChartDatas.push(tempSiteChartData);
+                }
+            }
+        } else {
+            // multipe day
+            let dateList = Datetime.DateList(
+                this.filterData.startDate,
+                this.filterData.endDate
+            );
+            for (let dateItem of dateList) {
+                let tempDateChartData = {
+                    date: new Date(dateItem.getTime()),
+                    siteObjectId: "",
+                    temperatureMin: 0,
+                    temperatureMax: 0,
+                    weather: EWeather.none,
+                    traffic: 0,
+                    revenue: 0,
+                    transaction: 0
+                };
+                for (let siteId of this.filterData.siteIds) {
+                    let tempSiteChartData = JSON.parse(
+                        JSON.stringify(tempDateChartData)
+                    );
+                    tempSiteChartData.siteObjectId = siteId;
+                    tempChartDatas.push(tempSiteChartData);
+                }
+            }
+        }
+
+        return false;
+
         // 取得date、siteObjectId資料
-        for (const summary of array) {
+        for (const summary of datas) {
             let tempChartData: IChartTrafficData = {
                 date: summary.date,
                 siteObjectId: summary.site.objectId,
