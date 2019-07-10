@@ -99,7 +99,7 @@
                                 <img src="../../assets/images/women.png">
                                 <div :class="eSign.none != anlysisData.demographic.sign2 ? (eSign.positive == anlysisData.demographic.sign2 ?  'ratio green':'ratio red') : 'ratio'">
                                     <span v-if="eSign.none != anlysisData.demographic.sign2">{{eSign.positive == anlysisData.demographic.sign2 ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.demographic.value2 != null ? numberWithCommas(anlysisData.demographic.value2) : "N/A"}} </span><br>
+                                    <span>{{anlysisData.demographic.value2 != null ? numberWithCommas(anlysisData.demographic.value2): "N/A"}} </span><br>
                                     <span>{{anlysisData.demographic.valueRatio2 != null ? toPercent(anlysisData.demographic.valueRatio2,1) : "N/A"}}</span>
                                 </div>
                             </div>
@@ -404,11 +404,11 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.peopleCounting.value,
-                            value: response.peopleCounting.variety
-                                ? response.peopleCounting.value *
-                                  response.peopleCounting.variety
-                                : null,
                             valueRatio: response.peopleCounting.variety
+                                ? response.peopleCounting.variety /
+                                  response.peopleCounting.value
+                                : null,
+                            value: response.peopleCounting.variety
                         };
                     }
                     if (response.humanDetection) {
@@ -421,11 +421,11 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.humanDetection.value,
-                            value: response.humanDetection.variety
-                                ? response.humanDetection.value *
-                                  response.humanDetection.variety
-                                : null,
                             valueRatio: response.humanDetection.variety
+                                ? response.humanDetection.variety /
+                                  response.humanDetection.value
+                                : null,
+                            value: response.humanDetection.variety
                         };
                     }
 
@@ -439,11 +439,11 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.averageDwellTime.value,
-                            value: response.averageDwellTime.variety
-                                ? response.averageDwellTime.value *
-                                  response.averageDwellTime.variety
-                                : null,
                             valueRatio: response.averageDwellTime.variety
+                                ? response.averageDwellTime.variety /
+                                  response.averageDwellTime.value
+                                : null,
+                            value: response.averageDwellTime.variety
                         };
                     }
 
@@ -502,11 +502,11 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.repeatCustomer.value,
-                            value: response.repeatCustomer.variety
-                                ? response.repeatCustomer.value *
-                                  response.repeatCustomer.variety
-                                : null,
                             valueRatio: response.repeatCustomer.variety
+                                ? response.repeatCustomer.variety /
+                                  response.repeatCustomer.value
+                                : null,
+                            value: response.repeatCustomer.variety
                         };
                     }
                     if (response.revenue) {
@@ -519,11 +519,11 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.revenue.value,
-                            value: response.revenue.variety
-                                ? response.revenue.value *
-                                  response.revenue.variety
-                                : null,
                             valueRatio: response.revenue.variety
+                                ? response.revenue.variety /
+                                  response.revenue.value
+                                : null,
+                            value: response.revenue.variety
                         };
                     }
                     if (response.transaction) {
@@ -536,11 +536,11 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.transaction.value,
-                            value: response.transaction.variety
-                                ? response.transaction.value *
-                                  response.transaction.variety
-                                : null,
                             valueRatio: response.transaction.variety
+                                ? response.transaction.variety /
+                                  response.transaction.value
+                                : null,
+                            value: response.transaction.variety
                         };
                     }
                     if (response.conversion) {
@@ -553,11 +553,11 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.conversion.value,
-                            value: response.conversion.variety
-                                ? response.conversion.value *
-                                  response.conversion.variety
-                                : null,
                             valueRatio: response.conversion.variety
+                                ? response.conversion.variety /
+                                  response.conversion.value
+                                : null,
+                            value: response.conversion.variety
                         };
                     }
                     if (response.asp) {
@@ -570,10 +570,10 @@ export class AnlysisDashboard extends Vue {
                                     ? ESign.positive
                                     : ESign.negative,
                             total: response.asp.value,
-                            value: response.asp.variety
-                                ? response.asp.value * response.asp.variety
-                                : null,
                             valueRatio: response.asp.variety
+                                ? response.asp.variety / response.asp.value
+                                : null,
+                            value: response.asp.variety
                         };
                     }
                 }
