@@ -1,20 +1,42 @@
 <template>
 <div>
-    <ivc-filter-form
-            :inf="filterInterface()"
-            :visible="filterVisible"
-            v-on:input="onFilterSubmit($event)"
-        />
-        <ivc-form-quick v-on:viewChange="viewChange($event)">    
-        <!-- 5) custom view templates with <template #view.* /> -->
+    <iv-card
+        v-show="filterVisible" 
+            :label="_('w_Filter')"
+        >
+            <iv-form
+                    ref="form"
+                    class="col-md-9"
+                    :value="params"
+                    @mounted="doMounted"
+                    :interface="filterInterface()"
+                    @submit="onFilterSubmit($event)"
+                    :visible="true"
+                >
+                <template #floorsystem="{$attrs,$listeners}">                   
+                    <b-form-group :label="_('system')" 
+                    class="col-md-6">     
+                        <b-input-group>               
+                            <b-form-radio inline v-model="floorsystem" name="system" value="">{{_("w_Not_Selected")}}</b-form-radio>
+                            <b-form-radio inline v-model="floorsystem" name="system" value="1">SIPASS</b-form-radio>
+                            <b-form-radio inline v-model="floorsystem" name="system" value="800">CCURE</b-form-radio>
+                        </b-input-group>    
+                    </b-form-group>
+                </template>       
+            
+            </iv-form> 
 
-        
-        <!-- 6) custom edit / add template with <template #add.* /> -->
-        <!-- <template #view.image="{$attrs, $listeners}">
-            <b-img v-bind:src="$attrs.value" fluid class="floor-image"/>
-        </template>  -->
-
-    </ivc-form-quick>
+        <div class="col-md-12">
+            <template v-if="isMounted" >            
+                <div class="float-right">
+                    <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                    <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onFilterSubmit()">{{ _("wb_Reset") }}</b-button>                
+                </div>
+            </template>
+        </div>
+        </iv-card>
+        <ivc-form-quick v-on:viewChange="viewChange($event)">  
+        </ivc-form-quick>
     <div class="float-right">                
         <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync()">{{_("w_Manual_Sync")}}</b-button>
     </div>
@@ -85,10 +107,59 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
         return;
     }
     /// Done
-     created(){
-         this.permissionName = PermissionName.floor;
-     }
+    created(){
+        this.permissionName = PermissionName.floor;
+    }
     
+    floorsystem:string="";
+    isMounted:boolean=false;
+    doMounted(){
+        this.isMounted=true;
+        
+    }
+    filterInterface():string{
+        return `interface {
+              /**
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Site")}
+              */
+             sitename?:string;
+             /**
+               * @uiColumnGroup - row1
+              * @uiLabel - ${this._("w_Area")}
+              */
+             areaname?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_ElevatorGroup")}
+              */
+             groupname?:string;
+             
+              /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_Elevator")}
+              */
+              elevatorname?:string;
+             /**
+               * @uiColumnGroup - row4
+              * @uiLabel - ${this._("name")}
+              */
+              name?:string;
+              /**
+              * @uiColumnGroup - row4
+              * @uiLabel - ${this._("system")}
+              */
+              floorsystem?:string;
+          }`;
+    } 
+    onFilterSubmit($event?: any): void {
+        
+      if(!$event)this.floorsystem="";
+
+       let params = $event || {};
+       if(this.floorsystem) params.system=this.floorsystem;
+       this.params = params;
+    }
 }
 </script>
 
