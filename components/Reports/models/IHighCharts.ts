@@ -37,13 +37,6 @@ interface IDayRange {
     endDate: string;
 }
 
-interface IDemographicMount {
-    genderAge: boolean;
-    genderTime: boolean;
-    age: boolean;
-    dwellTime: boolean;
-}
-
 interface IChart {
     date: Date;
     siteObjectId: string;
@@ -106,5 +99,4 @@ interface IChartRepeatVisitorData extends IChart {
 export { IValSelectItem, IBootstrapSelectItem };
 export { ISite, IArea, ISiteAreas, ISiteOfficeHourItem };
 export { IDayRange };
-export { IDemographicMount };
 export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData };

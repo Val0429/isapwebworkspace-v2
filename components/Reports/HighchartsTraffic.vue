@@ -1,10 +1,32 @@
 <template>
     <div class="chart">
         <b-form-group v-if="errorMessage == ''">
+            <!-- site1Day1 -->
             <highcharts
-                ref="chart"
-                v-if="mountChart"
-                :options="chartOptions"
+                ref="chartSite1Day1"
+                v-if="mountChart.site1Day1"
+                :options="chartOptions.site1Day1"
+            ></highcharts>
+
+            <!-- site1DayX -->
+            <highcharts
+                ref="chartSite1DayX"
+                v-if="mountChart.site1DayX"
+                :options="chartOptions.site1DayX"
+            ></highcharts>
+
+            <!-- siteXDay1 -->
+            <highcharts
+                ref="chartSiteXDay1"
+                v-if="mountChart.siteXDay1"
+                :options="chartOptions.siteXDay1"
+            ></highcharts>
+
+            <!-- siteXDayX -->
+            <highcharts
+                ref="chartSiteXDayX"
+                v-if="mountChart.siteXDayX"
+                :options="chartOptions.siteXDayX"
             ></highcharts>
         </b-form-group>
 
@@ -103,9 +125,30 @@ export class HighchartsTraffic extends Vue {
     value: IChartTrafficData[];
 
     errorMessage: string = "";
-    mountChart: boolean = false;
     chartMode: EChartMode = EChartMode.none;
-    chartOptions: any = {};
+
+    mountChart: {
+        site1Day1: boolean;
+        site1DayX: boolean;
+        siteXDay1: boolean;
+        siteXDayX: boolean;
+    } = {
+        site1Day1: false,
+        site1DayX: false,
+        siteXDay1: false,
+        siteXDayX: false
+    };
+    chartOptions: {
+        site1Day1: object;
+        site1DayX: object;
+        siteXDay1: object;
+        siteXDayX: object;
+    } = {
+        site1Day1: {},
+        site1DayX: {},
+        siteXDay1: {},
+        siteXDayX: {}
+    };
 
     @Watch("value", { deep: true })
     private onValueChanged(
@@ -128,6 +171,10 @@ export class HighchartsTraffic extends Vue {
 
     start() {
         this.errorMessage = "";
+        this.mountChart.site1Day1 = false;
+        this.mountChart.site1DayX = false;
+        this.mountChart.siteXDay1 = false;
+        this.mountChart.siteXDayX = false;
         this.chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
@@ -259,7 +306,7 @@ export class HighchartsTraffic extends Vue {
                 });
 
                 // set chart options
-                this.chartOptions = {
+                this.chartOptions.site1Day1 = {
                     chart: { zoomType: "x" },
                     exporting: { enabled: false },
                     title: { text: null },
@@ -313,7 +360,7 @@ export class HighchartsTraffic extends Vue {
             case EAreaMode.none:
             default:
                 // set chart options
-                this.chartOptions = {
+                this.chartOptions.site1Day1 = {
                     chart: { zoomType: "x" },
                     exporting: { enabled: false },
                     title: { text: null },
@@ -377,7 +424,7 @@ export class HighchartsTraffic extends Vue {
                 break;
         }
 
-        this.mountChart = true;
+        this.mountChart.site1Day1 = true;
     }
 
     ////////////////////////// site 1 day X //////////////////////////
@@ -677,7 +724,7 @@ export class HighchartsTraffic extends Vue {
         }
 
         // set chart options
-        this.chartOptions = {
+        this.chartOptions.site1DayX = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -762,7 +809,7 @@ export class HighchartsTraffic extends Vue {
             series: tempSeries
         };
 
-        this.mountChart = true;
+        this.mountChart.site1DayX = true;
     }
 
     ////////////////////////// site X day 1 //////////////////////////
@@ -837,7 +884,7 @@ export class HighchartsTraffic extends Vue {
         }
 
         // set chart options
-        this.chartOptions = {
+        this.chartOptions.siteXDay1 = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -905,7 +952,7 @@ export class HighchartsTraffic extends Vue {
             series: tempSeries
         };
 
-        this.mountChart = true;
+        this.mountChart.siteXDay1 = true;
     }
 
     ////////////////////////// site X day X //////////////////////////
@@ -1241,7 +1288,7 @@ export class HighchartsTraffic extends Vue {
             }
         }
 
-        this.chartOptions = {
+        this.chartOptions.siteXDayX = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1263,81 +1310,76 @@ export class HighchartsTraffic extends Vue {
                 backgroundColor: "#333",
                 style: { color: "#fff" },
                 formatter: function(tooltip: any) {
+                    console.log(tooltip);
                     let self: any = this;
                     let result = "";
                     let siteId = "";
-                    if (
-                        self.point != undefined &&
-                        self.point.series != undefined &&
-                        self.point.series.name != undefined
-                    ) {
-                        let startIndex = self.point.series.name.indexOf(">__");
-                        let endIndex = self.point.series.name.indexOf("__<");
-                        siteId = self.point.series.name.substring(
-                            startIndex + 3,
-                            endIndex
+
+                    try {
+                        let siteStartIndex = self.point.series.name.indexOf(
+                            ">__"
                         );
-                    }
+                        let siteEndIndex = self.point.series.name.indexOf(
+                            "__<"
+                        );
+                        siteId = self.point.series.name.substring(
+                            siteStartIndex + 3,
+                            siteEndIndex
+                        );
 
-                    if (
-                        siteId != undefined &&
-                        siteId != "" &&
-                        self.x != undefined
-                    ) {
-                        try {
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
+                        let valueStartIndex = self.x.indexOf(">{");
+                        let valueEndIndex = self.x.indexOf("}<");
+                        let valueJson = self.x.substring(
+                            valueStartIndex + 1,
+                            valueEndIndex + 1
+                        );
+                        let newValue: any = JSON.parse(valueJson);
 
-                            for (let site of newValue.sites) {
-                                if (site.siteObjectId == siteId) {
-                                    switch (newValue.timeMode) {
-                                        case ETimeMode.year:
-                                        case ETimeMode.quarter:
-                                        case ETimeMode.month:
-                                        case ETimeMode.week:
-                                            result += `${site.siteName}<br>`;
-                                            result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
-                                            result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
-                                            result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
-                                            result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
-                                            result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
-                                            result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
-                                            result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
-                                            break;
-                                        case ETimeMode.day:
-                                        case ETimeMode.hour:
-                                        default:
-                                            result += `${site.siteName}<br>`;
-                                            result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                            result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
-                                            result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
-                                            result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
-                                            result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
-                                            result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
-                                            result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
-                                            result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
-                                            result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
-                                            break;
-                                    }
-                                    break;
+                        for (let site of newValue.sites) {
+                            if (site.siteObjectId == siteId) {
+                                switch (newValue.timeMode) {
+                                    case ETimeMode.year:
+                                    case ETimeMode.quarter:
+                                    case ETimeMode.month:
+                                    case ETimeMode.week:
+                                        result += `${site.siteName}<br>`;
+                                        result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
+                                        result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
+                                        result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
+                                        result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
+                                        result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
+                                        result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                        result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
+                                        break;
+                                    case ETimeMode.day:
+                                    case ETimeMode.hour:
+                                    default:
+                                        result += `${site.siteName}<br>`;
+                                        result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
+                                        result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
+                                        result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
+                                        result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
+                                        result += `${newValue.i18n.traffic}: ${site.traffic}<br>`;
+                                        result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
+                                        result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
+                                        result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                        result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
+                                        break;
                                 }
+                                break;
                             }
-                        } catch (e) {
-                            console.log(e);
                         }
+                    } catch (e) {
+                        console.log(e);
                     }
+
                     return result;
                 }
             },
             series: tempSeries
         };
 
-        this.mountChart = true;
+        this.mountChart.siteXDayX = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
