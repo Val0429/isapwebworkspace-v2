@@ -91,7 +91,7 @@
                                 <img src="../../assets/images/men.png">
                                 <div :class="eSign.none != anlysisData.demographic.sign ? (eSign.positive == anlysisData.demographic.sign ?  'ratio green':'ratio red') : 'ratio'">
                                     <span v-if="eSign.none != anlysisData.demographic.sign">{{eSign.positive == anlysisData.demographic.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.demographic.value != null ? toPercent(anlysisData.demographic.value,1) : "N/A"}} </span><br>
+                                    <span>{{anlysisData.demographic.value != null ? numberWithCommas(anlysisData.demographic.value) : "N/A"}} </span><br>
                                     <span>{{anlysisData.demographic.valueRatio != null ? toPercent(anlysisData.demographic.valueRatio,1) : "N/A"}}</span>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                                 <img src="../../assets/images/women.png">
                                 <div :class="eSign.none != anlysisData.demographic.sign2 ? (eSign.positive == anlysisData.demographic.sign2 ?  'ratio green':'ratio red') : 'ratio'">
                                     <span v-if="eSign.none != anlysisData.demographic.sign2">{{eSign.positive == anlysisData.demographic.sign2 ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.demographic.value2 != null ? toPercent(anlysisData.demographic.value2,1): "N/A"}} </span><br>
+                                    <span>{{anlysisData.demographic.value2 != null ? numberWithCommas(anlysisData.demographic.value2): "N/A"}} </span><br>
                                     <span>{{anlysisData.demographic.valueRatio2 != null ? toPercent(anlysisData.demographic.valueRatio2,1) : "N/A"}}</span>
                                 </div>
                             </div>
