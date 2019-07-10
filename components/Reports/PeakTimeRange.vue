@@ -19,7 +19,7 @@
             </thead>
             <tbody>
                 <tr v-for="(items, key, index) in pData.body">
-                    <td v-if="dayXSiteX != eDayXSiteX.siteXDay1"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getMonth() + 1) + "/" + (new Date(items.title)).getUTCDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                    <td v-if="dayXSiteX != eDayXSiteX.siteXDay1"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getMonth() + 1) + "/" + (new Date(items.title)).getDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
                     <td v-if="dayXSiteX == eDayXSiteX.siteXDay1"> {{items.title}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
@@ -141,15 +141,15 @@ export class PeakTimeRange extends Vue {
         for (let officeHourItem of this.siteItems[0].officeHour) {
             if (
                 sTime == null ||
-                sTime > new Date(officeHourItem.startDate).getUTCHours()
+                sTime > new Date(officeHourItem.startDate).getHours()
             ) {
-                sTime = new Date(officeHourItem.startDate).getUTCHours();
+                sTime = new Date(officeHourItem.startDate).getHours();
             }
             if (
                 eTime == null ||
-                eTime < new Date(officeHourItem.endDate).getUTCHours()
+                eTime < new Date(officeHourItem.endDate).getHours()
             ) {
-                eTime = new Date(officeHourItem.endDate).getUTCHours();
+                eTime = new Date(officeHourItem.endDate).getHours();
             }
         }
         this.pData.head = [];
@@ -167,7 +167,7 @@ export class PeakTimeRange extends Vue {
                     value: 0
                 };
                 for (let contextItem of bodyItme.context) {
-                    if (headItem == new Date(contextItem.time).getUTCHours()) {
+                    if (headItem == new Date(contextItem.time).getHours()) {
                         context = {
                             time: contextItem.time,
                             value: contextItem.value
@@ -210,17 +210,15 @@ export class PeakTimeRange extends Vue {
                 for (let officeHourItem of this.siteItems[0].officeHour) {
                     if (
                         sTime == null ||
-                        sTime > new Date(officeHourItem.startDate).getUTCHours()
+                        sTime > new Date(officeHourItem.startDate).getHours()
                     ) {
-                        sTime = new Date(
-                            officeHourItem.startDate
-                        ).getUTCHours();
+                        sTime = new Date(officeHourItem.startDate).getHours();
                     }
                     if (
                         eTime == null ||
-                        eTime < new Date(officeHourItem.endDate).getUTCHours()
+                        eTime < new Date(officeHourItem.endDate).getHours()
                     ) {
-                        eTime = new Date(officeHourItem.endDate).getUTCHours();
+                        eTime = new Date(officeHourItem.endDate).getHours();
                     }
                 }
 
@@ -241,7 +239,7 @@ export class PeakTimeRange extends Vue {
                         for (let contextItem of bodyItme.context) {
                             if (
                                 headItem ==
-                                new Date(contextItem.time).getUTCHours()
+                                new Date(contextItem.time).getHours()
                             ) {
                                 context = {
                                     time: contextItem.time,
@@ -285,15 +283,15 @@ export class PeakTimeRange extends Vue {
             for (let officeHourItem of this.siteItems[0].officeHour) {
                 if (
                     sTime == null ||
-                    sTime > new Date(officeHourItem.startDate).getUTCHours()
+                    sTime > new Date(officeHourItem.startDate).getHours()
                 ) {
-                    sTime = new Date(officeHourItem.startDate).getUTCHours();
+                    sTime = new Date(officeHourItem.startDate).getHours();
                 }
                 if (
                     eTime == null ||
-                    eTime < new Date(officeHourItem.endDate).getUTCHours()
+                    eTime < new Date(officeHourItem.endDate).getHours()
                 ) {
-                    eTime = new Date(officeHourItem.endDate).getUTCHours();
+                    eTime = new Date(officeHourItem.endDate).getHours();
                 }
             }
 
@@ -316,7 +314,7 @@ export class PeakTimeRange extends Vue {
                             for (let contextItem of bodyItme.context) {
                                 if (
                                     headItem ==
-                                    new Date(contextItem.time).getUTCHours()
+                                    new Date(contextItem.time).getHours()
                                 ) {
                                     context = {
                                         time: contextItem.time,
@@ -363,17 +361,15 @@ export class PeakTimeRange extends Vue {
                 for (let officeHourItem of this.siteItems[0].officeHour) {
                     if (
                         sTime == null ||
-                        sTime > new Date(officeHourItem.startDate).getUTCHours()
+                        sTime > new Date(officeHourItem.startDate).getHours()
                     ) {
-                        sTime = new Date(
-                            officeHourItem.startDate
-                        ).getUTCHours();
+                        sTime = new Date(officeHourItem.startDate).getHours();
                     }
                     if (
                         eTime == null ||
-                        eTime < new Date(officeHourItem.endDate).getUTCHours()
+                        eTime < new Date(officeHourItem.endDate).getHours()
                     ) {
-                        eTime = new Date(officeHourItem.endDate).getUTCHours();
+                        eTime = new Date(officeHourItem.endDate).getHours();
                     }
                 }
 
@@ -394,7 +390,7 @@ export class PeakTimeRange extends Vue {
                         for (let contextItem of bodyItme.context) {
                             if (
                                 headItem ==
-                                new Date(contextItem.time).getUTCHours()
+                                new Date(contextItem.time).getHours()
                             ) {
                                 context = {
                                     time: contextItem.time,
