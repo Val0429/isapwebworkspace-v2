@@ -247,7 +247,7 @@ export default class ReportTraffic extends Vue {
     filterData: IFilterCondition = {
         startDate: new Date(),
         endDate: new Date(),
-        firstSiteId: '',
+        firstSiteId: "",
         siteIds: [],
         tagIds: [],
         type: ETimeMode.none
@@ -779,7 +779,6 @@ export default class ReportTraffic extends Vue {
                                 }
                             }
                         }
-                        console.log("inout", inCount, outCount);
                         tempArray[index].in.push(inCount);
                         tempArray[index].out.push(outCount);
                     }
@@ -1605,7 +1604,7 @@ export default class ReportTraffic extends Vue {
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
     }
