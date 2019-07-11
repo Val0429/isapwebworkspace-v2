@@ -1,7 +1,6 @@
 <template>
     <div class="chart">
-        <b-form-group v-if="errorMessage == ''">
-
+        <b-form-group>
             <!-- site1Day1 -->
             <highcharts
                 ref="chartSite1Day1"
@@ -30,13 +29,6 @@
                 :options="chartOptions.siteXDayX"
             ></highcharts>
 
-        </b-form-group>
-
-        <b-form-group
-            v-if="errorMessage != ''"
-            class="chart-error-message"
-            :label="errorMessage"
-        >
         </b-form-group>
     </div>
 </template>
@@ -126,7 +118,6 @@ export class HighchartsOccupancy extends Vue {
     })
     value: IChartOccupancyData[];
 
-    errorMessage: string = "";
     chartMode: EChartMode = EChartMode.none;
 
     mountChart: {
@@ -172,7 +163,6 @@ export class HighchartsOccupancy extends Vue {
     mounted() {}
 
     start() {
-        this.errorMessage = "";
         this.mountChart.site1Day1 = false;
         this.mountChart.site1DayX = false;
         this.mountChart.siteXDay1 = false;
@@ -182,19 +172,7 @@ export class HighchartsOccupancy extends Vue {
             this.endDate,
             this.sites
         );
-        if (isNaN(this.startDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateStart");
-            return false;
-        }
-        if (isNaN(this.endDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateEnd");
-            return false;
-        }
-        if (this.chartMode == EChartMode.none) {
-            this.errorMessage = this._("w_Report_ErrorChartMode");
-            return false;
-        }
-
+        
         switch (this.chartMode) {
             case EChartMode.site1Day1:
                 this.initSite1Day1();

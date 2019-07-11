@@ -1426,20 +1426,24 @@
 		//// 以下為 analysis filter ////
 
 		async receiveFilterData(filterData) {
-			this.inputFormData = {
+			
+            let param = JSON.parse(JSON.stringify(filterData));
+            this.filterData = filterData;
+            this.inputFormData = {
 				areaId: "",
 				groupId: "",
 				deviceId: "",
 				type: "",
 				isIncludedEmployee: "no"
-			};
+            };
 
 			await this.$server
-				.C("/report/demographic/summary", filterData)
+				.C("/report/demographic/summary", param)
 				.then((response: any) => {
 					if (response !== undefined) {
 						this.responseData = response;
-						this.officeHourItemDetail = this.responseData.officeHours;
+                        this.officeHourItemDetail = this.responseData.officeHours;
+                        this.resolveSummary();
 					}
 				})
 				.catch((e: any) => {
@@ -1448,11 +1452,11 @@
 					}
 					console.log(e);
 					return false;
-				});
-
-			this.filterData = filterData;
-			this.filterData.startDate = new Date(this.filterData.startDate);
-			this.filterData.endDate = new Date(this.filterData.endDate);
+                });
+                
+        }
+        
+        resolveSummary () {
 
 			console.log("this.filterData  - ", this.filterData);
 			console.log("this.responseData  - ", this.responseData);
@@ -1504,33 +1508,6 @@
 				}
 			}
 
-			/*
-			   for (const filterSiteId of this.filterData.siteIds) {
-				for (const detail of this.officeHourItemDetail) {
-					for (const officeHourSiteId of detail.sites) {
-						if (filterSiteId === officeHourSiteId.objectId) {
-							tempISite = {
-								objectId: officeHourSiteId.objectId,
-								name: officeHourSiteId.name,
-								officeHour: []
-							};
-
-							for (const dayRangesValue of detail.dayRanges) {
-								tempISite.officeHour.push({
-									startDay: dayRangesValue.startDay,
-									endDay: dayRangesValue.endDay,
-									startDate: dayRangesValue.startDate,
-									endDate: dayRangesValue.endDate
-								});
-							}
-
-							break;
-						}
-					}
-				}
-			}
-			*/
-
 			// this.sites.push(tempISite);
 			this.dTimeMode = this.filterData.type;
 			this.pSiteIds = this.filterData.siteIds;
@@ -1551,7 +1528,7 @@
 			console.log(" - ", this.timeMode);
 			console.log(" - ", this.areaMode);
 			console.log(" - ", this.chartDatas);
-		}
+        }
 
 		checkDateAndSite(
 			date1: Date | string,

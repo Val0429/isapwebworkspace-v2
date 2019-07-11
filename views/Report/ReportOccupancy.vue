@@ -936,6 +936,8 @@ export default class ReportOccupancy extends Vue {
     //// 以下為 analysis filter ////
 
     async receiveFilterData(filterData) {
+        let param = JSON.parse(JSON.stringify(filterData));
+        this.filterData = filterData;
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -945,11 +947,12 @@ export default class ReportOccupancy extends Vue {
         };
 
         await this.$server
-            .C("/report/human-detection/summary", filterData)
+            .C("/report/human-detection/summary", param)
             .then((response: any) => {
                 if (response !== undefined) {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
+                    this.resolveSummary();
                 }
             })
             .catch((e: any) => {
@@ -959,10 +962,9 @@ export default class ReportOccupancy extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        this.filterData = filterData;
-        this.filterData.startDate = new Date(this.filterData.startDate);
-        this.filterData.endDate = new Date(this.filterData.endDate);
+    async resolveSummary() {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
@@ -977,22 +979,6 @@ export default class ReportOccupancy extends Vue {
             type: this.filterData.type,
             isIncludedEmployee: "no"
         };
-
-        // let finalAreas = [];
-        // this.filterData.siteIds.map(siteIds => {
-        //     this.allAreaItem.map(area => {
-        //         if (area.site.objectId === siteIds) {
-        //            //  let tempAreas = [];
-        //             let tempArea: any = {};
-        //             tempArea = {
-        //                 name: area.name,
-        //                 objectId: area.objectId
-        //             };
-        //             finalAreas.push(tempArea);
-        //             console.log('887 finalAreas - ', finalAreas);
-        //         }
-        //     });
-        // });
 
         // get office hour data
         let tempISite: any = {};
@@ -1043,33 +1029,6 @@ export default class ReportOccupancy extends Vue {
             this.sites.push(tempISite);
             this.sitesItem.push(tempISite);
         }
-
-        /*
-		   for (const filterSiteId of this.filterData.siteIds) {
-			for (const detail of this.officeHourItemDetail) {
-				for (const officeHourSiteId of detail.sites) {
-					if (filterSiteId === officeHourSiteId.objectId) {
-						tempISite = {
-							objectId: officeHourSiteId.objectId,
-							name: officeHourSiteId.name,
-							officeHour: []
-						};
-
-						for (const dayRangesValue of detail.dayRanges) {
-							tempISite.officeHour.push({
-								startDay: dayRangesValue.startDay,
-								endDay: dayRangesValue.endDay,
-								startDate: dayRangesValue.startDate,
-								endDate: dayRangesValue.endDate
-							});
-						}
-
-						break;
-					}
-				}
-			}
-		}
-		*/
 
         // this.sites.push(tempISite);
         this.dTimeMode = this.filterData.type;
@@ -1161,16 +1120,15 @@ export default class ReportOccupancy extends Vue {
                         out2: []
                     };
 
-                  
-                        if (
-                            tempArray.every(
-                                t =>  t.group == undefined ||t.group.objectId == body.group.objectId
-                            )
-                        ) {
-                               tempArray.push(body);
-                        }
-                    
-                
+                    if (
+                        tempArray.every(
+                            t =>
+                                t.group == undefined ||
+                                t.group.objectId == body.group.objectId
+                        )
+                    ) {
+                        tempArray.push(body);
+                    }
                 }
             } else {
                 let body = {
@@ -1184,9 +1142,13 @@ export default class ReportOccupancy extends Vue {
                 };
 
                 if (
-                    tempArray.every(t => t.area == undefined || t.area.objectId == body.area.objectId)
+                    tempArray.every(
+                        t =>
+                            t.area == undefined ||
+                            t.area.objectId == body.area.objectId
+                    )
                 ) {
-                   tempArray.push(body);
+                    tempArray.push(body);
                 }
             }
         }
@@ -1361,20 +1323,21 @@ export default class ReportOccupancy extends Vue {
                         out2: []
                     };
 
-                        if (
-                            tempArray.every(
-                                t => t.group == undefined || t.group.objectId == body.group.objectId
-                            )
-                        ) {
-                             tempArray.push(body);
-                        }
-                   
+                    if (
+                        tempArray.every(
+                            t =>
+                                t.group == undefined ||
+                                t.group.objectId == body.group.objectId
+                        )
+                    ) {
+                        tempArray.push(body);
+                    }
                 }
             } else {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
-                       group: null,
+                    group: null,
                     in: [],
                     out: [],
                     in2: [],
@@ -1382,9 +1345,13 @@ export default class ReportOccupancy extends Vue {
                 };
 
                 if (
-                    tempArray.every(t => t.area == undefined || t.area.objectId == body.area.objectId)
+                    tempArray.every(
+                        t =>
+                            t.area == undefined ||
+                            t.area.objectId == body.area.objectId
+                    )
                 ) {
-                   tempArray.push(body);
+                    tempArray.push(body);
                 }
             }
         }

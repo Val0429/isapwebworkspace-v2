@@ -198,11 +198,12 @@ export default class ReportRepeatVisitor extends Vue {
     filterData: IFilterCondition = {
         startDate: new Date(),
         endDate: new Date(),
-        firstSiteId: '',
+        firstSiteId: "",
         siteIds: [],
         tagIds: [],
         type: ETimeMode.none
-    };    responseData: any = {};
+    };
+    responseData: any = {};
     userData: any = [];
     allAreaItem: any = [];
     siteAreaItem: any = {};
@@ -899,6 +900,8 @@ export default class ReportRepeatVisitor extends Vue {
     //// 以下為 analysis filter ////
 
     async receiveFilterData(filterData) {
+        let param = JSON.parse(JSON.stringify(filterData));
+        this.filterData = filterData;
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -913,6 +916,7 @@ export default class ReportRepeatVisitor extends Vue {
                 if (response !== undefined) {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
+                    this.resolveSummary();
                 }
             })
             .catch((e: any) => {
@@ -922,10 +926,9 @@ export default class ReportRepeatVisitor extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        this.filterData = filterData;
-        this.filterData.startDate = new Date(this.filterData.startDate);
-        this.filterData.endDate = new Date(this.filterData.endDate);
+    resolveSummary() {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
@@ -1090,12 +1093,18 @@ export default class ReportRepeatVisitor extends Vue {
         siteId1: string,
         siteId2: string
     ): boolean {
-        let tempDate1 = typeof date1 === "string" ? Datetime.DateToZero(new Date(date1)) : Datetime.DateToZero(date1);
-        let tempDate2 = typeof date2 === "string" ? Datetime.DateToZero(new Date(date2)) : Datetime.DateToZero(date2);
+        let tempDate1 =
+            typeof date1 === "string"
+                ? Datetime.DateToZero(new Date(date1))
+                : Datetime.DateToZero(date1);
+        let tempDate2 =
+            typeof date2 === "string"
+                ? Datetime.DateToZero(new Date(date2))
+                : Datetime.DateToZero(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-            Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
             siteId1 === siteId2
         );
     }

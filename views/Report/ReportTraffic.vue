@@ -255,7 +255,8 @@ export default class ReportTraffic extends Vue {
     selecteds: IRegionTreeSelected[] = [];
 
     // OfficeHour 相關
-    officeHourItemDetail: any = {};
+    officeHourItemDetail: any = [];
+
     // recipient 相關
     modalShow: boolean = false;
 
@@ -791,7 +792,8 @@ export default class ReportTraffic extends Vue {
                         (new Date(x).getMonth() + 1) +
                         "/" +
                         new Date(x).getDate() +
-                        " " +   ReportService.showWeek(new Date(x).getDay())
+                        " " +
+                        ReportService.showWeek(new Date(x).getDay())
                 );
                 break;
         }
@@ -1364,22 +1366,24 @@ export default class ReportTraffic extends Vue {
     //// 以下為 analysis filter ////
 
     // Author: Tina
-    async receiveFilterData(filterData) {
+    async receiveFilterData(filterData: IFilterCondition) {
+        let param = JSON.parse(JSON.stringify(filterData));
+        this.filterData = filterData;
         this.inputFormData = {
             areaId: "",
             groupId: "",
             deviceId: "",
             type: "",
-            inOrOut: "in",
             isIncludedEmployee: "no"
         };
 
         await this.$server
-            .C("/report/people-counting/summary", filterData)
+            .C("/report/people-counting/summary", param)
             .then((response: any) => {
                 if (response !== undefined) {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
+                    this.resolveSummary();
                 }
             })
             .catch((e: any) => {
@@ -1389,12 +1393,10 @@ export default class ReportTraffic extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        this.filterData = filterData;
-        this.filterData.startDate = new Date(this.filterData.startDate);
-        this.filterData.endDate = new Date(this.filterData.endDate);
-
-        console.log("this.filterData  - ", this.filterData);
+    // Author: Tina
+    resolveSummary() {
         console.log("this.responseData  - ", this.responseData);
 
         if (this.filterData.siteIds.length === 1) {
@@ -1535,7 +1537,6 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-
         // 計算 traffic
         for (let summary of datas) {
             let summaryDateFormat = isOneDay
@@ -1645,7 +1646,7 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-        console.log("!!! 1" , new Date().getTime());
+        console.log("!!! 1", new Date().getTime());
         this.chartDatas = tempChartDatas;
     }
 

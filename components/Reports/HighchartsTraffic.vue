@@ -1,40 +1,33 @@
 <template>
     <div class="chart">
-        <b-form-group v-if="errorMessage == ''">
-            <!-- site1Day1 -->
-            <highcharts
-                ref="chartSite1Day1"
-                v-if="mountChart.site1Day1"
-                :options="chartOptions.site1Day1"
-            ></highcharts>
+        <b-form-group></b-form-group>
+        <!-- site1Day1 -->
+        <highcharts
+            ref="chartSite1Day1"
+            v-if="mountChart.site1Day1"
+            :options="chartOptions.site1Day1"
+        ></highcharts>
 
-            <!-- site1DayX -->
-            <highcharts
-                ref="chartSite1DayX"
-                v-if="mountChart.site1DayX"
-                :options="chartOptions.site1DayX"
-            ></highcharts>
+        <!-- site1DayX -->
+        <highcharts
+            ref="chartSite1DayX"
+            v-if="mountChart.site1DayX"
+            :options="chartOptions.site1DayX"
+        ></highcharts>
 
-            <!-- siteXDay1 -->
-            <highcharts
-                ref="chartSiteXDay1"
-                v-if="mountChart.siteXDay1"
-                :options="chartOptions.siteXDay1"
-            ></highcharts>
+        <!-- siteXDay1 -->
+        <highcharts
+            ref="chartSiteXDay1"
+            v-if="mountChart.siteXDay1"
+            :options="chartOptions.siteXDay1"
+        ></highcharts>
 
-            <!-- siteXDayX -->
-            <highcharts
-                ref="chartSiteXDayX"
-                v-if="mountChart.siteXDayX"
-                :options="chartOptions.siteXDayX"
-            ></highcharts>
-        </b-form-group>
-
-        <b-form-group
-            v-if="errorMessage != ''"
-            class="chart-error-message"
-            :label="errorMessage"
-        >
+        <!-- siteXDayX -->
+        <highcharts
+            ref="chartSiteXDayX"
+            v-if="mountChart.siteXDayX"
+            :options="chartOptions.siteXDayX"
+        ></highcharts>
         </b-form-group>
     </div>
 </template>
@@ -124,7 +117,6 @@ export class HighchartsTraffic extends Vue {
     })
     value: IChartTrafficData[];
 
-    errorMessage: string = "";
     chartMode: EChartMode = EChartMode.none;
 
     mountChart: {
@@ -155,13 +147,11 @@ export class HighchartsTraffic extends Vue {
         newval: IChartTrafficData[],
         oldval: IChartTrafficData[]
     ) {
-        console.log("!!! onValueChanged");
         this.start();
     }
 
     @Watch("timeMode")
     private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
-        console.log("!!! onTimeModeChanged");
         this.start();
     }
 
@@ -172,8 +162,6 @@ export class HighchartsTraffic extends Vue {
     mounted() {}
 
     start() {
-        console.log("!!! 2" , new Date().getTime());
-        this.errorMessage = "";
         this.mountChart.site1Day1 = false;
         this.mountChart.site1DayX = false;
         this.mountChart.siteXDay1 = false;
@@ -183,18 +171,6 @@ export class HighchartsTraffic extends Vue {
             this.endDate,
             this.sites
         );
-        if (isNaN(this.startDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateStart");
-            return false;
-        }
-        if (isNaN(this.endDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateEnd");
-            return false;
-        }
-        if (this.chartMode == EChartMode.none) {
-            this.errorMessage = this._("w_Report_ErrorChartMode");
-            return false;
-        }
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
@@ -212,8 +188,6 @@ export class HighchartsTraffic extends Vue {
             default:
                 break;
         }
-
-        console.log("!!! 3" , new Date().getTime());
 
         console.log(
             "chart prop: ",
@@ -272,13 +246,15 @@ export class HighchartsTraffic extends Vue {
         // set data
         for (let categorie of tempHourStrings) {
             let haveValue = false;
-            for (let loopValue of tempValues) {
+            for (let i in tempValues) {
+                let loopValue = tempValues[i];
                 let value: IChartTrafficData = this.anysislyChartValue(
                     loopValue
                 );
                 if (value.timeString == categorie) {
                     haveValue = true;
                     tempResult.push(value);
+                    tempValues.splice(parseInt(i), 1);
                     break;
                 }
             }
@@ -462,24 +438,21 @@ export class HighchartsTraffic extends Vue {
         ];
 
         // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
         // 設置最大值避免無窮迴圈
         let categorieMaxlength = 10000;
         let categorieNowlength = 0;
 
         // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
         let dateGap: number =
             Math.floor(
-                Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                    86400000
+                Math.abs(
+                    sortDate.startDate.getTime() - sortDate.endDate.getTime()
+                ) / 86400000
             ) + 1;
 
         while (
@@ -633,7 +606,8 @@ export class HighchartsTraffic extends Vue {
                 tempChartData.dateStart
             );
 
-            for (let val of tempValues) {
+            for (let i in tempValues) {
+                let val = tempValues[i];
                 let value: IChartTrafficData = this.anysislyChartValue(val);
                 let valTimestamp = value.date.getTime();
 
@@ -650,6 +624,7 @@ export class HighchartsTraffic extends Vue {
                     tempChartData.weatherIcon = HighchartsService.weatherIcon(
                         value.weather
                     );
+                    tempValues.splice(parseInt(i), 1);
                 }
             }
 
@@ -848,14 +823,26 @@ export class HighchartsTraffic extends Vue {
 
         for (let site of this.sites) {
             let haveValue = false;
-            for (let loopValue of tempValues) {
+            for (let i in tempValues) {
+                let loopValue = tempValues[i];
                 let value: IChartTrafficData = this.anysislyChartValue(
                     loopValue
                 );
                 if (value.siteObjectId == site.objectId) {
                     haveValue = true;
-                    tempResult.push(value);
-                    break;
+                    let haveResult = false;
+                    for (let result of tempResult) {
+                        if (result.siteObjectId == site.objectId) {
+                            haveResult = true;
+                            result.traffic += value.traffic;
+                            result.revenue += value.revenue;
+                            break;
+                        }
+                    }
+                    if (!haveResult) {
+                        tempResult.push(value);
+                    }
+                    tempValues.splice(parseInt(i), 1);
                 }
             }
 
@@ -974,23 +961,20 @@ export class HighchartsTraffic extends Vue {
         }[] = [];
 
         // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
         // 設置最大值避免無窮迴圈
         let categorieMaxlength = 10000;
         let categorieNowlength = 0;
 
         // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
         let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
+            Math.abs(
+                sortDate.startDate.getTime() - sortDate.endDate.getTime()
+            ) / 86400000
         );
 
         while (
@@ -1177,7 +1161,8 @@ export class HighchartsTraffic extends Vue {
                 tempSiteValue.siteObjectId = site.objectId;
                 tempSiteValue.siteName = site.name;
 
-                for (let val of tempValues) {
+                for (let i in tempValues) {
+                    let val = tempValues[i];
                     let value: IChartTrafficData = this.anysislyChartValue(val);
                     let valTimestamp = value.date.getTime();
 
@@ -1194,9 +1179,10 @@ export class HighchartsTraffic extends Vue {
                         tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
                             value.weather
                         );
+                        tempValues.splice(parseInt(i), 1);
+                        break;
                     }
                 }
-
                 tempResultItem.sites.push(tempSiteValue);
             }
 
