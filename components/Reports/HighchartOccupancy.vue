@@ -172,7 +172,7 @@ export class HighchartsOccupancy extends Vue {
             this.endDate,
             this.sites
         );
-        
+
         switch (this.chartMode) {
             case EChartMode.site1Day1:
                 this.initSite1Day1();
@@ -237,7 +237,7 @@ export class HighchartsOccupancy extends Vue {
             for (let area of site.areas) {
                 tempSeries.push({
                     areaId: area.objectId,
-                    areaName: area.name,
+                    name: area.name,
                     data: []
                 });
             }
@@ -253,11 +253,11 @@ export class HighchartsOccupancy extends Vue {
                 serie.data.push(0);
             }
 
-            for (let loopValue of tempValues) {
+            for (let j in tempValues) {
+                let loopValue = tempValues[j];
                 let value: IChartOccupancyData = this.anysislyChartValue(
                     loopValue
                 );
-
                 let tempValueHour = Datetime.DateTime2String(
                     value.date,
                     "HH:mm"
@@ -280,7 +280,7 @@ export class HighchartsOccupancy extends Vue {
             for (let serie of tempSeries) {
                 tempCategorieData.datas.push({
                     areaId: serie.areaId,
-                    areaName: serie.areaName,
+                    areaName: serie.name,
                     occupancy: HighchartsService.formatFloat(serie.data[i])
                 });
             }
@@ -371,23 +371,20 @@ export class HighchartsOccupancy extends Vue {
         }
 
         // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
         // 設置最大值避免無窮迴圈
         let categorieMaxlength = 10000;
         let categorieNowlength = 0;
 
         // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
         let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
+            Math.abs(
+                sortDate.startDate.getTime() - sortDate.endDate.getTime()
+            ) / 86400000
         );
 
         while (
@@ -728,7 +725,7 @@ export class HighchartsOccupancy extends Vue {
             },
             series: tempSeries
         };
-        
+
         this.mountChart.siteXDay1 = true;
         let self = this;
         setTimeout(function() {
@@ -752,23 +749,20 @@ export class HighchartsOccupancy extends Vue {
         }[] = [];
 
         // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
         // 設置最大值避免無窮迴圈
         let categorieMaxlength = 10000;
         let categorieNowlength = 0;
 
         // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
         let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
+            Math.abs(
+                sortDate.startDate.getTime() - sortDate.endDate.getTime()
+            ) / 86400000
         );
 
         while (

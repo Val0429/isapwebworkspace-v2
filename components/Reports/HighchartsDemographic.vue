@@ -545,23 +545,20 @@ export class HighchartsDemographic extends Vue {
         let tempTotalCount: number = 0;
 
         // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
         // 設置最大值避免無窮迴圈
         let categorieMaxlength = 10000;
         let categorieNowlength = 0;
 
         // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
         let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
+            Math.abs(
+                sortDate.startDate.getTime() - sortDate.endDate.getTime()
+            ) / 86400000
         );
 
         while (
@@ -715,6 +712,7 @@ export class HighchartsDemographic extends Vue {
                 tempChartData.dateStart
             );
 
+            let spliceIndexList: number[] = [];
             for (let i in tempValues) {
                 let val = tempValues[i];
                 let value: IChartDemographicData = this.anysislyChartValue(val);
@@ -736,8 +734,13 @@ export class HighchartsDemographic extends Vue {
                             value.weather
                         );
                     }
-                    tempValues.splice(parseInt(i), 1);
+                    spliceIndexList.push(parseInt(i));
                 }
+            }
+
+            // tempValues 減肥
+            for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                tempValues.splice(spliceIndexList[i], 1);
             }
 
             // push single series data
@@ -1031,23 +1034,20 @@ export class HighchartsDemographic extends Vue {
         let tempTotalCount: number = 0;
 
         // 避免時間相反造成無窮迴圈
-        if (this.startDate.getTime() > this.endDate.getTime()) {
-            let tempDate = new Date(this.startDate.getTime());
-            this.startDate = new Date(this.endDate.getTime());
-            this.endDate = new Date(tempDate.getTime());
-        }
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
         // 設置最大值避免無窮迴圈
         let categorieMaxlength = 10000;
         let categorieNowlength = 0;
 
         // 時間累加判斷用
-        let tempTimestamp: number = this.startDate.getTime();
-        let endTimestamp: number = this.endDate.getTime();
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
         let dateGap: number = Math.ceil(
-            Math.abs(this.startDate.getTime() - this.endDate.getTime()) /
-                86400000
+            Math.abs(
+                sortDate.startDate.getTime() - sortDate.endDate.getTime()
+            ) / 86400000
         );
 
         while (
@@ -1233,7 +1233,9 @@ export class HighchartsDemographic extends Vue {
                 tempSiteValue.siteObjectId = site.objectId;
                 tempSiteValue.siteName = site.name;
 
-                for (let val of tempValues) {
+                let spliceIndexList: number[] = [];
+                for (let i in tempValues) {
+                    let val = tempValues[i];
                     let value: IChartDemographicData = this.anysislyChartValue(
                         val
                     );
@@ -1257,7 +1259,14 @@ export class HighchartsDemographic extends Vue {
 
                         tempTotalMaleCount += value.maleCount;
                         tempTotalFemaleCount += value.femaleCount;
+
+                        spliceIndexList.push(parseInt(i));
                     }
+                }
+
+                // tempValues 減肥
+                for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                    tempValues.splice(spliceIndexList[i], 1);
                 }
 
                 tempResultItem.sites.push(tempSiteValue);
@@ -1313,44 +1322,12 @@ export class HighchartsDemographic extends Vue {
 
         // set result
         for (let result of tempResult) {
-            switch (this.timeMode) {
-                case ETimeMode.year:
-                case ETimeMode.month:
-                    tempCategories.push(
-                        HighchartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-                case ETimeMode.quarter:
-                    tempCategories.push(
-                        HighchartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-                case ETimeMode.week:
-                    tempCategories.push(
-                        HighchartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-                case ETimeMode.day:
-                case ETimeMode.hour:
-                case ETimeMode.none:
-                default:
-                    tempCategories.push(
-                        HighchartsService.categorieStringWithJSON(
-                            result.categorie,
-                            result
-                        )
-                    );
-                    break;
-            }
+            tempCategories.push(
+                HighchartsService.categorieStringWithJSON(
+                    result.categorie,
+                    result
+                )
+            );
         }
 
         this.chartOptions.siteXDayX = {
