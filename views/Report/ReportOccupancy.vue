@@ -1154,36 +1154,29 @@ export default class ReportOccupancy extends Vue {
                     let body = {
                         site: summaryData.site,
                         area: summaryData.area,
-                        group: deviceGroup.deviceGroup,
+                        group: deviceGroup,
                         in: [],
                         out: [],
                         in2: [],
                         out2: []
                     };
 
-                    if (body.group != undefined) {
+                  
                         if (
-                            tempArray.some(
-                                t => t.group.objectId == body.group.objectId
+                            tempArray.every(
+                                t =>  t.group == undefined ||t.group.objectId == body.group.objectId
                             )
                         ) {
-                            continue;
+                               tempArray.push(body);
                         }
-                    } else {
-                        if (
-                            tempArray.some(
-                                t => t.area.objectId == body.area.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    }
-                    tempArray.push(body);
+                    
+                
                 }
             } else {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                    group: null,
                     in: [],
                     out: [],
                     in2: [],
@@ -1191,12 +1184,10 @@ export default class ReportOccupancy extends Vue {
                 };
 
                 if (
-                    tempArray.some(t => t.area.objectId == body.area.objectId)
+                    tempArray.every(t => t.area == undefined || t.area.objectId == body.area.objectId)
                 ) {
-                    continue;
+                   tempArray.push(body);
                 }
-
-                tempArray.push(body);
             }
         }
 
@@ -1363,36 +1354,27 @@ export default class ReportOccupancy extends Vue {
                     let body = {
                         site: summaryData.site,
                         area: summaryData.area,
-                        group: deviceGroup.deviceGroup,
+                        group: deviceGroup,
                         in: [],
                         out: [],
                         in2: [],
                         out2: []
                     };
 
-                    if (body.group != undefined) {
                         if (
-                            tempArray.some(
-                                t => t.group.objectId == body.group.objectId
+                            tempArray.every(
+                                t => t.group == undefined || t.group.objectId == body.group.objectId
                             )
                         ) {
-                            continue;
+                             tempArray.push(body);
                         }
-                    } else {
-                        if (
-                            tempArray.some(
-                                t => t.area.objectId == body.area.objectId
-                            )
-                        ) {
-                            continue;
-                        }
-                    }
-                    tempArray.push(body);
+                   
                 }
             } else {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                       group: null,
                     in: [],
                     out: [],
                     in2: [],
@@ -1400,12 +1382,10 @@ export default class ReportOccupancy extends Vue {
                 };
 
                 if (
-                    tempArray.some(t => t.area.objectId == body.area.objectId)
+                    tempArray.every(t => t.area == undefined || t.area.objectId == body.area.objectId)
                 ) {
-                    continue;
+                   tempArray.push(body);
                 }
-
-                tempArray.push(body);
             }
         }
 

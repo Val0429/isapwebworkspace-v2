@@ -479,9 +479,7 @@ export default class ReportDemographic extends Vue {
                         area: summaryData.area,
                         group: deviceGroup,
                         in: [],
-                        out: [],
-                        in2: [],
-                        out2: []
+                        out: []
                     };
 
                     if (
@@ -500,9 +498,7 @@ export default class ReportDemographic extends Vue {
                     area: summaryData.area,
                     group: null,
                     in: [],
-                    out: [],
-                    in2: [],
-                    out2: []
+                    out: []
                 };
 
                 if (
@@ -675,7 +671,7 @@ export default class ReportDemographic extends Vue {
                         in: [],
                         out: []
                     };
-                    console.log("group", body.group);
+
                     if (
                         tempArray.every(
                             t =>
@@ -690,6 +686,7 @@ export default class ReportDemographic extends Vue {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                    group: null,
                     in: [],
                     out: []
                 };

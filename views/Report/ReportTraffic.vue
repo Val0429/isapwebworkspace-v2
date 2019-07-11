@@ -479,6 +479,7 @@ export default class ReportTraffic extends Vue {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                    group: null,
                     in: [],
                     out: []
                 };
@@ -648,6 +649,7 @@ export default class ReportTraffic extends Vue {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                    group: null,
                     in: [],
                     out: []
                 };
