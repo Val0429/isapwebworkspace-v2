@@ -7,15 +7,15 @@
         :isBusy="isBusy"
         :fields="fields"
         v-model="filter"
+        v-on:input="onSubmit($event)"        
         v-on:update="onUpdate($event)"
-        v-on:input="onSubmit()"
      />                  
      
 </template>
            
 
 <script lang="ts">
-import { Component, Vue } from '@/../core';
+import { Component, Watch, Vue } from '@/../core';
 import { RegisterRouter } from '@/../core/router';
 import moment, { months } from 'moment';
 @Component
@@ -23,7 +23,10 @@ export default class ContractorReport extends Vue  {
     records:any[]=[];
     fields:any[] =[];
     isBusy:boolean=false;
-    filter:any={};
+    filter:any={
+        Start : moment(new Date()).add(-3, 'M').toDate(),
+        End : new Date()
+    };
     async created(){        
         this.fields = 
         [     
@@ -91,13 +94,17 @@ export default class ContractorReport extends Vue  {
             }
         ];
 
-        this.filter.Start = moment(new Date()).add(-3, 'M').toDate();
-        this.filter.End = new Date();
     }
     
   private async getData() { 
       try{    
-        if(!this.filter)return;
+        if(!this.filter){            
+            this.filter = {
+                Start : moment(new Date()).add(-3, 'M').toDate(),
+                End : new Date()
+            };
+            return;
+        }
         this.isBusy=true;           
         await this.getMemberData();
         await this.getAttendanceRecord();
@@ -124,15 +131,7 @@ async getAttendanceRecord(){
         let start = this.filter.Start.toISOString();
         let end = this.filter.End.toISOString();
         let resp: any=await this.$server.R("/report/attendancerecord" as any, Object.assign(this.filter, {start, end}));
-        
-        let monthCount = moment.utc(moment(this.filter.End).diff(moment(this.filter.Start))).month()+1;
-        
-        let monthIndex=12;
-        this.fields.splice(monthIndex, this.fields.length-monthIndex);
-        for(let i=0;i<monthCount;i++){
-            this.fields.push({key:`month${i+1}`,label:`Month${i+1}`});
-        }
-                  
+                                  
         let i=0;
         while(i<resp.results.length){            
             let item = resp.results[i];
@@ -219,15 +218,25 @@ async getAttendanceRecord(){
             
     }
     
-    async onSubmit(){      
+    async onSubmit($event){    
+        //this.filter=$event;  
         console.log("filter", this.filter) ;
         await this.getData();
     }
+    
+     
     onUpdate($event){      
         
         if($event.key!=="Start")return;        
-        if(!this.filter)this.filter={};        
+        if(!this.filter){
+            this.filter = {
+                Start : moment(new Date()).add(-3, 'M').toDate(),
+                End : new Date()
+            };    
+        }
         console.log("$event", $event);
+        this.filter.Start = $event.value;
+        this.filter.Start.setHours(0,0,0,0);
         this.filter.End = moment($event.value).add(3, 'M').toDate();
         this.filter.End.setHours(23,59,59,999);
         
