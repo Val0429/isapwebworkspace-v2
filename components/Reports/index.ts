@@ -1,5 +1,5 @@
 // enum
-export { ESign, EPageType, EChartMode, ECountType, EDeviceMode, EDesignationPeriod, EAddPeriodSelect, EIfAllSelected } from './models/EReport';
+export { ESign, EPageType, EChartMode, ECountType, EDeviceMode, EDesignationPeriod, EAddPeriodSelect, EIfAllSelected, ETypeInOrOut, EIncludedEmployee } from './models/EReport';
 export { EWeeks, EVideoSource } from './models/ETemplate';
 
 // interface

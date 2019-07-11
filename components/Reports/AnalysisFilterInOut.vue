@@ -97,9 +97,6 @@ import {
     Watch
 } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { ECountType, EType } from "@/components/Reports/models/EReport";
-import { IChartTrafficData, EWeather } from "@/components/Reports";
-import ResponseFilter from "@/services/ResponseFilter";
 let config = require("@/config/default/debug");
 
 
