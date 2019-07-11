@@ -91,6 +91,7 @@
         :interface="IAddAndEditForm()"
         :value="inputFormData"
         @update:*="tempSaveInputData($event)"
+        @update:cardCertificate="onCardCertificateUpdate($event)"
         @update:personPhoto="updateShowPhoto($event)"
         @submit="saveAddOrEdit($event)"
       >
@@ -111,7 +112,7 @@
           <h4 class="ml-3 mt-4 font-weight-bold">{{ _('w_Member_PermissionTable') }}</h4>
         </template>
 
-        <template #premissionList>
+        <template #premissionList>               
           <iv-sort-select
             v-if="premissionOptions.length > 0"
             v-model="inputFormData.premissionSelected"
@@ -389,7 +390,7 @@ export default class MemberForm extends Vue {
   cardProfileOptions: any = {};
   certificateOptions: any = {};
   carLicenseOptions: any = {};
-  
+  credentialProfiles :any[]=[];
   createReason1Options: any = {};
   createReason2Options: any = {};
   createReason3Options: any = {};
@@ -428,6 +429,10 @@ export default class MemberForm extends Vue {
     lastEditPerson: "",
     lastEditTime: "",
     cardCertificate: "",
+    profileName:"",
+    technologyCode:"",
+    pinMode:0,
+    pinDigit:0,    
     deviceNumber: 0,
     pin: "",
 
@@ -516,6 +521,10 @@ export default class MemberForm extends Vue {
       lastEditPerson: "",
       lastEditTime: "",
       cardCertificate: "",
+      profileName:"",
+      technologyCode:"",
+      pinMode:0,
+      pinDigit:0,   
       deviceNumber: 0,
       pin: "",
 
@@ -587,11 +596,10 @@ export default class MemberForm extends Vue {
 
   async mounted() {
     await Promise.all([
-      this.initSelectItemWorkGroup(),
+      this.initSelectItemWorkGroup(),      
       this.initDropDownList("Certification").then(res=>this.certificateOptions=res),
       this.initDropDownList("ProfileId","key").then(res=>this.cardProfileOptions=res),
-      this.initDropDownList("License").then(res=>this.carLicenseOptions=res),
-      
+      this.initDropDownList("License").then(res=>this.carLicenseOptions=res),      
       this.initDropDownList("CreateReason1").then(res=>this.createReason1Options=res),
       this.initDropDownList("CreateReason2").then(res=>this.createReason2Options=res),
       this.initDropDownList("CreateReason3").then(res=>this.createReason3Options=res),
@@ -599,9 +607,25 @@ export default class MemberForm extends Vue {
       this.initDropDownList("ApplyReason2").then(res=>this.applyReason2Options=res),
       this.initDropDownList("ApplyReason3").then(res=>this.applyReason3Options=res)
     ]);
+    await this.initCredentialProfile();
+  }
+  //@Watch("inputFormData.cardCertificate", {immediate:true})
+  onCardCertificateUpdate(value:any){
+    let profile = this.credentialProfiles.find(x=>x.Token == value);
+    if(!profile)return;
+    this.inputFormData.deviceNumber = profile.FacilityCode;
+    this.inputFormData.pinDigit = profile.PINDigits;
+    this.inputFormData.profileName = profile.Name;
+    this.inputFormData.technologyCode = profile.CardTechnologyCode;
+    let pinMode =0;
+    switch(profile.PINModeValue.Name){
+        case "CARD" : pinMode=1;break;
+        case "PIN AS CARD" : pinMode=2;break;
+        case "CARD AND PIN" : pinMode=4;break;
+    }
+    this.inputFormData.pinMode=pinMode;
     
   }
-
   async initSelectItemWorkGroup() {
     this.workGroupSelectItem = {};
     await this.$server
@@ -626,6 +650,11 @@ export default class MemberForm extends Vue {
         return false;
       });
   }
+  async initCredentialProfile() {
+    this.credentialProfiles=[];
+    let response:any = await this.$server.R("/acs/credentialprofiles" as any, {});
+    this.credentialProfiles = response.results;
+  }
   async initDropDownList(type:string,key:string="name", value:string="name") {     
       let resp:any = await this.$server .R("/acs/dropdownlist", { type });
       let result = {};
@@ -634,9 +663,6 @@ export default class MemberForm extends Vue {
        }
        return result;
     }
-    
-
-  
 
   selectedItem(data) {
     this.isSelected = data;
@@ -673,71 +699,31 @@ export default class MemberForm extends Vue {
         this.inputFormData.personType = detailData.PrimaryWorkgroupName;
       }
 
-      // if (detailData.PrimaryWorkgroupName != undefined) {
-      //     for (const detail in this.workGroupIdSelectItem) {
-      //         if (detailData.PrimaryWorkgroupName.toString() == detail) {
-      //             this.inputFormData.personType = this.workGroupIdSelectItem[
-      //                 detail
-      //                 ];
-      //             this.inputFormData.cardType = this.workGroupIdSelectItem[
-      //                 detail
-      //                 ];
-      //         }
-      //         for (const detail in this.workGroupSelectItem) {
-      //             if (this.inputFormData.cardType == detail) {
-      //                 this.inputFormData.cardType = this.workGroupSelectItem[
-      //                     detail
-      //                     ];
-      //             }
-      //         }
-      //     }
-      // }
-
       if (detailData.EmployeeNumber != undefined) {
-        this.inputFormData.employeeNumber = detailData.EmployeeNumber.toString();
+        this.inputFormData.employeeNumber = detailData.EmployeeNumber;
       }
 
       if (detailData.LastName != undefined) {
-        this.inputFormData.chineseName = detailData.LastName.toString();
+        this.inputFormData.chineseName = detailData.LastName;
       }
 
       if (detailData.FirstName != undefined) {
-        this.inputFormData.englishName = detailData.FirstName.toString();
+        this.inputFormData.englishName = detailData.FirstName;
       }
-
-      if (
-        detailData.Credentials != undefined &&
-        detailData.Credentials[0] != undefined &&
-        detailData.Credentials[0].CardNumber != undefined
-      ) {
-        this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber.toString();
-        this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber.toString();
-      }
-
-      if (
-        detailData.Credentials != undefined &&
-        detailData.Credentials[0] != undefined &&
-        detailData.Credentials[0].ProfileId != undefined
-      ) {
+    
+      if (detailData.Credentials && detailData.Credentials.length>0){        
+        console.log("detailData.Credentials[0]",detailData.Credentials[0])
+        this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber;
+        this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber;
         this.inputFormData.cardCertificate = detailData.Credentials[0].ProfileId.toString();
-        console.log(" - ", this.inputFormData.cardCertificate);
-      }
-
-      if (
-        detailData.Credentials != undefined &&
-        detailData.Credentials[0] != undefined &&
-        detailData.Credentials[0].FacilityCode != undefined
-      ) {
-        this.inputFormData.deviceNumber =
-          detailData.Credentials[0].FacilityCode;
-      }
-
-      if (
-        detailData.Credentials != undefined &&
-        detailData.Credentials[0] != undefined &&
-        detailData.Credentials[0].Pin != undefined
-      ) {
-        this.inputFormData.pin = detailData.Credentials[0].Pin;
+        this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode;
+        this.inputFormData.pinDigit = detailData.Credentials[0].PinDigit;
+        this.inputFormData.profileName = detailData.Credentials[0].ProfileName;
+        this.inputFormData.technologyCode = detailData.Credentials[0].CardTechnologyCode;    
+        this.inputFormData.pinMode = detailData.Credentials[0].PinMode;
+        this.inputFormData.startDate = detailData.Credentials[0].StartDate;
+        this.inputFormData.endDate = detailData.Credentials[0].StartDate;
+        this.inputFormData.pin = detailData.Credentials[0].Pin;  
       }
 
       if (detailData.StartDate != undefined && detailData.StartDate != "") {
@@ -1394,6 +1380,7 @@ export default class MemberForm extends Vue {
 
   async pageToEdit() {
     this.getInputData();
+    this.initPremission();
     this.pageStep = EPageStep.edit;
   }
 
@@ -1447,77 +1434,32 @@ export default class MemberForm extends Vue {
         this.inputFormData.deviceNumber
       );
 
-      // console.log('switch 1  - s ', );
-      // switch (this.inputFormData.ProfileId) {
-      //     case "35 bit":
-      //         tempCredentials[0].FacilityCode = 1;
-      //         break;
-      //     case "26 bit":
-      //         tempCredentials[0].FacilityCode = 2;
-      //         break;
-      //     case "mifare32":
-      //         tempCredentials[0].FacilityCode = 3;
-      //         break;
-      //     case undefined:
-      //         tempCredentials[0].FacilityCode = 0;
-      //         break;
-      // }
-
       tempCredentials[0].ProfileId = !isNaN(
         parseInt(this.inputFormData.cardCertificate)
       )
         ? parseInt(this.inputFormData.cardCertificate)
         : 0;
+
+      tempCredentials[0].ProfileName = this.inputFormData.profileName;
+      tempCredentials[0].CardTechnologyCode = this.inputFormData.technologyCode;
+      tempCredentials[0].PinMode= this.inputFormData.pinMode;          
+      tempCredentials[0].PinDigit=this.inputFormData.pinDigit;
+      tempCredentials[0].EndDate=this.inputFormData.endDate;
+      tempCredentials[0].StartDate=this.inputFormData.startDate;
     } else {
-      // console.log('switch 2  - s ', );
-      //
-      // switch (this.inputFormData.ProfileId) {
-      //     case "35 bit":
-      //         tempCredentials = [
-      //             {
-      //                 CardNumber: this.inputFormData.cardNumber,
-      //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
-      //                 ProfileId: 1
-      //             }
-      //         ];
-      //         break;
-      //     case "26 bit":
-      //         tempCredentials = [
-      //             {
-      //                 CardNumber: this.inputFormData.cardNumber,
-      //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
-      //                 ProfileId: 2
-      //             }
-      //         ];
-      //         break;
-      //     case "mifare32":
-      //         tempCredentials = [
-      //             {
-      //                 CardNumber: this.inputFormData.cardNumber,
-      //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
-      //                 ProfileId: 3
-      //             }
-      //         ];
-      //         break;
-      //     default:
-      //
-      //     tempCredentials = [
-      //             {
-      //                 CardNumber: this.inputFormData.cardNumber,
-      //                 FacilityCode: parseInt(this.inputFormData.deviceNumber),
-      //                 ProfileId: 0
-      //             }
-      //         ];
-      //         break;
-      // }
+      
       tempCredentials = [
         {
           CardNumber: this.inputFormData.cardNumber,
           Pin: this.inputFormData.pin,
           FacilityCode: parseInt(this.inputFormData.deviceNumber),
-          ProfileId: !isNaN(parseInt(this.inputFormData.cardCertificate))
-            ? parseInt(this.inputFormData.cardCertificate)
-            : 0
+          ProfileId: !isNaN(parseInt(this.inputFormData.cardCertificate)) ? parseInt(this.inputFormData.cardCertificate) : 0,
+          ProfileName : this.inputFormData.profileName,
+          CardTechnologyCode : this.inputFormData.technologyCode,
+          PinMode: this.inputFormData.pinMode,          
+          PinDigit:this.inputFormData.pinDigit,
+          EndDate:this.inputFormData.endDate,
+          StartDate:this.inputFormData.startDate
         }
       ];
     }
@@ -2210,6 +2152,7 @@ export default class MemberForm extends Vue {
 
 
                 /**
+                 * @uiHidden - true
                  * @uiLabel - ${this._("w_Member_deviceNumber")}
                  * @uiColumnGroup - row33
                  * @uiType - ${
