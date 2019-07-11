@@ -1523,6 +1523,7 @@ export default class ReportTraffic extends Vue {
         let tempChartDatas: IChartTrafficData[] = [];
         let isOneDay = false;
 
+        // 取得date、siteObjectId資料
         if (
             Datetime.IsOneDate(
                 this.filterData.startDate,
@@ -1555,7 +1556,7 @@ export default class ReportTraffic extends Vue {
                 }
             }
         } else {
-            // multipe day
+            // multiple days
             let dateList = Datetime.DateList(
                 this.filterData.startDate,
                 this.filterData.endDate
@@ -1582,7 +1583,8 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-        // 取得date、siteObjectId資料
+
+        // 計算 traffic
         for (let summary of datas) {
             let summaryDateFormat = isOneDay
                 ? Datetime.DateTime2String(
