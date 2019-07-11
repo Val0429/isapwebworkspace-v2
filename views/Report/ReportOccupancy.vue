@@ -1165,7 +1165,7 @@ export default class ReportOccupancy extends Vue {
                         tempArray.every(
                             t =>
                                 t.group == undefined ||
-                                t.group.objectId == body.group.objectId
+                                t.group.objectId != body.group.objectId
                         )
                     ) {
                         tempArray.push(body);
@@ -1186,7 +1186,7 @@ export default class ReportOccupancy extends Vue {
                     tempArray.every(
                         t =>
                             t.area == undefined ||
-                            t.area.objectId == body.area.objectId
+                            t.area.objectId != body.area.objectId
                     )
                 ) {
                     tempArray.push(body);
@@ -1207,45 +1207,22 @@ export default class ReportOccupancy extends Vue {
                     ) {
                         continue;
                     }
-                    if (
-                        summaryData.deviceGroups &&
-                        summaryData.deviceGroups.length > 0
-                    ) {
+                    if (tempArray[index].group != null) {
                         for (let deviceGroup of summaryData.deviceGroups) {
-                            if (tempArray[index].group != undefined) {
-                                if (
-                                    tempArray[index].group.objectId ==
-                                    deviceGroup.objectId
-                                ) {
-                                    inCount.value += Math.round(
-                                        summaryData.total / summaryData.count
-                                    );
-                                    inCount.valueRatio += 0;
-                                    outCount.value +=
-                                        summaryData.mediumThreshold;
-                                    outCount.valueRatio += 0;
-                                    in2Count.value += summaryData.highThreshold;
-                                    in2Count.valueRatio += 0;
-                                    out2Count.value += summaryData.maxValue;
-                                    out2Count.valueRatio += 0;
-                                }
-                            } else {
-                                if (
-                                    tempArray[index].area.objectId ==
-                                    summaryData.area.objectId
-                                ) {
-                                    inCount.value += Math.round(
-                                        summaryData.total / summaryData.count
-                                    );
-                                    inCount.valueRatio += 0;
-                                    outCount.value +=
-                                        summaryData.mediumThreshold;
-                                    outCount.valueRatio += 0;
-                                    in2Count.value += summaryData.highThreshold;
-                                    in2Count.valueRatio += 0;
-                                    out2Count.value += summaryData.maxValue;
-                                    out2Count.valueRatio += 0;
-                                }
+                            if (
+                                tempArray[index].group.objectId ==
+                                deviceGroup.objectId
+                            ) {
+                                inCount.value += Math.round(
+                                    summaryData.total / summaryData.count
+                                );
+                                inCount.valueRatio += 0;
+                                outCount.value += summaryData.mediumThreshold;
+                                outCount.valueRatio += 0;
+                                in2Count.value += summaryData.highThreshold;
+                                in2Count.valueRatio += 0;
+                                out2Count.value += summaryData.maxValue;
+                                out2Count.valueRatio += 0;
                             }
                         }
                     } else {
@@ -1368,7 +1345,7 @@ export default class ReportOccupancy extends Vue {
                         tempArray.every(
                             t =>
                                 t.group == undefined ||
-                                t.group.objectId == body.group.objectId
+                                t.group.objectId != body.group.objectId
                         )
                     ) {
                         tempArray.push(body);
@@ -1389,7 +1366,7 @@ export default class ReportOccupancy extends Vue {
                     tempArray.every(
                         t =>
                             t.area == undefined ||
-                            t.area.objectId == body.area.objectId
+                            t.area.objectId != body.area.objectId
                     )
                 ) {
                     tempArray.push(body);
@@ -1420,51 +1397,26 @@ export default class ReportOccupancy extends Vue {
                             ) {
                                 continue;
                             }
-                            if (
-                                summaryData.deviceGroups &&
-                                summaryData.deviceGroups.length > 0
-                            ) {
+
+                            if (tempArray[index].group != null) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
-                                    if (tempArray[index].group != undefined) {
-                                        if (
-                                            tempArray[index].group.objectId ==
-                                            deviceGroup.objectId
-                                        ) {
-                                            inCount.value += Math.round(
-                                                summaryData.total /
-                                                    summaryData.count
-                                            );
-                                            inCount.valueRatio += 0;
-                                            outCount.value +=
-                                                summaryData.mediumThreshold;
-                                            outCount.valueRatio += 0;
-                                            in2Count.value +=
-                                                summaryData.highThreshold;
-                                            in2Count.valueRatio += 0;
-                                            out2Count.value +=
-                                                summaryData.maxValue;
-                                            out2Count.valueRatio += 0;
-                                        }
-                                    } else {
-                                        if (
-                                            tempArray[index].area.objectId ==
-                                            summaryData.area.objectId
-                                        ) {
-                                            inCount.value += Math.round(
-                                                summaryData.total /
-                                                    summaryData.count
-                                            );
-                                            inCount.valueRatio += 0;
-                                            outCount.value +=
-                                                summaryData.mediumThreshold;
-                                            outCount.valueRatio += 0;
-                                            in2Count.value +=
-                                                summaryData.highThreshold;
-                                            in2Count.valueRatio += 0;
-                                            out2Count.value +=
-                                                summaryData.maxValue;
-                                            out2Count.valueRatio += 0;
-                                        }
+                                    if (
+                                        tempArray[index].group.objectId ==
+                                        deviceGroup.objectId
+                                    ) {
+                                        inCount.value += Math.round(
+                                            summaryData.total /
+                                                summaryData.count
+                                        );
+                                        inCount.valueRatio += 0;
+                                        outCount.value +=
+                                            summaryData.mediumThreshold;
+                                        outCount.valueRatio += 0;
+                                        in2Count.value +=
+                                            summaryData.highThreshold;
+                                        in2Count.valueRatio += 0;
+                                        out2Count.value += summaryData.maxValue;
+                                        out2Count.valueRatio += 0;
                                     }
                                 }
                             } else {
@@ -1472,7 +1424,9 @@ export default class ReportOccupancy extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    inCount.value += summaryData.total;
+                                    inCount.value += Math.round(
+                                        summaryData.total / summaryData.count
+                                    );
                                     inCount.valueRatio += 0;
                                     outCount.value +=
                                         summaryData.mediumThreshold;
@@ -1518,51 +1472,25 @@ export default class ReportOccupancy extends Vue {
                             ) {
                                 continue;
                             }
-                            if (
-                                summaryData.deviceGroups &&
-                                summaryData.deviceGroups.length > 0
-                            ) {
+                            if (tempArray[index].group != null) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
-                                    if (tempArray[index].group != undefined) {
-                                        if (
-                                            tempArray[index].group.objectId ==
-                                            deviceGroup.objectId
-                                        ) {
-                                            inCount.value += Math.round(
-                                                summaryData.total /
-                                                    summaryData.count
-                                            );
-                                            inCount.valueRatio += 0;
-                                            outCount.value +=
-                                                summaryData.mediumThreshold;
-                                            outCount.valueRatio += 0;
-                                            in2Count.value +=
-                                                summaryData.highThreshold;
-                                            in2Count.valueRatio += 0;
-                                            out2Count.value +=
-                                                summaryData.maxValue;
-                                            out2Count.valueRatio += 0;
-                                        }
-                                    } else {
-                                        if (
-                                            tempArray[index].area.objectId ==
-                                            summaryData.area.objectId
-                                        ) {
-                                            inCount.value += Math.round(
-                                                summaryData.total /
-                                                    summaryData.count
-                                            );
-                                            inCount.valueRatio += 0;
-                                            outCount.value +=
-                                                summaryData.mediumThreshold;
-                                            outCount.valueRatio += 0;
-                                            in2Count.value +=
-                                                summaryData.highThreshold;
-                                            in2Count.valueRatio += 0;
-                                            out2Count.value +=
-                                                summaryData.maxValue;
-                                            out2Count.valueRatio += 0;
-                                        }
+                                    if (
+                                        tempArray[index].group.objectId ==
+                                        deviceGroup.objectId
+                                    ) {
+                                        inCount.value += Math.round(
+                                            summaryData.total /
+                                                summaryData.count
+                                        );
+                                        inCount.valueRatio += 0;
+                                        outCount.value +=
+                                            summaryData.mediumThreshold;
+                                        outCount.valueRatio += 0;
+                                        in2Count.value +=
+                                            summaryData.highThreshold;
+                                        in2Count.valueRatio += 0;
+                                        out2Count.value += summaryData.maxValue;
+                                        out2Count.valueRatio += 0;
                                     }
                                 }
                             } else {

@@ -8,7 +8,7 @@
         >
             <thead>
                 <tr class="title">
-                    <th v-if="reportTableData._body &&  reportTableData._body[0]">
+                    <th v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].site">
                         {{ _('w_Site')}}
                     </th>
                     <th v-if="reportTableData._body && reportTableData._body[0] && reportTableData._body[0].area">
@@ -34,20 +34,20 @@
                 <template v-for="(items, key, index) in reportTableData._body">
                     <tr>
                         <td
-                            v-if="items.site"
+                            v-if="reportTableData._body && reportTableData._body[0] && reportTableData._body[0].site"
                             :rowspan="reportTableTitle.titleCount"
                             class="title"
-                        >{{items.site.name}}</td>
+                        >{{ items.site ? items.site.name: ""}}</td>
                         <td
-                            v-if="items.area"
+                            v-if="reportTableData._body && reportTableData._body[0] && reportTableData._body[0].area"
                             :rowspan="reportTableTitle.titleCount"
                             class="title"
-                        >{{items.area.name}}</td>
+                        >{{items.area ? items.area.name:""}}</td>
                         <td
-                            v-if="items.group"
+                            v-if="reportTableData._body && reportTableData._body[0] && reportTableData._body[0].group"
                             :rowspan="reportTableTitle.titleCount"
                             class="title"
-                        >{{items.group.objectId}}</td>
+                        >{{items.group ? items.group.name : ""}}</td>
                         <td class="title"> {{reportTableTitle.title1}}</td>
                         <td v-for="(itemIn, key, index) in items.in">
 

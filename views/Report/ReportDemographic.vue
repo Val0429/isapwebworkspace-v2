@@ -531,45 +531,24 @@
 						) {
 							continue;
 						}
-						if (
-							summaryData.deviceGroups &&
-							summaryData.deviceGroups.length > 0
-						) {
-							for (let deviceGroup of summaryData.deviceGroups) {
-								if (tempArray[index].group != undefined) {
-									if (
-										tempArray[index].group.objectId ==
-										deviceGroup.objectId
-									) {
-										inCount.value += summaryData.maleTotal;
-										inCount.valueRatio += ReportService.countRatio(
-											summaryData.maleTotal,
-											summaryData.prevMaleTotal
-										);
-										outCount.value += summaryData.femaleTotal;
-										outCount.valueRatio += ReportService.countRatio(
-											summaryData.femaleTotal,
-											summaryData.prevFemaleTotal
-										);
-									}
-								} else {
-									if (
-										tempArray[index].area.objectId ==
-										summaryData.area.objectId
-									) {
-										inCount.value += summaryData.maleTotal;
-										inCount.valueRatio += ReportService.countRatio(
-											summaryData.maleTotal,
-											summaryData.prevMaleTotal
-										);
-										outCount.value += summaryData.femaleTotal;
-										outCount.valueRatio += ReportService.countRatio(
-											summaryData.femaleTotal,
-											summaryData.prevFemaleTotal
-										);
-									}
-								}
-							}
+						if (tempArray[index].group != null) {
+                            for (let deviceGroup of summaryData.deviceGroups) {
+							    if (
+							    	tempArray[index].group.objectId ==
+							    	deviceGroup.objectId
+							    ) {
+							    	inCount.value += summaryData.maleTotal;
+							    	inCount.valueRatio += ReportService.countRatio(
+							    		summaryData.maleTotal,
+							    		summaryData.prevMaleTotal
+							    	);
+							    	outCount.value += summaryData.femaleTotal;
+							    	outCount.valueRatio += ReportService.countRatio(
+							    		summaryData.femaleTotal,
+							    		summaryData.prevFemaleTotal
+							    	);
+                                }
+                            }
 						} else {
 							if (
 								tempArray[index].area.objectId ==
@@ -726,24 +705,25 @@
 								) {
 									continue;
 								}
-								for (let deviceGroup of summaryData.deviceGroups) {
-									if (tempArray[index].group != undefined) {
-										if (
-											tempArray[index].group.objectId ==
-											deviceGroup.objectId
-										) {
-											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += ReportService.countRatio(
-												summaryData.maleTotal,
-												summaryData.prevMaleTotal
-											);
-											outCount.value +=
-												summaryData.femaleTotal;
-											outCount.valueRatio += ReportService.countRatio(
-												summaryData.femaleTotal,
-												summaryData.prevFemaleTotal
-											);
-										}
+									if (tempArray[index].group != null) {
+                                        for (let deviceGroup of summaryData.deviceGroups) {
+										    if (
+										    	tempArray[index].group.objectId ==
+										    	deviceGroup.objectId
+										    ) {
+										    	inCount.value += summaryData.maleTotal;
+										    	inCount.valueRatio += ReportService.countRatio(
+										    		summaryData.maleTotal,
+										    		summaryData.prevMaleTotal
+										    	);
+										    	outCount.value +=
+										    		summaryData.femaleTotal;
+										    	outCount.valueRatio += ReportService.countRatio(
+										    		summaryData.femaleTotal,
+										    		summaryData.prevFemaleTotal
+										    	);
+                                            }
+                                        }
 									} else {
 										if (
 											tempArray[index].area.objectId ==
@@ -762,7 +742,6 @@
 											);
 										}
 									}
-								}
 							}
 							tempArray[index].in.push(inCount);
 							tempArray[index].out.push(outCount);
@@ -790,24 +769,26 @@
 								) {
 									continue;
 								}
-								for (let deviceGroup of summaryData.deviceGroups) {
-									if (tempArray[index].group != undefined) {
-										if (
-											tempArray[index].group.objectId ==
-											deviceGroup.objectId
-										) {
-											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += ReportService.countRatio(
-												summaryData.maleTotal,
-												summaryData.prevMaleTotal
-											);
-											outCount.value +=
-												summaryData.femaleTotal;
-											outCount.valueRatio += ReportService.countRatio(
-												summaryData.femaleTotal,
-												summaryData.prevFemaleTotal
-											);
-										}
+						
+									if (tempArray[index].group != null) {
+                                        for (let deviceGroup of summaryData.deviceGroups) {
+										    if (
+										    	tempArray[index].group.objectId ==
+										    	deviceGroup.objectId
+										    ) {
+										    	inCount.value += summaryData.maleTotal;
+										    	inCount.valueRatio += ReportService.countRatio(
+										    		summaryData.maleTotal,
+										    		summaryData.prevMaleTotal
+										    	);
+										    	outCount.value +=
+										    		summaryData.femaleTotal;
+										    	outCount.valueRatio += ReportService.countRatio(
+										    		summaryData.femaleTotal,
+										    		summaryData.prevFemaleTotal
+										    	);
+                                            }
+                                        }
 									} else {
 										if (
 											tempArray[index].area.objectId ==
@@ -826,7 +807,6 @@
 											);
 										}
 									}
-								}
 							}
 							tempArray[index].in.push(inCount);
 							tempArray[index].out.push(outCount);

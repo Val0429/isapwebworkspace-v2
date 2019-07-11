@@ -503,7 +503,6 @@ export default class ReportTraffic extends Vue {
                     ) {
                         continue;
                     }
-
                     if (tempArray[index].group != undefined) {
                         for (let deviceGroup of summaryData.deviceGroups) {
                             if (
@@ -681,7 +680,7 @@ export default class ReportTraffic extends Vue {
                                 continue;
                             }
 
-                            if (tempArray[index].group != undefined) {
+                            if (tempArray[index].group != null) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (
                                         tempArray[index].group.objectId ==
@@ -744,7 +743,7 @@ export default class ReportTraffic extends Vue {
                                 continue;
                             }
 
-                            if (tempArray[index].group != undefined) {
+                            if (tempArray[index].group != null) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (
                                         tempArray[index].group.objectId ==
@@ -791,7 +790,8 @@ export default class ReportTraffic extends Vue {
                         (new Date(x).getMonth() + 1) +
                         "/" +
                         new Date(x).getDate() +
-                        " " +   ReportService.showWeek(new Date(x).getDay())
+                        " " +
+                        ReportService.showWeek(new Date(x).getDay())
                 );
                 break;
         }
@@ -1535,7 +1535,6 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-
         // 計算 traffic
         for (let summary of datas) {
             let summaryDateFormat = isOneDay
@@ -1645,7 +1644,7 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-        console.log("!!! 1" , new Date().getTime());
+        console.log("!!! 1", new Date().getTime());
         this.chartDatas = tempChartDatas;
     }
 
