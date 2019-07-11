@@ -2,6 +2,14 @@ import { EAgeRange, EWeek } from './EHighCharts';
 import { ITemplateItem } from './ITemplateItem';
 
 class ReportService {
+    datetimeFormat: {
+        date: string;
+        hour: string;
+    } = {
+        date: 'YYYY/MM/DD',
+        hour: 'YYYY/MM/DD HH',
+    };
+
     analysisTemplate(json: string): ITemplateItem | null {
         let result: ITemplateItem | null = null;
         try {

@@ -1,7 +1,7 @@
 <template>
     <div class="chart">
 
-        <b-form-group v-if="errorMessage == ''">
+        <b-form-group>
             <b-row>
                 <b-col cols="12">
                     <highcharts
@@ -98,12 +98,6 @@
                     </b-row>
                 </b-col>
             </b-row>
-        </b-form-group>
-
-        <b-form-group
-            v-if="errorMessage != ''"
-            :label="errorMessage"
-        >
         </b-form-group>
     </div>
 </template>
@@ -212,7 +206,6 @@ export class HighchartsDemographic extends Vue {
     }
 
     eChartMode = EChartMode;
-    errorMessage: string = "";
     chartMode: EChartMode = EChartMode.none;
 
     mountChart: {
@@ -317,8 +310,6 @@ export class HighchartsDemographic extends Vue {
     }
 
     start() {
-        this.errorMessage = "";
-
         this.mountChart.site1Day1 = false;
         this.mountChart.site1DayX = false;
         this.mountChart.siteXDay1 = false;
@@ -332,18 +323,6 @@ export class HighchartsDemographic extends Vue {
             this.endDate,
             this.sites
         );
-        if (isNaN(this.startDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateStart");
-            return false;
-        }
-        if (isNaN(this.endDate.getTime())) {
-            this.errorMessage = this._("w_Report_ErrorDateEnd");
-            return false;
-        }
-        if (this.chartMode == EChartMode.none) {
-            this.errorMessage = this._("w_Report_ErrorChartMode");
-            return false;
-        }
 
         // set same chart
         this.drawChartGenderAge();
@@ -377,6 +356,13 @@ export class HighchartsDemographic extends Vue {
             this.sites,
             this.value
         );
+
+        for (let value of this.value) {
+            if (value.maleCount > 0) {
+                console.log(value);
+            }
+        }
+        console.log("!!! value over");
 
         // TODO: For Demo
         this.deomRandomValue();
@@ -441,7 +427,7 @@ export class HighchartsDemographic extends Vue {
                             haveTempIn = true;
                             tempIn.maleCount += value.maleCount;
                             tempIn.femaleCount += value.femaleCount;
-                            break;
+                            // break;
                         }
                     }
                     if (!haveTempIn) {

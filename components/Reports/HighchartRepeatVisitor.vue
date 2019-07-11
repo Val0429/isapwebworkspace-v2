@@ -1,6 +1,6 @@
 <template>
     <div class="chart">
-        <b-form-group v-if="errorMessage == ''">
+        <b-form-group>
             <b-row>
 
                 <b-col cols="6">
@@ -59,13 +59,6 @@
 
             </b-row>
 
-        </b-form-group>
-
-        <b-form-group
-            v-if="errorMessage != ''"
-            class="chart-error-message"
-            :label="errorMessage"
-        >
         </b-form-group>
     </div>
 </template>
@@ -164,7 +157,6 @@ export class HighchartsRepeatVisitor extends Vue {
         repeatCount: []
     };
 
-    errorMessage: string = "";
     mountChart: boolean = false;
     mountDetailChart = false;
     chartOptionsBar: any = {};
@@ -208,8 +200,6 @@ export class HighchartsRepeatVisitor extends Vue {
     }
 
     start() {
-        this.errorMessage = "";
-
         this.initChart();
         this.initDetailChart();
 
