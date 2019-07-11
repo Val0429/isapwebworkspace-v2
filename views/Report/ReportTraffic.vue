@@ -504,7 +504,6 @@ export default class ReportTraffic extends Vue {
                     ) {
                         continue;
                     }
-
                     if (tempArray[index].group != undefined) {
                         for (let deviceGroup of summaryData.deviceGroups) {
                             if (
@@ -682,7 +681,7 @@ export default class ReportTraffic extends Vue {
                                 continue;
                             }
 
-                            if (tempArray[index].group != undefined) {
+                            if (tempArray[index].group != null) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (
                                         tempArray[index].group.objectId ==
@@ -745,7 +744,7 @@ export default class ReportTraffic extends Vue {
                                 continue;
                             }
 
-                            if (tempArray[index].group != undefined) {
+                            if (tempArray[index].group != null) {
                                 for (let deviceGroup of summaryData.deviceGroups) {
                                     if (
                                         tempArray[index].group.objectId ==
@@ -1397,6 +1396,8 @@ export default class ReportTraffic extends Vue {
 
     // Author: Tina
     resolveSummary() {
+
+        console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
         if (this.filterData.siteIds.length === 1) {
