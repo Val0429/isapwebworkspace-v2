@@ -384,7 +384,7 @@ export class AnlysisDashboard extends Vue {
             tagIds: this.tagIds
         };
 
-        await this.$server
+        this.$server
             .C("/report/complex", readParam)
             .then((response: any) => {
                 if (response != undefined) {
