@@ -8,7 +8,7 @@ export class BasicFormQuick extends Vue {
     canAdd:boolean;
     canEdit:boolean;
     canPreview:boolean;
-    canDelete:boolean;
+    canDelete:boolean=true;
     allowEdit:boolean=true;
     permissionName:string;
     filterVisible: boolean=true;

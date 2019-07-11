@@ -5,11 +5,12 @@
             :visible="filterVisible"
             v-on:input="onFilterSubmit($event)"
         />
-        <ivc-form-quick v-on:viewChange="viewChange($event)"
+        <ivc-form-quick 
+            v-on:viewChange="viewChange($event)"
+            v-on:selectedRows="selectedRows($event)"
             :canAdd="canAdd"
             :canEdit="canEdit"
-            :canDelete="canDelete"
-            v-on:selectedRows="selectedRows($event)"
+            :canDelete="canDelete"            
             :allowEdit="allowEdit">  
     
         <!-- 5) custom view templates with <template #view.* /> -->
@@ -54,10 +55,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
     tView: string = "w_User";
     tAdd: string = "w_UserAdd";
     tEdit: string = "w_UserEdit";
-    /// 4) possibility - edit / add / delete
-    // canAdd: boolean = true;
-    // canEdit: boolean = true;
-    // canDelete: boolean = true;
+    
     roleOptions :{key:any, value:any}[]=[];
     apiRoleOptions :{key:any, value:any}[]=[];
     /// 4) interfaces - view / edit / add
@@ -152,20 +150,13 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
         this.apiRoleOptions=resp.results.map(x=>{return {key:x.objectId, value:x.identifier} });
         console.log("apiRoleOptions", this.apiRoleOptions)    
     }
-    // viewChange($event: any): void {
-    //     console.log("view", $event)
-    //   this.filterVisible = $event == 'view';
-    //   this.roleVisible= $event == 'add';
-    // } 
-    roleVisible:boolean=false;
-    selectedRows($event){
+    
+    roleVisible:boolean = false;
+    selectedRows($event){        
         
-        if($event && $event.length > 0 && this.$user.user.objectId == $event[0].objectId)
-            this.canDelete= false;
-        else 
-            this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined; 
-        console.log("can delete", this.canDelete);
-        
+        this.canDelete= $event && $event.length > 0 && this.$user.user.objectId == $event[0].objectId ? 
+            false :
+            this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined; 
     }
         
 }
