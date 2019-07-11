@@ -1641,7 +1641,7 @@ export default class ReportTraffic extends Vue {
                     );
                     tempChartData.temperatureMin = weather.temperatureMin;
                     tempChartData.temperatureMax = weather.temperatureMax;
-                    this.responseData.weathers.splice(i, 1);
+                   // this.responseData.weathers.splice(i, 1);
                     break;
                 }
             }
