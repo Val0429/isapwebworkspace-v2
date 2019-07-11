@@ -139,12 +139,6 @@ import Dialog from "@/services/Dialog";
 
 // Tina
 import {
-    ECountType,
-    EDeviceMode,
-    EType,
-    EIncludedEmployee
-} from "@/components/Reports/models/EReport";
-import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
@@ -171,7 +165,10 @@ import {
     ISite,
     ITemplateItem,
     ReportTableData,
-    IFilterCondition
+    IFilterCondition,
+    ECountType,
+    EDeviceMode,
+    EIncludedEmployee
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";

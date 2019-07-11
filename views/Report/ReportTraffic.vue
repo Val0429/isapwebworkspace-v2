@@ -143,12 +143,6 @@ import {EAreaMode} from "../../components/Reports";
 import { Component, Vue } from "vue-property-decorator";
 // Tina
 import {
-    ECountType,
-    EDeviceMode,
-    EType,
-    EIncludedEmployee
-} from "@/components/Reports/models/EReport";
-import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
@@ -174,7 +168,11 @@ import {
     ReportDashboard,
     ReportTableData,
     ITemplateItem,
-    IFilterCondition
+    IFilterCondition,
+    ECountType,
+    EDeviceMode,
+    ETypeInOrOut,
+    EIncludedEmployee
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
 import toExcel from "@/services/Excel/json2excel";
@@ -287,8 +285,8 @@ export default class ReportTraffic extends Vue {
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
     typeSelectItem: any = [
-        { value: EType.in, text: EType.in },
-        { value: EType.out, text: EType.out }
+        { value: ETypeInOrOut.in, text: ETypeInOrOut.in },
+        { value: ETypeInOrOut.out, text: ETypeInOrOut.out }
     ];
     timeModeSelectItem: any = {
         day: ECountType.day,
@@ -1449,9 +1447,11 @@ export default class ReportTraffic extends Vue {
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
-        await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
-        await this.initSelectItemDevice();
+        if (this.filterData.siteIds.length === 1) {
+            this.initSelectItemArea();
+            this.initSelectItemDeviceGroup();
+            this.initSelectItemDevice();
+        }
 
         this.inputFormData = {
             areaId: "all",
@@ -1611,7 +1611,7 @@ export default class ReportTraffic extends Vue {
                     summaryDateFormat == tempDateFormat &&
                     summary.site.objectId == tempChartData.siteObjectId
                 ) {
-                    if (this.inputFormData.inOrOut == EType.in) {
+                    if (this.inputFormData.inOrOut == ETypeInOrOut.in) {
                         tempChartData.traffic += summary.in;
                         if (
                             this.inputFormData.isIncludedEmployee ==
@@ -1619,7 +1619,7 @@ export default class ReportTraffic extends Vue {
                         ) {
                             tempChartData.traffic -= summary.inEmployee;
                         }
-                    } else if (this.inputFormData.inOrOut == EType.out) {
+                    } else if (this.inputFormData.inOrOut == ETypeInOrOut.out) {
                         tempChartData.traffic += summary.out;
                         if (
                             this.inputFormData.isIncludedEmployee ==

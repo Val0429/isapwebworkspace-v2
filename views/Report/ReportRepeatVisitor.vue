@@ -111,12 +111,6 @@ import Dialog from "@/services/Dialog";
 
 // Tina
 import {
-    ECountType,
-    EDeviceMode,
-    EType,
-    EIncludedEmployee
-} from "@/components/Reports/models/EReport";
-import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
@@ -143,7 +137,10 @@ import {
     ITemplateItem,
     ReportDashboard,
     ReportTableData,
-    IFilterCondition
+    IFilterCondition,
+    ECountType,
+    EDeviceMode,
+    EIncludedEmployee
 } from "@/components/Reports";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";

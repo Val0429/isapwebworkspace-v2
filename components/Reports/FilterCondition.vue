@@ -408,7 +408,14 @@ export class FilterCondition extends Vue {
     }
 
     async doSubmit() {
-        const doSubmitParam: IFilterCondition = {
+        const doSubmitParam: {
+            startDate: Date | string;
+            endDate: Date | string;
+            firstSiteId?: string;
+            siteIds: string[];
+            tagIds: string[];
+            type: ETimeMode;
+        } = {
             startDate: Datetime.DateToZero(new Date()).toISOString(),
             endDate: Datetime.DateToZero(new Date()).toISOString(),
             type: ETimeMode.none,

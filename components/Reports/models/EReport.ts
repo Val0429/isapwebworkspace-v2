@@ -45,7 +45,7 @@ enum ECountType {
     year = 'year',
 }
 
-enum EType {
+enum ETypeInOrOut {
     in = 'in',
     out = 'out',
 }
@@ -84,4 +84,4 @@ enum EChartMode {
 }
 
 export { ESign, EPageType, EChartMode };
-export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, EType, EIncludedEmployee };
+export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, ETypeInOrOut, EIncludedEmployee };
