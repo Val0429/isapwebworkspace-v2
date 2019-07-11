@@ -75,7 +75,6 @@ import {EAreaMode} from "../../components/Reports";
 
                 <!-- Morris -->
                 <highcharts-traffic
-                    ref="highcharts"
                     :startDate="startDate"
                     :endDate="endDate"
                     :sites="sites"
@@ -1396,7 +1395,6 @@ export default class ReportTraffic extends Vue {
 
     // Author: Tina
     resolveSummary() {
-
         console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
@@ -1641,7 +1639,7 @@ export default class ReportTraffic extends Vue {
                     );
                     tempChartData.temperatureMin = weather.temperatureMin;
                     tempChartData.temperatureMax = weather.temperatureMax;
-                   // this.responseData.weathers.splice(i, 1);
+                    // this.responseData.weathers.splice(i, 1);
                     break;
                 }
             }
@@ -1947,14 +1945,8 @@ export default class ReportTraffic extends Vue {
 
     // Author: Tina
     receiveType(type) {
-        let chartRef: any = this.$refs.highcharts;
         this.inputFormData.type = type;
         this.timeMode = type;
-
-        if (chartRef != undefined) {
-            console.log("ready to start");
-            chartRef.start();
-        }
 
         console.log("type - ", this.inputFormData.type);
 
