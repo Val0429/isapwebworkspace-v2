@@ -353,9 +353,7 @@ class Datetime {
     // set Date to 00:00:00
     DateToZero(value: Date): Date {
         let date = new Date(value.getTime());
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setSeconds(0);
+        date.setHours(0, 0, 0, 0);
         return date;
     }
 
