@@ -47,10 +47,7 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
     tView: string = "w_UserPermission";
     tAdd: string = "w_UserPermissionAdd";
     tEdit: string = "w_UserPermissionEdit";
-    /// 4) possibility - edit / add / delete
-    // canAdd: boolean = true;
-    // canEdit: boolean = true;
-    // canDelete: boolean = true;
+    
     tokenOptions :{key:any, value:any}[]=[];
     apiRoleOptions :{key:any, value:any}[]=[];
     /// 4) interfaces - view / edit / add
@@ -70,14 +67,6 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
                 }
                 `;
             case EFormQuick.Add:
-                return `
-                    interface {
-                        /**
-                         * @uiLabel - ${this._("name")}
-                        */
-                      identifier:string;
-                    }
-                `;
             case EFormQuick.Edit:
                 return `
                 interface {
@@ -99,7 +88,8 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
     }
     /// 8) post-add 寫入新增前要做甚麼調整
     postAdd(row) {
-        return;
+        row.permissions=this.getNewPermissions(row);
+        return row;
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
     async preEdit(row) {                
@@ -107,22 +97,19 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
         return row;
     }
     /// 10) post-edit 寫入修改前要做甚麼調整
-    async postEdit(row) {
-        await this.deletePermissions(row.objectId);
-        await this.postPermissions(row, row.objectId);
+    postEdit(row) {
+        row.permissions=this.getNewPermissions(row);
         return row;
     }
-    
-  private async postPermissions(row: any, objectId:string) {
-      if(!row.permissions || row.permissions.length<=0)return;
-    let promises=[];
-    for(let perm of row.permissions) {
-      let data=PermissionList.find(x => x.key==this.tokenOptions.find(x => x.key==perm).value);
-      if(!data)continue;
-      promises.push(this.$server.C("/api-permissions" as any, { token: perm, role: objectId, data: data.access }));
+    getNewPermissions(row:any){
+        let newPermissions=[];
+        for(let perm of row.permissions) {
+            let data=PermissionList.find(x => x.key==this.tokenOptions.find(x => x.key==perm).value);
+            if(!data)continue;
+            newPermissions.push({objectId:perm, value:data.access})
+        }
+        return newPermissions;
     }
-    await Promise.all(promises);
-  }
     
     selectedRows($event){
         
@@ -139,10 +126,7 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
             return;
         }
     }
-    async deletePermissions(objectId:string){
-        
-        await this.$server.D("/api-permissions" as any, {objectId});
-    }
+
     async created(){
         this.permissionName = PermissionName.user;        
         await this.getApiToken();
