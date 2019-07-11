@@ -357,13 +357,6 @@ export class HighchartsDemographic extends Vue {
             this.value
         );
 
-        for (let value of this.value) {
-            if (value.maleCount > 0) {
-                console.log(value);
-            }
-        }
-        console.log("!!! value over");
-
         // TODO: For Demo
         this.deomRandomValue();
     }
@@ -737,9 +730,11 @@ export class HighchartsDemographic extends Vue {
                 tempChartData.dateStart
             );
 
-            for (let val of tempValues) {
+            for (let i in tempValues) {
+                let val = tempValues[i];
                 let value: IChartDemographicData = this.anysislyChartValue(val);
                 let valTimestamp = value.date.getTime();
+
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
@@ -747,13 +742,24 @@ export class HighchartsDemographic extends Vue {
                 ) {
                     tempChartData.maleCount += value.maleCount;
                     tempChartData.femaleCount += value.femaleCount;
-                    tempChartData.weather = value.weather;
-                    tempChartData.weatherIcon = HighchartsService.weatherIcon(
-                        value.weather
-                    );
-
                     tempTotalCount += value.maleCount;
                     tempTotalCount += value.femaleCount;
+
+                    if (tempChartData.weather == EWeather.none) {
+                        tempChartData.weather = value.weather;
+                        tempChartData.weatherIcon = HighchartsService.weatherIcon(
+                            value.weather
+                        );
+                    }
+
+                    if (Datetime.DateTime2String(value.date, "YYYY-MM-DD") == "2019-07-02") {
+                        console.log(
+                            Datetime.DateTime2String(value.date, "YYYY-MM-DD"),
+                            value,
+                            tempChartData
+                        );
+                    }
+                    tempValues.splice(parseInt(i), 1);
                 }
             }
 
