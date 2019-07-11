@@ -340,6 +340,12 @@ export class HighchartsOccupancy extends Vue {
         };
 
         this.mountChart.site1Day1 = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1DayX = false;
+            self.mountChart.siteXDay1 = false;
+            self.mountChart.siteXDayX = false;
+        }, 500);
     }
 
     ////////////////////////// site 1 day X //////////////////////////
@@ -624,6 +630,12 @@ export class HighchartsOccupancy extends Vue {
         };
 
         this.mountChart.site1DayX = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1Day1 = false;
+            self.mountChart.siteXDay1 = false;
+            self.mountChart.siteXDayX = false;
+        }, 500);
     }
 
     ////////////////////////// site X day 1 //////////////////////////
@@ -716,7 +728,14 @@ export class HighchartsOccupancy extends Vue {
             },
             series: tempSeries
         };
+        
         this.mountChart.siteXDay1 = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1Day1 = false;
+            self.mountChart.site1DayX = false;
+            self.mountChart.siteXDayX = false;
+        }, 500);
     }
 
     ////////////////////////// site X day X //////////////////////////
@@ -1114,6 +1133,12 @@ export class HighchartsOccupancy extends Vue {
         };
 
         this.mountChart.siteXDayX = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1Day1 = false;
+            self.mountChart.site1DayX = false;
+            self.mountChart.siteXDay1 = false;
+        }, 500);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

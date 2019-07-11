@@ -28,6 +28,7 @@
             v-if="mountChart.siteXDayX"
             :options="chartOptions.siteXDayX"
         ></highcharts>
+
         </b-form-group>
     </div>
 </template>
@@ -162,10 +163,6 @@ export class HighchartsTraffic extends Vue {
     mounted() {}
 
     start() {
-        this.mountChart.site1Day1 = false;
-        this.mountChart.site1DayX = false;
-        this.mountChart.siteXDay1 = false;
-        this.mountChart.siteXDayX = false;
         this.chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
@@ -406,6 +403,12 @@ export class HighchartsTraffic extends Vue {
         }
 
         this.mountChart.site1Day1 = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1DayX = false;
+            self.mountChart.siteXDay1 = false;
+            self.mountChart.siteXDayX = false;
+        }, 500);
     }
 
     ////////////////////////// site 1 day X //////////////////////////
@@ -790,6 +793,12 @@ export class HighchartsTraffic extends Vue {
         };
 
         this.mountChart.site1DayX = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1Day1 = false;
+            self.mountChart.siteXDay1 = false;
+            self.mountChart.siteXDayX = false;
+        }, 500);
     }
 
     ////////////////////////// site X day 1 //////////////////////////
@@ -945,6 +954,12 @@ export class HighchartsTraffic extends Vue {
         };
 
         this.mountChart.siteXDay1 = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1Day1 = false;
+            self.mountChart.site1DayX = false;
+            self.mountChart.siteXDayX = false;
+        }, 500);
     }
 
     ////////////////////////// site X day X //////////////////////////
@@ -1180,7 +1195,6 @@ export class HighchartsTraffic extends Vue {
                             value.weather
                         );
                         tempValues.splice(parseInt(i), 1);
-                        break;
                     }
                 }
                 tempResultItem.sites.push(tempSiteValue);
@@ -1370,6 +1384,12 @@ export class HighchartsTraffic extends Vue {
         };
 
         this.mountChart.siteXDayX = true;
+        let self = this;
+        setTimeout(function() {
+            self.mountChart.site1Day1 = false;
+            self.mountChart.site1DayX = false;
+            self.mountChart.siteXDay1 = false;
+        }, 500);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
