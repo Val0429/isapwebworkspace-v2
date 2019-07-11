@@ -5,7 +5,11 @@
             :visible="filterVisible"
             v-on:input="onFilterSubmit($event)"
         />
-        <ivc-form-quick v-on:viewChange="viewChange($event)">  
+        <ivc-form-quick v-on:viewChange="viewChange($event)"
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            :allowEdit="allowEdit">  
         <!-- 5) custom view templates with <template #view.* /> -->
 
         <template #view.name="{$attrs, $listeners}" >            
@@ -62,12 +66,7 @@ export default class SyncReceiverForm extends BasicFormQuick implements IFormQui
     tView: string = "w_SyncReceiver";
     tAdd: string = "w_SyncReceiverAdd";
     tEdit: string = "w_SyncReceiverEdit";
-    /// 4) possibility - edit / add / delete
-    canAdd: boolean = true;
-    canEdit: boolean = true;
-    canDelete: boolean = true;
-    selectedOptions=[];
-    options :{key:any, value:any}[]=[];
+    
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
         switch (type) {
@@ -112,11 +111,8 @@ export default class SyncReceiverForm extends BasicFormQuick implements IFormQui
     postEdit(row) {
         return;
     }
-    /// Done
- 
-    getName(key:any){
-        let item = this.options.find(x=>x.key==key);        
-        return item?item.value:'';
+    created(){
+        this.permissionName = PermissionName.syncreceiver;
     }
 }
 </script>

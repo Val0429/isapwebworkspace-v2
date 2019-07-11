@@ -5,7 +5,12 @@
             :visible="filterVisible"
             v-on:input="onFilterSubmit($event)"
         />
-        <ivc-form-quick v-on:viewChange="viewChange($event)">  
+        <ivc-form-quick v-on:viewChange="viewChange($event)"
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            v-on:selectedRows="selectedRows($event)"
+            :allowEdit="allowEdit">  
     
         <!-- 5) custom view templates with <template #view.* /> -->
         <template #view.roles="{$attrs, $listeners}">
@@ -153,7 +158,15 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
     //   this.roleVisible= $event == 'add';
     // } 
     roleVisible:boolean=false;
-    
+    selectedRows($event){
+        
+        if($event && $event.length > 0 && this.$user.user.objectId == $event[0].objectId)
+            this.canDelete= false;
+        else 
+            this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined; 
+        console.log("can delete", this.canDelete);
+        
+    }
         
 }
 </script>

@@ -5,7 +5,7 @@
                 <!-- <toolbox-view /> -->
                 <iv-toolbox-edit v-if="(canEdit || canPreview) && allowEdit" :disabled="selectedRows.length !== 1" @click="edit(selectedRows[0])" />
                 <!-- <toolbox-info /> -->
-                <iv-toolbox-delete v-if="canDelete && allowEdit" :disabled="selectedRows.length === 0" @click="doDelete(selectedRows)" />
+                <iv-toolbox-delete v-if="canDelete" :disabled="selectedRows.length === 0" @click="doDelete(selectedRows)" />
                 <!-- <toolbox-more /> -->
 
                 <!-- <toolbox-divider /> -->
@@ -34,7 +34,7 @@
                 <template v-if="canEdit || canPreview || canDelete" #actions$="{$attrs}">
                     <iv-toolbox-more>
                         <iv-toolbox-edit v-show="(canEdit || canPreview) && allowEdit" @click.stop="edit($attrs.row)" />
-                        <iv-toolbox-delete v-show="canDelete && allowEdit" @click.stop="doDelete($attrs.row)" />
+                        <iv-toolbox-delete v-show="canDelete" @click.stop="doDelete($attrs.row)" />
                     </iv-toolbox-more>
                 </template>
 

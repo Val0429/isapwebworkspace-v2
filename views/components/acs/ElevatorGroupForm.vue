@@ -5,7 +5,12 @@
             :visible="filterVisible"
             v-on:input="onFilterSubmit($event)"
         />
-    <ivc-form-quick v-on:viewChange="viewChange($event)">    
+    <ivc-form-quick 
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            :allowEdit="allowEdit"
+        v-on:viewChange="viewChange($event)">    
         <!-- 5) custom view templates with <template #view.* /> -->
         <template #view.area="{$attrs, $listeners}">
             {{$attrs.value ? $attrs.value.name : ''}}

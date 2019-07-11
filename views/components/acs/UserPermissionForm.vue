@@ -5,7 +5,13 @@
             :visible="filterVisible"
             v-on:input="onFilterSubmit($event)"
         />
-        <ivc-form-quick v-on:viewChange="viewChange($event)">  
+        <ivc-form-quick
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            :allowEdit="allowEdit"
+            v-on:selectedRows="selectedRows($event)"
+            v-on:viewChange="viewChange($event)">  
     
         <!-- 5) custom view templates with <template #view.* /> -->
         <template #view.roles="{$attrs, $listeners}">
@@ -75,14 +81,14 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
             case EFormQuick.Edit:
                 return `
                 interface {
-                        /**
-                         * @uiLabel - ${this._("name")}
-                        */
-                      identifier:string;
-                      /**
-                         * @uiLabel - ${this._("w_ApiRoles")}
-                        */
-                      permissions:any;
+                    /**
+                    * @uiLabel - ${this._("name")}
+                    */
+                    identifier:string;
+                    /**
+                    * @uiLabel - ${this._("w_ApiRoles")}
+                    */
+                    permissions:any;
                 }
                 `;
         }
@@ -96,7 +102,7 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
         return;
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
-    async preEdit(row) {
+    async preEdit(row) {                
         row.permissions = await this.getApiPermissions(row.objectId);        
         return row;
     }
@@ -106,6 +112,7 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
         await this.postPermissions(row, row.objectId);
         return row;
     }
+    
   private async postPermissions(row: any, objectId:string) {
       if(!row.permissions || row.permissions.length<=0)return;
     let promises=[];
@@ -116,7 +123,22 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
     }
     await Promise.all(promises);
   }
-
+    
+    selectedRows($event){
+        
+        this.allowEdit=true;
+        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined; 
+        //console.log("this.$user", this.$user);
+        //console.log("$event", $event);
+        for(let event of $event){
+            let exists = this.$user.user.apiRoles.find(x=>x.objectId == event.objectId);
+            //console.log("exists", exists);
+            if(!exists)continue;
+            this.allowEdit=false;
+            this.canDelete = false;
+            return;
+        }
+    }
     async deletePermissions(objectId:string){
         
         await this.$server.D("/api-permissions" as any, {objectId});
@@ -124,6 +146,7 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
     async created(){
         this.permissionName = PermissionName.user;        
         await this.getApiToken();
+       
     }
     private async getApiPermissions(objectId:string){
         let resp: any=await this.$server.R("/api-permissions" as any,{ "paging.all": "true", role:objectId });

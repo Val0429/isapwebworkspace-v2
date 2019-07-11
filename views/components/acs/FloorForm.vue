@@ -35,7 +35,11 @@
             </template>
         </div>
         </iv-card>
-        <ivc-form-quick v-on:viewChange="viewChange($event)">  
+        <ivc-form-quick v-on:viewChange="viewChange($event)"
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            :allowEdit="allowEdit">  
             <!-- 5) custom view templates with <template #view.* /> -->
             <template #view.system="{$attrs, $listeners}">
                 {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
