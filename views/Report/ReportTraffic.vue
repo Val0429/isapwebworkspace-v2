@@ -13,9 +13,7 @@ import {EAreaMode} from "../../components/Reports";
         </filter-condition>
 
         <div>
-
             <iv-card>
-
                 <template #toolbox>
                     <!-- Ben -->
                     <iv-toolbox-export-excel
@@ -26,7 +24,6 @@ import {EAreaMode} from "../../components/Reports";
                         size="lg"
                         @click="exportExcel(eFileType.csv)"
                     />
-
                     <iv-toolbox-export-pdf
                         size="lg"
                         @click="exportPDF"
@@ -62,7 +59,6 @@ import {EAreaMode} from "../../components/Reports";
                     @in_or_out="receiveInOrOut"
                     @is_included_employee="receiveIsIncludedEmployee"
                 >
-
                 </analysis-filter-in-out>
 
                 <!-- Ben -->
@@ -77,6 +73,7 @@ import {EAreaMode} from "../../components/Reports";
                 >
                 </anlysis-dashboard>
 
+                <!-- Morris -->
                 <highcharts-traffic
                     ref="highcharts"
                     :startDate="startDate"
@@ -125,7 +122,6 @@ import {EAreaMode} from "../../components/Reports";
                 </div>
 
             </iv-card>
-
         </div>
 
         <!-- Tina -->
@@ -444,6 +440,7 @@ export default class ReportTraffic extends Vue {
                 }
             }
         }
+
         while (sTime <= eTime) {
             this.sunRData.head.push(sTime);
             sTime++;
@@ -452,6 +449,7 @@ export default class ReportTraffic extends Vue {
         //body
         this.sunRData.body = [];
         let tempArray = [];
+
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
             if (
@@ -662,6 +660,7 @@ export default class ReportTraffic extends Vue {
                     tempArray.push(body);
             }
         }
+
         //填入資料
         switch (chartMode) {
             case EChartMode.site1Day1:
@@ -1152,13 +1151,12 @@ export default class ReportTraffic extends Vue {
         };
         if (!this.filterData.firstSiteId) {
             return false;
-
-            // 只選擇site
         } else if (
             this.filterData.firstSiteId &&
             !this.inputFormData.areaId &&
             !this.inputFormData.groupId
         ) {
+            // 只選擇site
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -1178,13 +1176,13 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all" &&
             !this.inputFormData.groupId
         ) {
+            // 選擇site和單一area
             readParam.areaId = this.inputFormData.areaId;
             await this.$server
                 .R("/device", readParam)
@@ -1205,7 +1203,6 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和單一device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -1213,6 +1210,7 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和單一area和單一device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -1236,8 +1234,6 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-
-            // 選擇site和單一area和單一device group和 all device
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -1246,6 +1242,7 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId !== "all" &&
             this.inputFormData.deviceId === "all"
         ) {
+            // 選擇site和單一area和單一device group和 all device
             readParam.groupId = this.inputFormData.groupId;
 
             await this.$server
@@ -1270,7 +1267,6 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -1279,6 +1275,7 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.groupId === "") &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和all area
             readParam.areaId = "";
             await this.$server
                 .R("/device", readParam)
@@ -1299,7 +1296,6 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -1307,6 +1303,7 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和all area和all device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -1330,7 +1327,6 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -1338,6 +1334,7 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和單一area和all device group
             readParam.areaId = this.inputFormData.areaId;
             readParam.groupId = "";
             await this.$server
@@ -1362,8 +1359,9 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-            //     // 選擇all area, all group, 單一 device
+
             // } else if (
+            //     // 選擇all area, all group, 單一 device
             //     this.filterData.firstSiteId &&
             //     this.inputFormData.areaId &&
             //     this.inputFormData.areaId === "all" &&
@@ -1524,7 +1522,6 @@ export default class ReportTraffic extends Vue {
     sortOutChartData(datas: any) {
         let tempChartDatas: IChartTrafficData[] = [];
         let isOneDay = false;
-        this.chartDatas = [];
 
         // 取得date、siteObjectId資料
         if (
@@ -1695,6 +1692,8 @@ export default class ReportTraffic extends Vue {
                 }
             }
         }
+
+        console.log("!!! 1" , new Date().getTime());
         this.chartDatas = tempChartDatas;
     }
 
@@ -1795,7 +1794,6 @@ export default class ReportTraffic extends Vue {
             for (const singleData of this.areaSummaryFilter) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
-
                     if (detailKey === "deviceGroups") {
                         if (
                             this.inputFormData.groupId ===
@@ -1809,28 +1807,24 @@ export default class ReportTraffic extends Vue {
             }
 
             this.sortOutChartData(this.deviceGroupSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.deviceId = "all";
-
-            // 依照all deviceGroups篩選
         } else if (
             this.inputFormData.areaId &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 依照all deviceGroups篩選
             this.sortOutChartData(this.areaSummaryFilter);
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
-
-            // 清除deviceGroups篩選
         } else if (this.inputFormData.areaId && !this.inputFormData.groupId) {
+            // 清除deviceGroups篩選
             this.sortOutChartData(this.areaSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.groupId = "all";
@@ -1896,13 +1890,12 @@ export default class ReportTraffic extends Vue {
             } else {
                 return false;
             }
-
-            // 判斷有 deviceGroup，groupId 為 'all'，
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 判斷有 deviceGroup，groupId 為 'all'，
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
                 for (const detailKey in singleData) {
@@ -1947,13 +1940,12 @@ export default class ReportTraffic extends Vue {
             } else {
                 return false;
             }
-
-            // 判斷有 deviceGroup，groupId 不為 'all'，
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 判斷有 deviceGroup，groupId 不為 'all'，
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
                 for (const detailKey in singleData) {
@@ -1983,15 +1975,13 @@ export default class ReportTraffic extends Vue {
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
                 this.inputFormData.deviceId = "all";
-
-                // 依照all device篩選
             } else if (
                 this.inputFormData.areaId &&
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
+                // 依照all device篩選
                 this.sortOutChartData(this.deviceGroupSummaryFilter);
-
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
                 this.inputFormData.deviceId = "all";
