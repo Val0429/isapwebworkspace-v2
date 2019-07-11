@@ -243,6 +243,7 @@ export class HighchartsTraffic extends Vue {
         // set data
         for (let categorie of tempHourStrings) {
             let haveValue = false;
+
             for (let i in tempValues) {
                 let loopValue = tempValues[i];
                 let value: IChartTrafficData = this.anysislyChartValue(
@@ -255,6 +256,7 @@ export class HighchartsTraffic extends Vue {
                     break;
                 }
             }
+
             if (!haveValue) {
                 let defaultValue = this.anysislyChartValueDefault();
                 defaultValue.timeString = categorie;
@@ -609,6 +611,7 @@ export class HighchartsTraffic extends Vue {
                 tempChartData.dateStart
             );
 
+            let spliceIndexList: number[] = [];
             for (let i in tempValues) {
                 let val = tempValues[i];
                 let value: IChartTrafficData = this.anysislyChartValue(val);
@@ -623,12 +626,20 @@ export class HighchartsTraffic extends Vue {
                     tempChartData.revenue += value.revenue;
                     tempChartData.transaction += value.transaction;
                     tempChartData.temperature += value.temperature;
+                    tempChartData.temperatureMin = value.temperatureMin;
+                    tempChartData.temperatureMax = value.temperatureMax;
                     tempChartData.weather = value.weather;
                     tempChartData.weatherIcon = HighchartsService.weatherIcon(
                         value.weather
                     );
-                    tempValues.splice(parseInt(i), 1);
+                    
+                    spliceIndexList.push(parseInt(i));
                 }
+            }
+
+            // tempValues 減肥
+            for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                tempValues.splice(spliceIndexList[i], 1);
             }
 
             // for calculate AVG
@@ -832,6 +843,8 @@ export class HighchartsTraffic extends Vue {
 
         for (let site of this.sites) {
             let haveValue = false;
+
+            let spliceIndexList: number[] = [];
             for (let i in tempValues) {
                 let loopValue = tempValues[i];
                 let value: IChartTrafficData = this.anysislyChartValue(
@@ -851,9 +864,16 @@ export class HighchartsTraffic extends Vue {
                     if (!haveResult) {
                         tempResult.push(value);
                     }
-                    tempValues.splice(parseInt(i), 1);
+                   
+                   spliceIndexList.push(parseInt(i));
                 }
             }
+
+            // tempValues 減肥
+            for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                tempValues.splice(spliceIndexList[i], 1);
+            }
+
 
             if (!haveValue) {
                 let defaultValue = this.anysislyChartValueDefault();
@@ -1176,6 +1196,7 @@ export class HighchartsTraffic extends Vue {
                 tempSiteValue.siteObjectId = site.objectId;
                 tempSiteValue.siteName = site.name;
 
+                let spliceIndexList: number[] = [];
                 for (let i in tempValues) {
                     let val = tempValues[i];
                     let value: IChartTrafficData = this.anysislyChartValue(val);
@@ -1190,12 +1211,22 @@ export class HighchartsTraffic extends Vue {
                         tempSiteValue.revenue += value.revenue;
                         tempSiteValue.transaction += value.transaction;
                         tempSiteValue.temperature = value.temperature;
-                        tempSiteValue.weather = value.weather;
-                        tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
-                            value.weather
-                        );
-                        tempValues.splice(parseInt(i), 1);
+                        tempSiteValue.temperatureMin = value.temperatureMin;
+                        tempSiteValue.temperatureMax = value.temperatureMax;
+                        if (
+                            tempSiteValue.weather == EWeather.none &&
+                            value.weather != EWeather.none
+                        ) {
+                            tempSiteValue.weather = value.weather;
+                            tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
+                                value.weather
+                            );
+                        }
+                        spliceIndexList.push(parseInt(i));
                     }
+                }
+                for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                    tempValues.splice(spliceIndexList[i], 1);
                 }
                 tempResultItem.sites.push(tempSiteValue);
             }

@@ -712,6 +712,7 @@ export class HighchartsDemographic extends Vue {
                 tempChartData.dateStart
             );
 
+            let spliceIndexList: number[] = [];
             for (let i in tempValues) {
                 let val = tempValues[i];
                 let value: IChartDemographicData = this.anysislyChartValue(val);
@@ -733,8 +734,13 @@ export class HighchartsDemographic extends Vue {
                             value.weather
                         );
                     }
-                    tempValues.splice(parseInt(i), 1);
+                    spliceIndexList.push(parseInt(i));
                 }
+            }
+
+            // tempValues 減肥
+            for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                tempValues.splice(spliceIndexList[i], 1);
             }
 
             // push single series data
@@ -1227,6 +1233,7 @@ export class HighchartsDemographic extends Vue {
                 tempSiteValue.siteObjectId = site.objectId;
                 tempSiteValue.siteName = site.name;
 
+                let spliceIndexList: number[] = [];
                 for (let i in tempValues) {
                     let val = tempValues[i];
                     let value: IChartDemographicData = this.anysislyChartValue(
@@ -1253,8 +1260,13 @@ export class HighchartsDemographic extends Vue {
                         tempTotalMaleCount += value.maleCount;
                         tempTotalFemaleCount += value.femaleCount;
 
-                        tempValues.splice(parseInt(i), 1);
+                        spliceIndexList.push(parseInt(i));
                     }
+                }
+
+                // tempValues 減肥
+                for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                    tempValues.splice(spliceIndexList[i], 1);
                 }
 
                 tempResultItem.sites.push(tempSiteValue);
