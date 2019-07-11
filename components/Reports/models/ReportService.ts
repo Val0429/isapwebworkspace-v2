@@ -1,4 +1,4 @@
-import { EAgeRange } from './EHighCharts';
+import { EAgeRange, EWeek } from './EHighCharts';
 import { ITemplateItem } from './ITemplateItem';
 
 class ReportService {
@@ -85,6 +85,53 @@ class ReportService {
                 return EAgeRange.upper61;
             default:
                 return EAgeRange.none;
+        }
+    }
+
+    showWeek(data: number): string {
+        switch (data) {
+            case 1:
+                return EWeek.Mon;
+            case 2:
+                return EWeek.Tue;
+            case 3:
+                return EWeek.Wed;
+            case 4:
+                return EWeek.Thu;
+            case 5:
+                return EWeek.Fri;
+            case 6:
+                return EWeek.Sat;
+            case 0:
+                return EWeek.Sun;
+        }
+    }
+
+    countRatio(value: number, prevValue: number): number {
+        if (value == undefined) {
+            return 0;
+        }
+        if (prevValue == undefined) {
+            return 0;
+        }
+        if (value == null) {
+            return 0;
+        }
+        if (prevValue == null) {
+            return 0;
+        }
+        if (value == 0) {
+            return 0;
+        }
+        if (prevValue == 0) {
+            return 0;
+        }
+        if (value > prevValue) {
+            return prevValue / value;
+        } else if (value < prevValue) {
+            return -(value / prevValue);
+        } else {
+            return 1;
         }
     }
 }

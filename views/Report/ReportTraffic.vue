@@ -255,7 +255,8 @@ export default class ReportTraffic extends Vue {
     selecteds: IRegionTreeSelected[] = [];
 
     // OfficeHour 相關
-    officeHourItemDetail: any = {};
+    officeHourItemDetail: any = [];
+
     // recipient 相關
     modalShow: boolean = false;
 
@@ -477,6 +478,7 @@ export default class ReportTraffic extends Vue {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                    group: null,
                     in: [],
                     out: []
                 };
@@ -510,12 +512,12 @@ export default class ReportTraffic extends Vue {
                                 deviceGroup.objectId
                             ) {
                                 inCount.value += summaryData.in;
-                                inCount.valueRatio += this.countRatio(
+                                inCount.valueRatio += ReportService.countRatio(
                                     summaryData.in,
                                     summaryData.prevIn
                                 );
                                 outCount.value += summaryData.out;
-                                outCount.valueRatio += this.countRatio(
+                                outCount.valueRatio += ReportService.countRatio(
                                     summaryData.out,
                                     summaryData.prevOut
                                 );
@@ -527,12 +529,12 @@ export default class ReportTraffic extends Vue {
                             summaryData.area.objectId
                         ) {
                             inCount.value += summaryData.in;
-                            inCount.valueRatio += this.countRatio(
+                            inCount.valueRatio += ReportService.countRatio(
                                 summaryData.in,
                                 summaryData.prevIn
                             );
                             outCount.value += summaryData.out;
-                            outCount.valueRatio += this.countRatio(
+                            outCount.valueRatio += ReportService.countRatio(
                                 summaryData.out,
                                 summaryData.prevOut
                             );
@@ -646,6 +648,7 @@ export default class ReportTraffic extends Vue {
                 let body = {
                     site: summaryData.site,
                     area: summaryData.area,
+                    group: null,
                     in: [],
                     out: []
                 };
@@ -686,12 +689,12 @@ export default class ReportTraffic extends Vue {
                                         deviceGroup.objectId
                                     ) {
                                         inCount.value += summaryData.in;
-                                        inCount.valueRatio += this.countRatio(
+                                        inCount.valueRatio += ReportService.countRatio(
                                             summaryData.in,
                                             summaryData.prevIn
                                         );
                                         outCount.value += summaryData.out;
-                                        outCount.valueRatio += this.countRatio(
+                                        outCount.valueRatio += ReportService.countRatio(
                                             summaryData.out,
                                             summaryData.prevOut
                                         );
@@ -703,12 +706,12 @@ export default class ReportTraffic extends Vue {
                                     summaryData.area.objectId
                                 ) {
                                     inCount.value += summaryData.in;
-                                    inCount.valueRatio += this.countRatio(
+                                    inCount.valueRatio += ReportService.countRatio(
                                         summaryData.in,
                                         summaryData.prevIn
                                     );
                                     outCount.value += summaryData.out;
-                                    outCount.valueRatio += this.countRatio(
+                                    outCount.valueRatio += ReportService.countRatio(
                                         summaryData.out,
                                         summaryData.prevOut
                                     );
@@ -749,12 +752,12 @@ export default class ReportTraffic extends Vue {
                                         deviceGroup.objectId
                                     ) {
                                         inCount.value += summaryData.in;
-                                        inCount.valueRatio += this.countRatio(
+                                        inCount.valueRatio += ReportService.countRatio(
                                             summaryData.in,
                                             summaryData.prevIn
                                         );
                                         outCount.value += summaryData.out;
-                                        outCount.valueRatio += this.countRatio(
+                                        outCount.valueRatio += ReportService.countRatio(
                                             summaryData.out,
                                             summaryData.prevOut
                                         );
@@ -766,12 +769,12 @@ export default class ReportTraffic extends Vue {
                                     summaryData.area.objectId
                                 ) {
                                     inCount.value += summaryData.in;
-                                    inCount.valueRatio += this.countRatio(
+                                    inCount.valueRatio += ReportService.countRatio(
                                         summaryData.in,
                                         summaryData.prevIn
                                     );
                                     outCount.value += summaryData.out;
-                                    outCount.valueRatio += this.countRatio(
+                                    outCount.valueRatio += ReportService.countRatio(
                                         summaryData.out,
                                         summaryData.prevOut
                                     );
@@ -790,7 +793,7 @@ export default class ReportTraffic extends Vue {
                         "/" +
                         new Date(x).getDate() +
                         " " +
-                        this.showWeek(new Date(x).getDay())
+                        ReportService.showWeek(new Date(x).getDay())
                 );
                 break;
         }
@@ -839,55 +842,6 @@ export default class ReportTraffic extends Vue {
                 });
         } else {
             // this.toDetailReportTable(thatDay, sunTime, sunSite, sunArea);
-        }
-    }
-
-    // Author: Ben
-    countRatio(value: number, prevValue: number): number {
-        if (value == undefined) {
-            return 0;
-        }
-        if (prevValue == undefined) {
-            return 0;
-        }
-        if (value == null) {
-            return 0;
-        }
-        if (prevValue == null) {
-            return 0;
-        }
-        if (value == 0) {
-            return 0;
-        }
-        if (prevValue == 0) {
-            return 0;
-        }
-        if (value > prevValue) {
-            return prevValue / value;
-        } else if (value < prevValue) {
-            return -(value / prevValue);
-        } else {
-            return 1;
-        }
-    }
-
-    // Author: Ben
-    showWeek(data) {
-        switch (data) {
-            case 1:
-                return "Mon";
-            case 2:
-                return "Tue";
-            case 3:
-                return "Wed";
-            case 4:
-                return "Thu";
-            case 5:
-                return "Fri";
-            case 6:
-                return "Sat";
-            case 0:
-                return "Sun";
         }
     }
 
@@ -1412,22 +1366,24 @@ export default class ReportTraffic extends Vue {
     //// 以下為 analysis filter ////
 
     // Author: Tina
-    async receiveFilterData(filterData) {
+    async receiveFilterData(filterData: IFilterCondition) {
+        let param = JSON.parse(JSON.stringify(filterData));
+        this.filterData = filterData;
         this.inputFormData = {
             areaId: "",
             groupId: "",
             deviceId: "",
             type: "",
-            inOrOut: "in",
             isIncludedEmployee: "no"
         };
 
         await this.$server
-            .C("/report/people-counting/summary", filterData)
+            .C("/report/people-counting/summary", param)
             .then((response: any) => {
                 if (response !== undefined) {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
+                    this.resolveSummary();
                 }
             })
             .catch((e: any) => {
@@ -1437,12 +1393,10 @@ export default class ReportTraffic extends Vue {
                 console.log(e);
                 return false;
             });
+    }
 
-        this.filterData = filterData;
-        this.filterData.startDate = new Date(this.filterData.startDate);
-        this.filterData.endDate = new Date(this.filterData.endDate);
-
-        console.log("this.filterData  - ", this.filterData);
+    // Author: Tina
+    resolveSummary() {
         console.log("this.responseData  - ", this.responseData);
 
         if (this.filterData.siteIds.length === 1) {
@@ -1583,7 +1537,6 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-
         // 計算 traffic
         for (let summary of datas) {
             let summaryDateFormat = isOneDay
@@ -1693,7 +1646,7 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-        console.log("!!! 1" , new Date().getTime());
+        console.log("!!! 1", new Date().getTime());
         this.chartDatas = tempChartDatas;
     }
 
