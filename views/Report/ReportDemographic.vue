@@ -228,7 +228,7 @@
 		selecteds: IRegionTreeSelected[] = [];
 
 		// OfficeHour 相關
-		officeHourItemDetail: any = {};
+		officeHourItemDetail: any = [];
 		// recipient 相關
 		modalShow: boolean = false;
 
@@ -1593,129 +1593,207 @@
 				for (let i = 0; i < 24; i++) {
 					let tempDate = Datetime.DateToZero(this.filterData.startDate);
 					tempDate.setHours(i);
-					let tempDateChartData = {
+					let tempDateChartDataLower20 = {
 						date: tempDate,
 						siteObjectId: "",
 						temperatureMin: 0,
 						temperatureMax: 0,
 						weather: EWeather.none,
-						ageRange: EAgeRange.none,
+						ageRange: EAgeRange.lower20,
 						maleCount: 0,
 						femaleCount: 0,
 					};
+					let tempDateChartDataM21_30 = {
+						date: tempDate,
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m21_30,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataM31_40 = {
+						date: tempDate,
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m31_40,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataM41_50 = {
+						date: tempDate,
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m41_50,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataM51_60 = {
+						date: tempDate,
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m51_60,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataUpper61 = {
+						date: tempDate,
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.upper61,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+
 					for (let siteId of this.filterData.siteIds) {
-						let tempSiteChartData = JSON.parse(
-							JSON.stringify(tempDateChartData)
+						let tempSiteChartDataLower20 = JSON.parse(JSON.stringify(tempDateChartDataLower20));
+						tempSiteChartDataLower20.date = new Date(tempSiteChartDataLower20.date);
+						tempSiteChartDataLower20.siteObjectId = siteId;
+
+						let tempSiteChartDataM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM21_30));
+						tempSiteChartDataM21_30.date = new Date(tempSiteChartDataM21_30.date);
+						tempSiteChartDataM21_30.siteObjectId = siteId;
+
+						let tempSiteChartDataM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM31_40));
+						tempSiteChartDataM31_40.date = new Date(tempSiteChartDataM31_40.date);
+						tempSiteChartDataM31_40.siteObjectId = siteId;
+
+						let tempSiteChartDataM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM41_50));
+						tempSiteChartDataM41_50.date = new Date(tempSiteChartDataM41_50.date);
+						tempSiteChartDataM41_50.siteObjectId = siteId;
+
+						let tempSiteChartDataM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM51_60));
+						tempSiteChartDataM51_60.date = new Date(tempSiteChartDataM51_60.date);
+						tempSiteChartDataM51_60.siteObjectId = siteId;
+
+						let tempSiteChartDataUpper61 = JSON.parse(JSON.stringify(tempDateChartDataUpper61));
+						tempSiteChartDataUpper61.date = new Date(tempSiteChartDataUpper61.date);
+						tempSiteChartDataUpper61.siteObjectId = siteId;
+
+						tempChartDatas.push(
+							tempSiteChartDataLower20,
+							tempSiteChartDataM21_30,
+							tempSiteChartDataM31_40,
+							tempSiteChartDataM41_50,
+							tempSiteChartDataM51_60,
+							tempSiteChartDataUpper61,
 						);
-						tempSiteChartData.date = new Date(tempSiteChartData.date);
-						tempSiteChartData.siteObjectId = siteId;
-						tempChartDatas.push(tempSiteChartData);
 					}
+
 				}
 			} else {
+
 				// multiple days
 				let dateList = Datetime.DateList(
 					this.filterData.startDate,
 					this.filterData.endDate
 				);
+
 				for (let dateItem of dateList) {
-					let tempDateChartData = {
+
+					let tempDateChartDataLower20 = {
 						date: new Date(dateItem.getTime()),
 						siteObjectId: "",
 						temperatureMin: 0,
 						temperatureMax: 0,
 						weather: EWeather.none,
-						ageRange: EAgeRange.none,
+						ageRange: EAgeRange.lower20,
 						maleCount: 0,
 						femaleCount: 0,
 					};
+					let tempDateChartDataM21_30 = {
+						date: new Date(dateItem.getTime()),
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m21_30,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataM31_40 = {
+						date: new Date(dateItem.getTime()),
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m31_40,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataM41_50 = {
+						date: new Date(dateItem.getTime()),
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m41_50,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataM51_60 = {
+						date: new Date(dateItem.getTime()),
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.m51_60,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+					let tempDateChartDataUpper61 = {
+						date: new Date(dateItem.getTime()),
+						siteObjectId: "",
+						temperatureMin: 0,
+						temperatureMax: 0,
+						weather: EWeather.none,
+						ageRange: EAgeRange.upper61,
+						maleCount: 0,
+						femaleCount: 0,
+					};
+
 					for (let siteId of this.filterData.siteIds) {
-						let tempSiteChartData = JSON.parse(
-							JSON.stringify(tempDateChartData)
+						let tempSiteChartDataLower20 = JSON.parse(JSON.stringify(tempDateChartDataLower20));
+						tempSiteChartDataLower20.date = new Date(tempSiteChartDataLower20.date);
+						tempSiteChartDataLower20.siteObjectId = siteId;
+
+						let tempSiteChartDataM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM21_30));
+						tempSiteChartDataM21_30.date = new Date(tempSiteChartDataM21_30.date);
+						tempSiteChartDataM21_30.siteObjectId = siteId;
+
+						let tempSiteChartDataM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM31_40));
+						tempSiteChartDataM31_40.date = new Date(tempSiteChartDataM31_40.date);
+						tempSiteChartDataM31_40.siteObjectId = siteId;
+
+						let tempSiteChartDataM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM41_50));
+						tempSiteChartDataM41_50.date = new Date(tempSiteChartDataM41_50.date);
+						tempSiteChartDataM41_50.siteObjectId = siteId;
+
+						let tempSiteChartDataM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM51_60));
+						tempSiteChartDataM51_60.date = new Date(tempSiteChartDataM51_60.date);
+						tempSiteChartDataM51_60.siteObjectId = siteId;
+
+						let tempSiteChartDataUpper61 = JSON.parse(JSON.stringify(tempDateChartDataUpper61));
+						tempSiteChartDataUpper61.date = new Date(tempSiteChartDataUpper61.date);
+						tempSiteChartDataUpper61.siteObjectId = siteId;
+
+						tempChartDatas.push(
+							tempSiteChartDataLower20,
+							tempSiteChartDataM21_30,
+							tempSiteChartDataM31_40,
+							tempSiteChartDataM41_50,
+							tempSiteChartDataM51_60,
+							tempSiteChartDataUpper61,
 						);
-						tempSiteChartData.date = new Date(tempSiteChartData.date);
-						tempSiteChartData.siteObjectId = siteId;
-						tempChartDatas.push(tempSiteChartData);
-					}
-				}
-			}
-
-			// 計算 ageRange、maleCount、femaleCount
-			for (let summary of datas) {
-				let summaryDateFormat = isOneDay
-					? Datetime.DateTime2String(
-						new Date(summary.date),
-						"YYYY-MM-DD HH"
-					)
-					: Datetime.DateTime2String(
-						new Date(summary.date),
-						"YYYY-MM-DD"
-					);
-
-				for (let tempChartData of tempChartDatas) {
-					let tempDateFormat = isOneDay
-						? Datetime.DateTime2String(
-							tempChartData.date,
-							"YYYY-MM-DD HH"
-						)
-						: Datetime.DateTime2String(
-							tempChartData.date,
-							"YYYY-MM-DD"
-						);
-					if (
-						summaryDateFormat == tempDateFormat &&
-						summary.site.objectId == tempChartData.siteObjectId
-					) {
-
-						for (let index = 0; index < 6; index++) {
-							if (summary.maleRanges[index] === null) {
-								summary.maleRanges[index] = 0;
-								break;
-							}
-
-							if (summary.femaleRanges[index] === null) {
-								summary.femaleRanges[index] = 0;
-								break;
-							}
-
-							if (summary.maleEmployeeRanges[index] === null) {
-								summary.maleEmployeeRanges[index] = 0;
-								break;
-							}
-
-							if (summary.femaleEmployeeRanges[index] === null) {
-								summary.femaleEmployeeRanges[index] = 0;
-								break;
-							}
-
-							let maleNotIncludeEmployee: number = 0;
-							let femaleNotIncludeEmployee: number = 0;
-							let maleTotal: number = 0;
-							let femaleTotal: number = 0;
-							let maleEmployee: number = 0;
-							let femaleEmployee: number = 0;
-
-							if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.yes) {
-
-								tempChartData.maleCount += summary.maleRanges[index];
-								tempChartData.femaleCount += summary.femaleRanges[index];
-								tempChartData.ageRange = ReportService.SwitchAgeRange(index.toString());
-
-							} else if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-
-								maleTotal += summary.maleRanges[index];
-								femaleTotal += summary.femaleRanges[index];
-								maleEmployee += summary.maleEmployeeRanges[index];
-								femaleEmployee += summary.femaleEmployeeRanges[index];
-								maleNotIncludeEmployee = maleTotal - maleEmployee;
-								femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
-
-								tempChartData.maleCount = maleNotIncludeEmployee;
-								tempChartData.femaleCount = femaleNotIncludeEmployee;
-								tempChartData.ageRange = ReportService.SwitchAgeRange(index.toString());
-							}
-						}
-
 					}
 				}
 			}
@@ -1723,18 +1801,74 @@
 
 			for (let tempChartData of tempChartDatas) {
 				let tempDateFormat = isOneDay
-					? Datetime.DateTime2String(tempChartData.date, "YYYY-MM-DD HH")
-					: Datetime.DateTime2String(tempChartData.date, "YYYY-MM-DD");
+					? Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.hour)
+                    : Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.date);
+
+            // 計算 maleCount、femaleCount
+			for (let summary of datas) {
+				let summaryDateFormat = isOneDay
+					? Datetime.DateTime2String(
+						new Date(summary.date),
+						ReportService.datetimeFormat.hour
+					)
+					: Datetime.DateTime2String(
+						new Date(summary.date),
+						ReportService.datetimeFormat.date
+                    );
+
+                	if (
+						summaryDateFormat == tempDateFormat &&
+						summary.site.objectId == tempChartData.siteObjectId
+					) {
+                        let ageRangeIndex = 0;
+                        switch (tempChartData.ageRange) {
+                            case EAgeRange.lower20:
+                                ageRangeIndex = 0;
+                                break;
+                            case EAgeRange.m21_30:
+                                ageRangeIndex = 1;
+                                break;
+                            case EAgeRange.m31_40:
+                                ageRangeIndex =2;
+                                break;
+                            case EAgeRange.m41_50:
+                                ageRangeIndex = 3;
+                                break;
+                            case EAgeRange.m51_60:
+                                ageRangeIndex =4;
+                                break;
+                            case EAgeRange.upper61:
+                                ageRangeIndex = 5;
+                                break;
+                        }
+
+                        summary.maleRanges[ageRangeIndex] = summary.maleRanges[ageRangeIndex] === null ? 0 : summary.maleRanges[ageRangeIndex];
+                        summary.femaleRanges[ageRangeIndex] = summary.femaleRanges[ageRangeIndex] === null ? 0 : summary.femaleRanges[ageRangeIndex];
+                        summary.maleEmployeeRanges[ageRangeIndex] = summary.maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.maleEmployeeRanges[ageRangeIndex];
+                        summary.femaleEmployeeRanges[ageRangeIndex] = summary.femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.femaleEmployeeRanges[ageRangeIndex];
+
+                        tempChartData.maleCount += summary.maleRanges[ageRangeIndex];
+                        tempChartData.femaleCount += summary.femaleRanges[ageRangeIndex];
+
+						if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+							tempChartData.maleCount -= summary.maleEmployeeRanges[ageRangeIndex];
+							tempChartData.femaleCount -= summary.femaleEmployeeRanges[ageRangeIndex];
+						}
+
+                    }
+
+            }
+				// 取得天氣
 				for (let i in this.responseData.weathers) {
 					let weather = this.responseData.weathers[i];
 					let weatherDateFormat = isOneDay
 						? Datetime.DateTime2String(
 							new Date(weather.date),
-							"YYYY-MM-DD HH"
+							ReportService.datetimeFormat.hour
 						)
 						: Datetime.DateTime2String(
 							new Date(weather.date),
-							"YYYY-MM-DD"
+							ReportService.datetimeFormat.date
 						);
 					if (
 						weatherDateFormat == tempDateFormat &&
@@ -1752,170 +1886,6 @@
 			}
 			this.chartDatas = tempChartDatas;
 		}
-
-		// sortOutChartData(array: any) {
-		//     let finalChartDatas: IChartDemographicData[] = [];
-		//     this.chartDatas = [];
-		//
-		//     switch (this.filterData.type) {
-		//         case ETimeMode.hour:
-		//     }
-		//
-		//     // TODO: Remove
-		//     let sampleData: any[] = [];
-		//     for (let i = 0; i < 24; i++) {
-		//         let tempDate = Datetime.DateToZero(new Date());
-		//         tempDate.setHours(i);
-		//         let tempData = {
-		//             date: tempDate,
-		//             siteObjectId: "",
-		//             maleCount: 0,
-		//             femaleCount: 0,
-		//             temperatureMin: 0,
-		//             temperatureMax: 0
-		//         };
-		//
-		//         for (let site of this.sites) {
-		//             let tempResult = JSON.parse(JSON.stringify(tempData));
-		//             tempResult.siteObjectId = site.objectId;
-		//             sampleData.push(tempResult);
-		//         }
-		//     }
-		//     console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", sampleData);
-		//     // TODO: Remove
-		//
-		//     // 取得date、siteObjectId資料
-		//     for (const summary of array) {
-		//         let tempChartData: IChartDemographicData = {
-		//             date: summary.date,
-		//             siteObjectId: summary.site.objectId,
-		//             ageRange: EAgeRange.none,
-		//             maleCount: 0,
-		//             femaleCount: 0,
-		//             temperatureMin: 0,
-		//             temperatureMax: 0,
-		//             weather: EWeather.none
-		//         };
-		//
-		//         // tempChartDatas.push(tempChartData);
-		//
-		//         let maleNotIncludeEmployee: number = 0;
-		//         let femaleNotIncludeEmployee: number = 0;
-		//         let maleTotal: number = 0;
-		//         let femaleTotal: number = 0;
-		//         let maleEmployee: number = 0;
-		//         let femaleEmployee: number = 0;
-		//
-		//         // tempChartDatas.map(item => {
-		//         //     if (
-		//         //         this.checkDateAndSite(
-		//         //             item.date,
-		//         //             summary.date,
-		//         //             item.siteObjectId,
-		//         //             summary.site.objectId
-		//         //         )
-		//         //     ) {
-		//         //
-		//         //     }
-		//         // });
-		//
-		//         // 判斷date, site 兩個是否相同
-		//         let haveSummary = false;
-		//         for (let loopChartData of tempChartDatas) {
-		//             if (
-		//                 this.checkDateAndSite(
-		//                     tempChartData.date,
-		//                     summary.date,
-		//                     tempChartData.siteObjectId,
-		//                     summary.site.objectId
-		//                 )
-		//             ) {
-		//                 haveSummary = true;
-		//                 tempChartData = loopChartData;
-		//                 break;
-		//             }
-		//         }
-		//
-		//         if (!haveSummary) {
-		//             // 取得weather、temperatureMin、temperatureMax
-		//             for (const weather of this.responseData.weathers) {
-		//                 if (
-		//                     this.checkDateAndSite(
-		//                         tempChartData.date,
-		//                         weather.date,
-		//                         tempChartData.siteObjectId,
-		//                         weather.site.objectId
-		//                     )
-		//                 ) {
-		//                     tempChartData.weather = WeatherService.WeatherIcon(
-		//                         weather.icon
-		//                     );
-		//                     tempChartData.temperatureMin = weather.temperatureMin;
-		//                     tempChartData.temperatureMax = weather.temperatureMax;
-		//                     break;
-		//                 }
-		//             }
-		//         }
-		//
-		//         //跑maleRange、 femaleRange
-		//         for (let index = 0; index < 6; index++) {
-		//             if (summary.maleRanges[index] === null) {
-		//                 break;
-		//             }
-		//
-		//             if (summary.femaleRanges[index] === null) {
-		//                 break;
-		//             }
-		//
-		//             if (summary.maleEmployeeRanges[index] === null) {
-		//                 break;
-		//             }
-		//
-		//             if (summary.femaleEmployeeRanges[index] === null) {
-		//                 break;
-		//             }
-		//
-		//             if (
-		//                 this.inputFormData.isIncludedEmployee ===
-		//                 EIncludedEmployee.no
-		//             ) {
-		//                 let tempData = JSON.parse(JSON.stringify(tempChartData));
-		//                 maleTotal += summary.maleRanges[index];
-		//                 femaleTotal += summary.femaleRanges[index];
-		//                 maleEmployee += summary.maleEmployeeRanges[index];
-		//                 femaleEmployee += summary.femaleEmployeeRanges[index];
-		//                 maleNotIncludeEmployee = maleTotal - maleEmployee;
-		//                 femaleNotIncludeEmployee = femaleTotal - femaleEmployee;
-		//
-		//                 tempData.maleCount = maleNotIncludeEmployee;
-		//                 tempData.femaleCount = femaleNotIncludeEmployee;
-		//                 tempData.ageRange = ReportService.SwitchAgeRange(
-		//                     index.toString()
-		//                 );
-		//
-		//                 tempChartDatas.push(tempData);
-		//             } else if (
-		//                 this.inputFormData.isIncludedEmployee ===
-		//                 EIncludedEmployee.yes
-		//             ) {
-		//                 let tempData = JSON.parse(JSON.stringify(tempChartData));
-		//                 maleTotal = summary.maleRanges[index];
-		//                 femaleTotal = summary.femaleRanges[index];
-		//
-		//                 tempData.maleCount = maleTotal;
-		//                 tempData.femaleCount = femaleTotal;
-		//                 tempData.ageRange = ReportService.SwitchAgeRange(
-		//                     index.toString()
-		//                 );
-		//
-		//                 tempChartDatas.push(tempData);
-		//             }
-		//         }
-		//     }
-		//
-		//     this.chartDatas = tempChartDatas;
-		//     console.log(" - ", this.chartDatas);
-		// }
 
 		async receiveAreaId(areaId) {
 			this.inputFormData.areaId = areaId;
@@ -2275,7 +2245,7 @@
 			let [fileName, fileType, sheetName] = [
 				this._("w_Navigation_VideoSources_Demographic"),
 				fType,
-				Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+				Datetime.DateTime2String(this.startDate, ReportService.datetimeFormat.date)
 			];
 			toExcel({th, data, fileName, fileType, sheetName});
 		}
