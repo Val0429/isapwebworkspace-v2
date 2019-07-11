@@ -1397,6 +1397,8 @@ export default class ReportTraffic extends Vue {
 
     // Author: Tina
     resolveSummary() {
+
+        console.log("this.filterData  - ", this.filterData);
         console.log("this.responseData  - ", this.responseData);
 
         if (this.filterData.siteIds.length === 1) {

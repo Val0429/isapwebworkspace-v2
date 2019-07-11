@@ -892,7 +892,7 @@
 		}
 
 
-		
+
 
 		////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -1397,7 +1397,7 @@
 		//// 以下為 analysis filter ////
 
 		async receiveFilterData(filterData) {
-			
+
             let param = JSON.parse(JSON.stringify(filterData));
             this.filterData = filterData;
             this.inputFormData = {
@@ -1424,9 +1424,9 @@
 					console.log(e);
 					return false;
                 });
-                
+
         }
-        
+
         resolveSummary () {
 
 			console.log("this.filterData  - ", this.filterData);
@@ -1500,28 +1500,6 @@
 			console.log(" - ", this.areaMode);
 			console.log(" - ", this.chartDatas);
         }
-
-		checkDateAndSite(
-			date1: Date | string,
-			date2: Date | string,
-			siteId1: string,
-			siteId2: string
-		): boolean {
-			let tempDate1 =
-				typeof date1 === "string"
-					? Datetime.DateToZero(new Date(date1))
-					: Datetime.DateToZero(date1);
-			let tempDate2 =
-				typeof date2 === "string"
-					? Datetime.DateToZero(new Date(date2))
-					: Datetime.DateToZero(date2);
-
-			return (
-				Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-				Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
-				siteId1 === siteId2
-			);
-		}
 
 		sortOutChartData(datas: any) {
 			let tempChartDatas: IChartDemographicData[] = [];
