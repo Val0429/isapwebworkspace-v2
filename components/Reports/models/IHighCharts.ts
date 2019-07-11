@@ -80,12 +80,9 @@ interface IChartTrafficData extends IChart {
 }
 
 interface IChartDemographicData extends IChart {
-    maleCountAge?: IAgeRange;
-    femaleCountAge?: IAgeRange;
-
-    ageRange?: EAgeRange;
-    maleCount?: number;
-    femaleCount?: number;
+    ageRange: EAgeRange;
+    maleCount: number;
+    femaleCount: number;
 
     maleCountPercent?: number;
     femaleCountPercent?: number;
