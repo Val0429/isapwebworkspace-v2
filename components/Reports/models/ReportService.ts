@@ -1,4 +1,4 @@
-import { EAgeRange } from './EHighCharts';
+import { EAgeRange, EWeek } from './EHighCharts';
 import { ITemplateItem } from './ITemplateItem';
 
 class ReportService {
@@ -83,19 +83,19 @@ class ReportService {
     showWeek(data: number): string {
         switch (data) {
             case 1:
-                return 'Mon';
+                return EWeek.Mon;
             case 2:
-                return 'Tue';
+                return EWeek.Tue;
             case 3:
-                return 'Wed';
+                return EWeek.Wed;
             case 4:
-                return 'Thu';
+                return EWeek.Thu;
             case 5:
-                return 'Fri';
+                return EWeek.Fri;
             case 6:
-                return 'Sat';
+                return EWeek.Sat;
             case 0:
-                return 'Sun';
+                return EWeek.Sun;
         }
     }
 

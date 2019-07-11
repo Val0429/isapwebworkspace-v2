@@ -542,12 +542,12 @@
 										deviceGroup.objectId
 									) {
 										inCount.value += summaryData.maleTotal;
-										inCount.valueRatio += this.countRatio(
+										inCount.valueRatio += ReportService.countRatio(
 											summaryData.maleTotal,
 											summaryData.prevMaleTotal
 										);
 										outCount.value += summaryData.femaleTotal;
-										outCount.valueRatio += this.countRatio(
+										outCount.valueRatio += ReportService.countRatio(
 											summaryData.femaleTotal,
 											summaryData.prevFemaleTotal
 										);
@@ -558,12 +558,12 @@
 										summaryData.area.objectId
 									) {
 										inCount.value += summaryData.maleTotal;
-										inCount.valueRatio += this.countRatio(
+										inCount.valueRatio += ReportService.countRatio(
 											summaryData.maleTotal,
 											summaryData.prevMaleTotal
 										);
 										outCount.value += summaryData.femaleTotal;
-										outCount.valueRatio += this.countRatio(
+										outCount.valueRatio += ReportService.countRatio(
 											summaryData.femaleTotal,
 											summaryData.prevFemaleTotal
 										);
@@ -576,12 +576,12 @@
 								summaryData.area.objectId
 							) {
 								inCount.value += summaryData.maleTotal;
-								inCount.valueRatio += this.countRatio(
+								inCount.valueRatio += ReportService.countRatio(
 									summaryData.maleTotal,
 									summaryData.prevMaleTotal
 								);
 								outCount.value += summaryData.femaleTotal;
-								outCount.valueRatio += this.countRatio(
+								outCount.valueRatio += ReportService.countRatio(
 									summaryData.femaleTotal,
 									summaryData.prevFemaleTotal
 								);
@@ -733,13 +733,13 @@
 											deviceGroup.objectId
 										) {
 											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += this.countRatio(
+											inCount.valueRatio += ReportService.countRatio(
 												summaryData.maleTotal,
 												summaryData.prevMaleTotal
 											);
 											outCount.value +=
 												summaryData.femaleTotal;
-											outCount.valueRatio += this.countRatio(
+											outCount.valueRatio += ReportService.countRatio(
 												summaryData.femaleTotal,
 												summaryData.prevFemaleTotal
 											);
@@ -750,13 +750,13 @@
 											summaryData.area.objectId
 										) {
 											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += this.countRatio(
+											inCount.valueRatio += ReportService.countRatio(
 												summaryData.maleTotal,
 												summaryData.prevMaleTotal
 											);
 											outCount.value +=
 												summaryData.femaleTotal;
-											outCount.valueRatio += this.countRatio(
+											outCount.valueRatio += ReportService.countRatio(
 												summaryData.femaleTotal,
 												summaryData.prevFemaleTotal
 											);
@@ -797,13 +797,13 @@
 											deviceGroup.objectId
 										) {
 											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += this.countRatio(
+											inCount.valueRatio += ReportService.countRatio(
 												summaryData.maleTotal,
 												summaryData.prevMaleTotal
 											);
 											outCount.value +=
 												summaryData.femaleTotal;
-											outCount.valueRatio += this.countRatio(
+											outCount.valueRatio += ReportService.countRatio(
 												summaryData.femaleTotal,
 												summaryData.prevFemaleTotal
 											);
@@ -814,13 +814,13 @@
 											summaryData.area.objectId
 										) {
 											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += this.countRatio(
+											inCount.valueRatio += ReportService.countRatio(
 												summaryData.maleTotal,
 												summaryData.prevMaleTotal
 											);
 											outCount.value +=
 												summaryData.femaleTotal;
-											outCount.valueRatio += this.countRatio(
+											outCount.valueRatio += ReportService.countRatio(
 												summaryData.femaleTotal,
 												summaryData.prevFemaleTotal
 											);
@@ -840,7 +840,7 @@
 							"/" +
 							new Date(x).getDate() +
 							" " +
-							this.showWeek(new Date(x).getDay())
+							ReportService.showWeek(new Date(x).getDay())
 					);
 					break;
 			}
@@ -891,37 +891,8 @@
 			}
 		}
 
-		countRatio(value, prevValue) {
-			if (value == undefined || prevValue == undefined) {
-				return 0;
-			}
-			if (value > prevValue) {
-				return prevValue / value;
-			} else if (value < prevValue) {
-				return -(value / prevValue);
-			} else {
-				return 0;
-			}
-		}
 
-		showWeek(data) {
-			switch (data) {
-				case 1:
-					return "Mon";
-				case 2:
-					return "Tue";
-				case 3:
-					return "Wed";
-				case 4:
-					return "Thu";
-				case 5:
-					return "Fri";
-				case 6:
-					return "Sat";
-				case 0:
-					return "Sun";
-			}
-		}
+		
 
 		////////////////////////////////////// Tina Start //////////////////////////////////////
 

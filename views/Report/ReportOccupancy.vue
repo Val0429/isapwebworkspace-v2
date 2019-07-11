@@ -1557,7 +1557,7 @@ export default class ReportOccupancy extends Vue {
                         "/" +
                         new Date(x).getDate() +
                         " " +
-                        this.showWeek(new Date(x).getDay())
+                        ReportService.showWeek(new Date(x).getDay())
                 );
                 break;
         }
@@ -1664,38 +1664,6 @@ export default class ReportOccupancy extends Vue {
                 console.log(e);
                 return false;
             });
-    }
-
-    countRatio(value, prevValue) {
-        if (value == undefined || prevValue == undefined) {
-            return 0;
-        }
-        if (value > prevValue) {
-            return prevValue / value;
-        } else if (value < prevValue) {
-            return -(value / prevValue);
-        } else {
-            return 0;
-        }
-    }
-
-    showWeek(data) {
-        switch (data) {
-            case 1:
-                return "Mon";
-            case 2:
-                return "Tue";
-            case 3:
-                return "Wed";
-            case 4:
-                return "Thu";
-            case 5:
-                return "Fri";
-            case 6:
-                return "Sat";
-            case 0:
-                return "Sun";
-        }
     }
 
     checkDateAndSite(
