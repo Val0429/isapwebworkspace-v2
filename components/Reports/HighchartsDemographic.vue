@@ -420,32 +420,11 @@ export class HighchartsDemographic extends Vue {
                             haveTempIn = true;
                             tempIn.maleCount += value.maleCount;
                             tempIn.femaleCount += value.femaleCount;
-                            // break;
                         }
                     }
                     if (!haveTempIn) {
                         tempResult.push(value);
                     }
-                }
-            }
-            if (!haveValue) {
-                let defaultValue = this.anysislyChartValueDefault();
-                defaultValue.timeString = categorie;
-                tempResult.push(defaultValue);
-            }
-        }
-
-        // set data
-        for (let categorie of tempHourStrings) {
-            let haveValue = false;
-            for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
-                    loopValue
-                );
-                if (value.timeString == categorie) {
-                    haveValue = true;
-                    tempResult.push(value);
-                    break;
                 }
             }
             if (!haveValue) {
