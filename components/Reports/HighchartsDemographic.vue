@@ -751,14 +751,6 @@ export class HighchartsDemographic extends Vue {
                             value.weather
                         );
                     }
-
-                    if (Datetime.DateTime2String(value.date, "YYYY-MM-DD") == "2019-07-02") {
-                        console.log(
-                            Datetime.DateTime2String(value.date, "YYYY-MM-DD"),
-                            value,
-                            tempChartData
-                        );
-                    }
                     tempValues.splice(parseInt(i), 1);
                 }
             }
