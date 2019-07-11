@@ -420,32 +420,11 @@ export class HighchartsDemographic extends Vue {
                             haveTempIn = true;
                             tempIn.maleCount += value.maleCount;
                             tempIn.femaleCount += value.femaleCount;
-                            // break;
                         }
                     }
                     if (!haveTempIn) {
                         tempResult.push(value);
                     }
-                }
-            }
-            if (!haveValue) {
-                let defaultValue = this.anysislyChartValueDefault();
-                defaultValue.timeString = categorie;
-                tempResult.push(defaultValue);
-            }
-        }
-
-        // set data
-        for (let categorie of tempHourStrings) {
-            let haveValue = false;
-            for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
-                    loopValue
-                );
-                if (value.timeString == categorie) {
-                    haveValue = true;
-                    tempResult.push(value);
-                    break;
                 }
             }
             if (!haveValue) {
@@ -749,14 +728,6 @@ export class HighchartsDemographic extends Vue {
                         tempChartData.weather = value.weather;
                         tempChartData.weatherIcon = HighchartsService.weatherIcon(
                             value.weather
-                        );
-                    }
-
-                    if (Datetime.DateTime2String(value.date, "YYYY-MM-DD") == "2019-07-02") {
-                        console.log(
-                            Datetime.DateTime2String(value.date, "YYYY-MM-DD"),
-                            value,
-                            tempChartData
                         );
                     }
                     tempValues.splice(parseInt(i), 1);

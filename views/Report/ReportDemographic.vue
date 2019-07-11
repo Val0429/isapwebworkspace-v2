@@ -1614,64 +1614,64 @@
 					? Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.hour)
                     : Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.date);
 
-            // 計算 maleCount、femaleCount
-			for (let summary of datas) {
-				let summaryDateFormat = isOneDay
-					? Datetime.DateTime2String(
-						new Date(summary.date),
-						ReportService.datetimeFormat.hour
-					)
-					: Datetime.DateTime2String(
-						new Date(summary.date),
-						ReportService.datetimeFormat.date
-                    );
+                // 計算 maleCount、femaleCount
+                for (let summary of datas) {
+                    let summaryDateFormat = isOneDay
+                        ? Datetime.DateTime2String(
+                            new Date(summary.date),
+                            ReportService.datetimeFormat.hour
+                        )
+                        : Datetime.DateTime2String(
+                            new Date(summary.date),
+                            ReportService.datetimeFormat.date
+                        );
 
-                	if (
-						summaryDateFormat == tempDateFormat &&
-						summary.site.objectId == tempChartData.siteObjectId
-					) {
-                        let ageRangeIndex = 0;
-                        switch (tempChartData.ageRange) {
-                            case EAgeRange.lower20:
-                                ageRangeIndex = 0;
-                                break;
-                            case EAgeRange.m21_30:
-                                ageRangeIndex = 1;
-                                break;
-                            case EAgeRange.m31_40:
-                                ageRangeIndex =2;
-                                break;
-                            case EAgeRange.m41_50:
-                                ageRangeIndex = 3;
-                                break;
-                            case EAgeRange.m51_60:
-                                ageRangeIndex =4;
-                                break;
-                            case EAgeRange.upper61:
-                                ageRangeIndex = 5;
-                                break;
+                        if (
+                            summaryDateFormat == tempDateFormat &&
+                            summary.site.objectId == tempChartData.siteObjectId
+                        ) {
+                            let ageRangeIndex = 0;
+                            switch (tempChartData.ageRange) {
+                                case EAgeRange.lower20:
+                                    ageRangeIndex = 0;
+                                    break;
+                                case EAgeRange.m21_30:
+                                    ageRangeIndex = 1;
+                                    break;
+                                case EAgeRange.m31_40:
+                                    ageRangeIndex =2;
+                                    break;
+                                case EAgeRange.m41_50:
+                                    ageRangeIndex = 3;
+                                    break;
+                                case EAgeRange.m51_60:
+                                    ageRangeIndex =4;
+                                    break;
+                                case EAgeRange.upper61:
+                                    ageRangeIndex = 5;
+                                    break;
+                            }
+
+                            summary.maleRanges[ageRangeIndex] = summary.maleRanges[ageRangeIndex] === null ? 0 : summary.maleRanges[ageRangeIndex];
+                            summary.femaleRanges[ageRangeIndex] = summary.femaleRanges[ageRangeIndex] === null ? 0 : summary.femaleRanges[ageRangeIndex];
+                            summary.maleEmployeeRanges[ageRangeIndex] = summary.maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.maleEmployeeRanges[ageRangeIndex];
+                            summary.femaleEmployeeRanges[ageRangeIndex] = summary.femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.femaleEmployeeRanges[ageRangeIndex];
+
+                            tempChartData.maleCount += summary.maleRanges[ageRangeIndex];
+                            tempChartData.femaleCount += summary.femaleRanges[ageRangeIndex];
+
+                            if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                tempChartData.maleCount -= summary.maleEmployeeRanges[ageRangeIndex];
+                                tempChartData.femaleCount -= summary.femaleEmployeeRanges[ageRangeIndex];
+                            }
+
                         }
+                }
 
-                        summary.maleRanges[ageRangeIndex] = summary.maleRanges[ageRangeIndex] === null ? 0 : summary.maleRanges[ageRangeIndex];
-                        summary.femaleRanges[ageRangeIndex] = summary.femaleRanges[ageRangeIndex] === null ? 0 : summary.femaleRanges[ageRangeIndex];
-                        summary.maleEmployeeRanges[ageRangeIndex] = summary.maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.maleEmployeeRanges[ageRangeIndex];
-                        summary.femaleEmployeeRanges[ageRangeIndex] = summary.femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.femaleEmployeeRanges[ageRangeIndex];
-
-                        tempChartData.maleCount += summary.maleRanges[ageRangeIndex];
-                        tempChartData.femaleCount += summary.femaleRanges[ageRangeIndex];
-
-						if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-							tempChartData.maleCount -= summary.maleEmployeeRanges[ageRangeIndex];
-							tempChartData.femaleCount -= summary.femaleEmployeeRanges[ageRangeIndex];
-						}
-
-                    }
-
-            }
-				// 取得天氣
-				for (let i in this.responseData.weathers) {
-					let weather = this.responseData.weathers[i];
-					let weatherDateFormat = isOneDay
+                // 取得天氣
+                for (let i in this.responseData.weathers) {
+                    let weather = this.responseData.weathers[i];
+                    let weatherDateFormat = isOneDay
 						? Datetime.DateTime2String(
 							new Date(weather.date),
 							ReportService.datetimeFormat.hour
@@ -1679,7 +1679,8 @@
 						: Datetime.DateTime2String(
 							new Date(weather.date),
 							ReportService.datetimeFormat.date
-						);
+                        );
+                        
 					if (
 						weatherDateFormat == tempDateFormat &&
 						weather.site.objectId == tempChartData.siteObjectId
@@ -1689,11 +1690,11 @@
 						);
 						tempChartData.temperatureMin = weather.temperatureMin;
 						tempChartData.temperatureMax = weather.temperatureMax;
-						this.responseData.weathers.splice(i, 1);
 						break;
 					}
 				}
-			}
+            }
+            
 			this.chartDatas = tempChartDatas;
 		}
 
