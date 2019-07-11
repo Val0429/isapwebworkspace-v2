@@ -190,6 +190,14 @@ export default class LangObject {
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
 
+    w_Mon = 'Mon';
+    w_Tue = 'Tue';
+    w_Wed = 'Wed';
+    w_Thu = 'Thu';
+    w_Fri = 'Fri';
+    w_Sat = 'Sat';
+    w_Sun = 'Sun';
+
     // button
     w_Save = 'Save';
     w_Back = 'Back';

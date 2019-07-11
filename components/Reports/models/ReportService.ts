@@ -61,22 +61,50 @@ class ReportService {
         return result.length;
     }
 
-    SwitchAgeRange(index) {
-        switch (index) {
-            case '0':
-                return EAgeRange.lower20;
-            case '1':
-                return EAgeRange.m21_30;
-            case '2':
-                return EAgeRange.m31_40;
-            case '3':
-                return EAgeRange.m41_50;
-            case '4':
-                return EAgeRange.m51_60;
-            case '5':
-                return EAgeRange.upper61;
-            default:
-                return EAgeRange.none;
+    showWeek(data: number): string {
+        switch (data) {
+            case 1:
+                return 'Mon';
+            case 2:
+                return 'Tue';
+            case 3:
+                return 'Wed';
+            case 4:
+                return 'Thu';
+            case 5:
+                return 'Fri';
+            case 6:
+                return 'Sat';
+            case 0:
+                return 'Sun';
+        }
+    }
+
+    countRatio(value: number, prevValue: number): number {
+        if (value == undefined) {
+            return 0;
+        }
+        if (prevValue == undefined) {
+            return 0;
+        }
+        if (value == null) {
+            return 0;
+        }
+        if (prevValue == null) {
+            return 0;
+        }
+        if (value == 0) {
+            return 0;
+        }
+        if (prevValue == 0) {
+            return 0;
+        }
+        if (value > prevValue) {
+            return prevValue / value;
+        } else if (value < prevValue) {
+            return -(value / prevValue);
+        } else {
+            return 1;
         }
     }
 }
