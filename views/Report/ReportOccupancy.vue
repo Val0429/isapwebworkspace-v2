@@ -967,8 +967,8 @@ export default class ReportOccupancy extends Vue {
         console.log("this.responseData  - ", this.responseData);
 
         await this.initSelectItemArea();
-        await this.initSelectItemDeviceGroup();
-        await this.initSelectItemDevice();
+        this.initSelectItemDeviceGroup();
+        this.initSelectItemDevice();
 
         this.inputFormData = {
             areaId: "all",
