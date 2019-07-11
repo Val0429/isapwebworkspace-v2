@@ -155,11 +155,13 @@ export class HighchartsTraffic extends Vue {
         newval: IChartTrafficData[],
         oldval: IChartTrafficData[]
     ) {
+        console.log("!!! onValueChanged");
         this.start();
     }
 
     @Watch("timeMode")
     private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
+        console.log("!!! onTimeModeChanged");
         this.start();
     }
 
@@ -170,6 +172,7 @@ export class HighchartsTraffic extends Vue {
     mounted() {}
 
     start() {
+        console.log("!!! 2" , new Date().getTime());
         this.errorMessage = "";
         this.mountChart.site1Day1 = false;
         this.mountChart.site1DayX = false;
@@ -209,6 +212,8 @@ export class HighchartsTraffic extends Vue {
             default:
                 break;
         }
+
+        console.log("!!! 3" , new Date().getTime());
 
         console.log(
             "chart prop: ",
@@ -1310,7 +1315,6 @@ export class HighchartsTraffic extends Vue {
                 backgroundColor: "#333",
                 style: { color: "#fff" },
                 formatter: function(tooltip: any) {
-                    console.log(tooltip);
                     let self: any = this;
                     let result = "";
                     let siteId = "";

@@ -421,6 +421,7 @@ export class HighchartsDemographic extends Vue {
             let hourString = i < 10 ? `0${i.toString()}` : i.toString();
             tempHourStrings.push(`${hourString}:00`);
         }
+
         //// office hour group ////
         for (let categorie of tempHourStrings) {
             let haveValue = false;

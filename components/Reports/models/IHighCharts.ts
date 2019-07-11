@@ -37,6 +37,15 @@ interface IDayRange {
     endDate: string;
 }
 
+interface IAgeRange {
+    lower20: number;
+    m21_30: number;
+    m31_40: number;
+    m41_50: number;
+    m51_60: number;
+    upper61: number;
+}
+
 interface IChart {
     date: Date;
     siteObjectId: string;
@@ -71,9 +80,12 @@ interface IChartTrafficData extends IChart {
 }
 
 interface IChartDemographicData extends IChart {
-    ageRange: EAgeRange;
-    maleCount: number;
-    femaleCount: number;
+    maleCountAge?: IAgeRange;
+    femaleCountAge?: IAgeRange;
+
+    ageRange?: EAgeRange;
+    maleCount?: number;
+    femaleCount?: number;
 
     maleCountPercent?: number;
     femaleCountPercent?: number;
