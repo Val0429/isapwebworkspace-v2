@@ -357,6 +357,13 @@ export class HighchartsDemographic extends Vue {
             this.value
         );
 
+        for (let value of this.value) {
+            if (value.maleCount > 0) {
+                console.log(value);
+            }
+        }
+        console.log("!!! value over");
+
         // TODO: For Demo
         this.deomRandomValue();
     }
@@ -420,7 +427,7 @@ export class HighchartsDemographic extends Vue {
                             haveTempIn = true;
                             tempIn.maleCount += value.maleCount;
                             tempIn.femaleCount += value.femaleCount;
-                            break;
+                            // break;
                         }
                     }
                     if (!haveTempIn) {
