@@ -31,8 +31,8 @@
                 <!-- Pass on all scoped slots -->
                 <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope"><slot :name="slot" v-bind="scope"/></template>
 
-                <template v-if="canEdit || canPreview || canDelete" #actions$="{$attrs}">
-                    <iv-toolbox-more>
+                <template v-if="canEdit || canPreview || canDelete"  #actions$="{$attrs}">
+                    <iv-toolbox-more v-show="selectedRows.length > 0 && selectedRows[0].objectId == $attrs.row.objectId && (((canEdit || canPreview) && allowEdit)|| canDelete)">
                         <iv-toolbox-edit v-show="(canEdit || canPreview) && allowEdit" @click.stop="edit($attrs.row)" />
                         <iv-toolbox-delete v-show="canDelete" @click.stop="doDelete($attrs.row)" />
                     </iv-toolbox-more>
