@@ -946,9 +946,8 @@ export default class ReportRepeatVisitor extends Vue {
         let chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
-            this.sites
+            this.pSiteIds
         );
-
         this.rDayXxSiteX = chartMode;
 
         this.rData = this.responseData.summaryTableDatas;
