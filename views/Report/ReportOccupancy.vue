@@ -1627,7 +1627,7 @@ export default class ReportOccupancy extends Vue {
         let tempValues = JSON.parse(JSON.stringify(datas));
         let tempChartDatas: IChartOccupancyData[] = [];
         let isOneDay: boolean = false;
-        let isSingleSite: boolean = this.sites.length == 1 ? true : false;
+        let isSingleSite: boolean = this.sites.length === 1 ? true : false;
 
         for (let site of this.sites) {
             let tempChartDataDates: IChartOccupancyData[] = [];
@@ -1658,7 +1658,7 @@ export default class ReportOccupancy extends Vue {
                     dateList.push(tempDate);
                 }
             } else {
-                // multipe day
+                // multiple day
                 dateList = Datetime.DateList(
                     this.filterData.startDate,
                     this.filterData.endDate
@@ -1768,6 +1768,13 @@ export default class ReportOccupancy extends Vue {
         }
 
         this.chartDatas = tempChartDatas;
+
+        console.log(" - ", this.sites);
+        console.log(" - ", this.startDate);
+        console.log(" - ", this.endDate);
+        console.log(" - ", this.timeMode);
+        console.log(" - ", this.areaMode);
+        console.log(" - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {
