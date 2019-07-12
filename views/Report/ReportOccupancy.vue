@@ -1742,9 +1742,10 @@ export default class ReportOccupancy extends Vue {
 
                 // area
                 if (
-                    this.inputFormData.areaId ||
+                    !this.inputFormData.areaId ||
                     this.inputFormData.areaId === "all"
                 ) {
+
                     console.log("site.areas", site.areas, site.objectId);
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
@@ -1896,7 +1897,10 @@ export default class ReportOccupancy extends Vue {
 
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
+
+            // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+
             // 整理sites
             let tempAreas = [];
             for (const area in this.areaSelectWithoutAllItem) {
