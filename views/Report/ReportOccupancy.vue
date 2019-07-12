@@ -247,7 +247,6 @@ export default class ReportOccupancy extends Vue {
     userData: any = [];
     allAreaItem: any = [];
     siteAreaItem: any = {};
-    sitesItem: any = [];
 
     //// Filter Condition End ////
 
@@ -256,6 +255,7 @@ export default class ReportOccupancy extends Vue {
 
     // select 相關
     areaSelectItem: any = {};
+    areaSelectWithoutAllItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
 
@@ -546,6 +546,7 @@ export default class ReportOccupancy extends Vue {
 
     async initSelectItemArea() {
         let tempAreaSelectItem = { all: this._("w_AllAreas") };
+        let tempAreaSelectWithoutAllItem = {};
 
         const readParam: {
             siteId: string;
@@ -562,11 +563,12 @@ export default class ReportOccupancy extends Vue {
                     if (response != undefined) {
                         for (const returnValue of response) {
                             // 自定義 sitesSelectItem 的 key 的方式
-                            tempAreaSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                            tempAreaSelectItem[returnValue.objectId] = returnValue.name;
+	                        tempAreaSelectWithoutAllItem[returnValue.objectId] = returnValue.name;
                             // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                         }
                         this.areaSelectItem = tempAreaSelectItem;
+                        this.areaSelectWithoutAllItem = tempAreaSelectWithoutAllItem;
                         this.allAreaItem = response;
                     }
                 })
@@ -982,7 +984,6 @@ export default class ReportOccupancy extends Vue {
 
         // get office hour data
         this.sites = [];
-        this.sitesItem = [];
         let tempAreas = [];
 
         for (const filterSiteId of this.filterData.siteIds) {
@@ -992,7 +993,7 @@ export default class ReportOccupancy extends Vue {
                 officeHour: [],
                 areas: []
             };
-            
+
             for (const detail of this.officeHourItemDetail) {
                 let haveSite = false;
                 for (const officeHourSiteId of detail.sites) {
@@ -1042,9 +1043,6 @@ export default class ReportOccupancy extends Vue {
                 // for chart
                 this.sites.push(tempISite);
 
-                // for calculate occupancy
-                this.sitesItem.push(tempISite);
-
                 // for single site
                 this.siteAreaItem = tempISite;
             }
@@ -1062,6 +1060,7 @@ export default class ReportOccupancy extends Vue {
         // Ben
         this.initDashboardData();
         this.initReportTable();
+
 
         console.log("this.sites - ", JSON.stringify(this.sites));
         console.log(" - ", this.startDate);
@@ -1648,7 +1647,7 @@ export default class ReportOccupancy extends Vue {
         ) {
             console.log("all area - ");
 
-            this.sitesItem.map(item => {
+            this.sites.map(item => {
                 console.log(" - ", item.areas.length);
 
                 item.areas.map(area => {
@@ -1922,7 +1921,7 @@ export default class ReportOccupancy extends Vue {
             this.chartDatas = tempChartDatas;
         }
     }
-    
+
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
         console.log("areaId - ", this.inputFormData.areaId);
@@ -1948,18 +1947,18 @@ export default class ReportOccupancy extends Vue {
 
             let tempAreas = [];
 
-            this.sitesItem.map(item => {
-                item.areas.map(area => {
-                    if (this.inputFormData.areaId === area.objectId) {
-                        let tempArea: any = {};
-                        tempArea = {
-                            name: area.name,
-                            objectId: area.objectId
-                        };
-                        tempAreas.push(tempArea);
-                    }
-                });
-            });
+
+	        for (const area in this.areaSelectItem) {
+		        if (this.inputFormData.areaId === area) {
+			        let tempArea: any = {};
+			        tempArea = {
+				        name: this.areaSelectItem[area],
+				        objectId: area
+			        };
+			        tempAreas.push(tempArea);
+		        }
+	        }
+
             this.siteAreaItem.areas = tempAreas;
             this.sites = [];
             this.sites.push(this.siteAreaItem);
@@ -1981,11 +1980,32 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
+
+
+	        // 整理sites
+	        let tempAreas = [];
+
+	        for (const area in this.areaSelectWithoutAllItem) {
+		        let tempArea: any = {};
+		        tempArea = {
+			        name: this.areaSelectItem[area],
+			        objectId: area
+		        };
+		        tempAreas.push(tempArea);
+	        }
+
+	        this.siteAreaItem.areas = tempAreas;
+	        this.sites = [];
+	        this.sites.push(this.siteAreaItem);
+
             this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
-            this.sites = this.sitesItem;
 
-            this.inputFormData.groupId = "";
+
+	        console.log('##############', this.sites);
+
+
+	        this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
             await this.initSelectItemArea();
@@ -1997,11 +2017,28 @@ export default class ReportOccupancy extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+
+        	// 整理sites
+	        let tempAreas = [];
+	        for (const area in this.areaSelectWithoutAllItem) {
+		        let tempArea: any = {};
+		        tempArea = {
+			        name: this.areaSelectItem[area],
+			        objectId: area
+		        };
+		        tempAreas.push(tempArea);
+	        }
+	        this.siteAreaItem.areas = tempAreas;
+	        this.sites = [];
+	        this.sites.push(this.siteAreaItem);
+
             this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
-            this.sites = this.sitesItem;
 
-            this.inputFormData.areaId = "";
+	        console.log('*************', this.sites);
+
+
+	        this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
