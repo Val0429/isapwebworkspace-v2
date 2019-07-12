@@ -120,8 +120,6 @@ export class PeakTimeRange extends Vue {
     }
 
     generateDay1Ste1() {
-        console.log("generateDay1Ste1", this.timeRangeData);
-
         if (this.timeRangeData.length == 0) {
             return;
         }
@@ -187,8 +185,6 @@ export class PeakTimeRange extends Vue {
     }
 
     generateDayXSte1() {
-        console.log("generateDayXSte1", this.timeRangeData);
-
         if (this.timeRangeData.length == 0) {
             return;
         }
@@ -262,8 +258,6 @@ export class PeakTimeRange extends Vue {
     }
 
     generateDay1SteX() {
-        console.log("generateDay1SteX", this.timeRangeData);
-
         if (this.timeRangeData.length == 0) {
             return;
         }
@@ -338,8 +332,6 @@ export class PeakTimeRange extends Vue {
     }
 
     generateDayXSteX() {
-        console.log("generateDayXSteX", this.timeRangeData);
-
         if (this.timeRangeData.length == 0) {
             return;
         }
