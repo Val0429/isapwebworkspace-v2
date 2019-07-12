@@ -615,4 +615,5 @@ export default class LangObject {
     w_License_Step1_offline = 'Add by upload offline key';
     w_Manual_Sync = "Manual Sync";
     w_Not_Selected = "Not Specified";
+    w_RedirectToLoginMessage = "You have been logged out";
 }
