@@ -104,19 +104,19 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
             case EFormQuick.Edit:
                 return `
                 interface {
-                        /**
-                         * @uiLabel - ${this._("w_Username")}
-                        */
-                       
-                      username:string;
-                      /**
-                         * @uiLabel - ${this._("w_ApiRoles")}
-                        */
-                      apiRoles?:any;
-                      /**                        
-                       * @uiLabel - ${this._("w_Roles")}
-                        */
-                      roles?:any;
+                    /**
+                     * @uiDisabled - true
+                     * @uiLabel - ${this._("w_Username")}
+                     */                       
+                     username:string;
+                    /**
+                     * @uiLabel - ${this._("w_ApiRoles")}
+                    */
+                    apiRoles?:any;
+                    /**                        
+                     * @uiLabel - ${this._("w_Roles")}
+                    */
+                    roles?:any;
                 }
                 `;
         }
