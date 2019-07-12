@@ -689,13 +689,12 @@ export default class ReportOccupancy extends Vue {
         };
         if (!this.filterData.firstSiteId) {
             return false;
-
-            // 只選擇site
         } else if (
             this.filterData.firstSiteId &&
             !this.inputFormData.areaId &&
             !this.inputFormData.groupId
         ) {
+            // 只選擇site
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -715,13 +714,13 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all" &&
             !this.inputFormData.groupId
         ) {
+            // 選擇site和單一area
             readParam.areaId = this.inputFormData.areaId;
             await this.$server
                 .R("/device", readParam)
@@ -742,7 +741,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和單一device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -750,6 +748,7 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和單一area和單一device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -807,7 +806,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -816,6 +814,7 @@ export default class ReportOccupancy extends Vue {
                 this.inputFormData.groupId === "") &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和all area
             readParam.areaId = "";
             await this.$server
                 .R("/device", readParam)
@@ -836,7 +835,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -844,6 +842,7 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和all area和all device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -867,7 +866,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -875,6 +873,7 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和單一area和all device group
             readParam.areaId = this.inputFormData.areaId;
             readParam.groupId = "";
             await this.$server
@@ -930,7 +929,6 @@ export default class ReportOccupancy extends Vue {
     async receiveUserData(data) {
         this.userData = [];
         this.userData = data;
-        console.log("this.userData - ", this.userData);
     }
 
     receiveModalShowData(data) {
@@ -938,7 +936,6 @@ export default class ReportOccupancy extends Vue {
     }
 
     //// 以下為 analysis filter ////
-
     async receiveFilterData(filterData) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
@@ -969,9 +966,6 @@ export default class ReportOccupancy extends Vue {
     }
 
     async resolveSummary() {
-        console.log("this.filterData  - ", this.filterData);
-        console.log("this.responseData  - ", this.responseData);
-
         await this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
@@ -986,8 +980,6 @@ export default class ReportOccupancy extends Vue {
 
         // get office hour data
         this.sites = [];
-
-        console.log("!!! this.filterData.siteIds", this.filterData.siteIds);
 
         for (const filterSiteId of this.filterData.siteIds) {
             let tempISite: any = {
@@ -1063,13 +1055,6 @@ export default class ReportOccupancy extends Vue {
         // Ben
         this.initDashboardData();
         this.initReportTable();
-
-        console.log("this.sites - ", JSON.stringify(this.sites));
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     // Ben //
@@ -1123,6 +1108,7 @@ export default class ReportOccupancy extends Vue {
         //body
         this.sunRData.body = [];
         let tempArray = [];
+
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
             if (
@@ -1229,6 +1215,7 @@ export default class ReportOccupancy extends Vue {
             }
             this.sunRData.body = tempArray;
         }
+
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
             x => x + ":00 - " + (x + 1) + ":00"
@@ -1303,6 +1290,7 @@ export default class ReportOccupancy extends Vue {
         //body
         this.rData.body = [];
         let tempArray = [];
+
         //篩選出所有店
         for (let summaryData of this.responseData.summaryTableDatas) {
             if (
@@ -1441,6 +1429,7 @@ export default class ReportOccupancy extends Vue {
                     x => x + ":00 - " + (x + 1) + ":00"
                 );
                 break;
+
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
                 for (let index in tempArray) {
@@ -1594,15 +1583,6 @@ export default class ReportOccupancy extends Vue {
         this.lastTableStep = this.tableStep;
         this.tableStep = ETableStep.detailTable;
         let tempTime = parseInt(sunTime.split(":")[0]);
-        console.log(
-            "toDetailReportTable",
-            thatDay,
-            sunTime,
-            sunSite,
-            sunArea,
-            rowName,
-            tempTime
-        );
 
         let tempSDate = new Date(
             thatDay.getFullYear(),
@@ -1792,7 +1772,6 @@ export default class ReportOccupancy extends Vue {
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
@@ -1876,8 +1855,6 @@ export default class ReportOccupancy extends Vue {
 
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
-
-            // 清除area篩選
         } else if (!this.inputFormData.areaId) {
             // 整理sites
             let tempAreas = [];
@@ -1914,7 +1891,6 @@ export default class ReportOccupancy extends Vue {
 
     async receiveGroupId(groupId) {
         this.inputFormData.groupId = groupId;
-        console.log("groupId - ", this.inputFormData.groupId);
 
         this.deviceGroupSummaryFilter = [];
 
@@ -1924,15 +1900,10 @@ export default class ReportOccupancy extends Vue {
         ) {
             // 依照單一deviceGroup篩選
             for (const singleData of this.areaSummaryFilter) {
-                console.log("singleData - ", singleData);
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
-                        console.log(
-                            "tempSingleData[0].objectId - ",
-                            tempSingleData[0].objectId
-                        );
                         if (
                             this.inputFormData.groupId ===
                             tempSingleData[0].objectId
@@ -1941,7 +1912,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                // console.log(" - ", this.deviceGroupSummaryFilter);
             }
 
             this.sortOutChartData(this.deviceGroupSummaryFilter);
@@ -1978,7 +1948,6 @@ export default class ReportOccupancy extends Vue {
 
     async receiveDeviceId(deviceId) {
         this.inputFormData.deviceId = deviceId;
-        console.log("deviceId - ", this.inputFormData.deviceId);
 
         this.deviceSummaryFilter = [];
 
@@ -2001,7 +1970,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -2052,7 +2020,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -2103,7 +2070,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -2139,15 +2105,10 @@ export default class ReportOccupancy extends Vue {
     receiveType(type) {
         this.inputFormData.type = type;
         this.timeMode = type;
-        console.log("type - ", this.inputFormData.type);
     }
 
     receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
-        console.log(
-            "isIncludedEmployee - ",
-            this.inputFormData.isIncludedEmployee
-        );
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
