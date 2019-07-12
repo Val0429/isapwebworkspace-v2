@@ -198,7 +198,8 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
 
        let params = $event || {};
        if(this.floorsystem) params.system=this.floorsystem;
-       this.params = params;
+       
+       this.setParams(params);
     }
     private async getElevators(){
         let resp: any=await this.$server.R("/acs/elevator" as any,{ "paging.all": "true" });

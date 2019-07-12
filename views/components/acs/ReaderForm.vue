@@ -252,7 +252,8 @@ export default class ReaderForm extends BasicFormQuick implements IFormQuick2 {
        let params = $event || {};
        if(this.readersystem) params.system=this.readersystem;
        if(this.readerIO) params.readerIO=this.readerIO;
-       this.params = params;
+       this.setParams(params);
+       
     }
 }
 </script>

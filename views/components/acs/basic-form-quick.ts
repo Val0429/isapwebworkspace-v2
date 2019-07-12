@@ -42,9 +42,19 @@ export class BasicFormQuick extends Vue {
         this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
         this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;                
     }
-    
+    setParams(params:any){
+        if(!params)return;
+        for (const key in params) {
+            let value = params[key];
+            if(!value)continue;
+            let indexOfhash = value.indexOf('#');
+            if(indexOfhash>-1)params[key]=value.substr(0, indexOfhash);            
+       }
+       this.params = params;
+    }
     onFilterSubmit($event?: any): void {
-       this.params = $event || {};
+       let params = $event || {};
+       this.setParams(params);       
     }
     
     viewChange($event: any): void {

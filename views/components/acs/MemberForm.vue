@@ -3063,8 +3063,15 @@ export default class MemberForm extends Vue {
     if ($event.StartDateEnd) $event.end1 = $event.StartDateEnd.toISOString();
     if ($event.EndDateStart) $event.start2 = $event.EndDateStart.toISOString();
     if ($event.EndDateEnd) $event.end2 = $event.EndDateEnd.toISOString();
-
-    this.getParams = $event;
+    
+    let params = $event;
+    for (const key in params) {
+      let value = params[key];
+      if(!value)continue;
+      let indexOfhash = value.indexOf('#');
+      if(indexOfhash>-1)params[key]=value.substr(0, indexOfhash);
+    }
+    this.getParams = params;
   }
 }
 </script>
