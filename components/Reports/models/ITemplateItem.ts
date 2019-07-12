@@ -1,5 +1,4 @@
-import { EVideoSource } from './ETemplate';
-import { EDesignationPeriod } from './EReport';
+import { EVideoSource, EDesignationPeriod } from '../';
 
 interface ITemplateSite {
     objectId: string;

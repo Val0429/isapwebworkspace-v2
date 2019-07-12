@@ -1,4 +1,4 @@
-import { EPageType, ESign } from './EReport';
+import { EPageType, ESign } from '../';
 
 interface IReportDashboard {
     pageType: EPageType;

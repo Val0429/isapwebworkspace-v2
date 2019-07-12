@@ -1,4 +1,4 @@
-import { ETimeMode } from '@/components/Reports';
+import { ETimeMode } from '../';
 
 interface IFilterCondition {
     startDate: Date;

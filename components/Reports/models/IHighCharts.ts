@@ -1,4 +1,4 @@
-import { EWeather, ETimeMode, EAreaMode, EAgeRange, EGender } from './EHighCharts';
+import { EWeather, ETimeMode, EAreaMode, EAgeRange } from '../';
 
 interface IValSelectItem {
     id: string;
