@@ -53,4 +53,14 @@ enum EWeather {
     partlyCloudyNight = 'partlyCloudyNight',
 }
 
-export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange };
+enum EDwellTimeRange {
+    none = 'none',
+    lower5 = 'lower5',
+    m5_15 = 'm5_15',
+    m15_30 = 'm15_30',
+    m30_60 = 'm30_60',
+    m60_120 = 'm60_120',
+    upper120 = 'upper120',
+}
+
+export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EDwellTimeRange };

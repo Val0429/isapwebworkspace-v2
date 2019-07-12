@@ -36,6 +36,10 @@
 						size="lg"
 						@click="modalShow = !modalShow"
 					/>
+					<iv-toolbox-copy-to-template
+						size="lg"
+						@click="pageToReportTemplate()"
+					/>
 				</template>
 
 				<!-- Tina -->
@@ -150,7 +154,8 @@
 		ETimeMode,
         EWeather,
         EAgeRange,
-		EAreaMode,
+        EAreaMode,
+        EDwellTimeRange,
 		EChartMode,
 		EPageType,
         ESign,
@@ -158,7 +163,7 @@
 		EDeviceMode,
 		EIncludedEmployee,
 		IDayRange,
-		IChartDemographicData,
+		IChartDemographicDwellTimeData,
 		IChartTrafficData,
 		IPeckTimeRange,
 		ISite,
@@ -166,7 +171,10 @@
         ITemplateItem,
         IFilterCondition,
 		ReportDashboard,
-		ReportTableData
+		ReportTableData,
+	
+		EDesignationPeriod,
+		IReportToTemplateItem
 	} from "@/components/Reports";
 	
 	///////////////////////// export /////////////////////////
@@ -206,7 +214,7 @@
 		timeMode: ETimeMode = ETimeMode.none;
 		areaMode: EAreaMode = EAreaMode.none;
 		sites: ISite[] = [];
-		chartDatas: IChartDemographicData[] = [];
+		chartDatas: IChartDemographicDwellTimeData[] = [];
 
 		////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -279,6 +287,10 @@
 		// send user 相關
 		userSelectItem: any = {};
 
+		// Report To Template相關
+		ReportToTemplateData: IReportToTemplateItem | null =  null;
+		designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
+
 		//ReportDashboard 相關
 		dPageType: EPageType = EPageType.none;
 		dTimeMode: ETimeMode = ETimeMode.none;
@@ -317,7 +329,7 @@
 			}
 		}
 
-        
+
 
 		// Ben //
 		reportTableBack() {
@@ -553,7 +565,7 @@
 						  item1: [],
                         item2: []
                         };
-                        
+
 						if (
 							tempArray.every(
 								t =>
@@ -664,7 +676,7 @@
 								) {
 									continue;
 								}
-						
+
 									if (tempArray[index].group != null) {
                                         for (let deviceGroup of summaryData.deviceGroups) {
 										    if (
@@ -952,7 +964,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -979,7 +991,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1049,7 +1061,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1077,7 +1089,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1110,7 +1122,7 @@
 						return false;
 					});
 
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1144,7 +1156,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1174,7 +1186,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1206,7 +1218,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1278,11 +1290,12 @@
 
 		//// 以下為 analysis filter ////
 
-		async receiveFilterData(filterData) {
+		async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
 
             let param = JSON.parse(JSON.stringify(filterData));
             this.filterData = filterData;
-            this.inputFormData = {
+			this.designationPeriod = designationPeriod;
+			this.inputFormData = {
 				areaId: "",
 				groupId: "",
 				deviceId: "",
@@ -1372,7 +1385,7 @@
         }
 
 		sortOutChartData(datas: any) {
-			let tempChartDatas: IChartDemographicData[] = [];
+			let tempChartDatas: IChartDemographicDwellTimeData[] = [];
 			let isOneDay = false;
 			this.chartDatas = [];
 
@@ -1666,7 +1679,7 @@
 							new Date(weather.date),
 							ReportService.datetimeFormat.date
                         );
-                        
+
 					if (
 						weatherDateFormat == tempDateFormat &&
 						weather.site.objectId == tempChartData.siteObjectId
@@ -1680,7 +1693,7 @@
 					}
 				}
             }
-            
+
 			this.chartDatas = tempChartDatas;
 		}
 
@@ -1769,7 +1782,7 @@
 				for (const singleData of this.areaSummaryFilter) {
 					for (const detailKey in singleData) {
                         const tempSingleData = singleData[detailKey];
-                        
+
 						if (detailKey === "deviceGroups") {
 							if (
 								this.inputFormData.groupId ===
@@ -1994,6 +2007,31 @@
 			}
 		}
 
+		// Author: Tina
+		sortOutReportToTemplateData() {
+			this.ReportToTemplateData = {
+				startDate: this.filterData.startDate,
+				endDate: this.filterData.endDate,
+				mode: EDeviceMode.demographic,
+				siteIds: this.filterData.siteIds,
+				tagIds: this.filterData.tagIds,
+				sendUserIds: this.userData,
+				type: this.designationPeriod,
+			};
+
+		}
+
+		// Author: Tina
+		pageToReportTemplate() {
+			this.sortOutReportToTemplateData();
+			this.$router.push({
+				path: '/reports/',
+				query: {
+					reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+				}
+			});
+		}
+
 		////////////////////////////////////// Tina End //////////////////////////////////////
 
 		////////////////////////////////////// Export //////////////////////////////////////
@@ -2073,7 +2111,7 @@
 
 
         /////////////////////////////////////////////////////////////////////
-        
+
         // Author: Morris, Product remove
 		initChartDeveloper() {
 			this.timeMode = ETimeMode.day;
@@ -2154,13 +2192,14 @@
 					let tempDate = new Date(
 						`2019-07-${iString10}T${iString10}:00:00.000Z`
 					);
-					let tempChartData: IChartDemographicData = {
+					let tempChartData: IChartDemographicDwellTimeData = {
 						date: tempDate,
 						siteObjectId: "site" + (j + 1).toString(),
 						temperatureMin: iNumber,
 						temperatureMax: iNumber,
 						weather: weather,
-						ageRange: ageRange,
+                        ageRange: ageRange,
+                        dwellTimeRange: EDwellTimeRange.none,
 						maleCount: Math.floor(Math.random() * 300),
 						femaleCount: Math.floor(Math.random() * 300)
 					};

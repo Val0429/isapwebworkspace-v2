@@ -1,3 +1,4 @@
+import {EDesignationPeriod} from "../../components/Reports";
 import {EAreaMode} from "../../components/Reports";
 <template>
     <div>
@@ -33,6 +34,10 @@ import {EAreaMode} from "../../components/Reports";
                     <iv-toolbox-send-mail
                         size="lg"
                         @click="modalShow = !modalShow"
+                    />
+                    <iv-toolbox-copy-to-template
+                        size="lg"
+                        @click="pageToReportTemplate()"
                     />
                 </template>
 
@@ -160,16 +165,22 @@ import {
     EDeviceMode,
     ETypeInOrOut,
     EIncludedEmployee,
+    EDesignationPeriod,
     ITemplateItem,
     IFilterCondition,
     IChartTrafficData,
     IPeckTimeRange,
     ISite,
     ISiteItems,
+    IReportToTemplateItem,
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
+
+////////////////////////////////// export //////////////////////////////////
+import html2Canvas from "html2canvas";
+import JsPDF from "jspdf";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 enum EFileType {
@@ -177,10 +188,6 @@ enum EFileType {
     xls = "xls",
     csv = "csv"
 }
-
-///////////////////////// export /////////////////////////
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -314,6 +321,10 @@ export default class ReportTraffic extends Vue {
 
     // send user 相關
     userSelectItem: any = {};
+
+    // Report To Template相關
+    ReportToTemplateData: IReportToTemplateItem | null = null;
+    designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
@@ -1369,9 +1380,13 @@ export default class ReportTraffic extends Vue {
     //// 以下為 analysis filter ////
 
     // Author: Tina
-    async receiveFilterData(filterData: IFilterCondition) {
+    async receiveFilterData(
+        filterData: IFilterCondition,
+        designationPeriod: EDesignationPeriod
+    ) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
+        this.designationPeriod = designationPeriod;
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -1963,6 +1978,30 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
         }
+    }
+
+    // Author: Tina
+    sortOutReportToTemplateData() {
+        this.ReportToTemplateData = {
+            startDate: this.filterData.startDate,
+            endDate: this.filterData.endDate,
+            mode: EDeviceMode.peopleCounting,
+            siteIds: this.filterData.siteIds,
+            tagIds: this.filterData.tagIds,
+            sendUserIds: this.userData,
+            type: this.designationPeriod
+        };
+    }
+
+    // Author: Tina
+    pageToReportTemplate() {
+        this.sortOutReportToTemplateData();
+        this.$router.push({
+            path: "/reports/",
+            query: {
+                reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+            }
+        });
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
