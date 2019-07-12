@@ -580,12 +580,12 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all"
         ) {
+            // 選擇site和單一area
             readParam.areaId = this.inputFormData.areaId;
             await this.$server
                 .R("/device/group/all", readParam)
@@ -606,12 +606,12 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
+            // 選擇site和all area
             await this.$server
                 .R("/device/group/all", readParam)
                 .then((response: any) => {
@@ -675,13 +675,13 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all" &&
             !this.inputFormData.groupId
         ) {
+            // 選擇site和單一area
             readParam.areaId = this.inputFormData.areaId;
             await this.$server
                 .R("/device", readParam)
@@ -702,7 +702,6 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和單一device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -710,6 +709,7 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和單一area和單一device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -733,8 +733,6 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-
-            // 選擇site和單一area和單一device group和 all device
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -743,6 +741,7 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.groupId !== "all" &&
             this.inputFormData.deviceId === "all"
         ) {
+            // 選擇site和單一area和單一device group和 all device
             readParam.groupId = this.inputFormData.groupId;
 
             await this.$server
@@ -767,7 +766,6 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -776,6 +774,7 @@ export default class ReportRepeatVisitor extends Vue {
                 this.inputFormData.groupId === "") &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和all area
             readParam.areaId = "";
             await this.$server
                 .R("/device", readParam)
@@ -796,7 +795,6 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -804,6 +802,7 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和all area和all device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -827,7 +826,6 @@ export default class ReportRepeatVisitor extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -835,6 +833,7 @@ export default class ReportRepeatVisitor extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和單一area和all device group
             readParam.areaId = this.inputFormData.areaId;
             readParam.groupId = "";
             await this.$server
@@ -890,7 +889,6 @@ export default class ReportRepeatVisitor extends Vue {
     async receiveUserData(data) {
         this.userData = [];
         this.userData = data;
-        console.log("this.userData - ", this.userData);
     }
 
     receiveModalShowData(data) {
@@ -929,122 +927,6 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     resolveSummary() {
-        console.log("this.filterData  - ", this.filterData);
-        console.log("this.responseData  - ", this.responseData);
-
-        //  this.initSelectItemArea();
-        //  this.initSelectItemDeviceGroup();
-        //  this.initSelectItemDevice();
-
-        // this.inputFormData = {
-        //     areaId: "all",
-        //     groupId: "all",
-        //     deviceId: "all",
-        //     type: this.filterData.type,
-        //     isIncludedEmployee: "no"
-        // };
-
-        // let finalAreas = [];
-        // this.filterData.siteIds.map(siteIds => {
-        //     this.allAreaItem.map(area => {
-        //         if (area.site.objectId === siteIds) {
-        //            //  let tempAreas = [];
-        //             let tempArea: any = {};
-        //             tempArea = {
-        //                 name: area.name,
-        //                 objectId: area.objectId
-        //             };
-        //             finalAreas.push(tempArea);
-        //             console.log('887 finalAreas - ', finalAreas);
-        //         }
-        //     });
-        // });
-
-        // get office hour data
-        let tempISite: any = {};
-        this.sites = [
-            {
-                objectId: "",
-                name: "",
-                officeHour: [],
-                areas: []
-            }
-        ];
-        let tempAreas = [];
-
-        // for (const filterSiteId of this.filterData.siteIds) {
-        //     for (const detail of this.officeHourItemDetail) {
-        //         for (const singleArea of this.allAreaItem) {
-        //             for (const officeHourSiteId of detail.sites) {
-        //                 if (filterSiteId === officeHourSiteId.objectId) {
-        //                     let tempOfficeHours = [];
-        //                     for (const dayRangesValue of detail.dayRanges) {
-        //                         let tempOfficeHour: any = {};
-        //                         tempOfficeHour = {
-        //                             startDay: dayRangesValue.startDay,
-        //                             endDay: dayRangesValue.endDay,
-        //                             startDate: dayRangesValue.startDate,
-        //                             endDate: dayRangesValue.endDate
-        //                         };
-        //                         tempOfficeHours.push(tempOfficeHour);
-        //                     }
-        //                     tempISite = {
-        //                         objectId: officeHourSiteId.objectId,
-        //                         name: officeHourSiteId.name,
-        //                         officeHour: tempOfficeHours
-        //                     };
-        //
-        //                     this.siteAreaItem = {
-        //                         objectId: officeHourSiteId.objectId,
-        //                         name: officeHourSiteId.name,
-        //                         officeHour: tempOfficeHours
-        //                     };
-        //
-        //                     if (filterSiteId === singleArea.site.objectId) {
-        //                         let tempArea: any = {};
-        //                         tempArea = {
-        //                             name: singleArea.name,
-        //                             objectId: singleArea.objectId
-        //                         };
-        //                         tempAreas.push(tempArea);
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     tempISite.areas = tempAreas;
-        //     this.sites.push(tempISite);
-        //     this.sitesItem.push(tempISite);
-        // }
-
-        /*
-		   for (const filterSiteId of this.filterData.siteIds) {
-			for (const detail of this.officeHourItemDetail) {
-				for (const officeHourSiteId of detail.sites) {
-					if (filterSiteId === officeHourSiteId.objectId) {
-						tempISite = {
-							objectId: officeHourSiteId.objectId,
-							name: officeHourSiteId.name,
-							officeHour: []
-						};
-
-						for (const dayRangesValue of detail.dayRanges) {
-							tempISite.officeHour.push({
-								startDay: dayRangesValue.startDay,
-								endDay: dayRangesValue.endDay,
-								startDate: dayRangesValue.startDate,
-								endDate: dayRangesValue.endDate
-							});
-						}
-
-						break;
-					}
-				}
-			}
-		}
-		*/
-
-        // this.sites.push(tempISite);
         this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
@@ -1057,13 +939,6 @@ export default class ReportRepeatVisitor extends Vue {
         // Ben
         this.initDashboardData();
         this.initReportTableData();
-
-        console.log("this.sites - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     // Ben //
@@ -1130,49 +1005,7 @@ export default class ReportRepeatVisitor extends Vue {
             let maleTotal: number = 0;
             let femaleTotal: number = 0;
 
-            // 判斷date, site 兩個是否相同
-            // let haveSummary = false;
-            // for (let loopChartData of tempChartDatas) {
-            //     if (
-            // 	    this.checkDateAndSite(
-            // 		    loopChartData.date,
-            // 		    summary.date,
-            // 		    loopChartData.siteObjectId,
-            // 		    summary.site.objectId
-            // 	    )
-            //     ) {
-            // 	    haveSummary = true;
-            // 	    tempChartData = loopChartData;
-            // 	    break;
-            //     }
-            // }
-            //
-            // // tempChartData.repeatCount += summary.total;
-            // // tempChartData.occupancy += summary.count;
-            //
-            // if (!haveSummary) {
-            //     // 取得weather、temperatureMin、temperatureMax
-            //     for (const weather of this.responseData.weathers) {
-            // 	    if (
-            // 		    this.checkDateAndSite(
-            // 			    tempChartData.date,
-            // 			    weather.date,
-            // 			    tempChartData.siteObjectId,
-            // 			    weather.site.objectId
-            // 		    )
-            // 	    ) {
-            // 		    console.log(" - ", weather.icon);
-            // 		    tempChartData.weather = WeatherService.WeatherIcon(
-            // 			    weather.icon
-            // 		    );
-            // 		    tempChartData.temperatureMin = weather.temperatureMin;
-            // 		    tempChartData.temperatureMax = weather.temperatureMax;
-            // 		    break;
-            // 	    }
-            //     }
-            // }
-
-            //跑maleRange、 femaleRange
+            // 跑maleRange、 femaleRange
             for (let index = 0; index < 6; index++) {
                 if (summary.maleRanges[index] === null) {
                     break;
@@ -1193,28 +1026,14 @@ export default class ReportRepeatVisitor extends Vue {
                 );
 
                 tempChartDatas.push(tempData);
-
-                // console.log(
-                //     index,
-                //     JSON.parse(JSON.stringify(tempChartDatas)),
-                //     JSON.parse(JSON.stringify(tempChartData)),
-                //     tempData.ageRange
-                // );
             }
 
-            // tempChartDatas.push(tempData);
-
-            // tempChartDatas.push(tempChartData);
-
             this.chartDatas = tempChartDatas;
-            // console.log("this.chartDatas - ", this.chartDatas);
         }
     }
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        console.log("areaId - ", this.inputFormData.areaId);
-
         this.areaSummaryFilter = [];
         this.chartDatas = [];
 
@@ -1303,19 +1122,10 @@ export default class ReportRepeatVisitor extends Vue {
         } else {
             return false;
         }
-
-        console.log("this.sites - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     async receiveGroupId(groupId) {
         this.inputFormData.groupId = groupId;
-        console.log("groupId - ", this.inputFormData.groupId);
-
         this.deviceGroupSummaryFilter = [];
 
         if (
@@ -1324,15 +1134,10 @@ export default class ReportRepeatVisitor extends Vue {
         ) {
             // 依照單一deviceGroup篩選
             for (const singleData of this.areaSummaryFilter) {
-                console.log("singleData - ", singleData);
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
-                        console.log(
-                            "tempSingleData[0].objectId - ",
-                            tempSingleData[0].objectId
-                        );
                         if (
                             this.inputFormData.groupId ===
                             tempSingleData[0].objectId
@@ -1341,7 +1146,6 @@ export default class ReportRepeatVisitor extends Vue {
                         }
                     }
                 }
-                // console.log(" - ", this.deviceGroupSummaryFilter);
             }
 
             this.sortOutChartData(this.deviceGroupSummaryFilter);
@@ -1378,8 +1182,6 @@ export default class ReportRepeatVisitor extends Vue {
 
     async receiveDeviceId(deviceId) {
         this.inputFormData.deviceId = deviceId;
-        console.log("deviceId - ", this.inputFormData.deviceId);
-
         this.deviceSummaryFilter = [];
 
         // 判斷沒有 deviceGroup
@@ -1401,7 +1203,6 @@ export default class ReportRepeatVisitor extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1452,7 +1253,6 @@ export default class ReportRepeatVisitor extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1503,7 +1303,6 @@ export default class ReportRepeatVisitor extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1539,7 +1338,6 @@ export default class ReportRepeatVisitor extends Vue {
     async receiveType(type) {
         this.inputFormData.type = type;
         this.timeMode = type;
-        console.log("type - ", this.inputFormData.type);
 
         // 單一site
         if (this.filterData.firstSiteId) {
@@ -1561,10 +1359,6 @@ export default class ReportRepeatVisitor extends Vue {
 
     async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
-        console.log(
-            "isIncludedEmployee - ",
-            this.inputFormData.isIncludedEmployee
-        );
 
         // 單一site
         if (this.filterData.firstSiteId) {
