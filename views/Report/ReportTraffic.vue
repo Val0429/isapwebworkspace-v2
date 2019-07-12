@@ -156,18 +156,18 @@ import {
     ESign,
     ETimeMode,
     EWeather,
+    ECountType,
+    EDeviceMode,
+    ETypeInOrOut,
+    EIncludedEmployee,
+    ITemplateItem,
+    IFilterCondition,
     IChartTrafficData,
     IPeckTimeRange,
     ISite,
     ISiteItems,
     ReportDashboard,
-    ReportTableData,
-    ITemplateItem,
-    IFilterCondition,
-    ECountType,
-    EDeviceMode,
-    ETypeInOrOut,
-    EIncludedEmployee
+    ReportTableData
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
 import toExcel from "@/services/Excel/json2excel";

@@ -12,7 +12,7 @@
 		>
 		</filter-condition>
 
-		<div v-show="pageStep === ePageStep.none">
+		<div>
 			<iv-card>
 
 				<template #toolbox>
@@ -73,6 +73,7 @@
 				>
 				</anlysis-dashboard>
 
+                <!-- Morris -->
 				<highcharts-demographic
 					ref="test"
 					:startDate="startDate"
@@ -147,43 +148,39 @@
 	import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 	import {
 		ETimeMode,
-		EWeather,
-		IDayRange,
-		IChartDemographicData,
-		EAgeRange,
+        EWeather,
+        EAgeRange,
 		EAreaMode,
 		EChartMode,
 		EPageType,
-		ESign,
+        ESign,
+		ECountType,
+		EDeviceMode,
+		EIncludedEmployee,
+		IDayRange,
+		IChartDemographicData,
 		IChartTrafficData,
 		IPeckTimeRange,
 		ISite,
 		ISiteItems,
-		ITemplateItem,
+        ITemplateItem,
+        IFilterCondition,
 		ReportDashboard,
-		ReportTableData,
-		IFilterCondition,
-		ECountType,
-		EDeviceMode,
-		EIncludedEmployee
+		ReportTableData
 	} from "@/components/Reports";
-	import toExcel from "@/services/Excel/json2excel";
+	
+	///////////////////////// export /////////////////////////
+	import html2Canvas from "html2canvas";
+    import JsPDF from "jspdf";
+    import toExcel from "@/services/Excel/json2excel";
 	import excel2json from "@/services/Excel/excel2json";
 
 	enum EFileType {
 		xlsx = "xlsx",
 		xls = "xls",
 		csv = "csv"
-	}
-
-	///////////////////////// export /////////////////////////
-	import html2Canvas from "html2canvas";
-	import JsPDF from "jspdf";
-
-	enum EPageStep {
-		none = "none"
-	}
-
+    }
+    
 	enum ETableStep {
 		mainTable = "mainTable",
 		sunTable = "sunTable",
@@ -198,12 +195,10 @@
 		lastTableStep: ETableStep = ETableStep.none;
 		tableStep: ETableStep = ETableStep.none;
 		eTableStep = ETableStep;
-		ePageStep = EPageStep;
 		ePageType = EPageType;
 		eWeather = EWeather;
 		eFileType = EFileType;
 
-		pageStep: EPageStep = EPageStep.none;
 		templateItem: ITemplateItem | null = null;
 
 		startDate: Date = new Date("2019-01-01T00:00:00.000Z");
@@ -228,7 +223,8 @@
 		selecteds: IRegionTreeSelected[] = [];
 
 		// OfficeHour 相關
-		officeHourItemDetail: any = [];
+        officeHourItemDetail: any = [];
+        
 		// recipient 相關
 		modalShow: boolean = false;
 
@@ -243,7 +239,6 @@
 		};
 		responseData: any = {};
 		userData: any = [];
-
 		//// Filter Condition End ////
 
 		//// Analysis Filter Start ////

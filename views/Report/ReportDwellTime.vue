@@ -1,7 +1,19 @@
 <template>
     <div class="animated fadeIn">
-        <div v-show="pageStep === ePageStep.none">
-            DwellTime
+        <div>
+
+            <!-- Morris -->
+            <highcharts-dwell-time
+                ref="test"
+                :startDate="startDate"
+                :endDate="endDate"
+                :sites="sites"
+                :timeMode="timeMode"
+                :areaMode="areaMode"
+                :value="chartDatas"
+            >
+            </highcharts-dwell-time>
+
         </div>
 
     </div>
@@ -10,24 +22,148 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
+import HighchartsDwellTime from "@/components/Reports/HighchartsDwellTime.vue";
 
-enum EPageStep {
-    none = "none"
-}
+import {
+    ETimeMode,
+    EWeather,
+    IDayRange,
+    ECountType,
+    EDeviceMode,
+    EIncludedEmployee,
+    EAgeRange,
+    EAreaMode,
+    EChartMode,
+    EPageType,
+    ESign,
+    IChartDwellTimeData,
+    IPeckTimeRange,
+    ISite,
+    ISiteItems,
+    ITemplateItem,
+    IFilterCondition,
+    ReportDashboard,
+    ReportTableData
+} from "@/components/Reports";
 
 @Component({
-    components: {}
+    components: {
+        HighchartsDwellTime
+    }
 })
 export default class ReportDwellTime extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
+    startDate: Date = new Date("2019-01-01T00:00:00.000Z");
+    endDate: Date = new Date("2019-01-01T01:00:00.000Z");
+    timeMode: ETimeMode = ETimeMode.none;
+    areaMode: EAreaMode = EAreaMode.none;
+    sites: ISite[] = [];
+    chartDatas: IChartDwellTimeData[] = [];
 
     created() {}
 
     mounted() {}
+
+    /////////////////////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        this.timeMode = ETimeMode.day;
+        this.areaMode = EAreaMode.single;
+
+        // single day
+        this.startDate = new Date("2019-07-01T08:00:00.000Z");
+        this.endDate = new Date("2019-07-01T14:00:00.000Z");
+
+        // multipe day
+        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        // this.endDate = new Date("2019-07-10T14:00:00.000Z");
+
+        let siteLength = 1;
+
+        for (let j = 0; j < siteLength; j++) {
+            let tempJ = j + 1;
+            this.sites.push({
+                objectId: "site" + tempJ.toString(),
+                name: "Site " + tempJ.toString(),
+                officeHour: [
+                    {
+                        startDay: "0",
+                        endDay: "6",
+                        startDate: "2000-01-01T00:00:00.000Z",
+                        endDate: "2000-01-01T14:00:00.000Z"
+                    }
+                ]
+            });
+
+            for (let i = 1; i < 30; i++) {
+                let ageRange = EAgeRange.none;
+                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
+
+                let weather = EWeather.none;
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
+
+                if (tempWeatherNumber % 10 == 0) {
+                    weather = EWeather.clearDay;
+                } else if (tempWeatherNumber % 10 == 1) {
+                    weather = EWeather.clearNight;
+                } else if (tempWeatherNumber % 10 == 2) {
+                    weather = EWeather.rain;
+                } else if (tempWeatherNumber % 10 == 3) {
+                    weather = EWeather.snow;
+                } else if (tempWeatherNumber % 10 == 4) {
+                    weather = EWeather.sleet;
+                } else if (tempWeatherNumber % 10 == 5) {
+                    weather = EWeather.wind;
+                } else if (tempWeatherNumber % 10 == 6) {
+                    weather = EWeather.fog;
+                } else if (tempWeatherNumber % 10 == 7) {
+                    weather = EWeather.cloudy;
+                } else if (tempWeatherNumber % 10 == 8) {
+                    weather = EWeather.partlyCloudyDay;
+                } else if (tempWeatherNumber % 10 == 9) {
+                    weather = EWeather.partlyCloudyNight;
+                }
+
+                if (tempAgeRangeNumber % 6 == 0) {
+                    ageRange = EAgeRange.lower20;
+                } else if (tempAgeRangeNumber % 6 == 1) {
+                    ageRange = EAgeRange.m21_30;
+                } else if (tempAgeRangeNumber % 6 == 2) {
+                    ageRange = EAgeRange.m31_40;
+                } else if (tempAgeRangeNumber % 6 == 3) {
+                    ageRange = EAgeRange.m41_50;
+                } else if (tempAgeRangeNumber % 6 == 4) {
+                    ageRange = EAgeRange.m51_60;
+                } else if (tempAgeRangeNumber % 6 == 5) {
+                    ageRange = EAgeRange.upper61;
+                }
+
+                let tempI = i;
+                let iNumber = tempI;
+                let iString = tempI.toString();
+                let iString10 = iNumber < 10 ? `0${iString}` : iString;
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
+                let tempChartData: IChartDwellTimeData = {
+                    date: tempDate,
+                    siteObjectId: "site" + (j + 1).toString(),
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
+                    weather: weather,
+                    ageRange: ageRange,
+                    maleCount: Math.floor(Math.random() * 300),
+                    femaleCount: Math.floor(Math.random() * 300)
+                };
+
+                if (!isNaN(tempChartData.date.getTime())) {
+                    this.chartDatas.push(tempChartData);
+                }
+            }
+        }
+    }
 }
 </script>
-
 
 <style lang="scss" scoped>
 </style>
