@@ -1,3 +1,4 @@
+import {EDesignationPeriod} from "../../components/Reports";
 import {EAreaMode} from "../../components/Reports";
 <template>
     <div>
@@ -33,6 +34,10 @@ import {EAreaMode} from "../../components/Reports";
                     <iv-toolbox-send-mail
                         size="lg"
                         @click="modalShow = !modalShow"
+                    />
+                    <iv-toolbox-copy-to-template
+                        size="lg"
+                        @click="pageToReportTemplate()"
                     />
                 </template>
 
@@ -135,54 +140,49 @@ import {EAreaMode} from "../../components/Reports";
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-// Tina
-import {
-    ERegionType,
-    IRegionTreeSelected,
-    RegionTreeItem
-} from "@/components/RegionTree";
+    import {Component, Vue} from "vue-property-decorator";
+    // Tina
+    import {ERegionType, IRegionTreeSelected, RegionTreeItem} from "@/components/RegionTree";
 
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import Datetime from "@/services/Datetime";
-import HighchartsService from "@/components/Reports/models/HighchartsService";
-import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
-import {
-    EAreaMode,
-    EChartMode,
-    EPageType,
-    ESign,
-    ETimeMode,
-    EWeather,
-    IChartTrafficData,
-    IPeckTimeRange,
-    ISite,
-    ISiteItems,
-    ReportDashboard,
-    ReportTableData,
-    ITemplateItem,
-    IFilterCondition,
-    ECountType,
-    EDeviceMode,
-    ETypeInOrOut,
-    EIncludedEmployee
-} from "@/components/Reports";
-import ReportService from "@/components/Reports/models/ReportService";
-import toExcel from "@/services/Excel/json2excel";
-import excel2json from "@/services/Excel/excel2json";
-enum EFileType {
+    import RegionAPI from "@/services/RegionAPI";
+    import ResponseFilter from "@/services/ResponseFilter";
+    import WeatherService from "@/components/Reports/models/WeatherService";
+    import Datetime from "@/services/Datetime";
+    import HighchartsService from "@/components/Reports/models/HighchartsService";
+    import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
+    import {
+        EAreaMode,
+        EChartMode,
+        ECountType,
+        EDesignationPeriod,
+        EDeviceMode,
+        EIncludedEmployee,
+        EPageType,
+        ETimeMode,
+        ETypeInOrOut,
+        EWeather,
+        IChartTrafficData,
+        IFilterCondition,
+        IPeckTimeRange,
+        ISite,
+        ISiteItems,
+        ITemplateItem,
+        ReportTableData,
+        IReportToTemplateItem
+    } from "@/components/Reports";
+    import ReportService from "@/components/Reports/models/ReportService";
+    import toExcel from "@/services/Excel/json2excel";
+    ///////////////////////// export /////////////////////////
+    import html2Canvas from "html2canvas";
+    import JsPDF from "jspdf";
+
+    enum EFileType {
     xlsx = "xlsx",
     xls = "xls",
     csv = "csv"
 }
 
-///////////////////////// export /////////////////////////
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
-
-enum ETableStep {
+    enum ETableStep {
     mainTable = "mainTable",
     sunTable = "sunTable",
     detailTable = "detailTable",
@@ -314,6 +314,10 @@ export default class ReportTraffic extends Vue {
 
     // send user 相關
     userSelectItem: any = {};
+
+    // Report To Template相關
+    ReportToTemplateData: IReportToTemplateItem | null =  null;
+    designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
@@ -1369,9 +1373,10 @@ export default class ReportTraffic extends Vue {
     //// 以下為 analysis filter ////
 
     // Author: Tina
-    async receiveFilterData(filterData: IFilterCondition) {
+    async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
+        this.designationPeriod = designationPeriod;
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -1963,6 +1968,31 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
         }
+    }
+
+    // Author: Tina
+    sortOutReportToTemplateData() {
+        this.ReportToTemplateData = {
+            startDate: this.filterData.startDate,
+            endDate: this.filterData.endDate,
+            mode: EDeviceMode.peopleCounting,
+            siteIds: this.filterData.siteIds,
+            tagIds: this.filterData.tagIds,
+            sendUserIds: this.userData,
+            type: this.designationPeriod,
+        };
+
+    }
+
+    // Author: Tina
+    pageToReportTemplate() {
+        this.sortOutReportToTemplateData();
+        this.$router.push({
+            path: '/reports/',
+            query: {
+                reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+            }
+        });
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

@@ -37,6 +37,10 @@
                         size="lg"
                         @click="modalShow = !modalShow"
                     />
+                    <iv-toolbox-copy-to-template
+                        size="lg"
+                        @click="pageToReportTemplate()"
+                    />
                 </template>
 
                 <!-- Tina -->
@@ -167,7 +171,9 @@ import {
     IFilterCondition,
     ECountType,
     EDeviceMode,
-    EIncludedEmployee
+    EIncludedEmployee,
+    EDesignationPeriod,
+    IReportToTemplateItem
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
@@ -288,6 +294,10 @@ export default class ReportOccupancy extends Vue {
 
     // send user 相關
     userSelectItem: any = {};
+
+    // Report To Template相關
+    ReportToTemplateData: IReportToTemplateItem | null =  null;
+    designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
     //ReportDashboard 相關
     dPageType: EPageType = EPageType.none;
@@ -962,9 +972,10 @@ export default class ReportOccupancy extends Vue {
     }
 
     //// 以下為 analysis filter ////
-    async receiveFilterData(filterData) {
+    async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
+        this.designationPeriod = designationPeriod;
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -2147,6 +2158,31 @@ export default class ReportOccupancy extends Vue {
 
     receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+    }
+
+    // Author: Tina
+    sortOutReportToTemplateData() {
+        this.ReportToTemplateData = {
+            startDate: this.filterData.startDate,
+            endDate: this.filterData.endDate,
+            mode: EDeviceMode.humanDetection,
+            siteIds: this.filterData.siteIds,
+            tagIds: this.filterData.tagIds,
+            sendUserIds: this.userData,
+            type: this.designationPeriod,
+        };
+
+    }
+
+    // Author: Tina
+    pageToReportTemplate() {
+        this.sortOutReportToTemplateData();
+        this.$router.push({
+            path: '/reports/',
+            query: {
+                reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+            }
+        });
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

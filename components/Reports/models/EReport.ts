@@ -33,6 +33,7 @@ enum EDesignationPeriod {
     q3 = 'q3',
     q4 = 'q4',
     thisYear = 'thisYear',
+    none = 'none'
 }
 
 // count type

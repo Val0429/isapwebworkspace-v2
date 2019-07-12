@@ -36,6 +36,10 @@
 						size="lg"
 						@click="modalShow = !modalShow"
 					/>
+					<iv-toolbox-copy-to-template
+						size="lg"
+						@click="pageToReportTemplate()"
+					/>
 				</template>
 
 				<!-- Tina -->
@@ -165,7 +169,9 @@
 		IFilterCondition,
 		ECountType,
 		EDeviceMode,
-		EIncludedEmployee
+		EIncludedEmployee,
+		EDesignationPeriod,
+		IReportToTemplateItem
 	} from "@/components/Reports";
 	import toExcel from "@/services/Excel/json2excel";
 	import excel2json from "@/services/Excel/excel2json";
@@ -284,6 +290,10 @@
 		// send user 相關
 		userSelectItem: any = {};
 
+		// Report To Template相關
+		ReportToTemplateData: IReportToTemplateItem | null =  null;
+		designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
+
 		//ReportDashboard 相關
 		dPageType: EPageType = EPageType.none;
 		dTimeMode: ETimeMode = ETimeMode.none;
@@ -322,7 +332,7 @@
 			}
 		}
 
-        
+
 
 		// Ben //
 		reportTableBack() {
@@ -558,7 +568,7 @@
 						  item1: [],
                         item2: []
                         };
-                        
+
 						if (
 							tempArray.every(
 								t =>
@@ -669,7 +679,7 @@
 								) {
 									continue;
 								}
-						
+
 									if (tempArray[index].group != null) {
                                         for (let deviceGroup of summaryData.deviceGroups) {
 										    if (
@@ -957,7 +967,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -984,7 +994,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1054,7 +1064,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1082,7 +1092,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1115,7 +1125,7 @@
 						return false;
 					});
 
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1149,7 +1159,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1179,7 +1189,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1211,7 +1221,7 @@
 						console.log(e);
 						return false;
 					});
-				
+
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1283,11 +1293,12 @@
 
 		//// 以下為 analysis filter ////
 
-		async receiveFilterData(filterData) {
+		async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
 
             let param = JSON.parse(JSON.stringify(filterData));
             this.filterData = filterData;
-            this.inputFormData = {
+			this.designationPeriod = designationPeriod;
+			this.inputFormData = {
 				areaId: "",
 				groupId: "",
 				deviceId: "",
@@ -1671,7 +1682,7 @@
 							new Date(weather.date),
 							ReportService.datetimeFormat.date
                         );
-                        
+
 					if (
 						weatherDateFormat == tempDateFormat &&
 						weather.site.objectId == tempChartData.siteObjectId
@@ -1685,7 +1696,7 @@
 					}
 				}
             }
-            
+
 			this.chartDatas = tempChartDatas;
 		}
 
@@ -1774,7 +1785,7 @@
 				for (const singleData of this.areaSummaryFilter) {
 					for (const detailKey in singleData) {
                         const tempSingleData = singleData[detailKey];
-                        
+
 						if (detailKey === "deviceGroups") {
 							if (
 								this.inputFormData.groupId ===
@@ -1999,6 +2010,31 @@
 			}
 		}
 
+		// Author: Tina
+		sortOutReportToTemplateData() {
+			this.ReportToTemplateData = {
+				startDate: this.filterData.startDate,
+				endDate: this.filterData.endDate,
+				mode: EDeviceMode.demographic,
+				siteIds: this.filterData.siteIds,
+				tagIds: this.filterData.tagIds,
+				sendUserIds: this.userData,
+				type: this.designationPeriod,
+			};
+
+		}
+
+		// Author: Tina
+		pageToReportTemplate() {
+			this.sortOutReportToTemplateData();
+			this.$router.push({
+				path: '/reports/',
+				query: {
+					reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+				}
+			});
+		}
+
 		////////////////////////////////////// Tina End //////////////////////////////////////
 
 		////////////////////////////////////// Export //////////////////////////////////////
@@ -2073,7 +2109,7 @@
 
 
         /////////////////////////////////////////////////////////////////////
-        
+
         // Author: Morris, Product remove
 		initChartDeveloper() {
 			this.timeMode = ETimeMode.day;
