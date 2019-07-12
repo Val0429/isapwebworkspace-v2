@@ -1668,7 +1668,6 @@ export default class ReportOccupancy extends Vue {
     sortOutChartData(datas: any) {
         let tempValues = JSON.parse(JSON.stringify(datas));
         let tempChartDatas: IChartOccupancyData[] = [];
-<<<<<<< HEAD
         let isOneDay: boolean = false;
         let isSingleSite: boolean = this.sites.length == 1 ? true : false;
 
@@ -1683,120 +1682,6 @@ export default class ReportOccupancy extends Vue {
                 occupancy: 0,
                 areaId: ""
             };
-=======
-        let isOneDay = false;
-
-        // all area
-        if (
-            (this.inputFormData.areaId &&
-                this.inputFormData.areaId === "all") ||
-            !this.inputFormData.areaId
-        ) {
-            console.log("all area - ");
-
-            this.sites.map(item => {
-                console.log(" - ", item.areas.length);
-
-                item.areas.map(area => {
-                    console.log("area - ", area.objectId);
-                    // 取得date、siteObjectId資料
-                    if (
-                        Datetime.IsOneDate(
-                            this.filterData.startDate,
-                            this.filterData.endDate
-                        )
-                    ) {
-                        isOneDay = true;
-
-                        // one day
-                        for (let i = 0; i < 24; i++) {
-                            let tempDate = Datetime.DateToZero(
-                                this.filterData.startDate
-                            );
-                            tempDate.setHours(i);
-                            let tempDateChartData = {
-                                date: tempDate,
-                                siteObjectId: "",
-                                temperatureMin: 0,
-                                temperatureMax: 0,
-                                weather: EWeather.none,
-                                occupancy: 0,
-                                areaId: area.objectId
-                            };
-
-                            for (let siteId of this.filterData.siteIds) {
-                                let tempSiteChartData = JSON.parse(
-                                    JSON.stringify(tempDateChartData)
-                                );
-                                tempSiteChartData.date = new Date(
-                                    tempSiteChartData.date
-                                );
-                                tempSiteChartData.siteObjectId = siteId;
-                                tempChartDatas.push(tempSiteChartData);
-                            }
-                        }
-                    } else {
-                        // multiple days
-                        let dateList = Datetime.DateList(
-                            this.filterData.startDate,
-                            this.filterData.endDate
-                        );
-                        for (let dateItem of dateList) {
-                            let tempDateChartData = {
-                                date: new Date(dateItem.getTime()),
-                                siteObjectId: "",
-                                temperatureMin: 0,
-                                temperatureMax: 0,
-                                weather: EWeather.none,
-                                occupancy: 0,
-                                areaId: ""
-                            };
-                            for (let siteId of this.filterData.siteIds) {
-                                let tempSiteChartData = JSON.parse(
-                                    JSON.stringify(tempDateChartData)
-                                );
-                                tempSiteChartData.date = new Date(
-                                    tempSiteChartData.date
-                                );
-                                tempSiteChartData.siteObjectId = siteId;
-                                tempChartDatas.push(tempSiteChartData);
-                            }
-                        }
-                    }
-                });
-
-                for (let tempChartData of tempChartDatas) {
-                    let tempDateFormat = isOneDay
-                        ? Datetime.DateTime2String(
-                              tempChartData.date,
-                              ReportService.datetimeFormat.hour
-                          )
-                        : Datetime.DateTime2String(
-                              tempChartData.date,
-                              ReportService.datetimeFormat.date
-                          );
-
-                    // 計算 occupancy
-                    for (let summary of datas) {
-                        if (summary.area.objectId === tempChartData.areaId) {
-                            let summaryDateFormat = isOneDay
-                                ? Datetime.DateTime2String(
-                                      new Date(summary.date),
-                                      ReportService.datetimeFormat.hour
-                                  )
-                                : Datetime.DateTime2String(
-                                      new Date(summary.date),
-                                      ReportService.datetimeFormat.date
-                                  );
-
-                            if (
-                                summaryDateFormat == tempDateFormat &&
-                                summary.site.objectId ==
-                                    tempChartData.siteObjectId
-                            ) {
-                                console.log("summary.total - ", summary.total);
-                                console.log("summary.count - ", summary.count);
->>>>>>> 1959ca0c516072512572f4f2ebd4d93d5df41a9b
 
             let dateList: Date[] = [];
 
@@ -1865,7 +1750,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-<<<<<<< HEAD
 
                 // area
                 if (
@@ -1875,25 +1759,6 @@ export default class ReportOccupancy extends Vue {
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
                             JSON.stringify(tempChartDataDate)
-=======
-                for (let i in this.responseData.weathers) {
-                    let weather = this.responseData.weathers[i];
-                    let weatherDateFormat = isOneDay
-                        ? Datetime.DateTime2String(
-                              new Date(weather.date),
-                              ReportService.datetimeFormat.hour
-                          )
-                        : Datetime.DateTime2String(
-                              new Date(weather.date),
-                              ReportService.datetimeFormat.date
-                          );
-                    if (
-                        weatherDateFormat == tempDateFormat &&
-                        weather.site.objectId == tempChartData.siteObjectId
-                    ) {
-                        tempChartData.weather = WeatherService.WeatherIcon(
-                            weather.icon
->>>>>>> 1959ca0c516072512572f4f2ebd4d93d5df41a9b
                         );
                         tempChartDataArea.areaId = area.objectId;
                         tempChartDatas.push(tempChartDataArea);
@@ -1945,290 +1810,6 @@ export default class ReportOccupancy extends Vue {
         }
 
         this.chartDatas = tempChartDatas;
-
-        
-
-        /////////////////////////////////
-
-        // all area
-        // if (
-        //     (this.inputFormData.areaId &&
-        //         this.inputFormData.areaId === "all") ||
-        //     !this.inputFormData.areaId
-        // ) {
-        //     console.log("all area - ");
-
-        //     this.sites.map(item => {
-        //         console.log(" - ", item.areas.length);
-
-        //         item.areas.map(area => {
-        //             console.log("area - ", area.objectId);
-        //             // 取得date、siteObjectId資料
-        //             if (
-        //                 Datetime.IsOneDate(
-        //                     this.filterData.startDate,
-        //                     this.filterData.endDate
-        //                 )
-        //             ) {
-        //                 isOneDay = true;
-
-        //                 // one day
-        //                 for (let i = 0; i < 24; i++) {
-        //                     let tempDate = Datetime.DateToZero(
-        //                         this.filterData.startDate
-        //                     );
-        //                     tempDate.setHours(i);
-        //                     let tempDateChartData = {
-        //                         date: tempDate,
-        //                         siteObjectId: "",
-        //                         temperatureMin: 0,
-        //                         temperatureMax: 0,
-        //                         weather: EWeather.none,
-        //                         occupancy: 0,
-        //                         areaId: area.objectId
-        //                     };
-
-        //                     for (let siteId of this.filterData.siteIds) {
-        //                         let tempSiteChartData = JSON.parse(
-        //                             JSON.stringify(tempDateChartData)
-        //                         );
-        //                         tempSiteChartData.date = new Date(
-        //                             tempSiteChartData.date
-        //                         );
-        //                         tempSiteChartData.siteObjectId = siteId;
-        //                         tempChartDatas.push(tempSiteChartData);
-        //                     }
-        //                 }
-        //             } else {
-        //                 // multiple days
-        //                 let dateList = Datetime.DateList(
-        //                     this.filterData.startDate,
-        //                     this.filterData.endDate
-        //                 );
-        //                 for (let dateItem of dateList) {
-        //                     let tempDateChartData = {
-        //                         date: new Date(dateItem.getTime()),
-        //                         siteObjectId: "",
-        //                         temperatureMin: 0,
-        //                         temperatureMax: 0,
-        //                         weather: EWeather.none,
-        //                         occupancy: 0,
-        //                         areaId: ""
-        //                     };
-        //                     for (let siteId of this.filterData.siteIds) {
-        //                         let tempSiteChartData = JSON.parse(
-        //                             JSON.stringify(tempDateChartData)
-        //                         );
-        //                         tempSiteChartData.date = new Date(
-        //                             tempSiteChartData.date
-        //                         );
-        //                         tempSiteChartData.siteObjectId = siteId;
-        //                         tempChartDatas.push(tempSiteChartData);
-        //                     }
-        //                 }
-        //             }
-        //         });
-
-        //         for (let tempChartData of tempChartDatas) {
-        //             let tempDateFormat = isOneDay
-        //                 ? Datetime.DateTime2String(
-        //                       tempChartData.date,
-        //                       ReportService.datetimeFormat.hour
-        //                   )
-        //                 : Datetime.DateTime2String(
-        //                       tempChartData.date,
-        //                       ReportService.datetimeFormat.date
-        //                   );
-
-        //             // 計算 occupancy
-        //             for (let summary of datas) {
-        //                 if (summary.area.objectId === tempChartData.areaId) {
-        //                     let summaryDateFormat = isOneDay
-        //                         ? Datetime.DateTime2String(
-        //                               new Date(summary.date),
-        //                               ReportService.datetimeFormat.hour
-        //                           )
-        //                         : Datetime.DateTime2String(
-        //                               new Date(summary.date),
-        //                               ReportService.datetimeFormat.date
-        //                           );
-
-        //                     if (
-        //                         summaryDateFormat == tempDateFormat &&
-        //                         summary.site.objectId ==
-        //                             tempChartData.siteObjectId
-        //                     ) {
-        //                         console.log("summary.total - ", summary.total);
-        //                         console.log("summary.count - ", summary.count);
-
-        //                         tempChartData.occupancy =
-        //                             summary.total / summary.count;
-        //                         break;
-        //                     }
-
-        //                     for (let i in this.responseData.weathers) {
-        //                         let weather = this.responseData.weathers[i];
-        //                         let weatherDateFormat = isOneDay
-        //                             ? Datetime.DateTime2String(
-        //                                   tempChartData.date,
-        //                                   ReportService.datetimeFormat.hour
-        //                               )
-        //                             : Datetime.DateTime2String(
-        //                                   tempChartData.date,
-        //                                   ReportService.datetimeFormat.date
-        //                               );
-        //                         if (
-        //                             weatherDateFormat == tempDateFormat &&
-        //                             weather.site.objectId ==
-        //                                 tempChartData.siteObjectId
-        //                         ) {
-        //                             tempChartData.weather = WeatherService.WeatherIcon(
-        //                                 weather.icon
-        //                             );
-        //                             tempChartData.temperatureMin =
-        //                                 weather.temperatureMin;
-        //                             tempChartData.temperatureMax =
-        //                                 weather.temperatureMax;
-        //                             // this.responseData.weathers.splice(i, 1);
-        //                             break;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         console.log("!!! 1", new Date().getTime());
-        //         this.chartDatas = tempChartDatas;
-        //     });
-        // } else if (
-        //     this.inputFormData.areaId &&
-        //     this.inputFormData.areaId !== "all"
-        // ) {
-        //     // 單一 area
-        //     // 取得date、siteObjectId資料
-        //     if (
-        //         Datetime.IsOneDate(
-        //             this.filterData.startDate,
-        //             this.filterData.endDate
-        //         )
-        //     ) {
-        //         isOneDay = true;
-
-        //         // one day
-        //         for (let i = 0; i < 24; i++) {
-        //             let tempDate = Datetime.DateToZero(
-        //                 this.filterData.startDate
-        //             );
-        //             tempDate.setHours(i);
-        //             let tempDateChartData = {
-        //                 date: tempDate,
-        //                 siteObjectId: "",
-        //                 temperatureMin: 0,
-        //                 temperatureMax: 0,
-        //                 weather: EWeather.none,
-        //                 occupancy: 0,
-        //                 areaId: this.inputFormData.areaId
-        //             };
-
-        //             for (let siteId of this.filterData.siteIds) {
-        //                 let tempSiteChartData = JSON.parse(
-        //                     JSON.stringify(tempDateChartData)
-        //                 );
-        //                 tempSiteChartData.date = new Date(
-        //                     tempSiteChartData.date
-        //                 );
-        //                 tempSiteChartData.siteObjectId = siteId;
-        //                 tempChartDatas.push(tempSiteChartData);
-        //             }
-        //         }
-        //     } else {
-        //         // multiple days
-        //         let dateList = Datetime.DateList(
-        //             this.filterData.startDate,
-        //             this.filterData.endDate
-        //         );
-        //         for (let dateItem of dateList) {
-        //             let tempDateChartData = {
-        //                 date: new Date(dateItem.getTime()),
-        //                 siteObjectId: "",
-        //                 temperatureMin: 0,
-        //                 temperatureMax: 0,
-        //                 weather: EWeather.none,
-        //                 occupancy: 0,
-        //                 areaId: this.inputFormData.areaId
-        //             };
-        //             for (let siteId of this.filterData.siteIds) {
-        //                 let tempSiteChartData = JSON.parse(
-        //                     JSON.stringify(tempDateChartData)
-        //                 );
-        //                 tempSiteChartData.date = new Date(
-        //                     tempSiteChartData.date
-        //                 );
-        //                 tempSiteChartData.siteObjectId = siteId;
-        //                 tempChartDatas.push(tempSiteChartData);
-        //             }
-        //         }
-        //     }
-
-        //     for (let tempChartData of tempChartDatas) {
-        //         let tempDateFormat = isOneDay
-        //             ? Datetime.DateTime2String(
-        //                   tempChartData.date,
-        //                   ReportService.datetimeFormat.hour
-        //               )
-        //             : Datetime.DateTime2String(
-        //                   tempChartData.date,
-        //                   ReportService.datetimeFormat.date
-        //               );
-
-        //         // 計算 occupancy
-        //         for (let summary of datas) {
-        //             let summaryDateFormat = isOneDay
-        //                 ? Datetime.DateTime2String(
-        //                       new Date(summary.date),
-        //                       ReportService.datetimeFormat.hour
-        //                   )
-        //                 : Datetime.DateTime2String(
-        //                       new Date(summary.date),
-        //                       ReportService.datetimeFormat.date
-        //                   );
-
-        //             if (
-        //                 summaryDateFormat == tempDateFormat &&
-        //                 summary.site.objectId == tempChartData.siteObjectId
-        //             ) {
-        //                 tempChartData.occupancy = summary.total / summary.count;
-        //                 break;
-        //             }
-        //         }
-        //         for (let i in this.responseData.weathers) {
-        //             let weather = this.responseData.weathers[i];
-        //             let weatherDateFormat = isOneDay
-        //                 ? Datetime.DateTime2String(
-        //                       new Date(weather.date),
-        //                       ReportService.datetimeFormat.hour
-        //                   )
-        //                 : Datetime.DateTime2String(
-        //                       new Date(weather.date),
-        //                       ReportService.datetimeFormat.date
-        //                   );
-        //             if (
-        //                 weatherDateFormat == tempDateFormat &&
-        //                 weather.site.objectId == tempChartData.siteObjectId
-        //             ) {
-        //                 tempChartData.weather = WeatherService.WeatherIcon(
-        //                     weather.icon
-        //                 );
-        //                 tempChartData.temperatureMin = weather.temperatureMin;
-        //                 tempChartData.temperatureMax = weather.temperatureMax;
-        //                 // this.responseData.weathers.splice(i, 1);
-        //                 break;
-        //             }
-        //         }
-        //     }
-
-        //     console.log("!!! 1", new Date().getTime());
-            
-        // }
     }
 
     async receiveAreaId(areaId) {
@@ -2256,7 +1837,6 @@ export default class ReportOccupancy extends Vue {
 
             let tempAreas = [];
 
-<<<<<<< HEAD
             this.sites.map(item => {
                 item.areas.map(area => {
                     if (this.inputFormData.areaId === area.objectId) {
@@ -2269,20 +1849,6 @@ export default class ReportOccupancy extends Vue {
                     }
                 });
             });
-=======
-
-	        for (const area in this.areaSelectItem) {
-		        if (this.inputFormData.areaId === area) {
-			        let tempArea: any = {};
-			        tempArea = {
-				        name: this.areaSelectItem[area],
-				        objectId: area
-			        };
-			        tempAreas.push(tempArea);
-		        }
-	        }
-
->>>>>>> 1959ca0c516072512572f4f2ebd4d93d5df41a9b
             this.siteAreaItem.areas = tempAreas;
             this.sites = [];
             this.sites.push(this.siteAreaItem);
