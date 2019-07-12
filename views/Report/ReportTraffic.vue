@@ -140,49 +140,56 @@ import {EAreaMode} from "../../components/Reports";
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    // Tina
-    import {ERegionType, IRegionTreeSelected, RegionTreeItem} from "@/components/RegionTree";
+import { Component, Vue } from "vue-property-decorator";
+// Tina
+import {
+    ERegionType,
+    IRegionTreeSelected,
+    RegionTreeItem
+} from "@/components/RegionTree";
 
-    import RegionAPI from "@/services/RegionAPI";
-    import ResponseFilter from "@/services/ResponseFilter";
-    import WeatherService from "@/components/Reports/models/WeatherService";
-    import Datetime from "@/services/Datetime";
-    import HighchartsService from "@/components/Reports/models/HighchartsService";
-    import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
-    import {
-        EAreaMode,
-        EChartMode,
-        ECountType,
-        EDesignationPeriod,
-        EDeviceMode,
-        EIncludedEmployee,
-        EPageType,
-        ETimeMode,
-        ETypeInOrOut,
-        EWeather,
-        IChartTrafficData,
-        IFilterCondition,
-        IPeckTimeRange,
-        ISite,
-        ISiteItems,
-        ITemplateItem,
-        ReportTableData,
-        IReportToTemplateItem
-    } from "@/components/Reports";
-    import ReportService from "@/components/Reports/models/ReportService";
-    import toExcel from "@/services/Excel/json2excel";
-    ///////////////////////// export /////////////////////////
-    import html2Canvas from "html2canvas";
-    import JsPDF from "jspdf";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import WeatherService from "@/components/Reports/models/WeatherService";
+import Datetime from "@/services/Datetime";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
+import {
+    EAreaMode,
+    EChartMode,
+    EPageType,
+    ESign,
+    ETimeMode,
+    EWeather,
+    ECountType,
+    EDeviceMode,
+    ETypeInOrOut,
+    EIncludedEmployee,
+    EDesignationPeriod,
+    ITemplateItem,
+    IFilterCondition,
+    IChartTrafficData,
+    IPeckTimeRange,
+    ISite,
+    ISiteItems,
+    IReportToTemplateItem,
+    ReportDashboard,
+    ReportTableData
+} from "@/components/Reports";
+import ReportService from "@/components/Reports/models/ReportService";
 
-    enum EFileType {
+////////////////////////////////// export //////////////////////////////////
+import html2Canvas from "html2canvas";
+import JsPDF from "jspdf";
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+enum EFileType {
     xlsx = "xlsx",
     xls = "xls",
     csv = "csv"
 }
 
-    enum ETableStep {
+enum ETableStep {
     mainTable = "mainTable",
     sunTable = "sunTable",
     detailTable = "detailTable",
@@ -316,7 +323,7 @@ export default class ReportTraffic extends Vue {
     userSelectItem: any = {};
 
     // Report To Template相關
-    ReportToTemplateData: IReportToTemplateItem | null =  null;
+    ReportToTemplateData: IReportToTemplateItem | null = null;
     designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
@@ -1373,7 +1380,10 @@ export default class ReportTraffic extends Vue {
     //// 以下為 analysis filter ////
 
     // Author: Tina
-    async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
+    async receiveFilterData(
+        filterData: IFilterCondition,
+        designationPeriod: EDesignationPeriod
+    ) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
@@ -1979,16 +1989,15 @@ export default class ReportTraffic extends Vue {
             siteIds: this.filterData.siteIds,
             tagIds: this.filterData.tagIds,
             sendUserIds: this.userData,
-            type: this.designationPeriod,
+            type: this.designationPeriod
         };
-
     }
 
     // Author: Tina
     pageToReportTemplate() {
         this.sortOutReportToTemplateData();
         this.$router.push({
-            path: '/reports/',
+            path: "/reports/",
             query: {
                 reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
             }

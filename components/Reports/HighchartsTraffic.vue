@@ -194,7 +194,7 @@ export class HighchartsTraffic extends Vue {
             this.timeMode,
             this.areaMode,
             this.sites,
-            JSON.stringify(this.value)
+            this.value
         );
     }
 

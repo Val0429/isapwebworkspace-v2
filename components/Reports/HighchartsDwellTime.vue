@@ -142,7 +142,7 @@ import HighchartsService from "./models/HighchartsService";
 @Component({
     components: {}
 })
-export class HighchartsDemographic extends Vue {
+export class HighchartsDwellTime extends Vue {
     // Prop
     @Prop({
         type: Date,
@@ -2062,8 +2062,8 @@ export class HighchartsDemographic extends Vue {
     }
 }
 
-export default HighchartsDemographic;
-Vue.component("highcharts-demographic", HighchartsDemographic);
+export default HighchartsDwellTime;
+Vue.component("highcharts-dwell-time", HighchartsDwellTime);
 </script>
 
 <style lang="scss" scoped>

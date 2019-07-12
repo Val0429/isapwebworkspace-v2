@@ -1,4 +1,4 @@
-import { ESign } from './EReport';
+import { ESign } from '../';
 
 interface IReportTableDataTotal {
     item1Total?: IReportTableDataBodyInOut;

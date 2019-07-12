@@ -1,6 +1,6 @@
-import { EWeather, EChartMode } from './EHighCharts';
+import { EWeather, EChartMode } from '../';
+import { ISite, ISiteOfficeHourItem, IDayRange } from '../';
 import Datetime from '@/services/Datetime';
-import { ISite, ISiteOfficeHourItem, IDayRange } from './IHighCharts';
 
 class HighchartsService {
     readonly mathRoundLength = 2;

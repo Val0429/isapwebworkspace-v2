@@ -12,7 +12,7 @@
         >
         </filter-condition>
 
-        <div v-show="pageStep === ePageStep.none">
+        <div>
 
             <iv-card>
 
@@ -42,29 +42,6 @@
                     />
                 </template>
 
-                <!-- Tina -->
-                <!--                <analysis-filter-->
-                <!--                    class="mb-4"-->
-                <!--                    :areaSelectItem="areaSelectItem"-->
-                <!--                    :deviceGroupSelectItem="deviceGroupSelectItem"-->
-                <!--                    :deviceSelectItem="deviceSelectItem"-->
-                <!--                    :timeModeSelectItem="timeModeSelectItem"-->
-                <!--                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"-->
-                <!--                    :siteIds="filterData.siteIds"-->
-                <!--                    :areaId="inputFormData.areaId"-->
-                <!--                    :groupId="inputFormData.groupId"-->
-                <!--                    :deviceId="inputFormData.deviceId"-->
-                <!--                    :type="inputFormData.type"-->
-                <!--                    :isIncludedEmployee="inputFormData.isIncludedEmployee"-->
-                <!--                    @area_id="receiveAreaId"-->
-                <!--                    @group_id="receiveGroupId"-->
-                <!--                    @device_id="receiveDeviceId"-->
-                <!--                    @type="receiveType"-->
-                <!--                    @is_included_employee="receiveIsIncludedEmployee"-->
-                <!--                >-->
-
-                <!--                </analysis-filter>-->
-
                 <!-- Ben -->
                 <anlysis-dashboard
                     ref="anlysisDashboard"
@@ -77,6 +54,7 @@
                 >
                 </anlysis-dashboard>
 
+                <!-- Morris -->
                 <highcharts-repeat-visitor
                     :startDate="startDate"
                     :endDate="endDate"
@@ -134,19 +112,19 @@ import {
     ETimeMode,
     EWeather,
     EAgeRange,
+    ECountType,
+    EDeviceMode,
+    EIncludedEmployee,
     IChartRepeatVisitorData,
     IPeckTimeRange,
     ISiteAreas,
     ISiteItems,
     ITemplateItem,
-    ReportDashboard,
-    ReportTableData,
     IFilterCondition,
-    ECountType,
-    EDeviceMode,
-    EIncludedEmployee,
     IReportToTemplateItem,
-    EDesignationPeriod
+    EDesignationPeriod,
+    ReportDashboard,
+    ReportTableData
 } from "@/components/Reports";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
@@ -161,16 +139,10 @@ import html2Canvas from "html2canvas";
 import JsPDF from "jspdf";
 import { EChartMode } from "@/components/Reports";
 
-enum EPageStep {
-    none = "none"
-}
-
 @Component({
     components: {}
 })
 export default class ReportRepeatVisitor extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
     templateItem: ITemplateItem | null = null;
     eFileType = EFileType;
 
@@ -256,7 +228,7 @@ export default class ReportRepeatVisitor extends Vue {
     userSelectItem: any = {};
 
     // Report To Template相關
-    ReportToTemplateData: IReportToTemplateItem | null =  null;
+    ReportToTemplateData: IReportToTemplateItem | null = null;
     designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
     //ReportDashboard 相關
@@ -273,10 +245,7 @@ export default class ReportRepeatVisitor extends Vue {
 
     created() {
         this.initDatas();
-        // this.initTemplate();
-
-        // TODO: Waitting API
-        // this.initChartDeveloper();
+        this.initTemplate();
     }
 
     mounted() {}
@@ -294,115 +263,6 @@ export default class ReportRepeatVisitor extends Vue {
         if (this.$route.query.template != undefined) {
             let templateJSON: string = this.$route.query.template as string;
             this.templateItem = ReportService.analysisTemplate(templateJSON);
-        }
-    }
-
-    initChartDeveloper() {
-        this.timeMode = ETimeMode.day;
-        this.areaMode = EAreaMode.all;
-
-        // single day
-        this.startDate = new Date("2019-07-01T08:00:00.000Z");
-        this.endDate = new Date("2019-07-01T14:00:00.000Z");
-
-        // multipe day
-        this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        this.endDate = new Date("2019-08-10T14:00:00.000Z");
-
-        let siteLength = 10;
-
-        for (let j = 0; j < siteLength; j++) {
-            let tempJ = j + 1;
-            this.sites.push({
-                objectId: "site" + tempJ.toString(),
-                name: "Site " + tempJ.toString(),
-                officeHour: [
-                    {
-                        startDay: "0",
-                        endDay: "6",
-                        startDate: "2000-01-01T00:00:00.000Z",
-                        endDate: "2000-01-01T14:00:00.000Z"
-                    }
-                ],
-                areas: [
-                    {
-                        objectId: "area1" + tempJ.toString(),
-                        name: "Area 1" + tempJ.toString()
-                    },
-                    {
-                        objectId: "area2" + tempJ.toString(),
-                        name: "Area 2" + tempJ.toString()
-                    }
-                ]
-            });
-
-            for (let i = 1; i < 30; i++) {
-                let ageRange = EAgeRange.none;
-                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
-                let weather = EWeather.none;
-                let tempWeatherNumber = Math.floor(Math.random() * 300);
-
-                if (tempWeatherNumber % 10 == 0) {
-                    weather = EWeather.clearDay;
-                } else if (tempWeatherNumber % 10 == 1) {
-                    weather = EWeather.clearNight;
-                } else if (tempWeatherNumber % 10 == 2) {
-                    weather = EWeather.rain;
-                } else if (tempWeatherNumber % 10 == 3) {
-                    weather = EWeather.snow;
-                } else if (tempWeatherNumber % 10 == 4) {
-                    weather = EWeather.sleet;
-                } else if (tempWeatherNumber % 10 == 5) {
-                    weather = EWeather.wind;
-                } else if (tempWeatherNumber % 10 == 6) {
-                    weather = EWeather.fog;
-                } else if (tempWeatherNumber % 10 == 7) {
-                    weather = EWeather.cloudy;
-                } else if (tempWeatherNumber % 10 == 8) {
-                    weather = EWeather.partlyCloudyDay;
-                } else if (tempWeatherNumber % 10 == 9) {
-                    weather = EWeather.partlyCloudyNight;
-                }
-
-                if (tempAgeRangeNumber % 7 == 0) {
-                    ageRange = EAgeRange.lower20;
-                } else if (tempAgeRangeNumber % 7 == 1) {
-                    ageRange = EAgeRange.m21_30;
-                } else if (tempAgeRangeNumber % 7 == 2) {
-                    ageRange = EAgeRange.m31_40;
-                } else if (tempAgeRangeNumber % 7 == 3) {
-                    ageRange = EAgeRange.m41_50;
-                } else if (tempAgeRangeNumber % 7 == 4) {
-                    ageRange = EAgeRange.m51_60;
-                } else if (tempAgeRangeNumber % 7 == 5) {
-                    ageRange = EAgeRange.upper61;
-                }
-
-                let tempI = i;
-                let iNumber = tempI;
-                let iString = tempI.toString();
-                let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(
-                    `2019-07-${iString10}T${iString10}:00:00.000Z`
-                );
-
-                for (let area of this.sites[j].areas) {
-                    let tempChartData: IChartRepeatVisitorData = {
-                        date: tempDate,
-                        siteObjectId: "site" + (j + 1).toString(),
-                        temperatureMin: iNumber,
-                        temperatureMax: iNumber,
-                        weather: weather,
-                        repeatCount: Math.floor(Math.random() * 6) + 1,
-                        ageRange: ageRange,
-                        maleCount: Math.floor(Math.random() * 50),
-                        femaleCount: Math.floor(Math.random() * 50)
-                    };
-                    if (!isNaN(tempChartData.date.getTime())) {
-                        this.chartDatas.push(tempChartData);
-                    }
-                }
-            }
         }
     }
 
@@ -907,7 +767,10 @@ export default class ReportRepeatVisitor extends Vue {
 
     //// 以下為 analysis filter ////
 
-    async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
+    async receiveFilterData(
+        filterData: IFilterCondition,
+        designationPeriod: EDesignationPeriod
+    ) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
@@ -938,7 +801,6 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     resolveSummary() {
-
         this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
@@ -958,9 +820,8 @@ export default class ReportRepeatVisitor extends Vue {
         let chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
-            this.sites
+            this.pSiteIds
         );
-
         this.rDayXxSiteX = chartMode;
 
         this.rData = this.responseData.summaryTableDatas;
@@ -1399,16 +1260,15 @@ export default class ReportRepeatVisitor extends Vue {
             siteIds: this.filterData.siteIds,
             tagIds: this.filterData.tagIds,
             sendUserIds: this.userData,
-            type: this.designationPeriod,
+            type: this.designationPeriod
         };
-
     }
 
     // Author: Tina
     pageToReportTemplate() {
         this.sortOutReportToTemplateData();
         this.$router.push({
-            path: '/reports/',
+            path: "/reports/",
             query: {
                 reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
             }
@@ -1485,6 +1345,118 @@ export default class ReportRepeatVisitor extends Vue {
             }
             PDF.save(title + ".pdf");
         });
+    }
+
+    /////////////////////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        this.timeMode = ETimeMode.day;
+        this.areaMode = EAreaMode.all;
+
+        // single day
+        this.startDate = new Date("2019-07-01T08:00:00.000Z");
+        this.endDate = new Date("2019-07-01T14:00:00.000Z");
+
+        // multipe day
+        this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        this.endDate = new Date("2019-08-10T14:00:00.000Z");
+
+        let siteLength = 10;
+
+        for (let j = 0; j < siteLength; j++) {
+            let tempJ = j + 1;
+            this.sites.push({
+                objectId: "site" + tempJ.toString(),
+                name: "Site " + tempJ.toString(),
+                officeHour: [
+                    {
+                        startDay: "0",
+                        endDay: "6",
+                        startDate: "2000-01-01T00:00:00.000Z",
+                        endDate: "2000-01-01T14:00:00.000Z"
+                    }
+                ],
+                areas: [
+                    {
+                        objectId: "area1" + tempJ.toString(),
+                        name: "Area 1" + tempJ.toString()
+                    },
+                    {
+                        objectId: "area2" + tempJ.toString(),
+                        name: "Area 2" + tempJ.toString()
+                    }
+                ]
+            });
+
+            for (let i = 1; i < 30; i++) {
+                let ageRange = EAgeRange.none;
+                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
+                let weather = EWeather.none;
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
+
+                if (tempWeatherNumber % 10 == 0) {
+                    weather = EWeather.clearDay;
+                } else if (tempWeatherNumber % 10 == 1) {
+                    weather = EWeather.clearNight;
+                } else if (tempWeatherNumber % 10 == 2) {
+                    weather = EWeather.rain;
+                } else if (tempWeatherNumber % 10 == 3) {
+                    weather = EWeather.snow;
+                } else if (tempWeatherNumber % 10 == 4) {
+                    weather = EWeather.sleet;
+                } else if (tempWeatherNumber % 10 == 5) {
+                    weather = EWeather.wind;
+                } else if (tempWeatherNumber % 10 == 6) {
+                    weather = EWeather.fog;
+                } else if (tempWeatherNumber % 10 == 7) {
+                    weather = EWeather.cloudy;
+                } else if (tempWeatherNumber % 10 == 8) {
+                    weather = EWeather.partlyCloudyDay;
+                } else if (tempWeatherNumber % 10 == 9) {
+                    weather = EWeather.partlyCloudyNight;
+                }
+
+                if (tempAgeRangeNumber % 7 == 0) {
+                    ageRange = EAgeRange.lower20;
+                } else if (tempAgeRangeNumber % 7 == 1) {
+                    ageRange = EAgeRange.m21_30;
+                } else if (tempAgeRangeNumber % 7 == 2) {
+                    ageRange = EAgeRange.m31_40;
+                } else if (tempAgeRangeNumber % 7 == 3) {
+                    ageRange = EAgeRange.m41_50;
+                } else if (tempAgeRangeNumber % 7 == 4) {
+                    ageRange = EAgeRange.m51_60;
+                } else if (tempAgeRangeNumber % 7 == 5) {
+                    ageRange = EAgeRange.upper61;
+                }
+
+                let tempI = i;
+                let iNumber = tempI;
+                let iString = tempI.toString();
+                let iString10 = iNumber < 10 ? `0${iString}` : iString;
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
+
+                for (let area of this.sites[j].areas) {
+                    let tempChartData: IChartRepeatVisitorData = {
+                        date: tempDate,
+                        siteObjectId: "site" + (j + 1).toString(),
+                        temperatureMin: iNumber,
+                        temperatureMax: iNumber,
+                        weather: weather,
+                        repeatCount: Math.floor(Math.random() * 6) + 1,
+                        ageRange: ageRange,
+                        maleCount: Math.floor(Math.random() * 50),
+                        femaleCount: Math.floor(Math.random() * 50)
+                    };
+                    if (!isNaN(tempChartData.date.getTime())) {
+                        this.chartDatas.push(tempChartData);
+                    }
+                }
+            }
+        }
     }
 }
 </script>

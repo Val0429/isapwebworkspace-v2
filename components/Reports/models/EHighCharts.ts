@@ -39,16 +39,6 @@ enum EAgeRange {
     upper61 = 'upper61',
 }
 
-enum EWeek {
-    Mon = 'Mon',
-    Tue = 'Tue',
-    Wed = 'Wed',
-    Thu = 'Thu',
-    Fri = 'Fri',
-    Sat = 'Sat',
-    Sun = 'Sun',
-}
-
 enum EWeather {
     none = 'none',
     clearDay = 'clearDay',
@@ -63,4 +53,4 @@ enum EWeather {
     partlyCloudyNight = 'partlyCloudyNight',
 }
 
-export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EWeek };
+export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange };

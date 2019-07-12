@@ -210,7 +210,7 @@ export class HighchartsRepeatVisitor extends Vue {
             this.timeMode,
             this.areaMode,
             this.sites,
-            JSON.stringify(this.value)
+            this.value
         );
     }
 

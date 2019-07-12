@@ -1,4 +1,4 @@
-import { EWeather, ETimeMode, EAreaMode, EAgeRange, EGender } from './EHighCharts';
+import { EWeather, ETimeMode, EAreaMode, EAgeRange } from '../';
 
 interface IValSelectItem {
     id: string;
@@ -105,7 +105,17 @@ interface IChartRepeatVisitorData extends IChart {
     femaleCountPercent?: number;
 }
 
+interface IChartDwellTimeData extends IChart {
+    ageRange: EAgeRange;
+    maleCount: number;
+    femaleCount: number;
+
+    maleCountPercent?: number;
+    femaleCountPercent?: number;
+}
+
 export { IValSelectItem, IBootstrapSelectItem };
-export { ISite, IArea, ISiteAreas, ISiteOfficeHourItem };
+export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem };
 export { IDayRange };
 export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData };
+export { IChartDwellTimeData };

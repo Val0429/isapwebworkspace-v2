@@ -84,5 +84,35 @@ enum EChartMode {
     siteXDayX = 'siteXDayX',
 }
 
+enum EWeek {
+    Mon = 'Mon',
+    Tue = 'Tue',
+    Wed = 'Wed',
+    Thu = 'Thu',
+    Fri = 'Fri',
+    Sat = 'Sat',
+    Sun = 'Sun',
+}
+
+enum EWeeks {
+    Sunday = 'Sunday',
+    Monday = 'Monday',
+    Tuesday = 'Tuesday',
+    Wednesday = 'Wednesday',
+    Thursday = 'Thursday',
+    Friday = 'Friday',
+    Saturday = 'Saturday',
+}
+
+enum EVideoSource {
+    peopleCounting = 'peopleCounting',
+    humanDetection = 'humanDetection',
+    heatmap = 'heatmap',
+    dwellTime = 'dwellTime',
+    demographic = 'demographic',
+    visitor = 'visitor',
+}
+
+export { EWeek, EWeeks, EVideoSource };
 export { ESign, EPageType, EChartMode };
 export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, ETypeInOrOut, EIncludedEmployee };

@@ -1,5 +1,5 @@
-import { ESign, EChartMode } from './EReport';
-import { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut } from './IReportTable';
+import { ESign, EChartMode } from '../';
+import { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut } from '../';
 
 class ReportTableData {
     _thatDay?: Date;

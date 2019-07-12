@@ -1,35 +1,32 @@
-import { EWeather } from './EHighCharts';
+import { EWeather } from '../';
 
 class WeatherService {
-
     WeatherIcon(icon: string): EWeather {
         switch (icon) {
-            case "clear-day":
+            case 'clear-day':
                 return EWeather.clearDay;
-            case "clear-night":
+            case 'clear-night':
                 return EWeather.clearNight;
-            case "rain":
+            case 'rain':
                 return EWeather.rain;
-            case "snow":
+            case 'snow':
                 return EWeather.snow;
-            case "sleet":
+            case 'sleet':
                 return EWeather.sleet;
-            case "wind":
+            case 'wind':
                 return EWeather.wind;
-            case "fog":
+            case 'fog':
                 return EWeather.fog;
-            case "cloudy":
+            case 'cloudy':
                 return EWeather.cloudy;
-            case "partly-cloudy-day":
+            case 'partly-cloudy-day':
                 return EWeather.partlyCloudyDay;
-            case "partly-cloudy-night":
+            case 'partly-cloudy-night':
                 return EWeather.partlyCloudyNight;
             default:
                 return EWeather.none;
         }
     }
-
-
 }
 
 export default new WeatherService();
