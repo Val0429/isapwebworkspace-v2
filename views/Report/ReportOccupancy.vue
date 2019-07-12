@@ -556,9 +556,35 @@ export default class ReportOccupancy extends Vue {
 
         if (!this.filterData.firstSiteId) {
             return false;
-        } else {
+        } else if (this.filterData.firstSiteId && this.filterData.siteIds.length === 1) {
+
             await this.$server
                 .R("/location/area/all", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 sitesSelectItem 的 key 的方式
+                            tempAreaSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                            tempAreaSelectWithoutAllItem[returnValue.objectId] =
+                                returnValue.name;
+                            // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                        }
+                        this.areaSelectItem = tempAreaSelectItem;
+                        this.areaSelectWithoutAllItem = tempAreaSelectWithoutAllItem;
+                        this.allAreaItem = response;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else {
+            await this.$server
+                .R("/location/area/all")
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
@@ -966,7 +992,12 @@ export default class ReportOccupancy extends Vue {
     }
 
     async resolveSummary() {
+
+        console.log("this.filterData  - ", this.filterData);
+
+
         await this.initSelectItemArea();
+
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
 
@@ -1583,7 +1614,6 @@ export default class ReportOccupancy extends Vue {
         this.lastTableStep = this.tableStep;
         this.tableStep = ETableStep.detailTable;
         let tempTime = parseInt(sunTime.split(":")[0]);
-
         let tempSDate = new Date(
             thatDay.getFullYear(),
             thatDay.getMonth(),
@@ -1627,7 +1657,7 @@ export default class ReportOccupancy extends Vue {
         let tempValues = JSON.parse(JSON.stringify(datas));
         let tempChartDatas: IChartOccupancyData[] = [];
         let isOneDay: boolean = false;
-        let isSingleSite: boolean = this.sites.length == 1 ? true : false;
+        let isSingleSite: boolean = this.sites.length === 1 ? true : false;
 
         for (let site of this.sites) {
             let tempChartDataDates: IChartOccupancyData[] = [];
@@ -1659,7 +1689,7 @@ export default class ReportOccupancy extends Vue {
                     dateList.push(tempDate);
                 }
             } else {
-                // multipe day
+                // multiple day
                 dateList = Datetime.DateList(
                     this.filterData.startDate,
                     this.filterData.endDate
@@ -1772,6 +1802,13 @@ export default class ReportOccupancy extends Vue {
         }
 
         this.chartDatas = tempChartDatas;
+
+        console.log(" - ", this.sites);
+        console.log(" - ", this.startDate);
+        console.log(" - ", this.endDate);
+        console.log(" - ", this.timeMode);
+        console.log(" - ", this.areaMode);
+        console.log(" - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {

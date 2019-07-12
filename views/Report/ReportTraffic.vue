@@ -671,12 +671,12 @@ export default class ReportTraffic extends Vue {
                         let item1Count = {
                             value: 0,
                             valueRatio: 0,
-                            link: true
+                            link: false
                         };
                         let item2Count = {
                             value: 0,
                             valueRatio: 0,
-                            link: true
+                            link: false
                         };
                         for (let summaryData of this.responseData
                             .summaryDatas) {
