@@ -13,5 +13,5 @@ export { ReportTableData } from './models/ReportTable';
 export { ReportDashboard } from './models/ReportDashboard';
 
 // HighCharts
-export { ETimeMode, EGender, EAreaMode, EWeather, EAgeRange } from './models/EHighCharts';
+export { ETimeMode, EGender, EAreaMode, EDwellTimeRange, EWeather, EAgeRange } from './models/EHighCharts';
 export * from './models/IHighCharts';

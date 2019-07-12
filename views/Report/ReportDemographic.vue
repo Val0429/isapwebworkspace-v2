@@ -150,7 +150,8 @@
 		ETimeMode,
         EWeather,
         EAgeRange,
-		EAreaMode,
+        EAreaMode,
+        EDwellTimeRange,
 		EChartMode,
 		EPageType,
         ESign,
@@ -158,7 +159,7 @@
 		EDeviceMode,
 		EIncludedEmployee,
 		IDayRange,
-		IChartDemographicData,
+		IChartDemographicDwellTimeData,
 		IChartTrafficData,
 		IPeckTimeRange,
 		ISite,
@@ -206,7 +207,7 @@
 		timeMode: ETimeMode = ETimeMode.none;
 		areaMode: EAreaMode = EAreaMode.none;
 		sites: ISite[] = [];
-		chartDatas: IChartDemographicData[] = [];
+		chartDatas: IChartDemographicDwellTimeData[] = [];
 
 		////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -1372,7 +1373,7 @@
         }
 
 		sortOutChartData(datas: any) {
-			let tempChartDatas: IChartDemographicData[] = [];
+			let tempChartDatas: IChartDemographicDwellTimeData[] = [];
 			let isOneDay = false;
 			this.chartDatas = [];
 
@@ -2149,13 +2150,14 @@
 					let tempDate = new Date(
 						`2019-07-${iString10}T${iString10}:00:00.000Z`
 					);
-					let tempChartData: IChartDemographicData = {
+					let tempChartData: IChartDemographicDwellTimeData = {
 						date: tempDate,
 						siteObjectId: "site" + (j + 1).toString(),
 						temperatureMin: iNumber,
 						temperatureMax: iNumber,
 						weather: weather,
-						ageRange: ageRange,
+                        ageRange: ageRange,
+                        dwellTimeRange: EDwellTimeRange.none,
 						maleCount: Math.floor(Math.random() * 300),
 						femaleCount: Math.floor(Math.random() * 300)
 					};

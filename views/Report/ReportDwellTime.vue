@@ -32,11 +32,12 @@ import {
     EDeviceMode,
     EIncludedEmployee,
     EAgeRange,
+    EDwellTimeRange,
     EAreaMode,
     EChartMode,
     EPageType,
     ESign,
-    IChartDwellTimeData,
+    IChartDemographicDwellTimeData,
     IPeckTimeRange,
     ISite,
     ISiteItems,
@@ -57,9 +58,11 @@ export default class ReportDwellTime extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    chartDatas: IChartDwellTimeData[] = [];
+    chartDatas: IChartDemographicDwellTimeData[] = [];
 
-    created() {}
+    created() {
+        this.initChartDeveloper();
+    }
 
     mounted() {}
 
@@ -145,13 +148,14 @@ export default class ReportDwellTime extends Vue {
                 let tempDate = new Date(
                     `2019-07-${iString10}T${iString10}:00:00.000Z`
                 );
-                let tempChartData: IChartDwellTimeData = {
+                let tempChartData: IChartDemographicDwellTimeData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
                     temperatureMin: iNumber,
                     temperatureMax: iNumber,
                     weather: weather,
                     ageRange: ageRange,
+                    dwellTimeRange: EDwellTimeRange.none,
                     maleCount: Math.floor(Math.random() * 300),
                     femaleCount: Math.floor(Math.random() * 300)
                 };

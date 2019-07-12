@@ -127,14 +127,15 @@ import {
     EChartMode,
     EWeather,
     EAgeRange,
-    EGender
+    EGender,
+    EDwellTimeRange
 } from "./models/EHighCharts";
 import {
     IValSelectItem,
     IBootstrapSelectItem,
     ISite,
     ISiteOfficeHourItem,
-    IChartDemographicData
+    IChartDemographicDwellTimeData
 } from "./models/IHighCharts";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
@@ -190,12 +191,12 @@ export class HighchartsDemographic extends Vue {
             return [];
         }
     })
-    value: IChartDemographicData[];
+    value: IChartDemographicDwellTimeData[];
 
     @Watch("value", { deep: true })
     private onValueChanged(
-        newval: IChartDemographicData[],
-        oldval: IChartDemographicData[]
+        newval: IChartDemographicDwellTimeData[],
+        oldval: IChartDemographicDwellTimeData[]
     ) {
         this.start();
     }
@@ -364,12 +365,12 @@ export class HighchartsDemographic extends Vue {
     ////////////////////////// site 1 day 1 //////////////////////////
 
     initSite1Day1() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let tempHourStrings: string[] = [];
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
+        let tempResult: IChartDemographicDwellTimeData[] = [];
         let tempSeries: any = [
             {
                 name: this._("w_ReportDemographic_GenderMale"),
@@ -406,7 +407,7 @@ export class HighchartsDemographic extends Vue {
             let haveValue = false;
 
             for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
+                let value: IChartDemographicDwellTimeData = this.anysislyChartValue(
                     loopValue
                 );
 
@@ -527,11 +528,11 @@ export class HighchartsDemographic extends Vue {
     ////////////////////////// site 1 day X //////////////////////////
 
     initSite1DayX() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
+        let tempResult: IChartDemographicDwellTimeData[] = [];
         let tempSeries: any = [
             {
                 name: this._("w_ReportDemographic_GenderMale"),
@@ -565,7 +566,7 @@ export class HighchartsDemographic extends Vue {
             tempTimestamp <= endTimestamp &&
             categorieNowlength < categorieMaxlength
         ) {
-            let tempChartData: IChartDemographicData = this.anysislyChartValueDefault();
+            let tempChartData: IChartDemographicDwellTimeData = this.anysislyChartValueDefault();
 
             // set site
             if (this.sites[0].objectId != undefined) {
@@ -715,7 +716,9 @@ export class HighchartsDemographic extends Vue {
             let spliceIndexList: number[] = [];
             for (let i in tempValues) {
                 let val = tempValues[i];
-                let value: IChartDemographicData = this.anysislyChartValue(val);
+                let value: IChartDemographicDwellTimeData = this.anysislyChartValue(
+                    val
+                );
                 let valTimestamp = value.date.getTime();
 
                 if (
@@ -875,11 +878,11 @@ export class HighchartsDemographic extends Vue {
     ////////////////////////// site X day 1 //////////////////////////
 
     initSiteXDay1() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
+        let tempResult: IChartDemographicDwellTimeData[] = [];
         let tempSeries: any = [
             {
                 name: this._("w_ReportDemographic_GenderMale"),
@@ -895,7 +898,7 @@ export class HighchartsDemographic extends Vue {
         for (let site of this.sites) {
             let haveValue = false;
             for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
+                let value: IChartDemographicDwellTimeData = this.anysislyChartValue(
                     loopValue
                 );
 
@@ -1019,7 +1022,7 @@ export class HighchartsDemographic extends Vue {
     ////////////////////////// site X day X //////////////////////////
 
     initSiteXDayX() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let tempCategories: string[] = [];
@@ -1054,7 +1057,7 @@ export class HighchartsDemographic extends Vue {
             tempTimestamp <= endTimestamp &&
             categorieNowlength < categorieMaxlength
         ) {
-            let tempChartData: IChartDemographicData = this.anysislyChartValueDefault();
+            let tempChartData: IChartDemographicDwellTimeData = this.anysislyChartValueDefault();
             let tempResultItem = {
                 categorie: "",
                 i18n: this.i18nItem(),
@@ -1236,7 +1239,7 @@ export class HighchartsDemographic extends Vue {
                 let spliceIndexList: number[] = [];
                 for (let i in tempValues) {
                     let val = tempValues[i];
-                    let value: IChartDemographicData = this.anysislyChartValue(
+                    let value: IChartDemographicDwellTimeData = this.anysislyChartValue(
                         val
                     );
                     let valTimestamp = value.date.getTime();
@@ -1433,7 +1436,7 @@ export class HighchartsDemographic extends Vue {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     drawChartGenderAge() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let categories: string[] = this.getAgeList();
@@ -1537,7 +1540,7 @@ export class HighchartsDemographic extends Vue {
     }
 
     drawChartAge() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let categories: string[] = this.getAgeList();
@@ -1690,7 +1693,7 @@ export class HighchartsDemographic extends Vue {
 
     // TODO: No dwelltime API
     deomRandomValue() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
 
@@ -1751,7 +1754,7 @@ export class HighchartsDemographic extends Vue {
 
     // TODO: No dwelltime API
     drawChartDwellTime() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDemographicDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let categories: string[] = this.getPersonCountList();
@@ -1895,11 +1898,12 @@ export class HighchartsDemographic extends Vue {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private anysislyChartValueDefault(): IChartDemographicData {
-        let value: IChartDemographicData = {
+    private anysislyChartValueDefault(): IChartDemographicDwellTimeData {
+        let value: IChartDemographicDwellTimeData = {
             date: new Date(),
             siteObjectId: "",
             ageRange: EAgeRange.none,
+            dwellTimeRange: EDwellTimeRange.none,
             maleCount: 0,
             femaleCount: 0,
             temperatureMin: 0,
@@ -1941,8 +1945,8 @@ export class HighchartsDemographic extends Vue {
     }
 
     private anysislyChartValue(
-        item: IChartDemographicData
-    ): IChartDemographicData {
+        item: IChartDemographicDwellTimeData
+    ): IChartDemographicDwellTimeData {
         let value = JSON.parse(JSON.stringify(item));
         value.date = new Date(value.date);
 
