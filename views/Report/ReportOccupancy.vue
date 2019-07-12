@@ -984,7 +984,6 @@ export default class ReportOccupancy extends Vue {
 
         // get office hour data
         this.sites = [];
-        let tempAreas = [];
 
         for (const filterSiteId of this.filterData.siteIds) {
             let tempISite: any = {
@@ -1641,28 +1640,6 @@ export default class ReportOccupancy extends Vue {
             });
     }
 
-    checkDateAndSite(
-        date1: Date | string,
-        date2: Date | string,
-        siteId1: string,
-        siteId2: string
-    ): boolean {
-        let tempDate1 =
-            typeof date1 === "string"
-                ? Datetime.DateToZero(new Date(date1))
-                : Datetime.DateToZero(date1);
-        let tempDate2 =
-            typeof date2 === "string"
-                ? Datetime.DateToZero(new Date(date2))
-                : Datetime.DateToZero(date2);
-
-        return (
-            Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
-            siteId1 === siteId2
-        );
-    }
-
    sortOutChartData(datas: any) {
         let tempChartDatas: IChartOccupancyData[] = [];
         let isOneDay = false;
@@ -1972,8 +1949,8 @@ export default class ReportOccupancy extends Vue {
                 }
             }
 
-            let tempAreas = [];
-
+	        // 整理sites
+	        let tempAreas = [];
 
 	        for (const area in this.areaSelectItem) {
 		        if (this.inputFormData.areaId === area) {
@@ -2029,9 +2006,6 @@ export default class ReportOccupancy extends Vue {
             this.areaMode = EAreaMode.all;
 
 
-	        console.log('##############', this.sites);
-
-
 	        this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
@@ -2062,9 +2036,6 @@ export default class ReportOccupancy extends Vue {
             this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
 
-	        console.log('*************', this.sites);
-
-
 	        this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -2079,13 +2050,6 @@ export default class ReportOccupancy extends Vue {
         } else {
             return false;
         }
-
-        console.log("this.sites - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     async receiveGroupId(groupId) {
