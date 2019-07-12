@@ -668,8 +668,16 @@ export default class ReportTraffic extends Vue {
             case EChartMode.siteXDay1:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let item1Count = { value: 0, valueRatio: 0, link: true };
-                        let item2Count = { value: 0, valueRatio: 0, link: true };
+                        let item1Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
                         for (let summaryData of this.responseData
                             .summaryDatas) {
                             if (
@@ -728,8 +736,16 @@ export default class ReportTraffic extends Vue {
             case EChartMode.siteXDayX:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let item1Count = { value: 0, valueRatio: 0, link: true };
-                        let item2Count = { value: 0, valueRatio: 0, link: true };
+                        let item1Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
                         for (let summaryData of this.responseData
                             .summaryDatas) {
                             if (
@@ -796,7 +812,6 @@ export default class ReportTraffic extends Vue {
                 break;
         }
         this.rData.body = tempArray;
-        console.log("  this.rData.body", this.rData);
     }
 
     // Author: Ben
