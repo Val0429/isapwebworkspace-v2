@@ -1663,7 +1663,6 @@ export default class ReportOccupancy extends Vue {
                 occupancy: 0,
                 areaId: ""
             };
-
             let dateList: Date[] = [];
 
             // date
@@ -1675,8 +1674,10 @@ export default class ReportOccupancy extends Vue {
             ) {
                 // single day
                 isOneDay = true;
-                let tempDate = Datetime.DateToZero(this.filterData.startDate);
                 for (let i = 0; i < 24; i++) {
+                    let tempDate = Datetime.DateToZero(
+                        this.filterData.startDate
+                    );
                     tempDate.setHours(i);
                     dateList.push(tempDate);
                 }
@@ -1737,6 +1738,7 @@ export default class ReportOccupancy extends Vue {
                     this.inputFormData.areaId ||
                     this.inputFormData.areaId === "all"
                 ) {
+                    console.log("site.areas", site.areas, site.objectId);
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
                             JSON.stringify(tempChartDataDate)
@@ -1788,6 +1790,8 @@ export default class ReportOccupancy extends Vue {
                     break;
                 }
             }
+
+            console.log(JSON.stringify(loopChartData));
         }
 
         this.chartDatas = tempChartDatas;
@@ -1939,28 +1943,23 @@ export default class ReportOccupancy extends Vue {
             }
 
             this.sortOutChartData(this.deviceGroupSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.deviceId = "all";
-
-            // 依照all deviceGroups篩選
         } else if (
             this.inputFormData.areaId &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 依照all deviceGroups篩選
             this.sortOutChartData(this.areaSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
-
-            // 清除deviceGroups篩選
         } else if (this.inputFormData.areaId && !this.inputFormData.groupId) {
+            // 清除deviceGroups篩選
             this.sortOutChartData(this.areaSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.groupId = "all";
@@ -2023,13 +2022,12 @@ export default class ReportOccupancy extends Vue {
             } else {
                 return false;
             }
-
-            // 判斷有 deviceGroup，groupId 為 'all'，
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 判斷有 deviceGroup，groupId 為 'all'，
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
                 for (const detailKey in singleData) {
@@ -2073,13 +2071,12 @@ export default class ReportOccupancy extends Vue {
             } else {
                 return false;
             }
-
-            // 判斷有 deviceGroup，groupId 不為 'all'，
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 判斷有 deviceGroup，groupId 不為 'all'，
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
                 for (const detailKey in singleData) {
