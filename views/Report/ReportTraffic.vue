@@ -461,8 +461,8 @@ export default class ReportTraffic extends Vue {
                         site: summaryData.site,
                         area: summaryData.area,
                         group: deviceGroup,
-                        in: [],
-                        out: []
+                        item1: [],
+                        item2: []
                     };
                     if (
                         tempArray.every(
@@ -478,8 +478,8 @@ export default class ReportTraffic extends Vue {
                     site: summaryData.site,
                     area: summaryData.area,
                     group: null,
-                    in: [],
-                    out: []
+                    item1: [],
+                    item2: []
                 };
                 if (
                     tempArray.every(
@@ -495,8 +495,8 @@ export default class ReportTraffic extends Vue {
         // 填入資料
         for (let index in tempArray) {
             for (let head of this.sunRData.head) {
-                let inCount = { value: 0, valueRatio: 0, link: false };
-                let outCount = { value: 0, valueRatio: 0, link: false };
+                let item1Count = { value: 0, valueRatio: 0, link: false };
+                let item2Count = { value: 0, valueRatio: 0, link: false };
                 for (let summaryData of summaryTableDatas) {
                     if (
                         new Date(summaryData.date).getHours().toString() != head
@@ -509,13 +509,13 @@ export default class ReportTraffic extends Vue {
                                 tempArray[index].group.objectId ==
                                 deviceGroup.objectId
                             ) {
-                                inCount.value += summaryData.in;
-                                inCount.valueRatio += ReportService.countRatio(
+                                item1Count.value += summaryData.in;
+                                item1Count.valueRatio += ReportService.countRatio(
                                     summaryData.in,
                                     summaryData.prevIn
                                 );
-                                outCount.value += summaryData.out;
-                                outCount.valueRatio += ReportService.countRatio(
+                                item2Count.value += summaryData.out;
+                                item2Count.valueRatio += ReportService.countRatio(
                                     summaryData.out,
                                     summaryData.prevOut
                                 );
@@ -526,21 +526,21 @@ export default class ReportTraffic extends Vue {
                             tempArray[index].area.objectId ==
                             summaryData.area.objectId
                         ) {
-                            inCount.value += summaryData.in;
-                            inCount.valueRatio += ReportService.countRatio(
+                            item1Count.value += summaryData.in;
+                            item1Count.valueRatio += ReportService.countRatio(
                                 summaryData.in,
                                 summaryData.prevIn
                             );
-                            outCount.value += summaryData.out;
-                            outCount.valueRatio += ReportService.countRatio(
+                            item2Count.value += summaryData.out;
+                            item2Count.valueRatio += ReportService.countRatio(
                                 summaryData.out,
                                 summaryData.prevOut
                             );
                         }
                     }
                 }
-                tempArray[index].in.push(inCount);
-                tempArray[index].out.push(outCount);
+                tempArray[index].item1.push(item1Count);
+                tempArray[index].item2.push(item2Count);
             }
             this.sunRData.body = tempArray;
         }
@@ -565,8 +565,8 @@ export default class ReportTraffic extends Vue {
             titleCount: 2,
             title1: this._("w_TrafficIn"),
             title2: this._("w_TrafficOut"),
-            inTotalTitle: this._("w_TrafficInTotal"),
-            outTotalTitle: this._("w_TrafficOutTotal")
+            title1Title: this._("w_TrafficInTotal"),
+            title2Title: this._("w_TrafficOutTotal")
         };
 
         //head
@@ -629,8 +629,8 @@ export default class ReportTraffic extends Vue {
                         site: summaryData.site,
                         area: summaryData.area,
                         group: deviceGroup,
-                        in: [],
-                        out: []
+                        item1: [],
+                        item2: []
                     };
 
                     if (
@@ -647,8 +647,8 @@ export default class ReportTraffic extends Vue {
                     site: summaryData.site,
                     area: summaryData.area,
                     group: null,
-                    in: [],
-                    out: []
+                    item1: [],
+                    item2: []
                 };
 
                 if (
@@ -668,8 +668,8 @@ export default class ReportTraffic extends Vue {
             case EChartMode.siteXDay1:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let inCount = { value: 0, valueRatio: 0, link: true };
-                        let outCount = { value: 0, valueRatio: 0, link: true };
+                        let item1Count = { value: 0, valueRatio: 0, link: true };
+                        let item2Count = { value: 0, valueRatio: 0, link: true };
                         for (let summaryData of this.responseData
                             .summaryDatas) {
                             if (
@@ -686,13 +686,13 @@ export default class ReportTraffic extends Vue {
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
                                     ) {
-                                        inCount.value += summaryData.in;
-                                        inCount.valueRatio += ReportService.countRatio(
+                                        item1Count.value += summaryData.in;
+                                        item1Count.valueRatio += ReportService.countRatio(
                                             summaryData.in,
                                             summaryData.prevIn
                                         );
-                                        outCount.value += summaryData.out;
-                                        outCount.valueRatio += ReportService.countRatio(
+                                        item2Count.value += summaryData.out;
+                                        item2Count.valueRatio += ReportService.countRatio(
                                             summaryData.out,
                                             summaryData.prevOut
                                         );
@@ -703,21 +703,21 @@ export default class ReportTraffic extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    inCount.value += summaryData.in;
-                                    inCount.valueRatio += ReportService.countRatio(
+                                    item1Count.value += summaryData.in;
+                                    item1Count.valueRatio += ReportService.countRatio(
                                         summaryData.in,
                                         summaryData.prevIn
                                     );
-                                    outCount.value += summaryData.out;
-                                    outCount.valueRatio += ReportService.countRatio(
+                                    item2Count.value += summaryData.out;
+                                    item2Count.valueRatio += ReportService.countRatio(
                                         summaryData.out,
                                         summaryData.prevOut
                                     );
                                 }
                             }
                         }
-                        tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount);
+                        tempArray[index].item1.push(item1Count);
+                        tempArray[index].item2.push(item2Count);
                     }
                 }
                 this.rData.head = this.rData.head.map(
@@ -728,8 +728,8 @@ export default class ReportTraffic extends Vue {
             case EChartMode.siteXDayX:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let inCount = { value: 0, valueRatio: 0, link: true };
-                        let outCount = { value: 0, valueRatio: 0, link: true };
+                        let item1Count = { value: 0, valueRatio: 0, link: true };
+                        let item2Count = { value: 0, valueRatio: 0, link: true };
                         for (let summaryData of this.responseData
                             .summaryDatas) {
                             if (
@@ -749,13 +749,13 @@ export default class ReportTraffic extends Vue {
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
                                     ) {
-                                        inCount.value += summaryData.in;
-                                        inCount.valueRatio += ReportService.countRatio(
+                                        item1Count.value += summaryData.in;
+                                        item1Count.valueRatio += ReportService.countRatio(
                                             summaryData.in,
                                             summaryData.prevIn
                                         );
-                                        outCount.value += summaryData.out;
-                                        outCount.valueRatio += ReportService.countRatio(
+                                        item2Count.value += summaryData.out;
+                                        item2Count.valueRatio += ReportService.countRatio(
                                             summaryData.out,
                                             summaryData.prevOut
                                         );
@@ -766,21 +766,21 @@ export default class ReportTraffic extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    inCount.value += summaryData.in;
-                                    inCount.valueRatio += ReportService.countRatio(
+                                    item1Count.value += summaryData.in;
+                                    item1Count.valueRatio += ReportService.countRatio(
                                         summaryData.in,
                                         summaryData.prevIn
                                     );
-                                    outCount.value += summaryData.out;
-                                    outCount.valueRatio += ReportService.countRatio(
+                                    item2Count.value += summaryData.out;
+                                    item2Count.valueRatio += ReportService.countRatio(
                                         summaryData.out,
                                         summaryData.prevOut
                                     );
                                 }
                             }
                         }
-                        tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount);
+                        tempArray[index].item1.push(item1Count);
+                        tempArray[index].item2.push(item2Count);
                     }
                 }
                 this.rData.head = this.rData.head.map(
