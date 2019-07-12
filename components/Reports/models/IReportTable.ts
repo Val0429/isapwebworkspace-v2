@@ -1,10 +1,10 @@
 import { ESign } from './EReport';
 
 interface IReportTableDataTotal {
-    inTotal?: IReportTableDataBodyInOut;
-    outTotal?: IReportTableDataBodyInOut;
-    inTotal2?: IReportTableDataBodyInOut;
-    outTotal2?: IReportTableDataBodyInOut;
+    item1Total?: IReportTableDataBodyInOut;
+    item2Total?: IReportTableDataBodyInOut;
+    item3Total?: IReportTableDataBodyInOut;
+    item4Total?: IReportTableDataBodyInOut;
 }
 
 interface stratum {
@@ -16,10 +16,10 @@ interface IReportTableDataBody extends IReportTableDataTotal {
     site?: stratum;
     area?: stratum;
     group?: stratum;
-    in: IReportTableDataBodyInOut[];
-    out: IReportTableDataBodyInOut[];
-    in2?: IReportTableDataBodyInOut[];
-    out2?: IReportTableDataBodyInOut[];
+    item1: IReportTableDataBodyInOut[];
+    item2: IReportTableDataBodyInOut[];
+    item3?: IReportTableDataBodyInOut[];
+    item4?: IReportTableDataBodyInOut[];
 }
 
 interface IReportTableDataBodyInOut {
@@ -35,8 +35,8 @@ interface IReportTableTitle {
     title2?: string;
     title3?: string;
     title4?: string;
-    inTotalTitle: string;
-    outTotalTitle: string;
+    title1Title: string;
+    title2Title: string;
 }
 
 export { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut, IReportTableTitle };

@@ -386,10 +386,8 @@
 							site: summaryData.site,
 							area: summaryData.area,
 							group: deviceGroup,
-							in: [],
-							out: [],
-							in2: [],
-							out2: []
+						  item1: [],
+                        item2: []
 						};
 
 						if (
@@ -407,10 +405,8 @@
 						site: summaryData.site,
 						area: summaryData.area,
 						group: null,
-						in: [],
-						out: [],
-						in2: [],
-						out2: []
+					  item1: [],
+                        item2: []
 					};
 
 					if (
@@ -428,8 +424,8 @@
 			//填入資料
 			for (let index in tempArray) {
 				for (let head of this.sunRData.head) {
-					let inCount = {value: 0, valueRatio: 0, link: false};
-					let outCount = {value: 0, valueRatio: 0, link: false};
+					let item1Count = {value: 0, valueRatio: 0, link: false};
+					let item2Count = {value: 0, valueRatio: 0, link: false};
 					for (let summaryData of summaryTableDatas) {
 						if (
 							new Date(summaryData.date).getHours().toString() != head
@@ -442,13 +438,13 @@
 							    	tempArray[index].group.objectId ==
 							    	deviceGroup.objectId
 							    ) {
-							    	inCount.value += summaryData.maleTotal;
-							    	inCount.valueRatio += ReportService.countRatio(
+							    	item1Count.value += summaryData.maleTotal;
+							    	item1Count.valueRatio += ReportService.countRatio(
 							    		summaryData.maleTotal,
 							    		summaryData.prevMaleTotal
 							    	);
-							    	outCount.value += summaryData.femaleTotal;
-							    	outCount.valueRatio += ReportService.countRatio(
+							    	item2Count.value += summaryData.femaleTotal;
+							    	item2Count.valueRatio += ReportService.countRatio(
 							    		summaryData.femaleTotal,
 							    		summaryData.prevFemaleTotal
 							    	);
@@ -459,21 +455,21 @@
 								tempArray[index].area.objectId ==
 								summaryData.area.objectId
 							) {
-								inCount.value += summaryData.maleTotal;
-								inCount.valueRatio += ReportService.countRatio(
+								item1Count.value += summaryData.maleTotal;
+								item1Count.valueRatio += ReportService.countRatio(
 									summaryData.maleTotal,
 									summaryData.prevMaleTotal
 								);
-								outCount.value += summaryData.femaleTotal;
-								outCount.valueRatio += ReportService.countRatio(
+								item2Count.value += summaryData.femaleTotal;
+								item2Count.valueRatio += ReportService.countRatio(
 									summaryData.femaleTotal,
 									summaryData.prevFemaleTotal
 								);
 							}
 						}
 					}
-					tempArray[index].in.push(inCount);
-					tempArray[index].out.push(outCount);
+					tempArray[index].item1.push(item1Count);
+					tempArray[index].item2.push(item2Count);
 				}
 				this.sunRData.body = tempArray;
 			}
@@ -497,8 +493,8 @@
 				titleCount: 2,
 				title1: this._("w_Male"),
 				title2: this._("w_FeMale"),
-				inTotalTitle: this._("w_MaleTotal"),
-				outTotalTitle: this._("w_FeMaleTotal")
+				title1Title: this._("w_MaleTotal"),
+				title2Title: this._("w_FeMaleTotal")
 			};
 
 			//head
@@ -559,8 +555,8 @@
 							site: summaryData.site,
 							area: summaryData.area,
 							group: deviceGroup,
-							in: [],
-							out: []
+						  item1: [],
+                        item2: []
                         };
                         
 						if (
@@ -577,8 +573,8 @@
 					let body = {
 						site: summaryData.site,
 						area: summaryData.area,
-						in: [],
-						out: []
+					  item1: [],
+                        item2: []
 					};
 					if (
 						tempArray.every(
@@ -598,8 +594,8 @@
 				case EChartMode.siteXDay1:
 					for (let index in tempArray) {
 						for (let head of this.rData.head) {
-							let inCount = {value: 0, valueRatio: 0, link: true};
-							let outCount = {value: 0, valueRatio: 0, link: true};
+							let item1Count = {value: 0, valueRatio: 0, link: false};
+							let item2Count = {value: 0, valueRatio: 0, link: false};
 							for (let summaryData of this.responseData
 								.summaryDatas) {
 								if (
@@ -615,14 +611,14 @@
 										    	tempArray[index].group.objectId ==
 										    	deviceGroup.objectId
 										    ) {
-										    	inCount.value += summaryData.maleTotal;
-										    	inCount.valueRatio += ReportService.countRatio(
+										    	item1Count.value += summaryData.maleTotal;
+										    	item1Count.valueRatio += ReportService.countRatio(
 										    		summaryData.maleTotal,
 										    		summaryData.prevMaleTotal
 										    	);
-										    	outCount.value +=
+										    	item2Count.value +=
 										    		summaryData.femaleTotal;
-										    	outCount.valueRatio += ReportService.countRatio(
+										    	item2Count.valueRatio += ReportService.countRatio(
 										    		summaryData.femaleTotal,
 										    		summaryData.prevFemaleTotal
 										    	);
@@ -633,22 +629,22 @@
 											tempArray[index].area.objectId ==
 											summaryData.area.objectId
 										) {
-											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += ReportService.countRatio(
+											item1Count.value += summaryData.maleTotal;
+											item1Count.valueRatio += ReportService.countRatio(
 												summaryData.maleTotal,
 												summaryData.prevMaleTotal
 											);
-											outCount.value +=
+											item2Count.value +=
 												summaryData.femaleTotal;
-											outCount.valueRatio += ReportService.countRatio(
+											item2Count.valueRatio += ReportService.countRatio(
 												summaryData.femaleTotal,
 												summaryData.prevFemaleTotal
 											);
 										}
 									}
 							}
-							tempArray[index].in.push(inCount);
-							tempArray[index].out.push(outCount);
+							tempArray[index].item1.push(item1Count);
+							tempArray[index].item2.push(item2Count);
 						}
 					}
 					this.rData.head = this.rData.head.map(
@@ -659,8 +655,8 @@
 				case EChartMode.siteXDayX:
 					for (let index in tempArray) {
 						for (let head of this.rData.head) {
-							let inCount = {value: 0, valueRatio: 0, link: true};
-							let outCount = {value: 0, valueRatio: 0, link: true};
+							let item1Count = {value: 0, valueRatio: 0, link: true};
+							let item2Count = {value: 0, valueRatio: 0, link: true};
 							for (let summaryData of this.responseData
 								.summaryDatas) {
 								if (
@@ -680,14 +676,14 @@
 										    	tempArray[index].group.objectId ==
 										    	deviceGroup.objectId
 										    ) {
-										    	inCount.value += summaryData.maleTotal;
-										    	inCount.valueRatio += ReportService.countRatio(
+										    	item1Count.value += summaryData.maleTotal;
+										    	item1Count.valueRatio += ReportService.countRatio(
 										    		summaryData.maleTotal,
 										    		summaryData.prevMaleTotal
 										    	);
-										    	outCount.value +=
+										    	item2Count.value +=
 										    		summaryData.femaleTotal;
-										    	outCount.valueRatio += ReportService.countRatio(
+										    	item2Count.valueRatio += ReportService.countRatio(
 										    		summaryData.femaleTotal,
 										    		summaryData.prevFemaleTotal
 										    	);
@@ -698,22 +694,22 @@
 											tempArray[index].area.objectId ==
 											summaryData.area.objectId
 										) {
-											inCount.value += summaryData.maleTotal;
-											inCount.valueRatio += ReportService.countRatio(
+											item1Count.value += summaryData.maleTotal;
+											item1Count.valueRatio += ReportService.countRatio(
 												summaryData.maleTotal,
 												summaryData.prevMaleTotal
 											);
-											outCount.value +=
+											item2Count.value +=
 												summaryData.femaleTotal;
-											outCount.valueRatio += ReportService.countRatio(
+											item2Count.valueRatio += ReportService.countRatio(
 												summaryData.femaleTotal,
 												summaryData.prevFemaleTotal
 											);
 										}
 									}
 							}
-							tempArray[index].in.push(inCount);
-							tempArray[index].out.push(outCount);
+							tempArray[index].item1.push(item1Count);
+							tempArray[index].item2.push(item2Count);
 						}
 					}
 					this.rData.head = this.rData.head.map(

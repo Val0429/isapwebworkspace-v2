@@ -14,27 +14,27 @@ class ReportTableData {
     countTotal() {
         //row total
         for (let item of this._body) {
-            //in1 out1
-            item.inTotal = this.showRowTotal(item.in);
-            item.outTotal = this.showRowTotal(item.out);
-            for (let subItem of item.in) {
+            //item1 item2
+            item.item1Total = this.showRowTotal(item.item1);
+            item.item2Total = this.showRowTotal(item.item2);
+            for (let subItem of item.item1) {
                 subItem.sign = ESign.none;
                 if (subItem.valueRatio != 0) {
                     subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
                 }
             }
 
-            for (let subItem of item.out) {
+            for (let subItem of item.item2) {
                 subItem.sign = ESign.none;
                 if (subItem.valueRatio != 0) {
                     subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
                 }
             }
 
-            //in2 out2
-            if (item.in2) {
-                item.inTotal2 = this.showRowTotal(item.in2);
-                for (let subItem of item.in2) {
+            //item3 item4
+            if (item.item3) {
+                item.item3Total = this.showRowTotal(item.item3);
+                for (let subItem of item.item3) {
                     subItem.sign = ESign.none;
                     if (subItem.valueRatio != 0) {
                         subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
@@ -42,9 +42,9 @@ class ReportTableData {
                 }
             }
 
-            if (item.in2) {
-                item.outTotal2 = this.showRowTotal(item.out2);
-                for (let subItem of item.out2) {
+            if (item.item4) {
+                item.item4Total = this.showRowTotal(item.item4);
+                for (let subItem of item.item4) {
                     subItem.sign = ESign.none;
                     if (subItem.valueRatio != 0) {
                         subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
@@ -62,8 +62,8 @@ class ReportTableData {
             this._foot = [];
             for (let index in this._head) {
                 let total: IReportTableDataTotal = {
-                    inTotal: this.showColTotal(this._body, index, 'in'),
-                    outTotal: this.showColTotal(this._body, index, 'out'),
+                    item1Total: this.showColTotal(this._body, index, 'item1'),
+                    item2Total: this.showColTotal(this._body, index, 'item2'),
                 };
 
                 this._foot.push(total);
@@ -71,32 +71,32 @@ class ReportTableData {
         }
 
         //all total
-        let intTotal: IReportTableDataBodyInOut = {
+        let item1Total: IReportTableDataBodyInOut = {
             sign: ESign.none,
             value: 0,
             valueRatio: 0,
         };
 
-        intTotal.value = this._foot.reduce((ty, u) => ty + u.inTotal.value, 0);
-        intTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.inTotal.valueRatio, 0);
-        if (intTotal.valueRatio) {
-            intTotal.sign = intTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
+        item1Total.value = this._foot.reduce((ty, u) => ty + u.item1Total.value, 0);
+        item1Total.valueRatio = this._foot.reduce((ty, u) => ty + u.item1Total.valueRatio, 0);
+        if (item1Total.valueRatio) {
+            item1Total.sign = item1Total.valueRatio > 0 ? ESign.positive : ESign.negative;
         }
 
-        let outTotal: IReportTableDataBodyInOut = {
+        let item2Total: IReportTableDataBodyInOut = {
             sign: ESign.none,
             value: 0,
             valueRatio: 0,
         };
-        outTotal.value = this._foot.reduce((ty, u) => ty + u.outTotal.value, 0);
-        outTotal.valueRatio = this._foot.reduce((ty, u) => ty + u.outTotal.valueRatio, 0);
-        if (outTotal.valueRatio) {
-            outTotal.sign = outTotal.valueRatio > 0 ? ESign.positive : ESign.negative;
+        item2Total.value = this._foot.reduce((ty, u) => ty + u.item2Total.value, 0);
+        item2Total.valueRatio = this._foot.reduce((ty, u) => ty + u.item2Total.valueRatio, 0);
+        if (item2Total.valueRatio) {
+            item2Total.sign = item2Total.valueRatio > 0 ? ESign.positive : ESign.negative;
         }
 
         let allTotal: IReportTableDataTotal = {
-            inTotal: intTotal,
-            outTotal: outTotal,
+            item1Total: item1Total,
+            item2Total: item2Total,
         };
 
         this._foot.push(allTotal);

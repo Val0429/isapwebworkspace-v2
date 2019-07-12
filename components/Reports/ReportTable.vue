@@ -49,91 +49,91 @@
                             class="title"
                         >{{items.group ? items.group.name : ""}}</td>
                         <td class="title"> {{reportTableTitle.title1}}</td>
-                        <td v-for="(itemIn, key, index) in items.in">
+                        <td v-for="(item1, key, index) in items.item1">
 
                             <a
-                                v-if="itemIn.link && itemIn.value != 0"
+                                v-if="item1.link && item1.value != 0"
                                 href="#"
-                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'in')"
-                            >{{ itemIn.value}}</a>
-                            <span v-else>{{ itemIn.value}}</span>
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'item1')"
+                            >{{ item1.value}}</a>
+                            <span v-else>{{ item1.value}}</span>
                             <span
-                                v-if="itemIn.valueRatio != 0"
-                                :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''"
-                            >{{ " (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
+                                v-if="item1.valueRatio != 0"
+                                :class="eSign.none != item1.sign ? (eSign.positive == item1.sign ?  'green':'red') : ''"
+                            >{{ " (" + toPercent(item1.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.in">
-                            <a>{{items.inTotal.value }}</a>
+                        <td v-if="items.item1">
+                            <a>{{items.item1Total.value }}</a>
                             <span
-                                v-if="items.inTotal.valueRatio != 0"
-                                :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''"
-                            >{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
+                                v-if="items.item1Total.valueRatio != 0"
+                                :class="eSign.none != items.item1Total.sign ? (eSign.positive == items.item1Total.sign ?  'green':'red') : ''"
+                            >{{ " (" + toPercent(items.item1Total.valueRatio,0) + ")" }}</span>
                         </td>
                     </tr>
                     <tr>
                         <td class="title"> {{reportTableTitle.title2}}</td>
-                        <td v-for="(itemOut, key, index) in items.out">
+                        <td v-for="(item2, key, index) in items.item2">
                             <a
-                                v-if="itemOut.link && itemOut.value != 0"
+                                v-if="item2.link && item2.value != 0"
                                 href="#"
-                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'out')"
-                            >{{ itemOut.value }}</a>
-                            <span v-else>{{ itemOut.value}}</span>
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'item2')"
+                            >{{ item2.value }}</a>
+                            <span v-else>{{ item2.value}}</span>
                             <span
-                                v-if="itemOut.valueRatio != 0"
-                                :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''"
-                            >{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
+                                v-if="item2.valueRatio != 0"
+                                :class="eSign.none != item2.sign ? (eSign.positive == item2.sign ?  'green':'red') : ''"
+                            >{{" (" + toPercent(item2.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.out">
-                            <span>{{ items.outTotal.value }}</span>
+                        <td v-if="items.item2">
+                            <span>{{ items.item2Total.value }}</span>
                             <span
-                                v-if="items.outTotal.valueRatio"
-                                :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"
-                            > {{" (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                                v-if="items.item2Total.valueRatio"
+                                :class="eSign.none != items.item2Total.sign ? (eSign.positive == items.item2Total.sign ?  'green':'red') : ''"
+                            > {{" (" + toPercent(items.item2Total.valueRatio,0) + ")"}}</span>
                         </td>
                     </tr>
                     <tr v-if="reportTableTitle.title3">
                         <td class="title"> {{reportTableTitle.title3}}</td>
-                        <td v-for="(itemIn, key, index) in items.in2">
+                        <td v-for="(item3, key, index) in items.item3">
                             <a
-                                v-if="itemIn.link && itemIn.value != 0"
+                                v-if="item3.link && item3.value != 0"
                                 href="#"
-                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'in2')"
-                            >{{ itemIn.value }}</a>
-                            <span v-else>{{ itemIn.value}}</span>
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'item3')"
+                            >{{ item3.value }}</a>
+                            <span v-else>{{ item3.value}}</span>
                             <span
-                                v-if="itemIn.valueRatio != 0"
-                                :class="eSign.none != itemIn.sign ? (eSign.positive == itemIn.sign ?  'green':'red') : ''"
-                            >{{" (" + toPercent(itemIn.valueRatio,0) + ")" }}</span>
+                                v-if="item3.valueRatio != 0"
+                                :class="eSign.none != item3.sign ? (eSign.positive == item3.sign ?  'green':'red') : ''"
+                            >{{" (" + toPercent(item3.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.in2">
-                            <span>{{ items.inTotal2.value }}</span>
+                        <td v-if="items.item3">
+                            <span>{{ items.item3Total.value }}</span>
                             <span
-                                v-if="items.inTotal2.valueRatio != 0"
-                                :class="eSign.none != items.inTotal2.sign ? (eSign.positive == items.inTotal2.sign ?  'green':'red') : ''"
-                            > {{" (" + toPercent(items.inTotal2.valueRatio,0) + ")"}}</span>
+                                v-if="items.item3Total.valueRatio != 0"
+                                :class="eSign.none != items.item3Total.sign ? (eSign.positive == items.item3Total.sign ?  'green':'red') : ''"
+                            > {{" (" + toPercent(items.item3Total.valueRatio,0) + ")"}}</span>
                         </td>
                     </tr>
                     <tr v-if="reportTableTitle.title4">
                         <td class="title"> {{reportTableTitle.title4}}</td>
-                        <td v-for="(itemOut, key, index) in items.out2">
+                        <td v-for="(item4, key, index) in items.item4">
                             <a
-                                v-if="itemOut.link && itemOut.value != 0"
+                                v-if="item4.link && item4.value != 0"
                                 href="#"
-                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'out2')"
-                            >{{ itemOut.value }}</a>
-                            <span v-else>{{ itemOut.value}}</span>
+                                @click="clickItem(reportTableData._head[key],items.site.objectId,items.area.objectId,'item4')"
+                            >{{ item4.value }}</a>
+                            <span v-else>{{ item4.value}}</span>
                             <span
-                                v-if="itemOut.valueRatio != 0"
-                                :class="eSign.none != itemOut.sign ? (eSign.positive == itemOut.sign ?  'green':'red') : ''"
-                            >{{" (" + toPercent(itemOut.valueRatio,0) + ")" }}</span>
+                                v-if="item4.valueRatio != 0"
+                                :class="eSign.none != item4.sign ? (eSign.positive == item4.sign ?  'green':'red') : ''"
+                            >{{" (" + toPercent(item4.valueRatio,0) + ")" }}</span>
                         </td>
-                        <td v-if="items.out2">
-                            <span>{{ items.outTotal2.value }}</span>
+                        <td v-if="items.item4">
+                            <span>{{ items.item4Total.value }}</span>
                             <span
-                                v-if="items.outTotal2.valueRatio != 0"
-                                :class="eSign.none != items.outTotal2.sign ? (eSign.positive == items.outTotal2.sign ?  'green':'red') : ''"
-                            > {{" (" + toPercent(items.outTotal2.valueRatio,0) + ")"}}</span>
+                                v-if="items.item4Total.valueRatio != 0"
+                                :class="eSign.none != items.item4Total.sign ? (eSign.positive == items.item4Total.sign ?  'green':'red') : ''"
+                            > {{" (" + toPercent(items.item4Total.valueRatio,0) + ")"}}</span>
                         </td>
                     </tr>
                 </template>
@@ -155,24 +155,24 @@
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
-                    <td class="title"> {{reportTableTitle.inTotalTitle}}</td>
+                    <td class="title"> {{reportTableTitle.title1Title}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
-                        <span>{{ items.inTotal.value}}</span>
+                        <span>{{ items.item1Total.value}}</span>
                         <span
-                            v-if="items.inTotal.valueRatio != 0"
-                            :class="eSign.none != items.inTotal.sign ? (eSign.positive == items.inTotal.sign ?  'green':'red') : ''"
-                        >{{ " (" + toPercent(items.inTotal.valueRatio,0) + ")" }}</span>
+                            v-if="items.item1Total.valueRatio != 0"
+                            :class="eSign.none != items.item1Total.sign ? (eSign.positive == items.item1Total.sign ?  'green':'red') : ''"
+                        >{{ " (" + toPercent(items.item1Total.valueRatio,0) + ")" }}</span>
                     </td>
 
                 </tr>
                 <tr>
-                    <td class="title"> {{reportTableTitle.outTotalTitle}}</td>
+                    <td class="title"> {{reportTableTitle.title2Title}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
-                        <span>{{ items.outTotal.value }}</span>
+                        <span>{{ items.item2Total.value }}</span>
                         <span
-                            v-if="items.outTotal.valueRatio != 0"
-                            :class="eSign.none != items.outTotal.sign ? (eSign.positive == items.outTotal.sign ?  'green':'red') : ''"
-                        >{{ " (" + toPercent(items.outTotal.valueRatio,0) + ")"}}</span>
+                            v-if="items.item2Total.valueRatio != 0"
+                            :class="eSign.none != items.item2Total.sign ? (eSign.positive == items.item2Total.sign ?  'green':'red') : ''"
+                        >{{ " (" + toPercent(items.item2Total.valueRatio,0) + ")"}}</span>
                     </td>
 
                 </tr>

@@ -247,7 +247,6 @@ export default class ReportOccupancy extends Vue {
     userData: any = [];
     allAreaItem: any = [];
     siteAreaItem: any = {};
-    sitesItem: any = [];
 
     //// Filter Condition End ////
 
@@ -256,6 +255,7 @@ export default class ReportOccupancy extends Vue {
 
     // select 相關
     areaSelectItem: any = {};
+    areaSelectWithoutAllItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
 
@@ -546,6 +546,7 @@ export default class ReportOccupancy extends Vue {
 
     async initSelectItemArea() {
         let tempAreaSelectItem = { all: this._("w_AllAreas") };
+        let tempAreaSelectWithoutAllItem = {};
 
         const readParam: {
             siteId: string;
@@ -562,11 +563,12 @@ export default class ReportOccupancy extends Vue {
                     if (response != undefined) {
                         for (const returnValue of response) {
                             // 自定義 sitesSelectItem 的 key 的方式
-                            tempAreaSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                            tempAreaSelectItem[returnValue.objectId] = returnValue.name;
+	                        tempAreaSelectWithoutAllItem[returnValue.objectId] = returnValue.name;
                             // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                         }
                         this.areaSelectItem = tempAreaSelectItem;
+                        this.areaSelectWithoutAllItem = tempAreaSelectWithoutAllItem;
                         this.allAreaItem = response;
                     }
                 })
@@ -1061,6 +1063,7 @@ export default class ReportOccupancy extends Vue {
         this.initDashboardData();
         this.initReportTable();
 
+
         console.log("this.sites - ", JSON.stringify(this.sites));
         console.log(" - ", this.startDate);
         console.log(" - ", this.endDate);
@@ -1131,10 +1134,10 @@ export default class ReportOccupancy extends Vue {
                         site: summaryData.site,
                         area: summaryData.area,
                         group: deviceGroup,
-                        in: [],
-                        out: [],
-                        in2: [],
-                        out2: []
+                        item1: [],
+                        item2: [],
+                        item3: [],
+                        item4: []
                     };
 
                     if (
@@ -1152,10 +1155,10 @@ export default class ReportOccupancy extends Vue {
                     site: summaryData.site,
                     area: summaryData.area,
                     group: null,
-                    in: [],
-                    out: [],
-                    in2: [],
-                    out2: []
+                    item1: [],
+                    item2: [],
+                    item3: [],
+                    item4: []
                 };
 
                 if (
@@ -1173,10 +1176,10 @@ export default class ReportOccupancy extends Vue {
         //填入資料
         for (let index in tempArray) {
             for (let head of this.sunRData.head) {
-                let inCount = { value: 0, valueRatio: 0, link: false };
-                let outCount = { value: 0, valueRatio: 0, link: true };
-                let in2Count = { value: 0, valueRatio: 0, link: true };
-                let out2Count = { value: 0, valueRatio: 0, link: false };
+                let item1Count = { value: 0, valueRatio: 0, link: false };
+                let item2Count = { value: 0, valueRatio: 0, link: true };
+                let item3Count = { value: 0, valueRatio: 0, link: true };
+                let item4Count = { value: 0, valueRatio: 0, link: false };
                 for (let summaryData of summaryTableDatas) {
                     if (
                         new Date(summaryData.date).getHours().toString() != head
@@ -1189,16 +1192,16 @@ export default class ReportOccupancy extends Vue {
                                 tempArray[index].group.objectId ==
                                 deviceGroup.objectId
                             ) {
-                                inCount.value += Math.round(
+                                item1Count.value += Math.round(
                                     summaryData.total / summaryData.count
                                 );
-                                inCount.valueRatio += 0;
-                                outCount.value += summaryData.mediumThreshold;
-                                outCount.valueRatio += 0;
-                                in2Count.value += summaryData.highThreshold;
-                                in2Count.valueRatio += 0;
-                                out2Count.value += summaryData.maxValue;
-                                out2Count.valueRatio += 0;
+                                item1Count.valueRatio += 0;
+                                item2Count.value += summaryData.mediumThreshold;
+                                item2Count.valueRatio += 0;
+                                item3Count.value += summaryData.highThreshold;
+                                item3Count.valueRatio += 0;
+                                item4Count.value += summaryData.maxValue;
+                                item4Count.valueRatio += 0;
                             }
                         }
                     } else {
@@ -1206,23 +1209,23 @@ export default class ReportOccupancy extends Vue {
                             tempArray[index].area.objectId ==
                             summaryData.area.objectId
                         ) {
-                            inCount.value += Math.round(
+                            item1Count.value += Math.round(
                                 summaryData.total / summaryData.count
                             );
-                            inCount.valueRatio += 0;
-                            outCount.value += summaryData.mediumThreshold;
-                            outCount.valueRatio += 0;
-                            in2Count.value += summaryData.highThreshold;
-                            in2Count.valueRatio += 0;
-                            out2Count.value += summaryData.maxValue;
-                            out2Count.valueRatio += 0;
+                            item1Count.valueRatio += 0;
+                            item2Count.value += summaryData.mediumThreshold;
+                            item2Count.valueRatio += 0;
+                            item3Count.value += summaryData.highThreshold;
+                            item3Count.valueRatio += 0;
+                            item4Count.value += summaryData.maxValue;
+                            item4Count.valueRatio += 0;
                         }
                     }
                 }
-                tempArray[index].in.push(inCount);
-                tempArray[index].out.push(outCount);
-                tempArray[index].in2.push(in2Count);
-                tempArray[index].out2.push(out2Count);
+                tempArray[index].item1.push(item1Count);
+                tempArray[index].item2.push(item2Count);
+                tempArray[index].item3.push(item3Count);
+                tempArray[index].item4.push(item4Count);
             }
             this.sunRData.body = tempArray;
         }
@@ -1311,10 +1314,10 @@ export default class ReportOccupancy extends Vue {
                         site: summaryData.site,
                         area: summaryData.area,
                         group: deviceGroup,
-                        in: [],
-                        out: [],
-                        in2: [],
-                        out2: []
+                        item1: [],
+                        item2: [],
+                        item3: [],
+                        item4: []
                     };
 
                     if (
@@ -1332,10 +1335,10 @@ export default class ReportOccupancy extends Vue {
                     site: summaryData.site,
                     area: summaryData.area,
                     group: null,
-                    in: [],
-                    out: [],
-                    in2: [],
-                    out2: []
+                    item1: [],
+                    item2: [],
+                    item3: [],
+                    item4: []
                 };
 
                 if (
@@ -1356,10 +1359,22 @@ export default class ReportOccupancy extends Vue {
             case EChartMode.siteXDay1:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let inCount = { value: 0, valueRatio: 0, link: false };
-                        let outCount = { value: 0, valueRatio: 0, link: true };
-                        let in2Count = { value: 0, valueRatio: 0, link: true };
-                        let out2Count = {
+                        let item1Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
+                        let item2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item3Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item4Count = {
                             value: 0,
                             valueRatio: 0,
                             link: false
@@ -1380,19 +1395,20 @@ export default class ReportOccupancy extends Vue {
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
                                     ) {
-                                        inCount.value += Math.round(
+                                        item1Count.value += Math.round(
                                             summaryData.total /
                                                 summaryData.count
                                         );
-                                        inCount.valueRatio += 0;
-                                        outCount.value +=
+                                        item1Count.valueRatio += 0;
+                                        item2Count.value +=
                                             summaryData.mediumThreshold;
-                                        outCount.valueRatio += 0;
-                                        in2Count.value +=
+                                        item2Count.valueRatio += 0;
+                                        item3Count.value +=
                                             summaryData.highThreshold;
-                                        in2Count.valueRatio += 0;
-                                        out2Count.value += summaryData.maxValue;
-                                        out2Count.valueRatio += 0;
+                                        item3Count.valueRatio += 0;
+                                        item4Count.value +=
+                                            summaryData.maxValue;
+                                        item4Count.valueRatio += 0;
                                     }
                                 }
                             } else {
@@ -1400,24 +1416,25 @@ export default class ReportOccupancy extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    inCount.value += Math.round(
+                                    item1Count.value += Math.round(
                                         summaryData.total / summaryData.count
                                     );
-                                    inCount.valueRatio += 0;
-                                    outCount.value +=
+                                    item1Count.valueRatio += 0;
+                                    item2Count.value +=
                                         summaryData.mediumThreshold;
-                                    outCount.valueRatio += 0;
-                                    in2Count.value += summaryData.highThreshold;
-                                    in2Count.valueRatio += 0;
-                                    out2Count.value += summaryData.maxValue;
-                                    out2Count.valueRatio += 0;
+                                    item2Count.valueRatio += 0;
+                                    item3Count.value +=
+                                        summaryData.highThreshold;
+                                    item3Count.valueRatio += 0;
+                                    item4Count.value += summaryData.maxValue;
+                                    item4Count.valueRatio += 0;
                                 }
                             }
                         }
-                        tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount);
-                        tempArray[index].in2.push(in2Count);
-                        tempArray[index].out2.push(out2Count);
+                        tempArray[index].item1.push(item1Count);
+                        tempArray[index].item2.push(item2Count);
+                        tempArray[index].item3.push(item3Count);
+                        tempArray[index].item4.push(item4Count);
                     }
                 }
                 this.rData.head = this.rData.head.map(
@@ -1428,10 +1445,22 @@ export default class ReportOccupancy extends Vue {
             case EChartMode.siteXDayX:
                 for (let index in tempArray) {
                     for (let head of this.rData.head) {
-                        let inCount = { value: 0, valueRatio: 0, link: false };
-                        let outCount = { value: 0, valueRatio: 0, link: true };
-                        let in2Count = { value: 0, valueRatio: 0, link: true };
-                        let out2Count = {
+                        let item1Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
+                        let item2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item3Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item4Count = {
                             value: 0,
                             valueRatio: 0,
                             link: false
@@ -1454,19 +1483,20 @@ export default class ReportOccupancy extends Vue {
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
                                     ) {
-                                        inCount.value += Math.round(
+                                        item1Count.value += Math.round(
                                             summaryData.total /
                                                 summaryData.count
                                         );
-                                        inCount.valueRatio += 0;
-                                        outCount.value +=
+                                        item1Count.valueRatio += 0;
+                                        item2Count.value +=
                                             summaryData.mediumThreshold;
-                                        outCount.valueRatio += 0;
-                                        in2Count.value +=
+                                        item2Count.valueRatio += 0;
+                                        item3Count.value +=
                                             summaryData.highThreshold;
-                                        in2Count.valueRatio += 0;
-                                        out2Count.value += summaryData.maxValue;
-                                        out2Count.valueRatio += 0;
+                                        item3Count.valueRatio += 0;
+                                        item4Count.value +=
+                                            summaryData.maxValue;
+                                        item4Count.valueRatio += 0;
                                     }
                                 }
                             } else {
@@ -1474,24 +1504,25 @@ export default class ReportOccupancy extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    inCount.value += Math.round(
+                                    item1Count.value += Math.round(
                                         summaryData.total / summaryData.count
                                     );
-                                    inCount.valueRatio += 0;
-                                    outCount.value +=
+                                    item1Count.valueRatio += 0;
+                                    item2Count.value +=
                                         summaryData.mediumThreshold;
-                                    outCount.valueRatio += 0;
-                                    in2Count.value += summaryData.highThreshold;
-                                    in2Count.valueRatio += 0;
-                                    out2Count.value += summaryData.maxValue;
-                                    out2Count.valueRatio += 0;
+                                    item2Count.valueRatio += 0;
+                                    item3Count.value +=
+                                        summaryData.highThreshold;
+                                    item3Count.valueRatio += 0;
+                                    item4Count.value += summaryData.maxValue;
+                                    item4Count.valueRatio += 0;
                                 }
                             }
                         }
-                        tempArray[index].in.push(inCount);
-                        tempArray[index].out.push(outCount);
-                        tempArray[index].in2.push(in2Count);
-                        tempArray[index].out2.push(out2Count);
+                        tempArray[index].item1.push(item1Count);
+                        tempArray[index].item2.push(item2Count);
+                        tempArray[index].item3.push(item3Count);
+                        tempArray[index].item4.push(item4Count);
                     }
                 }
                 this.rData.head = this.rData.head.map(
@@ -1590,7 +1621,7 @@ export default class ReportOccupancy extends Vue {
         let filterData = {
             startDate: tempSDate,
             endDate: tempEDate,
-            type: rowName == "out" ? "medium" : "high",
+            type: rowName == "item2" ? "medium" : "high",
             areaId: sunArea
         };
 
@@ -1637,6 +1668,7 @@ export default class ReportOccupancy extends Vue {
     sortOutChartData(datas: any) {
         let tempValues = JSON.parse(JSON.stringify(datas));
         let tempChartDatas: IChartOccupancyData[] = [];
+<<<<<<< HEAD
         let isOneDay: boolean = false;
         let isSingleSite: boolean = this.sites.length == 1 ? true : false;
 
@@ -1651,6 +1683,120 @@ export default class ReportOccupancy extends Vue {
                 occupancy: 0,
                 areaId: ""
             };
+=======
+        let isOneDay = false;
+
+        // all area
+        if (
+            (this.inputFormData.areaId &&
+                this.inputFormData.areaId === "all") ||
+            !this.inputFormData.areaId
+        ) {
+            console.log("all area - ");
+
+            this.sites.map(item => {
+                console.log(" - ", item.areas.length);
+
+                item.areas.map(area => {
+                    console.log("area - ", area.objectId);
+                    // 取得date、siteObjectId資料
+                    if (
+                        Datetime.IsOneDate(
+                            this.filterData.startDate,
+                            this.filterData.endDate
+                        )
+                    ) {
+                        isOneDay = true;
+
+                        // one day
+                        for (let i = 0; i < 24; i++) {
+                            let tempDate = Datetime.DateToZero(
+                                this.filterData.startDate
+                            );
+                            tempDate.setHours(i);
+                            let tempDateChartData = {
+                                date: tempDate,
+                                siteObjectId: "",
+                                temperatureMin: 0,
+                                temperatureMax: 0,
+                                weather: EWeather.none,
+                                occupancy: 0,
+                                areaId: area.objectId
+                            };
+
+                            for (let siteId of this.filterData.siteIds) {
+                                let tempSiteChartData = JSON.parse(
+                                    JSON.stringify(tempDateChartData)
+                                );
+                                tempSiteChartData.date = new Date(
+                                    tempSiteChartData.date
+                                );
+                                tempSiteChartData.siteObjectId = siteId;
+                                tempChartDatas.push(tempSiteChartData);
+                            }
+                        }
+                    } else {
+                        // multiple days
+                        let dateList = Datetime.DateList(
+                            this.filterData.startDate,
+                            this.filterData.endDate
+                        );
+                        for (let dateItem of dateList) {
+                            let tempDateChartData = {
+                                date: new Date(dateItem.getTime()),
+                                siteObjectId: "",
+                                temperatureMin: 0,
+                                temperatureMax: 0,
+                                weather: EWeather.none,
+                                occupancy: 0,
+                                areaId: ""
+                            };
+                            for (let siteId of this.filterData.siteIds) {
+                                let tempSiteChartData = JSON.parse(
+                                    JSON.stringify(tempDateChartData)
+                                );
+                                tempSiteChartData.date = new Date(
+                                    tempSiteChartData.date
+                                );
+                                tempSiteChartData.siteObjectId = siteId;
+                                tempChartDatas.push(tempSiteChartData);
+                            }
+                        }
+                    }
+                });
+
+                for (let tempChartData of tempChartDatas) {
+                    let tempDateFormat = isOneDay
+                        ? Datetime.DateTime2String(
+                              tempChartData.date,
+                              ReportService.datetimeFormat.hour
+                          )
+                        : Datetime.DateTime2String(
+                              tempChartData.date,
+                              ReportService.datetimeFormat.date
+                          );
+
+                    // 計算 occupancy
+                    for (let summary of datas) {
+                        if (summary.area.objectId === tempChartData.areaId) {
+                            let summaryDateFormat = isOneDay
+                                ? Datetime.DateTime2String(
+                                      new Date(summary.date),
+                                      ReportService.datetimeFormat.hour
+                                  )
+                                : Datetime.DateTime2String(
+                                      new Date(summary.date),
+                                      ReportService.datetimeFormat.date
+                                  );
+
+                            if (
+                                summaryDateFormat == tempDateFormat &&
+                                summary.site.objectId ==
+                                    tempChartData.siteObjectId
+                            ) {
+                                console.log("summary.total - ", summary.total);
+                                console.log("summary.count - ", summary.count);
+>>>>>>> 1959ca0c516072512572f4f2ebd4d93d5df41a9b
 
             let dateList: Date[] = [];
 
@@ -1719,6 +1865,7 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
+<<<<<<< HEAD
 
                 // area
                 if (
@@ -1728,6 +1875,25 @@ export default class ReportOccupancy extends Vue {
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
                             JSON.stringify(tempChartDataDate)
+=======
+                for (let i in this.responseData.weathers) {
+                    let weather = this.responseData.weathers[i];
+                    let weatherDateFormat = isOneDay
+                        ? Datetime.DateTime2String(
+                              new Date(weather.date),
+                              ReportService.datetimeFormat.hour
+                          )
+                        : Datetime.DateTime2String(
+                              new Date(weather.date),
+                              ReportService.datetimeFormat.date
+                          );
+                    if (
+                        weatherDateFormat == tempDateFormat &&
+                        weather.site.objectId == tempChartData.siteObjectId
+                    ) {
+                        tempChartData.weather = WeatherService.WeatherIcon(
+                            weather.icon
+>>>>>>> 1959ca0c516072512572f4f2ebd4d93d5df41a9b
                         );
                         tempChartDataArea.areaId = area.objectId;
                         tempChartDatas.push(tempChartDataArea);
@@ -2090,6 +2256,7 @@ export default class ReportOccupancy extends Vue {
 
             let tempAreas = [];
 
+<<<<<<< HEAD
             this.sites.map(item => {
                 item.areas.map(area => {
                     if (this.inputFormData.areaId === area.objectId) {
@@ -2102,6 +2269,20 @@ export default class ReportOccupancy extends Vue {
                     }
                 });
             });
+=======
+
+	        for (const area in this.areaSelectItem) {
+		        if (this.inputFormData.areaId === area) {
+			        let tempArea: any = {};
+			        tempArea = {
+				        name: this.areaSelectItem[area],
+				        objectId: area
+			        };
+			        tempAreas.push(tempArea);
+		        }
+	        }
+
+>>>>>>> 1959ca0c516072512572f4f2ebd4d93d5df41a9b
             this.siteAreaItem.areas = tempAreas;
             this.sites = [];
             this.sites.push(this.siteAreaItem);
@@ -2123,10 +2304,32 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
+
+
+	        // 整理sites
+	        let tempAreas = [];
+
+	        for (const area in this.areaSelectWithoutAllItem) {
+		        let tempArea: any = {};
+		        tempArea = {
+			        name: this.areaSelectItem[area],
+			        objectId: area
+		        };
+		        tempAreas.push(tempArea);
+	        }
+
+	        this.siteAreaItem.areas = tempAreas;
+	        this.sites = [];
+	        this.sites.push(this.siteAreaItem);
+
             this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
 
-            this.inputFormData.groupId = "";
+
+	        console.log('##############', this.sites);
+
+
+	        this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
             await this.initSelectItemArea();
@@ -2138,10 +2341,28 @@ export default class ReportOccupancy extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+
+        	// 整理sites
+	        let tempAreas = [];
+	        for (const area in this.areaSelectWithoutAllItem) {
+		        let tempArea: any = {};
+		        tempArea = {
+			        name: this.areaSelectItem[area],
+			        objectId: area
+		        };
+		        tempAreas.push(tempArea);
+	        }
+	        this.siteAreaItem.areas = tempAreas;
+	        this.sites = [];
+	        this.sites.push(this.siteAreaItem);
+
             this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
 
-            this.inputFormData.areaId = "";
+	        console.log('*************', this.sites);
+
+
+	        this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
