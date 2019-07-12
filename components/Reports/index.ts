@@ -5,7 +5,7 @@ export { EAddPeriodSelect, EIfAllSelected, ETypeInOrOut, EIncludedEmployee, EWee
 // interface
 export { IPeckTimeRange, IPeckTimeRangeBody, ISiteItems } from './models/IPeckTimeRange';
 export { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut, IReportTableTitle } from './models/IReportTable';
-export { ITemplateItem } from './models/ITemplateItem';
+export { ITemplateItem, IReportToTemplateItem } from './models/ITemplateItem';
 export { IFilterCondition } from './models/IReportFilter';
 
 // class

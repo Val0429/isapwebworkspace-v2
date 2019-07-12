@@ -1,4 +1,4 @@
-import { EVideoSource, EDesignationPeriod } from '../';
+import { EVideoSource, EDesignationPeriod, EDeviceMode } from '../';
 
 interface ITemplateSite {
     objectId: string;
@@ -35,4 +35,14 @@ interface ITemplateItem {
     sendUsers?: ITemplateSendUser[];
 }
 
-export { ITemplateItem };
+interface IReportToTemplateItem {
+    mode: EDeviceMode;
+    startDate?: Date;
+    endDate?: Date;
+    siteIds: string[];
+    tagIds?: string[];
+    sendUserIds?: string[];
+    type?: EDesignationPeriod;
+}
+
+export { ITemplateItem, IReportToTemplateItem };

@@ -73,6 +73,7 @@ export default class LangObject {
     w_ExportPDF = 'Export PDF';
     w_ExportExcel = 'Export Excel';
     w_ExportCSV = 'Export CSV';
+    w_CopyToTemplate = 'Copy To Report Template';
 
     // date
     w_Week_0 = 'Sunday';

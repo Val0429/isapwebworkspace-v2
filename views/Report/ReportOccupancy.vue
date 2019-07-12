@@ -37,6 +37,10 @@
                         size="lg"
                         @click="modalShow = !modalShow"
                     />
+                    <iv-toolbox-copy-to-template
+                        size="lg"
+                        @click="pageToReportTemplate()"
+                    />
                 </template>
 
                 <!-- Tina -->
@@ -167,8 +171,10 @@ import {
     ISite,
     ITemplateItem,
     IFilterCondition,
+    EDesignationPeriod,
+    IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData,
+    ReportTableData
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
@@ -282,6 +288,10 @@ export default class ReportOccupancy extends Vue {
 
     // send user 相關
     userSelectItem: any = {};
+
+    // Report To Template相關
+    ReportToTemplateData: IReportToTemplateItem | null = null;
+    designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
     //ReportDashboard 相關
     dPageType: EPageType = EPageType.none;
@@ -447,8 +457,10 @@ export default class ReportOccupancy extends Vue {
 
         if (!this.filterData.firstSiteId) {
             return false;
-        } else if (this.filterData.firstSiteId && this.filterData.siteIds.length === 1) {
-
+        } else if (
+            this.filterData.firstSiteId &&
+            this.filterData.siteIds.length === 1
+        ) {
             await this.$server
                 .R("/location/area/all", readParam)
                 .then((response: any) => {
@@ -853,9 +865,13 @@ export default class ReportOccupancy extends Vue {
     }
 
     //// 以下為 analysis filter ////
-    async receiveFilterData(filterData) {
+    async receiveFilterData(
+        filterData: IFilterCondition,
+        designationPeriod: EDesignationPeriod
+    ) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
+        this.designationPeriod = designationPeriod;
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -883,9 +899,7 @@ export default class ReportOccupancy extends Vue {
     }
 
     async resolveSummary() {
-
         console.log("this.filterData  - ", this.filterData);
-
 
         await this.initSelectItemArea();
 
@@ -1636,7 +1650,6 @@ export default class ReportOccupancy extends Vue {
                     !this.inputFormData.areaId ||
                     this.inputFormData.areaId === "all"
                 ) {
-
                     console.log("site.areas", site.areas, site.objectId);
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
@@ -1791,7 +1804,6 @@ export default class ReportOccupancy extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-
             // 整理sites
             let tempAreas = [];
             for (const area in this.areaSelectWithoutAllItem) {
@@ -2040,6 +2052,30 @@ export default class ReportOccupancy extends Vue {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
     }
 
+    // Author: Tina
+    sortOutReportToTemplateData() {
+        this.ReportToTemplateData = {
+            startDate: this.filterData.startDate,
+            endDate: this.filterData.endDate,
+            mode: EDeviceMode.humanDetection,
+            siteIds: this.filterData.siteIds,
+            tagIds: this.filterData.tagIds,
+            sendUserIds: this.userData,
+            type: this.designationPeriod
+        };
+    }
+
+    // Author: Tina
+    pageToReportTemplate() {
+        this.sortOutReportToTemplateData();
+        this.$router.push({
+            path: "/reports/",
+            query: {
+                reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+            }
+        });
+    }
+
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     ////////////////////////////////////// Export //////////////////////////////////////
@@ -2114,8 +2150,8 @@ export default class ReportOccupancy extends Vue {
 
     /////////////////////////////////////////////////////////////////////
 
-     // Author: Morris, Product remove
-     initChartDeveloper() {
+    // Author: Morris, Product remove
+    initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
 
@@ -2217,7 +2253,6 @@ export default class ReportOccupancy extends Vue {
             }
         }
     }
-
 }
 </script>
 

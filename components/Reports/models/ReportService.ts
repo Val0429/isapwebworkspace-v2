@@ -1,5 +1,5 @@
 import { EAgeRange, EWeeks, EWeek } from '../';
-import { ITemplateItem } from '../';
+import { ITemplateItem, IReportToTemplateItem } from '../';
 
 class ReportService {
     datetimeFormat: {
