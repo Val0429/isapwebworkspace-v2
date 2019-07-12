@@ -354,7 +354,7 @@ export class HighchartsDemographic extends Vue {
             this.timeMode,
             this.areaMode,
             this.sites,
-            this.value
+            JSON.stringify(this.value)
         );
 
         // TODO: For Demo

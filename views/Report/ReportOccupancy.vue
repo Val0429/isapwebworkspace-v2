@@ -689,13 +689,12 @@ export default class ReportOccupancy extends Vue {
         };
         if (!this.filterData.firstSiteId) {
             return false;
-
-            // 只選擇site
         } else if (
             this.filterData.firstSiteId &&
             !this.inputFormData.areaId &&
             !this.inputFormData.groupId
         ) {
+            // 只選擇site
             await this.$server
                 .R("/device", readParam)
                 .then((response: any) => {
@@ -715,13 +714,13 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all" &&
             !this.inputFormData.groupId
         ) {
+            // 選擇site和單一area
             readParam.areaId = this.inputFormData.areaId;
             await this.$server
                 .R("/device", readParam)
@@ -742,7 +741,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和單一device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -750,6 +748,7 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和單一area和單一device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -807,7 +806,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -816,6 +814,7 @@ export default class ReportOccupancy extends Vue {
                 this.inputFormData.groupId === "") &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 選擇site和all area
             readParam.areaId = "";
             await this.$server
                 .R("/device", readParam)
@@ -836,7 +835,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和all area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -844,6 +842,7 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和all area和all device group
             readParam.groupId = this.inputFormData.groupId;
             await this.$server
                 .R("/device", readParam)
@@ -867,7 +866,6 @@ export default class ReportOccupancy extends Vue {
                     console.log(e);
                     return false;
                 });
-            // 選擇site和單一area和all device group
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -875,6 +873,7 @@ export default class ReportOccupancy extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 選擇site和單一area和all device group
             readParam.areaId = this.inputFormData.areaId;
             readParam.groupId = "";
             await this.$server
@@ -930,7 +929,6 @@ export default class ReportOccupancy extends Vue {
     async receiveUserData(data) {
         this.userData = [];
         this.userData = data;
-        console.log("this.userData - ", this.userData);
     }
 
     receiveModalShowData(data) {
@@ -938,7 +936,6 @@ export default class ReportOccupancy extends Vue {
     }
 
     //// 以下為 analysis filter ////
-
     async receiveFilterData(filterData) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
@@ -969,9 +966,6 @@ export default class ReportOccupancy extends Vue {
     }
 
     async resolveSummary() {
-        console.log("this.filterData  - ", this.filterData);
-        console.log("this.responseData  - ", this.responseData);
-
         await this.initSelectItemArea();
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
@@ -986,7 +980,6 @@ export default class ReportOccupancy extends Vue {
 
         // get office hour data
         this.sites = [];
-        let tempAreas = [];
 
         for (const filterSiteId of this.filterData.siteIds) {
             let tempISite: any = {
@@ -1062,13 +1055,6 @@ export default class ReportOccupancy extends Vue {
         // Ben
         this.initDashboardData();
         this.initReportTable();
-
-        console.log("this.sites - ", JSON.stringify(this.sites));
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     // Ben //
@@ -1122,6 +1108,7 @@ export default class ReportOccupancy extends Vue {
         //body
         this.sunRData.body = [];
         let tempArray = [];
+
         //篩選出所有店
         for (let summaryData of summaryTableDatas) {
             if (
@@ -1228,6 +1215,7 @@ export default class ReportOccupancy extends Vue {
             }
             this.sunRData.body = tempArray;
         }
+
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
             x => x + ":00 - " + (x + 1) + ":00"
@@ -1302,6 +1290,7 @@ export default class ReportOccupancy extends Vue {
         //body
         this.rData.body = [];
         let tempArray = [];
+
         //篩選出所有店
         for (let summaryData of this.responseData.summaryTableDatas) {
             if (
@@ -1440,6 +1429,7 @@ export default class ReportOccupancy extends Vue {
                     x => x + ":00 - " + (x + 1) + ":00"
                 );
                 break;
+
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
                 for (let index in tempArray) {
@@ -1632,317 +1622,159 @@ export default class ReportOccupancy extends Vue {
             });
     }
 
-    checkDateAndSite(
-        date1: Date | string,
-        date2: Date | string,
-        siteId1: string,
-        siteId2: string
-    ): boolean {
-        let tempDate1 =
-            typeof date1 === "string"
-                ? Datetime.DateToZero(new Date(date1))
-                : Datetime.DateToZero(date1);
-        let tempDate2 =
-            typeof date2 === "string"
-                ? Datetime.DateToZero(new Date(date2))
-                : Datetime.DateToZero(date2);
-
-        return (
-            Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
-            siteId1 === siteId2
-        );
-    }
-
     sortOutChartData(datas: any) {
+        let tempValues = JSON.parse(JSON.stringify(datas));
         let tempChartDatas: IChartOccupancyData[] = [];
-        let isOneDay = false;
+        let isOneDay: boolean = false;
+        let isSingleSite: boolean = this.sites.length == 1 ? true : false;
 
-        // all area
-        if (
-            (this.inputFormData.areaId &&
-                this.inputFormData.areaId === "all") ||
-            !this.inputFormData.areaId
-        ) {
-            console.log("all area - ");
+        for (let site of this.sites) {
+            let tempChartDataDates: IChartOccupancyData[] = [];
+            let tempChartDataSite: IChartOccupancyData = {
+                date: new Date(),
+                siteObjectId: site.objectId,
+                temperatureMin: 0,
+                temperatureMax: 0,
+                weather: EWeather.none,
+                occupancy: 0,
+                areaId: ""
+            };
+            let dateList: Date[] = [];
 
-            this.sites.map(item => {
-                console.log(" - ", item.areas.length);
-
-                item.areas.map(area => {
-                    console.log("area - ", area.objectId);
-                    // 取得date、siteObjectId資料
-                    if (
-                        Datetime.IsOneDate(
-                            this.filterData.startDate,
-                            this.filterData.endDate
-                        )
-                    ) {
-                        isOneDay = true;
-
-                        // one day
-                        for (let i = 0; i < 24; i++) {
-                            let tempDate = Datetime.DateToZero(
-                                this.filterData.startDate
-                            );
-                            tempDate.setHours(i);
-                            let tempDateChartData = {
-                                date: tempDate,
-                                siteObjectId: "",
-                                temperatureMin: 0,
-                                temperatureMax: 0,
-                                weather: EWeather.none,
-                                occupancy: 0,
-                                areaId: area.objectId
-                            };
-
-                            for (let siteId of this.filterData.siteIds) {
-                                let tempSiteChartData = JSON.parse(
-                                    JSON.stringify(tempDateChartData)
-                                );
-                                tempSiteChartData.date = new Date(
-                                    tempSiteChartData.date
-                                );
-                                tempSiteChartData.siteObjectId = siteId;
-                                tempChartDatas.push(tempSiteChartData);
-                            }
-                        }
-                    } else {
-                        // multiple days
-                        let dateList = Datetime.DateList(
-                            this.filterData.startDate,
-                            this.filterData.endDate
-                        );
-                        for (let dateItem of dateList) {
-                            let tempDateChartData = {
-                                date: new Date(dateItem.getTime()),
-                                siteObjectId: "",
-                                temperatureMin: 0,
-                                temperatureMax: 0,
-                                weather: EWeather.none,
-                                occupancy: 0,
-                                areaId: ""
-                            };
-                            for (let siteId of this.filterData.siteIds) {
-                                let tempSiteChartData = JSON.parse(
-                                    JSON.stringify(tempDateChartData)
-                                );
-                                tempSiteChartData.date = new Date(
-                                    tempSiteChartData.date
-                                );
-                                tempSiteChartData.siteObjectId = siteId;
-                                tempChartDatas.push(tempSiteChartData);
-                            }
-                        }
-                    }
-                });
-
-                for (let tempChartData of tempChartDatas) {
-                    let tempDateFormat = isOneDay
-                        ? Datetime.DateTime2String(
-                              tempChartData.date,
-                              ReportService.datetimeFormat.hour
-                          )
-                        : Datetime.DateTime2String(
-                              tempChartData.date,
-                              ReportService.datetimeFormat.date
-                          );
-
-                    // 計算 occupancy
-                    for (let summary of datas) {
-                        if (summary.area.objectId === tempChartData.areaId) {
-                            let summaryDateFormat = isOneDay
-                                ? Datetime.DateTime2String(
-                                      new Date(summary.date),
-                                      ReportService.datetimeFormat.hour
-                                  )
-                                : Datetime.DateTime2String(
-                                      new Date(summary.date),
-                                      ReportService.datetimeFormat.date
-                                  );
-
-                            if (
-                                summaryDateFormat == tempDateFormat &&
-                                summary.site.objectId ==
-                                    tempChartData.siteObjectId
-                            ) {
-                                console.log("summary.total - ", summary.total);
-                                console.log("summary.count - ", summary.count);
-
-                                tempChartData.occupancy =
-                                    summary.total / summary.count;
-                                break;
-                            }
-
-                            for (let i in this.responseData.weathers) {
-                                let weather = this.responseData.weathers[i];
-                                let weatherDateFormat = isOneDay
-                                    ? Datetime.DateTime2String(
-                                          tempChartData.date,
-                                          ReportService.datetimeFormat.hour
-                                      )
-                                    : Datetime.DateTime2String(
-                                          tempChartData.date,
-                                          ReportService.datetimeFormat.date
-                                      );
-                                if (
-                                    weatherDateFormat == tempDateFormat &&
-                                    weather.site.objectId ==
-                                        tempChartData.siteObjectId
-                                ) {
-                                    tempChartData.weather = WeatherService.WeatherIcon(
-                                        weather.icon
-                                    );
-                                    tempChartData.temperatureMin =
-                                        weather.temperatureMin;
-                                    tempChartData.temperatureMax =
-                                        weather.temperatureMax;
-                                    // this.responseData.weathers.splice(i, 1);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                console.log("!!! 1", new Date().getTime());
-                this.chartDatas = tempChartDatas;
-            });
-
-            // 單一 area
-        } else if (
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all"
-        ) {
-            // 取得date、siteObjectId資料
+            // date
             if (
                 Datetime.IsOneDate(
                     this.filterData.startDate,
                     this.filterData.endDate
                 )
             ) {
+                // single day
                 isOneDay = true;
-
-                // one day
                 for (let i = 0; i < 24; i++) {
                     let tempDate = Datetime.DateToZero(
                         this.filterData.startDate
                     );
                     tempDate.setHours(i);
-                    let tempDateChartData = {
-                        date: tempDate,
-                        siteObjectId: "",
-                        temperatureMin: 0,
-                        temperatureMax: 0,
-                        weather: EWeather.none,
-                        occupancy: 0,
-                        areaId: this.inputFormData.areaId
-                    };
-
-                    for (let siteId of this.filterData.siteIds) {
-                        let tempSiteChartData = JSON.parse(
-                            JSON.stringify(tempDateChartData)
-                        );
-                        tempSiteChartData.date = new Date(
-                            tempSiteChartData.date
-                        );
-                        tempSiteChartData.siteObjectId = siteId;
-                        tempChartDatas.push(tempSiteChartData);
-                    }
+                    dateList.push(tempDate);
                 }
             } else {
-                // multiple days
-                let dateList = Datetime.DateList(
+                // multipe day
+                dateList = Datetime.DateList(
                     this.filterData.startDate,
                     this.filterData.endDate
                 );
-                for (let dateItem of dateList) {
-                    let tempDateChartData = {
-                        date: new Date(dateItem.getTime()),
-                        siteObjectId: "",
-                        temperatureMin: 0,
-                        temperatureMax: 0,
-                        weather: EWeather.none,
-                        occupancy: 0,
-                        areaId: this.inputFormData.areaId
-                    };
-                    for (let siteId of this.filterData.siteIds) {
-                        let tempSiteChartData = JSON.parse(
-                            JSON.stringify(tempDateChartData)
-                        );
-                        tempSiteChartData.date = new Date(
-                            tempSiteChartData.date
-                        );
-                        tempSiteChartData.siteObjectId = siteId;
-                        tempChartDatas.push(tempSiteChartData);
-                    }
-                }
             }
 
-            for (let tempChartData of tempChartDatas) {
+            // site + date
+            for (let dateItem of dateList) {
+                let tempChartDataDate: IChartOccupancyData = JSON.parse(
+                    JSON.stringify(tempChartDataSite)
+                );
                 let tempDateFormat = isOneDay
                     ? Datetime.DateTime2String(
-                          tempChartData.date,
+                          new Date(dateItem),
                           ReportService.datetimeFormat.hour
                       )
                     : Datetime.DateTime2String(
-                          tempChartData.date,
+                          new Date(dateItem),
+                          ReportService.datetimeFormat.date
+                      );
+                tempChartDataDate.date = dateItem;
+
+                // weather
+                if (!isOneDay) {
+                    for (let weather of this.responseData.weathers) {
+                        let weatherDateFormat = isOneDay
+                            ? Datetime.DateTime2String(
+                                  new Date(weather.date),
+                                  ReportService.datetimeFormat.hour
+                              )
+                            : Datetime.DateTime2String(
+                                  new Date(weather.date),
+                                  ReportService.datetimeFormat.date
+                              );
+                        if (
+                            weatherDateFormat == tempDateFormat &&
+                            weather.site.objectId == site.objectId
+                        ) {
+                            tempChartDataDate.weather = WeatherService.WeatherIcon(
+                                weather.icon
+                            );
+                            tempChartDataDate.temperatureMin =
+                                weather.temperatureMin;
+                            tempChartDataDate.temperatureMax =
+                                weather.temperatureMax;
+                            break;
+                        }
+                    }
+                }
+
+                // area
+                if (
+                    this.inputFormData.areaId ||
+                    this.inputFormData.areaId === "all"
+                ) {
+                    console.log("site.areas", site.areas, site.objectId);
+                    for (let area of site.areas) {
+                        let tempChartDataArea: IChartOccupancyData = JSON.parse(
+                            JSON.stringify(tempChartDataDate)
+                        );
+                        tempChartDataArea.areaId = area.objectId;
+                        tempChartDatas.push(tempChartDataArea);
+                    }
+                } else {
+                    let tempChartDataArea = JSON.parse(
+                        JSON.stringify(tempChartDataDate)
+                    );
+                    tempChartDataArea.areaId = this.inputFormData.areaId;
+                    tempChartDatas.push(tempChartDataArea);
+                }
+            }
+        }
+
+        // get summary data
+        for (let loopChartData of tempChartDatas) {
+            let tempDateFormat = isOneDay
+                ? Datetime.DateTime2String(
+                      new Date(loopChartData.date),
+                      ReportService.datetimeFormat.hour
+                  )
+                : Datetime.DateTime2String(
+                      new Date(loopChartData.date),
+                      ReportService.datetimeFormat.date
+                  );
+
+            // 計算 occupancy
+            for (let i in tempValues) {
+                let summary = tempValues[i];
+                let summaryDateFormat = isOneDay
+                    ? Datetime.DateTime2String(
+                          new Date(summary.date),
+                          ReportService.datetimeFormat.hour
+                      )
+                    : Datetime.DateTime2String(
+                          new Date(summary.date),
                           ReportService.datetimeFormat.date
                       );
 
-                // 計算 occupancy
-                for (let summary of datas) {
-                    let summaryDateFormat = isOneDay
-                        ? Datetime.DateTime2String(
-                              new Date(summary.date),
-                              ReportService.datetimeFormat.hour
-                          )
-                        : Datetime.DateTime2String(
-                              new Date(summary.date),
-                              ReportService.datetimeFormat.date
-                          );
-
-                    if (
-                        summaryDateFormat == tempDateFormat &&
-                        summary.site.objectId == tempChartData.siteObjectId
-                    ) {
-                        tempChartData.occupancy = summary.total / summary.count;
-                        break;
-                    }
-                }
-                for (let i in this.responseData.weathers) {
-                    let weather = this.responseData.weathers[i];
-                    let weatherDateFormat = isOneDay
-                        ? Datetime.DateTime2String(
-                              new Date(weather.date),
-                              ReportService.datetimeFormat.hour
-                          )
-                        : Datetime.DateTime2String(
-                              new Date(weather.date),
-                              ReportService.datetimeFormat.date
-                          );
-                    if (
-                        weatherDateFormat == tempDateFormat &&
-                        weather.site.objectId == tempChartData.siteObjectId
-                    ) {
-                        tempChartData.weather = WeatherService.WeatherIcon(
-                            weather.icon
-                        );
-                        tempChartData.temperatureMin = weather.temperatureMin;
-                        tempChartData.temperatureMax = weather.temperatureMax;
-                        // this.responseData.weathers.splice(i, 1);
-                        break;
-                    }
+                if (
+                    summaryDateFormat == tempDateFormat &&
+                    summary.area.objectId === loopChartData.areaId
+                ) {
+                    loopChartData.occupancy = summary.total / summary.count;
+                    tempValues.splice(parseInt(i), 1);
+                    break;
                 }
             }
 
-            console.log("!!! 1", new Date().getTime());
-            this.chartDatas = tempChartDatas;
+            console.log(JSON.stringify(loopChartData));
         }
+
+        this.chartDatas = tempChartDatas;
     }
 
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        console.log("areaId - ", this.inputFormData.areaId);
 
         this.areaSummaryFilter = [];
         this.chartDatas = [];
@@ -1963,9 +1795,10 @@ export default class ReportOccupancy extends Vue {
                 }
             }
 
+            // 整理sites
             let tempAreas = [];
 
-            for (const area in this.areaSelectItem) {
+            for (const area in this.areaSelectWithoutAllItem) {
                 if (this.inputFormData.areaId === area) {
                     let tempArea: any = {};
                     tempArea = {
@@ -2016,8 +1849,6 @@ export default class ReportOccupancy extends Vue {
             this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
 
-            console.log("##############", this.sites);
-
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
@@ -2027,8 +1858,6 @@ export default class ReportOccupancy extends Vue {
 
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
-
-            // 清除area篩選
         } else if (!this.inputFormData.areaId) {
             // 整理sites
             let tempAreas = [];
@@ -2047,8 +1876,6 @@ export default class ReportOccupancy extends Vue {
             this.sortOutChartData(this.responseData.summaryTableDatas);
             this.areaMode = EAreaMode.all;
 
-            console.log("*************", this.sites);
-
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -2063,18 +1890,10 @@ export default class ReportOccupancy extends Vue {
         } else {
             return false;
         }
-
-        console.log("this.sites - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     async receiveGroupId(groupId) {
         this.inputFormData.groupId = groupId;
-        console.log("groupId - ", this.inputFormData.groupId);
 
         this.deviceGroupSummaryFilter = [];
 
@@ -2084,15 +1903,10 @@ export default class ReportOccupancy extends Vue {
         ) {
             // 依照單一deviceGroup篩選
             for (const singleData of this.areaSummaryFilter) {
-                console.log("singleData - ", singleData);
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
-                        console.log(
-                            "tempSingleData[0].objectId - ",
-                            tempSingleData[0].objectId
-                        );
                         if (
                             this.inputFormData.groupId ===
                             tempSingleData[0].objectId
@@ -2101,32 +1915,26 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                // console.log(" - ", this.deviceGroupSummaryFilter);
             }
 
             this.sortOutChartData(this.deviceGroupSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.deviceId = "all";
-
-            // 依照all deviceGroups篩選
         } else if (
             this.inputFormData.areaId &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 依照all deviceGroups篩選
             this.sortOutChartData(this.areaSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
-
-            // 清除deviceGroups篩選
         } else if (this.inputFormData.areaId && !this.inputFormData.groupId) {
+            // 清除deviceGroups篩選
             this.sortOutChartData(this.areaSummaryFilter);
-
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
             this.inputFormData.groupId = "all";
@@ -2138,7 +1946,6 @@ export default class ReportOccupancy extends Vue {
 
     async receiveDeviceId(deviceId) {
         this.inputFormData.deviceId = deviceId;
-        console.log("deviceId - ", this.inputFormData.deviceId);
 
         this.deviceSummaryFilter = [];
 
@@ -2161,7 +1968,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -2191,13 +1997,12 @@ export default class ReportOccupancy extends Vue {
             } else {
                 return false;
             }
-
-            // 判斷有 deviceGroup，groupId 為 'all'，
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
+            // 判斷有 deviceGroup，groupId 為 'all'，
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
                 for (const detailKey in singleData) {
@@ -2212,7 +2017,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -2242,13 +2046,12 @@ export default class ReportOccupancy extends Vue {
             } else {
                 return false;
             }
-
-            // 判斷有 deviceGroup，groupId 不為 'all'，
         } else if (
             !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
             this.inputFormData.groupId &&
             this.inputFormData.groupId !== "all"
         ) {
+            // 判斷有 deviceGroup，groupId 不為 'all'，
             // 依照device篩選
             for (const singleData of this.deviceGroupSummaryFilter) {
                 for (const detailKey in singleData) {
@@ -2263,7 +2066,6 @@ export default class ReportOccupancy extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -2299,15 +2101,10 @@ export default class ReportOccupancy extends Vue {
     receiveType(type) {
         this.inputFormData.type = type;
         this.timeMode = type;
-        console.log("type - ", this.inputFormData.type);
     }
 
     receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
-        console.log(
-            "isIncludedEmployee - ",
-            this.inputFormData.isIncludedEmployee
-        );
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
