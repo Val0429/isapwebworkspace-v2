@@ -957,12 +957,13 @@
 						console.log(e);
 						return false;
 					});
-				// 選擇site和單一area
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
 				this.inputFormData.areaId !== "all"
 			) {
+                // 選擇site和單一area
 				readParam.areaId = this.inputFormData.areaId;
 				await this.$server
 					.R("/device/group/all", readParam)
@@ -983,12 +984,13 @@
 						console.log(e);
 						return false;
 					});
-				// 選擇site和all area
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
 				this.inputFormData.areaId === "all"
 			) {
+                // 選擇site和all area
 				await this.$server
 					.R("/device/group/all", readParam)
 					.then((response: any) => {
@@ -1052,13 +1054,14 @@
 						console.log(e);
 						return false;
 					});
-				// 選擇site和單一area
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
 				this.inputFormData.areaId !== "all" &&
 				!this.inputFormData.groupId
 			) {
+                // 選擇site和單一area
 				readParam.areaId = this.inputFormData.areaId;
 				await this.$server
 					.R("/device", readParam)
@@ -1079,7 +1082,7 @@
 						console.log(e);
 						return false;
 					});
-				// 選擇site和單一area和單一device group
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1087,6 +1090,7 @@
 				this.inputFormData.groupId &&
 				this.inputFormData.groupId !== "all"
 			) {
+                // 選擇site和單一area和單一device group
 				readParam.groupId = this.inputFormData.groupId;
 				await this.$server
 					.R("/device", readParam)
@@ -1111,7 +1115,7 @@
 						return false;
 					});
 
-				// 選擇site和單一area和單一device group和 all device
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1120,6 +1124,7 @@
 				this.inputFormData.groupId !== "all" &&
 				this.inputFormData.deviceId === "all"
 			) {
+                // 選擇site和單一area和單一device group和 all device
 				readParam.groupId = this.inputFormData.groupId;
 
 				await this.$server
@@ -1144,7 +1149,7 @@
 						console.log(e);
 						return false;
 					});
-				// 選擇site和all area
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1153,6 +1158,7 @@
 					this.inputFormData.groupId === "") &&
 				this.inputFormData.groupId !== "all"
 			) {
+                // 選擇site和all area
 				readParam.areaId = "";
 				await this.$server
 					.R("/device", readParam)
@@ -1173,7 +1179,7 @@
 						console.log(e);
 						return false;
 					});
-				// 選擇site和all area和all device group
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1181,6 +1187,7 @@
 				this.inputFormData.groupId &&
 				this.inputFormData.groupId === "all"
 			) {
+                // 選擇site和all area和all device group
 				readParam.groupId = this.inputFormData.groupId;
 				await this.$server
 					.R("/device", readParam)
@@ -1204,7 +1211,7 @@
 						console.log(e);
 						return false;
 					});
-				// 選擇site和單一area和all device group
+				
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1212,6 +1219,7 @@
 				this.inputFormData.groupId &&
 				this.inputFormData.groupId === "all"
 			) {
+                // 選擇site和單一area和all device group
 				readParam.areaId = this.inputFormData.areaId;
 				readParam.groupId = "";
 				await this.$server
@@ -1267,7 +1275,6 @@
 		async receiveUserData(data) {
 			this.userData = [];
 			this.userData = data;
-			console.log("this.userData - ", this.userData);
 		}
 
 		receiveModalShowData(data) {
@@ -1309,9 +1316,6 @@
 
         resolveSummary () {
 
-			console.log("this.filterData  - ", this.filterData);
-			console.log("this.responseData  - ", this.responseData);
-
 			if (this.filterData.siteIds.length === 1) {
 				this.initSelectItemArea();
 				this.initSelectItemDeviceGroup();
@@ -1334,8 +1338,6 @@
 				for (const detail of this.officeHourItemDetail) {
 					for (const officeHourSiteId of detail.sites) {
 						if (filterSiteId === officeHourSiteId.objectId) {
-							// console.log('filterSiteId - ', filterSiteId);
-							// console.log('officeHourSiteId.objectId - ', officeHourSiteId.objectId);
 							let tempOfficeHours = [];
 							for (const dayRangesValue of detail.dayRanges) {
 								let tempOfficeHour: any = {};
@@ -1372,13 +1374,6 @@
 			//Ben
 			this.initDashboardData();
 			this.initReportTable();
-
-			console.log(" - ", this.sites);
-			console.log(" - ", this.startDate);
-			console.log(" - ", this.endDate);
-			console.log(" - ", this.timeMode);
-			console.log(" - ", this.areaMode);
-			console.log(" - ", this.chartDatas);
         }
 
 		sortOutChartData(datas: any) {
@@ -1696,7 +1691,6 @@
 
 		async receiveAreaId(areaId) {
 			this.inputFormData.areaId = areaId;
-			console.log("areaId - ", this.inputFormData.areaId);
 
 			this.areaSummaryFilter = [];
 			this.chartDatas = [];
@@ -1719,14 +1713,6 @@
 
 				this.sortOutChartData(this.areaSummaryFilter);
 				this.areaMode = EAreaMode.single;
-
-				console.log(" - ", this.sites);
-				console.log(" - ", this.startDate);
-				console.log(" - ", this.endDate);
-				console.log(" - ", this.timeMode);
-				console.log(" - ", this.areaMode);
-				console.log(" - ", this.chartDatas);
-
 				this.inputFormData.groupId = "";
 				this.inputFormData.deviceId = "";
 
@@ -1777,7 +1763,6 @@
 
 		async receiveGroupId(groupId) {
 			this.inputFormData.groupId = groupId;
-			console.log("groupId - ", this.inputFormData.groupId);
 
 			this.deviceGroupSummaryFilter = [];
 
@@ -1787,15 +1772,10 @@
 			) {
 				// 依照單一deviceGroup篩選
 				for (const singleData of this.areaSummaryFilter) {
-					console.log("singleData - ", singleData);
 					for (const detailKey in singleData) {
-						const tempSingleData = singleData[detailKey];
-
+                        const tempSingleData = singleData[detailKey];
+                        
 						if (detailKey === "deviceGroups") {
-							console.log(
-								"tempSingleData[0].objectId - ",
-								tempSingleData[0].objectId
-							);
 							if (
 								this.inputFormData.groupId ===
 								tempSingleData[0].objectId
@@ -1804,7 +1784,6 @@
 							}
 						}
 					}
-					// console.log(" - ", this.deviceGroupSummaryFilter);
 				}
 
 				this.sortOutChartData(this.deviceGroupSummaryFilter);
@@ -1841,8 +1820,6 @@
 
 		async receiveDeviceId(deviceId) {
 			this.inputFormData.deviceId = deviceId;
-			console.log("deviceId - ", this.inputFormData.deviceId);
-
 			this.deviceSummaryFilter = [];
 
 			// 判斷沒有 deviceGroup
@@ -1864,7 +1841,6 @@
 							}
 						}
 					}
-					console.log(" - ", this.deviceSummaryFilter);
 				}
 				this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1915,7 +1891,6 @@
 							}
 						}
 					}
-					console.log(" - ", this.deviceSummaryFilter);
 				}
 				this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1966,7 +1941,6 @@
 							}
 						}
 					}
-					console.log(" - ", this.deviceSummaryFilter);
 				}
 				this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -2002,15 +1976,10 @@
 		receiveType(type) {
 			this.inputFormData.type = type;
 			this.timeMode = type;
-			console.log("type - ", this.inputFormData.type);
 		}
 
 		async receiveIsIncludedEmployee(isIncludedEmployee) {
 			this.inputFormData.isIncludedEmployee = isIncludedEmployee;
-			console.log(
-				"isIncludedEmployee - ",
-				this.inputFormData.isIncludedEmployee
-			);
 
 			// 單一site
 			if (this.filterData.firstSiteId) {

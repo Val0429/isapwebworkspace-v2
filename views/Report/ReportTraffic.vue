@@ -1326,15 +1326,6 @@ export default class ReportTraffic extends Vue {
                     console.log(e);
                     return false;
                 });
-
-            // } else if (
-            //     // 選擇all area, all group, 單一 device
-            //     this.filterData.firstSiteId &&
-            //     this.inputFormData.areaId &&
-            //     this.inputFormData.areaId === "all" &&
-            //     this.inputFormData.groupId &&
-            //     this.inputFormData.groupId === "all"
-            // ) {
         }
     }
 
@@ -1368,7 +1359,6 @@ export default class ReportTraffic extends Vue {
     async receiveUserData(data) {
         this.userData = [];
         this.userData = data;
-        console.log("this.userData - ", this.userData);
     }
 
     // Author: Tina
@@ -1410,9 +1400,6 @@ export default class ReportTraffic extends Vue {
 
     // Author: Tina
     resolveSummary() {
-        console.log("this.filterData  - ", this.filterData);
-        console.log("this.responseData  - ", this.responseData);
-
         if (this.filterData.siteIds.length === 1) {
             this.initSelectItemArea();
             this.initSelectItemDeviceGroup();
@@ -1436,11 +1423,6 @@ export default class ReportTraffic extends Vue {
             for (const detail of this.officeHourItemDetail) {
                 for (const officeHourSiteId of detail.sites) {
                     if (filterSiteId === officeHourSiteId.objectId) {
-                        console.log("filterSiteId - ", filterSiteId);
-                        console.log(
-                            "officeHourSiteId.objectId - ",
-                            officeHourSiteId.objectId
-                        );
                         let tempOfficeHours = [];
                         for (const dayRangesValue of detail.dayRanges) {
                             let tempOfficeHour: any = {};
@@ -1477,13 +1459,6 @@ export default class ReportTraffic extends Vue {
         this.initDashboardData();
         this.initPeakTimeRange();
         this.initReportTable();
-
-        console.log(" - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" chartDatas - ", this.chartDatas);
     }
 
     // Author: Tina & Morris
@@ -1659,16 +1634,12 @@ export default class ReportTraffic extends Vue {
                 }
             }
         }
-
-        console.log("!!! 1", new Date().getTime());
         this.chartDatas = tempChartDatas;
     }
 
     // Author: Tina
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
-        console.log("areaId - ", this.inputFormData.areaId);
-
         this.areaSummaryFilter = [];
         this.chartDatas = [];
 
@@ -1690,13 +1661,6 @@ export default class ReportTraffic extends Vue {
 
             this.sortOutChartData(this.areaSummaryFilter);
             this.areaMode = EAreaMode.single;
-
-            console.log(" - ", this.sites);
-            console.log(" - ", this.startDate);
-            console.log(" - ", this.endDate);
-            console.log(" - ", this.timeMode);
-            console.log(" - ", this.areaMode);
-            console.log(" - ", this.chartDatas);
 
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -1749,8 +1713,6 @@ export default class ReportTraffic extends Vue {
     // Author: Tina
     async receiveGroupId(groupId) {
         this.inputFormData.groupId = groupId;
-        console.log("groupId - ", this.inputFormData.groupId);
-
         this.deviceGroupSummaryFilter = [];
 
         if (
@@ -1770,7 +1732,6 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                 }
-                // console.log(" - ", this.deviceGroupSummaryFilter);
             }
 
             this.sortOutChartData(this.deviceGroupSummaryFilter);
@@ -1804,7 +1765,6 @@ export default class ReportTraffic extends Vue {
     // Author: Tina
     async receiveDeviceId(deviceId) {
         this.inputFormData.deviceId = deviceId;
-        console.log("deviceId - ", this.inputFormData.deviceId);
 
         this.deviceSummaryFilter = [];
 
@@ -1827,7 +1787,6 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1877,7 +1836,6 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1927,7 +1885,6 @@ export default class ReportTraffic extends Vue {
                         }
                     }
                 }
-                console.log(" - ", this.deviceSummaryFilter);
             }
             this.sortOutChartData(this.deviceSummaryFilter);
 
@@ -1962,21 +1919,11 @@ export default class ReportTraffic extends Vue {
     receiveType(type) {
         this.inputFormData.type = type;
         this.timeMode = type;
-
-        console.log("type - ", this.inputFormData.type);
-
-        console.log(" - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" chartDatas - ", this.chartDatas);
     }
 
     // Author: Tina
     async receiveInOrOut(inOrOut) {
         this.inputFormData.inOrOut = inOrOut;
-        console.log("inOrOut - ", this.inputFormData.inOrOut);
 
         // 單一site
         if (this.filterData.firstSiteId) {
@@ -1999,10 +1946,6 @@ export default class ReportTraffic extends Vue {
     // Author: Tina
     async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
-        console.log(
-            "isIncludedEmployee - ",
-            this.inputFormData.isIncludedEmployee
-        );
 
         // 單一site
         if (this.filterData.firstSiteId) {
