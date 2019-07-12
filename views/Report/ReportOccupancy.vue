@@ -981,62 +981,80 @@ export default class ReportOccupancy extends Vue {
         };
 
         // get office hour data
-        let tempISite: any = {};
         this.sites = [];
         this.sitesItem = [];
         let tempAreas = [];
 
         for (const filterSiteId of this.filterData.siteIds) {
+            let tempISite: any = {
+                objectId: "",
+                name: "",
+                officeHour: [],
+                areas: []
+            };
+            
             for (const detail of this.officeHourItemDetail) {
-                for (const singleArea of this.allAreaItem) {
-                    for (const officeHourSiteId of detail.sites) {
-                        if (filterSiteId === officeHourSiteId.objectId) {
-                            let tempOfficeHours = [];
-                            for (const dayRangesValue of detail.dayRanges) {
-                                let tempOfficeHour: any = {};
-                                tempOfficeHour = {
-                                    startDay: dayRangesValue.startDay,
-                                    endDay: dayRangesValue.endDay,
-                                    startDate: dayRangesValue.startDate,
-                                    endDate: dayRangesValue.endDate
-                                };
-                                tempOfficeHours.push(tempOfficeHour);
-                            }
-                            tempISite = {
-                                objectId: officeHourSiteId.objectId,
-                                name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours
-                            };
+                let haveSite = false;
+                for (const officeHourSiteId of detail.sites) {
+                    if (filterSiteId === officeHourSiteId.objectId) {
+                        haveSite = true;
 
-                            this.siteAreaItem = {
-                                objectId: officeHourSiteId.objectId,
-                                name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours
+                        let tempOfficeHours = [];
+                        for (const dayRangesValue of detail.dayRanges) {
+                            let tempOfficeHour: any = {};
+                            tempOfficeHour = {
+                                startDay: dayRangesValue.startDay,
+                                endDay: dayRangesValue.endDay,
+                                startDate: dayRangesValue.startDate,
+                                endDate: dayRangesValue.endDate
                             };
-
-                            if (filterSiteId === singleArea.site.objectId) {
-                                let tempArea: any = {};
-                                tempArea = {
-                                    name: singleArea.name,
-                                    objectId: singleArea.objectId
-                                };
-                                tempAreas.push(tempArea);
-                            }
+                            tempOfficeHours.push(tempOfficeHour);
                         }
+
+                        tempISite = {
+                            objectId: filterSiteId,
+                            name: officeHourSiteId.name,
+                            officeHour: tempOfficeHours
+                        };
+
+                        break;
                     }
                 }
+                if (haveSite) {
+                    break;
+                }
             }
-            tempISite.areas = tempAreas;
-            this.sites.push(tempISite);
-            this.sitesItem.push(tempISite);
+
+            if (tempISite.objectId != "") {
+                let tempAreas = [];
+                for (const singleArea of this.allAreaItem) {
+                    if (filterSiteId === singleArea.site.objectId) {
+                        let tempArea: any = {};
+                        tempArea = {
+                            name: singleArea.name,
+                            objectId: singleArea.objectId
+                        };
+                        tempAreas.push(tempArea);
+                    }
+                }
+                tempISite.areas = tempAreas;
+
+                // for chart
+                this.sites.push(tempISite);
+
+                // for calculate occupancy
+                this.sitesItem.push(tempISite);
+
+                // for single site
+                this.siteAreaItem = tempISite;
+            }
         }
 
-        // this.sites.push(tempISite);
         this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
-        this.startDate = new Date(this.filterData.startDate);
-        this.endDate = new Date(this.filterData.endDate);
+        this.startDate = this.filterData.startDate;
+        this.endDate = this.filterData.endDate;
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
         this.sortOutChartData(this.responseData.summaryTableDatas);
@@ -1045,7 +1063,7 @@ export default class ReportOccupancy extends Vue {
         this.initDashboardData();
         this.initReportTable();
 
-        console.log("this.sites - ", this.sites);
+        console.log("this.sites - ", JSON.stringify(this.sites));
         console.log(" - ", this.startDate);
         console.log(" - ", this.endDate);
         console.log(" - ", this.timeMode);
@@ -1591,6 +1609,7 @@ export default class ReportOccupancy extends Vue {
             thatDay.getDate(),
             tempTime
         ).toISOString();
+
         let tempEDate = new Date(
             thatDay.getFullYear(),
             thatDay.getMonth(),
@@ -1645,7 +1664,7 @@ export default class ReportOccupancy extends Vue {
         );
     }
 
-    sortOutChartData(datas: any) {
+   sortOutChartData(datas: any) {
         let tempChartDatas: IChartOccupancyData[] = [];
         let isOneDay = false;
 
@@ -1930,181 +1949,7 @@ export default class ReportOccupancy extends Vue {
             this.chartDatas = tempChartDatas;
         }
     }
-
-    // sortOutChartData(array: any) {
-    //     console.log("areaSelectItem - ", this.areaSelectItem);
-    //     console.log("areaId - ", this.inputFormData.areaId);
-    //
-    //
-    //     let tempChartDatas: IChartOccupancyData[] = [];
-    //     let isOneDay = false;
-    //
-    //
-    //     // all area
-    //     if (
-    //         (this.inputFormData.areaId &&
-    //             this.inputFormData.areaId === "all") ||
-    //         !this.inputFormData.areaId
-    //     ) {
-    //         let tempChartDatas: IChartOccupancyData[] = [];
-    //         this.chartDatas = [];
-    //
-    //         // 取得date、siteObjectId資料
-    //         for (const summary of array) {
-    //             let tempChartData: IChartOccupancyData = {
-    //                 date: summary.date,
-    //                 siteObjectId: "",
-    //                 temperatureMin: 0,
-    //                 temperatureMax: 0,
-    //                 weather: EWeather.none,
-    //                 areaId: "",
-    //                 occupancy: 0
-    //             };
-    //
-    //             let total: any = 0;
-    //             let count: any = 0;
-    //             let average: any = 0;
-    //
-    //             // 判斷date, site 兩個是否相同
-    //             let haveSummary = false;
-    //             for (let loopChartData of tempChartDatas) {
-    //                 if (
-    //                     this.checkDateAndSite(
-    //                         loopChartData.date,
-    //                         summary.date,
-    //                         loopChartData.siteObjectId,
-    //                         summary.site.objectId
-    //                         // loopChartData.areaId,
-    //                         // summary.area.objectId,
-    //                     )
-    //                 ) {
-    //                     haveSummary = true;
-    //                     tempChartData = loopChartData;
-    //                     break;
-    //                 }
-    //             }
-    //
-    //             average = summary.total / summary.count;
-    //             tempChartData.occupancy = average;
-    //
-    //             if (!haveSummary) {
-    //                 // 取得weather、temperatureMin、temperatureMax
-    //                 for (const weather of this.responseData.weathers) {
-    //                     if (
-    //                         this.checkDateAndSite(
-    //                             tempChartData.date,
-    //                             weather.date,
-    //                             tempChartData.siteObjectId,
-    //                             weather.site.objectId
-    //                         )
-    //                     ) {
-    //                         console.log(" - ", weather.icon);
-    //                         tempChartData.weather = WeatherService.WeatherIcon(
-    //                             weather.icon
-    //                         );
-    //                         tempChartData.temperatureMin =
-    //                             weather.temperatureMin;
-    //                         tempChartData.temperatureMax =
-    //                             weather.temperatureMax;
-    //                         break;
-    //                     }
-    //                 }
-    //             }
-    //             let tempData = JSON.parse(JSON.stringify(tempChartData));
-    //             tempData.areaId = summary.area.objectId;
-    //             tempData.siteObjectId = summary.site.objectId;
-    //
-    //             tempChartDatas.push(tempData);
-    //             this.chartDatas = tempChartDatas;
-    //
-    //             console.log("this.chartDatas - ", this.chartDatas);
-    //         }
-    //
-    //         // 單一 area
-    //     } else if (
-    //         this.inputFormData.areaId &&
-    //         this.inputFormData.areaId !== "all"
-    //     ) {
-    //         let tempChartDatas: IChartOccupancyData[] = [];
-    //         this.chartDatas = [];
-    //
-    //         // 取得date、siteObjectId資料
-    //         for (const summary of array) {
-    //             let tempChartData: IChartOccupancyData = {
-    //                 date: summary.date,
-    //                 siteObjectId: "",
-    //                 temperatureMin: 0,
-    //                 temperatureMax: 0,
-    //                 weather: EWeather.none,
-    //                 areaId: summary.area.objectId,
-    //                 occupancy: 0
-    //             };
-    //
-    //             let total: any = 0;
-    //             let count: any = 0;
-    //             let average: any = 0;
-    //
-    //             // 判斷date, site 兩個是否相同
-    //             let haveSummary = false;
-    //             for (let loopChartData of tempChartDatas) {
-    //                 if (
-    //                     this.checkDateAndSite(
-    //                         loopChartData.date,
-    //                         summary.date,
-    //                         loopChartData.siteObjectId,
-    //                         summary.site.objectId
-    //                         // loopChartData.areaId,
-    //                         // summary.area.objectId,
-    //                     )
-    //                 ) {
-    //                     haveSummary = true;
-    //                     tempChartData = loopChartData;
-    //                     break;
-    //                 }
-    //             }
-    //
-    //             // total += summary.total;
-    //             // count += summary.count;
-    //             average = summary.total / summary.count;
-    //             tempChartData.occupancy = average;
-    //             // tempChartData.occupancy += summary.count;
-    //
-    //             if (!haveSummary) {
-    //                 // 取得weather、temperatureMin、temperatureMax
-    //                 for (const weather of this.responseData.weathers) {
-    //                     if (
-    //                         this.checkDateAndSite(
-    //                             tempChartData.date,
-    //                             weather.date,
-    //                             tempChartData.siteObjectId,
-    //                             weather.site.objectId
-    //                         )
-    //                     ) {
-    //                         console.log(" - ", weather.icon);
-    //                         tempChartData.weather = WeatherService.WeatherIcon(
-    //                             weather.icon
-    //                         );
-    //                         tempChartData.temperatureMin =
-    //                             weather.temperatureMin;
-    //                         tempChartData.temperatureMax =
-    //                             weather.temperatureMax;
-    //                         break;
-    //                     }
-    //                 }
-    //             }
-    //
-    //             let tempData = JSON.parse(JSON.stringify(tempChartData));
-    //             tempData.areaId = summary.area.objectId;
-    //             tempData.siteObjectId = summary.site.objectId;
-    //
-    //             tempChartDatas.push(tempChartData);
-    //             this.chartDatas = tempChartDatas;
-    //
-    //             console.log("this.chartDatas - ", this.chartDatas);
-    //         }
-    //     }
-    // }
-
+    
     async receiveAreaId(areaId) {
         this.inputFormData.areaId = areaId;
         console.log("areaId - ", this.inputFormData.areaId);
