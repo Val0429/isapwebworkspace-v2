@@ -522,7 +522,7 @@ export default class MemberForm extends Vue {
       lastEditTime: "",
       cardCertificate: "",
       profileName:"",
-      technologyCode:"",
+      technologyCode:"0",
       pinMode:0,
       pinDigit:0,   
       deviceNumber: 0,
@@ -723,7 +723,7 @@ export default class MemberForm extends Vue {
         this.inputFormData.pinMode = detailData.Credentials[0].PinMode;
         this.inputFormData.startDate = detailData.Credentials[0].StartDate;
         this.inputFormData.endDate = detailData.Credentials[0].StartDate;
-        this.inputFormData.pin = detailData.Credentials[0].Pin;  
+        this.inputFormData.pin = detailData.Credentials[0].Pin || "0";
       }
 
       if (detailData.StartDate != undefined && detailData.StartDate != "") {
@@ -1429,7 +1429,7 @@ export default class MemberForm extends Vue {
         JSON.stringify(this.selectedDetail[0].Credentials)
       );
       tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
-      tempCredentials[0].Pin = this.inputFormData.pin;
+      tempCredentials[0].Pin = this.inputFormData.pin || "0";
       tempCredentials[0].FacilityCode = parseInt(
         this.inputFormData.deviceNumber
       );
@@ -1451,7 +1451,7 @@ export default class MemberForm extends Vue {
       tempCredentials = [
         {
           CardNumber: this.inputFormData.cardNumber,
-          Pin: this.inputFormData.pin,
+          Pin: this.inputFormData.pin || "0",
           FacilityCode: parseInt(this.inputFormData.deviceNumber),
           ProfileId: !isNaN(parseInt(this.inputFormData.cardCertificate)) ? parseInt(this.inputFormData.cardCertificate) : 0,
           ProfileName : this.inputFormData.profileName,
