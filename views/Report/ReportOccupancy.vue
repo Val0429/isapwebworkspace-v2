@@ -981,61 +981,78 @@ export default class ReportOccupancy extends Vue {
         };
 
         // get office hour data
-        let tempISite: any = {};
         this.sites = [];
-        let tempAreas = [];
 
         for (const filterSiteId of this.filterData.siteIds) {
+            let tempISite: any = {
+                objectId: "",
+                name: "",
+                officeHour: [],
+                areas: []
+            };
+            
             for (const detail of this.officeHourItemDetail) {
-                for (const singleArea of this.allAreaItem) {
-                    for (const officeHourSiteId of detail.sites) {
-                        if (filterSiteId === officeHourSiteId.objectId) {
-                            let tempOfficeHours = [];
-                            for (const dayRangesValue of detail.dayRanges) {
-                                let tempOfficeHour: any = {};
-                                tempOfficeHour = {
-                                    startDay: dayRangesValue.startDay,
-                                    endDay: dayRangesValue.endDay,
-                                    startDate: dayRangesValue.startDate,
-                                    endDate: dayRangesValue.endDate
-                                };
-                                tempOfficeHours.push(tempOfficeHour);
-                            }
-                            tempISite = {
-                                objectId: officeHourSiteId.objectId,
-                                name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours
-                            };
+                let haveSite = false;
+                for (const officeHourSiteId of detail.sites) {
+                    if (filterSiteId === officeHourSiteId.objectId) {
+                        haveSite = true;
 
-                            this.siteAreaItem = {
-                                objectId: officeHourSiteId.objectId,
-                                name: officeHourSiteId.name,
-                                officeHour: tempOfficeHours
+                        let tempOfficeHours = [];
+                        for (const dayRangesValue of detail.dayRanges) {
+                            let tempOfficeHour: any = {};
+                            tempOfficeHour = {
+                                startDay: dayRangesValue.startDay,
+                                endDay: dayRangesValue.endDay,
+                                startDate: dayRangesValue.startDate,
+                                endDate: dayRangesValue.endDate
                             };
-
-                            if (filterSiteId === singleArea.site.objectId) {
-                                let tempArea: any = {};
-                                tempArea = {
-                                    name: singleArea.name,
-                                    objectId: singleArea.objectId
-                                };
-                                tempAreas.push(tempArea);
-                            }
+                            tempOfficeHours.push(tempOfficeHour);
                         }
+
+                        tempISite = {
+                            objectId: filterSiteId,
+                            name: officeHourSiteId.name,
+                            officeHour: tempOfficeHours
+                        };
+
+                        break;
                     }
                 }
+                if (haveSite) {
+                    break;
+                }
             }
-            tempISite.areas = tempAreas;
-            this.sites.push(tempISite);
-            this.sitesItem.push(tempISite);
+
+            if (tempISite.objectId != "") {
+                let tempAreas = [];
+                for (const singleArea of this.allAreaItem) {
+                    if (filterSiteId === singleArea.site.objectId) {
+                        let tempArea: any = {};
+                        tempArea = {
+                            name: singleArea.name,
+                            objectId: singleArea.objectId
+                        };
+                        tempAreas.push(tempArea);
+                    }
+                }
+                tempISite.areas = tempAreas;
+
+                // for chart
+                this.sites.push(tempISite);
+
+                // for calculate occupancy
+                this.sitesItem.push(tempISite);
+
+                // for single site
+                this.siteAreaItem = tempISite;
+            }
         }
 
-        // this.sites.push(tempISite);
         this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
-        this.startDate = new Date(this.filterData.startDate);
-        this.endDate = new Date(this.filterData.endDate);
+        this.startDate = this.filterData.startDate;
+        this.endDate = this.filterData.endDate;
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
         this.sortOutChartData(this.responseData.summaryTableDatas);
@@ -1044,7 +1061,7 @@ export default class ReportOccupancy extends Vue {
         this.initDashboardData();
         this.initReportTable();
 
-        console.log("this.sites - ", this.sites);
+        console.log("this.sites - ", JSON.stringify(this.sites));
         console.log(" - ", this.startDate);
         console.log(" - ", this.endDate);
         console.log(" - ", this.timeMode);
@@ -1562,6 +1579,7 @@ export default class ReportOccupancy extends Vue {
             thatDay.getDate(),
             tempTime
         ).toISOString();
+
         let tempEDate = new Date(
             thatDay.getFullYear(),
             thatDay.getMonth(),
@@ -1639,173 +1657,206 @@ export default class ReportOccupancy extends Vue {
         let tempChartDatas: IChartOccupancyData[] = [];
         let isOneDay = false;
 
+        if (
+            Datetime.IsOneDate(
+                this.filterData.startDate,
+                this.filterData.endDate
+            )
+        ) {
+            isOneDay = true;
+
+            // one day
+            for (let i = 0; i < 24; i++) {
+                let tempDate = Datetime.DateToZero(this.filterData.startDate);
+                tempDate.setHours(i);
+                let tempDateChartData = {
+                    date: tempDate,
+                    siteObjectId: "",
+                    temperatureMin: 0,
+                    temperatureMax: 0,
+                    weather: EWeather.none,
+                    traffic: 0,
+                    revenue: 0,
+                    transaction: 0
+                };
+                for (let siteId of this.filterData.siteIds) {
+                    let tempSiteChartData = JSON.parse(
+                        JSON.stringify(tempDateChartData)
+                    );
+                    tempSiteChartData.date = new Date(tempSiteChartData.date);
+                    tempSiteChartData.siteObjectId = siteId;
+                    tempChartDatas.push(tempSiteChartData);
+                }
+            }
+        } else {
+        }
+
+        this.chartDatas = tempChartDatas;
+
+        return false;
+
         // all area
         if (
-            (this.inputFormData.areaId && this.inputFormData.areaId === "all") ||
+            (this.inputFormData.areaId &&
+                this.inputFormData.areaId === "all") ||
             !this.inputFormData.areaId
         ) {
+            console.log("all area - ");
 
-        	console.log('all area - ', );
+            this.sitesItem.map(item => {
+                for (let i = 0; i < item.areas.length; i++) {
+                    console.log(" - ", item.areas.length);
 
-	        this.sitesItem.map(item => {
-		        for (let i = 0; i < item.areas.length; i++) {
+                    // 取得date、siteObjectId資料
+                    if (
+                        Datetime.IsOneDate(
+                            this.filterData.startDate,
+                            this.filterData.endDate
+                        )
+                    ) {
+                        isOneDay = true;
 
-		        	console.log(' - ', item.areas.length);
+                        // one day
+                        for (let i = 0; i < 24; i++) {
+                            let tempDate = Datetime.DateToZero(
+                                this.filterData.startDate
+                            );
+                            tempDate.setHours(i);
+                            let tempDateChartData = {
+                                date: tempDate,
+                                siteObjectId: "",
+                                temperatureMin: 0,
+                                temperatureMax: 0,
+                                weather: EWeather.none,
+                                occupancy: 0,
+                                areaId: ""
+                            };
 
-				// 取得date、siteObjectId資料
-			        if (
-				        Datetime.IsOneDate(
-					        this.filterData.startDate,
-					        this.filterData.endDate
-				        )
-			        ) {
-				        isOneDay = true;
+                            for (let siteId of this.filterData.siteIds) {
+                                let tempSiteChartData = JSON.parse(
+                                    JSON.stringify(tempDateChartData)
+                                );
+                                tempSiteChartData.date = new Date(
+                                    tempSiteChartData.date
+                                );
+                                tempSiteChartData.siteObjectId = siteId;
+                                tempChartDatas.push(tempSiteChartData);
+                            }
+                        }
+                    } else {
+                        // multiple days
+                        let dateList = Datetime.DateList(
+                            this.filterData.startDate,
+                            this.filterData.endDate
+                        );
+                        for (let dateItem of dateList) {
+                            let tempDateChartData = {
+                                date: new Date(dateItem.getTime()),
+                                siteObjectId: "",
+                                temperatureMin: 0,
+                                temperatureMax: 0,
+                                weather: EWeather.none,
+                                occupancy: 0,
+                                areaId: ""
+                            };
+                            for (let siteId of this.filterData.siteIds) {
+                                let tempSiteChartData = JSON.parse(
+                                    JSON.stringify(tempDateChartData)
+                                );
+                                tempSiteChartData.date = new Date(
+                                    tempSiteChartData.date
+                                );
+                                tempSiteChartData.siteObjectId = siteId;
+                                tempChartDatas.push(tempSiteChartData);
+                            }
+                        }
+                    }
 
-				        // one day
-				        for (let i = 0; i < 24; i++) {
-					        let tempDate = Datetime.DateToZero(
-						        this.filterData.startDate
-					        );
-					        tempDate.setHours(i);
-					        let tempDateChartData = {
-						        date: tempDate,
-						        siteObjectId: "",
-						        temperatureMin: 0,
-						        temperatureMax: 0,
-						        weather: EWeather.none,
-						        occupancy: 0,
-						        areaId: ""
-					        };
+                    item.areas.map(area => {
+                        // 計算 occupancy
+                        for (let summary of datas) {
+                            let summaryDateFormat = isOneDay
+                                ? Datetime.DateTime2String(
+                                      new Date(summary.date),
+                                      "YYYY-MM-DD HH"
+                                  )
+                                : Datetime.DateTime2String(
+                                      new Date(summary.date),
+                                      "YYYY-MM-DD"
+                                  );
 
-					        for (let siteId of this.filterData.siteIds) {
-						        let tempSiteChartData = JSON.parse(
-							        JSON.stringify(tempDateChartData)
-						        );
-						        tempSiteChartData.date = new Date(
-							        tempSiteChartData.date
-						        );
-						        tempSiteChartData.siteObjectId = siteId;
-						        tempChartDatas.push(tempSiteChartData);
-					        }
-				        }
-			        } else {
-				        // multiple days
-				        let dateList = Datetime.DateList(
-					        this.filterData.startDate,
-					        this.filterData.endDate
-				        );
-				        for (let dateItem of dateList) {
-					        let tempDateChartData = {
-						        date: new Date(dateItem.getTime()),
-						        siteObjectId: "",
-						        temperatureMin: 0,
-						        temperatureMax: 0,
-						        weather: EWeather.none,
-						        occupancy: 0,
-						        areaId: ""
-					        };
-					        for (let siteId of this.filterData.siteIds) {
-						        let tempSiteChartData = JSON.parse(
-							        JSON.stringify(tempDateChartData)
-						        );
-						        tempSiteChartData.date = new Date(
-							        tempSiteChartData.date
-						        );
-						        tempSiteChartData.siteObjectId = siteId;
-						        tempChartDatas.push(tempSiteChartData);
-					        }
-				        }
-			        }
+                            for (let tempChartData of tempChartDatas) {
+                                let tempDateFormat = isOneDay
+                                    ? Datetime.DateTime2String(
+                                          tempChartData.date,
+                                          "YYYY-MM-DD HH"
+                                      )
+                                    : Datetime.DateTime2String(
+                                          tempChartData.date,
+                                          "YYYY-MM-DD"
+                                      );
+                                if (
+                                    summaryDateFormat == tempDateFormat &&
+                                    summary.site.objectId ==
+                                        tempChartData.siteObjectId
+                                ) {
+                                    tempChartData.occupancy =
+                                        summary.total / summary.count;
+                                    tempChartData.areaId = area.objectId;
+                                    break;
+                                }
+                            }
+                        }
 
-			        item.areas.map(area => {
-				        // 計算 occupancy
-				        for (let summary of datas) {
-					        let summaryDateFormat = isOneDay
-						        ? Datetime.DateTime2String(
-							        new Date(summary.date),
-							        "YYYY-MM-DD HH"
-						        )
-						        : Datetime.DateTime2String(
-							        new Date(summary.date),
-							        "YYYY-MM-DD"
-						        );
+                        for (let tempChartData of tempChartDatas) {
+                            let tempDateFormat = isOneDay
+                                ? Datetime.DateTime2String(
+                                      tempChartData.date,
+                                      "YYYY-MM-DD HH"
+                                  )
+                                : Datetime.DateTime2String(
+                                      tempChartData.date,
+                                      "YYYY-MM-DD"
+                                  );
+                            for (let i in this.responseData.weathers) {
+                                let weather = this.responseData.weathers[i];
+                                let weatherDateFormat = isOneDay
+                                    ? Datetime.DateTime2String(
+                                          new Date(weather.date),
+                                          "YYYY-MM-DD HH"
+                                      )
+                                    : Datetime.DateTime2String(
+                                          new Date(weather.date),
+                                          "YYYY-MM-DD"
+                                      );
+                                if (
+                                    weatherDateFormat == tempDateFormat &&
+                                    weather.site.objectId ==
+                                        tempChartData.siteObjectId
+                                ) {
+                                    tempChartData.weather = WeatherService.WeatherIcon(
+                                        weather.icon
+                                    );
+                                    tempChartData.temperatureMin =
+                                        weather.temperatureMin;
+                                    tempChartData.temperatureMax =
+                                        weather.temperatureMax;
+                                    // this.responseData.weathers.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
 
-					        for (let tempChartData of tempChartDatas) {
-						        let tempDateFormat = isOneDay
-							        ? Datetime.DateTime2String(
-								        tempChartData.date,
-								        "YYYY-MM-DD HH"
-							        )
-							        : Datetime.DateTime2String(
-								        tempChartData.date,
-								        "YYYY-MM-DD"
-							        );
-						        if (
-							        summaryDateFormat == tempDateFormat &&
-							        summary.site.objectId == tempChartData.siteObjectId
-						        ) {
-
-						        	console.log('summary.total - ', summary.total);
-						        	console.log('summary.count - ', summary.count);
-						        	console.log(' - ', area.objectId);
-
-							        tempChartData.occupancy = summary.total / summary.count;
-							        tempChartData.areaId = area.objectId;
-							        break;
-						        }
-					        }
-				        }
-
-				        for (let tempChartData of tempChartDatas) {
-					        let tempDateFormat = isOneDay
-						        ? Datetime.DateTime2String(
-							        tempChartData.date,
-							        "YYYY-MM-DD HH"
-						        )
-						        : Datetime.DateTime2String(
-							        tempChartData.date,
-							        "YYYY-MM-DD"
-						        );
-					        for (let i in this.responseData.weathers) {
-						        let weather = this.responseData.weathers[i];
-						        let weatherDateFormat = isOneDay
-							        ? Datetime.DateTime2String(
-								        new Date(weather.date),
-								        "YYYY-MM-DD HH"
-							        )
-							        : Datetime.DateTime2String(
-								        new Date(weather.date),
-								        "YYYY-MM-DD"
-							        );
-						        if (
-							        weatherDateFormat == tempDateFormat &&
-							        weather.site.objectId == tempChartData.siteObjectId
-						        ) {
-							        tempChartData.weather = WeatherService.WeatherIcon(
-								        weather.icon
-							        );
-							        tempChartData.temperatureMin = weather.temperatureMin;
-							        tempChartData.temperatureMax = weather.temperatureMax;
-							        // this.responseData.weathers.splice(i, 1);
-							        break;
-						        }
-					        }
-				        }
-
-				        console.log("!!! 1", new Date().getTime());
-				        this.chartDatas = tempChartDatas;
-			        });
-
-
-		        }
-	        });
-
-
-            // 單一 area
+                        console.log("!!! 1", new Date().getTime());
+                        this.chartDatas = tempChartDatas;
+                    });
+                }
+            });
         } else if (
             this.inputFormData.areaId &&
             this.inputFormData.areaId !== "all"
         ) {
+            // 單一 area
             // 取得date、siteObjectId資料
             if (
                 Datetime.IsOneDate(
@@ -1900,7 +1951,6 @@ export default class ReportOccupancy extends Vue {
                         summaryDateFormat == tempDateFormat &&
                         summary.site.objectId == tempChartData.siteObjectId
                     ) {
-
                         tempChartData.occupancy = summary.total / summary.count;
                         break;
                     }
@@ -1942,9 +1992,6 @@ export default class ReportOccupancy extends Vue {
                     }
                 }
             }
-
-            console.log("!!! 1", new Date().getTime());
-            this.chartDatas = tempChartDatas;
         }
     }
 
