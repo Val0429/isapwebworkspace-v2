@@ -105,6 +105,7 @@
                 </report-table>
 
                 <occupancy-details-table
+                    ref="detailReportTable"
                     v-show="tableStep === eTableStep.detailTable"
                     :thresholdDetailTableContent="detailRData"
                 >
@@ -168,7 +169,7 @@ import {
     ITemplateItem,
     IFilterCondition,
     ReportDashboard,
-    ReportTableData,
+    ReportTableData
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
@@ -447,8 +448,10 @@ export default class ReportOccupancy extends Vue {
 
         if (!this.filterData.firstSiteId) {
             return false;
-        } else if (this.filterData.firstSiteId && this.filterData.siteIds.length === 1) {
-
+        } else if (
+            this.filterData.firstSiteId &&
+            this.filterData.siteIds.length === 1
+        ) {
             await this.$server
                 .R("/location/area/all", readParam)
                 .then((response: any) => {
@@ -883,9 +886,7 @@ export default class ReportOccupancy extends Vue {
     }
 
     async resolveSummary() {
-
         console.log("this.filterData  - ", this.filterData);
-
 
         await this.initSelectItemArea();
 
@@ -1636,7 +1637,6 @@ export default class ReportOccupancy extends Vue {
                     !this.inputFormData.areaId ||
                     this.inputFormData.areaId === "all"
                 ) {
-
                     console.log("site.areas", site.areas, site.objectId);
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
@@ -1791,7 +1791,6 @@ export default class ReportOccupancy extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-
             // 整理sites
             let tempAreas = [];
             for (const area in this.areaSelectWithoutAllItem) {
@@ -2045,7 +2044,14 @@ export default class ReportOccupancy extends Vue {
     ////////////////////////////////////// Export //////////////////////////////////////
 
     exportExcel(fType) {
-        let reportTable: any = this.$refs.reportTable;
+        let reportTable: any = null;
+        if (this.tableStep == ETableStep.mainTable) {
+            reportTable = this.$refs.reportTable;
+        } else if (this.tableStep == ETableStep.sunTable) {
+            reportTable = this.$refs.sunReportTable;
+        } else {
+            reportTable = this.$refs.detailReportTable;
+        }
         let tableData = reportTable.tableToArray();
         //th
         let th = [];
@@ -2114,8 +2120,8 @@ export default class ReportOccupancy extends Vue {
 
     /////////////////////////////////////////////////////////////////////
 
-     // Author: Morris, Product remove
-     initChartDeveloper() {
+    // Author: Morris, Product remove
+    initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
 
@@ -2217,7 +2223,6 @@ export default class ReportOccupancy extends Vue {
             }
         }
     }
-
 }
 </script>
 

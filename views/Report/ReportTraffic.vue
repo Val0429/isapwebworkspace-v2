@@ -1971,8 +1971,14 @@ export default class ReportTraffic extends Vue {
 
     // Author: Ben
     exportExcel(fType) {
-        let reportTable: any = this.$refs.reportTable;
+        let reportTable: any = null;
+        if (this.tableStep == ETableStep.mainTable) {
+            reportTable = this.$refs.reportTable;
+        } else {
+            reportTable = this.$refs.sunReportTable;
+        }
         let tableData = reportTable.tableToArray();
+
         //th
         let th = [];
         for (let title of tableData[0]) {
