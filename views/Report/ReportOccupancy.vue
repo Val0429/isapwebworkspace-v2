@@ -556,9 +556,35 @@ export default class ReportOccupancy extends Vue {
 
         if (!this.filterData.firstSiteId) {
             return false;
-        } else {
+        } else if (this.filterData.firstSiteId && this.filterData.siteIds.length === 1) {
+
             await this.$server
                 .R("/location/area/all", readParam)
+                .then((response: any) => {
+                    if (response != undefined) {
+                        for (const returnValue of response) {
+                            // 自定義 sitesSelectItem 的 key 的方式
+                            tempAreaSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                            tempAreaSelectWithoutAllItem[returnValue.objectId] =
+                                returnValue.name;
+                            // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                        }
+                        this.areaSelectItem = tempAreaSelectItem;
+                        this.areaSelectWithoutAllItem = tempAreaSelectWithoutAllItem;
+                        this.allAreaItem = response;
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        } else {
+            await this.$server
+                .R("/location/area/all")
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
@@ -966,7 +992,12 @@ export default class ReportOccupancy extends Vue {
     }
 
     async resolveSummary() {
+
+        console.log("this.filterData  - ", this.filterData);
+
+
         await this.initSelectItemArea();
+
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
 
