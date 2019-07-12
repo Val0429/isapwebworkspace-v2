@@ -1614,7 +1614,6 @@ export default class ReportOccupancy extends Vue {
         this.lastTableStep = this.tableStep;
         this.tableStep = ETableStep.detailTable;
         let tempTime = parseInt(sunTime.split(":")[0]);
-
         let tempSDate = new Date(
             thatDay.getFullYear(),
             thatDay.getMonth(),
