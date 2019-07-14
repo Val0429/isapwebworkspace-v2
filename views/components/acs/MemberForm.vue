@@ -244,6 +244,7 @@ import Datetime from "@/services/Datetime";
 import ImageBase64 from "@/services/ImageBase64";
 import CardTemplateBase64 from "@/components/FET_Card/models/cardTemplateBase64";
 import { PermissionName } from "@/../src/constants/permissions";
+import moment from 'moment';
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
 import SortSelect from "@/components/SortSelect/SortSelect.vue";
@@ -1444,8 +1445,8 @@ export default class MemberForm extends Vue {
       tempCredentials[0].CardTechnologyCode = this.inputFormData.technologyCode;
       tempCredentials[0].PinMode= this.inputFormData.pinMode;          
       tempCredentials[0].PinDigit=this.inputFormData.pinDigit;
-      tempCredentials[0].EndDate=this.inputFormData.endDate;
-      tempCredentials[0].StartDate=this.inputFormData.startDate;
+      tempCredentials[0].EndDate=this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate();
+      tempCredentials[0].StartDate=this.inputFormData.startDate || new Date();
     } else {
       
       tempCredentials = [
@@ -1458,8 +1459,8 @@ export default class MemberForm extends Vue {
           CardTechnologyCode : this.inputFormData.technologyCode,
           PinMode: this.inputFormData.pinMode,          
           PinDigit:this.inputFormData.pinDigit,
-          EndDate:this.inputFormData.endDate,
-          StartDate:this.inputFormData.startDate
+          EndDate:this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
+          StartDate:this.inputFormData.startDate || new Date()
         }
       ];
     }
@@ -1778,12 +1779,8 @@ export default class MemberForm extends Vue {
       editParam.EmployeeNumber = this.inputFormData.employeeNumber;
       editParam.LastName = this.inputFormData.chineseName;
       editParam.FirstName = this.inputFormData.englishName;
-      editParam.StartDate =
-        this.inputFormData.startDate === null
-          ? ""
-          : this.inputFormData.startDate;
-      editParam.EndDate =
-        this.inputFormData.endDate === null ? "" : this.inputFormData.endDate;
+      editParam.StartDate = this.inputFormData.startDate || new Date()
+      editParam.EndDate = this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate()
 
       // tab1
       editParam.extensionNumber = this.inputFormData.PhoneNumber;
@@ -1821,12 +1818,8 @@ export default class MemberForm extends Vue {
         EmployeeNumber: this.inputFormData.employeeNumber,
         LastName: this.inputFormData.chineseName,
         FirstName: this.inputFormData.englishName,
-        StartDate:
-          this.inputFormData.startDate === null
-            ? ""
-            : this.inputFormData.startDate,
-        EndDate:
-          this.inputFormData.endDate === null ? "" : this.inputFormData.endDate,
+        StartDate: this.inputFormData.startDate || new Date(),
+        EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
         // EndDate: this.inputFormData.EndDate,
 
         // tab1
