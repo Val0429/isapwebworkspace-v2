@@ -98,12 +98,13 @@ export default class LangObject implements ILang {
     w_Phone = 'Phone';
     w_ManagedSites = 'Managed sites';
     w_Description = 'Description';
-	// w_Sites = 'Site(s)';
-	w_Sites = 'Store(s)';
-	w_Tag = 'Tag(s)';
-	// w_Site = 'Site';
-	w_Site = 'Store';
-    w_Group = 'Group';
+    // w_Sites = 'Site(s)';
+    w_Sites = 'Store(s)';
+    w_Tag = 'Tag(s)';
+    // w_Site = 'Site';
+    w_Site = 'Store';
+    //w_Group = 'Group';
+    w_Group = 'Entrance';
     w_Item = 'Item';
     w_Total = 'Total';
     w_Average_Occupancy = 'Average Occupancy';
@@ -150,10 +151,10 @@ export default class LangObject implements ILang {
     w_Location = 'Location';
     w_Areas = 'Area(s)';
     w_Devices = 'Device(s)';
-	// w_SelectSites = 'Select Site(s)';
-	// w_AllSites = 'All Sites';
-	w_SelectSites = 'Select Store(s)';
-	w_AllSites = 'All Stores';
+    // w_SelectSites = 'Select Site(s)';
+    // w_AllSites = 'All Sites';
+    w_SelectSites = 'Select Store(s)';
+    w_AllSites = 'All Stores';
     w_period = 'Period';
     w_Designation = 'Designation';
     w_Today = 'Today';
@@ -170,8 +171,8 @@ export default class LangObject implements ILang {
     w_thisYear = 'This Year';
     w_SelectArea = 'Select Area';
     w_AllAreas = 'All Areas';
-    // w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDeviceGroups = 'All Entrances';
+    // w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDevices = 'All Devices';
     w_Employee = 'Employee';
     w_VIP = 'VIP';
@@ -206,9 +207,9 @@ export default class LangObject implements ILang {
     w_ErrorConfig = 'Required IP, Port, WSPort, Protocol, Account and Password';
     w_WrongConfig = 'Please check IP, Port, WSPort, Protocol, Account and Password again';
 
-	// w_SelectSiteTree = 'Select site tree';
-	w_SelectSiteTree = 'Select store tree';
-	w_SelectRegionTree = 'Select region tree';
+    // w_SelectSiteTree = 'Select site tree';
+    w_SelectSiteTree = 'Select store tree';
+    w_SelectRegionTree = 'Select region tree';
 
     w_Mon = 'Mon';
     w_Tue = 'Tue';
@@ -249,8 +250,8 @@ export default class LangObject implements ILang {
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
 
-	// w_Navigation_Site = 'Site';
-	w_Navigation_Site = 'Store';
+    // w_Navigation_Site = 'Site';
+    w_Navigation_Site = 'Store';
 
     w_Navigation_Region = 'Region';
 
@@ -348,8 +349,8 @@ export default class LangObject implements ILang {
     w_Region_LevelRegion = 'Region';
     w_Region_LevelSite = 'Site';
     w_Region_LevelArea = 'Area';
-    //w_Region_Sites = 'Sites';
-	w_Region_Sites = 'Stores';
+    // w_Region_Sites = 'Sites';
+    w_Region_Sites = 'Stores';
 
     w_Region_NamePlaceholder = 'Please input name';
     w_Region_AddressPlaceholder = 'Please input address';
@@ -360,8 +361,8 @@ export default class LangObject implements ILang {
     w_Region_LngPlaceholder = 'Please input longitude';
     w_Region_TagsPlaceholder = 'Please choose tag';
     w_Region_LevelPlaceholder = 'Please choose level';
-	// w_Region_SitesPlaceholder = 'Please choose site';
-	w_Region_SitesPlaceholder = 'Please choose store';
+    // w_Region_SitesPlaceholder = 'Please choose site';
+    w_Region_SitesPlaceholder = 'Please choose store';
 
     w_Region_ErrorLongitude = 'Longitude only -180~180';
     w_Region_ErrorLatitude = 'Latitude only -90~90';
@@ -435,73 +436,73 @@ export default class LangObject implements ILang {
     w_MailServer_Test_Fail = 'Email Server test failed.';
     w_MailServer_Read_Fail = 'Mail Server read failed.';
 
-	// Site
-	// w_Site_SiteID = 'Site ID';
-	// w_Site_SiteName = 'Site Name';
-	w_Site_SiteID = 'Store ID';
-	w_Site_SiteName = 'Store Name';
-	w_Site_AreaName = 'Area Name';
-	// w_Site_GroupName = 'Device Group Name';
-	w_Site_GroupName = 'Entrance Name';
-	w_Site_DeviceName = 'Device Name';
-	w_Site_DeviceType = 'Device Type';
-	w_Site_Address = 'Address';
-	w_Site_Establishment = 'Establishment';
-	w_Site_PhoneNumber = 'Phone Number';
-	w_Site_SquareMeter = 'Square Meter';
-	w_Site_Manager = 'Manager';
-	w_Site_StaffNumber = 'Staff Number';
-	w_Site_OfficeHour = 'Office Hour';
-	w_Site_Area = 'Area';
-	w_Site_Tag = 'Tag';
-	w_Site_Devices = 'Devices';
-	// w_Site_DeviceGroup = 'Device Group';
-	w_Site_DeviceGroup = 'Entrance';
-	w_Site_Model = 'Model';
-	w_Site_Photo = 'Photo';
-	w_Site_MapPhoto = 'Map Photo';
-	w_Site_Longitude = 'Longitude';
-	w_Site_Latitude = 'Latitude';
-	w_Site_Longitude_Range = 'Longitude range from 180° to -180°';
-	w_Site_Latitude_Range = 'Latitude range from 90° to -90°';
-	w_Site_Mapping = 'Mapping';
-	// w_Site_ViewSite = 'View Site';
-	// w_Site_AddSite = 'Add Site';
-	// w_Site_SiteList = 'Site List';
-	// w_Site_EditSite = 'Edit Site';
-	w_Site_SiteList = 'Store List';
-	w_Site_ViewSite = 'View Store';
-	w_Site_AddSite = 'Add Store';
-	w_Site_EditSite = 'Edit Store';
-	w_Site_AreaList = 'Area List';
-	w_Site_ViewArea = 'View Area';
-	w_Site_AddArea = 'Add Area';
-	w_Site_EditArea = 'Edit Area';
-	// w_Site_DeviceGroupList = 'Device Group List';
-	w_Site_DeviceGroupList = 'Entrance List';
-	w_Site_ViewDevice = 'View Device';
-	w_Site_AddDevice = 'Add Device';
-	w_Site_EditDevice = 'Edit Device';
-	// w_Site_AddSiteSuccess = 'Add Site Success';
-	// w_Site_AddSiteFailed = 'Add Site Failed';
-	// w_Site_EditSiteSuccess = 'Edit Site Success';
-	// w_Site_EditSiteFailed = 'Edit Site Failed';
-	w_Site_AddSiteSuccess = 'Add Store Success';
-	w_Site_AddSiteFailed = 'Add Store Failed';
-	w_Site_EditSiteSuccess = 'Edit Store Success';
-	w_Site_EditSiteFailed = 'Edit Store Failed';
-	w_Site_AddAreaSuccess = 'Add Area Success';
-	w_Site_AddAreaFailed = 'Add Area Failed';
-	w_Site_EditAreaSuccess = 'Edit Area Success';
-	w_Site_EditAreaFailed = 'Edit Area Failed';
-	// w_Site_AddDeviceGroupSuccess = 'Add Device Group Success';
-	// w_Site_AddDeviceGroupFailed = 'Add Device Group Failed';
-	// w_Site_EditDeviceGroupSuccess = 'Edit Device Group Success';
-	// w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
-	w_Site_AddDeviceGroupSuccess = 'Add Entrance Success';
-	w_Site_AddDeviceGroupFailed = 'Add Entrance Failed';
-	w_Site_EditDeviceGroupSuccess = 'Edit Entrance Success';
-	w_Site_EditDeviceGroupFailed = 'Edit Entrance Failed';
+    // Site
+    // w_Site_SiteID = 'Site ID';
+    // w_Site_SiteName = 'Site Name';
+    w_Site_SiteID = 'Store ID';
+    w_Site_SiteName = 'Store Name';
+    w_Site_AreaName = 'Area Name';
+    // w_Site_GroupName = 'Device Group Name';
+    w_Site_GroupName = 'Entrance Name';
+    w_Site_DeviceName = 'Device Name';
+    w_Site_DeviceType = 'Device Type';
+    w_Site_Address = 'Address';
+    w_Site_Establishment = 'Establishment';
+    w_Site_PhoneNumber = 'Phone Number';
+    w_Site_SquareMeter = 'Square Meter';
+    w_Site_Manager = 'Manager';
+    w_Site_StaffNumber = 'Staff Number';
+    w_Site_OfficeHour = 'Office Hour';
+    w_Site_Area = 'Area';
+    w_Site_Tag = 'Tag';
+    w_Site_Devices = 'Devices';
+    // w_Site_DeviceGroup = 'Device Group';
+    w_Site_DeviceGroup = 'Entrance';
+    w_Site_Model = 'Model';
+    w_Site_Photo = 'Photo';
+    w_Site_MapPhoto = 'Map Photo';
+    w_Site_Longitude = 'Longitude';
+    w_Site_Latitude = 'Latitude';
+    w_Site_Longitude_Range = 'Longitude range from 180° to -180°';
+    w_Site_Latitude_Range = 'Latitude range from 90° to -90°';
+    w_Site_Mapping = 'Mapping';
+    // w_Site_ViewSite = 'View Site';
+    // w_Site_AddSite = 'Add Site';
+    // w_Site_SiteList = 'Site List';
+    // w_Site_EditSite = 'Edit Site';
+    w_Site_SiteList = 'Store List';
+    w_Site_ViewSite = 'View Store';
+    w_Site_AddSite = 'Add Store';
+    w_Site_EditSite = 'Edit Store';
+    w_Site_AreaList = 'Area List';
+    w_Site_ViewArea = 'View Area';
+    w_Site_AddArea = 'Add Area';
+    w_Site_EditArea = 'Edit Area';
+    // w_Site_DeviceGroupList = 'Device Group List';
+    w_Site_DeviceGroupList = 'Entrance List';
+    w_Site_ViewDevice = 'View Device';
+    w_Site_AddDevice = 'Add Device';
+    w_Site_EditDevice = 'Edit Device';
+    // w_Site_AddSiteSuccess = 'Add Site Success';
+    // w_Site_AddSiteFailed = 'Add Site Failed';
+    // w_Site_EditSiteSuccess = 'Edit Site Success';
+    // w_Site_EditSiteFailed = 'Edit Site Failed';
+    w_Site_AddSiteSuccess = 'Add Store Success';
+    w_Site_AddSiteFailed = 'Add Store Failed';
+    w_Site_EditSiteSuccess = 'Edit Store Success';
+    w_Site_EditSiteFailed = 'Edit Store Failed';
+    w_Site_AddAreaSuccess = 'Add Area Success';
+    w_Site_AddAreaFailed = 'Add Area Failed';
+    w_Site_EditAreaSuccess = 'Edit Area Success';
+    w_Site_EditAreaFailed = 'Edit Area Failed';
+    // w_Site_AddDeviceGroupSuccess = 'Add Device Group Success';
+    // w_Site_AddDeviceGroupFailed = 'Add Device Group Failed';
+    // w_Site_EditDeviceGroupSuccess = 'Edit Device Group Success';
+    // w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
+    w_Site_AddDeviceGroupSuccess = 'Add Entrance Success';
+    w_Site_AddDeviceGroupFailed = 'Add Entrance Failed';
+    w_Site_EditDeviceGroupSuccess = 'Edit Entrance Success';
+    w_Site_EditDeviceGroupFailed = 'Edit Entrance Failed';
 
     // Backup
     w_Backup_List = 'Function List';
@@ -771,9 +772,9 @@ export default class LangObject implements ILang {
     w_VSHeatmap_SetCMS = 'Not yet set? Go to set CMS';
     w_VSHeatmap_NVR = 'NVR';
     w_VSHeatmap_ChannelInNVR = 'Channel In NVR';
-// w_VSHeatmap_Site = 'Site';
-	w_VSHeatmap_Site = 'Store';
-	w_VSHeatmap_Area = 'Area';
+    // w_VSHeatmap_Site = 'Site';
+    w_VSHeatmap_Site = 'Store';
+    w_VSHeatmap_Area = 'Area';
     w_VSHeatmap_DeviceGroup = 'Device Group';
     w_VSHeatmap_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
     w_VSHeatmap_DeleteConfirm = 'Are you sure to delete selected Device(s)?';
@@ -796,9 +797,9 @@ export default class LangObject implements ILang {
     w_VSHumanDetection_SetSHServer = 'Not yet set? Go to set SHServer';
     w_VSHumanDetection_NVR = 'NVR';
     w_VSHumanDetection_ChannelInNVR = 'Channel In NVR';
-	// w_VSHumanDetection_Site = 'Site';
-	w_VSHumanDetection_Site = 'Store';
-	w_VSHumanDetection_Area = 'Area';
+    // w_VSHumanDetection_Site = 'Site';
+    w_VSHumanDetection_Site = 'Store';
+    w_VSHumanDetection_Area = 'Area';
     w_VSHumanDetection_DeviceGroup = 'Device Group';
     w_VSHumanDetection_PageToCMSAlter = 'Data will not be stored, Are you sure to CMS Page?';
     w_VSHumanDetection_PageToHDServerAlter = 'Data will not be stored, Are you sure to HD Server Page?';
@@ -922,9 +923,9 @@ export default class LangObject implements ILang {
     w_ReportDateError = 'EndDate must greater or equal than startDate.';
     w_countSelect = 'Time Mode';
     w_isIncludedEmployee = 'Staff Inclusion';
-    //w_PleaseSelectSites = 'Please Select Site(s)';
-	w_PleaseSelectSites = 'Please Select Store(s)';
-	w_InOutType = 'In Out Type';
+    // w_PleaseSelectSites = 'Please Select Site(s)';
+    w_PleaseSelectSites = 'Please Select Store(s)';
+    w_InOutType = 'In Out Type';
     w_businessChartType = 'Business Chart Type';
 
     // Report Dashboard
@@ -946,9 +947,9 @@ export default class LangObject implements ILang {
 
     //Report Visitor
     w_ReportVisitor_Visitor = 'Visitor';
-	// w_ReportVisitor_Site = 'Site';
-	w_ReportVisitor_Site = 'Store';
-	w_ReportVisitor_Date = 'Date';
+    // w_ReportVisitor_Site = 'Site';
+    w_ReportVisitor_Site = 'Store';
+    w_ReportVisitor_Date = 'Date';
     w_ReportVisitor_1 = '1';
     w_ReportVisitor_2 = '2';
     w_ReportVisitor_3 = '3';

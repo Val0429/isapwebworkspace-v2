@@ -103,7 +103,8 @@ export default class LangObject implements ILang {
     w_Tag = 'Tag(s)';
     // w_Site = 'Site';
     w_Site = 'Store';
-    w_Group = 'Group';
+    //w_Group = 'Group';
+    w_Group = 'Entrance';
     w_Item = 'Item';
     w_Total = 'Total';
     w_Average_Occupancy = 'Average Occupancy';
@@ -170,8 +171,8 @@ export default class LangObject implements ILang {
     w_thisYear = 'This Year';
     w_SelectArea = 'Select Area';
     w_AllAreas = 'All Areas';
-    // w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDeviceGroups = 'All Entrances';
+    // w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDevices = 'All Devices';
     w_Employee = 'Employee';
     w_VIP = 'VIP';
@@ -348,7 +349,7 @@ export default class LangObject implements ILang {
     w_Region_LevelRegion = 'Region';
     w_Region_LevelSite = 'Site';
     w_Region_LevelArea = 'Area';
-    //w_Region_Sites = 'Sites';
+    // w_Region_Sites = 'Sites';
     w_Region_Sites = 'Stores';
 
     w_Region_NamePlaceholder = 'Please input name';
@@ -771,7 +772,7 @@ export default class LangObject implements ILang {
     w_VSHeatmap_SetCMS = 'Not yet set? Go to set CMS';
     w_VSHeatmap_NVR = 'NVR';
     w_VSHeatmap_ChannelInNVR = 'Channel In NVR';
-// w_VSHeatmap_Site = 'Site';
+    // w_VSHeatmap_Site = 'Site';
     w_VSHeatmap_Site = 'Store';
     w_VSHeatmap_Area = 'Area';
     w_VSHeatmap_DeviceGroup = 'Device Group';
