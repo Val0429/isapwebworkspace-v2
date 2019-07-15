@@ -86,12 +86,12 @@ import {
     EAreaMode,
     EAgeRange,
     EWeather
-} from "./models/EHighCharts";
+} from "./";
 import {
     ISiteAreas,
     IChartRepeatVisitorData,
     ISiteOfficeHourItem
-} from "./models/IHighCharts";
+} from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 

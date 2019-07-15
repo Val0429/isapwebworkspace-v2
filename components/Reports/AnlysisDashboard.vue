@@ -288,7 +288,7 @@ import {
     ESign,
     ETimeMode
 } from "@/components/Reports";
-import { EWeather } from "./models/EHighCharts";
+import { EWeather } from "./";
 import HighchartsService from "./models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
 

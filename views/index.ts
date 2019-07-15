@@ -135,7 +135,7 @@ $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", 
 $({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-question' })(ReportHeatmap);
 $({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-check' })(ReportOccupancy);
 $({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-question' })(ReportVIPTracking);
-$({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-code' })(ReportRepeatVisitor);
+$({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-check' })(ReportRepeatVisitor);
 $({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-question' })(ReportCampaign);
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-check' })(ReportTemplate);
 

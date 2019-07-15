@@ -1,5 +1,5 @@
 // enum
-export { ESign, EPageType, EChartMode, ECountType, EDeviceMode, EDesignationPeriod } from './models/EReport';
+export { ESign, EPageType, ECountType, EDeviceMode, EDesignationPeriod } from './models/EReport';
 export { EAddPeriodSelect, EIfAllSelected, ETypeInOrOut, EIncludedEmployee, EWeek, EWeeks, EVideoSource, EBusinessChart } from './models/EReport';
 
 // interface
@@ -13,5 +13,8 @@ export { ReportTableData } from './models/ReportTable';
 export { ReportDashboard } from './models/ReportDashboard';
 
 // HighCharts
-export { ETimeMode, EGender, EAreaMode, EDwellTimeRange, EWeather, EAgeRange } from './models/EHighCharts';
-export * from './models/IHighCharts';
+export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EDwellTimeRange } from './models/EReport';
+export { IValSelectItem, IBootstrapSelectItem } from './models/IHighCharts';
+export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem } from './models/IHighCharts';
+export { IDayRange } from './models/IHighCharts';
+export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData } from './models/IHighCharts';

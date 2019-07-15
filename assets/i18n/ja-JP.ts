@@ -112,9 +112,9 @@ export default class LangObject implements ILang {
     w_TrafficInTotal = 'Traffic-in Total';
     w_TrafficOutTotal = 'Traffic-out Total';
     w_Male = 'Male';
-    w_Female = 'FeMale';
+    w_Female = 'Female';
     w_MaleTotal = 'MaleTotal';
-    w_FemaleTotal = 'FeMale Total';
+    w_FemaleTotal = 'Female Total';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';
     w_CurrentPassword = 'Current Password';

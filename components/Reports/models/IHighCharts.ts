@@ -1,5 +1,5 @@
 import { EWeather, ETimeMode, EAreaMode, EAgeRange } from '../';
-import { EDwellTimeRange } from './EHighCharts';
+import { EDwellTimeRange } from '../';
 
 interface IValSelectItem {
     id: string;

@@ -119,14 +119,14 @@ import {
     EAgeRange,
     EDwellTimeRange,
     EGender
-} from "./models/EHighCharts";
+} from "./";
 import {
     IValSelectItem,
     IBootstrapSelectItem,
     ISite,
     ISiteOfficeHourItem,
     IChartDemographicData
-} from "./models/IHighCharts";
+} from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 
@@ -217,7 +217,7 @@ export class HighchartsDwellTime extends Vue {
         gender: false
     };
 
-    selection: { dwellTimeRange: EDwellTimeRange; } = {
+    selection: { dwellTimeRange: EDwellTimeRange } = {
         dwellTimeRange: EDwellTimeRange.none
     };
     selectItem: {
@@ -1416,9 +1416,7 @@ export class HighchartsDwellTime extends Vue {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    drawChartPercentage() {}
-
-    drawChartAge() {
+    drawChartPercentage() {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
         );
@@ -1488,32 +1486,29 @@ export class HighchartsDwellTime extends Vue {
             }
 
             // set chart options
-            this.chartOptions.ageRange = {
-                chart: { zoomType: "x" },
+            this.chartOptions.percentage = {
+                chart: {
+                    type: "bar",
+                    zoomType: "x"
+                },
                 exporting: { enabled: false },
                 title: { text: null },
                 subtitle: { text: null },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: "pointer",
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                                let self: any = this;
-                                return `${self.y}%`;
-                            }
-                        },
-                        showInLegend: true,
-                        center: ["50%", "50%"],
-                        size: "100%"
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null,
+                        align: "high"
                     }
                 },
-                tooltip: { enabled: false },
+                credits: { enabled: false },
                 series: series
             };
 
-            this.mountChart.ageRange = true;
+            this.mountChart.percentage = true;
         }
     }
 

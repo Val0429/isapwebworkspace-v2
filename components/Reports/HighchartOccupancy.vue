@@ -56,12 +56,12 @@ import {
     EAreaMode,
     EChartMode,
     EWeather
-} from "./models/EHighCharts";
+} from "./";
 import {
     ISiteAreas,
     IChartOccupancyData,
     ISiteOfficeHourItem
-} from "./models/IHighCharts";
+} from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 

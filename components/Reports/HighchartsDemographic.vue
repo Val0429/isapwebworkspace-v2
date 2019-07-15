@@ -129,14 +129,14 @@ import {
     EAgeRange,
     EGender,
     EDwellTimeRange
-} from "./models/EHighCharts";
+} from "./";
 import {
     IValSelectItem,
     IBootstrapSelectItem,
     ISite,
     ISiteOfficeHourItem,
     IChartDemographicData
-} from "./models/IHighCharts";
+} from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 
@@ -1639,6 +1639,7 @@ export class HighchartsDemographic extends Vue {
             JSON.stringify(this.value)
         );
         let categories: string[] = this.getPersonCountList();
+        let totalCount: number = 0;
 
         let barSeries = [
             {
@@ -1685,10 +1686,21 @@ export class HighchartsDemographic extends Vue {
                         barSeriesDataIndex = 5;
                         break;
                 }
+                totalCount += val.maleCount;
+                totalCount += val.femaleCount;
                 barSeries[0].data[barSeriesDataIndex] += val.maleCount;
                 barSeries[1].data[barSeriesDataIndex] += val.femaleCount;
                 pieSeriesData[0][1] += val.maleCount;
                 pieSeriesData[1][1] += val.femaleCount;
+            }
+        }
+
+        if (totalCount > 0) {
+            for (let i = 0; i < 6; i++) {
+                barSeries[0].data[i] =
+                    HighchartsService.formatFloat((barSeries[0].data[i] / totalCount) * 100);
+                barSeries[1].data[i] = HighchartsService.formatFloat(
+                    (barSeries[1].data[i] / totalCount) * 100);
             }
         }
 
@@ -1708,8 +1720,15 @@ export class HighchartsDemographic extends Vue {
                 title: {
                     text: null,
                     align: "high"
+                },
+                labels: {
+                    formatter: function() {
+                        let self: any = this;
+                        return self.value + "%";
+                    }
                 }
             },
+            tooltip: { enabled: false },
             credits: { enabled: false },
             series: barSeries
         };
