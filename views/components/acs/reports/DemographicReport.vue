@@ -83,13 +83,16 @@ export default class DemographicReport extends Vue  {
 
         ];
 
-        this.filter.Start = new Date();
-        this.filter.End = new Date();
+        this.filter={Start : new Date(), End : new Date()};
     }
     
   private async getData() { 
       try{    
-        if(!this.filter)return;
+        if(!this.filter){
+            let params = {Start : new Date(), End : new Date()};
+            this.filter=params;       
+            return;
+        }
         this.isBusy=true;           
         await this.getMemberData();
         await this.getAttendanceRecord();
