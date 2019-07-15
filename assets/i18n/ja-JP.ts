@@ -42,7 +42,8 @@ export default class LangObject implements ILang {
     w_Map = 'Map';
     w_Area = 'Area';
     w_Device = 'Device';
-    w_DeviceGroup = 'Device Group';
+    // w_DeviceGroup = 'Device Group';
+    w_DeviceGroup = 'Entrance';
     w_EditMyProfile = 'Edit My Profile';
     w_ChangePassword = 'Change Password';
     w_ForgetPassword = 'Forget Password Step';
@@ -130,7 +131,8 @@ export default class LangObject implements ILang {
     w_Brand = 'Brand';
     w_Model = 'Model';
     w_DeviceName = 'Device Name';
-    w_DeviceGroups = 'Device Group(s)';
+    // w_DeviceGroups = 'Device Group(s)';
+    w_DeviceGroups = 'Entrance(s)';
     w_Hanwha = 'Hanwha';
     w_iSapFRS = 'FRS';
     w_iSapFRSServer = 'FRS Server';
@@ -164,7 +166,8 @@ export default class LangObject implements ILang {
     w_thisYear = 'This Year';
     w_SelectArea = 'Select Area';
     w_AllAreas = 'All Areas';
-    w_AllDeviceGroups = 'All DeviceGroups';
+    // w_AllDeviceGroups = 'All DeviceGroups';
+    w_AllDeviceGroups = 'All Entrances';
     w_AllDevices = 'All Devices';
     w_Employee = 'Employee';
     w_VIP = 'VIP';
@@ -428,7 +431,8 @@ export default class LangObject implements ILang {
     w_Site_SiteID = 'Site ID';
     w_Site_SiteName = 'Site Name';
     w_Site_AreaName = 'Area Name';
-    w_Site_GroupName = 'Device Group Name';
+   // w_Site_GroupName = 'Device Group Name';
+    w_Site_GroupName = 'Entrance Name';
     w_Site_DeviceName = 'Device Name';
     w_Site_DeviceType = 'Device Type';
     w_Site_Address = 'Address';
@@ -441,7 +445,8 @@ export default class LangObject implements ILang {
     w_Site_Area = 'Area';
     w_Site_Tag = 'Tag';
     w_Site_Devices = 'Devices';
-    w_Site_DeviceGroup = 'Device Group';
+    // w_Site_DeviceGroup = 'Device Group';
+    w_Site_DeviceGroup = 'Entrance';
     w_Site_Model = 'Model';
     w_Site_Photo = 'Photo';
     w_Site_MapPhoto = 'Map Photo';
@@ -458,7 +463,8 @@ export default class LangObject implements ILang {
     w_Site_ViewArea = 'View Area';
     w_Site_AddArea = 'Add Area';
     w_Site_EditArea = 'Edit Area';
-    w_Site_DeviceGroupList = 'Device Group List';
+    // w_Site_DeviceGroupList = 'Device Group List';
+    w_Site_DeviceGroupList = 'Entrance List';
     w_Site_ViewDevice = 'View Device';
     w_Site_AddDevice = 'Add Device';
     w_Site_EditDevice = 'Edit Device';
