@@ -259,18 +259,8 @@ export default class ReportOccupancy extends Vue {
     areaSelectWithoutAllItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
-
-    timeModeSelectItem: any = {
-        day: ECountType.day,
-        week: ECountType.week,
-        month: ECountType.month,
-        quarter: ECountType.quarter,
-        year: ECountType.year
-    };
-    isIncludedEmployeeSelectItem: any = {
-        yes: EIncludedEmployee.yes,
-        no: EIncludedEmployee.no
-    };
+    timeModeSelectItem: any = {};
+    isIncludedEmployeeSelectItem: any = {};
 
     inputFormData: any = {
         areaId: "",
@@ -337,13 +327,18 @@ export default class ReportOccupancy extends Vue {
 
     initSelect() {
 
-        // this.timeModeSelectItem = {
-        //     day: this._(''),
-        //     week: this._(''),
-        //     month: this._(''),
-        //     quarter: this._(''),
-        //     year: this._('')
-        // };
+        this.timeModeSelectItem = {
+            day: this._('w_daily'),
+            week: this._('w_weekly'),
+            month: this._('w_monthly'),
+            quarter: this._('w_quarterly'),
+            year: this._('w_yearly')
+        };
+
+        this.isIncludedEmployeeSelectItem = {
+            yes: this._('w_yes'),
+            no: this._('w_no')
+        };
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
