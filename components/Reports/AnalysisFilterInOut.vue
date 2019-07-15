@@ -8,6 +8,7 @@
             @update:type="whenSelectedType($event)"
             @update:selectInOrOut="whenSelectedInOrOut($event)"
             @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
+            @update:businessChartType="whenSelectedBusinessChartType($event)"
         >
 
             <template #areaId="{ $attrs, $listeners }">
@@ -67,20 +68,36 @@
             </template>
 
             <template #selectInOrOut="{ $attrs, $listeners }">
-
-                <b-form-radio-group
-                    v-if="siteIds.length !== 0"
+                <iv-form-selection
+                    class="col-md-1"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.inOrOut"
-                    class="h-25 click_button col-md-1"
-                    buttons
-                    button-variant="outline-success"
-                    name="radio-btn-outline"
-                    :options="typeSelectItem"
-                ></b-form-radio-group>
+                >
+                </iv-form-selection>
+
+<!--                <b-form-radio-group-->
+<!--                    v-if="siteIds.length !== 0"-->
+<!--                    v-bind="$attrs"-->
+<!--                    v-on="$listeners"-->
+<!--                    v-model="inputFormData.inOrOut"-->
+<!--                    class="h-25 click_button col-md-1"-->
+<!--                    buttons-->
+<!--                    button-variant="outline-success"-->
+<!--                    name="radio-btn-outline"-->
+<!--                    :options="typeSelectItem"-->
+<!--                ></b-form-radio-group>-->
             </template>
 
+            <template #businessChartType="{ $attrs, $listeners }">
+                <iv-form-selection
+                    class="col-md-2"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.businessChartType"
+                >
+                </iv-form-selection>
+            </template>
 
         </iv-form>
 
@@ -123,10 +140,10 @@ export class AnalysisFilterInOut extends Vue {
     deviceSelectItem: object;
 
     @Prop({
-        type: Array, // Boolean, Number, String, Array, Object
-        default: []
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
     })
-    typeSelectItem: object;
+    inOrOutTypeSelectItem: object;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -139,6 +156,12 @@ export class AnalysisFilterInOut extends Vue {
         default:{}
     })
     isIncludedEmployeeSelectItem: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    businessChartTypeSelectItem: object;
 
 
     @Prop({
@@ -184,13 +207,20 @@ export class AnalysisFilterInOut extends Vue {
     })
     isIncludedEmployee: string;
 
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "revenue"
+    })
+    businessChartType: string;
+
     inputFormData: any = {
         areaId: "all",
         groupId: "all",
         deviceId: "all",
         type: "day",
         inOrOut: "in",
-        isIncludedEmployee: 'no'
+        isIncludedEmployee: 'no',
+        businessChartType: 'revenue'
     };
 
     created() {}
@@ -224,7 +254,12 @@ export class AnalysisFilterInOut extends Vue {
 
     @Watch("isIncludedEmployee", { deep: true })
     private isIncludedEmployeeChanged(newVal, oldVal) {
-        this.inputFormData.is = newVal;
+        this.inputFormData.isIncludedEmployee = newVal;
+    }
+
+    @Watch("businessChartType", { deep: true })
+    private businessChartTypeChanged(newVal, oldVal) {
+        this.inputFormData.businessChartType = newVal;
     }
 
     async whenSelectedAreaId() {
@@ -249,6 +284,10 @@ export class AnalysisFilterInOut extends Vue {
 
     whenSelectedIsIncludedEmployee() {
         this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
+    }
+
+    whenSelectedBusinessChartType() {
+        this.$emit("business_chart_type", this.inputFormData.businessChartType);
     }
 
     IAnalysisFilterForm() {
@@ -297,9 +336,17 @@ export class AnalysisFilterInOut extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_InOutType")}
                  * @uiColumnGroup - analysis
                  */
-                selectInOrOut?: any;
+                selectInOrOut?: ${toEnumInterface(this.inOrOutTypeSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_businessChartType")}
+                 * @uiColumnGroup - analysis
+                 */
+                businessChartType?: ${toEnumInterface(this.businessChartTypeSelectItem as any, false)};
 
 
             }

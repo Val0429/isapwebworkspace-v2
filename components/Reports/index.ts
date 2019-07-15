@@ -1,6 +1,6 @@
 // enum
 export { ESign, EPageType, EChartMode, ECountType, EDeviceMode, EDesignationPeriod } from './models/EReport';
-export { EAddPeriodSelect, EIfAllSelected, ETypeInOrOut, EIncludedEmployee, EWeek, EWeeks, EVideoSource } from './models/EReport';
+export { EAddPeriodSelect, EIfAllSelected, ETypeInOrOut, EIncludedEmployee, EWeek, EWeeks, EVideoSource, EBusinessChart } from './models/EReport';
 
 // interface
 export { IPeckTimeRange, IPeckTimeRangeBody, ISiteItems } from './models/IPeckTimeRange';

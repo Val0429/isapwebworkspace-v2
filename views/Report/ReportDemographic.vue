@@ -172,11 +172,11 @@
         IFilterCondition,
 		ReportDashboard,
 		ReportTableData,
-	
+
 		EDesignationPeriod,
 		IReportToTemplateItem
 	} from "@/components/Reports";
-	
+
 	///////////////////////// export /////////////////////////
 	import html2Canvas from "html2canvas";
     import JsPDF from "jspdf";
@@ -188,7 +188,7 @@
 		xls = "xls",
 		csv = "csv"
     }
-    
+
 	enum ETableStep {
 		mainTable = "mainTable",
 		sunTable = "sunTable",
@@ -232,7 +232,7 @@
 
 		// OfficeHour 相關
         officeHourItemDetail: any = [];
-        
+
 		// recipient 相關
 		modalShow: boolean = false;
 
@@ -315,11 +315,23 @@
 
 		async initDatas() {
 			// Tina
+			this.initSelect();
 			await this.initRegionTreeSelect();
 			await this.siteFilterPermission();
 			await this.initSelectItemTag();
 			await this.initSelectItemTree();
 			await this.initSelectItemUsers();
+		}
+
+		initSelect() {
+
+			// this.timeModeSelectItem = {
+			//     day: this._(''),
+			//     week: this._(''),
+			//     month: this._(''),
+			//     quarter: this._(''),
+			//     year: this._('')
+			// };
 		}
 
 		initTemplate() {
@@ -1708,9 +1720,9 @@
                     tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
                 } else {
                     tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
-                } 
+                }
                 // TODO: Dwell time
-                
+
             }
 
 			this.chartDatas = tempChartDatas;

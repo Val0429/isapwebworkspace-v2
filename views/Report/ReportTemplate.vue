@@ -366,9 +366,6 @@ export default class ReportTemplate extends Vue {
 
     created() {
 
-
-        console.log(' - ', this.reportToTemplateData);
-
         if (this.$route.query.reportToTemplateData !== undefined) {
             this.initTemplate();
         }
