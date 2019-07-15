@@ -5,7 +5,8 @@
         v-bind:label-for="'input-' + _uid"
         >
              <b-row>
-                <b-col>  
+                <b-col> 
+                    {{_("w_Site")}} 
                 <b-form-select
                     @change="updateArea()"
                     v-model="siteObjectId"
@@ -21,6 +22,7 @@
                 </b-form-select> 
                 </b-col>
                 <b-col>  
+                    {{_("w_Area")}} 
                 <b-form-select
                 @change="update()"
                 v-model="areaObjectId"
