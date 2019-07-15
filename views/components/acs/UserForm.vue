@@ -29,7 +29,7 @@
             :options="roleOptions" />
         </template>
         <template #add.apiRoles="{$attrs, $listeners}" >
-            <ivc-multi-selections 
+            <ivc-single-selection
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="apiRoleOptions" />
@@ -112,7 +112,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
                     /**
                      * @uiLabel - ${this._("w_ApiRoles")}
                     */
-                    apiRoles?:any;
+                    apiRoles:any;
                     /**                        
                      * @uiLabel - ${this._("w_Roles")}
                     */
@@ -129,16 +129,19 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
     postAdd(row) {
         row.data={};
         row.roles = this.roleOptions.map(x=>x.key);
+        row.apiRoles=[row.apiRoles];
         return row;
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
     preEdit(row) {
         row.roles = row.roles.map(x=>x.name);
+        row.apiRoles=row.apiRoles && row.apiRoles.length>0 ? row.apiRoles[0].objectId :"";
         return row;
     }
     /// 10) post-edit 寫入修改前要做甚麼調整
     postEdit(row) {
-        return;
+        row.apiRoles=[row.apiRoles];
+        return row;
     }
     async created(){
         this.permissionName = PermissionName.userManagement;
