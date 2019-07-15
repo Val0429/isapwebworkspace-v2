@@ -191,7 +191,6 @@
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToAreaList()" />
                 </template>
-
                 <iv-form
                     :interface="IAreaForm()"
                     :value="area"
@@ -202,10 +201,10 @@
                     <template #imageSrc="{ $attrs, $listeners}">
                         <img
                             class="imgSide"
-                            v-if="areaPhotoSrc"
+                            v-if="areaPhotoSrc || area.imageSrc"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :src="areaPhotoSrc"
+                            :src="areaPhotoSrc || (serverUrl +area.imageSrc)"
                         />
                     </template>
 
@@ -213,10 +212,10 @@
                         <div class="card-content iv-form-group col-md-12">
                             <img
                             class="imgSide"
-                            v-if="imageMap"
+                            v-if="imageMap || area.mapSrc"
                             v-bind="$attrs"
                             v-on="$listeners"
-                            :src="imageMap"
+                            :src="imageMap || (serverUrl + area.mapSrc)"
                             />
                            
                         </div>
