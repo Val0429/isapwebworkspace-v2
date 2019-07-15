@@ -381,7 +381,7 @@ export default class MemberForm extends Vue {
   tableMultiple: boolean = true;
 
   selectedDetail: any = [];
-
+  workGroupSelectItems:any[]=[];
   workGroupSelectItem: any = {};
   cardTemplateSelectItem: any = {
     permanent: ITemplateCard.permanent,
@@ -412,9 +412,9 @@ export default class MemberForm extends Vue {
 
   inputFormData: any = {
     // Master
-    objectId: "",
+    objectId: undefined,
     premissionSelected: [],
-    personType: "正職",
+    personType: "2000000006",
     cardType: "",
     employeeNumber: "",
     chineseName: "",
@@ -504,9 +504,9 @@ export default class MemberForm extends Vue {
     this.premissionOptions = [];
     this.inputFormData = {
       // Master
-      objectId: "",
+      objectId: undefined,
       premissionSelected: [],
-      personType: "正職",
+      personType: "2000000006",
       cardType: "",
       employeeNumber: "",
       chineseName: "",
@@ -629,13 +629,15 @@ export default class MemberForm extends Vue {
   }
   async initSelectItemWorkGroup() {
     this.workGroupSelectItem = {};
+    this.workGroupSelectItems=[];
     await this.$server
       .R("/acs/workgroup")
       .then((response: any) => {
         if (response != undefined) {
+          this.workGroupSelectItems = response.results;
           for (const returnValue of response.results) {
             // 自定義 sitesSelectItem 的 key 的方式
-            this.workGroupSelectItem[returnValue.groupname] =
+            this.workGroupSelectItem[returnValue.groupid.toString()] =
               returnValue.groupname;
 
             // this.workGroupIdSelectItem[returnValue.groupid] =
@@ -674,49 +676,29 @@ export default class MemberForm extends Vue {
   getInputData() {
     this.clearInputData();
 
-    if (this.selectedDetail[0] != undefined) {
+    if (!this.selectedDetail[0]) return;
       let detailData = this.selectedDetail[0];
 
-      // Master form
-      if (detailData.objectId != undefined) {
-        this.inputFormData.objectId = detailData.objectId.toString();
-      }
+      // Master form      
+      this.inputFormData.objectId = detailData.objectId;      
 
-      if (detailData.AccessRules != undefined) {
+      if (detailData.AccessRules) {
         for (let rule of detailData.AccessRules) {
-          if (typeof rule == "object") {
-            if (rule.RuleToken) {
-              this.inputFormData.premissionSelected.push(
-                rule.RuleToken
-              );
-            }
-          } else if (typeof rule == "string") {
-            this.inputFormData.premissionSelected.push(rule);
-          }
+              this.inputFormData.premissionSelected.push(rule.RuleToken ? rule.RuleToken: rule);            
         }
       }
-
-      if (detailData.PrimaryWorkgroupName != undefined) {
-        this.inputFormData.personType = detailData.PrimaryWorkgroupName;
-      }
-
-      if (detailData.EmployeeNumber != undefined) {
-        this.inputFormData.employeeNumber = detailData.EmployeeNumber;
-      }
-
-      if (detailData.LastName != undefined) {
-        this.inputFormData.chineseName = detailData.LastName;
-      }
-
-      if (detailData.FirstName != undefined) {
-        this.inputFormData.englishName = detailData.FirstName;
-      }
+      
+      this.inputFormData.personType = (detailData.PrimaryWorkgroupId || 2000000006).toString();
+      this.inputFormData.employeeNumber = detailData.EmployeeNumber;      
+      this.inputFormData.chineseName = detailData.LastName;
+      this.inputFormData.englishName = detailData.FirstName;
+      
     
       if (detailData.Credentials && detailData.Credentials.length>0){        
         console.log("detailData.Credentials[0]",detailData.Credentials[0])
         this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber;
         this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber;
-        this.inputFormData.cardCertificate = detailData.Credentials[0].ProfileId.toString();
+        this.inputFormData.cardCertificate = (detailData.Credentials[0].ProfileId || 2).toString();
         this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode;
         this.inputFormData.pinDigit = detailData.Credentials[0].PinDigit;
         this.inputFormData.profileName = detailData.Credentials[0].ProfileName;
@@ -727,7 +709,7 @@ export default class MemberForm extends Vue {
         this.inputFormData.pin = detailData.Credentials[0].Pin || "0";
       }
 
-      if (detailData.StartDate != undefined && detailData.StartDate != "") {
+      if (detailData.StartDate) {
         try {
           this.inputFormData.startDate = new Date(detailData.StartDate);
         } catch (e) {
@@ -735,7 +717,7 @@ export default class MemberForm extends Vue {
         }
       }
 
-      if (detailData.EndDate != undefined && detailData.EndDate != "") {
+      if (detailData.EndDate) {
         try {
           this.inputFormData.endDate = new Date(detailData.EndDate);
         } catch (e) {
@@ -743,17 +725,12 @@ export default class MemberForm extends Vue {
         }
       }
 
-      // tab1
-      if (detailData.PhoneNumber != undefined) {
-        this.inputFormData.extensionNumber = detailData.PhoneNumber.toString();
-      }
-      if (detailData.MobileNumber != undefined) {
-        this.inputFormData.phone = detailData.MobileNumber.toString();
-      }
-      if (detailData.Email != undefined) {
-        this.inputFormData.email = detailData.Email.toString();
-      }
-      if (detailData.DateOfBirth != undefined && detailData.DateOfBirth != "") {
+      // tab1      
+      this.inputFormData.extensionNumber = detailData.PhoneNumber;
+      this.inputFormData.phone = detailData.MobileNumber;            
+      this.inputFormData.email = detailData.Email;
+      
+      if (detailData.DateOfBirth) {
         try {
           this.inputFormData.birthday = new Date(detailData.DateOfBirth);
         } catch (e) {
@@ -762,338 +739,267 @@ export default class MemberForm extends Vue {
       }
 
       // tab2
-      if (
-        detailData.PersonalDetails != undefined &&
-        detailData.PersonalDetails.UserDetails != undefined &&
-        detailData.PersonalDetails.UserDetails.UserName != undefined &&
-        detailData.PersonalDetails.UserDetails.UserName != ""
-      ) {
-        this.inputFormData.account =
-          detailData.PersonalDetails.UserDetails.UserName;
+      if (detailData.PersonalDetails && detailData.PersonalDetails.UserDetails) {
+        this.inputFormData.account = detailData.PersonalDetails.UserDetails.UserName;
+        this.inputFormData.password = detailData.PersonalDetails.UserDetails.Password;
       }
 
-      if (
-        detailData.PersonalDetails != undefined &&
-        detailData.PersonalDetails.UserDetails != undefined &&
-        detailData.PersonalDetails.UserDetails.Password != undefined &&
-        detailData.PersonalDetails.UserDetails.Password != ""
-      ) {
-        this.inputFormData.password =
-          detailData.PersonalDetails.UserDetails.Password;
-      }
+      
 
-      if (detailData.CustomFields != undefined) {
-        for (let content of detailData.CustomFields) {
-          if (
-            content.FiledName != undefined &&
-            content.FieldValue != undefined
-          ) {
-            // Master
-            if (content.FiledName == "CustomTextBoxControl6__CF") {
-              this.inputFormData.companyName = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomTextBoxControl2__CF") {
-              this.inputFormData.cardCustodian = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomTextBoxControl3__CF") {
-              this.inputFormData.lastEditPerson = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDateControl2__CF") {
-              this.inputFormData.lastEditTime = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDropdownControl1__CF") {
-              this.inputFormData.cardType = content.FieldValue.toString();
-            }
+      if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
+      for (let content of detailData.CustomFields) {
+          if (!content.FiledName || !content.FieldValue )continue;           
+          // Master
+          if (content.FiledName == "CustomTextBoxControl6__CF") {
+            this.inputFormData.companyName = content.FieldValue;
+          }
+          if (content.FiledName == "CustomTextBoxControl2__CF") {
+            this.inputFormData.cardCustodian = content.FieldValue;
+          }
+          if (content.FiledName == "CustomTextBoxControl3__CF") {
+            this.inputFormData.lastEditPerson = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDateControl2__CF") {
+            this.inputFormData.lastEditTime = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDropdownControl1__CF") {
+            this.inputFormData.cardType = content.FieldValue;
+          }
 
-            // tab1
-            if (content.FiledName == "CustomTextBoxControl5__CF_CF") {
-              this.inputFormData.MVPN = content.FieldValue.toString();
-            }
+          // tab1
+          if (content.FiledName == "CustomTextBoxControl5__CF_CF") {
+            this.inputFormData.MVPN = content.FieldValue;
+          }
 
-            if (content.FiledName == "CustomDropdownControl2__CF_CF") {
-              this.inputFormData.gender = content.FieldValue.toString();
-            }
+          if (content.FiledName == "CustomDropdownControl2__CF_CF") {
+            this.inputFormData.gender = content.FieldValue;
+          }
 
-            if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF") {
-              this.inputFormData.department = content.FieldValue.toString();
-            }
+          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF") {
+            this.inputFormData.department = content.FieldValue;
+          }
 
-            if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF") {
-              this.inputFormData.costCenter = content.FieldValue.toString();
-            }
+          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF") {
+            this.inputFormData.costCenter = content.FieldValue;
+          }
 
-            if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF_CF") {
-              this.inputFormData.area = content.FieldValue.toString();
-            }
+          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF_CF") {
+            this.inputFormData.area = content.FieldValue;
+          }
 
-            if (
-              content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.workArea = content.FieldValue.toString();
-            }
+          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.workArea = content.FieldValue;
+          }
 
-            if (content.FiledName == "CustomDateControl1__CF_CF_CF") {
-              try {
-                this.inputFormData.registrationDate = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-
-            if (content.FiledName == "CustomDateControl1__CF") {
-              try {
-                this.inputFormData.resignationDate = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-
-            // tab2
-            if (content.FiledName == "CustomDropdownControl2__CF") {
-              this.inputFormData.carLicenseCategory = content.FieldValue.toString();
-            }
-
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.cardLicense = content.FieldValue.toString();
-            }
-
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.carLicense = content.FieldValue.toString();
-            }
-
-            if (content.FiledName == "CustomTextBoxControl5__CF") {
-              this.inputFormData.carLicense1 = content.FieldValue.toString();
-            }
-
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.carLicense2 = content.FieldValue.toString();
-            }
-
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.carLicense3 = content.FieldValue.toString();
-            }
-
-            // tab3
-            if (content.FiledName == "CustomTextBoxControl7__CF_CF") {
-              this.inputFormData.resignationNote = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF") {
-              this.inputFormData.resignationRecordCardRecord = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDropdownControl3__CF_CF") {
-              this.inputFormData.reasonForCard1 = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF") {
-              this.inputFormData.historyForCard1 = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF") {
-              try {
-                this.inputFormData.dateForCard1 = new Date(content.FieldValue);
-              } catch (e) {
-                console.log(e);
-              }
-            }
-
-            if (content.FiledName == "CustomDropdownControl3__CF_CF_CF") {
-              this.inputFormData.reasonForCard2 = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF") {
-              this.inputFormData.historyForCard2 = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF") {
-              try {
-                this.inputFormData.dateForCard2 = new Date(
-                  content.FieldValue.toString()
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF") {
-              this.inputFormData.reasonForCard3 = content.FieldValue.toString();
-            }
-            if (
-              content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.historyForCard3 = content.FieldValue.toString();
-            }
-
-            if (
-              content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              try {
-                this.inputFormData.dateForCard3 = new Date(content.FieldValue);
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF_CF") {
-              this.inputFormData.reasonForApplication1 = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF") {
-              try {
-                this.inputFormData.dateForApplication1 = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (
-              content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.reasonForApplication2 = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDateControl3__CF_CF_CF") {
-              try {
-                this.inputFormData.dateForApplication2 = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-
-            if (content.FiledName == "CustomDropdownControl3__CF") {
-              this.inputFormData.reasonForApplication3 = content.FieldValue.toString();
-            }
-            if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF") {
-              try {
-                this.inputFormData.dateForApplication3 = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (
-              content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.resignationRecordCarLicense = content.FieldValue.toString();
-            }
-
-            // tab 5
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.censusRecord1 = content.FieldValue.toString();
-            }
-            if (
-              content.FiledName ==
-              "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              try {
-                this.inputFormData.censusDate1 = new Date(content.FieldValue);
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.censusRecord2 = content.FieldValue.toString();
-            }
-            if (
-              content.FiledName ==
-              "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              try {
-                this.inputFormData.censusDate2 = new Date(content.FieldValue);
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (content.FiledName == "CustomTextBoxControl7__CF") {
-              this.inputFormData.censusRecord3 = content.FieldValue.toString();
-            }
-
-            if (content.FiledName == "CustomDateControl3__CF") {
-              try {
-                this.inputFormData.censusDate3 = new Date(content.FieldValue);
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.infoOfViolation1 = content.FieldValue.toString();
-            }
-            if (
-              content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              try {
-                this.inputFormData.dateOfViolation1 = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.infoOfViolation2 = content.FieldValue.toString();
-            }
-            if (
-              content.FiledName ==
-              "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              try {
-                this.inputFormData.dateOfViolation2 = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }
-
-            if (
-              content.FiledName ==
-              "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              this.inputFormData.infoOfViolation3 = content.FieldValue.toString();
-            }
-            if (
-              content.FiledName ==
-              "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF"
-            ) {
-              try {
-                this.inputFormData.dateOfViolation3 = new Date(
-                  content.FieldValue
-                );
-              } catch (e) {
-                console.log(e);
-              }
+          if (content.FiledName == "CustomDateControl1__CF_CF_CF") {
+            try {
+              this.inputFormData.registrationDate = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
             }
           }
-        }
-      }
 
-      console.log("let detailData - ", detailData);
-    }
+          if (content.FiledName == "CustomDateControl1__CF") {
+            try {
+              this.inputFormData.resignationDate = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
 
-    // this.pageToAdd();
+          // tab2
+          if (content.FiledName == "CustomDropdownControl2__CF") {
+            this.inputFormData.carLicenseCategory = content.FieldValue;
+          }
+
+          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.cardLicense = content.FieldValue;
+          }
+
+          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.carLicense = content.FieldValue;
+          }
+
+          if (content.FiledName == "CustomTextBoxControl5__CF") {
+            this.inputFormData.carLicense1 = content.FieldValue;
+          }
+
+          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.carLicense2 = content.FieldValue;
+          }
+
+          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.carLicense3 = content.FieldValue;
+          }
+
+          // tab3
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF") {
+            this.inputFormData.resignationNote = content.FieldValue;
+          }
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF") {
+            this.inputFormData.resignationRecordCardRecord = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDropdownControl3__CF_CF") {
+            this.inputFormData.reasonForCard1 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF") {
+            this.inputFormData.historyForCard1 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateForCard1 = new Date(content.FieldValue);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+
+          if (content.FiledName == "CustomDropdownControl3__CF_CF_CF") {
+            this.inputFormData.reasonForCard2 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF") {
+            this.inputFormData.historyForCard2 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateForCard2 = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF") {
+            this.inputFormData.reasonForCard3 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.historyForCard3 = content.FieldValue;
+          }
+
+          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateForCard3 = new Date(content.FieldValue);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF_CF") {
+            this.inputFormData.reasonForApplication1 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateForApplication1 = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (
+            content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF_CF_CF"
+          ) {
+            this.inputFormData.reasonForApplication2 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDateControl3__CF_CF_CF") {
+            try {
+              this.inputFormData.dateForApplication2 = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
+
+          if (content.FiledName == "CustomDropdownControl3__CF") {
+            this.inputFormData.reasonForApplication3 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateForApplication3 = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.resignationRecordCarLicense = content.FieldValue;
+          }
+
+          // tab 5
+          if (content.FiledName =="CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.censusRecord1 = content.FieldValue;
+          }
+          if (content.FiledName =="CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.censusDate1 = new Date(content.FieldValue);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (content.FiledName =="CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.censusRecord2 = content.FieldValue;
+          }
+          if (content.FiledName =="CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.censusDate2 = new Date(content.FieldValue);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (content.FiledName == "CustomTextBoxControl7__CF") {
+            this.inputFormData.censusRecord3 = content.FieldValue;
+          }
+
+          if (content.FiledName == "CustomDateControl3__CF") {
+            try {
+              this.inputFormData.censusDate3 = new Date(content.FieldValue);
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (content.FiledName =="CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.infoOfViolation1 = content.FieldValue;
+          }
+          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateOfViolation1 = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.infoOfViolation2 = content.FieldValue;
+          }
+          if ( content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateOfViolation2 = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
+
+          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            this.inputFormData.infoOfViolation3 = content.FieldValue;
+          }
+          if (content.FiledName =="CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
+            try {
+              this.inputFormData.dateOfViolation3 = new Date(
+                content.FieldValue
+              );
+            } catch (e) {
+              console.log(e);
+            }
+          }
+        
+      }      
   }
 
   tempSaveInputData(data) {
@@ -1418,29 +1324,32 @@ export default class MemberForm extends Vue {
 
   async saveAddOrEdit() {
     let tempCredentials: any = [];
-    let tempPersonalDetails: any = {};
+    let tempPersonalDetails: any = {
+          Address: "",
+          ContactDetails: {
+              Email: this.inputFormData.email || "",
+              MobileNumber: this.inputFormData.MobileNumber || "",
+              MobileServiceProviderId: "0",
+              PagerNumber: "",
+              PagerServiceProviderId: "0",
+              PhoneNumber: this.inputFormData.PhoneNumber || "",
+              },
+              DateOfBirth: this.inputFormData.birthday && !isNaN(this.inputFormData.birthday.getTime()) ? this.inputFormData.birthday.toISOString(): "",
+              PayrollNumber: "",
+              Title: "",
+              UserDetails: {
+                  Password: this.inputFormData.password || "",
+                  UserName: this.inputFormData.account || ""
+              }
+    };
     let tempCustomFieldsList: any = [];
 
-    if (
-      this.selectedDetail[0] != undefined &&
-      this.selectedDetail[0].Credentials != undefined &&
-      this.selectedDetail[0].Credentials[0] != undefined
-    ) {
-      tempCredentials = JSON.parse(
-        JSON.stringify(this.selectedDetail[0].Credentials)
-      );
+    if (this.selectedDetail[0] && this.selectedDetail[0].Credentials && this.selectedDetail[0].Credentials.length>0) {
+      tempCredentials = this.selectedDetail[0].Credentials;      
       tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
       tempCredentials[0].Pin = this.inputFormData.pin || "0";
-      tempCredentials[0].FacilityCode = parseInt(
-        this.inputFormData.deviceNumber
-      );
-
-      tempCredentials[0].ProfileId = !isNaN(
-        parseInt(this.inputFormData.cardCertificate)
-      )
-        ? parseInt(this.inputFormData.cardCertificate)
-        : 0;
-
+      tempCredentials[0].FacilityCode = parseInt(this.inputFormData.deviceNumber || "0");
+      tempCredentials[0].ProfileId = parseInt(this.inputFormData.cardCertificate || "2");
       tempCredentials[0].ProfileName = this.inputFormData.profileName;
       tempCredentials[0].CardTechnologyCode = this.inputFormData.technologyCode;
       tempCredentials[0].PinMode= this.inputFormData.pinMode;          
@@ -1465,84 +1374,58 @@ export default class MemberForm extends Vue {
       ];
     }
 
-    if (
-      this.selectedDetail[0] != undefined &&
-      this.selectedDetail[0].PersonalDetails != undefined
-    ) {
-      tempPersonalDetails = JSON.parse(
-        JSON.stringify(this.selectedDetail[0].PersonalDetails)
-      );
-      if (tempPersonalDetails.UserDetails != undefined) {
-        tempPersonalDetails.UserDetails.account = this.inputFormData.account;
-        tempPersonalDetails.UserDetails.password = this.inputFormData.password;
-      } else {
-        tempPersonalDetails.UserDetails = {
-          UserName: this.inputFormData.account,
-          Password: this.inputFormData.password
-        };
-      }
-    } else {
-      tempPersonalDetails = {
-        UserDetails: {
-          UserName: this.inputFormData.account,
-          Password: this.inputFormData.password
-        }
-      };
-    }
-
     // master
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl6__CF",
-      FieldValue: this.inputFormData.companyName.toString()
+      FieldValue: this.inputFormData.companyName || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl2__CF",
-      FieldValue: this.inputFormData.cardCustodian.toString()
+      FieldValue: this.inputFormData.cardCustodian || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl3__CF",
-      FieldValue: this.inputFormData.lastEditPerson.toString()
+      FieldValue: this.inputFormData.lastEditPerson || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.lastEditTime.toString()
+      FieldValue: this.inputFormData.lastEditTime || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl1__CF",
-      FieldValue: this.inputFormData.cardType.toString()
+      FieldValue: this.inputFormData.cardType || ""
     });
 
     // tab1
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF",
-      FieldValue: this.inputFormData.MVPN.toString()
+      FieldValue: this.inputFormData.MVPN || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl2__CF_CF",
-      FieldValue: this.inputFormData.gender.toString()
+      FieldValue: this.inputFormData.gender || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF",
-      FieldValue: this.inputFormData.department.toString()
+      FieldValue: this.inputFormData.department || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF_CF",
-      FieldValue: this.inputFormData.costCenter.toString()
+      FieldValue: this.inputFormData.costCenter || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.area.toString()
+      FieldValue: this.inputFormData.area || ""
     });
 
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.workArea.toString()
+      FieldValue: this.inputFormData.workArea || ""
     });
 
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl1__CF_CF_CF",
-      FieldValue:
-        this.inputFormData.registrationDate != null &&
+      FieldValue: this.inputFormData.registrationDate &&
         !isNaN(this.inputFormData.registrationDate.getTime())
           ? this.inputFormData.registrationDate.toISOString()
           : ""
@@ -1560,45 +1443,45 @@ export default class MemberForm extends Vue {
     // tab2
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl2__CF",
-      FieldValue: this.inputFormData.carLicenseCategory.toString()
+      FieldValue: this.inputFormData.carLicenseCategory || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.cardLicense.toString()
+      FieldValue: this.inputFormData.cardLicense || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.carLicense.toString()
+      FieldValue: this.inputFormData.carLicense || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF",
-      FieldValue: this.inputFormData.carLicense1.toString()
+      FieldValue: this.inputFormData.carLicense1 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.carLicense2.toString()
+      FieldValue: this.inputFormData.carLicense2 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.carLicense3.toString()
+      FieldValue: this.inputFormData.carLicense3 || ""
     });
 
     // tab3
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF",
-      FieldValue: this.inputFormData.resignationNote.toString()
+      FieldValue: this.inputFormData.resignationNote || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF",
-      FieldValue: this.inputFormData.resignationRecordCardRecord.toString()
+      FieldValue: this.inputFormData.resignationRecordCardRecord || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl3__CF_CF",
-      FieldValue: this.inputFormData.reasonForCard1.toString()
+      FieldValue: this.inputFormData.reasonForCard1 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF",
-      FieldValue: this.inputFormData.historyForCard1.toString()
+      FieldValue: this.inputFormData.historyForCard1 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1611,11 +1494,11 @@ export default class MemberForm extends Vue {
 
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl3__CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForCard2.toString()
+      FieldValue: this.inputFormData.reasonForCard2 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.historyForCard2.toString()
+      FieldValue: this.inputFormData.historyForCard2 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1627,11 +1510,11 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl3__CF_CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForCard3.toString()
+      FieldValue: this.inputFormData.reasonForCard3 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.historyForCard3.toString()
+      FieldValue: this.inputFormData.historyForCard3 || ""
     });
 
     tempCustomFieldsList.push({
@@ -1644,7 +1527,7 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForApplication1.toString()
+      FieldValue: this.inputFormData.reasonForApplication1 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1656,7 +1539,7 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForApplication2.toString()
+      FieldValue: this.inputFormData.reasonForApplication2 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1669,7 +1552,7 @@ export default class MemberForm extends Vue {
 
     tempCustomFieldsList.push({
       FiledName: "CustomDropdownControl3__CF",
-      FieldValue: this.inputFormData.reasonForApplication3.toString()
+      FieldValue: this.inputFormData.reasonForApplication3 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1681,13 +1564,13 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.resignationRecordCarLicense.toString()
+      FieldValue: this.inputFormData.resignationRecordCarLicense || ""
     });
 
     // tab5
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.censusRecord1.toString()
+      FieldValue: this.inputFormData.censusRecord1 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1699,7 +1582,7 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.censusRecord2.toString()
+      FieldValue: this.inputFormData.censusRecord2 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1711,7 +1594,7 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF",
-      FieldValue: this.inputFormData.censusRecord3.toString()
+      FieldValue: this.inputFormData.censusRecord3 || ""
     });
 
     tempCustomFieldsList.push({
@@ -1724,7 +1607,7 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.infoOfViolation1.toString()
+      FieldValue: this.inputFormData.infoOfViolation1 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1736,7 +1619,7 @@ export default class MemberForm extends Vue {
     });
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.infoOfViolation2.toString()
+      FieldValue: this.inputFormData.infoOfViolation2 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1749,7 +1632,7 @@ export default class MemberForm extends Vue {
 
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.infoOfViolation3.toString()
+      FieldValue: this.inputFormData.infoOfViolation3 || ""
     });
     tempCustomFieldsList.push({
       FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
@@ -1760,22 +1643,30 @@ export default class MemberForm extends Vue {
           : ""
     });
 
-    if (
-      this.selectedDetail[0] != undefined &&
-      this.selectedDetail[0].objectId != undefined &&
-      this.selectedDetail[0].objectId != ""
-    ) {
-      const editParam: any = JSON.parse(JSON.stringify(this.selectedDetail[0]));
-
+    if (this.selectedDetail[0] && this.selectedDetail[0].objectId) {
+      const editParam: any = this.selectedDetail[0];
       // master
       editParam.objectId = this.inputFormData.objectId;
       editParam.AccessRules = this.inputFormData.premissionSelected;
-      editParam.PrimaryWorkgroupName = this.inputFormData.personType;
-      // editParam.PrimaryWorkgroupName = !isNaN(
-      //     parseInt(this.inputFormData.personType)
-      // )
-      //     ? parseInt(this.inputFormData.personType)
-      //     : 0;
+      editParam.PrimaryWorkgroupName = this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType)).groupname;
+      editParam.PrimaryWorkgroupId = parseInt(this.inputFormData.personType);
+      editParam.ApbWorkgroupId = parseInt(this.inputFormData.personType);
+      editParam.Attributes={};
+      editParam.SmartCardProfileId="";
+      editParam.Status=1;
+      editParam.GeneralInformation="";
+      editParam.NonPartitionWorkGroups=[];
+      editParam.NonPartitionWorkgroupAccessRules=[];
+      editParam.PrimaryWorkGroupAccessRule=[];
+      editParam.Token = "-1";
+      editParam.Vehicle1= {};
+      editParam.Vehicle2 = {};
+      editParam.VisitorDetails={
+        VisitorCardStatus : 0,
+        VisitorCustomValues : {}
+      };    
+      editParam.TraceDetails= {};
+      
       editParam.EmployeeNumber = this.inputFormData.employeeNumber;
       editParam.LastName = this.inputFormData.chineseName;
       editParam.FirstName = this.inputFormData.englishName;
@@ -1811,10 +1702,13 @@ export default class MemberForm extends Vue {
         });
     } else {
       const addParam = {
+        
         // master
         objectId: this.inputFormData.objectId,
         AccessRules: this.inputFormData.premissionSelected,
-        PrimaryWorkgroupName: this.inputFormData.personType,
+        PrimaryWorkgroupId:parseInt(this.inputFormData.personType),
+        ApbWorkgroupId:parseInt(this.inputFormData.personType),
+        PrimaryWorkgroupName: this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType)).groupname,
         EmployeeNumber: this.inputFormData.employeeNumber,
         LastName: this.inputFormData.chineseName,
         FirstName: this.inputFormData.englishName,
@@ -1827,7 +1721,22 @@ export default class MemberForm extends Vue {
         phone: this.inputFormData.MobileNumber,
         Email: this.inputFormData.email,
         DateOfBirth: this.inputFormData.birthday,
-
+        SmartCardProfileId:"",
+        Status:1,
+        //new addition
+        GeneralInformation:"",
+        Attributes:{},
+        NonPartitionWorkGroups:[],
+        NonPartitionWorkgroupAccessRules:[],
+        PrimaryWorkGroupAccessRule:[],       
+        Token: "-1",
+        Vehicle1: {},
+        Vehicle2: {},
+        VisitorDetails: {
+            VisitorCardStatus: 0,
+            VisitorCustomValues: {}
+        },
+        TraceDetails: {},
         // special
         Credentials: tempCredentials,
         PersonalDetails: tempPersonalDetails,
