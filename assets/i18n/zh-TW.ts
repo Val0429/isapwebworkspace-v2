@@ -112,9 +112,9 @@ export default class LangObject implements ILang {
     w_TrafficInTotal = 'Traffic-in Total';
     w_TrafficOutTotal = 'Traffic-out Total';
     w_Male = 'Male';
-    w_FeMale = 'FeMale';
+    w_Female = 'FeMale';
     w_MaleTotal = 'MaleTotal';
-    w_FeMaleTotal = 'FeMale Total';
+    w_FemaleTotal = 'FeMale Total';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';
     w_CurrentPassword = 'Current Password';
@@ -822,11 +822,10 @@ export default class LangObject implements ILang {
     w_ReportTraffic_TrafficConversion = 'Conversion';
     w_ReportTraffic_TrafficASP = 'ASP';
 
-    // Report Demographic
-    w_ReportDemographic_Gender = 'Gender';
-    w_ReportDemographic_GenderMale = 'Male';
-    w_ReportDemographic_GenderFemale = 'Female';
+    // Report Dwell Time
+    w_ReportDwellTime_LabelDwellTimePercentage = 'Dwell Time Percentage';
 
+    // Report Demographic
     w_ReportDemographic_AgeAll = 'All';
     w_ReportDemographic_AgeLow20 = '<20';
     w_ReportDemographic_AgeM21_30 = '21-30';
@@ -834,6 +833,9 @@ export default class LangObject implements ILang {
     w_ReportDemographic_AgeM41_50 = '41-50';
     w_ReportDemographic_AgeM51_60 = '51-60';
     w_ReportDemographic_AgeUpp61 = '>61';
+
+    w_ReportDemographic_LabelGender = 'Demographic by Gender';
+    w_ReportDemographic_LabelAge = 'Demographic by Age';
 
     // Report Occupancy
     w_ReportOccupancy_Occupancy = 'Occupancy';

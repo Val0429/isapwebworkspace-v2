@@ -352,10 +352,7 @@ export class HighchartsRepeatVisitor extends Vue {
                     data: [0, 0, 0, 0, 0, 0]
                 }
             ],
-            pie: [
-                [this._("w_ReportDemographic_GenderMale"), 0],
-                [this._("w_ReportDemographic_GenderFemale"), 0]
-            ]
+            pie: [[this._("w_Male"), 0], [this._("w_Female"), 0]]
         };
 
         let totalCount = 0;
