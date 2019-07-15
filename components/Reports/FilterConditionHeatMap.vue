@@ -11,20 +11,6 @@
                 @submit="doSubmit($event)"
             >
 
-                <template #ifAllSites="{ $attrs, $listeners }">
-                    <b-form-radio-group
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="selectAllSites"
-                        class="h-25 select_date_button mb-3"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="ifAllSitesSelectItem"
-                        @change="changeAllSitesSelect"
-                    ></b-form-radio-group>
-                </template>
-
                 <template #siteIds="{ $attrs, $listeners }">
                     <iv-form-selection
                         v-bind="$attrs"
@@ -87,15 +73,6 @@
                     </iv-form-selection>
                 </template>
 
-                <template #tagIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.tagIds"
-                    >
-                    </iv-form-selection>
-                </template>
-
             </iv-form>
 
             <template #footer>
@@ -120,7 +97,7 @@
 
         <region-tree-select
             v-if="pageStep === ePageStep.chooseTree && selectAllSites === 'select'"
-            :multiple="true"
+            :multiple="false"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
             :selecteds="selecteds"
@@ -159,18 +136,12 @@ enum EPageStep {
 @Component({
     components: {}
 })
-export class FilterCondition extends Vue {
+export class FilterConditionHeatMap extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
     })
     sitesSelectItem: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    tagSelectItem: object;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -186,10 +157,6 @@ export class FilterCondition extends Vue {
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
-
-    // site 相關
-    selectAllSites: string = EIfAllSelected.select;
-    ifAllSitesSelectItem: any = [];
 
     // select 相關
 
@@ -237,10 +204,6 @@ export class FilterCondition extends Vue {
     // }
 
     initSelectItem() {
-        this.ifAllSitesSelectItem = [
-            { value: EIfAllSelected.all, text: this._("w_AllSites") },
-            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
-        ];
 
         this.addPeriodSelectItem = [
             { value: EAddPeriodSelect.period, text: this._("w_period") },
@@ -267,7 +230,6 @@ export class FilterCondition extends Vue {
     }
 
     siteFilterPermission() {
-
         for (const detail of this.$user.allowSites) {
             this.inputFormData.allSiteIds.push(detail.objectId);
         }
@@ -339,20 +301,6 @@ export class FilterCondition extends Vue {
         // from selecteds push siteIds
         for (const item of this.selecteds) {
             this.inputFormData.siteIds.push(item.objectId);
-        }
-    }
-
-    changeAllSitesSelect(selected: string) {
-        this.inputFormData.siteIds = [];
-        this.selecteds = [];
-        this.selectAllSites = selected;
-        if (this.selectAllSites === EIfAllSelected.all) {
-            this.inputFormData.siteIds = [];
-            this.selecteds = [];
-            this.inputFormData.siteIds = this.inputFormData.allSiteIds;
-        } else {
-            this.inputFormData.siteIds = [];
-            this.selecteds = [];
         }
     }
 
@@ -429,10 +377,6 @@ export class FilterCondition extends Vue {
         if (this.inputFormData.siteIds.length === 0) {
             Dialog.error(this._("w_PleaseSelectSites"));
             return false;
-        }
-
-        if (this.selectAllSites === "all") {
-            this.inputFormData.siteIds = this.inputFormData.allSiteIds;
         }
 
         doSubmitParam.siteIds = this.inputFormData.siteIds;
@@ -604,7 +548,6 @@ export class FilterCondition extends Vue {
     doReset() {
         this.inputFormData = {
             siteIds: [],
-            tagIds: [],
             allSiteIds: [],
             startDate: new Date(),
             endDate: new Date(),
@@ -618,32 +561,16 @@ export class FilterCondition extends Vue {
         return `
             interface {
 
-                /**
-                 * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
-                 * @uiColumnGroup - site
-                 */
-                 ifAllSites?: any;
-
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
-                 * @uiHidden - ${
-                     this.selectAllSites === EIfAllSelected.all
-                         ? "true"
-                         : "false"
-                 }
                  */
-                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                siteIds: ${toEnumInterface(this.sitesSelectItem as any, false)};
 
 
                 /**
                  * @uiColumnGroup - site
-                 * @uiHidden - ${
-                     this.selectAllSites === EIfAllSelected.all
-                         ? "true"
-                         : "false"
-                 }
                  */
                  selectTree?: any;
 
@@ -697,25 +624,13 @@ export class FilterCondition extends Vue {
                     false
                 )};
 
-
-                /**
-                 * @uiLabel - ${this._("w_Tag")}
-                 * @uiColumnGroup - tag
-                 */
-                tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
-
-
-                /**
-                 * @uiColumnGroup - tag
-                 */
-                 tag1?: any;
             }
         `;
     }
 }
 
-export default FilterCondition;
-Vue.component("filter-condition", FilterCondition);
+export default FilterConditionHeatMap;
+Vue.component("filter-condition-heat-map", FilterConditionHeatMap);
 </script>
 
 <style lang="scss" scoped>

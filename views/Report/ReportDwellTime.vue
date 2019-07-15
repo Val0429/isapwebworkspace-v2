@@ -1982,7 +1982,7 @@ export default class ReportDwellTime extends Vue {
             fType,
             Datetime.DateTime2String(
                 this.startDate,
-                ReportService.datetimeFormat.date
+             "YYYY-MM-DD"
             )
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
