@@ -632,7 +632,7 @@ export class HighchartsTraffic extends Vue {
                     tempChartData.weatherIcon = HighchartsService.weatherIcon(
                         value.weather
                     );
-                    
+
                     spliceIndexList.push(parseInt(i));
                 }
             }
@@ -864,8 +864,8 @@ export class HighchartsTraffic extends Vue {
                     if (!haveResult) {
                         tempResult.push(value);
                     }
-                   
-                   spliceIndexList.push(parseInt(i));
+
+                    spliceIndexList.push(parseInt(i));
                 }
             }
 
@@ -873,7 +873,6 @@ export class HighchartsTraffic extends Vue {
             for (let i = spliceIndexList.length - 1; i >= 0; i--) {
                 tempValues.splice(spliceIndexList[i], 1);
             }
-
 
             if (!haveValue) {
                 let defaultValue = this.anysislyChartValueDefault();
@@ -1340,16 +1339,7 @@ export class HighchartsTraffic extends Vue {
                     style: { color: "#000" }
                 }
             },
-            // events: {
-            //     click: function (e: any) {
-            //         let self: any = this;
-            //         console.log("Click Highcharts", self);
-            //         // find the clicked values and the series
-            //         var x = e.xAxis[0].value, y = e.yAxis[0].value, series = self.series[0];
-            //         // Add it
-            //         series.addPoint([x, y]);
-            //     }
-            // },
+
             tooltip: {
                 enabled: true,
                 useHTML: true,
