@@ -19,7 +19,7 @@
         <iv-sort-select
                 v-if="options.length>0"                      
                 v-model="selectedColumns"
-                class="col-md-6"
+                class="col-md-8"
                 v-on:input="onOptionsChange($event)"
                 :options="options"
             />
