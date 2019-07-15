@@ -47,9 +47,10 @@ import {EAreaMode} from "../../components/Reports";
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
-                    :typeSelectItem="typeSelectItem"
+                    :inOrOutTypeSelectItem="inOrOutTypeSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
                     :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                    :businessChartTypeSelectItem="businessChartTypeSelectItem"
                     :siteIds="filterData.siteIds"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
@@ -57,12 +58,14 @@ import {EAreaMode} from "../../components/Reports";
                     :type="inputFormData.type"
                     :inOrOut="inputFormData.inOrOut"
                     :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                    :businessChartType="inputFormData.businessChartType"
                     @area_id="receiveAreaId"
                     @group_id="receiveGroupId"
                     @device_id="receiveDeviceId"
                     @type="receiveType"
                     @in_or_out="receiveInOrOut"
                     @is_included_employee="receiveIsIncludedEmployee"
+                    @business_chart_type="receiveBusinessChartType"
                 >
                 </analysis-filter-in-out>
 
@@ -174,7 +177,7 @@ import {
     ISiteItems,
     IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData
+    ReportTableData, EBusinessChart
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
 
@@ -287,10 +290,12 @@ export default class ReportTraffic extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
-    typeSelectItem: any = [
-        { value: ETypeInOrOut.in, text: ETypeInOrOut.in },
-        { value: ETypeInOrOut.out, text: ETypeInOrOut.out }
-    ];
+    inOrOutTypeSelectItem: any = {};
+    //     [
+    //     { value: ETypeInOrOut.in, text: ETypeInOrOut.in },
+    //     { value: ETypeInOrOut.out, text: ETypeInOrOut.out },
+    //      { value: ETypeInOrOut.all, text: ETypeInOrOut.all }
+    // ];
     timeModeSelectItem: any = {
         day: ECountType.day,
         week: ECountType.week,
@@ -302,14 +307,16 @@ export default class ReportTraffic extends Vue {
         yes: EIncludedEmployee.yes,
         no: EIncludedEmployee.no
     };
+    businessChartTypeSelectItem: any = {};
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
         type: "",
-        inOrOut: "in",
-        isIncludedEmployee: "no"
+        inOrOut: ETypeInOrOut.in,
+        isIncludedEmployee: EIncludedEmployee.no,
+        businessChartType: EBusinessChart.revenue
     };
 
     // 整理 showReportData 相關
@@ -337,11 +344,35 @@ export default class ReportTraffic extends Vue {
 
     // Author: Tina
     async initDatas() {
+        this.initSelect();
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
         await this.initSelectItemUsers();
+    }
+
+    initSelect() {
+        this.inOrOutTypeSelectItem = {
+            in: this._('w_In'),
+            out: this._('w_Out'),
+            all: this._('w_All'),
+        };
+
+        // this.timeModeSelectItem = {
+        //     day: this._(''),
+        //     week: this._(''),
+        //     month: this._(''),
+        //     quarter: this._(''),
+        //     year: this._('')
+        // };
+
+        this.businessChartTypeSelectItem = {
+            asp: this._('w_asp'),
+            revenue: this._('w_revenue'),
+            transaction: this._('w_transaction'),
+            conversion: this._('w_conversion'),
+        }
     }
 
     // Author: Morris
@@ -1391,8 +1422,9 @@ export default class ReportTraffic extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
-            type: "",
-            isIncludedEmployee: "no"
+            type: ETypeInOrOut.in,
+            isIncludedEmployee: EIncludedEmployee.no,
+            businessChartType: EBusinessChart.revenue
         };
 
         await this.$server
@@ -1426,8 +1458,8 @@ export default class ReportTraffic extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            inOrOut: "in",
-            isIncludedEmployee: "no"
+            isIncludedEmployee: EIncludedEmployee.no,
+            businessChartType: EBusinessChart.revenue
         };
 
         // get office hour data
@@ -1961,6 +1993,27 @@ export default class ReportTraffic extends Vue {
     // Author: Tina
     async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
+
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
+        }
+    }
+
+    async receiveBusinessChartType(businessChartType) {
+        this.inputFormData.businessChartType = businessChartType;
 
         // 單一site
         if (this.filterData.firstSiteId) {

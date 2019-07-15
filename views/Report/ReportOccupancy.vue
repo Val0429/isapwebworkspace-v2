@@ -327,11 +327,23 @@ export default class ReportOccupancy extends Vue {
 
     async initDatas() {
         // Tina
+        this.initSelect();
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
         await this.initSelectItemUsers();
+    }
+
+    initSelect() {
+
+        // this.timeModeSelectItem = {
+        //     day: this._(''),
+        //     week: this._(''),
+        //     month: this._(''),
+        //     quarter: this._(''),
+        //     year: this._('')
+        // };
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////

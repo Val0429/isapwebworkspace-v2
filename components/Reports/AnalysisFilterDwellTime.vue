@@ -6,7 +6,6 @@
             @update:groupId="whenSelectedGroupId($event)"
             @update:deviceId="whenSelectedDeviceId($event)"
             @update:type="whenSelectedType($event)"
-            @update:selectInOrOut="whenSelectedInOrOut($event)"
             @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
             @update:businessChartType="whenSelectedBusinessChartType($event)"
         >
@@ -67,28 +66,6 @@
                 </iv-form-selection>
             </template>
 
-            <template #selectInOrOut="{ $attrs, $listeners }">
-                <iv-form-selection
-                    class="col-md-1"
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.inOrOut"
-                >
-                </iv-form-selection>
-
-<!--                <b-form-radio-group-->
-<!--                    v-if="siteIds.length !== 0"-->
-<!--                    v-bind="$attrs"-->
-<!--                    v-on="$listeners"-->
-<!--                    v-model="inputFormData.inOrOut"-->
-<!--                    class="h-25 click_button col-md-1"-->
-<!--                    buttons-->
-<!--                    button-variant="outline-success"-->
-<!--                    name="radio-btn-outline"-->
-<!--                    :options="typeSelectItem"-->
-<!--                ></b-form-radio-group>-->
-            </template>
-
             <template #businessChartType="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
@@ -120,7 +97,7 @@ let config = require("@/config/default/debug");
 @Component({
     components: {}
 })
-export class AnalysisFilterInOut extends Vue {
+export class AnalysisFilterDwellTime extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -139,11 +116,6 @@ export class AnalysisFilterInOut extends Vue {
     })
     deviceSelectItem: object;
 
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    inOrOutTypeSelectItem: object;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -197,12 +169,6 @@ export class AnalysisFilterInOut extends Vue {
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
-        default: "in"
-    })
-    inOrOut: string;
-
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
         default: "no"
     })
     isIncludedEmployee: string;
@@ -218,7 +184,6 @@ export class AnalysisFilterInOut extends Vue {
         groupId: "all",
         deviceId: "all",
         type: "day",
-        inOrOut: "in",
         isIncludedEmployee: 'no',
         businessChartType: 'revenue'
     };
@@ -247,11 +212,6 @@ export class AnalysisFilterInOut extends Vue {
         this.inputFormData.type = newVal;
     }
 
-    @Watch("inOrOut", { deep: true })
-    private inOrOutChanged(newVal, oldVal) {
-        this.inputFormData.inOrOut = newVal;
-    }
-
     @Watch("isIncludedEmployee", { deep: true })
     private isIncludedEmployeeChanged(newVal, oldVal) {
         this.inputFormData.isIncludedEmployee = newVal;
@@ -276,10 +236,6 @@ export class AnalysisFilterInOut extends Vue {
 
     whenSelectedType() {
         this.$emit("type", this.inputFormData.type);
-    }
-
-    whenSelectedInOrOut() {
-        this.$emit("in_or_out", this.inputFormData.inOrOut);
     }
 
     whenSelectedIsIncludedEmployee() {
@@ -336,13 +292,6 @@ export class AnalysisFilterInOut extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_InOutType")}
-                 * @uiColumnGroup - analysis
-                 */
-                selectInOrOut?: ${toEnumInterface(this.inOrOutTypeSelectItem as any, false)};
-
-
-                /**
                  * @uiLabel - ${this._("w_businessChartType")}
                  * @uiColumnGroup - analysis
                  */
@@ -354,8 +303,8 @@ export class AnalysisFilterInOut extends Vue {
     }
 }
 
-export default AnalysisFilterInOut;
-Vue.component("analysis-filter-in-out", AnalysisFilterInOut);
+export default AnalysisFilterDwellTime;
+Vue.component("analysis-filter-dwell-time", AnalysisFilterDwellTime);
 </script>
 
 <style lang="scss" scoped>

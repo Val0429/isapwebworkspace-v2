@@ -138,6 +138,7 @@ export default class LangObject implements ILang {
     w_iSapFRSManagerServer = 'FRS Manager ';
     w_In = 'In';
     w_Out = 'Out';
+    w_All = 'All';
     w_Direction = 'Direction';
     w_ServerId = 'Server Id';
     w_SourceId = 'Source Id';
@@ -170,6 +171,10 @@ export default class LangObject implements ILang {
     w_Blacklist = 'Blacklist';
     w_SetUserGroupInFRS = '* Set User Group In FRS';
     w_SetUserGroupInFRS1 = 'Set User Group In FRS';
+    w_asp = 'ASP';
+    w_revenue = 'Revenue';
+    w_transaction = 'Transaction';
+    w_conversion = 'Conversion';
 
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
@@ -882,6 +887,8 @@ export default class LangObject implements ILang {
     w_countSelect = 'Time Mode';
     w_isIncludedEmployee = 'Is Included Employee';
     w_PleaseSelectSites = 'Please Select Site(s)';
+    w_InOutType = 'In Out Type';
+    w_businessChartType = 'Business Chart Type';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';

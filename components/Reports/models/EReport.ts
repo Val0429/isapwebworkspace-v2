@@ -49,6 +49,7 @@ enum ECountType {
 enum ETypeInOrOut {
     in = 'in',
     out = 'out',
+    all = 'all'
 }
 
 enum EIncludedEmployee {
@@ -113,6 +114,13 @@ enum EVideoSource {
     visitor = 'visitor',
 }
 
+enum EBusinessChart {
+    asp = 'asp',
+    revenue = 'revenue',
+    transaction = 'transaction',
+    conversion = 'conversion',
+}
+
 export { EWeek, EWeeks, EVideoSource };
 export { ESign, EPageType, EChartMode };
-export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, ETypeInOrOut, EIncludedEmployee };
+export { EDeviceMode, EAddPeriodSelect, EDesignationPeriod, ECountType, EIfAllSelected, ETypeInOrOut, EIncludedEmployee, EBusinessChart };

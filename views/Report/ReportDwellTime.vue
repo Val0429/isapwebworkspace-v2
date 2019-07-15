@@ -43,13 +43,14 @@
                 </template>
 
                 <!-- Tina -->
-                <analysis-filter
+                <analysis-filter-dwell-time
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
                     :deviceSelectItem="deviceSelectItem"
                     :timeModeSelectItem="timeModeSelectItem"
                     :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                    :businessChartTypeSelectItem="businessChartTypeSelectItem"
                     :siteIds="filterData.siteIds"
                     :areaId="inputFormData.areaId"
                     :groupId="inputFormData.groupId"
@@ -61,9 +62,10 @@
                     @device_id="receiveDeviceId"
                     @type="receiveType"
                     @is_included_employee="receiveIsIncludedEmployee"
+                    @business_chart_type="receiveBusinessChartType"
                 >
 
-                </analysis-filter>
+                </analysis-filter-dwell-time>
                 <!-- Morris -->
                 <highcharts-dwell-time
                     ref="test"
@@ -152,7 +154,8 @@ import {
     ReportDashboard,
     ReportTableData,
     EDesignationPeriod,
-    IReportToTemplateItem
+    IReportToTemplateItem,
+    EBusinessChart
 } from "@/components/Reports";
 
 ///////////////////////// export /////////////////////////
@@ -248,13 +251,15 @@ export default class ReportDwellTime extends Vue {
         yes: EIncludedEmployee.yes,
         no: EIncludedEmployee.no
     };
+    businessChartTypeSelectItem: any = {};
 
     inputFormData: any = {
         areaId: "",
         groupId: "",
         deviceId: "",
         type: "",
-        isIncludedEmployee: "no"
+        isIncludedEmployee: EIncludedEmployee.no,
+        businessChartType: EBusinessChart.revenue
     };
 
     // 整理 showReportData 相關
@@ -293,11 +298,29 @@ export default class ReportDwellTime extends Vue {
 
     async initDatas() {
         // Tina
+        this.initSelect();
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
         await this.initSelectItemUsers();
+    }
+
+    initSelect() {
+        // this.timeModeSelectItem = {
+        //     day: this._(''),
+        //     week: this._(''),
+        //     month: this._(''),
+        //     quarter: this._(''),
+        //     year: this._('')
+        // };
+
+        this.businessChartTypeSelectItem = {
+            asp: this._("w_asp"),
+            revenue: this._("w_revenue"),
+            transaction: this._("w_transaction"),
+            conversion: this._("w_conversion")
+        };
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -543,8 +566,8 @@ export default class ReportDwellTime extends Vue {
         //填入資料
         for (let index in tempArray) {
             for (let head of this.sunRData.head) {
-                let item1Count = {value: 0, valueRatio: 0, link: false};
-                let item2Count = {value: 0, valueRatio: 0, link: false};
+                let item1Count = { value: 0, valueRatio: 0, link: false };
+                let item2Count = { value: 0, valueRatio: 0, link: false };
                 for (let summaryData of summaryTableDatas) {
                     if (
                         new Date(summaryData.date).getHours().toString() != head
@@ -1110,7 +1133,8 @@ export default class ReportDwellTime extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            isIncludedEmployee: "no"
+            isIncludedEmployee: EIncludedEmployee.no,
+            businessChartType: EBusinessChart.revenue
         };
 
         await this.$server
@@ -1143,7 +1167,8 @@ export default class ReportDwellTime extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            isIncludedEmployee: "no"
+            isIncludedEmployee: EIncludedEmployee.no,
+            businessChartType: EBusinessChart.revenue
         };
 
         // get office hour data
@@ -1864,6 +1889,27 @@ export default class ReportDwellTime extends Vue {
 
     async receiveIsIncludedEmployee(isIncludedEmployee) {
         this.inputFormData.isIncludedEmployee = isIncludedEmployee;
+
+        // 單一site
+        if (this.filterData.firstSiteId) {
+            this.sortOutChartData(this.responseData.summaryDatas);
+
+            this.inputFormData.areaId = "";
+            this.inputFormData.groupId = "";
+            this.inputFormData.deviceId = "";
+
+            await this.initSelectItemArea();
+            await this.initSelectItemDeviceGroup();
+            await this.initSelectItemDevice();
+
+            this.inputFormData.areaId = "all";
+            this.inputFormData.groupId = "all";
+            this.inputFormData.deviceId = "all";
+        }
+    }
+
+    async receiveBusinessChartType(businessChartType) {
+        this.inputFormData.businessChartType = businessChartType;
 
         // 單一site
         if (this.filterData.firstSiteId) {
