@@ -307,7 +307,6 @@ export default class ReportDwellTime extends Vue {
     }
 
     initSelect() {
-
         // this.timeModeSelectItem = {
         //     day: this._(''),
         //     week: this._(''),
@@ -317,11 +316,11 @@ export default class ReportDwellTime extends Vue {
         // };
 
         this.businessChartTypeSelectItem = {
-            asp: this._('w_asp'),
-            revenue: this._('w_revenue'),
-            transaction: this._('w_transaction'),
-            conversion: this._('w_conversion'),
-        }
+            asp: this._("w_asp"),
+            revenue: this._("w_revenue"),
+            transaction: this._("w_transaction"),
+            conversion: this._("w_conversion")
+        };
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -567,8 +566,8 @@ export default class ReportDwellTime extends Vue {
         //填入資料
         for (let index in tempArray) {
             for (let head of this.sunRData.head) {
-                let item1Count = {value: 0, valueRatio: 0, link: false};
-                let item2Count = {value: 0, valueRatio: 0, link: false};
+                let item1Count = { value: 0, valueRatio: 0, link: false };
+                let item2Count = { value: 0, valueRatio: 0, link: false };
                 for (let summaryData of summaryTableDatas) {
                     if (
                         new Date(summaryData.date).getHours().toString() != head
@@ -1219,7 +1218,6 @@ export default class ReportDwellTime extends Vue {
     }
 
     sortOutChartData(datas: any) {
-       // let tempChartDatas: any[] = [];
         let tempChartDatas: IChartDemographicData[] = [];
         let isOneDay = false;
         this.chartDatas = [];
@@ -1930,7 +1928,6 @@ export default class ReportDwellTime extends Vue {
             this.inputFormData.deviceId = "all";
         }
     }
-
 
     // Author: Tina
     sortOutReportToTemplateData() {

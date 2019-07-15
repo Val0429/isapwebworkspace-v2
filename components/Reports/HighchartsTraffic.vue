@@ -1340,6 +1340,16 @@ export class HighchartsTraffic extends Vue {
                     style: { color: "#000" }
                 }
             },
+            // events: {
+            //     click: function (e: any) {
+            //         let self: any = this;
+            //         console.log("Click Highcharts", self);
+            //         // find the clicked values and the series
+            //         var x = e.xAxis[0].value, y = e.yAxis[0].value, series = self.series[0];
+            //         // Add it
+            //         series.addPoint([x, y]);
+            //     }
+            // },
             tooltip: {
                 enabled: true,
                 useHTML: true,

@@ -6,8 +6,8 @@
                 <b-col cols="12">
                     <highcharts
                         ref="chartGenderAge"
-                        v-if="mountChart.genderAge"
-                        :options="chartOptions.genderAge"
+                        v-if="mountChart.genderAgeRange"
+                        :options="chartOptions.genderAgeRange"
                     ></highcharts>
                 </b-col>
             </b-row>
@@ -65,8 +65,8 @@
                 <b-col cols="6">
                     <highcharts
                         ref="chartAge"
-                        v-if="mountChart.age"
-                        :options="chartOptions.age"
+                        v-if="mountChart.ageRange"
+                        :options="chartOptions.ageRange"
                     ></highcharts>
                 </b-col>
                 <b-col cols="6">
@@ -215,7 +215,7 @@ export class HighchartsDemographic extends Vue {
         siteXDay1: boolean;
         siteXDayX: boolean;
         genderAge: boolean;
-        age: boolean;
+        ageRange: boolean;
         dwellTime: boolean;
     } = {
         site1Day1: false,
@@ -223,7 +223,7 @@ export class HighchartsDemographic extends Vue {
         siteXDay1: false,
         siteXDayX: false,
         genderAge: false,
-        age: false,
+        ageRange: false,
         dwellTime: false
     };
 
@@ -246,7 +246,7 @@ export class HighchartsDemographic extends Vue {
         siteXDay1: object;
         siteXDayX: object;
         genderAge: object;
-        age: object;
+        ageRange: object;
         dwellTimeBar: object;
         dwellTimePie: object;
     } = {
@@ -255,7 +255,7 @@ export class HighchartsDemographic extends Vue {
         siteXDay1: {},
         siteXDayX: {},
         genderAge: {},
-        age: {},
+        ageRange: {},
         dwellTimeBar: {},
         dwellTimePie: {}
     };
@@ -281,31 +281,31 @@ export class HighchartsDemographic extends Vue {
         this.selectItem.ageRange = [
             {
                 id: EAgeRange.all,
-                text: this._("w_ReportDemographic_AgeAll")
+                text: this._("w_Report_AgeRangeAll")
             },
             {
                 id: EAgeRange.lower20,
-                text: this._("w_ReportDemographic_AgeLow20")
+                text: this._("w_Report_AgeRangeLower20")
             },
             {
                 id: EAgeRange.m21_30,
-                text: this._("w_ReportDemographic_AgeM21_30")
+                text: this._("w_Report_AgeRangeM21_30")
             },
             {
                 id: EAgeRange.m31_40,
-                text: this._("w_ReportDemographic_AgeM31_40")
+                text: this._("w_Report_AgeRangeM31_40")
             },
             {
                 id: EAgeRange.m41_50,
-                text: this._("w_ReportDemographic_AgeM41_50")
+                text: this._("w_Report_AgeRangeM41_50")
             },
             {
                 id: EAgeRange.m51_60,
-                text: this._("w_ReportDemographic_AgeM51_60")
+                text: this._("w_Report_AgeRangeM51_60")
             },
             {
                 id: EAgeRange.upper61,
-                text: this._("w_ReportDemographic_AgeUpp61")
+                text: this._("w_Report_AgeRangeUpper61")
             }
         ];
     }
@@ -316,7 +316,7 @@ export class HighchartsDemographic extends Vue {
         this.mountChart.siteXDay1 = false;
         this.mountChart.siteXDayX = false;
         this.mountChart.genderAge = false;
-        this.mountChart.age = false;
+        this.mountChart.ageRange = false;
         this.mountChart.dwellTime = false;
 
         this.chartMode = HighchartsService.chartMode(
@@ -1604,7 +1604,7 @@ export class HighchartsDemographic extends Vue {
             }
 
             // set chart options
-            this.chartOptions.age = {
+            this.chartOptions.ageRange = {
                 chart: { zoomType: "x" },
                 exporting: { enabled: false },
                 title: { text: null },
@@ -1629,7 +1629,7 @@ export class HighchartsDemographic extends Vue {
                 series: series
             };
 
-            this.mountChart.age = true;
+            this.mountChart.ageRange = true;
         }
     }
 
@@ -1861,12 +1861,12 @@ export class HighchartsDemographic extends Vue {
 
     private getAgeList(): string[] {
         let result: string[] = [
-            this._("w_ReportDemographic_AgeLow20"),
-            this._("w_ReportDemographic_AgeM21_30"),
-            this._("w_ReportDemographic_AgeM31_40"),
-            this._("w_ReportDemographic_AgeM41_50"),
-            this._("w_ReportDemographic_AgeM51_60"),
-            this._("w_ReportDemographic_AgeUpp61")
+            this._("w_Report_AgeRangeLower20"),
+            this._("w_Report_AgeRangeM21_30"),
+            this._("w_Report_AgeRangeM31_40"),
+            this._("w_Report_AgeRangeM41_50"),
+            this._("w_Report_AgeRangeM51_60"),
+            this._("w_Report_AgeRangeUpper61")
         ];
         return result;
     }

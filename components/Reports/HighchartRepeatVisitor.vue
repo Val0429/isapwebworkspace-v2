@@ -332,12 +332,12 @@ export class HighchartsRepeatVisitor extends Vue {
             pie: string[];
         } = {
             bar: [
-                this._("w_ReportDemographic_AgeUpp61"),
-                this._("w_ReportDemographic_AgeM51_60"),
-                this._("w_ReportDemographic_AgeM41_50"),
-                this._("w_ReportDemographic_AgeM31_40"),
-                this._("w_ReportDemographic_AgeM21_30"),
-                this._("w_ReportDemographic_AgeLow20")
+                this._("w_Report_AgeRangeUpper61"),
+                this._("w_Report_AgeRangeM51_60"),
+                this._("w_Report_AgeRangeM41_50"),
+                this._("w_Report_AgeRangeM31_40"),
+                this._("w_Report_AgeRangeM21_30"),
+                this._("w_Report_AgeRangeLower20")
             ],
             pie: []
         };
