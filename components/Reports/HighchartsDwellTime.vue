@@ -57,7 +57,7 @@
                     <highcharts
                         ref="chartAge"
                         v-if="mountChart.age"
-                        :options="chartOptions.age"
+                        :options="chartOptions.percentage"
                     ></highcharts>
                 </b-col>
                 <b-col cols="6">
@@ -65,25 +65,25 @@
                         <b-col cols="12">
                             <iv-form-selection
                                 class='col-md-12'
-                                :value="selection.ageRange"
-                                :options="selectItem.ageRange"
-                                @input="changeAge"
+                                :value="selection.dwellTimeRange"
+                                :options="selectItem.dwellTimeRange"
+                                @input="changeDwellTime"
                             ></iv-form-selection>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col cols="6">
                             <highcharts
-                                ref="chartDwellTime"
-                                v-if="mountChart.dwellTime"
-                                :options="chartOptions.dwellTimeBar"
+                                ref="chartAgeRange"
+                                v-if="mountChart.ageRange"
+                                :options="chartOptions.ageRange"
                             ></highcharts>
                         </b-col>
                         <b-col cols="6">
                             <highcharts
                                 ref="chartGender"
-                                v-if="mountChart.dwellTime"
-                                :options="chartOptions.dwellTimePie"
+                                v-if="mountChart.gender"
+                                :options="chartOptions.gender"
                             ></highcharts>
                         </b-col>
                     </b-row>
@@ -204,29 +204,26 @@ export class HighchartsDwellTime extends Vue {
         site1DayX: boolean;
         siteXDay1: boolean;
         siteXDayX: boolean;
-        genderAge: boolean;
-        age: boolean;
-        dwellTime: boolean;
+        percentage: boolean;
+        ageRange: boolean;
+        gender: boolean;
     } = {
         site1Day1: false,
         site1DayX: false,
         siteXDay1: false,
         siteXDayX: false,
-        genderAge: false,
-        age: false,
-        dwellTime: false
+        percentage: false,
+        ageRange: false,
+        gender: false
     };
 
-    selection: { gender: EGender; ageRange: EAgeRange } = {
-        gender: EGender.male,
-        ageRange: EAgeRange.all
+    selection: { dwellTimeRange: EDwellTimeRange; } = {
+        dwellTimeRange: EDwellTimeRange.none
     };
     selectItem: {
-        gender: IBootstrapSelectItem[];
-        ageRange: IValSelectItem[];
+        dwellTimeRange: IBootstrapSelectItem[];
     } = {
-        gender: [],
-        ageRange: []
+        dwellTimeRange: []
     };
 
     // chart options
@@ -235,19 +232,17 @@ export class HighchartsDwellTime extends Vue {
         site1DayX: object;
         siteXDay1: object;
         siteXDayX: object;
-        genderAge: object;
-        age: object;
-        dwellTimeBar: object;
-        dwellTimePie: object;
+        percentage: object;
+        ageRange: object;
+        gender: object;
     } = {
         site1Day1: {},
         site1DayX: {},
         siteXDay1: {},
         siteXDayX: {},
-        genderAge: {},
-        age: {},
-        dwellTimeBar: {},
-        dwellTimePie: {}
+        percentage: {},
+        ageRange: {},
+        gender: {}
     };
 
     created() {
@@ -258,44 +253,34 @@ export class HighchartsDwellTime extends Vue {
     mounted() {}
 
     initSelectItem() {
-        this.selectItem.gender = [
+        this.selectItem.dwellTimeRange = [
             {
-                value: EGender.male,
-                text: this._("w_Male")
+                value: EDwellTimeRange.all,
+                text: this._("w_Report_DwellTimeRangeAll")
             },
             {
-                value: EGender.female,
-                text: this._("w_Female")
-            }
-        ];
-        this.selectItem.ageRange = [
-            {
-                id: EAgeRange.all,
-                text: this._("w_ReportDemographic_AgeAll")
+                value: EDwellTimeRange.lower5,
+                text: this._("w_Report_DwellTimeRangeLower5")
             },
             {
-                id: EAgeRange.lower20,
-                text: this._("w_ReportDemographic_AgeLow20")
+                value: EDwellTimeRange.m5_15,
+                text: this._("w_Report_DwellTimeRangeM5_15")
             },
             {
-                id: EAgeRange.m21_30,
-                text: this._("w_ReportDemographic_AgeM21_30")
+                value: EDwellTimeRange.m15_30,
+                text: this._("w_Report_DwellTimeRangeM15_30")
             },
             {
-                id: EAgeRange.m31_40,
-                text: this._("w_ReportDemographic_AgeM31_40")
+                value: EDwellTimeRange.m30_60,
+                text: this._("w_Report_DwellTimeRangeM30_60")
             },
             {
-                id: EAgeRange.m41_50,
-                text: this._("w_ReportDemographic_AgeM41_50")
+                value: EDwellTimeRange.m60_120,
+                text: this._("w_Report_DwellTimeRangeM60_120")
             },
             {
-                id: EAgeRange.m51_60,
-                text: this._("w_ReportDemographic_AgeM51_60")
-            },
-            {
-                id: EAgeRange.upper61,
-                text: this._("w_ReportDemographic_AgeUpp61")
+                value: EDwellTimeRange.upper120,
+                text: this._("w_Report_DwellTimeRangeUpper120")
             }
         ];
     }
@@ -305,9 +290,9 @@ export class HighchartsDwellTime extends Vue {
         this.mountChart.site1DayX = false;
         this.mountChart.siteXDay1 = false;
         this.mountChart.siteXDayX = false;
-        this.mountChart.genderAge = false;
-        this.mountChart.age = false;
-        this.mountChart.dwellTime = false;
+        this.mountChart.percentage = false;
+        this.mountChart.ageRange = false;
+        this.mountChart.gender = false;
 
         this.chartMode = HighchartsService.chartMode(
             this.startDate,
@@ -315,9 +300,9 @@ export class HighchartsDwellTime extends Vue {
             this.sites
         );
 
-        // set same chart
-        this.drawChartAge();
-        this.drawChartDwellTime();
+        // set same chartAge
+        this.drawChartPercentage();
+        this.drawChartAgeRangeGender();
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
@@ -1048,7 +1033,7 @@ export class HighchartsDwellTime extends Vue {
                 sites: [],
                 timeMode: this.timeMode,
                 areaMode: this.areaMode,
-                genderMode: this.selection.gender
+                timeRange: this.selection.dwellTimeRange
             };
             tempChartData.i18n = null;
             tempChartData.timeMode = null;
@@ -1285,11 +1270,23 @@ export class HighchartsDwellTime extends Vue {
                             );
                         }
 
-                        switch (this.selection.gender) {
-                            case EGender.male:
+                        switch (this.selection.dwellTimeRange) {
+                            case EDwellTimeRange.lower5:
                                 tempData.push(tempItem.maleCountPercent);
                                 break;
-                            case EGender.female:
+                            case EDwellTimeRange.m5_15:
+                                tempData.push(tempItem.femaleCountPercent);
+                                break;
+                            case EDwellTimeRange.m15_30:
+                                tempData.push(tempItem.femaleCountPercent);
+                                break;
+                            case EDwellTimeRange.m30_60:
+                                tempData.push(tempItem.femaleCountPercent);
+                                break;
+                            case EDwellTimeRange.m60_120:
+                                tempData.push(tempItem.femaleCountPercent);
+                                break;
+                            case EDwellTimeRange.upper120:
                                 tempData.push(tempItem.femaleCountPercent);
                                 break;
                         }
@@ -1419,6 +1416,8 @@ export class HighchartsDwellTime extends Vue {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    drawChartPercentage() {}
+
     drawChartAge() {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
@@ -1489,7 +1488,7 @@ export class HighchartsDwellTime extends Vue {
             }
 
             // set chart options
-            this.chartOptions.age = {
+            this.chartOptions.ageRange = {
                 chart: { zoomType: "x" },
                 exporting: { enabled: false },
                 title: { text: null },
@@ -1514,64 +1513,11 @@ export class HighchartsDwellTime extends Vue {
                 series: series
             };
 
-            this.mountChart.age = true;
+            this.mountChart.ageRange = true;
         }
     }
 
-    ////////////////////////////// TODO: //////////////////////////////
-
-    demoRandomData: any = [
-        [
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 }
-        ],
-        [
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 }
-        ],
-        [
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 }
-        ],
-        [
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 }
-        ],
-        [
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 }
-        ],
-        [
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 },
-            { male: 0, female: 0 }
-        ]
-    ];
-
-    drawChartDwellTime() {
+    drawChartAgeRangeGender() {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
         );
@@ -1590,91 +1536,7 @@ export class HighchartsDwellTime extends Vue {
 
         let pieSeriesData = [[this._("w_Male"), 0], [this._("w_Female"), 0]];
 
-        switch (this.selection.ageRange) {
-            case EAgeRange.all:
-                for (let i in this.demoRandomData) {
-                    let demoAge = this.demoRandomData[i];
-                    for (let j in demoAge) {
-                        let demoData = demoAge[j];
-                        barSeries[0].data[i] += demoData.male;
-                        barSeries[1].data[i] += demoData.female;
-                        pieSeriesData[0][1] += demoData.male;
-                        pieSeriesData[1][1] += demoData.female;
-                    }
-                }
-                break;
-            case EAgeRange.lower20:
-                let demoAgeIndex0 = 0;
-                let demoAge0 = this.demoRandomData[demoAgeIndex0];
-                for (let j in demoAge0) {
-                    let demoData = demoAge0[j];
-                    barSeries[0].data[j] += demoData.male;
-                    barSeries[1].data[j] += demoData.female;
-                    pieSeriesData[0][1] += demoData.male;
-                    pieSeriesData[1][1] += demoData.female;
-                }
-                break;
-            case EAgeRange.m21_30:
-                let demoAgeIndex1 = 1;
-                let demoAge1 = this.demoRandomData[demoAgeIndex1];
-                for (let j in demoAge1) {
-                    let demoData = demoAge1[j];
-                    barSeries[0].data[j] += demoData.male;
-                    barSeries[1].data[j] += demoData.female;
-                    pieSeriesData[0][1] += demoData.male;
-                    pieSeriesData[1][1] += demoData.female;
-                }
-                break;
-            case EAgeRange.m31_40:
-                let demoAgeIndex2 = 2;
-                let demoAge2 = this.demoRandomData[demoAgeIndex2];
-                for (let j in demoAge2) {
-                    let demoData = demoAge2[j];
-                    barSeries[0].data[j] += demoData.male;
-                    barSeries[1].data[j] += demoData.female;
-                    pieSeriesData[0][1] += demoData.male;
-                    pieSeriesData[1][1] += demoData.female;
-                }
-                break;
-            case EAgeRange.m41_50:
-                let demoAgeIndex3 = 3;
-                let demoAge3 = this.demoRandomData[demoAgeIndex3];
-                for (let j in demoAge3) {
-                    let demoData = demoAge3[j];
-                    barSeries[0].data[j] += demoData.male;
-                    barSeries[1].data[j] += demoData.female;
-                    pieSeriesData[0][1] += demoData.male;
-                    pieSeriesData[1][1] += demoData.female;
-                }
-                break;
-            case EAgeRange.m51_60:
-                let demoAgeIndex4 = 4;
-                let demoAge4 = this.demoRandomData[demoAgeIndex4];
-                for (let j in demoAge4) {
-                    let demoData = demoAge4[j];
-                    barSeries[0].data[j] += demoData.male;
-                    barSeries[1].data[j] += demoData.female;
-                    pieSeriesData[0][1] += demoData.male;
-                    pieSeriesData[1][1] += demoData.female;
-                }
-                break;
-            case EAgeRange.upper61:
-                let demoAgeIndex5 = 5;
-                let demoAge5 = this.demoRandomData[demoAgeIndex5];
-                for (let j in demoAge5) {
-                    let demoData = demoAge5[j];
-                    barSeries[0].data[j] += demoData.male;
-                    barSeries[1].data[j] += demoData.female;
-                    pieSeriesData[0][1] += demoData.male;
-                    pieSeriesData[1][1] += demoData.female;
-                }
-                break;
-            case EAgeRange.none:
-            default:
-                break;
-        }
-
-        this.chartOptions.dwellTimeBar = {
+        this.chartOptions.ageRange = {
             chart: {
                 type: "bar",
                 zoomType: "x"
@@ -1696,7 +1558,7 @@ export class HighchartsDwellTime extends Vue {
             series: barSeries
         };
 
-        this.chartOptions.dwellTimePie = {
+        this.chartOptions.gender = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1711,7 +1573,7 @@ export class HighchartsDwellTime extends Vue {
             ]
         };
 
-        this.mountChart.dwellTime = true;
+        this.mountChart.gender = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1829,26 +1691,19 @@ export class HighchartsDwellTime extends Vue {
         return value;
     }
 
-    private changeGender(value: EGender) {
-        this.selection.gender = value;
-        if (this.chartMode == EChartMode.siteXDayX) {
-            this.initSiteXDayX();
-        }
-    }
-
-    private changeAge(value: EAgeRange) {
-        this.selection.ageRange = value;
-        this.drawChartDwellTime();
+    private changeDwellTime(value: EDwellTimeRange) {
+        this.selection.dwellTimeRange = value;
+        this.drawChartAgeRangeGender();
     }
 
     private getAgeList(): string[] {
         let result: string[] = [
-            this._("w_ReportDemographic_AgeLow20"),
-            this._("w_ReportDemographic_AgeM21_30"),
-            this._("w_ReportDemographic_AgeM31_40"),
-            this._("w_ReportDemographic_AgeM41_50"),
-            this._("w_ReportDemographic_AgeM51_60"),
-            this._("w_ReportDemographic_AgeUpp61")
+            this._("w_Report_DwellTimeRangeLower5"),
+            this._("w_Report_DwellTimeRangeM5_15"),
+            this._("w_Report_DwellTimeRangeM15_30"),
+            this._("w_Report_DwellTimeRangeM30_60"),
+            this._("w_Report_DwellTimeRangeM60_120"),
+            this._("w_Report_DwellTimeRangeUpper120")
         ];
         return result;
     }

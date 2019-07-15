@@ -810,6 +810,22 @@ export default class LangObject implements ILang {
     w_Report_Weather = 'Weather';
     w_Report_Percent = 'Percent';
 
+    w_Report_AgeRangeAll = 'All';
+    w_Report_AgeRangeLower20 = '<20';
+    w_Report_AgeRangeM21_30 = '21-30';
+    w_Report_AgeRangeM31_40 = '31-40';
+    w_Report_AgeRangeM41_50 = '41-50';
+    w_Report_AgeRangeM51_60 = '51-60';
+    w_Report_AgeRangeUpper61 = '>61';
+
+    w_Report_DwellTimeRangeAll = 'All';
+    w_Report_DwellTimeRangeLower5 = '<5';
+    w_Report_DwellTimeRangeM5_15 = '5-15';
+    w_Report_DwellTimeRangeM15_30 = '15-30';
+    w_Report_DwellTimeRangeM30_60 = '30-60';
+    w_Report_DwellTimeRangeM60_120 = '60-120';
+    w_Report_DwellTimeRangeUpper120 = '>120';
+
     w_Report_ErrorDateStart = 'Start date error';
     w_Report_ErrorDateEnd = 'End date error';
     w_Report_ErrorChartMode = 'No Find Chart Mode';
@@ -826,14 +842,6 @@ export default class LangObject implements ILang {
     w_ReportDwellTime_LabelDwellTimePercentage = 'Dwell Time Percentage';
 
     // Report Demographic
-    w_ReportDemographic_AgeAll = 'All';
-    w_ReportDemographic_AgeLow20 = '<20';
-    w_ReportDemographic_AgeM21_30 = '21-30';
-    w_ReportDemographic_AgeM31_40 = '31-40';
-    w_ReportDemographic_AgeM41_50 = '41-50';
-    w_ReportDemographic_AgeM51_60 = '51-60';
-    w_ReportDemographic_AgeUpp61 = '>61';
-
     w_ReportDemographic_LabelGender = 'Demographic by Gender';
     w_ReportDemographic_LabelAge = 'Demographic by Age';
 

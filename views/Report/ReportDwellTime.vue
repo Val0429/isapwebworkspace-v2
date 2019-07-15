@@ -1193,7 +1193,7 @@ export default class ReportDwellTime extends Vue {
     }
 
     sortOutChartData(datas: any) {
-        let tempChartDatas: IChartDemographicDwellTimeData[] = [];
+        let tempChartDatas: IChartDemographicData[] = [];
         let isOneDay = false;
         this.chartDatas = [];
 

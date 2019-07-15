@@ -6,16 +6,16 @@ enum EChartMode {
     siteXDayX = 'siteXDayX',
 }
 
-enum EGender {
-    none = 'none',
-    male = 'male',
-    female = 'female',
-}
-
 enum EAreaMode {
     none = 'none',
     all = 'all',
     single = 'single',
+}
+
+enum EGender {
+    none = 'none',
+    male = 'male',
+    female = 'female',
 }
 
 enum ETimeMode {
@@ -26,17 +26,6 @@ enum ETimeMode {
     month = 'month',
     quarter = 'quarter',
     year = 'year',
-}
-
-enum EAgeRange {
-    none = 'none',
-    all = 'all',
-    lower20 = 'lower20',
-    m21_30 = 'm21_30',
-    m31_40 = 'm31_40',
-    m41_50 = 'm41_50',
-    m51_60 = 'm51_60',
-    upper61 = 'upper61',
 }
 
 enum EWeather {
@@ -53,8 +42,20 @@ enum EWeather {
     partlyCloudyNight = 'partlyCloudyNight',
 }
 
+enum EAgeRange {
+    none = 'none',
+    all = 'all',
+    lower20 = 'lower20',
+    m21_30 = 'm21_30',
+    m31_40 = 'm31_40',
+    m41_50 = 'm41_50',
+    m51_60 = 'm51_60',
+    upper61 = 'upper61',
+}
+
 enum EDwellTimeRange {
     none = 'none',
+    all = 'all',
     lower5 = 'lower5',
     m5_15 = 'm5_15',
     m15_30 = 'm15_30',
