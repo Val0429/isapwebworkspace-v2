@@ -163,7 +163,7 @@
 		EDeviceMode,
 		EIncludedEmployee,
 		IDayRange,
-		IChartDemographicDwellTimeData,
+		IChartDemographicData,
 		IChartTrafficData,
 		IPeckTimeRange,
 		ISite,
@@ -214,7 +214,7 @@
 		timeMode: ETimeMode = ETimeMode.none;
 		areaMode: EAreaMode = EAreaMode.none;
 		sites: ISite[] = [];
-		chartDatas: IChartDemographicDwellTimeData[] = [];
+		chartDatas: IChartDemographicData[] = [];
 
 		////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -499,9 +499,9 @@
 			this.reportTableTitle = {
 				titleCount: 2,
 				title1: this._("w_Male"),
-				title2: this._("w_FeMale"),
+				title2: this._("w_Female"),
 				title1Title: this._("w_MaleTotal"),
-				title2Title: this._("w_FeMaleTotal")
+				title2Title: this._("w_FemaleTotal")
 			};
 
 			//head
@@ -1385,7 +1385,7 @@
         }
 
 		sortOutChartData(datas: any) {
-			let tempChartDatas: IChartDemographicDwellTimeData[] = [];
+			let tempChartDatas: IChartDemographicData[] = [];
 			let isOneDay = false;
 			this.chartDatas = [];
 
@@ -1692,6 +1692,25 @@
 						break;
 					}
 				}
+
+
+                // TODO: Dwell time
+                let tempRandomDwellTime = Math.floor(Math.random()*6);
+                if (tempRandomDwellTime == 0) {
+                    tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
+                } else if (tempRandomDwellTime == 1) {
+                    tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
+                } else if (tempRandomDwellTime == 2) {
+                    tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
+                } else if (tempRandomDwellTime == 3) {
+                    tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
+                } else if (tempRandomDwellTime == 4) {
+                    tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
+                } else {
+                    tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
+                } 
+                // TODO: Dwell time
+                
             }
 
 			this.chartDatas = tempChartDatas;
@@ -2192,7 +2211,7 @@
 					let tempDate = new Date(
 						`2019-07-${iString10}T${iString10}:00:00.000Z`
 					);
-					let tempChartData: IChartDemographicDwellTimeData = {
+					let tempChartData: IChartDemographicData = {
 						date: tempDate,
 						siteObjectId: "site" + (j + 1).toString(),
 						temperatureMin: iNumber,

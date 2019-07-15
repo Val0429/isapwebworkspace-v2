@@ -143,7 +143,7 @@ import {
     EChartMode,
     EPageType,
     ESign,
-    IChartDemographicDwellTimeData,
+    IChartDemographicData,
     IPeckTimeRange,
     ISite,
     ISiteItems,
@@ -194,7 +194,7 @@ export default class ReportDwellTime extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    chartDatas: IChartDemographicDwellTimeData[] = [];
+    chartDatas: IChartDemographicData[] = [];
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -382,7 +382,7 @@ export default class ReportDwellTime extends Vue {
                 let tempDate = new Date(
                     `2019-07-${iString10}T${iString10}:00:00.000Z`
                 );
-                let tempChartData: IChartDemographicDwellTimeData = {
+                let tempChartData: IChartDemographicData = {
                     date: tempDate,
                     siteObjectId: "site" + (j + 1).toString(),
                     temperatureMin: iNumber,
