@@ -616,4 +616,7 @@ export default class LangObject implements ILang {
     w_Manual_Sync = "Manual Sync";
     w_Not_Selected = "Not Specified";
     w_RedirectToLoginMessage = "因閒置過久已被登出，請重新登入";
+    w_QueryPermission = "Query Permission";
+    w_Member_Count = "Member Count";
+    w_Number = "序號";
 }

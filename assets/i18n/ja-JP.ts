@@ -613,4 +613,7 @@ export default class LangObject implements ILang {
     w_Manual_Sync = "Manual Sync";
     w_Not_Selected = "Not Specified";
     w_RedirectToLoginMessage = "You have been logged out";
+    w_QueryPermission = "Query Permission";
+    w_Member_Count = "Member Count";
+    w_Number = "Number";
 }

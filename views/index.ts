@@ -39,6 +39,7 @@ import UserPermission from './components/acs/UserPermission.vue';
 import Site from './components/bar/Site.vue';
 import Region from './components/bar/Region.vue';
 import License from './components/bar/License.vue';
+import QueryPermission from './components/acs/QueryPermission.vue';
 
 // Demos
 import DemoFETCardPrint from './Demos/DemoFETCardPrint.vue';
@@ -62,6 +63,7 @@ $({ path: '/floor', name: "_('w_Floor')"})(Floor);
     $({ path: '/cardreport', name: "_('w_CardExpirationReport')"})(CardExpirationReport);
     $({ path: '/visitorreport', name: "_('w_VisitorCardReport')"})(VisitorCardReport);
     $({ path: '/license', name: "_('w_License')"})(License);
+    $({ path: '/querypermission', name: "_('w_QueryPermission')"})(QueryPermission);
     
 // Users
 
