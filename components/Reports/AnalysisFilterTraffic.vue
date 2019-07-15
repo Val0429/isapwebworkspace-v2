@@ -70,6 +70,7 @@
             <template #selectInOrOut="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-1"
+                    v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.inOrOut"
@@ -92,6 +93,7 @@
             <template #businessChartType="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
+                    v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.businessChartType"
@@ -120,7 +122,7 @@ let config = require("@/config/default/debug");
 @Component({
     components: {}
 })
-export class AnalysisFilterInOut extends Vue {
+export class AnalysisFilterTraffic extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -305,20 +307,14 @@ export class AnalysisFilterInOut extends Vue {
                  * @uiLabel - ${this._("w_DeviceGroups")}
                  * @uiColumnGroup - analysis
                  */
-                groupId?: ${toEnumInterface(
-                    this.deviceGroupSelectItem as any,
-                    false
-                )};
+                groupId?: ${toEnumInterface( this.deviceGroupSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_Devices")}
                  * @uiColumnGroup - analysis
                  */
-                deviceId?: ${toEnumInterface(
-                    this.deviceSelectItem as any,
-                    false
-                )};
+                deviceId?: ${toEnumInterface(this.deviceSelectItem as any, false)};
 
 
                 /**
@@ -354,8 +350,8 @@ export class AnalysisFilterInOut extends Vue {
     }
 }
 
-export default AnalysisFilterInOut;
-Vue.component("analysis-filter-in-out", AnalysisFilterInOut);
+export default AnalysisFilterTraffic;
+Vue.component("analysis-filter-traffic", AnalysisFilterTraffic);
 </script>
 
 <style lang="scss" scoped>
