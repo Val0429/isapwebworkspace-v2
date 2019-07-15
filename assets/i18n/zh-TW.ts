@@ -101,7 +101,8 @@ export default class LangObject implements ILang {
     w_Sites = 'Site(s)';
     w_Tag = 'Tag(s)';
     w_Site = 'Site';
-    w_Group = 'Group';
+    //w_Group = 'Group';
+    w_Group = 'Entrance';
     w_Item = 'Item';
     w_Total = 'Total';
     w_Average_Occupancy = 'Average Occupancy';
@@ -431,7 +432,7 @@ export default class LangObject implements ILang {
     w_Site_SiteID = 'Site ID';
     w_Site_SiteName = 'Site Name';
     w_Site_AreaName = 'Area Name';
-   // w_Site_GroupName = 'Device Group Name';
+    // w_Site_GroupName = 'Device Group Name';
     w_Site_GroupName = 'Entrance Name';
     w_Site_DeviceName = 'Device Name';
     w_Site_DeviceType = 'Device Type';

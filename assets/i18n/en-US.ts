@@ -101,7 +101,8 @@ export default class LangObject {
     w_Sites = 'Site(s)';
     w_Tag = 'Tag(s)';
     w_Site = 'Site';
-    w_Group = 'Group';
+    //w_Group = 'Group';
+    w_Group = 'Entrance';
     w_Item = 'Item';
     w_Total = 'Total';
     w_Average_Occupancy = 'Average Occupancy';
@@ -463,7 +464,7 @@ export default class LangObject {
     w_Site_ViewArea = 'View Area';
     w_Site_AddArea = 'Add Area';
     w_Site_EditArea = 'Edit Area';
-   // w_Site_DeviceGroupList = 'Device Group List';
+    // w_Site_DeviceGroupList = 'Device Group List';
     w_Site_DeviceGroupList = 'Entrance List';
     w_Site_ViewDevice = 'View Device';
     w_Site_AddDevice = 'Add Device';
