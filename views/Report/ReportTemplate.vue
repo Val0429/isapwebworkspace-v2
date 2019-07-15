@@ -1,3 +1,4 @@
+import {EDesignationPeriod} from "../../components/Reports";
 <template>
     <div class="animated fadeIn">
         <iv-card
@@ -270,7 +271,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue, Prop} from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
     import {toEnumInterface} from "@/../core";
     import {ERegionType, IRegionTreeSelected, RegionTreeItem} from "@/components/RegionTree";
 
@@ -278,10 +279,16 @@
     import ResponseFilter from "@/services/ResponseFilter";
     import Dialog from "@/services/Dialog";
     import Datetime from "@/services/Datetime";
+    import ReportService from "@/components/Reports/models/ReportService";
 
-    import { EVideoSource, EWeeks, ITemplateItem, EAddPeriodSelect, EDesignationPeriod,
-        IReportToTemplateItem } from "@/components/Reports";
-    import ReportService from '@/components/Reports/models/ReportService';
+    import {
+        EAddPeriodSelect,
+        EDesignationPeriod,
+        EDeviceMode,
+        EVideoSource,
+        EWeeks,
+        IReportToTemplateItem
+    } from "@/components/Reports";
 
     enum EPageStep {
     list = "list",
@@ -344,11 +351,28 @@ export default class ReportTemplate extends Vue {
     selectPeriodAddWay: string = EAddPeriodSelect.period;
 
     // Report To Template
-    reportToTemplateData: IReportToTemplateItem | null =  null;
+    // reportToTemplateData: IReportToTemplateItem | null = null
+    reportToTemplateData: any = {};
+    // reportToTemplateData: IReportToTemplateItem = {
+    //     startDate: new Date(),
+    //     endDate: new Date(),
+    //     mode: EDeviceMode.humanDetection,
+    //     siteIds: [],
+    //     tagIds: [],
+    //     sendUserIds: [],
+    //     type: EDesignationPeriod.today,
+    // };
 
 
     created() {
-        this.initTemplate();
+
+
+        console.log(' - ', this.reportToTemplateData);
+
+        if (this.$route.query.reportToTemplateData !== undefined) {
+            this.initTemplate();
+        }
+
     }
 
     mounted() {
@@ -538,13 +562,10 @@ export default class ReportTemplate extends Vue {
             this.reportToTemplateData = JSON.parse(this.$route.query.reportToTemplateData as string);
             this.reportToTemplateData.startDate = Datetime.DateToZero(new Date(this.reportToTemplateData.startDate));
             this.reportToTemplateData.endDate = Datetime.DateToZero(new Date(this.reportToTemplateData.endDate));
+            this.reportToTemplateData.siteIds = JSON.parse(JSON.stringify(this.reportToTemplateData.siteIds))
         }
 
-
-
         await this.pageToAdd(EPageStep.add);
-
-
 
         this.inputFormData = {
             mode: this.reportToTemplateData.mode,
@@ -794,6 +815,7 @@ export default class ReportTemplate extends Vue {
         this.pageStep = EPageStep.list;
         (this.$refs.tagTable as any).reload();
         this.selecteds = [];
+        this.reportToTemplateData = {};
     }
 
     async pageToChooseTree() {
