@@ -296,17 +296,8 @@ export default class ReportTraffic extends Vue {
     //     { value: ETypeInOrOut.out, text: ETypeInOrOut.out },
     //      { value: ETypeInOrOut.all, text: ETypeInOrOut.all }
     // ];
-    timeModeSelectItem: any = {
-        day: ECountType.day,
-        week: ECountType.week,
-        month: ECountType.month,
-        quarter: ECountType.quarter,
-        year: ECountType.year
-    };
-    isIncludedEmployeeSelectItem: any = {
-        yes: EIncludedEmployee.yes,
-        no: EIncludedEmployee.no
-    };
+    timeModeSelectItem: any = {};
+    isIncludedEmployeeSelectItem: any = {};
     businessChartTypeSelectItem: any = {};
 
     inputFormData: any = {
@@ -367,12 +358,17 @@ export default class ReportTraffic extends Vue {
             year: this._('w_yearly')
         };
 
+        this.isIncludedEmployeeSelectItem = {
+            yes: this._('w_yes'),
+            no: this._('w_no')
+        };
+
         this.businessChartTypeSelectItem = {
             asp: this._('w_asp'),
             revenue: this._('w_revenue'),
             transaction: this._('w_transaction'),
             conversion: this._('w_conversion'),
-        }
+        };
     }
 
     // Author: Morris

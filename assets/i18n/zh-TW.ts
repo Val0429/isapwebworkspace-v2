@@ -184,6 +184,9 @@ export default class LangObject implements ILang {
     w_transaction = 'Transaction';
     w_conversion = 'Conversion';
 
+	w_yes = 'Yes';
+	w_no = 'No';
+
     w_daily = 'Daily';
     w_weekly = 'Weekly';
     w_monthly = 'Monthly';

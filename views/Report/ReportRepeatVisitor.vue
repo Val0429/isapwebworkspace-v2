@@ -196,18 +196,8 @@ export default class ReportRepeatVisitor extends Vue {
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
     deviceSelectItem: any = {};
-
-    timeModeSelectItem: any = {
-        day: ECountType.day,
-        week: ECountType.week,
-        month: ECountType.month,
-        quarter: ECountType.quarter,
-        year: ECountType.year
-    };
-    isIncludedEmployeeSelectItem: any = {
-        yes: EIncludedEmployee.yes,
-        no: EIncludedEmployee.no
-    };
+    timeModeSelectItem: any = {};
+    isIncludedEmployeeSelectItem: any = {};
 
     inputFormData: any = {
         areaId: "",
@@ -250,13 +240,31 @@ export default class ReportRepeatVisitor extends Vue {
 
     mounted() {}
 
+
     async initDatas() {
         // Tina
+        this.initSelect();
         await this.initRegionTreeSelect();
         await this.siteFilterPermission();
         await this.initSelectItemTag();
         await this.initSelectItemTree();
         await this.initSelectItemUsers();
+    }
+
+
+    initSelect() {
+        this.timeModeSelectItem = {
+            day: this._('w_daily'),
+            week: this._('w_weekly'),
+            month: this._('w_monthly'),
+            quarter: this._('w_quarterly'),
+            year: this._('w_yearly')
+        };
+
+        this.isIncludedEmployeeSelectItem = {
+            yes: this._('w_yes'),
+            no: this._('w_no')
+        };
     }
 
     initTemplate() {
