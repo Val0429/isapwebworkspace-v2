@@ -176,6 +176,12 @@ export default class LangObject implements ILang {
     w_transaction = 'Transaction';
     w_conversion = 'Conversion';
 
+    w_daily = 'Daily';
+    w_weekly = 'Weekly';
+    w_monthly = 'Monthly';
+    w_quarterly = 'Quarterly';
+    w_yearly = 'Yearly';
+
     w_Port_PlaceHolder = 'Port , 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
     w_Phone_Placeholder = 'ex : +xxxxxxxxxx';

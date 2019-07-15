@@ -359,13 +359,13 @@ export default class ReportTraffic extends Vue {
             all: this._('w_All'),
         };
 
-        // this.timeModeSelectItem = {
-        //     day: this._(''),
-        //     week: this._(''),
-        //     month: this._(''),
-        //     quarter: this._(''),
-        //     year: this._('')
-        // };
+        this.timeModeSelectItem = {
+            day: this._('w_daily'),
+            week: this._('w_weekly'),
+            month: this._('w_monthly'),
+            quarter: this._('w_quarterly'),
+            year: this._('w_yearly')
+        };
 
         this.businessChartTypeSelectItem = {
             asp: this._('w_asp'),
