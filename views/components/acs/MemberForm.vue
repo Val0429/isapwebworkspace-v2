@@ -685,9 +685,9 @@ export default class MemberForm extends Vue {
       if (detailData.AccessRules != undefined) {
         for (let rule of detailData.AccessRules) {
           if (typeof rule == "object") {
-            if (rule.ObjectToken != undefined && rule.ObjectName != undefined) {
+            if (rule.RuleToken) {
               this.inputFormData.premissionSelected.push(
-                rule.ObjectToken.toString()
+                rule.RuleToken
               );
             }
           } else if (typeof rule == "string") {
