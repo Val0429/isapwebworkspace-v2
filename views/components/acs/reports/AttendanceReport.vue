@@ -77,14 +77,16 @@ export default class EmployeeReport extends Vue  {
             }
 
         ];
-        this.filter.DateStart = new Date();
-        this.filter.DateEnd = new Date();
+        this.filter= {DateStart: new Date(), DateEnd : new Date()};
         
     }
     
   private async getData() {    
       try{    
-        if(!this.filter)return;
+        if(!this.filter){
+            this.filter= {DateStart: new Date(), DateEnd : new Date()};
+            return;
+        }
         this.isBusy=true;           
         await this.getMemberData();
         await this.getAttendanceRecord();
