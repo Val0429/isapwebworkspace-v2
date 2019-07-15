@@ -69,6 +69,7 @@
             <template #businessChartType="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
+                    v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.businessChartType"

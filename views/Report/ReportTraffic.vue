@@ -42,7 +42,7 @@ import {EAreaMode} from "../../components/Reports";
                 </template>
 
                 <!-- Tina -->
-                <analysis-filter-in-out
+                <analysis-filter-traffic
                     class="mb-4"
                     :areaSelectItem="areaSelectItem"
                     :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -67,7 +67,7 @@ import {EAreaMode} from "../../components/Reports";
                     @is_included_employee="receiveIsIncludedEmployee"
                     @business_chart_type="receiveBusinessChartType"
                 >
-                </analysis-filter-in-out>
+                </analysis-filter-traffic>
 
                 <!-- Ben -->
                 <anlysis-dashboard
@@ -1422,7 +1422,8 @@ export default class ReportTraffic extends Vue {
             areaId: "",
             groupId: "",
             deviceId: "",
-            type: ETypeInOrOut.in,
+            inOrOut: ETypeInOrOut.in,
+            type: '',
             isIncludedEmployee: EIncludedEmployee.no,
             businessChartType: EBusinessChart.revenue
         };
@@ -1457,6 +1458,7 @@ export default class ReportTraffic extends Vue {
             areaId: "all",
             groupId: "all",
             deviceId: "all",
+            inOrOut: ETypeInOrOut.in,
             type: this.filterData.type,
             isIncludedEmployee: EIncludedEmployee.no,
             businessChartType: EBusinessChart.revenue
@@ -2014,6 +2016,8 @@ export default class ReportTraffic extends Vue {
 
     async receiveBusinessChartType(businessChartType) {
         this.inputFormData.businessChartType = businessChartType;
+        console.log(' - ', this.inputFormData.businessChartType);
+
 
         // 單一site
         if (this.filterData.firstSiteId) {
