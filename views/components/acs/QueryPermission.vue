@@ -36,19 +36,6 @@
                 :per-page="perPage"
                 aria-controls="my-table"
                 />
-                <!-- <iv-table
-                    ref="mainTable"
-                    :interface="IMainTable()"
-                    :server="{ path: '/acs/permissiontable' }"
-                    :params="filter"
-                >
-                    <template #Actions="{$attrs, $listeners}">
-                        
-                            <iv-toolbox-view @click="pageToView($attrs.row)" />                            
-                        
-                    </template>
-
-                </iv-table> -->
             </iv-card>
         </div>
         <div v-show="viewPage">
@@ -148,8 +135,8 @@ export default class QueryPermission extends Vue {
             if(!item.accesslevels || item.accesslevels.length<=0)continue;
             let doors = [];
             for(let accesslevel of item.accesslevels){
-                if(!accesslevel.doors || accesslevel.doors.length<=0)continue;
-                doors.push(...accesslevel.doors);
+                if(!accesslevel.type || accesslevel.type!="door" || !accesslevel.door)continue;
+                doors.push(accesslevel.door);
             }
             let k=1;
             for(let door of doors){
