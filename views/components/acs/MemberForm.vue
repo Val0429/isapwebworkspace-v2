@@ -715,13 +715,9 @@ export default class MemberForm extends Vue {
           EndDate:this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
           StartDate:this.inputFormData.startDate || new Date()
         };
-    let tempCredentials: any = [];
-    if (this.selectedDetail[0] && this.selectedDetail[0].Credentials && this.selectedDetail[0].Credentials.length>0) {
-      tempCredentials = this.selectedDetail[0].Credentials;
-      tempCredentials[0] = credential;
-    } else {      
-      tempCredentials = [credential];
-    }
+        
+    let tempCredentials:any[] = credential.CardNumber && credential.CardNumber.trim()!="" ? [credential] : [];
+    
 
     let tempCustomFieldsList: any = [];
     for(let field of CustomFields){
@@ -742,12 +738,10 @@ export default class MemberForm extends Vue {
         PrimaryWorkgroupName: this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType)).groupname,
         EmployeeNumber: this.inputFormData.employeeNumber,
         LastName: this.inputFormData.chineseName,
-        FirstName: this.inputFormData.englishName,
+        FirstName: this.inputFormData.englishName || "-",
         StartDate: this.inputFormData.startDate || new Date(),
-        EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),        
-
-        // tab1                
-        SmartCardProfileId:"",
+        EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
+        SmartCardProfileId:"0",
         Status:1,
         //new addition
         GeneralInformation:"",
@@ -1060,6 +1054,7 @@ export default class MemberForm extends Vue {
                      ? "false"
                      : "true"
                  }
+                 * @uiHidden - ${!this.inputFormData.cardNumber || this.inputFormData.cardNumber=="" ? "true":"false"}
                  */
                 cardCertificate?: ${toEnumInterface(
                   this.cardProfileOptions as any,
@@ -1085,6 +1080,7 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_pin")}
                  * @uiColumnGroup - row173
+                 * @uiDisabled - ${!this.inputFormData.cardNumber || this.inputFormData.cardNumber=="" ? "true":"false"}
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
                    this.pageStep === EPageStep.edit
