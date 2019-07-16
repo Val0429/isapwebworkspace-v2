@@ -118,7 +118,7 @@ import {EAreaMode} from "../../components/Reports";
                 >
                 </report-table>
 
-                <div class="col-md-12">
+                <div>
                     <b-button
                         v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
                         variant="secondary"
