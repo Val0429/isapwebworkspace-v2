@@ -480,7 +480,7 @@ export class HighchartsDemographic extends Vue {
             },
             tooltip: {
                 useHTML: true,
-                formatter: function() {
+                formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
                     if (self.x != undefined) {
@@ -828,7 +828,7 @@ export class HighchartsDemographic extends Vue {
             },
             tooltip: {
                 useHTML: true,
-                formatter: function() {
+                formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
                     if (self.x != undefined) {
@@ -971,7 +971,7 @@ export class HighchartsDemographic extends Vue {
             },
             tooltip: {
                 useHTML: true,
-                formatter: function() {
+                formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
                     if (self.x != undefined) {
@@ -1523,10 +1523,7 @@ export class HighchartsDemographic extends Vue {
                     },
                     title: { text: null }
                 },
-                tooltip: {
-                    useHTML: true,
-                    enabled: false
-                },
+                tooltip: { enabled: false },
                 series: series
             };
 
