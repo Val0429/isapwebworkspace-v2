@@ -14,11 +14,11 @@
             :allowEdit="allowEdit">  
     
         <!-- 5) custom view templates with <template #view.* /> -->
-        <template #view.roles="{$attrs, $listeners}">
+        <template #view.roles="{$attrs, $listeners}">            
             {{$attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x=>x.name).join(", "):"" }}
         </template>
         <template #view.apiRoles="{$attrs, $listeners}">
-            {{$attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x=>x.identifier).join(", "):"" }}
+            {{$attrs.value && $attrs.value.length > 0 ? $attrs.value.map(x=>x.identifier).join(", "):"" }}            
         </template>
         
         <!-- 6) custom edit / add template with <template #add.* /> -->
@@ -29,6 +29,18 @@
             :options="roleOptions" />
         </template>
         <template #add.apiRoles="{$attrs, $listeners}" >
+            <ivc-single-selection
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="apiRoleOptions" />
+        </template>
+        <template #add.rolesTemp="{$attrs, $listeners}" >
+            <ivc-multi-selections v-show="roleVisible"
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="roleOptions" />
+        </template>
+        <template #add.apiRolesTemp="{$attrs, $listeners}" >
             <ivc-single-selection
             v-bind="$attrs" 
             v-on="$listeners" 
@@ -112,11 +124,11 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
                     /**
                      * @uiLabel - ${this._("w_ApiRoles")}
                     */
-                    apiRoles:any;
+                    apiRolesTemp:any;
                     /**                        
                      * @uiLabel - ${this._("w_Roles")}
                     */
-                    roles?:any;
+                    rolesTemp?:any;
                 }
                 `;
         }
@@ -134,13 +146,14 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
     preEdit(row) {
-        row.roles = row.roles.map(x=>x.name);
-        row.apiRoles=row.apiRoles && row.apiRoles.length>0 ? row.apiRoles[0].objectId :"";
+        row.rolesTemp = row.roles.map(x=>x.name);
+        row.apiRolesTemp=row.apiRoles && row.apiRoles.length>0 ? row.apiRoles[0].objectId :"";
         return row;
     }
     /// 10) post-edit 寫入修改前要做甚麼調整
     postEdit(row) {
-        row.apiRoles=[row.apiRoles];
+        row.apiRoles=[row.apiRolesTemp];
+        row.roles=row.rolesTemp;
         return row;
     }
     async created(){
