@@ -245,6 +245,7 @@ import ImageBase64 from "@/services/ImageBase64";
 import CardTemplateBase64 from "@/components/FET_Card/models/cardTemplateBase64";
 import { PermissionName } from "@/../src/constants/permissions";
 import moment from 'moment';
+import { CustomFields } from "@/../src/constants/customfields";
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
 import SortSelect from "@/components/SortSelect/SortSelect.vue";
@@ -659,62 +660,11 @@ export default class MemberForm extends Vue {
         this.inputFormData.account = detailData.PersonalDetails.UserDetails.UserName;
         this.inputFormData.password = detailData.PersonalDetails.UserDetails.Password;
       }
-
+      //custom fields
       if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
-      
-      //this.inputFormData.lastEditTime = this.getFieldValue("CustomDateControl4__CF" , detailData.CustomFields);
-      this.inputFormData.cardType = this.getFieldValue("CustomDropdownControl1__CF" , detailData.CustomFields);
-      //this.inputFormData.companyName = this.getFieldValue("CustomTextBoxControl1__CF" , detailData.CustomFields);
-      this.inputFormData.cardCustodian = this.getFieldValue("CustomTextBoxControl2__CF" , detailData.CustomFields);
-      this.inputFormData.lastEditPerson = this.getFieldValue("CustomTextBoxControl3__CF" , detailData.CustomFields);
-      this.inputFormData.companyName = this.getFieldValue("CustomTextBoxControl6__CF" , detailData.CustomFields);
-      this.inputFormData.lastEditTime = this.getFieldValue("CustomDateControl2__CF" , detailData.CustomFields);
-      this.inputFormData.gender = this.getFieldValue("CustomDropdownControl2__CF_CF" , detailData.CustomFields);
-      this.inputFormData.carLicenseCategory = this.getFieldValue("CustomDropdownControl2__CF" , detailData.CustomFields);
-      this.inputFormData.MVPN = this.getFieldValue("CustomTextBoxControl5__CF_CF" , detailData.CustomFields);
-      this.inputFormData.department = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.costCenter = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.area = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.workArea = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      //this.inputFormData.companyName = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.cardLicense = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.carLicense = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.carLicense2 = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.carLicense3 = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.carLicense1 = this.getFieldValue("CustomTextBoxControl5__CF" , detailData.CustomFields);
-      //this.inputFormData.birthday = this.getFieldValue("CustomDateControl1__CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.registrationDate = this.getFieldValue("CustomDateControl1__CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.resignationDate = this.getFieldValue("CustomDateControl1__CF" , detailData.CustomFields, true);
-      this.inputFormData.reasonForCard1 = this.getFieldValue("CustomDropdownControl3__CF_CF" , detailData.CustomFields);
-      this.inputFormData.reasonForCard2 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.reasonForCard3 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.reasonForApplication1 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.reasonForApplication2 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.reasonForApplication3 = this.getFieldValue("CustomDropdownControl3__CF" , detailData.CustomFields);
-      this.inputFormData.resignationNote = this.getFieldValue("CustomTextBoxControl7__CF_CF" , detailData.CustomFields);
-      this.inputFormData.resignationRecordCardRecord = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.historyForCard1 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.historyForCard2 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.historyForCard3 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.resignationRecordCarLicense = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.infoOfViolation1 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.infoOfViolation2 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.infoOfViolation3 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.censusRecord1 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.censusRecord2 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
-      this.inputFormData.censusRecord3 = this.getFieldValue("CustomTextBoxControl7__CF" , detailData.CustomFields);
-      this.inputFormData.dateForApplication1 = this.getFieldValue("CustomDateControl3__CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateForApplication2 = this.getFieldValue("CustomDateControl3__CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateForApplication3 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateForCard1 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateForCard2 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateForCard3 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateOfViolation1 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateOfViolation2 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.dateOfViolation3 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.censusDate1 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.censusDate2 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
-      this.inputFormData.censusDate3 = this.getFieldValue("CustomDateControl3__CF", detailData.CustomFields, true);       
+      for(let field of CustomFields){
+        this.inputFormData[field.name] = this.getFieldValue(field.fieldName, detailData.CustomFields, field.date);
+      }           
   }
 
   tempSaveInputData(data) {
@@ -1036,9 +986,7 @@ export default class MemberForm extends Vue {
       });
     }
   }
- buildCustomField(fieldName:any, fieldValue:any){
-   return {FiledName:fieldName, FieldValue:fieldValue};
- }
+  
   async saveAddOrEdit() {
     
     let tempPersonalDetails: any = {
@@ -1080,62 +1028,16 @@ export default class MemberForm extends Vue {
       tempCredentials = [credential];
     }
 
- let tempCustomFieldsList: any = [];
- // master
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl6__CF", this.inputFormData.companyName || ""));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl2__CF",this.inputFormData.cardCustodian || ""));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl3__CF", this.inputFormData.lastEditPerson || ""));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl2__CF", this.inputFormData.lastEditTime || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl1__CF", this.inputFormData.cardType || "" ));
- // tab1 
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF", this.inputFormData.MVPN || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl2__CF_CF", this.inputFormData.gender || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF", this.inputFormData.department || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF", this.inputFormData.costCenter || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF", this.inputFormData.area || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF", this.inputFormData.workArea || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl1__CF_CF_CF", this.inputFormData.registrationDate && !isNaN(this.inputFormData.registrationDate.getTime()) ? this.inputFormData.registrationDate.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl1__CF", this.inputFormData.resignationDate != null && !isNaN(this.inputFormData.resignationDate.getTime()) ? this.inputFormData.resignationDate.toISOString() : "" ));
- // tab2 
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl2__CF", this.inputFormData.carLicenseCategory || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.cardLicense || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.carLicense || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF", this.inputFormData.carLicense1 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.carLicense2 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.carLicense3 || "" ));
- // tab3 
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF", this.inputFormData.resignationNote || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF", this.inputFormData.resignationRecordCardRecord || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF", this.inputFormData.reasonForCard1 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF", this.inputFormData.historyForCard1 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF", this.inputFormData.dateForCard1 != null && !isNaN(this.inputFormData.dateForCard1.getTime()) ? this.inputFormData.dateForCard1.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF", this.inputFormData.reasonForCard2 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF", this.inputFormData.historyForCard2 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF", this.inputFormData.dateForCard2 != null && !isNaN(this.inputFormData.dateForCard2.getTime()) ? this.inputFormData.dateForCard2.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF_CF", this.inputFormData.reasonForCard3 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF", this.inputFormData.historyForCard3 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateForCard3 != null && !isNaN(this.inputFormData.dateForCard3.getTime()) ? this.inputFormData.dateForCard3.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF_CF_CF", this.inputFormData.reasonForApplication1 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF", this.inputFormData.dateForApplication1 != null && !isNaN(this.inputFormData.dateForApplication1.getTime()) ? this.inputFormData.dateForApplication1.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF_CF_CF_CF", this.inputFormData.reasonForApplication2 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF", this.inputFormData.dateForApplication2 != null && !isNaN(this.inputFormData.dateForApplication2.getTime()) ? this.inputFormData.dateForApplication2.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF", this.inputFormData.reasonForApplication3 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF", this.inputFormData.dateForApplication3 != null && !isNaN(this.inputFormData.dateForApplication3.getTime()) ? this.inputFormData.dateForApplication3.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF", this.inputFormData.resignationRecordCarLicense || "" ));
- // tab5 
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusRecord1 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusDate1 != null && !isNaN(this.inputFormData.censusDate1.getTime()) ? this.inputFormData.censusDate1.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusRecord2 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusDate2 != null && !isNaN(this.inputFormData.censusDate2.getTime()) ? this.inputFormData.censusDate2.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF", this.inputFormData.censusRecord3 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF", this.inputFormData.censusDate3 != null && !isNaN(this.inputFormData.censusDate3.getTime()) ? this.inputFormData.censusDate3.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.infoOfViolation1 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateOfViolation1 != null && !isNaN(this.inputFormData.dateOfViolation1.getTime()) ? this.inputFormData.dateOfViolation1.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.infoOfViolation2 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateOfViolation2 != null && !isNaN(this.inputFormData.dateOfViolation2.getTime()) ? this.inputFormData.dateOfViolation2.toISOString() : "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.infoOfViolation3 || "" ));
- tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateOfViolation3 != null && !isNaN(this.inputFormData.dateOfViolation3.getTime()) ? this.inputFormData.dateOfViolation3.toISOString() : "" ));
-
+    let tempCustomFieldsList: any = [];
+    for(let field of CustomFields){
+      if(field.date){
+        let dt = !isNaN(this.inputFormData[field.name].getTime()) ? this.inputFormData[field.name].toISOString() : "";
+        tempCustomFieldsList.push({FiledName:field.fieldName,  FieldValue:dt});
+      }else{
+        tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});
+      }
+    }
+   
     let member = {        
         // master
         objectId: this.inputFormData.objectId,
