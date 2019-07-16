@@ -280,8 +280,14 @@ export class SortSelect extends Vue {
     // option
     showOption(data: string): boolean {
         let result = true;
-        if (this.optionSearchText != "" && !data.match(this.optionSearchText)) {
+        if (this.optionSearchText != "") {
             result = false;
+            for (let item of this.optionsSelectItem) {
+                if (data == item.value && item.text.match(this.optionSearchText)) {
+                    result = true;
+                    break;
+                }
+            }
         }
         return result;
     }
@@ -300,8 +306,14 @@ export class SortSelect extends Vue {
     // choose
     showChoose(data: string): boolean {
         let result = true;
-        if (this.chooseSearchText != "" && !data.match(this.chooseSearchText)) {
+        if (this.chooseSearchText != "") {
             result = false;
+            for (let item of this.chooseSelectItem) {
+                if (data == item.value && item.text.match(this.chooseSearchText)) {
+                    result = true;
+                    break;
+                }
+            }
         }
         return result;
     }
