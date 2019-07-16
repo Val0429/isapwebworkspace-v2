@@ -59,7 +59,7 @@
                 ></heat-map-many-day>
                 <br>
                 <!-- Ben -->
-                <camera-heatmap >
+                <camera-heatmap>
                 </camera-heatmap>
 
             </iv-card>
