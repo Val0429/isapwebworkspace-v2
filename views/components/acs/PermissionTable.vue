@@ -362,7 +362,7 @@ export default class PermissionTable extends Vue {
         this.SearchParams = {};
         for (var i in datas) {
             this.SearchParams = {
-                tablename: datas.permissionName
+                name: datas.permissionName
             };
         }
         (this.$refs.mainTable as any).reload();

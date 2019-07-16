@@ -242,7 +242,7 @@ export default class QueryPermission extends Vue {
                  * @uiLabel - ${this._("w_Permission_PermissionName")}
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
-                permissionName?: string;
+                name?: string;
 
             }
         `;
