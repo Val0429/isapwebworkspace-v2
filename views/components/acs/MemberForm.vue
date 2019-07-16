@@ -662,7 +662,7 @@ export default class MemberForm extends Vue {
 
       if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
       
-      this.inputFormData.lastEditTime = this.getFieldValue("CustomDateControl4__CF" , detailData.CustomFields, true);
+      //this.inputFormData.lastEditTime = this.getFieldValue("CustomDateControl4__CF" , detailData.CustomFields);
       this.inputFormData.cardType = this.getFieldValue("CustomDropdownControl1__CF" , detailData.CustomFields);
       //this.inputFormData.companyName = this.getFieldValue("CustomTextBoxControl1__CF" , detailData.CustomFields);
       this.inputFormData.cardCustodian = this.getFieldValue("CustomTextBoxControl2__CF" , detailData.CustomFields);
@@ -1036,7 +1036,9 @@ export default class MemberForm extends Vue {
       });
     }
   }
-
+ buildCustomField(fieldName:any, fieldValue:any){
+   return {FiledName:fieldName, FieldValue:fieldValue};
+ }
   async saveAddOrEdit() {
     
     let tempPersonalDetails: any = {
@@ -1078,275 +1080,62 @@ export default class MemberForm extends Vue {
       tempCredentials = [credential];
     }
 
-    let tempCustomFieldsList: any = [];
-    // master
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl6__CF",
-      FieldValue: this.inputFormData.companyName || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl2__CF",
-      FieldValue: this.inputFormData.cardCustodian || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl3__CF",
-      FieldValue: this.inputFormData.lastEditPerson || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.lastEditTime || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl1__CF",
-      FieldValue: this.inputFormData.cardType || ""
-    });
+ let tempCustomFieldsList: any = [];
+ // master
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl6__CF", this.inputFormData.companyName || ""));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl2__CF",this.inputFormData.cardCustodian || ""));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl3__CF", this.inputFormData.lastEditPerson || ""));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl2__CF", this.inputFormData.lastEditTime || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl1__CF", this.inputFormData.cardType || "" ));
+ // tab1 
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF", this.inputFormData.MVPN || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl2__CF_CF", this.inputFormData.gender || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF", this.inputFormData.department || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF", this.inputFormData.costCenter || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF", this.inputFormData.area || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF", this.inputFormData.workArea || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl1__CF_CF_CF", this.inputFormData.registrationDate && !isNaN(this.inputFormData.registrationDate.getTime()) ? this.inputFormData.registrationDate.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl1__CF", this.inputFormData.resignationDate != null && !isNaN(this.inputFormData.resignationDate.getTime()) ? this.inputFormData.resignationDate.toISOString() : "" ));
+ // tab2 
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl2__CF", this.inputFormData.carLicenseCategory || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.cardLicense || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.carLicense || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF", this.inputFormData.carLicense1 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.carLicense2 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.carLicense3 || "" ));
+ // tab3 
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF", this.inputFormData.resignationNote || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF", this.inputFormData.resignationRecordCardRecord || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF", this.inputFormData.reasonForCard1 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF", this.inputFormData.historyForCard1 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF", this.inputFormData.dateForCard1 != null && !isNaN(this.inputFormData.dateForCard1.getTime()) ? this.inputFormData.dateForCard1.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF", this.inputFormData.reasonForCard2 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF", this.inputFormData.historyForCard2 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF", this.inputFormData.dateForCard2 != null && !isNaN(this.inputFormData.dateForCard2.getTime()) ? this.inputFormData.dateForCard2.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF_CF", this.inputFormData.reasonForCard3 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF", this.inputFormData.historyForCard3 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateForCard3 != null && !isNaN(this.inputFormData.dateForCard3.getTime()) ? this.inputFormData.dateForCard3.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF_CF_CF", this.inputFormData.reasonForApplication1 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF", this.inputFormData.dateForApplication1 != null && !isNaN(this.inputFormData.dateForApplication1.getTime()) ? this.inputFormData.dateForApplication1.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF_CF_CF_CF_CF_CF", this.inputFormData.reasonForApplication2 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF", this.inputFormData.dateForApplication2 != null && !isNaN(this.inputFormData.dateForApplication2.getTime()) ? this.inputFormData.dateForApplication2.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDropdownControl3__CF", this.inputFormData.reasonForApplication3 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF", this.inputFormData.dateForApplication3 != null && !isNaN(this.inputFormData.dateForApplication3.getTime()) ? this.inputFormData.dateForApplication3.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF", this.inputFormData.resignationRecordCarLicense || "" ));
+ // tab5 
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusRecord1 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusDate1 != null && !isNaN(this.inputFormData.censusDate1.getTime()) ? this.inputFormData.censusDate1.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusRecord2 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.censusDate2 != null && !isNaN(this.inputFormData.censusDate2.getTime()) ? this.inputFormData.censusDate2.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF", this.inputFormData.censusRecord3 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF", this.inputFormData.censusDate3 != null && !isNaN(this.inputFormData.censusDate3.getTime()) ? this.inputFormData.censusDate3.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.infoOfViolation1 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateOfViolation1 != null && !isNaN(this.inputFormData.dateOfViolation1.getTime()) ? this.inputFormData.dateOfViolation1.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.infoOfViolation2 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateOfViolation2 != null && !isNaN(this.inputFormData.dateOfViolation2.getTime()) ? this.inputFormData.dateOfViolation2.toISOString() : "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.infoOfViolation3 || "" ));
+ tempCustomFieldsList.push(this.buildCustomField("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF", this.inputFormData.dateOfViolation3 != null && !isNaN(this.inputFormData.dateOfViolation3.getTime()) ? this.inputFormData.dateOfViolation3.toISOString() : "" ));
 
-    // tab1
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF",
-      FieldValue: this.inputFormData.MVPN || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl2__CF_CF",
-      FieldValue: this.inputFormData.gender || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF",
-      FieldValue: this.inputFormData.department || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF_CF",
-      FieldValue: this.inputFormData.costCenter || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.area || ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.workArea || ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl1__CF_CF_CF",
-      FieldValue: this.inputFormData.registrationDate &&
-        !isNaN(this.inputFormData.registrationDate.getTime())
-          ? this.inputFormData.registrationDate.toISOString()
-          : ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl1__CF",
-      FieldValue:
-        this.inputFormData.resignationDate != null &&
-        !isNaN(this.inputFormData.resignationDate.getTime())
-          ? this.inputFormData.resignationDate.toISOString()
-          : ""
-    });
-
-    // tab2
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl2__CF",
-      FieldValue: this.inputFormData.carLicenseCategory || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.cardLicense || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.carLicense || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF",
-      FieldValue: this.inputFormData.carLicense1 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.carLicense2 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.carLicense3 || ""
-    });
-
-    // tab3
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF",
-      FieldValue: this.inputFormData.resignationNote || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF",
-      FieldValue: this.inputFormData.resignationRecordCardRecord || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl3__CF_CF",
-      FieldValue: this.inputFormData.reasonForCard1 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF",
-      FieldValue: this.inputFormData.historyForCard1 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateForCard1 != null &&
-        !isNaN(this.inputFormData.dateForCard1.getTime())
-          ? this.inputFormData.dateForCard1.toISOString()
-          : ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl3__CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForCard2 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.historyForCard2 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateForCard2 != null &&
-        !isNaN(this.inputFormData.dateForCard2.getTime())
-          ? this.inputFormData.dateForCard2.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl3__CF_CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForCard3 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.historyForCard3 || ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateForCard3 != null &&
-        !isNaN(this.inputFormData.dateForCard3.getTime())
-          ? this.inputFormData.dateForCard3.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForApplication1 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateForApplication1 != null &&
-        !isNaN(this.inputFormData.dateForApplication1.getTime())
-          ? this.inputFormData.dateForApplication1.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl3__CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.reasonForApplication2 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateForApplication2 != null &&
-        !isNaN(this.inputFormData.dateForApplication2.getTime())
-          ? this.inputFormData.dateForApplication2.toISOString()
-          : ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomDropdownControl3__CF",
-      FieldValue: this.inputFormData.reasonForApplication3 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateForApplication3 != null &&
-        !isNaN(this.inputFormData.dateForApplication3.getTime())
-          ? this.inputFormData.dateForApplication3.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.resignationRecordCarLicense || ""
-    });
-
-    // tab5
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.censusRecord1 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.censusDate1 != null &&
-        !isNaN(this.inputFormData.censusDate1.getTime())
-          ? this.inputFormData.censusDate1.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.censusRecord2 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.censusDate2 != null &&
-        !isNaN(this.inputFormData.censusDate2.getTime())
-          ? this.inputFormData.censusDate2.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF",
-      FieldValue: this.inputFormData.censusRecord3 || ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.censusDate3 != null &&
-        !isNaN(this.inputFormData.censusDate3.getTime())
-          ? this.inputFormData.censusDate3.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.infoOfViolation1 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateOfViolation1 != null &&
-        !isNaN(this.inputFormData.dateOfViolation1.getTime())
-          ? this.inputFormData.dateOfViolation1.toISOString()
-          : ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.infoOfViolation2 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateOfViolation2 != null &&
-        !isNaN(this.inputFormData.dateOfViolation2.getTime())
-          ? this.inputFormData.dateOfViolation2.toISOString()
-          : ""
-    });
-
-    tempCustomFieldsList.push({
-      FiledName: "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF",
-      FieldValue: this.inputFormData.infoOfViolation3 || ""
-    });
-    tempCustomFieldsList.push({
-      FiledName: "CustomDateControl3__CF_CF_CF_CF_CF",
-      FieldValue:
-        this.inputFormData.dateOfViolation3 != null &&
-        !isNaN(this.inputFormData.dateOfViolation3.getTime())
-          ? this.inputFormData.dateOfViolation3.toISOString()
-          : ""
-    });
     let member = {        
         // master
         objectId: this.inputFormData.objectId,
