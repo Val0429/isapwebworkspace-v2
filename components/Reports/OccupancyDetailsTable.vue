@@ -95,14 +95,12 @@ export class OccupancyDetailsTable extends Vue {
     }
 
     getData() {
-        if (this.totalRow != this.thresholdDetailTableContent.length) {
-            this.totalRow = this.thresholdDetailTableContent.length;
-            this.thresholdDetailTableData = this.thresholdDetailTableContent.filter(
-                (u, i) =>
-                    i >= (this.currentPage - 1) * this.prePage &&
-                    i < this.currentPage * this.prePage
-            );
-        }
+        this.thresholdDetailTableData = this.thresholdDetailTableContent.filter(
+            (u, i) =>
+                i >= (this.currentPage - 1) * this.prePage &&
+                i < this.currentPage * this.prePage
+        );
+        this.totalRow = this.thresholdDetailTableContent.length;
     }
 
     showTime(time) {
