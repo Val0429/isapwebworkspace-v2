@@ -42,6 +42,18 @@
                     />
                 </template>
 
+                <!-- Ben -->
+                <anlysis-dashboard
+                    ref="anlysisDashboard"
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :type="dTimeMode"
+                    :siteIds="pSiteIds"
+                    :tagIds="tags"
+                    :pageType="dPageType"
+                >
+                </anlysis-dashboard>
+
                 <!-- Tina -->
                 <analysis-filter-dwell-time
                     class="mb-4"
@@ -94,6 +106,7 @@
                     ref="sunReportTable"
                     :reportTableData="sunRData"
                     :reportTableTitle="reportTableTitle"
+                    @clickItem="toDetailReportTable"
                 >
                 </report-table>
 
@@ -340,6 +353,314 @@ export default class ReportDwellTime extends Vue {
     reportTableBack() {
         this.tableStep = this.lastTableStep;
         this.lastTableStep = ETableStep.mainTable;
+    }
+
+    initReportTable() {
+        this.lastTableStep = this.tableStep;
+        this.tableStep = ETableStep.mainTable;
+        let chartMode = HighchartsService.chartMode(
+            this.startDate,
+            this.endDate,
+            this.sites
+        );
+        this.rData.chartMode = chartMode;
+        this.rData.noFoot = true;
+
+        this.reportTableTitle = {
+            titleCount: 4,
+            title1: this._("w_Average_Occupancy"),
+            title2: this._("w_Over_Medium_Threshold"),
+            title3: this._("w_Over_High_Threshold"),
+            title4: this._("w_Max_Occupancy")
+        };
+
+        //head
+        this.rData.head = [];
+        let sTime = null;
+        let eTime = null;
+        switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                this.rData.thatDay = this.startDate; //單天記錄時間日期
+                for (let siteItem of this.sites) {
+                    for (let officeHourItem of siteItem.officeHour) {
+                        if (
+                            sTime == null ||
+                            sTime >
+                                new Date(officeHourItem.startDate).getHours()
+                        ) {
+                            sTime = new Date(
+                                officeHourItem.startDate
+                            ).getHours();
+                        }
+                        if (
+                            eTime == null ||
+                            eTime < new Date(officeHourItem.endDate).getHours()
+                        ) {
+                            eTime = new Date(officeHourItem.endDate).getHours();
+                        }
+                    }
+                }
+                while (sTime <= eTime) {
+                    this.rData.head.push(sTime);
+                    sTime++;
+                }
+
+                break;
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                this.rData.thatDay = null; //多天無當天時間
+                let sDate = new Date(this.startDate);
+                let eDate = new Date(this.endDate);
+                while (sDate <= eDate) {
+                    this.rData.head.push(sDate.toString());
+                    sDate.setDate(sDate.getDate() + 1);
+                }
+
+                break;
+        }
+
+        //body
+        this.rData.body = [];
+        let tempArray = [];
+
+        //篩選出所有店
+        for (let summaryData of this.responseData.summaryTableDatas) {
+            if (
+                summaryData.deviceGroups &&
+                summaryData.deviceGroups.length > 0
+            ) {
+                for (let deviceGroup of summaryData.deviceGroups) {
+                    let body = {
+                        site: summaryData.site,
+                        area: summaryData.area,
+                        group: deviceGroup,
+                        item1: [],
+                        item2: [],
+                        item3: [],
+                        item4: []
+                    };
+
+                    if (
+                        tempArray.every(
+                            t =>
+                                t.group == undefined ||
+                                t.group.objectId != body.group.objectId
+                        )
+                    ) {
+                        tempArray.push(body);
+                    }
+                }
+            } else {
+                let body = {
+                    site: summaryData.site,
+                    area: summaryData.area,
+                    group: null,
+                    item1: [],
+                    item2: [],
+                    item3: [],
+                    item4: []
+                };
+
+                if (
+                    tempArray.every(
+                        t =>
+                            t.area == undefined ||
+                            t.area.objectId != body.area.objectId
+                    )
+                ) {
+                    tempArray.push(body);
+                }
+            }
+        }
+
+        //填入資料
+        switch (chartMode) {
+            case EChartMode.site1Day1:
+            case EChartMode.siteXDay1:
+                for (let index in tempArray) {
+                    for (let head of this.rData.head) {
+                        let item1Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
+                        let item2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item3Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item4Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
+                        for (let summaryData of this.responseData
+                            .summaryTableDatas) {
+                            if (
+                                new Date(summaryData.date)
+                                    .getHours()
+                                    .toString() != head
+                            ) {
+                                continue;
+                            }
+
+                            if (tempArray[index].group != null) {
+                                for (let deviceGroup of summaryData.deviceGroups) {
+                                    if (
+                                        tempArray[index].group.objectId ==
+                                        deviceGroup.objectId
+                                    ) {
+                                        item1Count.value += Math.round(
+                                            summaryData.total /
+                                                summaryData.count
+                                        );
+                                        item1Count.valueRatio += 0;
+                                        item2Count.value +=
+                                            summaryData.mediumThreshold;
+                                        item2Count.valueRatio += 0;
+                                        item3Count.value +=
+                                            summaryData.highThreshold;
+                                        item3Count.valueRatio += 0;
+                                        item4Count.value +=
+                                            summaryData.maxValue;
+                                        item4Count.valueRatio += 0;
+                                    }
+                                }
+                            } else {
+                                if (
+                                    tempArray[index].area.objectId ==
+                                    summaryData.area.objectId
+                                ) {
+                                    item1Count.value += Math.round(
+                                        summaryData.total / summaryData.count
+                                    );
+                                    item1Count.valueRatio += 0;
+                                    item2Count.value +=
+                                        summaryData.mediumThreshold;
+                                    item2Count.valueRatio += 0;
+                                    item3Count.value +=
+                                        summaryData.highThreshold;
+                                    item3Count.valueRatio += 0;
+                                    item4Count.value += summaryData.maxValue;
+                                    item4Count.valueRatio += 0;
+                                }
+                            }
+                        }
+                        tempArray[index].item1.push(item1Count);
+                        tempArray[index].item2.push(item2Count);
+                        tempArray[index].item3.push(item3Count);
+                        tempArray[index].item4.push(item4Count);
+                    }
+                }
+                this.rData.head = this.rData.head.map(
+                    x => x + ":00 - " + (x + 1) + ":00"
+                );
+                break;
+
+            case EChartMode.site1DayX:
+            case EChartMode.siteXDayX:
+                for (let index in tempArray) {
+                    for (let head of this.rData.head) {
+                        let item1Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
+                        let item2Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item3Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: true
+                        };
+                        let item4Count = {
+                            value: 0,
+                            valueRatio: 0,
+                            link: false
+                        };
+                        for (let summaryData of this.responseData
+                            .summaryTableDatas) {
+                            if (
+                                new Date(summaryData.date).getFullYear() !=
+                                    new Date(head).getFullYear() ||
+                                new Date(summaryData.date).getMonth() !=
+                                    new Date(head).getMonth() ||
+                                new Date(summaryData.date).getDate() !=
+                                    new Date(head).getDate()
+                            ) {
+                                continue;
+                            }
+                            if (tempArray[index].group != null) {
+                                for (let deviceGroup of summaryData.deviceGroups) {
+                                    if (
+                                        tempArray[index].group.objectId ==
+                                        deviceGroup.objectId
+                                    ) {
+                                        item1Count.value += Math.round(
+                                            summaryData.total /
+                                                summaryData.count
+                                        );
+                                        item1Count.valueRatio += 0;
+                                        item2Count.value +=
+                                            summaryData.mediumThreshold;
+                                        item2Count.valueRatio += 0;
+                                        item3Count.value +=
+                                            summaryData.highThreshold;
+                                        item3Count.valueRatio += 0;
+                                        item4Count.value +=
+                                            summaryData.maxValue;
+                                        item4Count.valueRatio += 0;
+                                    }
+                                }
+                            } else {
+                                if (
+                                    tempArray[index].area.objectId ==
+                                    summaryData.area.objectId
+                                ) {
+                                    item1Count.value += Math.round(
+                                        summaryData.total / summaryData.count
+                                    );
+                                    item1Count.valueRatio += 0;
+                                    item2Count.value +=
+                                        summaryData.mediumThreshold;
+                                    item2Count.valueRatio += 0;
+                                    item3Count.value +=
+                                        summaryData.highThreshold;
+                                    item3Count.valueRatio += 0;
+                                    item4Count.value += summaryData.maxValue;
+                                    item4Count.valueRatio += 0;
+                                }
+                            }
+                        }
+                        tempArray[index].item1.push(item1Count);
+                        tempArray[index].item2.push(item2Count);
+                        tempArray[index].item3.push(item3Count);
+                        tempArray[index].item4.push(item4Count);
+                    }
+                }
+                this.rData.head = this.rData.head.map(
+                    x =>
+                        new Date(x).getFullYear() +
+                        "/" +
+                        (new Date(x).getMonth() + 1) +
+                        "/" +
+                        new Date(x).getDate() +
+                        " " +
+                        ReportService.showWeek(new Date(x).getDay())
+                );
+                break;
+        }
+
+        this.rData.body = tempArray;
     }
 
     async toSunReportTable(thatDay, sunTime, sunSite, sunArea, rowName) {
@@ -1167,8 +1488,16 @@ export default class ReportDwellTime extends Vue {
         this.sortOutChartData(this.responseData.summaryDatas);
 
         //Ben
-        // this.initDashboardData();
-        // this.initReportTable();
+        this.initDashboardData();
+        this.initReportTable();
+    }
+
+    initDashboardData() {
+        this.dPageType = EPageType.averageDwellTime;
+        setTimeout(() => {
+            let anlysisDashboard: any = this.$refs.anlysisDashboard;
+            anlysisDashboard.initData();
+        }, 300);
     }
 
     sortOutChartData(datas: any) {
