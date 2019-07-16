@@ -17,14 +17,15 @@
 
             <tbody>
                 <tr
-                    v-for="(value,index) in thresholdDetailTableContent"
-                    :key="'tableDataFromApi__' + index"
+                    v-for="(value,index) in thresholdDetailTableData"
+                    :key="'tableData__' + index"
                 >
                     <td class="center">{{ showTime(value.date)}}</td>
                     <td class="center">{{ value.total }}</td>
                     <td class="center">
                         <img
                             v-for="(item,index) in value.imageSrcs"
+                            :key="'tableDataSrc__' + index"
                             class="threshold-image"
                             :src="serverConfig.url  + item"
                         >
@@ -32,6 +33,14 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="table-pagination right">
+            <b-pagination-nav
+                :link-gen="getData"
+                :number-of-pages="Math.ceil(totalRow / prePage) ? Math.ceil(totalRow / prePage) : 1"
+                v-model="currentPage"
+            />
+        </div>
 
     </div>
 </template>
@@ -61,20 +70,41 @@ export class OccupancyDetailsTable extends Vue {
 
     thresholdDetailTableTitle: any = [];
 
+    thresholdDetailTableData: any = [];
+
     serverConfig = ServerConfig;
 
+    prePage = 5;
+    currentPage = 1;
+    totalRow = 5;
+
     created() {
+        console.log("created");
         this.initDate();
     }
 
-    mounted() {}
+    mounted() {
+        console.log("getmountedData");
+        // this.getData();
+    }
 
     initDate() {
+        console.log("mounted");
         this.thresholdDetailTableTitle = [
             this._("w_Occupancy_Time"),
             this._("w_Occupancy_NumberDetected"),
             this._("w_Occupancy_Snapshot")
         ];
+    }
+
+    getData() {
+        this.thresholdDetailTableData = this.thresholdDetailTableContent.filter(
+            (u, i) =>
+                i >= (this.currentPage - 1) * this.prePage &&
+                i < this.currentPage * this.prePage
+        );
+        this.totalRow = this.thresholdDetailTableContent.length;
+        console.log("getData", this.thresholdDetailTableData, this.totalRow);
     }
 
     showTime(time) {
@@ -137,5 +167,9 @@ Vue.component("occupancy-details-table", OccupancyDetailsTable);
 }
 .center {
     text-align: center;
+}
+
+.right {
+    float: right;
 }
 </style>
