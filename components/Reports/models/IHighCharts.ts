@@ -80,6 +80,22 @@ interface IChartTrafficData extends IChart {
     trafficAVG?: number;
 }
 
+interface IChartDwellTimeData extends IChart {
+    ageRange: EAgeRange;
+    dwellTimeRange: EDwellTimeRange;
+    maleCount: number;
+    femaleCount: number;
+    revenue: number;
+    transaction: number;
+
+    dwellTime?: number;
+    dwellTimeAVG?: number;
+    maleCountPercent?: number;
+    femaleCountPercent?: number;
+    conversion?: number;
+    asp?: number;
+}
+
 interface IChartDemographicData extends IChart {
     ageRange: EAgeRange;
     dwellTimeRange: EDwellTimeRange;
@@ -111,3 +127,4 @@ export { IValSelectItem, IBootstrapSelectItem };
 export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem };
 export { IDayRange };
 export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData };
+export { IChartDwellTimeData };

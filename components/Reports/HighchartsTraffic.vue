@@ -51,17 +51,8 @@ exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
 // custom import
-import {
-    ETimeMode,
-    EAreaMode,
-    EChartMode,
-    EWeather
-} from "./";
-import {
-    ISite,
-    IChartTrafficData,
-    ISiteOfficeHourItem
-} from "./";
+import { ETimeMode, EAreaMode, EChartMode, EWeather, EBusinessChart } from "./";
+import { ISite, IChartTrafficData, ISiteOfficeHourItem } from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 
@@ -101,6 +92,14 @@ export class HighchartsTraffic extends Vue {
         }
     })
     areaMode: EAreaMode;
+
+    @Prop({
+        type: String,
+        default: function() {
+            return EBusinessChart.revenue;
+        }
+    })
+    businessMode: EBusinessChart;
 
     @Prop({
         type: Array,
@@ -153,6 +152,14 @@ export class HighchartsTraffic extends Vue {
 
     @Watch("timeMode")
     private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
+        this.start();
+    }
+
+    @Watch("businessMode")
+    private onBusinessModeChanged(
+        newval: EBusinessChart,
+        oldval: EBusinessChart
+    ) {
         this.start();
     }
 
@@ -1429,12 +1436,13 @@ export class HighchartsTraffic extends Vue {
         let value: IChartTrafficData = {
             date: new Date(),
             siteObjectId: "",
-            traffic: 0,
-            revenue: 0,
             temperatureMin: 0,
             temperatureMax: 0,
-            transaction: 0,
             weather: EWeather.none,
+
+            traffic: 0,
+            revenue: 0,
+            transaction: 0,
 
             conversion: 0,
             asp: 0,

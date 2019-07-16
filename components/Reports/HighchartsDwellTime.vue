@@ -13,8 +13,8 @@
                         buttons
                         button-variant="outline-success"
                         name="radio-btn-outline"
-                        :options="selectItem.gender"
-                        @change="changeGender"
+                        :options="selectItem.dwellTime"
+                        @change="changeDwellTime"
                     ></b-form-radio-group>
 
                     <!-- site1Day1 -->
@@ -118,14 +118,15 @@ import {
     EWeather,
     EAgeRange,
     EDwellTimeRange,
-    EGender
+    EGender,
+    EBusinessChart
 } from "./";
 import {
     IValSelectItem,
     IBootstrapSelectItem,
     ISite,
     ISiteOfficeHourItem,
-    IChartDemographicData
+    IChartDwellTimeData
 } from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
@@ -168,6 +169,14 @@ export class HighchartsDwellTime extends Vue {
     areaMode: EAreaMode;
 
     @Prop({
+        type: String,
+        default: function() {
+            return EBusinessChart.revenue;
+        }
+    })
+    businessMode: EBusinessChart;
+
+    @Prop({
         type: Array,
         default: function() {
             return [];
@@ -181,18 +190,26 @@ export class HighchartsDwellTime extends Vue {
             return [];
         }
     })
-    value: IChartDemographicData[];
+    value: IChartDwellTimeData[];
 
     @Watch("value", { deep: true })
     private onValueChanged(
-        newval: IChartDemographicData[],
-        oldval: IChartDemographicData[]
+        newval: IChartDwellTimeData[],
+        oldval: IChartDwellTimeData[]
     ) {
         this.start();
     }
 
     @Watch("timeMode")
     private onTimeModeChanged(newval: ETimeMode, oldval: ETimeMode) {
+        this.start();
+    }
+
+    @Watch("businessMode")
+    private onBusinessModeChanged(
+        newval: EBusinessChart,
+        oldval: EBusinessChart
+    ) {
         this.start();
     }
 
@@ -336,23 +353,25 @@ export class HighchartsDwellTime extends Vue {
     ////////////////////////// site 1 day 1 //////////////////////////
 
     initSite1Day1() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let tempHourStrings: string[] = [];
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
+        let tempResult: IChartDwellTimeData[] = [];
         let tempSeries: any = [
             {
-                name: this._("w_Male"),
+                name: this._("w_ReportDwellTime_DwellTimeRevenue"),
+                type: "column",
+                yAxis: 1,
                 data: []
             },
             {
-                name: this._("w_Female"),
+                name: this._("w_ReportDwellTime_DwellTimeDwellTime"),
+                type: "spline",
                 data: []
             }
         ];
-        let tempTotalCount: number = 0;
 
         //// office hour group ////
         if (this.chartMode != EChartMode.site1Day1) {
@@ -367,38 +386,29 @@ export class HighchartsDwellTime extends Vue {
             weekDay,
             this.sites[0].officeHour
         );
-
         for (let i = officeHour.startHour; i <= officeHour.endHour; i++) {
             let hourString = i < 10 ? `0${i.toString()}` : i.toString();
             tempHourStrings.push(`${hourString}:00`);
         }
-
         //// office hour group ////
+
+        // set data
         for (let categorie of tempHourStrings) {
             let haveValue = false;
 
-            for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
+            for (let i in tempValues) {
+                let loopValue = tempValues[i];
+                let value: IChartDwellTimeData = this.anysislyChartValue(
                     loopValue
                 );
-
                 if (value.timeString == categorie) {
-                    let haveTempIn = false;
                     haveValue = true;
-                    tempTotalCount += value.maleCount;
-                    tempTotalCount += value.femaleCount;
-                    for (let tempIn of tempResult) {
-                        if (tempIn.timeString == categorie) {
-                            haveTempIn = true;
-                            tempIn.maleCount += value.maleCount;
-                            tempIn.femaleCount += value.femaleCount;
-                        }
-                    }
-                    if (!haveTempIn) {
-                        tempResult.push(value);
-                    }
+                    tempResult.push(value);
+                    tempValues.splice(parseInt(i), 1);
+                    break;
                 }
             }
+
             if (!haveValue) {
                 let defaultValue = this.anysislyChartValueDefault();
                 defaultValue.timeString = categorie;
@@ -408,20 +418,8 @@ export class HighchartsDwellTime extends Vue {
 
         // set result
         for (let result of tempResult) {
-            if (tempTotalCount > 0) {
-                result.maleCountPercent = HighchartsService.formatFloat(
-                    (result.maleCount / tempTotalCount) * 100
-                );
-                result.femaleCountPercent = HighchartsService.formatFloat(
-                    (result.femaleCount / tempTotalCount) * 100
-                );
-            } else {
-                result.maleCountPercent = 0;
-                result.femaleCountPercent = 0;
-            }
-
-            tempSeries[0].data.push(result.maleCountPercent);
-            tempSeries[1].data.push(result.femaleCountPercent);
+            tempSeries[0].data.push(result.revenue);
+            tempSeries[1].data.push(result.dwellTime);
             tempCategories.push(
                 HighchartsService.categorieStringWithJSON(
                     result.timeString,
@@ -430,62 +428,137 @@ export class HighchartsDwellTime extends Vue {
             );
         }
 
-        this.chartOptions.site1Day1 = {
-            chart: { type: "column", zoomType: "x" },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            xAxis: {
-                labels: { useHTML: true },
-                categories: tempCategories
-            },
-            yAxis: {
-                min: 0,
-                labels: {
-                    style: { color: "#000" },
-                    formatter: function() {
-                        let self: any = this;
-                        return `${self.value}%`;
-                    }
-                },
-                title: {
-                    text: null
-                }
-            },
-            tooltip: {
-                useHTML: true,
-                formatter: function() {
-                    let self: any = this;
-                    let result = "";
-                    if (self.x != undefined) {
-                        try {
-                            // anysisly JSON
-                            let startIndex = self.x.indexOf(">{");
-                            let endIndex = self.x.indexOf("}<");
-                            let valueJson = self.x.substring(
-                                startIndex + 1,
-                                endIndex + 1
-                            );
-                            let newValue: any = JSON.parse(valueJson);
+        switch (this.areaMode) {
+            case EAreaMode.single:
+                let singleSeries = [];
 
-                            // set value
-                            result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
-                            result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
-                            if (self.series.name == newValue.i18n.male) {
-                                result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
-                            } else {
-                                result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
+                singleSeries.push({
+                    name: tempSeries[1].name,
+                    data: tempSeries[1].data
+                });
+
+                // set chart options
+                this.chartOptions.site1Day1 = {
+                    chart: { zoomType: "x" },
+                    exporting: { enabled: false },
+                    title: { text: null },
+                    subtitle: { text: null },
+                    xAxis: {
+                        crosshair: true,
+                        categories: tempCategories,
+                        labels: { useHTML: true }
+                    },
+                    yAxis: {
+                        labels: { style: { color: "#000" } },
+                        title: {
+                            text: this._(
+                                "w_ReportDwellTime_DwellTimeDwellTimeM"
+                            ),
+                            style: { color: "#000" }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        shared: true,
+                        useHTML: true,
+                        backgroundColor: "#333",
+                        style: { color: "#fff" },
+                        formatter: function(tooltip: any) {
+                            let self: any = this;
+                            let result = "";
+                            if (self.x != undefined) {
+                                try {
+                                    // anysisly JSON
+                                    let startIndex = self.x.indexOf(">{");
+                                    let endIndex = self.x.indexOf("}<");
+                                    let valueJson = self.x.substring(
+                                        startIndex + 1,
+                                        endIndex + 1
+                                    );
+                                    let newValue: any = JSON.parse(valueJson);
+
+                                    // set value
+                                    result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                } catch (e) {
+                                    console.log(e);
+                                }
                             }
                             return result;
-                        } catch (e) {
-                            console.log(e);
                         }
-                    }
-                    return result;
-                }
-            },
-            series: tempSeries
-        };
+                    },
+                    series: singleSeries
+                };
+                break;
+            case EAreaMode.all:
+            case EAreaMode.none:
+            default:
+                // set chart options
+                this.chartOptions.site1Day1 = {
+                    chart: { zoomType: "x" },
+                    exporting: { enabled: false },
+                    title: { text: null },
+                    subtitle: { text: null },
+                    xAxis: [
+                        {
+                            categories: tempCategories,
+                            labels: { useHTML: true }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            labels: { style: { color: "#000" } },
+                            title: {
+                                text: this._(
+                                    "w_ReportDwellTime_DwellTimeDwellTimeM"
+                                ),
+                                style: { color: "#000" }
+                            }
+                        },
+                        {
+                            labels: { style: { color: "#000" } },
+                            title: {
+                                text: this._("w_ReportTraffic_TrafficRevenue"),
+                                style: { color: "#000" }
+                            },
+                            opposite: true
+                        }
+                    ],
+                    tooltip: {
+                        enabled: true,
+                        shared: true,
+                        useHTML: true,
+                        backgroundColor: "#333",
+                        style: { color: "#fff" },
+                        formatter: function(tooltip: any) {
+                            let self: any = this;
+                            let result = "";
+                            if (self.x != undefined) {
+                                try {
+                                    // anysisly JSON
+                                    let startIndex = self.x.indexOf(">{");
+                                    let endIndex = self.x.indexOf("}<");
+                                    let valueJson = self.x.substring(
+                                        startIndex + 1,
+                                        endIndex + 1
+                                    );
+                                    let newValue: any = JSON.parse(valueJson);
+
+                                    // set value
+                                    result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                            return result;
+                        }
+                    },
+                    series: tempSeries
+                };
+                break;
+        }
 
         this.mountChart.site1Day1 = true;
         let self = this;
@@ -499,22 +572,31 @@ export class HighchartsDwellTime extends Vue {
     ////////////////////////// site 1 day X //////////////////////////
 
     initSite1DayX() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let dwellTimeAVG = 0;
+        let dwellTimeTotal = 0;
+        let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
+        let tempResult: IChartDwellTimeData[] = [];
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
         let tempSeries: any = [
             {
-                name: this._("w_Male"),
+                name: this._("w_ReportTraffic_TrafficRevenue"),
+                type: "column",
+                yAxis: 1,
                 data: []
             },
             {
-                name: this._("w_Female"),
+                name: this._("w_ReportDwellTime_DwellTimeDwellTime"),
+                type: "spline",
+                data: []
+            },
+            {
+                name: this._("w_ReportDwellTime_DwellTimeDwellTimeAVG"),
+                type: "spline",
                 data: []
             }
         ];
-        let tempTotalCount: number = 0;
 
         // 避免時間相反造成無窮迴圈
         let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
@@ -527,17 +609,18 @@ export class HighchartsDwellTime extends Vue {
         let tempTimestamp: number = sortDate.startDate.getTime();
         let endTimestamp: number = sortDate.endDate.getTime();
         let tempDate: Date = new Date(tempTimestamp);
-        let dateGap: number = Math.ceil(
-            Math.abs(
-                sortDate.startDate.getTime() - sortDate.endDate.getTime()
-            ) / 86400000
-        );
+        let dateGap: number =
+            Math.floor(
+                Math.abs(
+                    sortDate.startDate.getTime() - sortDate.endDate.getTime()
+                ) / 86400000
+            ) + 1;
 
         while (
             tempTimestamp <= endTimestamp &&
             categorieNowlength < categorieMaxlength
         ) {
-            let tempChartData: IChartDemographicData = this.anysislyChartValueDefault();
+            let tempChartData: IChartDwellTimeData = this.anysislyChartValueDefault();
 
             // set site
             if (this.sites[0].objectId != undefined) {
@@ -687,7 +770,7 @@ export class HighchartsDwellTime extends Vue {
             let spliceIndexList: number[] = [];
             for (let i in tempValues) {
                 let val = tempValues[i];
-                let value: IChartDemographicData = this.anysislyChartValue(val);
+                let value: IChartDwellTimeData = this.anysislyChartValue(val);
                 let valTimestamp = value.date.getTime();
 
                 if (
@@ -695,17 +778,17 @@ export class HighchartsDwellTime extends Vue {
                     valTimestamp >= tempStartTimestamp &&
                     valTimestamp <= tempEndTimestamp
                 ) {
-                    tempChartData.maleCount += value.maleCount;
-                    tempChartData.femaleCount += value.femaleCount;
-                    tempTotalCount += value.maleCount;
-                    tempTotalCount += value.femaleCount;
+                    tempChartData.dwellTime += value.dwellTime;
+                    tempChartData.revenue += value.revenue;
+                    tempChartData.transaction += value.transaction;
+                    tempChartData.temperature += value.temperature;
+                    tempChartData.temperatureMin = value.temperatureMin;
+                    tempChartData.temperatureMax = value.temperatureMax;
+                    tempChartData.weather = value.weather;
+                    tempChartData.weatherIcon = HighchartsService.weatherIcon(
+                        value.weather
+                    );
 
-                    if (tempChartData.weather == EWeather.none) {
-                        tempChartData.weather = value.weather;
-                        tempChartData.weatherIcon = HighchartsService.weatherIcon(
-                            value.weather
-                        );
-                    }
                     spliceIndexList.push(parseInt(i));
                 }
             }
@@ -713,6 +796,22 @@ export class HighchartsDwellTime extends Vue {
             // tempValues 減肥
             for (let i = spliceIndexList.length - 1; i >= 0; i--) {
                 tempValues.splice(spliceIndexList[i], 1);
+            }
+
+            // for calculate AVG
+            dwellTimeTotal += tempChartData.dwellTime;
+
+            // calculate conversion & ASP
+            if (tempChartData.dwellTime != 0) {
+                tempChartData.conversion = HighchartsService.formatFloat(
+                    (tempChartData.transaction / tempChartData.dwellTime) * 100
+                );
+            }
+
+            if (tempChartData.transaction > 0) {
+                tempChartData.asp = HighchartsService.formatFloat(
+                    tempChartData.revenue / tempChartData.transaction
+                );
             }
 
             // push single series data
@@ -723,91 +822,100 @@ export class HighchartsDwellTime extends Vue {
             tempTimestamp = tempChartData.dateEnd.getTime() + 1000;
         }
 
-        // set data
-        if (tempTotalCount > 0) {
-            // set result
-            for (let result of tempResult) {
-                result.maleCountPercent = HighchartsService.formatFloat(
-                    (result.maleCount / tempTotalCount) * 100
-                );
-                result.femaleCountPercent = HighchartsService.formatFloat(
-                    (result.femaleCount / tempTotalCount) * 100
-                );
-                tempSeries[0].data.push(result.maleCountPercent);
-                tempSeries[1].data.push(result.femaleCountPercent);
-                switch (this.timeMode) {
-                    case ETimeMode.year:
-                    case ETimeMode.month:
-                        tempCategories.push(
-                            HighchartsService.categorieStringWithJSON(
-                                result.dateString,
-                                result
-                            )
-                        );
-                        break;
-                    case ETimeMode.quarter:
-                        tempCategories.push(
-                            HighchartsService.categorieStringWithJSON(
-                                HighchartsService.categoriesQuarter(
-                                    result.date
-                                ),
-                                result
-                            )
-                        );
-                        break;
-                    case ETimeMode.week:
-                        tempCategories.push(
-                            HighchartsService.categorieStringWithJSON(
-                                HighchartsService.categoriesWeek(result.date),
-                                result
-                            )
-                        );
-                        break;
-                    case ETimeMode.day:
-                    case ETimeMode.hour:
-                    case ETimeMode.none:
-                    default:
-                        tempCategories.push(
-                            HighchartsService.categorieStringWithJSON(
-                                `${result.dateString} ${result.weatherIcon}`,
-                                result
-                            )
-                        );
-                        break;
-                }
+        // calculate avg
+        if (dateGap > 0) {
+            dwellTimeAVG = HighchartsService.formatFloat(
+                dwellTimeTotal / dateGap
+            );
+        }
+
+        // set result
+        for (let result of tempResult) {
+            result.dwellTimeAVG = dwellTimeAVG;
+            tempSeries[0].data.push(result.revenue);
+            tempSeries[1].data.push(result.dwellTime);
+            tempSeries[2].data.push(dwellTimeAVG);
+            switch (this.timeMode) {
+                case ETimeMode.year:
+                case ETimeMode.month:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            result.dateString,
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.quarter:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            HighchartsService.categoriesQuarter(result.date),
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.week:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            HighchartsService.categoriesWeek(result.date),
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.day:
+                case ETimeMode.hour:
+                case ETimeMode.none:
+                default:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            `${result.dateString} ${result.weatherIcon}`,
+                            result
+                        )
+                    );
+                    break;
             }
         }
 
+        // set chart options
         this.chartOptions.site1DayX = {
-            chart: { type: "column", zoomType: "x" },
+            chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
-            xAxis: {
-                labels: { useHTML: true },
-                categories: tempCategories
-            },
-            yAxis: {
-                min: 0,
-                labels: {
-                    style: { color: "#000" },
-                    formatter: function() {
-                        let self: any = this;
-                        return `${self.value}%`;
+            xAxis: [
+                {
+                    crosshair: true,
+                    categories: tempCategories,
+                    labels: { useHTML: true }
+                }
+            ],
+            yAxis: [
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportDwellTime_DwellTimeDwellTimeM"),
+                        style: { color: "#000" }
                     }
                 },
-                title: {
-                    text: null
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportTraffic_TrafficRevenue"),
+                        style: { color: "#000" }
+                    },
+                    opposite: true
                 }
-            },
+            ],
             tooltip: {
+                enabled: true,
+                shared: true,
                 useHTML: true,
-                formatter: function() {
+                backgroundColor: "#333",
+                style: { color: "#fff" },
+                formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
                     if (self.x != undefined) {
                         try {
-                            // anysisly JSON
                             let startIndex = self.x.indexOf(">{");
                             let endIndex = self.x.indexOf("}<");
                             let valueJson = self.x.substring(
@@ -816,15 +924,33 @@ export class HighchartsDwellTime extends Vue {
                             );
                             let newValue: any = JSON.parse(valueJson);
 
-                            // set value
-                            result += `${newValue.i18n.date}:${newValue.dateString}<br>`;
-                            result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
-                            if (self.series.name == newValue.i18n.male) {
-                                result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
-                            } else {
-                                result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
+                            switch (newValue.timeMode) {
+                                case ETimeMode.year:
+                                case ETimeMode.quarter:
+                                case ETimeMode.month:
+                                case ETimeMode.week:
+                                    result += `${newValue.i18n.startDate}: ${newValue.dateStartString}<br>`;
+                                    result += `${newValue.i18n.endDate}: ${newValue.dateEndString}<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                    result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
+                                    break;
+                                case ETimeMode.day:
+                                case ETimeMode.hour:
+                                default:
+                                    result += `${newValue.dateString}<br>`;
+                                    result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                                    result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.dwellTimeAVG}: ${newValue.dwellTimeAVG}<br>`;
+                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                    result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
+                                    break;
                             }
-                            return result;
                         } catch (e) {
                             console.log(e);
                         }
@@ -847,47 +973,63 @@ export class HighchartsDwellTime extends Vue {
     ////////////////////////// site X day 1 //////////////////////////
 
     initSiteXDay1() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let dwellTimeAVG = 0;
+        let dwellTimeTotal = 0;
+        let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
+        let tempResult: IChartDwellTimeData[] = [];
         let tempCategories: string[] = [];
-        let tempResult: IChartDemographicData[] = [];
         let tempSeries: any = [
             {
-                name: this._("w_Male"),
+                name: this._("w_ReportTraffic_TrafficRevenue"),
+                type: "column",
+                yAxis: 1,
                 data: []
             },
             {
-                name: this._("w_Female"),
+                name: this._("w_ReportDwellTime_DwellTimeDwellTime"),
+                type: "spline",
+                data: []
+            },
+            {
+                name: this._("w_ReportDwellTime_DwellTimeDwellTimeAVG"),
+                type: "spline",
                 data: []
             }
         ];
-        let tempTotalCount: number = 0;
 
         for (let site of this.sites) {
             let haveValue = false;
-            for (let loopValue of tempValues) {
-                let value: IChartDemographicData = this.anysislyChartValue(
+
+            let spliceIndexList: number[] = [];
+            for (let i in tempValues) {
+                let loopValue = tempValues[i];
+                let value: IChartDwellTimeData = this.anysislyChartValue(
                     loopValue
                 );
-
                 if (value.siteObjectId == site.objectId) {
-                    let haveTempIn = false;
                     haveValue = true;
-                    tempTotalCount += value.maleCount;
-                    tempTotalCount += value.femaleCount;
-                    for (let tempIn of tempResult) {
-                        if (tempIn.siteObjectId == site.objectId) {
-                            haveTempIn = true;
-                            tempIn.maleCount += value.maleCount;
-                            tempIn.femaleCount += value.femaleCount;
+                    let haveResult = false;
+                    for (let result of tempResult) {
+                        if (result.siteObjectId == site.objectId) {
+                            haveResult = true;
+                            result.dwellTime += value.dwellTime;
+                            result.revenue += value.revenue;
                             break;
                         }
                     }
-                    if (!haveTempIn) {
+                    if (!haveResult) {
                         tempResult.push(value);
                     }
+
+                    spliceIndexList.push(parseInt(i));
                 }
+            }
+
+            // tempValues 減肥
+            for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                tempValues.splice(spliceIndexList[i], 1);
             }
 
             if (!haveValue) {
@@ -897,22 +1039,20 @@ export class HighchartsDwellTime extends Vue {
             }
         }
 
+        // calculate avg
+        if (tempResult.length > 0) {
+            for (let result of tempResult) {
+                dwellTimeTotal += result.dwellTime;
+            }
+            dwellTimeAVG = dwellTimeTotal / tempResult.length;
+        }
+
         // set result
         for (let result of tempResult) {
-            if (tempTotalCount > 0) {
-                result.maleCountPercent = HighchartsService.formatFloat(
-                    (result.maleCount / tempTotalCount) * 100
-                );
-                result.femaleCountPercent = HighchartsService.formatFloat(
-                    (result.femaleCount / tempTotalCount) * 100
-                );
-            } else {
-                result.maleCountPercent = 0;
-                result.femaleCountPercent = 0;
-            }
-
-            tempSeries[0].data.push(result.maleCountPercent);
-            tempSeries[1].data.push(result.femaleCountPercent);
+            result.dwellTimeAVG = dwellTimeAVG;
+            tempSeries[0].data.push(result.revenue);
+            tempSeries[1].data.push(result.dwellTime);
+            tempSeries[2].data.push(dwellTimeAVG);
             tempCategories.push(
                 HighchartsService.categorieStringWithJSON(
                     `${result.siteName} ${result.weatherIcon}`,
@@ -921,36 +1061,47 @@ export class HighchartsDwellTime extends Vue {
             );
         }
 
+        // set chart options
         this.chartOptions.siteXDay1 = {
-            chart: { type: "column", zoomType: "x" },
+            chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
-            xAxis: {
-                labels: { useHTML: true },
-                categories: tempCategories
-            },
-            yAxis: {
-                min: 0,
-                labels: {
-                    style: { color: "#000" },
-                    formatter: function() {
-                        let self: any = this;
-                        return `${self.value}%`;
+            xAxis: [
+                {
+                    crosshair: true,
+                    categories: tempCategories,
+                    labels: { useHTML: true }
+                }
+            ],
+            yAxis: [
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportDwellTime_DwellTimeDwellTimeM"),
+                        style: { color: "#000" }
                     }
                 },
-                title: {
-                    text: null
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportTraffic_TrafficRevenue"),
+                        style: { color: "#000" }
+                    },
+                    opposite: true
                 }
-            },
+            ],
             tooltip: {
+                enabled: true,
+                shared: true,
                 useHTML: true,
-                formatter: function() {
+                backgroundColor: "#333",
+                style: { color: "#fff" },
+                formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
                     if (self.x != undefined) {
                         try {
-                            // anysisly JSON
                             let startIndex = self.x.indexOf(">{");
                             let endIndex = self.x.indexOf("}<");
                             let valueJson = self.x.substring(
@@ -959,16 +1110,16 @@ export class HighchartsDwellTime extends Vue {
                             );
                             let newValue: any = JSON.parse(valueJson);
 
-                            // set value
+                            ///////// tooltip /////////
                             result += `${newValue.siteName}<br>`;
-                            result += `${newValue.i18n.gender}: ${self.series.name}<br>`;
-                            result += `${newValue.i18n.date}:${newValue.dateString}<br>`;
-                            if (self.series.name == newValue.i18n.male) {
-                                result += `${newValue.i18n.percent}: ${newValue.maleCountPercent}%<br>`;
-                            } else {
-                                result += `${newValue.i18n.percent}: ${newValue.femaleCountPercent}%<br>`;
-                            }
-                            return result;
+                            result += `${newValue.i18n.date}: ${newValue.dateString}<br>`;
+                            result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
+                            result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                            result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                            result += `${newValue.i18n.dwellTimeAVG}: ${newValue.dwellTimeAVG}<br>`;
+                            result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                            result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                            result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
                         } catch (e) {
                             console.log(e);
                         }
@@ -991,19 +1142,15 @@ export class HighchartsDwellTime extends Vue {
     ////////////////////////// site X day X //////////////////////////
 
     initSiteXDayX() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
+        let tempResult: any[] = [];
         let tempCategories: string[] = [];
-        let tempResult: any = [];
         let tempSeries: {
             name: string;
             data: number[];
         }[] = [];
-
-        let tempTotalMaleCount: number = 0;
-        let tempTotalFemaleCount: number = 0;
-        let tempTotalCount: number = 0;
 
         // 避免時間相反造成無窮迴圈
         let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
@@ -1026,14 +1173,15 @@ export class HighchartsDwellTime extends Vue {
             tempTimestamp <= endTimestamp &&
             categorieNowlength < categorieMaxlength
         ) {
-            let tempChartData: IChartDemographicData = this.anysislyChartValueDefault();
+            let tempChartData: IChartDwellTimeData = this.anysislyChartValueDefault();
             let tempResultItem = {
                 categorie: "",
                 i18n: this.i18nItem(),
                 sites: [],
+                conversion: 0,
+                asp: 0,
                 timeMode: this.timeMode,
-                areaMode: this.areaMode,
-                timeRange: this.selection.dwellTimeRange
+                areaMode: this.areaMode
             };
             tempChartData.i18n = null;
             tempChartData.timeMode = null;
@@ -1208,7 +1356,7 @@ export class HighchartsDwellTime extends Vue {
                 let spliceIndexList: number[] = [];
                 for (let i in tempValues) {
                     let val = tempValues[i];
-                    let value: IChartDemographicData = this.anysislyChartValue(
+                    let value: IChartDwellTimeData = this.anysislyChartValue(
                         val
                     );
                     let valTimestamp = value.date.getTime();
@@ -1218,29 +1366,27 @@ export class HighchartsDwellTime extends Vue {
                         valTimestamp >= tempStartTimestamp &&
                         valTimestamp <= tempEndTimestamp
                     ) {
-                        tempSiteValue.maleCount += value.maleCount;
-                        tempSiteValue.femaleCount += value.femaleCount;
-                        tempSiteValue.temperature += value.temperature;
-                        tempSiteValue.weather = value.weather;
-                        tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
-                            value.weather
-                        );
-
-                        tempTotalCount += value.maleCount;
-                        tempTotalCount += value.femaleCount;
-
-                        tempTotalMaleCount += value.maleCount;
-                        tempTotalFemaleCount += value.femaleCount;
-
+                        tempSiteValue.dwellTime += value.dwellTime;
+                        tempSiteValue.revenue += value.revenue;
+                        tempSiteValue.transaction += value.transaction;
+                        tempSiteValue.temperature = value.temperature;
+                        tempSiteValue.temperatureMin = value.temperatureMin;
+                        tempSiteValue.temperatureMax = value.temperatureMax;
+                        if (
+                            tempSiteValue.weather == EWeather.none &&
+                            value.weather != EWeather.none
+                        ) {
+                            tempSiteValue.weather = value.weather;
+                            tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
+                                value.weather
+                            );
+                        }
                         spliceIndexList.push(parseInt(i));
                     }
                 }
-
-                // tempValues 減肥
                 for (let i = spliceIndexList.length - 1; i >= 0; i--) {
                     tempValues.splice(spliceIndexList[i], 1);
                 }
-
                 tempResultItem.sites.push(tempSiteValue);
             }
 
@@ -1258,39 +1404,7 @@ export class HighchartsDwellTime extends Vue {
             for (let tempItems of tempResult) {
                 for (let tempItem of tempItems.sites) {
                     if (tempItem.siteObjectId == site.objectId) {
-                        if (tempTotalMaleCount != 0) {
-                            tempItem.maleCountPercent = HighchartsService.formatFloat(
-                                (tempItem.maleCount / tempTotalMaleCount) * 100
-                            );
-                        }
-                        if (tempTotalFemaleCount != 0) {
-                            tempItem.femaleCountPercent = HighchartsService.formatFloat(
-                                (tempItem.femaleCount / tempTotalFemaleCount) *
-                                    100
-                            );
-                        }
-
-                        switch (this.selection.dwellTimeRange) {
-                            case EDwellTimeRange.lower5:
-                                tempData.push(tempItem.maleCountPercent);
-                                break;
-                            case EDwellTimeRange.m5_15:
-                                tempData.push(tempItem.femaleCountPercent);
-                                break;
-                            case EDwellTimeRange.m15_30:
-                                tempData.push(tempItem.femaleCountPercent);
-                                break;
-                            case EDwellTimeRange.m30_60:
-                                tempData.push(tempItem.femaleCountPercent);
-                                break;
-                            case EDwellTimeRange.m60_120:
-                                tempData.push(tempItem.femaleCountPercent);
-                                break;
-                            case EDwellTimeRange.upper120:
-                                tempData.push(tempItem.femaleCountPercent);
-                                break;
-                        }
-
+                        tempData.push(tempItem.dwellTime);
                         break;
                     }
                 }
@@ -1306,12 +1420,67 @@ export class HighchartsDwellTime extends Vue {
 
         // set result
         for (let result of tempResult) {
-            tempCategories.push(
-                HighchartsService.categorieStringWithJSON(
-                    result.categorie,
-                    result
-                )
-            );
+            let dwellTimeTotal: number = 0;
+            let transactionTotal: number = 0;
+            let revenueTotal: number = 0;
+
+            // calculate conversion & ASP
+            for (let site of result.sites) {
+                dwellTimeTotal += site.dwellTime;
+                transactionTotal += site.transaction;
+                revenueTotal += site.revenue;
+            }
+
+            if (dwellTimeTotal != 0) {
+                result.conversion = HighchartsService.formatFloat(
+                    (transactionTotal / dwellTimeTotal) * 100
+                );
+            }
+
+            if (transactionTotal > 0) {
+                result.asp = HighchartsService.formatFloat(
+                    revenueTotal / transactionTotal
+                );
+            }
+
+            switch (this.timeMode) {
+                case ETimeMode.year:
+                case ETimeMode.month:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.quarter:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.week:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
+                    );
+                    break;
+                case ETimeMode.day:
+                case ETimeMode.hour:
+                case ETimeMode.none:
+                default:
+                    tempCategories.push(
+                        HighchartsService.categorieStringWithJSON(
+                            result.categorie,
+                            result
+                        )
+                    );
+                    break;
+            }
         }
 
         this.chartOptions.siteXDayX = {
@@ -1326,10 +1495,11 @@ export class HighchartsDwellTime extends Vue {
             yAxis: {
                 labels: { style: { color: "#000" } },
                 title: {
-                    text: null,
+                    text: this._("w_ReportDwellTime_DwellTimeDwellTime"),
                     style: { color: "#000" }
                 }
             },
+
             tooltip: {
                 enabled: true,
                 useHTML: true,
@@ -1370,26 +1540,25 @@ export class HighchartsDwellTime extends Vue {
                                         result += `${site.siteName}<br>`;
                                         result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
                                         result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
-                                        if (newValue.genderMode == "male") {
-                                            result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
-                                            result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
-                                        } else {
-                                            result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
-                                            result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
-                                        }
+                                        result += `${newValue.i18n.dwellTime}: ${site.dwellTime}<br>`;
+                                        result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
+                                        result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
+                                        result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                        result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
                                         break;
                                     case ETimeMode.day:
                                     case ETimeMode.hour:
                                     default:
                                         result += `${site.siteName}<br>`;
                                         result += `${newValue.i18n.date}: ${newValue.categorie}<br>`;
-                                        if (newValue.genderMode == "male") {
-                                            result += `${newValue.i18n.gender}: ${newValue.i18n.male}<br>`;
-                                            result += `${newValue.i18n.percent}: ${site.maleCountPercent}%<br>`;
-                                        } else {
-                                            result += `${newValue.i18n.gender}: ${newValue.i18n.female}<br>`;
-                                            result += `${newValue.i18n.percent}: ${site.femaleCountPercent}%<br>`;
-                                        }
+                                        result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
+                                        result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
+                                        result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
+                                        result += `${newValue.i18n.dwellTime}: ${site.dwellTime}<br>`;
+                                        result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
+                                        result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
+                                        result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
+                                        result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
                                         break;
                                 }
                                 break;
@@ -1417,7 +1586,7 @@ export class HighchartsDwellTime extends Vue {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     drawChartPercentage() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let categories: string[] = this.getAgeList();
@@ -1513,7 +1682,7 @@ export class HighchartsDwellTime extends Vue {
     }
 
     drawChartAgeRangeGender() {
-        let tempValues: IChartDemographicData[] = JSON.parse(
+        let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let categories: string[] = this.getPersonCountList();
@@ -1573,18 +1742,25 @@ export class HighchartsDwellTime extends Vue {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private anysislyChartValueDefault(): IChartDemographicData {
-        let value: IChartDemographicData = {
+    private anysislyChartValueDefault(): IChartDwellTimeData {
+        let value: IChartDwellTimeData = {
             date: new Date(),
             siteObjectId: "",
-            ageRange: EAgeRange.none,
-            dwellTimeRange: EDwellTimeRange.none,
-            maleCount: 0,
-            femaleCount: 0,
             temperatureMin: 0,
             temperatureMax: 0,
             weather: EWeather.none,
 
+            ageRange: EAgeRange.none,
+            dwellTimeRange: EDwellTimeRange.none,
+            maleCount: 0,
+            femaleCount: 0,
+            revenue: 0,
+            transaction: 0,
+
+            dwellTime: 0,
+            conversion: 0,
+            asp: 0,
+            dwellTimeAVG: 0,
             maleCountPercent: 0,
             femaleCountPercent: 0,
 
@@ -1619,14 +1795,17 @@ export class HighchartsDwellTime extends Vue {
         return value;
     }
 
-    private anysislyChartValue(
-        item: IChartDemographicData
-    ): IChartDemographicData {
+    private anysislyChartValue(item: IChartDwellTimeData): IChartDwellTimeData {
         let value = JSON.parse(JSON.stringify(item));
         value.date = new Date(value.date);
 
+        value.dwellTime = value.maleCount + value.femaleCount;
+
         value.maleCountPercent = 0;
         value.femaleCountPercent = 0;
+        value.conversion = 0;
+        value.asp = 0;
+        value.dwellTimeAVG = 0;
 
         // every report
         for (let site of this.sites) {
@@ -1728,7 +1907,13 @@ export class HighchartsDwellTime extends Vue {
             gender: this._("w_Gender"),
             male: this._("w_Male"),
             female: this._("w_Female"),
-            percent: this._("w_Report_Percent")
+            percent: this._("w_Report_Percent"),
+            dwellTime: this._("w_ReportDwellTime_DwellTimeDwellTime"),
+            dwellTimeAVG: this._("w_ReportDwellTime_DwellTimeDwellTimeAVG"),
+            revenue: this._("w_ReportTraffic_TrafficRevenue"),
+            transaction: this._("w_ReportTraffic_TrafficTransaction"),
+            conversion: this._("w_ReportTraffic_TrafficConversion"),
+            asp: this._("w_ReportTraffic_TrafficASP")
         };
         return result;
     }

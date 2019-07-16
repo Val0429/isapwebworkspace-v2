@@ -885,6 +885,10 @@ export default class LangObject implements ILang {
 
     // Report Dwell Time
     w_ReportDwellTime_LabelDwellTimePercentage = 'Dwell Time Percentage';
+    w_ReportDwellTime_DwellTimeDwellTime = 'Dwell Time';
+    w_ReportDwellTime_DwellTimeDwellTimeM = 'Dwell Time(m)';
+    w_ReportDwellTime_DwellTimeRevenue = 'Revenue';
+    w_ReportDwellTime_DwellTimeDwellTimeAVG = 'AVG Dwell Time';
 
     // Report Demographic
     w_ReportDemographic_LabelGender = 'Demographic by Gender';

@@ -74,6 +74,7 @@
                     :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
+                    :businessMode="inputFormData.businessChartType"
                     :value="chartDatas"
                 >
                 </highcharts-dwell-time>
@@ -145,7 +146,7 @@ import {
     EChartMode,
     EPageType,
     ESign,
-    IChartDemographicData,
+    IChartDwellTimeData,
     IPeckTimeRange,
     ISite,
     ISiteItems,
@@ -197,7 +198,7 @@ export default class ReportDwellTime extends Vue {
     timeMode: ETimeMode = ETimeMode.none;
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
-    chartDatas: IChartDemographicData[] = [];
+    chartDatas: IChartDwellTimeData[] = [];
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -296,19 +297,18 @@ export default class ReportDwellTime extends Vue {
         await this.initSelectItemUsers();
     }
 
-
     initSelect() {
         this.timeModeSelectItem = {
-            day: this._('w_daily'),
-            week: this._('w_weekly'),
-            month: this._('w_monthly'),
-            quarter: this._('w_quarterly'),
-            year: this._('w_yearly')
+            day: this._("w_daily"),
+            week: this._("w_weekly"),
+            month: this._("w_monthly"),
+            quarter: this._("w_quarterly"),
+            year: this._("w_yearly")
         };
 
         this.isIncludedEmployeeSelectItem = {
-            yes: this._('w_yes'),
-            no: this._('w_no')
+            yes: this._("w_yes"),
+            no: this._("w_no")
         };
 
         this.businessChartTypeSelectItem = {
@@ -317,106 +317,6 @@ export default class ReportDwellTime extends Vue {
             transaction: this._("w_transaction"),
             conversion: this._("w_conversion")
         };
-    }
-    /////////////////////////////////////////////////////////////////////
-
-    // Author: Morris, Product remove
-    initChartDeveloper() {
-        this.timeMode = ETimeMode.day;
-        this.areaMode = EAreaMode.single;
-
-        // single day
-        this.startDate = new Date("2019-07-01T08:00:00.000Z");
-        this.endDate = new Date("2019-07-01T14:00:00.000Z");
-
-        // multipe day
-        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
-        // this.endDate = new Date("2019-07-10T14:00:00.000Z");
-
-        let siteLength = 1;
-
-        for (let j = 0; j < siteLength; j++) {
-            let tempJ = j + 1;
-            this.sites.push({
-                objectId: "site" + tempJ.toString(),
-                name: "Site " + tempJ.toString(),
-                officeHour: [
-                    {
-                        startDay: "0",
-                        endDay: "6",
-                        startDate: "2000-01-01T00:00:00.000Z",
-                        endDate: "2000-01-01T14:00:00.000Z"
-                    }
-                ]
-            });
-
-            for (let i = 1; i < 30; i++) {
-                let ageRange = EAgeRange.none;
-                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
-
-                let weather = EWeather.none;
-                let tempWeatherNumber = Math.floor(Math.random() * 300);
-
-                if (tempWeatherNumber % 10 == 0) {
-                    weather = EWeather.clearDay;
-                } else if (tempWeatherNumber % 10 == 1) {
-                    weather = EWeather.clearNight;
-                } else if (tempWeatherNumber % 10 == 2) {
-                    weather = EWeather.rain;
-                } else if (tempWeatherNumber % 10 == 3) {
-                    weather = EWeather.snow;
-                } else if (tempWeatherNumber % 10 == 4) {
-                    weather = EWeather.sleet;
-                } else if (tempWeatherNumber % 10 == 5) {
-                    weather = EWeather.wind;
-                } else if (tempWeatherNumber % 10 == 6) {
-                    weather = EWeather.fog;
-                } else if (tempWeatherNumber % 10 == 7) {
-                    weather = EWeather.cloudy;
-                } else if (tempWeatherNumber % 10 == 8) {
-                    weather = EWeather.partlyCloudyDay;
-                } else if (tempWeatherNumber % 10 == 9) {
-                    weather = EWeather.partlyCloudyNight;
-                }
-
-                if (tempAgeRangeNumber % 6 == 0) {
-                    ageRange = EAgeRange.lower20;
-                } else if (tempAgeRangeNumber % 6 == 1) {
-                    ageRange = EAgeRange.m21_30;
-                } else if (tempAgeRangeNumber % 6 == 2) {
-                    ageRange = EAgeRange.m31_40;
-                } else if (tempAgeRangeNumber % 6 == 3) {
-                    ageRange = EAgeRange.m41_50;
-                } else if (tempAgeRangeNumber % 6 == 4) {
-                    ageRange = EAgeRange.m51_60;
-                } else if (tempAgeRangeNumber % 6 == 5) {
-                    ageRange = EAgeRange.upper61;
-                }
-
-                let tempI = i;
-                let iNumber = tempI;
-                let iString = tempI.toString();
-                let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(
-                    `2019-07-${iString10}T${iString10}:00:00.000Z`
-                );
-                let tempChartData: IChartDemographicData = {
-                    date: tempDate,
-                    siteObjectId: "site" + (j + 1).toString(),
-                    temperatureMin: iNumber,
-                    temperatureMax: iNumber,
-                    weather: weather,
-                    ageRange: ageRange,
-                    dwellTimeRange: EDwellTimeRange.none,
-                    maleCount: Math.floor(Math.random() * 300),
-                    femaleCount: Math.floor(Math.random() * 300)
-                };
-
-                if (!isNaN(tempChartData.date.getTime())) {
-                    this.chartDatas.push(tempChartData);
-                }
-            }
-        }
     }
 
     initTemplate() {
@@ -1213,7 +1113,7 @@ export default class ReportDwellTime extends Vue {
     }
 
     sortOutChartData(datas: any) {
-        let tempChartDatas: IChartDemographicData[] = [];
+        let tempChartDatas: IChartDwellTimeData[] = [];
         let isOneDay = false;
         this.chartDatas = [];
 
@@ -1975,10 +1875,7 @@ export default class ReportDwellTime extends Vue {
         let [fileName, fileType, sheetName] = [
             this._("w_Navigation_VideoSources_Demographic"),
             fType,
-            Datetime.DateTime2String(
-                this.startDate,
-             "YYYY-MM-DD"
-            )
+            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
     }
@@ -2029,6 +1926,108 @@ export default class ReportDwellTime extends Vue {
     }
 
     /////////////////////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        this.timeMode = ETimeMode.day;
+        this.areaMode = EAreaMode.all;
+        this.inputFormData.businessChartType = EBusinessChart.revenue;
+
+        // single day
+        this.startDate = new Date("2019-07-01T08:00:00.000Z");
+        this.endDate = new Date("2019-07-01T14:00:00.000Z");
+
+        // multipe day
+        this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        this.endDate = new Date("2019-07-10T14:00:00.000Z");
+
+        let siteLength = 3;
+
+        for (let j = 0; j < siteLength; j++) {
+            let tempJ = j + 1;
+            this.sites.push({
+                objectId: "site" + tempJ.toString(),
+                name: "Site " + tempJ.toString(),
+                officeHour: [
+                    {
+                        startDay: "0",
+                        endDay: "6",
+                        startDate: "2000-01-01T00:00:00.000Z",
+                        endDate: "2000-01-01T14:00:00.000Z"
+                    }
+                ]
+            });
+
+            for (let i = 1; i < 30; i++) {
+                let ageRange = EAgeRange.none;
+                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
+
+                let weather = EWeather.none;
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
+
+                if (tempWeatherNumber % 10 == 0) {
+                    weather = EWeather.clearDay;
+                } else if (tempWeatherNumber % 10 == 1) {
+                    weather = EWeather.clearNight;
+                } else if (tempWeatherNumber % 10 == 2) {
+                    weather = EWeather.rain;
+                } else if (tempWeatherNumber % 10 == 3) {
+                    weather = EWeather.snow;
+                } else if (tempWeatherNumber % 10 == 4) {
+                    weather = EWeather.sleet;
+                } else if (tempWeatherNumber % 10 == 5) {
+                    weather = EWeather.wind;
+                } else if (tempWeatherNumber % 10 == 6) {
+                    weather = EWeather.fog;
+                } else if (tempWeatherNumber % 10 == 7) {
+                    weather = EWeather.cloudy;
+                } else if (tempWeatherNumber % 10 == 8) {
+                    weather = EWeather.partlyCloudyDay;
+                } else if (tempWeatherNumber % 10 == 9) {
+                    weather = EWeather.partlyCloudyNight;
+                }
+
+                if (tempAgeRangeNumber % 6 == 0) {
+                    ageRange = EAgeRange.lower20;
+                } else if (tempAgeRangeNumber % 6 == 1) {
+                    ageRange = EAgeRange.m21_30;
+                } else if (tempAgeRangeNumber % 6 == 2) {
+                    ageRange = EAgeRange.m31_40;
+                } else if (tempAgeRangeNumber % 6 == 3) {
+                    ageRange = EAgeRange.m41_50;
+                } else if (tempAgeRangeNumber % 6 == 4) {
+                    ageRange = EAgeRange.m51_60;
+                } else if (tempAgeRangeNumber % 6 == 5) {
+                    ageRange = EAgeRange.upper61;
+                }
+
+                let tempI = i;
+                let iNumber = tempI;
+                let iString = tempI.toString();
+                let iString10 = iNumber < 10 ? `0${iString}` : iString;
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
+                let tempChartData: IChartDwellTimeData = {
+                    date: tempDate,
+                    siteObjectId: "site" + (j + 1).toString(),
+                    temperatureMin: iNumber,
+                    temperatureMax: iNumber,
+                    weather: weather,
+                    ageRange: ageRange,
+                    dwellTimeRange: EDwellTimeRange.none,
+                    maleCount: Math.floor(Math.random() * 300),
+                    femaleCount: Math.floor(Math.random() * 300),
+                    revenue: Math.floor(Math.random() * 1000),
+                    transaction: Math.floor(Math.random() * 50)
+                };
+
+                if (!isNaN(tempChartData.date.getTime())) {
+                    this.chartDatas.push(tempChartData);
+                }
+            }
+        }
+    }
 }
 </script>
 

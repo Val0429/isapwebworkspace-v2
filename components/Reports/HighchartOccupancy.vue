@@ -51,17 +51,8 @@ exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
 // custom import
-import {
-    ETimeMode,
-    EAreaMode,
-    EChartMode,
-    EWeather
-} from "./";
-import {
-    ISiteAreas,
-    IChartOccupancyData,
-    ISiteOfficeHourItem
-} from "./";
+import { ETimeMode, EAreaMode, EChartMode, EWeather } from "./";
+import { ISiteAreas, IChartOccupancyData, ISiteOfficeHourItem } from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 
@@ -1141,15 +1132,15 @@ export class HighchartsOccupancy extends Vue {
         let value: IChartOccupancyData = {
             date: new Date(),
             siteObjectId: "",
+            temperatureMin: 0,
+            temperatureMax: 0,
+            weather: EWeather.none,
 
             areaId: "",
             areaName: "",
             occupancy: 0,
 
             // every report
-            temperatureMin: 0,
-            temperatureMax: 0,
-            weather: EWeather.none,
             siteName: "",
             timeMode: this.timeMode,
             areaMode: this.areaMode,
