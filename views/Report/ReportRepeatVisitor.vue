@@ -240,7 +240,6 @@ export default class ReportRepeatVisitor extends Vue {
 
     mounted() {}
 
-
     async initDatas() {
         // Tina
         this.initSelect();
@@ -251,19 +250,18 @@ export default class ReportRepeatVisitor extends Vue {
         await this.initSelectItemUsers();
     }
 
-
     initSelect() {
         this.timeModeSelectItem = {
-            day: this._('w_daily'),
-            week: this._('w_weekly'),
-            month: this._('w_monthly'),
-            quarter: this._('w_quarterly'),
-            year: this._('w_yearly')
+            day: this._("w_daily"),
+            week: this._("w_weekly"),
+            month: this._("w_monthly"),
+            quarter: this._("w_quarterly"),
+            year: this._("w_yearly")
         };
 
         this.isIncludedEmployeeSelectItem = {
-            yes: this._('w_yes'),
-            no: this._('w_no')
+            yes: this._("w_yes"),
+            no: this._("w_no")
         };
     }
 

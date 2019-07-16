@@ -17,15 +17,15 @@
                     <div v-show="selection.chartType == 'bar'">
                         <highcharts
                             ref="chart"
-                            v-if="mountChart"
-                            :options="chartOptionsBar"
+                            v-if="mountChart.bar"
+                            :options="chartOptions.bar"
                         ></highcharts>
                     </div>
                     <div v-show="selection.chartType == 'pie'">
                         <highcharts
                             ref="chart"
-                            v-if="mountChart"
-                            :options="chartOptionsPie"
+                            v-if="mountChart.pie"
+                            :options="chartOptions.pie"
                         ></highcharts>
                     </div>
                 </b-col>
@@ -37,26 +37,44 @@
                         :options="selectItem.repeatCount"
                         @input="changeRepeatCount"
                     ></iv-form-selection>
+
                     <b-row>
                         <b-col cols="6">
                             <highcharts
                                 ref="chart"
-                                v-if="mountDetailChart"
-                                :options="chartOptionsDetailBar"
+                                v-if="mountChart.detailBar"
+                                :options="chartOptions.detailBar"
                             ></highcharts>
                         </b-col>
 
                         <b-col cols="6">
                             <highcharts
                                 ref="chart"
-                                v-if="mountDetailChart"
-                                :options="chartOptionsDetailPie"
+                                v-if="mountChart.detailPie"
+                                :options="chartOptions.detailPie"
                             ></highcharts>
                         </b-col>
                     </b-row>
-
                 </b-col>
 
+            </b-row>
+
+            <b-row>
+                <b-col cols="6">
+                    <highcharts
+                        ref="chart"
+                        v-if="mountChart.percentageOnce"
+                        :options="chartOptions.percentageOnce"
+                    ></highcharts>
+                </b-col>
+
+                <b-col cols="6">
+                    <highcharts
+                        ref="chart"
+                        v-if="mountChart.percentageRepeat"
+                        :options="chartOptions.percentageRepeat"
+                    ></highcharts>
+                </b-col>
             </b-row>
 
         </b-form-group>
@@ -148,12 +166,37 @@ export class HighchartsRepeatVisitor extends Vue {
         repeatCount: []
     };
 
-    mountChart: boolean = false;
-    mountDetailChart = false;
-    chartOptionsBar: any = {};
-    chartOptionsPie: any = {};
-    chartOptionsDetailBar: any = {};
-    chartOptionsDetailPie: any = {};
+    mountChart: {
+        bar: boolean;
+        pie: boolean;
+        detailBar: boolean;
+        detailPie: boolean;
+        percentageOnce: boolean;
+        percentageRepeat: boolean;
+    } = {
+        bar: false,
+        pie: false,
+        detailBar: false,
+        detailPie: false,
+        percentageOnce: false,
+        percentageRepeat: false
+    };
+
+    chartOptions: {
+        bar: any;
+        pie: any;
+        detailBar: any;
+        detailPie: any;
+        percentageOnce: any;
+        percentageRepeat: any;
+    } = {
+        bar: {},
+        pie: {},
+        detailBar: {},
+        detailPie: {},
+        percentageOnce: {},
+        percentageRepeat: {}
+    };
 
     @Watch("value", { deep: true })
     private onValueChanged(
@@ -191,6 +234,15 @@ export class HighchartsRepeatVisitor extends Vue {
     }
 
     start() {
+        this.mountChart = {
+            bar: false,
+            pie: false,
+            detailBar: false,
+            detailPie: false,
+            percentageOnce: false,
+            percentageRepeat: false
+        };
+
         this.initChart();
         this.initDetailChart();
 
@@ -263,7 +315,7 @@ export class HighchartsRepeatVisitor extends Vue {
         }
 
         // bar
-        this.chartOptionsBar = {
+        this.chartOptions.bar = {
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -278,14 +330,17 @@ export class HighchartsRepeatVisitor extends Vue {
                 title: { text: null }
             },
             tooltip: {
-                useHTML: true,
-                enabled: false
+                enabled: true,
+                formatter: function() {
+                    let self: any = this;
+                    return `${self.y}`;
+                }
             },
             series: tempSeries.bar
         };
 
         // pie
-        this.chartOptionsPie = {
+        this.chartOptions.pie = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -306,11 +361,18 @@ export class HighchartsRepeatVisitor extends Vue {
                     size: "100%"
                 }
             },
-            tooltip: { enabled: false },
+            tooltip: {
+                enabled: true,
+                formatter: function() {
+                    let self: any = this;
+                    return `${self.point.name}: ${self.y}%`;
+                }
+            },
             series: tempSeries.pie
         };
 
-        this.mountChart = true;
+        this.mountChart.bar = true;
+        this.mountChart.pie = true;
     }
 
     initDetailChart() {
@@ -320,7 +382,6 @@ export class HighchartsRepeatVisitor extends Vue {
 
         let tempCategories: {
             bar: string[];
-            pie: string[];
         } = {
             bar: [
                 this._("w_Report_AgeRangeUpper61"),
@@ -329,13 +390,14 @@ export class HighchartsRepeatVisitor extends Vue {
                 this._("w_Report_AgeRangeM31_40"),
                 this._("w_Report_AgeRangeM21_30"),
                 this._("w_Report_AgeRangeLower20")
-            ],
-            pie: []
+            ]
         };
 
         let tempSeries: {
             bar: any;
             pie: any;
+            once: any;
+            repeat: any;
         } = {
             bar: [
                 {
@@ -343,21 +405,32 @@ export class HighchartsRepeatVisitor extends Vue {
                     data: [0, 0, 0, 0, 0, 0]
                 }
             ],
-            pie: [[this._("w_Male"), 0], [this._("w_Female"), 0]]
+            pie: [[this._("w_Male"), 0], [this._("w_Female"), 0]],
+            once: [["1", 0], ["2+", 0]],
+            repeat: [["2", 0], ["3", 0], ["4", 0], ["5+", 0]]
         };
 
-        let totalCount = 0;
-        let maleCount = 0;
-        let femaleCount = 0;
+        let countItem = {
+            gender: 0,
+            male: 0,
+            female: 0,
+            times: 0,
+            m1: 0,
+            m2: 0,
+            m3: 0,
+            m4: 0,
+            m5: 0
+        };
 
         for (let val of tempValues) {
+            // set detail count
             switch (this.selection.repeatCount) {
                 case "1":
                     if (val.repeatCount == 1) {
-                        totalCount += val.maleCount;
-                        totalCount += val.femaleCount;
-                        maleCount += val.maleCount;
-                        femaleCount += val.femaleCount;
+                        countItem.gender += val.maleCount;
+                        countItem.gender += val.femaleCount;
+                        countItem.male += val.maleCount;
+                        countItem.female += val.femaleCount;
 
                         switch (val.ageRange) {
                             case EAgeRange.upper61:
@@ -390,10 +463,10 @@ export class HighchartsRepeatVisitor extends Vue {
 
                 case "2":
                     if (val.repeatCount == 2) {
-                        totalCount += val.maleCount;
-                        totalCount += val.femaleCount;
-                        maleCount += val.maleCount;
-                        femaleCount += val.femaleCount;
+                        countItem.gender += val.maleCount;
+                        countItem.gender += val.femaleCount;
+                        countItem.male += val.maleCount;
+                        countItem.female += val.femaleCount;
 
                         switch (val.ageRange) {
                             case EAgeRange.upper61:
@@ -426,10 +499,10 @@ export class HighchartsRepeatVisitor extends Vue {
 
                 case "3":
                     if (val.repeatCount == 3) {
-                        totalCount += val.maleCount;
-                        totalCount += val.femaleCount;
-                        maleCount += val.maleCount;
-                        femaleCount += val.femaleCount;
+                        countItem.gender += val.maleCount;
+                        countItem.gender += val.femaleCount;
+                        countItem.male += val.maleCount;
+                        countItem.female += val.femaleCount;
 
                         switch (val.ageRange) {
                             case EAgeRange.upper61:
@@ -462,10 +535,10 @@ export class HighchartsRepeatVisitor extends Vue {
 
                 case "4":
                     if (val.repeatCount == 4) {
-                        totalCount += val.maleCount;
-                        totalCount += val.femaleCount;
-                        maleCount += val.maleCount;
-                        femaleCount += val.femaleCount;
+                        countItem.gender += val.maleCount;
+                        countItem.gender += val.femaleCount;
+                        countItem.male += val.maleCount;
+                        countItem.female += val.femaleCount;
 
                         switch (val.ageRange) {
                             case EAgeRange.upper61:
@@ -498,10 +571,10 @@ export class HighchartsRepeatVisitor extends Vue {
 
                 case "5+":
                     if (val.repeatCount >= 5) {
-                        totalCount += val.maleCount;
-                        totalCount += val.femaleCount;
-                        maleCount += val.maleCount;
-                        femaleCount += val.femaleCount;
+                        countItem.gender += val.maleCount;
+                        countItem.gender += val.femaleCount;
+                        countItem.male += val.maleCount;
+                        countItem.female += val.femaleCount;
 
                         switch (val.ageRange) {
                             case EAgeRange.upper61:
@@ -534,10 +607,10 @@ export class HighchartsRepeatVisitor extends Vue {
 
                 case "all":
                 default:
-                    totalCount += val.maleCount;
-                    totalCount += val.femaleCount;
-                    maleCount += val.maleCount;
-                    femaleCount += val.femaleCount;
+                    countItem.gender += val.maleCount;
+                    countItem.gender += val.femaleCount;
+                    countItem.male += val.maleCount;
+                    countItem.female += val.femaleCount;
 
                     switch (val.ageRange) {
                         case EAgeRange.upper61:
@@ -568,19 +641,64 @@ export class HighchartsRepeatVisitor extends Vue {
 
                     break;
             }
+
+            // set percentage count
+            if (val.repeatCount > 0) {
+                countItem.times++;
+                if (val.repeatCount == 1) {
+                    countItem.m1++;
+                } else if (val.repeatCount == 2) {
+                    countItem.m2++;
+                } else if (val.repeatCount == 3) {
+                    countItem.m3++;
+                } else if (val.repeatCount == 4) {
+                    countItem.m4++;
+                } else {
+                    countItem.m5++;
+                }
+            }
         }
 
-        if (totalCount > 0) {
+        // calculate detail
+        if (countItem.gender > 0) {
             tempSeries.pie[0][1] = HighchartsService.formatFloat(
-                (maleCount / totalCount) * 100
+                (countItem.male / countItem.gender) * 100
             );
             tempSeries.pie[1][1] = HighchartsService.formatFloat(
-                (femaleCount / totalCount) * 100
+                (countItem.female / countItem.gender) * 100
+            );
+        }
+
+        // calculate percentage
+        if (countItem.times > 0) {
+            tempSeries.once[0][1] = HighchartsService.formatFloat(
+                (countItem.m1 / countItem.times) * 100
+            );
+            tempSeries.once[1][1] = HighchartsService.formatFloat(
+                ((countItem.m2 + countItem.m3 + countItem.m4 + countItem.m5) /
+                    countItem.times) *
+                    100
+            );
+        }
+
+        let tempRepeatCount = countItem.times - countItem.m1;
+        if (tempRepeatCount > 0) {
+            tempSeries.repeat[0][1] = HighchartsService.formatFloat(
+                (countItem.m2 / tempRepeatCount) * 100
+            );
+            tempSeries.repeat[1][1] = HighchartsService.formatFloat(
+                (countItem.m3 / tempRepeatCount) * 100
+            );
+            tempSeries.repeat[2][1] = HighchartsService.formatFloat(
+                (countItem.m4 / tempRepeatCount) * 100
+            );
+            tempSeries.repeat[3][1] = HighchartsService.formatFloat(
+                (countItem.m5 / tempRepeatCount) * 100
             );
         }
 
         // detail bar
-        this.chartOptionsDetailBar = {
+        this.chartOptions.detailBar = {
             chart: {
                 type: "bar",
                 zoomType: "x"
@@ -599,18 +717,46 @@ export class HighchartsRepeatVisitor extends Vue {
                 }
             },
             credits: { enabled: false },
-            tooltip: { enabled: false },
+            tooltip: {
+                enabled: true,
+                formatter: function() {
+                    let self: any = this;
+                    return `${self.y}`;
+                }
+            },
             legend: { enabled: false },
             series: tempSeries.bar
         };
 
         // detail pie
-        this.chartOptionsDetailPie = {
+        this.chartOptions.detailPie = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
-            tooltip: { enabled: false },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: "pointer",
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            let self: any = this;
+                            return `${self.y}%`;
+                        }
+                    },
+                    showInLegend: true,
+                    center: ["50%", "50%"],
+                    size: "100%"
+                }
+            },
+            tooltip: {
+                enabled: true,
+                formatter: function() {
+                    let self: any = this;
+                    return `${self.point.name}: ${self.y}%`;
+                }
+            },
             series: [
                 {
                     type: "pie",
@@ -620,7 +766,86 @@ export class HighchartsRepeatVisitor extends Vue {
             ]
         };
 
-        this.mountDetailChart = true;
+        // percentageOnce
+        this.chartOptions.percentageOnce = {
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: "pointer",
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            let self: any = this;
+                            return `${self.y}%`;
+                        }
+                    },
+                    showInLegend: true,
+                    center: ["50%", "50%"],
+                    size: "100%"
+                }
+            },
+            tooltip: {
+                enabled: true,
+                formatter: function() {
+                    let self: any = this;
+                    return `${self.point.name}: ${self.y}%`;
+                }
+            },
+            series: [
+                {
+                    type: "pie",
+                    innerSize: "50%",
+                    data: tempSeries.once
+                }
+            ]
+        };
+
+        // percentageRepeat
+        this.chartOptions.percentageRepeat = {
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: "pointer",
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            let self: any = this;
+                            return `${self.y}%`;
+                        }
+                    },
+                    showInLegend: true,
+                    center: ["50%", "50%"],
+                    size: "100%"
+                }
+            },
+            tooltip: {
+                enabled: true,
+                formatter: function() {
+                    let self: any = this;
+                    return `${self.point.name}: ${self.y}%`;
+                }
+            },
+            series: [
+                {
+                    type: "pie",
+                    innerSize: "50%",
+                    data: tempSeries.repeat
+                }
+            ]
+        };
+
+        this.mountChart.detailBar = true;
+        this.mountChart.detailPie = true;
+        this.mountChart.percentageOnce = true;
+        this.mountChart.percentageRepeat = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
