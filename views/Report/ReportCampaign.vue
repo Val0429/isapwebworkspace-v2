@@ -5,7 +5,7 @@
         <filter-condition-campaign
             :yearSelectItem="yearSelectItem"
             :campaignSelectItem="campaignSelectItem"
-            :campaignStoreSelectItem="campaignStoreSelectItem"
+            :campaignSiteSelectItem="campaignSiteSelectItem"
         >
         </filter-condition-campaign>
 
@@ -35,7 +35,7 @@ export default class ReportCampaign extends Vue {
 
     yearSelectItem: any = {};
     campaignSelectItem: any = {};
-    campaignStoreSelectItem: any = {};
+    campaignSiteSelectItem: any = {};
 
     inputFormData: any = {
         date: '',
@@ -59,8 +59,20 @@ export default class ReportCampaign extends Vue {
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
-    initSelectYear() {}
-    async initSelectCampaign() {}
+    initSelectYear() {
+        // this.yearSelectItem = {
+        //     "2019": "2019",
+        //     "2020": "2020",
+        // }
+    }
+
+    async initSelectCampaign() {
+        // this.campaignSelectItem = {
+        //     MMsKioPy3X: "聖誕節",
+        //     k6H0cOOLXe: "母親節",
+        // }
+    }
+
     async initSelectCampaignStore() {}
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

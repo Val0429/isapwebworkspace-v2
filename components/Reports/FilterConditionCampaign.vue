@@ -1,7 +1,6 @@
 <template>
     <div>
         <iv-card
-            v-show="pageStep === ePageStep.none"
             :visible="true"
             :label="_('w_ReportFilterConditionComponent_')"
         >
@@ -11,22 +10,29 @@
                 @submit="doSubmit($event)"
             >
 
-                <template #ifAllSites="{ $attrs, $listeners }">
-                    <b-form-radio-group
+                <template #campaignIds="{ $attrs, $listeners }">
+                    <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
-                        v-model="selectAllSites"
-                        class="h-25 select_date_button mb-3"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="ifAllSitesSelectItem"
-                        @change="changeAllSitesSelect"
-                    ></b-form-radio-group>
+                        v-model="inputFormData.campaignIds"
+                    >
+                    </iv-form-selection>
+                </template>
+
+
+                <template #confirm="{ $attrs, $listeners }">
+
+                    <div class="ml-3 select_report_period_button mr-5">
+                        <b-button
+                            @click="confirmCampaign">
+                            {{ _('w_Confirm') }}
+                        </b-button>
+                    </div>
                 </template>
 
                 <template #siteIds="{ $attrs, $listeners }">
                     <iv-form-selection
+                        v-if="inputFormData.year !== '' && inputFormData.campaignIds.length === 1 && inputFormData.campaignIds !== 'all'"
                         v-bind="$attrs"
                         v-on="$listeners"
                         v-model="inputFormData.siteIds"
@@ -34,67 +40,8 @@
                     </iv-form-selection>
                 </template>
 
-                <template #selectTree="{ $attrs, $listeners }">
 
-                    <div class="ml-3 select_report_period_button">
-                        <b-button
-                            v-if="selectAllSites === 'select'"
-                            @click="pageToChooseTree"
-                        >
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-                </template>
 
-                <template #selectPeriodAddWay="{ $attrs, $listeners }">
-                    <b-form-radio-group
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="selectPeriodAddWay"
-                        class="h-25 select_date_button"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="addPeriodSelectItem"
-                        @change="changeAddPeriodSelect"
-                    ></b-form-radio-group>
-                </template>
-
-                <template #startDate="{ $attrs, $listeners }">
-                    <iv-form-date
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.startDate"
-                    >
-                    </iv-form-date>
-                </template>
-
-                <template #endDate="{ $attrs, $listeners }">
-                    <iv-form-date
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.endDate"
-                    >
-                    </iv-form-date>
-                </template>
-
-                <template #designationPeriod="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.designationPeriod"
-                    >
-                    </iv-form-selection>
-                </template>
-
-                <template #tagIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.tagIds"
-                    >
-                    </iv-form-selection>
-                </template>
 
             </iv-form>
 
@@ -118,15 +65,6 @@
 
         </iv-card>
 
-        <region-tree-select
-            v-if="pageStep === ePageStep.chooseTree && selectAllSites === 'select'"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
 
     </div>
 </template>
@@ -148,35 +86,28 @@ import {
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
 
-enum EPageStep {
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree",
-    select = "select",
-    all = "all"
-}
-
 @Component({
     components: {}
 })
+
 export class FilterConditionCampaign extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
     })
-    sitesSelectItem: object;
+    yearSelectItem: object;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
     })
-    tagSelectItem: object;
+    campaignSelectItem: object;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
     })
-    regionTreeItem: object;
+    campaignSiteSelectItem: object;
 
     @Prop({
         type: Object,
@@ -192,7 +123,7 @@ export class FilterConditionCampaign extends Vue {
     designationPeriodSelectItem: any = [];
 
     inputFormData: any = {
-        date: '',
+        year: '',
         campaignIds: [],
         siteIds: [],
     };
@@ -206,6 +137,9 @@ export class FilterConditionCampaign extends Vue {
 
     tempSaveInputData(data) {
         switch (data.key) {
+            case "year":
+                this.inputFormData.year = data.value;
+                break;
             case "siteIds":
                 for (const siteId of data.value) {
                     if (!siteId) {
@@ -215,17 +149,12 @@ export class FilterConditionCampaign extends Vue {
                     }
                 }
                 break;
-            case "tagIds":
-                this.inputFormData.tagIds = data.value;
-                break;
-            case "startDate":
-                this.inputFormData.startDate = data.value;
-                break;
-            case "endDate":
-                this.inputFormData.endDate = data.value;
-                break;
-            case "designationPeriod":
-                this.inputFormData.designationPeriod = data.value;
+            case "campaignIds":
+                // this.inputFormData.campaignIds = data.value;
+
+                this.inputFormData.campaignIds = [];
+
+                this.inputFormData.campaignIds.push(data.value);
                 break;
         }
     }
@@ -279,6 +208,10 @@ export class FilterConditionCampaign extends Vue {
 
             this.doSubmit();
         }
+    }
+
+    async confirmCampaign() {
+
     }
 
     async doSubmit() {
@@ -474,7 +407,7 @@ export class FilterConditionCampaign extends Vue {
 
     doReset() {
         this.inputFormData = {
-            date: '',
+            year: '',
             campaignIds: [],
             siteIds: [],
         };
@@ -487,25 +420,30 @@ export class FilterConditionCampaign extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiLabel - ${this._("w_BOCampaign_FiscalYear")}
                  * @uiColumnGroup - site
                  */
-                date: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                year: ${toEnumInterface(this.yearSelectItem as any, false)};
 
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_EventName")}
+                 * @uiColumnGroup - site
+                 */
+                campaignIds: ${toEnumInterface(this.campaignSelectItem as any, false)};
+
+
+                /**
+                 * @uiColumnGroup - site
+                 */
+                 confirm: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
                  */
-                campaignIds: ${toEnumInterface(this.sitesSelectItem as any, false)};
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiColumnGroup - site
-                 */
-                siteIds: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                siteIds?: ${toEnumInterface(this.campaignSiteSelectItem as any, false)};
 
 
             }
@@ -519,7 +457,7 @@ Vue.component("filter-condition-campaign", FilterConditionCampaign);
 
 <style lang="scss" scoped>
 .select_report_period_button {
-    margin-top: 27px;
+    margin-top: 28px;
     margin-bottom: 16px;
 }
 

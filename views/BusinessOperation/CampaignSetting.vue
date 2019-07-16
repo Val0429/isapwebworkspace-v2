@@ -307,7 +307,6 @@ export default class CampaignSetting extends Vue {
 
     initYear() {
         this.yearSelectItem = Datetime.FiveYearsIdText();
-        console.log(' - ', this.yearSelectItem);
     }
 
     selectedItem(data) {
