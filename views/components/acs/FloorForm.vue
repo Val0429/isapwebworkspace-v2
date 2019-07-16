@@ -219,9 +219,9 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
         ]);
     }
      getInfo(floor:any){
-        let elevator = this.elevators.find(x=>x.reader.find(y=> y.objectId == floor.objectId));
+        let elevator = this.elevators.find(x=>x.reader&& x.reader.length>0 && x.reader.find(y=> y.objectId == floor.objectId));
         let elevatorname = elevator ? elevator.elevatorname : "";
-        let group = elevator ? this.elevatorGroups.find(x=>x.elevators.find(y=>y.objectId==elevator.objectId)) : "";
+        let group = elevator ? this.elevatorGroups.find(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId)) : "";
         let elevatorgroup = group ? group.groupname : "";
         let areaname = group && group.area ? group.area.name : "";
         let sitename = group && group.area && group.area.site ? group.area.site.name : "";

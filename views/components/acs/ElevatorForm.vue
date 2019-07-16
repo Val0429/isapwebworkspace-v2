@@ -150,7 +150,7 @@ export default class ElevatorForm extends BasicFormQuick implements IFormQuick2 
         console.log("elevatorGroups", this.elevatorGroups)    
     }
      getInfo(elevator:any){
-        let group = this.elevatorGroups.find(x=>x.elevators.find(y=>y.objectId==elevator.objectId));
+        let group = this.elevatorGroups.find(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId));
         let elevatorgroup = group ? group.groupname : "";
         let area = group && group.area ? group.area.name : "";
         let site = group && group.area && group.area.site ? group.area.site.name : "";

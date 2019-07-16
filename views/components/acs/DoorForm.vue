@@ -262,7 +262,7 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         console.log("ccureOptions", this.ccureOptions);
     }
     getInfo(door:any){
-        let group = this.doorGroups.find(x=>x.doors.find(y=>y.objectId==door.objectId));
+        let group = this.doorGroups.find(x=>x.doors && x.doors.length>0 && x.doors.find(y=>y.objectId==door.objectId));
         let doorgroup = group ? group.groupname : "";
         let area = group && group.area ? group.area.name : "";
         let site = group && group.area && group.area.site ? group.area.site.name : "";
