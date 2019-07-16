@@ -81,17 +81,8 @@ exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
 // custom import
-import {
-    ETimeMode,
-    EAreaMode,
-    EAgeRange,
-    EWeather
-} from "./";
-import {
-    ISiteAreas,
-    IChartRepeatVisitorData,
-    ISiteOfficeHourItem
-} from "./";
+import { ETimeMode, EAreaMode, EAgeRange, EWeather } from "./";
+import { ISiteAreas, IChartRepeatVisitorData, ISiteOfficeHourItem } from "./";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 
@@ -638,18 +629,19 @@ export class HighchartsRepeatVisitor extends Vue {
         let value: IChartRepeatVisitorData = {
             date: new Date(),
             siteObjectId: "",
+            temperatureMin: 0,
+            temperatureMax: 0,
+            weather: EWeather.none,
 
             repeatCount: 0,
             ageRange: EAgeRange.none,
             maleCount: 0,
             femaleCount: 0,
+
             maleCountPercent: 0,
             femaleCountPercent: 0,
 
             // every report
-            temperatureMin: 0,
-            temperatureMax: 0,
-            weather: EWeather.none,
             siteName: "",
             timeMode: this.timeMode,
             areaMode: this.areaMode,

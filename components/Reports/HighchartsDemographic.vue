@@ -1697,10 +1697,12 @@ export class HighchartsDemographic extends Vue {
 
         if (totalCount > 0) {
             for (let i = 0; i < 6; i++) {
-                barSeries[0].data[i] =
-                    HighchartsService.formatFloat((barSeries[0].data[i] / totalCount) * 100);
+                barSeries[0].data[i] = HighchartsService.formatFloat(
+                    (barSeries[0].data[i] / totalCount) * 100
+                );
                 barSeries[1].data[i] = HighchartsService.formatFloat(
-                    (barSeries[1].data[i] / totalCount) * 100);
+                    (barSeries[1].data[i] / totalCount) * 100
+                );
             }
         }
 
@@ -1757,13 +1759,14 @@ export class HighchartsDemographic extends Vue {
         let value: IChartDemographicData = {
             date: new Date(),
             siteObjectId: "",
+            temperatureMin: 0,
+            temperatureMax: 0,
+            weather: EWeather.none,
+
             ageRange: EAgeRange.none,
             dwellTimeRange: EDwellTimeRange.none,
             maleCount: 0,
             femaleCount: 0,
-            temperatureMin: 0,
-            temperatureMax: 0,
-            weather: EWeather.none,
 
             maleCountPercent: 0,
             femaleCountPercent: 0,

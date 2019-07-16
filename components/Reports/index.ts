@@ -18,3 +18,4 @@ export { IValSelectItem, IBootstrapSelectItem } from './models/IHighCharts';
 export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem } from './models/IHighCharts';
 export { IDayRange } from './models/IHighCharts';
 export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData } from './models/IHighCharts';
+export { IChartDwellTimeData } from './models/IHighCharts';
