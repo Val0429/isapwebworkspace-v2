@@ -97,6 +97,13 @@
                 >
                 </report-table>
 
+                <dwell-time-table
+                    ref="detailReportTable"
+                    v-show="tableStep === eTableStep.detailTable"
+                    :thresholdDetailTableContent="detailRData"
+                >
+                </dwell-time-table>
+
                 <div>
                     <b-button
                         v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
@@ -279,6 +286,9 @@ export default class ReportDwellTime extends Vue {
     //Sun ReportTable 相關
     sunRData = new ReportTableData();
 
+    ///deatal ReportTable 相關
+    detailRData = [];
+
     created() {
         this.initChartDeveloper();
         this.initTemplate();
@@ -332,7 +342,7 @@ export default class ReportDwellTime extends Vue {
         this.lastTableStep = ETableStep.mainTable;
     }
 
-    async toSunReportTable(thatDay, sunTime, sunSite, sunArea) {
+    async toSunReportTable(thatDay, sunTime, sunSite, sunArea, rowName) {
         if (!thatDay) {
             let tempDate = new Date(sunTime.split(" ")[0]); //去掉星期
             let sDate = new Date(
@@ -371,8 +381,57 @@ export default class ReportDwellTime extends Vue {
                     return false;
                 });
         } else {
-            // this.toDetailReportTable(thatDay, sunTime, sunSite, sunArea);
+            this.toDetailReportTable(
+                thatDay,
+                sunTime,
+                sunSite,
+                sunArea,
+                rowName
+            );
         }
+    }
+
+    async toDetailReportTable(thatDay, sunTime, sunSite, sunArea, rowName) {
+        this.lastTableStep = this.tableStep;
+        this.tableStep = ETableStep.detailTable;
+        let tempTime = parseInt(sunTime.split(":")[0]);
+        let tempSDate = new Date(
+            thatDay.getFullYear(),
+            thatDay.getMonth(),
+            thatDay.getDate(),
+            tempTime
+        ).toISOString();
+
+        let tempEDate = new Date(
+            thatDay.getFullYear(),
+            thatDay.getMonth(),
+            thatDay.getDate(),
+            tempTime + 1
+        ).toISOString();
+
+        let filterData = {
+            startDate: tempSDate,
+            endDate: tempEDate,
+            type: rowName == "item2" ? "medium" : "high",
+            areaId: sunArea
+        };
+
+        let summaryTableDatas;
+        let officeHours;
+        await this.$server
+            .C("/report/human-detection/summary-threshold", filterData) //TODO wait api
+            .then((response: any) => {
+                if (response !== undefined) {
+                    this.detailRData = response;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
     }
 
     initSunReportTable(summaryTableDatas) {

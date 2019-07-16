@@ -1499,7 +1499,7 @@
                 let summaryTableDatas;
                 let officeHours;
                 await this.$server
-                    .C("/report/human-detection/summary", filterData)
+                    .C("/report/human-detection/summary", filterData)   
                     .then((response: any) => {
                         if (response !== undefined) {
                             summaryTableDatas = response.summaryTableDatas;

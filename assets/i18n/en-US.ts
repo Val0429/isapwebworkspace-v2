@@ -962,4 +962,11 @@ export default class LangObject {
     w_ReportVisitor_3 = '3';
     w_ReportVisitor_4 = '4';
     w_ReportVisitor_5 = '5+';
+
+    // Dwell Time
+    w_DwellTime_Customer = 'Customer';
+    w_DwellTime_In = 'In';
+    w_DwellTime_Out = 'Out';
+    w_DwellTime_DwellTime = 'Dwell Time(m)';
+    w_DwellTime_Type = 'Type';
 }
