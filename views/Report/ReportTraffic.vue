@@ -119,7 +119,7 @@ import {EAreaMode} from "../../components/Reports";
                 >
                 </report-table>
 
-                <div class="col-md-12">
+                <div>
                     <b-button
                         v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
                         variant="secondary"
@@ -366,8 +366,8 @@ export default class ReportTraffic extends Vue {
         };
 
         this.businessChartTypeSelectItem = {
-            asp: this._('w_asp'),
-            revenue: this._('w_revenue'),
+	        revenue: this._('w_revenue'),
+	        asp: this._('w_asp'),
             transaction: this._('w_transaction'),
             conversion: this._('w_conversion'),
         };

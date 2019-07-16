@@ -20,16 +20,28 @@
                     v-for="(value,index) in thresholdDetailTableData"
                     :key="'tableData__' + index"
                 >
-                    <td class="center">{{ showTime(value.date)}}</td>
-                    <td class="center">{{ value.total }}</td>
+                    <td class="center">{{getNo(thresholdDetailTableContent.indexOf(value))}}</td>
                     <td class="center">
                         <img
-                            v-for="(item,index) in value.imageSrcs"
+                            v-for="(item,index) in value.vip"
                             :key="'tableDataSrc__' + index"
                             class="threshold-image"
                             :src="serverConfig.url  + item"
                         >
                     </td>
+                    <td class="center">{{value.name}}</td>
+                    <td class="center">{{ value.location }}</td>
+                    <td class="center">{{ value.visitTime }}</td>
+                    <td class="center">{{ value.dwellTime }}</td>
+                    <td class="center">
+                        <a
+                            v-if="value.latestVisits != 0"
+                            href="#"
+                            @value="clickItem(items.objectId)"
+                        >{{ value.latestVisits }}</a>
+                        <span v-else>{{ value.latestVisits }}</span>
+                    </td>
+
                 </tr>
             </tbody>
         </table>
@@ -60,7 +72,7 @@ import ServerConfig from "@/services/ServerConfig";
 @Component({
     components: {}
 })
-export class OccupancyDetailsTable extends Vue {
+export class VipAndBlacklistTable extends Vue {
     Prop;
     @Prop({
         type: Array,
@@ -88,9 +100,13 @@ export class OccupancyDetailsTable extends Vue {
 
     initDate() {
         this.thresholdDetailTableTitle = [
-            this._("w_Occupancy_Time"),
-            this._("w_Occupancy_NumberDetected"),
-            this._("w_Occupancy_Snapshot")
+            this._("w_No"),
+            this._("w_VIP"),
+            this._("w_VIPAndBlackList_Name"),
+            this._("w_VIPAndBlackList_Location"),
+            this._("w_VIPAndBlackList_VisitTime"),
+            this._("w_VIPAndBlackList_DwellTime"),
+            this._("w_VIPAndBlackList_LatestVisits")
         ];
     }
 
@@ -103,8 +119,21 @@ export class OccupancyDetailsTable extends Vue {
         this.totalRow = this.thresholdDetailTableContent.length;
     }
 
-    showTime(time) {
-        return new Date(time).getHours() + ":" + new Date(time).getMinutes();
+    getNo(index: number, sortType: boolean = true): number {
+        if (sortType) {
+            return this.currentPage * this.prePage - this.prePage + index + 1;
+        } else {
+            return (
+                this.currentPage * this.prePage -
+                this.prePage +
+                this.prePage -
+                index
+            );
+        }
+    }
+
+    clickItem(id) {
+        this.$emit("clickItem", id);
     }
 
     tableToArray() {
@@ -152,8 +181,8 @@ export class OccupancyDetailsTable extends Vue {
     doCancel() {}
 }
 
-export default OccupancyDetailsTable;
-Vue.component("occupancy-details-table", OccupancyDetailsTable);
+export default VipAndBlacklistTable;
+Vue.component("vip-and-blacklist-table", VipAndBlacklistTable);
 </script>
 
 <style lang="scss" scoped>
