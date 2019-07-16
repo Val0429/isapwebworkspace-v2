@@ -401,7 +401,8 @@ export default class MemberForm extends Vue {
     this.tabMounted = true;
   }
 
-  inputFormData: any = {
+  inputFormData: any = {};
+  defaultFormData:any = {
     // Master
     objectId: undefined,
     premissionSelected: [],
@@ -491,97 +492,8 @@ export default class MemberForm extends Vue {
     dateOfViolation3: null
   };
 
-  clearInputData() {
-    this.premissionOptions = [];
-    this.inputFormData = {
-      // Master
-      objectId: undefined,
-      premissionSelected: [],
-      personType: "2000000006",
-      cardType: "",
-      employeeNumber: "",
-      chineseName: "",
-      englishName: "",
-      cardNumber: "",
-      cardAllNumber: "",
-      startDate: null,
-      endDate: null,
-      personPhoto: "",
-      imageSrc: "",
-      companyName: "",
-      cardCustodian: "",
-      lastEditPerson: "",
-      lastEditTime: "",
-      cardCertificate: "2",
-      profileName:"",
-      technologyCode:"0",
-      pinMode:0,
-      pinDigit:0,   
-      deviceNumber: 0,
-      pin: "",
-
-      // tab1
-      extensionNumber: "",
-      phone: "",
-      email: "",
-      birthday: null,
-      MVPN: "",
-      gender: "",
-      department: "",
-      costCenter: "",
-      area: "",
-      workArea: "",
-      registrationDate: null,
-      resignationDate: null,
-
-      // tab2
-      carLicenseCategory: "",
-      cardLicense: "",
-      carLicense: "",
-      carLicense1: "",
-      carLicense2: "",
-      carLicense3: "",
-      account: "",
-      password: "",
-
-      // tab3
-      resignationNote: "",
-      resignationRecordCardRecord: "",
-      reasonForCard1: "",
-      historyForCard1: "",
-      dateForCard1: null,
-      reasonForCard2: "",
-      historyForCard2: "",
-      dateForCard2: null,
-      reasonForCard3: "",
-      historyForCard3: "",
-      dateForCard3: null,
-      reasonForApplication1: "",
-      dateForApplication1: null,
-      reasonForApplication2: "",
-      dateForApplication2: null,
-      reasonForApplication3: "",
-      dateForApplication3: null,
-      resignationRecordCarLicense: "",
-
-      // tab4
-      cardTemplate: "",
-      imageSrcCard: "",
-
-      // tab 5
-      censusRecord1: "",
-      censusDate1: null,
-      censusRecord2: "",
-      censusDate2: null,
-      censusRecord3: "",
-      censusDate3: null,
-      infoOfViolation1: "",
-      dateOfViolation1: null,
-      infoOfViolation2: "",
-      dateOfViolation2: null,
-      infoOfViolation3: "",
-      dateOfViolation3: null
-    };
+  clearInputData() {    
+    this.inputFormData = Object.assign({}, this.defaultFormData);
   }
 
   created() {}
@@ -1126,7 +1038,7 @@ export default class MemberForm extends Vue {
   }
 
   async saveAddOrEdit() {
-    let tempCredentials: any = [];
+    
     let tempPersonalDetails: any = {
           Address: "",
           ContactDetails: {
@@ -1145,24 +1057,8 @@ export default class MemberForm extends Vue {
                   UserName: this.inputFormData.account || ""
               }
     };
-    let tempCustomFieldsList: any = [];
-
-    if (this.selectedDetail[0] && this.selectedDetail[0].Credentials && this.selectedDetail[0].Credentials.length>0) {
-      tempCredentials = this.selectedDetail[0].Credentials;      
-      tempCredentials[0].CardNumber = this.inputFormData.cardNumber;
-      tempCredentials[0].Pin = this.inputFormData.pin || "0";
-      tempCredentials[0].FacilityCode = parseInt(this.inputFormData.deviceNumber || "0");
-      tempCredentials[0].ProfileId = parseInt(this.inputFormData.cardCertificate || "2");
-      tempCredentials[0].ProfileName = this.inputFormData.profileName;
-      tempCredentials[0].CardTechnologyCode = this.inputFormData.technologyCode;
-      tempCredentials[0].PinMode= this.inputFormData.pinMode;          
-      tempCredentials[0].PinDigit=this.inputFormData.pinDigit;
-      tempCredentials[0].EndDate=this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate();
-      tempCredentials[0].StartDate=this.inputFormData.startDate || new Date();
-    } else {
-      
-      tempCredentials = [
-        {
+    
+    let credential = {
           CardNumber: this.inputFormData.cardNumber,
           Pin: this.inputFormData.pin || "0",
           FacilityCode: parseInt(this.inputFormData.deviceNumber),
@@ -1173,10 +1069,16 @@ export default class MemberForm extends Vue {
           PinDigit:this.inputFormData.pinDigit,
           EndDate:this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
           StartDate:this.inputFormData.startDate || new Date()
-        }
-      ];
+        };
+    let tempCredentials: any = [];
+    if (this.selectedDetail[0] && this.selectedDetail[0].Credentials && this.selectedDetail[0].Credentials.length>0) {
+      tempCredentials = this.selectedDetail[0].Credentials;
+      tempCredentials[0] = credential;
+    } else {      
+      tempCredentials = [credential];
     }
 
+    let tempCustomFieldsList: any = [];
     // master
     tempCustomFieldsList.push({
       FiledName: "CustomTextBoxControl6__CF",
@@ -1445,67 +1347,7 @@ export default class MemberForm extends Vue {
           ? this.inputFormData.dateOfViolation3.toISOString()
           : ""
     });
-
-    if (this.selectedDetail[0] && this.selectedDetail[0].objectId) {
-      const editParam: any = this.selectedDetail[0];
-      // master
-      editParam.objectId = this.inputFormData.objectId;
-      editParam.AccessRules = this.inputFormData.premissionSelected;
-      editParam.PrimaryWorkgroupName = this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType)).groupname;
-      editParam.PrimaryWorkgroupId = parseInt(this.inputFormData.personType);
-      editParam.ApbWorkgroupId = parseInt(this.inputFormData.personType);
-      editParam.Attributes={};
-      editParam.SmartCardProfileId="";
-      editParam.Status=1;
-      editParam.GeneralInformation="";
-      editParam.NonPartitionWorkGroups=[];
-      editParam.NonPartitionWorkgroupAccessRules=[];
-      editParam.PrimaryWorkGroupAccessRule=[];
-      editParam.Token = "-1";
-      editParam.Vehicle1= {};
-      editParam.Vehicle2 = {};
-      editParam.VisitorDetails={
-        VisitorCardStatus : 0,
-        VisitorCustomValues : {}
-      };    
-      editParam.TraceDetails= {};
-      
-      editParam.EmployeeNumber = this.inputFormData.employeeNumber;
-      editParam.LastName = this.inputFormData.chineseName;
-      editParam.FirstName = this.inputFormData.englishName;
-      editParam.StartDate = this.inputFormData.startDate || new Date()
-      editParam.EndDate = this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate()
-
-      // tab1
-      editParam.extensionNumber = this.inputFormData.PhoneNumber;
-      editParam.phone = this.inputFormData.MobileNumber;
-      editParam.Email = this.inputFormData.email;
-      editParam.DateOfBirth = this.inputFormData.birthday;
-
-      // special
-      editParam.Credentials = tempCredentials;
-      editParam.PersonalDetails = tempPersonalDetails;
-      editParam.CustomFields = tempCustomFieldsList;
-
-      await this.$server
-        .U("/acs/member", editParam)
-        .then((response: any) => {
-          this.pageToList();
-        })
-        .catch((e: any) => {
-          if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-            return ResponseFilter.base(this, e);
-          }
-          if (e.res.statusCode == 500) {
-            Dialog.error(this._("w_Member_EditFailed"));
-            return false;
-          }
-          console.log(e);
-          return false;
-        });
-    } else {
-      const addParam = {
-        
+    let member = {        
         // master
         objectId: this.inputFormData.objectId,
         AccessRules: this.inputFormData.premissionSelected,
@@ -1545,9 +1387,28 @@ export default class MemberForm extends Vue {
         PersonalDetails: tempPersonalDetails,
         CustomFields: tempCustomFieldsList
       };
-
+    if (this.selectedDetail[0] && this.selectedDetail[0].objectId) {
+      // master
+      member.objectId = this.selectedDetail[0].objectId;
       await this.$server
-        .C("/acs/member", addParam)
+        .U("/acs/member", member)
+        .then((response: any) => {
+          this.pageToList();
+        })
+        .catch((e: any) => {
+          if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+            return ResponseFilter.base(this, e);
+          }
+          if (e.res.statusCode == 500) {
+            Dialog.error(this._("w_Member_EditFailed"));
+            return false;
+          }
+          console.log(e);
+          return false;
+        });
+    } else {
+      await this.$server
+        .C("/acs/member", member)
         .then((response: any) => {
           this.pageToList();
         })
