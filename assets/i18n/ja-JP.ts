@@ -969,4 +969,11 @@ export default class LangObject implements ILang {
     w_DwellTime_Out = 'Out';
     w_DwellTime_DwellTime = 'Dwell Time(m)';
     w_DwellTime_Type = 'Type';
+
+    //Vip&Blacklist
+    w_VIPAndBlackList_Name = 'Name';
+    w_VIPAndBlackList_Location = 'Location';
+    w_VIPAndBlackList_VisitTime = 'VisitTime';
+    w_VIPAndBlackList_DwellTime = 'DwellTime(minute)';
+    w_VIPAndBlackList_LatestVisits = 'LatestVisits(1 Month)';
 }
