@@ -675,6 +675,35 @@ class Datetime {
         const lastYearEndDate = new Date(nowYear, 11, 31);
         return this.DateTime2String(lastYearEndDate);
     }
+
+    // 以今年為基準，取得前後五年，2019 --> 2014-2024
+    FiveYearsIdText(): any {
+
+        let tempYearArray = [];
+
+        for (let i = 0; i < 6; i++) {
+            let year = new Date().getFullYear();
+
+            let tempYearReduce = {
+                id: (year - i).toString(),
+                text: (year - i).toString()
+            };
+
+            let tempYearAdd = {
+                id: (year + i).toString(),
+                text: (year + i).toString()
+            };
+
+            tempYearArray.push(tempYearAdd, tempYearReduce);
+        }
+
+        let resultYearArray = [...new Set(tempYearArray.map(item => JSON.stringify(item)))].map(item => JSON.parse(item));
+
+        resultYearArray = resultYearArray.sort((a, b) => a.id - b.id);
+
+        return resultYearArray;
+
+    }
 }
 
 export default new Datetime();

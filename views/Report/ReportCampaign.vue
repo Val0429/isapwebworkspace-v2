@@ -1,5 +1,14 @@
 <template>
     <div class="animated fadeIn">
+
+        <!-- Tina -->
+        <filter-condition-campaign
+            :yearSelectItem="yearSelectItem"
+            :campaignSelectItem="campaignSelectItem"
+            :campaignStoreSelectItem="campaignStoreSelectItem"
+        >
+        </filter-condition-campaign>
+
         <div v-show="pageStep === ePageStep.none">
             Campaign
         </div>
@@ -22,9 +31,39 @@ export default class ReportCampaign extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
-    created() {}
+    ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    yearSelectItem: any = {};
+    campaignSelectItem: any = {};
+    campaignStoreSelectItem: any = {};
+
+    inputFormData: any = {
+        date: '',
+        campaignIds: [],
+        siteIds: [],
+    };
+
+    ////////////////////////////////////// Tina End //////////////////////////////////////
+
+    created() {
+        this.initData();
+    }
 
     mounted() {}
+
+    async initData() {
+        this.initSelectYear();
+        await this.initSelectCampaign();
+        await this.initSelectCampaignStore();
+    }
+
+    ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    initSelectYear() {}
+    async initSelectCampaign() {}
+    async initSelectCampaignStore() {}
+
+    ////////////////////////////////////// Tina End //////////////////////////////////////
 }
 </script>
 

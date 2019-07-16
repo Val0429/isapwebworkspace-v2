@@ -1544,7 +1544,7 @@ export default class ReportHeatmap extends Vue {
         console.log(' timeArrayIndex : ', timeArrayIndex);
         for (const index in this.timeArray) {
             if (timeArrayIndex === index) {
-                this.timeArrayData = this.timeArray[index]
+                this.timeArrayData = this.timeArray[index];
                 console.log(' - ', this.timeArray[index]);
             }
 
