@@ -272,18 +272,9 @@ export default class MemberForm extends Vue {
   beforeMount() {
     if (!this.$user || !this.$user.permissions) return;
     this.permissionName = PermissionName.member;
-    this.canAdd =
-      this.$user.permissions.find(
-        x => x.access.C === true && x.of.identifier == this.permissionName
-      ) != undefined;
-    this.canEdit =
-      this.$user.permissions.find(
-        x => x.access.U === true && x.of.identifier == this.permissionName
-      ) != undefined;
-    this.canDelete =
-      this.$user.permissions.find(
-        x => x.access.D === true && x.of.identifier == this.permissionName
-      ) != undefined;
+    this.canAdd = this.$user.permissions.find(x => x.access.C === true && x.of.identifier == this.permissionName) != undefined;
+    this.canEdit = this.$user.permissions.find(x => x.access.U === true && x.of.identifier == this.permissionName) != undefined;
+    this.canDelete = this.$user.permissions.find(x => x.access.D === true && x.of.identifier == this.permissionName) != undefined;
   }
   canAdd: boolean;
   canEdit: boolean;
@@ -672,7 +663,20 @@ export default class MemberForm extends Vue {
     this.selectedDetail = [];
     this.selectedDetail = data;
   }
+  getFieldValue(fieldName:string, customFields:any[], isDate:boolean=false){
+      
+      let exists = customFields.find(x=>x.FiledName == fieldName);
+      
+      if(!exists)return isDate ? null : "";
 
+      try{        
+        return isDate ? new Date(exists.FieldValue) :exists.FieldValue;
+      }catch(err){
+        console.error(err);
+        return isDate ? null : "";
+      }
+      
+  }
   getInputData() {
     this.clearInputData();
 
@@ -744,262 +748,61 @@ export default class MemberForm extends Vue {
         this.inputFormData.password = detailData.PersonalDetails.UserDetails.Password;
       }
 
-      
-
       if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
-      for (let content of detailData.CustomFields) {
-          if (!content.FiledName || !content.FieldValue )continue;           
-          // Master
-          if (content.FiledName == "CustomTextBoxControl6__CF") {
-            this.inputFormData.companyName = content.FieldValue;
-          }
-          if (content.FiledName == "CustomTextBoxControl2__CF") {
-            this.inputFormData.cardCustodian = content.FieldValue;
-          }
-          if (content.FiledName == "CustomTextBoxControl3__CF") {
-            this.inputFormData.lastEditPerson = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDateControl2__CF") {
-            this.inputFormData.lastEditTime = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDropdownControl1__CF") {
-            this.inputFormData.cardType = content.FieldValue;
-          }
-
-          // tab1
-          if (content.FiledName == "CustomTextBoxControl5__CF_CF") {
-            this.inputFormData.MVPN = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomDropdownControl2__CF_CF") {
-            this.inputFormData.gender = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF") {
-            this.inputFormData.department = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF") {
-            this.inputFormData.costCenter = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF_CF") {
-            this.inputFormData.area = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.workArea = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomDateControl1__CF_CF_CF") {
-            try {
-              this.inputFormData.registrationDate = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-
-          if (content.FiledName == "CustomDateControl1__CF") {
-            try {
-              this.inputFormData.resignationDate = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-
-          // tab2
-          if (content.FiledName == "CustomDropdownControl2__CF") {
-            this.inputFormData.carLicenseCategory = content.FieldValue;
-          }
-
-          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.cardLicense = content.FieldValue;
-          }
-
-          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.carLicense = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomTextBoxControl5__CF") {
-            this.inputFormData.carLicense1 = content.FieldValue;
-          }
-
-          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.carLicense2 = content.FieldValue;
-          }
-
-          if (content.FiledName =="CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.carLicense3 = content.FieldValue;
-          }
-
-          // tab3
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF") {
-            this.inputFormData.resignationNote = content.FieldValue;
-          }
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF") {
-            this.inputFormData.resignationRecordCardRecord = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDropdownControl3__CF_CF") {
-            this.inputFormData.reasonForCard1 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF") {
-            this.inputFormData.historyForCard1 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateForCard1 = new Date(content.FieldValue);
-            } catch (e) {
-              console.log(e);
-            }
-          }
-
-          if (content.FiledName == "CustomDropdownControl3__CF_CF_CF") {
-            this.inputFormData.reasonForCard2 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF") {
-            this.inputFormData.historyForCard2 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateForCard2 = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF") {
-            this.inputFormData.reasonForCard3 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.historyForCard3 = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateForCard3 = new Date(content.FieldValue);
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF_CF") {
-            this.inputFormData.reasonForApplication1 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateForApplication1 = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (
-            content.FiledName == "CustomDropdownControl3__CF_CF_CF_CF_CF_CF"
-          ) {
-            this.inputFormData.reasonForApplication2 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDateControl3__CF_CF_CF") {
-            try {
-              this.inputFormData.dateForApplication2 = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-
-          if (content.FiledName == "CustomDropdownControl3__CF") {
-            this.inputFormData.reasonForApplication3 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateForApplication3 = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.resignationRecordCarLicense = content.FieldValue;
-          }
-
-          // tab 5
-          if (content.FiledName =="CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.censusRecord1 = content.FieldValue;
-          }
-          if (content.FiledName =="CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.censusDate1 = new Date(content.FieldValue);
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (content.FiledName =="CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.censusRecord2 = content.FieldValue;
-          }
-          if (content.FiledName =="CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.censusDate2 = new Date(content.FieldValue);
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (content.FiledName == "CustomTextBoxControl7__CF") {
-            this.inputFormData.censusRecord3 = content.FieldValue;
-          }
-
-          if (content.FiledName == "CustomDateControl3__CF") {
-            try {
-              this.inputFormData.censusDate3 = new Date(content.FieldValue);
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (content.FiledName =="CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.infoOfViolation1 = content.FieldValue;
-          }
-          if (content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateOfViolation1 = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.infoOfViolation2 = content.FieldValue;
-          }
-          if ( content.FiledName == "CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateOfViolation2 = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-
-          if (content.FiledName == "CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            this.inputFormData.infoOfViolation3 = content.FieldValue;
-          }
-          if (content.FiledName =="CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF") {
-            try {
-              this.inputFormData.dateOfViolation3 = new Date(
-                content.FieldValue
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          }
-        
-      }      
+      
+      this.inputFormData.lastEditTime = this.getFieldValue("CustomDateControl4__CF" , detailData.CustomFields, true);
+      this.inputFormData.cardType = this.getFieldValue("CustomDropdownControl1__CF" , detailData.CustomFields);
+      //this.inputFormData.companyName = this.getFieldValue("CustomTextBoxControl1__CF" , detailData.CustomFields);
+      this.inputFormData.cardCustodian = this.getFieldValue("CustomTextBoxControl2__CF" , detailData.CustomFields);
+      this.inputFormData.lastEditPerson = this.getFieldValue("CustomTextBoxControl3__CF" , detailData.CustomFields);
+      this.inputFormData.companyName = this.getFieldValue("CustomTextBoxControl6__CF" , detailData.CustomFields);
+      this.inputFormData.lastEditTime = this.getFieldValue("CustomDateControl2__CF" , detailData.CustomFields);
+      this.inputFormData.gender = this.getFieldValue("CustomDropdownControl2__CF_CF" , detailData.CustomFields);
+      this.inputFormData.carLicenseCategory = this.getFieldValue("CustomDropdownControl2__CF" , detailData.CustomFields);
+      this.inputFormData.MVPN = this.getFieldValue("CustomTextBoxControl5__CF_CF" , detailData.CustomFields);
+      this.inputFormData.department = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.costCenter = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.area = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.workArea = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      //this.inputFormData.companyName = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.cardLicense = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.carLicense = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.carLicense2 = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.carLicense3 = this.getFieldValue("CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.carLicense1 = this.getFieldValue("CustomTextBoxControl5__CF" , detailData.CustomFields);
+      //this.inputFormData.birthday = this.getFieldValue("CustomDateControl1__CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.registrationDate = this.getFieldValue("CustomDateControl1__CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.resignationDate = this.getFieldValue("CustomDateControl1__CF" , detailData.CustomFields, true);
+      this.inputFormData.reasonForCard1 = this.getFieldValue("CustomDropdownControl3__CF_CF" , detailData.CustomFields);
+      this.inputFormData.reasonForCard2 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.reasonForCard3 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.reasonForApplication1 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.reasonForApplication2 = this.getFieldValue("CustomDropdownControl3__CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.reasonForApplication3 = this.getFieldValue("CustomDropdownControl3__CF" , detailData.CustomFields);
+      this.inputFormData.resignationNote = this.getFieldValue("CustomTextBoxControl7__CF_CF" , detailData.CustomFields);
+      this.inputFormData.resignationRecordCardRecord = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.historyForCard1 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.historyForCard2 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.historyForCard3 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.resignationRecordCarLicense = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.infoOfViolation1 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.infoOfViolation2 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.infoOfViolation3 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.censusRecord1 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.censusRecord2 = this.getFieldValue("CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields);
+      this.inputFormData.censusRecord3 = this.getFieldValue("CustomTextBoxControl7__CF" , detailData.CustomFields);
+      this.inputFormData.dateForApplication1 = this.getFieldValue("CustomDateControl3__CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateForApplication2 = this.getFieldValue("CustomDateControl3__CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateForApplication3 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateForCard1 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateForCard2 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateForCard3 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateOfViolation1 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateOfViolation2 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.dateOfViolation3 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.censusDate1 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.censusDate2 = this.getFieldValue("CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF" , detailData.CustomFields, true);
+      this.inputFormData.censusDate3 = this.getFieldValue("CustomDateControl3__CF", detailData.CustomFields, true);       
   }
 
   tempSaveInputData(data) {
