@@ -88,6 +88,7 @@ import {EAreaMode} from "../../components/Reports";
                     :sites="sites"
                     :timeMode="timeMode"
                     :areaMode="areaMode"
+                    :businessMode="inputFormData.businessChartType"
                     :value="chartDatas"
                 >
                 </highcharts-traffic>
@@ -169,6 +170,7 @@ import {
     ETypeInOrOut,
     EIncludedEmployee,
     EDesignationPeriod,
+    EBusinessChart,
     ITemplateItem,
     IFilterCondition,
     IChartTrafficData,
@@ -177,7 +179,7 @@ import {
     ISiteItems,
     IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData, EBusinessChart
+    ReportTableData
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
 
@@ -2143,6 +2145,7 @@ export default class ReportTraffic extends Vue {
     initChartDeveloper() {
         this.timeMode = ETimeMode.day;
         this.areaMode = EAreaMode.all;
+        this.inputFormData.businessChartType = EBusinessChart.revenue;
 
         // single day
         this.startDate = new Date("2019-07-01T08:00:00.000Z");
