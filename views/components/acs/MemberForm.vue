@@ -282,90 +282,7 @@ export default class MemberForm extends Vue {
   canDelete: boolean;
   permissionName: string;
 
-  // // Master
-  // objectId                     objectId
-  // premissionSelected           AccessRules (premissionTableAPI: tableid => ObjectToken, show: ObjectName)
-  // personType                   PrimaryWorkgroupName
-  // cardType                     * CustomFields -> CustomDropdownControl1__CF
-  // employeeNumber               EmployeeNumber
-  // chineseName                  LastName
-  // englishName                  FirstName
-  // cardNumber                   Credentials[0]CardNumber
-  // cardAllNumber                Credentials[0]CardNumber
-  // cardCertificate              * Credentials[0]ProfileId
-  // startDate                    StartDate
-  // endDate                      EndDate
-  // companyName                  CustomFields -> CustomTextBoxControl6__CF
-  // cardCustodian                CustomFields -> CustomTextBoxControl2__CF
-  // lastEditPerson               CustomFields -> CustomTextBoxControl3__CF
-  // lastEditTime                 CustomFields -> CustomDateControl2__CF
-  // deviceNumber                 * Credentials[0]FacilityCode
-  // Pin                          * pin
-
-  // // tab1
-  // extensionNumber              PhoneNumber
-  // phone                        MobileNumber
-  // email                        Email
-  // birthday                     DateOfBirth
-  // MVPN                         CustomFields -> CustomTextBoxControl5__CF_CF
-  // gender                       CustomFields -> CustomDropdownControl2__CF_CF
-  // department                   CustomFields -> CustomTextBoxControl5__CF_CF_CF
-  // costCenter                   CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF
-  // area                         CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF
-  // workArea                     CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF
-  // registrationDate             CustomFields -> CustomDateControl1__CF_CF_CF
-  // resignationDate              CustomFields -> CustomDateControl1__CF
-
-  // // tab2
-  // carLicenseCategory           CustomFields -> CustomDropdownControl2__CF
-  // cardLicense                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF
-  // carLicense                   CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // carLicense1                  CustomFields -> CustomTextBoxControl5__CF
-  // carLicense2                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // carLicense3                  CustomFields -> CustomTextBoxControl5__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // account                      PersonalDetails.UserDetails.UserName
-  // password                     PersonalDetails.UserDetails.Password
-
-  // // tab3
-  // resignationNote              CustomFields -> CustomTextBoxControl7__CF_CF
-  // resignationRecordCardRecord  CustomFields -> CustomTextBoxControl7__CF_CF_CF
-  // reasonForCard1               CustomFields -> CustomDropdownControl3__CF_CF
-  // historyForCard1              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF
-  // dateForCard1                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
-  // reasonForCard2               CustomFields -> CustomDropdownControl3__CF_CF_CF
-  // historyForCard2              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF
-  // dateForCard2                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF
-  // reasonForCard3               CustomFields -> CustomDropdownControl3__CF_CF_CF_CF
-  // historyForCard3              CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF
-  // dateForCard3                 CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF
-  // reasonForApplication1        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF
-  // dateForApplication1          CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF
-  // reasonForApplication2        CustomFields -> CustomDropdownControl3__CF_CF_CF_CF_CF_CF
-  // dateForApplication2          CustomFields -> CustomDateControl3__CF_CF_CF
-  // reasonForApplication3        CustomFields -> CustomDropdownControl3__CF
-  // dateForApplication3          CustomFields -> CustomDateControl3__CF_CF_CF_CF
-  // resignationRecordCarLicense  CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF
-
-  // // tab4
-  // cardTemplate
-  // imageSrc
-
-  // // tab 5
-  // censusRecord1                CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // censusDate1                  CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // censusRecord2                CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // censusDate2                  CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // censusRecord3                CustomFields -> CustomTextBoxControl7__CF
-  // censusDate3                  CustomFields -> CustomDateControl3__CF
-  // infoOfViolation1             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF
-  // dateOfViolation1             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF
-  // infoOfViolation2             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // dateOfViolation2             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // infoOfViolation3             CustomFields -> CustomTextBoxControl7__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-  // dateOfViolation3             CustomFields -> CustomDateControl3__CF_CF_CF_CF_CF_CF_CF_CF_CF_CF
-
-  ////////////////////////////////////////////////////////////////
-
+  
   ePageStep = EPageStep;
   pageStep: EPageStep = EPageStep.list;
 
@@ -424,7 +341,7 @@ export default class MemberForm extends Vue {
     lastEditTime: "",
     cardCertificate: "2",
     profileName:"",
-    technologyCode:"",
+    technologyCode:469,
     pinMode:0,
     pinDigit:0,    
     deviceNumber: 0,
@@ -514,7 +431,7 @@ export default class MemberForm extends Vue {
     ]);
     await this.initCredentialProfile();
   }
-  //@Watch("inputFormData.cardCertificate", {immediate:true})
+  
   onCardCertificateUpdate(value:any){
     let profile = this.credentialProfiles.find(x=>x.Token == value);
     if(!profile)return;
@@ -539,22 +456,11 @@ export default class MemberForm extends Vue {
       .then((response: any) => {
         if (response != undefined) {
           this.workGroupSelectItems = response.results;
-          for (const returnValue of response.results) {
-            // 自定義 sitesSelectItem 的 key 的方式
+          for (const returnValue of response.results) {            
             this.workGroupSelectItem[returnValue.groupid.toString()] =
               returnValue.groupname;
-
-            // this.workGroupIdSelectItem[returnValue.groupid] =
-            //     returnValue.groupname;
           }
         }
-      })
-      .catch((e: any) => {
-        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-          return ResponseFilter.base(this, e);
-        }
-        console.log(e);
-        return false;
       });
   }
   async initCredentialProfile() {
@@ -668,184 +574,7 @@ export default class MemberForm extends Vue {
   }
 
   tempSaveInputData(data) {
-    switch (data.key) {
-      // Master
-      case "objectId":
-        this.inputFormData.objectId = data.value;
-        break;
-      case "premissionSelected":
-        this.inputFormData.premissionSelected = data.value;
-        break;
-      case "personType":
-        this.inputFormData.personType = data.value;
-        break;
-      case "employeeNumber":
-        this.inputFormData.employeeNumber = data.value;
-        break;
-      case "chineseName":
-        this.inputFormData.chineseName = data.value;
-        break;
-      case "englishName":
-        this.inputFormData.englishName = data.value;
-        break;
-      case "cardNumber":
-        this.inputFormData.cardNumber = data.value;
-        this.inputFormData.cardAllNumber = data.value;
-        break;
-      case "startDate":
-        this.inputFormData.startDate = data.value;
-        break;
-      case "endDate":
-        this.inputFormData.endDate = data.value;
-        break;
-      case "companyName":
-        this.inputFormData.companyName = data.value;
-        break;
-      case "cardCustodian":
-        this.inputFormData.cardCustodian = data.value;
-        break;
-      case "personPhoto":
-        this.inputFormData.personPhoto = data.value;
-        break;
-      case "lastEditPerson":
-        this.inputFormData.lastEditPerson = data.value;
-        break;
-      case "lastEditTime":
-        this.inputFormData.lastEditTime = data.value;
-        break;
-      case "cardCertificate":
-        this.inputFormData.cardCertificate = data.value;
-        break;
-      case "cardType":
-        this.inputFormData.cardType = data.value;
-        break;
-      case "deviceNumber":
-        this.inputFormData.deviceNumber = data.value;
-        break;
-      case "pin":
-        this.inputFormData.pin = data.value;
-        break;
-      // tab1
-      case "extensionNumber":
-        this.inputFormData.extensionNumber = data.value;
-        break;
-      case "phone":
-        this.inputFormData.phone = data.value;
-        break;
-      case "email":
-        this.inputFormData.email = data.value;
-        break;
-      case "birthday":
-        this.inputFormData.birthday = data.value;
-        break;
-      case "MVPN":
-        this.inputFormData.MVPN = data.value;
-        break;
-      case "gender":
-        this.inputFormData.gender = data.value;
-        break;
-      case "department":
-        this.inputFormData.department = data.value;
-        break;
-      case "costCenter":
-        this.inputFormData.costCenter = data.value;
-        break;
-      case "area":
-        this.inputFormData.area = data.value;
-        break;
-      case "workArea":
-        this.inputFormData.workArea = data.value;
-        break;
-      case "registrationDate":
-        this.inputFormData.registrationDate = data.value;
-        break;
-      case "resignationDate":
-        this.inputFormData.resignationDate = data.value;
-        break;
-
-      // tab2
-      case "carLicenseCategory":
-        this.inputFormData.carLicenseCategory = data.value;
-        break;
-      case "cardLicense":
-        this.inputFormData.cardLicense = data.value;
-        break;
-      case "carLicense":
-        this.inputFormData.carLicense = data.value;
-        break;
-      case "carLicense1":
-        this.inputFormData.carLicense1 = data.value;
-        break;
-      case "carLicense2":
-        this.inputFormData.carLicense2 = data.value;
-        break;
-      case "carLicense3":
-        this.inputFormData.carLicense3 = data.value;
-        break;
-      case "account":
-        this.inputFormData.account = data.value;
-        break;
-      case "password":
-        this.inputFormData.password = data.value;
-        break;
-
-      // tab3
-      case "resignationNote":
-        this.inputFormData.resignationNote = data.value;
-        break;
-      case "resignationRecordCardRecord":
-        this.inputFormData.resignationRecordCardRecord = data.value;
-        break;
-      case "reasonForCard1":
-        this.inputFormData.reasonForCard1 = data.value;
-        break;
-      case "historyForCard1":
-        this.inputFormData.historyForCard1 = data.value;
-        break;
-      case "dateForCard1":
-        this.inputFormData.dateForCard1 = data.value;
-        break;
-      case "reasonForCard2":
-        this.inputFormData.reasonForCard2 = data.value;
-        break;
-      case "historyForCard2":
-        this.inputFormData.historyForCard2 = data.value;
-        break;
-      case "dateForCard2":
-        this.inputFormData.dateForCard2 = data.value;
-        break;
-      case "reasonForCard3":
-        this.inputFormData.reasonForCard3 = data.value;
-        break;
-      case "historyForCard3":
-        this.inputFormData.historyForCard3 = data.value;
-        break;
-      case "dateForCard3":
-        this.inputFormData.dateForCard3 = data.value;
-        break;
-      case "reasonForApplication1":
-        this.inputFormData.reasonForApplication1 = data.value;
-        break;
-      case "dateForApplication1":
-        this.inputFormData.dateForApplication1 = data.value;
-        break;
-      case "reasonForApplication2":
-        this.inputFormData.reasonForApplication2 = data.value;
-        break;
-      case "dateForApplication2":
-        this.inputFormData.dateForApplication2 = data.value;
-        break;
-      case "reasonForApplication3":
-        this.inputFormData.reasonForApplication3 = data.value;
-        break;
-      case "dateForApplication3":
-        this.inputFormData.dateForApplication3 = data.value;
-        break;
-      case "resignationRecordCarLicense":
-        this.inputFormData.resignationRecordCarLicense = data.value;
-        break;
-
-      // tab4
+    switch (data.key) {      
       case "cardTemplate":
         switch (data.value) {
           case "permanent":
@@ -855,45 +584,10 @@ export default class MemberForm extends Vue {
             this.imageSrcCard = CardTemplateBase64.contract;
             break;
         }
-        break;
-
-      // tab5
-      case "censusRecord1":
-        this.inputFormData.censusRecord1 = data.value;
-        break;
-      case "censusDate1":
-        this.inputFormData.censusDate1 = data.value;
-        break;
-      case "censusRecord2":
-        this.inputFormData.censusRecord2 = data.value;
-        break;
-      case "censusDate2":
-        this.inputFormData.censusDate2 = data.value;
-        break;
-      case "censusRecord3":
-        this.inputFormData.censusRecord3 = data.value;
-        break;
-      case "censusDate3":
-        this.inputFormData.censusDate3 = data.value;
-        break;
-      case "infoOfViolation1":
-        this.inputFormData.infoOfViolation1 = data.value;
-        break;
-      case "dateOfViolation1":
-        this.inputFormData.dateOfViolation1 = data.value;
-        break;
-      case "infoOfViolation2":
-        this.inputFormData.infoOfViolation2 = data.value;
-        break;
-      case "dateOfViolation2":
-        this.inputFormData.dateOfViolation2 = data.value;
-        break;
-      case "infoOfViolation3":
-        this.inputFormData.infoOfViolation3 = data.value;
-        break;
-      case "dateOfViolation3":
-        this.inputFormData.dateOfViolation3 = data.value;
-        break;
+        break;      
+        default:
+          this.inputFormData[data.key] = data.value;
+          break;
     }
   }
 
@@ -1031,7 +725,7 @@ export default class MemberForm extends Vue {
     let tempCustomFieldsList: any = [];
     for(let field of CustomFields){
       if(field.date){
-        let dt = !isNaN(this.inputFormData[field.name].getTime()) ? this.inputFormData[field.name].toISOString() : "";
+        let dt = this.inputFormData[field.name] && !isNaN(this.inputFormData[field.name].getTime()) ? this.inputFormData[field.name].toISOString() : "";
         tempCustomFieldsList.push({FiledName:field.fieldName,  FieldValue:dt});
       }else{
         tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});
@@ -1049,8 +743,7 @@ export default class MemberForm extends Vue {
         LastName: this.inputFormData.chineseName,
         FirstName: this.inputFormData.englishName,
         StartDate: this.inputFormData.startDate || new Date(),
-        EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
-        // EndDate: this.inputFormData.EndDate,
+        EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),        
 
         // tab1
         extensionNumber: this.inputFormData.PhoneNumber,
@@ -1085,34 +778,12 @@ export default class MemberForm extends Vue {
         .U("/acs/member", member)
         .then((response: any) => {
           this.pageToList();
-        })
-        .catch((e: any) => {
-          if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-            return ResponseFilter.base(this, e);
-          }
-          if (e.res.statusCode == 500) {
-            Dialog.error(this._("w_Member_EditFailed"));
-            return false;
-          }
-          console.log(e);
-          return false;
         });
     } else {
       await this.$server
         .C("/acs/member", member)
         .then((response: any) => {
           this.pageToList();
-        })
-        .catch((e: any) => {
-          if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-            return ResponseFilter.base(this, e);
-          }
-          if (e.res.statusCode == 500) {
-            Dialog.error(this._("w_Member_AddFailed"));
-            return false;
-          }
-          console.log(e);
-          return false;
         });
     }
   }
@@ -1135,12 +806,6 @@ export default class MemberForm extends Vue {
               if (response) {
                 this.pageToList();
               }
-            })
-            .catch((e: any) => {
-              if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                return ResponseFilter.base(this, e);
-              }
-              console.log(e);
             });
         }
       }
@@ -1151,9 +816,6 @@ export default class MemberForm extends Vue {
     return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
   }
 
-  // CardNumber: CustomTextBoxControl1__CF
-  // Department: CustomTextBoxControl5__CF_CF_CF
-  // CostCenter: CustomTextBoxControl5__CF_CF_CF_CF
   anysisTableColumn(row: any, key: string): string {
     let result: string = "";
     if (key == "CardNumber") {
