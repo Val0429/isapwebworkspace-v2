@@ -312,8 +312,8 @@ export default class ReportDwellTime extends Vue {
         };
 
         this.businessChartTypeSelectItem = {
-            asp: this._("w_asp"),
             revenue: this._("w_revenue"),
+            asp: this._("w_asp"),
             transaction: this._("w_transaction"),
             conversion: this._("w_conversion")
         };
@@ -1132,22 +1132,22 @@ export default class ReportDwellTime extends Vue {
             businessChartType: EBusinessChart.revenue
         };
 
-        await this.$server
-            .C("/report/demographic/summary", param)
-            .then((response: any) => {
-                if (response !== undefined) {
-                    this.responseData = response;
-                    this.officeHourItemDetail = this.responseData.officeHours;
-                    this.resolveSummary();
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        // await this.$server
+        //     .C("/report/demographic/summary", param)
+        //     .then((response: any) => {
+        //         if (response !== undefined) {
+        //             this.responseData = response;
+        //             this.officeHourItemDetail = this.responseData.officeHours;
+        //             this.resolveSummary();
+        //         }
+        //     })
+        //     .catch((e: any) => {
+        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //             return ResponseFilter.base(this, e);
+        //         }
+        //         console.log(e);
+        //         return false;
+        //     });
     }
 
     resolveSummary() {

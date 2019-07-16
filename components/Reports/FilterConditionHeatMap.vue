@@ -24,7 +24,6 @@
 
                     <div class="ml-3 select_report_period_button">
                         <b-button
-                            v-if="selectAllSites === 'select'"
                             @click="pageToChooseTree"
                         >
                             {{ _('w_SelectSiteTree') }}
@@ -96,7 +95,7 @@
         </iv-card>
 
         <region-tree-select
-            v-if="pageStep === ePageStep.chooseTree && selectAllSites === 'select'"
+            v-if="pageStep === ePageStep.chooseTree"
             :multiple="false"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
@@ -139,13 +138,13 @@ enum EPageStep {
 export class FilterConditionHeatMap extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
-        default: {}
+        default: () => {}
     })
     sitesSelectItem: object;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
-        default: {}
+        default: () => {}
     })
     regionTreeItem: object;
 
@@ -191,9 +190,6 @@ export class FilterConditionHeatMap extends Vue {
     }
 
     mounted() {
-        // this.initSelectItemTag();
-        // this.initSelectItemTree();
-        // this.initRegionTreeSelect();
         this.siteFilterPermission();
         this.initTemplate();
     }
