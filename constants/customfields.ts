@@ -22,7 +22,7 @@ export const CustomFields = [
     { fieldName:"CustomTextBoxControl7__CF_CF_CF", name:"resignationRecordCardRecord", date:false},
     { fieldName:"CustomDropdownControl3__CF_CF", name:"reasonForCard1", date:false},
     { fieldName:"CustomTextBoxControl7__CF_CF_CF_CF", name:"historyForCard1", date:false},
-    { fieldName:"CustomDateControl3__CF_CF_CF_CF_CF", name:"dateForCard1", date:true},
+    { fieldName:"CustomDateControl3__CF_CF", name:"dateForCard1", date:true},
     { fieldName:"CustomDropdownControl3__CF_CF_CF", name:"reasonForCard2", date:false},
     { fieldName:"CustomTextBoxControl7__CF_CF_CF_CF_CF", name:"historyForCard2", date:false},
     { fieldName:"CustomDateControl3__CF_CF_CF_CF_CF_CF", name:"dateForCard2", date:true},

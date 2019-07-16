@@ -548,23 +548,24 @@ export default class MemberForm extends Vue {
         }
       }
 
-      // tab1      
-      this.inputFormData.extensionNumber = detailData.PhoneNumber;
-      this.inputFormData.phone = detailData.MobileNumber;            
-      this.inputFormData.email = detailData.Email;
-      
-      if (detailData.DateOfBirth) {
-        try {
-          this.inputFormData.birthday = new Date(detailData.DateOfBirth);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-
       // tab2
-      if (detailData.PersonalDetails && detailData.PersonalDetails.UserDetails) {
-        this.inputFormData.account = detailData.PersonalDetails.UserDetails.UserName;
-        this.inputFormData.password = detailData.PersonalDetails.UserDetails.Password;
+      if (detailData.PersonalDetails) {
+        if(detailData.PersonalDetails.UserDetails){
+          this.inputFormData.account = detailData.PersonalDetails.UserDetails.UserName;
+          this.inputFormData.password = detailData.PersonalDetails.UserDetails.Password;
+        }
+        if(detailData.PersonalDetails.ContactDetails){
+          this.inputFormData.email = detailData.PersonalDetails.ContactDetails.Email;
+          this.inputFormData.phone = detailData.PersonalDetails.ContactDetails.PhoneNumber;
+          this.inputFormData.extensionNumber = detailData.PersonalDetails.ContactDetails.MobileNumber;
+        }
+        if (detailData.PersonalDetails.DateOfBirth) {
+          try {
+            this.inputFormData.birthday = new Date(detailData.PersonalDetails.DateOfBirth);
+          } catch (e) {
+            console.log(e);
+          }
+        }
       }
       //custom fields
       if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
@@ -687,11 +688,11 @@ export default class MemberForm extends Vue {
           Address: "",
           ContactDetails: {
               Email: this.inputFormData.email || "",
-              MobileNumber: this.inputFormData.MobileNumber || "",
+              MobileNumber: this.inputFormData.extensionNumber || "",
               MobileServiceProviderId: "0",
               PagerNumber: "",
               PagerServiceProviderId: "0",
-              PhoneNumber: this.inputFormData.PhoneNumber || "",
+              PhoneNumber: this.inputFormData.phone || "",
               },
               DateOfBirth: this.inputFormData.birthday && !isNaN(this.inputFormData.birthday.getTime()) ? this.inputFormData.birthday.toISOString(): "",
               PayrollNumber: "",
@@ -745,11 +746,7 @@ export default class MemberForm extends Vue {
         StartDate: this.inputFormData.startDate || new Date(),
         EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),        
 
-        // tab1
-        extensionNumber: this.inputFormData.PhoneNumber,
-        phone: this.inputFormData.MobileNumber,
-        Email: this.inputFormData.email,
-        DateOfBirth: this.inputFormData.birthday,
+        // tab1                
         SmartCardProfileId:"",
         Status:1,
         //new addition
