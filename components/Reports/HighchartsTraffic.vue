@@ -228,6 +228,29 @@ export class HighchartsTraffic extends Vue {
             }
         ];
 
+        // set business mode title
+        let tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+        switch (this.businessMode) {
+            case EBusinessChart.transaction:
+                tempBusinessTitle = this._(
+                    "w_ReportTraffic_TrafficTransaction"
+                );
+                break;
+            case EBusinessChart.conversion:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficConversion");
+                break;
+            case EBusinessChart.asp:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficASP");
+                break;
+
+            case EBusinessChart.revenue:
+            default:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+                break;
+        }
+
+        tempSeries[0].name = tempBusinessTitle;
+
         //// office hour group ////
         if (this.chartMode != EChartMode.site1Day1) {
             return false;
@@ -273,7 +296,23 @@ export class HighchartsTraffic extends Vue {
 
         // set result
         for (let result of tempResult) {
-            tempSeries[0].data.push(result.revenue);
+            switch (this.businessMode) {
+                case EBusinessChart.transaction:
+                    tempSeries[0].data.push(result.transaction);
+                    break;
+                case EBusinessChart.conversion:
+                    tempSeries[0].data.push(result.conversion);
+                    break;
+                case EBusinessChart.asp:
+                    tempSeries[0].data.push(result.asp);
+                    break;
+
+                case EBusinessChart.revenue:
+                default:
+                    tempSeries[0].data.push(result.revenue);
+                    break;
+            }
+
             tempSeries[1].data.push(result.traffic);
             tempCategories.push(
                 HighchartsService.categorieStringWithJSON(
@@ -369,7 +408,7 @@ export class HighchartsTraffic extends Vue {
                         {
                             labels: { style: { color: "#000" } },
                             title: {
-                                text: this._("w_ReportTraffic_TrafficRevenue"),
+                                text: tempBusinessTitle,
                                 style: { color: "#000" }
                             },
                             opposite: true
@@ -398,7 +437,21 @@ export class HighchartsTraffic extends Vue {
                                     // set value
                                     result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
                                     result += `${newValue.i18n.traffic}: ${newValue.traffic}<br>`;
-                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                    switch (newValue.businessMode) {
+                                        case "transaction":
+                                            result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                                            break;
+                                        case "conversion":
+                                            result += `${newValue.i18n.conversion}: ${newValue.conversion}<br>`;
+                                            break;
+                                        case "asp":
+                                            result += `${newValue.i18n.asp}: ${newValue.asp}<br>`;
+                                            break;
+                                        case "revenue":
+                                        default:
+                                            result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                            break;
+                                    }
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -448,6 +501,27 @@ export class HighchartsTraffic extends Vue {
                 data: []
             }
         ];
+
+        // set business mode title
+        let tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+        switch (this.businessMode) {
+            case EBusinessChart.transaction:
+                tempBusinessTitle = this._(
+                    "w_ReportTraffic_TrafficTransaction"
+                );
+                break;
+            case EBusinessChart.conversion:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficConversion");
+                break;
+            case EBusinessChart.asp:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficASP");
+                break;
+            case EBusinessChart.revenue:
+            default:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+                break;
+        }
+        tempSeries[0].name = tempBusinessTitle;
 
         // 避免時間相反造成無窮迴圈
         let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
@@ -681,7 +755,23 @@ export class HighchartsTraffic extends Vue {
         // set result
         for (let result of tempResult) {
             result.trafficAVG = trafficAVG;
-            tempSeries[0].data.push(result.revenue);
+
+            switch (this.businessMode) {
+                case EBusinessChart.transaction:
+                    tempSeries[0].data.push(result.transaction);
+                    break;
+                case EBusinessChart.conversion:
+                    tempSeries[0].data.push(result.conversion);
+                    break;
+                case EBusinessChart.asp:
+                    tempSeries[0].data.push(result.asp);
+                    break;
+                case EBusinessChart.revenue:
+                default:
+                    tempSeries[0].data.push(result.revenue);
+                    break;
+            }
+
             tempSeries[1].data.push(result.traffic);
             tempSeries[2].data.push(trafficAVG);
             switch (this.timeMode) {
@@ -748,7 +838,7 @@ export class HighchartsTraffic extends Vue {
                 {
                     labels: { style: { color: "#000" } },
                     title: {
-                        text: this._("w_ReportTraffic_TrafficRevenue"),
+                        text: tempBusinessTitle,
                         style: { color: "#000" }
                     },
                     opposite: true
@@ -848,6 +938,27 @@ export class HighchartsTraffic extends Vue {
             }
         ];
 
+        // set business mode title
+        let tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+        switch (this.businessMode) {
+            case EBusinessChart.transaction:
+                tempBusinessTitle = this._(
+                    "w_ReportTraffic_TrafficTransaction"
+                );
+                break;
+            case EBusinessChart.conversion:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficConversion");
+                break;
+            case EBusinessChart.asp:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficASP");
+                break;
+            case EBusinessChart.revenue:
+            default:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+                break;
+        }
+        tempSeries[0].name = tempBusinessTitle;
+
         for (let site of this.sites) {
             let haveValue = false;
 
@@ -899,7 +1010,22 @@ export class HighchartsTraffic extends Vue {
         // set result
         for (let result of tempResult) {
             result.trafficAVG = trafficAVG;
-            tempSeries[0].data.push(result.revenue);
+            switch (this.businessMode) {
+                case EBusinessChart.transaction:
+                    tempSeries[0].data.push(result.transaction);
+                    break;
+                case EBusinessChart.conversion:
+                    tempSeries[0].data.push(result.conversion);
+                    break;
+                case EBusinessChart.asp:
+                    tempSeries[0].data.push(result.asp);
+                    break;
+                case EBusinessChart.revenue:
+                default:
+                    tempSeries[0].data.push(result.revenue);
+                    break;
+            }
+
             tempSeries[1].data.push(result.traffic);
             tempSeries[2].data.push(trafficAVG);
             tempCategories.push(
@@ -934,7 +1060,7 @@ export class HighchartsTraffic extends Vue {
                 {
                     labels: { style: { color: "#000" } },
                     title: {
-                        text: this._("w_ReportTraffic_TrafficRevenue"),
+                        text: tempBusinessTitle,
                         style: { color: "#000" }
                     },
                     opposite: true
@@ -1452,6 +1578,7 @@ export class HighchartsTraffic extends Vue {
             siteName: "",
             timeMode: this.timeMode,
             areaMode: this.areaMode,
+            businessMode: this.businessMode,
             i18n: this.i18nItem(),
             temperature: 0,
             weatherIcon: HighchartsService.weatherIcon(EWeather.none),
@@ -1495,6 +1622,7 @@ export class HighchartsTraffic extends Vue {
         }
         value.timeMode = this.timeMode;
         value.areaMode = this.areaMode;
+        value.businessMode = this.businessMode;
         value.i18n = this.i18nItem();
         value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
         value.weatherIcon = HighchartsService.weatherIcon(value.weather);

@@ -107,10 +107,10 @@ enum EVideoSource {
 }
 
 enum EBusinessChart {
-    asp = 'asp',
     revenue = 'revenue',
     transaction = 'transaction',
     conversion = 'conversion',
+    asp = 'asp',
 }
 export { EWeek, EWeeks, EVideoSource };
 export { ESign, EPageType };

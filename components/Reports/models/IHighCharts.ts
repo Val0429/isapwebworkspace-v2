@@ -1,5 +1,6 @@
 import { EWeather, ETimeMode, EAreaMode, EAgeRange } from '../';
 import { EDwellTimeRange } from '../';
+import { EBusinessChart } from './EReport';
 
 interface IValSelectItem {
     id: string;
@@ -78,6 +79,7 @@ interface IChartTrafficData extends IChart {
     conversion?: number;
     asp?: number;
     trafficAVG?: number;
+    businessMode?: EBusinessChart;
 }
 
 interface IChartDwellTimeData extends IChart {
@@ -94,6 +96,7 @@ interface IChartDwellTimeData extends IChart {
     femaleCountPercent?: number;
     conversion?: number;
     asp?: number;
+    businessMode?: EBusinessChart;
 }
 
 interface IChartDemographicData extends IChart {
