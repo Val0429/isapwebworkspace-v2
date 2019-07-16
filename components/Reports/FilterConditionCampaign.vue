@@ -32,17 +32,14 @@
 
                 <template #siteIds="{ $attrs, $listeners }">
                     <iv-form-selection
-                        v-if="inputFormData.year !== '' && inputFormData.campaignIds.length === 1 && inputFormData.campaignIds !== 'all'"
                         v-bind="$attrs"
                         v-on="$listeners"
                         v-model="inputFormData.siteIds"
                     >
                     </iv-form-selection>
                 </template>
-
-
-
-
+<!--                        v-if="inputFormData.year !== '' && inputFormData.campaignIds.length === 1 && inputFormData.campaignIds !== 'all'"
+-->
             </iv-form>
 
             <template #footer>
@@ -116,11 +113,7 @@ export class FilterConditionCampaign extends Vue {
     templateItem: ITemplateItem | null;
 
     // date 相關
-    selectPeriodAddWay: string = EAddPeriodSelect.period;
 
-    addPeriodSelectItem: any = [];
-
-    designationPeriodSelectItem: any = [];
 
     inputFormData: any = {
         year: '',
@@ -132,7 +125,7 @@ export class FilterConditionCampaign extends Vue {
     }
 
     mounted() {
-        this.initTemplate();
+        // this.initTemplate();
     }
 
     tempSaveInputData(data) {
@@ -150,259 +143,82 @@ export class FilterConditionCampaign extends Vue {
                 }
                 break;
             case "campaignIds":
-                // this.inputFormData.campaignIds = data.value;
-
                 this.inputFormData.campaignIds = [];
-
                 this.inputFormData.campaignIds.push(data.value);
                 break;
         }
     }
 
-    changeAddPeriodSelect(selected: string) {
-        this.selectPeriodAddWay = selected;
-        this.inputFormData.designationPeriod = EDesignationPeriod.today;
-        this.inputFormData.startDate = new Date();
-        this.inputFormData.endDate = new Date();
-    }
-
-    initTemplate() {
-        if (this.templateItem != null) {
-            if (this.templateItem.type != undefined) {
-                this.inputFormData.type = this.templateItem.type;
-            }
-
-            if (this.templateItem.sites != undefined) {
-                for (let site of this.templateItem.sites) {
-                    this.inputFormData.siteIds.push(site.objectId);
-                }
-            }
-
-            if (this.templateItem.tags != undefined) {
-                for (let tag of this.templateItem.tags) {
-                    this.inputFormData.tagIds.push(tag.objectId);
-                }
-            }
-
-            console.log("!!!! templateItem:", this.templateItem);
-
-            // Select Report Period
-            if (
-                this.templateItem.type &&
-                !this.templateItem.startDate &&
-                !this.templateItem.endDate
-            ) {
-                this.selectPeriodAddWay = EAddPeriodSelect.designation;
-                this.inputFormData.designationPeriod = this.templateItem.type;
-            }
-
-            if (
-                !this.templateItem.type &&
-                this.templateItem.startDate &&
-                this.templateItem.endDate
-            ) {
-                this.selectPeriodAddWay = EAddPeriodSelect.period;
-                this.inputFormData.startDate = this.templateItem.startDate;
-                this.inputFormData.endDate = this.templateItem.endDate;
-            }
-
-            this.doSubmit();
-        }
-    }
+    // initTemplate() {
+    //     if (this.templateItem != null) {
+    //         if (this.templateItem.type != undefined) {
+    //             this.inputFormData.type = this.templateItem.type;
+    //         }
+    //
+    //         if (this.templateItem.sites != undefined) {
+    //             for (let site of this.templateItem.sites) {
+    //                 this.inputFormData.siteIds.push(site.objectId);
+    //             }
+    //         }
+    //
+    //         if (this.templateItem.tags != undefined) {
+    //             for (let tag of this.templateItem.tags) {
+    //                 this.inputFormData.tagIds.push(tag.objectId);
+    //             }
+    //         }
+    //
+    //         console.log("!!!! templateItem:", this.templateItem);
+    //
+    //         // Select Report Period
+    //         if (
+    //             this.templateItem.type &&
+    //             !this.templateItem.startDate &&
+    //             !this.templateItem.endDate
+    //         ) {
+    //             this.selectPeriodAddWay = EAddPeriodSelect.designation;
+    //             this.inputFormData.designationPeriod = this.templateItem.type;
+    //         }
+    //
+    //         if (
+    //             !this.templateItem.type &&
+    //             this.templateItem.startDate &&
+    //             this.templateItem.endDate
+    //         ) {
+    //             this.selectPeriodAddWay = EAddPeriodSelect.period;
+    //             this.inputFormData.startDate = this.templateItem.startDate;
+    //             this.inputFormData.endDate = this.templateItem.endDate;
+    //         }
+    //
+    //         this.doSubmit();
+    //     }
+    // }
 
     async confirmCampaign() {
-
+        this.$emit('year-campaign', this.inputFormData.year, this.inputFormData.campaignIds)
     }
 
     async doSubmit() {
         const doSubmitParam: {
-            startDate: Date;
-            endDate: Date;
-            firstSiteId?: string;
+            year: number;
+            campaignIds: string[];
             siteIds: string[];
-            tagIds: string[];
-            type: ETimeMode;
+
         } = {
-            startDate: Datetime.DateToZero(new Date()),
-            endDate: Datetime.DateToZero(new Date()),
-            type: ETimeMode.none,
-            firstSiteId: '',
+            year: this.inputFormData.year,
+            campaignIds: [],
             siteIds: [],
-            tagIds:this.inputFormData.tagIds === [] ? [] : this.inputFormData.tagIds,
         };
 
-        let designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
-        if (this.inputFormData.siteIds.length === 0) {
-            Dialog.error(this._("w_PleaseSelectSites"));
-            return false;
-        }
-
-
-        doSubmitParam.siteIds = this.inputFormData.siteIds;
-        doSubmitParam.firstSiteId = doSubmitParam.siteIds[0];
-
-        // 選擇 period
-        if (this.selectPeriodAddWay === "period") {
-            if (
-                !Datetime.CheckDate(
-                    this.inputFormData.startDate,
-                    this.inputFormData.endDate
-                )
-            ) {
-                Dialog.error(this._("w_ReportDateError"));
-                this.inputFormData.startDate = new Date();
-                this.inputFormData.endDate = new Date();
-                return false;
-            }
-
-            if (
-                Datetime.CheckTheSameDate(
-                    Datetime.DateTime2String(
-                        this.inputFormData.startDate,
-                        "YYYY-MM-DD"
-                    ),
-                    Datetime.DateTime2String(
-                        this.inputFormData.endDate,
-                        "YYYY-MM-DD"
-                    )
-                )
-            ) {
-                doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
-                doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
-                doSubmitParam.type = ETimeMode.hour;
-            } else {
-                doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
-                doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
-                doSubmitParam.type = ETimeMode.day;
-            }
-
-            // 選擇 designation
-        } else if (this.selectPeriodAddWay === "designation") {
-            switch (this.inputFormData.designationPeriod) {
-                case "today":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.CountDateNumber(0)));
-                    doSubmitParam.type = ETimeMode.hour;
-                    designationPeriod = EDesignationPeriod.today;
-                    console.log("startDate today - ", doSubmitParam.startDate);
-                    console.log("endDate today - ", doSubmitParam.endDate);
-                    break;
-                case "yesterday":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
-                    doSubmitParam.type = ETimeMode.hour;
-                    designationPeriod = EDesignationPeriod.yesterday;
-                    console.log(
-                        "startDate yesterday - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate yesterday - ", doSubmitParam.endDate);
-                    break;
-                case "last7days":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-6)));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.last7days;
-                    console.log(
-                        "startDate last7days - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate last7days - ", doSubmitParam.endDate);
-                    break;
-                case "thisWeek":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisWeekStartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.ThisWeekEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.thisWeek;
-                    console.log(
-                        "startDate thisWeek - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate thisWeek - ", doSubmitParam.endDate);
-                    break;
-                case "lastWeek":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastWeekStartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastWeekEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.lastWeek;
-                    console.log(
-                        "startDate lastWeek - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate lastWeek - ", doSubmitParam.endDate);
-                    break;
-                case "thisMonth":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisMonthStartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisMonthEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.thisMonth;
-                    console.log(
-                        "startDate thisMonth - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate thisMonth - ", doSubmitParam.endDate);
-                    break;
-                case "lastMonth":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastMonthStartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastMonthEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.lastMonth;
-                    console.log(
-                        "startDate lastMonth - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate lastMonth - ", doSubmitParam.endDate);
-                    break;
-                case "q1":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q1StartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q1EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.q1;
-                    console.log("startDate q1 - ", doSubmitParam.startDate);
-                    console.log("endDate q1 - ", doSubmitParam.endDate);
-                    break;
-                case "q2":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q2StartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q2EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.q2;
-                    console.log("startDate q2 - ", doSubmitParam.startDate);
-                    console.log("endDate q2 - ", doSubmitParam.endDate);
-                    break;
-                case "q3":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q3StartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q3EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.q3;
-                    console.log("startDate q3 - ", doSubmitParam.startDate);
-                    console.log("endDate q3 - ", doSubmitParam.endDate);
-                    break;
-                case "q4":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q4StartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q4EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.q4;
-                    console.log("startDate q4 - ", doSubmitParam.startDate);
-                    console.log("endDate q4 - ", doSubmitParam.endDate);
-                    break;
-                case "thisYear":
-                    doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisYearStartDate()));
-                    doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
-                    designationPeriod = EDesignationPeriod.thisYear;
-                    console.log(
-                        "startDate thisYear - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate thisYear - ", doSubmitParam.endDate);
-                    break;
-            }
+        if (this.inputFormData.campaignIds === 'all') {
+           // this.inputFormData.campaignIds =
+        } else {
+            // this.inputFormData.campaignIds =
         }
 
         // console.log(' - ', doSubmitParam); return false;
 
-        this.$emit("submit-data", doSubmitParam, designationPeriod);
+        this.$emit("submit-data", doSubmitParam);
     }
 
     doReset() {
