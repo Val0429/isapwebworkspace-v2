@@ -98,7 +98,7 @@ export default class VisitorCardReport extends Vue  {
             let item2 = resp.results[i+1];
             i+=2;
             let member = this.members.find(x=>x.CardNumber && x.CardNumber == item.card_no);
-            if(!member)continue;
+            if(!member || !item2)continue;
             let newItem = Object.assign(item, member);
             newItem.date_time_occurred_end = item2.date_time_occurred;
             newItem.at_id_end = item2.at_id;

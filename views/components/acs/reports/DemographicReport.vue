@@ -122,7 +122,7 @@ async getAttendanceRecord(){
             let item2 = resp.results[i+1];
             i+=2;
             let member = this.records.find(x=>x.CardNumber == item.card_no);
-            if(!member)continue;
+            if(!member|| !item2)continue;
             if(!member.InOutDailyCount)member.InOutDailyCount=0;
             if(member.LastDateOccured !== item.date_occurred){
                 member.LastDateOccured = item.date_occurred;

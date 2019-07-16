@@ -138,7 +138,7 @@ async getAttendanceRecord(){
             let item2 = resp.results[i+1];
             i+=2;
             let member = this.records.find(x=>x.CardNumber == item.card_no);
-            if(!member)continue;
+            if(!member || !item2)continue;
             if(!member.Month1)member.Month1=0;
             if(!member.Month2)member.Month2=0;
             if(!member.Month3)member.Month3=0;
