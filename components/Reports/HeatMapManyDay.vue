@@ -5,9 +5,12 @@
             <div class="card-carousel">
                 <div class="card-carousel--overflow-container">
                     <div class="card-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')'}">
-                        <div class="card-carousel--card" v-for="item in items">
+                        <div class="card-carousel--card"
+                             v-for="(time, index) in timeArray"
+                             :key="'key_' + index"
+                        >
                             <div class="card-carousel--card--footer">
-                                <p>{{ dateAndWeekDay(item) }}</p>
+                                <p>{{ dateAndWeekDay(time) }}</p>
                             </div>
                         </div>
                     </div>
@@ -28,33 +31,18 @@ import Datetime from "@/services/Datetime";
 export class HeatMapManyDay extends Vue {
     // Prop
     @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
+        type: Array, // Boolean, Number, String, Array, Object
+        default: () => []
     })
-    label: string;
+    timeArray: any;
 
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
-
-    inputData = "Test input data";
-    modelData = "";
 
     currentOffset: number = 0;
     windowSize: number = 1;
     paginationFactor: number = 300;
-    items:any = [
-        '2019-07-01T16:00:00.000Z',
-        '2019-07-02T16:00:00.000Z',
-        '2019-07-03T16:00:00.000Z',
-        '2019-07-04T16:00:00.000Z',
-        ];
 
     created() {
-        this.modelData = this.value;
+        console.log(' - ', this.timeArray);
     }
 
     mounted() {
@@ -62,11 +50,10 @@ export class HeatMapManyDay extends Vue {
     }
 
     start() {
-        this.$emit("input", this.inputData);
     }
 
     get atEndOfList() {
-        return this.currentOffset <= (this.paginationFactor * -1) * (this.items.length - this.windowSize);
+        return this.currentOffset <= (this.paginationFactor * -1) * (this.timeArray.length - this.windowSize);
     }
     get atHeadOfList() {
         return this.currentOffset === 0;
@@ -79,6 +66,13 @@ export class HeatMapManyDay extends Vue {
         } else if (direction === -1 && !this.atHeadOfList) {
             this.currentOffset += this.paginationFactor;
         }
+
+        const arrayIndex = (this.currentOffset / this.paginationFactor).toString().substring(1);
+
+        this.$emit("time-array-index", arrayIndex);
+
+
+        // console.log(' !!! ', (this.currentOffset / this.paginationFactor).toString().substring(1));
 
     }
 

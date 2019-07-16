@@ -7,7 +7,10 @@
             :regionTreeItem="regionTreeItem"
             :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
-            @submit-data="receiveFilterData"></filter-condition-heat-map>
+            @submit-data="receiveFilterData"
+        >
+
+        </filter-condition-heat-map>
 
         <div v-show="pageStep === ePageStep.none">
             <iv-card>
@@ -31,9 +34,30 @@
                 </template>
 
                 <!-- Tina -->
-                <heat-map-many-day>
+                <analysis-filter-heat-map
+                    class="mb-4"
+                    :areaSelectItem="areaSelectItem"
+                    :deviceGroupSelectItem="deviceGroupSelectItem"
+                    :deviceSelectItem="deviceSelectItem"
+                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                    :siteIds="filterData.siteIds"
+                    :areaId="inputFormData.areaId"
+                    :groupId="inputFormData.groupId"
+                    :deviceId="inputFormData.deviceId"
+                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                    @area_id="receiveAreaId"
+                    @group_id="receiveGroupId"
+                    @device_id="receiveDeviceId"
+                    @is_included_employee="receiveIsIncludedEmployee"
+                >
+                </analysis-filter-heat-map>
 
-                </heat-map-many-day>
+                <!-- Tina -->
+                <heat-map-many-day
+                    :timeArray="timeArray"
+                    @time-array-index="receiveTimeArrayIndex"
+                ></heat-map-many-day>
+                <br>
             </iv-card>
 
         </div>
@@ -186,6 +210,10 @@ export default class ReportHeatmap extends Vue {
     deviceGroupSummaryFilter: any = [];
     deviceSummaryFilter: any = [];
 
+    // 時間多天
+    timeArray: any = [];
+    timeArrayData: string = '';
+
     //// Analysis Filter End ////
 
     // send user 相關
@@ -212,6 +240,9 @@ export default class ReportHeatmap extends Vue {
     created() {
         this.initDatas();
         this.initTemplate();
+
+        // Tina 之後移到發api之後
+        this.initTimeArray();
     }
 
     mounted() {
@@ -225,6 +256,9 @@ export default class ReportHeatmap extends Vue {
         await this.initSelectItemTag();
         await this.initSelectItemTree();
         await this.initSelectItemUsers();
+
+
+
     }
 
 
@@ -748,6 +782,15 @@ export default class ReportHeatmap extends Vue {
                 console.log(e);
                 return false;
             });
+    }
+
+    initTimeArray() {
+        this.timeArray = [
+            '2019-07-01T16:00:00.000Z',
+            '2019-07-02T16:00:00.000Z',
+            '2019-07-03T16:00:00.000Z',
+            '2019-07-04T16:00:00.000Z',
+        ];
     }
 
     async receiveUserData(data) {
@@ -1494,6 +1537,17 @@ export default class ReportHeatmap extends Vue {
             this.inputFormData.areaId = "all";
             this.inputFormData.groupId = "all";
             this.inputFormData.deviceId = "all";
+        }
+    }
+
+    receiveTimeArrayIndex(timeArrayIndex) {
+        console.log(' timeArrayIndex : ', timeArrayIndex);
+        for (const index in this.timeArray) {
+            if (timeArrayIndex === index) {
+                this.timeArrayData = this.timeArray[index]
+                console.log(' - ', this.timeArray[index]);
+            }
+
         }
     }
 
