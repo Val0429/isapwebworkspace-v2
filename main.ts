@@ -1,5 +1,6 @@
 import { Vue, Language } from "@/../core";
 import Dialog from "@/services/Dialog/Dialog";
+import debug from '@/config/default/debug';
 
 Vue.config.errorHandler = (error, vm, info) => {
     let lang = new Language();
@@ -12,7 +13,7 @@ Vue.config.errorHandler = (error, vm, info) => {
     }
     
 }
-
-// window.console.log = function(){
-
-// }
+if(debug.prodMode){
+    //remove console log
+    window.console.log = function(){}
+}
