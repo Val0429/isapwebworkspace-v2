@@ -79,17 +79,14 @@ export class OccupancyDetailsTable extends Vue {
     totalRow = 5;
 
     created() {
-        console.log("created");
         this.initDate();
     }
 
     mounted() {
-        console.log("getmountedData");
         // this.getData();
     }
 
     initDate() {
-        console.log("mounted");
         this.thresholdDetailTableTitle = [
             this._("w_Occupancy_Time"),
             this._("w_Occupancy_NumberDetected"),
@@ -98,13 +95,14 @@ export class OccupancyDetailsTable extends Vue {
     }
 
     getData() {
-        this.thresholdDetailTableData = this.thresholdDetailTableContent.filter(
-            (u, i) =>
-                i >= (this.currentPage - 1) * this.prePage &&
-                i < this.currentPage * this.prePage
-        );
-        this.totalRow = this.thresholdDetailTableContent.length;
-        console.log("getData", this.thresholdDetailTableData, this.totalRow);
+        if (this.totalRow != this.thresholdDetailTableContent.length) {
+            this.totalRow = this.thresholdDetailTableContent.length;
+            this.thresholdDetailTableData = this.thresholdDetailTableContent.filter(
+                (u, i) =>
+                    i >= (this.currentPage - 1) * this.prePage &&
+                    i < this.currentPage * this.prePage
+            );
+        }
     }
 
     showTime(time) {
