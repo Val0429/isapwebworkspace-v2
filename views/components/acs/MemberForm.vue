@@ -340,11 +340,11 @@ export default class MemberForm extends Vue {
     lastEditPerson: "",
     lastEditTime: "",
     cardCertificate: "2",
-    profileName:"",
-    technologyCode:469,
-    pinMode:0,
+    profileName:"基礎",
+    technologyCode:10,
+    pinMode:1,
     pinDigit:0,    
-    deviceNumber: 0,
+    deviceNumber: 469,
     pin: "",
 
     // tab1
