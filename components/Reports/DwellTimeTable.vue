@@ -20,16 +20,20 @@
                     v-for="(value,index) in thresholdDetailTableData"
                     :key="'tableData__' + index"
                 >
-                    <td class="center">{{ showTime(value.date)}}</td>
-                    <td class="center">{{ value.total }}</td>
+                    <td class="center">{{ value.area}}</td>
+                    <td class="center">{{ value.group }}</td>
                     <td class="center">
                         <img
-                            v-for="(item,index) in value.imageSrcs"
+                            v-for="(item,index) in value.customer"
                             :key="'tableDataSrc__' + index"
                             class="threshold-image"
                             :src="serverConfig.url  + item"
                         >
                     </td>
+                    <td class="center">{{ value.in }}</td>
+                    <td class="center">{{ value.out }}</td>
+                    <td class="center">{{ value.dwellTime }}</td>
+                    <td class="center">{{ value.Type }}</td>
                 </tr>
             </tbody>
         </table>
@@ -90,7 +94,11 @@ export class OccupancyDetailsTable extends Vue {
         this.thresholdDetailTableTitle = [
             this._("w_Occupancy_Time"),
             this._("w_Occupancy_NumberDetected"),
-            this._("w_Occupancy_Snapshot")
+            this._("w_DwellTime_Customer"),
+            this._("w_DwellTime_In"),
+            this._("w_DwellTime_Out"),
+            this._("w_DwellTime_DwellTime"),
+            this._("w_DwellTime_Type")
         ];
     }
 
@@ -153,7 +161,7 @@ export class OccupancyDetailsTable extends Vue {
 }
 
 export default OccupancyDetailsTable;
-Vue.component("occupancy-details-table", OccupancyDetailsTable);
+Vue.component("dwell-time-table", OccupancyDetailsTable);
 </script>
 
 <style lang="scss" scoped>
