@@ -58,11 +58,13 @@
                     @time-array-index="receiveTimeArrayIndex"
                 ></heat-map-many-day>
                 <br>
+                <!-- Ben -->
+                <camera-heatmap >
+                </camera-heatmap>
+
             </iv-card>
 
         </div>
-
-
 
     </div>
 </template>
@@ -108,7 +110,6 @@ import {
     IFilterCondition,
     ReportDashboard,
     ReportTableData,
-
     EDesignationPeriod,
     IReportToTemplateItem
 } from "@/components/Reports";
@@ -132,7 +133,6 @@ enum ETableStep {
     none = "none"
 }
 
-
 enum EPageStep {
     none = "none"
 }
@@ -149,7 +149,6 @@ export default class ReportHeatmap extends Vue {
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     chartDatas: IChartDemographicData[] = [];
-
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
@@ -212,7 +211,7 @@ export default class ReportHeatmap extends Vue {
 
     // 時間多天
     timeArray: any = [];
-    timeArrayData: string = '';
+    timeArrayData: string = "";
 
     //// Analysis Filter End ////
 
@@ -220,7 +219,7 @@ export default class ReportHeatmap extends Vue {
     userSelectItem: any = {};
 
     // Report To Template相關
-    ReportToTemplateData: IReportToTemplateItem | null =  null;
+    ReportToTemplateData: IReportToTemplateItem | null = null;
     designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
     //ReportDashboard 相關
@@ -245,8 +244,7 @@ export default class ReportHeatmap extends Vue {
         this.initTimeArray();
     }
 
-    mounted() {
-    }
+    mounted() {}
 
     async initDatas() {
         // Tina
@@ -256,25 +254,20 @@ export default class ReportHeatmap extends Vue {
         await this.initSelectItemTag();
         await this.initSelectItemTree();
         await this.initSelectItemUsers();
-
-
-
     }
 
-
     initSelect() {
-
         this.timeModeSelectItem = {
-            day: this._('w_daily'),
-            week: this._('w_weekly'),
-            month: this._('w_monthly'),
-            quarter: this._('w_quarterly'),
-            year: this._('w_yearly')
+            day: this._("w_daily"),
+            week: this._("w_weekly"),
+            month: this._("w_monthly"),
+            quarter: this._("w_quarterly"),
+            year: this._("w_yearly")
         };
 
         this.isIncludedEmployeeSelectItem = {
-            yes: this._('w_yes'),
-            no: this._('w_no')
+            yes: this._("w_yes"),
+            no: this._("w_no")
         };
     }
 
@@ -399,7 +392,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemArea() {
-        let tempAreaSelectItem = {all: this._("w_AllAreas")};
+        let tempAreaSelectItem = { all: this._("w_AllAreas") };
 
         const readParam: {
             siteId: string;
@@ -434,7 +427,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemDeviceGroup() {
-        let tempDeviceGroupSelectItem = {all: this._("w_AllDeviceGroups")};
+        let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
         this.deviceGroupSelectItem = {};
 
         let readParam: {
@@ -469,7 +462,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -496,7 +488,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -526,7 +517,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemDevice() {
-        let tempDeviceSelectItem = {all: this._("w_AllDevices")};
+        let tempDeviceSelectItem = { all: this._("w_AllDevices") };
         this.deviceSelectItem = {};
 
         const readParam: {
@@ -566,7 +557,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -594,7 +584,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -626,8 +615,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -661,7 +648,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -691,7 +677,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -723,7 +708,6 @@ export default class ReportHeatmap extends Vue {
                     console.log(e);
                     return false;
                 });
-
         } else if (
             this.filterData.firstSiteId &&
             this.inputFormData.areaId &&
@@ -770,7 +754,7 @@ export default class ReportHeatmap extends Vue {
                         // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
                             returnValue.objectId
-                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -786,10 +770,10 @@ export default class ReportHeatmap extends Vue {
 
     initTimeArray() {
         this.timeArray = [
-            '2019-07-01T16:00:00.000Z',
-            '2019-07-02T16:00:00.000Z',
-            '2019-07-03T16:00:00.000Z',
-            '2019-07-04T16:00:00.000Z',
+            "2019-07-01T16:00:00.000Z",
+            "2019-07-02T16:00:00.000Z",
+            "2019-07-03T16:00:00.000Z",
+            "2019-07-04T16:00:00.000Z"
         ];
     }
 
@@ -804,8 +788,10 @@ export default class ReportHeatmap extends Vue {
 
     //// 以下為 analysis filter ////
 
-    async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
-
+    async receiveFilterData(
+        filterData: IFilterCondition,
+        designationPeriod: EDesignationPeriod
+    ) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
@@ -833,11 +819,9 @@ export default class ReportHeatmap extends Vue {
                 console.log(e);
                 return false;
             });
-
     }
 
-    resolveSummary () {
-
+    resolveSummary() {
         if (this.filterData.siteIds.length === 1) {
             this.initSelectItemArea();
             this.initSelectItemDeviceGroup();
@@ -924,7 +908,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.lower20,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM21_30 = {
                     date: tempDate,
@@ -934,7 +918,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m21_30,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM31_40 = {
                     date: tempDate,
@@ -944,7 +928,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m31_40,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM41_50 = {
                     date: tempDate,
@@ -954,7 +938,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m41_50,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM51_60 = {
                     date: tempDate,
@@ -964,7 +948,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m51_60,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataUpper61 = {
                     date: tempDate,
@@ -974,32 +958,56 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.upper61,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
 
                 for (let siteId of this.filterData.siteIds) {
-                    let tempSiteChartDataLower20 = JSON.parse(JSON.stringify(tempDateChartDataLower20));
-                    tempSiteChartDataLower20.date = new Date(tempSiteChartDataLower20.date);
+                    let tempSiteChartDataLower20 = JSON.parse(
+                        JSON.stringify(tempDateChartDataLower20)
+                    );
+                    tempSiteChartDataLower20.date = new Date(
+                        tempSiteChartDataLower20.date
+                    );
                     tempSiteChartDataLower20.siteObjectId = siteId;
 
-                    let tempSiteChartDataM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM21_30));
-                    tempSiteChartDataM21_30.date = new Date(tempSiteChartDataM21_30.date);
+                    let tempSiteChartDataM21_30 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM21_30)
+                    );
+                    tempSiteChartDataM21_30.date = new Date(
+                        tempSiteChartDataM21_30.date
+                    );
                     tempSiteChartDataM21_30.siteObjectId = siteId;
 
-                    let tempSiteChartDataM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM31_40));
-                    tempSiteChartDataM31_40.date = new Date(tempSiteChartDataM31_40.date);
+                    let tempSiteChartDataM31_40 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM31_40)
+                    );
+                    tempSiteChartDataM31_40.date = new Date(
+                        tempSiteChartDataM31_40.date
+                    );
                     tempSiteChartDataM31_40.siteObjectId = siteId;
 
-                    let tempSiteChartDataM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM41_50));
-                    tempSiteChartDataM41_50.date = new Date(tempSiteChartDataM41_50.date);
+                    let tempSiteChartDataM41_50 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM41_50)
+                    );
+                    tempSiteChartDataM41_50.date = new Date(
+                        tempSiteChartDataM41_50.date
+                    );
                     tempSiteChartDataM41_50.siteObjectId = siteId;
 
-                    let tempSiteChartDataM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM51_60));
-                    tempSiteChartDataM51_60.date = new Date(tempSiteChartDataM51_60.date);
+                    let tempSiteChartDataM51_60 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM51_60)
+                    );
+                    tempSiteChartDataM51_60.date = new Date(
+                        tempSiteChartDataM51_60.date
+                    );
                     tempSiteChartDataM51_60.siteObjectId = siteId;
 
-                    let tempSiteChartDataUpper61 = JSON.parse(JSON.stringify(tempDateChartDataUpper61));
-                    tempSiteChartDataUpper61.date = new Date(tempSiteChartDataUpper61.date);
+                    let tempSiteChartDataUpper61 = JSON.parse(
+                        JSON.stringify(tempDateChartDataUpper61)
+                    );
+                    tempSiteChartDataUpper61.date = new Date(
+                        tempSiteChartDataUpper61.date
+                    );
                     tempSiteChartDataUpper61.siteObjectId = siteId;
 
                     tempChartDatas.push(
@@ -1008,13 +1016,11 @@ export default class ReportHeatmap extends Vue {
                         tempSiteChartDataM31_40,
                         tempSiteChartDataM41_50,
                         tempSiteChartDataM51_60,
-                        tempSiteChartDataUpper61,
+                        tempSiteChartDataUpper61
                     );
                 }
-
             }
         } else {
-
             // multiple days
             let dateList = Datetime.DateList(
                 this.filterData.startDate,
@@ -1022,7 +1028,6 @@ export default class ReportHeatmap extends Vue {
             );
 
             for (let dateItem of dateList) {
-
                 let tempDateChartDataLower20 = {
                     date: new Date(dateItem.getTime()),
                     siteObjectId: "",
@@ -1031,7 +1036,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.lower20,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM21_30 = {
                     date: new Date(dateItem.getTime()),
@@ -1041,7 +1046,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m21_30,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM31_40 = {
                     date: new Date(dateItem.getTime()),
@@ -1051,7 +1056,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m31_40,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM41_50 = {
                     date: new Date(dateItem.getTime()),
@@ -1061,7 +1066,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m41_50,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataM51_60 = {
                     date: new Date(dateItem.getTime()),
@@ -1071,7 +1076,7 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m51_60,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
                 let tempDateChartDataUpper61 = {
                     date: new Date(dateItem.getTime()),
@@ -1081,32 +1086,56 @@ export default class ReportHeatmap extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.upper61,
                     maleCount: 0,
-                    femaleCount: 0,
+                    femaleCount: 0
                 };
 
                 for (let siteId of this.filterData.siteIds) {
-                    let tempSiteChartDataLower20 = JSON.parse(JSON.stringify(tempDateChartDataLower20));
-                    tempSiteChartDataLower20.date = new Date(tempSiteChartDataLower20.date);
+                    let tempSiteChartDataLower20 = JSON.parse(
+                        JSON.stringify(tempDateChartDataLower20)
+                    );
+                    tempSiteChartDataLower20.date = new Date(
+                        tempSiteChartDataLower20.date
+                    );
                     tempSiteChartDataLower20.siteObjectId = siteId;
 
-                    let tempSiteChartDataM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM21_30));
-                    tempSiteChartDataM21_30.date = new Date(tempSiteChartDataM21_30.date);
+                    let tempSiteChartDataM21_30 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM21_30)
+                    );
+                    tempSiteChartDataM21_30.date = new Date(
+                        tempSiteChartDataM21_30.date
+                    );
                     tempSiteChartDataM21_30.siteObjectId = siteId;
 
-                    let tempSiteChartDataM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM31_40));
-                    tempSiteChartDataM31_40.date = new Date(tempSiteChartDataM31_40.date);
+                    let tempSiteChartDataM31_40 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM31_40)
+                    );
+                    tempSiteChartDataM31_40.date = new Date(
+                        tempSiteChartDataM31_40.date
+                    );
                     tempSiteChartDataM31_40.siteObjectId = siteId;
 
-                    let tempSiteChartDataM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM41_50));
-                    tempSiteChartDataM41_50.date = new Date(tempSiteChartDataM41_50.date);
+                    let tempSiteChartDataM41_50 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM41_50)
+                    );
+                    tempSiteChartDataM41_50.date = new Date(
+                        tempSiteChartDataM41_50.date
+                    );
                     tempSiteChartDataM41_50.siteObjectId = siteId;
 
-                    let tempSiteChartDataM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM51_60));
-                    tempSiteChartDataM51_60.date = new Date(tempSiteChartDataM51_60.date);
+                    let tempSiteChartDataM51_60 = JSON.parse(
+                        JSON.stringify(tempDateChartDataM51_60)
+                    );
+                    tempSiteChartDataM51_60.date = new Date(
+                        tempSiteChartDataM51_60.date
+                    );
                     tempSiteChartDataM51_60.siteObjectId = siteId;
 
-                    let tempSiteChartDataUpper61 = JSON.parse(JSON.stringify(tempDateChartDataUpper61));
-                    tempSiteChartDataUpper61.date = new Date(tempSiteChartDataUpper61.date);
+                    let tempSiteChartDataUpper61 = JSON.parse(
+                        JSON.stringify(tempDateChartDataUpper61)
+                    );
+                    tempSiteChartDataUpper61.date = new Date(
+                        tempSiteChartDataUpper61.date
+                    );
                     tempSiteChartDataUpper61.siteObjectId = siteId;
 
                     tempChartDatas.push(
@@ -1115,29 +1144,34 @@ export default class ReportHeatmap extends Vue {
                         tempSiteChartDataM31_40,
                         tempSiteChartDataM41_50,
                         tempSiteChartDataM51_60,
-                        tempSiteChartDataUpper61,
+                        tempSiteChartDataUpper61
                     );
                 }
             }
         }
 
-
         for (let tempChartData of tempChartDatas) {
             let tempDateFormat = isOneDay
-                ? Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.hour)
-                : Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.date);
+                ? Datetime.DateTime2String(
+                      tempChartData.date,
+                      ReportService.datetimeFormat.hour
+                  )
+                : Datetime.DateTime2String(
+                      tempChartData.date,
+                      ReportService.datetimeFormat.date
+                  );
 
             // 計算 maleCount、femaleCount
             for (let summary of datas) {
                 let summaryDateFormat = isOneDay
                     ? Datetime.DateTime2String(
-                        new Date(summary.date),
-                        ReportService.datetimeFormat.hour
-                    )
+                          new Date(summary.date),
+                          ReportService.datetimeFormat.hour
+                      )
                     : Datetime.DateTime2String(
-                        new Date(summary.date),
-                        ReportService.datetimeFormat.date
-                    );
+                          new Date(summary.date),
+                          ReportService.datetimeFormat.date
+                      );
 
                 if (
                     summaryDateFormat == tempDateFormat &&
@@ -1152,32 +1186,50 @@ export default class ReportHeatmap extends Vue {
                             ageRangeIndex = 1;
                             break;
                         case EAgeRange.m31_40:
-                            ageRangeIndex =2;
+                            ageRangeIndex = 2;
                             break;
                         case EAgeRange.m41_50:
                             ageRangeIndex = 3;
                             break;
                         case EAgeRange.m51_60:
-                            ageRangeIndex =4;
+                            ageRangeIndex = 4;
                             break;
                         case EAgeRange.upper61:
                             ageRangeIndex = 5;
                             break;
                     }
 
-                    summary.maleRanges[ageRangeIndex] = summary.maleRanges[ageRangeIndex] === null ? 0 : summary.maleRanges[ageRangeIndex];
-                    summary.femaleRanges[ageRangeIndex] = summary.femaleRanges[ageRangeIndex] === null ? 0 : summary.femaleRanges[ageRangeIndex];
-                    summary.maleEmployeeRanges[ageRangeIndex] = summary.maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.maleEmployeeRanges[ageRangeIndex];
-                    summary.femaleEmployeeRanges[ageRangeIndex] = summary.femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.femaleEmployeeRanges[ageRangeIndex];
+                    summary.maleRanges[ageRangeIndex] =
+                        summary.maleRanges[ageRangeIndex] === null
+                            ? 0
+                            : summary.maleRanges[ageRangeIndex];
+                    summary.femaleRanges[ageRangeIndex] =
+                        summary.femaleRanges[ageRangeIndex] === null
+                            ? 0
+                            : summary.femaleRanges[ageRangeIndex];
+                    summary.maleEmployeeRanges[ageRangeIndex] =
+                        summary.maleEmployeeRanges[ageRangeIndex] === null
+                            ? 0
+                            : summary.maleEmployeeRanges[ageRangeIndex];
+                    summary.femaleEmployeeRanges[ageRangeIndex] =
+                        summary.femaleEmployeeRanges[ageRangeIndex] === null
+                            ? 0
+                            : summary.femaleEmployeeRanges[ageRangeIndex];
 
-                    tempChartData.maleCount += summary.maleRanges[ageRangeIndex];
-                    tempChartData.femaleCount += summary.femaleRanges[ageRangeIndex];
+                    tempChartData.maleCount +=
+                        summary.maleRanges[ageRangeIndex];
+                    tempChartData.femaleCount +=
+                        summary.femaleRanges[ageRangeIndex];
 
-                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-                        tempChartData.maleCount -= summary.maleEmployeeRanges[ageRangeIndex];
-                        tempChartData.femaleCount -= summary.femaleEmployeeRanges[ageRangeIndex];
+                    if (
+                        this.inputFormData.isIncludedEmployee ===
+                        EIncludedEmployee.no
+                    ) {
+                        tempChartData.maleCount -=
+                            summary.maleEmployeeRanges[ageRangeIndex];
+                        tempChartData.femaleCount -=
+                            summary.femaleEmployeeRanges[ageRangeIndex];
                     }
-
                 }
             }
 
@@ -1186,13 +1238,13 @@ export default class ReportHeatmap extends Vue {
                 let weather = this.responseData.weathers[i];
                 let weatherDateFormat = isOneDay
                     ? Datetime.DateTime2String(
-                        new Date(weather.date),
-                        ReportService.datetimeFormat.hour
-                    )
+                          new Date(weather.date),
+                          ReportService.datetimeFormat.hour
+                      )
                     : Datetime.DateTime2String(
-                        new Date(weather.date),
-                        ReportService.datetimeFormat.date
-                    );
+                          new Date(weather.date),
+                          ReportService.datetimeFormat.date
+                      );
 
                 if (
                     weatherDateFormat == tempDateFormat &&
@@ -1207,9 +1259,8 @@ export default class ReportHeatmap extends Vue {
                 }
             }
 
-
             // TODO: Dwell time
-            let tempRandomDwellTime = Math.floor(Math.random()*6);
+            let tempRandomDwellTime = Math.floor(Math.random() * 6);
             if (tempRandomDwellTime == 0) {
                 tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
             } else if (tempRandomDwellTime == 1) {
@@ -1224,7 +1275,6 @@ export default class ReportHeatmap extends Vue {
                 tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
             }
             // TODO: Dwell time
-
         }
 
         this.chartDatas = tempChartDatas;
@@ -1541,13 +1591,12 @@ export default class ReportHeatmap extends Vue {
     }
 
     receiveTimeArrayIndex(timeArrayIndex) {
-        console.log(' timeArrayIndex : ', timeArrayIndex);
+        console.log(" timeArrayIndex : ", timeArrayIndex);
         for (const index in this.timeArray) {
             if (timeArrayIndex === index) {
-                this.timeArrayData = this.timeArray[index]
-                console.log(' - ', this.timeArray[index]);
+                this.timeArrayData = this.timeArray[index];
+                console.log(" - ", this.timeArray[index]);
             }
-
         }
     }
 
@@ -1560,16 +1609,15 @@ export default class ReportHeatmap extends Vue {
             siteIds: this.filterData.siteIds,
             tagIds: this.filterData.tagIds,
             sendUserIds: this.userData,
-            type: this.designationPeriod,
+            type: this.designationPeriod
         };
-
     }
 
     // Author: Tina
     pageToReportTemplate() {
         this.sortOutReportToTemplateData();
         this.$router.push({
-            path: '/reports/',
+            path: "/reports/",
             query: {
                 reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
             }
@@ -1627,7 +1675,6 @@ export default class ReportHeatmap extends Vue {
     }
 
     /////////////////////////////////////////////////////////////////////
-
 }
 </script>
 
