@@ -1434,17 +1434,15 @@ export class HighchartsDemographic extends Vue {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories: string[] = this.getAgeList();
+        let categories: string[] = HighchartsService.ageRangeListAsc(this);
         let tempTotalCount: number = 0;
         let series: any = [
             {
                 name: this._("w_Male"),
-                countData: [0, 0, 0, 0, 0, 0],
                 data: [0, 0, 0, 0, 0, 0]
             },
             {
                 name: this._("w_Female"),
-                countData: [0, 0, 0, 0, 0, 0],
                 data: [0, 0, 0, 0, 0, 0]
             }
         ];
@@ -1475,29 +1473,29 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
             if (tempAgeIndex > -1) {
-                if (series[0].countData[tempAgeIndex] == undefined) {
-                    series[0].countData[tempAgeIndex] = 0;
+                if (series[0].data[tempAgeIndex] == undefined) {
+                    series[0].data[tempAgeIndex] = 0;
                 }
-                if (series[1].countData[tempAgeIndex] == undefined) {
-                    series[1].countData[tempAgeIndex] = 0;
+                if (series[1].data[tempAgeIndex] == undefined) {
+                    series[1].data[tempAgeIndex] = 0;
                 }
                 tempTotalCount += value.maleCount;
                 tempTotalCount += value.femaleCount;
-                series[0].countData[tempAgeIndex] += value.maleCount;
-                series[1].countData[tempAgeIndex] += value.femaleCount;
+                series[0].data[tempAgeIndex] += value.maleCount;
+                series[1].data[tempAgeIndex] += value.femaleCount;
             }
         }
 
         if (tempTotalCount > 0) {
             for (let i in series) {
                 let iNumber = parseInt(i);
-                for (let j in series[i].countData) {
+                for (let j in series[i].data) {
                     let jNumber = parseInt(j);
                     if (series[i].data[j] == undefined) {
                         series[i].data[j] = 0;
                     }
                     series[i].data[j] = HighchartsService.formatFloat(
-                        (series[i].countData[j] / tempTotalCount) * 100
+                        (series[i].data[j] / tempTotalCount) * 100
                     );
                 }
             }
@@ -1535,7 +1533,7 @@ export class HighchartsDemographic extends Vue {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories: string[] = this.getAgeList();
+        let categories: string[] = HighchartsService.ageRangeListAsc(this);
         let tempTotalCount: number = 0;
         let series: any = [
             {
@@ -1635,7 +1633,7 @@ export class HighchartsDemographic extends Vue {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories: string[] = this.getPersonCountList();
+        let categories: string[] = HighchartsService.personCountRangeListDesc(this);
         let totalCount: number = 0;
 
         let barSeries = [
@@ -1876,30 +1874,6 @@ export class HighchartsDemographic extends Vue {
     private changeAge(value: EAgeRange) {
         this.selection.ageRange = value;
         this.drawChartDwellTime();
-    }
-
-    private getAgeList(): string[] {
-        let result: string[] = [
-            this._("w_Report_AgeRangeLower20"),
-            this._("w_Report_AgeRangeM21_30"),
-            this._("w_Report_AgeRangeM31_40"),
-            this._("w_Report_AgeRangeM41_50"),
-            this._("w_Report_AgeRangeM51_60"),
-            this._("w_Report_AgeRangeUpper61")
-        ];
-        return result;
-    }
-
-    private getPersonCountList(): string[] {
-        let result: string[] = [
-            ">120",
-            "60-120",
-            "30-60",
-            "15-30",
-            "5-15",
-            "<5"
-        ];
-        return result;
     }
 
     private i18nItem() {
