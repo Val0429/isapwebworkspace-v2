@@ -613,36 +613,12 @@ export default class MemberForm extends Vue {
     await this.$server
       .R("/acs/permissiontable", param)
       .then((response: any) => {
-        if (response != undefined) {
-          for (let content of response.results) {
-            if (
-              content.tableid != undefined &&
-              content.tablename != undefined
-            ) {
-              let haveOption = false;
-              let tempOption: ISortSelectOption = {
-                value: content.tableid.toString(),
-                text: content.tablename.toString()
-              };
-              for (let option of this.premissionOptions) {
-                if (option.value == tempOption.value) {
-                  haveOption = true;
-                }
-              }
-              if (!haveOption) {
-                this.premissionOptions.push(tempOption);
-              }
-            }
-          }
-        }
-      })
-      .catch((e: any) => {
-        if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-          return ResponseFilter.base(this, e);
-        }
-        console.log(e);
-        return false;
-      });
+        this.premissionOptions=response.results.map(content=>{
+          return{
+            value: content.tableid.toString(),
+            text: content.tablename.toString()
+        }})        
+      })      
   }
 
   async pageToEdit() {
