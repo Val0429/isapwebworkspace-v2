@@ -6,14 +6,15 @@
                 style="display: flex; justify-content: center; align-items: center;"
             >
                 <div
-                    style="position:relative; opacity:0.5;"
+                    class="canvas-div"
+                    style="position:absolute;"
                     ref="heatmap"
                 >
 
                     <canvas
-                        style="position:absolute;  opacity:1.0;"
+                        style="position:relative; opacity:1.0;"
                         ref="snapshot"
-                        width="566"
+                        width="600"
                         height="400"
                     ></canvas>
                 </div>
@@ -118,14 +119,16 @@ Vue.component("camera-heatmap", CameraHeatmap);
 
 
 <style lang="scss" scoped>
-div {
-    width: 600px;
-    height: 400px;
-    border: 1px solid;
-    border-color: gray;
+.canvas-div {
+    width: 600;
+    height: 400;
 }
 
 .center {
     margin: 0px auto;
+}
+
+.heatmap-canvas {
+    opacity: 0.5;
 }
 </style>
