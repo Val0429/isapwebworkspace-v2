@@ -556,7 +556,7 @@ export class HighchartsDemographic extends Vue {
         let dateGap: number = Math.ceil(
             Math.abs(
                 sortDate.startDate.getTime() - sortDate.endDate.getTime()
-            ) / 86400000
+            ) / Datetime.oneDayTimestamp
         );
 
         while (
@@ -1045,7 +1045,7 @@ export class HighchartsDemographic extends Vue {
         let dateGap: number = Math.ceil(
             Math.abs(
                 sortDate.startDate.getTime() - sortDate.endDate.getTime()
-            ) / 86400000
+            ) / Datetime.oneDayTimestamp
         );
 
         while (
