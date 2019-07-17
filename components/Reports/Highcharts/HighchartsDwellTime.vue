@@ -1679,7 +1679,7 @@ export class HighchartsDwellTime extends Vue {
         let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories: string[] = HighchartsService.personCountRangeListDesc(
+        let categories: string[] = HighchartsService.ageRangeListDesc(
             this
         );
         let totalCount: number = 0;
