@@ -31,7 +31,7 @@ class HighchartsService {
             endHour: -1,
         };
         for (let dayRange of officeHour) {
-            let inday: boolean = this.WeekinDay(weekDay, parseInt(dayRange.startDay), parseInt(dayRange.endDay));
+            let inday: boolean = this.WeekInDay(weekDay, parseInt(dayRange.startDay), parseInt(dayRange.endDay));
             if (inday) {
                 let indayStartDate = new Date(dayRange.startDate);
                 let indayEndDate = new Date(dayRange.endDate);
@@ -150,7 +150,7 @@ class HighchartsService {
     }
 
     // check day in range
-    WeekinDay(weekDay: number, startDay: number, endDay: number): boolean {
+    WeekInDay(weekDay: number, startDay: number, endDay: number): boolean {
         let result = false;
         let have7 = false;
         let inRange = false;

@@ -780,6 +780,28 @@ export default class ReportHeatmap extends Vue {
     }
 
     initHourArray() {
+
+        // TODO: 整理OfficeHour，使用         HighchartsService.siteOfficeHour()
+
+        let weekDay = new Date().getDay();
+
+        const dayRanges =  [
+            {
+                "startDay": "1",
+                "endDay": "5",
+                "startDate": "2000-01-01T01:00:00.000Z",
+                "endDate": "2000-01-01T09:00:00.000Z"
+            },
+            {
+                "startDay": "6",
+                "endDay": "0",
+                "startDate": "2000-01-01T00:00:00.000Z",
+                "endDate": "2000-01-01T14:00:00.000Z"
+            }
+        ];
+
+        console.log(HighchartsService.siteOfficeHour(weekDay, dayRanges));
+
         this.hourArray = [
             "2019-07-01T16:00:00.000Z",
             "2019-07-01T17:00:00.000Z",

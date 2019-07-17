@@ -463,7 +463,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
             }
         }
 
-        console.log(' - ', doSubmitParam); return false;
+        // console.log(' - ', doSubmitParam); return false;
 
         this.$emit("submit-data", doSubmitParam, designationPeriod);
     }
