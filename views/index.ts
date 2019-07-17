@@ -130,7 +130,7 @@ $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-questio
 // Report
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-code', redirect: '/reports/report_template' })();
 $({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-check' })(ReportTraffic);
-$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-code' })(ReportDwellTime);
+$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-code', permission: false })(ReportDwellTime);
 $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-code' })(ReportDemographic);
 $({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-question', permission: false })(ReportHeatmap);
 $({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-check' })(ReportOccupancy);

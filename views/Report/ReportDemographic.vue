@@ -2172,12 +2172,42 @@
 
 				for (let i = 1; i < 30; i++) {
 					let ageRange = EAgeRange.none;
-					let tempAgeRangeNumber = Math.floor(Math.random() * 300);
+                    let dwellTimeRange = EDwellTimeRange.none;
+                    let weather = EWeather.none;
+                    
+                    let tempAgeRangeNumber = Math.floor(Math.random() * 300);
+                    let tempDwellTimeRangeNumber = Math.floor(Math.random() * 300);
+                    let tempWeatherNumber = Math.floor(Math.random() * 300);
 
-					let weather = EWeather.none;
-					let tempWeatherNumber = Math.floor(Math.random() * 300);
+					if (tempAgeRangeNumber % 6 == 0) {
+						ageRange = EAgeRange.lower20;
+					} else if (tempAgeRangeNumber % 6 == 1) {
+						ageRange = EAgeRange.m21_30;
+					} else if (tempAgeRangeNumber % 6 == 2) {
+						ageRange = EAgeRange.m31_40;
+					} else if (tempAgeRangeNumber % 6 == 3) {
+						ageRange = EAgeRange.m41_50;
+					} else if (tempAgeRangeNumber % 6 == 4) {
+						ageRange = EAgeRange.m51_60;
+					} else if (tempAgeRangeNumber % 6 == 5) {
+						ageRange = EAgeRange.upper61;
+                    }
+                    
+                    if (tempDwellTimeRangeNumber % 6 == 0) {
+						dwellTimeRange = EDwellTimeRange.lower5;
+					} else if (tempDwellTimeRangeNumber % 6 == 1) {
+						dwellTimeRange = EDwellTimeRange.m5_15;
+					} else if (tempDwellTimeRangeNumber % 6 == 2) {
+						dwellTimeRange = EDwellTimeRange.m15_30;
+					} else if (tempDwellTimeRangeNumber % 6 == 3) {
+						dwellTimeRange = EDwellTimeRange.m30_60;
+					} else if (tempDwellTimeRangeNumber % 6 == 4) {
+						dwellTimeRange = EDwellTimeRange.m60_120;
+					} else if (tempDwellTimeRangeNumber % 6 == 5) {
+						dwellTimeRange = EDwellTimeRange.upper120;
+                    }
 
-					if (tempWeatherNumber % 10 == 0) {
+                    if (tempWeatherNumber % 10 == 0) {
 						weather = EWeather.clearDay;
 					} else if (tempWeatherNumber % 10 == 1) {
 						weather = EWeather.clearNight;
@@ -2199,20 +2229,6 @@
 						weather = EWeather.partlyCloudyNight;
 					}
 
-					if (tempAgeRangeNumber % 6 == 0) {
-						ageRange = EAgeRange.lower20;
-					} else if (tempAgeRangeNumber % 6 == 1) {
-						ageRange = EAgeRange.m21_30;
-					} else if (tempAgeRangeNumber % 6 == 2) {
-						ageRange = EAgeRange.m31_40;
-					} else if (tempAgeRangeNumber % 6 == 3) {
-						ageRange = EAgeRange.m41_50;
-					} else if (tempAgeRangeNumber % 6 == 4) {
-						ageRange = EAgeRange.m51_60;
-					} else if (tempAgeRangeNumber % 6 == 5) {
-						ageRange = EAgeRange.upper61;
-					}
-
 					let tempI = i;
 					let iNumber = tempI;
 					let iString = tempI.toString();
@@ -2227,7 +2243,7 @@
 						temperatureMax: iNumber,
 						weather: weather,
                         ageRange: ageRange,
-                        dwellTimeRange: EDwellTimeRange.none,
+                        dwellTimeRange: dwellTimeRange,
 						maleCount: Math.floor(Math.random() * 300),
 						femaleCount: Math.floor(Math.random() * 300)
 					};
