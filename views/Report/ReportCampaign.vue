@@ -48,14 +48,14 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import HighchartsCampaignMultipe from "@/components/Reports/HighchartsCampaignMultipe.vue";
-import HighchartsCampaignSingle from "@/components/Reports/HighchartsCampaignSingle.vue";
+import HighchartsCampaignMultipe from "@/components/Reports/Highcharts/HighchartsCampaignMultipe.vue";
+import HighchartsCampaignSingle from "@/components/Reports/Highcharts/HighchartsCampaignSingle.vue";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
 
 import {
     ECampaignTimeType,
-    IChartCampaignMultipe,
+    IChartCampaignMultiple,
     IChartCampaignSingle
 } from "@/components/Reports";
 
@@ -74,7 +74,7 @@ export default class ReportCampaign extends Vue {
         single: false
     };
     chartDatas: {
-        multiple: IChartCampaignMultipe[];
+        multiple: IChartCampaignMultiple[];
         single: IChartCampaignSingle[];
     } = {
         multiple: [],
@@ -218,7 +218,7 @@ export default class ReportCampaign extends Vue {
         this.chartDatas.single = [];
 
         for (let i = 0; i < campaignMultipeTimeLength; i++) {
-            let tempItem: IChartCampaignMultipe = {
+            let tempItem: IChartCampaignMultiple = {
                 name: "Campaign " + i.toString(),
                 startDate: new Date(),
                 endDate: new Date(),

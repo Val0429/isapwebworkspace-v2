@@ -1,7 +1,6 @@
 <template>
     <div>
         <iv-card
-            v-show="pageStep === ePageStep.none"
             :visible="true"
             :label="_('w_ReportFilterConditionComponent_')"
         >
@@ -11,39 +10,28 @@
                 @submit="doSubmit($event)"
             >
 
-                <template #ifAllSites="{ $attrs, $listeners }">
+                <template #ifAllTags="{ $attrs, $listeners }">
                     <b-form-radio-group
                         v-bind="$attrs"
                         v-on="$listeners"
-                        v-model="selectAllSites"
+                        v-model="selectAllTags"
                         class="h-25 select_date_button mb-3"
                         buttons
                         button-variant="outline-success"
                         name="radio-btn-outline"
-                        :options="ifAllSitesSelectItem"
-                        @change="changeAllSitesSelect"
+                        :options="ifAllTagsSelectItem"
+                        @change="changeAllTagsSelect"
                     ></b-form-radio-group>
                 </template>
 
-                <template #siteIds="{ $attrs, $listeners }">
+
+                <template #tagIds="{ $attrs, $listeners }">
                     <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
-                        v-model="inputFormData.siteIds"
+                        v-model="inputFormData.tagIds"
                     >
                     </iv-form-selection>
-                </template>
-
-                <template #selectTree="{ $attrs, $listeners }">
-
-                    <div class="ml-3 select_report_period_button">
-                        <b-button
-                            v-if="selectAllSites === 'select'"
-                            @click="pageToChooseTree"
-                        >
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
                 </template>
 
                 <template #selectPeriodAddWay="{ $attrs, $listeners }">
@@ -87,14 +75,6 @@
                     </iv-form-selection>
                 </template>
 
-                <template #tagIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.tagIds"
-                    >
-                    </iv-form-selection>
-                </template>
 
             </iv-form>
 
@@ -118,15 +98,6 @@
 
         </iv-card>
 
-        <region-tree-select
-            v-if="pageStep === ePageStep.chooseTree && selectAllSites === 'select'"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
 
     </div>
 </template>
@@ -159,12 +130,7 @@ enum EPageStep {
 @Component({
     components: {}
 })
-export class FilterCondition extends Vue {
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    sitesSelectItem: object;
+export class FilterConditionVIPAndBlacklist extends Vue {
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -173,29 +139,14 @@ export class FilterCondition extends Vue {
     tagSelectItem: object;
 
     @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    regionTreeItem: object;
-
-    @Prop({
         type: Object,
         default: null
     })
     templateItem: ITemplateItem | null;
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
-
-    // site 相關
-    selectAllSites: string = EIfAllSelected.select;
-    ifAllSitesSelectItem: any = [];
-
-    // select 相關
-
-    // tree
-    selectType = ERegionType.site;
-    selecteds: IRegionTreeSelected[] = [];
+    // Tag 相關
+    selectAllTags: string = EIfAllSelected.select;
+    ifAllTagsSelectItem: any = [];
 
     // date 相關
     selectPeriodAddWay: string = EAddPeriodSelect.period;
@@ -205,9 +156,7 @@ export class FilterCondition extends Vue {
     designationPeriodSelectItem: any = [];
 
     inputFormData: any = {
-        siteIds: [],
         tagIds: [],
-        allSiteIds: [],
         allTagIds: [],
         startDate: new Date(),
         endDate: new Date(),
@@ -224,22 +173,14 @@ export class FilterCondition extends Vue {
     }
 
     mounted() {
-        // this.initSelectItemTag();
-        // this.initSelectItemTree();
-        // this.initRegionTreeSelect();
-        this.siteFilterPermission();
         this.initTemplate();
+        this.initAllTags();
     }
 
-    // initRegionTreeSelect() {
-    //     this.regionTreeItem = new RegionTreeItem();
-    //     this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
-    // }
-
     initSelectItem() {
-        this.ifAllSitesSelectItem = [
-            { value: EIfAllSelected.all, text: this._("w_AllSites") },
-            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
+        this.ifAllTagsSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllTags") },
+            { value: EIfAllSelected.select, text: this._("w_SelectTags") }
         ];
 
         this.addPeriodSelectItem = [
@@ -266,24 +207,16 @@ export class FilterCondition extends Vue {
         };
     }
 
-    siteFilterPermission() {
-
-        for (const detail of this.$user.allowSites) {
-            this.inputFormData.allSiteIds.push(detail.objectId);
+    initAllTags() {
+        for (const detail in this.tagSelectItem) {
+            this.inputFormData.allTagIds.push(detail);
         }
+
+
     }
 
     tempSaveInputData(data) {
         switch (data.key) {
-            case "siteIds":
-                for (const siteId of data.value) {
-                    if (!siteId) {
-                        this.inputFormData.siteIds = [];
-                    } else {
-                        this.inputFormData.siteIds = data.value;
-                    }
-                }
-                break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
                 break;
@@ -297,62 +230,17 @@ export class FilterCondition extends Vue {
                 this.inputFormData.designationPeriod = data.value;
                 break;
         }
-
-        this.selecteds = [];
-
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
     }
 
-    async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.selecteds = [];
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-    }
 
-    pageToShowResult() {
-        this.pageStep = EPageStep.none;
-        // siteIds clear
-        this.inputFormData.siteIds = [];
-
-        // from selecteds push siteIds
-        for (const item of this.selecteds) {
-            this.inputFormData.siteIds.push(item.objectId);
-        }
-    }
-
-    changeAllSitesSelect(selected: string) {
-        this.inputFormData.siteIds = [];
-        this.selecteds = [];
-        this.selectAllSites = selected;
-        if (this.selectAllSites === EIfAllSelected.all) {
-            this.inputFormData.siteIds = [];
-            this.selecteds = [];
-            this.inputFormData.siteIds = this.inputFormData.allSiteIds;
+    changeAllTagsSelect(selected: string) {
+        this.inputFormData.tagIds = [];
+        this.selectAllTags = selected;
+        if (this.selectAllTags === EIfAllSelected.all) {
+            this.inputFormData.tagIds = [];
+            this.inputFormData.tagIds = this.inputFormData.allTagIds;
         } else {
-            this.inputFormData.siteIds = [];
-            this.selecteds = [];
+            this.inputFormData.tagIds = [];
         }
     }
 
@@ -411,32 +299,25 @@ export class FilterCondition extends Vue {
         const doSubmitParam: {
             startDate: Date;
             endDate: Date;
-            firstSiteId?: string;
-            siteIds: string[];
             tagIds: string[];
-            type: ETimeMode;
         } = {
             startDate: Datetime.DateToZero(new Date()),
             endDate: Datetime.DateToZero(new Date()),
-            type: ETimeMode.none,
-            firstSiteId: '',
-            siteIds: [],
-            tagIds:this.inputFormData.tagIds === [] ? [] : this.inputFormData.tagIds,
+            tagIds: [],
         };
 
         let designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
-        if (this.inputFormData.siteIds.length === 0) {
-            Dialog.error(this._("w_PleaseSelectSites"));
+        if (this.inputFormData.tagIds.length === 0) {
+            Dialog.error(this._("w_PleaseSelectTags"));
             return false;
         }
 
-        if (this.selectAllSites === "all") {
-            this.inputFormData.siteIds = this.inputFormData.allSiteIds;
+        if (this.selectAllTags === "all") {
+            this.inputFormData.tagIds = this.inputFormData.allTagIds;
         }
 
-        doSubmitParam.siteIds = this.inputFormData.siteIds;
-        doSubmitParam.firstSiteId = doSubmitParam.siteIds[0];
+        doSubmitParam.tagIds = this.inputFormData.tagIds;
 
         // 選擇 period
         if (this.selectPeriodAddWay === "period") {
@@ -466,11 +347,9 @@ export class FilterCondition extends Vue {
             ) {
                 doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
                 doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
-                doSubmitParam.type = ETimeMode.hour;
             } else {
                 doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
                 doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
-                doSubmitParam.type = ETimeMode.day;
             }
 
             // 選擇 designation
@@ -479,7 +358,6 @@ export class FilterCondition extends Vue {
                 case "today":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.CountDateNumber(0)));
-                    doSubmitParam.type = ETimeMode.hour;
                     designationPeriod = EDesignationPeriod.today;
                     console.log("startDate today - ", doSubmitParam.startDate);
                     console.log("endDate today - ", doSubmitParam.endDate);
@@ -487,7 +365,6 @@ export class FilterCondition extends Vue {
                 case "yesterday":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
-                    doSubmitParam.type = ETimeMode.hour;
                     designationPeriod = EDesignationPeriod.yesterday;
                     console.log(
                         "startDate yesterday - ",
@@ -498,7 +375,6 @@ export class FilterCondition extends Vue {
                 case "last7days":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-6)));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.last7days;
                     console.log(
                         "startDate last7days - ",
@@ -509,7 +385,6 @@ export class FilterCondition extends Vue {
                 case "thisWeek":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisWeekStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.ThisWeekEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.thisWeek;
                     console.log(
                         "startDate thisWeek - ",
@@ -520,7 +395,6 @@ export class FilterCondition extends Vue {
                 case "lastWeek":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastWeekStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastWeekEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.lastWeek;
                     console.log(
                         "startDate lastWeek - ",
@@ -531,7 +405,6 @@ export class FilterCondition extends Vue {
                 case "thisMonth":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisMonthStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisMonthEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.thisMonth;
                     console.log(
                         "startDate thisMonth - ",
@@ -542,7 +415,6 @@ export class FilterCondition extends Vue {
                 case "lastMonth":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastMonthStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastMonthEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.lastMonth;
                     console.log(
                         "startDate lastMonth - ",
@@ -553,7 +425,6 @@ export class FilterCondition extends Vue {
                 case "q1":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q1StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q1EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q1;
                     console.log("startDate q1 - ", doSubmitParam.startDate);
                     console.log("endDate q1 - ", doSubmitParam.endDate);
@@ -561,7 +432,6 @@ export class FilterCondition extends Vue {
                 case "q2":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q2StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q2EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q2;
                     console.log("startDate q2 - ", doSubmitParam.startDate);
                     console.log("endDate q2 - ", doSubmitParam.endDate);
@@ -569,7 +439,6 @@ export class FilterCondition extends Vue {
                 case "q3":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q3StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q3EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q3;
                     console.log("startDate q3 - ", doSubmitParam.startDate);
                     console.log("endDate q3 - ", doSubmitParam.endDate);
@@ -577,7 +446,6 @@ export class FilterCondition extends Vue {
                 case "q4":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q4StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q4EndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q4;
                     console.log("startDate q4 - ", doSubmitParam.startDate);
                     console.log("endDate q4 - ", doSubmitParam.endDate);
@@ -585,7 +453,6 @@ export class FilterCondition extends Vue {
                 case "thisYear":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisYearStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()));
-                    doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.thisYear;
                     console.log(
                         "startDate thisYear - ",
@@ -596,24 +463,23 @@ export class FilterCondition extends Vue {
             }
         }
 
-        // console.log(' - ', doSubmitParam); return false;
+        console.log(' - ', doSubmitParam); return false;
 
         this.$emit("submit-data", doSubmitParam, designationPeriod);
     }
 
     doReset() {
         this.inputFormData = {
-            siteIds: [],
             tagIds: [],
-            allSiteIds: [],
+            allTagIds: [],
             startDate: new Date(),
             endDate: new Date(),
             designationPeriod: "today"
         };
 
-        this.selectAllSites = EIfAllSelected.select;
+        this.selectAllTags = EIfAllSelected.select;
 
-        this.siteFilterPermission();
+        this.initAllTags();
     }
 
     IFilterConditionForm() {
@@ -622,33 +488,27 @@ export class FilterCondition extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
-                 * @uiColumnGroup - site
+                 * @uiColumnGroup - tag
                  */
-                 ifAllSites?: any;
+                 ifAllTags?: any;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiColumnGroup - site
+                 * @uiLabel - ${this._("w_Tag")}
+                 * @uiColumnGroup - tag
                  * @uiHidden - ${
-                     this.selectAllSites === EIfAllSelected.all
-                         ? "true"
-                         : "false"
-                 }
+                        this.selectAllTags === EIfAllSelected.all
+                            ? "true"
+                            : "false"
+                        }
                  */
-                siteIds: ${toEnumInterface(this.sitesSelectItem as any, true)};
+                tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
 
 
                 /**
-                 * @uiColumnGroup - site
-                 * @uiHidden - ${
-                     this.selectAllSites === EIfAllSelected.all
-                         ? "true"
-                         : "false"
-                 }
+                 * @uiColumnGroup - tag
                  */
-                 selectTree?: any;
-
+                 tag1?: any;
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
@@ -699,25 +559,13 @@ export class FilterCondition extends Vue {
                     false
                 )};
 
-
-                /**
-                 * @uiLabel - ${this._("w_Tag")}
-                 * @uiColumnGroup - tag
-                 */
-                tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
-
-
-                /**
-                 * @uiColumnGroup - tag
-                 */
-                 tag1?: any;
             }
         `;
     }
 }
 
-export default FilterCondition;
-Vue.component("filter-condition", FilterCondition);
+export default FilterConditionVIPAndBlacklist;
+Vue.component("filter-condition-vip-and-blacklist", FilterConditionVIPAndBlacklist);
 </script>
 
 <style lang="scss" scoped>

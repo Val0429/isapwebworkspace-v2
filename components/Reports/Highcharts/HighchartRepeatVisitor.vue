@@ -99,10 +99,10 @@ exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
 // custom import
-import { ETimeMode, EAreaMode, EAgeRange, EWeather } from "./";
-import { ISiteAreas, IChartRepeatVisitorData, ISiteOfficeHourItem } from "./";
+import { ETimeMode, EAreaMode, EAgeRange, EWeather } from "../";
+import { ISiteAreas, IChartRepeatVisitorData, ISiteOfficeHourItem } from "../";
 import Datetime from "@/services/Datetime";
-import HighchartsService from "./models/HighchartsService";
+import HighchartsService from "../models/HighchartsService";
 
 @Component({
     components: {}
