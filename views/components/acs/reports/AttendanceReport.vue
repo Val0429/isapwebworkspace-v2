@@ -1,6 +1,6 @@
 <template >
 <div>
-     <ivc-basic-report          
+     <ivc-basic-report    
         :inf="inf()"
         :title="_('w_AttendanceReport')"
         :records="records"
@@ -8,7 +8,7 @@
         :fields="fields"
         v-model="filter"
         v-on:input="onSubmit()"
-     />          
+     />
      
 </div>
 </template>
@@ -32,7 +32,11 @@ export default class EmployeeReport extends Vue  {
             {
                 key: "EmployeeNumber",
                 label: this._('w_Member_EmployeeNumber1')
-            },            
+            },   
+            {
+                key: "CardNumber",
+                label: this._('w_Member_CardNumber1')
+            },          
             {
                 key:"DepartmentName",
                 label: this._("w_Member_Department1")
@@ -88,7 +92,6 @@ export default class EmployeeReport extends Vue  {
             return;
         }
         this.isBusy=true;           
-        await this.getMemberData();
         await this.getAttendanceRecord();
       }catch(err){
           console.error(err);
@@ -96,20 +99,27 @@ export default class EmployeeReport extends Vue  {
         this.isBusy=false;
       }
   }
-  private async getMemberData() {
-    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter);
+  private async getMemberData(cardNumbers?:string) {
+    let resp: any=await this.$server.R("/report/memberrecord" as any, Object.assign({CardNumbers:cardNumbers}, this.filter));
     this.members=resp.results;
     
   }
+    
 
-    async getAttendanceRecord(){   
-        
+    async getAttendanceRecord(){  
         this.filter.DateStart.setHours(0,0,0,0);        
         this.filter.DateEnd.setHours(23,59,59,999);
         // let card_no = this.filter.CardNumber;
         let start = this.filter.DateStart.toISOString();
         let end = this.filter.DateEnd.toISOString();
         let resp: any=await this.$server.R("/report/attendancerecord" as any, Object.assign(this.filter, {start, end}));
+
+        let cardNumbers = resp.results.filter(x=>x.card_no&&x.card_no!="").map(x=>x.card_no)
+            .filter((value, index, self) => self.indexOf(value)==index)
+            .join(",");
+        console.log("cardNUmbers", cardNumbers);
+        await this.getMemberData(cardNumbers);
+
         this.records=[];
         let i=0;
         while(i<resp.results.length){            
@@ -117,7 +127,7 @@ export default class EmployeeReport extends Vue  {
             let item2 = resp.results[i+1];
             i+=2;
             let member = this.members.find(x=>x.CardNumber && x.CardNumber == item.card_no);
-            if(!member || !item2)continue;
+            if(!member || !item2 || item2.card_no != item.card_no)continue;
             let newItem = Object.assign(item, member);
             newItem.date_time_occurred_end = item2.date_time_occurred;
             newItem.at_id_end = item2.at_id;
