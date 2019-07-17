@@ -12,18 +12,23 @@
             <iv-card :label="_('w_Permission_PermissionList')">
                 <template #toolbox>
 
-                    <iv-toolbox-view
+                    <!-- <iv-toolbox-view
                         
                         @click="pageToView($attrs.row)"
-                    />
+                    /> -->
                     
 
                 </template>
-                <b-table striped hover 
-                :items="records" 
-                :fields="fields" 
+                <b-table striped hover
+                ref="permTable"
+                :items="myProvider" 
+                :fields="fields"
                 :per-page="perPage"
                 :current-page="page">
+                <!-- A virtual column -->
+                <template slot="index" slot-scope="data">
+                    {{ data.index + (page-1)*perPage+ 1 }}
+                </template>
                     <template slot="Actions" slot-scope="data">
                         
                             <iv-toolbox-view @click="pageToView(data.item)" />
@@ -45,7 +50,12 @@
                 :fields="memberFields" 
                 :per-page="perPage"
                 :current-page="memberPage"
-           />
+           >
+                 <!-- A virtual column -->
+                <template slot="index" slot-scope="data">
+                    {{ data.index + (memberPage-1)*perPage + 1 }}
+                </template>
+           </b-table>
            <b-pagination
             v-model="memberPage"
             :total-rows="memberRecords.length"
@@ -61,7 +71,12 @@
                 :fields="doorFields" 
                 :per-page="perPage"
                 :current-page="doorPage"
-           />
+                >
+                    <!-- A virtual column -->
+                    <template slot="index" slot-scope="data">
+                        {{ data.index + (doorPage-1)*perPage + 1 }}
+                    </template>
+                </b-table>
            <b-pagination
             v-model="doorPage"
             :total-rows="doorRecords.length"
@@ -117,37 +132,44 @@ export default class QueryPermission extends Vue {
         this.viewPage=false;
         
     }
-    async getData(){
-        let resp:any = await this.$server.R("/acs/permissiontable" as any, this.filter);
-        this.total = resp.total;
-        let i=1;
-        this.records=[];
-        
-        let members = await this.getMembers(resp.results.map(x=>x.tableid));
-        for(let item of resp.results){
-            item.no = i++;
-            item.members = members.filter(x=>x.PermissionTable.find(y=> y == item.tableid));
-            let j=1;
-            for(let member of item.members){
-                member.no = j++;
+    myProvider (ctx) {
+        // Here we don't set isBusy prop, so busy state will be
+        // handled by table itself
+        // this.isBusy = true
+
+        console.log("filter", this.filter);
+
+        let promise = this.$server.R('/acs/permissiontable'as any, Object.assign({paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+
+        return promise.then(async (data:any) => {
+          this.total = data.paging.total;
+          let members = await this.getMembers(data.results.map(x=>x.tableid).join(","));
+            for(let item of data.results){
+                item.members = members.filter(x=>x.PermissionTable.find(y=> y == item.tableid));
+                item.membercount = item.members.length;
+                item.doors = [];
+                item.doorcount = 0;
+                if(!item.accesslevels || item.accesslevels.length<=0) continue;                
+                let doors = [];
+                for(let accesslevel of item.accesslevels){
+                    if(!accesslevel.type || accesslevel.type!="door" || !accesslevel.door)continue;
+                    doors.push(accesslevel.door);
+                }
+                item.doors = doors;
+                item.doorcount = doors.length;               
             }
-            item.membercount = item.members.length;
-            if(!item.accesslevels || item.accesslevels.length<=0)continue;
-            let doors = [];
-            for(let accesslevel of item.accesslevels){
-                if(!accesslevel.type || accesslevel.type!="door" || !accesslevel.door)continue;
-                doors.push(accesslevel.door);
-            }
-            let k=1;
-            for(let door of doors){
-                door.no = k++;
-            }
-            item.doors = doors;
-            item.doorcount = doors.length;
-            this.records.push(item);
-        }
-        
-    }
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          return(data.results);
+        }).catch(error => {
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          // Returning an empty array, allows table to correctly handle
+          // internal busy state in case of error
+          return []
+        })
+      }
+   
     async getMembers(permissions:any[]){
          let resp:any = await this.$server.R("/report/memberrecord" as any, {PermissionTable:permissions});
          return resp.results;
@@ -155,7 +177,7 @@ export default class QueryPermission extends Vue {
     created() {
         this.fields = [
             {
-                key: "no",
+                key: "index",
                 label: this._('w_Number')
             },
             {
@@ -178,7 +200,7 @@ export default class QueryPermission extends Vue {
         ];
         this.doorFields = [
             {
-                key: "no",
+                key: "index",
                 label: this._('w_Number')
             },
             {
@@ -188,7 +210,7 @@ export default class QueryPermission extends Vue {
         ];
         this.memberFields = [   
             {
-                key: "no",
+                key: "index",
                 label: this._('w_Number')
             },
             {
@@ -222,16 +244,15 @@ export default class QueryPermission extends Vue {
 
     }
 
-    async mounted() {
-        await this.getData();
+    mounted() {
+        
     }
 
-    async doFilter($event) {
-        console.log("filter", $event);
+    doFilter($event) {
+        console.log("doFilter", $event);
         this.filter = $event;
-        await this.getData();
+        (this.$refs.permTable as any).refresh();
     }
-
     
 
     filterInterface() {
