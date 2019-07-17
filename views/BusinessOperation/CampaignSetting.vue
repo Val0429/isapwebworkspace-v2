@@ -176,7 +176,7 @@ interface IinputFormData
     startDateText?: string;
     endDateText?: string;
     sites?: any;
-    year: string,
+    year: any,
 }
 
 enum EPageStep {
@@ -331,7 +331,7 @@ export default class CampaignSetting extends Vue {
                 siteIdsText: this.idsToText(param.sites),
                 sites: param.sites,
                 stepType: "",
-                year: param.year,
+                year: param.year.toString(),
             };
         }
     }
