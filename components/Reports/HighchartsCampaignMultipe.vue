@@ -154,7 +154,6 @@ export class HighchartsCampaignMultipe extends Vue {
                                 endIndex + 1
                             );
                             let newValue: any = JSON.parse(valueJson);
-                            console.log(newValue);
 
                             // set value
                             result += `${newValue.name}<br>`;
@@ -186,8 +185,23 @@ export class HighchartsCampaignMultipe extends Vue {
 
     private anysislyChartValueDefault(): any {
         let value: any = {
-            date: new Date()
+            name: "",
+            startDate: new Date(),
+            endDate: new Date(),
+            traffic: 0,
+            budget: 0
         };
+
+        value.i18n = this.i18nItem();
+        value.trafficGainPer = 0;
+        value.startDateString = Datetime.DateTime2String(
+            value.startDate,
+            HighchartsService.datetimeFormat.date
+        );
+        value.endDateString = Datetime.DateTime2String(
+            value.endDate,
+            HighchartsService.datetimeFormat.date
+        );
         return value;
     }
 
