@@ -2,7 +2,7 @@
     <div class="chart">
         <b-form-group>
             <highcharts
-                ref="chartMultipe"
+                ref="chartMultiple"
                 v-if="mountChart.campaignSingle"
                 :options="chartOptions.campaignSingle"
             ></highcharts>
