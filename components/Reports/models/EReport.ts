@@ -186,7 +186,7 @@ enum EDwellTimeRange {
 enum ECampaignTimeType {
     none = 'none',
     before = 'before',
-    inTime = 'inTime',
+    during = 'during',
     after = 'after',
 }
 

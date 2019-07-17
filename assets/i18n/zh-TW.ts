@@ -908,6 +908,9 @@ export default class LangObject implements ILang {
     w_ReportCampaign_Budget = 'Budget';
     w_ReportCampaign_TrafficGainPer = 'Traffic gain per$';
     w_ReportCampaign_TotalTraffic = 'Total Traffic';
+    w_ReportCampaign_CampaignBefore = 'Before Campaign';
+    w_ReportCampaign_CampaignDuring = 'During Campaign';
+    w_ReportCampaign_CampaignAfter = 'After Campaign';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';

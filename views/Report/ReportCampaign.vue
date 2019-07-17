@@ -250,7 +250,7 @@ export default class ReportCampaign extends Vue {
             } else if (i > campaignSingleTimeIndex3) {
                 tempItem.type = ECampaignTimeType.after;
             } else {
-                tempItem.type = ECampaignTimeType.inTime;
+                tempItem.type = ECampaignTimeType.during;
             }
             this.chartDatas.single.push(tempItem);
         }

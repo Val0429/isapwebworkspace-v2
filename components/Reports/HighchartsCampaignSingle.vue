@@ -80,15 +80,15 @@ export class HighchartsCampaignSingle extends Vue {
         let tempCategories: string[] = [];
         let tempSeries: any = [
             {
-                name: "Before Campaign",
+                name: this._('w_ReportCampaign_CampaignBefore'),
                 data: []
             },
             {
-                name: "During Campaign",
+                name: this._('w_ReportCampaign_CampaignDuring'),
                 data: []
             },
             {
-                name: "After Campaign",
+                name: this._('w_ReportCampaign_CampaignAfter'),
                 data: []
             }
         ];
@@ -110,8 +110,8 @@ export class HighchartsCampaignSingle extends Vue {
                             )
                         );
                         break;
-                    case ECampaignTimeType.inTime:
-                        tempCampaignTimeType = ECampaignTimeType.inTime;
+                    case ECampaignTimeType.during:
+                        tempCampaignTimeType = ECampaignTimeType.during;
                         tempSeries[0].data.push(tempItem.traffic);
                         tempSeries[1].data.push(tempItem.traffic);
                         tempSeries[2].data.push(null);
@@ -123,7 +123,7 @@ export class HighchartsCampaignSingle extends Vue {
                         );
                         break;
                     case ECampaignTimeType.after:
-                        tempCampaignTimeType = ECampaignTimeType.inTime;
+                        tempCampaignTimeType = ECampaignTimeType.during;
                         tempSeries[0].data.push(tempItem.traffic);
                         tempSeries[1].data.push(tempItem.traffic);
                         tempSeries[2].data.push(tempItem.traffic);
@@ -135,9 +135,9 @@ export class HighchartsCampaignSingle extends Vue {
                         );
                         break;
                 }
-            } else if (tempCampaignTimeType == ECampaignTimeType.inTime) {
+            } else if (tempCampaignTimeType == ECampaignTimeType.during) {
                 switch (tempItem.type) {
-                    case ECampaignTimeType.inTime:
+                    case ECampaignTimeType.during:
                         tempSeries[0].data.push(null);
                         tempSeries[1].data.push(tempItem.traffic);
                         tempSeries[2].data.push(null);
