@@ -217,8 +217,6 @@ export default class ReportHeatmap extends Vue {
     deviceSummaryFilter: any = [];
 
     // 時間一天
-    hourArray: any = [];
-    hourArrayData: string = "";
     slider: any = {};
     hour: string = '';
 
@@ -784,7 +782,6 @@ export default class ReportHeatmap extends Vue {
 
     initHourArray() {
 
-        // TODO: 整理OfficeHour，使用         HighchartsService.siteOfficeHour()
 
         let weekDay = new Date().getDay();
 
@@ -806,13 +803,6 @@ export default class ReportHeatmap extends Vue {
         let result = HighchartsService.siteOfficeHour(weekDay, dayRanges);
         console.log(result);
 
-        this.hourArray = [
-            "2019-07-01T16:00:00.000Z",
-            "2019-07-01T17:00:00.000Z",
-            "2019-07-01T18:00:00.000Z",
-            "2019-07-01T19:00:00.000Z"
-        ];
-
         this.slider = {
             value: 0,
             data: [],
@@ -827,10 +817,7 @@ export default class ReportHeatmap extends Vue {
             let hourString = i < 10 ? `0${i.toString()}` : i.toString();
             let tempLabel = { label: `${hourString}:00` };
 
-            console.log('tempLabel - ', tempLabel);
-
             tempRangeArray.push(tempLabel);
-
             tempDataArray.push(i)
         }
 
