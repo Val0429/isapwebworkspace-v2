@@ -1,7 +1,19 @@
 <template>
     <div class="animated fadeIn">
-        <div v-show="pageStep === ePageStep.none">
-            Campaign
+        <div>
+
+            <!-- Morris -->
+            <highcharts-campaign-multipe
+                v-if="chartMode.multiple"
+                :value="chartDatas.multiple"
+            >
+            </highcharts-campaign-multipe>
+
+            <highcharts-campaign-single
+                v-if="chartMode.single"
+                :value="chartDatas.single"
+            >
+            </highcharts-campaign-single>
         </div>
 
     </div>
@@ -10,21 +22,64 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
+import HighchartsCampaignMultipe from "@/components/Reports/HighchartsCampaignMultipe.vue";
+import HighchartsCampaignSingle from "@/components/Reports/HighchartsCampaignSingle.vue";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
 
-enum EPageStep {
-    none = "none"
-}
+import {
+    IChartCampaignMultipe,
+    IChartCampaignSingle
+} from "@/components/Reports";
 
 @Component({
-    components: {}
+    components: {
+        HighchartsCampaignMultipe,
+        HighchartsCampaignSingle
+    }
 })
 export default class ReportCampaign extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
+    chartMode: {
+        multiple: boolean;
+        single: boolean;
+    } = {
+        multiple: false,
+        single: false
+    };
+    chartDatas: {
+        multiple: IChartCampaignMultipe[];
+        single: IChartCampaignSingle[];
+    } = {
+        multiple: [],
+        single: []
+    };
 
-    created() {}
+    created() {
+        this.initChartDeveloper();
+    }
 
     mounted() {}
+
+    /////////////////////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        this.chartDatas.multiple = [];
+        this.chartDatas.single = [];
+
+        for (let i = 0; i < 10; i++) {
+            let tempItem: IChartCampaignMultipe = {
+                name: "Campaign " + i.toString(),
+                startDate: new Date(),
+                endDate: new Date(),
+                traffic: Math.floor(Math.random() * 300),
+                budget: Math.floor(Math.random() * 1000)
+            };
+            this.chartDatas.multiple.push(tempItem);
+        }
+
+        this.chartMode.multiple = true;
+        this.chartMode.single = true;
+    }
 }
 </script>
 

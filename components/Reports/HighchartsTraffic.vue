@@ -1,34 +1,39 @@
 <template>
     <div class="chart">
-        <b-form-group></b-form-group>
-        <!-- site1Day1 -->
-        <highcharts
-            ref="chartSite1Day1"
-            v-if="mountChart.site1Day1"
-            :options="chartOptions.site1Day1"
-        ></highcharts>
+        <b-form-group>
+            <b-row>
+                <b-col>
 
-        <!-- site1DayX -->
-        <highcharts
-            ref="chartSite1DayX"
-            v-if="mountChart.site1DayX"
-            :options="chartOptions.site1DayX"
-        ></highcharts>
+                    <!-- site1Day1 -->
+                    <highcharts
+                        ref="chartSite1Day1"
+                        v-if="mountChart.site1Day1"
+                        :options="chartOptions.site1Day1"
+                    ></highcharts>
 
-        <!-- siteXDay1 -->
-        <highcharts
-            ref="chartSiteXDay1"
-            v-if="mountChart.siteXDay1"
-            :options="chartOptions.siteXDay1"
-        ></highcharts>
+                    <!-- site1DayX -->
+                    <highcharts
+                        ref="chartSite1DayX"
+                        v-if="mountChart.site1DayX"
+                        :options="chartOptions.site1DayX"
+                    ></highcharts>
 
-        <!-- siteXDayX -->
-        <highcharts
-            ref="chartSiteXDayX"
-            v-if="mountChart.siteXDayX"
-            :options="chartOptions.siteXDayX"
-        ></highcharts>
+                    <!-- siteXDay1 -->
+                    <highcharts
+                        ref="chartSiteXDay1"
+                        v-if="mountChart.siteXDay1"
+                        :options="chartOptions.siteXDay1"
+                    ></highcharts>
 
+                    <!-- siteXDayX -->
+                    <highcharts
+                        ref="chartSiteXDayX"
+                        v-if="mountChart.siteXDayX"
+                        :options="chartOptions.siteXDayX"
+                    ></highcharts>
+
+                </b-col>
+            </b-row>
         </b-form-group>
     </div>
 </template>
@@ -1698,7 +1703,4 @@ Vue.component("highcharts-traffic", HighchartsTraffic);
 </script>
 
 <style lang="scss" scoped>
-.chart-error-message {
-    text-align: center;
-}
 </style>

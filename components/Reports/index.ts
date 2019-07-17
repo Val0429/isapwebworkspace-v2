@@ -19,3 +19,4 @@ export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem } from './mode
 export { IDayRange } from './models/IHighCharts';
 export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData } from './models/IHighCharts';
 export { IChartDwellTimeData } from './models/IHighCharts';
+export { IChartCampaignMultipe, IChartCampaignSingle } from './models/IHighCharts';

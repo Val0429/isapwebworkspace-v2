@@ -1262,7 +1262,4 @@ Vue.component("highcharts-occupancy", HighchartsOccupancy);
 </script>
 
 <style lang="scss" scoped>
-.chart-error-message {
-    text-align: center;
-}
 </style>

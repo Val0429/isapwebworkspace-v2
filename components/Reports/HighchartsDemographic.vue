@@ -1926,9 +1926,6 @@ Vue.component("highcharts-demographic", HighchartsDemographic);
 </script>
 
 <style lang="scss" scoped>
-.chart-error-message {
-    text-align: center;
-}
 .select-gender {
     height: 36px;
 }
