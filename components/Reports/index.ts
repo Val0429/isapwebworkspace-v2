@@ -13,7 +13,7 @@ export { ReportTableData } from './models/ReportTable';
 export { ReportDashboard } from './models/ReportDashboard';
 
 // HighCharts
-export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EDwellTimeRange } from './models/EReport';
+export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EDwellTimeRange, ECampaignTimeType } from './models/EReport';
 export { IValSelectItem, IBootstrapSelectItem } from './models/IHighCharts';
 export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem } from './models/IHighCharts';
 export { IDayRange } from './models/IHighCharts';

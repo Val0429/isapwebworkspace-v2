@@ -48,12 +48,13 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import HighchartsCampaignMultipe from "@/components/Reports/HighchartsCampaignMultipe.vue";
-import HighchartsCampaignSingle from "@/components/Reports/HighchartsCampaignSingle.vue";
+import HighchartsCampaignMultipe from "@/components/Reports/Highcharts/HighchartsCampaignMultipe.vue";
+import HighchartsCampaignSingle from "@/components/Reports/Highcharts/HighchartsCampaignSingle.vue";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
 
 import {
+    ECampaignTimeType,
     IChartCampaignMultiple,
     IChartCampaignSingle
 } from "@/components/Reports";
@@ -111,28 +112,6 @@ export default class ReportCampaign extends Vue {
     }
 
     mounted() {}
-
-    /////////////////////////////////////////////////////////////////////
-
-    // Author: Morris, Product remove
-    initChartDeveloper() {
-        this.chartDatas.multiple = [];
-        this.chartDatas.single = [];
-
-        for (let i = 0; i < 10; i++) {
-            let tempItem: IChartCampaignMultiple = {
-                name: "Campaign " + i.toString(),
-                startDate: new Date(),
-                endDate: new Date(),
-                traffic: Math.floor(Math.random() * 300),
-                budget: Math.floor(Math.random() * 1000)
-            };
-            this.chartDatas.multiple.push(tempItem);
-        }
-
-        this.chartMode.multiple = true;
-        this.chartMode.single = true;
-    }
 
     async initData() {
         this.initSelectYear();
@@ -227,6 +206,58 @@ export default class ReportCampaign extends Vue {
     resolveSummary() {}
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
+
+    /////////////////////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        let campaignMultipeTimeLength = 10;
+        let campaignSingleTimeLength = 30;
+
+        this.chartDatas.multiple = [];
+        this.chartDatas.single = [];
+
+        for (let i = 0; i < campaignMultipeTimeLength; i++) {
+            let tempItem: IChartCampaignMultiple = {
+                name: "Campaign " + i.toString(),
+                startDate: new Date(),
+                endDate: new Date(),
+                traffic: Math.floor(Math.random() * 300),
+                budget: Math.floor(Math.random() * 1000)
+            };
+            tempItem.startDate.setDate(
+                -Math.floor(Math.random() * i * campaignMultipeTimeLength) -
+                    (campaignMultipeTimeLength - i)
+            );
+            tempItem.endDate.setDate(
+                Math.floor(Math.random() * i * campaignMultipeTimeLength) -
+                    (campaignMultipeTimeLength - i)
+            );
+            this.chartDatas.multiple.push(tempItem);
+        }
+
+        for (let i = 0; i < campaignSingleTimeLength; i++) {
+            let tempItem: IChartCampaignSingle = {
+                type: ECampaignTimeType.none,
+                date: new Date(),
+                traffic: Math.floor(Math.random() * 300)
+            };
+            let campaignSingleTimeIndex1 = campaignSingleTimeLength / 3;
+            let campaignSingleTimeIndex3 = (campaignSingleTimeLength / 3) * 2;
+            tempItem.date.setDate(-(campaignSingleTimeLength - i));
+            if (i < campaignSingleTimeIndex1) {
+                tempItem.type = ECampaignTimeType.before;
+            } else if (i > campaignSingleTimeIndex3) {
+                tempItem.type = ECampaignTimeType.after;
+            } else {
+                tempItem.type = ECampaignTimeType.during;
+            }
+            this.chartDatas.single.push(tempItem);
+        }
+
+        this.chartMode.multiple = true;
+        this.chartMode.single = true;
+    }
 }
 </script>
 

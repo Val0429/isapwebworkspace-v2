@@ -1,6 +1,5 @@
 import { EWeather, ETimeMode, EAreaMode, EAgeRange } from '../';
-import { EDwellTimeRange } from '../';
-import { EBusinessChart } from './EReport';
+import { EDwellTimeRange, EBusinessChart, ECampaignTimeType } from '../';
 
 interface IValSelectItem {
     id: string;
@@ -139,7 +138,14 @@ interface IChartCampaignMultiple {
     endDateString?: string;
 }
 
-interface IChartCampaignSingle {}
+interface IChartCampaignSingle {
+    type: ECampaignTimeType;
+    date: Date;
+    traffic: number;
+
+    i18n?: any;
+    dateString?: string;
+}
 
 export { IValSelectItem, IBootstrapSelectItem };
 export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem };

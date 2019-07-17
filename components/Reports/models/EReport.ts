@@ -183,4 +183,11 @@ enum EDwellTimeRange {
     upper120 = 'upper120',
 }
 
-export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EDwellTimeRange };
+enum ECampaignTimeType {
+    none = 'none',
+    before = 'before',
+    during = 'during',
+    after = 'after',
+}
+
+export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EDwellTimeRange, ECampaignTimeType };
