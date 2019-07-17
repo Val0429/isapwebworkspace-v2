@@ -72,6 +72,17 @@
                 @submit="saveAddOrEdit($event)"
             >
 
+                <template #year="{$attrs, $listeners}">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.year"
+                        :multiple="false"
+                        :options="yearSelectItem"
+                    >
+                    </iv-form-selection>
+                </template>
+
                 <template #selectTree="{ $attrs, $listeners }">
 
                     <div class="mt-2 ml-3">
@@ -165,6 +176,7 @@ interface IinputFormData
     startDateText?: string;
     endDateText?: string;
     sites?: any;
+    year: string,
 }
 
 enum EPageStep {
@@ -190,6 +202,7 @@ export default class CampaignSetting extends Vue {
     selectedDetail: any = [];
 
     sitesSelectItem: any = {};
+    yearSelectItem: any = [];
 
     // tree 相關
     selectType = ERegionType.site;
@@ -208,12 +221,14 @@ export default class CampaignSetting extends Vue {
         stepType: "",
         siteIdsText: "",
         startDateText: "",
-        endDateText: ""
+        endDateText: "",
+        year: new Date().getFullYear().toString(),
     };
 
     created() {}
 
-    mounted() {}
+    mounted() {
+    }
 
     clearInputData() {
         this.inputFormData = {
@@ -228,7 +243,8 @@ export default class CampaignSetting extends Vue {
             stepType: "",
             siteIdsText: "",
             startDateText: "",
-            endDateText: ""
+            endDateText: "",
+            year: new Date().getFullYear().toString(),
         };
     }
 
@@ -289,6 +305,10 @@ export default class CampaignSetting extends Vue {
             });
     }
 
+    initYear() {
+        this.yearSelectItem = Datetime.FiveYearsIdText();
+    }
+
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
@@ -310,7 +330,8 @@ export default class CampaignSetting extends Vue {
                 type: param.type,
                 siteIdsText: this.idsToText(param.sites),
                 sites: param.sites,
-                stepType: ""
+                stepType: "",
+                year: param.year,
             };
         }
     }
@@ -359,6 +380,7 @@ export default class CampaignSetting extends Vue {
     async pageToAdd(stepType: string) {
         this.pageStep = EPageStep.add;
         this.clearInputData();
+        this.initYear();
         await this.initSelectItemSite();
 
         this.selecteds = [];
@@ -368,9 +390,11 @@ export default class CampaignSetting extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
         this.getInputData();
+        this.initYear();
         await this.initSelectItemSite();
 
         this.inputFormData.stepType = stepType;
+        this.inputFormData.year = this.inputFormData.year.toString();
 
         this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
@@ -432,6 +456,7 @@ export default class CampaignSetting extends Vue {
     }
 
     async saveAddOrEdit(data) {
+
         if (this.inputFormData.stepType === EPageStep.add) {
             const datas: any = [
                 {
@@ -441,7 +466,8 @@ export default class CampaignSetting extends Vue {
                     description: data.description,
                     startDate: Datetime.DateToZero(data.startDate).toISOString(),
                     endDate: Datetime.DateToZero(data.endDate).toISOString(),
-                    siteIds: data.siteIds !== undefined ? data.siteIds : []
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    year: parseInt(this.inputFormData.year)
                 }
             ];
 
@@ -486,7 +512,8 @@ export default class CampaignSetting extends Vue {
                     description: data.description,
                     startDate: Datetime.DateToZero(data.startDate).toISOString(),
                     endDate: Datetime.DateToZero(data.endDate).toISOString(),
-                    siteIds: data.siteIds !== undefined ? data.siteIds : []
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    year: parseInt(this.inputFormData.year)
                 }
             ];
 
@@ -683,6 +710,12 @@ export default class CampaignSetting extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_BOCampaign_FiscalYear")}
+                 */
+                year: any;
+
+
+                /**
                 * @uiLabel - ${this._("w_BOCampaign_StartDate")}
                 * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
                 * @uiType - iv-form-date
@@ -743,6 +776,13 @@ export default class CampaignSetting extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_BOCampaign_FiscalYear")}
+                 * @uiType - iv-form-label
+                 */
+                year?: number;
+
+
+               /**
                 * @uiLabel - ${this._("w_BOCampaign_StartDate")}
                 * @uiType - iv-form-label
                 */

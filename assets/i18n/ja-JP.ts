@@ -682,6 +682,7 @@ export default class LangObject implements ILang {
     w_BOCampaign_StartDate = 'Start Date';
     w_BOCampaign_FinishDate = 'Finish Date';
     w_BOCampaign_Budget = 'Budget';
+    w_BOCampaign_FiscalYear = 'Fiscal Year';
 
     w_BOCampaign_AddSuccess = 'Campaign add success.';
     w_BOCampaign_ADDFailed = 'Campaign add failed, please try again.';
@@ -983,4 +984,16 @@ export default class LangObject implements ILang {
     w_VIPAndBlackList_VisitTime = 'VisitTime';
     w_VIPAndBlackList_DwellTime = 'DwellTime(minute)';
     w_VIPAndBlackList_LatestVisits = 'LatestVisits(1 Month)';
+
+    //Campaign
+    w_Campaign_BeforeCampaign = 'Before Campaign';
+    w_Campaign_DuringCampaign = 'During Campaign';
+    w_Campaign_AfterCampaign = 'After Campaign';
+    w_Campaign_ChangeDuringCampaign = '% Change During Campaign';
+    w_Campaign_ChangeAfterCampaign = '% Change After Campaign';
+    w_Campaign_Event = 'Event';
+    w_Campaign_Period = 'Period';
+    w_Campaign_Budget = 'Budget';
+    w_Campaign_BudgetPercentage = 'Budget %';
+    w_Campaign_TrafficGainPer = 'Traffic gain per $';
 }
