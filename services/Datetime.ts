@@ -12,6 +12,10 @@ class Datetime {
 
     private _oneDayTimestamp = 86400000;
 
+    get oneDayTimestamp() {
+        return this._oneDayTimestamp;
+    }
+
     /**
      * Convert date to format string like C#
      * @param dateTime
@@ -678,7 +682,6 @@ class Datetime {
 
     // 以今年為基準，取得前後五年，2019 --> 2014-2024
     FiveYearsIdText(): any {
-
         let tempYearArray = [];
 
         for (let i = 0; i < 6; i++) {
@@ -686,23 +689,22 @@ class Datetime {
 
             let tempYearReduce = {
                 id: (year - i).toString(),
-                text: (year - i).toString()
+                text: (year - i).toString(),
             };
 
             let tempYearAdd = {
                 id: (year + i).toString(),
-                text: (year + i).toString()
+                text: (year + i).toString(),
             };
 
             tempYearArray.push(tempYearAdd, tempYearReduce);
         }
 
-        let resultYearArray = [...new Set(tempYearArray.map(item => JSON.stringify(item)))].map(item => JSON.parse(item));
+        let resultYearArray = [...new Set(tempYearArray.map((item) => JSON.stringify(item)))].map((item) => JSON.parse(item));
 
         resultYearArray = resultYearArray.sort((a, b) => a.id - b.id);
 
         return resultYearArray;
-
     }
 }
 

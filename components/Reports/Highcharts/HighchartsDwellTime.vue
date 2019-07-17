@@ -611,7 +611,7 @@ export class HighchartsDwellTime extends Vue {
             Math.floor(
                 Math.abs(
                     sortDate.startDate.getTime() - sortDate.endDate.getTime()
-                ) / 86400000
+                ) / Datetime.oneDayTimestamp
             ) + 1;
 
         while (
@@ -1164,7 +1164,7 @@ export class HighchartsDwellTime extends Vue {
         let dateGap: number = Math.ceil(
             Math.abs(
                 sortDate.startDate.getTime() - sortDate.endDate.getTime()
-            ) / 86400000
+            ) / Datetime.oneDayTimestamp
         );
 
         while (

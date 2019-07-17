@@ -375,7 +375,7 @@ export class HighchartsOccupancy extends Vue {
         let dateGap: number = Math.ceil(
             Math.abs(
                 sortDate.startDate.getTime() - sortDate.endDate.getTime()
-            ) / 86400000
+            ) / Datetime.oneDayTimestamp
         );
 
         while (
@@ -753,7 +753,7 @@ export class HighchartsOccupancy extends Vue {
         let dateGap: number = Math.ceil(
             Math.abs(
                 sortDate.startDate.getTime() - sortDate.endDate.getTime()
-            ) / 86400000
+            ) / Datetime.oneDayTimestamp
         );
 
         while (

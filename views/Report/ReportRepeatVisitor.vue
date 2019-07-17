@@ -1364,7 +1364,7 @@ export default class ReportRepeatVisitor extends Vue {
         this.startDate = new Date("2019-07-01T08:00:00.000Z");
         this.endDate = new Date("2019-07-01T14:00:00.000Z");
 
-        // multipe day
+        // Multiple day
         this.startDate = new Date("2019-06-20T08:00:00.000Z");
         this.endDate = new Date("2019-08-10T14:00:00.000Z");
 

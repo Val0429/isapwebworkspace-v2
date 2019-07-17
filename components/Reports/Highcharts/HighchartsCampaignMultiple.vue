@@ -1,12 +1,12 @@
 <template>
     <div class="chart">
-        <b-form-group :label="_('w_ReportCampaign_MultipeLabel')">
+        <b-form-group :label="_('w_ReportCampaign_MultipleLabel')">
             <b-row>
                 <b-col>
                     <highcharts
-                        ref="chartMultipe"
-                        v-if="mountChart.campaignMultipe"
-                        :options="chartOptions.campaignMultipe"
+                        ref="chartMultiple"
+                        v-if="mountChart.campaignMultiple"
+                        :options="chartOptions.campaignMultiple"
                     ></highcharts>
                 </b-col>
             </b-row>
@@ -35,35 +35,35 @@ Vue.use(HighchartsVue);
 import Datetime from "@/services/Datetime";
 import HighchartsService from "../models/HighchartsService";
 import { ETimeMode } from "../";
-import { IChartCampaignMultipe } from "../";
+import { IChartCampaignMultiple } from "../";
 
 @Component({
     components: {}
 })
-export class HighchartsCampaignMultipe extends Vue {
+export class HighchartsCampaignMultiple extends Vue {
     @Prop({
         type: Array,
         default: function() {
             return [];
         }
     })
-    value: IChartCampaignMultipe[];
+    value: IChartCampaignMultiple[];
 
     mountChart: {
-        campaignMultipe: boolean;
+        campaignMultiple: boolean;
     } = {
-        campaignMultipe: false
+        campaignMultiple: false
     };
     chartOptions: {
-        campaignMultipe: object;
+        campaignMultiple: object;
     } = {
-        campaignMultipe: {}
+        campaignMultiple: {}
     };
 
     @Watch("value", { deep: true })
     private onValueChanged(
-        newval: IChartCampaignMultipe[],
-        oldval: IChartCampaignMultipe[]
+        newval: IChartCampaignMultiple[],
+        oldval: IChartCampaignMultiple[]
     ) {
         this.start();
     }
@@ -75,12 +75,12 @@ export class HighchartsCampaignMultipe extends Vue {
     mounted() {}
 
     start() {
-        this.initCampaignMultipeChart();
+        this.initCampaignMultipleChart();
         console.log(this.value);
     }
 
-    initCampaignMultipeChart() {
-        let tempValues: IChartCampaignMultipe[] = JSON.parse(
+    initCampaignMultipleChart() {
+        let tempValues: IChartCampaignMultiple[] = JSON.parse(
             JSON.stringify(this.value)
         );
         let tempCategories: string[] = [];
@@ -107,7 +107,7 @@ export class HighchartsCampaignMultipe extends Vue {
             );
         }
 
-        this.chartOptions.campaignMultipe = {
+        this.chartOptions.campaignMultiple = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -178,7 +178,7 @@ export class HighchartsCampaignMultipe extends Vue {
             series: tempSeries
         };
 
-        this.mountChart.campaignMultipe = true;
+        this.mountChart.campaignMultiple = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,8 +206,8 @@ export class HighchartsCampaignMultipe extends Vue {
     }
 
     private anysislyChartValue(
-        item: IChartCampaignMultipe
-    ): IChartCampaignMultipe {
+        item: IChartCampaignMultiple
+    ): IChartCampaignMultiple {
         let value = JSON.parse(JSON.stringify(item));
         value.startDate = new Date(value.startDate);
         value.endDate = new Date(value.endDate);
@@ -248,8 +248,8 @@ export class HighchartsCampaignMultipe extends Vue {
     }
 }
 
-export default HighchartsCampaignMultipe;
-Vue.component("highcharts-campaign-multipe", HighchartsCampaignMultipe);
+export default HighchartsCampaignMultiple;
+Vue.component("highcharts-campaign-multiple", HighchartsCampaignMultiple);
 </script>
 
 <style lang="scss" scoped>

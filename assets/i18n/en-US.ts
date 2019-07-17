@@ -905,7 +905,7 @@ export default class LangObject {
     w_ReportRepeatVisitor_NumberOfVisit = 'Number of Visit ';
 
     // Report Campaign
-    w_ReportCampaign_MultipeLabel = 'Budget vs Traffic gain';
+    w_ReportCampaign_MultipleLabel = 'Budget vs Traffic gain';
     w_ReportCampaign_Traffic = 'Traffic';
     w_ReportCampaign_Budget = 'Budget';
     w_ReportCampaign_TrafficGainPer = 'Traffic gain per$';

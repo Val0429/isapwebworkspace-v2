@@ -20,11 +20,11 @@
             </template>
 
             <!-- Morris -->
-            <highcharts-campaign-multipe
+            <highcharts-campaign-multiple
                 v-if="chartMode.multiple"
                 :value="chartDatas.multiple"
             >
-            </highcharts-campaign-multipe>
+            </highcharts-campaign-multiple>
 
             <highcharts-campaign-single
                 v-if="chartMode.single"
@@ -48,7 +48,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import HighchartsCampaignMultipe from "@/components/Reports/Highcharts/HighchartsCampaignMultipe.vue";
+import HighchartsCampaignMultiple from "@/components/Reports/Highcharts/HighchartsCampaignMultiple.vue";
 import HighchartsCampaignSingle from "@/components/Reports/Highcharts/HighchartsCampaignSingle.vue";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
@@ -61,7 +61,7 @@ import {
 
 @Component({
     components: {
-        HighchartsCampaignMultipe,
+        HighchartsCampaignMultiple,
         HighchartsCampaignSingle
     }
 })
@@ -211,13 +211,13 @@ export default class ReportCampaign extends Vue {
 
     // Author: Morris, Product remove
     initChartDeveloper() {
-        let campaignMultipeTimeLength = 10;
+        let campaignMultipleTimeLength = 10;
         let campaignSingleTimeLength = 30;
 
         this.chartDatas.multiple = [];
         this.chartDatas.single = [];
 
-        for (let i = 0; i < campaignMultipeTimeLength; i++) {
+        for (let i = 0; i < campaignMultipleTimeLength; i++) {
             let tempItem: IChartCampaignMultiple = {
                 name: "Campaign " + i.toString(),
                 startDate: new Date(),
@@ -226,12 +226,12 @@ export default class ReportCampaign extends Vue {
                 budget: Math.floor(Math.random() * 1000)
             };
             tempItem.startDate.setDate(
-                -Math.floor(Math.random() * i * campaignMultipeTimeLength) -
-                    (campaignMultipeTimeLength - i)
+                -Math.floor(Math.random() * i * campaignMultipleTimeLength) -
+                    (campaignMultipleTimeLength - i)
             );
             tempItem.endDate.setDate(
-                Math.floor(Math.random() * i * campaignMultipeTimeLength) -
-                    (campaignMultipeTimeLength - i)
+                Math.floor(Math.random() * i * campaignMultipleTimeLength) -
+                    (campaignMultipleTimeLength - i)
             );
             this.chartDatas.multiple.push(tempItem);
         }
