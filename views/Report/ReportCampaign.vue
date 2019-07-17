@@ -10,21 +10,29 @@
         >
         </filter-condition-campaign>
 
-        <div v-show="pageStep === ePageStep.none">
+        <iv-card>
+            <template #toolbox>
+                <!-- Tina -->
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+            </template>
 
-            <iv-card>
+            <!-- Morris -->
+            <highcharts-campaign-multipe
+                v-if="chartMode.multiple"
+                :value="chartDatas.multiple"
+            >
+            </highcharts-campaign-multipe>
 
-                <template #toolbox>
-                    <!-- Tina -->
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                </template>
+            <highcharts-campaign-single
+                v-if="chartMode.single"
+                :value="chartDatas.single"
+            >
+            </highcharts-campaign-single>
 
-
-            </iv-card>
-        </div>
+        </iv-card>
 
         <!-- Tina -->
         <recipient
@@ -40,18 +48,37 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import ResponseFilter from '@/services/ResponseFilter';
+import HighchartsCampaignMultipe from "@/components/Reports/HighchartsCampaignMultipe.vue";
+import HighchartsCampaignSingle from "@/components/Reports/HighchartsCampaignSingle.vue";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import ResponseFilter from "@/services/ResponseFilter";
 
-enum EPageStep {
-    none = "none"
-}
+import {
+    IChartCampaignMultipe,
+    IChartCampaignSingle
+} from "@/components/Reports";
 
 @Component({
-    components: {}
+    components: {
+        HighchartsCampaignMultipe,
+        HighchartsCampaignSingle
+    }
 })
 export default class ReportCampaign extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
+    chartMode: {
+        multiple: boolean;
+        single: boolean;
+    } = {
+        multiple: false,
+        single: false
+    };
+    chartDatas: {
+        multiple: IChartCampaignMultipe[];
+        single: IChartCampaignSingle[];
+    } = {
+        multiple: [],
+        single: []
+    };
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -71,18 +98,41 @@ export default class ReportCampaign extends Vue {
     campaignSiteSelectItem: any = {};
 
     inputFormData: any = {
-        year: '',
+        year: "",
         campaignIds: [],
-        siteIds: [],
+        siteIds: []
     };
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
     created() {
         this.initData();
+        this.initChartDeveloper();
     }
 
     mounted() {}
+
+    /////////////////////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        this.chartDatas.multiple = [];
+        this.chartDatas.single = [];
+
+        for (let i = 0; i < 10; i++) {
+            let tempItem: IChartCampaignMultipe = {
+                name: "Campaign " + i.toString(),
+                startDate: new Date(),
+                endDate: new Date(),
+                traffic: Math.floor(Math.random() * 300),
+                budget: Math.floor(Math.random() * 1000)
+            };
+            this.chartDatas.multiple.push(tempItem);
+        }
+
+        this.chartMode.multiple = true;
+        this.chartMode.single = true;
+    }
 
     async initData() {
         this.initSelectYear();
@@ -104,7 +154,7 @@ export default class ReportCampaign extends Vue {
                         // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
                             returnValue.objectId
-                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
                 }
@@ -121,15 +171,15 @@ export default class ReportCampaign extends Vue {
     initSelectYear() {
         this.yearSelectItem = {
             "2019": "2019",
-            "2020": "2020",
-        }
+            "2020": "2020"
+        };
     }
 
     async initSelectCampaign() {
         this.campaignSelectItem = {
             MMsKioPy3X: "聖誕節",
-            k6H0cOOLXe: "母親節",
-        }
+            k6H0cOOLXe: "母親節"
+        };
     }
 
     async initSelectCampaignStore() {}
@@ -137,8 +187,11 @@ export default class ReportCampaign extends Vue {
     async receiveYearCampaign(year, campaignIds) {
         this.inputFormData.year = year;
         this.inputFormData.campaignIds = campaignIds;
-        console.log('this.inputFormData.year - ', this.inputFormData.year);
-        console.log('this.inputFormData.campaignIds - ', this.inputFormData.campaignIds);
+        console.log("this.inputFormData.year - ", this.inputFormData.year);
+        console.log(
+            "this.inputFormData.campaignIds - ",
+            this.inputFormData.campaignIds
+        );
     }
 
     async receiveUserData(data) {

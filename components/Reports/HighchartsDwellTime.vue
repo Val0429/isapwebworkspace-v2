@@ -1,8 +1,6 @@
 <template>
     <div class="chart">
-
         <b-form-group>
-
             <b-row>
                 <b-col cols='12'>
                     <b-form-group :label="'Demographic by Gender'"></b-form-group>
@@ -1924,9 +1922,6 @@ Vue.component("highcharts-dwell-time", HighchartsDwellTime);
 </script>
 
 <style lang="scss" scoped>
-.chart-error-message {
-    text-align: center;
-}
 .select-gender {
     height: 36px;
 }

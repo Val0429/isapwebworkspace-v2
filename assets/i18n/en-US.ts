@@ -902,6 +902,13 @@ export default class LangObject {
     // Report Repeat Visitor
     w_ReportRepeatVisitor_NumberOfVisit = 'Number of Visit ';
 
+    // Report Campaign
+    w_ReportCampaign_MultipeLabel = 'Budget vs Traffic gain';
+    w_ReportCampaign_Traffic = 'Traffic';
+    w_ReportCampaign_Budget = 'Budget';
+    w_ReportCampaign_TrafficGainPer = 'Traffic gain per$';
+    w_ReportCampaign_TotalTraffic = 'Total Traffic';
+
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
     w_ReportTemplate_Add = 'Add Report Template';

@@ -1000,7 +1000,4 @@ Vue.component("highcharts-repeat-visitor", HighchartsRepeatVisitor);
 </script>
 
 <style lang="scss" scoped>
-.chart-error-message {
-    text-align: center;
-}
 </style>

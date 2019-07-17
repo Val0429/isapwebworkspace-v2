@@ -113,13 +113,13 @@ $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
 // $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
 // Demo
-$({ path: '/demos', name: 'Demo', icon: 'fa-check', redirect: '/demos/region-tree-select' })();
-$({ path: '/demos/region-tree-select', name: 'Region Tree Select', icon: 'fa-check', permission: false })(DemoRegionTreeSelect);
-$({ path: '/demos/image-map', name: 'ImageMap', icon: 'fa-check', permission: false })(DemoImageMap);
-$({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(DemoROI);
-$({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
-$({ path: '/demos/sort_select', name: 'Sort Select', icon: 'fa-check', permission: false })(DemoSortSelect);
-$({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component', icon: 'fa-check' })(DemoFilterConditionComponent);
+$({ path: '/demos', name: 'Demo', redirect: '/demos/region-tree-select' })();
+$({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: false })(DemoRegionTreeSelect);
+$({ path: '/demos/image-map', name: 'ImageMap', permission: false })(DemoImageMap);
+$({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
+$({ path: '/demos/dialog', name: 'Dialog', permission: false })(DemoDialog);
+$({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
+$({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component' })(DemoFilterConditionComponent);
 
 // Dashboard
 $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();
