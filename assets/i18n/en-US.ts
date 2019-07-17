@@ -620,4 +620,11 @@ export default class LangObject {
     w_QueryPermission = "Query Permission";
     w_Member_Count = "Member Count";
     w_Number = "Number";
+    w_Error_PleaseContactAdmin = "Please contact admin";
+
+    w_DeviceType = "Device Type";
+                
+    w_DeviceArea="Device Area";
+    w_TimeFormat = "TimeFormat";
+    w_Action="Action";
 }

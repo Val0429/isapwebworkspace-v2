@@ -12,9 +12,9 @@ export default class LangObject implements ILang {
     w_Password = '密碼';
     w_Selection = '';
     w_Multi = '';
-    w_UserPermission="人員權限";
-    w_UserPermissionAdd="新增人員權限";
-    w_UserPermissionEdit="編輯人員權限";
+    w_UserPermission="角色權限管理";
+    w_UserPermissionAdd="新增角色權限";
+    w_UserPermissionEdit="編輯角色權限";
     w_Username = '使用者名稱';
     w_Roles = '角色';    
     w_ApiRoles = "角色";
@@ -117,7 +117,7 @@ export default class LangObject implements ILang {
     w_Floor = '樓層';
     w_FloorAdd = '新增樓層';
     w_FloorEdit = '編輯樓層';
-    name = 'Name';
+    name = '名稱';
     image = 'Image';
 
     floorid = '樓層 ID';
@@ -191,7 +191,7 @@ export default class LangObject implements ILang {
     w_SiteTreeSelect = 'Site Tree Select';
     w_Brand = 'Brand';
     w_Model = 'Model';
-    w_DeviceName = 'Device Name';
+    w_DeviceName = '裝置名稱';
     w_DeviceGroups = 'Device Group(s)';
     w_Hanwha = 'Hanwha';
     w_iSapFRS = 'FRS';
@@ -231,13 +231,13 @@ export default class LangObject implements ILang {
     // common
     w_Interval="間隔";
     w_ColumnSelection ="Column Selection";
-    w_Filter = "篩選";
+    w_Filter = "搜尋";
     w_Error = '錯誤';
     w_NextPage = '下一步';
     w_PreviousPage = '上一步';
     w_Clear = 'Clear';
     w_Unlink = 'Unlink';
-    w_Search = 'Search';
+    w_Search = '搜尋';
     w_No = 'No';
     w_Edit = 'Edit';
     w_View = 'View';
@@ -430,8 +430,8 @@ export default class LangObject implements ILang {
     w_Navigation_Users = 'Users';
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
-    w_Navigation_Site = 'Site';
-    w_Navigation_Region = 'Region';
+    w_Navigation_Site = '站點';
+    w_Navigation_Region = '地區';
 
     // Member
     w_Member_List = '人員管理';
@@ -613,10 +613,17 @@ export default class LangObject implements ILang {
     w_License_Step1_mac = '新增憑證金鑰及MAC位址';
     w_License_Step1_offline = '離線上傳憑證金鑰';
 
-    w_Manual_Sync = "Manual Sync";
-    w_Not_Selected = "Not Specified";
+    w_Manual_Sync = "手動同步讀卡機";
+    w_Not_Selected = "不限";
     w_RedirectToLoginMessage = "因閒置過久已被登出，請重新登入";
-    w_QueryPermission = "Query Permission";
-    w_Member_Count = "Member Count";
+    w_QueryPermission = "許可表查詢";
+    w_Member_Count = "人員數量";
     w_Number = "序號";
+    w_Error_PleaseContactAdmin = "請聯絡系統管理員";
+
+    w_DeviceType = "裝置類型";
+                
+    w_DeviceArea="裝置區域";
+    w_TimeFormat = "時間格式";
+    w_Action="Action";
 }

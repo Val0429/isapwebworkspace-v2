@@ -309,13 +309,7 @@ export default class PermissionTable extends Vue {
     isSelected: any = [];
     selectedDetail: any = [];
     inputFormData: any = {
-        title: [
-            "Device Type",
-            "Device Name",
-            "Device Area",
-            "Time Format",
-            "Action"
-        ],
+        title: [],
         id: "",
         permissionName: "",
         deviceType: "door",
@@ -371,11 +365,11 @@ export default class PermissionTable extends Vue {
     clearInputFormData() {
         this.inputFormData = {
             title: [
-                "Device Type",
-                "Device Name",
-                "Device Area",
-                "Time Format",
-                "Action"
+                this._("w_DeviceType"),
+                this._("w_DeviceName"),
+                this._("w_DeviceArea"),
+                this._("w_TimeFormat"),
+                this._("w_Action")
             ],
             id: "",
             permissionName: "",
