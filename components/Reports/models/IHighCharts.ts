@@ -126,7 +126,7 @@ interface IChartRepeatVisitorData extends IChart {
     femaleCountPercent?: number;
 }
 
-interface IChartCampaignMultipe {
+interface IChartCampaignMultiple {
     name: string;
     startDate: Date;
     endDate: Date;
@@ -146,4 +146,4 @@ export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem };
 export { IDayRange };
 export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData };
 export { IChartDwellTimeData };
-export { IChartCampaignMultipe, IChartCampaignSingle };
+export { IChartCampaignMultiple, IChartCampaignSingle };

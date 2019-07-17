@@ -54,7 +54,7 @@ import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
 
 import {
-    IChartCampaignMultipe,
+    IChartCampaignMultiple,
     IChartCampaignSingle
 } from "@/components/Reports";
 
@@ -73,7 +73,7 @@ export default class ReportCampaign extends Vue {
         single: false
     };
     chartDatas: {
-        multiple: IChartCampaignMultipe[];
+        multiple: IChartCampaignMultiple[];
         single: IChartCampaignSingle[];
     } = {
         multiple: [],
@@ -120,7 +120,7 @@ export default class ReportCampaign extends Vue {
         this.chartDatas.single = [];
 
         for (let i = 0; i < 10; i++) {
-            let tempItem: IChartCampaignMultipe = {
+            let tempItem: IChartCampaignMultiple = {
                 name: "Campaign " + i.toString(),
                 startDate: new Date(),
                 endDate: new Date(),
