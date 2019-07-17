@@ -1,5 +1,5 @@
 <template>
-    <div class="animated fadeIn center">
+    <div class="animated fadeIn">
         <div class="card-content">
             <div
                 class="form-group col-md-12"
@@ -10,7 +10,6 @@
                     style="position:absolute;"
                     ref="heatmap"
                 >
-
                     <canvas
                         style="position:relative; opacity:1.0;"
                         ref="snapshot"
@@ -78,9 +77,9 @@ export class CameraHeatmap extends Vue {
         var max = 0;
         var width = 600;
         var height = 400;
-        var len = 200;
+        var len = 500;
         while (len--) {
-            var val = Math.floor(Math.random() * 10);
+            var val = Math.floor(Math.random() * 100);
             max = Math.max(max, val);
             var point = {
                 x: Math.floor(Math.random() * width),
@@ -131,13 +130,5 @@ Vue.component("camera-heatmap", CameraHeatmap);
 .canvas-div {
     width: 600;
     height: 400;
-}
-
-.center {
-    margin: 0px auto;
-}
-
-.heatmap-canvas {
-    opacity: 0.5;
 }
 </style>
