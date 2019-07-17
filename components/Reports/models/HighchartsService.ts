@@ -11,6 +11,50 @@ class HighchartsService {
         time: 'HH:mm',
     };
 
+    ageRangeListAsc(self: any): string[] {
+        let result: string[] = [];
+        result.push(self._('w_Report_AgeRangeLower20'));
+        result.push(self._('w_Report_AgeRangeM21_30'));
+        result.push(self._('w_Report_AgeRangeM31_40'));
+        result.push(self._('w_Report_AgeRangeM41_50'));
+        result.push(self._('w_Report_AgeRangeM51_60'));
+        result.push(self._('w_Report_AgeRangeUpper61'));
+        return result;
+    }
+
+    ageRangeListDesc(self: any): string[] {
+        let result: string[] = [];
+        result.push(self._('w_Report_AgeRangeUpper61'));
+        result.push(self._('w_Report_AgeRangeM51_60'));
+        result.push(self._('w_Report_AgeRangeM41_50'));
+        result.push(self._('w_Report_AgeRangeM31_40'));
+        result.push(self._('w_Report_AgeRangeM21_30'));
+        result.push(self._('w_Report_AgeRangeLower20'));
+        return result;
+    }
+
+    personCountRangeListAsc(self: any): string[] {
+        let result: string[] = [];
+        result.push(self._('w_Report_DwellTimeRangeLower5'));
+        result.push(self._('w_Report_DwellTimeRangeM5_15'));
+        result.push(self._('w_Report_DwellTimeRangeM15_30'));
+        result.push(self._('w_Report_DwellTimeRangeM30_60'));
+        result.push(self._('w_Report_DwellTimeRangeM60_120'));
+        result.push(self._('w_Report_DwellTimeRangeUpper120'));
+        return result;
+    }
+
+    personCountRangeListDesc(self: any): string[] {
+        let result: string[] = [];
+        result.push(self._('w_Report_DwellTimeRangeUpper120'));
+        result.push(self._('w_Report_DwellTimeRangeM60_120'));
+        result.push(self._('w_Report_DwellTimeRangeM30_60'));
+        result.push(self._('w_Report_DwellTimeRangeM15_30'));
+        result.push(self._('w_Report_DwellTimeRangeM5_15'));
+        result.push(self._('w_Report_DwellTimeRangeLower5'));
+        return result;
+    }
+
     categoriesQuarter(date: Date): string {
         let result = '';
         let quarterNumber = Datetime.QuarterNumber(date);

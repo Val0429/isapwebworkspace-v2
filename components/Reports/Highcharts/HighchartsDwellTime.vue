@@ -54,7 +54,7 @@
                 <b-col cols="6">
                     <highcharts
                         ref="chartAge"
-                        v-if="mountChart.age"
+                        v-if="mountChart.percentage"
                         :options="chartOptions.percentage"
                     ></highcharts>
                 </b-col>
@@ -233,10 +233,10 @@ export class HighchartsDwellTime extends Vue {
     };
 
     selection: { dwellTimeRange: EDwellTimeRange } = {
-        dwellTimeRange: EDwellTimeRange.none
+        dwellTimeRange: EDwellTimeRange.all
     };
     selectItem: {
-        dwellTimeRange: IBootstrapSelectItem[];
+        dwellTimeRange: IValSelectItem[];
     } = {
         dwellTimeRange: []
     };
@@ -270,31 +270,31 @@ export class HighchartsDwellTime extends Vue {
     initSelectItem() {
         this.selectItem.dwellTimeRange = [
             {
-                value: EDwellTimeRange.all,
+                id: EDwellTimeRange.all,
                 text: this._("w_Report_DwellTimeRangeAll")
             },
             {
-                value: EDwellTimeRange.lower5,
+                id: EDwellTimeRange.lower5,
                 text: this._("w_Report_DwellTimeRangeLower5")
             },
             {
-                value: EDwellTimeRange.m5_15,
+                id: EDwellTimeRange.m5_15,
                 text: this._("w_Report_DwellTimeRangeM5_15")
             },
             {
-                value: EDwellTimeRange.m15_30,
+                id: EDwellTimeRange.m15_30,
                 text: this._("w_Report_DwellTimeRangeM15_30")
             },
             {
-                value: EDwellTimeRange.m30_60,
+                id: EDwellTimeRange.m30_60,
                 text: this._("w_Report_DwellTimeRangeM30_60")
             },
             {
-                value: EDwellTimeRange.m60_120,
+                id: EDwellTimeRange.m60_120,
                 text: this._("w_Report_DwellTimeRangeM60_120")
             },
             {
-                value: EDwellTimeRange.upper120,
+                id: EDwellTimeRange.upper120,
                 text: this._("w_Report_DwellTimeRangeUpper120")
             }
         ];
@@ -1587,57 +1587,46 @@ export class HighchartsDwellTime extends Vue {
         let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories: string[] = this.getAgeList();
+        let categories: string[] = HighchartsService.personCountRangeListDesc(
+            this
+        );
         let tempTotalCount: number = 0;
         let series: any = [
             {
-                type: "pie",
-                name: null,
-                innerSize: "50%",
-                data: [],
-                countData: []
+                name: "PersonCount",
+                data: [0, 0, 0, 0, 0, 0]
             }
         ];
 
-        for (let categorie of categories) {
-            series[0].data.push([categorie, 0]);
-            series[0].countData.push(0);
-        }
-
         for (let value of tempValues) {
-            let tempAgeIndex = -1;
-            switch (value.ageRange) {
-                case EAgeRange.lower20:
-                    tempAgeIndex = 0;
+            let tempDwellTimeIndex = -1;
+            switch (value.dwellTimeRange) {
+                case EDwellTimeRange.upper120:
+                    tempDwellTimeIndex = 0;
                     break;
-                case EAgeRange.m21_30:
-                    tempAgeIndex = 1;
+                case EDwellTimeRange.m60_120:
+                    tempDwellTimeIndex = 1;
                     break;
-                case EAgeRange.m31_40:
-                    tempAgeIndex = 2;
+                case EDwellTimeRange.m30_60:
+                    tempDwellTimeIndex = 2;
                     break;
-                case EAgeRange.m41_50:
-                    tempAgeIndex = 3;
+                case EDwellTimeRange.m15_30:
+                    tempDwellTimeIndex = 3;
                     break;
-                case EAgeRange.m51_60:
-                    tempAgeIndex = 4;
+                case EDwellTimeRange.m5_15:
+                    tempDwellTimeIndex = 4;
                     break;
-                case EAgeRange.upper61:
-                    tempAgeIndex = 5;
+                case EDwellTimeRange.lower5:
+                    tempDwellTimeIndex = 5;
                     break;
-                case EAgeRange.none:
+                case EDwellTimeRange.none:
                 default:
                     break;
             }
-            if (tempAgeIndex > -1) {
-                if (series[0].data[tempAgeIndex][1] == undefined) {
-                    series[0].data[tempAgeIndex][1] = 0;
-                }
-                if (series[0].countData[tempAgeIndex] == undefined) {
-                    series[0].countData[tempAgeIndex] = 0;
-                }
-                series[0].countData[tempAgeIndex] += value.maleCount;
-                series[0].countData[tempAgeIndex] += value.femaleCount;
+
+            if (tempDwellTimeIndex > -1) {
+                series[0].data[tempDwellTimeIndex] += value.maleCount;
+                series[0].data[tempDwellTimeIndex] += value.femaleCount;
                 tempTotalCount += value.maleCount;
                 tempTotalCount += value.femaleCount;
             }
@@ -1647,8 +1636,8 @@ export class HighchartsDwellTime extends Vue {
             // set data
             for (let i in series[0].data) {
                 let iNumber = parseInt(i);
-                series[0].data[iNumber][1] = HighchartsService.formatFloat(
-                    (series[0].countData[iNumber] / tempTotalCount) * 100
+                series[0].data[iNumber] = HighchartsService.formatFloat(
+                    (series[0].data[iNumber] / tempTotalCount) * 100
                 );
             }
 
@@ -1669,8 +1658,15 @@ export class HighchartsDwellTime extends Vue {
                     title: {
                         text: null,
                         align: "high"
+                    },
+                    labels: {
+                        formatter: function() {
+                            let self: any = this;
+                            return self.value + "%";
+                        }
                     }
                 },
+                tooltip: { enabled: false },
                 credits: { enabled: false },
                 series: series
             };
@@ -1683,20 +1679,68 @@ export class HighchartsDwellTime extends Vue {
         let tempValues: IChartDwellTimeData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let categories: string[] = this.getPersonCountList();
+        let categories: string[] = HighchartsService.ageRangeListDesc(
+            this
+        );
+        let totalCount: number = 0;
 
         let barSeries = [
             {
-                name: this._("w_Male"),
-                data: [0, 0, 0, 0, 0, 0]
-            },
-            {
-                name: this._("w_Female"),
+                name: "AgeRange",
                 data: [0, 0, 0, 0, 0, 0]
             }
         ];
+        let pieSeriesData: any = [
+            [this._("w_Male"), 0],
+            [this._("w_Female"), 0]
+        ];
 
-        let pieSeriesData = [[this._("w_Male"), 0], [this._("w_Female"), 0]];
+        for (let val of tempValues) {
+            let addValue = false;
+            if (this.selection.dwellTimeRange == EDwellTimeRange.all) {
+                addValue = true;
+            } else if (val.dwellTimeRange == this.selection.dwellTimeRange) {
+                addValue = true;
+            }
+
+            if (addValue) {
+                let barSeriesDataIndex: number = 0;
+                switch (val.ageRange) {
+                    case EAgeRange.upper61:
+                        barSeriesDataIndex = 0;
+                        break;
+                    case EAgeRange.m51_60:
+                        barSeriesDataIndex = 1;
+                        break;
+                    case EAgeRange.m41_50:
+                        barSeriesDataIndex = 2;
+                        break;
+                    case EAgeRange.m31_40:
+                        barSeriesDataIndex = 3;
+                        break;
+                    case EAgeRange.m21_30:
+                        barSeriesDataIndex = 4;
+                        break;
+                    case EAgeRange.lower20:
+                        barSeriesDataIndex = 5;
+                        break;
+                }
+                totalCount += val.maleCount;
+                totalCount += val.femaleCount;
+                barSeries[0].data[barSeriesDataIndex] += val.maleCount;
+                barSeries[0].data[barSeriesDataIndex] += val.femaleCount;
+                pieSeriesData[0][1] += val.maleCount;
+                pieSeriesData[1][1] += val.femaleCount;
+            }
+        }
+
+        if (totalCount > 0) {
+            for (let i = 0; i < 6; i++) {
+                barSeries[0].data[i] = HighchartsService.formatFloat(
+                    (barSeries[0].data[i] / totalCount) * 100
+                );
+            }
+        }
 
         this.chartOptions.ageRange = {
             chart: {
@@ -1714,8 +1758,15 @@ export class HighchartsDwellTime extends Vue {
                 title: {
                     text: null,
                     align: "high"
+                },
+                labels: {
+                    formatter: function() {
+                        let self: any = this;
+                        return self.value + "%";
+                    }
                 }
             },
+            tooltip: { enabled: false },
             credits: { enabled: false },
             series: barSeries
         };
@@ -1735,6 +1786,7 @@ export class HighchartsDwellTime extends Vue {
             ]
         };
 
+        this.mountChart.ageRange = true;
         this.mountChart.gender = true;
     }
 
@@ -1866,30 +1918,6 @@ export class HighchartsDwellTime extends Vue {
     private changeDwellTime(value: EDwellTimeRange) {
         this.selection.dwellTimeRange = value;
         this.drawChartAgeRangeGender();
-    }
-
-    private getAgeList(): string[] {
-        let result: string[] = [
-            this._("w_Report_DwellTimeRangeLower5"),
-            this._("w_Report_DwellTimeRangeM5_15"),
-            this._("w_Report_DwellTimeRangeM15_30"),
-            this._("w_Report_DwellTimeRangeM30_60"),
-            this._("w_Report_DwellTimeRangeM60_120"),
-            this._("w_Report_DwellTimeRangeUpper120")
-        ];
-        return result;
-    }
-
-    private getPersonCountList(): string[] {
-        let result: string[] = [
-            ">120",
-            "60-120",
-            "30-60",
-            "15-30",
-            "5-15",
-            "<5"
-        ];
-        return result;
     }
 
     private i18nItem() {
