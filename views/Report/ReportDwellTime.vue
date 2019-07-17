@@ -137,7 +137,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import HighchartsDwellTime from "@/components/Reports/HighchartsDwellTime.vue";
+import HighchartsDwellTime from "@/components/Reports/Highcharts/HighchartsDwellTime.vue";
 
 // Tina
 import {

@@ -29,9 +29,9 @@ Vue.use(HighchartsVue);
 
 // custom import
 import Datetime from "@/services/Datetime";
-import HighchartsService from "./models/HighchartsService";
-import { ECampaignTimeType } from "./";
-import { IChartCampaignSingle } from "./";
+import HighchartsService from "../models/HighchartsService";
+import { ECampaignTimeType } from "../";
+import { IChartCampaignSingle } from "../";
 
 @Component({
     components: {}

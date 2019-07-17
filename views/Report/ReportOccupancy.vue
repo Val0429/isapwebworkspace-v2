@@ -178,7 +178,6 @@
         ReportTableData
     } from "@/components/Reports";
     import HighchartsService from "@/components/Reports/models/HighchartsService";
-    import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
     import toExcel from "@/services/Excel/json2excel";
     import excel2json from "@/services/Excel/excel2json";
     enum EFileType {

@@ -157,7 +157,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
-import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
+import HighchartsTraffic from "@/components/Reports/Highcharts/HighchartsTraffic.vue";
 import {
     EAreaMode,
     EChartMode,

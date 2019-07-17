@@ -146,10 +146,9 @@
 	import ResponseFilter from "@/services/ResponseFilter";
 	import Datetime from "@/services/Datetime";
 	import ReportService from "@/components/Reports/models/ReportService";
-	import HighchartsDemographic from "@/components/Reports/HighchartsDemographic.vue";
+    import HighchartsDemographic from "@/components/Reports/Highcharts/HighchartsDemographic.vue";
 	import WeatherService from "@/components/Reports/models/WeatherService";
 	import HighchartsService from "@/components/Reports/models/HighchartsService";
-	import HighchartsTraffic from "@/components/Reports/HighchartsTraffic.vue";
 	import {
 		ETimeMode,
         EWeather,

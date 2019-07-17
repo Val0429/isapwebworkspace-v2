@@ -48,8 +48,8 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import HighchartsCampaignMultipe from "@/components/Reports/HighchartsCampaignMultipe.vue";
-import HighchartsCampaignSingle from "@/components/Reports/HighchartsCampaignSingle.vue";
+import HighchartsCampaignMultipe from "@/components/Reports/Highcharts/HighchartsCampaignMultipe.vue";
+import HighchartsCampaignSingle from "@/components/Reports/Highcharts/HighchartsCampaignSingle.vue";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
 
