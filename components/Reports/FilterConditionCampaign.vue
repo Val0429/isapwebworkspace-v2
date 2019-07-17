@@ -82,6 +82,7 @@ import {
 } from "@/components/Reports";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
+import ReportService from "@/components/Reports/models/ReportService";
 
 @Component({
     components: {}
@@ -126,6 +127,7 @@ export class FilterConditionCampaign extends Vue {
 
     mounted() {
         // this.initTemplate();
+        console.log('campaignSiteSelectItem - ', ReportService.CheckObjectIfEmpty(this.campaignSiteSelectItem));
     }
 
     tempSaveInputData(data) {
@@ -258,6 +260,7 @@ export class FilterConditionCampaign extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
+                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.campaignSiteSelectItem)}
                  */
                 siteIds?: ${toEnumInterface(this.campaignSiteSelectItem as any, false)};
 

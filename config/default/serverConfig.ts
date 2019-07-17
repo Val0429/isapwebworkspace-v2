@@ -1,6 +1,7 @@
 var config: Config = {
     // Min server
     //ip: '172.16.10.21',
+
     // Rebaca server
     ip: '172.16.10.194',
 

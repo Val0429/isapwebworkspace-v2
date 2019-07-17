@@ -58,6 +58,13 @@
                     @time-array-index="receiveTimeArrayIndex"
                 ></heat-map-many-day>
                 <br>
+
+                <heat-map-one-day-slider-bar
+                    :slider="slider"
+                >
+
+                </heat-map-one-day-slider-bar>
+
                 <!-- Ben -->
                 <camera-heatmap>
                 </camera-heatmap>
@@ -119,6 +126,7 @@ import html2Canvas from "html2canvas";
 import JsPDF from "jspdf";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
+import HeatMapManyDay from '@/components/Reports/HeatMapManyDay.vue';
 
 enum EFileType {
     xlsx = "xlsx",
@@ -138,7 +146,9 @@ enum EPageStep {
 }
 
 @Component({
-    components: {}
+    components: {
+        HeatMapManyDay
+    }
 })
 export default class ReportHeatmap extends Vue {
     // Author : Morris
@@ -174,12 +184,11 @@ export default class ReportHeatmap extends Vue {
     modalShow: boolean = false;
 
     // 接收 Filter Condition 資料 相關
-    filterData: IFilterCondition = {
+    filterData: any = {
         startDate: new Date(),
         endDate: new Date(),
         firstSiteId: "",
         siteIds: [],
-        tagIds: [],
         type: ETimeMode.none
     };
     responseData: any = {};
@@ -208,6 +217,11 @@ export default class ReportHeatmap extends Vue {
     areaSummaryFilter: any = [];
     deviceGroupSummaryFilter: any = [];
     deviceSummaryFilter: any = [];
+
+    // 時間一天
+    hourArray: any = [];
+    hourArrayData: string = "";
+    slider: any = {};
 
     // 時間多天
     timeArray: any = [];
@@ -242,6 +256,7 @@ export default class ReportHeatmap extends Vue {
 
         // Tina 之後移到發api之後
         this.initTimeArray();
+        this.initHourArray();
     }
 
     mounted() {}
@@ -766,6 +781,30 @@ export default class ReportHeatmap extends Vue {
                 console.log(e);
                 return false;
             });
+    }
+
+    initHourArray() {
+        this.hourArray = [
+            "2019-07-01T16:00:00.000Z",
+            "2019-07-01T17:00:00.000Z",
+            "2019-07-01T18:00:00.000Z",
+            "2019-07-01T19:00:00.000Z"
+        ];
+
+
+        this.slider = {
+            value: 45,
+            data: [9, 10, 11, 12, 13, 14, 15],
+            range: [
+                { label: '9:00' },
+                { label: '10:00' },
+                { label: '11:00' },
+                { label: '12:00' },
+                { label: '13:00' },
+                { label: '14:00' },
+                { label: '15:00' },
+            ]
+        };
     }
 
     initTimeArray() {

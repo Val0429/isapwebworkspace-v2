@@ -87,6 +87,10 @@ export default class ReportCampaign extends Vue {
     modalShow: boolean = false;
     userData: any = [];
 
+    // 接收 Filter Condition 資料 相關
+    filterData: any = {};
+    responseData: any = {};
+
     // send user 相關
     userSelectItem: any = {};
 
@@ -159,9 +163,9 @@ export default class ReportCampaign extends Vue {
 
     async initSelectCampaignStore() {}
 
-    async receiveYearCampaign(year, campaign) {
+    async receiveYearCampaign(year, campaignIds) {
         this.inputFormData.year = year;
-        this.inputFormData.campaignIds = campaign;
+        this.inputFormData.campaignIds = campaignIds;
         console.log("this.inputFormData.year - ", this.inputFormData.year);
         console.log(
             "this.inputFormData.campaignIds - ",
@@ -177,6 +181,29 @@ export default class ReportCampaign extends Vue {
     receiveModalShowData(data) {
         this.modalShow = data;
     }
+
+    async receiveFilterData(filterData) {
+        let param = JSON.parse(JSON.stringify(filterData));
+        this.filterData = filterData;
+
+        await this.$server
+            .C("/report/human-detection/summary", param)
+            .then((response: any) => {
+                if (response !== undefined) {
+                    this.responseData = response;
+                    this.resolveSummary();
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
+
+    resolveSummary() {}
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
