@@ -141,7 +141,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Model, Watch } from "vue-property-decorator";
 import { ISortSelectOption } from "./models/ISortSelect";
 
 @Component({
@@ -197,7 +197,11 @@ export class SortSelect extends Vue {
             }
         }
     }
-
+    @Watch("options", {immediate:true})
+    optionsChanged(value){
+        console.log("optionsChanged", value);
+        this.initValue();
+    }
     // disable
     disableSelectAllOption(): boolean {
         let result = false;
