@@ -53,11 +53,19 @@
                 </analysis-filter-heat-map>
 
                 <!-- Tina -->
-                <heat-map-many-day
-                    :timeArray="timeArray"
-                    @time-array-index="receiveTimeArrayIndex"
-                ></heat-map-many-day>
+<!--                <heat-map-many-day-->
+<!--                    :timeArray="timeArray"-->
+<!--                    @time-array-index="receiveTimeArrayIndex"-->
+<!--                ></heat-map-many-day>-->
                 <br>
+
+                <heat-map-many-day-slider-pips :min="0" :max="100" :step=5 labels :values="[5]">
+
+                </heat-map-many-day-slider-pips>
+                <br>
+
+                <heat-map-one-day-slider-bar></heat-map-one-day-slider-bar>
+
                 <!-- Ben -->
                 <camera-heatmap>
                 </camera-heatmap>
@@ -174,12 +182,11 @@ export default class ReportHeatmap extends Vue {
     modalShow: boolean = false;
 
     // 接收 Filter Condition 資料 相關
-    filterData: IFilterCondition = {
+    filterData: any = {
         startDate: new Date(),
         endDate: new Date(),
         firstSiteId: "",
         siteIds: [],
-        tagIds: [],
         type: ETimeMode.none
     };
     responseData: any = {};
@@ -208,6 +215,10 @@ export default class ReportHeatmap extends Vue {
     areaSummaryFilter: any = [];
     deviceGroupSummaryFilter: any = [];
     deviceSummaryFilter: any = [];
+
+    // 時間一天
+    hourArray: any = [];
+    hourArrayData: string = "";
 
     // 時間多天
     timeArray: any = [];
@@ -242,6 +253,7 @@ export default class ReportHeatmap extends Vue {
 
         // Tina 之後移到發api之後
         this.initTimeArray();
+        this.initHourArray();
     }
 
     mounted() {}
@@ -766,6 +778,17 @@ export default class ReportHeatmap extends Vue {
                 console.log(e);
                 return false;
             });
+    }
+
+    initHourArray() {
+        this.hourArray = [
+            "2019-07-01T16:00:00.000Z",
+            "2019-07-01T17:00:00.000Z",
+            "2019-07-01T18:00:00.000Z",
+            "2019-07-01T19:00:00.000Z"
+        ];
+
+
     }
 
     initTimeArray() {

@@ -395,7 +395,7 @@ export default class CampaignSetting extends Vue {
 
         this.inputFormData.stepType = stepType;
         this.inputFormData.year = this.inputFormData.year.toString();
-        
+
         this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
         );
