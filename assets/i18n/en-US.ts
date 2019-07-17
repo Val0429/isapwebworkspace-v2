@@ -183,6 +183,8 @@ export default class LangObject {
     w_revenue = 'Revenue';
     w_transaction = 'Transaction';
     w_conversion = 'Conversion';
+    w_SelectTags = 'Select Tag(s)';
+    w_AllTags = 'All Tags';
 
     w_yes = 'Yes';
     w_no = 'No';
@@ -940,6 +942,7 @@ export default class LangObject {
     w_isIncludedEmployee = 'Staff Inclusion';
     // w_PleaseSelectSites = 'Please Select Site(s)';
     w_PleaseSelectSites = 'Please Select Store(s)';
+    w_PleaseSelectTags = 'Please Select Tags(s)';
     w_InOutType = 'In Out Type';
     w_businessChartType = 'Business Chart Type';
 

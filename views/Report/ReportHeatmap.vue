@@ -196,7 +196,7 @@ export default class ReportHeatmap extends Vue {
     //// Filter Condition End ////
 
     //// Analysis Filter Start ////
-    deviceMode: string = EDeviceMode.demographic;
+    deviceMode: string = EDeviceMode.heatmap;
 
     // select 相關
     areaSelectItem: any = {};
