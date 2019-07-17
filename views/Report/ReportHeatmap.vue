@@ -53,18 +53,17 @@
                 </analysis-filter-heat-map>
 
                 <!-- Tina -->
-<!--                <heat-map-many-day-->
-<!--                    :timeArray="timeArray"-->
-<!--                    @time-array-index="receiveTimeArrayIndex"-->
-<!--                ></heat-map-many-day>-->
+                <heat-map-many-day
+                    :timeArray="timeArray"
+                    @time-array-index="receiveTimeArrayIndex"
+                ></heat-map-many-day>
                 <br>
 
-                <heat-map-many-day-slider-pips :min="0" :max="100" :step=5 labels :values="[5]">
+                <heat-map-one-day-slider-bar
+                    :slider="slider"
+                >
 
-                </heat-map-many-day-slider-pips>
-                <br>
-
-                <heat-map-one-day-slider-bar></heat-map-one-day-slider-bar>
+                </heat-map-one-day-slider-bar>
 
                 <!-- Ben -->
                 <camera-heatmap>
@@ -127,6 +126,7 @@ import html2Canvas from "html2canvas";
 import JsPDF from "jspdf";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
+import HeatMapManyDay from '@/components/Reports/HeatMapManyDay.vue';
 
 enum EFileType {
     xlsx = "xlsx",
@@ -146,7 +146,9 @@ enum EPageStep {
 }
 
 @Component({
-    components: {}
+    components: {
+        HeatMapManyDay
+    }
 })
 export default class ReportHeatmap extends Vue {
     // Author : Morris
@@ -219,6 +221,7 @@ export default class ReportHeatmap extends Vue {
     // 時間一天
     hourArray: any = [];
     hourArrayData: string = "";
+    slider: any = {};
 
     // 時間多天
     timeArray: any = [];
@@ -789,6 +792,19 @@ export default class ReportHeatmap extends Vue {
         ];
 
 
+        this.slider = {
+            value: 45,
+            data: [9, 10, 11, 12, 13, 14, 15],
+            range: [
+                { label: '9:00' },
+                { label: '10:00' },
+                { label: '11:00' },
+                { label: '12:00' },
+                { label: '13:00' },
+                { label: '14:00' },
+                { label: '15:00' },
+            ]
+        };
     }
 
     initTimeArray() {

@@ -8,7 +8,7 @@
             :processStyle="{ backgroundColor: '#d8d8d8' }"
             @callbackRange="callbackRange">
             <template slot="tooltip" slot-scope="tooltip">
-<!--                <img src="static/images/rectangle-slider.svg">-->
+                <img src="./rectangle-slider.svg">
             </template>
         </VueSlideBar>
         <h2>Value: {{slider.value}}</h2>
@@ -28,77 +28,54 @@ import VueSlideBar from 'vue-slide-bar'
 })
 export class HeatMapOneDayVueSlideBar extends Vue {
     // Prop
-    // @Prop({
-    //     type: Array, // Boolean, Number, String, Array, Object
-    //     default: [0]
-    // })
-    // values: any;
-    //
-    // @Prop({
-    //     type: Number, // Boolean, Number, String, Array, Object
-    //     default: 0
-    // })
-    // min: number;
-    //
-    // @Prop({
-    //     type: Number, // Boolean, Number, String, Array, Object
-    //     default: 0
-    // })
-    // max: number;
-    //
-    // @Prop({
-    //     type: Number, // Boolean, Number, String, Array, Object
-    //     default: 1
-    // })
-    // step: number;
-    //
-    // @Prop({
-    //     type: Boolean, // Boolean, Number, String, Array, Object
-    //     default: null
-    // })
-    // labels: boolean;
-
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    slider: object;
+    
     rangeValue:any = {};
-    slider:any = {
-        value: 45,
-        data: [
-            15,
-            30,
-            45,
-            60,
-            75,
-            90,
-            120
-        ],
-        range: [
-            {
-                label: '15 mins'
-            },
-            {
-                label: '30 mins',
-                isHide: true
-            },
-            {
-                label: '45 mins'
-            },
-            {
-                label: '1 hr',
-                isHide: true
-            },
-            {
-                label: '1 hr 15 mins'
-            },
-            {
-                label: '1 hr 30 mins',
-                isHide: true
-            },
-            {
-                label: '2 hrs'
-            }
-        ]
-    }
+    // slider:any = {
+    //     value: 45,
+    //     data: [
+    //         15,
+    //         30,
+    //         45,
+    //         60,
+    //         75,
+    //         90,
+    //         120
+    //     ],
+    //     range: [
+    //         {
+    //             label: '15 mins'
+    //         },
+    //         {
+    //             label: '30 mins',
+    //             isHide: true
+    //         },
+    //         {
+    //             label: '45 mins'
+    //         },
+    //         {
+    //             label: '1 hr',
+    //             isHide: true
+    //         },
+    //         {
+    //             label: '1 hr 15 mins'
+    //         },
+    //         {
+    //             label: '1 hr 30 mins',
+    //             isHide: true
+    //         },
+    //         {
+    //             label: '2 hrs'
+    //         }
+    //     ]
+    // };
 
     created() {
+        console.log('slider - ', this.slider);
     }
 
     mounted() {
@@ -109,11 +86,9 @@ export class HeatMapOneDayVueSlideBar extends Vue {
     }
 
     callbackRange (val) {
-        this.rangeValue = val
+        this.rangeValue = val;
+        console.log('this.rangeValue - ', this.rangeValue);
     }
-
-    /////////////  computed  /////////////
-
 }
 
 export default HeatMapOneDayVueSlideBar;
@@ -121,6 +96,4 @@ Vue.component("heat-map-one-day-slider-bar", HeatMapOneDayVueSlideBar);
 </script>
 
 <style lang="scss" scoped>
-
-
 </style>
