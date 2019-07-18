@@ -625,5 +625,5 @@ export default class LangObject implements ILang {
                 
     w_DeviceArea="裝置區域";
     w_TimeFormat = "時間格式";
-    w_Action="Action";
+    w_Action="行動";
 }

@@ -359,7 +359,7 @@ export default class PermissionTable extends Vue {
                 name: datas.permissionName
             };
         }
-        (this.$refs.mainTable as any).reload();
+        //(this.$refs.mainTable as any).reload();
     }
 
     clearInputFormData() {
@@ -1037,7 +1037,9 @@ export default class PermissionTable extends Vue {
                  * @uiPlaceHolder - ${this._("w_Permission_PermissionName")}
                  */
                 tablename?: string;
-
+                /**
+                 * @uiLabel - ${this._("w_Action")}
+                 */
                 Actions: any;
             }
         `;
@@ -1280,6 +1282,9 @@ export default class PermissionTable extends Vue {
                  */
                  deviceTimeFormat: string;
 
+                /**
+                 * @uiLabel - ${this._("w_Action")}
+                 */
                  Actions: any;
             }
         `;
