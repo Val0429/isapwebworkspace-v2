@@ -18,7 +18,7 @@
                     ></canvas>
                     <div class="legend-area">
                         <h5>Heatmap Legend</h5>
-                        <span class="left">0</span>
+                        <span class="left">{{min}}</span>
                         <span class="right">{{max}}</span>
                         <img
                             id="gradient"
@@ -46,6 +46,7 @@ export class CameraHeatmap extends Vue {
     private heatmapCanvs: any;
 
     private max: number = 0;
+    private min: number = 0;
     private width_r: number = 1; // 寬比例
     private height_r: number = 1; // 高比例
 
@@ -103,6 +104,7 @@ export class CameraHeatmap extends Vue {
         });
 
         this.max = heatmapData.max;
+        this.min = 1;
         me.heatmapCanvs.setData(heatmapData);
         console.log("initHeatmap", me.heatmapCanvs, heatmapData);
     }
