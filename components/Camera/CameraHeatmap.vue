@@ -17,7 +17,7 @@
                         height="400"
                     ></canvas>
                     <div class="legend-area">
-                        <h5>Heatmap Legend</h5>
+                        <h5>{{title}}</h5>
                         <span class="left">{{min}}</span>
                         <span class="right">{{max}}</span>
                         <img
@@ -45,6 +45,7 @@ export class CameraHeatmap extends Vue {
     private canvasEl: HTMLCanvasElement;
     private heatmapCanvs: any;
 
+    private title: string = "Heatmap Legend";
     private max: number = 0;
     private min: number = 0;
     private width_r: number = 1; // 寬比例
