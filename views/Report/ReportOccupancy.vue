@@ -2255,35 +2255,35 @@ export default class ReportOccupancy extends Vue {
 
     ////////////////////////////////////// Export //////////////////////////////////////
 
-    exportExcel(fType) {
-        let reportTable: any = null;
-        if (this.tableStep == ETableStep.mainTable) {
-            reportTable = this.$refs.reportTable;
-        } else if (this.tableStep == ETableStep.sunTable) {
-            reportTable = this.$refs.sunReportTable;
-        } else {
-            reportTable = this.$refs.detailReportTable;
-        }
-        let tableData = reportTable.tableToArray();
-        //th
-        let th = [];
-        for (let title of tableData[0]) {
-            th.push(title);
-        }
+     exportExcel(fType) {
+            let reportTable: any = null;
+            if (this.tableStep == ETableStep.mainTable) {
+                reportTable = this.$refs.reportTable;
+            } else if (this.tableStep == ETableStep.sunTable) {
+                reportTable = this.$refs.sunReportTable;
+            } else {
+                reportTable = this.$refs.detailReportTable;
+            }
+            let tableData = reportTable.tableToArray();
+            //th
+            let th = [];
+            for (let title of tableData[0]) {
+                th.push(title);
+            }
 
-        //data
-        let data = [];
-        for (let bodys of tableData) {
-            if (tableData.indexOf(bodys) == 0) continue;
-            data.push(bodys);
-        }
-        let [fileName, fileType, sheetName] = [
-            this._("w_Navigation_VideoSources_Demographic"),
-            fType,
-            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
-        ];
-        toExcel({ th, data, fileName, fileType, sheetName });
-    }
+            //data
+            let data = [];
+            for (let bodys of tableData) {
+                if (tableData.indexOf(bodys) == 0) continue;
+                data.push(bodys);
+            }
+            let [fileName, fileType, sheetName] = [
+                this._("w_Navigation_Report_Occupancy"),
+                fType,
+                Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+            ];
+            toExcel({ th, data, fileName, fileType, sheetName });
+     }
 
     exportPDF() {
         let title = "";

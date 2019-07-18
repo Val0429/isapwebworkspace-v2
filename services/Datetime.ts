@@ -700,8 +700,10 @@ class Datetime {
             tempYearArray.push(tempYearAdd, tempYearReduce);
         }
 
+        // 去掉重複的值
         let resultYearArray = [...new Set(tempYearArray.map((item) => JSON.stringify(item)))].map((item) => JSON.parse(item));
 
+        // 排序陣列
         resultYearArray = resultYearArray.sort((a, b) => a.id - b.id);
 
         return resultYearArray;

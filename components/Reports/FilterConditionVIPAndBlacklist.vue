@@ -139,6 +139,19 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     tagSelectItem: object;
 
     @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    sitesSelectItem: object;
+
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: []
+    })
+    tagIncludeSitesItem: any;
+
+    @Prop({
         type: Object,
         default: null
     })
@@ -170,6 +183,8 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     created() {
         // this.initSelectItemSite();
         this.initSelectItem();
+        console.log('sitesSelectItem - ', this.sitesSelectItem);
+        console.log('tagIncludeSitesItem - ', this.tagIncludeSitesItem);
     }
 
     mounted() {
@@ -300,10 +315,12 @@ export class FilterConditionVIPAndBlacklist extends Vue {
             startDate: Date;
             endDate: Date;
             tagIds: string[];
+            siteIds: string[];
         } = {
             startDate: Datetime.DateToZero(new Date()),
             endDate: Datetime.DateToZero(new Date()),
             tagIds: [],
+            siteIds: [],
         };
 
         let designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
@@ -318,6 +335,27 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         }
 
         doSubmitParam.tagIds = this.inputFormData.tagIds;
+
+        let tempSiteIds = [];
+
+        if (this.inputFormData.tagIds.length > 0 && this.tagIncludeSitesItem.length > 0 ) {
+            this.inputFormData.tagIds.map(tagId => {
+                this.tagIncludeSitesItem.map(item => {
+                    if (tagId === item.objectId && item.sites.length > 0) {
+                        item.sites.map(site => {
+                            tempSiteIds.push(site.objectId)
+                        })
+                    }
+                });
+            });
+        } else {
+            return false;
+        }
+
+        // 移除陣列中重複的值
+        let finalSiteIds = Array.from(new Set(tempSiteIds));
+
+        doSubmitParam.siteIds = finalSiteIds;
 
         // 選擇 period
         if (this.selectPeriodAddWay === "period") {

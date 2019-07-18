@@ -2,9 +2,11 @@
     <div class="animated fadeIn">
 
         <filter-condition-vip-and-blacklist
+            :label="_('w_ReportFilterConditionComponent_')"
             :tagSelectItem="tagSelectItem"
             :templateItem="templateItem"
-            :label="_('w_ReportFilterConditionComponent_')"
+            :sitesSelectItem="sitesSelectItem"
+            :tagIncludeSitesItem="tagIncludeSitesItem"
             @submit-data="receiveFilterData"
         >
 
@@ -20,13 +22,14 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import ResponseFilter from "@/services/ResponseFilter";
-
 import {
     ITemplateItem,
     EDesignationPeriod,
-    EDeviceMode
+    EDeviceMode,
+    ISite
 } from "@/components/Reports";
+import ResponseFilter from "@/services/ResponseFilter";
+
 import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
 import ReportService from "@/components/Reports/models/ReportService";
 
@@ -35,6 +38,7 @@ import ReportService from "@/components/Reports/models/ReportService";
 })
 export default class ReportVIPTracking extends Vue {
     templateItem: ITemplateItem | null = null;
+    sites: ISite[] = [];
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -48,6 +52,11 @@ export default class ReportVIPTracking extends Vue {
 
     // select 相關
     tagSelectItem: any = {};
+    sitesSelectItem: any = {};
+    tagIncludeSitesItem: any = [];
+
+    // OfficeHour 相關
+    officeHourItemDetail: any = [];
 
     // recipient 相關
     modalShow: boolean = false;
@@ -86,10 +95,20 @@ export default class ReportVIPTracking extends Vue {
 
     // Author: Tina
     async initDatas() {
+        this.siteFilterPermission();
         await this.initSelectItemTag();
+        await this.initTagIncludeSitesItem();
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    siteFilterPermission() {
+        let tempSitesSelectItem = {};
+        for (const detail of this.$user.allowSites) {
+            tempSitesSelectItem[detail.objectId] = detail.name;
+        }
+        this.sitesSelectItem = tempSitesSelectItem;
+    }
 
     // Author: Tina
     async initSelectItemTag() {
@@ -115,6 +134,34 @@ export default class ReportVIPTracking extends Vue {
                 return false;
             });
     }
+
+    async initTagIncludeSitesItem() {
+        let tempTagIncludeSitesItem = {};
+
+        let result = await this.$server
+            .R("/tag")
+            // .then((response: any) => {
+            //     if (response != undefined) {
+            //         for (const returnValue of response) {
+            //             // 自定義 tagSelectItem 的 key 的方式
+            //             tempTagSelectItem[returnValue.objectId] =
+            //                 returnValue.name;
+            //         }
+            //         this.tagSelectItem = tempTagSelectItem;
+            //     }
+            // })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        this.tagIncludeSitesItem = result["results"];
+        // console.log("result - ", this.tagIncludeSitesItem);
+    }
+
     // Author: Tina
     async receiveFilterData(filterData, designationPeriod) {
         let param = JSON.parse(JSON.stringify(filterData));
@@ -138,7 +185,38 @@ export default class ReportVIPTracking extends Vue {
             });
     }
 
-    resolveSummary() {}
+    resolveSummary() {
+        // get office hour data
+        let tempISite: any = {};
+        this.sites = [];
+
+        for (const filterSiteId of this.filterData.siteIds) {
+            for (const detail of this.officeHourItemDetail) {
+                for (const officeHourSiteId of detail.sites) {
+                    if (filterSiteId === officeHourSiteId.objectId) {
+                        let tempOfficeHours = [];
+                        for (const dayRangesValue of detail.dayRanges) {
+                            let tempOfficeHour: any = {};
+                            tempOfficeHour = {
+                                startDay: dayRangesValue.startDay,
+                                endDay: dayRangesValue.endDay,
+                                startDate: dayRangesValue.startDate,
+                                endDate: dayRangesValue.endDate
+                            };
+                            tempOfficeHours.push(tempOfficeHour);
+                        }
+                        tempISite = {
+                            objectId: officeHourSiteId.objectId,
+                            name: officeHourSiteId.name,
+                            officeHour: tempOfficeHours
+                        };
+                        this.sites.push(tempISite);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 }
