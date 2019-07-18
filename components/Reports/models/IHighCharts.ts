@@ -129,6 +129,7 @@ interface IChartOccupancyData extends IChart, IChartWeather, ITimeMode, IAreaMod
 interface IChartVipTrackingData {
     type: EVipTrackingType;
     date: Date;
+    personCount: number;
 
     i18n?: any;
     dateStart?: Date;

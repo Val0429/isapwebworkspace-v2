@@ -381,13 +381,6 @@ export class HighchartsDemographic extends Vue {
         let tempTotalCount: number = 0;
 
         //// office hour group ////
-        if (this.chartMode != EChartMode.site1Day1) {
-            return false;
-        }
-        if (this.sites.length != 1) {
-            return false;
-        }
-
         let weekDay = this.startDate.getDay();
         let officeHour: ISiteOfficeHourItem = HighchartsService.siteOfficeHour(
             weekDay,

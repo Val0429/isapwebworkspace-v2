@@ -46,6 +46,7 @@ import Datetime from "@/services/Datetime";
 import HighchartsService from "../models/HighchartsService";
 import { ISite, ISiteOfficeHourItem, IChartVipTrackingData } from "../";
 import { EChartMode, EVipTrackingType } from "../";
+import { IChartVipTrackingDetailData } from "../models/IHighCharts";
 
 @Component({
     components: {}
@@ -110,7 +111,9 @@ export class HighchartsVipTracking extends Vue {
         this.start();
     }
 
-    created() {}
+    created() {
+        this.start();
+    }
 
     mounted() {}
 
@@ -146,7 +149,107 @@ export class HighchartsVipTracking extends Vue {
 
     ////////////////////////// site X day 1 //////////////////////////
 
-    initSiteXDay1() {}
+    initSiteXDay1() {
+        let tempValues: IChartVipTrackingData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
+        let tempHourStrings: string[] = [];
+        let tempCategories: string[] = [];
+        let tempSeries: {
+            name: string;
+            data: number[];
+        }[] = [
+            { name: "VIP", data: [4, 5, 2] },
+            { name: "Blacklist", data: [23, 43, 5] }
+        ];
+
+        // get all site office hour
+        let weekDay = this.startDate.getDay();
+        let tempOfficeHour: ISiteOfficeHourItem = { startHour: 24, endHour: 0 };
+        for (let site of this.sites) {
+            let officeHour: ISiteOfficeHourItem = HighchartsService.siteOfficeHour(
+                weekDay,
+                this.sites[0].officeHour
+            );
+            if (officeHour.startHour < tempOfficeHour.startHour) {
+                tempOfficeHour.startHour = officeHour.startHour;
+            }
+            if (officeHour.endHour > tempOfficeHour.endHour) {
+                tempOfficeHour.endHour = officeHour.endHour;
+            }
+            if (officeHour.startHour >= 23 && officeHour.endHour <= 0) {
+                break;
+            }
+        }
+
+        // get all office hour string list
+        for (
+            let i = tempOfficeHour.startHour;
+            i <= tempOfficeHour.endHour;
+            i++
+        ) {
+            let hourString = i < 10 ? `0${i.toString()}` : i.toString();
+            tempHourStrings.push(`${hourString}:00`);
+        }
+
+        for (let val of tempValues) {
+            // if () {
+
+            // }
+        }
+
+        this.chartOptions.siteXday1 = {
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                categories: tempCategories,
+                labels: { useHTML: true }
+            },
+            yAxis: {
+                labels: { style: { color: "#000" } },
+                title: {
+                    text: this._("w_ReportTraffic_TrafficTraffic"),
+                    style: { color: "#000" }
+                }
+            },
+            tooltip: {
+                enabled: true,
+                useHTML: true,
+                backgroundColor: "#333",
+                style: { color: "#fff" }
+                // formatter: function(tooltip: any) {
+                //     let self: any = this;
+                //     let result = "";
+                //     try {
+                //         // let siteStartIndex = self.point.series.name.indexOf(
+                //         //     ">__"
+                //         // );
+                //         // let siteEndIndex = self.point.series.name.indexOf(
+                //         //     "__<"
+                //         // );
+                //         // siteId = self.point.series.name.substring(
+                //         //     siteStartIndex + 3,
+                //         //     siteEndIndex
+                //         // );
+                //         // let valueStartIndex = self.x.indexOf(">{");
+                //         // let valueEndIndex = self.x.indexOf("}<");
+                //         // let valueJson = self.x.substring(
+                //         //     valueStartIndex + 1,
+                //         //     valueEndIndex + 1
+                //         // );
+                //         // let newValue: any = JSON.parse(valueJson);
+                //     } catch (e) {
+                //         console.log(e);
+                //     }
+                //     return result;
+                // }
+            },
+            series: tempSeries
+        };
+        this.mountChart.siteXday1 = true;
+    }
 
     ////////////////////////// site X day X //////////////////////////
 
@@ -157,6 +260,7 @@ export class HighchartsVipTracking extends Vue {
         let value: IChartVipTrackingData = {
             type: EVipTrackingType.none,
             date: new Date(),
+            personCount: 0,
 
             // every report
             i18n: this.i18nItem(),
@@ -189,7 +293,6 @@ export class HighchartsVipTracking extends Vue {
         value.date = new Date(value.date);
 
         value.i18n = this.i18nItem();
-
         value.timeString = Datetime.DateTime2String(
             value.date,
             HighchartsService.datetimeFormat.time

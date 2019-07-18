@@ -11,7 +11,7 @@
         >
         </filter-condition-vip-and-blacklist>
 
-         <iv-card>
+        <iv-card>
             <highcharts-vip-tracking
                 :startDate="startDate"
                 :endDate="endDate"
@@ -19,7 +19,7 @@
                 :value="chartDatas"
             >
             </highcharts-vip-tracking>
-         </iv-card>
+        </iv-card>
 
     </div>
 </template>
@@ -28,9 +28,10 @@
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
 import {
-    ITemplateItem,
     EDesignationPeriod,
     EDeviceMode,
+    EVipTrackingType,
+    ITemplateItem,
     ISite,
     IChartVipTrackingData
 } from "@/components/Reports";
@@ -100,6 +101,7 @@ export default class ReportVIPTracking extends Vue {
 
     created() {
         this.initDatas();
+        this.initChartDeveloper();
     }
 
     mounted() {}
@@ -230,6 +232,58 @@ export default class ReportVIPTracking extends Vue {
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
+
+    ///////////////////////////////////////////////////////
+
+    // Author: Morris, Product remove
+    initChartDeveloper() {
+        // single day
+        this.startDate = new Date("2019-07-01T08:00:00.000Z");
+        this.endDate = new Date("2019-07-01T14:00:00.000Z");
+
+        // Multiple day
+        // this.startDate = new Date("2019-06-20T08:00:00.000Z");
+        // this.endDate = new Date("2019-08-10T14:00:00.000Z");
+
+        let siteLength = 5;
+
+        for (let j = 0; j < siteLength; j++) {
+            let tempJ = j + 1;
+            this.sites.push({
+                objectId: "site" + tempJ.toString(),
+                name: "Site " + tempJ.toString(),
+                officeHour: [
+                    {
+                        startDay: "0",
+                        endDay: "6",
+                        startDate: "2000-01-01T00:00:00.000Z",
+                        endDate: "2000-01-01T14:00:00.000Z"
+                    }
+                ]
+            });
+
+            let tempVipTrackingType =
+                Math.floor(Math.random()) > 0
+                    ? EVipTrackingType.vip
+                    : EVipTrackingType.blacklist;
+
+            for (let i = 1; i < 30; i++) {
+                let tempI = i;
+                let iNumber = tempI;
+                let iString = tempI.toString();
+                let iString10 = iNumber < 10 ? `0${iString}` : iString;
+                let tempDate = new Date(
+                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                );
+                let tempChartData: IChartVipTrackingData = {
+                    type: tempVipTrackingType,
+                    date: tempDate,
+                    personCount: Math.floor(Math.random() * 50)
+                };
+                this.chartDatas.push(tempChartData);
+            }
+        }
+    }
 }
 </script>
 
