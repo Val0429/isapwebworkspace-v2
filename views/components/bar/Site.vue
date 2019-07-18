@@ -54,7 +54,7 @@
 
                     <template #Actions="{$attrs, $listeners}">                        
                             <iv-toolbox-area :disabled="!isSelectSite"
-                            @click="pageToAreaList()" />                        
+                            @click="pageToAreaList($attrs.row)" />                        
                     </template>
                 </iv-table>
 
@@ -168,6 +168,7 @@
 
                 <iv-table
                     ref="areaTable"
+                    v-if="isSelectSite && areaParams"
                     @selected="selectedArea($event)"
                     :interface="IAreaList()"
                     :multiple="tableMultiple"
@@ -380,7 +381,7 @@ export default class Site extends Vue {
     areaMapSrc = "";
     areas = {};
     area: any = {};
-    areaParams = {};
+    areaParams:any;
 
     //options
     managerItem = [];
@@ -426,9 +427,17 @@ export default class Site extends Vue {
     doMounted(){
         this.isMounted=true;
     }
-    pageToAreaList() {
+    pageToAreaList(site?:any) {
         this.pageStep = EPageStep.areaList;
-        (this.$refs.areaTable as any).reload();
+        if(site){
+            this.site = site;
+            this.areaParams = {
+                siteId: site.objectId
+            };                    
+        }
+        else{        
+            (this.$refs.areaTable as any).reload();
+        }
     }
 
     pageToAreaView() {
@@ -488,29 +497,6 @@ export default class Site extends Vue {
         this.newImgSrc = this.serverUrl + this.site.imageSrc;
         this.pageStep = EPageStep.siteEdit;
     }
-    async initAreaNameItem() {
-        this.areaNameItem = [];
-
-        let body: {
-            siteId: string;
-        } = {
-            siteId: this.site.objectId
-        };
-
-        await this.$server
-            .R("/location/area/all" as any, body)
-            .then((response: any) => {
-                for (let item of response) {
-                    let area = { id: item.objectId, text: item.name };
-                    this.areaNameItem.push(area);
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
-    }
-
-    
     
 
     async saveSite(data) {
@@ -703,11 +689,8 @@ export default class Site extends Vue {
         console.log("selectedSite", data);
         this.newImgSrc = "";
         if (data) {            
-            this.site = this.isSelectSite = data;
-            this.areaParams = {
-                siteId: data.objectId
-            };            
-            this.initAreaNameItem();
+            this.site = data;
+            this.isSelectSite = true;            
         } else {
             this.clearSiteData();
         }
@@ -779,7 +762,7 @@ export default class Site extends Vue {
                 */
                 readerCount?: number;
                 /**
-                * @uiLabel -
+                * @uiLabel - ${this._("w_Action")}
                 */
                 Actions: any;
             }`;
@@ -856,7 +839,7 @@ export default class Site extends Vue {
     IAreaList() {
         return `interface {
                  /**
-                 * @uiLabel - ${this._("w_No")}
+                 * @uiLabel - ${this._("w_Number")}
                  * @uiType - iv-cell-auto-index
                  */
                 no: string;
