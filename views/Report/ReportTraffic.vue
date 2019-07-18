@@ -11,7 +11,6 @@
         >
         </filter-condition>
 
-        <div>
             <iv-card>
                 <template #toolbox>
                     <!-- Ben -->
@@ -128,7 +127,6 @@
                 </div>
 
             </iv-card>
-        </div>
 
         <!-- Tina -->
         <recipient

@@ -12,7 +12,6 @@
 
         </filter-condition-heat-map>
 
-        <div v-show="pageStep === ePageStep.none">
             <iv-card>
 
                 <template #toolbox>
@@ -75,7 +74,6 @@
 
             </iv-card>
 
-        </div>
 
     </div>
 </template>
@@ -144,10 +142,6 @@ enum ETableStep {
     none = "none"
 }
 
-enum EPageStep {
-    none = "none"
-}
-
 @Component({
     components: {
         HeatMapManyDay
@@ -162,9 +156,6 @@ export default class ReportHeatmap extends Vue {
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     chartDatas: IChartDemographicData[] = [];
-
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 

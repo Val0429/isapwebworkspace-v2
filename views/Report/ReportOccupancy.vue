@@ -12,7 +12,6 @@
         >
         </filter-condition>
 
-        <div>
 
             <iv-card>
 
@@ -126,7 +125,6 @@
                 </div>
 
             </iv-card>
-        </div>
 
         <!-- Tina -->
         <recipient

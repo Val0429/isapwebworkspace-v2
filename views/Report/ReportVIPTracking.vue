@@ -9,12 +9,17 @@
             :tagIncludeSitesItem="tagIncludeSitesItem"
             @submit-data="receiveFilterData"
         >
-
         </filter-condition-vip-and-blacklist>
 
-        <div>
-            VIPTracking
-        </div>
+         <iv-card>
+            <highcharts-vip-tracking
+                :startDate="startDate"
+                :endDate="endDate"
+                :sites="sites"
+                :value="chartDatas"
+            >
+            </highcharts-vip-tracking>
+         </iv-card>
 
     </div>
 </template>
@@ -26,7 +31,8 @@ import {
     ITemplateItem,
     EDesignationPeriod,
     EDeviceMode,
-    ISite
+    ISite,
+    IChartVipTrackingData
 } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
 
@@ -38,7 +44,12 @@ import ReportService from "@/components/Reports/models/ReportService";
 })
 export default class ReportVIPTracking extends Vue {
     templateItem: ITemplateItem | null = null;
+
+    ////////////////////////////////////// Morris Start //////////////////////////////////////
+    startDate: Date = new Date("2019-01-01T00:00:00.000Z");
+    endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     sites: ISite[] = [];
+    chartDatas: IChartVipTrackingData[] = [];
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 

@@ -12,8 +12,6 @@
         >
         </filter-condition>
 
-        <div>
-
             <iv-card>
 
                 <template #toolbox>
@@ -74,7 +72,6 @@
                 </vistor-details-table>
 
             </iv-card>
-        </div>
 
         <!-- Tina -->
         <recipient

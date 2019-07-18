@@ -12,7 +12,6 @@
         >
         </filter-condition>
 
-        <div>
             <iv-card>
 
                 <template #toolbox>
@@ -130,7 +129,6 @@
 
             </iv-card>
 
-        </div>
 
     </div>
 </template>
