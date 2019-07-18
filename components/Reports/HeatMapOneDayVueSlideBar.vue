@@ -12,7 +12,7 @@
             </template>
         </VueSlideBar>
         <h2>Value: {{slider.value}}</h2>
-        <h2>Label: {{rangeValue.label}}</h2>
+        <h2>Label: {{rangeValue}}</h2>
     </div>
 </template>
 
@@ -33,46 +33,8 @@ export class HeatMapOneDayVueSlideBar extends Vue {
         default: {}
     })
     slider: object;
-    
-    rangeValue:any = {};
-    // slider:any = {
-    //     value: 45,
-    //     data: [
-    //         15,
-    //         30,
-    //         45,
-    //         60,
-    //         75,
-    //         90,
-    //         120
-    //     ],
-    //     range: [
-    //         {
-    //             label: '15 mins'
-    //         },
-    //         {
-    //             label: '30 mins',
-    //             isHide: true
-    //         },
-    //         {
-    //             label: '45 mins'
-    //         },
-    //         {
-    //             label: '1 hr',
-    //             isHide: true
-    //         },
-    //         {
-    //             label: '1 hr 15 mins'
-    //         },
-    //         {
-    //             label: '1 hr 30 mins',
-    //             isHide: true
-    //         },
-    //         {
-    //             label: '2 hrs'
-    //         }
-    //     ]
-    // };
+
+    rangeValue:any = '';
 
     created() {
         console.log('slider - ', this.slider);
@@ -86,7 +48,8 @@ export class HeatMapOneDayVueSlideBar extends Vue {
     }
 
     callbackRange (val) {
-        this.rangeValue = val;
+        this.rangeValue = val.label.substring(0, 2);
+        this.$emit('hour', this.rangeValue);
         console.log('this.rangeValue - ', this.rangeValue);
     }
 }

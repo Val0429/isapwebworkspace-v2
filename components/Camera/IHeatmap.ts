@@ -11,7 +11,7 @@ interface IHeatMapData {
 
 interface IMapImage {
     name: string;
-    snapshotBase64: string;
+    src: string;
     width: number;
     height: number;
 }

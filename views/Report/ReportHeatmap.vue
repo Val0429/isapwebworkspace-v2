@@ -59,7 +59,9 @@
                 ></heat-map-many-day>
                 <br>
 
-                <heat-map-one-day-slider-bar :slider="slider">
+                <heat-map-one-day-slider-bar
+                    :slider="slider"
+                    @hour="receiveHour">
 
                 </heat-map-one-day-slider-bar>
 
@@ -215,9 +217,8 @@ export default class ReportHeatmap extends Vue {
     deviceSummaryFilter: any = [];
 
     // 時間一天
-    hourArray: any = [];
-    hourArrayData: string = "";
     slider: any = {};
+    hour: string = '';
 
     // 時間多天
     timeArray: any = [];
@@ -781,7 +782,6 @@ export default class ReportHeatmap extends Vue {
 
     initHourArray() {
 
-        // TODO: 整理OfficeHour，使用         HighchartsService.siteOfficeHour()
 
         let weekDay = new Date().getDay();
 
@@ -800,28 +800,36 @@ export default class ReportHeatmap extends Vue {
             }
         ];
 
-        console.log(HighchartsService.siteOfficeHour(weekDay, dayRanges));
-
-        this.hourArray = [
-            "2019-07-01T16:00:00.000Z",
-            "2019-07-01T17:00:00.000Z",
-            "2019-07-01T18:00:00.000Z",
-            "2019-07-01T19:00:00.000Z"
-        ];
+        let result = HighchartsService.siteOfficeHour(weekDay, dayRanges);
+        console.log(result);
 
         this.slider = {
-            value: 45,
-            data: [9, 10, 11, 12, 13, 14, 15],
-            range: [
-                { label: "9:00" },
-                { label: "10:00" },
-                { label: "11:00" },
-                { label: "12:00" },
-                { label: "13:00" },
-                { label: "14:00" },
-                { label: "15:00" }
-            ]
+            value: 0,
+            data: [],
+            range: [],
         };
+
+        let tempDataArray = [];
+        let tempRangeArray = [];
+
+        for (let i = result.startHour; i <= result.endHour; i++) {
+
+            let hourString = i < 10 ? `0${i.toString()}` : i.toString();
+            let tempLabel = { label: `${hourString}:00` };
+
+            tempRangeArray.push(tempLabel);
+            tempDataArray.push(i)
+        }
+
+        console.log('tempDataArray - ', tempDataArray);
+        console.log('tempRangeArray - ', tempRangeArray);
+
+        this.slider = {
+            value: result.startHour,
+            data: tempDataArray,
+            range: tempRangeArray
+        };
+
     }
 
     initTimeArray() {
@@ -1646,6 +1654,24 @@ export default class ReportHeatmap extends Vue {
         }
     }
 
+
+    // 一天的其中一小時
+    receiveHour(hour) {
+        let tempHour = new Date();
+        tempHour.setHours(parseInt(hour), 0, 0, 0);
+
+        this.hour = new Date(tempHour).toISOString();
+        console.log('this.hour - ', this.hour);
+
+        // let d =Datetime.DateTime2String(new Date('2000-01-01T01:00:00.000Z'), 'HH')
+        // let d1 =Datetime.DateTime2String(new Date(this.hour), 'HH')
+        // console.log('d - ', d);
+        // console.log('d1 - ', d1);
+        // console.log('?? - ', d1 === d);
+
+    }
+
+    // 多天的其中一天
     receiveTimeArrayIndex(timeArrayIndex) {
         console.log(" timeArrayIndex : ", timeArrayIndex);
         for (const index in this.timeArray) {
