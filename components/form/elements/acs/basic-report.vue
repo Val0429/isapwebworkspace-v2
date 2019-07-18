@@ -6,7 +6,7 @@
             :label="_('w_Filter')"
         >
          <iv-form 
-            ref="form"
+            ref="filter"            
             class="col-md-9"
             @mounted="doMounted"
             :interface="inf"            
@@ -17,6 +17,7 @@
             </iv-form> 
 
         <iv-sort-select
+                ref="fieldSelection"
                 v-if="options.length>0"                      
                 v-model="selectedColumns"
                 class="col-md-8"
@@ -26,8 +27,8 @@
             
         <template v-if="isMounted" >            
             <div class="float-right">
-                <b-button class="btn-filter" size="lg" v-bind="$refs.form.submitBindings.$attrs" v-on="$refs.form.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
-                <b-button class="btn-filter" size="lg" v-bind="$refs.form.resetBindings.$attrs" v-on="$refs.form.resetBindings.$listeners" @click="onReset()">{{ _("wb_Reset") }}</b-button>                
+                <b-button class="btn-filter" size="lg" v-bind="$refs.filter.submitBindings.$attrs" v-on="$refs.filter.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                <b-button class="btn-filter" size="lg" v-bind="$refs.filter.resetBindings.$attrs" v-on="$refs.filter.resetBindings.$listeners" @click="onReset()">{{ _("wb_Reset") }}</b-button>                
             </div>
         </template>
         </iv-card>
@@ -39,7 +40,9 @@
                 <iv-toolbox-export @click="exportToExcel()"/>
                 
             </template>        
-           <b-table striped hover 
+           <b-table 
+                striped hover 
+                ref="table"
                 :items="records" 
                 :fields="sortedFields" 
                 :per-page="perPage"

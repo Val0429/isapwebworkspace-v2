@@ -179,6 +179,7 @@ export class SortSelect extends Vue {
     }
 
     initValue() {
+        console.log("initValue");
         this.optionsSelected = [];
         this.chooseSelected = [];
         this.optionsSelectItem = [];
@@ -200,6 +201,7 @@ export class SortSelect extends Vue {
     @Watch("options", {immediate:true})
     optionsChanged(value){
         console.log("optionsChanged", value);
+        console.log("optionsChanged selected", this.value);
         this.initValue();
     }
     // disable
