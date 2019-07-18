@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 import { IHeatMapData, IHeatMapPosition, IMapImage } from "./IHeatmap";
 import Heatmap from "heatmap.js";
 
@@ -70,6 +70,11 @@ export class CameraHeatmap extends Vue {
         }
     })
     heatMapPosition: IHeatMapPosition[];
+
+    @Watch("heatMapPosition", { deep: true })
+    private watchPageType(newVal, oldVal) {
+        this.initMap();
+    }
 
     created() {}
 
