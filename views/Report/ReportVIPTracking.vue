@@ -15,6 +15,7 @@
             <highcharts-vip-tracking
                 :startDate="startDate"
                 :endDate="endDate"
+                :tagIds="tagIds"
                 :sites="sites"
                 :value="chartDatas"
             >
@@ -49,6 +50,7 @@ export default class ReportVIPTracking extends Vue {
     ////////////////////////////////////// Morris Start //////////////////////////////////////
     startDate: Date = new Date("2019-01-01T00:00:00.000Z");
     endDate: Date = new Date("2019-01-01T01:00:00.000Z");
+    tagIds: string[] = [];
     sites: ISite[] = [];
     chartDatas: IChartVipTrackingData[] = [];
 
@@ -229,6 +231,7 @@ export default class ReportVIPTracking extends Vue {
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
+            this.tagIds.push("TagId" + tempJ.toString());
             this.sites.push({
                 objectId: "site" + tempJ.toString(),
                 name: "Site " + tempJ.toString(),
@@ -243,7 +246,7 @@ export default class ReportVIPTracking extends Vue {
             });
 
             let tempVipTrackingType =
-                Math.floor(Math.random()) > 0
+                Math.floor(Math.random() * 300) % 2 == 0
                     ? EVipTrackingType.vip
                     : EVipTrackingType.blacklist;
 
