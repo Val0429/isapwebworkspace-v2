@@ -1,25 +1,26 @@
 <template>
     <div class="animated fadeIn">
-        <title>Peak hours</title>
-        <table class="table table-bordered">
+        <h2 v-if="dayXSiteX != eDayXSiteX.none">{{_('w_PeakHours')}}</h2>
+        <table class="table-no-border">
             <thead>
                 <tr>
-                    <th>
+                    <th v-if="dayXSiteX == eDayXSiteX.siteXDayX">
                         <b-form-select
-                            v-if="dayXSiteX == eDayXSiteX.siteXDayX"
                             v-model="site"
                             :options="siteItems"
                             @change="changeSite()"
                         ></b-form-select>
                     </th>
+                    <th v-if="dayXSiteX == eDayXSiteX.site1DayX || dayXSiteX == eDayXSiteX.siteXDay1">
+                    </th>
                     <th v-for="(item, key, index) in pData.head">
-                        {{item + ":00"}} - {{(item + 1) + ":00"}}
+                        {{fetchZero(item) + ":00"}} ~ {{fetchZero(item + 1) + ":00"}}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(items, key, index) in pData.body">
-                    <td v-if="dayXSiteX != eDayXSiteX.siteXDay1"> {{(new Date(items.title)).getFullYear() + "/" + ((new Date(items.title)).getMonth() + 1) + "/" + (new Date(items.title)).getDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
+                    <td v-if="dayXSiteX == eDayXSiteX.siteXDayX || dayXSiteX == eDayXSiteX.site1DayX"> {{(new Date(items.title)).getFullYear() + "/" + fetchZero((new Date(items.title)).getMonth() + 1) + "/" + (new Date(items.title)).getDate() + " " + showWeek((new Date(items.title)).getDay())}}</td>
                     <td v-if="dayXSiteX == eDayXSiteX.siteXDay1"> {{items.title}}</td>
                     <td
                         v-for="(item, key, index) in items.context"
@@ -331,6 +332,10 @@ export class PeakTimeRange extends Vue {
         }
     }
 
+    fetchZero(value) {
+        return value < 10 ? "0" + value : value;
+    }
+
     generateDayXSteX() {
         if (this.timeRangeData.length == 0) {
             return;
@@ -467,23 +472,31 @@ Vue.component("peak-time-range", PeakTimeRange);
     height: 47px;
 }
 .hoursRange1 {
-    background-color: #d7e7f7;
+    background-color: #d8e7f8;
     height: 47px;
 }
 .hoursRange2 {
-    background-color: #9ec3ef;
+    background-color: #b9cafc;
     height: 47px;
 }
 .hoursRange3 {
-    background-color: #3e86db;
+    background-color: #b9cafc;
     height: 47px;
 }
 .hoursRange4 {
-    background-color: #194f8f;
+    background-color: #5780f8;
     height: 47px;
 }
 .hoursRange5 {
-    background-color: #0f2f55;
+    background-color: #265bf6;
     height: 47px;
+}
+
+.table-no-border {
+    border-collapse: collapse;
+    th,
+    td {
+        border: 10px solid rgb(100%, 100%, 100%);
+    }
 }
 </style>
