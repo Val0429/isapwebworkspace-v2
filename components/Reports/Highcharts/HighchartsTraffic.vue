@@ -56,7 +56,13 @@ exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
 // custom import
-import { ETimeMode, EAreaMode, EChartMode, EWeather, EBusinessChart } from "../";
+import {
+    ETimeMode,
+    EAreaMode,
+    EChartMode,
+    EWeather,
+    EBusinessChart
+} from "../";
 import { ISite, IChartTrafficData, ISiteOfficeHourItem } from "../";
 import Datetime from "@/services/Datetime";
 import HighchartsService from "../models/HighchartsService";
@@ -257,13 +263,6 @@ export class HighchartsTraffic extends Vue {
         tempSeries[0].name = tempBusinessTitle;
 
         //// office hour group ////
-        if (this.chartMode != EChartMode.site1Day1) {
-            return false;
-        }
-        if (this.sites.length != 1) {
-            return false;
-        }
-
         let weekDay = this.startDate.getDay();
         let officeHour: ISiteOfficeHourItem = HighchartsService.siteOfficeHour(
             weekDay,

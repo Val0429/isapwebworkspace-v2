@@ -193,7 +193,7 @@ enum ECampaignTimeType {
 enum EVipTrackingType {
     none = 'none',
     vip = 'vip',
-    black = 'black',
+    blacklist = 'blacklist',
 }
 
 enum EFileType {
