@@ -11,125 +11,124 @@
         >
         </filter-condition>
 
-            <iv-card
-                :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
-                :visible="visible"
-            >
-                <template #toolbox>
-                    <!-- Ben -->
-                    <iv-toolbox-export-excel
-                        size="lg"
-                        @click="exportExcel(eFileType.xlsx)"
-                    />
-                    <iv-toolbox-export-csv
-                        size="lg"
-                        @click="exportExcel(eFileType.csv)"
-                    />
-                    <iv-toolbox-export-pdf
-                        size="lg"
-                        @click="exportPDF"
-                    />
-
-                    <!-- Tina -->
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                    <iv-toolbox-copy-to-template
-                        size="lg"
-                        @click="pageToReportTemplate()"
-                    />
-                </template>
+        <iv-card
+            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+            :visible="visible"
+        > <template #toolbox>
+                <!-- Ben -->
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
 
                 <!-- Tina -->
-                <analysis-filter-traffic
-                    class="mb-4"
-                    :areaSelectItem="areaSelectItem"
-                    :deviceGroupSelectItem="deviceGroupSelectItem"
-                    :deviceSelectItem="deviceSelectItem"
-                    :inOrOutTypeSelectItem="inOrOutTypeSelectItem"
-                    :timeModeSelectItem="timeModeSelectItem"
-                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                    :businessChartTypeSelectItem="businessChartTypeSelectItem"
-                    :siteIds="filterData.siteIds"
-                    :areaId="inputFormData.areaId"
-                    :groupId="inputFormData.groupId"
-                    :deviceId="inputFormData.deviceId"
-                    :type="inputFormData.type"
-                    :inOrOut="inputFormData.inOrOut"
-                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                    :businessChartType="inputFormData.businessChartType"
-                    @area_id="receiveAreaId"
-                    @group_id="receiveGroupId"
-                    @device_id="receiveDeviceId"
-                    @type="receiveType"
-                    @in_or_out="receiveInOrOut"
-                    @is_included_employee="receiveIsIncludedEmployee"
-                    @business_chart_type="receiveBusinessChartType"
-                >
-                </analysis-filter-traffic>
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
 
-                <!-- Ben -->
-                <anlysis-dashboard
-                    ref="anlysisDashboard"
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :type="dTimeMode"
-                    :siteIds="pSiteIds"
-                    :tagIds="tags"
-                    :pageType="dPageType"
-                >
-                </anlysis-dashboard>
+            <!-- Tina -->
+            <analysis-filter-traffic
+                class="mb-4"
+                :areaSelectItem="areaSelectItem"
+                :deviceGroupSelectItem="deviceGroupSelectItem"
+                :deviceSelectItem="deviceSelectItem"
+                :inOrOutTypeSelectItem="inOrOutTypeSelectItem"
+                :timeModeSelectItem="timeModeSelectItem"
+                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                :businessChartTypeSelectItem="businessChartTypeSelectItem"
+                :siteIds="filterData.siteIds"
+                :areaId="inputFormData.areaId"
+                :groupId="inputFormData.groupId"
+                :deviceId="inputFormData.deviceId"
+                :type="inputFormData.type"
+                :inOrOut="inputFormData.inOrOut"
+                :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                :businessChartType="inputFormData.businessChartType"
+                @area_id="receiveAreaId"
+                @group_id="receiveGroupId"
+                @device_id="receiveDeviceId"
+                @type="receiveType"
+                @in_or_out="receiveInOrOut"
+                @is_included_employee="receiveIsIncludedEmployee"
+                @business_chart_type="receiveBusinessChartType"
+            >
+            </analysis-filter-traffic>
 
-                <!-- Morris -->
-                <highcharts-traffic
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :sites="sites"
-                    :timeMode="timeMode"
-                    :areaMode="areaMode"
-                    :businessMode="inputFormData.businessChartType"
-                    :value="chartDatas"
-                >
-                </highcharts-traffic>
+            <!-- Ben -->
+            <anlysis-dashboard
+                ref="anlysisDashboard"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type="dTimeMode"
+                :siteIds="pSiteIds"
+                :tagIds="tags"
+                :pageType="dPageType"
+            >
+            </anlysis-dashboard>
 
-                <!-- Ben -->
-                <peak-time-range
-                    :siteItems="siteItem"
-                    :dayXSiteX="pDayXxSiteX"
-                    :timeRangeData="pData"
-                >
-                </peak-time-range>
+            <!-- Morris -->
+            <highcharts-traffic
+                :startDate="startDate"
+                :endDate="endDate"
+                :sites="sites"
+                :timeMode="timeMode"
+                :areaMode="areaMode"
+                :businessMode="inputFormData.businessChartType"
+                :value="chartDatas"
+            >
+            </highcharts-traffic>
 
-                <!-- Ben -->
-                <report-table
-                    v-show="tableStep === eTableStep.mainTable"
-                    ref="reportTable"
-                    :reportTableData="rData"
-                    :reportTableTitle="reportTableTitle"
-                    @clickItem="toSunReportTable"
-                >
-                </report-table>
+            <!-- Ben -->
+            <peak-time-range
+                :siteItems="siteItem"
+                :dayXSiteX="pDayXxSiteX"
+                :timeRangeData="pData"
+            >
+            </peak-time-range>
 
-                <report-table
-                    v-show="tableStep === eTableStep.sunTable"
-                    ref="sunReportTable"
-                    :reportTableData="sunRData"
-                    :reportTableTitle="reportTableTitle"
-                >
-                </report-table>
+            <!-- Ben -->
+            <report-table
+                v-show="tableStep === eTableStep.mainTable"
+                ref="reportTable"
+                :reportTableData="rData"
+                :reportTableTitle="reportTableTitle"
+                @clickItem="toSunReportTable"
+            >
+            </report-table>
 
-                <div>
-                    <b-button
-                        v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
-                        variant="secondary"
-                        size="lg"
-                        @click="reportTableBack"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </div>
+            <report-table
+                v-show="tableStep === eTableStep.sunTable"
+                ref="sunReportTable"
+                :reportTableData="sunRData"
+                :reportTableTitle="reportTableTitle"
+            >
+            </report-table>
 
-            </iv-card>
+            <div>
+                <b-button
+                    v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
+                    variant="secondary"
+                    size="lg"
+                    @click="reportTableBack"
+                >{{ _('w_Back') }}
+                </b-button>
+            </div>
+
+        </iv-card>
 
         <!-- Tina -->
         <recipient
@@ -1506,34 +1505,47 @@ export default class ReportTraffic extends Vue {
     }
 
     analysisTitle(): string {
+        let title = "Analysis - ";
 
-        let title = 'Analysis - ';
-
-        console.log('analysisTitle - ', this.filterData);
+        console.log("analysisTitle - ", this.filterData);
 
         if (this.filterData.siteIds.length === 1) {
             for (const siteId in this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === siteId) {
-                    title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+                if (this.filterData.siteIds[0] === siteId) {
+                    title += `${this._("w_Title_One_Site")} ${
+                        this.sitesSelectItem[siteId]
+                    }. `;
                 }
             }
         } else {
-            title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+            title += `${this._("w_Title_Many_Site_Start")} ${
+                this.filterData.siteIds.length
+            } ${this._("w_Title_Many_Site_End")} `;
         }
 
-        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
-        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+        title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
+            this.filterData.startDate,
+            "YYYY/MM/DD"
+        )}. `;
+        title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
+            this.filterData.endDate,
+            "YYYY/MM/DD"
+        )}. `;
 
         if (this.filterData.tagIds.length === 1) {
             for (const tagId in this.tagSelectItem) {
-                if(this.filterData.tagIds[0] === tagId) {
-                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                if (this.filterData.tagIds[0] === tagId) {
+                    title += `${this._("w_Title_One_Tag")} ${
+                        this.tagSelectItem[tagId]
+                    }. `;
                 }
             }
         } else if (this.filterData.tagIds.length >= 2) {
-            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+            title += `${this._("w_Title_Many_Tag_Start")} ${
+                this.filterData.tagIds.length
+            } ${this._("w_Title_Many_Tag_End")} `;
         } else {
-            title += '';
+            title += "";
         }
 
         this.visible = true;

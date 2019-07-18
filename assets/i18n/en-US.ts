@@ -212,6 +212,8 @@ export default class LangObject {
     w_ErrorConfig = 'Required IP, Port, WSPort, Protocol, Account and Password';
     w_WrongConfig = 'Please check IP, Port, WSPort, Protocol, Account and Password again';
 
+    w_PeakHours = 'PEAK HOURS';
+
     // w_SelectSiteTree = 'Select site tree';
     w_SelectSiteTree = 'Select store tree';
     w_SelectRegionTree = 'Select region tree';
