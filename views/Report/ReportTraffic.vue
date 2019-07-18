@@ -1,5 +1,3 @@
-import {EDesignationPeriod} from "../../components/Reports";
-import {EAreaMode} from "../../components/Reports";
 <template>
     <div>
         <!-- Tina -->
@@ -13,7 +11,6 @@ import {EAreaMode} from "../../components/Reports";
         >
         </filter-condition>
 
-        <div>
             <iv-card>
                 <template #toolbox>
                     <!-- Ben -->
@@ -130,7 +127,6 @@ import {EAreaMode} from "../../components/Reports";
                 </div>
 
             </iv-card>
-        </div>
 
         <!-- Tina -->
         <recipient
@@ -151,11 +147,10 @@ import {
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
-
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
-import WeatherService from "@/components/Reports/models/WeatherService";
 import Datetime from "@/services/Datetime";
+import WeatherService from "@/components/Reports/models/WeatherService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import HighchartsTraffic from "@/components/Reports/Highcharts/HighchartsTraffic.vue";
 import {
@@ -184,15 +179,10 @@ import {
 import ReportService from "@/components/Reports/models/ReportService";
 
 ////////////////////////////////// export //////////////////////////////////
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
-enum EFileType {
-    xlsx = "xlsx",
-    xls = "xls",
-    csv = "csv"
-}
+import ReportPDFService from "@/components/Reports/models/ReportPDFService";
+import { EFileType } from "@/components/Reports";
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -347,29 +337,29 @@ export default class ReportTraffic extends Vue {
 
     initSelect() {
         this.inOrOutTypeSelectItem = {
-            in: this._('w_In'),
-            out: this._('w_Out'),
-            all: this._('w_All'),
+            in: this._("w_In"),
+            out: this._("w_Out"),
+            all: this._("w_All")
         };
 
         this.timeModeSelectItem = {
-            day: this._('w_daily'),
-            week: this._('w_weekly'),
-            month: this._('w_monthly'),
-            quarter: this._('w_quarterly'),
-            year: this._('w_yearly')
+            day: this._("w_daily"),
+            week: this._("w_weekly"),
+            month: this._("w_monthly"),
+            quarter: this._("w_quarterly"),
+            year: this._("w_yearly")
         };
 
         this.isIncludedEmployeeSelectItem = {
-            yes: this._('w_yes'),
-            no: this._('w_no')
+            yes: this._("w_yes"),
+            no: this._("w_no")
         };
 
         this.businessChartTypeSelectItem = {
-	        revenue: this._('w_revenue'),
-	        asp: this._('w_asp'),
-            transaction: this._('w_transaction'),
-            conversion: this._('w_conversion'),
+            revenue: this._("w_revenue"),
+            asp: this._("w_asp"),
+            transaction: this._("w_transaction"),
+            conversion: this._("w_conversion")
         };
     }
 
@@ -1421,7 +1411,7 @@ export default class ReportTraffic extends Vue {
             groupId: "",
             deviceId: "",
             inOrOut: ETypeInOrOut.in,
-            type: '',
+            type: "",
             isIncludedEmployee: EIncludedEmployee.no,
             businessChartType: EBusinessChart.revenue
         };
@@ -2014,8 +2004,7 @@ export default class ReportTraffic extends Vue {
 
     async receiveBusinessChartType(businessChartType) {
         this.inputFormData.businessChartType = businessChartType;
-        console.log(' - ', this.inputFormData.businessChartType);
-
+        console.log(" - ", this.inputFormData.businessChartType);
 
         // 單一site
         if (this.filterData.firstSiteId) {
@@ -2103,40 +2092,7 @@ export default class ReportTraffic extends Vue {
             HighchartsService.datetimeFormat.date
         );
 
-        html2Canvas(document.querySelector(".container-fluid"), {
-            allowTaint: true,
-            useCORS: true
-        }).then(function(canvas) {
-            let contentWidth = canvas.width;
-            let contentHeight = canvas.height;
-            let pageHeight = (contentWidth / 592.28) * 841.89;
-            let leftHeight = contentHeight;
-            let position = 0;
-            const imgWidth = 595.28;
-            let imgHeight = (592.28 / contentWidth) * contentHeight;
-            let pageData = canvas.toDataURL("image/jpeg", 1.0);
-            let PDF = new JsPDF("", "pt", "a4");
-            if (leftHeight < pageHeight) {
-                PDF.addImage(pageData, "JPEG", 0, 10, imgWidth, imgHeight);
-            } else {
-                while (leftHeight > 0) {
-                    PDF.addImage(
-                        pageData,
-                        "JPEG",
-                        0,
-                        position,
-                        imgWidth,
-                        imgHeight
-                    );
-                    leftHeight -= pageHeight;
-                    position -= 841.89;
-                    if (leftHeight > 0) {
-                        PDF.addPage();
-                    }
-                }
-            }
-            PDF.save(title + ".pdf");
-        });
+        ReportPDFService.exportPDF(title);
     }
 
     ///////////////////////////////////////////////////////

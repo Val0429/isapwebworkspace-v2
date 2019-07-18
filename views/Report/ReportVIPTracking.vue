@@ -9,12 +9,17 @@
             :tagIncludeSitesItem="tagIncludeSitesItem"
             @submit-data="receiveFilterData"
         >
-
         </filter-condition-vip-and-blacklist>
 
-        <div v-show="pageStep === ePageStep.none">
-            VIPTracking
-        </div>
+         <iv-card>
+            <highcharts-vip-tracking
+                :startDate="startDate"
+                :endDate="endDate"
+                :sites="sites"
+                :value="chartDatas"
+            >
+            </highcharts-vip-tracking>
+         </iv-card>
 
     </div>
 </template>
@@ -26,23 +31,25 @@ import {
     ITemplateItem,
     EDesignationPeriod,
     EDeviceMode,
-    ISite
+    ISite,
+    IChartVipTrackingData
 } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
 
-enum EPageStep {
-    none = "none"
-}
+import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
+import ReportService from "@/components/Reports/models/ReportService";
 
 @Component({
     components: {}
 })
 export default class ReportVIPTracking extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
-
     templateItem: ITemplateItem | null = null;
+
+    ////////////////////////////////////// Morris Start //////////////////////////////////////
+    startDate: Date = new Date("2019-01-01T00:00:00.000Z");
+    endDate: Date = new Date("2019-01-01T01:00:00.000Z");
     sites: ISite[] = [];
+    chartDatas: IChartVipTrackingData[] = [];
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -162,7 +169,7 @@ export default class ReportVIPTracking extends Vue {
                 return false;
             });
 
-        this.tagIncludeSitesItem = result['results'];
+        this.tagIncludeSitesItem = result["results"];
         // console.log("result - ", this.tagIncludeSitesItem);
     }
 
@@ -190,8 +197,6 @@ export default class ReportVIPTracking extends Vue {
     }
 
     resolveSummary() {
-
-
         // get office hour data
         let tempISite: any = {};
         this.sites = [];
