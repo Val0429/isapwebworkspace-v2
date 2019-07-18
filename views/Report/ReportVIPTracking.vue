@@ -13,9 +13,39 @@
         </filter-condition-vip-and-blacklist>
 
         <iv-card
-            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
             :visible="visible"
         >
+<!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+-->
+
+
+            <template #toolbox>
+                <!-- Ben -->
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
+
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
+
+                <!-- Tina -->
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
+
             <highcharts-vip-tracking
                 :startDate="startDate"
                 :endDate="endDate"
@@ -24,6 +54,14 @@
             >
             </highcharts-vip-tracking>
         </iv-card>
+
+        <!-- Tina -->
+        <recipient
+            :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
+            @user-data="receiveUserData"
+            @return-modalShow="receiveModalShowData"
+        ></recipient>
 
     </div>
 </template>
@@ -75,7 +113,6 @@ export default class ReportVIPTracking extends Vue {
 
     // OfficeHour 相關
     officeHourItemDetail: any = [];
-
 
     // 收合card控制
     visible: boolean = false;
@@ -288,6 +325,40 @@ export default class ReportVIPTracking extends Vue {
         this.visible = true;
 
         return title;
+    }
+
+
+    async receiveUserData(data) {
+        this.userData = [];
+        this.userData = data;
+    }
+
+    receiveModalShowData(data) {
+        this.modalShow = data;
+    }
+
+    // Author: Tina
+    sortOutReportToTemplateData() {
+        this.ReportToTemplateData = {
+            startDate: this.filterData.startDate,
+            endDate: this.filterData.endDate,
+            mode: EDeviceMode.humanDetection,
+            siteIds: this.filterData.siteIds,
+            tagIds: this.filterData.tagIds,
+            sendUserIds: this.userData,
+            type: this.designationPeriod
+        };
+    }
+
+    // Author: Tina
+    pageToReportTemplate() {
+        this.sortOutReportToTemplateData();
+        this.$router.push({
+            path: "/reports/",
+            query: {
+                reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+            }
+        });
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

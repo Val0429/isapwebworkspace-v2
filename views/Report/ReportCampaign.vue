@@ -11,9 +11,12 @@
         </filter-condition-campaign>
 
         <iv-card
-            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
             :visible="visible"
         >
+<!--
+            :label="filterData.campaignIds.length !== 0 ? analysisTitle() : '' "
+-->
+
             <template #toolbox>
                 <!-- Tina -->
                 <iv-toolbox-send-mail
@@ -218,17 +221,17 @@ export default class ReportCampaign extends Vue {
         title += `${ this._('w_Title_FiscalYear') } ${ this.filterData.year }.`;
 
 
-        if (this.filterData.campaignIds.length === 1) {
-            for (const campaignId in this.campaignSelectItem) {
-                if(this.filterData.campaignIds[0] === campaignId) {
-                    title += `${this._('w_Title_One_EventName')} ${this.campaignSelectItem[campaignId]}. `;
-                }
-            }
-        } else if (this.filterData.campaignIds.length >= 2) {
-            title += `${this._('w_Title_EventName_Start')} ${this.filterData.campaignIds.length} ${this._('w_Title_EventName_End')} `;
-        } else {
-            title += '';
-        }
+        // if (this.filterData.campaignIds.length === 1) {
+        //     for (const campaignId in this.campaignSelectItem) {
+        //         if(this.filterData.campaignIds[0] === campaignId) {
+        //             title += `${this._('w_Title_One_EventName')} ${this.campaignSelectItem[campaignId]}. `;
+        //         }
+        //     }
+        // } else if (this.filterData.campaignIds.length >= 2) {
+        //     title += `${this._('w_Title_EventName_Start')} ${this.filterData.campaignIds.length} ${this._('w_Title_EventName_End')} `;
+        // } else {
+        //     title += '';
+        // }
 
         // if (this.filterData.siteIds.length === 1) {
         //     for (const siteId in this.sitesSelectItem) {
