@@ -12,123 +12,122 @@
         >
         </filter-condition>
 
-            <iv-card>
+        <iv-card>
 
-                <template #toolbox>
-                    <!-- Ben -->
-                    <iv-toolbox-export-excel
-                        size="lg"
-                        @click="exportExcel(eFileType.xlsx)"
-                    />
-                    <iv-toolbox-export-csv
-                        size="lg"
-                        @click="exportExcel(eFileType.csv)"
-                    />
+            <template #toolbox>
+                <!-- Ben -->
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
 
-                    <iv-toolbox-export-pdf
-                        size="lg"
-                        @click="exportPDF"
-                    />
-
-                    <!-- Tina -->
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                    <iv-toolbox-copy-to-template
-                        size="lg"
-                        @click="pageToReportTemplate()"
-                    />
-                </template>
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
 
                 <!-- Tina -->
-                <analysis-filter-dwell-time
-                    class="mb-4"
-                    :areaSelectItem="areaSelectItem"
-                    :deviceGroupSelectItem="deviceGroupSelectItem"
-                    :deviceSelectItem="deviceSelectItem"
-                    :timeModeSelectItem="timeModeSelectItem"
-                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                    :businessChartTypeSelectItem="businessChartTypeSelectItem"
-                    :siteIds="filterData.siteIds"
-                    :areaId="inputFormData.areaId"
-                    :groupId="inputFormData.groupId"
-                    :deviceId="inputFormData.deviceId"
-                    :type="inputFormData.type"
-                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                    @area_id="receiveAreaId"
-                    @group_id="receiveGroupId"
-                    @device_id="receiveDeviceId"
-                    @type="receiveType"
-                    @is_included_employee="receiveIsIncludedEmployee"
-                    @business_chart_type="receiveBusinessChartType"
-                >
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
 
-                </analysis-filter-dwell-time>
+            <!-- Tina -->
+            <analysis-filter-dwell-time
+                class="mb-4"
+                :areaSelectItem="areaSelectItem"
+                :deviceGroupSelectItem="deviceGroupSelectItem"
+                :deviceSelectItem="deviceSelectItem"
+                :timeModeSelectItem="timeModeSelectItem"
+                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                :businessChartTypeSelectItem="businessChartTypeSelectItem"
+                :siteIds="filterData.siteIds"
+                :areaId="inputFormData.areaId"
+                :groupId="inputFormData.groupId"
+                :deviceId="inputFormData.deviceId"
+                :type="inputFormData.type"
+                :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                @area_id="receiveAreaId"
+                @group_id="receiveGroupId"
+                @device_id="receiveDeviceId"
+                @type="receiveType"
+                @is_included_employee="receiveIsIncludedEmployee"
+                @business_chart_type="receiveBusinessChartType"
+            >
 
-                <!-- Ben -->
-                <anlysis-dashboard
-                    ref="analysisDashboard"
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :type="dTimeMode"
-                    :siteIds="pSiteIds"
-                    :tagIds="tags"
-                    :pageType="dPageType"
-                >
-                </anlysis-dashboard>
+            </analysis-filter-dwell-time>
 
-                <!-- Morris -->
-                <highcharts-dwell-time
-                    ref="test"
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :sites="sites"
-                    :timeMode="timeMode"
-                    :areaMode="areaMode"
-                    :businessMode="inputFormData.businessChartType"
-                    :value="chartDatas"
-                >
-                </highcharts-dwell-time>
+            <!-- Ben -->
+            <anlysis-dashboard
+                ref="analysisDashboard"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type="dTimeMode"
+                :siteIds="pSiteIds"
+                :tagIds="tags"
+                :pageType="dPageType"
+            >
+            </anlysis-dashboard>
 
-                <!-- Ben -->
-                <report-table
-                    v-show="tableStep === eTableStep.mainTable"
-                    ref="reportTable"
-                    :reportTableData="rData"
-                    :reportTableTitle="reportTableTitle"
-                    @clickItem="toSunReportTable"
-                >
-                </report-table>
+            <!-- Morris -->
+            <highcharts-dwell-time
+                ref="test"
+                :startDate="startDate"
+                :endDate="endDate"
+                :sites="sites"
+                :timeMode="timeMode"
+                :areaMode="areaMode"
+                :businessMode="inputFormData.businessChartType"
+                :value="chartDatas"
+            >
+            </highcharts-dwell-time>
 
-                <report-table
-                    v-show="tableStep === eTableStep.sunTable"
-                    ref="sunReportTable"
-                    :reportTableData="sunRData"
-                    :reportTableTitle="reportTableTitle"
-                    @clickItem="toDetailReportTable"
-                >
-                </report-table>
+            <!-- Ben -->
+            <report-table
+                v-show="tableStep === eTableStep.mainTable"
+                ref="reportTable"
+                :reportTableData="rData"
+                :reportTableTitle="reportTableTitle"
+                @clickItem="toSunReportTable"
+            >
+            </report-table>
 
-                <dwell-time-table
-                    ref="detailReportTable"
-                    v-show="tableStep === eTableStep.detailTable"
-                    :thresholdDetailTableContent="detailRData"
-                >
-                </dwell-time-table>
+            <report-table
+                v-show="tableStep === eTableStep.sunTable"
+                ref="sunReportTable"
+                :reportTableData="sunRData"
+                :reportTableTitle="reportTableTitle"
+                @clickItem="toDetailReportTable"
+            >
+            </report-table>
 
-                <div>
-                    <b-button
-                        v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
-                        variant="secondary"
-                        size="lg"
-                        @click="reportTableBack"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </div>
+            <dwell-time-table
+                ref="detailReportTable"
+                v-show="tableStep === eTableStep.detailTable"
+                :thresholdDetailTableContent="detailRData"
+            >
+            </dwell-time-table>
 
-            </iv-card>
+            <div>
+                <b-button
+                    v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
+                    variant="secondary"
+                    size="lg"
+                    @click="reportTableBack"
+                >{{ _('w_Back') }}
+                </b-button>
+            </div>
 
+        </iv-card>
 
     </div>
 </template>
@@ -182,7 +181,7 @@ import {
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
-import { EFileType } from "@/components/Reports";
+import { EFileType, IReportTableTitle } from "@/components/Reports";
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -287,7 +286,10 @@ export default class ReportDwellTime extends Vue {
 
     //ReportTable 相關
     rData = new ReportTableData();
-    reportTableTitle = {};
+    
+		 reportTableTitle: IReportTableTitle = {
+        titleCount:0
+    };
 
     //Sun ReportTable 相關
     sunRData = new ReportTableData();
@@ -375,6 +377,7 @@ export default class ReportDwellTime extends Vue {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
+                   this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
@@ -402,6 +405,7 @@ export default class ReportDwellTime extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
+                  this.reportTableTitle.headTitle = "DWELLTIME BY DAYS";
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
@@ -552,7 +556,11 @@ export default class ReportDwellTime extends Vue {
                     }
                 }
                 this.rData.head = this.rData.head.map(
-                    x => x + ":00 - " + (x + 1) + ":00"
+                    x =>
+                        this.fetchZero(x) +
+                        ":00 ~ " +
+                        this.fetchZero(x + 1) +
+                        ":00"
                 );
                 break;
 
@@ -644,7 +652,7 @@ export default class ReportDwellTime extends Vue {
                     x =>
                         new Date(x).getFullYear() +
                         "/" +
-                        (new Date(x).getMonth() + 1) +
+                        this.fetchZero(new Date(x).getMonth() + 1) +
                         "/" +
                         new Date(x).getDate() +
                         " " +
@@ -756,6 +764,7 @@ export default class ReportDwellTime extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
+           this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
 
         //head
         this.sunRData.head = [];
@@ -885,7 +894,7 @@ export default class ReportDwellTime extends Vue {
         }
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
-            x => x + ":00 - " + (x + 1) + ":00"
+            x => this.fetchZero(x) + ":00 ~ " + this.fetchZero(x + 1) + ":00"
         );
     }
 
@@ -1483,6 +1492,10 @@ export default class ReportDwellTime extends Vue {
         //Ben
         this.initDashboardData();
         this.initReportTable();
+    }
+
+    fetchZero(value) {
+        return value < 10 ? "0" + value : value;
     }
 
     initDashboardData() {

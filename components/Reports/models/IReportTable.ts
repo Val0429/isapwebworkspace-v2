@@ -31,12 +31,13 @@ interface IReportTableDataBodyInOut {
 
 interface IReportTableTitle {
     titleCount: number;
+    headTitle?: string;
     title1?: string;
     title2?: string;
     title3?: string;
     title4?: string;
-    title1Title: string;
-    title2Title: string;
+    total1Title?: string;
+    total2Title?: string;
 }
 
 export { IReportTableDataTotal, IReportTableDataBody, IReportTableDataBodyInOut, IReportTableTitle };
