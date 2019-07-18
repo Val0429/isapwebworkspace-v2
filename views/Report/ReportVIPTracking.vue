@@ -7,6 +7,7 @@
             :templateItem="templateItem"
             :sitesSelectItem="sitesSelectItem"
             :allTagsItem="allTagsItem"
+            :tagIncludeSitesItem="tagIncludeSitesItem"
             @submit-data="receiveFilterData"
         >
         </filter-condition-vip-and-blacklist>
@@ -109,6 +110,7 @@ export default class ReportVIPTracking extends Vue {
     async initDatas() {
         this.siteFilterPermission();
         await this.initSelectItemTag();
+        await this.initTagIncludeSitesItem();
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
@@ -150,6 +152,37 @@ export default class ReportVIPTracking extends Vue {
         }
     }
 
+    async initTagIncludeSitesItem() {
+
+        let result = await this.$server
+            .R("/tag")
+            // .then((response: any) => {
+            //     if (response != undefined) {
+            //         for (const returnValue of response) {
+            //             // 自定義 tagSelectItem 的 key 的方式
+            //             tempTagSelectItem[returnValue.objectId] =
+            //                 returnValue.name;
+            //         }
+            //         this.tagSelectItem = tempTagSelectItem;
+            //     }
+            // })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        if (result['results'].length > 0) {
+            result['results'].map(item => {
+                this.tagIncludeSitesItem.push(item)
+            })
+        } else {
+            return false;
+        }
+    }
+
     // Author: Tina
     async receiveFilterData(filterData, designationPeriod) {
         console.log(" - ", filterData);
@@ -164,6 +197,7 @@ export default class ReportVIPTracking extends Vue {
         //     .then((response: any) => {
         //         if (response !== undefined) {
         //             this.responseData = response;
+        //             this.officeHourItemDetail = this.responseData.officeHours;
         //             this.resolveSummary();
         //         }
         //     })

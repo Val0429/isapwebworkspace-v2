@@ -145,11 +145,11 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     })
     sitesSelectItem: object;
 
-    // @Prop({
-    //     type: Array, // Boolean, Number, String, Array, Object
-    //     default: []
-    // })
-    // tagIncludeSitesItem: any;
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: []
+    })
+    tagIncludeSitesItem: any;
 
     @Prop({
         type: Array, // Boolean, Number, String, Array, Object
@@ -166,7 +166,6 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     // Tag 相關
     selectAllTags: string = EIfAllSelected.select;
     ifAllTagsSelectItem: any = [];
-    // tagIncludeSitesItem: any = [];
 
     // date 相關
     selectPeriodAddWay: string = EAddPeriodSelect.period;
@@ -223,33 +222,6 @@ export class FilterConditionVIPAndBlacklist extends Vue {
             q4: this._("w_q4"),
             thisYear: this._("w_thisYear")
         };
-    }
-
-    async initTagIncludeSitesItem() {
-
-        let result = await this.$server
-            .R("/tag")
-            // .then((response: any) => {
-            //     if (response != undefined) {
-            //         for (const returnValue of response) {
-            //             // 自定義 tagSelectItem 的 key 的方式
-            //             tempTagSelectItem[returnValue.objectId] =
-            //                 returnValue.name;
-            //         }
-            //         this.tagSelectItem = tempTagSelectItem;
-            //     }
-            // })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
-
-
-        let tagIncludeSitesItem = result['results'];
-        return tagIncludeSitesItem
     }
 
     tempSaveInputData(data) {
@@ -358,13 +330,11 @@ export class FilterConditionVIPAndBlacklist extends Vue {
 
         doSubmitParam.tagIds = this.inputFormData.tagIds;
 
-        let tagIncludeSitesItem = await this.initTagIncludeSitesItem();
-
         let tempSiteIds = [];
 
-        if (this.inputFormData.tagIds.length > 0 && tagIncludeSitesItem.length > 0 ) {
+        if (this.inputFormData.tagIds.length > 0 && this.tagIncludeSitesItem.length > 0 ) {
             this.inputFormData.tagIds.map(tagId => {
-                tagIncludeSitesItem.map(item => {
+                this.tagIncludeSitesItem.map(item => {
                     if (tagId === item.objectId && item.sites.length > 0) {
                         item.sites.map(site => {
                             for (const allowSiteId in this.sitesSelectItem) {
@@ -414,6 +384,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
             ) {
                 doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
                 doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
+
             } else {
                 doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
                 doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
