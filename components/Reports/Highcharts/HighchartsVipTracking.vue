@@ -280,7 +280,93 @@ export class HighchartsVipTracking extends Vue {
 
     ////////////////////////// site X day X //////////////////////////
 
-    initSiteXDayX() {}
+    initSiteXDayX() {
+        let tempValues: IChartVipTrackingData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
+        let tempHourStrings: string[] = [];
+        let tempCategories: string[] = [];
+        let tempSeries: {
+            name: string;
+            data: number[];
+        }[] = [{ name: "VIP", data: [] }, { name: "Blacklist", data: [] }];
+
+        // 避免時間相反造成無窮迴圈
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
+
+        // 設置最大值避免無窮迴圈
+        let categorieMaxlength = 10000;
+        let categorieNowlength = 0;
+
+        // 時間累加判斷用
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
+        let tempDate: Date = new Date(tempTimestamp);
+        let dateGap: number =
+            Math.floor(
+                Math.abs(
+                    sortDate.startDate.getTime() - sortDate.endDate.getTime()
+                ) / Datetime.oneDayTimestamp
+            ) + 1;
+
+        while (
+            tempTimestamp <= endTimestamp &&
+            categorieNowlength < categorieMaxlength
+        ) {
+            let tempResult = {
+                vip: 0,
+                blacklist: 0,
+                date: new Date(tempTimestamp)
+            };
+
+            let dateStart = Datetime.DateStart(new Date(tempTimestamp));
+
+            let dateEnd = Datetime.DateStart(new Date(tempTimestamp));
+
+            let tempStartTimestamp = dateStart.getTime() - 1000;
+            let tempEndTimestamp = dateEnd.getTime() + 1000;
+
+            // set loop value
+            categorieNowlength++;
+            tempTimestamp = dateEnd.getTime() + 1000;
+        }
+
+        this.chartOptions.siteXdayX = {
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                categories: tempCategories,
+                labels: { useHTML: true }
+            },
+            yAxis: {
+                labels: { style: { color: "#000" } },
+                title: {
+                    text: this._("w_ReportTraffic_TrafficTraffic"),
+                    style: { color: "#000" }
+                }
+            },
+            tooltip: {
+                enabled: true,
+                useHTML: true,
+                backgroundColor: "#333",
+                style: { color: "#fff" }
+            },
+            plotOptions: {
+                series: {
+                    cursor: "pointer",
+                    point: {
+                        events: {
+                            click: this.clickChartPoint
+                        }
+                    }
+                }
+            },
+            series: tempSeries
+        };
+        this.mountChart.siteXdayX = true;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
