@@ -12,8 +12,6 @@
         >
         </filter-condition>
 
-        <div>
-
             <iv-card>
 
                 <template #toolbox>
@@ -74,7 +72,6 @@
                 </vistor-details-table>
 
             </iv-card>
-        </div>
 
         <!-- Tina -->
         <recipient
@@ -102,7 +99,6 @@ import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import ReportService from "@/components/Reports/models/ReportService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
-
 import Datetime from "@/services/Datetime";
 import HighchartsRepeatVisitor from "@/components/Reports/HighchartsRepeatVisitor.vue";
 import {
@@ -115,6 +111,8 @@ import {
     ECountType,
     EDeviceMode,
     EIncludedEmployee,
+    EChartMode,
+    EDesignationPeriod,
     IChartRepeatVisitorData,
     IPeckTimeRange,
     ISiteAreas,
@@ -122,22 +120,15 @@ import {
     ITemplateItem,
     IFilterCondition,
     IReportToTemplateItem,
-    EDesignationPeriod,
     ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
-import toExcel from "@/services/Excel/json2excel";
-import excel2json from "@/services/Excel/excel2json";
-enum EFileType {
-    xlsx = "xlsx",
-    xls = "xls",
-    csv = "csv"
-}
 
 ///////////////////////// export /////////////////////////
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
-import { EChartMode } from "@/components/Reports";
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+import ReportPDFService from "@/components/Reports/models/ReportPDFService";
+import { EFileType } from "@/components/Reports";
 
 @Component({
     components: {}
@@ -872,9 +863,6 @@ export default class ReportRepeatVisitor extends Vue {
             let tempChartData: IChartRepeatVisitorData = {
                 date: new Date(),
                 siteObjectId: this.filterData.firstSiteId,
-                temperatureMin: 0,
-                temperatureMax: 0,
-                weather: EWeather.none,
                 repeatCount: summary.total,
                 ageRange: EAgeRange.none,
                 maleCount: 0,
@@ -1317,40 +1305,7 @@ export default class ReportRepeatVisitor extends Vue {
             HighchartsService.datetimeFormat.date
         );
 
-        html2Canvas(document.querySelector(".container-fluid"), {
-            allowTaint: true,
-            useCORS: true
-        }).then(function(canvas) {
-            let contentWidth = canvas.width;
-            let contentHeight = canvas.height;
-            let pageHeight = (contentWidth / 592.28) * 841.89;
-            let leftHeight = contentHeight;
-            let position = 0;
-            const imgWidth = 595.28;
-            let imgHeight = (592.28 / contentWidth) * contentHeight;
-            let pageData = canvas.toDataURL("image/jpeg", 1.0);
-            let PDF = new JsPDF("", "pt", "a4");
-            if (leftHeight < pageHeight) {
-                PDF.addImage(pageData, "JPEG", 0, 10, imgWidth, imgHeight);
-            } else {
-                while (leftHeight > 0) {
-                    PDF.addImage(
-                        pageData,
-                        "JPEG",
-                        0,
-                        position,
-                        imgWidth,
-                        imgHeight
-                    );
-                    leftHeight -= pageHeight;
-                    position -= 841.89;
-                    if (leftHeight > 0) {
-                        PDF.addPage();
-                    }
-                }
-            }
-            PDF.save(title + ".pdf");
-        });
+        ReportPDFService.exportPDF(title);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -1449,9 +1404,6 @@ export default class ReportRepeatVisitor extends Vue {
                     let tempChartData: IChartRepeatVisitorData = {
                         date: tempDate,
                         siteObjectId: "site" + (j + 1).toString(),
-                        temperatureMin: iNumber,
-                        temperatureMax: iNumber,
-                        weather: weather,
                         repeatCount: Math.floor(Math.random() * 6) + 1,
                         ageRange: ageRange,
                         maleCount: Math.floor(Math.random() * 50),

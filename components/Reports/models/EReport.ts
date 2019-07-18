@@ -190,4 +190,19 @@ enum ECampaignTimeType {
     after = 'after',
 }
 
-export { ETimeMode, EGender, EChartMode, EAreaMode, EWeather, EAgeRange, EDwellTimeRange, ECampaignTimeType };
+enum EVipTrackingType {
+    none = 'none',
+    vip = 'vip',
+    black = 'black',
+}
+
+enum EFileType {
+    xlsx = 'xlsx',
+    xls = 'xls',
+    csv = 'csv',
+}
+
+export { EGender, EWeather, EAgeRange };
+export { EChartMode, EAreaMode, ETimeMode };
+export { EDwellTimeRange, ECampaignTimeType, EVipTrackingType };
+export { EFileType };

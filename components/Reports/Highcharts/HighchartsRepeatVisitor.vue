@@ -854,9 +854,6 @@ export class HighchartsRepeatVisitor extends Vue {
         let value: IChartRepeatVisitorData = {
             date: new Date(),
             siteObjectId: "",
-            temperatureMin: 0,
-            temperatureMax: 0,
-            weather: EWeather.none,
 
             repeatCount: 0,
             ageRange: EAgeRange.none,
@@ -868,13 +865,7 @@ export class HighchartsRepeatVisitor extends Vue {
 
             // every report
             siteName: "",
-            timeMode: this.timeMode,
-            areaMode: this.areaMode,
             i18n: this.i18nItem(),
-            temperature: 0,
-            weatherIcon: HighchartsService.weatherIcon(EWeather.none),
-            weekNumber: Datetime.WeekNumber(new Date()),
-            quarterNumber: Datetime.QuarterNumber(new Date()),
             dateStart: new Date(),
             dateEnd: new Date(),
             timeString: Datetime.DateTime2String(

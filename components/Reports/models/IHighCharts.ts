@@ -1,5 +1,6 @@
 import { EWeather, ETimeMode, EAreaMode, EAgeRange } from '../';
 import { EDwellTimeRange, EBusinessChart, ECampaignTimeType } from '../';
+import { EVipTrackingType } from './EReport';
 
 interface IValSelectItem {
     id: string;
@@ -50,18 +51,9 @@ interface IAgeRange {
 interface IChart {
     date: Date;
     siteObjectId: string;
-    temperatureMin: number;
-    temperatureMax: number;
-    weather: EWeather;
 
     siteName?: string;
-    timeMode?: ETimeMode;
-    areaMode?: EAreaMode;
     i18n?: any;
-    temperature?: number;
-    weatherIcon?: string;
-    weekNumber?: number;
-    quarterNumber?: number;
     dateStart?: Date;
     dateEnd?: Date;
     timeString?: string;
@@ -70,7 +62,26 @@ interface IChart {
     dateEndString?: string;
 }
 
-interface IChartTrafficData extends IChart {
+interface IChartWeather {
+    temperatureMin: number;
+    temperatureMax: number;
+    weather: EWeather;
+
+    temperature?: number;
+    weatherIcon?: string;
+}
+
+interface ITimeMode {
+    timeMode?: ETimeMode;
+    weekNumber?: number;
+    quarterNumber?: number;
+}
+
+interface IAreaMode {
+    areaMode?: EAreaMode;
+}
+
+interface IChartTrafficData extends IChart, IChartWeather, ITimeMode, IAreaMode {
     traffic: number;
     revenue: number;
     transaction: number;
@@ -81,7 +92,7 @@ interface IChartTrafficData extends IChart {
     businessMode?: EBusinessChart;
 }
 
-interface IChartDwellTimeData extends IChart {
+interface IChartDwellTimeData extends IChart, IChartWeather, ITimeMode, IAreaMode {
     ageRange: EAgeRange;
     dwellTimeRange: EDwellTimeRange;
     maleCount: number;
@@ -98,7 +109,7 @@ interface IChartDwellTimeData extends IChart {
     businessMode?: EBusinessChart;
 }
 
-interface IChartDemographicData extends IChart {
+interface IChartDemographicData extends IChart, IChartWeather, ITimeMode, IAreaMode {
     ageRange: EAgeRange;
     dwellTimeRange: EDwellTimeRange;
     maleCount: number;
@@ -108,11 +119,38 @@ interface IChartDemographicData extends IChart {
     femaleCountPercent?: number;
 }
 
-interface IChartOccupancyData extends IChart {
+interface IChartOccupancyData extends IChart, IChartWeather, ITimeMode, IAreaMode {
     areaId: string;
     occupancy: number;
 
     areaName?: string;
+}
+
+interface IChartVipTrackingData {
+    type: EVipTrackingType;
+    date: Date;
+
+    i18n?: any;
+    dateStart?: Date;
+    dateEnd?: Date;
+    timeString?: string;
+    dateString?: string;
+    dateStartString?: string;
+    dateEndString?: string;
+}
+
+interface IChartVipTrackingDetailData {
+    type: EVipTrackingType;
+    siteObjectId: string;
+    name: string;
+    data: Date;
+    dwellTime: number;
+    imgSrc: string;
+
+    timeString?: string;
+    dataString?: string;
+    siteName?: string;
+    dwellTimeString?: string;
 }
 
 interface IChartRepeatVisitorData extends IChart {
@@ -148,8 +186,8 @@ interface IChartCampaignSingle {
 }
 
 export { IValSelectItem, IBootstrapSelectItem };
-export { ISite, IArea, IAgeRange, ISiteAreas, ISiteOfficeHourItem };
-export { IDayRange };
-export { IChartTrafficData, IChartDemographicData, IChartOccupancyData, IChartRepeatVisitorData };
-export { IChartDwellTimeData };
+export { ISite, IArea, IAgeRange, IDayRange, ISiteAreas, ISiteOfficeHourItem };
+export { IChartTrafficData, IChartDwellTimeData, IChartDemographicData, IChartOccupancyData };
+export { IChartRepeatVisitorData };
+export { IChartVipTrackingData, IChartVipTrackingDetailData };
 export { IChartCampaignMultiple, IChartCampaignSingle };

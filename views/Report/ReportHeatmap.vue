@@ -12,70 +12,67 @@
 
         </filter-condition-heat-map>
 
-        <div v-show="pageStep === ePageStep.none">
-            <iv-card>
+        <iv-card>
 
-                <template #toolbox>
+            <template #toolbox>
 
-                    <iv-toolbox-export-pdf
-                        size="lg"
-                        @click="exportPDF"
-                    />
-
-                    <!-- Tina -->
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                    <iv-toolbox-copy-to-template
-                        size="lg"
-                        @click="pageToReportTemplate()"
-                    />
-                </template>
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
 
                 <!-- Tina -->
-                <analysis-filter-heat-map
-                    class="mb-4"
-                    :areaSelectItem="areaSelectItem"
-                    :deviceGroupSelectItem="deviceGroupSelectItem"
-                    :deviceSelectItem="deviceSelectItem"
-                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                    :siteIds="filterData.siteIds"
-                    :areaId="inputFormData.areaId"
-                    :groupId="inputFormData.groupId"
-                    :deviceId="inputFormData.deviceId"
-                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                    @area_id="receiveAreaId"
-                    @group_id="receiveGroupId"
-                    @device_id="receiveDeviceId"
-                    @is_included_employee="receiveIsIncludedEmployee"
-                >
-                </analysis-filter-heat-map>
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
 
-                <!-- Tina -->
-                <heat-map-many-day
-                    :timeArray="timeArray"
-                    @time-array-index="receiveTimeArrayIndex"
-                ></heat-map-many-day>
-                <br>
+            <!-- Tina -->
+            <analysis-filter-heat-map
+                class="mb-4"
+                :areaSelectItem="areaSelectItem"
+                :deviceGroupSelectItem="deviceGroupSelectItem"
+                :deviceSelectItem="deviceSelectItem"
+                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                :siteIds="filterData.siteIds"
+                :areaId="inputFormData.areaId"
+                :groupId="inputFormData.groupId"
+                :deviceId="inputFormData.deviceId"
+                :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                @area_id="receiveAreaId"
+                @group_id="receiveGroupId"
+                @device_id="receiveDeviceId"
+                @is_included_employee="receiveIsIncludedEmployee"
+            >
+            </analysis-filter-heat-map>
 
-                <heat-map-one-day-slider-bar
-                    :slider="slider"
-                    @hour="receiveHour"
-                >
+            <!-- Tina -->
+            <heat-map-many-day
+                :timeArray="timeArray"
+                @time-array-index="receiveTimeArrayIndex"
+            ></heat-map-many-day>
+            <br>
 
-                </heat-map-one-day-slider-bar>
+            <heat-map-one-day-slider-bar
+                :slider="slider"
+                @hour="receiveHour"
+            >
 
-                <!-- Ben -->
-                <camera-heatmap
-                    :mapImage="mapImage"
-                    :heatMapPosition="heatMapPosition"
-                >
-                </camera-heatmap>
+            </heat-map-one-day-slider-bar>
 
-            </iv-card>
+            <!-- Ben -->
+            <camera-heatmap
+                :mapImage="mapImage"
+                :heatMapPosition="heatMapPosition"
+            >
+            </camera-heatmap>
 
-        </div>
+        </iv-card>
 
     </div>
 </template>
@@ -123,11 +120,6 @@ import {
     IReportToTemplateItem
 } from "@/components/Reports";
 
-///////////////////////// export /////////////////////////
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
-import toExcel from "@/services/Excel/json2excel";
-import excel2json from "@/services/Excel/excel2json";
 import HeatMapManyDay from "@/components/Reports/HeatMapManyDay.vue";
 import {
     IHeatMapData,
@@ -135,20 +127,16 @@ import {
     IMapImage
 } from "@/components/Camera/IHeatmap";
 
-enum EFileType {
-    xlsx = "xlsx",
-    xls = "xls",
-    csv = "csv"
-}
+///////////////////////// export /////////////////////////
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+import ReportPDFService from "@/components/Reports/models/ReportPDFService";
+import { EFileType } from "@/components/Reports";
 
 enum ETableStep {
     mainTable = "mainTable",
     sunTable = "sunTable",
     detailTable = "detailTable",
-    none = "none"
-}
-
-enum EPageStep {
     none = "none"
 }
 
@@ -166,9 +154,6 @@ export default class ReportHeatmap extends Vue {
     areaMode: EAreaMode = EAreaMode.none;
     sites: ISite[] = [];
     chartDatas: IChartDemographicData[] = [];
-
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -289,7 +274,7 @@ export default class ReportHeatmap extends Vue {
         var max = 0;
         var width = this.mapImage.width;
         var height = this.mapImage.height;
-        var len = 200;
+        var len = 400;
 
         while (len--) {
             let val = Math.floor(Math.random() * 100);
@@ -301,16 +286,18 @@ export default class ReportHeatmap extends Vue {
             };
             if (
                 100 > point.x ||
-                point.x > 300 ||
-                100 > point.y ||
-                point.y > 200
+                point.x > 350 ||
+                70 > point.y ||
+                point.y > 250
             ) {
                 continue;
             }
             points.push(point);
         }
 
-        this.heatMapPosition = points;
+        setTimeout(() => {
+            this.heatMapPosition = points;
+        }, 3000);
     }
 
     initSelect() {
@@ -1759,40 +1746,7 @@ export default class ReportHeatmap extends Vue {
             HighchartsService.datetimeFormat.date
         );
 
-        html2Canvas(document.querySelector(".container-fluid"), {
-            allowTaint: true,
-            useCORS: true
-        }).then(function(canvas) {
-            let contentWidth = canvas.width;
-            let contentHeight = canvas.height;
-            let pageHeight = (contentWidth / 592.28) * 841.89;
-            let leftHeight = contentHeight;
-            let position = 0;
-            const imgWidth = 595.28;
-            let imgHeight = (592.28 / contentWidth) * contentHeight;
-            let pageData = canvas.toDataURL("image/jpeg", 1.0);
-            let PDF = new JsPDF("", "pt", "a4");
-            if (leftHeight < pageHeight) {
-                PDF.addImage(pageData, "JPEG", 0, 10, imgWidth, imgHeight);
-            } else {
-                while (leftHeight > 0) {
-                    PDF.addImage(
-                        pageData,
-                        "JPEG",
-                        0,
-                        position,
-                        imgWidth,
-                        imgHeight
-                    );
-                    leftHeight -= pageHeight;
-                    position -= 841.89;
-                    if (leftHeight > 0) {
-                        PDF.addPage();
-                    }
-                }
-            }
-            PDF.save(title + ".pdf");
-        });
+        ReportPDFService.exportPDF(title);
     }
 
     /////////////////////////////////////////////////////////////////////
