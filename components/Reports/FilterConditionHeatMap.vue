@@ -184,6 +184,9 @@ export class FilterConditionHeatMap extends Vue {
     // response 相關
     responseData: any = {};
 
+    // 收合card控制
+    visible: boolean = true;
+
     created() {
         // this.initSelectItemSite();
         this.initSelectItem();
@@ -538,6 +541,7 @@ export class FilterConditionHeatMap extends Vue {
 
         // console.log(' - ', doSubmitParam); return false;
 
+        this.visible = false;
         this.$emit("submit-data", doSubmitParam, designationPeriod);
     }
 

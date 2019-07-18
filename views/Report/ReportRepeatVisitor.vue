@@ -12,8 +12,10 @@
         >
         </filter-condition>
 
-            <iv-card>
-
+        <iv-card
+            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+            :visible="visible"
+        >
                 <template #toolbox>
                     <!-- Ben -->
                     <iv-toolbox-export-excel
@@ -160,8 +162,12 @@ export default class ReportRepeatVisitor extends Vue {
 
     // OfficeHour 相關
     officeHourItemDetail: any = {};
+
     // recipient 相關
     modalShow: boolean = false;
+
+    // 收合card控制
+    visible: boolean = false;
 
     // 接收 Filter Condition 資料 相關
     filterData: IFilterCondition = {
@@ -810,6 +816,43 @@ export default class ReportRepeatVisitor extends Vue {
         // Ben
         this.initDashboardData();
         this.initReportTableData();
+    }
+
+
+    analysisTitle(): string {
+
+        let title = 'Analysis - ';
+
+        console.log('analysisTitle - ', this.filterData);
+
+        if (this.filterData.siteIds.length === 1) {
+            for (const siteId in this.sitesSelectItem) {
+                if(this.filterData.siteIds[0] === siteId) {
+                    title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+                }
+            }
+        } else {
+            title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+        }
+
+        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
+        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+
+        if (this.filterData.tagIds.length === 1) {
+            for (const tagId in this.tagSelectItem) {
+                if(this.filterData.tagIds[0] === tagId) {
+                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                }
+            }
+        } else if (this.filterData.tagIds.length >= 2) {
+            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+        } else {
+            title += '';
+        }
+
+        this.visible = true;
+
+        return title;
     }
 
     // Ben //

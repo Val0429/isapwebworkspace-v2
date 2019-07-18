@@ -12,8 +12,10 @@
 		>
 		</filter-condition>
 
-			<iv-card>
-
+		<iv-card
+			:label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+			:visible="visible"
+		>
 				<template #toolbox>
 					<!-- Ben -->
 					<iv-toolbox-export-excel
@@ -226,6 +228,9 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 
 		// recipient 相關
 		modalShow: boolean = false;
+
+		// 收合card控制
+		visible: boolean = false;
 
 		// 接收 Filter Condition 資料 相關
 		filterData: IFilterCondition = {
@@ -1389,6 +1394,41 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
           fetchZero(value) {
         return value < 10 ? "0" + value : value;
     }
+		analysisTitle(): string {
+
+			let title = 'Analysis - ';
+
+			console.log('analysisTitle - ', this.filterData);
+
+			if (this.filterData.siteIds.length === 1) {
+				for (const siteId in this.sitesSelectItem) {
+					if(this.filterData.siteIds[0] === siteId) {
+						title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+					}
+				}
+			} else {
+				title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+			}
+
+			title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
+			title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+
+			if (this.filterData.tagIds.length === 1) {
+				for (const tagId in this.tagSelectItem) {
+					if(this.filterData.tagIds[0] === tagId) {
+						title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+					}
+				}
+			} else if (this.filterData.tagIds.length >= 2) {
+				title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+			} else {
+				title += '';
+			}
+
+			this.visible = true;
+
+			return title;
+		}
 
 		sortOutChartData(datas: any) {
 			let tempChartDatas: IChartDemographicData[] = [];
@@ -2100,7 +2140,7 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 				this.startDate,
 				HighchartsService.datetimeFormat.date
             );
-            
+
             ReportPDFService.exportPDF(title);
         }
 
@@ -2141,7 +2181,7 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 					let ageRange = EAgeRange.none;
                     let dwellTimeRange = EDwellTimeRange.none;
                     let weather = EWeather.none;
-                    
+
                     let tempAgeRangeNumber = Math.floor(Math.random() * 300);
                     let tempDwellTimeRangeNumber = Math.floor(Math.random() * 300);
                     let tempWeatherNumber = Math.floor(Math.random() * 300);
@@ -2159,7 +2199,7 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 					} else if (tempAgeRangeNumber % 6 == 5) {
 						ageRange = EAgeRange.upper61;
                     }
-                    
+
                     if (tempDwellTimeRangeNumber % 6 == 0) {
 						dwellTimeRange = EDwellTimeRange.lower5;
 					} else if (tempDwellTimeRangeNumber % 6 == 1) {
