@@ -3,10 +3,20 @@
         <div class="select-option-frame">
             <div>{{ _('w_Options') }}</div>
             <div class="sort-select-frame">
+                <b-input-group>   
                 <b-input
                     v-model="optionSearchText"
-                    type="text"
+                    type="search"
+                    @keyup.native.enter="searchOption()"
                 />
+                 <b-button
+                        class="button"
+                        variant="default"
+                        @click="searchOption()"
+                    >
+                        <i class="fa fa-search" />
+                    </b-button>
+                </b-input-group>   
                 <div class="button-frame">
                     <b-button
                         class="button"
@@ -31,7 +41,7 @@
                         <b-form-checkbox
                             v-for="option in optionsSelectItem"
                             v-model="optionsSelected"
-                            v-show="showOption(option)"
+                            v-show="option.visible" 
                             class="checkbox-group"
                             name="dragSelectOption"
                             :key="'sort_select__options__key__'+option.value"
@@ -77,10 +87,20 @@
         <div class="select-option-frame">
             <div>{{ _('w_Chooses') }}</div>
             <div class="sort-select-frame">
+                <b-input-group> 
                 <b-input
                     v-model="chooseSearchText"
-                    type="text"
+                    type="search"
+                    @keyup.native.enter="searchChoose()"
                 />
+                <b-button
+                        class="button"
+                        variant="default"
+                        @click="searchChoose()"
+                    >
+                        <i class="fa fa-search" />
+                    </b-button>
+                </b-input-group>  
                 <div class="button-frame">
                     <b-button
                         class="button"
@@ -122,8 +142,8 @@
                     <b-form-group>
                         <b-form-checkbox
                             v-for="choose in chooseSelectItem"
-                            v-model="chooseSelected"
-                            v-show="showChoose(choose)"
+                            v-model="chooseSelected"          
+                            v-show="choose.visible"                  
                             class="checkbox-group"
                             name="dragSelectChoose"
                             :key="'sort__select__choose__key__'+choose.value"
@@ -143,7 +163,9 @@
 <script lang="ts">
 import { Vue, Component, Prop, Model, Watch } from "vue-property-decorator";
 import { ISortSelectOption } from "./models/ISortSelect";
-
+interface ISortSelectOptionExtended extends ISortSelectOption{
+    visible:boolean;
+}
 @Component({
     components: {}
 })
@@ -153,8 +175,8 @@ export class SortSelect extends Vue {
 
     optionsSelected: string[] = [];
     chooseSelected: string[] = [];
-    optionsSelectItem: ISortSelectOption[] = [];
-    chooseSelectItem: ISortSelectOption[] = [];
+    optionsSelectItem: ISortSelectOptionExtended[] = [];
+    chooseSelectItem: ISortSelectOptionExtended[] = [];
 
     // Model
     @Model("input", {
@@ -170,7 +192,7 @@ export class SortSelect extends Vue {
         type: Array,
         default: []
     })
-    options: ISortSelectOption[];
+    options: ISortSelectOptionExtended[];
 
     created() {}
 
@@ -184,17 +206,17 @@ export class SortSelect extends Vue {
         this.chooseSelected = [];
         this.optionsSelectItem = [];
         this.chooseSelectItem = [];
-        for (let option of this.options) {
+        for (let option of this.options) {            
             let inValue = false;
             for (let val of this.value) {
                 if (val == option.value) {
                     inValue = true;
-                    this.chooseSelectItem.push(option);
+                    this.chooseSelectItem.push(Object.assign({visible:true},option));
                     break;
                 }
             }
             if (!inValue) {
-                this.optionsSelectItem.push(option);
+                this.optionsSelectItem.push(Object.assign({visible:true},option));
             }
         }
     }
@@ -283,11 +305,7 @@ export class SortSelect extends Vue {
         return this.optionsSelected.length < 1;
     }
 
-    // option
-    showOption(data: ISortSelectOption): boolean {
-        return data.text.search(new RegExp(this.optionSearchText, "i")) >-1;
-    }
-
+    
     selectAllOption() {
         this.optionsSelected = [];
         for (let option of this.optionsSelectItem) {
@@ -298,11 +316,30 @@ export class SortSelect extends Vue {
     clearOptions() {
         this.optionsSelected = [];
     }
-
-    // choose
-    showChoose(data: ISortSelectOption): boolean {
-        return data.text.search(new RegExp(this.chooseSearchText, "i")) >-1;
+    searchOption(visible?:boolean){           
+        console.log("this.optionSearchText", this.optionSearchText, visible);
+        for(let item of this.optionsSelectItem){            
+            item.visible = visible || item.text.search(new RegExp(this.optionSearchText, "i")) >-1;
+        }
     }
+    searchChoose(visible?:boolean){        
+        console.log("this.chooseSearchText", this.chooseSearchText, visible);
+        for(let item of this.chooseSelectItem){
+            item.visible = visible || item.text.search(new RegExp(this.chooseSearchText, "i")) >-1;
+        }
+    }
+    
+    @Watch("chooseSearchText", {immediate:true})
+    chooseSearchTextChanged(value, oldValue){
+        if(!oldValue || oldValue=="" || value!="")return;
+        this.searchChoose(true);
+    }
+    @Watch("optionSearchText", {immediate:true})
+    optionSearchTextChanged(value, oldValue){
+        if(!oldValue || oldValue=="" || value!="")return;
+        this.searchOption(true);
+    }
+
 
     selectAllChoose() {
         this.chooseSelected = [];
