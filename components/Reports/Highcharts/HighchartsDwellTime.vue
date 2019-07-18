@@ -1593,7 +1593,7 @@ export class HighchartsDwellTime extends Vue {
         let tempTotalCount: number = 0;
         let series: any = [
             {
-                name: "PersonCount",
+                name: " ",
                 data: [0, 0, 0, 0, 0, 0]
             }
         ];
@@ -1668,6 +1668,7 @@ export class HighchartsDwellTime extends Vue {
                 },
                 tooltip: { enabled: false },
                 credits: { enabled: false },
+                legend: { enabled: false },
                 series: series
             };
 
@@ -1768,6 +1769,7 @@ export class HighchartsDwellTime extends Vue {
             },
             tooltip: { enabled: false },
             credits: { enabled: false },
+            legend: { enabled: false },
             series: barSeries
         };
 
