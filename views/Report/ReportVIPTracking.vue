@@ -5,11 +5,12 @@
             :tagSelectItem="tagSelectItem"
             :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
-            @submit-data="receiveFilterData">
+            @submit-data="receiveFilterData"
+        >
 
         </filter-condition-vip-and-blacklist>
 
-        <div v-show="pageStep === ePageStep.none">
+        <div>
             VIPTracking
         </div>
 
@@ -19,22 +20,21 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import {ITemplateItem, EDesignationPeriod, EDeviceMode} from '@/components/Reports';
-import ResponseFilter from '@/services/ResponseFilter';
+import ResponseFilter from "@/services/ResponseFilter";
 
-enum EPageStep {
-    none = "none"
-}
+import {
+    ITemplateItem,
+    EDesignationPeriod,
+    EDeviceMode
+} from "@/components/Reports";
+import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
+import ReportService from "@/components/Reports/models/ReportService";
 
 @Component({
     components: {}
 })
 export default class ReportVIPTracking extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
-
     templateItem: ITemplateItem | null = null;
-
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -56,7 +56,7 @@ export default class ReportVIPTracking extends Vue {
     filterData: any = {
         startDate: new Date(),
         endDate: new Date(),
-        tagIds: [],
+        tagIds: []
     };
     responseData: any = {};
     userData: any = [];
@@ -83,8 +83,6 @@ export default class ReportVIPTracking extends Vue {
     }
 
     mounted() {}
-
-
 
     // Author: Tina
     async initDatas() {
@@ -118,7 +116,7 @@ export default class ReportVIPTracking extends Vue {
             });
     }
     // Author: Tina
-    async receiveFilterData(filterData, designationPeriod ) {
+    async receiveFilterData(filterData, designationPeriod) {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
@@ -143,7 +141,6 @@ export default class ReportVIPTracking extends Vue {
     resolveSummary() {}
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
-
 }
 </script>
 

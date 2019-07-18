@@ -61,7 +61,8 @@
 
                 <heat-map-one-day-slider-bar
                     :slider="slider"
-                    @hour="receiveHour">
+                    @hour="receiveHour"
+                >
 
                 </heat-map-one-day-slider-bar>
 
@@ -119,18 +120,13 @@ import {
     IReportToTemplateItem
 } from "@/components/Reports";
 
-///////////////////////// export /////////////////////////
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
-import toExcel from "@/services/Excel/json2excel";
-import excel2json from "@/services/Excel/excel2json";
 import HeatMapManyDay from "@/components/Reports/HeatMapManyDay.vue";
 
-enum EFileType {
-    xlsx = "xlsx",
-    xls = "xls",
-    csv = "csv"
-}
+///////////////////////// export /////////////////////////
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+import ReportPDFService from "@/components/Reports/models/ReportPDFService";
+import { EFileType } from "@/components/Reports";
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -218,7 +214,7 @@ export default class ReportHeatmap extends Vue {
 
     // 時間一天
     slider: any = {};
-    hour: string = '';
+    hour: string = "";
 
     // 時間多天
     timeArray: any = [];
@@ -781,22 +777,20 @@ export default class ReportHeatmap extends Vue {
     }
 
     initHourArray() {
-
-
         let weekDay = new Date().getDay();
 
-        const dayRanges =  [
+        const dayRanges = [
             {
-                "startDay": "1",
-                "endDay": "5",
-                "startDate": "2000-01-01T01:00:00.000Z",
-                "endDate": "2000-01-01T09:00:00.000Z"
+                startDay: "1",
+                endDay: "5",
+                startDate: "2000-01-01T01:00:00.000Z",
+                endDate: "2000-01-01T09:00:00.000Z"
             },
             {
-                "startDay": "6",
-                "endDay": "0",
-                "startDate": "2000-01-01T00:00:00.000Z",
-                "endDate": "2000-01-01T14:00:00.000Z"
+                startDay: "6",
+                endDay: "0",
+                startDate: "2000-01-01T00:00:00.000Z",
+                endDate: "2000-01-01T14:00:00.000Z"
             }
         ];
 
@@ -806,30 +800,28 @@ export default class ReportHeatmap extends Vue {
         this.slider = {
             value: 0,
             data: [],
-            range: [],
+            range: []
         };
 
         let tempDataArray = [];
         let tempRangeArray = [];
 
         for (let i = result.startHour; i <= result.endHour; i++) {
-
             let hourString = i < 10 ? `0${i.toString()}` : i.toString();
             let tempLabel = { label: `${hourString}:00` };
 
             tempRangeArray.push(tempLabel);
-            tempDataArray.push(i)
+            tempDataArray.push(i);
         }
 
-        console.log('tempDataArray - ', tempDataArray);
-        console.log('tempRangeArray - ', tempRangeArray);
+        console.log("tempDataArray - ", tempDataArray);
+        console.log("tempRangeArray - ", tempRangeArray);
 
         this.slider = {
             value: result.startHour,
             data: tempDataArray,
             range: tempRangeArray
         };
-
     }
 
     initTimeArray() {
@@ -1654,21 +1646,19 @@ export default class ReportHeatmap extends Vue {
         }
     }
 
-
     // 一天的其中一小時
     receiveHour(hour) {
         let tempHour = new Date();
         tempHour.setHours(parseInt(hour), 0, 0, 0);
 
         this.hour = new Date(tempHour).toISOString();
-        console.log('this.hour - ', this.hour);
+        console.log("this.hour - ", this.hour);
 
         // let d =Datetime.DateTime2String(new Date('2000-01-01T01:00:00.000Z'), 'HH')
         // let d1 =Datetime.DateTime2String(new Date(this.hour), 'HH')
         // console.log('d - ', d);
         // console.log('d1 - ', d1);
         // console.log('?? - ', d1 === d);
-
     }
 
     // 多天的其中一天
@@ -1720,40 +1710,7 @@ export default class ReportHeatmap extends Vue {
             HighchartsService.datetimeFormat.date
         );
 
-        html2Canvas(document.querySelector(".container-fluid"), {
-            allowTaint: true,
-            useCORS: true
-        }).then(function(canvas) {
-            let contentWidth = canvas.width;
-            let contentHeight = canvas.height;
-            let pageHeight = (contentWidth / 592.28) * 841.89;
-            let leftHeight = contentHeight;
-            let position = 0;
-            const imgWidth = 595.28;
-            let imgHeight = (592.28 / contentWidth) * contentHeight;
-            let pageData = canvas.toDataURL("image/jpeg", 1.0);
-            let PDF = new JsPDF("", "pt", "a4");
-            if (leftHeight < pageHeight) {
-                PDF.addImage(pageData, "JPEG", 0, 10, imgWidth, imgHeight);
-            } else {
-                while (leftHeight > 0) {
-                    PDF.addImage(
-                        pageData,
-                        "JPEG",
-                        0,
-                        position,
-                        imgWidth,
-                        imgHeight
-                    );
-                    leftHeight -= pageHeight;
-                    position -= 841.89;
-                    if (leftHeight > 0) {
-                        PDF.addPage();
-                    }
-                }
-            }
-            PDF.save(title + ".pdf");
-        });
+        ReportPDFService.exportPDF(title);
     }
 
     /////////////////////////////////////////////////////////////////////
