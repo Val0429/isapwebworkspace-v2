@@ -2261,7 +2261,7 @@ export default class ReportDwellTime extends Vue {
             data.push(bodys);
         }
         let [fileName, fileType, sheetName] = [
-            this._("w_Navigation_VideoSources_Demographic"),
+            this._("w_Navigation_Report_DwellTime"),
             fType,
             Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
         ];
@@ -2270,7 +2270,7 @@ export default class ReportDwellTime extends Vue {
 
     exportPDF() {
         let title = "";
-        title += this._("w_Navigation_Report_Demographic");
+        title += this._("w_Navigation_Report_DwellTime");
         title += " ";
         title += Datetime.DateTime2String(
             this.startDate,
@@ -2347,63 +2347,63 @@ export default class ReportDwellTime extends Vue {
             });
 
             for (let i = 1; i < 30; i++) {
-				let ageRange = EAgeRange.none;
-                    let dwellTimeRange = EDwellTimeRange.none;
-                    let weather = EWeather.none;
-                    
-                    let tempAgeRangeNumber = Math.floor(Math.random() * 300);
-                    let tempDwellTimeRangeNumber = Math.floor(Math.random() * 300);
-                    let tempWeatherNumber = Math.floor(Math.random() * 300);
+                let ageRange = EAgeRange.none;
+                let dwellTimeRange = EDwellTimeRange.none;
+                let weather = EWeather.none;
 
-					if (tempAgeRangeNumber % 6 == 0) {
-						ageRange = EAgeRange.lower20;
-					} else if (tempAgeRangeNumber % 6 == 1) {
-						ageRange = EAgeRange.m21_30;
-					} else if (tempAgeRangeNumber % 6 == 2) {
-						ageRange = EAgeRange.m31_40;
-					} else if (tempAgeRangeNumber % 6 == 3) {
-						ageRange = EAgeRange.m41_50;
-					} else if (tempAgeRangeNumber % 6 == 4) {
-						ageRange = EAgeRange.m51_60;
-					} else if (tempAgeRangeNumber % 6 == 5) {
-						ageRange = EAgeRange.upper61;
-                    }
-                    
-                    if (tempDwellTimeRangeNumber % 6 == 0) {
-						dwellTimeRange = EDwellTimeRange.lower5;
-					} else if (tempDwellTimeRangeNumber % 6 == 1) {
-						dwellTimeRange = EDwellTimeRange.m5_15;
-					} else if (tempDwellTimeRangeNumber % 6 == 2) {
-						dwellTimeRange = EDwellTimeRange.m15_30;
-					} else if (tempDwellTimeRangeNumber % 6 == 3) {
-						dwellTimeRange = EDwellTimeRange.m30_60;
-					} else if (tempDwellTimeRangeNumber % 6 == 4) {
-						dwellTimeRange = EDwellTimeRange.m60_120;
-					} else if (tempDwellTimeRangeNumber % 6 == 5) {
-						dwellTimeRange = EDwellTimeRange.upper120;
-                    }
+                let tempAgeRangeNumber = Math.floor(Math.random() * 300);
+                let tempDwellTimeRangeNumber = Math.floor(Math.random() * 300);
+                let tempWeatherNumber = Math.floor(Math.random() * 300);
 
-                    if (tempWeatherNumber % 10 == 0) {
-						weather = EWeather.clearDay;
-					} else if (tempWeatherNumber % 10 == 1) {
-						weather = EWeather.clearNight;
-					} else if (tempWeatherNumber % 10 == 2) {
-						weather = EWeather.rain;
-					} else if (tempWeatherNumber % 10 == 3) {
-						weather = EWeather.snow;
-					} else if (tempWeatherNumber % 10 == 4) {
-						weather = EWeather.sleet;
-					} else if (tempWeatherNumber % 10 == 5) {
-						weather = EWeather.wind;
-					} else if (tempWeatherNumber % 10 == 6) {
-						weather = EWeather.fog;
-					} else if (tempWeatherNumber % 10 == 7) {
-						weather = EWeather.cloudy;
-					} else if (tempWeatherNumber % 10 == 8) {
-						weather = EWeather.partlyCloudyDay;
-					} else if (tempWeatherNumber % 10 == 9) {
-						weather = EWeather.partlyCloudyNight;
-					}
+                if (tempAgeRangeNumber % 6 == 0) {
+                    ageRange = EAgeRange.lower20;
+                } else if (tempAgeRangeNumber % 6 == 1) {
+                    ageRange = EAgeRange.m21_30;
+                } else if (tempAgeRangeNumber % 6 == 2) {
+                    ageRange = EAgeRange.m31_40;
+                } else if (tempAgeRangeNumber % 6 == 3) {
+                    ageRange = EAgeRange.m41_50;
+                } else if (tempAgeRangeNumber % 6 == 4) {
+                    ageRange = EAgeRange.m51_60;
+                } else if (tempAgeRangeNumber % 6 == 5) {
+                    ageRange = EAgeRange.upper61;
+                }
+
+                if (tempDwellTimeRangeNumber % 6 == 0) {
+                    dwellTimeRange = EDwellTimeRange.lower5;
+                } else if (tempDwellTimeRangeNumber % 6 == 1) {
+                    dwellTimeRange = EDwellTimeRange.m5_15;
+                } else if (tempDwellTimeRangeNumber % 6 == 2) {
+                    dwellTimeRange = EDwellTimeRange.m15_30;
+                } else if (tempDwellTimeRangeNumber % 6 == 3) {
+                    dwellTimeRange = EDwellTimeRange.m30_60;
+                } else if (tempDwellTimeRangeNumber % 6 == 4) {
+                    dwellTimeRange = EDwellTimeRange.m60_120;
+                } else if (tempDwellTimeRangeNumber % 6 == 5) {
+                    dwellTimeRange = EDwellTimeRange.upper120;
+                }
+
+                if (tempWeatherNumber % 10 == 0) {
+                    weather = EWeather.clearDay;
+                } else if (tempWeatherNumber % 10 == 1) {
+                    weather = EWeather.clearNight;
+                } else if (tempWeatherNumber % 10 == 2) {
+                    weather = EWeather.rain;
+                } else if (tempWeatherNumber % 10 == 3) {
+                    weather = EWeather.snow;
+                } else if (tempWeatherNumber % 10 == 4) {
+                    weather = EWeather.sleet;
+                } else if (tempWeatherNumber % 10 == 5) {
+                    weather = EWeather.wind;
+                } else if (tempWeatherNumber % 10 == 6) {
+                    weather = EWeather.fog;
+                } else if (tempWeatherNumber % 10 == 7) {
+                    weather = EWeather.cloudy;
+                } else if (tempWeatherNumber % 10 == 8) {
+                    weather = EWeather.partlyCloudyDay;
+                } else if (tempWeatherNumber % 10 == 9) {
+                    weather = EWeather.partlyCloudyNight;
+                }
 
                 let tempI = i;
                 let iNumber = tempI;

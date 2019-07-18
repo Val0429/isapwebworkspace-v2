@@ -2285,7 +2285,7 @@
                 data.push(bodys);
             }
             let [fileName, fileType, sheetName] = [
-                this._("w_Navigation_VideoSources_Demographic"),
+                this._("w_Navigation_Report_Occupancy"),
                 fType,
                 Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
             ];
