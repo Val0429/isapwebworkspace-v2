@@ -300,10 +300,10 @@ export default class ReportHeatmap extends Vue {
                 value: val
             };
             if (
-                100 > point.x ||
-                point.x > 300 ||
-                100 > point.y ||
-                point.y > 200
+                50 > point.x ||
+                point.x > 350 ||
+                50 > point.y ||
+                point.y > 250
             ) {
                 continue;
             }
