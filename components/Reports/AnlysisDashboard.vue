@@ -151,7 +151,10 @@
             <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
+                <div
+                    class="box info-box-second"
+                    style="border-left: 0px"
+                >
                     <div :class="ePageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
@@ -173,7 +176,7 @@
             </div>
             <!--/col-->
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-122">
-                <div class="box info-box">
+                <div class="box info-box-second">
                     <div :class="ePageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
@@ -196,7 +199,7 @@
             <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
+                <div class="box info-box-second">
                     <div :class="ePageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Transaction")}}</span>
@@ -219,7 +222,7 @@
             <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
+                <div class="box info-box-second">
                     <div :class="ePageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Conversion")}}</span>
@@ -243,7 +246,7 @@
             <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
+                <div class="box info-box-second">
                     <div :class="ePageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_ASP")}}</span>
@@ -612,70 +615,82 @@ Vue.component("anlysis-dashboard", AnlysisDashboard);
 
 <style lang="scss" scoped>
 .info-box {
-    border: 1px solid #dbdee0;
+    border: 0px solid #dbdee0;
     margin: 0 0 30px 0;
-
-    .clearfix {
-        padding: 10px;
-    }
 
     .backgroundColor {
         padding: 10px;
-        background: #f9f9f9;
+        background: #efefef;
         color: black;
         height: 120px;
+        border-radius: 10px;
+    }
+}
 
-        .title {
-            float: left;
-            font-weight: bold;
-            font-size: 12px;
-            margin: 0;
-            padding: 0;
-        }
+.info-box-second {
+    border-left: 1px solid #4d5256;
+    margin: 0 0 30px 0;
 
-        .weather {
-            float: right;
-            font-weight: bold;
-            font-size: 12px;
-            margin: 0;
-            padding: 0;
-        }
+    .backgroundColor {
+        padding: 10px;
+        color: black;
+        height: 120px;
+    }
+}
 
-        .date {
-            float: left;
-            font-weight: bold;
-            font-size: 36px;
-            margin-top: -8px;
-            padding: 0;
-        }
+.backgroundColor.selected {
+    background: #4d5256;
+    color: white;
+}
 
-        .date-sm {
-            float: left;
-            font-weight: bold;
-            font-size: 26px;
-            margin-top: -8px;
-            padding-top: 6px;
-        }
+.clearfix {
+    padding: 10px;
 
-        .ratio {
-            float: right;
-            font-weight: bold;
-            font-size: 12px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .red {
-            color: #e26929;
-        }
-        .green {
-            color: #1bbc9b;
-        }
+    .title {
+        float: left;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
     }
 
-    .backgroundColor.selected {
-        background: #4e93b7;
-        color: white;
+    .weather {
+        float: right;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .date {
+        float: left;
+        font-weight: bold;
+        font-size: 36px;
+        margin-top: -8px;
+        padding: 0;
+    }
+
+    .date-sm {
+        float: left;
+        font-weight: bold;
+        font-size: 26px;
+        margin-top: -8px;
+        padding-top: 6px;
+    }
+
+    .ratio {
+        float: right;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .red {
+        color: #ff4326;
+    }
+    .green {
+        color: #55c250;
     }
 }
 </style>
