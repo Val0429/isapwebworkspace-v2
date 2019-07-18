@@ -6,7 +6,7 @@
             :tagSelectItem="tagSelectItem"
             :templateItem="templateItem"
             :sitesSelectItem="sitesSelectItem"
-            :tagIncludeSitesItem="tagIncludeSitesItem"
+            :allTagsItem="allTagsItem"
             @submit-data="receiveFilterData"
         >
 
@@ -58,6 +58,7 @@ export default class ReportVIPTracking extends Vue {
     tagSelectItem: any = {};
     sitesSelectItem: any = {};
     tagIncludeSitesItem: any = [];
+    allTagsItem: any = [];
 
     // OfficeHour 相關
     officeHourItemDetail: any = [];
@@ -101,7 +102,6 @@ export default class ReportVIPTracking extends Vue {
     async initDatas() {
         this.siteFilterPermission();
         await this.initSelectItemTag();
-        await this.initTagIncludeSitesItem();
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
@@ -137,56 +137,39 @@ export default class ReportVIPTracking extends Vue {
                 console.log(e);
                 return false;
             });
-    }
 
-    async initTagIncludeSitesItem() {
-        let tempTagIncludeSitesItem = {};
 
-        let result = await this.$server
-            .R("/tag")
-            // .then((response: any) => {
-            //     if (response != undefined) {
-            //         for (const returnValue of response) {
-            //             // 自定義 tagSelectItem 的 key 的方式
-            //             tempTagSelectItem[returnValue.objectId] =
-            //                 returnValue.name;
-            //         }
-            //         this.tagSelectItem = tempTagSelectItem;
-            //     }
-            // })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        for (const detail in this.tagSelectItem) {
+            this.allTagsItem.push(detail);
+        }
 
-        this.tagIncludeSitesItem = result['results'];
-        // console.log("result - ", this.tagIncludeSitesItem);
     }
 
     // Author: Tina
     async receiveFilterData(filterData, designationPeriod) {
+
+        console.log(' - ', filterData);
+        console.log(' - ', designationPeriod);
+
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
 
-        await this.$server
-            .C("/report/people-counting/summary", param)
-            .then((response: any) => {
-                if (response !== undefined) {
-                    this.responseData = response;
-                    this.resolveSummary();
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        // await this.$server
+        //     .C("/report/people-counting/summary", param)
+        //     .then((response: any) => {
+        //         if (response !== undefined) {
+        //             this.responseData = response;
+        //             this.resolveSummary();
+        //         }
+        //     })
+        //     .catch((e: any) => {
+        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //             return ResponseFilter.base(this, e);
+        //         }
+        //         console.log(e);
+        //         return false;
+        //     });
     }
 
     resolveSummary() {
