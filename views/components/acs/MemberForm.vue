@@ -593,33 +593,27 @@ export default class MemberForm extends Vue {
     }
   }
 
-  async pageToAdd() {
+  pageToAdd() {
     this.pageStep = EPageStep.add;
     this.clearInputData();
-    await this.initPremission();
+    this.initPremission();
   }
-
+  storedPermissionOptions:any[]=[];
   async initPremission() {
-    let param: {
-      paging: {
-        page: number;
-        pageSize: number;
-      };
-    } = {
-      paging: {
-        page: 1,
-        pageSize: 10000
-      }
-    };
-    await this.$server
-      .R("/acs/permissiontable", param)
-      .then((response: any) => {
-        this.premissionOptions=response.results.map(content=>{
-          return{
-            value: content.tableid.toString(),
-            text: content.tablename.toString()
-        }})        
-      })      
+    if(this.storedPermissionOptions.length==0){
+      await this.$server
+        .R("/acs/permissiontable", {"paging.all":"true"})
+        .then((response: any) => {
+          this.storedPermissionOptions=response.results.map(content=>{
+            return{
+              value: content.tableid.toString(),
+              text: content.tablename.toString()
+          }})        
+        });
+    }
+    
+    this.premissionOptions = Object.assign([],this.storedPermissionOptions);
+    
   }
 
   async pageToEdit() {
