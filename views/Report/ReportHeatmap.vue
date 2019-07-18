@@ -12,68 +12,67 @@
 
         </filter-condition-heat-map>
 
-            <iv-card>
+        <iv-card>
 
-                <template #toolbox>
+            <template #toolbox>
 
-                    <iv-toolbox-export-pdf
-                        size="lg"
-                        @click="exportPDF"
-                    />
-
-                    <!-- Tina -->
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                    <iv-toolbox-copy-to-template
-                        size="lg"
-                        @click="pageToReportTemplate()"
-                    />
-                </template>
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
 
                 <!-- Tina -->
-                <analysis-filter-heat-map
-                    class="mb-4"
-                    :areaSelectItem="areaSelectItem"
-                    :deviceGroupSelectItem="deviceGroupSelectItem"
-                    :deviceSelectItem="deviceSelectItem"
-                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                    :siteIds="filterData.siteIds"
-                    :areaId="inputFormData.areaId"
-                    :groupId="inputFormData.groupId"
-                    :deviceId="inputFormData.deviceId"
-                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                    @area_id="receiveAreaId"
-                    @group_id="receiveGroupId"
-                    @device_id="receiveDeviceId"
-                    @is_included_employee="receiveIsIncludedEmployee"
-                >
-                </analysis-filter-heat-map>
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
 
-                <!-- Tina -->
-                <heat-map-many-day
-                    :timeArray="timeArray"
-                    @time-array-index="receiveTimeArrayIndex"
-                ></heat-map-many-day>
-                <br>
+            <!-- Tina -->
+            <analysis-filter-heat-map
+                class="mb-4"
+                :areaSelectItem="areaSelectItem"
+                :deviceGroupSelectItem="deviceGroupSelectItem"
+                :deviceSelectItem="deviceSelectItem"
+                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                :siteIds="filterData.siteIds"
+                :areaId="inputFormData.areaId"
+                :groupId="inputFormData.groupId"
+                :deviceId="inputFormData.deviceId"
+                :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                @area_id="receiveAreaId"
+                @group_id="receiveGroupId"
+                @device_id="receiveDeviceId"
+                @is_included_employee="receiveIsIncludedEmployee"
+            >
+            </analysis-filter-heat-map>
 
-                <heat-map-one-day-slider-bar
-                    :slider="slider"
-                    @hour="receiveHour"
-                >
+            <!-- Tina -->
+            <heat-map-many-day
+                :timeArray="timeArray"
+                @time-array-index="receiveTimeArrayIndex"
+            ></heat-map-many-day>
+            <br>
 
-                </heat-map-one-day-slider-bar>
+            <heat-map-one-day-slider-bar
+                :slider="slider"
+                @hour="receiveHour"
+            >
 
-                <!-- Ben -->
-                <camera-heatmap
-                    :mapImage="mapImage"
-                    :heatMapPosition="heatMapPosition"
-                >
-                </camera-heatmap>
+            </heat-map-one-day-slider-bar>
 
-            </iv-card>
+            <!-- Ben -->
+            <camera-heatmap
+                :mapImage="mapImage"
+                :heatMapPosition="heatMapPosition"
+            >
+            </camera-heatmap>
 
+        </iv-card>
 
     </div>
 </template>
@@ -133,7 +132,6 @@ import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 import { EFileType } from "@/components/Reports";
-
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -276,7 +274,7 @@ export default class ReportHeatmap extends Vue {
         var max = 0;
         var width = this.mapImage.width;
         var height = this.mapImage.height;
-        var len = 200;
+        var len = 400;
 
         while (len--) {
             let val = Math.floor(Math.random() * 100);
@@ -288,16 +286,18 @@ export default class ReportHeatmap extends Vue {
             };
             if (
                 100 > point.x ||
-                point.x > 300 ||
-                100 > point.y ||
-                point.y > 200
+                point.x > 350 ||
+                70 > point.y ||
+                point.y > 250
             ) {
                 continue;
             }
             points.push(point);
         }
 
-        this.heatMapPosition = points;
+        setTimeout(() => {
+            this.heatMapPosition = points;
+        }, 3000);
     }
 
     initSelect() {

@@ -118,6 +118,7 @@ import {
 } from "@/components/Reports";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
+import ResponseFilter from '@/services/ResponseFilter';
 
 enum EPageStep {
     none = "none",
@@ -144,12 +145,17 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     })
     sitesSelectItem: object;
 
+    // @Prop({
+    //     type: Array, // Boolean, Number, String, Array, Object
+    //     default: []
+    // })
+    // tagIncludeSitesItem: any;
 
     @Prop({
         type: Array, // Boolean, Number, String, Array, Object
-        default: []
+        default: () => []
     })
-    tagIncludeSitesItem: any;
+    allTagsItem: any;
 
     @Prop({
         type: Object,
@@ -160,6 +166,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     // Tag 相關
     selectAllTags: string = EIfAllSelected.select;
     ifAllTagsSelectItem: any = [];
+    // tagIncludeSitesItem: any = [];
 
     // date 相關
     selectPeriodAddWay: string = EAddPeriodSelect.period;
@@ -181,15 +188,11 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     responseData: any = {};
 
     created() {
-        // this.initSelectItemSite();
         this.initSelectItem();
-        console.log('sitesSelectItem - ', this.sitesSelectItem);
-        console.log('tagIncludeSitesItem - ', this.tagIncludeSitesItem);
     }
 
     mounted() {
         this.initTemplate();
-        this.initAllTags();
     }
 
     initSelectItem() {
@@ -222,12 +225,31 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         };
     }
 
-    initAllTags() {
-        for (const detail in this.tagSelectItem) {
-            this.inputFormData.allTagIds.push(detail);
-        }
+    async initTagIncludeSitesItem() {
+
+        let result = await this.$server
+            .R("/tag")
+            // .then((response: any) => {
+            //     if (response != undefined) {
+            //         for (const returnValue of response) {
+            //             // 自定義 tagSelectItem 的 key 的方式
+            //             tempTagSelectItem[returnValue.objectId] =
+            //                 returnValue.name;
+            //         }
+            //         this.tagSelectItem = tempTagSelectItem;
+            //     }
+            // })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
 
 
+        let tagIncludeSitesItem = result['results'];
+        return tagIncludeSitesItem
     }
 
     tempSaveInputData(data) {
@@ -253,7 +275,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         this.selectAllTags = selected;
         if (this.selectAllTags === EIfAllSelected.all) {
             this.inputFormData.tagIds = [];
-            this.inputFormData.tagIds = this.inputFormData.allTagIds;
+            this.inputFormData.tagIds = this.allTagsItem;
         } else {
             this.inputFormData.tagIds = [];
         }
@@ -331,19 +353,26 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         }
 
         if (this.selectAllTags === "all") {
-            this.inputFormData.tagIds = this.inputFormData.allTagIds;
+            this.inputFormData.tagIds = this.allTagsItem;
         }
 
         doSubmitParam.tagIds = this.inputFormData.tagIds;
 
+        let tagIncludeSitesItem = await this.initTagIncludeSitesItem();
+
         let tempSiteIds = [];
 
-        if (this.inputFormData.tagIds.length > 0 && this.tagIncludeSitesItem.length > 0 ) {
+        if (this.inputFormData.tagIds.length > 0 && tagIncludeSitesItem.length > 0 ) {
             this.inputFormData.tagIds.map(tagId => {
-                this.tagIncludeSitesItem.map(item => {
+                tagIncludeSitesItem.map(item => {
                     if (tagId === item.objectId && item.sites.length > 0) {
                         item.sites.map(site => {
-                            tempSiteIds.push(site.objectId)
+                            for (const allowSiteId in this.sitesSelectItem) {
+                                if (allowSiteId === site.objectId) {
+                                    tempSiteIds.push(site.objectId)
+
+                                }
+                            }
                         })
                     }
                 });
@@ -517,7 +546,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
 
         this.selectAllTags = EIfAllSelected.select;
 
-        this.initAllTags();
+       // this.initAllTags();
     }
 
     IFilterConditionForm() {

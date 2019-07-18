@@ -16,15 +16,24 @@
                         width="600"
                         height="400"
                     ></canvas>
+                    <div class="legend-area">
+                        <h5>{{title}}</h5>
+                        <span class="left">{{min}}</span>
+                        <span class="right">{{max}}</span>
+                        <img
+                            id="gradient"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAKCAYAAABCHPt+AAAAnklEQVRYR+2WQQqDQBAES5wB/f8/Y05RcMWwSu6JIT0Dm4WlH1DUdHew7/z6WYFhhnGRpnlhAEaQpi/ADbh/np0MiBhGhW+2ymFU+DZfg1EhaoB4jCFuMYYcQKZrXwPEVvm5Og0pcYakBvI35G1jNIZ4jCHexxjSpz9ZFUjAynLbpOvqteaODkm9sloz5JF+ZTVmSAWSu9Qb65AvgDwBQoLgVDlWfAQAAAAASUVORK5CYII="
+                            style="width:100%"
+                        >
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 import { IHeatMapData, IHeatMapPosition, IMapImage } from "./IHeatmap";
 import Heatmap from "heatmap.js";
 
@@ -35,6 +44,12 @@ export class CameraHeatmap extends Vue {
     private image: HTMLImageElement;
     private canvasEl: HTMLCanvasElement;
     private heatmapCanvs: any;
+
+    private title: string = "Heatmap Legend";
+    private max: number = 0;
+    private min: number = 0;
+    private width_r: number = 1; // 寬比例
+    private height_r: number = 1; // 高比例
 
     @Prop({
         type: Object,
@@ -58,8 +73,10 @@ export class CameraHeatmap extends Vue {
     })
     heatMapPosition: IHeatMapPosition[];
 
-    private _width_r: number = 1; // 寬比例
-    private _height_r: number = 1; // 高比例
+    @Watch("heatMapPosition", { deep: true })
+    private watchPageType(newVal, oldVal) {
+        this.initMap();
+    }
 
     created() {}
 
@@ -81,12 +98,14 @@ export class CameraHeatmap extends Vue {
         heatmapData.data = me.heatMapPosition.map(function(item, index, array) {
             heatmapData.max = Math.max(heatmapData.max, item.value);
             return {
-                x: item.x * me._width_r,
-                y: item.y * me._height_r,
+                x: item.x * me.width_r,
+                y: item.y * me.height_r,
                 value: item.value
             };
         });
 
+        this.max = heatmapData.max;
+        this.min = 0;
         me.heatmapCanvs.setData(heatmapData);
         console.log("initHeatmap", me.heatmapCanvs, heatmapData);
     }
@@ -100,8 +119,8 @@ export class CameraHeatmap extends Vue {
 
         me.image.onload = () => {
             console.log("initMap", me.image.width, me.image.height);
-            me._width_r = me.mapImage.width / me.image.width;
-            me._height_r = me.mapImage.height / me.image.height;
+            me.width_r = me.mapImage.width / me.image.width;
+            me.height_r = me.mapImage.height / me.image.height;
             me.cx.drawImage(
                 me.image,
                 0,
@@ -123,5 +142,19 @@ Vue.component("camera-heatmap", CameraHeatmap);
 .canvas-div {
     width: 600;
     height: 400;
+}
+.legend-area {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    background: white;
+    outline: 2px solid black;
+    line-height: 1em;
+    z-index: 1;
+}
+
+.right {
+    float: right;
 }
 </style>
