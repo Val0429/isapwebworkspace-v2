@@ -861,12 +861,630 @@ export default class ReportHeatmap extends Vue {
     }
 
     initTimeArray() {
-        this.timeArray = [
-            "2019-07-01T16:00:00.000Z",
-            "2019-07-02T16:00:00.000Z",
-            "2019-07-03T16:00:00.000Z",
-            "2019-07-04T16:00:00.000Z"
-        ];
+
+        const summaryDatas = [
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "8CVfWZLlPD",
+                        "name": "1F peopleCounting STU48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "RiZtGia7MQ",
+                    "name": "台北 1F 80L_1-out"
+                },
+                "date": "2019-06-30T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 2,
+                "prevOut": 61,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "73iC8Xtl1t",
+                        "name": "2F peopleCounting 女裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "iYJLYUjHWF",
+                    "name": "台北 2F 80L_1-out"
+                },
+                "date": "2019-06-30T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 2,
+                "prevOut": 61,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "jzthfNUGky",
+                        "name": "2F peopleCounting 童裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bWBAWOHIn1",
+                    "name": "台北 2F 80L_1-in"
+                },
+                "date": "2019-06-30T16:00:00.000Z",
+                "type": "day",
+                "in": 1,
+                "prevIn": 62,
+                "out": 0,
+                "prevOut": 0,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "sfs8VJbvFE",
+                        "name": "1F peopleCounting HKT48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bZpj6O9hW1",
+                    "name": "台北 1F 80L_1-in"
+                },
+                "date": "2019-06-30T16:00:00.000Z",
+                "type": "day",
+                "in": 1,
+                "prevIn": 62,
+                "out": 0,
+                "prevOut": 0,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "8CVfWZLlPD",
+                        "name": "1F peopleCounting STU48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "RiZtGia7MQ",
+                    "name": "台北 1F 80L_1-out"
+                },
+                "date": "2019-07-01T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 50,
+                "prevOut": 82,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "73iC8Xtl1t",
+                        "name": "2F peopleCounting 女裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "iYJLYUjHWF",
+                    "name": "台北 2F 80L_1-out"
+                },
+                "date": "2019-07-01T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 50,
+                "prevOut": 82,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "jzthfNUGky",
+                        "name": "2F peopleCounting 童裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bWBAWOHIn1",
+                    "name": "台北 2F 80L_1-in"
+                },
+                "date": "2019-07-01T16:00:00.000Z",
+                "type": "day",
+                "in": 21,
+                "prevIn": 70,
+                "out": 0,
+                "prevOut": 0,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "sfs8VJbvFE",
+                        "name": "1F peopleCounting HKT48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bZpj6O9hW1",
+                    "name": "台北 1F 80L_1-in"
+                },
+                "date": "2019-07-01T16:00:00.000Z",
+                "type": "day",
+                "in": 21,
+                "prevIn": 70,
+                "out": 0,
+                "prevOut": 0,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "jzthfNUGky",
+                        "name": "2F peopleCounting 童裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bWBAWOHIn1",
+                    "name": "台北 2F 80L_1-in"
+                },
+                "date": "2019-07-02T16:00:00.000Z",
+                "type": "day",
+                "in": 60,
+                "prevIn": 86,
+                "out": 0,
+                "prevOut": 0,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "sfs8VJbvFE",
+                        "name": "1F peopleCounting HKT48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bZpj6O9hW1",
+                    "name": "台北 1F 80L_1-in"
+                },
+                "date": "2019-07-02T16:00:00.000Z",
+                "type": "day",
+                "in": 60,
+                "prevIn": 86,
+                "out": 0,
+                "prevOut": 0,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "8CVfWZLlPD",
+                        "name": "1F peopleCounting STU48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "RiZtGia7MQ",
+                    "name": "台北 1F 80L_1-out"
+                },
+                "date": "2019-07-02T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 85,
+                "prevOut": 82,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "73iC8Xtl1t",
+                        "name": "2F peopleCounting 女裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "iYJLYUjHWF",
+                    "name": "台北 2F 80L_1-out"
+                },
+                "date": "2019-07-02T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 85,
+                "prevOut": 82,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "8CVfWZLlPD",
+                        "name": "1F peopleCounting STU48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "RiZtGia7MQ",
+                    "name": "台北 1F 80L_1-out"
+                },
+                "date": "2019-07-03T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 56,
+                "prevOut": 2,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "73iC8Xtl1t",
+                        "name": "2F peopleCounting 女裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "iYJLYUjHWF",
+                    "name": "台北 2F 80L_1-out"
+                },
+                "date": "2019-07-03T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": 0,
+                "out": 56,
+                "prevOut": 2,
+                "inEmployee": 0,
+                "prevInEmployee": 0,
+                "outEmployee": 0,
+                "prevOutEmployee": 0
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "jzthfNUGky",
+                        "name": "2F peopleCounting 童裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bWBAWOHIn1",
+                    "name": "台北 2F 80L_1-in"
+                },
+                "date": "2019-07-03T16:00:00.000Z",
+                "type": "day",
+                "in": 38,
+                "prevIn": null,
+                "out": 0,
+                "prevOut": null,
+                "inEmployee": 0,
+                "prevInEmployee": null,
+                "outEmployee": 0,
+                "prevOutEmployee": null
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "sfs8VJbvFE",
+                        "name": "1F peopleCounting HKT48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bZpj6O9hW1",
+                    "name": "台北 1F 80L_1-in"
+                },
+                "date": "2019-07-03T16:00:00.000Z",
+                "type": "day",
+                "in": 38,
+                "prevIn": null,
+                "out": 0,
+                "prevOut": null,
+                "inEmployee": 0,
+                "prevInEmployee": null,
+                "outEmployee": 0,
+                "prevOutEmployee": null
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "jzthfNUGky",
+                        "name": "2F peopleCounting 童裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bWBAWOHIn1",
+                    "name": "台北 2F 80L_1-in"
+                },
+                "date": "2019-07-04T16:00:00.000Z",
+                "type": "day",
+                "in": 37,
+                "prevIn": null,
+                "out": 0,
+                "prevOut": null,
+                "inEmployee": 0,
+                "prevInEmployee": null,
+                "outEmployee": 0,
+                "prevOutEmployee": null
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "sfs8VJbvFE",
+                        "name": "1F peopleCounting HKT48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "bZpj6O9hW1",
+                    "name": "台北 1F 80L_1-in"
+                },
+                "date": "2019-07-04T16:00:00.000Z",
+                "type": "day",
+                "in": 37,
+                "prevIn": null,
+                "out": 0,
+                "prevOut": null,
+                "inEmployee": 0,
+                "prevInEmployee": null,
+                "outEmployee": 0,
+                "prevOutEmployee": null
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "1zK9b3J0Nq",
+                    "name": "1F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "8CVfWZLlPD",
+                        "name": "1F peopleCounting STU48區"
+                    }
+                ],
+                "device": {
+                    "objectId": "RiZtGia7MQ",
+                    "name": "台北 1F 80L_1-out"
+                },
+                "date": "2019-07-04T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": null,
+                "out": 46,
+                "prevOut": null,
+                "inEmployee": 0,
+                "prevInEmployee": null,
+                "outEmployee": 0,
+                "prevOutEmployee": null
+            },
+            {
+                "site": {
+                    "objectId": "iVTCTzctbF",
+                    "name": "台北店"
+                },
+                "area": {
+                    "objectId": "pfLGgj8Hf5",
+                    "name": "2F"
+                },
+                "deviceGroups": [
+                    {
+                        "objectId": "73iC8Xtl1t",
+                        "name": "2F peopleCounting 女裝區"
+                    }
+                ],
+                "device": {
+                    "objectId": "iYJLYUjHWF",
+                    "name": "台北 2F 80L_1-out"
+                },
+                "date": "2019-07-04T16:00:00.000Z",
+                "type": "day",
+                "in": 0,
+                "prevIn": null,
+                "out": 46,
+                "prevOut": null,
+                "inEmployee": 0,
+                "prevInEmployee": null,
+                "outEmployee": 0,
+                "prevOutEmployee": null
+            }
+        ]
+
+        let tempTimeArray = [];
+
+        if (summaryDatas.length > 0) {
+            summaryDatas.map(item => {
+                tempTimeArray.push(item.date);
+            });
+        } else {
+            return false;
+        }
+
+        // 去掉重複的值
+        this.timeArray = [...(new Set(tempTimeArray))];
+
+
+        // this.timeArray = [
+        //     "2019-07-01T16:00:00.000Z",
+        //     "2019-07-02T16:00:00.000Z",
+        //     "2019-07-03T16:00:00.000Z",
+        //     "2019-07-04T16:00:00.000Z"
+        // ];
     }
 
     async receiveUserData(data) {
