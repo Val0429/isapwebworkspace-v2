@@ -154,7 +154,7 @@
     import Datetime from "@/services/Datetime";
     import WeatherService from "@/components/Reports/models/WeatherService";
 
-    import HighchartOccupancy from "@/components/Reports/HighchartOccupancy.vue";
+    import HighchartsOccupancy from "@/components/Reports/HighchartsOccupancy.vue";
     import {
         EAreaMode,
         EPageType,
@@ -2285,7 +2285,7 @@
                 data.push(bodys);
             }
             let [fileName, fileType, sheetName] = [
-                this._("w_Navigation_VideoSources_Demographic"),
+                this._("w_Navigation_Report_Occupancy"),
                 fType,
                 Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
             ];

@@ -104,7 +104,7 @@ import ReportService from "@/components/Reports/models/ReportService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 
 import Datetime from "@/services/Datetime";
-import HighchartRepeatVisitor from "@/components/Reports/HighchartRepeatVisitor.vue";
+import HighchartsRepeatVisitor from "@/components/Reports/HighchartsRepeatVisitor.vue";
 import {
     EAreaMode,
     EPageType,
@@ -1301,7 +1301,7 @@ export default class ReportRepeatVisitor extends Vue {
             data.push(bodys);
         }
         let [fileName, fileType, sheetName] = [
-            this._("w_Navigation_VideoSources_Demographic"),
+            this._("w_Navigation_Report_RepeatVisitor"),
             fType,
             Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
         ];

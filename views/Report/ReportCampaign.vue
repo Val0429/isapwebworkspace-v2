@@ -60,10 +60,7 @@ import {
 } from "@/components/Reports";
 
 @Component({
-    components: {
-        HighchartsCampaignMultiple,
-        HighchartsCampaignSingle
-    }
+    components: {}
 })
 export default class ReportCampaign extends Vue {
     chartMode: {

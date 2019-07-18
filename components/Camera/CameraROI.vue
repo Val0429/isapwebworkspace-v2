@@ -194,9 +194,7 @@ export class CameraROI extends Vue {
                 me.model.height = Math.round(h * me.height_r);
 
                 console.log(
-                    `x:${me.model.x}, y:${me.model.y}, width:${
-                        me.model.width
-                    }, height:${me.model.height}`,
+                    `x:${me.model.x}, y:${me.model.y}, width:${me.model.width}, height:${me.model.height}`,
                     me.width_r,
                     me.height_r
                 );
