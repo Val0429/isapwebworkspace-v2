@@ -113,14 +113,14 @@ export class FilterConditionCampaign extends Vue {
     })
     templateItem: ITemplateItem | null;
 
-    // date 相關
-
-
     inputFormData: any = {
         year: '',
         campaignIds: [],
         siteIds: [],
     };
+
+    // 收合card控制
+    visible: boolean = true;
 
     created() {
     }
@@ -218,8 +218,15 @@ export class FilterConditionCampaign extends Vue {
             // this.inputFormData.campaignIds =
         }
 
+        if (this.inputFormData.siteIds === 'all') {
+            // this.inputFormData.siteIds =
+        } else {
+            // this.inputFormData.siteIds =
+        }
+
         // console.log(' - ', doSubmitParam); return false;
 
+        this.visible = false;
         this.$emit("submit-data", doSubmitParam);
     }
 

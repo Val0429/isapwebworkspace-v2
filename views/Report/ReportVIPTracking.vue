@@ -7,11 +7,45 @@
             :templateItem="templateItem"
             :sitesSelectItem="sitesSelectItem"
             :allTagsItem="allTagsItem"
+            :tagIncludeSitesItem="tagIncludeSitesItem"
             @submit-data="receiveFilterData"
         >
         </filter-condition-vip-and-blacklist>
 
-        <iv-card>
+        <iv-card
+            :visible="visible"
+        >
+<!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+-->
+
+
+            <template #toolbox>
+                <!-- Ben -->
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
+
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
+
+                <!-- Tina -->
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
+
             <highcharts-vip-tracking
                 :startDate="startDate"
                 :endDate="endDate"
@@ -21,6 +55,14 @@
             >
             </highcharts-vip-tracking>
         </iv-card>
+
+        <!-- Tina -->
+        <recipient
+            :modalShow="modalShow"
+            :userSelectItem="userSelectItem"
+            @user-data="receiveUserData"
+            @return-modalShow="receiveModalShowData"
+        ></recipient>
 
     </div>
 </template>
@@ -40,6 +82,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 
 import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
 import ReportService from "@/components/Reports/models/ReportService";
+import Datetime from '@/services/Datetime';
 
 @Component({
     components: {}
@@ -72,6 +115,9 @@ export default class ReportVIPTracking extends Vue {
 
     // OfficeHour 相關
     officeHourItemDetail: any = [];
+
+    // 收合card控制
+    visible: boolean = false;
 
     // recipient 相關
     modalShow: boolean = false;
@@ -113,6 +159,7 @@ export default class ReportVIPTracking extends Vue {
     async initDatas() {
         this.siteFilterPermission();
         await this.initSelectItemTag();
+        await this.initTagIncludeSitesItem();
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
@@ -154,6 +201,37 @@ export default class ReportVIPTracking extends Vue {
         }
     }
 
+    async initTagIncludeSitesItem() {
+
+        let result = await this.$server
+            .R("/tag")
+            // .then((response: any) => {
+            //     if (response != undefined) {
+            //         for (const returnValue of response) {
+            //             // 自定義 tagSelectItem 的 key 的方式
+            //             tempTagSelectItem[returnValue.objectId] =
+            //                 returnValue.name;
+            //         }
+            //         this.tagSelectItem = tempTagSelectItem;
+            //     }
+            // })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        if (result['results'].length > 0) {
+            result['results'].map(item => {
+                this.tagIncludeSitesItem.push(item)
+            })
+        } else {
+            return false;
+        }
+    }
+
     // Author: Tina
     async receiveFilterData(filterData, designationPeriod) {
         console.log(" - ", filterData);
@@ -168,6 +246,7 @@ export default class ReportVIPTracking extends Vue {
         //     .then((response: any) => {
         //         if (response !== undefined) {
         //             this.responseData = response;
+        //             this.officeHourItemDetail = this.responseData.officeHours;
         //             this.resolveSummary();
         //         }
         //     })
@@ -211,6 +290,77 @@ export default class ReportVIPTracking extends Vue {
                 }
             }
         }
+    }
+
+    analysisTitle(): string {
+
+        let title = 'Analysis - ';
+
+        console.log('analysisTitle - ', this.filterData);
+
+        if (this.filterData.tagIds.length === 1) {
+            for (const tagId in this.tagSelectItem) {
+                if(this.filterData.tagIds[0] === tagId) {
+                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                }
+            }
+        } else if (this.filterData.tagIds.length >= 2) {
+            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+        } else {
+            title += '';
+        }
+
+        // if (this.filterData.siteIds.length === 1) {
+        //     for (const siteId in this.sitesSelectItem) {
+        //         if(this.filterData.siteIds[0] === siteId) {
+        //             title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+        //         }
+        //     }
+        // } else {
+        //     title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+        // }
+
+        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
+        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+
+
+        this.visible = true;
+
+        return title;
+    }
+
+
+    async receiveUserData(data) {
+        this.userData = [];
+        this.userData = data;
+    }
+
+    receiveModalShowData(data) {
+        this.modalShow = data;
+    }
+
+    // Author: Tina
+    sortOutReportToTemplateData() {
+        this.ReportToTemplateData = {
+            startDate: this.filterData.startDate,
+            endDate: this.filterData.endDate,
+            mode: EDeviceMode.humanDetection,
+            siteIds: this.filterData.siteIds,
+            tagIds: this.filterData.tagIds,
+            sendUserIds: this.userData,
+            type: this.designationPeriod
+        };
+    }
+
+    // Author: Tina
+    pageToReportTemplate() {
+        this.sortOutReportToTemplateData();
+        this.$router.push({
+            path: "/reports/",
+            query: {
+                reportToTemplateData: JSON.stringify(this.ReportToTemplateData)
+            }
+        });
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

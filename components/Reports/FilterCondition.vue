@@ -2,7 +2,7 @@
     <div>
         <iv-card
             v-show="pageStep === ePageStep.none"
-            :visible="true"
+            :visible="visible"
             :label="_('w_ReportFilterConditionComponent_')"
         >
             <iv-form
@@ -217,6 +217,9 @@ export class FilterCondition extends Vue {
 
     // response 相關
     responseData: any = {};
+
+    // 收合card控制
+    visible: boolean = true;
 
     created() {
         // this.initSelectItemSite();
@@ -597,7 +600,7 @@ export class FilterCondition extends Vue {
         }
 
         // console.log(' - ', doSubmitParam); return false;
-
+        this.visible = false;
         this.$emit("submit-data", doSubmitParam, designationPeriod);
     }
 

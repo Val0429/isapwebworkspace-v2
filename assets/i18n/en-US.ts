@@ -212,6 +212,8 @@ export default class LangObject {
     w_ErrorConfig = 'Required IP, Port, WSPort, Protocol, Account and Password';
     w_WrongConfig = 'Please check IP, Port, WSPort, Protocol, Account and Password again';
 
+    w_PeakHours = 'PEAK HOURS';
+
     // w_SelectSiteTree = 'Select site tree';
     w_SelectSiteTree = 'Select store tree';
     w_SelectRegionTree = 'Select region tree';
@@ -948,6 +950,19 @@ export default class LangObject {
     w_PleaseSelectTags = 'Please Select Tags(s)';
     w_InOutType = 'In Out Type';
     w_businessChartType = 'Business Chart Type';
+
+	w_Title_One_Site = 'Selected store:';
+	w_Title_Many_Site_Start = 'Selected:';
+	w_Title_Many_Site_End = 'stores.';
+	w_Title_StartDate = 'Startdate:';
+	w_Title_EndDate = 'Enddate:';
+	w_Title_One_Tag = 'Selected tag:';
+	w_Title_Many_Tag_Start = 'Selected:';
+	w_Title_Many_Tag_End = 'tag.';
+	w_Title_FiscalYear = 'Fiscal year:';
+	w_Title_EventName_Start = 'Selected:';
+	w_Title_EventName_End = 'events.';
+	w_Title_One_EventName = 'Selected event:';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';
