@@ -115,7 +115,7 @@
         <template #premissionList>               
           <iv-sort-select
             v-if="premissionOptions.length > 0"
-            v-model="inputFormData.premissionSelected"
+            v-model="permissionSelected"
             class="col-md-12"
             :options="premissionOptions"
           ></iv-sort-select>
@@ -318,12 +318,11 @@ export default class MemberForm extends Vue {
   doTabMount() {
     this.tabMounted = true;
   }
-
+  permissionSelected:any[]=[];
   inputFormData: any = {};
   defaultFormData:any = {
     // Master
     objectId: undefined,
-    premissionSelected: [],
     personType: "2000000006",
     cardType: "",
     employeeNumber: "",
@@ -411,6 +410,7 @@ export default class MemberForm extends Vue {
   };
 
   clearInputData() {    
+    this.permissionSelected=[];
     this.inputFormData = Object.assign({}, this.defaultFormData);
   }
 
@@ -506,8 +506,9 @@ export default class MemberForm extends Vue {
       this.inputFormData.objectId = detailData.objectId;      
 
       if (detailData.AccessRules) {
+        console.log("pushing from access rules")
         for (let rule of detailData.AccessRules) {
-              this.inputFormData.premissionSelected.push(rule.RuleToken ? rule.RuleToken: rule);            
+              this.permissionSelected.push(rule.RuleToken ? rule.RuleToken: rule);            
         }
       }
       
@@ -592,10 +593,10 @@ export default class MemberForm extends Vue {
     }
   }
 
-  pageToAdd() {
+  async pageToAdd() {
     this.pageStep = EPageStep.add;
     this.clearInputData();
-    this.initPremission();
+    await this.initPremission();
   }
 
   async initPremission() {
@@ -708,7 +709,7 @@ export default class MemberForm extends Vue {
     let member = {        
         // master
         objectId: this.inputFormData.objectId,
-        AccessRules: this.inputFormData.premissionSelected,
+        AccessRules: this.permissionSelected,
         PrimaryWorkgroupId:parseInt(this.inputFormData.personType),
         ApbWorkgroupId:parseInt(this.inputFormData.personType),
         PrimaryWorkgroupName: this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType)).groupname,
