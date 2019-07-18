@@ -31,7 +31,7 @@
                         <b-form-checkbox
                             v-for="option in optionsSelectItem"
                             v-model="optionsSelected"
-                            v-show="showOption(option.value)"
+                            v-show="showOption(option)"
                             class="checkbox-group"
                             name="dragSelectOption"
                             :key="'sort_select__options__key__'+option.value"
@@ -123,7 +123,7 @@
                         <b-form-checkbox
                             v-for="choose in chooseSelectItem"
                             v-model="chooseSelected"
-                            v-show="showChoose(choose.value)"
+                            v-show="showChoose(choose)"
                             class="checkbox-group"
                             name="dragSelectChoose"
                             :key="'sort__select__choose__key__'+choose.value"
@@ -284,18 +284,8 @@ export class SortSelect extends Vue {
     }
 
     // option
-    showOption(data: string): boolean {
-        let result = true;
-        if (this.optionSearchText != "") {
-            result = false;
-            for (let item of this.optionsSelectItem) {
-                if (data == item.value && item.text.match(this.optionSearchText)) {
-                    result = true;
-                    break;
-                }
-            }
-        }
-        return result;
+    showOption(data: ISortSelectOption): boolean {
+        return data.text.search(new RegExp(this.optionSearchText, "i")) >-1;
     }
 
     selectAllOption() {
@@ -310,18 +300,8 @@ export class SortSelect extends Vue {
     }
 
     // choose
-    showChoose(data: string): boolean {
-        let result = true;
-        if (this.chooseSearchText != "") {
-            result = false;
-            for (let item of this.chooseSelectItem) {
-                if (data == item.value && item.text.match(this.chooseSearchText)) {
-                    result = true;
-                    break;
-                }
-            }
-        }
-        return result;
+    showChoose(data: ISortSelectOption): boolean {
+        return data.text.search(new RegExp(this.chooseSearchText, "i")) >-1;
     }
 
     selectAllChoose() {
@@ -344,7 +324,7 @@ export class SortSelect extends Vue {
                 let chooseItem = this.chooseSelectItem[i];
                 if (chooseItem.value == chooseSelected) {
                     chooseIndex = parseInt(i);
-                    tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+                    tempChooseItem = chooseItem;
                     this.chooseSelectItem.splice(parseInt(i), 1);
                     break;
                 }
@@ -369,7 +349,7 @@ export class SortSelect extends Vue {
                 let chooseItem = this.chooseSelectItem[i];
                 if (chooseItem.value == chooseSelected) {
                     chooseIndex = parseInt(i);
-                    tempChooseItem = JSON.parse(JSON.stringify(chooseItem));
+                    tempChooseItem = chooseItem;
                     this.chooseSelectItem.splice(parseInt(i), 1);
                     break;
                 }
@@ -391,9 +371,7 @@ export class SortSelect extends Vue {
             for (let i in this.chooseSelectItem) {
                 let chooseItem = this.chooseSelectItem[i];
                 if (choose == chooseItem.value) {
-                    this.optionsSelectItem.push(
-                        JSON.parse(JSON.stringify(chooseItem))
-                    );
+                    this.optionsSelectItem.push(chooseItem);
                     this.chooseSelectItem.splice(parseInt(i), 1);
                     break;
                 }
@@ -408,9 +386,7 @@ export class SortSelect extends Vue {
             for (let i in this.optionsSelectItem) {
                 let optionItem = this.optionsSelectItem[i];
                 if (option == optionItem.value) {
-                    this.chooseSelectItem.push(
-                        JSON.parse(JSON.stringify(optionItem))
-                    );
+                    this.chooseSelectItem.push(optionItem);
                     this.optionsSelectItem.splice(parseInt(i), 1);
                     break;
                 }
