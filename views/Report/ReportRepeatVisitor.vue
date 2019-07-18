@@ -104,7 +104,7 @@ import ReportService from "@/components/Reports/models/ReportService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 
 import Datetime from "@/services/Datetime";
-import HighchartRepeatVisitor from "@/components/Reports/HighchartRepeatVisitor.vue";
+import HighchartsRepeatVisitor from "@/components/Reports/HighchartsRepeatVisitor.vue";
 import {
     EAreaMode,
     EPageType,

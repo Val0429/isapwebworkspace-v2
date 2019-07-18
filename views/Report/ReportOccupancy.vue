@@ -154,7 +154,7 @@
     import Datetime from "@/services/Datetime";
     import WeatherService from "@/components/Reports/models/WeatherService";
 
-    import HighchartOccupancy from "@/components/Reports/HighchartOccupancy.vue";
+    import HighchartsOccupancy from "@/components/Reports/HighchartsOccupancy.vue";
     import {
         EAreaMode,
         EPageType,
