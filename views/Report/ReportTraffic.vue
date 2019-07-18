@@ -1,5 +1,3 @@
-import {EDesignationPeriod} from "../../components/Reports";
-import {EAreaMode} from "../../components/Reports";
 <template>
     <div>
         <!-- Tina -->
@@ -151,7 +149,6 @@ import {
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
-
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import WeatherService from "@/components/Reports/models/WeatherService";
@@ -347,29 +344,29 @@ export default class ReportTraffic extends Vue {
 
     initSelect() {
         this.inOrOutTypeSelectItem = {
-            in: this._('w_In'),
-            out: this._('w_Out'),
-            all: this._('w_All'),
+            in: this._("w_In"),
+            out: this._("w_Out"),
+            all: this._("w_All")
         };
 
         this.timeModeSelectItem = {
-            day: this._('w_daily'),
-            week: this._('w_weekly'),
-            month: this._('w_monthly'),
-            quarter: this._('w_quarterly'),
-            year: this._('w_yearly')
+            day: this._("w_daily"),
+            week: this._("w_weekly"),
+            month: this._("w_monthly"),
+            quarter: this._("w_quarterly"),
+            year: this._("w_yearly")
         };
 
         this.isIncludedEmployeeSelectItem = {
-            yes: this._('w_yes'),
-            no: this._('w_no')
+            yes: this._("w_yes"),
+            no: this._("w_no")
         };
 
         this.businessChartTypeSelectItem = {
-	        revenue: this._('w_revenue'),
-	        asp: this._('w_asp'),
-            transaction: this._('w_transaction'),
-            conversion: this._('w_conversion'),
+            revenue: this._("w_revenue"),
+            asp: this._("w_asp"),
+            transaction: this._("w_transaction"),
+            conversion: this._("w_conversion")
         };
     }
 
@@ -1421,7 +1418,7 @@ export default class ReportTraffic extends Vue {
             groupId: "",
             deviceId: "",
             inOrOut: ETypeInOrOut.in,
-            type: '',
+            type: "",
             isIncludedEmployee: EIncludedEmployee.no,
             businessChartType: EBusinessChart.revenue
         };
@@ -2014,8 +2011,7 @@ export default class ReportTraffic extends Vue {
 
     async receiveBusinessChartType(businessChartType) {
         this.inputFormData.businessChartType = businessChartType;
-        console.log(' - ', this.inputFormData.businessChartType);
-
+        console.log(" - ", this.inputFormData.businessChartType);
 
         // 單一site
         if (this.filterData.firstSiteId) {
