@@ -104,7 +104,7 @@ export class CameraHeatmap extends Vue {
         });
 
         this.max = heatmapData.max;
-        this.min = 1;
+        this.min = 0;
         me.heatmapCanvs.setData(heatmapData);
         console.log("initHeatmap", me.heatmapCanvs, heatmapData);
     }
