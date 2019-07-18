@@ -42,18 +42,6 @@
                     />
                 </template>
 
-                <!-- Ben -->
-                <anlysis-dashboard
-                    ref="anlysisDashboard"
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :type="dTimeMode"
-                    :siteIds="pSiteIds"
-                    :tagIds="tags"
-                    :pageType="dPageType"
-                >
-                </anlysis-dashboard>
-
                 <!-- Tina -->
                 <analysis-filter-dwell-time
                     class="mb-4"
@@ -78,6 +66,20 @@
                 >
 
                 </analysis-filter-dwell-time>
+
+
+                <!-- Ben -->
+                <anlysis-dashboard
+                    ref="analysisDashboard"
+                    :startDate="startDate"
+                    :endDate="endDate"
+                    :type="dTimeMode"
+                    :siteIds="pSiteIds"
+                    :tagIds="tags"
+                    :pageType="dPageType"
+                >
+                </anlysis-dashboard>
+
                 <!-- Morris -->
                 <highcharts-dwell-time
                     ref="test"
@@ -1495,8 +1497,8 @@ export default class ReportDwellTime extends Vue {
     initDashboardData() {
         this.dPageType = EPageType.averageDwellTime;
         setTimeout(() => {
-            let anlysisDashboard: any = this.$refs.anlysisDashboard;
-            anlysisDashboard.initData();
+            let analysisDashboard: any = this.$refs.analysisDashboard;
+            analysisDashboard.initData();
         }, 300);
     }
 
@@ -1526,7 +1528,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.lower20,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM21_30 = {
                     date: tempDate,
@@ -1536,7 +1540,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m21_30,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM31_40 = {
                     date: tempDate,
@@ -1546,7 +1552,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m31_40,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM41_50 = {
                     date: tempDate,
@@ -1556,7 +1564,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m41_50,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM51_60 = {
                     date: tempDate,
@@ -1566,7 +1576,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m51_60,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataUpper61 = {
                     date: tempDate,
@@ -1576,7 +1588,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.upper61,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
 
                 for (let siteId of this.filterData.siteIds) {
@@ -1654,7 +1668,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.lower20,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM21_30 = {
                     date: new Date(dateItem.getTime()),
@@ -1664,7 +1680,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m21_30,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM31_40 = {
                     date: new Date(dateItem.getTime()),
@@ -1674,7 +1692,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m31_40,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM41_50 = {
                     date: new Date(dateItem.getTime()),
@@ -1684,7 +1704,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m41_50,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataM51_60 = {
                     date: new Date(dateItem.getTime()),
@@ -1694,7 +1716,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.m51_60,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
                 let tempDateChartDataUpper61 = {
                     date: new Date(dateItem.getTime()),
@@ -1704,7 +1728,9 @@ export default class ReportDwellTime extends Vue {
                     weather: EWeather.none,
                     ageRange: EAgeRange.upper61,
                     maleCount: 0,
-                    femaleCount: 0
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
                 };
 
                 for (let siteId of this.filterData.siteIds) {
@@ -1821,14 +1847,17 @@ export default class ReportDwellTime extends Vue {
                         summary.maleRanges[ageRangeIndex] === null
                             ? 0
                             : summary.maleRanges[ageRangeIndex];
+
                     summary.femaleRanges[ageRangeIndex] =
                         summary.femaleRanges[ageRangeIndex] === null
                             ? 0
                             : summary.femaleRanges[ageRangeIndex];
+
                     summary.maleEmployeeRanges[ageRangeIndex] =
                         summary.maleEmployeeRanges[ageRangeIndex] === null
                             ? 0
                             : summary.maleEmployeeRanges[ageRangeIndex];
+
                     summary.femaleEmployeeRanges[ageRangeIndex] =
                         summary.femaleEmployeeRanges[ageRangeIndex] === null
                             ? 0
@@ -1847,6 +1876,37 @@ export default class ReportDwellTime extends Vue {
                             summary.maleEmployeeRanges[ageRangeIndex];
                         tempChartData.femaleCount -=
                             summary.femaleEmployeeRanges[ageRangeIndex];
+                    }
+                }
+            }
+
+            for (let saleRecord of this.responseData.salesRecords) {
+                let saleDateFormat = isOneDay
+                    ? Datetime.DateTime2String(
+                        new Date(saleRecord.date),
+                        "YYYY-MM-DD HH"
+                    )
+                    : Datetime.DateTime2String(
+                        new Date(saleRecord.date),
+                        "YYYY-MM-DD"
+                    );
+                for (let tempChartData of tempChartDatas) {
+                    let tempDateFormat = isOneDay
+                        ? Datetime.DateTime2String(
+                            tempChartData.date,
+                            "YYYY-MM-DD HH"
+                        )
+                        : Datetime.DateTime2String(
+                            tempChartData.date,
+                            "YYYY-MM-DD"
+                        );
+                    if (
+                        saleDateFormat == tempDateFormat &&
+                        saleRecord.site.objectId == tempChartData.siteObjectId
+                    ) {
+                        tempChartData.revenue += saleRecord.revenue;
+                        tempChartData.transaction += saleRecord.transaction;
+                        break;
                     }
                 }
             }
@@ -2350,7 +2410,7 @@ export default class ReportDwellTime extends Vue {
 				let ageRange = EAgeRange.none;
                     let dwellTimeRange = EDwellTimeRange.none;
                     let weather = EWeather.none;
-                    
+
                     let tempAgeRangeNumber = Math.floor(Math.random() * 300);
                     let tempDwellTimeRangeNumber = Math.floor(Math.random() * 300);
                     let tempWeatherNumber = Math.floor(Math.random() * 300);
@@ -2368,7 +2428,7 @@ export default class ReportDwellTime extends Vue {
 					} else if (tempAgeRangeNumber % 6 == 5) {
 						ageRange = EAgeRange.upper61;
                     }
-                    
+
                     if (tempDwellTimeRangeNumber % 6 == 0) {
 						dwellTimeRange = EDwellTimeRange.lower5;
 					} else if (tempDwellTimeRangeNumber % 6 == 1) {
