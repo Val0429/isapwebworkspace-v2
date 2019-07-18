@@ -10,7 +10,10 @@
         >
         </filter-condition-campaign>
 
-        <iv-card>
+        <iv-card
+            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+            :visible="visible"
+        >
             <template #toolbox>
                 <!-- Tina -->
                 <iv-toolbox-send-mail
@@ -83,6 +86,9 @@ export default class ReportCampaign extends Vue {
     // recipient 相關
     modalShow: boolean = false;
     userData: any = [];
+
+    // 收合card控制
+    visible: boolean = false;
 
     // 接收 Filter Condition 資料 相關
     filterData: any = {};
@@ -201,6 +207,43 @@ export default class ReportCampaign extends Vue {
     }
 
     resolveSummary() {}
+
+    analysisTitle(): string {
+
+        // TODO: 待確認 title 和 site部分
+        let title = 'Analysis - ';
+
+        console.log('analysisTitle - ', this.filterData);
+
+        title += `${ this._('w_Title_FiscalYear') } ${ this.filterData.year }.`;
+
+
+        if (this.filterData.campaignIds.length === 1) {
+            for (const campaignId in this.campaignSelectItem) {
+                if(this.filterData.campaignIds[0] === campaignId) {
+                    title += `${this._('w_Title_One_EventName')} ${this.campaignSelectItem[campaignId]}. `;
+                }
+            }
+        } else if (this.filterData.campaignIds.length >= 2) {
+            title += `${this._('w_Title_EventName_Start')} ${this.filterData.campaignIds.length} ${this._('w_Title_EventName_End')} `;
+        } else {
+            title += '';
+        }
+
+        // if (this.filterData.siteIds.length === 1) {
+        //     for (const siteId in this.sitesSelectItem) {
+        //         if(this.filterData.siteIds[0] === siteId) {
+        //             title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+        //         }
+        //     }
+        // } else {
+        //     title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+        // }
+
+        this.visible = true;
+
+        return title;
+    }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 

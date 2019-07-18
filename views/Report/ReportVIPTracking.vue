@@ -12,7 +12,10 @@
         >
         </filter-condition-vip-and-blacklist>
 
-        <iv-card>
+        <iv-card
+            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+            :visible="visible"
+        >
             <highcharts-vip-tracking
                 :startDate="startDate"
                 :endDate="endDate"
@@ -39,6 +42,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 
 import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
 import ReportService from "@/components/Reports/models/ReportService";
+import Datetime from '@/services/Datetime';
 
 @Component({
     components: {}
@@ -70,6 +74,10 @@ export default class ReportVIPTracking extends Vue {
 
     // OfficeHour 相關
     officeHourItemDetail: any = [];
+
+
+    // 收合card控制
+    visible: boolean = false;
 
     // recipient 相關
     modalShow: boolean = false;
@@ -241,6 +249,43 @@ export default class ReportVIPTracking extends Vue {
                 }
             }
         }
+    }
+
+    analysisTitle(): string {
+
+        let title = 'Analysis - ';
+
+        console.log('analysisTitle - ', this.filterData);
+
+        if (this.filterData.tagIds.length === 1) {
+            for (const tagId in this.tagSelectItem) {
+                if(this.filterData.tagIds[0] === tagId) {
+                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                }
+            }
+        } else if (this.filterData.tagIds.length >= 2) {
+            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+        } else {
+            title += '';
+        }
+
+        // if (this.filterData.siteIds.length === 1) {
+        //     for (const siteId in this.sitesSelectItem) {
+        //         if(this.filterData.siteIds[0] === siteId) {
+        //             title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+        //         }
+        //     }
+        // } else {
+        //     title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+        // }
+
+        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
+        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+
+
+        this.visible = true;
+
+        return title;
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////

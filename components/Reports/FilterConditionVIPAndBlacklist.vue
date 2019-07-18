@@ -186,6 +186,9 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     // response 相關
     responseData: any = {};
 
+    // 收合card控制
+    visible: boolean = true;
+
     created() {
         this.initSelectItem();
     }
@@ -503,6 +506,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
 
         // console.log(' - ', doSubmitParam); return false;
 
+        this.visible = false;
         this.$emit("submit-data", doSubmitParam, designationPeriod);
     }
 
