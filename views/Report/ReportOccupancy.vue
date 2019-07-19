@@ -2358,6 +2358,7 @@ export default class ReportOccupancy extends Vue {
             toExcel({ th, data, fileName, fileType, sheetName });
      }
 
+    // Author: Morris
     exportPDF() {
         let title = "";
         title += this._("w_Navigation_Report_Occupancy");
@@ -2366,7 +2367,6 @@ export default class ReportOccupancy extends Vue {
             this.startDate,
             HighchartsService.datetimeFormat.date
         );
-
         ReportPDFService.exportPDF(title);
     }
 
