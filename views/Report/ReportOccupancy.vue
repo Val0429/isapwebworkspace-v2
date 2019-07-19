@@ -6,6 +6,8 @@
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :ifAllSitesSelectItem="ifAllSitesSelectItem"
+            :addPeriodSelectItem="addPeriodSelectItem"
             :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
@@ -175,7 +177,9 @@ import {
     EDesignationPeriod,
     IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData
+    ReportTableData,
+    EAddPeriodSelect,
+    EIfAllSelected
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ReportService from "@/components/Reports/models/ReportService";
@@ -215,7 +219,9 @@ export default class ReportOccupancy extends Vue {
     //// Filter Condition Start ////
 
     // select 相關
-    sitesSelectItem: any = {};
+    sitesSelectItem: any = [];
+    ifAllSitesSelectItem: any = [];
+    addPeriodSelectItem: any = [];
     tagSelectItem: any = {};
     tags = [];
 
@@ -325,6 +331,21 @@ export default class ReportOccupancy extends Vue {
     }
 
     initSelect() {
+
+        this.ifAllSitesSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllSites") },
+            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
+        ];
+
+
+        this.addPeriodSelectItem = [
+            { value: EAddPeriodSelect.period, text: this._("w_period") },
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
+        ];
+
         this.timeModeSelectItem = {
             day: this._("w_daily"),
             week: this._("w_weekly"),
@@ -349,9 +370,12 @@ export default class ReportOccupancy extends Vue {
     siteFilterPermission() {
         let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
-            tempSitesSelectItem[detail.objectId] = detail.name;
+            let site = { id: detail.objectId, text: detail.name };
+            this.sitesSelectItem.push(site);
+
+            // tempSitesSelectItem[detail.objectId] = detail.name;
         }
-        this.sitesSelectItem = tempSitesSelectItem;
+        // this.sitesSelectItem = tempSitesSelectItem;
     }
 
     async initSelectItemSite() {

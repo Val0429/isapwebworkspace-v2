@@ -5,6 +5,8 @@
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :ifAllSitesSelectItem="ifAllSitesSelectItem"
+            :addPeriodSelectItem="addPeriodSelectItem"
             :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
@@ -176,7 +178,9 @@ import {
     ISiteItems,
     IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData
+    ReportTableData,
+    EIfAllSelected,
+    EAddPeriodSelect
 } from "@/components/Reports";
 import ReportService from "@/components/Reports/models/ReportService";
 
@@ -248,7 +252,9 @@ export default class ReportTraffic extends Vue {
     };
 
     // select 相關
-    sitesSelectItem: any = {};
+    sitesSelectItem: any = [];
+    ifAllSitesSelectItem: any = [];
+    addPeriodSelectItem: any = [];
     tagSelectItem: any = {};
     tags = [];
 
@@ -341,6 +347,21 @@ export default class ReportTraffic extends Vue {
     }
 
     initSelect() {
+
+        this.ifAllSitesSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllSites") },
+            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
+        ];
+
+
+        this.addPeriodSelectItem = [
+            { value: EAddPeriodSelect.period, text: this._("w_period") },
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
+        ];
+
         this.inOrOutTypeSelectItem = {
             in: this._("w_In"),
             out: this._("w_Out"),
@@ -905,9 +926,12 @@ export default class ReportTraffic extends Vue {
     siteFilterPermission() {
         let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
-            tempSitesSelectItem[detail.objectId] = detail.name;
+            let site = { id: detail.objectId, text: detail.name };
+            this.sitesSelectItem.push(site);
+
+            // tempSitesSelectItem[detail.objectId] = detail.name;
         }
-        this.sitesSelectItem = tempSitesSelectItem;
+        // this.sitesSelectItem = tempSitesSelectItem;
     }
 
     // Author: Tina

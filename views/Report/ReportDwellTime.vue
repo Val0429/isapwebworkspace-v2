@@ -6,6 +6,8 @@
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :ifAllSitesSelectItem="ifAllSitesSelectItem"
+            :addPeriodSelectItem="addPeriodSelectItem"
             :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
@@ -177,7 +179,9 @@ import {
     ReportTableData,
     EDesignationPeriod,
     IReportToTemplateItem,
-    EBusinessChart
+    EBusinessChart,
+    EIfAllSelected,
+    EAddPeriodSelect
 } from "@/components/Reports";
 
 ///////////////////////// export /////////////////////////
@@ -220,7 +224,9 @@ export default class ReportDwellTime extends Vue {
     //// Filter Condition Start ////
 
     // select 相關
-    sitesSelectItem: any = {};
+    sitesSelectItem: any = [];
+    ifAllSitesSelectItem: any = [];
+    addPeriodSelectItem: any = [];
     tagSelectItem: any = {};
     tags = [];
 
@@ -320,6 +326,21 @@ export default class ReportDwellTime extends Vue {
     }
 
     initSelect() {
+
+        this.ifAllSitesSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllSites") },
+            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
+        ];
+
+
+        this.addPeriodSelectItem = [
+            { value: EAddPeriodSelect.period, text: this._("w_period") },
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
+        ];
+
         this.timeModeSelectItem = {
             day: this._("w_daily"),
             week: this._("w_weekly"),
@@ -905,9 +926,12 @@ export default class ReportDwellTime extends Vue {
     siteFilterPermission() {
         let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
-            tempSitesSelectItem[detail.objectId] = detail.name;
+            let site = { id: detail.objectId, text: detail.name };
+            this.sitesSelectItem.push(site);
+
+            // tempSitesSelectItem[detail.objectId] = detail.name;
         }
-        this.sitesSelectItem = tempSitesSelectItem;
+        // this.sitesSelectItem = tempSitesSelectItem;
     }
 
     async initSelectItemSite() {
