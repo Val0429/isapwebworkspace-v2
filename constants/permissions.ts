@@ -27,7 +27,10 @@ export const PermissionName={
     operationLog:"7-3_system_operationlog_R"
 };
 export const PermissionList = [
-    
+    {key:PermissionName.accessLevel, route :"", group:"AccessLevel", access:{C:false,R:false,U:false,D:false}},
+    {key:PermissionName.member, route :"/member", group:"AccessLevel", access:{C:true,R:true,U:true,D:true}},
+    {key:PermissionName.permissionTable, route :"/permissiontable", group:"AccessLevel", access:{C:true,R:true,U:true,D:true}},
+
     {key:PermissionName.reportEmployee, route :"/employeereport", group:"Report", access:{C:false,R:true,U:false,D:false}},
     {key:PermissionName.reportDoor, route :"/doorreport", group:"Report", access:{C:false,R:true,U:false,D:false}},
     {key:PermissionName.reportDoorGroup, route :"/doorgroupreport", group:"Report", access:{C:false,R:true,U:false,D:false}},
@@ -35,28 +38,22 @@ export const PermissionList = [
     {key:PermissionName.reportContractor, route :"/contractorreport", group:"Report", access:{C:false,R:true,U:false,D:false}},
     {key:PermissionName.reportDemographic, route :"/demographicreport", group:"Report", access:{C:false,R:true,U:false,D:false}},
     {key:PermissionName.reportAttendance, route :"/attendance", group:"Report", access:{C:false,R:true,U:false,D:false}},
-    {key:PermissionName.reportVisitor, route :"/visitorreport", group:"Report", access:{C:false,R:true,U:false,D:false}},
-
-    {key:PermissionName.accessLevel, route :"", group:"AccessLevel", access:{C:false,R:false,U:false,D:false}},
-    {key:PermissionName.member, route :"/member", group:"AccessLevel", access:{C:true,R:true,U:true,D:true}},
-    {key:PermissionName.permissionTable, route :"/permissiontable", group:"AccessLevel", access:{C:true,R:true,U:true,D:true}},
+    {key:PermissionName.reportVisitor, route :"/visitorreport", group:"Report", access:{C:false,R:true,U:false,D:false}},    
 
     {key:PermissionName.area, route :"", group:"Setting", access:{C:false,R:false,U:false,D:false}},
     {key:PermissionName.site, route :"/site", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.region, route :"/region", group:"Setting", access:{C:true,R:true,U:true,D:true}},
-
     {key:PermissionName.door, route :"/door", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.doorgroup, route :"/doorgroup", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.floor, route :"/floor", group:"Setting", access:{C:false,R:true,U:false,D:false}},
     {key:PermissionName.elevatorgroup, route :"/elevatorgroup", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.elevator, route :"/elevator", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.reader, route :"/reader", group:"Setting", access:{C:true,R:true,U:true,D:true}},
-
     {key:PermissionName.syncreceiver, route :"/syncreceiver", group:"Setting", access:{C:true,R:true,U:true,D:true}},
-
     {key:PermissionName.humanResource, route :"", group:"Setting", access:{C:false,R:false,U:false,D:false}},
     {key:PermissionName.systemLicense, route :"/license", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.operationLog, route :"", group:"Setting", access:{C:false,R:true,U:false,D:false}},
+
     {key:PermissionName.user, route :"/userpermission", group:"Permission", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.userManagement, route :"/user", group:"Permission", access:{C:true,R:true,U:true,D:true}}
     
