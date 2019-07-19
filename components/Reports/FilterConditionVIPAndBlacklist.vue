@@ -106,6 +106,14 @@
                     </iv-form-selection>
                 </template>
 
+                <template #designationPeriodShow>
+                    <div
+                        v-if="showDesignationPeriod.endDate !== '' &&  showDesignationPeriod.startDate !== ''"
+                        class="row justify-content-center align-items-center mt-2 ml-3"
+                    >
+                        {{ showDesignationPeriod.startDate }} - {{ showDesignationPeriod.endDate }}
+                    </div>
+                </template>
 
             </iv-form>
 
@@ -221,6 +229,11 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         designationPeriod: EDesignationPeriod.today
     };
 
+    showDesignationPeriod: any = {
+        startDate: '',
+        endDate: '',
+    };
+
     // response 相關
     responseData: any = {};
 
@@ -270,6 +283,56 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                 break;
             case "designationPeriod":
                 this.inputFormData.designationPeriod = data.value;
+                switch (this.inputFormData.designationPeriod) {
+                    case "today":
+                        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(0);
+                        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(0);
+                        break;
+                    case "yesterday":
+                        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(-1);
+                        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(-1);
+                        break;
+                    case "last7days":
+                        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(-6);
+                        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(0);
+                        break;
+                    case "thisWeek":
+                        this.showDesignationPeriod.startDate = Datetime.ThisWeekStartDate();
+                        this.showDesignationPeriod.endDate = Datetime.ThisWeekEndDate();
+                        break;
+                    case "lastWeek":
+                        this.showDesignationPeriod.startDate = Datetime.LastWeekStartDate();
+                        this.showDesignationPeriod.endDate = Datetime.LastWeekEndDate();
+                        break;
+                    case "thisMonth":
+                        this.showDesignationPeriod.startDate = Datetime.ThisMonthStartDate();
+                        this.showDesignationPeriod.endDate = Datetime.ThisMonthEndDate();
+                        break;
+                    case "lastMonth":
+                        this.showDesignationPeriod.startDate = Datetime.LastMonthStartDate();
+                        this.showDesignationPeriod.endDate = Datetime.LastMonthEndDate();
+                        break;
+                    case "q1":
+                        this.showDesignationPeriod.startDate = Datetime.Q1StartDate();
+                        this.showDesignationPeriod.endDate = Datetime.Q1EndDate();
+                        break;
+                    case "q2":
+                        this.showDesignationPeriod.startDate = Datetime.Q2StartDate();
+                        this.showDesignationPeriod.endDate = Datetime.Q2EndDate();
+                        break;
+                    case "q3":
+                        this.showDesignationPeriod.startDate = Datetime.Q3StartDate();
+                        this.showDesignationPeriod.endDate = Datetime.Q3EndDate();
+                        break;
+                    case "q4":
+                        this.showDesignationPeriod.startDate = Datetime.Q4StartDate();
+                        this.showDesignationPeriod.endDate = Datetime.Q4EndDate();
+                        break;
+                    case "thisYear":
+                        this.showDesignationPeriod.startDate = Datetime.ThisYearStartDate();
+                        this.showDesignationPeriod.endDate = Datetime.ThisYearEndDate();
+                        break;
+                }
                 break;
         }
     }
@@ -292,6 +355,8 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
         this.inputFormData.designationPeriod = EDesignationPeriod.today;
+        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(0);
+        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(0);
         this.inputFormData.startDate = new Date();
         this.inputFormData.endDate = new Date();
     }
@@ -433,106 +498,61 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.CountDateNumber(0)));
                     designationPeriod = EDesignationPeriod.today;
-                    console.log("startDate today - ", doSubmitParam.startDate);
-                    console.log("endDate today - ", doSubmitParam.endDate);
                     break;
                 case "yesterday":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
                     designationPeriod = EDesignationPeriod.yesterday;
-                    console.log(
-                        "startDate yesterday - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate yesterday - ", doSubmitParam.endDate);
                     break;
                 case "last7days":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-6)));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     designationPeriod = EDesignationPeriod.last7days;
-                    console.log(
-                        "startDate last7days - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate last7days - ", doSubmitParam.endDate);
                     break;
                 case "thisWeek":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisWeekStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date( Datetime.ThisWeekEndDate()));
                     designationPeriod = EDesignationPeriod.thisWeek;
-                    console.log(
-                        "startDate thisWeek - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate thisWeek - ", doSubmitParam.endDate);
                     break;
                 case "lastWeek":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastWeekStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastWeekEndDate()));
                     designationPeriod = EDesignationPeriod.lastWeek;
-                    console.log(
-                        "startDate lastWeek - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate lastWeek - ", doSubmitParam.endDate);
                     break;
                 case "thisMonth":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisMonthStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisMonthEndDate()));
                     designationPeriod = EDesignationPeriod.thisMonth;
-                    console.log(
-                        "startDate thisMonth - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate thisMonth - ", doSubmitParam.endDate);
                     break;
                 case "lastMonth":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.LastMonthStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.LastMonthEndDate()));
                     designationPeriod = EDesignationPeriod.lastMonth;
-                    console.log(
-                        "startDate lastMonth - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate lastMonth - ", doSubmitParam.endDate);
                     break;
                 case "q1":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q1StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q1EndDate()));
                     designationPeriod = EDesignationPeriod.q1;
-                    console.log("startDate q1 - ", doSubmitParam.startDate);
-                    console.log("endDate q1 - ", doSubmitParam.endDate);
                     break;
                 case "q2":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q2StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q2EndDate()));
                     designationPeriod = EDesignationPeriod.q2;
-                    console.log("startDate q2 - ", doSubmitParam.startDate);
-                    console.log("endDate q2 - ", doSubmitParam.endDate);
                     break;
                 case "q3":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q3StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q3EndDate()));
                     designationPeriod = EDesignationPeriod.q3;
-                    console.log("startDate q3 - ", doSubmitParam.startDate);
-                    console.log("endDate q3 - ", doSubmitParam.endDate);
                     break;
                 case "q4":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.Q4StartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.Q4EndDate()));
                     designationPeriod = EDesignationPeriod.q4;
-                    console.log("startDate q4 - ", doSubmitParam.startDate);
-                    console.log("endDate q4 - ", doSubmitParam.endDate);
                     break;
                 case "thisYear":
                     doSubmitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisYearStartDate()));
                     doSubmitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()));
                     designationPeriod = EDesignationPeriod.thisYear;
-                    console.log(
-                        "startDate thisYear - ",
-                        doSubmitParam.startDate
-                    );
-                    console.log("endDate thisYear - ", doSubmitParam.endDate);
                     break;
             }
         }
@@ -623,6 +643,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_Fixed_Interval")}
+                 * @uiColumnGroup - period
                  * @uiHidden - ${
                         this.selectPeriodAddWay === EAddPeriodSelect.period
                             ? "true"
@@ -633,6 +654,11 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                     this.designationPeriodSelectItem as any,
                     false
                 )};
+
+                /**
+                 * @uiColumnGroup - period
+                 */
+                 designationPeriodShow: any;
 
             }
         `;
