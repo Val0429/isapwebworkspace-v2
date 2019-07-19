@@ -102,6 +102,8 @@ import {
     IChartTrafficData
 } from "../models/IHighCharts";
 
+import { Loading } from "@/services/Loading";
+
 @Component({
     components: {}
 })
@@ -154,9 +156,9 @@ export class HighchartsVipTracking extends Vue {
         titleList: [],
         data: [],
         paging: {
-            totalRow: 10,
-            prePage: 1,
-            currentPage: 10
+            totalRow: 30,
+            prePage: 10,
+            currentPage: 1
         }
     };
 
