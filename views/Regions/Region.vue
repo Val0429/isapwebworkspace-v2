@@ -75,6 +75,16 @@
                         :src="newImgSrc"
                     />
                 </template>
+
+                <template #tagIds="{$attrs, $listeners}">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        :options="selectItem.tags"
+                        :multiple="true"
+                    >
+                    </iv-form-selection>
+                </template>
             </iv-form>
 
             <template #footer-before>
@@ -141,6 +151,8 @@ import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 
+import { ITagReadUpdate } from "@/config/default/api/interfaces";
+
 enum EPageStep {
     none,
     tree,
@@ -165,7 +177,8 @@ export default class Region extends Vue {
     cardBindingTitle = "";
     deleteRegionIdList: string[] = [];
     selectItem: any = {
-        site: {}
+        site: {},
+        tags: []
     };
 
     // image
@@ -230,9 +243,43 @@ export default class Region extends Vue {
                 this.pageStep = EPageStep.modifyRegion;
                 break;
         }
+        this.initTagItem();
     }
 
     // init data
+    async initTagItem() {
+        this.selectItem.tags = [];
+
+        let body: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
+
+        await this.$server
+            .R("/tag/all", body)
+            .then((response: any) => {
+                for (let itme of response) {
+                    let tag = { id: itme.objectId, text: itme.name };
+                    this.selectItem.tags.push(tag);
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
+
+        this.regionTreeItem.region.tagIds = [];
+        for (let tag of this.regionTreeItem.region.tags) {
+            this.regionTreeItem.region.tagIds.push(tag.objectId);
+        }
+    }
+
     async initRegionTreeItem() {
         let param = {};
         this.regionTreeItem = new RegionTreeItem();
@@ -364,6 +411,7 @@ export default class Region extends Vue {
             objectId?: string;
             type: ERegionType;
             name: string;
+            tagIds: string[];
             customId?: string;
             address?: string;
             longitude?: number;
@@ -372,7 +420,8 @@ export default class Region extends Vue {
         } = {
             parentId: data.parentId,
             type: data.type,
-            name: data.name
+            name: data.name,
+            tagIds: data.tagIds
         };
 
         // get key
@@ -438,9 +487,7 @@ export default class Region extends Vue {
             await this.$server
                 .U("/location/region", param)
                 .then((response: any) => {
-                    if (response != undefined) {
-                        this.pageToTree();
-                    }
+                    this.pageToTree();
                 })
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
@@ -584,6 +631,12 @@ export default class Region extends Vue {
                     lng: number;
 
                     /**
+                     * @uiLabel - ${this._("w_Site_Tag")}
+                     * @uiPlaceHolder - ${this._("w_Site_Tag")}
+                     */
+                    tagIds?: any;
+
+                    /**
                      * @uiLabel - ${this._("w_Region_Photo")}
                      * @uiPlaceHolder - ${this._("w_Region_PhotoPlaceholder")}
                      * @uiType - iv-form-file
@@ -591,22 +644,21 @@ export default class Region extends Vue {
                     photoSrc: string;
 
                     photoImg?: any;
-
             }
         `;
     }
 
     IBindingSiteForm() {
         return `
-                interface {
+            interface {
 
-                    /**
-                     * @uiLabel - ${this._("w_Region_Sites")}
-                     * @uiPlaceHolder - ${this._("w_Region_SitesPlaceholder")}
-                     */
-                    sites?: ${toEnumInterface(this.selectItem.site, true)};
+                /**
+                 * @uiLabel - ${this._("w_Region_Sites")}
+                 * @uiPlaceHolder - ${this._("w_Region_SitesPlaceholder")}
+                 */
+                sites?: ${toEnumInterface(this.selectItem.site, true)};
 
-                    errorMessage?: any
+                errorMessage?: any
             }
         `;
     }
