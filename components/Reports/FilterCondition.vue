@@ -42,6 +42,7 @@
                     <div class="ml-3">
                         <b-button
                             v-if="selectAllSites === 'select'"
+                            variant="outline-secondary"
                             @click="pageToChooseTree"
                         >
                             {{ _('w_SelectSiteTree') }}
@@ -122,10 +123,9 @@
             </template>
 
         </iv-card>
-
+        
         <region-tree-select
-            v-if="pageStep === ePageStep.chooseTree && selectAllSites === 'select'"
-            :multiple="true"
+            v-show="pageStep === ePageStep.chooseTree && selectAllSites === 'select'":multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
             :selecteds="selecteds"
@@ -294,15 +294,15 @@ export class FilterCondition extends Vue {
 
     tempSaveInputData(data) {
         switch (data.key) {
-            case "siteIds":
-                for (const siteId of data.value) {
-                    if (!siteId) {
-                        this.inputFormData.siteIds = [];
-                    } else {
-                        this.inputFormData.siteIds = data.value;
-                    }
-                }
-                break;
+            // case "siteIds":
+            //     for (const siteId of data.value) {
+            //         if (!siteId) {
+            //             this.inputFormData.siteIds = [];
+            //         } else {
+            //             this.inputFormData.siteIds = data.value;
+            //         }
+            //     }
+            //     break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
                 break;
@@ -333,17 +333,12 @@ export class FilterCondition extends Vue {
                 }
             }
         }
-
-        console.log(
-            "this.inputFormData.siteIds - ",
-            this.inputFormData.siteIds
-        );
-        console.log("this.selecteds - ", this.selecteds);
     }
 
     async pageToChooseTree() {
         this.pageStep = EPageStep.chooseTree;
         this.selecteds = [];
+
         for (const id of this.inputFormData.siteIds) {
             for (const detail of this.sitesSelectItem) {
                 if (id === detail.id) {
@@ -367,13 +362,9 @@ export class FilterCondition extends Vue {
         for (const item of this.selecteds) {
             this.inputFormData.siteIds.push(item.objectId);
         }
-
-        console.log("this.selecteds - ", this.selecteds);
-        console.log(" - ", this.inputFormData.siteIds);
     }
 
     changeAllSitesSelect(selected: string) {
-        console.log("this.selectAllSites - ", this.selectAllSites);
         this.inputFormData.siteIds = [];
         this.selecteds = [];
         this.selectAllSites = selected;
@@ -808,9 +799,9 @@ Vue.component("filter-condition", FilterCondition);
 }
 
 .tree {
-    border: 1px solid #000;
     background-color: #fff;
-    height: 34px;
+    border: 1px solid #d1d1d1;
+    color: #bbb;
 }
 
 .select_date_button {
