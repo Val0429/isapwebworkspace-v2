@@ -108,7 +108,7 @@
 
                 <template #designationPeriodShow>
                     <div
-                        v-if="showDesignationPeriod.endDate !== '' &&  showDesignationPeriod.startDate !== ''"
+                        v-if="selectPeriodAddWay === 'designation' && showDesignationPeriod.endDate !== '' &&  showDesignationPeriod.startDate !== ''"
                         class="row justify-content-center align-items-center mt-2 ml-3"
                     >
                         {{ showDesignationPeriod.startDate }} - {{ showDesignationPeriod.endDate }}
