@@ -411,6 +411,7 @@ export default class Region extends Vue {
             objectId?: string;
             type: ERegionType;
             name: string;
+            tagIds: string[];
             customId?: string;
             address?: string;
             longitude?: number;
@@ -419,7 +420,8 @@ export default class Region extends Vue {
         } = {
             parentId: data.parentId,
             type: data.type,
-            name: data.name
+            name: data.name,
+            tagIds: data.tagIds
         };
 
         // get key
@@ -485,98 +487,12 @@ export default class Region extends Vue {
             await this.$server
                 .U("/location/region", param)
                 .then((response: any) => {
-                    if (response != undefined) {
-                        this.pageToTree();
-                    }
+                    this.pageToTree();
                 })
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
         }
-
-        //update tags
-        let tbody: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
-        await this.$server
-            .R("/tag", tbody)
-            .then((response: any) => {
-                const datas: ITagReadUpdate[] = [];
-                var tagList = response.results;
-
-                for (let tempResponse of tagList) {
-                    let haveRegionInTag = false;
-                    let haveChooseTag = false;
-
-                    // 檢查這個 tag 是否有這個 region
-                    for (let region of tempResponse.regions) {
-                        if (region.objectId == data.objectId) {
-                            haveRegionInTag = true;
-                            break;
-                        }
-                    }
-
-                    // 檢查這個 tag 是否被選擇
-                    for (let tagId of data.tagIds) {
-                        if (tagId == tempResponse.objectId) {
-                            haveChooseTag = true;
-                            break;
-                        }
-                    }
-
-                    // 都存在或都不存在就不修改
-                    if (haveRegionInTag != haveChooseTag) {
-                        let tempTageItem = {
-                            objectId: tempResponse.objectId,
-                            regionIds: []
-                        };
-
-                        if (haveChooseTag) {
-                            // 加上現在的 id 進去
-                            tempTageItem.regionIds.push(data.objectId);
-                        }
-
-                        // 移除現在的 region, 只加其他 id 進去
-                        for (let region of tempResponse.regions) {
-                            if (
-                                region.objectId != "" &&
-                                region.objectId != data.objectId
-                            ) {
-                                tempTageItem.regionIds.push(region.objectId);
-                            }
-                        }
-                        datas.push(tempTageItem);
-                    }
-                }
-
-                if (datas.length > 0) {
-                    const tagParam = { datas };
-                    this.$server
-                        .U("/tag", tagParam)
-                        .then((response: any) => {
-                            if (response != undefined) {
-                                this.pageToTree();
-                            }
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
-                        });
-                } else {
-                    this.pageToTree();
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
     }
 
     async clickSaveBindingSite(data: any) {
