@@ -8,7 +8,7 @@
             :processStyle="{ backgroundColor: '#d8d8d8' }"
             @callbackRange="callbackRange">
             <template slot="tooltip" slot-scope="tooltip">
-                <img src="./rectangle-slider.svg">
+                <img src="../images/rectangle-slider.svg">
             </template>
         </VueSlideBar>
         <h2>Value: {{slider.value}}</h2>

@@ -34,7 +34,7 @@ import {
     Model,
     Watch
 } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
+import { toEnumInterface } from "../../../../core";
 let config = require("@/config/default/debug");
 
 

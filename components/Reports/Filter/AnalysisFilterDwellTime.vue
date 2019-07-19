@@ -7,6 +7,7 @@
             @update:deviceId="whenSelectedDeviceId($event)"
             @update:type="whenSelectedType($event)"
             @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
+            @update:businessChartType="whenSelectedBusinessChartType($event)"
         >
 
             <template #areaId="{ $attrs, $listeners }">
@@ -51,15 +52,27 @@
                     v-model="inputFormData.type"
                 >
                 </iv-form-selection>
+
             </template>
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
+                <iv-form-selection
+                    class="col-md-1"
+                    v-if="siteIds.length !== 0"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    v-model="inputFormData.isIncludedEmployee"
+                >
+                </iv-form-selection>
+            </template>
+
+            <template #businessChartType="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
-                    v-model="inputFormData.isIncludedEmployee"
+                    v-model="inputFormData.businessChartType"
                 >
                 </iv-form-selection>
             </template>
@@ -78,14 +91,14 @@ import {
     Model,
     Watch
 } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
+import { toEnumInterface } from "../../../../core";
 let config = require("@/config/default/debug");
 
 
 @Component({
     components: {}
 })
-export class AnalysisFilterHeatMap extends Vue {
+export class AnalysisFilterDwellTime extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -104,6 +117,13 @@ export class AnalysisFilterHeatMap extends Vue {
     })
     deviceSelectItem: object;
 
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    timeModeSelectItem: object;
+
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default:{}
@@ -111,10 +131,18 @@ export class AnalysisFilterHeatMap extends Vue {
     isIncludedEmployeeSelectItem: object;
 
     @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default:{}
+    })
+    businessChartTypeSelectItem: object;
+
+
+    @Prop({
         type: Array, // Boolean, Number, String, Array, Object
         default: () => []
     })
     siteIds: object;
+
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
@@ -136,15 +164,29 @@ export class AnalysisFilterHeatMap extends Vue {
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
+        default: "hour"
+    })
+    type: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
         default: "no"
     })
     isIncludedEmployee: string;
+
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: "revenue"
+    })
+    businessChartType: string;
 
     inputFormData: any = {
         areaId: "all",
         groupId: "all",
         deviceId: "all",
-        isIncludedEmployee: 'no'
+        type: "day",
+        isIncludedEmployee: 'no',
+        businessChartType: 'revenue'
     };
 
     created() {}
@@ -166,9 +208,19 @@ export class AnalysisFilterHeatMap extends Vue {
         this.inputFormData.deviceId = newVal;
     }
 
+    @Watch("type", { deep: true })
+    private typeChanged(newVal, oldVal) {
+        this.inputFormData.type = newVal;
+    }
+
     @Watch("isIncludedEmployee", { deep: true })
     private isIncludedEmployeeChanged(newVal, oldVal) {
-        this.inputFormData.is = newVal;
+        this.inputFormData.isIncludedEmployee = newVal;
+    }
+
+    @Watch("businessChartType", { deep: true })
+    private businessChartTypeChanged(newVal, oldVal) {
+        this.inputFormData.businessChartType = newVal;
     }
 
     async whenSelectedAreaId() {
@@ -183,9 +235,16 @@ export class AnalysisFilterHeatMap extends Vue {
         this.$emit("device_id", this.inputFormData.deviceId);
     }
 
+    whenSelectedType() {
+        this.$emit("type", this.inputFormData.type);
+    }
 
     whenSelectedIsIncludedEmployee() {
         this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
+    }
+
+    whenSelectedBusinessChartType() {
+        this.$emit("business_chart_type", this.inputFormData.businessChartType);
     }
 
     IAnalysisFilterForm() {
@@ -220,10 +279,24 @@ export class AnalysisFilterHeatMap extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_countSelect")}
+                 * @uiColumnGroup - row
+                 */
+                type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
+
+
+                /**
                  * @uiLabel - ${this._("w_isIncludedEmployee")}
-                 * @uiColumnGroup - analysis
+                 * @uiColumnGroup - row
                  */
                 isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_businessChartType")}
+                 * @uiColumnGroup - row
+                 */
+                businessChartType?: ${toEnumInterface(this.businessChartTypeSelectItem as any, false)};
 
 
             }
@@ -231,8 +304,8 @@ export class AnalysisFilterHeatMap extends Vue {
     }
 }
 
-export default AnalysisFilterHeatMap;
-Vue.component("analysis-filter-heat-map", AnalysisFilterHeatMap);
+export default AnalysisFilterDwellTime;
+Vue.component("analysis-filter-dwell-time", AnalysisFilterDwellTime);
 </script>
 
 <style lang="scss" scoped>

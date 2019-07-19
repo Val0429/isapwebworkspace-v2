@@ -667,7 +667,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const thisYearStartDate = new Date(nowYear, 0, 1);
-        return this.DateTime2String(thisYearStartDate);
+        return this.DateTime2String(thisYearStartDate, 'YYYY-MM-DD');
     }
 
     //獲得ThisYear結束日期
@@ -677,7 +677,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const lastYearEndDate = new Date(nowYear, 11, 31);
-        return this.DateTime2String(lastYearEndDate);
+        return this.DateTime2String(lastYearEndDate, 'YYYY-MM-DD');
     }
 
     // 以今年為基準，取得前後五年，2019 --> 2014-2024
