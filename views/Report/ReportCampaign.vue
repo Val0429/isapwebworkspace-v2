@@ -4,6 +4,7 @@
         <!-- Tina -->
         <filter-condition-campaign
             :yearSelectItem="yearSelectItem"
+            :campaignAllData="campaignAllData"
             :campaignSelectItem="campaignSelectItem"
             :campaignSiteSelectItem="campaignSiteSelectItem"
             @year-campaign="receiveYearCampaign"
@@ -101,6 +102,7 @@ export default class ReportCampaign extends Vue {
     userSelectItem: any = {};
 
     yearSelectItem: any = {};
+    campaignAllData: any = {};
     campaignSelectItem: any = {};
     campaignSiteSelectItem: any = {};
 
@@ -124,6 +126,7 @@ export default class ReportCampaign extends Vue {
         await this.initSelectCampaign();
         await this.initSelectCampaignStore();
         await this.initSelectItemUsers();
+        await this.initSelectYear();
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
@@ -153,11 +156,32 @@ export default class ReportCampaign extends Vue {
             });
     }
 
-    initSelectYear() {
-        this.yearSelectItem = {
-            "2019": "2019",
-            "2020": "2020"
-        };
+    async initSelectYear() {
+
+        let tempResult = {};
+        let tempYearSelectItem = {};
+
+        let result = await this.$server
+            .R("/event/campaign/all-object")
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+
+        console.log('result - ', result);
+
+        tempResult = result;
+
+        for (const year in tempResult) {
+            tempYearSelectItem[year] = year;
+        }
+
+        this.campaignAllData = tempResult;
+        this.yearSelectItem = tempYearSelectItem;
+
     }
 
     async initSelectCampaign() {

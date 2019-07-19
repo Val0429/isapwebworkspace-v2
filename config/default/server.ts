@@ -292,6 +292,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         // report
         '/report/template': [any, any, false];
+        '/event/campaign/all-object': [any, any, false];
     };
 
     // update

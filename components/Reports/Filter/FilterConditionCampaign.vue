@@ -10,6 +10,17 @@
                 @submit="doSubmit($event)"
             >
 
+                <template #year="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.year"
+                    >
+                    </iv-form-selection>
+                </template>
+
+
+
                 <template #campaignIds="{ $attrs, $listeners }">
                     <iv-form-selection
                         v-bind="$attrs"
@@ -100,6 +111,12 @@ export class FilterConditionCampaign extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
     })
+    campaignAllData: object;
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
     campaignSelectItem: object;
 
     @Prop({
@@ -115,7 +132,7 @@ export class FilterConditionCampaign extends Vue {
     templateItem: ITemplateItem | null;
 
     inputFormData: any = {
-        year: '',
+        year: new Date().getFullYear().toString(),
         campaignIds: [],
         siteIds: [],
     };
@@ -124,6 +141,7 @@ export class FilterConditionCampaign extends Vue {
     visible: boolean = true;
 
     created() {
+        console.log('campaignAllData - ', this.campaignAllData);
     }
 
     mounted() {
