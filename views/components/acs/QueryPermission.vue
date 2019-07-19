@@ -98,7 +98,7 @@ import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog/Dialog";
 import { PermissionName} from '@/../src/constants/permissions';
-
+import { System } from '@/config/default/api/interfaces';
 
 
 
@@ -139,7 +139,7 @@ export default class QueryPermission extends Vue {
 
         console.log("filter", this.filter);
 
-        let promise = this.$server.R('/acs/permissiontable'as any, Object.assign({paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+        let promise = this.$server.R('/acs/permissiontable'as any, Object.assign({system:System.CCURE,paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
 
         return promise.then(async (data:any) => {
           this.total = data.paging.total;
@@ -194,7 +194,7 @@ export default class QueryPermission extends Vue {
             },
             {
                 key: "Actions",
-                label: ""
+                label: this._('w_Action')
             }
 
         ];
