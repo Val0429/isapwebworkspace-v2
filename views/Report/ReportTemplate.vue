@@ -1480,7 +1480,7 @@ export default class ReportTemplate extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_ReportTemplate_DesignationPeriod")}
+                 * @uiLabel - ${this._("w_ReportTemplate_Fixed_Interval")}
                  * @uiHidden - ${
                      this.selectPeriodAddWay === EAddPeriodSelect.period
                          ? "true"

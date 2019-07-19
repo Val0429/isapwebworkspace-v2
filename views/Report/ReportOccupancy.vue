@@ -6,6 +6,8 @@
             :sitesSelectItem="sitesSelectItem"
             :tagSelectItem="tagSelectItem"
             :regionTreeItem="regionTreeItem"
+            :ifAllSitesSelectItem="ifAllSitesSelectItem"
+            :addPeriodSelectItem="addPeriodSelectItem"
             :templateItem="templateItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
@@ -175,7 +177,9 @@ import {
     EDesignationPeriod,
     IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData
+    ReportTableData,
+    EAddPeriodSelect,
+    EIfAllSelected
 } from "@/components/Reports";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ReportService from "@/components/Reports/models/ReportService";
@@ -184,7 +188,7 @@ import ReportService from "@/components/Reports/models/ReportService";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
-import { EFileType } from "@/components/Reports";
+import { EFileType,IReportTableTitle } from "@/components/Reports";
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -215,7 +219,9 @@ export default class ReportOccupancy extends Vue {
     //// Filter Condition Start ////
 
     // select 相關
-    sitesSelectItem: any = {};
+    sitesSelectItem: any = [];
+    ifAllSitesSelectItem: any = [];
+    addPeriodSelectItem: any = [];
     tagSelectItem: any = {};
     tags = [];
 
@@ -290,7 +296,9 @@ export default class ReportOccupancy extends Vue {
 
     //ReportTable 相關
     rData = new ReportTableData();
-    reportTableTitle = {};
+    	 reportTableTitle: IReportTableTitle = {
+        titleCount:0
+    };
 
     //Sun ReportTable 相關
     sunRData = new ReportTableData();
@@ -325,6 +333,21 @@ export default class ReportOccupancy extends Vue {
     }
 
     initSelect() {
+
+        this.ifAllSitesSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllSites") },
+            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
+        ];
+
+
+        this.addPeriodSelectItem = [
+            { value: EAddPeriodSelect.period, text: this._("w_period") },
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
+        ];
+
         this.timeModeSelectItem = {
             day: this._("w_daily"),
             week: this._("w_weekly"),
@@ -349,9 +372,12 @@ export default class ReportOccupancy extends Vue {
     siteFilterPermission() {
         let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
-            tempSitesSelectItem[detail.objectId] = detail.name;
+            let site = { id: detail.objectId, text: detail.name };
+            this.sitesSelectItem.push(site);
+
+            // tempSitesSelectItem[detail.objectId] = detail.name;
         }
-        this.sitesSelectItem = tempSitesSelectItem;
+        // this.sitesSelectItem = tempSitesSelectItem;
     }
 
     async initSelectItemSite() {
@@ -1041,6 +1067,10 @@ export default class ReportOccupancy extends Vue {
         this.lastTableStep = ETableStep.mainTable;
     }
 
+      fetchZero(value) {
+        return value < 10 ? "0" + value : value;
+    }
+
     initDashboardData() {
         this.dPageType = EPageType.averageOccupancy;
         setTimeout(() => {
@@ -1057,6 +1087,7 @@ export default class ReportOccupancy extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
+                    this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
 
         //head
         this.sunRData.head = [];
@@ -1196,7 +1227,7 @@ export default class ReportOccupancy extends Vue {
 
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
-            x => x + ":00 - " + (x + 1) + ":00"
+            x => this.fetchZero(x) + ":00 ~ " + this.fetchZero(x + 1) + ":00"
         );
     }
 
@@ -1227,6 +1258,7 @@ export default class ReportOccupancy extends Vue {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
+                  this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
@@ -1254,6 +1286,7 @@ export default class ReportOccupancy extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
+                     this.reportTableTitle.headTitle = "OCCUPANCY BY DAYS";
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
@@ -1404,7 +1437,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 }
                 this.rData.head = this.rData.head.map(
-                    x => x + ":00 - " + (x + 1) + ":00"
+                    x => this.fetchZero(x) + ":00 ~ " + this.fetchZero(x + 1) + ":00"
                 );
                 break;
 
@@ -1496,7 +1529,7 @@ export default class ReportOccupancy extends Vue {
                     x =>
                         new Date(x).getFullYear() +
                         "/" +
-                        (new Date(x).getMonth() + 1) +
+                        this.fetchZero(new Date(x).getMonth() + 1) +
                         "/" +
                         new Date(x).getDate() +
                         " " +

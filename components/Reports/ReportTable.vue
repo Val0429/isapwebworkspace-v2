@@ -1,10 +1,9 @@
 <template>
     <div class="animated fadeIn overflow">
-        <title>Report Table</title>
+        <h2 v-if="reportTableData._body && reportTableData._body.length > 0">{{reportTableTitle.headTitle}}</h2>
         <table
             ref="reportTable"
             class="table table-bordered"
-            v-if="reportTableData._body && reportTableData._body.length > 0"
         >
             <thead>
                 <tr class="title">
@@ -138,24 +137,24 @@
                     </tr>
                 </template>
             </tbody>
-            <tfoot v-if="!reportTableData._noFoot">
+            <tfoot v-if="!reportTableData._noFoot && reportTableData._body && reportTableData._body.length > 0">
                 <tr>
                     <td
-                        v-if="reportTableData._body[0].site"
+                        v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].site"
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
                     <td
-                        v-if="reportTableData._body[0].area"
+                        v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].area"
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
                     <td
-                        v-if="reportTableData._body[0].group"
+                        v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].group"
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
-                    <td class="title"> {{reportTableTitle.title1Title}}</td>
+                    <td class="title"> {{reportTableTitle.total1Title}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.item1Total.value}}</span>
                         <span
@@ -166,7 +165,7 @@
 
                 </tr>
                 <tr>
-                    <td class="title"> {{reportTableTitle.title2Title}}</td>
+                    <td class="title"> {{reportTableTitle.total2Title}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.item2Total.value }}</span>
                         <span
@@ -287,12 +286,10 @@ Vue.component("report-table", ReportTable);
 }
 
 .red {
-    color: #e26929;
-    font-size: 10px;
+    color: #ff4326;
 }
 .green {
-    color: #1bbc9b;
-    font-size: 10px;
+    color: #55c250;
 }
 
 .overflow {
