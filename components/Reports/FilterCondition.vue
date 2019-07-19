@@ -123,7 +123,7 @@
             </template>
 
         </iv-card>
-        
+
         <region-tree-select
             v-show="pageStep === ePageStep.chooseTree && selectAllSites === 'select'":multiple="true"
             :regionTreeItem="regionTreeItem"
@@ -677,8 +677,8 @@ export class FilterCondition extends Vue {
             }
         }
 
-        console.log(" - ", doSubmitParam);
-        return false;
+        // console.log(" - ", doSubmitParam);
+        // return false;
         this.visible = false;
         this.$emit("submit-data", doSubmitParam, designationPeriod);
     }

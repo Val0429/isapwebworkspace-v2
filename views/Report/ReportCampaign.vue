@@ -162,6 +162,7 @@ export default class ReportCampaign extends Vue {
 
     async initSelectCampaign() {
         this.campaignSelectItem = {
+            all: "all",
             MMsKioPy3X: "聖誕節",
             k6H0cOOLXe: "母親節"
         };

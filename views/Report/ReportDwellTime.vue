@@ -350,7 +350,7 @@ export default class ReportDwellTime extends Vue {
 
     //ReportTable 相關
     rData = new ReportTableData();
-    
+
 		 reportTableTitle: IReportTableTitle = {
         titleCount:0
     };
@@ -1582,8 +1582,6 @@ export default class ReportDwellTime extends Vue {
     analysisTitle(): string {
 
         let title = 'Analysis - ';
-
-        console.log('analysisTitle - ', this.filterData);
 
         if (this.filterData.siteIds.length === 1) {
             for (const siteId in this.sitesSelectItem) {

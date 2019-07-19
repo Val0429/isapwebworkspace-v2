@@ -1421,8 +1421,6 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 
 			let title = 'Analysis - ';
 
-			console.log('analysisTitle - ', this.filterData);
-
 			if (this.filterData.siteIds.length === 1) {
 				for (const siteId in this.sitesSelectItem) {
 					if(this.filterData.siteIds[0] === siteId) {

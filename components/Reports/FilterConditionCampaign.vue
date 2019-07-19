@@ -24,6 +24,7 @@
 
                     <div class="ml-3 select_report_period_button mr-5">
                         <b-button
+                            variant="outline-secondary"
                             @click="confirmCampaign">
                             {{ _('w_Confirm') }}
                         </b-button>

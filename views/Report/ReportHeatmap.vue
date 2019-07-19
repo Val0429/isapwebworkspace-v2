@@ -14,7 +14,7 @@
         </filter-condition-heat-map>
 
         <iv-card
-            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+            :label="filterData.siteIds !== '' ? analysisTitle() : '' "
             :visible="visible">
 <!--                        :visible="visible"
 -->
@@ -58,6 +58,7 @@
 
             <!-- Tina 需要用v-if判斷出現哪個元件 -->
             <heat-map-many-day
+                v-if="!checkDateTheSameDay(filterData.startDate, filterData.endDate)"
                 :timeArray="timeArray"
                 @time-array-index="receiveTimeArrayIndex"
             ></heat-map-many-day>
@@ -65,7 +66,7 @@
 
             <!-- if 條件還需要更改 -->
             <heat-map-one-day-slider-bar
-                v-if="filterData.firstSiteId"
+                v-if="checkDateTheSameDay(filterData.startDate, filterData.endDate)"
                 :slider="slider"
                 @hour="receiveHour"
             >
@@ -192,7 +193,7 @@ export default class ReportHeatmap extends Vue {
         startDate: new Date(),
         endDate: new Date(),
         firstSiteId: "",
-        siteIds: [],
+        siteIds: '',
         type: ETimeMode.none
     };
     responseData: any = {};
@@ -261,14 +262,11 @@ export default class ReportHeatmap extends Vue {
         this.initDatas();
         this.initTemplate();
 
-        // Tina 之後移到發api之後
-        this.initTimeArray();
-       // this.initHourArray();
         // Ben
         this.initHeatmap();
     }
 
-    mounted() {}
+    mounted() {    }
 
     async initDatas() {
         // Tina
@@ -1533,8 +1531,12 @@ export default class ReportHeatmap extends Vue {
             isIncludedEmployee: "no"
         };
 
-        this.initHourArray();
 
+        if (this.checkDateTheSameDay(this.filterData.startDate, this.filterData.endDate)) {
+            this.initHourArray();
+        } else {
+            this.initTimeArray();
+        }
 
         // await this.$server
         //     .C("/report/demographic/summary", param)
@@ -1576,7 +1578,7 @@ export default class ReportHeatmap extends Vue {
         for (const filterSiteId of this.filterData.siteIds) {
             for (const detail of this.officeHourItemDetail) {
                 for (const officeHourSiteId of detail.sites) {
-                    if (filterSiteId === officeHourSiteId.objectId) {
+                    if (this.filterData.siteIds === officeHourSiteId.objectId) {
                         let tempOfficeHours = [];
                         for (const dayRangesValue of detail.dayRanges) {
                             let tempOfficeHour: any = {};
@@ -1621,15 +1623,13 @@ export default class ReportHeatmap extends Vue {
 
         console.log('analysisTitle - ', this.filterData);
 
-        if (this.filterData.siteIds.length === 1) {
             for (const siteId in this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === siteId) {
+                console.log('siteId - ', siteId);
+                if(this.filterData.siteIds === siteId) {
                     title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
                 }
             }
-        } else {
-            title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
-        }
+
 
         title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
         title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
@@ -1649,6 +1649,10 @@ export default class ReportHeatmap extends Vue {
         this.visible = true;
 
         return title;
+    }
+
+    checkDateTheSameDay(startDate: Date, endDate: Date) {
+        return Datetime.DateToZero(endDate).getTime() === Datetime.DateToZero(startDate).getTime();
     }
 
     sortOutChartData(datas: any) {

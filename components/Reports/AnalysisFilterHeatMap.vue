@@ -12,7 +12,7 @@
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
-                    v-if="siteIds && siteIds.length === 1"
+                    v-if="siteIds !== ''"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -22,7 +22,7 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    v-if="siteIds && siteIds.length === 1"
+                    v-if="siteIds !== ''"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -33,7 +33,7 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    v-if="siteIds && siteIds.length === 1"
+                    v-if="siteIds !== ''"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -42,21 +42,10 @@
                 </iv-form-selection>
             </template>
 
-            <template #type="{ $attrs, $listeners }">
-                <iv-form-selection
-                    class="col-md-2"
-                    v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.type"
-                >
-                </iv-form-selection>
-            </template>
-
             <template #isIncludedEmployee="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
-                    v-if="siteIds.length !== 0"
+                    v-if="siteIds !== ''"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.isIncludedEmployee"
@@ -111,10 +100,10 @@ export class AnalysisFilterHeatMap extends Vue {
     isIncludedEmployeeSelectItem: object;
 
     @Prop({
-        type: Array, // Boolean, Number, String, Array, Object
-        default: () => []
+        type: String, // Boolean, Number, String, Array, Object
+        default: ''
     })
-    siteIds: object;
+    siteIds: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object

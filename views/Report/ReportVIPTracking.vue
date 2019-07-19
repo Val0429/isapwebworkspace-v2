@@ -13,7 +13,9 @@
         >
         </filter-condition-vip-and-blacklist>
 
-        <iv-card :visible="visible">
+        <iv-card :visible="visible"
+                 :label="filterData.tagIds.length !== 0 ? analysisTitle() : '' "
+        >
             <!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
 -->
 
@@ -128,7 +130,8 @@ export default class ReportVIPTracking extends Vue {
     filterData: any = {
         startDate: new Date(),
         endDate: new Date(),
-        tagIds: []
+        tagIds: [],
+        siteIds: []
     };
     responseData: any = {};
     userData: any = [];
@@ -313,14 +316,10 @@ export default class ReportVIPTracking extends Vue {
     analysisTitle(): string {
         let title = "Analysis - ";
 
-        console.log("analysisTitle - ", this.filterData);
-
         if (this.filterData.tagIds.length === 1) {
-            for (const tagId in this.tagSelectItem) {
-                if (this.filterData.tagIds[0] === tagId) {
-                    title += `${this._("w_Title_One_Tag")} ${
-                        this.tagSelectItem[tagId]
-                    }. `;
+            for (const tagId of this.tagSelectItem) {
+                if (this.filterData.tagIds[0] === tagId.id) {
+                    title += `${this._("w_Title_One_Tag")} ${ tagId.text }. `;
                 }
             }
         } else if (this.filterData.tagIds.length >= 2) {

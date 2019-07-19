@@ -1,7 +1,7 @@
 <template>
     <div>
         <iv-card
-            :visible="true"
+            :visible="visible"
             :label="_('w_ReportFilterConditionComponent_')"
         >
             <iv-form

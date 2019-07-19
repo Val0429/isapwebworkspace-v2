@@ -2,7 +2,7 @@
     <div>
         <iv-card
             v-show="pageStep === ePageStep.none"
-            :visible="true"
+            :visible="visible"
             :label="_('w_ReportFilterConditionComponent_')"
         >
             <iv-form
@@ -24,6 +24,7 @@
 
                     <div class="ml-3 select_report_period_button">
                         <b-button
+                            variant="outline-secondary"
                             @click="pageToChooseTree"
                         >
                             {{ _('w_SelectSiteTree') }}
@@ -179,7 +180,7 @@ export class FilterConditionHeatMap extends Vue {
     designationPeriodSelectItem: any = [];
 
     inputFormData: any = {
-        siteIds: [],
+        siteIds: '',
         tagIds: [],
         allSiteIds: [],
         allTagIds: [],
@@ -198,7 +199,6 @@ export class FilterConditionHeatMap extends Vue {
     created() {
         // this.initSelectItemSite();
         this.initSelectItem();
-        console.log('addPeriodSelectItem - ', this.addPeriodSelectItem);
     }
 
     mounted() {
@@ -360,27 +360,27 @@ export class FilterConditionHeatMap extends Vue {
             startDate: Date;
             endDate: Date;
             firstSiteId?: string;
-            siteIds: string[];
-            tagIds: string[];
+            siteIds: string;
+            // tagIds: string[];
             type: ETimeMode;
         } = {
             startDate: Datetime.DateToZero(new Date()),
             endDate: Datetime.DateToZero(new Date()),
             type: ETimeMode.none,
             firstSiteId: '',
-            siteIds: [],
-            tagIds:this.inputFormData.tagIds === [] ? [] : this.inputFormData.tagIds,
+            siteIds: this.inputFormData.siteIds,
+            // tagIds:this.inputFormData.tagIds === [] ? [] : this.inputFormData.tagIds,
         };
 
         let designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
-        if (this.inputFormData.siteIds.length === 0) {
+        if (!this.inputFormData.siteIds) {
             Dialog.error(this._("w_PleaseSelectSites"));
             return false;
         }
 
         doSubmitParam.siteIds = this.inputFormData.siteIds;
-        doSubmitParam.firstSiteId = doSubmitParam.siteIds[0];
+        doSubmitParam.firstSiteId = this.inputFormData.siteIds;
 
         // 選擇 period
         if (this.selectPeriodAddWay === "period") {
@@ -548,7 +548,7 @@ export class FilterConditionHeatMap extends Vue {
 
     doReset() {
         this.inputFormData = {
-            siteIds: [],
+            siteIds: '',
             allSiteIds: [],
             startDate: new Date(),
             endDate: new Date(),
