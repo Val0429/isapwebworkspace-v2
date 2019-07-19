@@ -15,10 +15,8 @@
 
         <iv-card
             :label="filterData.siteIds !== '' ? analysisTitle() : '' "
-            :visible="visible">
-<!--                        :visible="visible"
--->
-
+            :visible="visible"
+        >
             <template #toolbox>
 
                 <iv-toolbox-export-pdf
@@ -66,11 +64,10 @@
 
             <!-- if 條件還需要更改 -->
             <heat-map-one-day-slider-bar
-                v-if="checkDateTheSameDay(filterData.startDate, filterData.endDate)"
+                v-if="filterData.siteIds !== '' && checkDateTheSameDay(filterData.startDate, filterData.endDate)"
                 :slider="slider"
                 @hour="receiveHour"
             >
-
             </heat-map-one-day-slider-bar>
 
             <!-- Ben -->
@@ -1621,10 +1618,7 @@ export default class ReportHeatmap extends Vue {
 
         let title = 'Analysis - ';
 
-        console.log('analysisTitle - ', this.filterData);
-
             for (const siteId in this.sitesSelectItem) {
-                console.log('siteId - ', siteId);
                 if(this.filterData.siteIds === siteId) {
                     title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
                 }
