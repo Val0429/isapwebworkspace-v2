@@ -101,7 +101,7 @@ export default class LangObject {
     // w_Sites = 'Site(s)';
     w_Sites = 'Store(s)';
     w_Sites1 = '* Store(s)';
-    w_Tag = 'Tag(s)';
+    w_Tag = '* Tag(s)';
     // w_Site = 'Site';
     w_Site = 'Store';
     //w_Group = 'Group';
