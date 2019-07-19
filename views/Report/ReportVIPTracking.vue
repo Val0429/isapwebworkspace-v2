@@ -12,12 +12,9 @@
         >
         </filter-condition-vip-and-blacklist>
 
-        <iv-card
-            :visible="visible"
-        >
-<!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
+        <iv-card :visible="visible">
+            <!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
 -->
-
 
             <template #toolbox>
                 <!-- Ben -->
@@ -79,10 +76,12 @@ import {
     IChartVipTrackingData
 } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 
 import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
 import ReportService from "@/components/Reports/models/ReportService";
-import Datetime from '@/services/Datetime';
+import Datetime from "@/services/Datetime";
 
 @Component({
     components: {}
@@ -202,7 +201,6 @@ export default class ReportVIPTracking extends Vue {
     }
 
     async initTagIncludeSitesItem() {
-
         let result = await this.$server
             .R("/tag")
             // .then((response: any) => {
@@ -223,10 +221,10 @@ export default class ReportVIPTracking extends Vue {
                 return false;
             });
 
-        if (result['results'].length > 0) {
-            result['results'].map(item => {
-                this.tagIncludeSitesItem.push(item)
-            })
+        if (result["results"].length > 0) {
+            result["results"].map(item => {
+                this.tagIncludeSitesItem.push(item);
+            });
         } else {
             return false;
         }
@@ -293,21 +291,24 @@ export default class ReportVIPTracking extends Vue {
     }
 
     analysisTitle(): string {
+        let title = "Analysis - ";
 
-        let title = 'Analysis - ';
-
-        console.log('analysisTitle - ', this.filterData);
+        console.log("analysisTitle - ", this.filterData);
 
         if (this.filterData.tagIds.length === 1) {
             for (const tagId in this.tagSelectItem) {
-                if(this.filterData.tagIds[0] === tagId) {
-                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                if (this.filterData.tagIds[0] === tagId) {
+                    title += `${this._("w_Title_One_Tag")} ${
+                        this.tagSelectItem[tagId]
+                    }. `;
                 }
             }
         } else if (this.filterData.tagIds.length >= 2) {
-            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+            title += `${this._("w_Title_Many_Tag_Start")} ${
+                this.filterData.tagIds.length
+            } ${this._("w_Title_Many_Tag_End")} `;
         } else {
-            title += '';
+            title += "";
         }
 
         // if (this.filterData.siteIds.length === 1) {
@@ -320,15 +321,19 @@ export default class ReportVIPTracking extends Vue {
         //     title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
         // }
 
-        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
-        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
-
+        title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
+            this.filterData.startDate,
+            "YYYY/MM/DD"
+        )}. `;
+        title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
+            this.filterData.endDate,
+            "YYYY/MM/DD"
+        )}. `;
 
         this.visible = true;
 
         return title;
     }
-
 
     async receiveUserData(data) {
         this.userData = [];
@@ -365,6 +370,19 @@ export default class ReportVIPTracking extends Vue {
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
 
+    // Author: Morris
+    exportPDF() {
+        let title = "";
+        title += this._("w_Navigation_Report_VIPBlackList");
+        title += " ";
+        title += Datetime.DateTime2String(
+            this.startDate,
+            HighchartsService.datetimeFormat.date
+        );
+
+        ReportPDFService.exportPDF(title);
+    }
+
     ///////////////////////////////////////////////////////
 
     // Author: Morris, Product remove
@@ -377,7 +395,7 @@ export default class ReportVIPTracking extends Vue {
         this.startDate = new Date("2019-06-20T08:00:00.000Z");
         this.endDate = new Date("2019-08-10T14:00:00.000Z");
 
-        let siteLength = 5;
+        let siteLength = 10;
 
         for (let j = 0; j < siteLength; j++) {
             let tempJ = j + 1;
@@ -395,18 +413,19 @@ export default class ReportVIPTracking extends Vue {
                 ]
             });
 
-            let tempVipTrackingType =
-                Math.floor(Math.random() * 300) % 2 == 0
-                    ? EVipTrackingType.vip
-                    : EVipTrackingType.blacklist;
-
-            for (let i = 1; i < 30; i++) {
+            for (let i = 1; i < 20; i++) {
                 let tempI = i;
                 let iNumber = tempI;
                 let iString = tempI.toString();
                 let iString10 = iNumber < 10 ? `0${iString}` : iString;
-                let tempDate = new Date(
-                    `2019-07-${iString10}T${iString10}:00:00.000Z`
+                let tempDate = new Date(`2019-07-${iString10}T00:00:00.000Z`);
+                let tempVipTrackingType =
+                    Math.floor(Math.random() * 300) % 2 == 0
+                        ? EVipTrackingType.vip
+                        : EVipTrackingType.blacklist;
+                console.log(
+                    "!!? Date",
+                    Datetime.DateTime2String(tempDate, "YYYY-MM-DD")
                 );
                 let tempChartData: IChartVipTrackingData = {
                     type: tempVipTrackingType,

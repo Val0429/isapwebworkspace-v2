@@ -2361,15 +2361,15 @@ export default class ReportDwellTime extends Vue {
         toExcel({ th, data, fileName, fileType, sheetName });
     }
 
-    exportPDF() {
-        let title = "";
-        title += this._("w_Navigation_Report_DwellTime");
-        title += " ";
-        title += Datetime.DateTime2String(
-            this.startDate,
-            HighchartsService.datetimeFormat.date
+    // Author: Morris
+	exportPDF() {
+		let title = "";
+		title += this._("w_Navigation_Report_DwellTime");
+		title += " ";
+		title += Datetime.DateTime2String(
+			this.startDate,
+			HighchartsService.datetimeFormat.date
         );
-
         ReportPDFService.exportPDF(title);
     }
 

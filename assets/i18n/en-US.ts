@@ -246,20 +246,15 @@ export default class LangObject {
 
     // Navigation
     w_Navigation_Label = 'iSAP Solution';
-
     w_Navigation_Dashboards = 'Dashboards';
-
     w_Navigation_Analysises = 'Analysises';
-
     w_Navigation_Reports = 'Reports';
-
     w_Navigation_Users = 'Users';
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
 
     // w_Navigation_Site = 'Site';
     w_Navigation_Site = 'Store';
-
     w_Navigation_Region = 'Region';
 
     w_Navigation_VideoSources = 'Video Source';
@@ -951,18 +946,18 @@ export default class LangObject {
     w_InOutType = 'In Out Type';
     w_businessChartType = 'Business Chart Type';
 
-	w_Title_One_Site = 'Selected store:';
-	w_Title_Many_Site_Start = 'Selected:';
-	w_Title_Many_Site_End = 'stores.';
-	w_Title_StartDate = 'Startdate:';
-	w_Title_EndDate = 'Enddate:';
-	w_Title_One_Tag = 'Selected tag:';
-	w_Title_Many_Tag_Start = 'Selected:';
-	w_Title_Many_Tag_End = 'tag.';
-	w_Title_FiscalYear = 'Fiscal year:';
-	w_Title_EventName_Start = 'Selected:';
-	w_Title_EventName_End = 'events.';
-	w_Title_One_EventName = 'Selected event:';
+    w_Title_One_Site = 'Selected store:';
+    w_Title_Many_Site_Start = 'Selected:';
+    w_Title_Many_Site_End = 'stores.';
+    w_Title_StartDate = 'Startdate:';
+    w_Title_EndDate = 'Enddate:';
+    w_Title_One_Tag = 'Selected tag:';
+    w_Title_Many_Tag_Start = 'Selected:';
+    w_Title_Many_Tag_End = 'tag.';
+    w_Title_FiscalYear = 'Fiscal year:';
+    w_Title_EventName_Start = 'Selected:';
+    w_Title_EventName_End = 'events.';
+    w_Title_One_EventName = 'Selected event:';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';
@@ -1005,6 +1000,12 @@ export default class LangObject {
     w_VIPAndBlackList_VisitTime = 'VisitTime';
     w_VIPAndBlackList_DwellTime = 'DwellTime(minute)';
     w_VIPAndBlackList_LatestVisits = 'LatestVisits(1 Month)';
+    w_VIPAndBlackList_TableTitleVip = 'VIP';
+    w_VIPAndBlackList_TableTitleBlacklist = 'Blacklist';
+    w_VIPAndBlackList_TableTitleName = 'Name';
+    w_VIPAndBlackList_TableTitleSite = 'Store';
+    w_VIPAndBlackList_TableTitleVisitDate = 'Visit date';
+    w_VIPAndBlackList_TableTitleDwellTime = 'Dwell time';
 
     //Campaign
     w_Campaign_BeforeCampaign = 'Before Campaign';
