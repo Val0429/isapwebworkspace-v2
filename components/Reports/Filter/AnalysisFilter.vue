@@ -7,7 +7,6 @@
             @update:deviceId="whenSelectedDeviceId($event)"
             @update:type="whenSelectedType($event)"
             @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
-            @update:businessChartType="whenSelectedBusinessChartType($event)"
         >
 
             <template #areaId="{ $attrs, $listeners }">
@@ -52,27 +51,15 @@
                     v-model="inputFormData.type"
                 >
                 </iv-form-selection>
-
             </template>
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
-                <iv-form-selection
-                    class="col-md-1"
-                    v-if="siteIds.length !== 0"
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.isIncludedEmployee"
-                >
-                </iv-form-selection>
-            </template>
-
-            <template #businessChartType="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
-                    v-model="inputFormData.businessChartType"
+                    v-model="inputFormData.isIncludedEmployee"
                 >
                 </iv-form-selection>
             </template>
@@ -91,14 +78,14 @@ import {
     Model,
     Watch
 } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
+import { toEnumInterface } from "../../../../core";
 let config = require("@/config/default/debug");
 
 
 @Component({
     components: {}
 })
-export class AnalysisFilterDwellTime extends Vue {
+export class AnalysisFilter extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -117,7 +104,6 @@ export class AnalysisFilterDwellTime extends Vue {
     })
     deviceSelectItem: object;
 
-
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default:{}
@@ -131,18 +117,10 @@ export class AnalysisFilterDwellTime extends Vue {
     isIncludedEmployeeSelectItem: object;
 
     @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default:{}
-    })
-    businessChartTypeSelectItem: object;
-
-
-    @Prop({
         type: Array, // Boolean, Number, String, Array, Object
         default: () => []
     })
     siteIds: object;
-
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
@@ -174,19 +152,13 @@ export class AnalysisFilterDwellTime extends Vue {
     })
     isIncludedEmployee: string;
 
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: "revenue"
-    })
-    businessChartType: string;
-
     inputFormData: any = {
         areaId: "all",
         groupId: "all",
         deviceId: "all",
         type: "day",
-        isIncludedEmployee: 'no',
-        businessChartType: 'revenue'
+        inOrOut: "in",
+        isIncludedEmployee: 'no'
     };
 
     created() {}
@@ -215,12 +187,7 @@ export class AnalysisFilterDwellTime extends Vue {
 
     @Watch("isIncludedEmployee", { deep: true })
     private isIncludedEmployeeChanged(newVal, oldVal) {
-        this.inputFormData.isIncludedEmployee = newVal;
-    }
-
-    @Watch("businessChartType", { deep: true })
-    private businessChartTypeChanged(newVal, oldVal) {
-        this.inputFormData.businessChartType = newVal;
+        this.inputFormData.is = newVal;
     }
 
     async whenSelectedAreaId() {
@@ -241,10 +208,6 @@ export class AnalysisFilterDwellTime extends Vue {
 
     whenSelectedIsIncludedEmployee() {
         this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
-    }
-
-    whenSelectedBusinessChartType() {
-        this.$emit("business_chart_type", this.inputFormData.businessChartType);
     }
 
     IAnalysisFilterForm() {
@@ -292,20 +255,13 @@ export class AnalysisFilterDwellTime extends Vue {
                 isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
 
 
-                /**
-                 * @uiLabel - ${this._("w_businessChartType")}
-                 * @uiColumnGroup - analysis
-                 */
-                businessChartType?: ${toEnumInterface(this.businessChartTypeSelectItem as any, false)};
-
-
             }
         `;
     }
 }
 
-export default AnalysisFilterDwellTime;
-Vue.component("analysis-filter-dwell-time", AnalysisFilterDwellTime);
+export default AnalysisFilter;
+Vue.component("analysis-filter", AnalysisFilter);
 </script>
 
 <style lang="scss" scoped>

@@ -12,7 +12,7 @@
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
-                    v-if="siteIds && siteIds.length === 1"
+                    v-if="siteIds !== ''"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.areaId"
@@ -22,7 +22,7 @@
 
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    v-if="siteIds && siteIds.length === 1"
+                    v-if="siteIds !== ''"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -33,7 +33,7 @@
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    v-if="siteIds && siteIds.length === 1"
+                    v-if="siteIds !== ''"
                     class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -42,21 +42,10 @@
                 </iv-form-selection>
             </template>
 
-            <template #type="{ $attrs, $listeners }">
-                <iv-form-selection
-                    class="col-md-2"
-                    v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.type"
-                >
-                </iv-form-selection>
-            </template>
-
             <template #isIncludedEmployee="{ $attrs, $listeners }">
                 <iv-form-selection
                     class="col-md-2"
-                    v-if="siteIds.length !== 0"
+                    v-if="siteIds !== ''"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.isIncludedEmployee"
@@ -78,14 +67,14 @@ import {
     Model,
     Watch
 } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
+import { toEnumInterface } from "../../../../core";
 let config = require("@/config/default/debug");
 
 
 @Component({
     components: {}
 })
-export class AnalysisFilter extends Vue {
+export class AnalysisFilterHeatMap extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -108,19 +97,13 @@ export class AnalysisFilter extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default:{}
     })
-    timeModeSelectItem: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default:{}
-    })
     isIncludedEmployeeSelectItem: object;
 
     @Prop({
-        type: Array, // Boolean, Number, String, Array, Object
-        default: () => []
+        type: String, // Boolean, Number, String, Array, Object
+        default: ''
     })
-    siteIds: object;
+    siteIds: string;
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
@@ -142,12 +125,6 @@ export class AnalysisFilter extends Vue {
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
-        default: "hour"
-    })
-    type: string;
-
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
         default: "no"
     })
     isIncludedEmployee: string;
@@ -156,8 +133,6 @@ export class AnalysisFilter extends Vue {
         areaId: "all",
         groupId: "all",
         deviceId: "all",
-        type: "day",
-        inOrOut: "in",
         isIncludedEmployee: 'no'
     };
 
@@ -180,11 +155,6 @@ export class AnalysisFilter extends Vue {
         this.inputFormData.deviceId = newVal;
     }
 
-    @Watch("type", { deep: true })
-    private typeChanged(newVal, oldVal) {
-        this.inputFormData.type = newVal;
-    }
-
     @Watch("isIncludedEmployee", { deep: true })
     private isIncludedEmployeeChanged(newVal, oldVal) {
         this.inputFormData.is = newVal;
@@ -202,9 +172,6 @@ export class AnalysisFilter extends Vue {
         this.$emit("device_id", this.inputFormData.deviceId);
     }
 
-    whenSelectedType() {
-        this.$emit("type", this.inputFormData.type);
-    }
 
     whenSelectedIsIncludedEmployee() {
         this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
@@ -242,13 +209,6 @@ export class AnalysisFilter extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_countSelect")}
-                 * @uiColumnGroup - analysis
-                 */
-                type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
-
-
-                /**
                  * @uiLabel - ${this._("w_isIncludedEmployee")}
                  * @uiColumnGroup - analysis
                  */
@@ -260,8 +220,8 @@ export class AnalysisFilter extends Vue {
     }
 }
 
-export default AnalysisFilter;
-Vue.component("analysis-filter", AnalysisFilter);
+export default AnalysisFilterHeatMap;
+Vue.component("analysis-filter-heat-map", AnalysisFilterHeatMap);
 </script>
 
 <style lang="scss" scoped>

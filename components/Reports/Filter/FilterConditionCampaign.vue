@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
+import { toEnumInterface } from "../../../../core";
 import { ERegionType, IRegionTreeSelected } from "@/components/RegionTree";
 import {
     IFilterCondition,

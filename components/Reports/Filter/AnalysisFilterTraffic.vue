@@ -13,7 +13,6 @@
 
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds && siteIds.length === 1"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -25,7 +24,6 @@
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds && siteIds.length === 1"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -36,7 +34,6 @@
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds && siteIds.length === 1"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -46,7 +43,6 @@
 
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -58,7 +54,6 @@
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-1"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -69,7 +64,6 @@
 
             <template #selectInOrOut="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-1"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -92,7 +86,6 @@
 
             <template #businessChartType="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -115,7 +108,7 @@ import {
     Model,
     Watch
 } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
+import { toEnumInterface } from "../../../../core";
 let config = require("@/config/default/debug");
 
 
@@ -319,28 +312,28 @@ export class AnalysisFilterTraffic extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_countSelect")}
-                 * @uiColumnGroup - analysis
+                 * @uiColumnGroup - row
                  */
                 type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_isIncludedEmployee")}
-                 * @uiColumnGroup - analysis
+                 * @uiColumnGroup - row
                  */
                 isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_InOutType")}
-                 * @uiColumnGroup - analysis
+                 * @uiColumnGroup - row
                  */
                 selectInOrOut?: ${toEnumInterface(this.inOrOutTypeSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_businessChartType")}
-                 * @uiColumnGroup - analysis
+                 * @uiColumnGroup - row
                  */
                 businessChartType?: ${toEnumInterface(this.businessChartTypeSelectItem as any, false)};
 

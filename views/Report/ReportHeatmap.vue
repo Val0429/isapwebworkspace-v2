@@ -126,7 +126,7 @@ import {
     EAddPeriodSelect
 } from "@/components/Reports";
 
-import HeatMapManyDay from "@/components/Reports/HeatMapManyDay.vue";
+import HeatMapManyDay from "@/components/Reports/Filter/HeatMapManyDay.vue";
 import {
     IHeatMapData,
     IHeatMapPosition,
