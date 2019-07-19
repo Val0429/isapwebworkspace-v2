@@ -1008,6 +1008,12 @@ export default class LangObject implements ILang {
     w_VIPAndBlackList_VisitTime = 'VisitTime';
     w_VIPAndBlackList_DwellTime = 'DwellTime(minute)';
     w_VIPAndBlackList_LatestVisits = 'LatestVisits(1 Month)';
+    w_VIPAndBlackList_TableTitleVip = 'VIP';
+    w_VIPAndBlackList_TableTitleBlacklist = 'Blacklist';
+    w_VIPAndBlackList_TableTitleName = 'Name';
+    w_VIPAndBlackList_TableTitleSite = 'Store';
+    w_VIPAndBlackList_TableTitleVisitDate = 'Visit date';
+    w_VIPAndBlackList_TableTitleDwellTime = 'Dwell time';
 
     //Campaign
     w_Campaign_BeforeCampaign = 'Before Campaign';

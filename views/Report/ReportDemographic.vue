@@ -2155,6 +2155,7 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 			toExcel({th, data, fileName, fileType, sheetName});
 		}
 
+        // Author: Morris
 		exportPDF() {
 			let title = "";
 			title += this._("w_Navigation_Report_Demographic");
@@ -2163,10 +2164,8 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 				this.startDate,
 				HighchartsService.datetimeFormat.date
             );
-
             ReportPDFService.exportPDF(title);
         }
-
 
         /////////////////////////////////////////////////////////////////////
 

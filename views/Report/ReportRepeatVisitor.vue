@@ -1367,6 +1367,7 @@ export default class ReportRepeatVisitor extends Vue {
         toExcel({ th, data, fileName, fileType, sheetName });
     }
 
+    // Author: Morris
     exportPDF() {
         let title = "";
         title += this._("w_Navigation_Report_RepeatVisitor");

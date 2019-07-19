@@ -21,6 +21,57 @@
                 </b-col>
             </b-row>
         </b-form-group>
+
+        <b-modal
+            v-model="modalShow"
+            hide-header
+            hide-footer
+            size="lg"
+        >
+            <table
+                ref="reportTable"
+                class="table b-table table-striped table-hover"
+            >
+                <thead>
+                    <tr>
+                        <th
+                            class="center"
+                            style="width:20%;"
+                            v-for="(value,index) in vipTrackingDetail.titleList"
+                            :key="'title_' + index"
+                        >{{ value }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(value,index) in vipTrackingDetail.data"
+                        :key="'tableData__' + index"
+                    >
+                        <td class="center">
+                            <img
+                                style="width: 100%; max-hight:50px;"
+                                :src="value.imageSrc"
+                            >
+                        </td>
+                        <td class="center">{{ value.name }}</td>
+                        <td class="center">{{ value.site }}</td>
+                        <td class="center">{{ value.date }}</td>
+                        <td class="center">{{ value.dwellTime }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="table-pagination right">
+                <b-pagination-nav
+                    :link-gen="getDetail"
+                    :number-of-pages="tableNumberRow()"
+                    v-model="vipTrackingDetail.paging.currentPage"
+                />
+            </div>
+
+        </b-modal>
+
     </div>
 </template>
 
@@ -97,6 +148,17 @@ export class HighchartsVipTracking extends Vue {
     value: IChartVipTrackingData[];
 
     chartMode: EChartMode = EChartMode.none;
+    modalShow = false;
+
+    vipTrackingDetail = {
+        titleList: [],
+        data: [],
+        paging: {
+            totalRow: 10,
+            prePage: 1,
+            currentPage: 10
+        }
+    };
 
     mountChart: {
         siteXday1: boolean;
@@ -129,6 +191,7 @@ export class HighchartsVipTracking extends Vue {
     mounted() {}
 
     start() {
+        this.modalShow = false;
         this.mountChart.siteXday1 = false;
         this.mountChart.siteXdayX = false;
 
@@ -284,12 +347,12 @@ export class HighchartsVipTracking extends Vue {
         let tempValues: IChartVipTrackingData[] = JSON.parse(
             JSON.stringify(this.value)
         );
-        let tempHourStrings: string[] = [];
         let tempCategories: string[] = [];
         let tempSeries: {
             name: string;
             data: number[];
         }[] = [{ name: "VIP", data: [] }, { name: "Blacklist", data: [] }];
+        let tempResult: any = [];
 
         // 避免時間相反造成無窮迴圈
         let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
@@ -313,22 +376,65 @@ export class HighchartsVipTracking extends Vue {
             tempTimestamp <= endTimestamp &&
             categorieNowlength < categorieMaxlength
         ) {
-            let tempResult = {
+            let tempItem = {
                 vip: 0,
                 blacklist: 0,
                 date: new Date(tempTimestamp)
             };
 
             let dateStart = Datetime.DateStart(new Date(tempTimestamp));
+            let dateEnd = Datetime.DateStart(
+                new Date(tempTimestamp + Datetime.oneDayTimestamp)
+            );
+            let tempStartTimestamp = dateStart.getTime();
+            let tempEndTimestamp = dateEnd.getTime();
 
-            let dateEnd = Datetime.DateStart(new Date(tempTimestamp));
+            let spliceIndexList: number[] = [];
+            for (let i in tempValues) {
+                let val = tempValues[i];
+                let value: IChartVipTrackingData = this.anysislyChartValue(val);
+                let valTimestamp = value.date.getTime();
 
-            let tempStartTimestamp = dateStart.getTime() - 1000;
-            let tempEndTimestamp = dateEnd.getTime() + 1000;
+                if (
+                    valTimestamp >= tempStartTimestamp &&
+                    valTimestamp <= tempEndTimestamp
+                ) {
+                    switch (value.type) {
+                        case EVipTrackingType.vip:
+                            tempItem.vip += value.personCount;
+                            break;
+                        case EVipTrackingType.blacklist:
+                            tempItem.blacklist += value.personCount;
+                            break;
+                    }
+                    spliceIndexList.push(parseInt(i));
+                }
+            }
+
+            tempResult.push(tempItem);
+
+            // tempValues 減肥
+            for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                tempValues.splice(spliceIndexList[i], 1);
+            }
 
             // set loop value
             categorieNowlength++;
             tempTimestamp = dateEnd.getTime() + 1000;
+        }
+
+        for (let ret of tempResult) {
+            tempCategories.push(
+                HighchartsService.categorieStringWithJSON(
+                    Datetime.DateTime2String(
+                        ret.date,
+                        HighchartsService.datetimeFormat.date
+                    ),
+                    ret
+                )
+            );
+            tempSeries[0].data.push(ret.vip);
+            tempSeries[1].data.push(ret.blacklist);
         }
 
         this.chartOptions.siteXdayX = {
@@ -343,7 +449,7 @@ export class HighchartsVipTracking extends Vue {
             yAxis: {
                 labels: { style: { color: "#000" } },
                 title: {
-                    text: this._("w_ReportTraffic_TrafficTraffic"),
+                    text: null,
                     style: { color: "#000" }
                 }
             },
@@ -403,13 +509,144 @@ export class HighchartsVipTracking extends Vue {
             );
             let newValue: any = JSON.parse(valueJson);
 
+            this.vipTrackingDetail.titleList = [];
+            this.vipTrackingDetail.data = [];
+
+            switch (vipType) {
+                case EVipTrackingType.vip:
+                    this.vipTrackingDetail.titleList.push(
+                        this._("w_VIPAndBlackList_TableTitleVip")
+                    );
+                    break;
+                case EVipTrackingType.blacklist:
+                    this.vipTrackingDetail.titleList.push(
+                        this._("w_VIPAndBlackList_TableTitleBlacklist")
+                    );
+                    break;
+            }
+
+            this.vipTrackingDetail.titleList.push(
+                this._("w_VIPAndBlackList_TableTitleName")
+            );
+            this.vipTrackingDetail.titleList.push(
+                this._("w_VIPAndBlackList_TableTitleSite")
+            );
+            this.vipTrackingDetail.titleList.push(
+                this._("w_VIPAndBlackList_TableTitleVisitDate")
+            );
+            this.vipTrackingDetail.titleList.push(
+                this._("w_VIPAndBlackList_TableTitleDwellTime")
+            );
+
+            this.getDetail();
+            this.modalShow = true;
+
             console.log("!!! newValue", newValue);
         } catch (e) {
             console.log(e);
         }
     }
 
+    getDetail() {
+        // TODO: Waitting API
+        this.vipTrackingDetail.data = [
+            {
+                imageSrc:
+                    "https://i2.kknews.cc/SIG=qgrgn5/ctp-vzntr/1522820711142o3526o5n61.jpg",
+                name: "楊冪",
+                site: "北京店",
+                date: "2019/07/13",
+                dwellTime: "30m"
+            },
+            {
+                imageSrc:
+                    "https://i1.kknews.cc/SIG=3o4k229/ctp-vzntr/1522817213043o8860rqn82.jpg",
+                name: "劉詩詩",
+                site: "杭州店",
+                date: "2019/07/20",
+                dwellTime: "1h30m"
+            },
+            {
+                imageSrc:
+                    "https://i1.kknews.cc/SIG=1fo64hq/ctp-vzntr/15228207228673p8o2o7or4.jpg",
+                name: "劉亦菲",
+                site: "南京店",
+                date: "2019/07/13",
+                dwellTime: "45m"
+            },
+            {
+                imageSrc:
+                    "https://i1.kknews.cc/SIG=2iu502h/ctp-vzntr/1522820285391rsq0175o86.jpg",
+                name: "迪麗熱巴",
+                site: "烏魯木齊店",
+                date: "2019/07/15",
+                dwellTime: "3h15m"
+            },
+            {
+                imageSrc:
+                    "https://i1.kknews.cc/SIG=26sbusf/ctp-vzntr/1522820882168on5q151qno.jpg",
+                name: "鄭爽",
+                site: "黑龍江店",
+                date: "2019/07/13",
+                dwellTime: "1d2h30m"
+            },
+            {
+                imageSrc:
+                    "https://i2.kknews.cc/SIG=19drvqf/ctp-vzntr/15228174698542o17496r19.jpg",
+                name: "唐嫣",
+                site: "青島店",
+                date: "2019/07/13",
+                dwellTime: "3h30m"
+            },
+            {
+                imageSrc:
+                    "https://i2.kknews.cc/SIG=3t52gmc/ctp-vzntr/15228205840133364402o41.jpg",
+                name: "戚薇",
+                site: "珠穆朗瑪峰店",
+                date: "2019/07/14",
+                dwellTime: "10m"
+            },
+            {
+                imageSrc:
+                    "https://i2.kknews.cc/SIG=1k4bper/ctp-vzntr/1522818581653p16n111q29.jpg",
+                name: "佟麗婭",
+                site: "重慶店",
+                date: "2019/07/13",
+                dwellTime: "3m"
+            },
+            {
+                imageSrc:
+                    "https://i1.kknews.cc/SIG=3qgbsmb/ctp-vzntr/1522820352800435sop9r68.jpg",
+                name: "趙麗穎",
+                site: "大連店",
+                date: "2019/07/13",
+                dwellTime: "7h5m"
+            },
+            {
+                imageSrc:
+                    "https://i2.kknews.cc/SIG=1ldkf9/ctp-vzntr/152281799889310p148o357.jpg",
+                name: "Angle Baby",
+                site: "上海店",
+                date: "2019/07/13",
+                dwellTime: "16m"
+            }
+        ];
+    }
+
+    tableNumberRow(): number {
+        let result = 1;
+        let tempNumber = Math.ceil(
+            this.vipTrackingDetail.paging.totalRow /
+                this.vipTrackingDetail.paging.prePage
+        );
+        if (tempNumber > 0) {
+            result = tempNumber;
+        }
+        return result;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private anysislyChartValueDefault(): IChartVipTrackingData {
         let value: IChartVipTrackingData = {
             type: EVipTrackingType.none,
@@ -460,4 +697,7 @@ Vue.component("highcharts-vip-tracking", HighchartsVipTracking);
 </script>
 
 <style lang="scss" scoped>
+.center {
+    text-align: center;
+}
 </style>

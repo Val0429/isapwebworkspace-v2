@@ -2408,14 +2408,13 @@ export default class ReportHeatmap extends Vue {
 
     // Author: Morris
     exportPDF() {
-        let title = "";
-        title += this._("w_Navigation_Report_Traffic");
-        title += " ";
-        title += Datetime.DateTime2String(
-            this.startDate,
-            HighchartsService.datetimeFormat.date
+		let title = "";
+		title += this._("w_Navigation_Report_Traffic");
+		title += " ";
+		title += Datetime.DateTime2String(
+			this.startDate,
+			HighchartsService.datetimeFormat.date
         );
-
         ReportPDFService.exportPDF(title);
     }
 
