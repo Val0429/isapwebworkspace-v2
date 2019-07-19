@@ -49,8 +49,8 @@
         <div class="table-pagination right">
             <b-pagination-nav
                 :link-gen="getData"
-                :number-of-pages="Math.ceil(totalRow / prePage) ? Math.ceil(totalRow / prePage) : 1"
-                v-model="currentPage"
+                :number-of-pages="numberOfPages()"
+                v-model="paging.currentPage"
             />
         </div>
 
@@ -68,6 +68,7 @@ import {
 } from "vue-property-decorator";
 import Datetime from "@/services/Datetime";
 import ServerConfig from "@/services/ServerConfig";
+import { IPaging } from "@/components/Table/models/IPaging";
 
 @Component({
     components: {}
@@ -86,9 +87,11 @@ export class VipAndBlacklistTable extends Vue {
 
     serverConfig = ServerConfig;
 
-    prePage = 5;
-    currentPage = 1;
-    totalRow = 5;
+    paging: IPaging = {
+        prePage: 5,
+        currentPage: 1,
+        totalRow: 5
+    };
 
     created() {
         this.initDate();
@@ -113,23 +116,34 @@ export class VipAndBlacklistTable extends Vue {
     getData() {
         this.thresholdDetailTableData = this.thresholdDetailTableContent.filter(
             (u, i) =>
-                i >= (this.currentPage - 1) * this.prePage &&
-                i < this.currentPage * this.prePage
+                i >= (this.paging.currentPage - 1) * this.paging.prePage &&
+                i < this.paging.currentPage * this.paging.prePage
         );
-        this.totalRow = this.thresholdDetailTableContent.length;
+        this.paging.totalRow = this.thresholdDetailTableContent.length;
     }
 
     getNo(index: number, sortType: boolean = true): number {
         if (sortType) {
-            return this.currentPage * this.prePage - this.prePage + index + 1;
+            return (
+                this.paging.currentPage * this.paging.prePage -
+                this.paging.prePage +
+                index +
+                1
+            );
         } else {
             return (
-                this.currentPage * this.prePage -
-                this.prePage +
-                this.prePage -
+                this.paging.currentPage * this.paging.prePage -
+                this.paging.prePage +
+                this.paging.prePage -
                 index
             );
         }
+    }
+
+    numberOfPages(): number {
+        return Math.ceil(this.paging.totalRow / this.paging.prePage)
+            ? Math.ceil(this.paging.totalRow / this.paging.prePage)
+            : 1;
     }
 
     clickItem(id) {
