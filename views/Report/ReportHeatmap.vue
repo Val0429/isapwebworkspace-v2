@@ -15,8 +15,10 @@
 
         <iv-card
             :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
-            :visible="visible"
-        >
+            :visible="visible">
+<!--                        :visible="visible"
+-->
+
             <template #toolbox>
 
                 <iv-toolbox-export-pdf
@@ -54,14 +56,16 @@
             >
             </analysis-filter-heat-map>
 
-            <!-- Tina -->
+            <!-- Tina 需要用v-if判斷出現哪個元件 -->
             <heat-map-many-day
                 :timeArray="timeArray"
                 @time-array-index="receiveTimeArrayIndex"
             ></heat-map-many-day>
             <br>
 
+            <!-- if 條件還需要更改 -->
             <heat-map-one-day-slider-bar
+                v-if="filterData.firstSiteId"
                 :slider="slider"
                 @hour="receiveHour"
             >
@@ -259,7 +263,7 @@ export default class ReportHeatmap extends Vue {
 
         // Tina 之後移到發api之後
         this.initTimeArray();
-        this.initHourArray();
+       // this.initHourArray();
         // Ben
         this.initHeatmap();
     }
@@ -1529,22 +1533,25 @@ export default class ReportHeatmap extends Vue {
             isIncludedEmployee: "no"
         };
 
-        await this.$server
-            .C("/report/demographic/summary", param)
-            .then((response: any) => {
-                if (response !== undefined) {
-                    this.responseData = response;
-                    this.officeHourItemDetail = this.responseData.officeHours;
-                    this.resolveSummary();
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        this.initHourArray();
+
+
+        // await this.$server
+        //     .C("/report/demographic/summary", param)
+        //     .then((response: any) => {
+        //         if (response !== undefined) {
+        //             this.responseData = response;
+        //             this.officeHourItemDetail = this.responseData.officeHours;
+        //             this.resolveSummary();
+        //         }
+        //     })
+        //     .catch((e: any) => {
+        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+        //             return ResponseFilter.base(this, e);
+        //         }
+        //         console.log(e);
+        //         return false;
+        //     });
     }
 
     resolveSummary() {
