@@ -32,17 +32,18 @@
                 </template>
 
                 <template #selectPeriodAddWay="{ $attrs, $listeners }">
-                    <b-form-radio-group
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="selectPeriodAddWay"
-                        class="h-25 select_date_button"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="addPeriodSelectItem"
-                        @change="changeAddPeriodSelect"
-                    ></b-form-radio-group>
+
+                    <p class="ml-3">{{ _('w_Selected_Date') }}</p>
+
+                    <b-col cols="9">
+                        <b-form-radio-group
+                            v-model="selectPeriodAddWay"
+                            name="selectPeriodAddWay"
+                            :options="addPeriodSelectItem"
+                            @change="changeAddPeriodSelect"
+                        ></b-form-radio-group>
+                    </b-col>
+
                 </template>
 
                 <template #startDate="{ $attrs, $listeners }">
@@ -154,6 +155,13 @@ export class FilterConditionHeatMap extends Vue {
     })
     templateItem: ITemplateItem | null;
 
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: () => []
+    })
+    addPeriodSelectItem: any;
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
 
@@ -166,7 +174,7 @@ export class FilterConditionHeatMap extends Vue {
     // date 相關
     selectPeriodAddWay: string = EAddPeriodSelect.period;
 
-    addPeriodSelectItem: any = [];
+    // addPeriodSelectItem: any = [];
 
     designationPeriodSelectItem: any = [];
 
@@ -190,6 +198,7 @@ export class FilterConditionHeatMap extends Vue {
     created() {
         // this.initSelectItemSite();
         this.initSelectItem();
+        console.log('addPeriodSelectItem - ', this.addPeriodSelectItem);
     }
 
     mounted() {
@@ -203,14 +212,6 @@ export class FilterConditionHeatMap extends Vue {
     // }
 
     initSelectItem() {
-
-        this.addPeriodSelectItem = [
-            { value: EAddPeriodSelect.period, text: this._("w_period") },
-            {
-                value: EAddPeriodSelect.designation,
-                text: this._("w_Designation")
-            }
-        ];
 
         this.designationPeriodSelectItem = {
             today: this._("w_Today"),
@@ -577,7 +578,6 @@ export class FilterConditionHeatMap extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
-                 * @uiColumnGroup - date
                  */
                  selectPeriodAddWay?: any;
 
@@ -585,13 +585,13 @@ export class FilterConditionHeatMap extends Vue {
                 /**
                 * @uiLabel - ${this._("w_BOCampaign_StartDate")}
                 * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
-                * @uiColumnGroup - date
                 * @uiType - iv-form-date
+                * @uiColumnGroup - date
                 * @uiHidden - ${
                     this.selectPeriodAddWay === EAddPeriodSelect.designation
                         ? "true"
                         : "false"
-                }
+                    }
                  */
                 startDate?: any;
 
@@ -599,25 +599,24 @@ export class FilterConditionHeatMap extends Vue {
                 /**
                 * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
                 * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
-                * @uiColumnGroup - date
                 * @uiType - iv-form-date
+                * @uiColumnGroup - date
                 * @uiHidden - ${
                     this.selectPeriodAddWay === EAddPeriodSelect.designation
                         ? "true"
                         : "false"
-                }
+                    }
                  */
                 endDate?: any;
 
 
                 /**
-                 * @uiLabel - ${this._("w_ReportTemplate_DesignationPeriod")}
-                 * @uiColumnGroup - date
+                 * @uiLabel - ${this._("w_ReportTemplate_Fixed_Interval")}
                  * @uiHidden - ${
-                     this.selectPeriodAddWay === EAddPeriodSelect.period
-                         ? "true"
-                         : "false"
-                 }
+                    this.selectPeriodAddWay === EAddPeriodSelect.period
+                        ? "true"
+                        : "false"
+                    }
                  */
                 designationPeriod?: ${toEnumInterface(
                     this.designationPeriodSelectItem as any,

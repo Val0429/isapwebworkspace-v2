@@ -6,6 +6,8 @@
 			:sitesSelectItem="sitesSelectItem"
 			:tagSelectItem="tagSelectItem"
 			:regionTreeItem="regionTreeItem"
+			:ifAllSitesSelectItem="ifAllSitesSelectItem"
+			:addPeriodSelectItem="addPeriodSelectItem"
 			:templateItem="templateItem"
 			:label="_('w_ReportFilterConditionComponent_')"
 			@submit-data="receiveFilterData"
@@ -173,7 +175,9 @@
 		ReportTableData,
 
 		EDesignationPeriod,
-		IReportToTemplateItem
+		IReportToTemplateItem,
+		EAddPeriodSelect,
+		EIfAllSelected
 	} from "@/components/Reports";
 
 ///////////////////////// export /////////////////////////
@@ -214,7 +218,9 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 		//// Filter Condition Start ////
 
 		// select 相關
-		sitesSelectItem: any = {};
+		sitesSelectItem: any = [];
+		ifAllSitesSelectItem: any = [];
+		addPeriodSelectItem: any = [];
 		tagSelectItem: any = {};
 		tags = [];
 
@@ -312,6 +318,20 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 		}
 
 		initSelect() {
+
+			this.ifAllSitesSelectItem = [
+				{ value: EIfAllSelected.all, text: this._("w_AllSites") },
+				{ value: EIfAllSelected.select, text: this._("w_SelectSites") }
+			];
+
+
+			this.addPeriodSelectItem = [
+				{ value: EAddPeriodSelect.period, text: this._("w_period") },
+				{
+					value: EAddPeriodSelect.designation,
+					text: this._("w_Designation")
+				}
+			];
 
 			this.timeModeSelectItem = {
 				day: this._('w_daily'),
@@ -798,9 +818,12 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 		siteFilterPermission() {
 			let tempSitesSelectItem = {};
 			for (const detail of this.$user.allowSites) {
-				tempSitesSelectItem[detail.objectId] = detail.name;
+				let site = { id: detail.objectId, text: detail.name };
+				this.sitesSelectItem.push(site);
+
+				// tempSitesSelectItem[detail.objectId] = detail.name;
 			}
-			this.sitesSelectItem = tempSitesSelectItem;
+			// this.sitesSelectItem = tempSitesSelectItem;
 		}
 
 		async initSelectItemSite() {

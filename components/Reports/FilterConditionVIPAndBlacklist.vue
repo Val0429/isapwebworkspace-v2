@@ -10,43 +10,74 @@
                 @submit="doSubmit($event)"
             >
 
+<!--                <template #ifAllTags="{ $attrs, $listeners }">-->
+<!--                    <b-form-radio-group-->
+<!--                        v-bind="$attrs"-->
+<!--                        v-on="$listeners"-->
+<!--                        v-model="selectAllTags"-->
+<!--                        class="h-25 select_date_button mb-3"-->
+<!--                        button-variant="outline-success"-->
+<!--                        name="radio-btn-outline"-->
+<!--                        :options="ifAllTagsSelectItem"-->
+<!--                        @change="changeAllTagsSelect"-->
+<!--                    ></b-form-radio-group>-->
+<!--                </template>-->
+
+
+
                 <template #ifAllTags="{ $attrs, $listeners }">
-                    <b-form-radio-group
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="selectAllTags"
-                        class="h-25 select_date_button mb-3"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="ifAllTagsSelectItem"
-                        @change="changeAllTagsSelect"
-                    ></b-form-radio-group>
+
+                    <p class="ml-3">{{ _('w_Tag') }}</p>
+
+                    <b-col cols="9">
+                        <b-form-radio-group
+                            v-model="selectAllTags"
+                            name="ifAllSites"
+                            :options="ifAllTagsSelectItem"
+                            @change="changeAllTagsSelect"
+                        ></b-form-radio-group>
+                    </b-col>
+
                 </template>
 
-
-                <template #tagIds="{ $attrs, $listeners }">
+                <template #tagIds="{$attrs, $listeners}">
                     <iv-form-selection
-                        v-bind="$attrs"
                         v-on="$listeners"
                         v-model="inputFormData.tagIds"
+                        class="select-site ml-3"
+                        :options="tagSelectItem"
+                        :multiple="true"
+                        @input="changeTagIds"
                     >
                     </iv-form-selection>
+<!--                    v-if="selectAllTags === 'select'"-->
+
                 </template>
 
+<!--                <template #tagIds="{ $attrs, $listeners }">-->
+<!--                    <iv-form-selection-->
+<!--                        v-bind="$attrs"-->
+<!--                        v-on="$listeners"-->
+<!--                        v-model="inputFormData.tagIds"-->
+<!--                    >-->
+<!--                    </iv-form-selection>-->
+<!--                </template>-->
+
                 <template #selectPeriodAddWay="{ $attrs, $listeners }">
-                    <b-form-radio-group
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="selectPeriodAddWay"
-                        class="h-25 select_date_button"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="addPeriodSelectItem"
-                        @change="changeAddPeriodSelect"
-                    ></b-form-radio-group>
+
+                    <p class="ml-3">{{ _('w_Selected_Date') }}</p>
+
+                    <b-col cols="9">
+                        <b-form-radio-group
+                            v-model="selectPeriodAddWay"
+                            name="selectPeriodAddWay"
+                            :options="addPeriodSelectItem"
+                            @change="changeAddPeriodSelect"
+                        ></b-form-radio-group>
+                    </b-col>
+
                 </template>
+
 
                 <template #startDate="{ $attrs, $listeners }">
                     <iv-form-date
@@ -134,10 +165,10 @@ enum EPageStep {
 export class FilterConditionVIPAndBlacklist extends Vue {
 
     @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
+        type: Array, // Boolean, Number, String, Array, Object
+        default: () => []
     })
-    tagSelectItem: object;
+    tagSelectItem: any;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -150,6 +181,13 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         default: []
     })
     tagIncludeSitesItem: any;
+
+    @Prop({
+        type: Array, // Boolean, Number, String, Array, Object
+        default: () => []
+    })
+    addPeriodSelectItem: any;
+
 
     @Prop({
         type: Array, // Boolean, Number, String, Array, Object
@@ -170,7 +208,7 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     // date 相關
     selectPeriodAddWay: string = EAddPeriodSelect.period;
 
-    addPeriodSelectItem: any = [];
+    // addPeriodSelectItem: any = [];
 
     designationPeriodSelectItem: any = [];
 
@@ -201,14 +239,6 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         this.ifAllTagsSelectItem = [
             { value: EIfAllSelected.all, text: this._("w_AllTags") },
             { value: EIfAllSelected.select, text: this._("w_SelectTags") }
-        ];
-
-        this.addPeriodSelectItem = [
-            { value: EAddPeriodSelect.period, text: this._("w_period") },
-            {
-                value: EAddPeriodSelect.designation,
-                text: this._("w_Designation")
-            }
         ];
 
         this.designationPeriodSelectItem = {
@@ -244,6 +274,9 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         }
     }
 
+    changeTagIds() {
+
+    }
 
     changeAllTagsSelect(selected: string) {
         this.inputFormData.tagIds = [];
@@ -528,23 +561,25 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         return `
             interface {
 
+
+
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
                  * @uiColumnGroup - tag
                  */
-                 ifAllTags?: any;
+                ifAllTags?: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_Tag")}
-                 * @uiColumnGroup - tag
                  * @uiHidden - ${
                         this.selectAllTags === EIfAllSelected.all
                             ? "true"
                             : "false"
                         }
                  */
-                tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
+                tagIds: any;
+
 
 
                 /**
@@ -552,9 +587,8 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                  */
                  tag1?: any;
 
-                /**
+                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}
-                 * @uiColumnGroup - date
                  */
                  selectPeriodAddWay?: any;
 
@@ -562,13 +596,13 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                 /**
                 * @uiLabel - ${this._("w_BOCampaign_StartDate")}
                 * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
-                * @uiColumnGroup - date
                 * @uiType - iv-form-date
+                * @uiColumnGroup - date
                 * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation
-                        ? "true"
-                        : "false"
-                }
+                        this.selectPeriodAddWay === EAddPeriodSelect.designation
+                            ? "true"
+                            : "false"
+                        }
                  */
                 startDate?: any;
 
@@ -576,27 +610,26 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                 /**
                 * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
                 * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
-                * @uiColumnGroup - date
                 * @uiType - iv-form-date
+                * @uiColumnGroup - date
                 * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.designation
-                        ? "true"
-                        : "false"
-                }
+                        this.selectPeriodAddWay === EAddPeriodSelect.designation
+                            ? "true"
+                            : "false"
+                        }
                  */
                 endDate?: any;
 
 
                 /**
-                 * @uiLabel - ${this._("w_ReportTemplate_DesignationPeriod")}
-                 * @uiColumnGroup - date
+                 * @uiLabel - ${this._("w_ReportTemplate_Fixed_Interval")}
                  * @uiHidden - ${
-                     this.selectPeriodAddWay === EAddPeriodSelect.period
-                         ? "true"
-                         : "false"
-                 }
+                        this.selectPeriodAddWay === EAddPeriodSelect.period
+                            ? "true"
+                            : "false"
+                        }
                  */
-                designationPeriod?: ${toEnumInterface(
+                  designationPeriod?: ${toEnumInterface(
                     this.designationPeriodSelectItem as any,
                     false
                 )};
@@ -627,4 +660,9 @@ Vue.component("filter-condition-vip-and-blacklist", FilterConditionVIPAndBlackli
     background-color: #d7d7d7;
     border: 1px solid #d7d7d7;
 }
+
+.select-site {
+    width: 98%;
+}
+
 </style>

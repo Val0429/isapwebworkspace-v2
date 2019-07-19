@@ -100,7 +100,8 @@ export default class LangObject {
     w_Description = 'Description';
     // w_Sites = 'Site(s)';
     w_Sites = 'Store(s)';
-    w_Tag = 'Tag(s)';
+    w_Sites1 = '* Store(s)';
+    w_Tag = '* Tag(s)';
     // w_Site = 'Site';
     w_Site = 'Store';
     //w_Group = 'Group';
@@ -185,6 +186,7 @@ export default class LangObject {
     w_conversion = 'Conversion';
     w_SelectTags = 'Select Tag(s)';
     w_AllTags = 'All Tags';
+	w_Selected_Date = '* Select Date(s)';
 
     w_yes = 'Yes';
     w_no = 'No';
@@ -950,6 +952,7 @@ export default class LangObject {
     w_PleaseSelectTags = 'Please Select Tags(s)';
     w_InOutType = 'In Out Type';
     w_businessChartType = 'Business Chart Type';
+	w_ReportTemplate_Fixed_Interval = 'Fixed Interval';
 
 	w_Title_One_Site = 'Selected store:';
 	w_Title_Many_Site_Start = 'Selected:';

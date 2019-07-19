@@ -6,6 +6,7 @@
             :sitesSelectItem="sitesSelectItem"
             :regionTreeItem="regionTreeItem"
             :templateItem="templateItem"
+            :addPeriodSelectItem="addPeriodSelectItem"
             :label="_('w_ReportFilterConditionComponent_')"
             @submit-data="receiveFilterData"
         >
@@ -119,7 +120,8 @@ import {
     ReportDashboard,
     ReportTableData,
     EDesignationPeriod,
-    IReportToTemplateItem
+    IReportToTemplateItem,
+    EAddPeriodSelect
 } from "@/components/Reports";
 
 import HeatMapManyDay from "@/components/Reports/HeatMapManyDay.vue";
@@ -163,6 +165,7 @@ export default class ReportHeatmap extends Vue {
 
     // select 相關
     sitesSelectItem: any = {};
+    addPeriodSelectItem: any = [];
     tagSelectItem: any = {};
     tags = [];
 
@@ -306,6 +309,14 @@ export default class ReportHeatmap extends Vue {
     }
 
     initSelect() {
+        this.addPeriodSelectItem = [
+            { value: EAddPeriodSelect.period, text: this._("w_period") },
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
+        ];
+
         this.timeModeSelectItem = {
             day: this._("w_daily"),
             week: this._("w_weekly"),

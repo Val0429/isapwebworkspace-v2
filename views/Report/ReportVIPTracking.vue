@@ -8,6 +8,7 @@
             :sitesSelectItem="sitesSelectItem"
             :allTagsItem="allTagsItem"
             :tagIncludeSitesItem="tagIncludeSitesItem"
+            :addPeriodSelectItem="addPeriodSelectItem"
             @submit-data="receiveFilterData"
         >
         </filter-condition-vip-and-blacklist>
@@ -17,7 +18,6 @@
         >
 <!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
 -->
-
 
             <template #toolbox>
                 <!-- Ben -->
@@ -76,7 +76,8 @@ import {
     EVipTrackingType,
     ITemplateItem,
     ISite,
-    IChartVipTrackingData
+    IChartVipTrackingData,
+    EAddPeriodSelect
 } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
 
@@ -108,7 +109,8 @@ export default class ReportVIPTracking extends Vue {
     };
 
     // select 相關
-    tagSelectItem: any = {};
+    tagSelectItem: any = [];
+    addPeriodSelectItem: any = [];
     sitesSelectItem: any = {};
     tagIncludeSitesItem: any = [];
     allTagsItem: any = [];
@@ -158,8 +160,21 @@ export default class ReportVIPTracking extends Vue {
     // Author: Tina
     async initDatas() {
         this.siteFilterPermission();
+        this.initSelect();
         await this.initSelectItemTag();
         await this.initTagIncludeSitesItem();
+    }
+
+    initSelect() {
+
+        this.addPeriodSelectItem = [
+            {value: EAddPeriodSelect.period, text: this._("w_period")},
+            {
+                value: EAddPeriodSelect.designation,
+                text: this._("w_Designation")
+            }
+        ];
+
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
@@ -182,10 +197,13 @@ export default class ReportVIPTracking extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response) {
                         // 自定義 tagSelectItem 的 key 的方式
-                        tempTagSelectItem[returnValue.objectId] =
-                            returnValue.name;
+                        // tempTagSelectItem[returnValue.objectId] =
+                        //     returnValue.name;
+
+                        let tad = { id: returnValue.objectId, text: returnValue.name };
+                        this.tagSelectItem.push(tad);
                     }
-                    this.tagSelectItem = tempTagSelectItem;
+                    // this.tagSelectItem = tempTagSelectItem;
                 }
             })
             .catch((e: any) => {
@@ -196,8 +214,8 @@ export default class ReportVIPTracking extends Vue {
                 return false;
             });
 
-        for (const detail in this.tagSelectItem) {
-            this.allTagsItem.push(detail);
+        for (const detail of this.tagSelectItem) {
+            this.allTagsItem.push(detail.id);
         }
     }
 
@@ -364,6 +382,49 @@ export default class ReportVIPTracking extends Vue {
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
+
+
+    exportExcel(fType) {
+        // let reportTable: any = null;
+        // if (this.tableStep == ETableStep.mainTable) {
+        //     reportTable = this.$refs.reportTable;
+        // } else {
+        //     reportTable = this.$refs.sunReportTable;
+        // }
+        // let tableData = reportTable.tableToArray();
+        //
+        // //th
+        // let th = [];
+        // for (let title of tableData[0]) {
+        //     th.push(title);
+        // }
+        //
+        // //data
+        // let data = [];
+        // for (let bodys of tableData) {
+        //     if (tableData.indexOf(bodys) == 0) continue;
+        //     data.push(bodys);
+        // }
+        // let [fileName, fileType, sheetName] = [
+        //     this._("w_Navigation_VideoSources_Demographic"),
+        //     fType,
+        //     Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        // ];
+        // toExcel({ th, data, fileName, fileType, sheetName });
+    }
+
+    // Author: Morris
+    exportPDF() {
+        // let title = "";
+        // title += this._("w_Navigation_Report_Traffic");
+        // title += " ";
+        // title += Datetime.DateTime2String(
+        //     this.startDate,
+        //     HighchartsService.datetimeFormat.date
+        // );
+        //
+        // ReportPDFService.exportPDF(title);
+    }
 
     ///////////////////////////////////////////////////////
 
