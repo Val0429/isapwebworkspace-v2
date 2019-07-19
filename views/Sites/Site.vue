@@ -1467,6 +1467,7 @@ export default class Site extends Vue {
             }
         };
 
+        // TODO: update remove not selected tag, watch /Views/Regions/Region.vue, 497
         await this.$server
             .R("/tag", tbody)
             .then((response: any) => {
@@ -2318,9 +2319,6 @@ export default class Site extends Vue {
                 */
                 mode: any;
 
-
-
-
             }`;
     }
 
@@ -2356,8 +2354,6 @@ export default class Site extends Vue {
                 * @uiType - iv-form-label
                 */
                 devices?: string;
-
-
 
             }`;
     }

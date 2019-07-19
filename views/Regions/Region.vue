@@ -75,6 +75,16 @@
                         :src="newImgSrc"
                     />
                 </template>
+
+                <template #tagIds="{$attrs, $listeners}">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        :options="selectItem.tags"
+                        :multiple="true"
+                    >
+                    </iv-form-selection>
+                </template>
             </iv-form>
 
             <template #footer-before>
@@ -141,6 +151,8 @@ import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 
+import { ITagReadUpdate } from "@/config/default/api/interfaces";
+
 enum EPageStep {
     none,
     tree,
@@ -165,7 +177,8 @@ export default class Region extends Vue {
     cardBindingTitle = "";
     deleteRegionIdList: string[] = [];
     selectItem: any = {
-        site: {}
+        site: {},
+        tags: []
     };
 
     // image
@@ -230,9 +243,43 @@ export default class Region extends Vue {
                 this.pageStep = EPageStep.modifyRegion;
                 break;
         }
+        this.initTagItem();
     }
 
     // init data
+    async initTagItem() {
+        this.selectItem.tags = [];
+
+        let body: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
+
+        await this.$server
+            .R("/tag/all", body)
+            .then((response: any) => {
+                for (let itme of response) {
+                    let tag = { id: itme.objectId, text: itme.name };
+                    this.selectItem.tags.push(tag);
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
+
+        this.regionTreeItem.region.tagIds = [];
+        for (let tag of this.regionTreeItem.region.tags) {
+            this.regionTreeItem.region.tagIds.push(tag.objectId);
+        }
+    }
+
     async initRegionTreeItem() {
         let param = {};
         this.regionTreeItem = new RegionTreeItem();
@@ -446,6 +493,90 @@ export default class Region extends Vue {
                     return ResponseFilter.base(this, e);
                 });
         }
+
+        //update tags
+        let tbody: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
+
+        await this.$server
+            .R("/tag", tbody)
+            .then((response: any) => {
+                const datas: ITagReadUpdate[] = [];
+                var tagList = response.results;
+
+                for (let tempResponse of tagList) {
+                    let haveRegionInTag = false;
+                    let haveChooseTag = false;
+
+                    // 檢查這個 tag 是否有這個 region
+                    for (let region of tempResponse.regions) {
+                        if (region.objectId == data.objectId) {
+                            haveRegionInTag = true;
+                            break;
+                        }
+                    }
+
+                    // 檢查這個 tag 是否被選擇
+                    for (let tagId of data.tagIds) {
+                        if (tagId == tempResponse.objectId) {
+                            haveChooseTag = true;
+                            break;
+                        }
+                    }
+
+                    // 都存在或都不存在就不修改
+                    if (haveRegionInTag != haveChooseTag) {
+                        let tempTageItem = {
+                            objectId: tempResponse.objectId,
+                            regionIds: []
+                        };
+
+                        if (haveChooseTag) {
+                            // 加上現在的 id 進去
+                            tempTageItem.regionIds.push(data.objectId);
+                        }
+
+                        // 移除現在的 region, 只加其他 id 進去
+                        for (let region of tempResponse.regions) {
+                            if (
+                                region.objectId != "" &&
+                                region.objectId != data.objectId
+                            ) {
+                                tempTageItem.regionIds.push(region.objectId);
+                            }
+                        }
+                        datas.push(tempTageItem);
+                    }
+                }
+
+                if (datas.length > 0) {
+                    const tagParam = { datas };
+                    this.$server
+                        .U("/tag", tagParam)
+                        .then((response: any) => {
+                            if (response != undefined) {
+                                this.pageToTree();
+                            }
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.base(this, e);
+                        });
+                } else {
+                    this.pageToTree();
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.base(this, e);
+            });
     }
 
     async clickSaveBindingSite(data: any) {
@@ -584,6 +715,12 @@ export default class Region extends Vue {
                     lng: number;
 
                     /**
+                     * @uiLabel - ${this._("w_Site_Tag")}
+                     * @uiPlaceHolder - ${this._("w_Site_Tag")}
+                     */
+                    tagIds?: any;
+
+                    /**
                      * @uiLabel - ${this._("w_Region_Photo")}
                      * @uiPlaceHolder - ${this._("w_Region_PhotoPlaceholder")}
                      * @uiType - iv-form-file
@@ -591,22 +728,21 @@ export default class Region extends Vue {
                     photoSrc: string;
 
                     photoImg?: any;
-
             }
         `;
     }
 
     IBindingSiteForm() {
         return `
-                interface {
+            interface {
 
-                    /**
-                     * @uiLabel - ${this._("w_Region_Sites")}
-                     * @uiPlaceHolder - ${this._("w_Region_SitesPlaceholder")}
-                     */
-                    sites?: ${toEnumInterface(this.selectItem.site, true)};
+                /**
+                 * @uiLabel - ${this._("w_Region_Sites")}
+                 * @uiPlaceHolder - ${this._("w_Region_SitesPlaceholder")}
+                 */
+                sites?: ${toEnumInterface(this.selectItem.site, true)};
 
-                    errorMessage?: any
+                errorMessage?: any
             }
         `;
     }

@@ -23,12 +23,11 @@ export default class DeomLoading extends Vue {
         setTimeout(this.hideLoading, 3000);
     }
 
-    hideLoading(){
+    hideLoading() {
         Loading.hide();
     }
 }
 </script>
 
 <style lang="scss" scoped>
-
 </style>
