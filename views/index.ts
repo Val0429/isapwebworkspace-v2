@@ -16,12 +16,13 @@ import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 
 // Demo
-import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
-import DemoImageMap from './Demos/DemoImageMap.vue';
-import DemoROI from './Demos/DemoROI.vue';
 import DemoDialog from './Demos/DemoDialog.vue';
-import DemoSortSelect from './Demos/DemoSortSelect.vue';
 import DemoFilterConditionComponent from './Demos/DemoFilterConditionComponent.vue';
+import DemoImageMap from './Demos/DemoImageMap.vue';
+import DemoLoading from './Demos/DemoLoading.vue';
+import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
+import DemoROI from './Demos/DemoROI.vue';
+import DemoSortSelect from './Demos/DemoSortSelect.vue';
 
 // Guest
 import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
@@ -114,12 +115,13 @@ $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
 
 // Demo
 $({ path: '/demos', name: 'Demo', redirect: '/demos/region-tree-select' })();
-$({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: false })(DemoRegionTreeSelect);
-$({ path: '/demos/image-map', name: 'ImageMap', permission: false })(DemoImageMap);
-$({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
 $({ path: '/demos/dialog', name: 'Dialog', permission: false })(DemoDialog);
-$({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
 $({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component' })(DemoFilterConditionComponent);
+$({ path: '/demos/image-map', name: 'ImageMap', permission: false })(DemoImageMap);
+$({ path: '/demos/loading', name: 'Loading', permission: false })(DemoLoading);
+$({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: false })(DemoRegionTreeSelect);
+$({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
+$({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
 
 // Dashboard
 $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();

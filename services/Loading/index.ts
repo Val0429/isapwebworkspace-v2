@@ -4,17 +4,17 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 Vue.use(VueLoading);
 
 export class Loading {
-    loader: any = null;
-
+    loader = null;
     constructor() {}
-
-    start() {
-        let vue: any = Vue;
-        vue.$loading.show();
+    show() {
+        let self: any = Vue;
+        this.loader = self.$loading.show({
+            // Optional parameters
+            canCancel: true,
+        });
     }
-
-    stop() {
-        let vue: any = Vue;
-        vue.$loading.show().hide();
+    hide() {
+        this.loader.hide();
     }
 }
+export default new Loading();
