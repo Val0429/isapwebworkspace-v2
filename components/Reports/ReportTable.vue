@@ -4,7 +4,6 @@
         <table
             ref="reportTable"
             class="table table-bordered"
-            v-if="reportTableData._body && reportTableData._body.length > 0"
         >
             <thead>
                 <tr class="title">
@@ -138,20 +137,20 @@
                     </tr>
                 </template>
             </tbody>
-            <tfoot v-if="!reportTableData._noFoot">
+            <tfoot v-if="!reportTableData._noFoot && reportTableData._body && reportTableData._body.length > 0">
                 <tr>
                     <td
-                        v-if="reportTableData._body[0].site"
+                        v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].site"
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
                     <td
-                        v-if="reportTableData._body[0].area"
+                        v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].area"
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
                     <td
-                        v-if="reportTableData._body[0].group"
+                        v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].group"
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
