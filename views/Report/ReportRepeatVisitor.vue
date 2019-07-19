@@ -880,6 +880,10 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     // Ben //
+      fetchZero(value) {
+        return value < 10 ? "0" + value : value;
+    }
+
     initReportTableData() {
         let chartMode = HighchartsService.chartMode(
             this.startDate,

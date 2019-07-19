@@ -184,7 +184,7 @@
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
-import { EFileType } from "@/components/Reports";
+import { EFileType,IReportTableTitle } from "@/components/Reports";
 
 	enum ETableStep {
 		mainTable = "mainTable",
@@ -290,8 +290,10 @@ import { EFileType } from "@/components/Reports";
 
 		//ReportTable 相關
 		rData = new ReportTableData();
-		reportTableTitle = {};
 
+		 reportTableTitle: IReportTableTitle = {
+        titleCount:0
+    };
 		//Sun ReportTable 相關
 		sunRData = new ReportTableData();
 
@@ -374,7 +376,8 @@ import { EFileType } from "@/components/Reports";
 
 			this.sunRData.chartMode = chartMode;
 			this.sunRData.noFoot = true;
-			this.sunRData.thatDay = this.startDate; //單天記錄時間日期
+            this.sunRData.thatDay = this.startDate; //單天記錄時間日期
+             this.reportTableTitle.headTitle = "DEMOGRAPHIC BY HOURS";
 
 			//head
 			this.sunRData.head = [];
@@ -504,7 +507,7 @@ import { EFileType } from "@/components/Reports";
 			}
 			//調整head時間格式
 			this.sunRData.head = this.sunRData.head.map(
-				x => x + ":00 - " + (x + 1) + ":00"
+				x => this.fetchZero(x) + ":00 ~ " + this.fetchZero(x + 1) + ":00"
 			);
 		}
 
@@ -522,8 +525,8 @@ import { EFileType } from "@/components/Reports";
 				titleCount: 2,
 				title1: this._("w_Male"),
 				title2: this._("w_Female"),
-				title1Title: this._("w_MaleTotal"),
-				title2Title: this._("w_FemaleTotal")
+				total1Title: this._("w_MaleTotal"),
+				total2Title: this._("w_FemaleTotal")
 			};
 
 			//head
@@ -533,7 +536,8 @@ import { EFileType } from "@/components/Reports";
 			switch (chartMode) {
 				case EChartMode.site1Day1:
 				case EChartMode.siteXDay1:
-					this.rData.thatDay = this.startDate; //單天記錄時間日期
+                    this.rData.thatDay = this.startDate; //單天記錄時間日期
+                    this.reportTableTitle.headTitle = "DEMOGRAPHIC BY HOURS";
 					for (let siteItem of this.sites) {
 						for (let officeHourItem of siteItem.officeHour) {
 							if (
@@ -560,6 +564,7 @@ import { EFileType } from "@/components/Reports";
 					break;
 				case EChartMode.site1DayX:
 				case EChartMode.siteXDayX:
+                          this.reportTableTitle.headTitle = "DEMOGRAPHIC BY DAYS";
 					this.rData.thatDay = null; //多天無當天時間
 					let sDate = new Date(this.startDate);
 					let eDate = new Date(this.endDate);
@@ -677,7 +682,7 @@ import { EFileType } from "@/components/Reports";
 						}
 					}
 					this.rData.head = this.rData.head.map(
-						x => x + ":00 - " + (x + 1) + ":00"
+						x => this.fetchZero(x) + ":00 ~ " + this.fetchZero(x + 1) + ":00"
 					);
 					break;
 				case EChartMode.site1DayX:
@@ -745,7 +750,7 @@ import { EFileType } from "@/components/Reports";
 						x =>
 							new Date(x).getFullYear() +
 							"/" +
-							(new Date(x).getMonth() + 1) +
+							this.fetchZero(new Date(x).getMonth() + 1) +
 							"/" +
 							new Date(x).getDate() +
 							" " +
@@ -1409,6 +1414,9 @@ import { EFileType } from "@/components/Reports";
 			this.initReportTable();
         }
 
+          fetchZero(value) {
+        return value < 10 ? "0" + value : value;
+    }
 		analysisTitle(): string {
 
 			let title = 'Analysis - ';

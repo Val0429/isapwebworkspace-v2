@@ -188,7 +188,7 @@ import ReportService from "@/components/Reports/models/ReportService";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
-import { EFileType } from "@/components/Reports";
+import { EFileType, IReportTableTitle } from "@/components/Reports";
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -234,7 +234,9 @@ export default class ReportTraffic extends Vue {
 
     //ReportTable 相關
     rData = new ReportTableData();
-    reportTableTitle = {};
+    reportTableTitle: IReportTableTitle = {
+        titleCount:0
+    };
 
     //Sun ReportTable 相關
     sunRData = new ReportTableData();
@@ -475,6 +477,7 @@ export default class ReportTraffic extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
+                      this.reportTableTitle.headTitle = "TRAFFIC BY HOURS";
 
         //head
         this.sunRData.head = [];
@@ -602,8 +605,12 @@ export default class ReportTraffic extends Vue {
         }
         //調整head時間格式
         this.sunRData.head = this.sunRData.head.map(
-            x => x + ":00 - " + (x + 1) + ":00"
+            x => this.fetchZero(x) + ":00 ~ " + this.fetchZero(x + 1) + ":00"
         );
+    }
+
+    fetchZero(value) {
+        return value < 10 ? "0" + value : value;
     }
 
     // Author: Ben
@@ -621,8 +628,8 @@ export default class ReportTraffic extends Vue {
             titleCount: 2,
             title1: this._("w_TrafficIn"),
             title2: this._("w_TrafficOut"),
-            title1Title: this._("w_TrafficInTotal"),
-            title2Title: this._("w_TrafficOutTotal")
+            total1Title: this._("w_TrafficInTotal"),
+            total2Title: this._("w_TrafficOutTotal")
         };
 
         //head
@@ -632,6 +639,7 @@ export default class ReportTraffic extends Vue {
         switch (chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
+                this.reportTableTitle.headTitle = "TRAFFIC BY HOURS";
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
@@ -660,6 +668,7 @@ export default class ReportTraffic extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
+                                this.reportTableTitle.headTitle = "TRAFFIC BY DAYS";
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
@@ -785,7 +794,11 @@ export default class ReportTraffic extends Vue {
                     }
                 }
                 this.rData.head = this.rData.head.map(
-                    x => x + ":00 - " + (x + 1) + ":00"
+                    x =>
+                        this.fetchZero(x) +
+                        ":00 ~ " +
+                        this.fetchZero(x + 1) +
+                        ":00"
                 );
                 break;
             case EChartMode.site1DayX:
@@ -859,7 +872,7 @@ export default class ReportTraffic extends Vue {
                     x =>
                         new Date(x).getFullYear() +
                         "/" +
-                        (new Date(x).getMonth() + 1) +
+                        this.fetchZero(new Date(x).getMonth() + 1) +
                         "/" +
                         new Date(x).getDate() +
                         " " +

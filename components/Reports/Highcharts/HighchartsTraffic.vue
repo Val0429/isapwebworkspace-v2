@@ -965,7 +965,6 @@ export class HighchartsTraffic extends Vue {
 
         for (let site of this.sites) {
             let haveValue = false;
-
             let spliceIndexList: number[] = [];
             for (let i in tempValues) {
                 let loopValue = tempValues[i];
@@ -986,7 +985,6 @@ export class HighchartsTraffic extends Vue {
                     if (!haveResult) {
                         tempResult.push(value);
                     }
-
                     spliceIndexList.push(parseInt(i));
                 }
             }

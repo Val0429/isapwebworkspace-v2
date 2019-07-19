@@ -132,12 +132,8 @@ interface IChartVipTrackingData {
     personCount: number;
 
     i18n?: any;
-    dateStart?: Date;
-    dateEnd?: Date;
     timeString?: string;
     dateString?: string;
-    dateStartString?: string;
-    dateEndString?: string;
 }
 
 interface IChartVipTrackingDetailData {

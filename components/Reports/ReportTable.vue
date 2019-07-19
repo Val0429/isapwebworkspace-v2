@@ -1,6 +1,6 @@
 <template>
     <div class="animated fadeIn overflow">
-        <title>Report Table</title>
+        <h2 v-if="reportTableData._body && reportTableData._body.length > 0">{{reportTableTitle.headTitle}}</h2>
         <table
             ref="reportTable"
             class="table table-bordered"
@@ -155,7 +155,7 @@
                         :rowspan="reportTableTitle.titleCount"
                         class="title"
                     ></td>
-                    <td class="title"> {{reportTableTitle.title1Title}}</td>
+                    <td class="title"> {{reportTableTitle.total1Title}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.item1Total.value}}</span>
                         <span
@@ -166,7 +166,7 @@
 
                 </tr>
                 <tr>
-                    <td class="title"> {{reportTableTitle.title2Title}}</td>
+                    <td class="title"> {{reportTableTitle.total2Title}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.item2Total.value }}</span>
                         <span
@@ -287,12 +287,10 @@ Vue.component("report-table", ReportTable);
 }
 
 .red {
-    color: #e26929;
-    font-size: 10px;
+    color: #ff4326;
 }
 .green {
-    color: #1bbc9b;
-    font-size: 10px;
+    color: #55c250;
 }
 
 .overflow {

@@ -46,7 +46,10 @@ import Datetime from "@/services/Datetime";
 import HighchartsService from "../models/HighchartsService";
 import { ISite, ISiteOfficeHourItem, IChartVipTrackingData } from "../";
 import { EChartMode, EVipTrackingType } from "../";
-import { IChartVipTrackingDetailData } from "../models/IHighCharts";
+import {
+    IChartVipTrackingDetailData,
+    IChartTrafficData
+} from "../models/IHighCharts";
 
 @Component({
     components: {}
@@ -68,6 +71,14 @@ export class HighchartsVipTracking extends Vue {
         }
     })
     endDate: Date;
+
+    @Prop({
+        type: Array,
+        default: function() {
+            return [];
+        }
+    })
+    tagIds: string[];
 
     @Prop({
         type: Array,
@@ -118,6 +129,9 @@ export class HighchartsVipTracking extends Vue {
     mounted() {}
 
     start() {
+        this.mountChart.siteXday1 = false;
+        this.mountChart.siteXdayX = false;
+
         this.chartMode = HighchartsService.chartMode(
             this.startDate,
             this.endDate,
@@ -158,10 +172,7 @@ export class HighchartsVipTracking extends Vue {
         let tempSeries: {
             name: string;
             data: number[];
-        }[] = [
-            { name: "VIP", data: [4, 5, 2] },
-            { name: "Blacklist", data: [23, 43, 5] }
-        ];
+        }[] = [{ name: "VIP", data: [] }, { name: "Blacklist", data: [] }];
 
         // get all site office hour
         let weekDay = this.startDate.getDay();
@@ -192,10 +203,42 @@ export class HighchartsVipTracking extends Vue {
             tempHourStrings.push(`${hourString}:00`);
         }
 
-        for (let val of tempValues) {
-            // if () {
+        for (let hour of tempHourStrings) {
+            let spliceIndexList: number[] = [];
+            let tempStartDate = new Date(this.startDate.getTime());
+            let tempHourNumber = hour.replace(":00", "");
+            tempStartDate.setHours(parseInt(tempHourNumber));
+            let tempResult = {
+                vip: 0,
+                blacklist: 0,
+                date: tempStartDate
+            };
+            for (let i in tempValues) {
+                let val = tempValues[i];
+                let tempValue = this.anysislyChartValue(val);
+                if (tempValue.timeString == hour) {
+                    spliceIndexList.push(parseInt(i));
+                    switch (tempValue.type) {
+                        case EVipTrackingType.vip:
+                            tempResult.vip += tempValue.personCount;
+                            break;
+                        case EVipTrackingType.blacklist:
+                            tempResult.blacklist += tempValue.personCount;
+                            break;
+                    }
+                }
+            }
 
-            // }
+            tempSeries[0].data.push(tempResult.vip);
+            tempSeries[1].data.push(tempResult.blacklist);
+            tempCategories.push(
+                HighchartsService.categorieStringWithJSON(hour, tempResult)
+            );
+
+            // tempValues 減肥
+            for (let i = spliceIndexList.length - 1; i >= 0; i--) {
+                tempValues.splice(spliceIndexList[i], 1);
+            }
         }
 
         this.chartOptions.siteXday1 = {
@@ -219,32 +262,16 @@ export class HighchartsVipTracking extends Vue {
                 useHTML: true,
                 backgroundColor: "#333",
                 style: { color: "#fff" }
-                // formatter: function(tooltip: any) {
-                //     let self: any = this;
-                //     let result = "";
-                //     try {
-                //         // let siteStartIndex = self.point.series.name.indexOf(
-                //         //     ">__"
-                //         // );
-                //         // let siteEndIndex = self.point.series.name.indexOf(
-                //         //     "__<"
-                //         // );
-                //         // siteId = self.point.series.name.substring(
-                //         //     siteStartIndex + 3,
-                //         //     siteEndIndex
-                //         // );
-                //         // let valueStartIndex = self.x.indexOf(">{");
-                //         // let valueEndIndex = self.x.indexOf("}<");
-                //         // let valueJson = self.x.substring(
-                //         //     valueStartIndex + 1,
-                //         //     valueEndIndex + 1
-                //         // );
-                //         // let newValue: any = JSON.parse(valueJson);
-                //     } catch (e) {
-                //         console.log(e);
-                //     }
-                //     return result;
-                // }
+            },
+            plotOptions: {
+                series: {
+                    cursor: "pointer",
+                    point: {
+                        events: {
+                            click: this.clickChartPoint
+                        }
+                    }
+                }
             },
             series: tempSeries
         };
@@ -253,7 +280,134 @@ export class HighchartsVipTracking extends Vue {
 
     ////////////////////////// site X day X //////////////////////////
 
-    initSiteXDayX() {}
+    initSiteXDayX() {
+        let tempValues: IChartVipTrackingData[] = JSON.parse(
+            JSON.stringify(this.value)
+        );
+        let tempHourStrings: string[] = [];
+        let tempCategories: string[] = [];
+        let tempSeries: {
+            name: string;
+            data: number[];
+        }[] = [{ name: "VIP", data: [] }, { name: "Blacklist", data: [] }];
+
+        // 避免時間相反造成無窮迴圈
+        let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
+
+        // 設置最大值避免無窮迴圈
+        let categorieMaxlength = 10000;
+        let categorieNowlength = 0;
+
+        // 時間累加判斷用
+        let tempTimestamp: number = sortDate.startDate.getTime();
+        let endTimestamp: number = sortDate.endDate.getTime();
+        let tempDate: Date = new Date(tempTimestamp);
+        let dateGap: number =
+            Math.floor(
+                Math.abs(
+                    sortDate.startDate.getTime() - sortDate.endDate.getTime()
+                ) / Datetime.oneDayTimestamp
+            ) + 1;
+
+        while (
+            tempTimestamp <= endTimestamp &&
+            categorieNowlength < categorieMaxlength
+        ) {
+            let tempResult = {
+                vip: 0,
+                blacklist: 0,
+                date: new Date(tempTimestamp)
+            };
+
+            let dateStart = Datetime.DateStart(new Date(tempTimestamp));
+
+            let dateEnd = Datetime.DateStart(new Date(tempTimestamp));
+
+            let tempStartTimestamp = dateStart.getTime() - 1000;
+            let tempEndTimestamp = dateEnd.getTime() + 1000;
+
+            // set loop value
+            categorieNowlength++;
+            tempTimestamp = dateEnd.getTime() + 1000;
+        }
+
+        this.chartOptions.siteXdayX = {
+            chart: { zoomType: "x" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                categories: tempCategories,
+                labels: { useHTML: true }
+            },
+            yAxis: {
+                labels: { style: { color: "#000" } },
+                title: {
+                    text: this._("w_ReportTraffic_TrafficTraffic"),
+                    style: { color: "#000" }
+                }
+            },
+            tooltip: {
+                enabled: true,
+                useHTML: true,
+                backgroundColor: "#333",
+                style: { color: "#fff" }
+            },
+            plotOptions: {
+                series: {
+                    cursor: "pointer",
+                    point: {
+                        events: {
+                            click: this.clickChartPoint
+                        }
+                    }
+                }
+            },
+            series: tempSeries
+        };
+        this.mountChart.siteXdayX = true;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    clickChartPoint(value: any) {
+        if (value == undefined) {
+            return false;
+        }
+
+        if (value.point == undefined) {
+            return false;
+        }
+
+        if (value.point.colorIndex == undefined) {
+            return false;
+        }
+
+        if (value.point.category == undefined) {
+            return false;
+        }
+
+        let vipType: EVipTrackingType = EVipTrackingType.none;
+        if (value.point.colorIndex == 0) {
+            vipType = EVipTrackingType.vip;
+        } else if (value.point.colorIndex == 1) {
+            vipType = EVipTrackingType.blacklist;
+        }
+
+        try {
+            let valueStartIndex = value.point.category.indexOf(">{");
+            let valueEndIndex = value.point.category.indexOf("}<");
+            let valueJson = value.point.category.substring(
+                valueStartIndex + 1,
+                valueEndIndex + 1
+            );
+            let newValue: any = JSON.parse(valueJson);
+
+            console.log("!!! newValue", newValue);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     private anysislyChartValueDefault(): IChartVipTrackingData {
@@ -264,21 +418,11 @@ export class HighchartsVipTracking extends Vue {
 
             // every report
             i18n: this.i18nItem(),
-            dateStart: new Date(),
-            dateEnd: new Date(),
             timeString: Datetime.DateTime2String(
                 new Date(),
                 HighchartsService.datetimeFormat.time
             ),
             dateString: Datetime.DateTime2String(
-                new Date(),
-                HighchartsService.datetimeFormat.date
-            ),
-            dateStartString: Datetime.DateTime2String(
-                new Date(),
-                HighchartsService.datetimeFormat.date
-            ),
-            dateEndString: Datetime.DateTime2String(
                 new Date(),
                 HighchartsService.datetimeFormat.date
             )
@@ -296,18 +440,6 @@ export class HighchartsVipTracking extends Vue {
         value.timeString = Datetime.DateTime2String(
             value.date,
             HighchartsService.datetimeFormat.time
-        );
-        value.dateString = Datetime.DateTime2String(
-            value.date,
-            HighchartsService.datetimeFormat.date
-        );
-        value.dateStartString = Datetime.DateTime2String(
-            value.dateStart,
-            HighchartsService.datetimeFormat.date
-        );
-        value.dateEndString = Datetime.DateTime2String(
-            value.dateEnd,
-            HighchartsService.datetimeFormat.date
         );
         return value;
     }
