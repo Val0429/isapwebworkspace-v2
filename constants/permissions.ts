@@ -27,8 +27,7 @@ export const PermissionName={
     operationLog:"7-3_system_operationlog_R"
 };
 export const PermissionList = [
-    {key:PermissionName.user, route :"/userpermission", group:"Permission", access:{C:true,R:true,U:true,D:true}},
-    {key:PermissionName.userManagement, route :"/user", group:"Permission", access:{C:true,R:true,U:true,D:true}},
+    
     {key:PermissionName.reportEmployee, route :"/employeereport", group:"Report", access:{C:false,R:true,U:false,D:false}},
     {key:PermissionName.reportDoor, route :"/doorreport", group:"Report", access:{C:false,R:true,U:false,D:false}},
     {key:PermissionName.reportDoorGroup, route :"/doorgroupreport", group:"Report", access:{C:false,R:true,U:false,D:false}},
@@ -57,6 +56,8 @@ export const PermissionList = [
 
     {key:PermissionName.humanResource, route :"", group:"Setting", access:{C:false,R:false,U:false,D:false}},
     {key:PermissionName.systemLicense, route :"/license", group:"Setting", access:{C:true,R:true,U:true,D:true}},
-    {key:PermissionName.operationLog, route :"", group:"Setting", access:{C:false,R:true,U:false,D:false}}
+    {key:PermissionName.operationLog, route :"", group:"Setting", access:{C:false,R:true,U:false,D:false}},
+    {key:PermissionName.user, route :"/userpermission", group:"Permission", access:{C:true,R:true,U:true,D:true}},
+    {key:PermissionName.userManagement, route :"/user", group:"Permission", access:{C:true,R:true,U:true,D:true}}
     
 ];
