@@ -168,7 +168,7 @@
 
                 <iv-table
                     ref="areaTable"
-                    v-if="isSelectSite && areaParams"
+                    v-if="isSelectSite && areaParams.siteId"
                     @selected="selectedArea($event)"
                     :interface="IAreaList()"
                     :multiple="tableMultiple"
@@ -381,7 +381,7 @@ export default class Site extends Vue {
     areaMapSrc = "";
     areas = {};
     area: any = {};
-    areaParams:any;
+    areaParams:any={};
 
     //options
     managerItem = [];
@@ -444,7 +444,7 @@ export default class Site extends Vue {
         console.log("pageToAreaView", this.area);
         this.areaPhotoSrc = this.serverUrl + this.area.imageSrc;
         this.areaMapSrc = this.serverUrl + this.area.mapSrc;
-        this.imageMap= ImageBase64.pngEmpty;
+        //this.imageMap= ImageBase64.pngEmpty;
         this.pageStep = EPageStep.areaView;
     }
 
@@ -484,7 +484,7 @@ export default class Site extends Vue {
     }
 
     pageToSiteView() {
-        this.newImgSrc = this.serverUrl + this.site.imageSrc;        
+        this.newImgSrc = this.serverUrl + this.site.imageSrc;
         this.pageStep = EPageStep.siteView;
     }
 
