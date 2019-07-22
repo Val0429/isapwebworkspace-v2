@@ -1,17 +1,16 @@
 import { IObjectIdAndName } from '@/config/default/api/interfaces';
 
-
 declare namespace Step3 {
     export interface Input {
-        account: string;
+        username: string;
         verification: string;
         password: string;
     }
 
-    export interface Output  {
+    export interface Output {
         sessionId: string;
         objectId: string;
-        account: string;
+        username: string;
         name: string;
         roles: string[];
         employeeId: string;

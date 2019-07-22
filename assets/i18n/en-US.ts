@@ -307,6 +307,9 @@ export default class LangObject {
     w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_Campaign = 'Campaign';
 
+    // failed to fetch
+    w_FailedToFetch = "We can't connect to server, please try again!";
+
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
 

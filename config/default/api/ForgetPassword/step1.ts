@@ -1,6 +1,6 @@
 declare namespace Step1 {
     export interface Input {
-        account: string;
+        username: string;
         email: string;
     }
 

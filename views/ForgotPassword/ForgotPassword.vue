@@ -181,22 +181,25 @@ export default class ForgetPassword extends Vue {
 
     async submitStep1() {
         const step1Param: {
-            account: string;
+            username: string;
             email: string;
         } = {
-            account: this.inputForgetPassword.account,
+            username: this.inputForgetPassword.account,
             email: this.inputForgetPassword.email
         };
 
+        Loading.show();
         await this.$server
             .C("/user/forget/step1", step1Param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     (this.$refs.step1 as any).set("submit", true);
                     (this.$refs.step as any).currentStep = 2;
                 }
             })
             .catch((e: any) => {
+                Loading.hide();
                 return ResponseFilter.customMessage(
                     this,
                     e,
@@ -207,22 +210,25 @@ export default class ForgetPassword extends Vue {
 
     async submitStep2() {
         const step2Param: {
-            account: string;
+            username: string;
             verification: string;
         } = {
-            account: this.inputForgetPassword.account,
+            username: this.inputForgetPassword.account,
             verification: this.inputForgetPassword.verification
         };
 
+        Loading.show();
         await this.$server
             .C("/user/forget/step2", step2Param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     (this.$refs.step2 as any).set("submit", true);
                     (this.$refs.step as any).currentStep = 3;
                 }
             })
             .catch((e: any) => {
+                Loading.hide();
                 return ResponseFilter.customMessage(
                     this,
                     e,
@@ -233,25 +239,28 @@ export default class ForgetPassword extends Vue {
 
     async submitStepFinal(data) {
         const step3Param: {
-            account: string;
+            username: string;
             verification: string;
             password: string;
         } = {
-            account: this.inputForgetPassword.account,
+            username: this.inputForgetPassword.account,
             verification: this.inputForgetPassword.verification,
             password: data.password
         };
 
         this.inputForgetPassword.password = data.password;
 
+        Loading.show();
         await this.$server
             .C("/user/forget/step3", step3Param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     this.login();
                 }
             })
             .catch((e: any) => {
+                Loading.hide();
                 return ResponseFilter.customMessage(
                     this,
                     e,
@@ -261,11 +270,27 @@ export default class ForgetPassword extends Vue {
     }
 
     async login() {
-        await this.$login({
+        Loading.show();
+        let param = {
             username: this.inputForgetPassword.account,
             password: this.inputForgetPassword.password
-        });
-        this.$router.push("/");
+        };
+        await this.$login(param)
+            .then(() => {
+                Loading.hide();
+                this.$router.push("/");
+            })
+            .catch((e: any) => {
+                Loading.hide();
+                console.log(e);
+                if (
+                    e.res != undefined &&
+                    e.res.statusCode != undefined &&
+                    e.res.statusCode == 401
+                ) {
+                    Dialog.error(this._("w_UserSession_Empty"));
+                }
+            });
     }
 
     IStep1() {
