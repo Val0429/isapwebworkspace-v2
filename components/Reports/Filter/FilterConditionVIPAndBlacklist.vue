@@ -275,7 +275,11 @@ export class FilterConditionVIPAndBlacklist extends Vue {
     }
 
     changeTagIds() {
-
+        if (this.inputFormData.tagIds.length !== this.allTagsItem.length) {
+            this.selectAllTags = EIfAllSelected.select;
+        } else if(this.inputFormData.tagIds.length === this.allTagsItem.length) {
+            this.selectAllTags = EIfAllSelected.all;
+        }
     }
 
     changeAllTagsSelect(selected: string) {
@@ -527,11 +531,6 @@ export class FilterConditionVIPAndBlacklist extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Tag")}
-                 * @uiHidden - ${
-                        this.selectAllTags === EIfAllSelected.all
-                            ? "true"
-                            : "false"
-                        }
                  */
                 tagIds: any;
 

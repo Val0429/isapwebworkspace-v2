@@ -29,7 +29,6 @@
 
                 <template #siteIds="{$attrs, $listeners}">
                     <iv-form-selection
-                        v-if="selectAllSites === 'select'"
                         v-on="$listeners"
                         v-model="inputFormData.siteIds"
                         class="select-site ml-3"
@@ -41,7 +40,6 @@
 
                     <div class="ml-3">
                         <b-button
-                            v-if="selectAllSites === 'select'"
                             variant="outline-secondary"
                             @click="pageToChooseTree"
                         >
@@ -125,7 +123,7 @@
         </iv-card>
 
         <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree && selectAllSites === 'select'"
+            v-show="pageStep === ePageStep.chooseTree"
             :multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
@@ -322,6 +320,13 @@ export class FilterCondition extends Vue {
     }
 
     changeSiteIds() {
+
+        if (this.inputFormData.siteIds.length !== this.inputFormData.allSiteIds.length) {
+            this.selectAllSites = EIfAllSelected.select;
+        } else if(this.inputFormData.siteIds.length === this.inputFormData.allSiteIds.length) {
+            this.selectAllSites = EIfAllSelected.all;
+        }
+
         this.selecteds = [];
 
         for (const id of this.inputFormData.siteIds) {
@@ -365,6 +370,12 @@ export class FilterCondition extends Vue {
         for (const item of this.selecteds) {
             this.inputFormData.siteIds.push(item.objectId);
         }
+
+        if (this.inputFormData.siteIds.length !== this.inputFormData.allSiteIds.length) {
+            this.selectAllSites = EIfAllSelected.select;
+        } else if(this.inputFormData.siteIds.length === this.inputFormData.allSiteIds.length) {
+            this.selectAllSites = EIfAllSelected.all;
+        }
     }
 
     changeAllSitesSelect(selected: string) {
@@ -374,6 +385,8 @@ export class FilterCondition extends Vue {
         if (this.selectAllSites === EIfAllSelected.all) {
             this.inputFormData.siteIds = [];
             this.selecteds = [];
+
+
             this.inputFormData.siteIds = this.inputFormData.allSiteIds;
         } else {
             this.inputFormData.siteIds = [];
@@ -670,16 +683,6 @@ export class FilterCondition extends Vue {
 
                 siteIds: any;
 
-
-                /**
-                 * @uiColumnGroup - site
-                 * @uiColumnGroup - site
-                 * @uiHidden - ${
-                     this.selectAllSites === EIfAllSelected.all
-                         ? "true"
-                         : "false"
-                 }
-                 */
                  selectTree?: any;
 
 
