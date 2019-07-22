@@ -77,10 +77,10 @@ export class HighchartsCampaignMultiple extends Vue {
 
     start() {
         this.initCampaignMultipleChart();
-        console.log(this.value);
+        console.log("chart prop: ", this.value);
     }
 
-    mountAnyChart(): boolean{
+    mountAnyChart(): boolean {
         if (this.mountChart.campaignMultiple) {
             return true;
         }
@@ -191,17 +191,17 @@ export class HighchartsCampaignMultiple extends Vue {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private anysislyChartValueDefault(): any {
-        let value: any = {
+    private anysislyChartValueDefault(): IChartCampaignMultiple {
+        let value: IChartCampaignMultiple = {
             name: "",
             startDate: new Date(),
             endDate: new Date(),
             traffic: 0,
-            budget: 0
+            budget: 0,
+            trafficGainPer: 0
         };
 
         value.i18n = this.i18nItem();
-        value.trafficGainPer = 0;
         value.startDateString = Datetime.DateTime2String(
             value.startDate,
             HighchartsService.datetimeFormat.date
@@ -220,16 +220,10 @@ export class HighchartsCampaignMultiple extends Vue {
         value.startDate = new Date(value.startDate);
         value.endDate = new Date(value.endDate);
 
+        value.trafficGainPer = HighchartsService.formatFloat(
+            value.trafficGainPer
+        );
         value.i18n = this.i18nItem();
-
-        if (value.budget != 0) {
-            value.trafficGainPer = HighchartsService.formatFloat(
-                value.traffic / value.budget
-            );
-        } else {
-            value.trafficGainPer = 0;
-        }
-
         value.startDateString = Datetime.DateTime2String(
             value.startDate,
             HighchartsService.datetimeFormat.date

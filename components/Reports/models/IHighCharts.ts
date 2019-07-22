@@ -166,9 +166,9 @@ interface IChartCampaignMultiple {
     endDate: Date;
     traffic: number;
     budget: number;
+    trafficGainPer: number;
 
     i18n?: any;
-    trafficGainPer?: number;
     startDateString?: string;
     endDateString?: string;
 }

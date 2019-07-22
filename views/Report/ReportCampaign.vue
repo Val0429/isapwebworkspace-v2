@@ -263,11 +263,13 @@ export default class ReportCampaign extends Vue {
                 startDate: new Date(summary.startDate),
                 endDate: new Date(summary.endDate),
                 traffic: summary.traffic,
-                budget: summary.budget
+                budget: summary.budget,
+                trafficGainPer: summary.trafficGainPer
             };
             this.chartDatas.multiple.push(tempChartData);
         }
         this.chartMode.multiple = true;
+        console.log(" - ", this.chartDatas.multiple);
     }
 
     sortOutChartDataSingleCampaign() {
@@ -359,7 +361,8 @@ export default class ReportCampaign extends Vue {
                 startDate: new Date(),
                 endDate: new Date(),
                 traffic: Math.floor(Math.random() * 300),
-                budget: Math.floor(Math.random() * 1000)
+                budget: Math.floor(Math.random() * 1000),
+                trafficGainPer: Math.floor(Math.random())
             };
             tempItem.startDate.setDate(
                 -Math.floor(Math.random() * i * campaignMultipleTimeLength) -
