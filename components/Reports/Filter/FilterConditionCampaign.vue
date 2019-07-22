@@ -151,10 +151,6 @@ export class FilterConditionCampaign extends Vue {
         // this.initTemplate();
     }
 
-    initCampaignSelectItem() {
-
-    }
-
     tempSaveInputData(data) {
         switch (data.key) {
             case "year":
@@ -192,7 +188,6 @@ export class FilterConditionCampaign extends Vue {
                                     if (campaign.sites.length > 0) {
                                         campaign.sites.map(item => {
                                             tempCampaignSiteSelectItem[item.objectId] = item.name;
-
                                         });
                                     }
                                 }
@@ -281,22 +276,47 @@ export class FilterConditionCampaign extends Vue {
             siteIds: string[];
 
         } = {
-            year: this.inputFormData.year,
+            year: parseInt(this.inputFormData.year),
             campaignIds: [],
             siteIds: [],
         };
 
 
-        if (this.inputFormData.campaignIds === 'all') {
-           // this.inputFormData.campaignIds =
-        } else {
-            // this.inputFormData.campaignIds =
-        }
+        if (this.inputFormData.year) {
+            for (const year in this.campaignAllData) {
+                if (this.inputFormData.year === year) {
+                    const tempYearCampaign = this.campaignAllData[year];
 
-        if (this.inputFormData.siteIds === 'all') {
-            // this.inputFormData.siteIds =
-        } else {
-            // this.inputFormData.siteIds =
+                    // all campaigns
+                    if (this.inputFormData.campaignIds === 'all') {
+                        for (const campaignKey of tempYearCampaign) {
+                            doSubmitParam.campaignIds.push(campaignKey.objectId)
+                        }
+                    } else {
+
+                        // one campaigns
+                        doSubmitParam.campaignIds.push(this.inputFormData.campaignIds);
+
+                        // all sites
+                        if (this.inputFormData.siteIds === 'all') {
+                            if (tempYearCampaign.length > 0) {
+                                tempYearCampaign.map(campaign => {
+                                    if (campaign.objectId === this.inputFormData.campaignIds) {
+                                        if (campaign.sites.length > 0) {
+                                            campaign.sites.map(item => {
+                                                doSubmitParam.siteIds.push(item.objectId)
+                                            });
+                                        }
+                                    }
+                                })
+                            }
+                        } else {
+                            // one sites
+                            doSubmitParam.siteIds.push(this.inputFormData.siteIds);
+                        }
+                    }
+                }
+            }
         }
 
         // console.log(' - ', doSubmitParam); return false;

@@ -848,9 +848,9 @@ export default class ReportRepeatVisitor extends Vue {
         let title = 'Analysis - ';
 
         if (this.filterData.siteIds.length === 1) {
-            for (const siteId in this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === siteId) {
-                    title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+            for (const site of this.sitesSelectItem) {
+                if(this.filterData.siteIds[0] === site.id) {
+                    title += `${this._('w_Title_One_Site')} ${site.text}. `;
                 }
             }
         } else {
