@@ -18,64 +18,64 @@
             :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
             :visible="visible"
         >
-                <template #toolbox>
-                    <!-- Ben -->
-                    <iv-toolbox-export-excel
-                        size="lg"
-                        @click="exportExcel(eFileType.xlsx)"
-                    />
-                    <iv-toolbox-export-csv
-                        size="lg"
-                        @click="exportExcel(eFileType.csv)"
-                    />
-
-                    <iv-toolbox-export-pdf
-                        size="lg"
-                        @click="exportPDF"
-                    />
-
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                    <iv-toolbox-copy-to-template
-                        size="lg"
-                        @click="pageToReportTemplate()"
-                    />
-                </template>
-
+            <template #toolbox>
                 <!-- Ben -->
-                <anlysis-dashboard
-                    ref="analysisDashboard"
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :type="dTimeMode"
-                    :siteIds="pSiteIds"
-                    :tagIds="tags"
-                    :pageType="dPageType"
-                >
-                </anlysis-dashboard>
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
 
-                <!-- Morris -->
-                <highcharts-repeat-visitor
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :sites="sites"
-                    :timeMode="timeMode"
-                    :areaMode="areaMode"
-                    :value="chartDatas"
-                >
-                </highcharts-repeat-visitor>
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
 
-                <!-- Ben -->
-                <vistor-details-table
-                    :thresholdDetailTableContent="rData"
-                    :dayXSiteX="rDayXxSiteX"
-                    ref="reportTable"
-                >
-                </vistor-details-table>
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
 
-            </iv-card>
+            <!-- Ben -->
+            <anlysis-dashboard
+                ref="analysisDashboard"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type="dTimeMode"
+                :siteIds="pSiteIds"
+                :tagIds="tags"
+                :pageType="dPageType"
+            >
+            </anlysis-dashboard>
+
+            <!-- Morris -->
+            <highcharts-repeat-visitor
+                :startDate="startDate"
+                :endDate="endDate"
+                :sites="sites"
+                :timeMode="timeMode"
+                :areaMode="areaMode"
+                :value="chartDatas"
+            >
+            </highcharts-repeat-visitor>
+
+            <!-- Ben -->
+            <vistor-details-table
+                :thresholdDetailTableContent="rData"
+                :dayXSiteX="rDayXxSiteX"
+                ref="reportTable"
+            >
+            </vistor-details-table>
+
+        </iv-card>
 
         <!-- Tina -->
         <recipient
@@ -104,6 +104,7 @@ import WeatherService from "@/components/Reports/models/WeatherService";
 import ReportService from "@/components/Reports/models/ReportService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import Datetime from "@/services/Datetime";
+
 import HighchartsRepeatVisitor from "@/components/Reports/HighchartsRepeatVisitor.vue";
 import {
     EAreaMode,
@@ -254,12 +255,10 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     initSelect() {
-
         this.ifAllSitesSelectItem = [
             { value: EIfAllSelected.all, text: this._("w_AllSites") },
             { value: EIfAllSelected.select, text: this._("w_SelectSites") }
         ];
-
 
         this.addPeriodSelectItem = [
             { value: EAddPeriodSelect.period, text: this._("w_period") },
@@ -842,34 +841,44 @@ export default class ReportRepeatVisitor extends Vue {
         this.initReportTableData();
     }
 
-
     analysisTitle(): string {
-
-        let title = 'Analysis - ';
+        let title = "Analysis - ";
 
         if (this.filterData.siteIds.length === 1) {
             for (const site of this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === site.id) {
-                    title += `${this._('w_Title_One_Site')} ${site.text}. `;
+                if (this.filterData.siteIds[0] === site.id) {
+                    title += `${this._("w_Title_One_Site")} ${site.text}. `;
                 }
             }
         } else {
-            title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+            title += `${this._("w_Title_Many_Site_Start")} ${
+                this.filterData.siteIds.length
+            } ${this._("w_Title_Many_Site_End")} `;
         }
 
-        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
-        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+        title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
+            this.filterData.startDate,
+            "YYYY/MM/DD"
+        )}. `;
+        title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
+            this.filterData.endDate,
+            "YYYY/MM/DD"
+        )}. `;
 
         if (this.filterData.tagIds.length === 1) {
             for (const tagId in this.tagSelectItem) {
-                if(this.filterData.tagIds[0] === tagId) {
-                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                if (this.filterData.tagIds[0] === tagId) {
+                    title += `${this._("w_Title_One_Tag")} ${
+                        this.tagSelectItem[tagId]
+                    }. `;
                 }
             }
         } else if (this.filterData.tagIds.length >= 2) {
-            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+            title += `${this._("w_Title_Many_Tag_Start")} ${
+                this.filterData.tagIds.length
+            } ${this._("w_Title_Many_Tag_End")} `;
         } else {
-            title += '';
+            title += "";
         }
 
         this.visible = true;
@@ -878,7 +887,7 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     // Ben //
-      fetchZero(value) {
+    fetchZero(value) {
         return value < 10 ? "0" + value : value;
     }
 

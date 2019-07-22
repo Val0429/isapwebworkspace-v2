@@ -5,6 +5,10 @@ export class ResponseFilter {
 
     base(viewItem: any, e: any) {
         console.log('error: ', e);
+        if (e.err != undefined && e.err == 'Failed to fetch') {
+            Dialog.error(viewItem._('w_FailedToFetch'));
+            return true;
+        }
         if (!e.res) {
             return false;
         }
@@ -19,6 +23,11 @@ export class ResponseFilter {
     }
 
     customMessage(viewItem: any, e: any, message: string) {
+        console.log('error: ', e);
+        if (e.err != undefined && e.err == 'Failed to fetch') {
+            Dialog.error(viewItem._('w_FailedToFetch'));
+            return true;
+        }
         if (!e.res) {
             return false;
         }
@@ -29,10 +38,7 @@ export class ResponseFilter {
             viewItem.$router.push({ path: '/' });
             return true;
         }
-        if (e.res.statusCode == 400) {
-            Dialog.error(message);
-            return true;
-        }
+        Dialog.error(message);
         return true;
     }
 }

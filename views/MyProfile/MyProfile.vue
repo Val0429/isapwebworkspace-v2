@@ -81,6 +81,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
 interface IInputMyProfile {
     objectId: string;
@@ -182,24 +183,23 @@ export default class MyProfile extends Vue {
             current: data.current
         };
 
+        Loading.show();
         await this.$server
             .U("/user/base/password", editPasswordParam)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_MyProfile_ChangePasswordSuccess"));
                     this.$logout();
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_MyProfile_ChangePasswordFailed"));
-                    return false;
-                }
-                console.log(e);
-                return false;
+                Loading.hide();
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_MyProfile_ChangePasswordFailed")
+                );
             });
     }
 
@@ -217,27 +217,23 @@ export default class MyProfile extends Vue {
             datas
         };
 
+        Loading.show();
         await this.$server
             .U("/user/user", editMyProfileParam)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_MyProfile_EditSuccess"));
-                    // User.name = data.name;
-                    // User.email = data.email;
-                    // User.phone = data.phone;
                     this.pageToView();
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_MyProfile_EditFailed"));
-                    return false;
-                }
-                console.log(e);
-                return false;
+                Loading.hide();
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_MyProfile_EditFailed")
+                );
             });
     }
 

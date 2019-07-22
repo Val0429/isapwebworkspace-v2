@@ -676,12 +676,8 @@ export default class CMS extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -727,12 +723,8 @@ export default class CMS extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -778,12 +770,8 @@ export default class CMS extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 

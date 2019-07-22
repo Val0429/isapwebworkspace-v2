@@ -593,9 +593,7 @@ export default class VIP extends Vue {
         }
 
         if (this.inputFormData.serverId !== "") {
-            this.selectSourceIdAndLocation(
-                this.inputFormData.serverId
-            );
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
         }
     }
 
@@ -678,12 +676,8 @@ export default class VIP extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -729,12 +723,8 @@ export default class VIP extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -780,12 +770,8 @@ export default class VIP extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -1075,8 +1061,7 @@ export default class VIP extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid,
-
+            sourceid: data.sourceid
         };
 
         if (this.inputFormData.brand === EAddStep.isapFrs) {

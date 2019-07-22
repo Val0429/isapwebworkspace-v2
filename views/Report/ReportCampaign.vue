@@ -14,8 +14,6 @@
             :visible="visible"
             :label="filterData.campaignIds ? analysisTitle() : '' "
         >
-<!--
--->
 
             <template #toolbox>
                 <!-- Tina -->
@@ -64,7 +62,7 @@ import {
     IChartCampaignMultiple,
     IChartCampaignSingle
 } from "@/components/Reports";
-import Datetime from '@/services/Datetime';
+import Datetime from "@/services/Datetime";
 
 @Component({
     components: {}
@@ -116,7 +114,7 @@ export default class ReportCampaign extends Vue {
 
     created() {
         this.initData();
-       // this.initChartDeveloper();
+        // this.initChartDeveloper();
     }
 
     mounted() {}
@@ -141,7 +139,6 @@ export default class ReportCampaign extends Vue {
         }
         // this.sitesSelectItem = tempSitesSelectItem;
     }
-
 
     async initSelectItemUsers() {
         let tempUserSelectItem = {};
@@ -169,7 +166,6 @@ export default class ReportCampaign extends Vue {
     }
 
     async initSelectYear() {
-
         let tempResult = {};
         let tempYearSelectItem = {};
 
@@ -187,16 +183,11 @@ export default class ReportCampaign extends Vue {
 
         for (const year in tempResult) {
             tempYearSelectItem[year] = year;
-            this.$set(
-                this.campaignAllData,
-                year,
-                tempResult[year]
-            );
+            this.$set(this.campaignAllData, year, tempResult[year]);
         }
 
         this.campaignAllData = tempResult;
         this.yearSelectItem = tempYearSelectItem;
-
     }
 
     async initSelectCampaignStore() {}
@@ -221,12 +212,11 @@ export default class ReportCampaign extends Vue {
     }
 
     async receiveFilterData(filterData) {
-
         let param = {};
 
         this.filterData = filterData;
 
-        console.log('this.filterData - ', this.filterData);
+        console.log("this.filterData - ", this.filterData);
 
         if (this.filterData.campaignIds.length > 1) {
             param = {
@@ -238,7 +228,9 @@ export default class ReportCampaign extends Vue {
                 .then((response: any) => {
                     if (response !== undefined) {
                         this.responseDataAllCampaign = response;
-                        this.sortOutChartDataAllCampaign(this.responseDataAllCampaign.summaryDatas);
+                        this.sortOutChartDataAllCampaign(
+                            this.responseDataAllCampaign.summaryDatas
+                        );
                         this.analysisTitle();
                     }
                 })
@@ -250,28 +242,28 @@ export default class ReportCampaign extends Vue {
                     return false;
                 });
         }
-
-
     }
 
     sortOutChartDataAllCampaign(datas: any) {
         let tempChartDatas: IChartCampaignMultiple[] = [];
         let tempDateChartDataBefore = {
-            name: '',
+            name: "",
             startDate: new Date(),
             endDate: new Date(),
             traffic: 0,
-            budget: 0,
+            budget: 0
         };
 
         for (let summary of datas) {
-            let tempChartData = JSON.parse(JSON.stringify(tempDateChartDataBefore));
+            let tempChartData = JSON.parse(
+                JSON.stringify(tempDateChartDataBefore)
+            );
             tempChartData = {
                 name: summary.campaign.name,
                 startDate: new Date(summary.startDate),
                 endDate: new Date(summary.endDate),
                 traffic: summary.traffic,
-                budget: summary.budget,
+                budget: summary.budget
             };
             this.chartDatas.multiple.push(tempChartData);
         }
@@ -281,66 +273,67 @@ export default class ReportCampaign extends Vue {
     sortOutChartDataSingleCampaign() {
         let tempChartDatas: IChartCampaignSingle[] = [];
 
-
         let tempDateChartDataBefore = {
             type: ECampaignTimeType.before,
             date: "",
-            traffic: 0,
+            traffic: 0
         };
         let tempDateChartDataDuring = {
             type: ECampaignTimeType.during,
             date: "",
-            traffic: 0,
+            traffic: 0
         };
         let tempDateChartDataAfter = {
             type: ECampaignTimeType.after,
             date: "",
-            traffic: 0,
+            traffic: 0
         };
-
-            }
+    }
 
     resolveSummary() {
-
         if (this.filterData.campaignIds.length === 1) {
             this.sortOutChartDataSingleCampaign();
         } else {
         }
-
     }
 
     analysisTitle(): string {
+        let title = "Analysis - ";
 
-        let title = 'Analysis - ';
-
-        title += `${ this._('w_Title_FiscalYear') } ${ this.filterData.year }.`;
+        title += `${this._("w_Title_FiscalYear")} ${this.filterData.year}.`;
 
         if (this.filterData.campaignIds.length === 1) {
             for (const campaignId in this.campaignAllData) {
                 if (this.campaignAllData[campaignId].length > 0) {
                     this.campaignAllData[campaignId].map(item => {
-                        if(this.filterData.campaignIds[0] === item.objectId) {
-                            title += `${this._('w_Title_One_EventName')} ${item.name}. `;
+                        if (this.filterData.campaignIds[0] === item.objectId) {
+                            title += `${this._("w_Title_One_EventName")} ${
+                                item.name
+                            }. `;
                         }
-                    })
+                    });
                 }
             }
         } else if (this.filterData.campaignIds.length >= 2) {
-            title += `${this._('w_Title_EventName_Start')} ${this.filterData.campaignIds.length} ${this._('w_Title_EventName_End')} `;
+            title += `${this._("w_Title_EventName_Start")} ${
+                this.filterData.campaignIds.length
+            } ${this._("w_Title_EventName_End")} `;
         } else {
-            title += '';
+            title += "";
         }
 
         if (this.filterData.siteIds.length === 1) {
             for (const site of this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === site.id) {
-                    title += `${this._('w_Title_One_Site')} ${site.text}. `;
+                if (this.filterData.siteIds[0] === site.id) {
+                    title += `${this._("w_Title_One_Site")} ${site.text}. `;
                 }
             }
         } else if (this.filterData.siteIds.length >= 2) {
-            title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+            title += `${this._("w_Title_Many_Site_Start")} ${
+                this.filterData.siteIds.length
+            } ${this._("w_Title_Many_Site_End")} `;
         } else {
-            title += '';
+            title += "";
         }
 
         this.visible = true;

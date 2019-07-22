@@ -18,12 +18,10 @@ export default class Login extends Vue {
 
     async Login() {
         Loading.show();
-
         let param = {
             username: this.username,
             password: this.password,
         };
-
         await this.$login(param)
             .then(() => {
                 Loading.hide();
@@ -32,6 +30,10 @@ export default class Login extends Vue {
             .catch((e: any) => {
                 Loading.hide();
                 console.log(e);
+                if (e.err != undefined && e.err == 'Failed to fetch') {
+                    Dialog.error(this._('w_FailedToFetch'));
+                    return true;
+                }
                 if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 401) {
                     Dialog.error(this._('w_UserSession_Empty'));
                 }

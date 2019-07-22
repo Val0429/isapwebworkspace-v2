@@ -258,9 +258,9 @@ export default class License extends Vue {
                 if (response != undefined) {
                     for (const returnValue of response) {
                         // 自定義 macSelectItem 的 key 的方式
-                        this.macSelectItem[returnValue.mac] = `${
+                        this.macSelectItem[
                             returnValue.mac
-                            }, ${returnValue.ifname}`;
+                        ] = `${returnValue.mac}, ${returnValue.ifname}`;
                     }
                 }
             })

@@ -115,15 +115,13 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
-
-import toExcel from "@/services/Excel/json2excel";
-import excel2json from "@/services/Excel/excel2json";
 import Datetime from "@/services/Datetime";
 import Utility from "@/services/Utility";
 import { IBusinessOperationSalesRecord } from "../../config/default/api/interfaces";
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
 
 interface IExcelTitle {
     storeId: string;
@@ -496,7 +494,6 @@ export default class SalesRecords extends Vue {
     }
 
     async sendRecordFile() {
-        
         let param: {
             datas: IBusinessOperationSalesRecord[];
         } = {

@@ -1,9 +1,7 @@
 <template>
     <div class="animated fadeIn m-2">
 
-        <iv-auto-card
-            :label="_('w_ForgetPassword')"
-        >
+        <iv-auto-card :label="_('w_ForgetPassword')">
 
             <template #toolbox>
                 <iv-toolbox-leave @click="pageToLeave" />
@@ -74,34 +72,34 @@
                             <h5 class="info">{{ _('w_ForgetPassword_Step2_info') }}</h5>
                         </template>
 
-                    <template #verification="{$attrs, $listeners}">
-                        <iv-form-string
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            v-model="inputForgetPassword.verification"
-                        ></iv-form-string>
-                    </template>
-
-                    <template #submit="{ $attrs, $listeners }">
-
-                        <div
-                            class="button-right button-group right mt-2"
-                            v-bind="$attrs"
-                        >
-                            <b-button
-                                v-bind="{ ...$attrs, class: undefined }"
+                        <template #verification="{$attrs, $listeners}">
+                            <iv-form-string
+                                v-bind="$attrs"
                                 v-on="$listeners"
-                                class="button"
-                                variant="success"
-                                type="button"
-                                @click="submitStep2($event)"
-                            >{{ _('w_Check') }}
-                            </b-button>
-                        </div>
-                    </template>
+                                v-model="inputForgetPassword.verification"
+                            ></iv-form-string>
+                        </template>
+
+                        <template #submit="{ $attrs, $listeners }">
+
+                            <div
+                                class="button-right button-group right mt-2"
+                                v-bind="$attrs"
+                            >
+                                <b-button
+                                    v-bind="{ ...$attrs, class: undefined }"
+                                    v-on="$listeners"
+                                    class="button"
+                                    variant="success"
+                                    type="button"
+                                    @click="submitStep2($event)"
+                                >{{ _('w_Check') }}
+                                </b-button>
+                            </div>
+                        </template>
                     </iv-form>
                 </template>
-                
+
                 <template #3-title>{{ _('w_ForgetPassword_Step3') }}</template>
                 <template #3>
                     <iv-form
@@ -115,7 +113,7 @@
                         </template>
                     </iv-form>
                 </template>
-                
+
             </iv-step-progress>
 
             <template #footer-before>
@@ -129,7 +127,6 @@
 
         </iv-auto-card>
 
-
     </div>
 </template>
 
@@ -137,6 +134,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
 interface IInputForgetPassword {
     account: string;
@@ -183,77 +181,116 @@ export default class ForgetPassword extends Vue {
 
     async submitStep1() {
         const step1Param: {
-            account: string;
+            username: string;
             email: string;
         } = {
-            account: this.inputForgetPassword.account,
+            username: this.inputForgetPassword.account,
             email: this.inputForgetPassword.email
         };
 
+        Loading.show();
         await this.$server
             .C("/user/forget/step1", step1Param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     (this.$refs.step1 as any).set("submit", true);
                     (this.$refs.step as any).currentStep = 2;
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.customMessage(this, e, this._("w_ForgetPassword_Step1Failed"));
+                Loading.hide();
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_ForgetPassword_Step1Failed")
+                );
             });
     }
 
     async submitStep2() {
         const step2Param: {
-            account: string;
+            username: string;
             verification: string;
         } = {
-            account: this.inputForgetPassword.account,
+            username: this.inputForgetPassword.account,
             verification: this.inputForgetPassword.verification
         };
 
-        await this.$server.C("/user/forget/step2", step2Param)
+        Loading.show();
+        await this.$server
+            .C("/user/forget/step2", step2Param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     (this.$refs.step2 as any).set("submit", true);
                     (this.$refs.step as any).currentStep = 3;
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.customMessage(this, e, this._("w_ForgetPassword_Step2Failed"));
+                Loading.hide();
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_ForgetPassword_Step2Failed")
+                );
             });
     }
 
     async submitStepFinal(data) {
         const step3Param: {
-            account: string;
+            username: string;
             verification: string;
             password: string;
         } = {
-            account: this.inputForgetPassword.account,
+            username: this.inputForgetPassword.account,
             verification: this.inputForgetPassword.verification,
             password: data.password
         };
 
         this.inputForgetPassword.password = data.password;
 
-        await this.$server.C("/user/forget/step3", step3Param)
+        Loading.show();
+        await this.$server
+            .C("/user/forget/step3", step3Param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     this.login();
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.customMessage(this, e, this._("w_ForgetPassword_Step3Failed"));
+                Loading.hide();
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_ForgetPassword_Step3Failed")
+                );
             });
     }
 
-    async login () {
-        await this.$login({
+    async login() {
+        Loading.show();
+        let param = {
             username: this.inputForgetPassword.account,
-            password: this.inputForgetPassword.password,
-        });
-        this.$router.push('/');
+            password: this.inputForgetPassword.password
+        };
+        await this.$login(param)
+            .then(() => {
+                Loading.hide();
+                this.$router.push("/");
+            })
+            .catch((e: any) => {
+                Loading.hide();
+                console.log(e);
+                if (
+                    e.res != undefined &&
+                    e.res.statusCode != undefined &&
+                    e.res.statusCode == 401
+                ) {
+                    Dialog.error(this._("w_UserSession_Empty"));
+                }
+            });
     }
 
     IStep1() {
