@@ -460,11 +460,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -480,11 +476,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -501,11 +493,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -522,11 +510,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -543,11 +527,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -676,12 +656,8 @@ export default class FaceRecognition extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -696,15 +672,11 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSPeopleCounting_ADDFailed")
+                    );
                 });
         }
         console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
@@ -727,12 +699,8 @@ export default class FaceRecognition extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -747,15 +715,11 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSPeopleCounting_ADDFailed")
+                    );
                 });
         }
         console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
@@ -778,12 +742,8 @@ export default class FaceRecognition extends Vue {
                                 // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`,
-                                    `${returnValue.sourceid} - ${
-                                        returnValue.location
-                                    }`
+                                    `${returnValue.sourceid} - ${returnValue.location}`,
+                                    `${returnValue.sourceid} - ${returnValue.location}`
                                 );
                             }
 
@@ -798,15 +758,11 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSPeopleCounting_ADDFailed")
+                    );
                 });
         }
         console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
@@ -1006,15 +962,11 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSPeopleCounting_ADDFailed")
+                    );
                 });
         }
 
@@ -1057,15 +1009,11 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSPeopleCounting_EditFailed")
+                    );
                 });
         }
     }
@@ -1115,15 +1063,11 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSPeopleCounting_ADDFailed")
+                    );
                 });
         }
 
@@ -1166,15 +1110,11 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_VSPeopleCounting_EditFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSPeopleCounting_ADDFailed")
+                    );
                 });
         }
     }
@@ -1205,15 +1145,7 @@ export default class FaceRecognition extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }
