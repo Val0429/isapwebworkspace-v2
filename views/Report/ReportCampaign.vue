@@ -6,13 +6,14 @@
             :yearSelectItem="yearSelectItem"
             :campaignAllData="campaignAllData"
             @year-campaign="receiveYearCampaign"
+            @submit-data="receiveFilterData"
         >
         </filter-condition-campaign>
 
-        <iv-card :visible="visible">
-            <!--
-            :label="filterData.campaignIds.length !== 0 ? analysisTitle() : '' "
--->
+        <iv-card
+            :visible="visible"
+            :label="filterData.campaignIds ? analysisTitle() : '' "
+        >
 
             <template #toolbox>
                 <!-- Tina -->
@@ -86,6 +87,7 @@ export default class ReportCampaign extends Vue {
     // recipient 相關
     modalShow: boolean = false;
     userData: any = [];
+    sitesSelectItem: any = [];
 
     // 收合card控制
     visible: boolean = false;
@@ -116,13 +118,25 @@ export default class ReportCampaign extends Vue {
     mounted() {}
 
     async initData() {
-        this.initSelectYear();
         await this.initSelectCampaignStore();
         await this.initSelectItemUsers();
         await this.initSelectYear();
+        this.siteFilterPermission();
     }
 
     ////////////////////////////////////// Tina Start //////////////////////////////////////
+
+    // Author: Tina
+    siteFilterPermission() {
+        let tempSitesSelectItem = {};
+        for (const detail of this.$user.allowSites) {
+            let site = { id: detail.objectId, text: detail.name };
+            this.sitesSelectItem.push(site);
+
+            // tempSitesSelectItem[detail.objectId] = detail.name;
+        }
+        // this.sitesSelectItem = tempSitesSelectItem;
+    }
 
     async initSelectItemUsers() {
         let tempUserSelectItem = {};
@@ -177,13 +191,13 @@ export default class ReportCampaign extends Vue {
     async initSelectCampaignStore() {}
 
     async receiveYearCampaign(year, campaignIds) {
-        this.inputFormData.year = year;
-        this.inputFormData.campaignIds = campaignIds;
-        console.log("this.inputFormData.year - ", this.inputFormData.year);
-        console.log(
-            "this.inputFormData.campaignIds - ",
-            this.inputFormData.campaignIds
-        );
+        // this.inputFormData.year = year;
+        // this.inputFormData.campaignIds = campaignIds;
+        // console.log("this.inputFormData.year - ", this.inputFormData.year);
+        // console.log(
+        //     "this.inputFormData.campaignIds - ",
+        //     this.inputFormData.campaignIds
+        // );
     }
 
     async receiveUserData(data) {
@@ -199,12 +213,15 @@ export default class ReportCampaign extends Vue {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
 
+        console.log("this.filterData - ", this.filterData);
+
         await this.$server
-            .C("/report/human-detection/summary", param)
+            .C("/report/campaign/summary", param)
             .then((response: any) => {
                 if (response !== undefined) {
                     this.responseData = response;
                     this.resolveSummary();
+                    this.analysisTitle();
                 }
             })
             .catch((e: any) => {
@@ -219,34 +236,45 @@ export default class ReportCampaign extends Vue {
     resolveSummary() {}
 
     analysisTitle(): string {
-        // TODO: 待確認 title 和 site部分
         let title = "Analysis - ";
 
         console.log("analysisTitle - ", this.filterData);
 
         title += `${this._("w_Title_FiscalYear")} ${this.filterData.year}.`;
 
-        // if (this.filterData.campaignIds.length === 1) {
-        //     for (const campaignId in this.campaignSelectItem) {
-        //         if(this.filterData.campaignIds[0] === campaignId) {
-        //             title += `${this._('w_Title_One_EventName')} ${this.campaignSelectItem[campaignId]}. `;
-        //         }
-        //     }
-        // } else if (this.filterData.campaignIds.length >= 2) {
-        //     title += `${this._('w_Title_EventName_Start')} ${this.filterData.campaignIds.length} ${this._('w_Title_EventName_End')} `;
-        // } else {
-        //     title += '';
-        // }
+        if (this.filterData.campaignIds.length === 1) {
+            for (const campaignId in this.campaignAllData) {
+                if (this.campaignAllData[campaignId].length > 0) {
+                    this.campaignAllData[campaignId].map(item => {
+                        if (this.filterData.campaignIds[0] === item.objectId) {
+                            title += `${this._("w_Title_One_EventName")} ${
+                                item.name
+                            }. `;
+                        }
+                    });
+                }
+            }
+        } else if (this.filterData.campaignIds.length >= 2) {
+            title += `${this._("w_Title_EventName_Start")} ${
+                this.filterData.campaignIds.length
+            } ${this._("w_Title_EventName_End")} `;
+        } else {
+            title += "";
+        }
 
-        // if (this.filterData.siteIds.length === 1) {
-        //     for (const siteId in this.sitesSelectItem) {
-        //         if(this.filterData.siteIds[0] === siteId) {
-        //             title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
-        //         }
-        //     }
-        // } else {
-        //     title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
-        // }
+        if (this.filterData.siteIds.length === 1) {
+            for (const site of this.sitesSelectItem) {
+                if (this.filterData.siteIds[0] === site.id) {
+                    title += `${this._("w_Title_One_Site")} ${site.text}. `;
+                }
+            }
+        } else if (this.filterData.siteIds.length >= 2) {
+            title += `${this._("w_Title_Many_Site_Start")} ${
+                this.filterData.siteIds.length
+            } ${this._("w_Title_Many_Site_End")} `;
+        } else {
+            title += "";
+        }
 
         this.visible = true;
 
