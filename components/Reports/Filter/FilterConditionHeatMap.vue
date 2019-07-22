@@ -104,6 +104,7 @@
         </iv-card>
 
         <region-tree-select
+            v-show="pageStep === ePageStep.chooseTree"
             :multiple="false"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"

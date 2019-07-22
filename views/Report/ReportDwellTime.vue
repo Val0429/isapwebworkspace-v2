@@ -2334,7 +2334,7 @@ export default class ReportDwellTime extends Vue {
         this.ReportToTemplateData = {
             startDate: this.filterData.startDate,
             endDate: this.filterData.endDate,
-            mode: EDeviceMode.demographic,
+            mode: EDeviceMode.dwellTime,
             siteIds: this.filterData.siteIds,
             tagIds: this.filterData.tagIds,
             sendUserIds: this.userData,
