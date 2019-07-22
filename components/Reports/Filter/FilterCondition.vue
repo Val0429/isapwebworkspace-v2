@@ -93,15 +93,6 @@
                     </iv-form-selection>
                 </template>
 
-                <template #designationPeriodShow>
-                    <div
-                        v-if="selectPeriodAddWay === 'designation' && showDesignationPeriod.endDate !== '' &&  showDesignationPeriod.startDate !== ''"
-                        class="row justify-content-center align-items-center mt-2 ml-3"
-                    >
-                        {{ showDesignationPeriod.startDate }} - {{ showDesignationPeriod.endDate }}
-                    </div>
-                </template>
-
                 <template #tagIds="{ $attrs, $listeners }">
                     <iv-form-selection
                         v-bind="$attrs"
@@ -230,7 +221,7 @@ export class FilterCondition extends Vue {
 
     // addPeriodSelectItem: any = [];
 
-    designationPeriodSelectItem: any = [];
+    designationPeriodSelectItem: any = {};
 
     inputFormData: any = {
         siteIds: [],
@@ -243,10 +234,6 @@ export class FilterCondition extends Vue {
         designationPeriod: EDesignationPeriod.today
     };
 
-    showDesignationPeriod: any = {
-        startDate: '',
-        endDate: '',
-    };
 
     // response 相關
     responseData: any = {};
@@ -287,18 +274,18 @@ export class FilterCondition extends Vue {
         // ];
 
         this.designationPeriodSelectItem = {
-            today: this._("w_Today"),
-            yesterday: this._("w_Yesterday"),
-            last7days: this._("w_last7days"),
-            thisWeek: this._("w_thisWeek"),
-            lastWeek: this._("w_lastWeek"),
-            thisMonth: this._("w_thisMonth"),
-            lastMonth: this._("w_lastMonth"),
-            q1: this._("w_q1"),
-            q2: this._("w_q2"),
-            q3: this._("w_q3"),
-            q4: this._("w_q4"),
-            thisYear: this._("w_thisYear")
+            today: `${this._("w_Today")} (${Datetime.CountDateNumber(0)} - ${Datetime.CountDateNumber(0)})`,
+            yesterday: `${this._("w_Yesterday")} (${Datetime.CountDateNumber(-1)} - ${Datetime.CountDateNumber(-1)})`,
+            last7days: `${this._("w_last7days")} (${Datetime.CountDateNumber(-6)} - ${Datetime.CountDateNumber(0)})`,
+            thisWeek: `${this._("w_thisWeek")} (${Datetime.ThisWeekStartDate()} - ${Datetime.ThisWeekEndDate()})`,
+            lastWeek: `${this._("w_lastWeek")} (${Datetime.LastWeekStartDate()} - ${Datetime.LastWeekEndDate()})`,
+            thisMonth: `${this._("w_thisMonth")} (${Datetime.ThisMonthStartDate()} - ${Datetime.ThisMonthEndDate()})`,
+            lastMonth: `${this._("w_lastMonth")} (${Datetime.LastMonthStartDate()} - ${Datetime.LastMonthEndDate()})`,
+            q1: `${this._("w_q1")} (${Datetime.Q1StartDate()} - ${Datetime.Q1EndDate()})`,
+            q2: `${this._("w_q2")} (${Datetime.Q2StartDate()} - ${Datetime.Q2EndDate()})`,
+            q3: `${this._("w_q3")} (${Datetime.Q3StartDate()} - ${Datetime.Q3EndDate()})`,
+            q4: `${this._("w_q4")} (${Datetime.Q4StartDate()} - ${Datetime.Q4EndDate()})`,
+            thisYear: `${this._("w_thisYear")} (${Datetime.ThisYearStartDate()} - ${Datetime.ThisYearEndDate()})`
         };
     }
 
@@ -330,56 +317,6 @@ export class FilterCondition extends Vue {
                 break;
             case "designationPeriod":
                 this.inputFormData.designationPeriod = data.value;
-                switch (this.inputFormData.designationPeriod) {
-                    case "today":
-                        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(0);
-                        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(0);
-                        break;
-                    case "yesterday":
-                        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(-1);
-                        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(-1);
-                        break;
-                    case "last7days":
-                        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(-6);
-                        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(0);
-                        break;
-                    case "thisWeek":
-                        this.showDesignationPeriod.startDate = Datetime.ThisWeekStartDate();
-                        this.showDesignationPeriod.endDate = Datetime.ThisWeekEndDate();
-                        break;
-                    case "lastWeek":
-                        this.showDesignationPeriod.startDate = Datetime.LastWeekStartDate();
-                        this.showDesignationPeriod.endDate = Datetime.LastWeekEndDate();
-                        break;
-                    case "thisMonth":
-                        this.showDesignationPeriod.startDate = Datetime.ThisMonthStartDate();
-                        this.showDesignationPeriod.endDate = Datetime.ThisMonthEndDate();
-                        break;
-                    case "lastMonth":
-                        this.showDesignationPeriod.startDate = Datetime.LastMonthStartDate();
-                        this.showDesignationPeriod.endDate = Datetime.LastMonthEndDate();
-                        break;
-                    case "q1":
-                        this.showDesignationPeriod.startDate = Datetime.Q1StartDate();
-                        this.showDesignationPeriod.endDate = Datetime.Q1EndDate();
-                        break;
-                    case "q2":
-                        this.showDesignationPeriod.startDate = Datetime.Q2StartDate();
-                        this.showDesignationPeriod.endDate = Datetime.Q2EndDate();
-                        break;
-                    case "q3":
-                        this.showDesignationPeriod.startDate = Datetime.Q3StartDate();
-                        this.showDesignationPeriod.endDate = Datetime.Q3EndDate();
-                        break;
-                    case "q4":
-                        this.showDesignationPeriod.startDate = Datetime.Q4StartDate();
-                        this.showDesignationPeriod.endDate = Datetime.Q4EndDate();
-                        break;
-                    case "thisYear":
-                        this.showDesignationPeriod.startDate = Datetime.ThisYearStartDate();
-                        this.showDesignationPeriod.endDate = Datetime.ThisYearEndDate();
-                        break;
-                }
                 break;
         }
     }
@@ -447,8 +384,6 @@ export class FilterCondition extends Vue {
     changeAddPeriodSelect(selected: string) {
         this.selectPeriodAddWay = selected;
         this.inputFormData.designationPeriod = EDesignationPeriod.today;
-        this.showDesignationPeriod.startDate = Datetime.CountDateNumber(0);
-        this.showDesignationPeriod.endDate = Datetime.CountDateNumber(0);
         this.inputFormData.startDate = new Date();
         this.inputFormData.endDate = new Date();
     }
@@ -796,10 +731,6 @@ export class FilterCondition extends Vue {
                     false
                 )};
 
-                 /**
-                 * @uiColumnGroup - period
-                 */
-                 designationPeriodShow: any;
 
                 /**
                  * @uiLabel - ${this._("w_Tag")}
