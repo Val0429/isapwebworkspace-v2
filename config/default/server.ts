@@ -190,6 +190,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/report/repeat-visitor/summary': [any, any, false];
         '/report/complex': [any, any, false];
         '/report/template': [any, any, false];
+        '/report/campaign/summary': [any, any, false];
     };
 
     // read
@@ -292,7 +293,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         // report
         '/report/template': [any, any, false];
-        '/event/campaign/all-object': [any, any, false];
+        '/report/campaign/condition': [any, any, false];
     };
 
     // update

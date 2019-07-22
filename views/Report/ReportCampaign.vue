@@ -5,8 +5,6 @@
         <filter-condition-campaign
             :yearSelectItem="yearSelectItem"
             :campaignAllData="campaignAllData"
-            :campaignSelectItem="campaignSelectItem"
-            :campaignSiteSelectItem="campaignSiteSelectItem"
             @year-campaign="receiveYearCampaign"
         >
         </filter-condition-campaign>
@@ -103,8 +101,6 @@ export default class ReportCampaign extends Vue {
 
     yearSelectItem: any = {};
     campaignAllData: any = {};
-    campaignSelectItem: any = {};
-    campaignSiteSelectItem: any = {};
 
     inputFormData: any = {
         year: "",
@@ -123,7 +119,6 @@ export default class ReportCampaign extends Vue {
 
     async initData() {
         this.initSelectYear();
-        await this.initSelectCampaign();
         await this.initSelectCampaignStore();
         await this.initSelectItemUsers();
         await this.initSelectYear();
@@ -162,7 +157,7 @@ export default class ReportCampaign extends Vue {
         let tempYearSelectItem = {};
 
         let result = await this.$server
-            .R("/event/campaign/all-object")
+            .R("/report/campaign/condition")
             .catch((e: any) => {
                 if (e.res && e.res.statusCode && e.res.statusCode == 401) {
                     return ResponseFilter.base(this, e);
@@ -171,25 +166,20 @@ export default class ReportCampaign extends Vue {
                 return false;
             });
 
-        console.log('result - ', result);
-
         tempResult = result;
 
         for (const year in tempResult) {
             tempYearSelectItem[year] = year;
+            this.$set(
+                this.campaignAllData,
+                year,
+                tempResult[year]
+            );
         }
 
         this.campaignAllData = tempResult;
         this.yearSelectItem = tempYearSelectItem;
 
-    }
-
-    async initSelectCampaign() {
-        this.campaignSelectItem = {
-            all: "all",
-            MMsKioPy3X: "聖誕節",
-            k6H0cOOLXe: "母親節"
-        };
     }
 
     async initSelectCampaignStore() {}

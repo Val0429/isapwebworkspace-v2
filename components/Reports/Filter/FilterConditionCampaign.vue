@@ -23,6 +23,7 @@
 
                 <template #campaignIds="{ $attrs, $listeners }">
                     <iv-form-selection
+                        v-if="inputFormData.campaignIds && checkObjectLength(campaignSelectItem) > 1"
                         v-bind="$attrs"
                         v-on="$listeners"
                         v-model="inputFormData.campaignIds"
@@ -44,14 +45,13 @@
 
                 <template #siteIds="{ $attrs, $listeners }">
                     <iv-form-selection
+                        v-if="inputFormData.siteIds && checkObjectLength(campaignSiteSelectItem) > 1"
                         v-bind="$attrs"
                         v-on="$listeners"
                         v-model="inputFormData.siteIds"
                     >
                     </iv-form-selection>
                 </template>
-<!--                        v-if="inputFormData.year !== '' && inputFormData.campaignIds.length === 1 && inputFormData.campaignIds !== 'all'"
--->
             </iv-form>
 
             <template #footer>
@@ -113,17 +113,17 @@ export class FilterConditionCampaign extends Vue {
     })
     campaignAllData: object;
 
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    campaignSelectItem: object;
-
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: {}
-    })
-    campaignSiteSelectItem: object;
+    // @Prop({
+    //     type: Object, // Boolean, Number, String, Array, Object
+    //     default: {}
+    // })
+    // campaignSelectItem: object;
+    //
+    // @Prop({
+    //     type: Object, // Boolean, Number, String, Array, Object
+    //     default: {}
+    // })
+    // campaignSiteSelectItem: object;
 
     @Prop({
         type: Object,
@@ -132,42 +132,98 @@ export class FilterConditionCampaign extends Vue {
     templateItem: ITemplateItem | null;
 
     inputFormData: any = {
-        year: new Date().getFullYear().toString(),
-        campaignIds: [],
-        siteIds: [],
+        year: '',
+        campaignIds: '',
+        siteIds: '',
     };
+
+    campaignSelectItem: any = {};
+    campaignSiteSelectItem: any = {};
 
     // 收合card控制
     visible: boolean = true;
 
     created() {
-        console.log('campaignAllData - ', this.campaignAllData);
+        // this.initSelect();
     }
 
     mounted() {
         // this.initTemplate();
-        console.log('campaignSiteSelectItem - ', ReportService.CheckObjectIfEmpty(this.campaignSiteSelectItem));
+    }
+
+    initCampaignSelectItem() {
+
     }
 
     tempSaveInputData(data) {
         switch (data.key) {
             case "year":
                 this.inputFormData.year = data.value;
-                break;
-            case "siteIds":
-                for (const siteId of data.value) {
-                    if (!siteId) {
-                        this.inputFormData.siteIds = [];
-                    } else {
-                        this.inputFormData.siteIds = data.value;
+
+                if (this.inputFormData.year) {
+                    let tempCampaignSelectItem = { all: this._('w_AllCampaign')};
+                    for (const year in this.campaignAllData) {
+                        if (this.inputFormData.year === year) {
+                            const tempYearCampaign = this.campaignAllData[year];
+                            for (const campaignKey of tempYearCampaign) {
+                                tempCampaignSelectItem[campaignKey.objectId] = campaignKey.name;
+                            }
+                        }
                     }
+                    this.campaignSelectItem = tempCampaignSelectItem;
+                    this.inputFormData.campaignIds = 'all';
+                } else {
+                    this.inputFormData.campaignIds = '';
+                    this.campaignSelectItem = {};
+                    this.campaignSiteSelectItem = {};
                 }
+
                 break;
             case "campaignIds":
-                this.inputFormData.campaignIds = [];
-                this.inputFormData.campaignIds.push(data.value);
+                this.inputFormData.campaignIds = data.value;
+
+                if (this.inputFormData.campaignIds) {
+                    let tempCampaignSiteSelectItem = { all: this._('w_AllSites')};
+                    for (const year in this.campaignAllData) {
+                        const tempYearCampaign = this.campaignAllData[year];
+                        if (tempYearCampaign.length > 0) {
+                            tempYearCampaign.map(campaign => {
+                                if (campaign.objectId === this.inputFormData.campaignIds) {
+                                    if (campaign.sites.length > 0) {
+                                        campaign.sites.map(item => {
+                                            tempCampaignSiteSelectItem[item.objectId] = item.name;
+
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    }
+                    this.campaignSiteSelectItem = tempCampaignSiteSelectItem;
+                    this.inputFormData.siteIds = 'all';
+                } else if (this.inputFormData.campaignIds && this.inputFormData.campaignIds === 'all') {
+                    this.inputFormData.campaignIds = '';
+                    this.campaignSiteSelectItem = {};
+                } else {
+                    this.inputFormData.campaignIds = 'all';
+                    this.campaignSiteSelectItem = {};
+                }
+
                 break;
+                case "siteIds":
+                    this.inputFormData.siteIds = data.value;
+
+                    if (!this.inputFormData.siteIds) {
+                        this.inputFormData.siteIds = 'all';
+                    }
+                break;
+
         }
+    }
+
+    checkObjectLength(obj: object): number {
+        const result = Object.keys(obj);
+        return result.length;
     }
 
     // initTemplate() {
@@ -252,8 +308,8 @@ export class FilterConditionCampaign extends Vue {
     doReset() {
         this.inputFormData = {
             year: '',
-            campaignIds: [],
-            siteIds: [],
+            campaignIds: '',
+            siteIds: '',
         };
 
     }
@@ -278,15 +334,8 @@ export class FilterConditionCampaign extends Vue {
 
 
                 /**
-                 * @uiColumnGroup - site
-                 */
-                 confirm: any;
-
-
-                /**
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
-                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.campaignSiteSelectItem)}
                  */
                 siteIds?: ${toEnumInterface(this.campaignSiteSelectItem as any, false)};
 
@@ -295,6 +344,9 @@ export class FilterConditionCampaign extends Vue {
         `;
     }
 }
+
+//                  * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.campaignSiteSelectItem)}
+
 
 export default FilterConditionCampaign;
 Vue.component("filter-condition-campaign", FilterConditionCampaign);

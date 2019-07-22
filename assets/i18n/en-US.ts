@@ -187,6 +187,7 @@ export default class LangObject {
     w_SelectTags = 'Select Tag(s)';
     w_AllTags = 'All Tags';
 	w_Selected_Date = '* Select Date(s)';
+    w_AllCampaign = 'All Campaign';
 
     w_yes = 'Yes';
     w_no = 'No';
