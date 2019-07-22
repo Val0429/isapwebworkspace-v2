@@ -201,6 +201,7 @@ interface ISite {
     officeHourId: string;
     longitude: number;
     latitude: number;
+    tagIds: string[];
 }
 
 interface ISiteAddData extends ISite {

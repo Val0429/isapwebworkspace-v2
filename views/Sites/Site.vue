@@ -1398,7 +1398,8 @@ export default class Site extends Vue {
                     officeHourId: data.officeHour,
                     imageBase64: this.newImgSrc,
                     longitude: data.longitude,
-                    latitude: data.latitude
+                    latitude: data.latitude,
+                    tagIds: data.tag
                 }
             ];
 
@@ -1431,7 +1432,8 @@ export default class Site extends Vue {
                     staffNumber: data.staffNumber,
                     officeHourId: data.officeHour,
                     longitude: data.longitude,
-                    latitude: data.latitude
+                    latitude: data.latitude,
+                    tagIds: data.tag
                 }
             ];
 
@@ -1453,60 +1455,6 @@ export default class Site extends Vue {
                     return ResponseFilter.base(this, e);
                 });
         }
-
-        //update tags
-        let tbody: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
-        // TODO: update remove not selected tag, watch /Views/Regions/Region.vue, 497
-        await this.$server
-            .R("/tag", tbody)
-            .then((response: any) => {
-                var tagList = response.results;
-
-                const datas: ITagReadUpdate[] = [];
-                var items = [];
-                for (let tagId of data.tag) {
-                    //新site
-                    let item = {
-                        objectId: tagId,
-                        siteIds: [data.objectId]
-                    };
-
-                    //原本有的site也加進去
-                    for (let tagItem of tagList) {
-                        if (tagItem.objectId === tagId) {
-                            for (let site of tagItem.sites) {
-                                item.siteIds.push(site.objectId);
-                            }
-                        }
-                    }
-                    datas.push(item);
-                }
-                const tagParam = { datas };
-                this.$server
-                    .U("/tag", tagParam)
-                    .then((response: any) => {
-                        if (response != undefined) {
-                            console.log("tags update Success");
-                        }
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.base(this, e);
-                    });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.base(this, e);
-            });
     }
 
     async saveArea(data) {
