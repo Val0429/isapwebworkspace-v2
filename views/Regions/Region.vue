@@ -146,12 +146,11 @@ import {
     RegionTreeItem
 } from "@/components/RegionTree";
 import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
+import { ITagReadUpdate } from "@/config/default/api/interfaces";
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
-
-import { ITagReadUpdate } from "@/config/default/api/interfaces";
 
 enum EPageStep {
     none,

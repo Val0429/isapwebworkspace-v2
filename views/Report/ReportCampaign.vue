@@ -9,10 +9,8 @@
         >
         </filter-condition-campaign>
 
-        <iv-card
-            :visible="visible"
-        >
-<!--
+        <iv-card :visible="visible">
+            <!--
             :label="filterData.campaignIds.length !== 0 ? analysisTitle() : '' "
 -->
 
@@ -152,7 +150,6 @@ export default class ReportCampaign extends Vue {
     }
 
     async initSelectYear() {
-
         let tempResult = {};
         let tempYearSelectItem = {};
 
@@ -170,16 +167,11 @@ export default class ReportCampaign extends Vue {
 
         for (const year in tempResult) {
             tempYearSelectItem[year] = year;
-            this.$set(
-                this.campaignAllData,
-                year,
-                tempResult[year]
-            );
+            this.$set(this.campaignAllData, year, tempResult[year]);
         }
 
         this.campaignAllData = tempResult;
         this.yearSelectItem = tempYearSelectItem;
-
     }
 
     async initSelectCampaignStore() {}
@@ -227,14 +219,12 @@ export default class ReportCampaign extends Vue {
     resolveSummary() {}
 
     analysisTitle(): string {
-
         // TODO: 待確認 title 和 site部分
-        let title = 'Analysis - ';
+        let title = "Analysis - ";
 
-        console.log('analysisTitle - ', this.filterData);
+        console.log("analysisTitle - ", this.filterData);
 
-        title += `${ this._('w_Title_FiscalYear') } ${ this.filterData.year }.`;
-
+        title += `${this._("w_Title_FiscalYear")} ${this.filterData.year}.`;
 
         // if (this.filterData.campaignIds.length === 1) {
         //     for (const campaignId in this.campaignSelectItem) {

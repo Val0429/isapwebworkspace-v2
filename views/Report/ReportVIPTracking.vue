@@ -13,8 +13,9 @@
         >
         </filter-condition-vip-and-blacklist>
 
-        <iv-card :visible="visible"
-                 :label="filterData.tagIds.length !== 0 ? analysisTitle() : '' "
+        <iv-card
+            :visible="visible"
+            :label="filterData.tagIds.length !== 0 ? analysisTitle() : '' "
         >
             <!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
 -->
@@ -81,11 +82,13 @@ import {
 } from "@/components/Reports";
 import ResponseFilter from "@/services/ResponseFilter";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
-import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 
 import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
 import ReportService from "@/components/Reports/models/ReportService";
 import Datetime from "@/services/Datetime";
+
+////////////////////////////////// export //////////////////////////////////
+import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 
 @Component({
     components: {}
@@ -319,7 +322,7 @@ export default class ReportVIPTracking extends Vue {
         if (this.filterData.tagIds.length === 1) {
             for (const tagId of this.tagSelectItem) {
                 if (this.filterData.tagIds[0] === tagId.id) {
-                    title += `${this._("w_Title_One_Tag")} ${ tagId.text }. `;
+                    title += `${this._("w_Title_One_Tag")} ${tagId.text}. `;
                 }
             }
         } else if (this.filterData.tagIds.length >= 2) {

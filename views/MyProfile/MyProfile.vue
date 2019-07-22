@@ -81,6 +81,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
 interface IInputMyProfile {
     objectId: string;

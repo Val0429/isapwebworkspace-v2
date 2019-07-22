@@ -282,7 +282,7 @@ enum EWeeks {
     Wednesday = "Wednesday",
     Thursday = "Thursday",
     Friday = "Friday",
-    Saturday = "Saturday",
+    Saturday = "Saturday"
 }
 
 @Component({

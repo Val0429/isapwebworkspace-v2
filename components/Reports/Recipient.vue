@@ -1,6 +1,11 @@
 <template>
     <div>
-        <b-modal v-model="modalShow" hide-header hide-footer size="lg">
+        <b-modal
+            v-model="modalShow"
+            hide-header
+            hide-footer
+            size="lg"
+        >
             <iv-card
                 :visible="true"
                 :label="_('w_ReportTemplate_RecipientSelect')"
@@ -14,7 +19,8 @@
                         <iv-form-selection
                             v-bind="$attrs"
                             v-on="$listeners"
-                            v-model="userIds">
+                            v-model="userIds"
+                        >
                         </iv-form-selection>
                     </template>
 
@@ -47,91 +53,95 @@
                 </template>
 
             </iv-card>
-        </b-modal >
+        </b-modal>
 
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
-    import ResponseFilter from "@/services/ResponseFilter";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import ResponseFilter from "@/services/ResponseFilter";
 
-    @Component({
-        components: {}
+@Component({
+    components: {}
+})
+export class Recipient extends Vue {
+    // Prop
+    @Prop({
+        type: Boolean, // Boolean, Number, String, Array, Object
+        default: false
     })
-    export class Recipient extends Vue {
+    modalShow: boolean;
 
-        // Prop
-        @Prop({
-            type: Boolean, // Boolean, Number, String, Array, Object
-            default: false
-        })
-        modalShow: boolean;
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: {}
+    })
+    userSelectItem: object;
 
-        @Prop({
-            type: Object, // Boolean, Number, String, Array, Object
-            default: {}
-        })
-        userSelectItem: object;
+    // userSelectItem: any = {};
 
-        // userSelectItem: any = {};
+    userIds: any = [];
 
-        userIds: any = [];
+    created() {}
 
-        created() {
-        }
+    mounted() {
+        // this.initSelectItemUsers();
+    }
 
-        mounted() {
-            // this.initSelectItemUsers();
-        }
+    @Watch("modalShow", { deep: true })
+    private whenModalShowChanged(newVal, oldVal) {}
 
-        @Watch("modalShow", { deep: true })
-        private whenModalShowChanged(newVal, oldVal) {}
+    async initSelectItemUsers() {
+        let tempUserSelectItem = {};
 
-        async initSelectItemUsers() {
-
-            let tempUserSelectItem = {};
-
-            await this.$server
-                .R("/user/user")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response.results) {
-                            // 自定義 userSelectItem 的 key 的方式
-                            tempUserSelectItem[returnValue.objectId] =
-                                `${returnValue.username} - ${returnValue.email}`;
-                        }
-                        this.userSelectItem = tempUserSelectItem;
+        await this.$server
+            .R("/user/user")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 userSelectItem 的 key 的方式
+                        tempUserSelectItem[
+                            returnValue.objectId
+                        ] = `${returnValue.username} - ${returnValue.email}`;
                     }
-                })
-                .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
-                });
-        }
+                    this.userSelectItem = tempUserSelectItem;
+                }
+            })
+            .catch((e: any) => {
+                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                    return ResponseFilter.base(this, e);
+                }
+                console.log(e);
+                return false;
+            });
+    }
 
+    doSubmit() {
+        // TODO: wait api
+        this.$emit("user-data", this.userIds);
+        this.doCancel();
+    }
 
-        doSubmit() {
-            // TODO: wait api
-            this.$emit("user-data", this.userIds);
-            this.doCancel();
-        }
+    doReset() {
+        this.userIds = [];
+    }
 
-        doReset() {
-            this.userIds = [];
-        }
+    doCancel() {
+        this.userIds = [];
+        this.$emit("return-modalShow", false);
+    }
 
-        doCancel() {
-            this.userIds = [];
-            this.$emit("return-modalShow", false);
-        }
-
-        IFilterConditionForm() {
-            return `
+    IFilterConditionForm() {
+        return `
             interface {
 
                 /**
@@ -141,21 +151,20 @@
 
             }
         `;
-        }
     }
+}
 
-    export default Recipient;
-    Vue.component("recipient", Recipient);
+export default Recipient;
+Vue.component("recipient", Recipient);
 </script>
 
 <style lang="scss" scoped>
-    .submit {
-        background-color: #5c7895;
-        border: 1px solid #5c7895;
-    }
-    .reset {
-        background-color: #d7d7d7;
-        border: 1px solid #d7d7d7;
-    }
-
+.submit {
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+}
+.reset {
+    background-color: #d7d7d7;
+    border: 1px solid #d7d7d7;
+}
 </style>

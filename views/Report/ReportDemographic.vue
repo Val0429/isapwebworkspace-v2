@@ -134,51 +134,50 @@
 </template>
 
 <script lang="ts">
-	import {Vue, Component} from "vue-property-decorator";
-	import Dialog from "@/services/Dialog";
+import {Vue, Component} from "vue-property-decorator";
+import Dialog from "@/services/Dialog";
 
-	// Tina
-	import {
-		ERegionType,
-		IRegionTreeSelected,
-		RegionTreeItem
-	} from "@/components/RegionTree";
+// Tina
+import {
+	ERegionType,
+	IRegionTreeSelected,
+	RegionTreeItem
+} from "@/components/RegionTree";
 
-	import RegionAPI from "@/services/RegionAPI";
-	import ResponseFilter from "@/services/ResponseFilter";
-	import Datetime from "@/services/Datetime";
-	import ReportService from "@/components/Reports/models/ReportService";
-    import HighchartsDemographic from "@/components/Reports/Highcharts/HighchartsDemographic.vue";
-	import WeatherService from "@/components/Reports/models/WeatherService";
-	import HighchartsService from "@/components/Reports/models/HighchartsService";
-	import {
-		ETimeMode,
-        EWeather,
-        EAgeRange,
-        EAreaMode,
-        EDwellTimeRange,
-		EChartMode,
-		EPageType,
-        ESign,
-		ECountType,
-		EDeviceMode,
-		EIncludedEmployee,
-		IDayRange,
-		IChartDemographicData,
-		IChartTrafficData,
-		IPeckTimeRange,
-		ISite,
-		ISiteItems,
-        ITemplateItem,
-        IFilterCondition,
-		ReportDashboard,
-		ReportTableData,
-
-		EDesignationPeriod,
-		IReportToTemplateItem,
-		EAddPeriodSelect,
-		EIfAllSelected
-	} from "@/components/Reports";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import ReportService from "@/components/Reports/models/ReportService";
+import HighchartsDemographic from "@/components/Reports/Highcharts/HighchartsDemographic.vue";
+import WeatherService from "@/components/Reports/models/WeatherService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import {
+	ETimeMode,
+    EWeather,
+    EAgeRange,
+    EAreaMode,
+    EDwellTimeRange,
+	EChartMode,
+	EPageType,
+    ESign,
+	ECountType,
+    EDeviceMode,
+    EAddPeriodSelect,
+    EDesignationPeriod,
+    EIfAllSelected,
+    EIncludedEmployee,
+	IDayRange,
+	IChartDemographicData,
+	IChartTrafficData,
+	IPeckTimeRange,
+	ISite,
+	ISiteItems,
+    ITemplateItem,
+    IFilterCondition,
+    IReportToTemplateItem,
+	ReportDashboard,
+	ReportTableData
+} from "@/components/Reports";
 
 ///////////////////////// export /////////////////////////
 import toExcel from "@/services/Excel/json2excel";
@@ -186,17 +185,17 @@ import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 import { EFileType,IReportTableTitle } from "@/components/Reports";
 
-	enum ETableStep {
-		mainTable = "mainTable",
-		sunTable = "sunTable",
-		detailTable = "detailTable",
-		none = "none"
-	}
+enum ETableStep {
+	mainTable = "mainTable",
+	sunTable = "sunTable",
+	detailTable = "detailTable",
+	none = "none"
+}
 
-	@Component({
-		components: {}
-	})
-	export default class ReportDemographic extends Vue {
+@Component({
+	components: {}
+})
+export default class ReportDemographic extends Vue {
 		lastTableStep: ETableStep = ETableStep.none;
 		tableStep: ETableStep = ETableStep.none;
 		eTableStep = ETableStep;
@@ -2281,7 +2280,7 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 				}
 			}
 		}
-	}
+}
 </script>
 
 

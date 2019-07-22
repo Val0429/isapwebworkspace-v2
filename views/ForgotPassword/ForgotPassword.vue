@@ -1,9 +1,7 @@
 <template>
     <div class="animated fadeIn m-2">
 
-        <iv-auto-card
-            :label="_('w_ForgetPassword')"
-        >
+        <iv-auto-card :label="_('w_ForgetPassword')">
 
             <template #toolbox>
                 <iv-toolbox-leave @click="pageToLeave" />
@@ -74,34 +72,34 @@
                             <h5 class="info">{{ _('w_ForgetPassword_Step2_info') }}</h5>
                         </template>
 
-                    <template #verification="{$attrs, $listeners}">
-                        <iv-form-string
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            v-model="inputForgetPassword.verification"
-                        ></iv-form-string>
-                    </template>
-
-                    <template #submit="{ $attrs, $listeners }">
-
-                        <div
-                            class="button-right button-group right mt-2"
-                            v-bind="$attrs"
-                        >
-                            <b-button
-                                v-bind="{ ...$attrs, class: undefined }"
+                        <template #verification="{$attrs, $listeners}">
+                            <iv-form-string
+                                v-bind="$attrs"
                                 v-on="$listeners"
-                                class="button"
-                                variant="success"
-                                type="button"
-                                @click="submitStep2($event)"
-                            >{{ _('w_Check') }}
-                            </b-button>
-                        </div>
-                    </template>
+                                v-model="inputForgetPassword.verification"
+                            ></iv-form-string>
+                        </template>
+
+                        <template #submit="{ $attrs, $listeners }">
+
+                            <div
+                                class="button-right button-group right mt-2"
+                                v-bind="$attrs"
+                            >
+                                <b-button
+                                    v-bind="{ ...$attrs, class: undefined }"
+                                    v-on="$listeners"
+                                    class="button"
+                                    variant="success"
+                                    type="button"
+                                    @click="submitStep2($event)"
+                                >{{ _('w_Check') }}
+                                </b-button>
+                            </div>
+                        </template>
                     </iv-form>
                 </template>
-                
+
                 <template #3-title>{{ _('w_ForgetPassword_Step3') }}</template>
                 <template #3>
                     <iv-form
@@ -115,7 +113,7 @@
                         </template>
                     </iv-form>
                 </template>
-                
+
             </iv-step-progress>
 
             <template #footer-before>
@@ -129,7 +127,6 @@
 
         </iv-auto-card>
 
-
     </div>
 </template>
 
@@ -137,6 +134,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
 interface IInputForgetPassword {
     account: string;
@@ -199,7 +197,11 @@ export default class ForgetPassword extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.customMessage(this, e, this._("w_ForgetPassword_Step1Failed"));
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_ForgetPassword_Step1Failed")
+                );
             });
     }
 
@@ -212,7 +214,8 @@ export default class ForgetPassword extends Vue {
             verification: this.inputForgetPassword.verification
         };
 
-        await this.$server.C("/user/forget/step2", step2Param)
+        await this.$server
+            .C("/user/forget/step2", step2Param)
             .then((response: any) => {
                 if (response !== undefined) {
                     (this.$refs.step2 as any).set("submit", true);
@@ -220,7 +223,11 @@ export default class ForgetPassword extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.customMessage(this, e, this._("w_ForgetPassword_Step2Failed"));
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_ForgetPassword_Step2Failed")
+                );
             });
     }
 
@@ -237,23 +244,28 @@ export default class ForgetPassword extends Vue {
 
         this.inputForgetPassword.password = data.password;
 
-        await this.$server.C("/user/forget/step3", step3Param)
+        await this.$server
+            .C("/user/forget/step3", step3Param)
             .then((response: any) => {
                 if (response !== undefined) {
                     this.login();
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.customMessage(this, e, this._("w_ForgetPassword_Step3Failed"));
+                return ResponseFilter.customMessage(
+                    this,
+                    e,
+                    this._("w_ForgetPassword_Step3Failed")
+                );
             });
     }
 
-    async login () {
+    async login() {
         await this.$login({
             username: this.inputForgetPassword.account,
-            password: this.inputForgetPassword.password,
+            password: this.inputForgetPassword.password
         });
-        this.$router.push('/');
+        this.$router.push("/");
     }
 
     IStep1() {

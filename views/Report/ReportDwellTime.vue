@@ -18,57 +18,57 @@
             :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
             :visible="visible"
         >
-                <template #toolbox>
-                    <!-- Ben -->
-                    <iv-toolbox-export-excel
-                        size="lg"
-                        @click="exportExcel(eFileType.xlsx)"
-                    />
-                    <iv-toolbox-export-csv
-                        size="lg"
-                        @click="exportExcel(eFileType.csv)"
-                    />
+            <template #toolbox>
+                <!-- Ben -->
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
 
-                    <iv-toolbox-export-pdf
-                        size="lg"
-                        @click="exportPDF"
-                    />
-
-                    <!-- Tina -->
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                    <iv-toolbox-copy-to-template
-                        size="lg"
-                        @click="pageToReportTemplate()"
-                    />
-                </template>
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
 
                 <!-- Tina -->
-                <analysis-filter-dwell-time
-                    class="mb-4"
-                    :areaSelectItem="areaSelectItem"
-                    :deviceGroupSelectItem="deviceGroupSelectItem"
-                    :deviceSelectItem="deviceSelectItem"
-                    :timeModeSelectItem="timeModeSelectItem"
-                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                    :businessChartTypeSelectItem="businessChartTypeSelectItem"
-                    :siteIds="filterData.siteIds"
-                    :areaId="inputFormData.areaId"
-                    :groupId="inputFormData.groupId"
-                    :deviceId="inputFormData.deviceId"
-                    :type="inputFormData.type"
-                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                    @area_id="receiveAreaId"
-                    @group_id="receiveGroupId"
-                    @device_id="receiveDeviceId"
-                    @type="receiveType"
-                    @is_included_employee="receiveIsIncludedEmployee"
-                    @business_chart_type="receiveBusinessChartType"
-                >
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
 
-                </analysis-filter-dwell-time>
+            <!-- Tina -->
+            <analysis-filter-dwell-time
+                class="mb-4"
+                :areaSelectItem="areaSelectItem"
+                :deviceGroupSelectItem="deviceGroupSelectItem"
+                :deviceSelectItem="deviceSelectItem"
+                :timeModeSelectItem="timeModeSelectItem"
+                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                :businessChartTypeSelectItem="businessChartTypeSelectItem"
+                :siteIds="filterData.siteIds"
+                :areaId="inputFormData.areaId"
+                :groupId="inputFormData.groupId"
+                :deviceId="inputFormData.deviceId"
+                :type="inputFormData.type"
+                :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                @area_id="receiveAreaId"
+                @group_id="receiveGroupId"
+                @device_id="receiveDeviceId"
+                @type="receiveType"
+                @is_included_employee="receiveIsIncludedEmployee"
+                @business_chart_type="receiveBusinessChartType"
+            >
+
+            </analysis-filter-dwell-time>
 
             <template #toolbox>
                 <!-- Ben -->
@@ -292,7 +292,6 @@ export default class ReportDwellTime extends Vue {
     // recipient 相關
     modalShow: boolean = false;
 
-
     // 收合card控制
     visible: boolean = false;
 
@@ -351,8 +350,8 @@ export default class ReportDwellTime extends Vue {
     //ReportTable 相關
     rData = new ReportTableData();
 
-		 reportTableTitle: IReportTableTitle = {
-        titleCount:0
+    reportTableTitle: IReportTableTitle = {
+        titleCount: 0
     };
 
     //Sun ReportTable 相關
@@ -380,12 +379,10 @@ export default class ReportDwellTime extends Vue {
     }
 
     initSelect() {
-
         this.ifAllSitesSelectItem = [
             { value: EIfAllSelected.all, text: this._("w_AllSites") },
             { value: EIfAllSelected.select, text: this._("w_SelectSites") }
         ];
-
 
         this.addPeriodSelectItem = [
             { value: EAddPeriodSelect.period, text: this._("w_period") },
@@ -456,7 +453,7 @@ export default class ReportDwellTime extends Vue {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
-                   this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
+                this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
@@ -484,7 +481,7 @@ export default class ReportDwellTime extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                  this.reportTableTitle.headTitle = "DWELLTIME BY DAYS";
+                this.reportTableTitle.headTitle = "DWELLTIME BY DAYS";
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
@@ -843,7 +840,7 @@ export default class ReportDwellTime extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
-           this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
+        this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
 
         //head
         this.sunRData.head = [];
@@ -1580,32 +1577,45 @@ export default class ReportDwellTime extends Vue {
         return value < 10 ? "0" + value : value;
     }
     analysisTitle(): string {
-
-        let title = 'Analysis - ';
+        let title = "Analysis - ";
 
         if (this.filterData.siteIds.length === 1) {
             for (const siteId in this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === siteId) {
-                    title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+                if (this.filterData.siteIds[0] === siteId) {
+                    title += `${this._("w_Title_One_Site")} ${
+                        this.sitesSelectItem[siteId]
+                    }. `;
                 }
             }
         } else {
-            title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+            title += `${this._("w_Title_Many_Site_Start")} ${
+                this.filterData.siteIds.length
+            } ${this._("w_Title_Many_Site_End")} `;
         }
 
-        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
-        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+        title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
+            this.filterData.startDate,
+            "YYYY/MM/DD"
+        )}. `;
+        title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
+            this.filterData.endDate,
+            "YYYY/MM/DD"
+        )}. `;
 
         if (this.filterData.tagIds.length === 1) {
             for (const tagId in this.tagSelectItem) {
-                if(this.filterData.tagIds[0] === tagId) {
-                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                if (this.filterData.tagIds[0] === tagId) {
+                    title += `${this._("w_Title_One_Tag")} ${
+                        this.tagSelectItem[tagId]
+                    }. `;
                 }
             }
         } else if (this.filterData.tagIds.length >= 2) {
-            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+            title += `${this._("w_Title_Many_Tag_Start")} ${
+                this.filterData.tagIds.length
+            } ${this._("w_Title_Many_Tag_End")} `;
         } else {
-            title += '';
+            title += "";
         }
 
         this.visible = true;
@@ -2448,13 +2458,13 @@ export default class ReportDwellTime extends Vue {
     }
 
     // Author: Morris
-	exportPDF() {
-		let title = "";
-		title += this._("w_Navigation_Report_DwellTime");
-		title += " ";
-		title += Datetime.DateTime2String(
-			this.startDate,
-			HighchartsService.datetimeFormat.date
+    exportPDF() {
+        let title = "";
+        title += this._("w_Navigation_Report_DwellTime");
+        title += " ";
+        title += Datetime.DateTime2String(
+            this.startDate,
+            HighchartsService.datetimeFormat.date
         );
         ReportPDFService.exportPDF(title);
     }
