@@ -70,7 +70,7 @@
 
 				<!-- Ben -->
 				<anlysis-dashboard
-					ref="anlysisDashboard"
+					ref="analysisDashboard"
 					:startDate="startDate"
 					:endDate="endDate"
 					:type="dTimeMode"
@@ -364,8 +364,8 @@ import { EFileType,IReportTableTitle } from "@/components/Reports";
 		initDashboardData() {
 			this.dPageType = EPageType.demographic;
 			setTimeout(() => {
-				let anlysisDashboard: any = this.$refs.anlysisDashboard;
-				anlysisDashboard.initData();
+				let analysisDashboard: any = this.$refs.analysisDashboard;
+				analysisDashboard.initData();
 			}, 300);
 		}
 

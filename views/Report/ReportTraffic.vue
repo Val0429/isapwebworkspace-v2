@@ -72,7 +72,7 @@
 
             <!-- Ben -->
             <anlysis-dashboard
-                ref="anlysisDashboard"
+                ref="analysisDashboard"
                 :startDate="startDate"
                 :endDate="endDate"
                 :type="dTimeMode"
@@ -235,7 +235,7 @@ export default class ReportTraffic extends Vue {
     //ReportTable 相關
     rData = new ReportTableData();
     reportTableTitle: IReportTableTitle = {
-        titleCount:0
+        titleCount: 0
     };
 
     //Sun ReportTable 相關
@@ -349,12 +349,10 @@ export default class ReportTraffic extends Vue {
     }
 
     initSelect() {
-
         this.ifAllSitesSelectItem = [
             { value: EIfAllSelected.all, text: this._("w_AllSites") },
             { value: EIfAllSelected.select, text: this._("w_SelectSites") }
         ];
-
 
         this.addPeriodSelectItem = [
             { value: EAddPeriodSelect.period, text: this._("w_period") },
@@ -409,8 +407,8 @@ export default class ReportTraffic extends Vue {
     initDashboardData() {
         this.dPageType = EPageType.traffic;
         setTimeout(() => {
-            let anlysisDashboard: any = this.$refs.anlysisDashboard;
-            anlysisDashboard.initData();
+            let analysisDashboard: any = this.$refs.analysisDashboard;
+            analysisDashboard.initData();
         }, 300);
     }
 
@@ -465,6 +463,7 @@ export default class ReportTraffic extends Vue {
 
             pDatum.body.push(body);
             this.pData.push(pDatum);
+            console.log("initPeakTimeRange", this.pData);
         }
     }
 
@@ -477,7 +476,7 @@ export default class ReportTraffic extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
-                      this.reportTableTitle.headTitle = "TRAFFIC BY HOURS";
+        this.reportTableTitle.headTitle = "TRAFFIC BY HOURS";
 
         //head
         this.sunRData.head = [];
@@ -668,7 +667,7 @@ export default class ReportTraffic extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                                this.reportTableTitle.headTitle = "TRAFFIC BY DAYS";
+                this.reportTableTitle.headTitle = "TRAFFIC BY DAYS";
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
