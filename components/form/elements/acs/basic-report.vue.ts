@@ -48,8 +48,8 @@ export class BasicReport extends Vue{
     doMounted(){
         this.isMounted=true;        
         this.options=this.fields.map(x=>{return{value:x.key,text:x.label}});
-        this.selectedColumns = this.fields.map(x=>x.key);
-        this.sortedFields = Object.assign([], this.fields);
+        this.selectedColumns = [];//this.fields.map(x=>x.key);
+        this.sortedFields = [];//Object.assign([], this.fields);
         //console.log(this.options.length);        
     }
 
