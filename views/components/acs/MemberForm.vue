@@ -114,10 +114,10 @@
 
         <template #premissionList>               
           <iv-sort-select
-            v-if="premissionOptions.length > 0"
+            v-if="permissionOptions.length > 0"
             v-model="permissionSelected"
             class="col-md-12"
-            :options="premissionOptions"
+            :options="permissionOptions"
           ></iv-sort-select>
         </template>
 
@@ -313,7 +313,7 @@ export default class MemberForm extends Vue {
   newImg = new Image();
   newImgSrc = "";
   imageSrcCard = "";
-  premissionOptions: ISortSelectOption[] = [];
+  permissionOptions: ISortSelectOption[] = [];
   tabMounted: boolean = false;
   doTabMount() {
     this.tabMounted = true;
@@ -611,8 +611,8 @@ export default class MemberForm extends Vue {
           }})        
         });
     }
-    
-    this.premissionOptions = Object.assign([],this.storedPermissionOptions);
+    //force on options change triggerred
+    this.permissionOptions = Object.assign([],this.storedPermissionOptions);
     
   }
 
@@ -915,7 +915,7 @@ export default class MemberForm extends Vue {
                      : "iv-form-label"
                  }
                  */
-                employeeNumber?: string;
+                employeeNumber: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_ChineseName")}
@@ -1140,7 +1140,9 @@ export default class MemberForm extends Vue {
                 row63?: string;
 
                 permissionTable?: any;
-
+                /**
+                * @uiHidden - ${!this.inputFormData.cardNumber || this.inputFormData.cardNumber=="" ? "true":"false"}
+                */                
                 premissionList?: any;
 
                 tabItem?: any;
