@@ -14,121 +14,120 @@
         >
         </filter-condition>
 
-
         <iv-card
             :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
             :visible="visible"
         >
-                <template #toolbox>
-                    <!-- Ben -->
-                    <iv-toolbox-export-excel
-                        size="lg"
-                        @click="exportExcel(eFileType.xlsx)"
-                    />
-                    <iv-toolbox-export-csv
-                        size="lg"
-                        @click="exportExcel(eFileType.csv)"
-                    />
+            <template #toolbox>
+                <!-- Ben -->
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
 
-                    <iv-toolbox-export-pdf
-                        size="lg"
-                        @click="exportPDF"
-                    />
-
-                    <!-- Tina -->
-                    <iv-toolbox-send-mail
-                        size="lg"
-                        @click="modalShow = !modalShow"
-                    />
-                    <iv-toolbox-copy-to-template
-                        size="lg"
-                        @click="pageToReportTemplate()"
-                    />
-                </template>
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
 
                 <!-- Tina -->
-                <analysis-filter
-                    class="mb-4"
-                    :areaSelectItem="areaSelectItem"
-                    :deviceGroupSelectItem="deviceGroupSelectItem"
-                    :deviceSelectItem="deviceSelectItem"
-                    :timeModeSelectItem="timeModeSelectItem"
-                    :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                    :siteIds="filterData.siteIds"
-                    :areaId="inputFormData.areaId"
-                    :groupId="inputFormData.groupId"
-                    :deviceId="inputFormData.deviceId"
-                    :type="inputFormData.type"
-                    :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                    @area_id="receiveAreaId"
-                    @group_id="receiveGroupId"
-                    @device_id="receiveDeviceId"
-                    @type="receiveType"
-                    @is_included_employee="receiveIsIncludedEmployee"
-                >
+                <iv-toolbox-send-mail
+                    size="lg"
+                    @click="modalShow = !modalShow"
+                />
+                <iv-toolbox-copy-to-template
+                    size="lg"
+                    @click="pageToReportTemplate()"
+                />
+            </template>
 
-                </analysis-filter>
+            <!-- Tina -->
+            <analysis-filter
+                class="mb-4"
+                :areaSelectItem="areaSelectItem"
+                :deviceGroupSelectItem="deviceGroupSelectItem"
+                :deviceSelectItem="deviceSelectItem"
+                :timeModeSelectItem="timeModeSelectItem"
+                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+                :siteIds="filterData.siteIds"
+                :areaId="inputFormData.areaId"
+                :groupId="inputFormData.groupId"
+                :deviceId="inputFormData.deviceId"
+                :type="inputFormData.type"
+                :isIncludedEmployee="inputFormData.isIncludedEmployee"
+                @area_id="receiveAreaId"
+                @group_id="receiveGroupId"
+                @device_id="receiveDeviceId"
+                @type="receiveType"
+                @is_included_employee="receiveIsIncludedEmployee"
+            >
 
-                <!-- Ben -->
-                <anlysis-dashboard
-                    ref="analysisDashboard"
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :type="dTimeMode"
-                    :siteIds="pSiteIds"
-                    :tagIds="tags"
-                    :pageType="dPageType"
-                >
-                </anlysis-dashboard>
+            </analysis-filter>
 
-                <!-- Morris -->
-                <highcharts-occupancy
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    :sites="sites"
-                    :timeMode="timeMode"
-                    :areaMode="areaMode"
-                    :value="chartDatas"
-                >
-                </highcharts-occupancy>
+            <!-- Ben -->
+            <anlysis-dashboard
+                ref="analysisDashboard"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type="dTimeMode"
+                :siteIds="pSiteIds"
+                :tagIds="tags"
+                :pageType="dPageType"
+            >
+            </anlysis-dashboard>
 
-                <!-- Ben -->
-                <report-table
-                    v-show="tableStep === eTableStep.mainTable"
-                    ref="reportTable"
-                    :reportTableData="rData"
-                    :reportTableTitle="reportTableTitle"
-                    @clickItem="toSunReportTable"
-                >
-                </report-table>
+            <!-- Morris -->
+            <highcharts-occupancy
+                :startDate="startDate"
+                :endDate="endDate"
+                :sites="sites"
+                :timeMode="timeMode"
+                :areaMode="areaMode"
+                :value="chartDatas"
+            >
+            </highcharts-occupancy>
 
-                <report-table
-                    v-show="tableStep === eTableStep.sunTable"
-                    ref="sunReportTable"
-                    :reportTableData="sunRData"
-                    :reportTableTitle="reportTableTitle"
-                    @clickItem="toDetailReportTable"
-                >
-                </report-table>
+            <!-- Ben -->
+            <report-table
+                v-show="tableStep === eTableStep.mainTable"
+                ref="reportTable"
+                :reportTableData="rData"
+                :reportTableTitle="reportTableTitle"
+                @clickItem="toSunReportTable"
+            >
+            </report-table>
 
-                <occupancy-details-table
-                    ref="detailReportTable"
-                    v-show="tableStep === eTableStep.detailTable"
-                    :thresholdDetailTableContent="detailRData"
-                >
-                </occupancy-details-table>
+            <report-table
+                v-show="tableStep === eTableStep.sunTable"
+                ref="sunReportTable"
+                :reportTableData="sunRData"
+                :reportTableTitle="reportTableTitle"
+                @clickItem="toDetailReportTable"
+            >
+            </report-table>
 
-                <div>
-                    <b-button
-                        v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
-                        variant="secondary"
-                        size="lg"
-                        @click="reportTableBack"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </div>
+            <occupancy-details-table
+                ref="detailReportTable"
+                v-show="tableStep === eTableStep.detailTable"
+                :thresholdDetailTableContent="detailRData"
+            >
+            </occupancy-details-table>
 
-            </iv-card>
+            <div>
+                <b-button
+                    v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
+                    variant="secondary"
+                    size="lg"
+                    @click="reportTableBack"
+                >{{ _('w_Back') }}
+                </b-button>
+            </div>
+
+        </iv-card>
 
         <!-- Tina -->
         <recipient
@@ -188,7 +187,7 @@ import ReportService from "@/components/Reports/models/ReportService";
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
-import { EFileType,IReportTableTitle } from "@/components/Reports";
+import { EFileType, IReportTableTitle } from "@/components/Reports";
 
 enum ETableStep {
     mainTable = "mainTable",
@@ -296,8 +295,8 @@ export default class ReportOccupancy extends Vue {
 
     //ReportTable 相關
     rData = new ReportTableData();
-    	 reportTableTitle: IReportTableTitle = {
-        titleCount:0
+    reportTableTitle: IReportTableTitle = {
+        titleCount: 0
     };
 
     //Sun ReportTable 相關
@@ -333,12 +332,10 @@ export default class ReportOccupancy extends Vue {
     }
 
     initSelect() {
-
         this.ifAllSitesSelectItem = [
             { value: EIfAllSelected.all, text: this._("w_AllSites") },
             { value: EIfAllSelected.select, text: this._("w_SelectSites") }
         ];
-
 
         this.addPeriodSelectItem = [
             { value: EAddPeriodSelect.period, text: this._("w_period") },
@@ -1026,32 +1023,45 @@ export default class ReportOccupancy extends Vue {
     }
 
     analysisTitle(): string {
-
-        let title = 'Analysis - ';
+        let title = "Analysis - ";
 
         if (this.filterData.siteIds.length === 1) {
             for (const siteId in this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === siteId) {
-                    title += `${this._('w_Title_One_Site')} ${this.sitesSelectItem[siteId]}. `;
+                if (this.filterData.siteIds[0] === siteId) {
+                    title += `${this._("w_Title_One_Site")} ${
+                        this.sitesSelectItem[siteId]
+                    }. `;
                 }
             }
         } else {
-            title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
+            title += `${this._("w_Title_Many_Site_Start")} ${
+                this.filterData.siteIds.length
+            } ${this._("w_Title_Many_Site_End")} `;
         }
 
-        title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
-        title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+        title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
+            this.filterData.startDate,
+            "YYYY/MM/DD"
+        )}. `;
+        title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
+            this.filterData.endDate,
+            "YYYY/MM/DD"
+        )}. `;
 
         if (this.filterData.tagIds.length === 1) {
             for (const tagId in this.tagSelectItem) {
-                if(this.filterData.tagIds[0] === tagId) {
-                    title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
+                if (this.filterData.tagIds[0] === tagId) {
+                    title += `${this._("w_Title_One_Tag")} ${
+                        this.tagSelectItem[tagId]
+                    }. `;
                 }
             }
         } else if (this.filterData.tagIds.length >= 2) {
-            title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
+            title += `${this._("w_Title_Many_Tag_Start")} ${
+                this.filterData.tagIds.length
+            } ${this._("w_Title_Many_Tag_End")} `;
         } else {
-            title += '';
+            title += "";
         }
 
         this.visible = true;
@@ -1065,7 +1075,7 @@ export default class ReportOccupancy extends Vue {
         this.lastTableStep = ETableStep.mainTable;
     }
 
-      fetchZero(value) {
+    fetchZero(value) {
         return value < 10 ? "0" + value : value;
     }
 
@@ -1085,7 +1095,7 @@ export default class ReportOccupancy extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
-                    this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
+        this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
 
         //head
         this.sunRData.head = [];
@@ -1256,7 +1266,7 @@ export default class ReportOccupancy extends Vue {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
-                  this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
+                this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
@@ -1284,7 +1294,7 @@ export default class ReportOccupancy extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                     this.reportTableTitle.headTitle = "OCCUPANCY BY DAYS";
+                this.reportTableTitle.headTitle = "OCCUPANCY BY DAYS";
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
@@ -1435,7 +1445,11 @@ export default class ReportOccupancy extends Vue {
                     }
                 }
                 this.rData.head = this.rData.head.map(
-                    x => this.fetchZero(x) + ":00 ~ " + this.fetchZero(x + 1) + ":00"
+                    x =>
+                        this.fetchZero(x) +
+                        ":00 ~ " +
+                        this.fetchZero(x + 1) +
+                        ":00"
                 );
                 break;
 
@@ -2326,35 +2340,35 @@ export default class ReportOccupancy extends Vue {
 
     ////////////////////////////////////// Export //////////////////////////////////////
 
-     exportExcel(fType) {
-            let reportTable: any = null;
-            if (this.tableStep == ETableStep.mainTable) {
-                reportTable = this.$refs.reportTable;
-            } else if (this.tableStep == ETableStep.sunTable) {
-                reportTable = this.$refs.sunReportTable;
-            } else {
-                reportTable = this.$refs.detailReportTable;
-            }
-            let tableData = reportTable.tableToArray();
-            //th
-            let th = [];
-            for (let title of tableData[0]) {
-                th.push(title);
-            }
+    exportExcel(fType) {
+        let reportTable: any = null;
+        if (this.tableStep == ETableStep.mainTable) {
+            reportTable = this.$refs.reportTable;
+        } else if (this.tableStep == ETableStep.sunTable) {
+            reportTable = this.$refs.sunReportTable;
+        } else {
+            reportTable = this.$refs.detailReportTable;
+        }
+        let tableData = reportTable.tableToArray();
+        //th
+        let th = [];
+        for (let title of tableData[0]) {
+            th.push(title);
+        }
 
-            //data
-            let data = [];
-            for (let bodys of tableData) {
-                if (tableData.indexOf(bodys) == 0) continue;
-                data.push(bodys);
-            }
-            let [fileName, fileType, sheetName] = [
-                this._("w_Navigation_Report_Occupancy"),
-                fType,
-                Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
-            ];
-            toExcel({ th, data, fileName, fileType, sheetName });
-     }
+        //data
+        let data = [];
+        for (let bodys of tableData) {
+            if (tableData.indexOf(bodys) == 0) continue;
+            data.push(bodys);
+        }
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_Report_Occupancy"),
+            fType,
+            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
 
     // Author: Morris
     exportPDF() {
