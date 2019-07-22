@@ -699,18 +699,18 @@ export default class MemberForm extends Vue {
         tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});
       }
     }
-   
+    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType));
     let member = {        
         // master
         objectId: this.inputFormData.objectId,
         AccessRules: this.permissionSelected,
         PrimaryWorkgroupId:parseInt(this.inputFormData.personType),
         ApbWorkgroupId:parseInt(this.inputFormData.personType),
-        PrimaryWorkgroupName: this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType)).groupname,
+        PrimaryWorkgroupName: wg? wg.groupname : "",
         EmployeeNumber: this.inputFormData.employeeNumber,
         LastName: this.inputFormData.chineseName,
         FirstName: this.inputFormData.englishName || "-",
-        StartDate: this.inputFormData.startDate || new Date(),
+        StartDate: this.inputFormData.startDate || credential.StartDate,
         EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
         SmartCardProfileId:"0",
         Status:1,
