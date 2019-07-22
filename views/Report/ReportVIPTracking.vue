@@ -214,11 +214,7 @@ export default class ReportVIPTracking extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
 
         for (const detail of this.tagSelectItem) {
@@ -240,11 +236,7 @@ export default class ReportVIPTracking extends Vue {
             //     }
             // })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
 
         if (result["results"].length > 0) {
@@ -275,11 +267,7 @@ export default class ReportVIPTracking extends Vue {
         //         }
         //     })
         //     .catch((e: any) => {
-        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-        //             return ResponseFilter.base(this, e);
-        //         }
-        //         console.log(e);
-        //         return false;
+        //         return ResponseFilter.base(this, e);
         //     });
     }
 

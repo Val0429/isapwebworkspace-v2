@@ -543,15 +543,11 @@ export default class GeneralOfficeHour extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_OfficeHour_AddFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_OfficeHour_AddFailed")
+                    );
                 });
         }
 
@@ -612,15 +608,11 @@ export default class GeneralOfficeHour extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_OfficeHour_EditFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_OfficeHour_EditFailed")
+                    );
                 });
         }
     }
@@ -651,15 +643,7 @@ export default class GeneralOfficeHour extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }

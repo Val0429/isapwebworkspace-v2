@@ -915,11 +915,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else {
             // this.toDetailReportTable(thatDay, sunTime, sunSite, sunArea);
@@ -969,11 +965,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -994,11 +986,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -1038,11 +1026,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -1073,11 +1057,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -1113,11 +1093,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
             // 選擇site和單一area
         } else if (
@@ -1139,11 +1115,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
             // 選擇site和all area
         } else if (
@@ -1164,11 +1136,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -1208,11 +1176,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1235,11 +1199,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1266,11 +1226,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1299,11 +1255,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1328,11 +1280,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1359,11 +1307,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1391,11 +1335,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -1418,11 +1358,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -1468,11 +1404,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 

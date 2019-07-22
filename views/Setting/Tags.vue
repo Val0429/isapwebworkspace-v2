@@ -256,11 +256,7 @@ export default class Tags extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -281,11 +277,7 @@ export default class Tags extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -302,11 +294,7 @@ export default class Tags extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -548,15 +536,11 @@ export default class Tags extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_Tag_AddTagFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_Tag_AddTagFailed")
+                    );
                 });
         }
         if (this.inputFormData.type === EPageStep.edit) {
@@ -589,15 +573,11 @@ export default class Tags extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_Tag_EditTagFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_Tag_EditTagFailed")
+                    );
                 });
         }
     }
@@ -628,15 +608,7 @@ export default class Tags extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }

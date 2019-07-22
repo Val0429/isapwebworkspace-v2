@@ -156,13 +156,12 @@ export default class MailServer extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
                 this.modalShow = !this.modalShow;
-                Dialog.error(this._("w_MailServer_Test_Fail"));
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_MailServer_Test_Fail")
+                );
             });
     }
 
@@ -179,12 +178,11 @@ export default class MailServer extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                Dialog.error(this._("w_MailServer_Read_Fail"));
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_MailServer_Read_Fail")
+                );
             });
     }
 
@@ -220,14 +218,11 @@ export default class MailServer extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_MailServer_Setting_Fail"));
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_MailServer_Setting_Fail")
+                );
             });
     }
 

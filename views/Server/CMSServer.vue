@@ -247,15 +247,11 @@ export default class CMSServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_ServerCMS_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_ServerCMS_ADDFailed")
+                    );
                 });
         }
 
@@ -296,15 +292,11 @@ export default class CMSServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_ServerCMS_EditFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_ServerCMS_EditFailed")
+                    );
                 });
         }
     }
@@ -335,15 +327,7 @@ export default class CMSServer extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }

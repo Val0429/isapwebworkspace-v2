@@ -200,7 +200,7 @@ export default class ForgetPassword extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
-                return ResponseFilter.customMessage(
+                return ResponseFilter.base(
                     this,
                     e,
                     this._("w_ForgetPassword_Step1Failed")
@@ -229,7 +229,7 @@ export default class ForgetPassword extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
-                return ResponseFilter.customMessage(
+                return ResponseFilter.base(
                     this,
                     e,
                     this._("w_ForgetPassword_Step2Failed")
@@ -261,7 +261,7 @@ export default class ForgetPassword extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
-                return ResponseFilter.customMessage(
+                return ResponseFilter.base(
                     this,
                     e,
                     this._("w_ForgetPassword_Step3Failed")

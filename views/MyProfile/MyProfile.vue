@@ -195,7 +195,7 @@ export default class MyProfile extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
-                return ResponseFilter.customMessage(
+                return ResponseFilter.base(
                     this,
                     e,
                     this._("w_MyProfile_ChangePasswordFailed")
@@ -229,7 +229,7 @@ export default class MyProfile extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
-                return ResponseFilter.customMessage(
+                return ResponseFilter.base(
                     this,
                     e,
                     this._("w_MyProfile_EditFailed")

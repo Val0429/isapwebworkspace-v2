@@ -375,11 +375,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -399,11 +395,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -442,11 +434,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -476,11 +464,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -515,11 +499,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -541,11 +521,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -566,11 +542,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -610,11 +582,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -637,11 +605,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -668,11 +632,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -701,11 +661,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -730,11 +686,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -761,11 +713,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -793,11 +741,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -819,11 +763,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -1547,11 +1487,7 @@ export default class ReportHeatmap extends Vue {
         //         }
         //     })
         //     .catch((e: any) => {
-        //         if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-        //             return ResponseFilter.base(this, e);
-        //         }
-        //         console.log(e);
-        //         return false;
+        //         return ResponseFilter.base(this, e);
         //     });
     }
 
