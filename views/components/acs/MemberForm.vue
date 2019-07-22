@@ -430,6 +430,7 @@ export default class MemberForm extends Vue {
       this.initDropDownList("ApplyReason3").then(res=>this.applyReason3Options=res)
     ]);
     await this.initCredentialProfile();
+    
   }
   
   onCardCertificateUpdate(value:any){
@@ -468,8 +469,12 @@ export default class MemberForm extends Vue {
     let response:any = await this.$server.R("/acs/credentialprofiles" as any, {});
     this.credentialProfiles = response.results;
   }
-  async initDropDownList(type:string,key:string="name", value:string="name") {     
+  async initDropDownList(type:string,key:string="name", value:string="name") {
       let resp:any = await this.$server .R("/acs/dropdownlist", { type });
+      if(type=="ProfileId"){                    
+          let p35bit=resp.results.find(x=>x.name=="35 bit");
+          this.defaultFormData.cardCertificate=p35bit ? p35bit.key.toString() : '0';
+      }
       let result = {};
        for(let res of resp.results){
          result[res[key]]=res[value];
@@ -518,11 +523,11 @@ export default class MemberForm extends Vue {
       this.inputFormData.englishName = detailData.FirstName;
       
     
-      if (detailData.Credentials && detailData.Credentials.length>0){        
+      if (detailData.Credentials && detailData.Credentials.length>0){
         console.log("detailData.Credentials[0]",detailData.Credentials[0])
         this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber;
         this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber;
-        this.inputFormData.cardCertificate = (detailData.Credentials[0].ProfileId || 2).toString();
+        this.inputFormData.cardCertificate = (detailData.Credentials[0].ProfileId || 0).toString();
         this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode;
         this.inputFormData.pinDigit = detailData.Credentials[0].PinDigit;
         this.inputFormData.profileName = detailData.Credentials[0].ProfileName;
