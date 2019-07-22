@@ -112,7 +112,7 @@ export default class DoorGroupReport extends Vue  {
         for(let tableid of member.PermissionTable){
             let newMember = Object.assign({},member);
             let permission = this.permissions.find(x=>x.tableid==tableid);
-            if(!permission)continue;
+            if(!permission || !permission.accesslevels)continue;
             for(let access of permission.accesslevels){
                 newMember.PermissionName = permission.tablename;
                 newMember.TimeSchedule = access.timeschedule.timename;

@@ -514,7 +514,7 @@ export default class PermissionTable extends Vue {
     async initInputFormData() {
         this.inputFormData.id = this.selectedDetail.objectId;
         this.inputFormData.permissionName = this.selectedDetail.tablename;
-
+        if(!this.selectedDetail.accesslevels)return;
         for (const tempAccesslevels of this.selectedDetail.accesslevels) {
             if (tempAccesslevels.objectId == undefined) {
                 continue;
