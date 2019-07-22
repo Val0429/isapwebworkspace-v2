@@ -298,7 +298,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 @Component({
     components: {}
 })
-export class AnlysisDashboard extends Vue {
+export class AnalysisDashboard extends Vue {
     // Prop
     @Prop({
         type: Date,
@@ -609,8 +609,8 @@ export class AnlysisDashboard extends Vue {
     }
 }
 
-export default AnlysisDashboard;
-Vue.component("anlysis-dashboard", AnlysisDashboard);
+export default AnalysisDashboard;
+Vue.component("anlysis-dashboard", AnalysisDashboard);
 </script>
 
 <style lang="scss" scoped>

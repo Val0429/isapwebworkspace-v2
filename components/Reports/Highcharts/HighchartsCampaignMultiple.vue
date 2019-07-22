@@ -1,5 +1,6 @@
 <template>
     <div class="chart">
+        <h2 v-if="mountAnyChart()">{{ _('w_ReportCampaign_CampaignChart') }}</h2>
         <b-form-group :label="_('w_ReportCampaign_MultipleLabel')">
             <b-row>
                 <b-col>
@@ -77,6 +78,13 @@ export class HighchartsCampaignMultiple extends Vue {
     start() {
         this.initCampaignMultipleChart();
         console.log(this.value);
+    }
+
+    mountAnyChart(): boolean{
+        if (this.mountChart.campaignMultiple) {
+            return true;
+        }
+        return false;
     }
 
     initCampaignMultipleChart() {
@@ -253,4 +261,8 @@ Vue.component("highcharts-campaign-multiple", HighchartsCampaignMultiple);
 </script>
 
 <style lang="scss" scoped>
+.chart {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 </style>

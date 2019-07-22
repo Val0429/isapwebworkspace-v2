@@ -1,5 +1,6 @@
 <template>
     <div class="chart">
+        <h2 v-if="mountAnyChart()">{{ _('w_ReportVipTrackin_VipTrackingChart') }}</h2>
         <b-form-group>
             <b-row>
                 <b-col>
@@ -7,15 +8,15 @@
                     <!-- siteXDay1 -->
                     <highcharts
                         ref="chartSiteXDay1"
-                        v-if="mountChart.siteXday1"
-                        :options="chartOptions.siteXday1"
+                        v-if="mountChart.siteXDay1"
+                        :options="chartOptions.siteXDay1"
                     ></highcharts>
 
                     <!-- siteXDayX -->
                     <highcharts
                         ref="chartSiteXDayX"
-                        v-if="mountChart.siteXdayX"
-                        :options="chartOptions.siteXdayX"
+                        v-if="mountChart.siteXDayX"
+                        :options="chartOptions.siteXDayX"
                     ></highcharts>
 
                 </b-col>
@@ -163,19 +164,19 @@ export class HighchartsVipTracking extends Vue {
     };
 
     mountChart: {
-        siteXday1: boolean;
-        siteXdayX: boolean;
+        siteXDay1: boolean;
+        siteXDayX: boolean;
     } = {
-        siteXday1: false,
-        siteXdayX: false
+        siteXDay1: false,
+        siteXDayX: false
     };
 
     chartOptions: {
-        siteXday1: any;
-        siteXdayX: any;
+        siteXDay1: any;
+        siteXDayX: any;
     } = {
-        siteXday1: {},
-        siteXdayX: {}
+        siteXDay1: {},
+        siteXDayX: {}
     };
 
     @Watch("value", { deep: true })
@@ -194,8 +195,8 @@ export class HighchartsVipTracking extends Vue {
 
     start() {
         this.modalShow = false;
-        this.mountChart.siteXday1 = false;
-        this.mountChart.siteXdayX = false;
+        this.mountChart.siteXDay1 = false;
+        this.mountChart.siteXDayX = false;
 
         this.chartMode = HighchartsService.chartMode(
             this.startDate,
@@ -224,6 +225,16 @@ export class HighchartsVipTracking extends Vue {
             this.sites,
             this.value
         );
+    }
+
+    mountAnyChart(): boolean {
+        if (this.mountChart.siteXDay1) {
+            return true;
+        }
+        if (this.mountChart.siteXDayX) {
+            return true;
+        }
+        return false;
     }
 
     ////////////////////////// site X day 1 //////////////////////////
@@ -306,7 +317,7 @@ export class HighchartsVipTracking extends Vue {
             }
         }
 
-        this.chartOptions.siteXday1 = {
+        this.chartOptions.siteXDay1 = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -340,7 +351,7 @@ export class HighchartsVipTracking extends Vue {
             },
             series: tempSeries
         };
-        this.mountChart.siteXday1 = true;
+        this.mountChart.siteXDay1 = true;
     }
 
     ////////////////////////// site X day X //////////////////////////
@@ -439,7 +450,7 @@ export class HighchartsVipTracking extends Vue {
             tempSeries[1].data.push(ret.blacklist);
         }
 
-        this.chartOptions.siteXdayX = {
+        this.chartOptions.siteXDayX = {
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -473,7 +484,7 @@ export class HighchartsVipTracking extends Vue {
             },
             series: tempSeries
         };
-        this.mountChart.siteXdayX = true;
+        this.mountChart.siteXDayX = true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -699,6 +710,10 @@ Vue.component("highcharts-vip-tracking", HighchartsVipTracking);
 </script>
 
 <style lang="scss" scoped>
+.chart {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 .center {
     text-align: center;
 }

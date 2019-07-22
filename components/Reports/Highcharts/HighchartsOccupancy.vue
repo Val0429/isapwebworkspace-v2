@@ -1,5 +1,6 @@
 <template>
     <div class="chart">
+        <h2 v-if="mountAnyChart()">{{ _('w_ReportOccupancy_OccupancyChart') }}</h2>
         <b-form-group>
             <!-- site1Day1 -->
             <highcharts
@@ -191,6 +192,22 @@ export class HighchartsOccupancy extends Vue {
             this.sites,
             this.value
         );
+    }
+
+     mountAnyChart(): boolean{
+        if (this.mountChart.site1Day1) {
+            return true;
+        }
+        if (this.mountChart.site1DayX) {
+            return true;
+        }
+        if (this.mountChart.siteXDay1) {
+            return true;
+        }
+        if (this.mountChart.siteXDayX) {
+            return true;
+        }
+        return false;
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
@@ -1255,4 +1272,8 @@ Vue.component("highcharts-occupancy", HighchartsOccupancy);
 </script>
 
 <style lang="scss" scoped>
+.chart {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 </style>
