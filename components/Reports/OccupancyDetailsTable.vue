@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>OCCUPANCY BY HOUR</h2>
         <table
             ref="reportTable"
             class="table b-table table-striped table-hover"

@@ -134,23 +134,23 @@ $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-code', redire
 $({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-check' })(ReportTraffic);
 $({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-code', permission: false })(ReportDwellTime);
 $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-code' })(ReportDemographic);
-$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-question', permission: false })(ReportHeatmap);
+$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-code', permission: false })(ReportHeatmap);
 $({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-check' })(ReportOccupancy);
-$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-question', permission: false })(ReportVIPTracking);
+$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-code', permission: false })(ReportVIPTracking);
 $({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-check' })(ReportRepeatVisitor);
-$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-question', permission: false })(ReportCampaign);
+$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-code', permission: false })(ReportCampaign);
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-check' })(ReportTemplate);
 
 // Users
-$({ path: '/users', name: "_('w_Navigation_Users')", icon: 'fa-check', redirect: '/users/user' })();
-$({ path: '/users/user', name: "_('w_Navigation_Users_User')", icon: 'fa-check' })(User);
-$({ path: '/users/user_group', name: "_('w_Navigation_Users_UserGroup')", icon: 'fa-check' })(UserGroup);
+$({ path: '/users', name: "_('w_Navigation_Users')", redirect: '/users/user' })();
+$({ path: '/users/user', name: "_('w_Navigation_Users_User')" })(User);
+$({ path: '/users/user_group', name: "_('w_Navigation_Users_UserGroup')" })(UserGroup);
 
 // Sites
-$({ path: '/site', name: "_('w_Navigation_Site')", icon: 'fa-check' })(Site);
+$({ path: '/site', name: "_('w_Navigation_Site')" })(Site);
 
 // Regions
-$({ path: '/region', name: "_('w_Navigation_Region')", icon: 'fa-check' })(Region);
+$({ path: '/region', name: "_('w_Navigation_Region')" })(Region);
 
 // Server
 $({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-code', redirect: '/server/cms_server' })();
@@ -176,7 +176,7 @@ $({ path: '/video_sources/vip_stranger_visitor', name: 'VideoSources_VIP_Strange
 $({ path: '/rules_actions', name: "_('w_Navigation_RulesActions')", icon: 'fa-question', redirect: '/login' })();
 
 // Business Operation
-$({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", icon: 'fa-check', redirect: '/business_operations/campaign_setting' })();
+$({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", redirect: '/business_operations/campaign_setting' })();
 $({ path: '/business_operations/campaign_setting', name: "_('w_Navigation_BO_CampaignSetting')", icon: 'fa-check' })(CampaignSetting);
 $({ path: '/business_operations/sales_records', name: "_('w_Navigation_BO_SalesRecords')", icon: 'fa-check' })(SalesRecords);
 $({ path: '/business_operations/general_office_hour', name: "_('w_Navigation_BO_GeneralOfficeHour')", icon: 'fa-check' })(GeneralOfficeHour);
