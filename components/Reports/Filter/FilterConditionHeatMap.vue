@@ -11,18 +11,24 @@
                 @submit="doSubmit($event)"
             >
 
-                <template #siteIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.siteIds"
-                    >
-                    </iv-form-selection>
+                <template #ifAllSites="{ $attrs, $listeners }">
+
+                    <p class="ml-3">{{ _('w_SelectSite') }}</p>
+
                 </template>
 
-                <template #selectTree="{ $attrs, $listeners }">
+                <template #siteIds="{$attrs, $listeners}">
+                    <iv-form-selection
+                        v-on="$listeners"
+                        v-model="inputFormData.siteIds"
+                        class="select-site ml-3"
+                        :options="sitesSelectItem"
+                        :multiple="false"
+                        @input="changeSiteIds"
+                    >
+                    </iv-form-selection>
 
-                    <div class="ml-3 select_report_period_button">
+                    <div class="ml-3">
                         <b-button
                             variant="outline-secondary"
                             @click="pageToChooseTree"
@@ -30,6 +36,7 @@
                             {{ _('w_SelectSiteTree') }}
                         </b-button>
                     </div>
+
                 </template>
 
                 <template #selectPeriodAddWay="{ $attrs, $listeners }">
@@ -97,7 +104,6 @@
         </iv-card>
 
         <region-tree-select
-            v-if="pageStep === ePageStep.chooseTree"
             :multiple="false"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
@@ -139,10 +145,10 @@ enum EPageStep {
 })
 export class FilterConditionHeatMap extends Vue {
     @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: () => {}
+        type: Array, // Boolean, Number, String, Array, Object
+        default: []
     })
-    sitesSelectItem: object;
+    sitesSelectItem: any;
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -216,23 +222,19 @@ export class FilterConditionHeatMap extends Vue {
     initSelectItem() {
 
         this.designationPeriodSelectItem = {
-            today: `${this._("w_Today")} (${Datetime.CountDateNumber(0)} - ${Datetime.CountDateNumber(0)})`,
-            yesterday: `${this._("w_Yesterday")} (${Datetime.CountDateNumber(-1)} - ${Datetime.CountDateNumber(-1)})`,
-            last7days: `${this._("w_last7days")} (${Datetime.CountDateNumber(-6)} - ${Datetime.CountDateNumber(0)})`,
-            thisWeek: `${this._("w_thisWeek")} (${Datetime.ThisWeekStartDate()} - ${Datetime.ThisWeekEndDate()})`,
-            lastWeek: `${this._("w_lastWeek")} (${Datetime.LastWeekStartDate()} - ${Datetime.LastWeekEndDate()})`,
-            thisMonth: `${this._("w_thisMonth")} (${Datetime.ThisMonthStartDate()} - ${Datetime.ThisMonthEndDate()})`,
-            lastMonth: `${this._("w_lastMonth")} (${Datetime.LastMonthStartDate()} - ${Datetime.LastMonthEndDate()})`,
-            q1: `${this._("w_q1")} (${Datetime.Q1StartDate()} - ${Datetime.Q1EndDate()})`,
-            q2: `${this._("w_q2")} (${Datetime.Q2StartDate()} - ${Datetime.Q2EndDate()})`,
-            q3: `${this._("w_q3")} (${Datetime.Q3StartDate()} - ${Datetime.Q3EndDate()})`,
-            q4: `${this._("w_q4")} (${Datetime.Q4StartDate()} - ${Datetime.Q4EndDate()})`,
-            thisYear: `${this._("w_thisYear")} (${Datetime.ThisYearStartDate()} - ${Datetime.ThisYearEndDate()})`
+            today: `${this._("w_Today")} ( ${Datetime.CountDateNumber(0)} - ${Datetime.CountDateNumber(0)} )`,
+            yesterday: `${this._("w_Yesterday")} ( ${Datetime.CountDateNumber(-1)} - ${Datetime.CountDateNumber(-1)} )`,
+            last7days: `${this._("w_last7days")} ( ${Datetime.CountDateNumber(-6)} - ${Datetime.CountDateNumber(0)} )`,
+            thisWeek: `${this._("w_thisWeek")} ( ${Datetime.ThisWeekStartDate()} - ${Datetime.ThisWeekEndDate()} )`,
+            lastWeek: `${this._("w_lastWeek")} ( ${Datetime.LastWeekStartDate()} - ${Datetime.LastWeekEndDate()} )`,
+            thisMonth: `${this._("w_thisMonth")} ( ${Datetime.ThisMonthStartDate()} - ${Datetime.ThisMonthEndDate()} )`,
+            lastMonth: `${this._("w_lastMonth")} ( ${Datetime.LastMonthStartDate()} - ${Datetime.LastMonthEndDate()} )`,
+            q1: `${this._("w_q1")} ( ${Datetime.Q1StartDate()} - ${Datetime.Q1EndDate()} )`,
+            q2: `${this._("w_q2")} ( ${Datetime.Q2StartDate()} - ${Datetime.Q2EndDate()} )`,
+            q3: `${this._("w_q3")} ( ${Datetime.Q3StartDate()} - ${Datetime.Q3EndDate()} )`,
+            q4: `${this._("w_q4")} ( ${Datetime.Q4StartDate()} - ${Datetime.Q4EndDate()} )`,
+            thisYear: `${this._("w_thisYear")} ( ${Datetime.ThisYearStartDate()} - ${Datetime.ThisYearEndDate()} )`
         };
-
-
-
-
     }
 
     siteFilterPermission() {
@@ -244,13 +246,7 @@ export class FilterConditionHeatMap extends Vue {
     tempSaveInputData(data) {
         switch (data.key) {
             case "siteIds":
-                for (const siteId of data.value) {
-                    if (!siteId) {
-                        this.inputFormData.siteIds = [];
-                    } else {
-                        this.inputFormData.siteIds = data.value;
-                    }
-                }
+                this.inputFormData.siteIds = data.value;
                 break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
@@ -267,15 +263,32 @@ export class FilterConditionHeatMap extends Vue {
                 break;
         }
 
+        // this.selecteds = [];
+        //
+        // for (const id of this.inputFormData.siteIds) {
+        //     for (const detail in this.sitesSelectItem) {
+        //         if (id === detail) {
+        //             let selectedsObject: IRegionTreeSelected = {
+        //                 objectId: detail,
+        //                 type: ERegionType.site,
+        //                 name: this.sitesSelectItem[detail]
+        //             };
+        //             this.selecteds.push(selectedsObject);
+        //         }
+        //     }
+        // }
+    }
+
+    changeSiteIds() {
         this.selecteds = [];
 
         for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
+            for (const detail of this.sitesSelectItem) {
+                if (id === detail.id) {
                     let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
+                        objectId: detail.id,
                         type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
+                        name: detail.text
                     };
                     this.selecteds.push(selectedsObject);
                 }
@@ -286,28 +299,28 @@ export class FilterConditionHeatMap extends Vue {
     async pageToChooseTree() {
         this.pageStep = EPageStep.chooseTree;
         this.selecteds = [];
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
+
+            for (const detail of this.sitesSelectItem) {
+                if (this.inputFormData.siteIds === detail.id) {
                     let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
+                        objectId: detail.id,
                         type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
+                        name: detail.text
                     };
                     this.selecteds.push(selectedsObject);
                 }
             }
-        }
+
     }
 
     pageToShowResult() {
         this.pageStep = EPageStep.none;
         // siteIds clear
-        this.inputFormData.siteIds = [];
+        this.inputFormData.siteIds = '';
 
         // from selecteds push siteIds
         for (const item of this.selecteds) {
-            this.inputFormData.siteIds.push(item.objectId);
+            this.inputFormData.siteIds = item.objectId;
         }
     }
 
@@ -575,10 +588,12 @@ export class FilterConditionHeatMap extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiColumnGroup - site
+                 * @uiLabel - ${this._("w_SelectSites")}
+                 * @uiColumnGroup - site1
                  */
-                siteIds: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                ifAllSites?: any;
+
+                siteIds: any;
 
 
                 /**
@@ -654,6 +669,11 @@ Vue.component("filter-condition-heat-map", FilterConditionHeatMap);
 .select_date_button {
     margin-top: 29px;
 }
+
+.select-site {
+    width: 89%;
+}
+
 .submit {
     background-color: #5c7895;
     border: 1px solid #5c7895;

@@ -166,7 +166,7 @@ export default class ReportHeatmap extends Vue {
     //// Filter Condition Start ////
 
     // select 相關
-    sitesSelectItem: any = {};
+    sitesSelectItem: any = [];
     addPeriodSelectItem: any = [];
     tagSelectItem: any = {};
     tags = [];
@@ -348,9 +348,12 @@ export default class ReportHeatmap extends Vue {
     siteFilterPermission() {
         let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
-            tempSitesSelectItem[detail.objectId] = detail.name;
+            let site = { id: detail.objectId, text: detail.name };
+            this.sitesSelectItem.push(site);
+
+            // tempSitesSelectItem[detail.objectId] = detail.name;
         }
-        this.sitesSelectItem = tempSitesSelectItem;
+        // this.sitesSelectItem = tempSitesSelectItem;
     }
 
     async initSelectItemSite() {

@@ -156,6 +156,7 @@ export default class LangObject implements ILang {
     // w_AllSites = 'All Sites';
     w_SelectSites = 'Select Store(s)';
     w_AllSites = 'All Stores';
+    w_SelectSite = 'Select Store';
     w_period = 'Period';
     w_Designation = 'Designation';
     w_Today = 'Today';

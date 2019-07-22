@@ -155,6 +155,7 @@ export default class LangObject {
     // w_SelectSites = 'Select Site(s)';
     // w_AllSites = 'All Sites';
     w_SelectSites = 'Select Store(s)';
+    w_SelectSite = 'Select Store';
     w_AllSites = 'All Stores';
     w_period = 'Period';
     w_Designation = 'Designation';
