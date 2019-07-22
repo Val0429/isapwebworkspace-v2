@@ -1515,9 +1515,15 @@ export default class ReportHeatmap extends Vue {
         filterData: IFilterCondition,
         designationPeriod: EDesignationPeriod
     ) {
+
+
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
+
+        console.log('this.filterData - ', this.filterData);
+
+
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -1620,11 +1626,9 @@ export default class ReportHeatmap extends Vue {
     analysisTitle(): string {
         let title = "Analysis - ";
 
-        for (const siteId in this.sitesSelectItem) {
-            if (this.filterData.siteIds === siteId) {
-                title += `${this._("w_Title_One_Site")} ${
-                    this.sitesSelectItem[siteId]
-                }. `;
+        for (const site of this.sitesSelectItem) {
+            if (this.filterData.siteIds === site.id) {
+                title += `${this._("w_Title_One_Site")} ${site.text}. `;
             }
         }
 
@@ -1636,18 +1640,6 @@ export default class ReportHeatmap extends Vue {
             this.filterData.endDate,
             "YYYY/MM/DD"
         )}. `;
-
-        // if (this.filterData.tagIds.length === 1) {
-        //     for (const tagId in this.tagSelectItem) {
-        //         if(this.filterData.tagIds[0] === tagId) {
-        //             title += `${this._('w_Title_One_Tag')} ${this.tagSelectItem[tagId]}. `;
-        //         }
-        //     }
-        // } else if (this.filterData.tagIds.length >= 2) {
-        //     title += `${this._('w_Title_Many_Tag_Start')} ${this.filterData.tagIds.length} ${this._('w_Title_Many_Tag_End')} `;
-        // } else {
-        //     title += '';
-        // }
 
         this.visible = true;
 
@@ -2400,7 +2392,7 @@ export default class ReportHeatmap extends Vue {
         this.ReportToTemplateData = {
             startDate: this.filterData.startDate,
             endDate: this.filterData.endDate,
-            mode: EDeviceMode.demographic,
+            mode: EDeviceMode.heatmap,
             siteIds: this.filterData.siteIds,
             tagIds: this.filterData.tagIds,
             sendUserIds: this.userData,

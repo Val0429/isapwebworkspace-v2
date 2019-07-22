@@ -102,6 +102,7 @@ export default class LangObject {
     w_Sites = 'Store(s)';
     w_Sites1 = '* Store(s)';
     w_Tag = '* Tag(s)';
+    w_Tag1 = 'Tag';
     // w_Site = 'Site';
     w_Site = 'Store';
     //w_Group = 'Group';
@@ -963,8 +964,8 @@ export default class LangObject {
     w_Title_One_Site = 'Selected store:';
     w_Title_Many_Site_Start = 'Selected:';
     w_Title_Many_Site_End = 'stores.';
-    w_Title_StartDate = 'Startdate:';
-    w_Title_EndDate = 'Enddate:';
+    w_Title_StartDate = 'Start date:';
+    w_Title_EndDate = 'End date:';
     w_Title_One_Tag = 'Selected tag:';
     w_Title_Many_Tag_Start = 'Selected:';
     w_Title_Many_Tag_End = 'tag.';

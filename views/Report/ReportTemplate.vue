@@ -1435,7 +1435,7 @@ export default class ReportTemplate extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Tag")}
+                 * @uiLabel - ${this._("w_Tag1")}
                  * @uiColumnGroup - tag
                  */
                 tagIds: ${toEnumInterface(this.tagSelectItem as any, true)};
@@ -1533,7 +1533,7 @@ export default class ReportTemplate extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Tag")}
+                 * @uiLabel - ${this._("w_Tag1")}
                  * @uiType - iv-form-label
                  */
                 tagIdsText: string;

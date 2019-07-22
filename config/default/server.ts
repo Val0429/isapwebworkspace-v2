@@ -190,7 +190,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/report/repeat-visitor/summary': [any, any, false];
         '/report/complex': [any, any, false];
         '/report/template': [any, any, false];
-        '/report/campaign/summary': [any, any, false];
+        '/report/campaign/multi-campaign-summary': [any, any, false];
     };
 
     // read

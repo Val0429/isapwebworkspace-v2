@@ -64,6 +64,7 @@ import {
     IChartCampaignMultiple,
     IChartCampaignSingle
 } from "@/components/Reports";
+import Datetime from '@/services/Datetime';
 
 @Component({
     components: {}
@@ -96,7 +97,8 @@ export default class ReportCampaign extends Vue {
 
     // 接收 Filter Condition 資料 相關
     filterData: any = {};
-    responseData: any = {};
+    responseDataAllCampaign: any = {};
+    responseDataSingleCampaign: any = {};
 
     // send user 相關
     userSelectItem: any = {};
@@ -114,7 +116,7 @@ export default class ReportCampaign extends Vue {
 
     created() {
         this.initData();
-        this.initChartDeveloper();
+       // this.initChartDeveloper();
     }
 
     mounted() {}
@@ -220,41 +222,98 @@ export default class ReportCampaign extends Vue {
 
     async receiveFilterData(filterData) {
 
-        let param = JSON.parse(JSON.stringify(filterData));
+        let param = {};
+
         this.filterData = filterData;
 
         console.log('this.filterData - ', this.filterData);
 
-        await this.$server
-            .C("/report/campaign/summary", param)
-            .then((response: any) => {
-                if (response !== undefined) {
-                    this.responseData = response;
-                    this.resolveSummary();
-                    this.analysisTitle();
-                }
-            })
-            .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
-            });
+        if (this.filterData.campaignIds.length > 1) {
+            param = {
+                campaignIds: this.filterData.campaignIds
+            };
+
+            await this.$server
+                .C("/report/campaign/multi-campaign-summary", param)
+                .then((response: any) => {
+                    if (response !== undefined) {
+                        this.responseDataAllCampaign = response;
+                        this.sortOutChartDataAllCampaign(this.responseDataAllCampaign.summaryDatas);
+                        this.analysisTitle();
+                    }
+                })
+                .catch((e: any) => {
+                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
+                        return ResponseFilter.base(this, e);
+                    }
+                    console.log(e);
+                    return false;
+                });
+        }
+
+
     }
 
+    sortOutChartDataAllCampaign(datas: any) {
+        let tempChartDatas: IChartCampaignMultiple[] = [];
+        let tempDateChartDataBefore = {
+            name: '',
+            startDate: new Date(),
+            endDate: new Date(),
+            traffic: 0,
+            budget: 0,
+        };
+
+        for (let summary of datas) {
+            let tempChartData = JSON.parse(JSON.stringify(tempDateChartDataBefore));
+            tempChartData = {
+                name: summary.campaign.name,
+                startDate: new Date(summary.startDate),
+                endDate: new Date(summary.endDate),
+                traffic: summary.traffic,
+                budget: summary.budget,
+            };
+            this.chartDatas.multiple.push(tempChartData);
+        }
+        this.chartMode.multiple = true;
+    }
+
+    sortOutChartDataSingleCampaign() {
+        let tempChartDatas: IChartCampaignSingle[] = [];
 
 
-    resolveSummary() {}
+        let tempDateChartDataBefore = {
+            type: ECampaignTimeType.before,
+            date: "",
+            traffic: 0,
+        };
+        let tempDateChartDataDuring = {
+            type: ECampaignTimeType.during,
+            date: "",
+            traffic: 0,
+        };
+        let tempDateChartDataAfter = {
+            type: ECampaignTimeType.after,
+            date: "",
+            traffic: 0,
+        };
+
+            }
+
+    resolveSummary() {
+
+        if (this.filterData.campaignIds.length === 1) {
+            this.sortOutChartDataSingleCampaign();
+        } else {
+        }
+
+    }
 
     analysisTitle(): string {
 
         let title = 'Analysis - ';
 
-        console.log('analysisTitle - ', this.filterData);
-
         title += `${ this._('w_Title_FiscalYear') } ${ this.filterData.year }.`;
-
 
         if (this.filterData.campaignIds.length === 1) {
             for (const campaignId in this.campaignAllData) {
