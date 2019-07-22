@@ -1562,8 +1562,8 @@ export default class ReportDwellTime extends Vue {
         }
 
         // this.sites.push(tempISite);
-        // this.dTimeMode = this.filterData.type;
-        // this.pSiteIds = this.filterData.siteIds;
+        this.dTimeMode = this.filterData.type;
+        this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
         this.startDate = new Date(this.filterData.startDate);
         this.endDate = new Date(this.filterData.endDate);
