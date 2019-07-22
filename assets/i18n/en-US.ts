@@ -186,7 +186,7 @@ export default class LangObject {
     w_conversion = 'Conversion';
     w_SelectTags = 'Select Tag(s)';
     w_AllTags = 'All Tags';
-	w_Selected_Date = '* Select Date(s)';
+    w_Selected_Date = '* Select Date(s)';
 
     w_yes = 'Yes';
     w_no = 'No';
@@ -878,6 +878,7 @@ export default class LangObject {
     w_Report_ErrorChartMode = 'No Find Chart Mode';
 
     // Report Traffic
+    w_ReportTraffic_TrafficChart = 'Traffic Chart';
     w_ReportTraffic_TrafficTraffic = 'Traffic';
     w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
     w_ReportTraffic_TrafficRevenue = 'Revenue';
@@ -891,17 +892,24 @@ export default class LangObject {
     w_ReportDwellTime_DwellTimeDwellTimeM = 'Dwell Time(m)';
     w_ReportDwellTime_DwellTimeRevenue = 'Revenue';
     w_ReportDwellTime_DwellTimeDwellTimeAVG = 'AVG Dwell Time';
+    w_ReportDwellTime_DwellTimeChart = 'Dwell Time Chart';
 
     // Report Demographic
     w_ReportDemographic_LabelGender = 'Demographic by Gender';
     w_ReportDemographic_LabelAge = 'Demographic by Age';
+    w_ReportDemographic_DemographicChart = 'Demographic Chart';
 
     // Report Occupancy
     w_ReportOccupancy_Occupancy = 'Occupancy';
     w_ReportOccupancy_OccupancyAVG = 'AVG Occupancy';
+    w_ReportOccupancy_OccupancyChart = 'Occupancy Chart';
+
+    // Report VIP Tracking
+    w_ReportVipTrackin_VipTrackingChart = 'VIP & Black List Chart';
 
     // Report Repeat Visitor
     w_ReportRepeatVisitor_NumberOfVisit = 'Number of Visit ';
+    w_ReportRepeatVisitor_RepeatVisitorChart = 'Repeat Visitor Chart';
 
     // Report Campaign
     w_ReportCampaign_MultipleLabel = 'Budget vs Traffic gain';
@@ -912,6 +920,7 @@ export default class LangObject {
     w_ReportCampaign_CampaignBefore = 'Before Campaign';
     w_ReportCampaign_CampaignDuring = 'During Campaign';
     w_ReportCampaign_CampaignAfter = 'After Campaign';
+    w_ReportCampaign_CampaignChart = 'Campaign Chart';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
@@ -947,7 +956,7 @@ export default class LangObject {
     w_PleaseSelectTags = 'Please Select Tags(s)';
     w_InOutType = 'In Out Type';
     w_businessChartType = 'Business Chart Type';
-	w_ReportTemplate_Fixed_Interval = 'Fixed Interval';
+    w_ReportTemplate_Fixed_Interval = 'Fixed Interval';
 
     w_Title_One_Site = 'Selected store:';
     w_Title_Many_Site_Start = 'Selected:';

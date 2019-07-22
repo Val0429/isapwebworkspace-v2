@@ -1,5 +1,6 @@
 <template>
     <div class="chart">
+        <h2 v-if="mountAnyChart()">{{ _('w_ReportCampaign_CampaignChart') }}</h2>
         <b-form-group>
             <highcharts
                 ref="chartMultiple"
@@ -80,15 +81,15 @@ export class HighchartsCampaignSingle extends Vue {
         let tempCategories: string[] = [];
         let tempSeries: any = [
             {
-                name: this._('w_ReportCampaign_CampaignBefore'),
+                name: this._("w_ReportCampaign_CampaignBefore"),
                 data: []
             },
             {
-                name: this._('w_ReportCampaign_CampaignDuring'),
+                name: this._("w_ReportCampaign_CampaignDuring"),
                 data: []
             },
             {
-                name: this._('w_ReportCampaign_CampaignAfter'),
+                name: this._("w_ReportCampaign_CampaignAfter"),
                 data: []
             }
         ];
@@ -223,6 +224,13 @@ export class HighchartsCampaignSingle extends Vue {
         this.mountChart.campaignSingle = true;
     }
 
+    mountAnyChart(): boolean {
+        if (this.mountChart.campaignSingle) {
+            return true;
+        }
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private anysislyChartValueDefault(): IChartCampaignSingle {
@@ -272,4 +280,8 @@ Vue.component("highcharts-campaign-single", HighchartsCampaignSingle);
 </script>
 
 <style lang="scss" scoped>
+.chart {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 </style>

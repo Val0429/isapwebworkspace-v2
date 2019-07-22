@@ -1,5 +1,6 @@
 <template>
     <div class="chart">
+        <h2 v-if="mountAnyChart()">{{ _('w_ReportTraffic_TrafficChart') }}</h2>
         <b-form-group>
             <b-row>
                 <b-col>
@@ -214,6 +215,22 @@ export class HighchartsTraffic extends Vue {
             this.sites,
             this.value
         );
+    }
+
+    mountAnyChart(): boolean{
+        if (this.mountChart.site1Day1) {
+            return true;
+        }
+        if (this.mountChart.site1DayX) {
+            return true;
+        }
+        if (this.mountChart.siteXDay1) {
+            return true;
+        }
+        if (this.mountChart.siteXDayX) {
+            return true;
+        }
+        return false;
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
@@ -1700,4 +1717,8 @@ Vue.component("highcharts-traffic", HighchartsTraffic);
 </script>
 
 <style lang="scss" scoped>
+.chart {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 </style>

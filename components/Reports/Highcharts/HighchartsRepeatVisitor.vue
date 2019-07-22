@@ -1,5 +1,6 @@
 <template>
     <div class="chart">
+        <h2 v-if="mountAnyChart()">{{ _('w_ReportRepeatVisitor_RepeatVisitorChart') }}</h2>
         <b-form-group>
             <b-row>
 
@@ -255,6 +256,28 @@ export class HighchartsRepeatVisitor extends Vue {
             this.sites,
             this.value
         );
+    }
+
+    mountAnyChart(): boolean{
+        if (this.mountChart.bar) {
+            return true;
+        }
+        if (this.mountChart.pie) {
+            return true;
+        }
+        if (this.mountChart.detailBar) {
+            return true;
+        }
+        if (this.mountChart.detailPie) {
+            return true;
+        }
+        if (this.mountChart.percentageOnce) {
+            return true;
+        }
+        if (this.mountChart.percentageRepeat) {
+            return true;
+        }
+        return false;
     }
 
     ////////////////////////// site 1 day 1 //////////////////////////
@@ -991,4 +1014,8 @@ Vue.component("highcharts-repeat-visitor", HighchartsRepeatVisitor);
 </script>
 
 <style lang="scss" scoped>
+.chart {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 </style>
