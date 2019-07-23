@@ -1,140 +1,150 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label="_('w_UserGroup_UserGroupList')"
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
-
-            </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/user/group' }"
-                @selected="selectedItem($event)"
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_UserGroup_UserGroupList')"
             >
-                <template #description="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ show30Words($attrs.value) }}
+                <template #toolbox>
+
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+
                 </template>
 
-                <template #sites="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/user/group' }"
+                    @selected="selectedItem($event)"
+                >
+                    <template #description="{$attrs}">
+                        {{ show30Words($attrs.value) }}
+                    </template>
 
-                <template #users="{$attrs}">
-                    <!--                {{ $attrs.value.map(item => item.name).join(', ')}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
+                    <template #sites="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
 
-                <template #Actions="{$attrs, $listeners}">
+                    <template #users="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
 
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
-                </template>
+                    <template #Actions="{$attrs, $listeners}">
 
-            </iv-table>
-        </iv-card>
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
 
-        <!--From (Add and Edit)-->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
-            :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_UserGroup_AddGroup') :  _('w_UserGroup_EditGroup')"
-        >
-            <template #toolbox>
+                </iv-table>
+            </iv-card>
 
-                <iv-toolbox-back @click="pageToList()" />
-
-            </template>
-
-            <iv-form
-                :interface="IAddAndEditForm()"
-                :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAddOrEdit($event)"
+            <!-- view -->
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label="_('w_UserGroup_ViewGroup')"
             >
-                <template #selectTree="{ $attrs, $listeners }">
-
-                    <div class="m-3">
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-
-                    </div>
-
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
                 </template>
-            </iv-form>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+                </iv-form>
 
-        </iv-auto-card>
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label="_('w_UserGroup_ViewGroup')"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
+            </iv-card>
 
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
+            <!--From (Add and Edit)-->
+            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_UserGroup_AddGroup') :  _('w_UserGroup_EditGroup')"
             >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
 
-            </iv-form>
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEdit($event)"
+                >
+                    <template #selectTree="{ $attrs, $listeners }">
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                        <div class="m-3">
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
 
-        </iv-card>
+                        </div>
 
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            v-on:click-back="pageToShowResult"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-        >
-        </region-tree-select>
+                    </template>
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <!-- v-show="pageStep === ePageStep.chooseTree" -->
+            <region-tree-select
+                key="transition_4"
+                v-show="transition.step === 4"
+                v-on:click-back="pageToShowResult"
+                :multiple="true"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+            >
+            </region-tree-select>
+
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -148,6 +158,10 @@ import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API interface
 import { IUserGroupAdd, IUserGroupEdit } from "@/config/default/api/interfaces";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Region Tree
 import {
@@ -167,31 +181,21 @@ interface inputFormData extends IUserGroupAdd, IUserGroupEdit {
     users: any;
     siteIdsText?: string;
     groupIdsText?: string;
-    type?: string;
-}
-
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree"
 }
 
 @Component({
     components: {}
 })
 export default class UserGroup extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
     isSelected: any = [];
     tableMultiple: boolean = true;
-
     selectedDetail: any = [];
-
     sitesSelectItem: any = {};
     userGroupSelectItem: any = {};
 
@@ -206,7 +210,6 @@ export default class UserGroup extends Vue {
         description: "",
         siteIdsText: "",
         groupIdsText: "",
-        type: "",
         siteIds: [],
         users: []
     };
@@ -223,8 +226,7 @@ export default class UserGroup extends Vue {
             siteIdsText: "",
             groupIdsText: "",
             siteIds: [],
-            users: [],
-            type: ""
+            users: []
         };
     }
 
@@ -293,8 +295,7 @@ export default class UserGroup extends Vue {
                 siteIdsText: this.idsToText(param.sites),
                 groupIdsText: this.idsToText(param.users),
                 siteIds: param.sites,
-                users: param.users,
-                type: ""
+                users: param.users
             };
         }
     }
@@ -326,22 +327,33 @@ export default class UserGroup extends Vue {
         }
     }
 
-    async pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+        this.selecteds = [];
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         await this.initSelectItemSite();
         this.clearInputData();
         this.selecteds = [];
-        this.inputFormData.type = type;
     }
 
     async pageToEdit(type: string) {
-        this.pageStep = EPageStep.edit;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.getInputData();
         await this.initSelectItemSite();
         this.selecteds = [];
-
-        this.inputFormData.type = type;
-
         this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(
                 this.inputFormData.siteIds.map(item => item.objectId)
@@ -349,19 +361,9 @@ export default class UserGroup extends Vue {
         );
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.listTable as any).reload();
-        this.selecteds = [];
-    }
-
     async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
@@ -380,32 +382,19 @@ export default class UserGroup extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputFormData.type === EPageStep.edit) {
-            this.pageStep = EPageStep.edit;
-            // siteIds clear
-            this.inputFormData.siteIds = [];
+        this.transition.step = this.transition.prevStep;
 
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
-        }
+        // siteIds clear
+        this.inputFormData.siteIds = [];
 
-        if (this.inputFormData.type === EPageStep.add) {
-            this.pageStep = EPageStep.add;
-
-            // siteIds clear
-            this.inputFormData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
+        // from selecteds push siteIds
+        for (const item of this.selecteds) {
+            this.inputFormData.siteIds.push(item.objectId);
         }
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputFormData.type === EPageStep.add) {
+        if (this.inputFormData.objectId == "") {
             const datas: IUserGroupAdd[] = [
                 {
                     name: data.name,
@@ -444,9 +433,7 @@ export default class UserGroup extends Vue {
                         this._("w_UserGroup_AddUserGroupFailed")
                     );
                 });
-        }
-
-        if (this.inputFormData.type === EPageStep.edit) {
+        } else {
             const datas: IUserGroupEdit[] = [
                 {
                     // siteIds: data.siteIds,
@@ -593,44 +580,9 @@ export default class UserGroup extends Vue {
         `;
     }
 
-    IAddAndEditForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
-                 * @uiPlaceHolder - ${this._("w_UserGroup_GroupName")}
-                 * @uiType - ${
-                     this.inputFormData.type === EPageStep.add
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
-                 */
-                name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Description")}
-                 * @uiPlaceHolder - ${this._("w_Description")}
-                 */
-                description: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-
-                selectTree?: any;
-            }
-        `;
-    }
-
     IViewForm() {
         return `
             interface {
-
 
                 /**
                  * @uiLabel - ${this._("w_UserGroup_GroupName")}
@@ -638,20 +590,17 @@ export default class UserGroup extends Vue {
                  */
                 name?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Description")}
                  * @uiType - iv-form-label
                  */
                 description?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiType - iv-form-label
                  */
                 siteIdsText?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_UserGroup_Users")}
@@ -661,6 +610,39 @@ export default class UserGroup extends Vue {
             }
         `;
     }
+
+    IAddAndEditForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_UserGroup_GroupName")}
+                 * @uiPlaceHolder - ${this._("w_UserGroup_GroupName")}
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                 */
+                name: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiPlaceHolder - ${this._("w_Description")}
+                 */
+                description: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+
+                selectTree?: any;
+            }
+        `;
+    }
+
+    
 }
 </script>
 
