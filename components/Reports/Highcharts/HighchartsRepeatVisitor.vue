@@ -258,7 +258,7 @@ export class HighchartsRepeatVisitor extends Vue {
         );
     }
 
-    mountAnyChart(): boolean{
+    mountAnyChart(): boolean {
         if (this.mountChart.bar) {
             return true;
         }
@@ -937,7 +937,9 @@ export class HighchartsRepeatVisitor extends Vue {
         value.timeMode = this.timeMode;
         value.areaMode = this.areaMode;
         value.i18n = this.i18nItem();
-        value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
+        value.temperature = HighchartsService.formatFloat(
+            (value.temperatureMin + value.temperatureMax) / 2
+        );
         value.weatherIcon = HighchartsService.weatherIcon(value.weather);
         value.weekNumber = Datetime.WeekNumber(value.date);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
