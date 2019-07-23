@@ -5,7 +5,6 @@
         <filter-condition-campaign
             :yearSelectItem="yearSelectItem"
             :campaignAllData="campaignAllData"
-            @year-campaign="receiveYearCampaign"
             @submit-data="receiveFilterData"
         >
         </filter-condition-campaign>
@@ -65,27 +64,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
+    // Vue
+    // Report
+    import {
+        ECampaignTimeType,
+        IChartCampaignMultiple,
+        IChartCampaignSingle
+    } from "@/components/Reports";
+    // Service
+    import ResponseFilter from "@/services/ResponseFilter";
 
-// Vue
-import HighchartsCampaignMultiple from "@/components/Reports/Highcharts/HighchartsCampaignMultiple.vue";
-import HighchartsCampaignSingle from "@/components/Reports/Highcharts/HighchartsCampaignSingle.vue";
-
-// Report
-import {
-    ECampaignTimeType,
-    IChartCampaignMultiple,
-    IChartCampaignSingle
-} from "@/components/Reports";
-
-// Service
-import HighchartsService from "@/components/Reports/models/HighchartsService";
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime";
-import Loading from "@/services/Loading";
-
-@Component({
+    @Component({
     components: {}
 })
 export default class ReportCampaign extends Vue {
@@ -141,7 +131,6 @@ export default class ReportCampaign extends Vue {
     mounted() {}
 
     async initData() {
-        await this.initSelectCampaignStore();
         await this.initSelectItemUsers();
         await this.initSelectYear();
         this.siteFilterPermission();
@@ -151,7 +140,6 @@ export default class ReportCampaign extends Vue {
 
     // Author: Tina
     siteFilterPermission() {
-        let tempSitesSelectItem = {};
         for (const detail of this.$user.allowSites) {
             let site = { id: detail.objectId, text: detail.name };
             this.sitesSelectItem.push(site);
@@ -183,16 +171,14 @@ export default class ReportCampaign extends Vue {
     }
 
     async initSelectYear() {
-        let tempResult = {};
+        let tempResult: {};
         let tempYearSelectItem = {};
 
-        let result = await this.$server
+        tempResult = await this.$server
             .R("/report/campaign/condition")
             .catch((e: any) => {
                 return ResponseFilter.base(this, e);
             });
-
-        tempResult = result;
 
         for (const year in tempResult) {
             tempYearSelectItem[year] = year;
@@ -201,18 +187,6 @@ export default class ReportCampaign extends Vue {
 
         this.campaignAllData = tempResult;
         this.yearSelectItem = tempYearSelectItem;
-    }
-
-    async initSelectCampaignStore() {}
-
-    async receiveYearCampaign(year, campaignIds) {
-        // this.inputFormData.year = year;
-        // this.inputFormData.campaignIds = campaignIds;
-        // console.log("this.inputFormData.year - ", this.inputFormData.year);
-        // console.log(
-        //     "this.inputFormData.campaignIds - ",
-        //     this.inputFormData.campaignIds
-        // );
     }
 
     async receiveUserData(data) {
