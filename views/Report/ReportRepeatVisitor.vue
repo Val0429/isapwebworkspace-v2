@@ -90,22 +90,18 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog";
 
-// Tina
+// Vue
+import HighchartsRepeatVisitor from "@/components/Reports/HighchartsRepeatVisitor.vue";
+
+// Region Tree
 import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import ReportService from "@/components/Reports/models/ReportService";
-import HighchartsService from "@/components/Reports/models/HighchartsService";
-import Datetime from "@/services/Datetime";
 
-import HighchartsRepeatVisitor from "@/components/Reports/HighchartsRepeatVisitor.vue";
+// Report
 import {
     EAreaMode,
     EPageType,
@@ -131,7 +127,17 @@ import {
     EIfAllSelected
 } from "@/components/Reports";
 
-///////////////////////// export /////////////////////////
+// Service
+import Dialog from "@/services/Dialog";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import WeatherService from "@/components/Reports/models/WeatherService";
+import ReportService from "@/components/Reports/models/ReportService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import Datetime from "@/services/Datetime";
+import Loading from "@/services/Loading";
+
+// Export
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
@@ -329,7 +335,7 @@ export default class ReportRepeatVisitor extends Vue {
                 }
             })
             .catch((e: any) => {
-               return ResponseFilter.base(this, e);
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -388,7 +394,7 @@ export default class ReportRepeatVisitor extends Vue {
                 }
             })
             .catch((e: any) => {
-               return ResponseFilter.base(this, e);
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -419,7 +425,7 @@ export default class ReportRepeatVisitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -454,7 +460,7 @@ export default class ReportRepeatVisitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -537,7 +543,7 @@ export default class ReportRepeatVisitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -587,7 +593,7 @@ export default class ReportRepeatVisitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -616,7 +622,7 @@ export default class ReportRepeatVisitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -668,7 +674,7 @@ export default class ReportRepeatVisitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&

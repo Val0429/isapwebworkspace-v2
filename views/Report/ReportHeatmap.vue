@@ -84,21 +84,18 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog";
 
-// Tina
+// Vue
+import HeatMapManyDay from "@/components/Reports/Filter/HeatMapManyDay.vue";
+
+// Region Tree
 import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
 
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Datetime from "@/services/Datetime";
-import ReportService from "@/components/Reports/models/ReportService";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import HighchartsService from "@/components/Reports/models/HighchartsService";
+// Report
 import {
     ETimeMode,
     EWeather,
@@ -111,6 +108,8 @@ import {
     ECountType,
     EDeviceMode,
     EIncludedEmployee,
+    EDesignationPeriod,
+    EAddPeriodSelect,
     IDayRange,
     IChartDemographicData,
     IChartTrafficData,
@@ -119,21 +118,27 @@ import {
     ISiteItems,
     ITemplateItem,
     IFilterCondition,
-    ReportDashboard,
-    ReportTableData,
-    EDesignationPeriod,
     IReportToTemplateItem,
-    EAddPeriodSelect
+    ReportDashboard,
+    ReportTableData
 } from "@/components/Reports";
-
-import HeatMapManyDay from "@/components/Reports/Filter/HeatMapManyDay.vue";
 import {
     IHeatMapData,
     IHeatMapPosition,
     IMapImage
 } from "@/components/Camera/IHeatmap";
 
-///////////////////////// export /////////////////////////
+// Service
+import Dialog from "@/services/Dialog";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import ReportService from "@/components/Reports/models/ReportService";
+import WeatherService from "@/components/Reports/models/WeatherService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import Loading from "@/services/Loading";
+
+// Export
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";

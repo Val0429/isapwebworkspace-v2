@@ -14,7 +14,9 @@ export class Loading {
         });
     }
     hide() {
-        this.loader.hide();
+        if (this.loader != null) {
+            this.loader.hide();
+        }
     }
 }
 export default new Loading();

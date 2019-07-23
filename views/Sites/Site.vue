@@ -627,11 +627,23 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import ImageBase64 from "@/services/ImageBase64";
-import ServerConfig from "@/services/ServerConfig";
-import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime";
+
+// Vue
 import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
+
+// API Interface
+import {
+    ISiteAddData,
+    ISiteEditData,
+    IAreaAddData,
+    IAreaEditData,
+    IDeviceGroupAddData,
+    IDeviceGroupEditData,
+    ITagReadUpdate,
+    IOfficeHourEditData
+} from "@/config/default/api/interfaces";
+
+// Image Map
 import {
     EDragType,
     EVideoSource,
@@ -645,17 +657,14 @@ import {
     DataWindowOccupancyItem,
     DataWindowPeopleCountingItem
 } from "@/components/ImageMap";
+
+// Service
 import ResponseFilter from "@/services/ResponseFilter";
-import {
-    ISiteAddData,
-    ISiteEditData,
-    IAreaAddData,
-    IAreaEditData,
-    IDeviceGroupAddData,
-    IDeviceGroupEditData,
-    ITagReadUpdate,
-    IOfficeHourEditData
-} from "@/config/default/api/interfaces";
+import ImageBase64 from "@/services/ImageBase64";
+import ServerConfig from "@/services/ServerConfig";
+import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
+import Loading from "@/services/Loading";
 
 enum EPageStep {
     siteList = "siteList",

@@ -148,24 +148,31 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import Datetime from "@/services/Datetime";
 import { toEnumInterface } from "@/../core";
+
+// Vue
+import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+
+// API interfaces
 import {
     IAddBusinessOperationCampaign,
     IEditBusinessOperationCampaign
 } from "@/config/default/api/interfaces";
 
+// Region Tree
 import {
     ERegionType,
     IRegionItem,
     RegionTreeItem,
     IRegionTreeSelected
 } from "@/components/RegionTree";
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
+// Service
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import RegionAPI from "@/services/RegionAPI";
+import Loading from "@/services/Loading";
+import Datetime from "@/services/Datetime";
 
 interface IinputFormData
     extends IAddBusinessOperationCampaign,
@@ -467,9 +474,11 @@ export default class CampaignSetting extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .C("/event/campaign", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_BOCampaign_AddSuccess"));
@@ -540,6 +549,7 @@ export default class CampaignSetting extends Vue {
             this._("w_BOCampaign_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -564,6 +574,7 @@ export default class CampaignSetting extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

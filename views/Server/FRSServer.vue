@@ -120,6 +120,11 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+import ReportService from "@/components/Reports/models/ReportService";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
+
 import {
     IFRSServerResults,
     IAddFRSServer,
@@ -127,10 +132,6 @@ import {
     IFRSServerReadUserGroup,
     IFRSUserGroup
 } from "@/config/default/api/interfaces";
-import ReportService from "@/components/Reports/models/ReportService";
-
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
 
 interface IInputFormData extends IFRSServerResults {
     type?: string;

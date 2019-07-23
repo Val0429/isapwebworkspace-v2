@@ -1,27 +1,24 @@
 <template>
     <div class="animated fadeIn">
-	    <iv-card
-		    :label="_('w_Restore_SettingFiles')"
-	    >
+        <iv-card :label="_('w_Restore_SettingFiles')">
 
-			    <b-form-file
-				    :label="_('w_Restore_SelectFile')"
-				    :placeholder="_('w_Restore_SelectFile')"
-				    :drop-placeholder="_('w_Restore_SelectFile')"
-				    multiple="multiple"
-			    />
+            <b-form-file
+                :label="_('w_Restore_SelectFile')"
+                :placeholder="_('w_Restore_SelectFile')"
+                :drop-placeholder="_('w_Restore_SelectFile')"
+                multiple="multiple"
+            />
 
+            <template #footer>
+                <b-button
+                    variant="primary"
+                    size="lg"
+                    @click="saveRestore()"
+                >{{ _('w_Submit') }}
+                </b-button>
+            </template>
 
-		    <template #footer>
-			    <b-button
-				    variant="primary"
-				    size="lg"
-				    @click="saveRestore()"
-			    >{{ _('w_Submit') }}
-			    </b-button>
-		    </template>
-
-	    </iv-card>
+        </iv-card>
 
     </div>
 </template>
@@ -30,40 +27,35 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "../../../core";
 
+// Service
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog.vue";
+import Loading from "@/services/Loading";
 
 enum EPageStep {
-	list = "list",
-	add = "add",
-	edit = "edit",
-	view = "view",
-	none = "none",
+    list = "list",
+    add = "add",
+    edit = "edit",
+    view = "view",
+    none = "none"
 }
 
 @Component({
     components: {}
 })
 export default class Restore extends Vue {
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
 
-	ePageStep = EPageStep;
-	pageStep: EPageStep = EPageStep.list;
+    created() {}
 
-	created() {
+    mounted() {}
 
-	}
+    clearInputData() {}
 
-	mounted() {
-
-	}
-
-	clearInputData() {
-
-	}
-
-	saveRestore() {
-		alert('saveRestore')
-	}
+    saveRestore() {
+        alert("saveRestore");
+    }
 }
 </script>
 
