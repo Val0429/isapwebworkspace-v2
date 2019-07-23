@@ -168,6 +168,7 @@ export class FilterConditionCampaign extends Vue {
                     }
                     this.campaignSelectItem = tempCampaignSelectItem;
                     this.inputFormData.campaignIds = 'all';
+                    this.campaignSiteSelectItem = {};
                 } else {
                     this.inputFormData.campaignIds = '';
                     this.campaignSelectItem = {};
