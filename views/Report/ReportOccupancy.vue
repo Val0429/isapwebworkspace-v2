@@ -160,7 +160,6 @@ import {
     ESign,
     ETimeMode,
     EWeather,
-    ECountType,
     EDeviceMode,
     EIncludedEmployee,
     EChartMode,
@@ -170,8 +169,6 @@ import {
     IChartOccupancyData,
     IPeckTimeRange,
     ISiteAreas,
-    ISiteItems,
-    ISite,
     ITemplateItem,
     IFilterCondition,
     IReportToTemplateItem,
@@ -276,7 +273,7 @@ export default class ReportOccupancy extends Vue {
         groupId: "",
         deviceId: "",
         type: "",
-        isIncludedEmployee: "no"
+        isIncludedEmployee: EIncludedEmployee.no
     };
 
     // 整理 showReportData 相關
@@ -848,7 +845,7 @@ export default class ReportOccupancy extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            isIncludedEmployee: "no"
+            isIncludedEmployee: EIncludedEmployee.no
         };
 
         await this.$server
@@ -878,7 +875,7 @@ export default class ReportOccupancy extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            isIncludedEmployee: "no"
+            isIncludedEmployee: EIncludedEmployee.no
         };
 
         // get office hour data

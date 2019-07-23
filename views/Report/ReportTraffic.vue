@@ -164,7 +164,6 @@ import {
     ESign,
     ETimeMode,
     EWeather,
-    ECountType,
     EDeviceMode,
     ETypeInOrOut,
     EIncludedEmployee,

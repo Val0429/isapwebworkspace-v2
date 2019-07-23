@@ -205,8 +205,6 @@ import {
 import {
     ETimeMode,
     EWeather,
-    IDayRange,
-    ECountType,
     EDeviceMode,
     EIncludedEmployee,
     EAgeRange,
@@ -222,7 +220,6 @@ import {
     IChartDwellTimeData,
     IPeckTimeRange,
     ISite,
-    ISiteItems,
     ITemplateItem,
     IFilterCondition,
     IReportToTemplateItem,
