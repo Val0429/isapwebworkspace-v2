@@ -256,9 +256,6 @@ export default class ReportVIPTracking extends Vue {
 
     // Author: Tina
     async receiveFilterData(filterData, designationPeriod) {
-        console.log(" - ", filterData);
-        console.log(" - ", designationPeriod);
-
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
@@ -468,10 +465,6 @@ export default class ReportVIPTracking extends Vue {
                     Math.floor(Math.random() * 300) % 2 == 0
                         ? EVipTrackingType.vip
                         : EVipTrackingType.blacklist;
-                console.log(
-                    "!!? Date",
-                    Datetime.DateTime2String(tempDate, "YYYY-MM-DD")
-                );
                 let tempChartData: IChartVipTrackingData = {
                     type: tempVipTrackingType,
                     date: tempDate,

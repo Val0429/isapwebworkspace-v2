@@ -492,6 +492,7 @@ export default class UserGroup extends Vue {
             this._("w_UserGroup_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteUserParam: {
                         objectId: string;
@@ -517,6 +518,7 @@ export default class UserGroup extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

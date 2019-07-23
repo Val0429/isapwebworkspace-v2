@@ -168,6 +168,7 @@ export class FilterConditionCampaign extends Vue {
                     }
                     this.campaignSelectItem = tempCampaignSelectItem;
                     this.inputFormData.campaignIds = 'all';
+                    this.campaignSiteSelectItem = {};
                 } else {
                     this.inputFormData.campaignIds = '';
                     this.campaignSelectItem = {};
@@ -238,8 +239,6 @@ export class FilterConditionCampaign extends Vue {
     //                 this.inputFormData.tagIds.push(tag.objectId);
     //             }
     //         }
-    //
-    //         console.log("!!!! templateItem:", this.templateItem);
     //
     //         // Select Report Period
     //         if (
@@ -318,8 +317,6 @@ export class FilterConditionCampaign extends Vue {
                 }
             }
         }
-
-        // console.log(' - ', doSubmitParam); return false;
 
         this.visible = false;
         this.$emit("submit-data", doSubmitParam);

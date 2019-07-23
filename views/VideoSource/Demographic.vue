@@ -235,7 +235,7 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfig, IConfigiSap } from "@/config/default/api/interfaces";
+import { IConfigiSap } from "@/config/default/api/interfaces";
 
 // Region Tree
 import {
@@ -962,6 +962,7 @@ export default class Demographic extends Vue {
             this._("w_VSDemographic_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -986,6 +987,7 @@ export default class Demographic extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

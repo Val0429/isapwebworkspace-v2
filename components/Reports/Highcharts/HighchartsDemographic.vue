@@ -346,17 +346,6 @@ export class HighchartsDemographic extends Vue {
             default:
                 break;
         }
-
-        console.log(
-            "chart prop: ",
-            this.chartMode,
-            this.startDate,
-            this.endDate,
-            this.timeMode,
-            this.areaMode,
-            this.sites,
-            this.value
-        );
     }
 
     mountAnyChart(): boolean {

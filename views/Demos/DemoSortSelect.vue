@@ -207,7 +207,6 @@ export default class DemoSortSelect extends Vue {
         for (let chooseSelected of this.treeSelected) {
             submitText += `${chooseSelected}<br>`;
         }
-        console.log("Submit", this.treeSelected);
         Dialog.success(submitText);
     }
 

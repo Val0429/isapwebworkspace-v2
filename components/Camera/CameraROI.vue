@@ -192,12 +192,6 @@ export class CameraROI extends Vue {
                 me.model.y = Math.round(y * me.height_r);
                 me.model.width = Math.round(w * me.width_r);
                 me.model.height = Math.round(h * me.height_r);
-
-                console.log(
-                    `x:${me.model.x}, y:${me.model.y}, width:${me.model.width}, height:${me.model.height}`,
-                    me.width_r,
-                    me.height_r
-                );
             }
         };
     }
@@ -257,7 +251,6 @@ export class CameraROI extends Vue {
     }
 
     saveROI() {
-        console.log("saveROI");
         this.$emit("save-roi", this._canvasData);
     }
 
@@ -266,13 +259,10 @@ export class CameraROI extends Vue {
         this.isSave = false;
         this.cxView.clearRect(0, 0, 600, 350); //清除
         this.initSnapshot(false); //更新圖片
-
-        console.log("clearROI");
         this.$emit("clear-roi", this._canvasData);
     }
 
     pageToBack() {
-        console.log("pageToBack");
         this.$emit("page-to-back");
     }
 }

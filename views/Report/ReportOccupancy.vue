@@ -165,9 +165,9 @@ import {
     EDesignationPeriod,
     EAddPeriodSelect,
     EIfAllSelected,
+    EIncludedEmployee,
     IChartOccupancyData,
     ISiteAreas,
-    ISite,
     ITemplateItem,
     IFilterCondition,
     IReportToTemplateItem,
@@ -271,7 +271,7 @@ export default class ReportOccupancy extends Vue {
         groupId: "",
         deviceId: "",
         type: "",
-        isIncludedEmployee: "no"
+        isIncludedEmployee: EIncludedEmployee.no
     };
 
     // 整理 showReportData 相關
@@ -843,7 +843,7 @@ export default class ReportOccupancy extends Vue {
             groupId: "",
             deviceId: "",
             type: "",
-            isIncludedEmployee: "no"
+            isIncludedEmployee: EIncludedEmployee.no
         };
 
         await this.$server
@@ -861,10 +861,7 @@ export default class ReportOccupancy extends Vue {
     }
 
     async resolveSummary() {
-        console.log("this.filterData  - ", this.filterData);
-
         await this.initSelectItemArea();
-
         this.initSelectItemDeviceGroup();
         this.initSelectItemDevice();
 
@@ -873,7 +870,7 @@ export default class ReportOccupancy extends Vue {
             groupId: "all",
             deviceId: "all",
             type: this.filterData.type,
-            isIncludedEmployee: "no"
+            isIncludedEmployee: EIncludedEmployee.no
         };
 
         // get office hour data
@@ -1666,7 +1663,6 @@ export default class ReportOccupancy extends Vue {
                     !this.inputFormData.areaId ||
                     this.inputFormData.areaId === "all"
                 ) {
-                    console.log("site.areas", site.areas, site.objectId);
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
                             JSON.stringify(tempChartDataDate)
@@ -1718,27 +1714,14 @@ export default class ReportOccupancy extends Vue {
                 ) {
                     total += summary.total;
                     count += summary.count;
-
-                    // console.log('total - ', total);
-                    // console.log('count - ', count);
-
                     loopChartData.occupancy = total / count;
                     tempValues.splice(parseInt(i), 1);
                     break;
                 }
             }
-
-            console.log(JSON.stringify(loopChartData));
         }
 
         this.chartDatas = tempChartDatas;
-
-        console.log(" - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     sortOutChartDataDevice(datas: any) {
@@ -1833,7 +1816,6 @@ export default class ReportOccupancy extends Vue {
                     !this.inputFormData.areaId ||
                     this.inputFormData.areaId === "all"
                 ) {
-                    console.log("site.areas", site.areas, site.objectId);
                     for (let area of site.areas) {
                         let tempChartDataArea: IChartOccupancyData = JSON.parse(
                             JSON.stringify(tempChartDataDate)
@@ -1891,18 +1873,9 @@ export default class ReportOccupancy extends Vue {
                     break;
                 }
             }
-
-            console.log(JSON.stringify(loopChartData));
         }
 
         this.chartDatas = tempChartDatas;
-
-        console.log(" - ", this.sites);
-        console.log(" - ", this.startDate);
-        console.log(" - ", this.endDate);
-        console.log(" - ", this.timeMode);
-        console.log(" - ", this.areaMode);
-        console.log(" - ", this.chartDatas);
     }
 
     async receiveAreaId(areaId) {

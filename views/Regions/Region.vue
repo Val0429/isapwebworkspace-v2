@@ -475,6 +475,7 @@ export default class Region extends Vue {
         }
         param.datas.push(saveRegion);
 
+        Loading.show();
         // check create or update
         if (
             param.datas[0].objectId == undefined ||
@@ -483,6 +484,7 @@ export default class Region extends Vue {
             await this.$server
                 .C("/location/region", param)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         this.pageToTree();
                     }
@@ -494,6 +496,7 @@ export default class Region extends Vue {
             await this.$server
                 .U("/location/region", param)
                 .then((response: any) => {
+                    Loading.hide();
                     this.pageToTree();
                 })
                 .catch((e: any) => {
@@ -529,9 +532,12 @@ export default class Region extends Vue {
         for (let removeId of removeBindingIdList) {
             param.datas.push(removeId);
         }
+
+        Loading.show();
         await this.$server
             .U("/location/site/binding-region", param)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     this.pageToTree();
                 }
@@ -544,9 +550,12 @@ export default class Region extends Vue {
     // modal function
     async deleteRegionConfirm() {
         let param = { objectId: this.deleteRegionIdList };
+
+        Loading.show();
         await this.$server
             .D("/location/region", param)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     this.pageToTree();
                 }

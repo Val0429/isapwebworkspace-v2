@@ -312,10 +312,7 @@ export default class License extends Vue {
     loadTextFromFile(e: any) {
         const file = e.target.files[0];
         const reader = new FileReader();
-
-        // reader.onload = (e: any) => console.log('219', e.target.result);
         reader.onload = (e: any) => {
-            console.log("e.target.result", e.target.result);
             this.licenseInputDataOffline.data = e.target.result;
         };
         reader.readAsText(file);

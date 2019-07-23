@@ -151,7 +151,7 @@ import {
 } from "@/components/Reports";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
-import ReportService from '../models/ReportService';
+import ReportService from "../models/ReportService";
 
 enum EPageStep {
     none = "none",
@@ -232,7 +232,6 @@ export class FilterCondition extends Vue {
         designationPeriod: EDesignationPeriod.today
     };
 
-
     // response 相關
     responseData: any = {};
 
@@ -272,18 +271,42 @@ export class FilterCondition extends Vue {
         // ];
 
         this.designationPeriodSelectItem = {
-            today: `${this._("w_Today")} ( ${Datetime.CountDateNumber(0)} ~ ${Datetime.CountDateNumber(0)} )`,
-            yesterday: `${this._("w_Yesterday")} ( ${Datetime.CountDateNumber(-1)} ~ ${Datetime.CountDateNumber(-1)} )`,
-            last7days: `${this._("w_last7days")} ( ${Datetime.CountDateNumber(-6)} ~ ${Datetime.CountDateNumber(0)} )`,
-            thisWeek: `${this._("w_thisWeek")} ( ${Datetime.ThisWeekStartDate()} ~ ${Datetime.ThisWeekEndDate()} )`,
-            lastWeek: `${this._("w_lastWeek")} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
-            thisMonth: `${this._("w_thisMonth")} ( ${Datetime.ThisMonthStartDate()} ~ ${Datetime.ThisMonthEndDate()} )`,
-            lastMonth: `${this._("w_lastMonth")} ( ${Datetime.LastMonthStartDate()} ~ ${Datetime.LastMonthEndDate()} )`,
-            q1: `${this._("w_q1")} ( ${Datetime.Q1StartDate()} ~ ${Datetime.Q1EndDate()} )`,
-            q2: `${this._("w_q2")} ( ${Datetime.Q2StartDate()} ~ ${Datetime.Q2EndDate()} )`,
-            q3: `${this._("w_q3")} ( ${Datetime.Q3StartDate()} ~ ${Datetime.Q3EndDate()} )`,
-            q4: `${this._("w_q4")} ( ${Datetime.Q4StartDate()} ~ ${Datetime.Q4EndDate()} )`,
-            thisYear: `${this._("w_thisYear")} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`
+            today: `${this._("w_Today")} ( ${Datetime.CountDateNumber(
+                0
+            )} ~ ${Datetime.CountDateNumber(0)} )`,
+            yesterday: `${this._("w_Yesterday")} ( ${Datetime.CountDateNumber(
+                -1
+            )} ~ ${Datetime.CountDateNumber(-1)} )`,
+            last7days: `${this._("w_last7days")} ( ${Datetime.CountDateNumber(
+                -6
+            )} ~ ${Datetime.CountDateNumber(0)} )`,
+            thisWeek: `${this._(
+                "w_thisWeek"
+            )} ( ${Datetime.ThisWeekStartDate()} ~ ${Datetime.ThisWeekEndDate()} )`,
+            lastWeek: `${this._(
+                "w_lastWeek"
+            )} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
+            thisMonth: `${this._(
+                "w_thisMonth"
+            )} ( ${Datetime.ThisMonthStartDate()} ~ ${Datetime.ThisMonthEndDate()} )`,
+            lastMonth: `${this._(
+                "w_lastMonth"
+            )} ( ${Datetime.LastMonthStartDate()} ~ ${Datetime.LastMonthEndDate()} )`,
+            q1: `${this._(
+                "w_q1"
+            )} ( ${Datetime.Q1StartDate()} ~ ${Datetime.Q1EndDate()} )`,
+            q2: `${this._(
+                "w_q2"
+            )} ( ${Datetime.Q2StartDate()} ~ ${Datetime.Q2EndDate()} )`,
+            q3: `${this._(
+                "w_q3"
+            )} ( ${Datetime.Q3StartDate()} ~ ${Datetime.Q3EndDate()} )`,
+            q4: `${this._(
+                "w_q4"
+            )} ( ${Datetime.Q4StartDate()} ~ ${Datetime.Q4EndDate()} )`,
+            thisYear: `${this._(
+                "w_thisYear"
+            )} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`
         };
     }
 
@@ -320,10 +343,15 @@ export class FilterCondition extends Vue {
     }
 
     changeSiteIds() {
-
-        if (this.inputFormData.siteIds.length !== this.inputFormData.allSiteIds.length) {
+        if (
+            this.inputFormData.siteIds.length !==
+            this.inputFormData.allSiteIds.length
+        ) {
             this.selectAllSites = EIfAllSelected.select;
-        } else if(this.inputFormData.siteIds.length === this.inputFormData.allSiteIds.length) {
+        } else if (
+            this.inputFormData.siteIds.length ===
+            this.inputFormData.allSiteIds.length
+        ) {
             this.selectAllSites = EIfAllSelected.all;
         }
 
@@ -371,9 +399,15 @@ export class FilterCondition extends Vue {
             this.inputFormData.siteIds.push(item.objectId);
         }
 
-        if (this.inputFormData.siteIds.length !== this.inputFormData.allSiteIds.length) {
+        if (
+            this.inputFormData.siteIds.length !==
+            this.inputFormData.allSiteIds.length
+        ) {
             this.selectAllSites = EIfAllSelected.select;
-        } else if(this.inputFormData.siteIds.length === this.inputFormData.allSiteIds.length) {
+        } else if (
+            this.inputFormData.siteIds.length ===
+            this.inputFormData.allSiteIds.length
+        ) {
             this.selectAllSites = EIfAllSelected.all;
         }
     }
@@ -385,7 +419,6 @@ export class FilterCondition extends Vue {
         if (this.selectAllSites === EIfAllSelected.all) {
             this.inputFormData.siteIds = [];
             this.selecteds = [];
-
 
             this.inputFormData.siteIds = this.inputFormData.allSiteIds;
         } else {
@@ -418,8 +451,6 @@ export class FilterCondition extends Vue {
                     this.inputFormData.tagIds.push(tag.objectId);
                 }
             }
-
-            console.log("!!!! templateItem:", this.templateItem);
 
             // Select Report Period
             if (
@@ -648,7 +679,6 @@ export class FilterCondition extends Vue {
             }
         }
 
-        // console.log(" - ", doSubmitParam);
         // return false;
         this.visible = false;
         this.$emit("submit-data", doSubmitParam, designationPeriod);

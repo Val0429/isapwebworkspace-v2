@@ -371,7 +371,7 @@ export default class ReportTraffic extends Vue {
         this.inOrOutTypeSelectItem = {
             in: this._("w_In"),
             out: this._("w_Out"),
-            all: this._("w_All")
+            // all: this._("w_All")
         };
 
         this.timeModeSelectItem = {
@@ -469,7 +469,6 @@ export default class ReportTraffic extends Vue {
 
             pDatum.body.push(body);
             this.pData.push(pDatum);
-            console.log("initPeakTimeRange", this.pData);
         }
     }
 
@@ -2033,7 +2032,6 @@ export default class ReportTraffic extends Vue {
 
     async receiveBusinessChartType(businessChartType) {
         this.inputFormData.businessChartType = businessChartType;
-        console.log(" - ", this.inputFormData.businessChartType);
 
         // 單一site
         if (this.filterData.firstSiteId) {

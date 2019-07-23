@@ -76,13 +76,10 @@ export default class DemoFilterConditionComponent extends Vue {
         this.filterData = filterData;
         this.responseData = responseData;
         Vue.set(this.filterData, "firstSiteId", filterData.siteIds[0]);
-        console.log("this.filterData  - ", this.filterData);
-        // console.log("this.responseData  - ", this.responseData);
     }
 
     receiveUserData(data) {
         this.userData = data;
-        console.log("this.userData - ", this.userData);
     }
 
     receiveModalShowData(data) {

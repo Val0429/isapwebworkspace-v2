@@ -77,7 +77,6 @@ export default class DemoRegionTreeSelect extends Vue {
 
     pageToShowResult() {
         this.pageStep = EPageStep.showResult;
-        console.log(JSON.stringify(this.selecteds));
     }
 
     pageToChooseTree() {

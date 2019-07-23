@@ -216,15 +216,6 @@ export class HighchartsVipTracking extends Vue {
             default:
                 break;
         }
-
-        console.log(
-            "chart prop: ",
-            this.chartMode,
-            this.startDate,
-            this.endDate,
-            this.sites,
-            this.value
-        );
     }
 
     mountAnyChart(): boolean {
@@ -553,8 +544,6 @@ export class HighchartsVipTracking extends Vue {
 
             this.getDetail();
             this.modalShow = true;
-
-            console.log("!!! newValue", newValue);
         } catch (e) {
             console.log(e);
         }

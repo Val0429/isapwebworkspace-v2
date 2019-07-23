@@ -446,8 +446,6 @@ export default class FRSServer extends Vue {
                 datas
             };
 
-            console.log("addParam - ", addParam);
-
             await this.$server
                 .C("/partner/frs", addParam)
                 .then((response: any) => {
@@ -528,6 +526,7 @@ export default class FRSServer extends Vue {
             this._("w_ServerFRS_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteUserParam: {
                         objectId: string;
@@ -552,6 +551,7 @@ export default class FRSServer extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

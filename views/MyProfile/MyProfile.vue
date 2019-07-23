@@ -196,7 +196,6 @@ export default class MyProfile extends Vue {
                 }
             })
             .catch((e: any) => {
-                Loading.hide();
                 return ResponseFilter.base(
                     this,
                     e,
@@ -230,7 +229,6 @@ export default class MyProfile extends Vue {
                 }
             })
             .catch((e: any) => {
-                Loading.hide();
                 return ResponseFilter.base(
                     this,
                     e,
