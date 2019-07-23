@@ -164,7 +164,6 @@ import {
     ESign,
     ETimeMode,
     EWeather,
-    ECountType,
     EDeviceMode,
     ETypeInOrOut,
     EIncludedEmployee,
@@ -179,7 +178,6 @@ import {
     ISite,
     ISiteItems,
     IReportToTemplateItem,
-    ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
 

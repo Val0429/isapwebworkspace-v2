@@ -102,25 +102,17 @@ import {
     EAgeRange,
     EAreaMode,
     EDwellTimeRange,
-    EChartMode,
     EPageType,
     ESign,
-    ECountType,
     EDeviceMode,
     EIncludedEmployee,
     EDesignationPeriod,
     EAddPeriodSelect,
-    IDayRange,
     IChartDemographicData,
-    IChartTrafficData,
-    IPeckTimeRange,
     ISite,
-    ISiteItems,
     ITemplateItem,
     IFilterCondition,
-    IReportToTemplateItem,
-    ReportDashboard,
-    ReportTableData
+    IReportToTemplateItem
 } from "@/components/Reports";
 import {
     IHeatMapData,
