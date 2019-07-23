@@ -11,12 +11,15 @@
                     ref="heatmap"
                 >
                     <canvas
-                        style="position:relative; opacity:1.0;"
+                        class="canvas-snapshot"
                         ref="snapshot"
                         width="600"
                         height="400"
                     ></canvas>
-                    <div class="legend-area">
+                    <div
+                        class="legend-area"
+                        v-if="heatMapPosition.length > 0"
+                    >
                         <h5>{{title}}</h5>
                         <span class="left">{{min}}</span>
                         <span class="right">{{max}}</span>
@@ -98,8 +101,8 @@ export class CameraHeatmap extends Vue {
         heatmapData.data = me.heatMapPosition.map(function(item, index, array) {
             heatmapData.max = Math.max(heatmapData.max, item.value);
             return {
-                x: item.x * me.width_r,
-                y: item.y * me.height_r,
+                x: Math.round(item.x * me.width_r),
+                y: Math.round(item.y * me.height_r),
                 value: item.value
             };
         });
@@ -107,6 +110,16 @@ export class CameraHeatmap extends Vue {
         this.max = heatmapData.max;
         this.min = 0;
         me.heatmapCanvs.setData(heatmapData);
+        this.changeAlpha(0.5);
+
+        console.log("heatmapData", heatmapData);
+    }
+
+    changeAlpha(value: number) {
+        var elements = document.getElementsByClassName("heatmap-canvas");
+        for (let element of elements) {
+            (element as any).style.opacity = value;
+        }
     }
 
     initMap() {
@@ -141,6 +154,12 @@ Vue.component("camera-heatmap", CameraHeatmap);
     width: 600;
     height: 400;
 }
+
+.canvas-snapshot {
+    position: relative;
+    opacity: 1;
+}
+
 .legend-area {
     position: absolute;
     bottom: 0;
