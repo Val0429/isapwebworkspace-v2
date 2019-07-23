@@ -190,23 +190,18 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog";
+
+// Vue
 import HighchartsDwellTime from "@/components/Reports/Highcharts/HighchartsDwellTime.vue";
 
-// Tina
+// Region Tree
 import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
 
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Datetime from "@/services/Datetime";
-import ReportService from "@/components/Reports/models/ReportService";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import HighchartsService from "@/components/Reports/models/HighchartsService";
-
+// Report
 import {
     ETimeMode,
     EWeather,
@@ -220,22 +215,32 @@ import {
     EChartMode,
     EPageType,
     ESign,
+    EBusinessChart,
+    EIfAllSelected,
+    EAddPeriodSelect,
+    EDesignationPeriod,
     IChartDwellTimeData,
     IPeckTimeRange,
     ISite,
     ISiteItems,
     ITemplateItem,
     IFilterCondition,
-    ReportDashboard,
-    ReportTableData,
-    EDesignationPeriod,
     IReportToTemplateItem,
-    EBusinessChart,
-    EIfAllSelected,
-    EAddPeriodSelect
+    ReportDashboard,
+    ReportTableData
 } from "@/components/Reports";
 
-///////////////////////// export /////////////////////////
+// Service
+import Dialog from "@/services/Dialog";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import ReportService from "@/components/Reports/models/ReportService";
+import WeatherService from "@/components/Reports/models/WeatherService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import Loading from "@/services/Loading";
+
+// Export
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";

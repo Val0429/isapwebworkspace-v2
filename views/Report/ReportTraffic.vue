@@ -145,18 +145,18 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-// Tina
+
+// Vue
+import HighchartsTraffic from "@/components/Reports/Highcharts/HighchartsTraffic.vue";
+
+// Region Tree
 import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Datetime from "@/services/Datetime";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import HighchartsService from "@/components/Reports/models/HighchartsService";
-import HighchartsTraffic from "@/components/Reports/Highcharts/HighchartsTraffic.vue";
+
+// Report
 import {
     EAreaMode,
     EChartMode,
@@ -170,6 +170,8 @@ import {
     EIncludedEmployee,
     EDesignationPeriod,
     EBusinessChart,
+    EIfAllSelected,
+    EAddPeriodSelect,
     ITemplateItem,
     IFilterCondition,
     IChartTrafficData,
@@ -178,13 +180,19 @@ import {
     ISiteItems,
     IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData,
-    EIfAllSelected,
-    EAddPeriodSelect
+    ReportTableData
 } from "@/components/Reports";
-import ReportService from "@/components/Reports/models/ReportService";
 
-////////////////////////////////// export //////////////////////////////////
+// Service
+import ReportService from "@/components/Reports/models/ReportService";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import WeatherService from "@/components/Reports/models/WeatherService";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import Loading from "@/services/Loading";
+
+// Export
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
@@ -1477,8 +1485,8 @@ export default class ReportTraffic extends Vue {
 
         if (this.filterData.siteIds.length === 1) {
             for (const site of this.sitesSelectItem) {
-                if(this.filterData.siteIds[0] === site.id) {
-                    title += `${this._('w_Title_One_Site')} ${site.text}. `;
+                if (this.filterData.siteIds[0] === site.id) {
+                    title += `${this._("w_Title_One_Site")} ${site.text}. `;
                 }
             }
         } else {

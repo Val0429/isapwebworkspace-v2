@@ -51,18 +51,24 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog";
+
+// Vue
 import HighchartsCampaignMultiple from "@/components/Reports/Highcharts/HighchartsCampaignMultiple.vue";
 import HighchartsCampaignSingle from "@/components/Reports/Highcharts/HighchartsCampaignSingle.vue";
-import HighchartsService from "@/components/Reports/models/HighchartsService";
-import ResponseFilter from "@/services/ResponseFilter";
 
+// Report
 import {
     ECampaignTimeType,
     IChartCampaignMultiple,
     IChartCampaignSingle
 } from "@/components/Reports";
+
+// Service
+import HighchartsService from "@/components/Reports/models/HighchartsService";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
+import Loading from "@/services/Loading";
 
 @Component({
     components: {}

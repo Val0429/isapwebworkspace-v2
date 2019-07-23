@@ -142,20 +142,18 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog";
 
-// Tina
+// Vue
+import HighchartsOccupancy from "@/components/Reports/Highcharts/HighchartsOccupancy.vue";
+
+// Region Tree
 import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Datetime from "@/services/Datetime";
-import WeatherService from "@/components/Reports/models/WeatherService";
 
-import HighchartsOccupancy from "@/components/Reports/HighchartsOccupancy.vue";
+// Report
 import {
     EAreaMode,
     EPageType,
@@ -166,6 +164,9 @@ import {
     EDeviceMode,
     EIncludedEmployee,
     EChartMode,
+    EDesignationPeriod,
+    EAddPeriodSelect,
+    EIfAllSelected,
     IChartOccupancyData,
     IPeckTimeRange,
     ISiteAreas,
@@ -173,17 +174,22 @@ import {
     ISite,
     ITemplateItem,
     IFilterCondition,
-    EDesignationPeriod,
     IReportToTemplateItem,
     ReportDashboard,
-    ReportTableData,
-    EAddPeriodSelect,
-    EIfAllSelected
+    ReportTableData
 } from "@/components/Reports";
+
+// Service
+import Dialog from "@/services/Dialog";
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import WeatherService from "@/components/Reports/models/WeatherService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ReportService from "@/components/Reports/models/ReportService";
+import Loading from "@/services/Loading";
 
-///////////////////////// export /////////////////////////
+// Export
 import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
@@ -419,7 +425,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-               return ResponseFilter.base(this, e);
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -458,7 +464,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-               return ResponseFilter.base(this, e);
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -552,7 +558,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
             // 選擇site和單一area
         } else if (
@@ -574,7 +580,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
             // 選擇site和all area
         } else if (
@@ -634,7 +640,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -657,7 +663,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -739,7 +745,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -766,7 +772,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -816,7 +822,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-               return ResponseFilter.base(this, e);
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -1563,7 +1569,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-               return ResponseFilter.base(this, e);
+                return ResponseFilter.base(this, e);
             });
     }
 

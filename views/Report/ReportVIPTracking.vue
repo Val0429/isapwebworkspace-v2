@@ -70,7 +70,11 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Dialog from "@/services/Dialog";
+
+// Vue
+import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
+
+// Report
 import {
     EDesignationPeriod,
     EDeviceMode,
@@ -80,14 +84,16 @@ import {
     IChartVipTrackingData,
     EAddPeriodSelect
 } from "@/components/Reports";
+
+// Service
+import Dialog from "@/services/Dialog";
 import ResponseFilter from "@/services/ResponseFilter";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
-
-import HighchartsVipTracking from "@/components/Reports/Highcharts/HighchartsVipTracking.vue";
 import ReportService from "@/components/Reports/models/ReportService";
 import Datetime from "@/services/Datetime";
+import Loading from "@/services/Loading";
 
-////////////////////////////////// export //////////////////////////////////
+// Export
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 
 @Component({

@@ -138,19 +138,27 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import ImageBase64 from "@/services/ImageBase64";
 
+// Vue
+import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
+
+// API interfaces
+import { ITagReadUpdate } from "@/config/default/api/interfaces";
+
+// Region Tree
 import {
     ERegionType,
     IRegionItem,
     RegionTreeItem
 } from "@/components/RegionTree";
-import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
-import { ITagReadUpdate } from "@/config/default/api/interfaces";
+
+// Service
 import RegionAPI from "@/services/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
+import ImageBase64 from "@/services/ImageBase64";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
 enum EPageStep {
     none,

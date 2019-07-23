@@ -1,29 +1,27 @@
 <template>
     <div class="animated fadeIn">
 
-	    <iv-card
-		    :label=" _('w_Backup_List') "
-	    >
-		    <b-form-checkbox
-			    v-for="option in options"
-			    v-model="selected"
-			    :key="option.value"
-			    :value="option.value"
-			    class="m-2"
-		    >
-			    {{ option.text }}
-		    </b-form-checkbox>
+        <iv-card :label=" _('w_Backup_List') ">
+            <b-form-checkbox
+                v-for="option in options"
+                v-model="selected"
+                :key="option.value"
+                :value="option.value"
+                class="m-2"
+            >
+                {{ option.text }}
+            </b-form-checkbox>
 
-		    <template #footer>
-			    <b-button
-				    variant="primary"
-				    size="lg"
-				    @click="saveBackup()"
-			    >{{ _('w_Backup_Backup') }}
-			    </b-button>
-		    </template>
+            <template #footer>
+                <b-button
+                    variant="primary"
+                    size="lg"
+                    @click="saveBackup()"
+                >{{ _('w_Backup_Backup') }}
+                </b-button>
+            </template>
 
-	    </iv-card>
+        </iv-card>
     </div>
 </template>
 
@@ -31,49 +29,44 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "../../../core";
 
+// Service
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog.vue";
+import Loading from "@/services/Loading";
 
 enum EPageStep {
-	list = "list",
-	add = "add",
-	edit = "edit",
-	view = "view",
-	none = "none",
+    list = "list",
+    add = "add",
+    edit = "edit",
+    view = "view",
+    none = "none"
 }
 
 @Component({
     components: {}
 })
 export default class Backup extends Vue {
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
 
-	ePageStep = EPageStep;
-	pageStep: EPageStep = EPageStep.list;
+    selected: any = {};
 
-	selected: any = {};
+    options: any = [
+        { text: "User setting", value: "UserSetting" },
+        { text: "Sites setting", value: "SitesSetting" },
+        { text: "Business Operation", value: "BusinessOperation" },
+        { text: "Device setting", value: "DeviceSetting" }
+    ];
 
-	options: any = [
-		{ text: 'User setting', value: 'UserSetting' },
-		{ text: 'Sites setting', value: 'SitesSetting' },
-		{ text: 'Business Operation', value: 'BusinessOperation' },
-		{ text: 'Device setting', value: 'DeviceSetting' }
-	];
+    created() {}
 
-	created() {
+    mounted() {}
 
-	}
+    clearInputData() {}
 
-	mounted() {
-
-	}
-
-	clearInputData() {
-
-	}
-
-	saveBackup() {
-		alert('saveBackup')
-	}
+    saveBackup() {
+        alert("saveBackup");
+    }
 }
 </script>
 

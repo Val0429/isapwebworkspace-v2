@@ -266,17 +266,15 @@ import {EDesignationPeriod} from "../../components/Reports";
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+
+// Region Tree
 import {
     ERegionType,
     IRegionTreeSelected,
     RegionTreeItem
 } from "@/components/RegionTree";
 
-import RegionAPI from "@/services/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime";
-
+// Report
 import {
     EAddPeriodSelect,
     EDesignationPeriod,
@@ -285,6 +283,13 @@ import {
     EWeeks,
     IReportToTemplateItem
 } from "@/components/Reports";
+
+// Service
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
+import Loading from "@/services/Loading";
 
 enum EPageStep {
     list = "list",

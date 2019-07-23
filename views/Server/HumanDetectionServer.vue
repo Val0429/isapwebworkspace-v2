@@ -58,7 +58,6 @@
             </iv-card>
         </div>
 
-
         <!--Form (Add and Edit)-->
         <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
             <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') ">
@@ -123,7 +122,6 @@
                 </template>
             </iv-card>
         </div>
-
 
         <!-- Model -->
         <b-modal
@@ -207,15 +205,15 @@ import {
 import ImageBase64 from "@/services/ImageBase64";
 import ServerConfig from "@/services/ServerConfig";
 import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime.vue";
+import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
+import Loading from "@/services/Loading";
 
 enum EPageStep {
     List = "List",
     View = "View",
     Add = "Add",
     Edit = "Edit",
-
     none = "none"
 }
 
@@ -249,10 +247,10 @@ export default class HumanDetectionServer extends Vue {
     //test data
     inputHumanServerData = {
         imageBase64: "",
-        objectId: "",
+        objectId: ""
     };
 
-    returnImageBase64: string = '';
+    returnImageBase64: string = "";
 
     //options
     targetScoreItem: any = {};
@@ -279,23 +277,21 @@ export default class HumanDetectionServer extends Vue {
 
     clearInputData() {
         this.inputFormData = {
-            objectId: '',
-            customId: '',
-            name: '',
-            protocol: 'http',
-            ip: '',
-            port: '',
-            target_score: '0.5',
-            imageBase64: ''
-        }
+            objectId: "",
+            customId: "",
+            name: "",
+            protocol: "http",
+            ip: "",
+            port: "",
+            target_score: "0.5",
+            imageBase64: ""
+        };
     }
-
 
     selectedData(data) {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
-
     }
 
     getInputData() {
@@ -309,10 +305,9 @@ export default class HumanDetectionServer extends Vue {
                 ip: param.ip,
                 port: param.port,
                 protocol: param.protocol,
-                target_score: param.target_score.toString(),
+                target_score: param.target_score.toString()
             };
         }
-
     }
 
     pageToView() {
@@ -335,7 +330,6 @@ export default class HumanDetectionServer extends Vue {
         this.clearInputData();
         this.pageStep = EPageStep.List;
         (this.$refs.listTable as any).reload();
-
     }
 
     pageToHumanServerTest() {
@@ -348,7 +342,6 @@ export default class HumanDetectionServer extends Vue {
     }
 
     async sendHumanServerTest(data) {
-
         if (this.newImgSrc == "") {
             Dialog.error(this._("w_Upload_Fail"));
             return;
@@ -358,11 +351,11 @@ export default class HumanDetectionServer extends Vue {
             protocol: data.protocol,
             ip: data.ip,
             port: data.port,
-            target_score: parseFloat(data.target_score),
+            target_score: parseFloat(data.target_score)
         };
 
         const humanObject: {
-            config: any,
+            config: any;
             imageBase64: string;
         } = {
             config: configOnject,
@@ -409,7 +402,10 @@ export default class HumanDetectionServer extends Vue {
                                 Dialog.success(this._("w_ServerHD_AddSuccess"));
                                 this.pageToList();
                             }
-                            if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
                                 Dialog.error(this._("w_ServerHD_AddFailed"));
                                 return false;
                             }
@@ -419,7 +415,6 @@ export default class HumanDetectionServer extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
-
         } else if (this.pageStep == EPageStep.Edit) {
             const datas = [
                 {
@@ -441,10 +436,15 @@ export default class HumanDetectionServer extends Vue {
                     if (response != undefined) {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
-                                Dialog.success(this._("w_ServerHD_EditSuccess"));
+                                Dialog.success(
+                                    this._("w_ServerHD_EditSuccess")
+                                );
                                 this.pageToList();
                             }
-                            if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                            if (
+                                returnValue.statusCode === 500 ||
+                                returnValue.statusCode === 400
+                            ) {
                                 Dialog.error(this._("w_ServerHD_EditFailed"));
                                 return false;
                             }
@@ -458,27 +458,31 @@ export default class HumanDetectionServer extends Vue {
     }
 
     async deleteData() {
-        Dialog.confirm(this._("w_ServerHD_DeleteConfirm"), this._("w_Confirm"), () => {
-            for (const param of this.selectedDetail) {
-                const deleteParam: {
-                    objectId: string;
-                } = {
-                    objectId: param.objectId
-                };
+        Dialog.confirm(
+            this._("w_ServerHD_DeleteConfirm"),
+            this._("w_Confirm"),
+            () => {
+                for (const param of this.selectedDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
 
-                this.$server
-                    .D("/partner/human-detection", deleteParam)
-                    .then((response: any) => {
-                        if (response) {
-                            Dialog.success(this._("w_Success"));
-                            this.pageToList();
-                        }
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.base(this, e);
-                    });
+                    this.$server
+                        .D("/partner/human-detection", deleteParam)
+                        .then((response: any) => {
+                            if (response) {
+                                Dialog.success(this._("w_Success"));
+                                this.pageToList();
+                            }
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.base(this, e);
+                        });
+                }
             }
-        });
+        );
     }
 
     updateForm(data) {
@@ -591,10 +595,10 @@ export default class HumanDetectionServer extends Vue {
                  * @uiLabel - ${this._("w_ServerHD_DeviceID")}
                  * @uiPlaceHolder - ${this._("w_ServerHD_DeviceID")}
                  * @uiType - ${
-                    this.pageStep === EPageStep.Add
-                ? "iv-form-string"
-                : "iv-form-label"
-            }
+                     this.pageStep === EPageStep.Add
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
                 customId: string;
 
@@ -648,9 +652,9 @@ export default class HumanDetectionServer extends Vue {
                  * @uiLabel - ${this._("w_Protocol")}
                  */
                  protocol: ${toEnumInterface({
-                    http: "http",
-                    https: "https"
-                })};
+                     http: "http",
+                     https: "https"
+                 })};
 
                 /**
                  * @uiLabel - ${this._("w_ServerHD_IP")}

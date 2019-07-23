@@ -48,7 +48,7 @@ import {
     EChartMode,
     ISiteItems
 } from "@/components/Reports";
-import Datetime from "@/services/Datetime.vue";
+import Datetime from "@/services/Datetime";
 import HighchartsService from "./models/HighchartsService";
 
 @Component({
