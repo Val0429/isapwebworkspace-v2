@@ -175,6 +175,10 @@ import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 // API Interface
 import { ITag, ITagReadUpdate } from "@/config/default/api/interfaces";
 
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
 // Region Tree
 import {
     ERegionType,
@@ -188,21 +192,10 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
-import Transition from "@/services/Transition";
-import { ITransition } from "@/services/Transition";
 
 interface IinputFormData extends ITag, ITagReadUpdate {
     siteIdsText?: string;
     regionIdsText?: string;
-}
-
-enum EPageStep {
-    list = "list", // 1
-    view = "view", //2
-    add = "add", // 3
-    edit = "edit", // 3
-    chooseRegionTree = "chooseRegionTree", // 4
-    chooseSiteTree = "chooseSiteTree" // 5
 }
 
 @Component({
@@ -211,6 +204,7 @@ enum EPageStep {
 export default class Tags extends Vue {
     transition: ITransition = {
         type: Transition.type,
+        prevStep: 1,
         step: 1
     };
 
@@ -395,6 +389,7 @@ export default class Tags extends Vue {
     }
 
     pageToList() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         (this.$refs.listTable as any).reload();
         this.selectedsSites = [];
@@ -402,11 +397,13 @@ export default class Tags extends Vue {
     }
 
     pageToView() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
         this.getInputData();
     }
 
     async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         await this.initSelectItemSite();
         await this.initSelectItemRegion();
@@ -416,6 +413,7 @@ export default class Tags extends Vue {
     }
 
     async pageToEdit() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.getInputData();
         await this.initSelectItemSite();
@@ -436,6 +434,7 @@ export default class Tags extends Vue {
     }
 
     async pageToChooseRegionTree() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 4;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
@@ -455,6 +454,7 @@ export default class Tags extends Vue {
     }
 
     async pageToChooseSiteTree() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 5;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
@@ -474,6 +474,7 @@ export default class Tags extends Vue {
     }
 
     pageToShowResultRegionTree() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
 
         // siteIds clear
@@ -487,6 +488,7 @@ export default class Tags extends Vue {
     }
 
     pageToShowResultSiteTree() {
+        this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
 
         // siteIds clear
@@ -682,6 +684,41 @@ export default class Tags extends Vue {
         `;
     }
 
+    IViewForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_Tag_TagName")}
+                 * @uiType - iv-form-label
+                 */
+                name?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiType - iv-form-label
+                 */
+                description?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Regions")}
+                 * @uiType - iv-form-label
+                 */
+                regionIdsText?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 * @uiType - iv-form-label
+                */
+                siteIdsText?: string;
+
+            }
+        `;
+    }
+
     IAddAndEditForm() {
         return `
             interface {
@@ -721,41 +758,6 @@ export default class Tags extends Vue {
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
                 selectTreeSite?: any;
-
-            }
-        `;
-    }
-
-    IViewForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_Tag_TagName")}
-                 * @uiType - iv-form-label
-                 */
-                name?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Description")}
-                 * @uiType - iv-form-label
-                 */
-                description?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Regions")}
-                 * @uiType - iv-form-label
-                 */
-                regionIdsText?: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiType - iv-form-label
-                */
-                siteIdsText?: string;
 
             }
         `;
