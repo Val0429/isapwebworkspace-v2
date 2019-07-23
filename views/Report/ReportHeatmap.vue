@@ -1460,14 +1460,11 @@ export default class ReportHeatmap extends Vue {
         filterData: IFilterCondition,
         designationPeriod: EDesignationPeriod
     ) {
-
-
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
 
-        console.log('this.filterData - ', this.filterData);
-
+        console.log("this.filterData - ", this.filterData);
 
         this.inputFormData = {
             areaId: "",
@@ -2319,11 +2316,9 @@ export default class ReportHeatmap extends Vue {
 
     // 多天的其中一天
     receiveTimeArrayIndex(timeArrayIndex) {
-        console.log(" timeArrayIndex : ", timeArrayIndex);
         for (const index in this.timeArray) {
             if (timeArrayIndex === index) {
                 this.timeArrayData = this.timeArray[index];
-                console.log(" - ", this.timeArray[index]);
             }
         }
     }

@@ -201,7 +201,6 @@ export default class ForgetPassword extends Vue {
                 }
             })
             .catch((e: any) => {
-                Loading.hide();
                 return ResponseFilter.base(
                     this,
                     e,
@@ -230,7 +229,6 @@ export default class ForgetPassword extends Vue {
                 }
             })
             .catch((e: any) => {
-                Loading.hide();
                 return ResponseFilter.base(
                     this,
                     e,
@@ -262,7 +260,6 @@ export default class ForgetPassword extends Vue {
                 }
             })
             .catch((e: any) => {
-                Loading.hide();
                 return ResponseFilter.base(
                     this,
                     e,

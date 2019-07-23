@@ -203,8 +203,6 @@ export class HeatMapManyDaySliderPips extends Vue {
         } else {
             this.$set( this.vals, handle, pipValue );
         }
-
-        console.log('clickValue - ', this.clickValue);
     }
 
     getClosestHandle( value ) {

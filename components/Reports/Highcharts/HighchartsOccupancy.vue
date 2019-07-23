@@ -181,17 +181,6 @@ export class HighchartsOccupancy extends Vue {
             default:
                 break;
         }
-
-        console.log(
-            "chart prop: ",
-            this.chartMode,
-            this.startDate,
-            this.endDate,
-            this.timeMode,
-            this.areaMode,
-            this.sites,
-            this.value
-        );
     }
 
     mountAnyChart(): boolean {
@@ -995,7 +984,7 @@ export class HighchartsOccupancy extends Vue {
                     }
                 }
             }
-            // console.log("!!! tempData", tempData);
+
             tempSeries.push({
                 name: HighchartsService.categorieStringNotJSON(
                     site.name,
@@ -1007,7 +996,6 @@ export class HighchartsOccupancy extends Vue {
 
         // set result
         for (let result of tempResult) {
-            console.log("!!! result ", result);
             for (let i in result.sites) {
                 result.sites[i].occupancy = HighchartsService.formatFloat(
                     result.sites[i].occupancy

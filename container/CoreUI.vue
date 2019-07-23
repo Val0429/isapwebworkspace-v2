@@ -272,9 +272,8 @@ export default class CoreUI extends Vue {
         try {
             this.$logout(this.logoutPath);
         } catch (e) {
-            console.log("catch", e);
+            console.log(e);
         } finally {
-            console.log("finally");
             this.$router.push("/login");
         }
     }

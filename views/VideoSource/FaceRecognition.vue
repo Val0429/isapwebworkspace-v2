@@ -686,7 +686,6 @@ export default class FaceRecognition extends Vue {
                     );
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async selectAreaId(data) {
@@ -729,7 +728,6 @@ export default class FaceRecognition extends Vue {
                     );
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async selectGroupDeviceId(data) {
@@ -772,7 +770,6 @@ export default class FaceRecognition extends Vue {
                     );
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async pageToAdd(stepType: string) {
@@ -851,7 +848,6 @@ export default class FaceRecognition extends Vue {
         this.addStep = EAddStep.isapFrs;
         this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
-        console.log("brand", this.inputFormData.brand);
     }
 
     async pageToAddByiSapFRSManager(brand: string) {

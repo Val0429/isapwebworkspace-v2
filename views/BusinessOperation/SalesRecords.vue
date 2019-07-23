@@ -519,9 +519,11 @@ export default class SalesRecords extends Vue {
             param.datas.push(tempItem);
         }
 
+        Loading.show();
         await this.$server
             .C("/report/sales-record", param)
             .then((response: any) => {
+                Loading.hide();
                 if (typeof response == "object" && response.length > 0) {
                     for (let i in response) {
                         let iNumber = parseInt(i);

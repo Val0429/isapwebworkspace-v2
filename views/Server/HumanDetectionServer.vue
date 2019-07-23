@@ -377,8 +377,6 @@ export default class HumanDetectionServer extends Vue {
     }
 
     async saveData(data) {
-        console.log("saveArea", data);
-
         if (this.pageStep == EPageStep.Add) {
             const datas = [
                 {
@@ -486,14 +484,12 @@ export default class HumanDetectionServer extends Vue {
     }
 
     updateForm(data) {
-        console.log("updateForm", data);
         if (data) {
             this.inputFormData[data.key] = data.value;
         }
     }
 
     updateServerData(data) {
-        console.log("updateServerData", data);
         if (data && data.key == "imageBase64") {
             this.uploadFile(data.value);
         }
@@ -507,7 +503,6 @@ export default class HumanDetectionServer extends Vue {
                     this.newImg.src = base64;
                     this.newImg.onload = () => {
                         this.newImgSrc = base64;
-                        console.log("newImgSrc", this.newImgSrc);
                         return;
                     };
                 } else {

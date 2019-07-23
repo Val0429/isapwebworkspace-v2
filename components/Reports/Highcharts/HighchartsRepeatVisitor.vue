@@ -246,16 +246,6 @@ export class HighchartsRepeatVisitor extends Vue {
 
         this.initChart();
         this.initDetailChart();
-
-        console.log(
-            "chart prop: ",
-            this.startDate,
-            this.endDate,
-            this.timeMode,
-            this.areaMode,
-            this.sites,
-            this.value
-        );
     }
 
     mountAnyChart(): boolean {

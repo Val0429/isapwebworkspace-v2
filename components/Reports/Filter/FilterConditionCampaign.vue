@@ -239,8 +239,6 @@ export class FilterConditionCampaign extends Vue {
     //             }
     //         }
     //
-    //         console.log("!!!! templateItem:", this.templateItem);
-    //
     //         // Select Report Period
     //         if (
     //             this.templateItem.type &&
@@ -318,8 +316,6 @@ export class FilterConditionCampaign extends Vue {
                 }
             }
         }
-
-        // console.log(' - ', doSubmitParam); return false;
 
         this.visible = false;
         this.$emit("submit-data", doSubmitParam);
