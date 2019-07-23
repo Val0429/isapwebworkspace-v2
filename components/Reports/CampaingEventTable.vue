@@ -23,7 +23,7 @@
                 >
                     <td class="center">{{ value.campaign.name  }}</td>
                     <td class="center">{{ initDatetime(value.startDate, value.endDate) }}</td>
-                    <td class="center">{{ value.budget }}</td>
+                    <td class="center">{{ value.budget.toLocaleString() }}</td>
                     <td class="center">{{ toPercent(value.budgetPercent ),0}}</td>
                     <td class="center">{{ toPercent( value.trafficGainPer ),0}}</td>
 
@@ -34,7 +34,7 @@
                 <tr>
                     <td class="center">{{ this.totalTitle }}</td>
                     <td class="center"></td>
-                    <td class="center"> {{ total }}</td>
+                    <td class="center"> {{ initFormatNumber(total.toString()) }}</td>
                     <td class="center"></td>
                     <td class="center"></td>
                 </tr>
@@ -65,6 +65,7 @@ import {
 import Datetime from "@/services/Datetime";
 import ServerConfig from "@/services/ServerConfig";
 import { IPaging } from "@/components/Table/models/IPaging";
+import ReportService from "@/components/Reports/models/ReportService";
 
 @Component({
     components: {}
@@ -120,6 +121,10 @@ export class CampaingEventTable extends Vue {
 
     initDatetime(date1, date2 ): string {
         return `${ Datetime.DateTime2String(new Date(date1), 'YYYY/MM/DD') } ~ ${ Datetime.DateTime2String(new Date(date2), 'YYYY/MM/DD') }`
+    }
+
+    initFormatNumber(number: string): string {
+        return ReportService.FormatNumber(number)
     }
 
     getData() {

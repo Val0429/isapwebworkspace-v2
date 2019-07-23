@@ -132,7 +132,8 @@ export default class LangObject implements ILang {
     w_IPAddress = 'IP Address';
     w_Selected = 'Selected';
     w_RegionTreeSelect = 'Region Tree Select';
-    w_SiteTreeSelect = 'Site Tree Select';
+    // w_SiteTreeSelect = 'Site Tree Select';
+    w_SiteTreeSelect = 'Store Tree Select';
     w_Brand = 'Brand';
     w_Model = 'Model';
     w_DeviceName = 'Device Name';
@@ -157,7 +158,7 @@ export default class LangObject implements ILang {
     // w_AllSites = 'All Sites';
     w_SelectSites = 'Select Store(s)';
     w_AllSites = 'All Stores';
-    w_SelectSite = 'Select Store';
+    w_SelectSite = '* Select Store';
     w_period = 'Period';
     w_Designation = 'Designation';
     w_Today = 'Today';

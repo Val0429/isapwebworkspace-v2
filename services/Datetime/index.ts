@@ -1,4 +1,4 @@
-import Utility from './Utility';
+import Utility from '../Utility';
 
 enum DatetimeFormat {
     'default' = 'YYYY/MM/DD HH:mm:ss',

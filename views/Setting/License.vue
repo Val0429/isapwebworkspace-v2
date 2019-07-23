@@ -1,197 +1,199 @@
 <template>
     <div class="animated fadeIn">
 
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label=" _('w_License_List') "
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
 
-            <template #toolbox>
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd()" />
-            </template>
-
-            <iv-table
-                ref="licenseTable"
-                :interface="IList()"
-                :server="{ path: '/license' }"
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label=" _('w_License_List') "
             >
 
-            </iv-table>
+                <template #toolbox>
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+                </template>
 
-        </iv-card>
+                <iv-table
+                    ref="licenseTable"
+                    :interface="IList()"
+                    :server="{ path: '/license' }"
+                >
 
-        <!-- 選擇增加方式 -->
-        <iv-auto-card
-            v-show="addStep === eAddStep.select"
-            :label="_('w_License_Add') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList" />
-                <iv-toolbox-step-backward
-                    v-show="addStep === eAddStep.macLicense || addStep === eAddStep.offline"
-                    @click="pageStepBackward"
-                />
-            </template>
+                </iv-table>
 
-            <iv-form :interface="IAddFromSelect()">
+            </iv-card>
 
-                <template #licensemac="{$attrs, $listeners}">
+            <!-- 選擇增加方式 -->
+            <!-- v-show="addStep === eAddStep.select" -->
+            <iv-auto-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :label="_('w_License_Add') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList" />
+                </template>
+
+                <iv-form :interface="IAddFromSelect()">
+
+                    <template #licensemac="{$attrs, $listeners}">
+                        <b-button
+                            class="button ml-3 mr-5 mb-3 mt-2"
+                            size="md"
+                            variant="success"
+                            type="button"
+                            @click="pageToAddByMac()"
+                        >
+                            {{ _('w_License_Step1_mac') }}
+                        </b-button>
+
+                    </template>
+
+                    <template #offline="{$attrs, $listeners}">
+                        <b-button
+                            class="button mb-3 mt-2"
+                            size="md"
+                            variant="success"
+                            type="button"
+                            @click="pageToAddByOffline()"
+                        >
+                            {{ _('w_License_Step1_offline') }}
+                        </b-button>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
                     <b-button
-                        class="button ml-3 mr-5 mb-3 mt-2"
-                        size="md"
-                        variant="success"
-                        type="button"
-                        @click="pageToAddByMac()"
-                    >
-                        {{ _('w_License_Step1_mac') }}
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
                     </b-button>
 
-                </template>
-
-                <template #offline="{$attrs, $listeners}">
                     <b-button
-                        class="button mb-3 mt-2"
-                        size="md"
-                        variant="success"
-                        type="button"
-                        @click="pageToAddByOffline()"
-                    >
-                        {{ _('w_License_Step1_offline') }}
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
                     </b-button>
-
                 </template>
 
-            </iv-form>
+            </iv-auto-card>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
-                </b-button>
-
-                <b-button
-                    v-show="addStep === eAddStep.macLicense || addStep === eAddStep.offline"
-                    variant="secondary"
-                    size="lg"
-                    @click="pageStepBackward"
-                >{{ _('w_StepBackward') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- 使用 macLicense -->
-        <iv-auto-card
-            v-show="addStep === eAddStep.macLicense"
-            :label="_('w_License_Add') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList" />
-                <iv-toolbox-step-backward
-                    v-show="addStep === eAddStep.macLicense || addStep === eAddStep.offline"
-                    @click="pageStepBackward"
-                />
-            </template>
-
-            <iv-form
-                :interface="IAddFromMac()"
-                :value="licenseInputDataMac"
-                @submit="saveAddLicenseMac($event)"
+            <!-- 使用 macLicense -->
+            <!-- v-show="addStep === eAddStep.macLicense" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :label="_('w_License_Add') "
             >
-
-                <template #key="{$attrs, $listeners}">
-                    <iv-form-license
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                    ></iv-form-license>
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList" />
+                    <iv-toolbox-step-backward @click="pageStepBackward" />
                 </template>
 
-                <template #mac="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                    ></iv-form-selection>
-                </template>
+                <iv-form
+                    :interface="IAddFromMac()"
+                    :value="licenseInputDataMac"
+                    @submit="saveAddLicenseMac($event)"
+                >
 
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
-                </b-button>
-
-                <b-button
-                    v-show="addStep === eAddStep.macLicense || addStep === eAddStep.offline"
-                    variant="secondary"
-                    size="lg"
-                    @click="pageStepBackward"
-                >{{ _('w_StepBackward') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- 使用 offline -->
-        <iv-auto-card
-            v-show="addStep === eAddStep.offline"
-            :label="_('w_License_Add')"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList" />
-                <iv-toolbox-step-backward
-                    v-show="addStep === eAddStep.macLicense || addStep === eAddStep.offline"
-                    @click="pageStepBackward"
-                />
-            </template>
-
-            <iv-form
-                :interface="IAddFromOffline()"
-                :value="licenseInputDataOffline"
-                @submit="saveAddLicenseOffLine($event)"
-            >
-
-                <template #title="{ $attrs, $listeners }">
-                    <div class="ml-3 mb-2 w-100">{{ _('w_License_UploadOfflineKey1') }}</div>
-                </template>
-
-                <template #data="{$attrs, $listeners}">
-                    <div class="upload_file">
-                        <b-form-file
+                    <template #key="{$attrs, $listeners}">
+                        <iv-form-license
                             v-bind="$attrs"
                             v-on="$listeners"
-                            @change="loadTextFromFile"
-                        >
-                        </b-form-file>
-                    </div>
+                        ></iv-form-license>
+                    </template>
 
+                    <template #mac="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                        ></iv-form-selection>
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
                 </template>
 
-            </iv-form>
+            </iv-auto-card>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
-                </b-button>
+            <!-- 使用 offline -->
+            <!-- v-show="addStep === eAddStep.offline" -->
+            <iv-auto-card
+                key="transition_4"
+                v-show="transition.step === 4"
+                :label="_('w_License_Add')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList" />
+                    <iv-toolbox-step-backward @click="pageStepBackward" />
+                </template>
 
-                <b-button
-                    v-show="addStep === eAddStep.macLicense || addStep === eAddStep.offline"
-                    variant="secondary"
-                    size="lg"
-                    @click="pageStepBackward"
-                >{{ _('w_StepBackward') }}
-                </b-button>
-            </template>
+                <iv-form
+                    :interface="IAddFromOffline()"
+                    :value="licenseInputDataOffline"
+                    @submit="saveAddLicenseOffLine($event)"
+                >
 
-        </iv-auto-card>
+                    <template #title="{ $attrs, $listeners }">
+                        <div class="ml-3 mb-2 w-100">{{ _('w_License_UploadOfflineKey1') }}</div>
+                    </template>
+
+                    <template #data="{$attrs, $listeners}">
+                        <div class="upload_file">
+                            <b-form-file
+                                v-bind="$attrs"
+                                v-on="$listeners"
+                                @change="loadTextFromFile"
+                            >
+                            </b-form-file>
+                        </div>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -199,6 +201,10 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Service
 import ResponseFilter from "@/services/ResponseFilter";
@@ -218,29 +224,17 @@ interface ILicenseInputDataOffline {
     data: any;
 }
 
-enum EPageStep {
-    list = "list",
-    none = "none"
-}
-
-enum EAddStep {
-    select = "select",
-    macLicense = "macLicense",
-    offline = "offline",
-    none = "none"
-}
-
 @Component({
     components: {}
 })
 export default class License extends Vue {
     macSelectItem: any = {};
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
-
-    eAddStep = EAddStep;
-    addStep: EAddStep = EAddStep.none;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
     licenseInputDataMac: ILicenseInputDataMac = {
         key: "",
@@ -282,31 +276,34 @@ export default class License extends Vue {
         };
     }
 
-    pageToAdd() {
-        this.pageStep = EPageStep.none;
-        this.addStep = EAddStep.select;
-        this.clearInputData();
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
     }
 
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        this.addStep = EAddStep.none;
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.clearInputData();
     }
 
     async pageToAddByMac() {
         this.clearInputData();
         await this.initMacSelectItem();
-        this.addStep = EAddStep.macLicense;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
     }
 
     pageToAddByOffline() {
         this.clearInputData();
-        this.addStep = EAddStep.offline;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
     }
 
     pageStepBackward() {
         this.clearInputData();
-        this.addStep = EAddStep.select;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
     }
 
     loadTextFromFile(e: any) {
