@@ -18,7 +18,7 @@
         
         <!-- 6) custom edit / add template with <template #add.* /> -->
 
-        <template #add.ccurein="{$attrs, $listeners}">
+        <!-- <template #add.ccurein="{$attrs, $listeners}">
             <ivc-single-selection
             v-bind="$attrs" 
             v-on="$listeners" 
@@ -45,7 +45,7 @@
             v-on="$listeners" 
             :options="sipassOptions" 
             />
-        </template>
+        </template> -->
         <template #view.doorgroup="{$attrs, $listeners}">
             {{getInfo($attrs.row).doorgroup}}
         </template>
@@ -120,19 +120,19 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
                 /**
                 * @uiLabel - ${"SIPASS"+" "+this._("readerin")}
                 */
-                sipassin?: string;
+                sipassin?:  ${toEnumInterface(this.sipassOptions, false)};
                  /**
                 * @uiLabel - ${"SIPASS"+" "+this._("readerout")}
                 */
-                sipassout?: string;
+                sipassout?: ${toEnumInterface(this.sipassOptions, false)};
                 /**
                 * @uiLabel - ${"CCURE"+" "+this._("readerin")}
                 */
-                ccurein?: string;
+                ccurein?: ${toEnumInterface(this.ccureOptions, false)};
                 /**
                 * @uiLabel - ${"CCURE"+" "+this._("readerout")}
                 */
-                ccureout?: string;
+                ccureout?: ${toEnumInterface(this.ccureOptions, false)};
                 
                 }
                 `;
@@ -156,10 +156,10 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
     /// 9) pre-edit 送去修改表單前要做甚麼調整
     async preEdit(row) {
         let props = this.getReaderInfo(row);
-        row.sipassin = props.sipassin;
-        row.sipassout = props.sipassout;
-        row.ccurein = props.ccurein;
-        row.ccureout = props.ccureout;
+        row.sipassin = props.sipassin ? props.sipassin.objectId:"";
+        row.sipassout =  props.sipassout ? props.sipassout.objectId:"";
+        row.ccurein =  props.ccurein ? props.ccurein.objectId:"";
+        row.ccureout = props.ccureout ? props.ccureout.objectId:"";
         console.log("row.readerin", row.readerin);
         console.log("row.readerout", row.readerout);
         await this.getOptions(row.readerin,row.readerout);        
@@ -229,8 +229,8 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         return row;
     }
     /// Done
-    private sipassOptions:{key:any, value:any, system:any}[]=[];
-    private ccureOptions:{key:any, value:any, system:any}[]=[];
+    private sipassOptions:any={};
+    private ccureOptions:any={};
     private options:{key:any, value:any, system:any}[]=[];
     private doorGroups:any[]=[];
     private areas:any[]=[];
@@ -255,8 +255,14 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         if(readerin)tempOptions.push(...readerin);
         if(readerout)tempOptions.push(...readerout);        
         this.options=tempOptions.map(item => { return { key: item.objectId,value: item.readername,system: item.system }; });
-        this.sipassOptions=this.options.filter(x => x.system==System.SIPASS);
-        this.ccureOptions=this.options.filter(x => x.system==System.CCURE);
+        this.sipassOptions={};
+        for(let option of this.options.filter(x => x.system==System.SIPASS)){
+            this.sipassOptions[option.key]=option.value;
+        }
+        this.ccureOptions={};
+         for(let option of this.options.filter(x => x.system==System.CCURE)){
+            this.ccureOptions[option.key]=option.value;
+        }
         
         console.log("sipassOptions", this.sipassOptions);
         console.log("ccureOptions", this.ccureOptions);
