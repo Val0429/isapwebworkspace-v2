@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>{{_('w_ReportCampaign_Single')}}</h2>
         <table
             ref="reportTable"
             class="table b-table table-striped table-hover"

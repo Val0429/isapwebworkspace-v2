@@ -50,6 +50,13 @@
             >
             </highcharts-campaign-single>
 
+
+	        <campaign-event-table
+		        v-if="chartMode.multiple"
+		        :thresholdDetailTableContent="responseDataAllCampaignArray"
+		        :total="total"
+	        ></campaign-event-table>
+
 	        <campaign-table
 		        v-if="chartMode.single"
 		        :thresholdDetailTableContent="responseDataSingleCampaignArray"
@@ -113,8 +120,10 @@ export default class ReportCampaign extends Vue {
     // 接收 Filter Condition 資料 相關
     filterData: any = {};
     responseDataAllCampaign: any = {};
+    responseDataAllCampaignArray: any = [];
     responseDataSingleCampaign: any = {};
     responseDataSingleCampaignArray: any = [];
+    total: number = 0;
 
     // send user 相關
     userSelectItem: any = {};
@@ -207,6 +216,7 @@ export default class ReportCampaign extends Vue {
 
     async receiveFilterData(filterData) {
         let param = {};
+	    this.responseDataAllCampaignArray = [];
 	    this.responseDataSingleCampaignArray = [];
         this.filterData = filterData;
 
@@ -222,6 +232,8 @@ export default class ReportCampaign extends Vue {
                 .then((response: any) => {
                     if (response !== undefined) {
                         this.responseDataAllCampaign = response;
+	                    this.responseDataAllCampaignArray = response.summaryDatas;
+	                    this.total = response.budgetTotal;
                         this.sortOutChartDataAllCampaign(
                             this.responseDataAllCampaign.summaryDatas
                         );

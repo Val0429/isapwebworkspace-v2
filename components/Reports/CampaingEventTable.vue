@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>{{_('w_ReportCampaign_All')}}</h2>
         <table
             ref="reportTable"
             class="table b-table table-striped table-hover"
@@ -20,24 +21,34 @@
                     v-for="(value,index) in thresholdDetailTableData"
                     :key="'tableData__' + index"
                 >
-                    <td class="center">{{numberWithCommas(value.type)}}</td>
-                    <td class="center">{{numberWithCommas(value.before)}}</td>
-                    <td class="center">{{ numberWithCommas(value.during) }}</td>
-                    <td class="center">{{ numberWithCommas(value.after) }}</td>
-                    <td class="center">{{ toPercent(value.changeDuring ),0}}</td>
-                    <td class="center">{{toPercent( value.changeAfter ),0}}</td>
+                    <td class="center">{{ value.campaign.name  }}</td>
+                    <td class="center">{{ initDatetime(value.startDate, value.endDate) }}</td>
+                    <td class="center">{{ value.budget }}</td>
+                    <td class="center">{{ toPercent(value.budgetPercent ),0}}</td>
+                    <td class="center">{{ toPercent( value.trafficGainPer ),0}}</td>
 
                 </tr>
             </tbody>
+
+            <tfoot>
+                <tr>
+                    <td class="center">{{ this.totalTitle }}</td>
+                    <td class="center"></td>
+                    <td class="center"> {{ total }}</td>
+                    <td class="center"></td>
+                    <td class="center"></td>
+                </tr>
+            </tfoot>
+
         </table>
 
-        <div class="table-pagination right">
-            <b-pagination-nav
-                :link-gen="getData"
-                :number-of-pages="numberOfPages()"
-                v-model="paging.currentPage"
-            />
-        </div>
+<!--        <div class="table-pagination right">-->
+<!--            <b-pagination-nav-->
+<!--                :link-gen="getData"-->
+<!--                :number-of-pages="numberOfPages()"-->
+<!--                v-model="paging.currentPage"-->
+<!--            />-->
+<!--        </div>-->
 
     </div>
 </template>
@@ -64,7 +75,15 @@ export class CampaingEventTable extends Vue {
         type: Array,
         default: () => []
     })
-    thresholdDetailTableContent: [];
+    thresholdDetailTableContent: any;
+
+    @Prop({
+        type: Number,
+        default: 0
+    })
+    total: number;
+
+    totalTitle: string = '';
 
     thresholdDetailTableTitle: any = [];
 
@@ -80,10 +99,10 @@ export class CampaingEventTable extends Vue {
 
     created() {
         this.initDate();
+        this.getData();
     }
 
     mounted() {
-        // this.getData();
     }
 
     initDate() {
@@ -94,6 +113,13 @@ export class CampaingEventTable extends Vue {
             this._("w_Campaign_BudgetPercentage"),
             this._("w_Campaign_TrafficGainPer")
         ];
+
+        this.totalTitle = this._("w_Total");
+
+    }
+
+    initDatetime(date1, date2 ): string {
+        return `${ Datetime.DateTime2String(new Date(date1), 'YYYY/MM/DD') } ~ ${ Datetime.DateTime2String(new Date(date2), 'YYYY/MM/DD') }`
     }
 
     getData() {
@@ -113,7 +139,7 @@ export class CampaingEventTable extends Vue {
     }
 
     toPercent(point, fixed = 0) {
-        var str = Number(Math.abs(point) * 100).toFixed(fixed);
+        var str = Number((point) * 100).toFixed(fixed);
         str += "%";
         return str;
     }
@@ -164,7 +190,7 @@ export class CampaingEventTable extends Vue {
 }
 
 export default CampaingEventTable;
-Vue.component("campaing-event-table", CampaingEventTable);
+Vue.component("campaign-event-table", CampaingEventTable);
 </script>
 
 <style lang="scss" scoped>
