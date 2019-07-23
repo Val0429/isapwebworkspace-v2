@@ -889,6 +889,8 @@ export default class LangObject implements ILang {
     w_Report_ErrorChartMode = 'No Find Chart Mode';
 
     // Report Traffic
+    w_ReportTraffic_TrafficByHours = ' TRAFFIC BY HOURS';
+    w_ReportTraffic_TrafficByDays = ' TRAFFIC BY DAYS';
     w_ReportTraffic_TrafficChart = 'Traffic Chart';
     w_ReportTraffic_TrafficTraffic = 'Traffic';
     w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
@@ -898,6 +900,8 @@ export default class LangObject implements ILang {
     w_ReportTraffic_TrafficASP = 'ASP';
 
     // Report Dwell Time
+    w_ReportDwellTime_DwellTimeByDays = 'DWELLTIME BY DAYS';
+    w_ReportDwellTime_DwellTimeByHours = 'DWELLTIME BY HOURS';
     w_ReportDwellTime_LabelDwellTimePercentage = 'Dwell Time Percentage';
     w_ReportDwellTime_DwellTimeDwellTime = 'Dwell Time';
     w_ReportDwellTime_DwellTimeDwellTimeM = 'Dwell Time(m)';
@@ -906,11 +910,16 @@ export default class LangObject implements ILang {
     w_ReportDwellTime_DwellTimeChart = 'Dwell Time Chart';
 
     // Report Demographic
+    w_ReportDemographic_DemographicByDays = 'DEMOGRAPHIC BY DAYS';
+    w_ReportDemographic_DemographicByHours = 'DEMOGRAPHIC BY HOURS';
     w_ReportDemographic_LabelGender = 'Demographic by Gender';
     w_ReportDemographic_LabelAge = 'Demographic by Age';
     w_ReportDemographic_DemographicChart = 'Demographic Chart';
 
     // Report Occupancy
+    w_ReportOccupancy_OccupancyByDays = 'OCCUPANCY BY DAYS';
+    w_ReportOccupancy_OccupancyByHours = 'OCCUPANCY BY HOURS';
+    w_ReportOccupancy_OccupancyByHour = 'OCCUPANCY BY HOUR';
     w_ReportOccupancy_Occupancy = 'Occupancy';
     w_ReportOccupancy_OccupancyAVG = 'AVG Occupancy';
     w_ReportOccupancy_OccupancyChart = 'Occupancy Chart';

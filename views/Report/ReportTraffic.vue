@@ -482,7 +482,9 @@ export default class ReportTraffic extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
-        this.reportTableTitle.headTitle = "TRAFFIC BY HOURS";
+        this.reportTableTitle.headTitle = this._(
+            "w_ReportTraffic_TrafficByHours"
+        );
 
         //head
         this.sunRData.head = [];
@@ -644,7 +646,9 @@ export default class ReportTraffic extends Vue {
         switch (chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
-                this.reportTableTitle.headTitle = "TRAFFIC BY HOURS";
+                this.reportTableTitle.headTitle = this._(
+                    "w_ReportTraffic_TrafficByHours"
+                );
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
@@ -673,7 +677,7 @@ export default class ReportTraffic extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                this.reportTableTitle.headTitle = "TRAFFIC BY DAYS";
+                this.reportTableTitle.headTitle = this._('w_ReportTraffic_TrafficByDays');
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);

@@ -1026,7 +1026,9 @@ export default class ReportOccupancy extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
-        this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
+        this.reportTableTitle.headTitle = this._(
+            "w_ReportOccupancy_OccupancyByHours"
+        );
 
         //head
         this.sunRData.head = [];
@@ -1197,7 +1199,10 @@ export default class ReportOccupancy extends Vue {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
-                this.reportTableTitle.headTitle = "OCCUPANCY BY HOURS";
+                this.reportTableTitle.headTitle = this._(
+                    "w_ReportOccupancy_OccupancyByHours"
+                );
+
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
@@ -1225,7 +1230,8 @@ export default class ReportOccupancy extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                this.reportTableTitle.headTitle = "OCCUPANCY BY DAYS";
+                this.reportTableTitle.headTitle = this._('w_ReportOccupancy_OccupancyByDays');
+
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);

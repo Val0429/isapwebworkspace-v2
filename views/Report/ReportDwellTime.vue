@@ -453,7 +453,9 @@ export default class ReportDwellTime extends Vue {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
                 this.rData.thatDay = this.startDate; //單天記錄時間日期
-                this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
+                this.reportTableTitle.headTitle = this._(
+                    "w_ReportDwellTime_DwellTimeByHours"
+                );
                 for (let siteItem of this.sites) {
                     for (let officeHourItem of siteItem.officeHour) {
                         if (
@@ -481,7 +483,9 @@ export default class ReportDwellTime extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                this.reportTableTitle.headTitle = "DWELLTIME BY DAYS";
+                this.reportTableTitle.headTitle = this._(
+                    "w_ReportDwellTime_DwellTimeByDays"
+                );
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
@@ -832,7 +836,9 @@ export default class ReportDwellTime extends Vue {
         this.sunRData.chartMode = chartMode;
         this.sunRData.noFoot = true;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
-        this.reportTableTitle.headTitle = "DWELLTIME BY HOURS";
+        this.reportTableTitle.headTitle = this._(
+            "w_ReportDwellTime_DwellTimeByHours"
+        );
 
         //head
         this.sunRData.head = [];
