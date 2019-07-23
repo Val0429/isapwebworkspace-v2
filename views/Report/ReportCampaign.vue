@@ -50,18 +50,17 @@
             >
             </highcharts-campaign-single>
 
+            <campaign-event-table
+                v-if="chartMode.multiple"
+                :thresholdDetailTableContent="responseDataAllCampaignArray"
+                :total="total"
+            ></campaign-event-table>
 
-	        <campaign-event-table
-		        v-if="chartMode.multiple"
-		        :thresholdDetailTableContent="responseDataAllCampaignArray"
-		        :total="total"
-	        ></campaign-event-table>
-
-	        <campaign-table
-		        v-if="chartMode.single"
-		        :thresholdDetailTableContent="responseDataSingleCampaignArray"
-	        >
-	        </campaign-table>
+            <campaign-table
+                v-if="chartMode.single"
+                :thresholdDetailTableContent="responseDataSingleCampaignArray"
+            >
+            </campaign-table>
 
         </iv-card>
 
@@ -77,20 +76,19 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    // Vue
-    // Report
-    import {
-        ECampaignTimeType,
-        IChartCampaignMultiple,
-        IChartCampaignSingle
-    } from "@/components/Reports";
+import { Component, Vue } from "vue-property-decorator";
+// Vue
+// Report
+import {
+    ECampaignTimeType,
+    IChartCampaignMultiple,
+    IChartCampaignSingle
+} from "@/components/Reports";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Loading from "@/services/Loading";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Loading from "@/services/Loading";
-
-    @Component({
+@Component({
     components: {}
 })
 export default class ReportCampaign extends Vue {
@@ -218,8 +216,8 @@ export default class ReportCampaign extends Vue {
 
     async receiveFilterData(filterData) {
         let param = {};
-	    this.responseDataAllCampaignArray = [];
-	    this.responseDataSingleCampaignArray = [];
+        this.responseDataAllCampaignArray = [];
+        this.responseDataSingleCampaignArray = [];
         this.filterData = filterData;
 
         console.log("this.filterData - ", this.filterData);
@@ -236,8 +234,9 @@ export default class ReportCampaign extends Vue {
                     Loading.hide();
                     if (response !== undefined) {
                         this.responseDataAllCampaign = response;
-	                    this.responseDataAllCampaignArray = response.summaryDatas;
-	                    this.total = response.budgetTotal;
+                        this.responseDataAllCampaignArray =
+                            response.summaryDatas;
+                        this.total = response.budgetTotal;
                         this.sortOutChartDataAllCampaign(
                             this.responseDataAllCampaign.summaryDatas
                         );
