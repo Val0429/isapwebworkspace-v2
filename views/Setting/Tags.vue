@@ -1,148 +1,166 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label=" _('w_Tag_TagList') "
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label=" _('w_Tag_TagList') "
+            >
+                <template #toolbox>
 
-            </template>
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
 
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/tag' }"
-                @selected="selectedItem($event)"
+                </template>
+
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/tag' }"
+                    @selected="selectedItem($event)"
+                >
+
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                    <template #description="{$attrs}">
+                        {{ show30Words($attrs.value) }}
+                    </template>
+
+                    <template #regions="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                    <template #sites="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- view -->
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label=" _('w_Tag_ViewTag') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!--From (Add and Edit)-->
+            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_Tag_AddTag') :  _('w_Tag_EditTag')"
             >
 
-                <template #Actions="{$attrs, $listeners}">
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEdit($event)"
+                >
+                    <template #selectTreeRegion="{ $attrs, $listeners }">
+
+                        <div class="m-3">
+                            <b-button @click="pageToChooseRegionTree">
+                                {{ _('w_SelectRegionTree') }}
+                            </b-button>
+                        </div>
+                    </template>
+
+                    <template #selectTreeSite="{ $attrs, $listeners }">
+
+                        <div class="m-3">
+                            <b-button @click="pageToChooseSiteTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
+                    </template>
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
                 </template>
 
-                <template #description="{$attrs}">
-                    {{ show30Words($attrs.value) }}
-                </template>
+            </iv-auto-card>
 
-                <template #regions="{$attrs}">
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #sites="{$attrs}">
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-            </iv-table>
-        </iv-card>
-
-        <!--From (Add and Edit)-->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
-            :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_Tag_AddTag') :  _('w_Tag_EditTag')"
-        >
-
-            <iv-form
-                :interface="IAddAndEditForm()"
-                :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAddOrEdit($event)"
+            <!-- v-show="pageStep === ePageStep.chooseRegionTree" -->
+            <region-tree-select
+                key="transition_4"
+                v-show="transition.step === 4"
+                v-on:click-back="pageToShowResultRegionTree"
+                :multiple="true"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectTypeRegion"
+                :selecteds="selectedsRegions"
             >
-                <template #selectTreeRegion="{ $attrs, $listeners }">
+            </region-tree-select>
 
-                    <div class="m-3">
-                        <b-button @click="pageToChooseRegionTree">
-                            {{ _('w_SelectRegionTree') }}
-                        </b-button>
-                    </div>
-                </template>
-
-                <template #selectTreeSite="{ $attrs, $listeners }">
-
-                    <div class="m-3">
-                        <b-button @click="pageToChooseSiteTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-                </template>
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label=" _('w_Tag_ViewTag') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
+            <!-- v-show="pageStep === ePageStep.chooseSiteTree" -->
+            <region-tree-select
+                key="transition_5"
+                v-show="transition.step === 5"
+                v-on:click-back="pageToShowResultSiteTree"
+                :multiple="true"
+                :regionTreeItem="siteTreeItem"
+                :selectType="selectTypeSite"
+                :selecteds="selectedsSites"
             >
-            </iv-form>
+            </region-tree-select>
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-card>
-
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseRegionTree"
-            v-on:click-back="pageToShowResultRegionTree"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectTypeRegion"
-            :selecteds="selectedsRegions"
-        >
-        </region-tree-select>
-
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseSiteTree"
-            v-on:click-back="pageToShowResultSiteTree"
-            :multiple="true"
-            :regionTreeItem="siteTreeItem"
-            :selectType="selectTypeSite"
-            :selecteds="selectedsSites"
-        >
-        </region-tree-select>
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -170,30 +188,31 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 interface IinputFormData extends ITag, ITagReadUpdate {
     siteIdsText?: string;
     regionIdsText?: string;
-    type?: string;
 }
 
 enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none",
-    showResult = "showResult",
-    chooseRegionTree = "chooseRegionTree",
-    chooseSiteTree = "chooseSiteTree"
+    list = "list", // 1
+    view = "view", //2
+    add = "add", // 3
+    edit = "edit", // 3
+    chooseRegionTree = "chooseRegionTree", // 4
+    chooseSiteTree = "chooseSiteTree" // 5
 }
 
 @Component({
     components: {}
 })
 export default class Tags extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
+    transition: ITransition = {
+        type: Transition.type,
+        step: 1
+    };
 
     isSelected: any = [];
     tableMultiple: boolean = true;
@@ -219,8 +238,7 @@ export default class Tags extends Vue {
         siteIds: [],
         regionIds: [],
         siteIdsText: "",
-        regionIdsText: "",
-        type: ""
+        regionIdsText: ""
     };
 
     created() {}
@@ -235,8 +253,7 @@ export default class Tags extends Vue {
             siteIds: [],
             regionIds: [],
             siteIdsText: "",
-            regionIdsText: "",
-            type: ""
+            regionIdsText: ""
         };
     }
 
@@ -329,8 +346,7 @@ export default class Tags extends Vue {
                 siteIds: param.sites,
                 regionIds: param.regions,
                 siteIdsText: this.idsToText(param.sites),
-                regionIdsText: this.idsToText(param.regions),
-                type: ""
+                regionIdsText: this.idsToText(param.regions)
             };
         }
     }
@@ -378,24 +394,34 @@ export default class Tags extends Vue {
         }
     }
 
-    async pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
+    pageToList() {
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+        this.selectedsSites = [];
+        this.selectedsRegions = [];
+    }
+
+    pageToView() {
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    async pageToAdd() {
+        this.transition.step = 3;
         await this.initSelectItemSite();
         await this.initSelectItemRegion();
         this.clearInputData();
         this.selectedsSites = [];
         this.selectedsRegions = [];
-        this.inputFormData.type = type;
     }
 
-    async pageToEdit(type: string) {
-        this.pageStep = EPageStep.edit;
+    async pageToEdit() {
+        this.transition.step = 3;
         this.getInputData();
         await this.initSelectItemSite();
         await this.initSelectItemRegion();
         this.selectedsSites = [];
         this.selectedsRegions = [];
-        this.inputFormData.type = type;
 
         this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(
@@ -409,20 +435,8 @@ export default class Tags extends Vue {
         );
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.listTable as any).reload();
-        this.selectedsSites = [];
-        this.selectedsRegions = [];
-    }
-
     async pageToChooseRegionTree() {
-        this.pageStep = EPageStep.chooseRegionTree;
+        this.transition.step = 4;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selectedsRegions = [];
@@ -441,7 +455,7 @@ export default class Tags extends Vue {
     }
 
     async pageToChooseSiteTree() {
-        this.pageStep = EPageStep.chooseSiteTree;
+        this.transition.step = 5;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selectedsSites = [];
@@ -460,61 +474,32 @@ export default class Tags extends Vue {
     }
 
     pageToShowResultRegionTree() {
-        if (this.inputFormData.type === EPageStep.edit) {
-            this.pageStep = EPageStep.edit;
+        this.transition.step = 3;
 
-            // siteIds clear
-            this.inputFormData.regionIds = [];
+        // siteIds clear
+        this.inputFormData.regionIds = [];
 
-            // from selecteds push siteIds / regionIds
+        // from selecteds push siteIds / regionIds
 
-            for (const item of this.selectedsRegions) {
-                this.inputFormData.regionIds.push(item.objectId);
-            }
-        }
-
-        if (this.inputFormData.type === EPageStep.add) {
-            this.pageStep = EPageStep.add;
-
-            // siteIds clear
-            this.inputFormData.regionIds = [];
-
-            // from selecteds push siteIds / regionIds
-
-            for (const item of this.selectedsRegions) {
-                this.inputFormData.regionIds.push(item.objectId);
-            }
+        for (const item of this.selectedsRegions) {
+            this.inputFormData.regionIds.push(item.objectId);
         }
     }
 
     pageToShowResultSiteTree() {
-        if (this.inputFormData.type === EPageStep.edit) {
-            this.pageStep = EPageStep.edit;
+        this.transition.step = 3;
 
-            // siteIds clear
-            this.inputFormData.siteIds = [];
+        // siteIds clear
+        this.inputFormData.siteIds = [];
 
-            // from selecteds push siteIds / regionIds
-            for (const item of this.selectedsSites) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
-        }
-
-        if (this.inputFormData.type === EPageStep.add) {
-            this.pageStep = EPageStep.add;
-
-            // siteIds clear
-            this.inputFormData.siteIds = [];
-
-            // from selecteds push siteIds / regionIds
-            for (const item of this.selectedsSites) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
+        // from selecteds push siteIds / regionIds
+        for (const item of this.selectedsSites) {
+            this.inputFormData.siteIds.push(item.objectId);
         }
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputFormData.type === EPageStep.add) {
+        if (data.objectId == "") {
             const datas: ITag[] = [
                 {
                     name: data.name,
@@ -550,8 +535,7 @@ export default class Tags extends Vue {
                         this._("w_Tag_AddTagFailed")
                     );
                 });
-        }
-        if (this.inputFormData.type === EPageStep.edit) {
+        } else {
             const datas: ITagReadUpdate[] = [
                 {
                     description: data.description,
@@ -704,7 +688,7 @@ export default class Tags extends Vue {
                  * @uiLabel - ${this._("w_Tag_TagName")}
                  * @uiPlaceHolder - ${this._("w_Tag_TagName")}
                  * @uiType - ${
-                     this.inputFormData.type === EPageStep.add
+                     this.inputFormData.objectId === ""
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
