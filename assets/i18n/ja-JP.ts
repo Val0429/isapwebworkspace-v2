@@ -969,18 +969,18 @@ export default class LangObject implements ILang {
     w_businessChartType = 'Business Chart Type';
     w_ReportTemplate_Fixed_Interval = 'Fixed Interval';
 
-    w_Title_One_Site = 'Selected store:';
-    w_Title_Many_Site_Start = 'Selected:';
-    w_Title_Many_Site_End = 'stores.';
-    w_Title_StartDate = 'Start date:';
-    w_Title_EndDate = 'End date:';
-    w_Title_One_Tag = 'Selected tag:';
-    w_Title_Many_Tag_Start = 'Selected:';
-    w_Title_Many_Tag_End = 'tag.';
-    w_Title_FiscalYear = 'Fiscal year:';
-    w_Title_EventName_Start = 'Selected:';
-    w_Title_EventName_End = 'events.';
-    w_Title_One_EventName = 'Selected event:';
+    w_Title_One_Site = ' Selected store : ';
+    w_Title_Many_Site_Start = 'Selected : ';
+    w_Title_Many_Site_End = ' stores. ';
+    w_Title_StartDate = ' Start date : ';
+    w_Title_EndDate = ' End date : ';
+    w_Title_One_Tag = ' Selected tag : ';
+    w_Title_Many_Tag_Start = ' Selected : ';
+    w_Title_Many_Tag_End = ' tag. ';
+    w_Title_FiscalYear = ' Fiscal year : ';
+    w_Title_EventName_Start = ' Selected : ';
+    w_Title_EventName_End = ' events. ';
+    w_Title_One_EventName = ' Selected event : ';
 
     // Report Dashboard
     w_ReportDashboard_Traffic = 'TRAFFIC';

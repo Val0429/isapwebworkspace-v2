@@ -229,17 +229,40 @@ export default class ReportCampaign extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
+        } else if(this.filterData.campaignIds.length === 1) {
+
+            param = {
+                campaignId: this.filterData.campaignIds[0],
+                siteIds: this.filterData.siteIds
+            };
+
+            await this.$server
+                .C("/report/campaign/single-campaign-summary", param)
+                .then((response: any) => {
+                    if (response !== undefined) {
+                        this.responseDataSingleCampaign = response;
+                        this.sortOutChartDataSingleCampaign(
+                            this.responseDataSingleCampaign.summaryDatas
+                        );
+                        this.analysisTitle();
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.base(this, e);
+                });
+        } else {
+            return false;
         }
     }
 
     sortOutChartDataAllCampaign(datas: any) {
-        let tempChartDatas: IChartCampaignMultiple[] = [];
-        let tempDateChartDataBefore = {
+        let tempDateChartDataBefore: IChartCampaignMultiple = {
             name: "",
             startDate: new Date(),
             endDate: new Date(),
             traffic: 0,
-            budget: 0
+            budget: 0,
+            trafficGainPer: 0
         };
 
         for (let summary of datas) {
@@ -257,34 +280,73 @@ export default class ReportCampaign extends Vue {
             this.chartDatas.multiple.push(tempChartData);
         }
         this.chartMode.multiple = true;
-        console.log(" - ", this.chartDatas.multiple);
+        console.log("chartDatas.multiple - ", this.chartDatas.multiple);
     }
 
-    sortOutChartDataSingleCampaign() {
-        let tempChartDatas: IChartCampaignSingle[] = [];
+    sortOutChartDataSingleCampaign(datas: any) {
 
-        let tempDateChartDataBefore = {
+        let tempChartDataBefore:IChartCampaignSingle = {
             type: ECampaignTimeType.before,
-            date: "",
+            date: new Date(),
             traffic: 0
         };
-        let tempDateChartDataDuring = {
-            type: ECampaignTimeType.during,
-            date: "",
-            traffic: 0
-        };
-        let tempDateChartDataAfter = {
-            type: ECampaignTimeType.after,
-            date: "",
-            traffic: 0
-        };
-    }
 
-    resolveSummary() {
-        if (this.filterData.campaignIds.length === 1) {
-            this.sortOutChartDataSingleCampaign();
-        } else {
+        let tempChartDataDuring: IChartCampaignSingle = {
+            type: ECampaignTimeType.during,
+            date: new Date(),
+            traffic: 0
+        };
+
+        let tempChartDataAfter: IChartCampaignSingle = {
+            type: ECampaignTimeType.after,
+            date: new Date(),
+            traffic: 0
+        };
+
+        for (let summary of datas) {
+
+            let tempChartDataBeforeItem = JSON.parse(
+                JSON.stringify(tempChartDataBefore)
+            );
+
+            let tempChartDataDuringItem = JSON.parse(
+                JSON.stringify(tempChartDataDuring)
+            );
+
+            let tempChartDataAfterItem = JSON.parse(
+                JSON.stringify(tempChartDataAfter)
+            );
+
+            switch (summary.type) {
+                case 0:
+                    tempChartDataBeforeItem = {
+                        type: ECampaignTimeType.before,
+                        date: new Date(summary.date),
+                        traffic: summary.traffic
+                    };
+                    this.chartDatas.single.push(tempChartDataBeforeItem);
+                    break;
+                case 1:
+                    tempChartDataDuringItem = {
+                        type: ECampaignTimeType.during,
+                        date: new Date(summary.date),
+                        traffic: summary.traffic
+                    };
+                    this.chartDatas.single.push(tempChartDataDuringItem);
+                    break;
+                case 2:
+                    tempChartDataAfterItem = {
+                        type: ECampaignTimeType.after,
+                        date: new Date(summary.date),
+                        traffic: summary.traffic
+                    };
+                    this.chartDatas.single.push(tempChartDataAfterItem);
+                    break;
+            }
+
         }
+        this.chartMode.single = true;
+        console.log("chartDatas.single - ", this.chartDatas.single);
     }
 
     analysisTitle(): string {
