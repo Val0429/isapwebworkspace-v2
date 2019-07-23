@@ -85,8 +85,10 @@
         IChartCampaignMultiple,
         IChartCampaignSingle
     } from "@/components/Reports";
+
     // Service
     import ResponseFilter from "@/services/ResponseFilter";
+    import Loading from "@/services/Loading";
 
     @Component({
     components: {}

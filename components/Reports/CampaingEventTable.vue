@@ -42,13 +42,13 @@
 
         </table>
 
-<!--        <div class="table-pagination right">-->
-<!--            <b-pagination-nav-->
-<!--                :link-gen="getData"-->
-<!--                :number-of-pages="numberOfPages()"-->
-<!--                v-model="paging.currentPage"-->
-<!--            />-->
-<!--        </div>-->
+        <div class="table-pagination right">
+            <b-pagination-nav
+                :link-gen="getData"
+                :number-of-pages="numberOfPages()"
+                v-model="paging.currentPage"
+            />
+        </div>
 
     </div>
 </template>
@@ -143,6 +143,13 @@ export class CampaingEventTable extends Vue {
         str += "%";
         return str;
     }
+
+    numberOfPages(): number {
+        return Math.ceil(this.paging.totalRow / this.paging.prePage)
+            ? Math.ceil(this.paging.totalRow / this.paging.prePage)
+            : 1;
+    }
+
 
     tableToArray() {
         let objTable: any = this.$refs.reportTable;

@@ -18,10 +18,10 @@
 
             <tbody>
                 <tr
-                    v-for="(value,index) in thresholdDetailTableContent"
+                    v-for="(value,index) in thresholdDetailTableData"
                     :key="'tableData__' + index"
                 >
-                    <td class="center">Traffic</td>
+                    <td class="center">{{ trafficTitle }}</td>
                     <td class="center">{{numberWithCommas(value.beforeTraffic)}}</td>
                     <td class="center">{{ numberWithCommas(value.traffic) }}</td>
                     <td class="center">{{ numberWithCommas(value.afterTraffic) }}</td>
@@ -73,6 +73,8 @@ export class CampaingTable extends Vue {
 
     serverConfig = ServerConfig;
 
+    trafficTitle: string = '';
+
     paging: IPaging = {
         prePage: 5,
         currentPage: 1,
@@ -102,6 +104,8 @@ export class CampaingTable extends Vue {
             this._("w_Campaign_ChangeDuringCampaign"),
             this._("w_Campaign_ChangeAfterCampaign")
         ];
+
+        this.trafficTitle = this._('w_Navigation_Report_Traffic');
     }
 
     getData() {
