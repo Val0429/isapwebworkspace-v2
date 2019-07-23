@@ -236,9 +236,11 @@ export default class ReportCampaign extends Vue {
                 campaignIds: this.filterData.campaignIds
             };
 
+            Loading.show();
             await this.$server
                 .C("/report/campaign/multi-campaign-summary", param)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response !== undefined) {
                         this.responseDataAllCampaign = response;
                         this.sortOutChartDataAllCampaign(
@@ -256,9 +258,11 @@ export default class ReportCampaign extends Vue {
                 siteIds: this.filterData.siteIds
             };
 
+            Loading.show();
             await this.$server
                 .C("/report/campaign/single-campaign-summary", param)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response !== undefined) {
                         this.responseDataSingleCampaign = response;
                         this.sortOutChartDataSingleCampaign(
@@ -276,7 +280,6 @@ export default class ReportCampaign extends Vue {
     }
 
     sortOutChartDataAllCampaign(datas: any) {
-
         this.chartDatas.multiple = [];
 
         let tempDateChartDataBefore: IChartCampaignMultiple = {
@@ -308,7 +311,6 @@ export default class ReportCampaign extends Vue {
     }
 
     sortOutChartDataSingleCampaign(datas: any) {
-
         this.chartDatas.single = [];
 
         let tempChartDataBefore: IChartCampaignSingle = {

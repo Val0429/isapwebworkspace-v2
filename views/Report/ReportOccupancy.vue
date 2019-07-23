@@ -845,10 +845,11 @@ export default class ReportOccupancy extends Vue {
             type: "",
             isIncludedEmployee: EIncludedEmployee.no
         };
-
+        Loading.show();
         await this.$server
             .C("/report/human-detection/summary", param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
@@ -1227,7 +1228,9 @@ export default class ReportOccupancy extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                this.reportTableTitle.headTitle = this._('w_ReportOccupancy_OccupancyByDays');
+                this.reportTableTitle.headTitle = this._(
+                    "w_ReportOccupancy_OccupancyByDays"
+                );
 
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
@@ -1510,9 +1513,11 @@ export default class ReportOccupancy extends Vue {
 
             let summaryTableDatas;
             let officeHours;
+            Loading.show();
             await this.$server
                 .C("/report/human-detection/summary", filterData)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response !== undefined) {
                         summaryTableDatas = response.summaryTableDatas;
                         this.initSunReportTable(summaryTableDatas);
@@ -1559,9 +1564,11 @@ export default class ReportOccupancy extends Vue {
 
         let summaryTableDatas;
         let officeHours;
+        Loading.show();
         await this.$server
             .C("/report/human-detection/summary-threshold", filterData)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     this.detailRData = response;
                 }

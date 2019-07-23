@@ -528,10 +528,11 @@ export default class Tags extends Vue {
             const addParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .C("/tag", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_Tag_AddTagSuccess"));
@@ -565,10 +566,11 @@ export default class Tags extends Vue {
             const editgParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .U("/tag", editgParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_Tag_EditTagSuccess"));

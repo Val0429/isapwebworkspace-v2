@@ -188,10 +188,11 @@ export default class Weather extends Vue {
             latitude: data.latitude,
             longitude: data.longitude
         };
-
+        Loading.show();
         await this.$server
             .C("/setting/weather/test", weatherObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     this.dataFromApi = {
                         latitude: response.latitude,
@@ -243,10 +244,11 @@ export default class Weather extends Vue {
         } = {
             secretKey: data.secretKey
         };
-
+        Loading.show();
         await this.$server
             .U("/setting/weather", weatherParam)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     Dialog.success(this._("w_Weather_Setting_Success"));
                 }

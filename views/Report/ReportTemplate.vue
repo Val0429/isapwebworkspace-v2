@@ -945,10 +945,11 @@ export default class ReportTemplate extends Vue {
             }
 
             addParam = { datas };
-
+            Loading.show();
             await this.$server
                 .C("/report/template", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
@@ -1020,10 +1021,11 @@ export default class ReportTemplate extends Vue {
             }
 
             editParam = { datas };
-
+            Loading.show();
             await this.$server
                 .U("/report/template", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(

@@ -361,10 +361,11 @@ export default class HumanDetectionServer extends Vue {
             config: configOnject,
             imageBase64: this.newImgSrc
         };
-
+        Loading.show();
         await this.$server
             .C("/partner/human-detection/test", humanObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     this.modalShow = !this.modalShow;
                     (this.$refs["detail"] as any).show();
@@ -390,10 +391,11 @@ export default class HumanDetectionServer extends Vue {
             ];
 
             const addParam = { datas };
-
+            Loading.show();
             await this.$server
                 .C("/partner/human-detection", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
@@ -427,10 +429,11 @@ export default class HumanDetectionServer extends Vue {
             ];
 
             const editParam = { datas };
-
+            Loading.show();
             await this.$server
                 .U("/partner/human-detection", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {

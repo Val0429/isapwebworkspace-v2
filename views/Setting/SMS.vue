@@ -145,10 +145,11 @@ export default class SMS extends Vue {
         } = {
             phone: this.inputTestSmsPhone
         };
-
+        Loading.show();
         await this.$server
             .C("/setting/sgsms/test", smsObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     this.modalShow = !this.modalShow;
                     Dialog.success(this._("w_SmsServer_Setting_Test_Success"));
@@ -197,10 +198,11 @@ export default class SMS extends Vue {
             account: data.account,
             password: data.password
         };
-
+        Loading.show();
         await this.$server
             .U("/setting/sgsms", smsObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_SmsServer_Setting_Success"));
                 }

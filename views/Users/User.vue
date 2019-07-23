@@ -598,10 +598,11 @@ export default class User extends Vue {
         } = {
             email: this.inputTestEmail
         };
-
+        Loading.show();
         await this.$server
             .C("/setting/smtp/test", mailServerObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_MailServer_Setting_Success"));
                     this.modalShow = !this.modalShow;
@@ -635,10 +636,11 @@ export default class User extends Vue {
         const addParam = {
             datas
         };
-
+        Loading.show();
         await this.$server
             .C("/user/user", addParam)
             .then((response: any) => {
+                Loading.hide();
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
                         Dialog.success(this._("w_User_AddUserSuccess"));
@@ -675,10 +677,11 @@ export default class User extends Vue {
         const editParam = {
             datas
         };
-
+        Loading.show();
         await this.$server
             .U("/user/user", editParam)
             .then((response: any) => {
+                Loading.hide();
                 for (const returnValue of response) {
                     if (returnValue.statusCode === 200) {
                         Dialog.success(this._("w_User_EditUserSuccess"));
