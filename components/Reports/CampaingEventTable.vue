@@ -23,7 +23,7 @@
                 >
                     <td class="center">{{ value.campaign.name  }}</td>
                     <td class="center">{{ initDatetime(value.startDate, value.endDate) }}</td>
-                    <td class="center">{{ initFormatNumber(value.budget.toString()) }}</td>
+                    <td class="center">{{ value.budget.toLocaleString() }}</td>
                     <td class="center">{{ toPercent(value.budgetPercent ),0}}</td>
                     <td class="center">{{ toPercent( value.trafficGainPer ),0}}</td>
 

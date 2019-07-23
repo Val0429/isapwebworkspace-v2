@@ -57,8 +57,8 @@
             <!-- Tina 需要用v-if判斷出現哪個元件 -->
             <heat-map-many-day
                 v-if="!checkDateTheSameDay(filterData.startDate, filterData.endDate)"
-                :timeArray="timeArray"
-                @time-array-index="receiveTimeArrayIndex"
+                :dayArray="dayArray"
+                @day-array-index="receiveDayArrayIndex"
             ></heat-map-many-day>
             <br>
 
@@ -222,8 +222,8 @@ export default class ReportHeatmap extends Vue {
     hour: string = "";
 
     // 時間多天
-    timeArray: any = [];
-    timeArrayData: string = "";
+    dayArray: any = [];
+    dayArrayData: string = "";
 
     //// Analysis Filter End ////
 
@@ -812,7 +812,7 @@ export default class ReportHeatmap extends Vue {
         };
     }
 
-    initTimeArray() {
+    initDayArray() {
         const summaryDatas = [
             {
                 site: {
@@ -1416,20 +1416,20 @@ export default class ReportHeatmap extends Vue {
             }
         ];
 
-        let tempTimeArray = [];
+        let tempDayArray = [];
 
         if (summaryDatas.length > 0) {
             summaryDatas.map(item => {
-                tempTimeArray.push(item.date);
+                tempDayArray.push(item.date);
             });
         } else {
             return false;
         }
 
         // 去掉重複的值
-        this.timeArray = [...new Set(tempTimeArray)];
+        this.dayArray = [...new Set(tempDayArray)];
 
-        // this.timeArray = [
+        // this.dayArray = [
         //     "2019-07-01T16:00:00.000Z",
         //     "2019-07-02T16:00:00.000Z",
         //     "2019-07-03T16:00:00.000Z",
@@ -1474,7 +1474,7 @@ export default class ReportHeatmap extends Vue {
         ) {
             this.initHourArray();
         } else {
-            this.initTimeArray();
+            this.initDayArray();
         }
 
         // await this.$server
@@ -2307,12 +2307,14 @@ export default class ReportHeatmap extends Vue {
     }
 
     // 多天的其中一天
-    receiveTimeArrayIndex(timeArrayIndex) {
-        for (const index in this.timeArray) {
+    receiveDayArrayIndex(timeArrayIndex) {
+        for (const index in this.dayArray) {
             if (timeArrayIndex === index) {
-                this.timeArrayData = this.timeArray[index];
+                this.dayArrayData = this.dayArray[index];
             }
         }
+
+        console.log('this.dayArrayData ~ ', this.dayArrayData)
     }
 
     // Author: Tina

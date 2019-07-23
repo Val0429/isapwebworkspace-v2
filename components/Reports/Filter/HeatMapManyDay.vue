@@ -6,6 +6,7 @@
                 @click="moveCarousel(-1)"
                 :disabled="atHeadOfList"
             ></div>
+
             <div class="card-carousel">
                 <div class="card-carousel--overflow-container">
                     <div
@@ -14,16 +15,17 @@
                     >
                         <div
                             class="card-carousel--card"
-                            v-for="(time, index) in timeArray"
+                            v-for="(day, index) in dayArray"
                             :key="'key_' + index"
                         >
                             <div class="card-carousel--card--footer">
-                                <p>{{ dateAndWeekDay(time) }}</p>
+                                <p>{{ dateAndWeekDay(day) }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div
                 class="card-carousel--nav__right"
                 @click="moveCarousel(1)"
@@ -46,7 +48,7 @@ export class HeatMapManyDay extends Vue {
         type: Array, // Boolean, Number, String, Array, Object
         default: () => []
     })
-    timeArray: any;
+    dayArray: any;
 
     currentOffset: number = 0;
     windowSize: number = 1;
@@ -65,7 +67,7 @@ export class HeatMapManyDay extends Vue {
             this.currentOffset <=
             this.paginationFactor *
                 -1 *
-                (this.timeArray.length - this.windowSize)
+                (this.dayArray.length - this.windowSize)
         );
     }
     get atHeadOfList() {
@@ -84,13 +86,13 @@ export class HeatMapManyDay extends Vue {
             .toString()
             .substring(1);
 
-        this.$emit("time-array-index", arrayIndex);
+        this.$emit("day-array-index", arrayIndex);
     }
 
     dateAndWeekDay(dateStr: string): string {
         const dateResult = Datetime.DateTime2String(
             new Date(dateStr),
-            "YYYY-MM-DD"
+            "YYYY/MM/DD"
         );
         let weekResult = "";
 
