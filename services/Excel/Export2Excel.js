@@ -2,7 +2,7 @@
 require('script-loader!file-saver');
 require('./Blob');
 require('script-loader!xlsx/dist/xlsx.core.min');
-function generateArray(table) {
+function generateArray (table) {
     var out = [];
     var rows = table.querySelectorAll('tr');
     var ranges = [];
@@ -28,7 +28,7 @@ function generateArray(table) {
             if (rowspan || colspan) {
                 rowspan = rowspan || 1;
                 colspan = colspan || 1;
-                ranges.push({s: {r: R, c: outRow.length}, e: {r: R + rowspan - 1, c: outRow.length + colspan - 1}});
+                ranges.push({ s: { r: R, c: outRow.length }, e: { r: R + rowspan - 1, c: outRow.length + colspan - 1 } });
             }
             ;
 
@@ -43,24 +43,24 @@ function generateArray(table) {
     return [out, ranges];
 };
 
-function datenum(v, date1904) {
+function datenum (v, date1904) {
     if (date1904) v += 1462;
     var epoch = Date.parse(v);
     return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
 }
 
-function sheet_from_array_of_arrays(data, opts) {
+function sheet_from_array_of_arrays (data, opts) {
     var ws = {};
-    var range = {s: {c: 10000000, r: 10000000}, e: {c: 0, r: 0}};
+    var range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
     for (var R = 0; R != data.length; ++R) {
         for (var C = 0; C != data[R].length; ++C) {
             if (range.s.r > R) range.s.r = R;
             if (range.s.c > C) range.s.c = C;
             if (range.e.r < R) range.e.r = R;
             if (range.e.c < C) range.e.c = C;
-            var cell = {v: data[R][C]};
+            var cell = { v: data[R][C] };
             if (cell.v == null) continue;
-            var cell_ref = XLSX.utils.encode_cell({c: C, r: R});
+            var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
 
             if (typeof cell.v === 'number') cell.t = 'n';
             else if (typeof cell.v === 'boolean') cell.t = 'b';
@@ -78,29 +78,27 @@ function sheet_from_array_of_arrays(data, opts) {
     return ws;
 }
 
-function Workbook() {
+function Workbook () {
     if (!(this instanceof Workbook)) return new Workbook();
     this.SheetNames = [];
     this.Sheets = {};
 }
 
-function s2ab(s) {
+function s2ab (s) {
     var buf = new ArrayBuffer(s.length);
     var view = new Uint8Array(buf);
     for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
     return buf;
 }
 
-export function export_table_to_excel(id) {
+export function export_table_to_excel (id) {
     var theTable = document.getElementById(id);
-    console.log('a')
     var oo = generateArray(theTable);
     var ranges = oo[1];
 
     /* original data */
     var data = oo[0];
     var ws_name = "SheetJS";
-    console.log(data);
 
     var wb = new Workbook(), ws = sheet_from_array_of_arrays(data);
 
@@ -112,15 +110,15 @@ export function export_table_to_excel(id) {
     wb.SheetNames.push(ws_name);
     wb.Sheets[ws_name] = ws;
 
-    var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' });
 
-    saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "test.xlsx")
+    saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), "test.xlsx")
 }
 
-function formatJson(jsonData) {
+function formatJson (jsonData) {
     console.log(jsonData)
 }
-export function export_json_to_excel(th, jsonData, defaultTitle) {
+export function export_json_to_excel (th, jsonData, defaultTitle) {
 
     /* original data */
 
@@ -135,7 +133,7 @@ export function export_json_to_excel(th, jsonData, defaultTitle) {
     wb.SheetNames.push(ws_name);
     wb.Sheets[ws_name] = ws;
 
-    var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' });
     var title = defaultTitle || '列表'
-    saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), title + ".xlsx")
+    saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), title + ".xlsx")
 }

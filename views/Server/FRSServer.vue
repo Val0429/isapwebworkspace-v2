@@ -446,8 +446,6 @@ export default class FRSServer extends Vue {
                 datas
             };
 
-            console.log("addParam - ", addParam);
-
             await this.$server
                 .C("/partner/frs", addParam)
                 .then((response: any) => {

@@ -520,9 +520,11 @@ export default class CampaignSetting extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .U("/event/campaign", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_BOCampaign_EditSuccess"));
@@ -557,9 +559,11 @@ export default class CampaignSetting extends Vue {
                         objectId: param.objectId
                     };
 
+                    Loading.show();
                     this.$server
                         .D("/event/campaign", deleteParam)
                         .then((response: any) => {
+                            Loading.hide();
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
                                     this.pageToList();

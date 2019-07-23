@@ -70,7 +70,6 @@ export class HighchartsCampaignSingle extends Vue {
 
     start() {
         this.initCampaignSingleChart();
-        console.log("chart prop: ", this.value);
     }
 
     initCampaignSingleChart() {

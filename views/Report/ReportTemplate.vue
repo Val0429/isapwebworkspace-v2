@@ -711,8 +711,6 @@ export default class ReportTemplate extends Vue {
             this.inputFormData.startDate &&
             this.inputFormData.endDate
         ) {
-            //  console.log(' - ', this.inputFormData.startDate, this.inputFormData.endDate);
-
             this.selectPeriodAddWay = EAddPeriodSelect.period;
             // this.inputFormData.startDate = new Date(this.inputFormData.startDate);
             // this.inputFormData.endDate = new Date(this.inputFormData.endDate);
@@ -778,8 +776,6 @@ export default class ReportTemplate extends Vue {
             this.inputFormData.startDate &&
             this.inputFormData.endDate
         ) {
-            //  console.log(' - ', this.inputFormData.startDate, this.inputFormData.endDate);
-
             this.selectPeriodAddWay = EAddPeriodSelect.period;
             // this.inputFormData.startDate = new Date(this.inputFormData.startDate);
             // this.inputFormData.endDate = new Date(this.inputFormData.endDate);
@@ -886,8 +882,6 @@ export default class ReportTemplate extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        //console.log('sendReportTime - ', this.sendReportTime);
-
         let date: Date = new Date();
         let day: string = "";
         let tempSendDates = [];
@@ -1372,8 +1366,6 @@ export default class ReportTemplate extends Vue {
             default:
                 break;
         }
-
-        console.log(value.row);
 
         this.$router.push({
             path: url,

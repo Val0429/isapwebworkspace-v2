@@ -107,7 +107,6 @@ export class CameraHeatmap extends Vue {
         this.max = heatmapData.max;
         this.min = 0;
         me.heatmapCanvs.setData(heatmapData);
-        console.log("initHeatmap", me.heatmapCanvs, heatmapData);
     }
 
     initMap() {
@@ -118,7 +117,6 @@ export class CameraHeatmap extends Vue {
         me.image.src = me.mapImage.src;
 
         me.image.onload = () => {
-            console.log("initMap", me.image.width, me.image.height);
             me.width_r = me.mapImage.width / me.image.width;
             me.height_r = me.mapImage.height / me.image.height;
             me.cx.drawImage(

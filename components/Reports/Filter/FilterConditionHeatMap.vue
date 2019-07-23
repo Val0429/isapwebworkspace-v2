@@ -163,7 +163,6 @@ export class FilterConditionHeatMap extends Vue {
     })
     templateItem: ITemplateItem | null;
 
-
     @Prop({
         type: Array, // Boolean, Number, String, Array, Object
         default: () => []
@@ -187,7 +186,7 @@ export class FilterConditionHeatMap extends Vue {
     designationPeriodSelectItem: any = {};
 
     inputFormData: any = {
-        siteIds: '',
+        siteIds: "",
         tagIds: [],
         allSiteIds: [],
         allTagIds: [],
@@ -196,8 +195,6 @@ export class FilterConditionHeatMap extends Vue {
         type: "",
         designationPeriod: EDesignationPeriod.today
     };
-
-
 
     // response 相關
     responseData: any = {};
@@ -221,20 +218,43 @@ export class FilterConditionHeatMap extends Vue {
     // }
 
     initSelectItem() {
-
         this.designationPeriodSelectItem = {
-            today: `${this._("w_Today")} ( ${Datetime.CountDateNumber(0)} ~ ${Datetime.CountDateNumber(0)} )`,
-            yesterday: `${this._("w_Yesterday")} ( ${Datetime.CountDateNumber(-1)} ~ ${Datetime.CountDateNumber(-1)} )`,
-            last7days: `${this._("w_last7days")} ( ${Datetime.CountDateNumber(-6)} ~ ${Datetime.CountDateNumber(0)} )`,
-            thisWeek: `${this._("w_thisWeek")} ( ${Datetime.ThisWeekStartDate()} ~ ${Datetime.ThisWeekEndDate()} )`,
-            lastWeek: `${this._("w_lastWeek")} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
-            thisMonth: `${this._("w_thisMonth")} ( ${Datetime.ThisMonthStartDate()} ~ ${Datetime.ThisMonthEndDate()} )`,
-            lastMonth: `${this._("w_lastMonth")} ( ${Datetime.LastMonthStartDate()} ~ ${Datetime.LastMonthEndDate()} )`,
-            q1: `${this._("w_q1")} ( ${Datetime.Q1StartDate()} ~ ${Datetime.Q1EndDate()} )`,
-            q2: `${this._("w_q2")} ( ${Datetime.Q2StartDate()} ~ ${Datetime.Q2EndDate()} )`,
-            q3: `${this._("w_q3")} ( ${Datetime.Q3StartDate()} ~ ${Datetime.Q3EndDate()} )`,
-            q4: `${this._("w_q4")} ( ${Datetime.Q4StartDate()} ~ ${Datetime.Q4EndDate()} )`,
-            thisYear: `${this._("w_thisYear")} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`
+            today: `${this._("w_Today")} ( ${Datetime.CountDateNumber(
+                0
+            )} ~ ${Datetime.CountDateNumber(0)} )`,
+            yesterday: `${this._("w_Yesterday")} ( ${Datetime.CountDateNumber(
+                -1
+            )} ~ ${Datetime.CountDateNumber(-1)} )`,
+            last7days: `${this._("w_last7days")} ( ${Datetime.CountDateNumber(
+                -6
+            )} ~ ${Datetime.CountDateNumber(0)} )`,
+            thisWeek: `${this._(
+                "w_thisWeek"
+            )} ( ${Datetime.ThisWeekStartDate()} ~ ${Datetime.ThisWeekEndDate()} )`,
+            lastWeek: `${this._(
+                "w_lastWeek"
+            )} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
+            thisMonth: `${this._(
+                "w_thisMonth"
+            )} ( ${Datetime.ThisMonthStartDate()} ~ ${Datetime.ThisMonthEndDate()} )`,
+            lastMonth: `${this._(
+                "w_lastMonth"
+            )} ( ${Datetime.LastMonthStartDate()} ~ ${Datetime.LastMonthEndDate()} )`,
+            q1: `${this._(
+                "w_q1"
+            )} ( ${Datetime.Q1StartDate()} ~ ${Datetime.Q1EndDate()} )`,
+            q2: `${this._(
+                "w_q2"
+            )} ( ${Datetime.Q2StartDate()} ~ ${Datetime.Q2EndDate()} )`,
+            q3: `${this._(
+                "w_q3"
+            )} ( ${Datetime.Q3StartDate()} ~ ${Datetime.Q3EndDate()} )`,
+            q4: `${this._(
+                "w_q4"
+            )} ( ${Datetime.Q4StartDate()} ~ ${Datetime.Q4EndDate()} )`,
+            thisYear: `${this._(
+                "w_thisYear"
+            )} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`
         };
     }
 
@@ -301,23 +321,22 @@ export class FilterConditionHeatMap extends Vue {
         this.pageStep = EPageStep.chooseTree;
         this.selecteds = [];
 
-            for (const detail of this.sitesSelectItem) {
-                if (this.inputFormData.siteIds === detail.id) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail.id,
-                        type: ERegionType.site,
-                        name: detail.text
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
+        for (const detail of this.sitesSelectItem) {
+            if (this.inputFormData.siteIds === detail.id) {
+                let selectedsObject: IRegionTreeSelected = {
+                    objectId: detail.id,
+                    type: ERegionType.site,
+                    name: detail.text
+                };
+                this.selecteds.push(selectedsObject);
             }
-
+        }
     }
 
     pageToShowResult() {
         this.pageStep = EPageStep.none;
         // siteIds clear
-        this.inputFormData.siteIds = '';
+        this.inputFormData.siteIds = "";
 
         // from selecteds push siteIds
         for (const item of this.selecteds) {
@@ -350,8 +369,6 @@ export class FilterConditionHeatMap extends Vue {
                     this.inputFormData.tagIds.push(tag.objectId);
                 }
             }
-
-            console.log("!!!! templateItem:", this.templateItem);
 
             // Select Report Period
             if (
@@ -389,8 +406,8 @@ export class FilterConditionHeatMap extends Vue {
             startDate: Datetime.DateToZero(new Date()),
             endDate: Datetime.DateToZero(new Date()),
             type: ETimeMode.none,
-            firstSiteId: '',
-            siteIds: this.inputFormData.siteIds,
+            firstSiteId: "",
+            siteIds: this.inputFormData.siteIds
             // tagIds:this.inputFormData.tagIds === [] ? [] : this.inputFormData.tagIds,
         };
 
@@ -430,12 +447,20 @@ export class FilterConditionHeatMap extends Vue {
                     )
                 )
             ) {
-                doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
-                doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
+                doSubmitParam.startDate = Datetime.DateToZero(
+                    this.inputFormData.startDate
+                );
+                doSubmitParam.endDate = Datetime.DateToZero(
+                    this.inputFormData.endDate
+                );
                 doSubmitParam.type = ETimeMode.hour;
             } else {
-                doSubmitParam.startDate = Datetime.DateToZero(this.inputFormData.startDate);
-                doSubmitParam.endDate = Datetime.DateToZero(this.inputFormData.endDate);
+                doSubmitParam.startDate = Datetime.DateToZero(
+                    this.inputFormData.startDate
+                );
+                doSubmitParam.endDate = Datetime.DateToZero(
+                    this.inputFormData.endDate
+                );
                 doSubmitParam.type = ETimeMode.day;
             }
 
@@ -565,15 +590,13 @@ export class FilterConditionHeatMap extends Vue {
             }
         }
 
-        // console.log(' - ', doSubmitParam); return false;
-
         this.visible = false;
         this.$emit("submit-data", doSubmitParam, designationPeriod);
     }
 
     doReset() {
         this.inputFormData = {
-            siteIds: '',
+            siteIds: "",
             allSiteIds: [],
             startDate: new Date(),
             endDate: new Date(),
@@ -618,7 +641,7 @@ export class FilterConditionHeatMap extends Vue {
                     this.selectPeriodAddWay === EAddPeriodSelect.designation
                         ? "true"
                         : "false"
-                    }
+                }
                  */
                 startDate?: any;
 
@@ -632,7 +655,7 @@ export class FilterConditionHeatMap extends Vue {
                     this.selectPeriodAddWay === EAddPeriodSelect.designation
                         ? "true"
                         : "false"
-                    }
+                }
                  */
                 endDate?: any;
 
@@ -641,10 +664,10 @@ export class FilterConditionHeatMap extends Vue {
                  * @uiLabel - ${this._("w_ReportTemplate_Fixed_Interval")}
                  * @uiColumnGroup - period
                  * @uiHidden - ${
-                    this.selectPeriodAddWay === EAddPeriodSelect.period
-                        ? "true"
-                        : "false"
-                    }
+                     this.selectPeriodAddWay === EAddPeriodSelect.period
+                         ? "true"
+                         : "false"
+                 }
                  */
                 designationPeriod?: ${toEnumInterface(
                     this.designationPeriodSelectItem as any,

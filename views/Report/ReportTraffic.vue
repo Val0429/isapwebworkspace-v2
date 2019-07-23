@@ -469,7 +469,6 @@ export default class ReportTraffic extends Vue {
 
             pDatum.body.push(body);
             this.pData.push(pDatum);
-            console.log("initPeakTimeRange", this.pData);
         }
     }
 
@@ -2029,7 +2028,6 @@ export default class ReportTraffic extends Vue {
 
     async receiveBusinessChartType(businessChartType) {
         this.inputFormData.businessChartType = businessChartType;
-        console.log(" - ", this.inputFormData.businessChartType);
 
         // 單一site
         if (this.filterData.firstSiteId) {

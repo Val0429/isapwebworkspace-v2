@@ -532,9 +532,11 @@ export default class GeneralOfficeHour extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .C("/office-hour", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             this.pageToList();
@@ -597,9 +599,11 @@ export default class GeneralOfficeHour extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .U("/office-hour", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             this.pageToList();
@@ -625,6 +629,7 @@ export default class GeneralOfficeHour extends Vue {
             this._("w_OfficeHour_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -649,6 +654,7 @@ export default class GeneralOfficeHour extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

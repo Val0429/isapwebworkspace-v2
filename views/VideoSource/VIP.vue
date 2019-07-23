@@ -654,9 +654,11 @@ export default class VIP extends Vue {
                 objectId: data
             };
 
+            Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             for (const returnValue of response) {
@@ -686,7 +688,6 @@ export default class VIP extends Vue {
                     );
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async selectAreaId(data) {
@@ -729,7 +730,6 @@ export default class VIP extends Vue {
                     );
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async selectGroupDeviceId(data) {
@@ -772,7 +772,6 @@ export default class VIP extends Vue {
                     );
                 });
         }
-        console.log("sourceIdSelectItem - ", this.sourceIdSelectItem);
     }
 
     async pageToAdd(stepType: string) {
@@ -851,7 +850,6 @@ export default class VIP extends Vue {
         this.addStep = EAddStep.isapFrs;
         this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
-        console.log("brand", this.inputFormData.brand);
     }
 
     async pageToAddByiSapFRSManager(brand: string) {

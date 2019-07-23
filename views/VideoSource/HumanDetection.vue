@@ -553,7 +553,6 @@ export default class HumanDetection extends Vue {
     }
 
     async initDeviceData(data) {
-        console.log("initDeviceData", data);
         let body: {
             objectId: string;
         } = {
@@ -574,7 +573,6 @@ export default class HumanDetection extends Vue {
     }
 
     initNVRItem() {
-        console.log("initNVRItem", this.devices);
         this.nvrItem = [];
         for (let device of this.devices) {
             let nvr = { id: device.nvrId.toString(), text: device.nvrId };
@@ -583,14 +581,12 @@ export default class HumanDetection extends Vue {
     }
 
     updateForm(data) {
-        console.log("updateForm", data);
         if (data) {
             this.inputFormData[data.key] = data.value;
         }
     }
 
     showChannelName(data) {
-        console.log("showChannelName", this.channelItem, data);
         if (this.channelItem.length > 0) {
             return this.channelItem.filter(x => x.id == data.toString())[0]
                 .text;
@@ -599,7 +595,6 @@ export default class HumanDetection extends Vue {
     }
 
     initChannelItem(data) {
-        console.log("initChannelItem", this.devices, data);
         this.channelItem = [];
         for (let device of this.devices) {
             if (device.nvrId == data) {
@@ -615,7 +610,6 @@ export default class HumanDetection extends Vue {
     }
 
     initInputFromData(data) {
-        console.log("initInputFromData", data);
         this.inputFormData.angle = data.angle;
         this.inputFormData.brand = data.brand;
         this.inputFormData.customId = data.customId;
@@ -646,11 +640,9 @@ export default class HumanDetection extends Vue {
         this.inputFormData.visibleDistance = data.visibleDistance;
         this.inputFormData.x = data.x;
         this.inputFormData.y = data.y;
-        console.log("initInputFromData2", this.inputFormData);
     }
 
     async selectedItem(data) {
-        console.log("selectedItem", data);
         this.isSelected = data;
         if (this.isSelected.length > 0) {
             this.initInputFromData(data[0]);
@@ -668,7 +660,6 @@ export default class HumanDetection extends Vue {
     }
 
     async pageToEdit() {
-        console.log("pageToEdit", this.inputFormData);
         await this.initSelectItemSite();
         await this.initDeviceData(this.inputFormData.serverId);
         await this.initChannelItem(this.inputFormData.nvrId);
@@ -877,7 +868,6 @@ export default class HumanDetection extends Vue {
     }
 
     async pageToShowResult() {
-        console.log("pageToShowResult", this.pageStep, this.selecteds);
         this.pageStep = this.lastPageStep;
 
         // siteId clear
@@ -909,7 +899,6 @@ export default class HumanDetection extends Vue {
     }
 
     async selectAreaId(data) {
-        console.log("selectAreaId", data);
         this.areaSelectItem = {};
         this.deviceGroupSelectItem = {};
 
@@ -955,7 +944,6 @@ export default class HumanDetection extends Vue {
     }
 
     showGroups(datas) {
-        console.log("showGroups", this.groupNameItem, datas);
         var groups = [];
         for (let data of datas) {
             let groupName = this.groupNameItem.filter(g => g.id == data)[0]
@@ -1214,8 +1202,6 @@ export default class HumanDetection extends Vue {
     canvasDetail = [];
 
     async stepsubmit(data) {
-        console.log("stepsubmit", data);
-
         if (this.pageStep == EPageStep.add) {
             const datas: any[] = [
                 {
@@ -1238,7 +1224,6 @@ export default class HumanDetection extends Vue {
             await this.$server
                 .C("/device/human-detection", addParam)
                 .then((response: any) => {
-                    console.log("/device/heatmap", response);
                     if (response[0] != undefined) {
                         if (response[0].statusCode === 200) {
                             Dialog.success(this._("w_Success"));
@@ -1306,15 +1291,18 @@ export default class HumanDetection extends Vue {
     }
 
     pageToBack() {
+        // TODO: Do something?
         console.log("pageToBack");
     }
 
     saveROI(data) {
+        // TODO: Do something?
         console.log("saveROI", data, this.canvasDetail);
         this.canvasDetail = data;
     }
 
     clearROI(data) {
+        // TODO: Do something?
         console.log("clearROI", data, this.canvasDetail);
     }
 }

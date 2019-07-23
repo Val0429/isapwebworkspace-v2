@@ -37,7 +37,6 @@ export class HeatMapOneDayVueSlideBar extends Vue {
     rangeValue:any = '';
 
     created() {
-        console.log('slider - ', this.slider);
     }
 
     mounted() {
@@ -48,7 +47,6 @@ export class HeatMapOneDayVueSlideBar extends Vue {
     }
 
     callbackRange (val) {
-        console.log('this.rangeValue - ', this.rangeValue);
         this.rangeValue = val.label.substring(0, 2);
         this.$emit('hour', this.rangeValue);
     }

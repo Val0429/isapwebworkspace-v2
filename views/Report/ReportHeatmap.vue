@@ -2308,11 +2308,9 @@ export default class ReportHeatmap extends Vue {
 
     // 多天的其中一天
     receiveTimeArrayIndex(timeArrayIndex) {
-        console.log(" timeArrayIndex : ", timeArrayIndex);
         for (const index in this.timeArray) {
             if (timeArrayIndex === index) {
                 this.timeArrayData = this.timeArray[index];
-                console.log(" - ", this.timeArray[index]);
             }
         }
     }

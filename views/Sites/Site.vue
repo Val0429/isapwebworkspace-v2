@@ -764,10 +764,12 @@ export default class Site extends Vue {
     }
 
     drop(event: any) {
+        // TODO: do something?
         console.log("!!! drop", event);
     }
 
     clickDevice(event: any, data: any) {
+        // TODO: do something?
         console.log("!!! clickDevice", event, data);
     }
 
@@ -832,13 +834,6 @@ export default class Site extends Vue {
     }
 
     initImageMap() {
-        console.log(
-            "initImageMap",
-            this.imageMap,
-            this.devicesGroupDevices,
-            this.devices
-        );
-
         let imageMapRef: any = this.$refs.imageMap;
 
         // imageMap mode
@@ -856,7 +851,6 @@ export default class Site extends Vue {
         this.imageMap.draw.viewerInDevice = true;
 
         // image box
-        console.log("imgate", this.areaMapSrc);
         this.imageMap.imageBox = new ImageBoxItem(this.areaMapSrc, {
             width: 1170,
             height: 665
@@ -1056,7 +1050,6 @@ export default class Site extends Vue {
     }
 
     pageToAreaView() {
-        console.log("pageToAreaView", this.area);
         this.areaPhotoSrc = this.serverUrl + this.area.imageSrc;
         this.areaMapSrc = this.serverUrl + this.area.mapSrc;
         this.initMap();
@@ -1079,14 +1072,12 @@ export default class Site extends Vue {
     }
 
     pageToDeviceGroupList(lastPageStep) {
-        console.log("pageToDeviceGroupList", this.lastPageStep, lastPageStep);
         this.initCameraItem();
         this.lastPageStep = lastPageStep ? lastPageStep : this.lastPageStep;
         this.pageStep = EPageStep.deviceGroupList;
     }
 
     pageToDeviceGroupView() {
-        console.log("pageToDeviceGroupView", this.site);
         this.newImgSrc = this.serverUrl + this.site.imageSrc;
         this.pageStep = EPageStep.deviceGroupView;
     }
@@ -1147,7 +1138,6 @@ export default class Site extends Vue {
         await this.$server
             .R("/device/group", body)
             .then((response: any) => {
-                console.log("deviceGroupAll", response);
                 this.deviceGroupAll = response.results;
             })
             .catch((e: any) => {
@@ -1183,28 +1173,17 @@ export default class Site extends Vue {
     pageAddDeviceGroup() {
         var lastPageSetp = this.pageStep;
         this.pageToDeviceGroupList(EPageStep.none);
-        console.log("pageAddDeviceGroup", this.deviceGroup);
         this.pageToDeviceGroupAdd(lastPageSetp);
     }
 
     pageEditDeviceGroup(event: any, data: any) {
         var lastPageSetp = this.pageStep;
         this.pageToDeviceGroupList(EPageStep.none);
-        console.log("pageEditDeviceGroup", this.imageMap.deviceGroups, data);
         this.pageToDeviceGroupEdit(lastPageSetp);
-        //for (let tempData of this.imageMap.deviceGroups) {
-        //    if (data == tempData) {
-        //        console.log("Edit - deviceGroupId: ", data.deviceGroupId);
-        //    }
-        //}
     }
 
     async initDeviceNameItem() {
-        this.deviceNameItem = [
-            // { id: "1", text: "device1", type: "peopleCounting" },
-            // { id: "2", text: "device2", type: "dwellTime" },
-            // { id: "3", text: "device3", type: "humanDetection" }
-        ];
+        this.deviceNameItem = [];
 
         let body: {
             paging: {
@@ -1221,7 +1200,6 @@ export default class Site extends Vue {
         await this.$server
             .R("/device", body)
             .then((response: any) => {
-                console.log("initDeviceNameItem", response);
                 for (let item of response.results) {
                     let device = {
                         id: item.objectId,
@@ -1390,8 +1368,6 @@ export default class Site extends Vue {
     }
 
     async saveSite(data) {
-        console.log("saveSite", data);
-
         if (this.pageStep == EPageStep.siteAdd) {
             const datas: ISiteAddData[] = [
                 {
@@ -1467,8 +1443,6 @@ export default class Site extends Vue {
     }
 
     async saveArea(data) {
-        console.log("saveArea", data);
-
         if (this.pageStep == EPageStep.areaAdd) {
             const datas: IAreaAddData[] = [
                 {
@@ -1587,8 +1561,6 @@ export default class Site extends Vue {
     }
 
     async saveDeviceGroup(data) {
-        console.log("saveDeviceGroup", data, this.area.objectId);
-
         if (this.pageStep == EPageStep.deviceGroupAdd) {
             const datas: IDeviceGroupAddData[] = [
                 {
@@ -1644,8 +1616,6 @@ export default class Site extends Vue {
     }
 
     async deleteGroupDevice() {
-        console.log("objectId - ", this.deviceGroup.objectId);
-
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
             const body: {
                 objectId: string;
@@ -1677,13 +1647,11 @@ export default class Site extends Vue {
     }
 
     googleMapMapping() {
-        console.log("googleMapMapping", this.site);
         if (this.site) {
             if (
                 parseFloat(this.site.longitude) > 180 ||
                 parseFloat(this.site.longitude) < -180
             ) {
-                console.log("ING", parseFloat(this.site.longitude));
                 Dialog.error(this._("w_Site_Longitude_Range"));
                 return;
             }
@@ -1707,7 +1675,6 @@ export default class Site extends Vue {
     }
 
     updateSiteForm(data) {
-        console.log("updateSiteForm", data);
         if (data) {
             this.site[data.key] = data.value;
             if (data.key == "sitePhoto") {
@@ -1717,7 +1684,6 @@ export default class Site extends Vue {
     }
 
     async updateAreaForm(data) {
-        console.log("updateAreaForm", data);
         if (data) {
             this.area[data.key] = data.value;
             if (data.key == "areaPhoto") {
@@ -1741,14 +1707,12 @@ export default class Site extends Vue {
     }
 
     updateDeviceGroupForm(data) {
-        console.log("updateDeviceGroupForm", data);
         if (data) {
             this.deviceGroup[data.key] = data.value;
         }
     }
 
     selectedDeviceGroup(data) {
-        console.log("selectedDeviceGroup", data);
         this.newImgSrc = "";
         if (data) {
             this.deviceGroup = this.isSelectDeviceGroup = data;
@@ -1758,7 +1722,6 @@ export default class Site extends Vue {
     }
 
     selectedArea(data) {
-        console.log("selectedArea", data);
         this.newImgSrc = "";
         this.areaPhotoSrc = "";
         if (data) {
@@ -1772,7 +1735,6 @@ export default class Site extends Vue {
     }
 
     selectedSite(data) {
-        console.log("selectedSite", data);
         this.newImgSrc = "";
         this.gooleMapSrc = "";
         if (data) {
@@ -1797,6 +1759,7 @@ export default class Site extends Vue {
     }
 
     pageSize(data) {
+        // TODO: do something?
         console.log("pageSize", data);
     }
 
@@ -1876,7 +1839,6 @@ export default class Site extends Vue {
 
     showDeviceDtail(datas) {
         let modalContext = "";
-        console.log("showDeviceDtail", datas);
         if (datas) {
             for (let data of datas) {
                 if (data) {
@@ -1888,24 +1850,20 @@ export default class Site extends Vue {
     }
 
     showTags(datas) {
-        console.log("showTags", datas);
         var tags = [];
         for (let data of datas) {
             tags.push(this.tagItem.filter(m => m.id == data)[0].text);
         }
-        console.log("tags", tags);
         return tags.join(",");
     }
 
     showOfficeHour(data) {
-        console.log("showOfficeHour", data);
         return this.officeHourItem.filter(m => m.id == data)[0]
             ? this.officeHourItem.filter(m => m.id == data)[0].text
             : "";
     }
 
     showManager(data) {
-        console.log("showManager", data);
         return this.managerItem.filter(m => m.id == data)[0]
             ? this.managerItem.filter(m => m.id == data)[0].text
             : "";
@@ -2323,7 +2281,6 @@ export default class Site extends Vue {
                     this.newImg.src = base64;
                     this.newImg.onload = () => {
                         this.newImgSrc = base64;
-                        console.log("newImgSrc", this.newImgSrc);
                         return;
                     };
                 } else {

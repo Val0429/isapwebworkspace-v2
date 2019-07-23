@@ -132,7 +132,6 @@ export class TagLabelView extends Vue {
                             x: 0,
                             y: 0
                         };
-                        console.log(tempObject);
                         break;
                     }
                 }
