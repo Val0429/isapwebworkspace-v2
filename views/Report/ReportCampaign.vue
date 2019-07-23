@@ -276,6 +276,9 @@ export default class ReportCampaign extends Vue {
     }
 
     sortOutChartDataAllCampaign(datas: any) {
+
+        this.chartDatas.multiple = [];
+
         let tempDateChartDataBefore: IChartCampaignMultiple = {
             name: "",
             startDate: new Date(),
@@ -300,10 +303,14 @@ export default class ReportCampaign extends Vue {
             this.chartDatas.multiple.push(tempChartData);
         }
         this.chartMode.multiple = true;
+        this.chartMode.single = false;
         console.log("chartDatas.multiple - ", this.chartDatas.multiple);
     }
 
     sortOutChartDataSingleCampaign(datas: any) {
+
+        this.chartDatas.single = [];
+
         let tempChartDataBefore: IChartCampaignSingle = {
             type: ECampaignTimeType.before,
             date: new Date(),
@@ -363,6 +370,7 @@ export default class ReportCampaign extends Vue {
             }
         }
         this.chartMode.single = true;
+        this.chartMode.multiple = false;
         console.log("chartDatas.single - ", this.chartDatas.single);
     }
 
