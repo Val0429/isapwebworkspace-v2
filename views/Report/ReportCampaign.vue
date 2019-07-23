@@ -64,18 +64,19 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    // Vue
-    // Report
-    import {
-        ECampaignTimeType,
-        IChartCampaignMultiple,
-        IChartCampaignSingle
-    } from "@/components/Reports";
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
+import { Component, Vue } from "vue-property-decorator";
+// Vue
+// Report
+import {
+    ECampaignTimeType,
+    IChartCampaignMultiple,
+    IChartCampaignSingle
+} from "@/components/Reports";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Loading from "@/services/Loading";
 
-    @Component({
+@Component({
     components: {}
 })
 export default class ReportCampaign extends Vue {
