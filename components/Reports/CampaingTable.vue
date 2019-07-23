@@ -22,9 +22,9 @@
                     :key="'tableData__' + index"
                 >
                     <td class="center">{{ trafficTitle }}</td>
-                    <td class="center">{{ numberWithCommas(initFormatNumber(value.beforeTraffic))}}</td>
-                    <td class="center">{{ numberWithCommas(initFormatNumber(value.traffic)) }}</td>
-                    <td class="center">{{ numberWithCommas(initFormatNumber(value.afterTraffic)) }}</td>
+                    <td class="center">{{ numberWithCommas(value.beforeTraffic)}}</td>
+                    <td class="center">{{ numberWithCommas(value.traffic) }}</td>
+                    <td class="center">{{ numberWithCommas(value.afterTraffic) }}</td>
                     <td class="center">{{ toPercent(value.changeTrafficCampaign ),0}}</td>
                     <td class="center">{{toPercent( value.changeAfterTrafficCampaign ),0}}</td>
 
