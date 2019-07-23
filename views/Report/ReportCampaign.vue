@@ -16,6 +16,21 @@
         >
 
             <template #toolbox>
+
+                <!-- Ben -->
+                <iv-toolbox-export-excel
+                    size="lg"
+                    @click="exportExcel(eFileType.xlsx)"
+                />
+                <iv-toolbox-export-csv
+                    size="lg"
+                    @click="exportExcel(eFileType.csv)"
+                />
+                <iv-toolbox-export-pdf
+                    size="lg"
+                    @click="exportPDF"
+                />
+
                 <!-- Tina -->
                 <iv-toolbox-send-mail
                     size="lg"
@@ -229,8 +244,7 @@ export default class ReportCampaign extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
-        } else if(this.filterData.campaignIds.length === 1) {
-
+        } else if (this.filterData.campaignIds.length === 1) {
             param = {
                 campaignId: this.filterData.campaignIds[0],
                 siteIds: this.filterData.siteIds
@@ -284,8 +298,7 @@ export default class ReportCampaign extends Vue {
     }
 
     sortOutChartDataSingleCampaign(datas: any) {
-
-        let tempChartDataBefore:IChartCampaignSingle = {
+        let tempChartDataBefore: IChartCampaignSingle = {
             type: ECampaignTimeType.before,
             date: new Date(),
             traffic: 0
@@ -304,7 +317,6 @@ export default class ReportCampaign extends Vue {
         };
 
         for (let summary of datas) {
-
             let tempChartDataBeforeItem = JSON.parse(
                 JSON.stringify(tempChartDataBefore)
             );
@@ -343,7 +355,6 @@ export default class ReportCampaign extends Vue {
                     this.chartDatas.single.push(tempChartDataAfterItem);
                     break;
             }
-
         }
         this.chartMode.single = true;
         console.log("chartDatas.single - ", this.chartDatas.single);
@@ -394,6 +405,53 @@ export default class ReportCampaign extends Vue {
     }
 
     ////////////////////////////////////// Tina End //////////////////////////////////////
+
+    ////////////////////////////////////// Export //////////////////////////////////////
+
+    // Author: Ben
+    exportExcel(fType) {
+        // let reportTable: any = null;
+        // if (this.tableStep == ETableStep.mainTable) {
+        //     reportTable = this.$refs.reportTable;
+        // } else {
+        //     reportTable = this.$refs.sunReportTable;
+        // }
+        // let tableData = reportTable.tableToArray();
+        //
+        // //th
+        // let th = [];
+        // for (let title of tableData[0]) {
+        //     th.push(title);
+        // }
+        //
+        // //data
+        // let data = [];
+        // for (let bodys of tableData) {
+        //     if (tableData.indexOf(bodys) == 0) continue;
+        //     data.push(bodys);
+        // }
+        // let [fileName, fileType, sheetName] = [
+        //     this._("w_Navigation_VideoSources_Demographic"),
+        //     fType,
+        //     Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+        // ];
+        // toExcel({ th, data, fileName, fileType, sheetName });
+    }
+
+    // Author: Morris
+    exportPDF() {
+        let title = "";
+        title += this._("w_Navigation_Report_Traffic");
+        title += " ";
+        title += Datetime.DateTime2String(
+            this.startDate,
+            HighchartsService.datetimeFormat.date
+        );
+
+        ReportPDFService.exportPDF(title);
+    }
+
+    ///////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////////////
 
