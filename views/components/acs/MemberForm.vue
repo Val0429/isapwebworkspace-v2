@@ -711,14 +711,14 @@ export default class MemberForm extends Vue {
         tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});
       }
     }
-    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType));
+    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType || "0"));
     let member = {        
         // master
         objectId: this.inputFormData.objectId,
         AccessRules: this.permissionSelected,
         PrimaryWorkgroupId:parseInt(this.inputFormData.personType),
         ApbWorkgroupId:parseInt(this.inputFormData.personType),
-        PrimaryWorkgroupName: wg? wg.groupname : "",
+        PrimaryWorkgroupName: wg? wg.groupname:"",
         EmployeeNumber: this.inputFormData.employeeNumber,
         LastName: this.inputFormData.chineseName,
         FirstName: this.inputFormData.englishName || "-",
