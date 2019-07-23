@@ -349,7 +349,7 @@ export class HighchartsDwellTime extends Vue {
         );
     }
 
-      mountAnyChart(): boolean{
+    mountAnyChart(): boolean {
         if (this.mountChart.site1Day1) {
             return true;
         }
@@ -362,13 +362,13 @@ export class HighchartsDwellTime extends Vue {
         if (this.mountChart.siteXDayX) {
             return true;
         }
-         if (this.mountChart.percentage) {
+        if (this.mountChart.percentage) {
             return true;
         }
-         if (this.mountChart.ageRange) {
+        if (this.mountChart.ageRange) {
             return true;
         }
-         if (this.mountChart.gender) {
+        if (this.mountChart.gender) {
             return true;
         }
         return false;
@@ -798,7 +798,7 @@ export class HighchartsDwellTime extends Vue {
                     tempChartData.dwellTime += value.dwellTime;
                     tempChartData.revenue += value.revenue;
                     tempChartData.transaction += value.transaction;
-                    tempChartData.temperature += value.temperature;
+                    tempChartData.temperature = value.temperature;
                     tempChartData.temperatureMin = value.temperatureMin;
                     tempChartData.temperatureMax = value.temperatureMax;
                     tempChartData.weather = value.weather;
@@ -1886,7 +1886,9 @@ export class HighchartsDwellTime extends Vue {
         value.timeMode = this.timeMode;
         value.areaMode = this.areaMode;
         value.i18n = this.i18nItem();
-        value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
+        value.temperature = HighchartsService.formatFloat(
+            (value.temperatureMin + value.temperatureMax) / 2
+        );
         value.weatherIcon = HighchartsService.weatherIcon(value.weather);
         value.weekNumber = Datetime.WeekNumber(value.date);
         value.quarterNumber = Datetime.QuarterNumber(value.date);

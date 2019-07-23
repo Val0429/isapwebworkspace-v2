@@ -194,7 +194,7 @@ export class HighchartsOccupancy extends Vue {
         );
     }
 
-     mountAnyChart(): boolean{
+    mountAnyChart(): boolean {
         if (this.mountChart.site1Day1) {
             return true;
         }
@@ -365,7 +365,7 @@ export class HighchartsOccupancy extends Vue {
             for (let area of site.areas) {
                 tempSeries.push({
                     areaId: area.objectId,
-                    areaName: area.name,
+                    name: area.name,
                     data: []
                 });
             }
@@ -545,7 +545,6 @@ export class HighchartsOccupancy extends Vue {
                         valTimestamp <= tempEndTimestamp
                     ) {
                         serie.data[dataIndex] += value.occupancy;
-                        break;
                     }
                 }
             }
@@ -568,7 +567,7 @@ export class HighchartsOccupancy extends Vue {
             for (let serie of tempSeries) {
                 tempCategorieData.datas.push({
                     areaId: serie.areaId,
-                    areaName: serie.areaName,
+                    areaName: serie.name,
                     occupancy: HighchartsService.formatFloat(serie.data[i])
                 });
             }
@@ -963,6 +962,8 @@ export class HighchartsOccupancy extends Vue {
                     ) {
                         tempSiteValue.occupancy += value.occupancy;
                         tempSiteValue.temperature = value.temperature;
+                        tempSiteValue.temperatureMax = value.temperatureMax;
+                        tempSiteValue.temperatureMin = value.temperatureMin;
                         tempSiteValue.weather = value.weather;
                         tempSiteValue.weatherIcon = HighchartsService.weatherIcon(
                             value.weather
@@ -994,6 +995,7 @@ export class HighchartsOccupancy extends Vue {
                     }
                 }
             }
+            // console.log("!!! tempData", tempData);
             tempSeries.push({
                 name: HighchartsService.categorieStringNotJSON(
                     site.name,
@@ -1005,6 +1007,12 @@ export class HighchartsOccupancy extends Vue {
 
         // set result
         for (let result of tempResult) {
+            console.log("!!! result ", result);
+            for (let i in result.sites) {
+                result.sites[i].occupancy = HighchartsService.formatFloat(
+                    result.sites[i].occupancy
+                );
+            }
             switch (this.timeMode) {
                 case ETimeMode.year:
                 case ETimeMode.month:
@@ -1202,7 +1210,9 @@ export class HighchartsOccupancy extends Vue {
         value.timeMode = this.timeMode;
         value.areaMode = this.areaMode;
         value.i18n = this.i18nItem();
-        value.temperature = (value.temperatureMin + value.temperatureMax) / 2;
+        value.temperature = HighchartsService.formatFloat(
+            (value.temperatureMin + value.temperatureMax) / 2
+        );
         value.weatherIcon = HighchartsService.weatherIcon(value.weather);
         value.weekNumber = Datetime.WeekNumber(value.date);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
