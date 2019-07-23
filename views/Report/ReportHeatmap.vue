@@ -109,13 +109,10 @@ import {
     EDesignationPeriod,
     EAddPeriodSelect,
     IChartDemographicData,
-    IPeckTimeRange,
     ISite,
     ITemplateItem,
     IFilterCondition,
-    IReportToTemplateItem,
-    ReportDashboard,
-    ReportTableData
+    IReportToTemplateItem
 } from "@/components/Reports";
 import {
     IHeatMapData,
@@ -1455,14 +1452,11 @@ export default class ReportHeatmap extends Vue {
         filterData: IFilterCondition,
         designationPeriod: EDesignationPeriod
     ) {
-
-
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
 
-        console.log('this.filterData - ', this.filterData);
-
+        console.log("this.filterData - ", this.filterData);
 
         this.inputFormData = {
             areaId: "",

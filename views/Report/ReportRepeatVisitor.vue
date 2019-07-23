@@ -113,7 +113,6 @@ import {
     EChartMode,
     EDesignationPeriod,
     IChartRepeatVisitorData,
-    IPeckTimeRange,
     ISiteAreas,
     ITemplateItem,
     IFilterCondition,
