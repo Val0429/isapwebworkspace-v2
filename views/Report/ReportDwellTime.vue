@@ -205,8 +205,6 @@ import {
 import {
     ETimeMode,
     EWeather,
-    IDayRange,
-    ECountType,
     EDeviceMode,
     EIncludedEmployee,
     EAgeRange,
@@ -220,13 +218,10 @@ import {
     EAddPeriodSelect,
     EDesignationPeriod,
     IChartDwellTimeData,
-    IPeckTimeRange,
     ISite,
-    ISiteItems,
     ITemplateItem,
     IFilterCondition,
     IReportToTemplateItem,
-    ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
 
@@ -1178,7 +1173,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                   return ResponseFilter.base(this, e);
+                    return ResponseFilter.base(this, e);
                 });
         }
     }
@@ -1442,8 +1437,6 @@ export default class ReportDwellTime extends Vue {
         //     .catch((e: any) => {
         //         return ResponseFilter.base(this, e);
         //     });
-
-
     }
 
     resolveSummary() {
