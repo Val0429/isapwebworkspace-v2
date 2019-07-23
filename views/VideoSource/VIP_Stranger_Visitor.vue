@@ -240,7 +240,7 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfig, IConfigiSap } from "@/config/default/api/interfaces";
+import { IConfigiSap } from "@/config/default/api/interfaces";
 
 // Region Tree
 import {

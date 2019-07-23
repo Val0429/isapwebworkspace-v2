@@ -308,10 +308,6 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import {
-    IAddBusinessOperationCampaign,
-    IEditBusinessOperationCampaign
-} from "@/config/default/api/interfaces";
 
 // Region Tree
 import {

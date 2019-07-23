@@ -164,7 +164,6 @@ import {
     ESign,
     ETimeMode,
     EWeather,
-    ECountType,
     EDeviceMode,
     ETypeInOrOut,
     EIncludedEmployee,
@@ -179,7 +178,6 @@ import {
     ISite,
     ISiteItems,
     IReportToTemplateItem,
-    ReportDashboard,
     ReportTableData
 } from "@/components/Reports";
 
@@ -373,7 +371,7 @@ export default class ReportTraffic extends Vue {
         this.inOrOutTypeSelectItem = {
             in: this._("w_In"),
             out: this._("w_Out"),
-            all: this._("w_All")
+            // all: this._("w_All")
         };
 
         this.timeModeSelectItem = {

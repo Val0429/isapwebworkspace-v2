@@ -156,22 +156,16 @@ import {
 	EChartMode,
 	EPageType,
     ESign,
-	ECountType,
     EDeviceMode,
     EAddPeriodSelect,
     EDesignationPeriod,
     EIfAllSelected,
     EIncludedEmployee,
-	IDayRange,
 	IChartDemographicData,
-	IChartTrafficData,
-	IPeckTimeRange,
 	ISite,
-	ISiteItems,
     ITemplateItem,
     IFilterCondition,
     IReportToTemplateItem,
-	ReportDashboard,
 	ReportTableData
 } from "@/components/Reports";
 
