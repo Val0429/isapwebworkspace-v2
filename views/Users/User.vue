@@ -379,11 +379,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -399,11 +395,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -422,11 +414,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -612,13 +600,12 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
                 this.modalShow = !this.modalShow;
-                Dialog.error(this._("w_MailServer_Test_Fail"));
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_MailServer_Test_Fail")
+                );
             });
     }
 
@@ -656,15 +643,11 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_AddUserFailed"));
-                    return false;
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_User_AddUserFailed")
+                );
             });
     }
 
@@ -700,15 +683,11 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500) {
-                    Dialog.error(this._("w_User_EditUserFailed"));
-                    return false;
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_User_EditUserFailed")
+                );
             });
     }
 
@@ -738,15 +717,7 @@ export default class User extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }

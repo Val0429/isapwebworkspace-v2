@@ -276,11 +276,7 @@ export default class CampaignSetting extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -296,11 +292,7 @@ export default class CampaignSetting extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -490,15 +482,11 @@ export default class CampaignSetting extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_BOCampaign_ADDFailed")
+                    );
                 });
         }
 
@@ -538,15 +526,11 @@ export default class CampaignSetting extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_BOCampaign_EditFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_BOCampaign_EditFailed")
+                    );
                 });
         }
     }
@@ -577,15 +561,7 @@ export default class CampaignSetting extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }

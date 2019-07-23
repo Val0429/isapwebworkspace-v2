@@ -157,11 +157,7 @@ export default class ReportCampaign extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -172,11 +168,7 @@ export default class ReportCampaign extends Vue {
         let result = await this.$server
             .R("/report/campaign/condition")
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
 
         tempResult = result;
@@ -235,11 +227,7 @@ export default class ReportCampaign extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(this, e);
                 });
         }
     }

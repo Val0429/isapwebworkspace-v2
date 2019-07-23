@@ -206,14 +206,13 @@ export default class Weather extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                Dialog.error(this._("w_WeatherTest_Fail"));
                 (this.$refs["detail"] as any).hide() &&
                     (this.$refs["test"] as any).hide();
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_WeatherTest_Fail")
+                );
             });
     }
 
@@ -226,10 +225,11 @@ export default class Weather extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 400) {
-                    Dialog.error(this._("w_Weather_Read_Fail"));
-                }
-                console.log(e);
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_Weather_Read_Fail")
+                );
             });
     }
 
@@ -248,10 +248,11 @@ export default class Weather extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 400) {
-                    Dialog.error(this._("w_Weather_Setting_Fail"));
-                }
-                console.log(e);
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_Weather_Setting_Fail")
+                );
             });
     }
 

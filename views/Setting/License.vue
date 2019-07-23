@@ -265,11 +265,7 @@ export default class License extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -341,16 +337,11 @@ export default class License extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500 || e.res.statusCode == 400) {
-                    Dialog.error(this._("w_License_Setting_Fail"));
-                    return false;
-                }
-
-                console.log(e);
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_License_Setting_Fail")
+                );
             });
     }
 
@@ -370,16 +361,11 @@ export default class License extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 500 || e.res.statusCode == 400) {
-                    Dialog.error(this._("w_License_Setting_Fail"));
-                    return false;
-                }
-
-                console.log(e);
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_License_Setting_Fail")
+                );
             });
     }
 

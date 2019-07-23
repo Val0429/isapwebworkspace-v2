@@ -487,9 +487,11 @@ export default class SalesRecords extends Vue {
                 this.pageTo3();
             })
             .catch((e: any) => {
-                console.log(e);
-                Dialog.error(this._("w_BOSalesRecords_ErrorFileResolve"));
-                return false;
+                return ResponseFilter.base(
+                    this,
+                    e,
+                    this._("w_BOSalesRecords_ErrorFileResolve")
+                );
             });
     }
 
@@ -563,11 +565,7 @@ export default class SalesRecords extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                this.sendError();
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 

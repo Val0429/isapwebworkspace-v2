@@ -64,8 +64,7 @@
 
                 <template #setUserGroupFRS>
                     <div class="m-3">
-                        <b-button
-                            @click="clickToSetUserGroupInFRS">
+                        <b-button @click="clickToSetUserGroupInFRS">
                             {{ _('w_SetUserGroupInFRS1') }}
                         </b-button>
                     </div>
@@ -102,7 +101,6 @@
                     <h6 class="ml-3 font-weight-bold mt-3">{{ _('w_SetUserGroupInFRS1') }}</h6>
                 </template>
 
-
             </iv-form>
 
             <template #footer>
@@ -122,8 +120,14 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { IFRSServerResults, IAddFRSServer, IEditFRSServer, IFRSServerReadUserGroup, IFRSUserGroup } from "@/config/default/api/interfaces";
-import ReportService from '@/components/Reports/models/ReportService'
+import {
+    IFRSServerResults,
+    IAddFRSServer,
+    IEditFRSServer,
+    IFRSServerReadUserGroup,
+    IFRSUserGroup
+} from "@/config/default/api/interfaces";
+import ReportService from "@/components/Reports/models/ReportService";
 
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
@@ -149,7 +153,7 @@ enum EPageStep {
 enum EUserGroup {
     employee = "employee",
     blacklist = "blacklist",
-    vip = "vip",
+    vip = "vip"
 }
 
 @Component({
@@ -181,9 +185,9 @@ export default class FRSServer extends Vue {
         account: "",
         password: "",
         type: "",
-        employee: '',
-        vip: '',
-        blacklist: ''
+        employee: "",
+        vip: "",
+        blacklist: ""
     };
 
     created() {}
@@ -202,9 +206,9 @@ export default class FRSServer extends Vue {
             account: "",
             password: "",
             type: "",
-            employee: '',
-            vip: '',
-            blacklist: ''
+            employee: "",
+            vip: "",
+            blacklist: ""
         };
     }
 
@@ -214,14 +218,14 @@ export default class FRSServer extends Vue {
         this.selectedDetail = data;
     }
 
-   async initUserGroupInFRS() {
+    async initUserGroupInFRS() {
         const configObject: IFRSServerReadUserGroup = {
             ip: this.inputFormData.ip,
             port: this.inputFormData.port,
             wsport: this.inputFormData.wsport,
             protocol: this.inputFormData.protocol,
             account: this.inputFormData.account,
-            password: this.inputFormData.password,
+            password: this.inputFormData.password
         };
 
         const addParam = {
@@ -247,15 +251,7 @@ export default class FRSServer extends Vue {
             //     }
             // })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                if (e.res.statusCode == 400) {
-                    Dialog.error(this._("w_WrongConfig"));
-                    return false;
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e, this._("w_WrongConfig"));
             });
 
         this.groupData = results;
@@ -284,13 +280,11 @@ export default class FRSServer extends Vue {
                 }
             }
         }
-
     }
 
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
-
             this.inputFormData = {
                 objectId: param.objectId,
                 customId: param.customId,
@@ -300,7 +294,7 @@ export default class FRSServer extends Vue {
                 password: param.password,
                 port: param.port,
                 wsport: param.wsport,
-                protocol: param.protocol,
+                protocol: param.protocol
             };
 
             param.userGroups.map(item => {
@@ -319,8 +313,6 @@ export default class FRSServer extends Vue {
                         break;
                 }
             });
-
-
         }
     }
 
@@ -367,7 +359,6 @@ export default class FRSServer extends Vue {
         if (this.groupData.length === 0) {
             await this.initUserGroupInFRS();
         }
-
     }
 
     async pageToView() {
@@ -399,11 +390,10 @@ export default class FRSServer extends Vue {
     }
 
     async saveAddOrEdit(data) {
-
         let userGroups: IFRSUserGroup = {
-            type: '',
-            objectId: '',
-            name: '',
+            type: "",
+            objectId: "",
+            name: ""
         };
 
         let tempGroups: any = [];
@@ -437,7 +427,6 @@ export default class FRSServer extends Vue {
 
         // add
         if (this.inputFormData.type === EPageStep.add) {
-
             const datas: IAddFRSServer[] = [
                 {
                     customId: data.customId,
@@ -456,7 +445,7 @@ export default class FRSServer extends Vue {
                 datas
             };
 
-            console.log('addParam - ', addParam);
+            console.log("addParam - ", addParam);
 
             await this.$server
                 .C("/partner/frs", addParam)
@@ -477,15 +466,11 @@ export default class FRSServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_ServerFRS_ADDFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_ServerFRS_ADDFailed")
+                    );
                 });
         }
 
@@ -528,15 +513,11 @@ export default class FRSServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(this._("w_ServerFRS_EditFailed"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_ServerFRS_EditFailed")
+                    );
                 });
         }
     }
@@ -567,14 +548,7 @@ export default class FRSServer extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }
@@ -689,28 +663,36 @@ export default class FRSServer extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Employee")}
-                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.groupEmployee)}
+                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(
+                     this.groupEmployee
+                 )}
                  */
                 employee: ${toEnumInterface(this.groupEmployee as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_VIP")}
-                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.groupVIP)}
+                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(
+                     this.groupVIP
+                 )}
                  */
                 vip: ${toEnumInterface(this.groupVIP as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist")}
-                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(this.groupBlacklist)}
+                 * @uiHidden - ${ReportService.CheckObjectIfEmpty(
+                     this.groupBlacklist
+                 )}
                  */
-                blacklist: ${toEnumInterface(this.groupBlacklist as any, false)};
+                blacklist: ${toEnumInterface(
+                    this.groupBlacklist as any,
+                    false
+                )};
 
             }
         `;
     }
-
 
     IViewForm() {
         return `

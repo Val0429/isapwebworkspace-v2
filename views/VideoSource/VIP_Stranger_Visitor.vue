@@ -352,11 +352,7 @@ export default class VIP_Stranger_Visitor extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -372,11 +368,7 @@ export default class VIP_Stranger_Visitor extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -395,11 +387,7 @@ export default class VIP_Stranger_Visitor extends Vue {
                 }
             })
             .catch((e: any) => {
-                if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                    return ResponseFilter.base(this, e);
-                }
-                console.log(e);
-                return false;
+                return ResponseFilter.base(this, e);
             });
     }
 
@@ -549,15 +537,11 @@ export default class VIP_Stranger_Visitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500 || e.res.statusCode == 400) {
-                        Dialog.error(this._("w_ErrorReadData"));
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_ErrorReadData")
+                    );
                 });
         }
     }
@@ -596,19 +580,11 @@ export default class VIP_Stranger_Visitor extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        if (
-                            e.res &&
-                            e.res.statusCode &&
-                            e.res.statusCode == 401
-                        ) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_ErrorReadData"));
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
+                        return ResponseFilter.base(
+                            this,
+                            e,
+                            this._("w_ErrorReadData")
+                        );
                     });
             }
         }
@@ -640,19 +616,11 @@ export default class VIP_Stranger_Visitor extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        if (
-                            e.res &&
-                            e.res.statusCode &&
-                            e.res.statusCode == 401
-                        ) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(this._("w_ErrorReadData"));
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
+                        return ResponseFilter.base(
+                            this,
+                            e,
+                            this._("w_ErrorReadData")
+                        );
                     });
             }
         }
@@ -691,21 +659,11 @@ export default class VIP_Stranger_Visitor extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        if (
-                            e.res &&
-                            e.res.statusCode &&
-                            e.res.statusCode == 401
-                        ) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(
-                                this._("w_VSPeopleCounting_ADDFailed")
-                            );
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
+                        return ResponseFilter.base(
+                            this,
+                            e,
+                            this._("w_VSPeopleCounting_ADDFailed")
+                        );
                     });
             }
         }
@@ -739,21 +697,11 @@ export default class VIP_Stranger_Visitor extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        if (
-                            e.res &&
-                            e.res.statusCode &&
-                            e.res.statusCode == 401
-                        ) {
-                            return ResponseFilter.base(this, e);
-                        }
-                        if (e.res.statusCode == 500) {
-                            Dialog.error(
-                                this._("w_VSPeopleCounting_ADDFailed")
-                            );
-                            return false;
-                        }
-                        console.log(e);
-                        return false;
+                        return ResponseFilter.base(
+                            this,
+                            e,
+                            this._("w_VSPeopleCounting_ADDFailed")
+                        );
                     });
             }
         }
@@ -920,17 +868,11 @@ export default class VIP_Stranger_Visitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(
-                            this._("w_VSVIP_Stranger_Visitor_ADDFailed")
-                        );
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSVIP_Stranger_Visitor_ADDFailed")
+                    );
                 });
         }
 
@@ -971,17 +913,11 @@ export default class VIP_Stranger_Visitor extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    if (e.res && e.res.statusCode && e.res.statusCode == 401) {
-                        return ResponseFilter.base(this, e);
-                    }
-                    if (e.res.statusCode == 500) {
-                        Dialog.error(
-                            this._("w_VSVIP_Stranger_Visitor_EditFailed")
-                        );
-                        return false;
-                    }
-                    console.log(e);
-                    return false;
+                    return ResponseFilter.base(
+                        this,
+                        e,
+                        this._("w_VSVIP_Stranger_Visitor_EditFailed")
+                    );
                 });
         }
     }
@@ -1012,15 +948,7 @@ export default class VIP_Stranger_Visitor extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            if (
-                                e.res &&
-                                e.res.statusCode &&
-                                e.res.statusCode == 401
-                            ) {
-                                return ResponseFilter.base(this, e);
-                            }
-
-                            console.log(e);
+                            return ResponseFilter.base(this, e);
                         });
                 }
             }
