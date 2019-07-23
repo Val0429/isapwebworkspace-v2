@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>{{_('w_ReportCampaign_Single')}}</h2>
         <table
             ref="reportTable"
             class="table b-table table-striped table-hover"
@@ -20,12 +21,12 @@
                     v-for="(value,index) in thresholdDetailTableData"
                     :key="'tableData__' + index"
                 >
-                    <td class="center">{{numberWithCommas(value.type)}}</td>
-                    <td class="center">{{numberWithCommas(value.before)}}</td>
-                    <td class="center">{{ numberWithCommas(value.during) }}</td>
-                    <td class="center">{{ numberWithCommas(value.after) }}</td>
-                    <td class="center">{{ toPercent(value.changeDuring ),0}}</td>
-                    <td class="center">{{toPercent( value.changeAfter ),0}}</td>
+                    <td class="center">{{ trafficTitle }}</td>
+                    <td class="center">{{ numberWithCommas(initFormatNumber(value.beforeTraffic))}}</td>
+                    <td class="center">{{ numberWithCommas(initFormatNumber(value.traffic)) }}</td>
+                    <td class="center">{{ numberWithCommas(initFormatNumber(value.afterTraffic)) }}</td>
+                    <td class="center">{{ toPercent(value.changeTrafficCampaign ),0}}</td>
+                    <td class="center">{{toPercent( value.changeAfterTrafficCampaign ),0}}</td>
 
                 </tr>
             </tbody>
@@ -54,6 +55,7 @@ import {
 import Datetime from "@/services/Datetime";
 import ServerConfig from "@/services/ServerConfig";
 import { IPaging } from "@/components/Table/models/IPaging";
+import ReportService from "@/components/Reports/models/ReportService";
 
 @Component({
     components: {}
@@ -71,6 +73,8 @@ export class CampaingTable extends Vue {
     thresholdDetailTableData: any = [];
 
     serverConfig = ServerConfig;
+
+    trafficTitle: string = '';
 
     paging: IPaging = {
         prePage: 5,
@@ -101,7 +105,14 @@ export class CampaingTable extends Vue {
             this._("w_Campaign_ChangeDuringCampaign"),
             this._("w_Campaign_ChangeAfterCampaign")
         ];
+
+        this.trafficTitle = this._('w_Navigation_Report_Traffic');
     }
+
+    initFormatNumber(number: string): string {
+        return ReportService.FormatNumber(number)
+    }
+
 
     getData() {
         this.thresholdDetailTableData = this.thresholdDetailTableContent.filter(
@@ -138,7 +149,7 @@ export class CampaingTable extends Vue {
     }
 
     toPercent(point, fixed = 0) {
-        var str = Number(Math.abs(point) * 100).toFixed(fixed);
+        var str = Number((point) * 100).toFixed(fixed);
         str += "%";
         return str;
     }
@@ -189,7 +200,7 @@ export class CampaingTable extends Vue {
 }
 
 export default CampaingTable;
-Vue.component("campaing-table", CampaingTable);
+Vue.component("campaign-table", CampaingTable);
 </script>
 
 <style lang="scss" scoped>

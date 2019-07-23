@@ -515,10 +515,11 @@ export default class DwellTime extends Vue {
             } = {
                 objectId: data
             };
-
+            Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             for (const returnValue of response) {
@@ -854,10 +855,11 @@ export default class DwellTime extends Vue {
             const addParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .C("/device/dwell-time", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_VSDwellTime_AddSuccess"));
@@ -896,10 +898,11 @@ export default class DwellTime extends Vue {
             const editParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .U("/device/dwell-time", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_VSDwellTime_EditSuccess"));

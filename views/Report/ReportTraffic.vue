@@ -370,7 +370,7 @@ export default class ReportTraffic extends Vue {
 
         this.inOrOutTypeSelectItem = {
             in: this._("w_In"),
-            out: this._("w_Out"),
+            out: this._("w_Out")
             // all: this._("w_All")
         };
 
@@ -676,7 +676,9 @@ export default class ReportTraffic extends Vue {
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                this.reportTableTitle.headTitle = this._('w_ReportTraffic_TrafficByDays');
+                this.reportTableTitle.headTitle = this._(
+                    "w_ReportTraffic_TrafficByDays"
+                );
                 this.rData.thatDay = null; //多天無當天時間
                 let sDate = new Date(this.startDate);
                 let eDate = new Date(this.endDate);
@@ -915,9 +917,11 @@ export default class ReportTraffic extends Vue {
 
             let summaryTableDatas;
             let officeHours;
+            Loading.show();
             await this.$server
                 .C("/report/people-counting/summary", filterData)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response !== undefined) {
                         summaryTableDatas = response.summaryDatas;
                         this.initSunReportTable(summaryTableDatas);
@@ -1401,10 +1405,11 @@ export default class ReportTraffic extends Vue {
             isIncludedEmployee: EIncludedEmployee.no,
             businessChartType: EBusinessChart.revenue
         };
-
+        Loading.show();
         await this.$server
             .C("/report/people-counting/summary", param)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;

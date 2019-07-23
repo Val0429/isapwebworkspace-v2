@@ -326,10 +326,11 @@ export default class License extends Vue {
             key: data.key,
             mac: data.mac
         };
-
+        Loading.show();
         await this.$server
             .C("/license", licenseParam)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_License_Setting_Success"));
                     this.pageToList();
@@ -350,10 +351,11 @@ export default class License extends Vue {
         } = {
             data: data.data
         };
-
+        Loading.show();
         await this.$server
             .C("/license", licenseParam)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_License_Setting_Success"));
                     this.pageToList();

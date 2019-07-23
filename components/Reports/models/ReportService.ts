@@ -134,6 +134,10 @@ class ReportService {
             return 1;
         }
     }
+
+    FormatNumber(str: string): string {
+        return str.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    }
 }
 
 export default new ReportService();

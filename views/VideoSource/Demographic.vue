@@ -542,10 +542,11 @@ export default class Demographic extends Vue {
             } = {
                 objectId: data
             };
-
+            Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             for (const returnValue of response) {
@@ -883,10 +884,11 @@ export default class Demographic extends Vue {
             const addParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .C("/device/demographic", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
@@ -927,10 +929,11 @@ export default class Demographic extends Vue {
             const editParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .U("/device/demographic", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(

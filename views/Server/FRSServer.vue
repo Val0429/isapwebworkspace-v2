@@ -232,7 +232,7 @@ export default class FRSServer extends Vue {
         const addParam = {
             config: configObject
         };
-
+        Loading.show();
         let results = await this.$server
             .C("/partner/frs/user-group", addParam)
             // .then((response: any) => {
@@ -254,7 +254,7 @@ export default class FRSServer extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.base(this, e, this._("w_WrongConfig"));
             });
-
+        Loading.hide();
         this.groupData = results;
 
         let tempBlacklist = {};
@@ -445,10 +445,11 @@ export default class FRSServer extends Vue {
             const addParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .C("/partner/frs", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_ServerFRS_AddSuccess"));
@@ -492,10 +493,11 @@ export default class FRSServer extends Vue {
             const editParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .U("/partner/frs", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_ServerFRS_EditSuccess"));

@@ -884,8 +884,8 @@ export default class LangObject {
     w_Report_ErrorChartMode = 'No Find Chart Mode';
 
     // Report Traffic
-    w_ReportTraffic_TrafficByHours = ' TRAFFIC BY HOURS';
-    w_ReportTraffic_TrafficByDays = ' TRAFFIC BY DAYS';
+    w_ReportTraffic_TrafficByHours = ' Traffic By Hours';
+    w_ReportTraffic_TrafficByDays = ' Traffic By Days';
     w_ReportTraffic_TrafficChart = 'Traffic Chart';
     w_ReportTraffic_TrafficTraffic = 'Traffic';
     w_ReportTraffic_TrafficTrafficAVG = 'AVG Traffic';
@@ -895,8 +895,8 @@ export default class LangObject {
     w_ReportTraffic_TrafficASP = 'ASP';
 
     // Report Dwell Time
-    w_ReportDwellTime_DwellTimeByDays = 'DWELLTIME BY DAYS';
-    w_ReportDwellTime_DwellTimeByHours = 'DWELLTIME BY HOURS';
+    w_ReportDwellTime_DwellTimeByDays = 'Dwell Time By Days';
+    w_ReportDwellTime_DwellTimeByHours = 'Dwell Time By Hours';
     w_ReportDwellTime_LabelDwellTimePercentage = 'Dwell Time Percentage';
     w_ReportDwellTime_DwellTimeDwellTime = 'Dwell Time';
     w_ReportDwellTime_DwellTimeDwellTimeM = 'Dwell Time(m)';
@@ -905,16 +905,16 @@ export default class LangObject {
     w_ReportDwellTime_DwellTimeChart = 'Dwell Time Chart';
 
     // Report Demographic
-    w_ReportDemographic_DemographicByDays = 'DEMOGRAPHIC BY DAYS';
-    w_ReportDemographic_DemographicByHours = 'DEMOGRAPHIC BY HOURS';
+    w_ReportDemographic_DemographicByDays = 'Demographic By Days';
+    w_ReportDemographic_DemographicByHours = 'Demographic By Hours';
     w_ReportDemographic_LabelGender = 'Demographic by Gender';
     w_ReportDemographic_LabelAge = 'Demographic by Age';
     w_ReportDemographic_DemographicChart = 'Demographic Chart';
 
     // Report Occupancy
-    w_ReportOccupancy_OccupancyByDays = 'OCCUPANCY BY DAYS';
-    w_ReportOccupancy_OccupancyByHours = 'OCCUPANCY BY HOURS';
-    w_ReportOccupancy_OccupancyByHour = 'OCCUPANCY BY HOUR';
+    w_ReportOccupancy_OccupancyByDays = 'Occupancy By Days';
+    w_ReportOccupancy_OccupancyByHours = 'Occupancy By Hours';
+    w_ReportOccupancy_OccupancyByHour = 'Occupancy By Hour';
     w_ReportOccupancy_Occupancy = 'Occupancy';
     w_ReportOccupancy_OccupancyAVG = 'AVG Occupancy';
     w_ReportOccupancy_OccupancyChart = 'Occupancy Chart';
@@ -936,6 +936,8 @@ export default class LangObject {
     w_ReportCampaign_CampaignDuring = 'During Campaign';
     w_ReportCampaign_CampaignAfter = 'After Campaign';
     w_ReportCampaign_CampaignChart = 'Campaign Chart';
+    w_ReportCampaign_All = 'Campaign By All Events';
+    w_ReportCampaign_Single = 'Campaign By Single Event';
 
     // Report Template
     w_ReportTemplate_List = 'Report Template List';
