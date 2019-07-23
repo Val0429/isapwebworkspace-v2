@@ -582,13 +582,7 @@ export default class MemberForm extends Vue {
 
   tempSaveInputData(data) {
     switch (data.key) {  
-      case "cardNumber":    
-          this.inputFormData.cardNumber=data.value;
-          if(!data.value || data.value==""){
-            this.permissionSelected=[];
-            this.permissionOptions = Object.assign([],this.storedPermissionOptions);
-          }
-        break;
+      
       case "cardTemplate":
         switch (data.value) {
           case "permanent":
@@ -1152,9 +1146,8 @@ export default class MemberForm extends Vue {
                 row63?: string;
 
                 permissionTable?: any;
-                /**
-                * @uiHidden - ${!this.inputFormData.cardNumber || this.inputFormData.cardNumber=="" ? "true":"false"}
-                */                
+                
+                               
                 premissionList?: any;
 
                 tabItem?: any;
