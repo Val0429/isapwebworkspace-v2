@@ -17,15 +17,15 @@
 
             <tbody>
                 <tr
-                    v-for="(value,index) in thresholdDetailTableData"
+                    v-for="(value,index) in thresholdDetailTableContent"
                     :key="'tableData__' + index"
                 >
-                    <td class="center">{{numberWithCommas(value.type)}}</td>
-                    <td class="center">{{numberWithCommas(value.before)}}</td>
-                    <td class="center">{{ numberWithCommas(value.during) }}</td>
-                    <td class="center">{{ numberWithCommas(value.after) }}</td>
-                    <td class="center">{{ toPercent(value.changeDuring ),0}}</td>
-                    <td class="center">{{toPercent( value.changeAfter ),0}}</td>
+                    <td class="center">Traffic</td>
+                    <td class="center">{{numberWithCommas(value.beforeTraffic)}}</td>
+                    <td class="center">{{ numberWithCommas(value.traffic) }}</td>
+                    <td class="center">{{ numberWithCommas(value.afterTraffic) }}</td>
+                    <td class="center">{{ toPercent(value.changeTrafficCampaign ),0}}</td>
+                    <td class="center">{{toPercent( value.changeAfterTrafficCampaign ),0}}</td>
 
                 </tr>
             </tbody>
@@ -138,7 +138,7 @@ export class CampaingTable extends Vue {
     }
 
     toPercent(point, fixed = 0) {
-        var str = Number(Math.abs(point) * 100).toFixed(fixed);
+        var str = Number((point) * 100).toFixed(fixed);
         str += "%";
         return str;
     }
@@ -189,7 +189,7 @@ export class CampaingTable extends Vue {
 }
 
 export default CampaingTable;
-Vue.component("campaing-table", CampaingTable);
+Vue.component("campaign-table", CampaingTable);
 </script>
 
 <style lang="scss" scoped>

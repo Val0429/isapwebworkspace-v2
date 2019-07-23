@@ -50,6 +50,12 @@
             >
             </highcharts-campaign-single>
 
+	        <campaign-table
+		        v-if="chartMode.single"
+		        :thresholdDetailTableContent="responseDataSingleCampaignArray"
+	        >
+	        </campaign-table>
+
         </iv-card>
 
         <!-- Tina -->
@@ -108,6 +114,7 @@ export default class ReportCampaign extends Vue {
     filterData: any = {};
     responseDataAllCampaign: any = {};
     responseDataSingleCampaign: any = {};
+    responseDataSingleCampaignArray: any = [];
 
     // send user 相關
     userSelectItem: any = {};
@@ -200,7 +207,7 @@ export default class ReportCampaign extends Vue {
 
     async receiveFilterData(filterData) {
         let param = {};
-
+	    this.responseDataSingleCampaignArray = [];
         this.filterData = filterData;
 
         console.log("this.filterData - ", this.filterData);
@@ -235,6 +242,7 @@ export default class ReportCampaign extends Vue {
                 .then((response: any) => {
                     if (response !== undefined) {
                         this.responseDataSingleCampaign = response;
+                        this.responseDataSingleCampaignArray.push(response);
                         this.sortOutChartDataSingleCampaign(
                             this.responseDataSingleCampaign.summaryDatas
                         );
