@@ -277,7 +277,7 @@ import {
 import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
-import Loading from "＠/services/Loading";
+import Loading from "@/services/Loading";
 
 interface inputFormData extends IUserAddData, IUserEditData {
     siteIdsText?: string;
