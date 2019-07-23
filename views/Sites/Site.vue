@@ -1525,9 +1525,12 @@ export default class Site extends Vue {
             } = {
                 objectId: this.site.objectId
             };
+
+            Loading.show();
             this.$server
                 .D("/location/site", body)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response) {
                         Dialog.success(this._("w_Success"));
                         (this.$refs.siteTable as any).reload();
@@ -1546,9 +1549,12 @@ export default class Site extends Vue {
             } = {
                 objectId: this.area.objectId
             };
+
+            Loading.show();
             this.$server
                 .D("/location/area", body)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response) {
                         Dialog.success(this._("w_Success"));
                         (this.$refs.areaTable as any).reload();
@@ -1622,9 +1628,12 @@ export default class Site extends Vue {
             } = {
                 objectId: this.deviceGroup.objectId
             };
+
+            Loading.show();
             this.$server
                 .D("/device/group", body)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response) {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {

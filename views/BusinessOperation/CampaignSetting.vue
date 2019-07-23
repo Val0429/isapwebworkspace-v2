@@ -558,12 +558,9 @@ export default class CampaignSetting extends Vue {
                     } = {
                         objectId: param.objectId
                     };
-
-                    Loading.show();
                     this.$server
                         .D("/event/campaign", deleteParam)
                         .then((response: any) => {
-                            Loading.hide();
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
                                     this.pageToList();

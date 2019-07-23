@@ -698,9 +698,11 @@ export default class VIP extends Vue {
                 objectId: data
             };
 
+            Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             for (const returnValue of response) {
@@ -740,9 +742,11 @@ export default class VIP extends Vue {
                 objectId: data
             };
 
+            Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             for (const returnValue of response) {
@@ -945,9 +949,11 @@ export default class VIP extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .C("/device/people-counting", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
@@ -992,9 +998,11 @@ export default class VIP extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .U("/device/people-counting", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
@@ -1046,9 +1054,11 @@ export default class VIP extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .C("/device/people-counting", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
@@ -1093,9 +1103,11 @@ export default class VIP extends Vue {
                 datas
             };
 
+            Loading.show();
             await this.$server
                 .U("/device/people-counting", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
@@ -1129,6 +1141,7 @@ export default class VIP extends Vue {
             this._("w_VSPeopleCounting_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -1153,6 +1166,7 @@ export default class VIP extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

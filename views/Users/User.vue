@@ -704,6 +704,7 @@ export default class User extends Vue {
             this._("w_User_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -728,6 +729,7 @@ export default class User extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

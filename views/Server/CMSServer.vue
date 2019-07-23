@@ -310,6 +310,7 @@ export default class CMSServer extends Vue {
             this._("w_ServerCMSDeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteUserParam: {
                         objectId: string;
@@ -334,6 +335,7 @@ export default class CMSServer extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

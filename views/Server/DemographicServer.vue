@@ -551,6 +551,7 @@ export default class DemographicServer extends Vue {
             this._("w_DemographicServer_DeleteConfirm"),
             this._("w_Confirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteParam: {
                         objectId: string;
@@ -570,6 +571,7 @@ export default class DemographicServer extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }

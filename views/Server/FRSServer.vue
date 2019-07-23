@@ -526,6 +526,7 @@ export default class FRSServer extends Vue {
             this._("w_ServerFRS_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
+                Loading.show();
                 for (const param of this.selectedDetail) {
                     const deleteUserParam: {
                         objectId: string;
@@ -550,6 +551,7 @@ export default class FRSServer extends Vue {
                             return ResponseFilter.base(this, e);
                         });
                 }
+                Loading.hide();
             }
         );
     }
