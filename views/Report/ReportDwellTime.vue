@@ -767,9 +767,11 @@ export default class ReportDwellTime extends Vue {
 
             let summaryTableDatas;
             let officeHours;
+            Loading.show();
             await this.$server
                 .C("/report/demographic/summary", filterData)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response !== undefined) {
                         summaryTableDatas = response.summaryDatas;
                         this.initSunReportTable(summaryTableDatas);
@@ -816,9 +818,11 @@ export default class ReportDwellTime extends Vue {
 
         let summaryTableDatas;
         let officeHours;
+        Loading.show();
         await this.$server
             .C("/report/human-detection/summary-threshold", filterData) //TODO wait api
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     this.detailRData = response;
                 }
@@ -1431,9 +1435,11 @@ export default class ReportDwellTime extends Vue {
             businessChartType: EBusinessChart.revenue
         };
 
+        // Loading.show();
         // await this.$server
         //     .C("/report/demographic/summary", param)
         //     .then((response: any) => {
+        //          Loading.hide();
         //         if (response !== undefined) {
         //             this.responseData = response;
         //             this.officeHourItemDetail = this.responseData.officeHours;

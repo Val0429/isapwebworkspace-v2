@@ -401,10 +401,11 @@ export default class DemographicServer extends Vue {
             config: configOnject,
             imageBase64: this.newImgSrc
         };
-
+        Loading.show();
         await this.$server
             .C("/partner/demographic/test", humanObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response.length > 0) {
                     this.modalShow = !this.modalShow;
                     this.initDate();
@@ -475,10 +476,11 @@ export default class DemographicServer extends Vue {
             ];
 
             const addParam = { datas };
-
+            Loading.show();
             await this.$server
                 .C("/partner/demographic", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {
@@ -516,10 +518,11 @@ export default class DemographicServer extends Vue {
             ];
 
             const editParam = { datas };
-
+            Loading.show();
             await this.$server
                 .U("/partner/demographic", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         for (const returnValue of response) {
                             if (returnValue.statusCode === 200) {

@@ -231,10 +231,11 @@ export default class CMSServer extends Vue {
             const addParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .C("/partner/cms", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_ServerCMS_AddSuccess"));
@@ -276,10 +277,11 @@ export default class CMSServer extends Vue {
             const editParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .U("/partner/cms", editParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(this._("w_ServerCMS_EditSuccess"));

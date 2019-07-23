@@ -148,10 +148,11 @@ export default class MailServer extends Vue {
         } = {
             email: this.inputTestEmail
         };
-
+        Loading.show();
         await this.$server
             .C("/setting/smtp/test", mailServerObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_MailServer_Test_Success"));
                     this.modalShow = !this.modalShow;
@@ -211,10 +212,11 @@ export default class MailServer extends Vue {
             email: data.email,
             password: data.password
         };
-
+        Loading.show();
         await this.$server
             .U("/setting/smtp", mailServerObject)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_MailServer_Setting_Success"));
                 }

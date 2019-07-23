@@ -1389,10 +1389,11 @@ export default class Site extends Vue {
             ];
 
             const addSiteParam = { datas };
-
+            Loading.show();
             await this.$server
                 .C("/location/site", addSiteParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         data.objectId = response[0].objectId;
                         Dialog.success(this._("w_Site_AddSiteSuccess"));
@@ -1427,10 +1428,11 @@ export default class Site extends Vue {
             }
 
             const editSiteParam = { datas };
-
+            Loading.show();
             await this.$server
                 .U("/location/site", editSiteParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         Dialog.success(this._("w_Site_EditSiteSuccess"));
                         this.pageToSiteList();
@@ -1454,10 +1456,11 @@ export default class Site extends Vue {
             ];
 
             const addAreaParam = { datas };
-
+            Loading.show();
             await this.$server
                 .C("/location/area", addAreaParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         Dialog.success(this._("w_Site_AddAreaSuccess"));
                         this.pageToAreaList();
@@ -1480,10 +1483,11 @@ export default class Site extends Vue {
             }
 
             const editAreaParam = { datas };
-
+            Loading.show();
             await this.$server
                 .U("/location/area", editAreaParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         Dialog.success(this._("w_Site_EditAreaSuccess"));
                         this.pageToAreaList();
@@ -1504,10 +1508,11 @@ export default class Site extends Vue {
         ];
 
         const editAreaParam = { datas };
-
+        Loading.show();
         await this.$server
             .U("/location/area", editAreaParam)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     Dialog.success(this._("w_Site_EditAreaSuccess"));
                     this.pageToAreaList();
@@ -1579,9 +1584,11 @@ export default class Site extends Vue {
             ];
 
             const addDeviceGroupParam = { datas };
+            Loading.show();
             await this.$server
                 .C("/device/group", addDeviceGroupParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         Dialog.success(this._("w_Site_AddDeviceGroupSuccess"));
                         this.lastPageStep === EPageStep.areaAdd
@@ -1603,9 +1610,11 @@ export default class Site extends Vue {
             ];
 
             const editDeviceGroupParam = { datas };
+            Loading.show();
             await this.$server
                 .U("/device/group", editDeviceGroupParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response != undefined) {
                         Dialog.success(this._("w_Site_EditDeviceGroupSuccess"));
                         this.lastPageStep === EPageStep.areaAdd

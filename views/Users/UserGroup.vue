@@ -417,11 +417,12 @@ export default class UserGroup extends Vue {
             const addUParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .C("/user/group", addUParam)
                 .then((response: any) => {
                     for (const returnValue of response) {
+                        Loading.hide();
                         if (returnValue.statusCode === 200) {
                             Dialog.success(
                                 this._("w_UserGroup_AddUserGroupSuccess")
@@ -458,10 +459,11 @@ export default class UserGroup extends Vue {
             const editUserParam = {
                 datas
             };
-
+            Loading.show();
             await this.$server
                 .U("/user/group", editUserParam)
                 .then((response: any) => {
+                    Loading.hide();
                     for (const returnValue of response) {
                         if (returnValue.statusCode === 200) {
                             Dialog.success(

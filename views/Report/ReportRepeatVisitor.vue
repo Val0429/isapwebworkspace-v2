@@ -749,10 +749,11 @@ export default class ReportRepeatVisitor extends Vue {
             type: "",
             isIncludedEmployee: "no"
         };
-
+        Loading.show();
         await this.$server
             .C("/report/repeat-visitor/summary", filterData)
             .then((response: any) => {
+                Loading.hide();
                 if (response !== undefined) {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;

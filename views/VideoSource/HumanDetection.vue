@@ -558,10 +558,11 @@ export default class HumanDetection extends Vue {
         } = {
             objectId: data
         };
-
+        Loading.show();
         await this.$server
             .C("/partner/cms/device", body)
             .then((response: any) => {
+                Loading.hide();
                 if (response != undefined) {
                     this.devices = response;
                     this.initNVRItem();
@@ -1222,10 +1223,11 @@ export default class HumanDetection extends Vue {
             ];
 
             const addParam = { datas };
-
+            Loading.show();
             await this.$server
                 .C("/device/human-detection", addParam)
                 .then((response: any) => {
+                    Loading.hide();
                     if (response[0] != undefined) {
                         if (response[0].statusCode === 200) {
                             Dialog.success(this._("w_Success"));
@@ -1270,10 +1272,11 @@ export default class HumanDetection extends Vue {
             const editParam = { datas };
 
             const editAreaParam = { datas };
-
+              Loading.show();
             await this.$server
                 .U("/device/human-detection", editParam)
                 .then((response: any) => {
+                      Loading.hide();
                     if (response[0].statusCode === 200) {
                         Dialog.success(this._("w_Success"));
                         this.pageToList();
