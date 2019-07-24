@@ -1,136 +1,151 @@
 <template>
     <div class="animated fadeIn">
 
-        <!-- region tree -->
-        <region-tree-setup
-            v-show="pageStep == ePageStep.tree"
-            v-on:click-binding-site="pageToBindingSite"
-            v-on:click-add-next-layer-region="pageToEdit"
-            v-on:click-add-same-layer-region="pageToEdit"
-            v-on:click-edit-root="pageToEdit"
-            v-on:click-edit-region="pageToEdit"
-            v-on:click-delete="treeDelete"
-            :regionTreeItem="regionTreeItem"
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-        </region-tree-setup>
 
-        <!-- edit root -->
-        <iv-auto-card
-            v-show="pageStep == ePageStep.modifyRoot"
-            :visible="true"
-            :label="cardModifyTitle"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToTree($event)" />
-            </template>
-
-            <iv-form
-                :interface="IRootForm()"
-                :value="regionTreeItem.region"
-                @update:*="updateRegionFrom($event)"
-                @submit="clickSaveModifyRegion($event)"
+            <!-- region tree -->
+            <!-- v-show="pageStep == ePageStep.tree" -->
+            <region-tree-setup
+                key="transition_1"
+                v-show="transition.step === 1"
+                v-on:click-binding-site="pageToBindingSite"
+                v-on:click-add-next-layer-region="pageToEdit"
+                v-on:click-add-same-layer-region="pageToEdit"
+                v-on:click-edit-root="pageToEdit"
+                v-on:click-edit-region="pageToEdit"
+                v-on:click-delete="treeDelete"
+                :regionTreeItem="regionTreeItem"
             >
-                <template #photoImg="{ $attrs, $listeners }">
-                    <img
-                        v-if="newImgSrc != ''"
-                        class="region-form-image"
-                        :src="newImgSrc"
-                    />
-                </template>
+            </region-tree-setup>
 
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToTree($event)"
-                >{{ _('w_Region_BackToTree') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- add or edit region -->
-        <iv-auto-card
-            v-show="pageStep == ePageStep.modifyRegion"
-            :visible="true"
-            :label="cardModifyTitle"
-        >
-
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToTree($event)" />
-            </template>
-
-            <iv-form
-                :interface="IRegionForm()"
-                :value="regionTreeItem.region"
-                @update:*="updateRegionFrom($event)"
-                @submit="clickSaveModifyRegion($event)"
+            <!-- edit root -->
+            <!-- v-show="pageStep == ePageStep.modifyRoot" -->
+            <iv-auto-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label="cardModifyTitle"
             >
-                <template #photoImg="{ $attrs, $listeners }">
-                    <img
-                        v-if="newImgSrc != ''"
-                        class="region-form-image"
-                        :src="newImgSrc"
-                    />
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToTree($event)" />
                 </template>
 
-                <template #tagIds="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        :options="selectItem.tags"
-                        :multiple="true"
-                    >
-                    </iv-form-selection>
+                <iv-form
+                    :interface="IRootForm()"
+                    :value="regionTreeItem.region"
+                    @update:*="updateRegionFrom($event)"
+                    @submit="clickSaveModifyRegion($event)"
+                >
+                    <template #photoImg="{ $attrs, $listeners }">
+                        <img
+                            v-if="newImgSrc != ''"
+                            class="region-form-image"
+                            :src="newImgSrc"
+                        />
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToTree($event)"
+                    >{{ _('w_Region_BackToTree') }}
+                    </b-button>
                 </template>
-            </iv-form>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToTree($event)"
-                >{{ _('w_Region_BackToTree') }}
-                </b-button>
-            </template>
+            </iv-auto-card>
 
-        </iv-auto-card>
-
-        <!-- binding site -->
-        <iv-auto-card
-            v-show="pageStep == ePageStep.bindingSite"
-            :visible="true"
-            :label="cardBindingTitle"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToTree($event)" />
-            </template>
-
-            <iv-form
-                :interface="IBindingSiteForm()"
-                :value="regionTreeItem.region"
-                @submit="clickSaveBindingSite($event)"
+            <!-- add or edit region -->
+            <!-- v-show="pageStep == ePageStep.modifyRegion" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="cardModifyTitle"
             >
-                <template #errorMessage>
-                    <div
-                        v-if="noSiteBeBinding"
-                        class="region-binding-site-error-message"
-                    >{{ _('w_Region_ErrorNoSiteBeBinding') }}</div>
+
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToTree($event)" />
                 </template>
-            </iv-form>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToTree($event)"
-                >{{ _('w_Region_BackToTree') }}
-                </b-button>
-            </template>
+                <iv-form
+                    :interface="IRegionForm()"
+                    :value="regionTreeItem.region"
+                    @update:*="updateRegionFrom($event)"
+                    @submit="clickSaveModifyRegion($event)"
+                >
+                    <template #photoImg="{ $attrs, $listeners }">
+                        <img
+                            v-if="newImgSrc != ''"
+                            class="region-form-image"
+                            :src="newImgSrc"
+                        />
+                    </template>
 
-        </iv-auto-card>
+                    <template #tagIds="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="selectItem.tags"
+                            :multiple="true"
+                        >
+                        </iv-form-selection>
+                    </template>
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToTree($event)"
+                    >{{ _('w_Region_BackToTree') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <!-- binding site -->
+            <!-- v-show="pageStep == ePageStep.bindingSite" -->
+            <iv-auto-card
+                key="transition_4"
+                v-show="transition.step === 4"
+                :visible="true"
+                :label="cardBindingTitle"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToTree($event)" />
+                </template>
+
+                <iv-form
+                    :interface="IBindingSiteForm()"
+                    :value="regionTreeItem.region"
+                    @submit="clickSaveBindingSite($event)"
+                >
+                    <template #errorMessage>
+                        <div
+                            v-if="noSiteBeBinding"
+                            class="region-binding-site-error-message"
+                        >{{ _('w_Region_ErrorNoSiteBeBinding') }}</div>
+                    </template>
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToTree($event)"
+                    >{{ _('w_Region_BackToTree') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -144,6 +159,10 @@ import { RegionTreeSetup } from "@/components/RegionTree/RegionTreeSetup.vue";
 
 // API interfaces
 import { ITagReadUpdate } from "@/config/default/api/interfaces";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Region Tree
 import {
@@ -160,23 +179,18 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 
-enum EPageStep {
-    none,
-    tree,
-    modifyRoot,
-    modifyRegion,
-    bindingSite
-}
-
 @Component({
     components: {
         RegionTreeSetup
     }
 })
 export default class Region extends Vue {
-    ePageStep = EPageStep;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
-    pageStep: EPageStep = EPageStep.tree;
     regionTreeItem: RegionTreeItem = new RegionTreeItem();
 
     noSiteBeBinding = false;
@@ -201,7 +215,8 @@ export default class Region extends Vue {
     pageToTree() {
         this.initRegionTreeItem();
         this.newImgSrc = "";
-        this.pageStep = EPageStep.tree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
     }
 
     async pageToBindingSite() {
@@ -233,7 +248,9 @@ export default class Region extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.base(this, e);
             });
-        this.pageStep = EPageStep.bindingSite;
+
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
     }
 
     pageToEdit() {
@@ -244,10 +261,12 @@ export default class Region extends Vue {
         this.newImgSrc = this.regionTreeItem.region.photoSrc;
         switch (this.regionTreeItem.region.type) {
             case ERegionType.root:
-                this.pageStep = EPageStep.modifyRoot;
+                this.transition.prevStep = this.transition.step;
+                this.transition.step = 2;
                 break;
             default:
-                this.pageStep = EPageStep.modifyRegion;
+                this.transition.prevStep = this.transition.step;
+                this.transition.step = 3;
                 break;
         }
         this.initTagItem();
