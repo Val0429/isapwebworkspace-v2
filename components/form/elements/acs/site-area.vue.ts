@@ -1,4 +1,5 @@
 import { Vue, Component, Prop, Model, Emit } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 
 
 @Component
@@ -19,38 +20,72 @@ export class SiteArea extends Vue {
         required: false
     })
     value!: any;    
-    areaObjectId:string="";
-    siteObjectId:string="";
-    sites:any[]=[];
-    areas:any[]=[];
-    async created(){        
-        this.areaObjectId = this.value ? this.value.objectId : "";
+    siteArea:any={
+        site:"",
+        area:""
+    }
+    
+    sites:any={};
+    areas:any={};
+    async created(){  
         console.log("created");
-        let resp:any = await this.$server.R("/location/site/all" as any, {"type":"all"});
-        this.sites = resp.map(item=>{return{key:item.objectId, value:item.name}});
-        if(this.areaObjectId && this.value.site){
-            this.siteObjectId = this.value.site.objectId;
-            this.updateArea();
-        }        
+        let resp:any = await this.$server.R("/location/site" as any, {"paging.all":"true"});
+        this.sites = {};
+        for(let site of resp.results){
+            this.sites[site.objectId]=site.name; 
+            
+        }
+        
+        if(this.value && this.value.site){
+            this.siteArea.area = this.value.objectId || "";
+            this.siteArea.site =  this.value.site.objectId || "";
+            this.updateArea(this.siteArea.site);
+        }
+    }
+    inf(){
+        return `
+        interface {
+            /**
+             * @uiColumnGroup - sitearea
+             * @uiLabel - ${this._("w_Site")}
+            */
+            site:${toEnumInterface(this.sites, false)};
+            /**
+             * @uiColumnGroup - sitearea
+             * @uiLabel - ${this._("w_Area")}
+            */
+            area:${toEnumInterface(this.areas, false)};
+        }
+        `;
     }
     mounted(){
         console.log("mounted value", this.value);        
     }
-    async updateArea(){
-        console.log("siteObjectId", this.siteObjectId);
-        if(this.siteObjectId){
-            let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true", "siteId":this.siteObjectId});
-            this.areas =  resp.results.map(item=>{return{key:item.objectId, value:item.name}});
+    async updateArea($event)
+    {
+        this.siteArea.site=$event;
+        console.log("this.siteArea.site", $event, this.siteArea.site);        
+        if(this.siteArea.site){
+            let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true", "siteId":this.siteArea.site});
+            this.areas = {};
+            for(let area of resp.results)
+            {
+                this.areas[area.objectId]=area.name;
+            }
+            if(!this.siteArea.area || !this.value.site || this.value.site.objectId!=this.siteArea.site) 
+                this.siteArea.area = resp.results.length>0?resp.results[0].objectId:"";
         }else{
-            this.areas = [];
+            this.areas = {};
+            this.siteArea.area="";
         }
         console.log("areas", this.areas);
-        if(!this.areaObjectId || !this.value.site || this.value.site.objectId!=this.siteObjectId) this.areaObjectId = this.areas.length>0?this.areas[0].key:"";
-        this.update();
+        
+        this.update(this.siteArea.area);
     }
-    update(){        
-        console.log("new value", this.areaObjectId);
-        this.$emit('input', this.areaObjectId);  
+    update($event){        
+        this.siteArea.area=$event;
+        console.log("new value", this.siteArea.area);
+        this.$emit('input', this.siteArea.area);  
     }
 }
 export default SiteArea;
