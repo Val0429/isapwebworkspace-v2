@@ -751,12 +751,20 @@ export default class MemberForm extends Vue {
     if (this.selectedDetail[0] && this.selectedDetail[0].objectId) {
       // master
       member.objectId = this.selectedDetail[0].objectId;
+
+      let isDuplicateFound = await this.checkDuplication(member);
+      if(isDuplicateFound)return;
+
       await this.$server
         .U("/acs/member", member)
         .then((response: any) => {
           this.pageToList();
         });
-    } else {
+    } 
+    else {
+      let isDuplicateFound = await this.checkDuplication(member);
+      if(isDuplicateFound)return;
+      
       await this.$server
         .C("/acs/member", member)
         .then((response: any) => {
@@ -764,7 +772,23 @@ export default class MemberForm extends Vue {
         });
     }
   }
-
+  async checkDuplication(member:any):Promise<boolean>{
+    let empNoDuplication:any = await this.$server.R("/acs/member",{eEmployeeNumber:member.EmployeeNumber});
+      if(empNoDuplication.results.length>0){        
+        let isDuplicate = member.objectId ? empNoDuplication.results[0].objectId!=member.objectId : true;
+        if(isDuplicate)alert(this._("w_Error_DuplicateEmployeeNumber"));
+        return isDuplicate;
+      }
+      if(member.Credentials && member.Credentials.length>0){
+        let cardDuplication:any = await this.$server.R("/acs/member",{eCardNumber:member.Credentials[0].CardNumber});
+        if(cardDuplication.results.length>0){          
+          let isDuplicate = member.objectId ? cardDuplication.results[0].objectId!=member.objectId : true;          
+          if(isDuplicate)alert(this._("w_Error_DuplicateCardNumber"));
+          return isDuplicate;
+        }
+      }
+      return false; 
+  }
   async doDelete() {
     await Dialog.confirm(
       this._("w_Member_DeleteConfirm"),

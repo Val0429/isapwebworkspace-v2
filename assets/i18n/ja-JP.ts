@@ -622,4 +622,7 @@ export default class LangObject implements ILang {
     w_DeviceArea="Device Area";
     w_TimeFormat = "TimeFormat";
     w_Action="Action";
+
+    w_Error_DuplicateCardNumber="Duplicate Card number";
+    w_Error_DuplicateEmployeeNumber="Duplicate Employee number";
 }
