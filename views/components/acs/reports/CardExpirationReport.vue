@@ -73,7 +73,7 @@ export default class CardExpirationReport extends Vue  {
       if(!this.filter)return;
       if(this.filter.End)this.filter.EndDate = this.filter.End.toISOString();
         this.isBusy=true;            
-        let resp: any=await this.$server.R("/report/memberrecord" as any, this.filter);        
+        let resp: any=await this.$server.R("/report/memberrecord" as any, Object.assign({"expired":true}, this.filter));
         this.records = resp.results;
       }catch(err){
           console.error(err);
