@@ -323,7 +323,7 @@ export default class MemberForm extends Vue {
   defaultFormData:any = {
     // Master
     objectId: undefined,
-    personType: "2000000006",
+    personType: "1",
     cardType: "",
     employeeNumber: "",
     chineseName: "",
@@ -414,6 +414,8 @@ export default class MemberForm extends Vue {
   clearInputData() {    
     this.permissionSelected=[];
     this.inputFormData = Object.assign({}, this.defaultFormData);
+    let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
+    this.inputFormData.personType = defaultWg ? defaultWg.groupid.toString() : 1;
   }
 
   created() {}
@@ -519,12 +521,12 @@ export default class MemberForm extends Vue {
         }
         console.log("pushing from access rules2",  this.permissionSelected);
       }
-      
-      this.inputFormData.personType = (detailData.PrimaryWorkgroupId || 2000000006).toString();
+      let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
+      this.inputFormData.personType = (detailData.PrimaryWorkgroupId || (defaultWg ? defaultWg.groupid : 1)).toString();
       this.inputFormData.employeeNumber = detailData.EmployeeNumber;      
       this.inputFormData.chineseName = detailData.LastName;
       this.inputFormData.englishName = detailData.FirstName;
-      
+      console.log("this.inputFormData.personType",this.inputFormData.personType);
     
       if (detailData.Credentials && detailData.Credentials.length>0){
         console.log("detailData.Credentials[0]",detailData.Credentials[0])
@@ -712,14 +714,14 @@ export default class MemberForm extends Vue {
         tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});
       }
     }
-    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType || "0"));
+    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType || "1"));
     let member = {        
         // master
         objectId: this.inputFormData.objectId,
         AccessRules: this.permissionSelected,
         PrimaryWorkgroupId:parseInt(this.inputFormData.personType),
         ApbWorkgroupId:parseInt(this.inputFormData.personType),
-        PrimaryWorkgroupName: wg? wg.groupname:"",
+        PrimaryWorkgroupName: wg? wg.groupname:"正職",
         EmployeeNumber: this.inputFormData.employeeNumber,
         LastName: this.inputFormData.chineseName,
         FirstName: this.inputFormData.englishName || "-",
