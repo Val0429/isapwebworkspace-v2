@@ -69,7 +69,7 @@
             <!--Site Form (Add and Edit)-->
             <div
                 key="transition_3_4"
-                v-show="transition.step === 3  || transition.step === 4"
+                v-if="transition.step === 3  || transition.step === 4"
             >
                 <iv-auto-card :label="pageStep == ePageStep.siteAdd ? _('w_Site_AddSite') :  _('w_Site_EditSite')">
 
@@ -166,7 +166,7 @@
             <!--Site View-->
             <div
                 key="transition_2"
-                v-show="transition.step === 2"
+                v-if="transition.step === 2"
             >
                 <iv-card :label="_('w_Site_ViewSite')">
 
@@ -311,7 +311,7 @@
             <!--Area Form (Add and Edit)-->
             <div
                 key="transition_7_8"
-                v-show="transition.step === 7  || transition.step === 8"
+                v-if="transition.step === 7  || transition.step === 8"
             >
                 <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_Site_AddArea') :  _('w_Site_EditArea')">
                     <template #toolbox>
@@ -364,7 +364,7 @@
             <!--Area View-->
             <div
                 key="transition_6"
-                v-show="transition.step === 6"
+                v-if="transition.step === 6"
             >
                 <iv-card :label=" _('w_Site_ViewArea')">
 
@@ -1772,8 +1772,9 @@ export default class Site extends Vue {
     }
 
     selectedDeviceGroup(data) {
+        console.log("selectedDeviceGroup", data);
         this.newImgSrc = "";
-        if (data) {
+        if (data && data.objectId) {
             this.deviceGroup = this.isSelectDeviceGroup = data;
         } else {
             this.clearDeviceData();
@@ -1781,9 +1782,10 @@ export default class Site extends Vue {
     }
 
     selectedArea(data) {
+        console.log("selectedArea", data);
         this.newImgSrc = "";
         this.areaPhotoSrc = "";
-        if (data) {
+        if (data && data.objectId) {
             this.area = this.isSelectArea = data;
             this.deviceGroupParams = {
                 areaId: data.objectId
@@ -1794,9 +1796,13 @@ export default class Site extends Vue {
     }
 
     selectedSite(data) {
+        console.log("selectedSite", data);
         this.newImgSrc = "";
         this.gooleMapSrc = "";
-        if (data) {
+        this.initManagerItem();
+        this.initTagItem();
+        this.initOfficeHourItem();
+        if (data && data.objectId) {
             data.managerId = data.manager
                 ? data.manager.objectId
                 : data.manager;
@@ -1808,9 +1814,7 @@ export default class Site extends Vue {
             this.deviceGroupParams = {
                 siteId: data.objectId
             };
-            this.initManagerItem();
-            this.initTagItem();
-            this.initOfficeHourItem();
+
             this.initAreaNameItem();
         } else {
             this.clearSiteData();
@@ -1836,9 +1840,6 @@ export default class Site extends Vue {
     }
 
     clearSiteData() {
-        this.initManagerItem();
-        this.initTagItem();
-        this.initOfficeHourItem();
         this.isSelectSite = false;
         this.gooleMapSrc = "";
         this.newImgSrc = "";
@@ -1911,7 +1912,9 @@ export default class Site extends Vue {
     showTags(datas) {
         var tags = [];
         for (let data of datas) {
-            tags.push(this.tagItem.filter(m => m.id == data)[0].text);
+            if (this.tagItem.filter(m => m.id == data)[0]) {
+                tags.push(this.tagItem.filter(m => m.id == data)[0].text);
+            }
         }
         return tags.join(",");
     }
