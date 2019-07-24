@@ -12,45 +12,44 @@
                 v-show="transition.step === 1"
                 :label=" _('w_ServerCMS_List') "
             >
-            <template #toolbox>
+                <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit(ePageStep.edit)"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
 
-            </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/partner/cms' }"
-                @selected="selectedItem($event)"
-            >
-
-                <template #Actions="{$attrs, $listeners}">
-
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
                 </template>
 
-            </iv-table>
-        </iv-card>
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/partner/cms' }"
+                    @selected="selectedItem($event)"
+                >
 
+                    <template #Actions="{$attrs, $listeners}">
+
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
 
             <!-- view -->
             <!-- v-show="pageStep === ePageStep.view" -->
@@ -82,36 +81,36 @@
 
             </iv-card>
 
-        <!--From (Add and Edit)-->
+            <!--From (Add and Edit)-->
             <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
                 :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
-        >
-            <template #toolbox>
+                :label="pageStep === ePageStep.add ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
+            >
+                <template #toolbox>
 
-                <iv-toolbox-back @click="pageToList()" />
+                    <iv-toolbox-back @click="pageToList()" />
 
-            </template>
+                </template>
 
-            <iv-form
-                :interface="IAddAndEditForm()"
-                :value="inputFormData"
-                @submit="saveAddOrEdit($event)"
-            ></iv-form>
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @submit="saveAddOrEdit($event)"
+                ></iv-form>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
-        </iv-auto-card>
+            </iv-auto-card>
 
         </iv-auto-transition>
 
@@ -129,7 +128,6 @@ import { IAddCMSServer, IEditCMSServer } from "@/config/default/api/interfaces";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
-
 
 // Transition
 import Transition from "@/services/Transition";
@@ -151,7 +149,6 @@ enum EPageStep {
     components: {}
 })
 export default class CMSServer extends Vue {
-
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -419,10 +416,10 @@ export default class CMSServer extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputFormData.type === EPageStep.add
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                        this.inputFormData.objectId === ""
+                            ? "iv-form-string"
+                            : "iv-form-label"
+                    }
                  */
                 customId: string;
 
