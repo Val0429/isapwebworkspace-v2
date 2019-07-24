@@ -1,9 +1,17 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label=" _('w_ServerCMS_List') "
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
+
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label=" _('w_ServerCMS_List') "
+            >
             <template #toolbox>
 
                 <iv-toolbox-view
@@ -43,10 +51,43 @@
             </iv-table>
         </iv-card>
 
+
+            <!-- view -->
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label=" _('w_ServerCMS_View') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
         <!--From (Add and Edit)-->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
-            :visible="true"
+            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
             :label="pageStep === ePageStep.add ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
         >
             <template #toolbox>
@@ -72,33 +113,7 @@
 
         </iv-auto-card>
 
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label=" _('w_ServerCMS_View') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
-            >
-
-            </iv-form>
-
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-card>
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -114,6 +129,11 @@ import { IAddCMSServer, IEditCMSServer } from "@/config/default/api/interfaces";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 interface IinputFormData extends IAddCMSServer, IEditCMSServer {
     type?: string;
@@ -131,6 +151,13 @@ enum EPageStep {
     components: {}
 })
 export default class CMSServer extends Vue {
+
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -191,26 +218,34 @@ export default class CMSServer extends Vue {
         }
     }
 
+    pageToList() {
+        // this.pageStep = EPageStep.list;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        // this.pageStep = EPageStep.view;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
     pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
+        // this.pageStep = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.clearInputData();
         this.inputFormData.type = type;
     }
 
     pageToEdit(type: string) {
-        this.pageStep = EPageStep.edit;
+        // this.pageStep = EPageStep.edit;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.getInputData();
         this.inputFormData.type = type;
-    }
-
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.listTable as any).reload();
     }
 
     async saveAddOrEdit(data) {
