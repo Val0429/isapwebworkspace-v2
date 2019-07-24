@@ -1,10 +1,7 @@
 <template>
     <div class="animated fadeIn">
         <div class="card-content">
-            <div
-                class="form-group col-md-12"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
+            <div class="form-group col-md-12 center">
                 <div
                     class="canvas-div"
                     style="position:absolute;"
@@ -20,7 +17,7 @@
                         class="legend-area"
                         v-if="heatMapPosition.length > 0"
                     >
-                        <h5>{{title}}</h5>
+                        <h5>{{legendTitle}}</h5>
                         <span class="left">{{min}}</span>
                         <span class="right">{{max}}</span>
                         <img
@@ -31,6 +28,15 @@
                     </div>
                 </div>
             </div>
+            <div class="center">
+                <b-form-input
+                    @mousemove="changeAlpha(alpha)"
+                    v-model="alpha"
+                    type="range"
+                    min="0"
+                    max="10"
+                ></b-form-input>
+            </div>
         </div>
     </div>
 </template>
@@ -39,6 +45,7 @@
 import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 import { IHeatMapData, IHeatMapPosition, IMapImage } from "./IHeatmap";
 import Heatmap from "heatmap.js";
+import VueSlideBar from "vue-slide-bar";
 
 @Component({})
 export class CameraHeatmap extends Vue {
@@ -48,11 +55,12 @@ export class CameraHeatmap extends Vue {
     private canvasEl: HTMLCanvasElement;
     private heatmapCanvs: any;
 
-    private title: string = "Heatmap Legend";
+    private legendTitle: string = "";
     private max: number = 0;
     private min: number = 0;
     private width_r: number = 1; // 寬比例
     private height_r: number = 1; // 高比例
+    private alpha: number = 5;
 
     @Prop({
         type: Object,
@@ -81,7 +89,9 @@ export class CameraHeatmap extends Vue {
         this.initMap();
     }
 
-    created() {}
+    created() {
+        this.legendTitle = this._("w_Navigation_Report_HeatmapLegend");
+    }
 
     mounted() {
         this.initMap();
@@ -110,15 +120,13 @@ export class CameraHeatmap extends Vue {
         this.max = heatmapData.max;
         this.min = 0;
         me.heatmapCanvs.setData(heatmapData);
-        this.changeAlpha(0.5);
-
-        console.log("heatmapData", heatmapData);
+        this.changeAlpha(5);
     }
 
     changeAlpha(value: number) {
         var elements = document.getElementsByClassName("heatmap-canvas");
         for (let element of elements) {
-            (element as any).style.opacity = value;
+            (element as any).style.opacity = value / 10;
         }
     }
 
@@ -151,13 +159,15 @@ Vue.component("camera-heatmap", CameraHeatmap);
 
 <style lang="scss" scoped>
 .canvas-div {
-    width: 600;
-    height: 400;
+    width: 600px;
+    height: 400px;
 }
 
 .canvas-snapshot {
     position: relative;
     opacity: 1;
+    width: 600px;
+    height: 400px;
 }
 
 .legend-area {
@@ -173,5 +183,15 @@ Vue.component("camera-heatmap", CameraHeatmap);
 
 .right {
     float: right;
+}
+
+.custom-range {
+    width: 600px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

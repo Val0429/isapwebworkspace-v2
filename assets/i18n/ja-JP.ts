@@ -313,6 +313,8 @@ export default class LangObject implements ILang {
     w_Navigation_Report_RepeatVisitor = 'Repeat Visitor';
     w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_Campaign = 'Campaign';
+    w_Navigation_Report_HeatmapLegend = 'Heatmap Legend';
+    w_Navigation_Report_AlphaRange = 'Alpha Range';
 
     // failed to fetch
     w_FailedToFetch = "We can't connect to server, please try again!";
