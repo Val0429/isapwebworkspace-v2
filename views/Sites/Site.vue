@@ -1772,7 +1772,6 @@ export default class Site extends Vue {
     }
 
     selectedDeviceGroup(data) {
-        console.log("selectedDeviceGroup", data);
         this.newImgSrc = "";
         if (data && data.objectId) {
             this.deviceGroup = this.isSelectDeviceGroup = data;
@@ -1782,7 +1781,6 @@ export default class Site extends Vue {
     }
 
     selectedArea(data) {
-        console.log("selectedArea", data);
         this.newImgSrc = "";
         this.areaPhotoSrc = "";
         if (data && data.objectId) {
@@ -1796,7 +1794,6 @@ export default class Site extends Vue {
     }
 
     selectedSite(data) {
-        console.log("selectedSite", data);
         this.newImgSrc = "";
         this.gooleMapSrc = "";
         this.initManagerItem();
