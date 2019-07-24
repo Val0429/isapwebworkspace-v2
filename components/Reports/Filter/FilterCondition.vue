@@ -1,136 +1,145 @@
 <template>
     <div>
 
-        <iv-card
-            v-show="pageStep === ePageStep.none"
-            :visible="visible"
-            :label="_('w_ReportFilterConditionComponent_')"
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <iv-form
-                :interface="IFilterConditionForm()"
-                @update:*="tempSaveInputData($event)"
-                @submit="doSubmit($event)"
+
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :visible="visible"
+                :label="_('w_ReportFilterConditionComponent_')"
             >
+                <iv-form
+                    :interface="IFilterConditionForm()"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="doSubmit($event)"
+                >
 
-                <template #ifAllSites="{ $attrs, $listeners }">
+                    <template #ifAllSites="{ $attrs, $listeners }">
 
-                    <p class="ml-3">{{ _('w_Sites1') }}</p>
+                        <p class="ml-3">{{ _('w_Sites1') }}</p>
 
-                    <b-col cols="9">
-                        <b-form-radio-group
-                            v-model="selectAllSites"
-                            name="ifAllSites"
-                            :options="ifAllSitesSelectItem"
-                            @change="changeAllSitesSelect"
-                        ></b-form-radio-group>
-                    </b-col>
+                        <b-col cols="9">
+                            <b-form-radio-group
+                                v-model="selectAllSites"
+                                name="ifAllSites"
+                                :options="ifAllSitesSelectItem"
+                                @change="changeAllSitesSelect"
+                            ></b-form-radio-group>
+                        </b-col>
 
-                </template>
+                    </template>
 
-                <template #siteIds="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-on="$listeners"
-                        v-model="inputFormData.siteIds"
-                        class="select-site ml-3"
-                        :options="sitesSelectItem"
-                        :multiple="true"
-                        @input="changeSiteIds"
-                    >
-                    </iv-form-selection>
-
-                    <div class="ml-3">
-                        <b-button
-                            variant="outline-secondary"
-                            @click="pageToChooseTree"
+                    <template #siteIds="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-on="$listeners"
+                            v-model="inputFormData.siteIds"
+                            class="select-site ml-3"
+                            :options="sitesSelectItem"
+                            :multiple="true"
+                            @input="changeSiteIds"
                         >
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
+                        </iv-form-selection>
 
-                </template>
+                        <div class="ml-3">
+                            <b-button
+                                variant="outline-secondary"
+                                @click="pageToChooseTree"
+                            >
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
 
-                <template #selectPeriodAddWay="{ $attrs, $listeners }">
+                    </template>
 
-                    <p class="ml-3">{{ _('w_Selected_Date') }}</p>
+                    <template #selectPeriodAddWay="{ $attrs, $listeners }">
 
-                    <b-col cols="9">
-                        <b-form-radio-group
-                            v-model="selectPeriodAddWay"
-                            name="selectPeriodAddWay"
-                            :options="addPeriodSelectItem"
-                            @change="changeAddPeriodSelect"
-                        ></b-form-radio-group>
-                    </b-col>
+                        <p class="ml-3">{{ _('w_Selected_Date') }}</p>
 
-                </template>
+                        <b-col cols="9">
+                            <b-form-radio-group
+                                v-model="selectPeriodAddWay"
+                                name="selectPeriodAddWay"
+                                :options="addPeriodSelectItem"
+                                @change="changeAddPeriodSelect"
+                            ></b-form-radio-group>
+                        </b-col>
 
-                <template #startDate="{ $attrs, $listeners }">
-                    <iv-form-date
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.startDate"
+                    </template>
+
+                    <template #startDate="{ $attrs, $listeners }">
+                        <iv-form-date
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.startDate"
+                        >
+                        </iv-form-date>
+                    </template>
+
+                    <template #endDate="{ $attrs, $listeners }">
+                        <iv-form-date
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.endDate"
+                        >
+                        </iv-form-date>
+                    </template>
+
+                    <template #designationPeriod="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.designationPeriod"
+                        >
+                        </iv-form-selection>
+                    </template>
+
+                    <template #tagIds="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.tagIds"
+                        >
+                        </iv-form-selection>
+                    </template>
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        class="submit"
+                        size="lg"
+                        @click="doSubmit"
                     >
-                    </iv-form-date>
-                </template>
+                        {{ _('wb_Submit') }}
+                    </b-button>
 
-                <template #endDate="{ $attrs, $listeners }">
-                    <iv-form-date
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.endDate"
+                    <b-button
+                        class="reset"
+                        size="lg"
+                        @click="doReset"
                     >
-                    </iv-form-date>
+                        {{ _('wb_Reset') }}
+                    </b-button>
                 </template>
 
-                <template #designationPeriod="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.designationPeriod"
-                    >
-                    </iv-form-selection>
-                </template>
+            </iv-card>
 
-                <template #tagIds="{ $attrs, $listeners }">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.tagIds"
-                    >
-                    </iv-form-selection>
-                </template>
+            <region-tree-select
+                key="transition_2"
+                v-show="transition.step === 2"
+                :multiple="true"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+                v-on:click-back="pageToShowResult"
+            >
+            </region-tree-select>
 
-            </iv-form>
-
-            <template #footer>
-                <b-button
-                    class="submit"
-                    size="lg"
-                    @click="doSubmit"
-                >
-                    {{ _('wb_Submit') }}
-                </b-button>
-
-                <b-button
-                    class="reset"
-                    size="lg"
-                    @click="doReset"
-                >
-                    {{ _('wb_Reset') }}
-                </b-button>
-            </template>
-
-        </iv-card>
-
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -139,7 +148,15 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { toEnumInterface } from "../../../../core";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
+// Region Tree
 import { ERegionType, IRegionTreeSelected } from "@/components/RegionTree";
+
+// Report
 import {
     IFilterCondition,
     ITemplateItem,
@@ -149,17 +166,11 @@ import {
     EIfAllSelected,
     ETimeMode
 } from "@/components/Reports";
+
+// Service
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
 import ReportService from "../models/ReportService";
-
-enum EPageStep {
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree",
-    select = "select",
-    all = "all"
-}
 
 @Component({
     components: {}
@@ -201,8 +212,11 @@ export class FilterCondition extends Vue {
     })
     templateItem: ITemplateItem | null;
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
     // site 相關
     selectAllSites: string = EIfAllSelected.select;
@@ -228,7 +242,6 @@ export class FilterCondition extends Vue {
         allTagIds: [],
         startDate: new Date(),
         endDate: new Date(),
-        type: "",
         designationPeriod: EDesignationPeriod.today
     };
 
@@ -239,37 +252,14 @@ export class FilterCondition extends Vue {
     visible: boolean = true;
 
     created() {
-        // this.initSelectItemSite();
         this.initSelectItem();
     }
 
     mounted() {
-        // this.initSelectItemTag();
-        // this.initSelectItemTree();
-        // this.initRegionTreeSelect();
         this.siteFilterPermission();
         this.initTemplate();
     }
-
-    // initRegionTreeSelect() {
-    //     this.regionTreeItem = new RegionTreeItem();
-    //     this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
-    // }
-
     initSelectItem() {
-        // this.ifAllSitesSelectItem = [
-        //     { value: EIfAllSelected.all, text: this._("w_AllSites") },
-        //     { value: EIfAllSelected.select, text: this._("w_SelectSites") }
-        // ];
-
-        // this.addPeriodSelectItem = [
-        //     { value: EAddPeriodSelect.period, text: this._("w_period") },
-        //     {
-        //         value: EAddPeriodSelect.designation,
-        //         text: this._("w_Designation")
-        //     }
-        // ];
-
         this.designationPeriodSelectItem = {
             today: `${this._("w_Today")} ( ${Datetime.CountDateNumber(
                 0
@@ -318,15 +308,6 @@ export class FilterCondition extends Vue {
 
     tempSaveInputData(data) {
         switch (data.key) {
-            // case "siteIds":
-            //     for (const siteId of data.value) {
-            //         if (!siteId) {
-            //             this.inputFormData.siteIds = [];
-            //         } else {
-            //             this.inputFormData.siteIds = data.value;
-            //         }
-            //     }
-            //     break;
             case "tagIds":
                 this.inputFormData.tagIds = data.value;
                 break;
@@ -372,7 +353,9 @@ export class FilterCondition extends Vue {
     }
 
     async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+
         this.selecteds = [];
 
         for (const id of this.inputFormData.siteIds) {
@@ -390,7 +373,9 @@ export class FilterCondition extends Vue {
     }
 
     pageToShowResult() {
-        this.pageStep = EPageStep.none;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+
         // siteIds clear
         this.inputFormData.siteIds = [];
 
@@ -702,7 +687,6 @@ export class FilterCondition extends Vue {
     IFilterConditionForm() {
         return `
             interface {
-
 
                 /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}

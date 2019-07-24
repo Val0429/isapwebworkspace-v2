@@ -1,8 +1,16 @@
 import {EDesignationPeriod} from "../../components/Reports";
 <template>
     <div class="animated fadeIn">
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
+        >
+
+        <!-- List -->
         <iv-card
-            v-show="pageStep === ePageStep.list"
+            key="transition_1"
+            v-show="transition.step === 1"
             :label=" _('w_ReportTemplate_List') "
         >
             <template #toolbox>
@@ -13,18 +21,18 @@ import {EDesignationPeriod} from "../../components/Reports";
                 />
                 <iv-toolbox-edit
                     :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
+                    @click="pageToEdit()"
                 />
                 <iv-toolbox-copy
                     :disabled="isSelected.length !== 1"
-                    @click="pageToDuplicate(ePageStep.duplicate)"
+                    @click="pageToDuplicate()"
                 />
                 <iv-toolbox-delete
                     :disabled="isSelected.length === 0"
                     @click="doDelete"
                 />
                 <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+                <iv-toolbox-add @click="pageToAdd()" />
 
             </template>
 
@@ -66,9 +74,9 @@ import {EDesignationPeriod} from "../../components/Reports";
 
                 <template #Actions="{$attrs, $listeners}">
                     <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-copy @click="pageToDuplicate(ePageStep.duplicate)" />
+                        <iv-toolbox-copy @click="pageToDuplicate()" />
                         <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                        <iv-toolbox-edit @click="pageToEdit()" />
                         <iv-toolbox-delete @click="doDelete" />
                     </iv-toolbox-more>
                 </template>
@@ -84,9 +92,38 @@ import {EDesignationPeriod} from "../../components/Reports";
             </iv-table>
         </iv-card>
 
+        <!-- view -->
+        <iv-card
+            key="transition_2"
+            v-show="transition.step === 2"
+            :visible="true"
+            :label=" _('w_ReportTemplate_View') "
+        >
+            <template #toolbox>
+                <iv-toolbox-back @click="pageToList()" />
+            </template>
+
+            <iv-form
+                :interface="IViewForm()"
+                :value="inputFormData"
+            >
+            </iv-form>
+
+            <template #footer>
+                <b-button
+                    variant="dark"
+                    size="lg"
+                    @click="pageToList()"
+                >{{ _('w_Back') }}
+                </b-button>
+            </template>
+
+        </iv-card>
+
         <!--From (Add and Edit and Duplicate)-->
         <iv-auto-card
-            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.duplicate"
+            key="transition_3"
+            v-show="transition.step === 3"
             :visible="true"
             :label=showLabelTitle()
         >
@@ -222,36 +259,10 @@ import {EDesignationPeriod} from "../../components/Reports";
 
         </iv-auto-card>
 
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label=" _('w_ReportTemplate_View') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
-            >
-            </iv-form>
-
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-card>
-
         <!-- region tree select -->
         <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
+            key="transition_4"
+            v-show="transition.step === 4"
             :multiple="true"
             :regionTreeItem="regionTreeItem"
             :selectType="selectType"
@@ -260,12 +271,18 @@ import {EDesignationPeriod} from "../../components/Reports";
         >
         </region-tree-select>
 
+        </iv-auto-transition>
+
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Region Tree
 import {
@@ -291,17 +308,6 @@ import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import Loading from "@/services/Loading";
 
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    duplicate = "duplicate",
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree"
-}
-
 const timeItem = {
     week: "1",
     hour: "22"
@@ -311,8 +317,11 @@ const timeItem = {
     components: {}
 })
 export default class ReportTemplate extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
     isSelected: any = [];
     tableMultiple: boolean = true;
@@ -386,9 +395,6 @@ export default class ReportTemplate extends Vue {
             startDate: new Date(),
             sendDates: "",
             sendUserIds: [],
-
-            stepType: "",
-
             siteIdsText: "",
             tagIdsText: "",
             modeText: "",
@@ -550,7 +556,7 @@ export default class ReportTemplate extends Vue {
             );
         }
 
-        await this.pageToAdd(EPageStep.add);
+        await this.pageToAdd();
 
         this.inputFormData = {
             mode: this.reportToTemplateData.mode,
@@ -568,7 +574,7 @@ export default class ReportTemplate extends Vue {
             this.inputFormData.type = this.reportToTemplateData.type;
         }
 
-        this.inputFormData.stepType = EPageStep.add;
+        this.transition.step = 3;
     }
 
     selectedItem(data) {
@@ -585,7 +591,6 @@ export default class ReportTemplate extends Vue {
                 name: param.name,
                 siteIds: param.sites,
                 tagIds: param.tags,
-                stepType: "",
                 mode: param.mode,
                 type: param.type ? param.type : "",
                 startDate: param.startDate ? new Date(param.startDate) : null,
@@ -654,25 +659,39 @@ export default class ReportTemplate extends Vue {
         }
     }
 
-    async pageToAdd(stepType: string) {
-        this.pageStep = EPageStep.add;
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.tagTable as any).reload();
+        this.selecteds = [];
+        this.reportToTemplateData = {};
+    }
+
+     pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
         await this.initSelectItemTag();
         this.clearInputData();
         this.selecteds = [];
-        this.inputFormData.stepType = stepType;
         this.sendReportTime = [{ week: "1", hour: "22" }];
     }
 
-    async pageToDuplicate(stepType: string) {
-        this.pageStep = EPageStep.duplicate;
+    async pageToDuplicate() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+
         this.getInputData();
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
         await this.initSelectItemTag();
-
-        this.inputFormData.stepType = stepType;
 
         this.inputFormData.name = "";
         this.inputFormData.objectId = "";
@@ -732,14 +751,13 @@ export default class ReportTemplate extends Vue {
         );
     }
 
-    async pageToEdit(stepType: string) {
-        this.pageStep = EPageStep.edit;
+    async pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.getInputData();
         await this.initSelectItemSite();
         await this.initSelectItemUsers();
         await this.initSelectItemTag();
-
-        this.inputFormData.stepType = stepType;
 
         this.selecteds = [];
         this.sendReportTime = [];
@@ -797,20 +815,10 @@ export default class ReportTemplate extends Vue {
         );
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.tagTable as any).reload();
-        this.selecteds = [];
-        this.reportToTemplateData = {};
-    }
 
     async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
@@ -829,40 +837,15 @@ export default class ReportTemplate extends Vue {
     }
 
     pageToShowResult() {
-        if (this.inputFormData.stepType === EPageStep.edit) {
-            this.pageStep = EPageStep.edit;
-            // siteIds clear
+        this.transition.step = this.transition.prevStep;
+
+        // siteIds clear
             this.inputFormData.siteIds = [];
 
             // from selecteds push siteIds
             for (const item of this.selecteds) {
                 this.inputFormData.siteIds.push(item.objectId);
             }
-        }
-
-        if (this.inputFormData.stepType === EPageStep.add) {
-            this.pageStep = EPageStep.add;
-
-            // siteIds clear
-            this.inputFormData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
-        }
-
-        if (this.inputFormData.stepType === EPageStep.duplicate) {
-            this.pageStep = EPageStep.duplicate;
-
-            // siteIds clear
-            this.inputFormData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
-        }
     }
 
     addSendReportTime() {
@@ -902,7 +885,7 @@ export default class ReportTemplate extends Vue {
         let addParam = {};
         let editParam = {};
 
-        if (!this.inputFormData.objectId) {
+        if (this.inputFormData.objectId == "") {
             if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
                 const tempDatas: any = [
                     {
@@ -976,7 +959,7 @@ export default class ReportTemplate extends Vue {
                         this._("w_ReportTemplate_AddReportTemplateFailed")
                     );
                 });
-        } else if (this.inputFormData.objectId) {
+        } else  {
             if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
                 const tempDatas: any = [
                     {
@@ -1122,15 +1105,13 @@ export default class ReportTemplate extends Vue {
     }
 
     showLabelTitle(): string {
-        if (this.pageStep === EPageStep.add) {
-            return this._("w_ReportTemplate_Add");
+        let result: string = "";
+        if (this.inputFormData.objectId == '') {
+            result = this._("w_ReportTemplate_Add");
+        } else {
+            result = this._("w_ReportTemplate_Edit");
         }
-        if (this.pageStep === EPageStep.edit) {
-            return this._("w_ReportTemplate_Edit");
-        }
-        if (this.pageStep === EPageStep.duplicate) {
-            return this._("w_ReportTemplate_AddDuplicate");
-        }
+        return result;
     }
 
     getWeekText(value: any): string {
@@ -1454,8 +1435,7 @@ export default class ReportTemplate extends Vue {
                  * @uiLabel - ${this._("w_ReportTemplate_Name")}
                  * @uiPlaceHolder - ${this._("w_ReportTemplate_Name")}
                  * @uiType - ${
-                     this.inputFormData.stepType === EPageStep.add ||
-                     this.inputFormData.stepType === EPageStep.duplicate
+                     this.inputFormData.objectId == ''
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

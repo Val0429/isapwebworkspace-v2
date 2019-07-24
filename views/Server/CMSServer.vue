@@ -6,7 +6,7 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.list" -->
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -20,14 +20,14 @@
                     />
                     <iv-toolbox-edit
                         :disabled="isSelected.length !== 1"
-                        @click="pageToEdit(ePageStep.edit)"
+                        @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
                         :disabled="isSelected.length === 0"
                         @click="doDelete"
                     />
                     <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+                    <iv-toolbox-add @click="pageToAdd()" />
 
                 </template>
 
@@ -43,7 +43,7 @@
 
                         <iv-toolbox-more :disabled="isSelected.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
                         </iv-toolbox-more>
                     </template>
@@ -52,7 +52,6 @@
             </iv-card>
 
             <!-- view -->
-            <!-- v-show="pageStep === ePageStep.view" -->
             <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -82,12 +81,11 @@
             </iv-card>
 
             <!--From (Add and Edit)-->
-            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
                 :visible="true"
-                :label="pageStep === ePageStep.add ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
+                :label="inputFormData.objectId == '' ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
             >
                 <template #toolbox>
 
@@ -133,17 +131,7 @@ import Loading from "@/services/Loading";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
-interface IinputFormData extends IAddCMSServer, IEditCMSServer {
-    type?: string;
-}
-
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none"
-}
+interface IInputFormData extends IAddCMSServer, IEditCMSServer {}
 
 @Component({
     components: {}
@@ -155,15 +143,12 @@ export default class CMSServer extends Vue {
         step: 1
     };
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
-
     isSelected: any = [];
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
 
-    inputFormData: IinputFormData = {
+    inputFormData: IInputFormData = {
         objectId: "",
         customId: "",
         name: "",
@@ -171,8 +156,7 @@ export default class CMSServer extends Vue {
         ip: "",
         port: null,
         account: "",
-        password: "",
-        type: ""
+        password: ""
     };
 
     created() {}
@@ -188,8 +172,7 @@ export default class CMSServer extends Vue {
             ip: "",
             port: null,
             account: "",
-            password: "",
-            type: ""
+            password: ""
         };
     }
 
@@ -216,39 +199,33 @@ export default class CMSServer extends Vue {
     }
 
     pageToList() {
-        // this.pageStep = EPageStep.list;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         (this.$refs.listTable as any).reload();
     }
 
     pageToView() {
-        // this.pageStep = EPageStep.view;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
         this.getInputData();
     }
 
-    pageToAdd(type: string) {
-        // this.pageStep = EPageStep.add;
+    pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.clearInputData();
-        this.inputFormData.type = type;
     }
 
-    pageToEdit(type: string) {
-        // this.pageStep = EPageStep.edit;
+    pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.getInputData();
-        this.inputFormData.type = type;
     }
 
     async saveAddOrEdit(data) {
         // add
-        if (this.inputFormData.type === EPageStep.add) {
-            const datas: IinputFormData[] = [
+        if (this.inputFormData.objectId == "") {
+            const datas: IInputFormData[] = [
                 {
                     customId: data.customId,
                     name: data.name,
@@ -290,11 +267,8 @@ export default class CMSServer extends Vue {
                         this._("w_ServerCMS_ADDFailed")
                     );
                 });
-        }
-
-        // edit
-        if (this.inputFormData.type === EPageStep.edit) {
-            const datas: IinputFormData[] = [
+        } else {
+            const datas: IInputFormData[] = [
                 {
                     name: data.name,
                     protocol: data.protocol,

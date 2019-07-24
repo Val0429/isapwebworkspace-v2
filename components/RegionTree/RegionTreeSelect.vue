@@ -59,14 +59,6 @@ import {
     RegionTreeItem
 } from "./";
 
-enum EPageStep {
-    none,
-    list,
-    editRoot,
-    editRegion,
-    bindingSite
-}
-
 @Component({
     components: {
         Card,

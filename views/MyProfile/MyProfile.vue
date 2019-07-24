@@ -6,7 +6,6 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.view" -->
             <!-- view -->
             <iv-card
                 key="transition_1"
@@ -28,7 +27,6 @@
             </iv-card>
 
             <!-- edit My Profile -->
-            <!-- v-show="pageStep === ePageStep.editMyProfile" -->
             <iv-auto-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -57,7 +55,6 @@
             </iv-auto-card>
 
             <!-- edit Password -->
-            <!-- v-show="pageStep === ePageStep.changePassword" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
@@ -117,26 +114,15 @@ interface IInputPasswordUpdate {
     current: string;
 }
 
-enum EPageStep {
-    changePassword,
-    editMyProfile,
-    view,
-    none
-}
-
 @Component({
     components: {}
 })
 export default class MyProfile extends Vue {
-
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
         step: 1
     };
-
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.view;
 
     userDetail: any = {};
 
@@ -190,20 +176,17 @@ export default class MyProfile extends Vue {
     }
 
     pageToView() {
-        // this.pageStep = EPageStep.view;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         this.initUserDetail();
     }
 
     pageToEdit() {
-        // this.pageStep = EPageStep.editMyProfile;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
     }
 
     pageToChangePassword() {
-        this.pageStep = EPageStep.changePassword;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }

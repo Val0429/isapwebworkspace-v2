@@ -6,7 +6,7 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.list" -->
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -62,7 +62,6 @@
             </iv-card>
 
             <!-- view -->
-            <!-- v-show="pageStep === ePageStep.view" -->
             <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -92,7 +91,6 @@
             </iv-card>
 
             <!--From (Add and Edit)-->
-            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
@@ -145,7 +143,6 @@
 
             </iv-auto-card>
 
-            <!-- v-show="pageStep === ePageStep.chooseTree" -->
             <region-tree-select
                 key="transition_4"
                 v-show="transition.step === 4"
@@ -393,7 +390,6 @@ export default class CampaignSetting extends Vue {
             }
         }
     }
-
 
     pageToList() {
         this.transition.prevStep = this.transition.step;

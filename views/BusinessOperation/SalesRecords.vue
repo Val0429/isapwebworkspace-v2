@@ -74,24 +74,24 @@
 
             <template
                 #footer
-                v-if="pageStep > 0"
+                v-if="transitionStep > 0"
             >
                 <b-button
-                    v-if="pageStep > 1 && pageStep < 4"
+                    v-if="transitionStep > 1 && transitionStep < 4"
                     variant="dark"
                     size="lg"
                     @click="pageToPrev"
                 >{{ _('w_PreviousPage') }}
                 </b-button>
                 <b-button
-                    v-if="pageStep == 1"
+                    v-if="transitionStep == 1"
                     variant="dark"
                     size="lg"
                     @click="pageTo2"
                 >{{ _('w_NextPage') }}
                 </b-button>
                 <b-button
-                    v-if="pageStep == 3"
+                    v-if="transitionStep == 3"
                     variant="dark"
                     size="lg"
                     :disabled="recordFileError"
@@ -99,7 +99,7 @@
                 >{{ _('w_Submit') }}
                 </b-button>
                 <b-button
-                    v-if="pageStep == 4"
+                    v-if="transitionStep == 4"
                     variant="dark"
                     size="lg"
                     @click="pageTo1"
@@ -157,7 +157,7 @@ interface IRecordFile {
     components: {}
 })
 export default class SalesRecords extends Vue {
-    pageStep: number = 1;
+    transitionStep: number = 1;
     stepRef: any = this.$refs.step;
     file: any | null = null;
     recordFileError: boolean = false;
@@ -189,11 +189,11 @@ export default class SalesRecords extends Vue {
     }
 
     pageToPrev() {
-        if (this.pageStep >= 5) {
+        if (this.transitionStep >= 5) {
             this.pageTo4();
-        } else if (this.pageStep == 4) {
+        } else if (this.transitionStep == 4) {
             this.pageTo3();
-        } else if (this.pageStep == 3) {
+        } else if (this.transitionStep == 3) {
             this.pageTo2();
         } else {
             this.pageTo1();
@@ -203,36 +203,36 @@ export default class SalesRecords extends Vue {
     pageTo1() {
         this.file = null;
         this.recordFileContent = [];
-        this.pageStep = 1;
+        this.transitionStep = 1;
         this.recordFileError = false;
-        this.stepToPageStep();
+        this.stepToTransitionStep();
     }
 
     pageTo2() {
-        this.pageStep = 2;
+        this.transitionStep = 2;
         this.recordFileContent = [];
         this.recordFileError = false;
         this.file = null;
-        this.stepToPageStep();
+        this.stepToTransitionStep();
     }
 
     pageTo3() {
-        this.pageStep = 3;
-        this.stepToPageStep();
+        this.transitionStep = 3;
+        this.stepToTransitionStep();
     }
 
     pageTo4() {
-        this.pageStep = 4;
-        this.stepToPageStep();
+        this.transitionStep = 4;
+        this.stepToTransitionStep();
     }
 
     pageTo5() {
-        this.pageStep = 5;
-        this.stepToPageStep();
+        this.transitionStep = 5;
+        this.stepToTransitionStep();
     }
 
-    stepToPageStep() {
-        this.stepRef.currentStep = this.pageStep;
+    stepToTransitionStep() {
+        this.stepRef.currentStep = this.transitionStep;
     }
 
     downloadExample() {

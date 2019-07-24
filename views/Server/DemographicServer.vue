@@ -67,7 +67,6 @@
             </iv-card>
 
             <!-- view -->
-            <!-- v-show="pageStep === ePageStep.view" -->
             <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -102,12 +101,11 @@
             </iv-card>
 
             <!--From (Add and Edit)-->
-            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
                 :visible="true"
-                :label="pageStep == ePageStep.Add ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') "
+                :label="inputFormData.objectId == '' ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') "
             >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -261,15 +259,6 @@ import Loading from "@/services/Loading";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
-enum EPageStep {
-    List = "List",
-    View = "View",
-    Add = "Add",
-    Edit = "Edit",
-
-    none = "none"
-}
-
 interface IHDServer {
     objectId?: string;
     customId: string;
@@ -290,8 +279,6 @@ export default class DemographicServer extends Vue {
         step: 1
     };
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
     modalShow: boolean = false;
 
     newImg = new Image();
@@ -378,30 +365,26 @@ export default class DemographicServer extends Vue {
     }
 
     pageToList() {
-        this.initTargetScoreItem();
-        this.clearInputData();
-        // this.pageStep = EPageStep.list;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
+        this.initTargetScoreItem();
+        this.clearInputData();
         (this.$refs.listTable as any).reload();
     }
 
     pageToView() {
-        // this.pageStep = EPageStep.view;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
         this.getInputData();
     }
 
     pageToAdd() {
-        // this.pageStep = EPageStep.Add;  // 勿刪，判斷是否為增加或編輯
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.clearInputData();
     }
 
     pageToEdit() {
-        // this.pageStep = EPageStep.Edit;     // 勿刪，判斷是否為增加或編輯
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.getInputData();
@@ -499,7 +482,7 @@ export default class DemographicServer extends Vue {
     }
 
     async saveData(data) {
-        if (this.pageStep == EPageStep.Add) {
+        if (this.inputFormData.objectId == '') {
             const datas = [
                 {
                     customId: data.customId,
@@ -540,7 +523,7 @@ export default class DemographicServer extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
-        } else if (this.pageStep == EPageStep.Edit) {
+        } else {
             const datas = [
                 {
                     objectId: data.objectId,

@@ -6,7 +6,7 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.list" -->
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -80,7 +80,7 @@
                     <b-button
                         variant="secondary"
                         size="lg"
-                        @click="pageStepBackward"
+                        @click="transitionStepBackward"
                     >{{ _('w_StepBackward') }}
                     </b-button>
                 </template>
@@ -96,7 +96,7 @@
             >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList" />
-                    <iv-toolbox-step-backward @click="pageStepBackward" />
+                    <iv-toolbox-step-backward @click="transitionStepBackward" />
                 </template>
 
                 <iv-form
@@ -132,7 +132,7 @@
                     <b-button
                         variant="secondary"
                         size="lg"
-                        @click="pageStepBackward"
+                        @click="transitionStepBackward"
                     >{{ _('w_StepBackward') }}
                     </b-button>
                 </template>
@@ -148,7 +148,7 @@
             >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList" />
-                    <iv-toolbox-step-backward @click="pageStepBackward" />
+                    <iv-toolbox-step-backward @click="transitionStepBackward" />
                 </template>
 
                 <iv-form
@@ -186,7 +186,7 @@
                     <b-button
                         variant="secondary"
                         size="lg"
-                        @click="pageStepBackward"
+                        @click="transitionStepBackward"
                     >{{ _('w_StepBackward') }}
                     </b-button>
                 </template>
@@ -300,7 +300,7 @@ export default class License extends Vue {
         this.transition.step = 4;
     }
 
-    pageStepBackward() {
+    transitionStepBackward() {
         this.clearInputData();
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;

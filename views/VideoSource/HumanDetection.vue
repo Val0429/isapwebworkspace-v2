@@ -6,7 +6,7 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.list" -->
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -65,7 +65,6 @@
             </iv-card>
 
             <!-- View-->
-            <!-- v-if="pageStep === ePageStep.view" -->
             <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -173,10 +172,7 @@
                 </template>
             </iv-card>
 
-            <!--
-                v-if="pageStep === ePageStep.add || pageStep ===  ePageStep.edit ||  pageStep === ePageStep.chooseTree "
-                v-show="pageStep != ePageStep.chooseTree"
-            -->
+            <!-- Form -->
             <iv-auto-card
                 key="transition_3"
                 v-if="transition.step === 3 || transition.step === 4 || transition.step === 5"
@@ -331,7 +327,7 @@
 
             </iv-auto-card>
 
-            <!-- v-show="pageStep === ePageStep.chooseTree" -->
+            <!-- Region Tree Select -->
             <region-tree-select
                 key="transition_4"
                 v-show="transition.step === 4"
@@ -375,16 +371,6 @@ import RegionAPI from "@/services/RegionAPI";
 import Datetime from "@/services/Datetime";
 import Loading from "@/services/Loading";
 
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none",
-
-    chooseTree = "chooseTree"
-}
-
 enum ECameraMode {
     humanDetection = "humanDetection"
 }
@@ -399,9 +385,6 @@ export default class HumanDetection extends Vue {
         step: 1
     };
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
-    lastPageStep: EPageStep = EPageStep.none;
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
@@ -689,7 +672,6 @@ export default class HumanDetection extends Vue {
     }
 
     pageToList() {
-        // this.pageStep = EPageStep.list;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         this.initCMSItem();
@@ -704,8 +686,6 @@ export default class HumanDetection extends Vue {
         this.initGroupItem();
         await this.initDeviceData(this.inputFormData.serverId);
         await this.initChannelItem(this.inputFormData.nvrId);
-
-        // this.pageStep = EPageStep.view;
     }
 
     async pageToAdd() {
@@ -715,7 +695,6 @@ export default class HumanDetection extends Vue {
         await this.initSelectItemSite();
         this.canvasDetail = [];
         this.selecteds = [];
-        // this.pageStep = EPageStep.add;
     }
 
     async pageToEdit() {
@@ -726,8 +705,6 @@ export default class HumanDetection extends Vue {
         await this.initChannelItem(this.inputFormData.nvrId);
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-
-        this.pageStep = EPageStep.edit;
     }
 
     async selectGroupDeviceId(data) {
@@ -893,8 +870,6 @@ export default class HumanDetection extends Vue {
     }
 
     async pageToChooseTree() {
-        // this.lastPageStep = this.pageStep;
-        // this.pageStep = EPageStep.chooseTree;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 4;
         this.initRegionTreeSelect();
@@ -917,7 +892,6 @@ export default class HumanDetection extends Vue {
     }
 
     async pageToShowResult() {
-        // this.pageStep = this.lastPageStep;
         this.transition.step = this.transition.prevStep;
 
         // siteId clear

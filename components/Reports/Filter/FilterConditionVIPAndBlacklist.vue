@@ -146,14 +146,6 @@ import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
 import ResponseFilter from "@/services/ResponseFilter";
 
-enum EPageStep {
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree",
-    select = "select",
-    all = "all"
-}
-
 @Component({
     components: {}
 })

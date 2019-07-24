@@ -6,7 +6,7 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.list" -->
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -62,7 +62,6 @@
             </iv-card>
 
             <!-- View-->
-            <!-- v-if="pageStep === ePageStep.view" -->
             <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -160,10 +159,7 @@
                 </template>
             </iv-card>
 
-            <!--
-                v-if="pageStep === ePageStep.add || pageStep ===  ePageStep.edit ||  pageStep === ePageStep.chooseTree "
-                v-show="pageStep != ePageStep.chooseTree"
-            -->
+            <!-- Step -->
             <iv-auto-card
                 key="transition_3"
                 v-if="transition.step === 3 || transition.step === 4 || transition.step === 5"
@@ -296,7 +292,7 @@
 
             </iv-auto-card>
 
-            <!-- v-show="pageStep === ePageStep.chooseTree" -->
+            <!-- Region Tree -->
             <region-tree-select
                 key="transition_4"
                 v-show="transition.step === 4"
