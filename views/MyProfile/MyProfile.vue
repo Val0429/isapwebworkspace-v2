@@ -1,78 +1,91 @@
 <template>
     <div class="animated fadeIn m-2">
 
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :data="{ label: _('w_MyProfile_ViewMyProfile') }"
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <template #toolbox>
-                <iv-toolbox-editmyprofile @click="pageToEdit" />
-                <iv-toolbox-changepassword @click="pageToChangePassword" />
-            </template>
 
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputMyProfile"
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <!-- view -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :visible="true"
+                :label=" _('w_MyProfile_ViewMyProfile') "
             >
-            </iv-form>
+                <template #toolbox>
+                    <iv-toolbox-editmyprofile @click="pageToEdit" />
+                    <iv-toolbox-changepassword @click="pageToChangePassword" />
+                </template>
 
-        </iv-card>
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputMyProfile"
+                >
+                </iv-form>
 
-        <!-- edit Password -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.changePassword"
-            :visible="true"
-            :label="_('w_ChangePassword') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToView()" />
-            </template>
+            </iv-card>
 
-            <iv-form
-                :interface="IEditFormPassword()"
-                :value="inputPasswordUpdate"
-                @submit="saveEditPassword($event)"
-            ></iv-form>
+            <!-- edit My Profile -->
+            <!-- v-show="pageStep === ePageStep.editMyProfile" -->
+            <iv-auto-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label=" _('w_MyProfile_EditMyProfile') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToView" />
+                </template>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToView"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                <iv-form
+                    :interface="IEditFormMyProfile()"
+                    :value="inputMyProfile"
+                    @submit="saveEditMyProfile($event)"
+                ></iv-form>
 
-        </iv-auto-card>
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToView"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
-        <!-- edit My Profile -->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.editMyProfile"
-            :visible="true"
-            :label=" _('w_MyProfile_EditMyProfile') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToView" />
-            </template>
+            </iv-auto-card>
 
-            <iv-form
-                :interface="IEditFormMyProfile()"
-                :value="inputMyProfile"
-                @submit="saveEditMyProfile($event)"
-            ></iv-form>
+            <!-- edit Password -->
+            <!-- v-show="pageStep === ePageStep.changePassword" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="_('w_ChangePassword') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToView()" />
+                </template>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToView"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                <iv-form
+                    :interface="IEditFormPassword()"
+                    :value="inputPasswordUpdate"
+                    @submit="saveEditPassword($event)"
+                ></iv-form>
 
-        </iv-auto-card>
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToView"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -84,6 +97,10 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 interface IInputMyProfile {
     objectId: string;
@@ -111,6 +128,13 @@ enum EPageStep {
     components: {}
 })
 export default class MyProfile extends Vue {
+
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.view;
 
@@ -166,16 +190,22 @@ export default class MyProfile extends Vue {
     }
 
     pageToView() {
-        this.pageStep = EPageStep.view;
+        // this.pageStep = EPageStep.view;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
         this.initUserDetail();
     }
 
     pageToEdit() {
-        this.pageStep = EPageStep.editMyProfile;
+        // this.pageStep = EPageStep.editMyProfile;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
     }
 
     pageToChangePassword() {
         this.pageStep = EPageStep.changePassword;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
     }
 
     async saveEditPassword(data) {

@@ -260,6 +260,8 @@ export default class ReportVIPTracking extends Vue {
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
 
+        console.log('this.filterData ~ ', this.filterData)
+
         // await this.$server
         //     .C("/report/people-counting/summary", param)
         //     .then((response: any) => {
