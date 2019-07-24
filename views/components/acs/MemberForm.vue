@@ -406,7 +406,9 @@ export default class MemberForm extends Vue {
     infoOfViolation2: "",
     dateOfViolation2: null,
     infoOfViolation3: "",
-    dateOfViolation3: null
+    dateOfViolation3: null,
+    Token:"-1",
+    Status:1
   };
 
   clearInputData() {    
@@ -511,10 +513,11 @@ export default class MemberForm extends Vue {
       this.inputFormData.objectId = detailData.objectId;      
 
       if (detailData.AccessRules) {
-        console.log("pushing from access rules")
+        console.log("pushing from access rules1",  this.permissionSelected);
         for (let rule of detailData.AccessRules) {
               this.permissionSelected.push(rule.RuleToken ? rule.RuleToken: rule);            
         }
+        console.log("pushing from access rules2",  this.permissionSelected);
       }
       
       this.inputFormData.personType = (detailData.PrimaryWorkgroupId || 2000000006).toString();
@@ -577,7 +580,9 @@ export default class MemberForm extends Vue {
       if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
       for(let field of CustomFields){
         this.inputFormData[field.name] = this.getFieldValue(field.fieldName, detailData.CustomFields, field.date);
-      }           
+      }
+      this.inputFormData.Token = detailData.Token || "-1";
+      this.inputFormData.Status = detailData.Status || 1;
   }
 
   tempSaveInputData(data) {
@@ -610,7 +615,9 @@ export default class MemberForm extends Vue {
       await this.$server
         .R("/acs/permissiontable", {"paging.all":"true"})
         .then((response: any) => {
-          this.storedPermissionOptions=response.results.map(content=>{
+          this.storedPermissionOptions=response.results
+          .filter((x, index, self)=>{ return  x.system && x.tableid && x.tablename && self.indexOf(x)===index})
+          .map(content=>{
             return{
               value: content.tableid.toString(),
               text: content.tablename.toString()
@@ -719,14 +726,14 @@ export default class MemberForm extends Vue {
         StartDate: this.inputFormData.startDate || credential.StartDate,
         EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
         SmartCardProfileId:"0",
-        Status:1,
+        Status: this.inputFormData.Status,
         //new addition
         GeneralInformation:"",
         Attributes:{},
         NonPartitionWorkGroups:[],
         NonPartitionWorkgroupAccessRules:[],
         PrimaryWorkGroupAccessRule:[],       
-        Token: "-1",
+        Token: this.inputFormData.Token,
         Vehicle1: {},
         Vehicle2: {},
         VisitorDetails: {
