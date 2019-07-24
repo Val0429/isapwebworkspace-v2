@@ -1493,7 +1493,7 @@ export default class ReportHeatmap extends Vue {
         //         return ResponseFilter.base(this, e);
         //     });
 
-        // Ben
+        // Ben  //TODO for test and delete it when have api
         this.initHeatmap();
     }
 
