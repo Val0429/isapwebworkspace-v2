@@ -245,59 +245,6 @@ export default class CampaignSetting extends Vue {
 
     mounted() {}
 
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
-    }
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-        this.getInputData();
-    }
-
-    async pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearInputData();
-        this.initYear();
-        await this.initSelectItemSite();
-        this.selecteds = [];
-    }
-
-    async pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.getInputData();
-        this.initYear();
-        await this.initSelectItemSite();
-        this.inputFormData.year = this.inputFormData.year.toString();
-        this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
-        );
-    }
-
-    async pageToChooseTree() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 4;
-        this.initRegionTreeSelect();
-        await this.initSelectItemTree();
-        this.selecteds = [];
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-    }
-
     pageToShowResult() {
         this.transition.step = this.transition.prevStep;
 
@@ -433,6 +380,60 @@ export default class CampaignSetting extends Vue {
 
         this.selecteds = [];
 
+        for (const id of this.inputFormData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+        this.initYear();
+        await this.initSelectItemSite();
+        this.selecteds = [];
+    }
+
+    async pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        await this.initSelectItemSite();
+        this.getInputData();
+        this.initYear();
+        this.inputFormData.year = this.inputFormData.year.toString();
+        this.inputFormData.siteIds = JSON.parse(
+            JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
+        );
+    }
+
+    async pageToChooseTree() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selecteds = [];
         for (const id of this.inputFormData.siteIds) {
             for (const detail in this.sitesSelectItem) {
                 if (id === detail) {

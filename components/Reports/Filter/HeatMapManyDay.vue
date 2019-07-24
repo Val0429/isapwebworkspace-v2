@@ -135,7 +135,7 @@ Vue.component("heat-map-many-day", HeatMapManyDay);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px 0 40px;
+    margin: 20px 0 20px;
     color: #666a73;
 }
 

@@ -527,9 +527,9 @@ export default class User extends Vue {
     async pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 4;
-        this.getInputData();
         await this.initSelectItemSite();
         await this.initSelectItemUserGroup();
+        this.getInputData();
         this.selecteds = [];
 
         this.inputFormData.siteIds = JSON.parse(

@@ -751,12 +751,12 @@ export default class Demographic extends Vue {
 
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
-        this.getInputData();
         await this.initSelectItemFRSServer();
         await this.initSelectItemDemographicServer();
         await this.initSelectItemSite();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
+        this.getInputData();
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(

@@ -132,9 +132,9 @@ export default class LangObject {
     w_IPAddress = 'IP Address';
     w_Selected = 'Selected';
     w_RegionTreeSelect = 'Region Tree Select';
-// w_SiteTreeSelect = 'Site Tree Select';
-	w_SiteTreeSelect = 'Store Tree Select';
-	w_Brand = 'Brand';
+    // w_SiteTreeSelect = 'Site Tree Select';
+    w_SiteTreeSelect = 'Store Tree Select';
+    w_Brand = 'Brand';
     w_Model = 'Model';
     w_DeviceName = 'Device Name';
     // w_DeviceGroups = 'Device Group(s)';
@@ -308,6 +308,8 @@ export default class LangObject {
     w_Navigation_Report_RepeatVisitor = 'Repeat Visitor';
     w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_Campaign = 'Campaign';
+    w_Navigation_Report_HeatmapLegend = 'Heatmap Legend';
+    w_Navigation_Report_AlphaRange = 'Alpha Range';
 
     // failed to fetch
     w_FailedToFetch = "We can't connect to server, please try again!";

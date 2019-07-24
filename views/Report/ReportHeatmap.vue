@@ -51,7 +51,7 @@
             >
             </analysis-filter-heat-map>
 
-            <!-- Tina 需要用v-if判斷出現哪個元件 -->
+            <!-- Tina -->
             <heat-map-many-day
                 v-if="!checkDateTheSameDay(filterData.startDate, filterData.endDate)"
                 :dayArray="dayArray"
@@ -59,7 +59,7 @@
             ></heat-map-many-day>
             <br>
 
-            <!-- if 條件還需要更改 -->
+            <!-- Tina  -->
             <heat-map-one-day-slider-bar
                 v-if="filterData.siteIds !== '' && checkDateTheSameDay(filterData.startDate, filterData.endDate)"
                 :slider="slider"
@@ -1493,7 +1493,7 @@ export default class ReportHeatmap extends Vue {
         //         return ResponseFilter.base(this, e);
         //     });
 
-        // Ben
+        // Ben  //TODO for test and delete it when have api
         this.initHeatmap();
     }
 

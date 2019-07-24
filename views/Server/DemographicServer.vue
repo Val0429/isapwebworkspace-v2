@@ -1,8 +1,17 @@
 <template>
     <div class="animated fadeIn">
-        <!--List-->
-        <div v-show="pageStep === ePageStep.List">
-            <iv-card :label="_('w_DemographicServer_List')">
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
+        >
+
+            <!--List-->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_DemographicServer_List')"
+            >
 
                 <template #toolbox>
 
@@ -56,11 +65,50 @@
                 </iv-table>
 
             </iv-card>
-        </div>
 
-        <!--Form (Add and Edit)-->
-        <div v-show="pageStep === ePageStep.Add || pageStep === ePageStep.Edit">
-            <iv-auto-card :label="pageStep == ePageStep.Add ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') ">
+            <!-- view -->
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label="_('w_DemographicServer_View')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IView()"
+                    :value="inputFormData"
+                >
+                    <template #margin="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :value="inputFormData.margin ? Math.round(inputFormData.margin*100) + '%': ''"
+                        />
+                    </template>
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+            </iv-card>
+
+            <!--From (Add and Edit)-->
+            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="pageStep == ePageStep.Add ? _('w_DemographicServer_Add') :  _('w_DemographicServer_Edit') "
+            >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
                 </template>
@@ -90,38 +138,8 @@
                 </template>
 
             </iv-auto-card>
-        </div>
 
-        <!--View-->
-        <div v-show="pageStep === ePageStep.View">
-            <iv-card :label="_('w_DemographicServer_View')">
-                <template #toolbox>
-                    <iv-toolbox-back @click="pageToList()" />
-                </template>
-
-                <iv-form
-                    :interface="IView()"
-                    :value="inputFormData"
-                >
-                    <template #margin="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :value="inputFormData.margin ? Math.round(inputFormData.margin*100) + '%': ''"
-                        />
-                    </template>
-                </iv-form>
-
-                <template #footer>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="pageToList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
-            </iv-card>
-        </div>
+        </iv-auto-transition>
 
         <!-- Model -->
         <b-modal
@@ -239,6 +257,10 @@ import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
 import Loading from "@/services/Loading";
 
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
 enum EPageStep {
     List = "List",
     View = "View",
@@ -262,6 +284,12 @@ interface IHDServer {
     components: {}
 })
 export default class DemographicServer extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     modalShow: boolean = false;
@@ -349,26 +377,34 @@ export default class DemographicServer extends Vue {
         }
     }
 
-    pageToView() {
-        this.getInputData();
-        this.pageStep = EPageStep.View;
-    }
-
-    pageToAdd() {
-        this.clearInputData();
-        this.pageStep = EPageStep.Add;
-    }
-
-    pageToEdit() {
-        this.getInputData();
-        this.pageStep = EPageStep.Edit;
-    }
-
     pageToList() {
         this.initTargetScoreItem();
         this.clearInputData();
-        this.pageStep = EPageStep.List;
+        // this.pageStep = EPageStep.list;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
         (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        // this.pageStep = EPageStep.view;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    pageToAdd() {
+        // this.pageStep = EPageStep.Add;  // 勿刪，判斷是否為增加或編輯
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+    }
+
+    pageToEdit() {
+        // this.pageStep = EPageStep.Edit;     // 勿刪，判斷是否為增加或編輯
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.getInputData();
     }
 
     pageToHumanServerTest() {
@@ -686,7 +722,7 @@ export default class DemographicServer extends Vue {
                  * @uiLabel - ${this._("w_ServerHD_DeviceID")}
                  * @uiPlaceHolder - ${this._("w_ServerHD_DeviceID")}
                  * @uiType - ${
-                     this.pageStep === EPageStep.Add
+                     this.inputFormData.objectId === ""
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

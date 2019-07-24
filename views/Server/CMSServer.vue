@@ -1,104 +1,118 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label=" _('w_ServerCMS_List') "
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
-
-            </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/partner/cms' }"
-                @selected="selectedItem($event)"
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label=" _('w_ServerCMS_List') "
             >
+                <template #toolbox>
 
-                <template #Actions="{$attrs, $listeners}">
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit(ePageStep.edit)"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
 
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
                 </template>
 
-            </iv-table>
-        </iv-card>
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/partner/cms' }"
+                    @selected="selectedItem($event)"
+                >
 
-        <!--From (Add and Edit)-->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
-            :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
-        >
-            <template #toolbox>
+                    <template #Actions="{$attrs, $listeners}">
 
-                <iv-toolbox-back @click="pageToList()" />
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
 
-            </template>
+                </iv-table>
+            </iv-card>
 
-            <iv-form
-                :interface="IAddAndEditForm()"
-                :value="inputFormData"
-                @submit="saveAddOrEdit($event)"
-            ></iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label=" _('w_ServerCMS_View') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
+            <!-- view -->
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label=" _('w_ServerCMS_View') "
             >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
 
-            </iv-form>
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                </iv-form>
 
-        </iv-card>
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!--From (Add and Edit)-->
+            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="pageStep === ePageStep.add ? _('w_ServerCMS_Add') :  _('w_ServerCMS_Edit')"
+            >
+                <template #toolbox>
+
+                    <iv-toolbox-back @click="pageToList()" />
+
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @submit="saveAddOrEdit($event)"
+                ></iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -114,6 +128,10 @@ import { IAddCMSServer, IEditCMSServer } from "@/config/default/api/interfaces";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 interface IinputFormData extends IAddCMSServer, IEditCMSServer {
     type?: string;
@@ -131,6 +149,12 @@ enum EPageStep {
     components: {}
 })
 export default class CMSServer extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -191,26 +215,34 @@ export default class CMSServer extends Vue {
         }
     }
 
+    pageToList() {
+        // this.pageStep = EPageStep.list;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        // this.pageStep = EPageStep.view;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
     pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
+        // this.pageStep = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.clearInputData();
         this.inputFormData.type = type;
     }
 
     pageToEdit(type: string) {
-        this.pageStep = EPageStep.edit;
+        // this.pageStep = EPageStep.edit;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.getInputData();
         this.inputFormData.type = type;
-    }
-
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.listTable as any).reload();
     }
 
     async saveAddOrEdit(data) {
@@ -384,10 +416,10 @@ export default class CMSServer extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                     this.inputFormData.type === EPageStep.add
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                        this.inputFormData.objectId === ""
+                            ? "iv-form-string"
+                            : "iv-form-label"
+                    }
                  */
                 customId: string;
 

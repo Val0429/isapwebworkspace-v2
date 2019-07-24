@@ -415,9 +415,9 @@ export default class Tags extends Vue {
     async pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-        this.getInputData();
         await this.initSelectItemSite();
         await this.initSelectItemRegion();
+        this.getInputData();
         this.selectedsSites = [];
         this.selectedsRegions = [];
 
