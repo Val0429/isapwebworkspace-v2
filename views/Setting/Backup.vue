@@ -34,20 +34,10 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog.vue";
 import Loading from "@/services/Loading";
 
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none"
-}
-
 @Component({
     components: {}
 })
 export default class Backup extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
 
     selected: any = {};
 
