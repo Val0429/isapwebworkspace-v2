@@ -6,7 +6,7 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.list" -->
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -20,14 +20,14 @@
                     />
                     <iv-toolbox-edit
                         :disabled="isSelected.length !== 1"
-                        @click="pageToEdit(ePageStep.edit)"
+                        @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
                         :disabled="isSelected.length === 0"
                         @click="doDelete"
                     />
                     <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+                    <iv-toolbox-add @click="pageToAdd()" />
 
                 </template>
 
@@ -43,7 +43,7 @@
 
                         <iv-toolbox-more :disabled="isSelected.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
                         </iv-toolbox-more>
                     </template>
@@ -52,7 +52,6 @@
             </iv-card>
 
             <!-- view -->
-            <!-- v-show="pageStep === ePageStep.view" -->
             <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -86,12 +85,11 @@
             </iv-card>
 
             <!--From (Add and Edit)-->
-            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
                 :visible="true"
-                :label="pageStep === ePageStep.add ? _('w_ServerFRS_Add') :  _('w_ServerFRS_Edit')"
+                :label="inputFormData.objectId == '' ? _('w_ServerFRS_Add') :  _('w_ServerFRS_Edit')"
             >
                 <template #toolbox>
 
@@ -152,21 +150,12 @@ import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
 interface IInputFormData extends IFRSServerResults {
-    type?: string;
     employee?: string;
     employeeName?: string;
     vip?: string;
     vipName?: string;
     blacklist?: string;
     blacklistName?: string;
-}
-
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none"
 }
 
 enum EUserGroup {
@@ -184,9 +173,6 @@ export default class FRSServer extends Vue {
         prevStep: 1,
         step: 1
     };
-
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
 
     isSelected: any = [];
     tableMultiple: boolean = true;
@@ -209,7 +195,6 @@ export default class FRSServer extends Vue {
         wsport: null,
         account: "",
         password: "",
-        type: "",
         employee: "",
         vip: "",
         blacklist: ""
@@ -230,7 +215,6 @@ export default class FRSServer extends Vue {
             wsport: null,
             account: "",
             password: "",
-            type: "",
             employee: "",
             vip: "",
             blacklist: ""
@@ -371,33 +355,27 @@ export default class FRSServer extends Vue {
     }
 
     pageToList() {
-        // this.pageStep = EPageStep.list;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         (this.$refs.listTable as any).reload();
     }
 
     async pageToView() {
-        // this.pageStep = EPageStep.view;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
         this.getInputData();
     }
 
-    pageToAdd(type: string) {
-        // this.pageStep = EPageStep.add;
+    pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.clearInputData();
-        this.inputFormData.type = type;
     }
 
-    async pageToEdit(type: string) {
-        // this.pageStep = EPageStep.edit;
+    async pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.getInputData();
-        this.inputFormData.type = type;
 
         if (this.groupData.length === 0) {
             await this.initUserGroupInFRS();
@@ -459,7 +437,7 @@ export default class FRSServer extends Vue {
         });
 
         // add
-        if (this.inputFormData.type === EPageStep.add) {
+        if (this.inputFormData.objectId == "") {
             const datas: IAddFRSServer[] = [
                 {
                     customId: data.customId,
@@ -504,10 +482,8 @@ export default class FRSServer extends Vue {
                         this._("w_ServerFRS_ADDFailed")
                     );
                 });
-        }
-
-        // edit
-        if (this.inputFormData.type === EPageStep.edit) {
+        } else {
+            // edit
             const datas: IEditFRSServer[] = [
                 {
                     name: data.name,

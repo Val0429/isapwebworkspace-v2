@@ -7,7 +7,6 @@
         >
 
             <!-- region tree -->
-            <!-- v-show="pageStep == ePageStep.tree" -->
             <region-tree-setup
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -22,7 +21,6 @@
             </region-tree-setup>
 
             <!-- edit root -->
-            <!-- v-show="pageStep == ePageStep.modifyRoot" -->
             <iv-auto-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -61,7 +59,6 @@
             </iv-auto-card>
 
             <!-- add or edit region -->
-            <!-- v-show="pageStep == ePageStep.modifyRegion" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
@@ -110,7 +107,6 @@
             </iv-auto-card>
 
             <!-- binding site -->
-            <!-- v-show="pageStep == ePageStep.bindingSite" -->
             <iv-auto-card
                 key="transition_4"
                 v-show="transition.step === 4"

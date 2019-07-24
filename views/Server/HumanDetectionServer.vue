@@ -6,7 +6,7 @@
             :type="transition.type"
         >
 
-            <!-- v-show="pageStep === ePageStep.list" -->
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
@@ -39,8 +39,6 @@
                     :server="{ path: '/partner/human-detection' }"
                     :multiple="true"
                 >
-                    <!-- :server="{ path: '/partner/human-detection' }" -->
-                    <!-- :data="datas" -->
 
                     <template #target_score="{$attrs, $listeners}">
                         {{Math.round($attrs.row.target_score*100) + '%'}}
@@ -67,7 +65,6 @@
             </iv-card>
 
             <!-- view -->
-            <!-- v-show="pageStep === ePageStep.view" -->
             <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -102,12 +99,11 @@
             </iv-card>
 
             <!--From (Add and Edit)-->
-            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
                 :visible="true"
-                :label="pageStep == ePageStep.Add ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') "
+                :label="inputFormData.objectId == '' ? _('w_ServerHD_Add') :  _('w_ServerHD_Edit') "
             >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -222,14 +218,6 @@ import Loading from "@/services/Loading";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
-enum EPageStep {
-    List = "List",
-    View = "View",
-    Add = "Add",
-    Edit = "Edit",
-    none = "none"
-}
-
 interface IHDServer {
     objectId?: string;
     customId: string;
@@ -250,8 +238,6 @@ export default class HumanDetectionServer extends Vue {
         step: 1
     };
 
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.none;
     modalShow: boolean = false;
 
     newImg = new Image();
@@ -332,7 +318,6 @@ export default class HumanDetectionServer extends Vue {
     pageToList() {
         this.initTargetScoreItem();
         this.clearInputData();
-        // this.pageStep = EPageStep.list;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         (this.$refs.listTable as any).reload();
@@ -340,21 +325,18 @@ export default class HumanDetectionServer extends Vue {
 
     pageToView() {
         this.getInputData();
-        // this.pageStep = EPageStep.view;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
     }
 
     pageToAdd() {
         this.clearInputData();
-        // this.pageStep = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }
 
     pageToEdit() {
         this.getInputData();
-        // this.pageStep = EPageStep.edit;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }
@@ -405,7 +387,7 @@ export default class HumanDetectionServer extends Vue {
     }
 
     async saveData(data) {
-        if (this.pageStep == EPageStep.Add) {
+        if (this.inputFormData.objectId == '') {
             const datas = [
                 {
                     customId: data.customId,
@@ -442,7 +424,7 @@ export default class HumanDetectionServer extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
-        } else if (this.pageStep == EPageStep.Edit) {
+        } else {
             const datas = [
                 {
                     objectId: data.objectId,
