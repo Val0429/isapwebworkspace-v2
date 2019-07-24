@@ -1,248 +1,254 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label="_('w_OfficeHour_List')"
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
-
-            </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/office-hour' }"
-                @selected="selectedItem($event)"
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_OfficeHour_List')"
             >
-                <template #dayRanges="{$attrs}">
-                    <div v-html="sortOutTableDataFromApi($attrs)"></div>
-                </template>
+                <template #toolbox>
 
-                <template #sites="{$attrs}">
-                    <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #Actions="{$attrs, $listeners}">
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
-                </template>
-
-            </iv-table>
-        </iv-card>
-
-        <!--From (Add and Edit)-->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
-            :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_OfficeHour_Add') :  _('w_OfficeHour_Edit')"
-        >
-            <template #toolbox>
-
-                <iv-toolbox-back @click="pageToList()" />
-
-            </template>
-
-            <iv-form
-                :interface="IAddAndEditForm()"
-                :value="inputFormData"
-                @submit="saveAddOrEdit($event)"
-            >
-                <template #title="{ $attrs, $listeners }">
-                    <div class="ml-3 mb-2 w-100">{{ _('w_OfficeHour') }}</div>
-                </template>
-
-                <template #dayRanges="{$attrs, $listeners}">
-                    <b-form-group class="ml-3">
-                        <b-row
-                            v-for="(value, index) in officeHourTime"
-                            :key="'officeHourTime__' + index"
-                        >
-                            <b-col>
-                                <b-form-select
-                                    class="selectWeekWidth mb-2"
-                                    v-model="officeHourTime[index].startDay"
-                                    :plain="true"
-                                    :options="dayRanges.weeks"
-                                ></b-form-select>
-                            </b-col>
-
-                            <b-col>
-                                <span>{{ _('w_To') }}</span>
-                            </b-col>
-
-                            <b-col>
-                                <b-form-select
-                                    class="selectWeekWidth"
-                                    v-model="officeHourTime[index].endDay"
-                                    :plain="true"
-                                    :options="dayRanges.weeks"
-                                ></b-form-select>
-                            </b-col>
-
-                            <b-col>
-                                <b-form-select
-                                    class="selectHourWidth"
-                                    v-model="officeHourTime[index].startHour"
-                                    :plain="true"
-                                    :options="dayRanges.hours"
-                                ></b-form-select>
-                            </b-col>
-
-                            <b-col>
-                                <span> ： </span>
-                            </b-col>
-
-                            <b-col>
-                                <b-form-select
-                                    class="selectMinuteWidth"
-                                    v-model="officeHourTime[index].startMinute"
-                                    :plain="true"
-                                    :options="dayRanges.minutes"
-                                ></b-form-select>
-                            </b-col>
-
-                            <b-col>
-                                <span>{{ _('w_To') }}</span>
-                            </b-col>
-
-                            <b-col>
-                                <b-form-select
-                                    class="selectHourWidth"
-                                    v-model="officeHourTime[index].endHour"
-                                    :plain="true"
-                                    :options="dayRanges.hours"
-                                ></b-form-select>
-                            </b-col>
-
-                            <b-col>
-                                <span> ： </span>
-                            </b-col>
-
-                            <b-col>
-                                <b-form-select
-                                    class="selectMinuteWidth"
-                                    v-model="officeHourTime[index].endMinute"
-                                    :plain="true"
-                                    :options="dayRanges.minutes"
-                                ></b-form-select>
-                            </b-col>
-
-                            <b-col>
-                                <b-button
-                                    class="button addButton"
-                                    variant="success"
-                                    type="button"
-                                    @click="addOfficeHour()"
-                                >
-                                    <i class="fa fa-plus"></i>
-                                </b-button>
-                            </b-col>
-
-                            <b-col>
-                                <b-button
-                                    v-show="index === 0"
-                                    class="button"
-                                    variant="danger"
-                                    type="button"
-                                    style="visibility:hidden"
-                                    @click="removeOfficeHour(index)"
-                                >
-                                    <i class="fa fa-minus"></i>
-
-                                </b-button>
-                            </b-col>
-
-                            <b-col>
-                                <b-button
-                                    v-show="index !== 0"
-                                    class="button"
-                                    variant="danger"
-                                    type="button"
-                                    @click="removeOfficeHour(index)"
-                                >
-                                    <i class="fa fa-minus"></i>
-
-                                </b-button>
-                            </b-col>
-
-                        </b-row>
-                    </b-form-group>
-
-                </template>
-
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label="_('w_OfficeHour_View')"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
-            >
-                <!--                <template #sites="{$attrs, $listeners}">-->
-                <!--                    <form-label-->
-                <!--                        v-bind="$attrs"-->
-                <!--                        :value="$attrs.value.map(item => item.name).join(', ')"-->
-                <!--                    />-->
-                <!--                </template>-->
-
-                <template #dayRanges="{$attrs, $listeners}">
-                    <iv-form-label
-                        v-bind="$attrs"
-                        :value="$attrs.value"
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
                     />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+
                 </template>
 
-            </iv-form>
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/office-hour' }"
+                    @selected="selectedItem($event)"
+                >
+                    <template #dayRanges="{$attrs}">
+                        <div v-html="sortOutTableDataFromApi($attrs)"></div>
+                    </template>
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                    <template #sites="{$attrs}">
+                        <!--                {{ $attrs.value.map((item, index) => item.name)[0] + '...'}}-->
+                        {{ showFirst($attrs.value) }}
+                    </template>
 
-        </iv-card>
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- view -->
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label="_('w_OfficeHour_View')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+
+                    <template #dayRanges="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            :value="$attrs.value"
+                        />
+                    </template>
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!--From (Add and Edit)-->
+            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_OfficeHour_Add') :  _('w_OfficeHour_Edit')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @submit="saveAddOrEdit($event)"
+                >
+                    <template #title="{ $attrs, $listeners }">
+                        <div class="ml-3 mb-2 w-100">{{ _('w_OfficeHour') }}</div>
+                    </template>
+
+                    <template #dayRanges="{$attrs, $listeners}">
+                        <b-form-group class="ml-3">
+                            <b-row
+                                v-for="(value, index) in officeHourTime"
+                                :key="'officeHourTime__' + index"
+                            >
+                                <b-col>
+                                    <b-form-select
+                                        class="selectWeekWidth mb-2"
+                                        v-model="officeHourTime[index].startDay"
+                                        :plain="true"
+                                        :options="dayRanges.weeks"
+                                    ></b-form-select>
+                                </b-col>
+
+                                <b-col>
+                                    <span>{{ _('w_To') }}</span>
+                                </b-col>
+
+                                <b-col>
+                                    <b-form-select
+                                        class="selectWeekWidth"
+                                        v-model="officeHourTime[index].endDay"
+                                        :plain="true"
+                                        :options="dayRanges.weeks"
+                                    ></b-form-select>
+                                </b-col>
+
+                                <b-col>
+                                    <b-form-select
+                                        class="selectHourWidth"
+                                        v-model="officeHourTime[index].startHour"
+                                        :plain="true"
+                                        :options="dayRanges.hours"
+                                    ></b-form-select>
+                                </b-col>
+
+                                <b-col>
+                                    <span> ： </span>
+                                </b-col>
+
+                                <b-col>
+                                    <b-form-select
+                                        class="selectMinuteWidth"
+                                        v-model="officeHourTime[index].startMinute"
+                                        :plain="true"
+                                        :options="dayRanges.minutes"
+                                    ></b-form-select>
+                                </b-col>
+
+                                <b-col>
+                                    <span>{{ _('w_To') }}</span>
+                                </b-col>
+
+                                <b-col>
+                                    <b-form-select
+                                        class="selectHourWidth"
+                                        v-model="officeHourTime[index].endHour"
+                                        :plain="true"
+                                        :options="dayRanges.hours"
+                                    ></b-form-select>
+                                </b-col>
+
+                                <b-col>
+                                    <span> ： </span>
+                                </b-col>
+
+                                <b-col>
+                                    <b-form-select
+                                        class="selectMinuteWidth"
+                                        v-model="officeHourTime[index].endMinute"
+                                        :plain="true"
+                                        :options="dayRanges.minutes"
+                                    ></b-form-select>
+                                </b-col>
+
+                                <b-col>
+                                    <b-button
+                                        class="button addButton"
+                                        variant="success"
+                                        type="button"
+                                        @click="addOfficeHour()"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </b-button>
+                                </b-col>
+
+                                <b-col>
+                                    <b-button
+                                        v-show="index === 0"
+                                        class="button"
+                                        variant="danger"
+                                        type="button"
+                                        style="visibility:hidden"
+                                        @click="removeOfficeHour(index)"
+                                    >
+                                        <i class="fa fa-minus"></i>
+
+                                    </b-button>
+                                </b-col>
+
+                                <b-col>
+                                    <b-button
+                                        v-show="index !== 0"
+                                        class="button"
+                                        variant="danger"
+                                        type="button"
+                                        @click="removeOfficeHour(index)"
+                                    >
+                                        <i class="fa fa-minus"></i>
+
+                                    </b-button>
+                                </b-col>
+
+                            </b-row>
+                        </b-form-group>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -250,6 +256,10 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Service
 import Datetime from "@/services/Datetime";
@@ -268,16 +278,6 @@ const timeItem = {
     endDate: new Date(2000, 1, 1, 21, 30)
 };
 
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree"
-}
-
 enum EWeeks {
     Sunday = "Sunday",
     Monday = "Monday",
@@ -292,8 +292,11 @@ enum EWeeks {
     components: {}
 })
 export default class GeneralOfficeHour extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
     isSelected: any = [];
     tableMultiple: boolean = true;
@@ -331,7 +334,6 @@ export default class GeneralOfficeHour extends Vue {
         objectId: "",
         name: "",
         dayRanges: [],
-        type: "",
         siteIdsText: "",
         dayRangesText: ""
     };
@@ -397,36 +399,45 @@ export default class GeneralOfficeHour extends Vue {
         }
     }
 
-    pageToAdd(type: string) {
-        this.pageStep = EPageStep.add;
-        if (type === EPageStep.add) {
-            this.officeHourTime = [
-                {
-                    startDay: "1",
-                    endDay: "0",
-                    startHour: "9",
-                    startMinute: "0",
-                    endHour: "21",
-                    endMinute: "30",
-                    startDate: new Date(2000, 1, 1, 9, 0),
-                    endDate: new Date(2000, 1, 1, 21, 30)
-                }
-            ];
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
 
-            this.clearInputData();
-            this.inputFormData.type = type;
-        }
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
         this.dayRangesToText();
     }
 
-    pageToEdit(type: string) {
-        this.pageStep = EPageStep.edit;
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.officeHourTime = [
+            {
+                startDay: "1",
+                endDay: "0",
+                startHour: "9",
+                startMinute: "0",
+                endHour: "21",
+                endMinute: "30",
+                startDate: new Date(2000, 1, 1, 9, 0),
+                endDate: new Date(2000, 1, 1, 21, 30)
+            }
+        ];
+
+        this.clearInputData();
+        this.dayRangesToText();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.getInputData();
 
-        this.inputFormData.type = type;
-
         this.officeHourTime = [];
-
         for (const item of this.inputFormData.dayRanges) {
             let startHour = parseInt(
                 Datetime.DateTime2String(new Date(item.startDate), "HH")
@@ -471,17 +482,6 @@ export default class GeneralOfficeHour extends Vue {
         this.dayRangesToText();
     }
 
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-        this.dayRangesToText();
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.listTable as any).reload();
-    }
-
     addOfficeHour() {
         var tempTimeItem = JSON.parse(JSON.stringify(timeItem));
         this.officeHourTime.push(tempTimeItem);
@@ -492,7 +492,7 @@ export default class GeneralOfficeHour extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        if (this.inputFormData.type === EPageStep.add) {
+        if (this.inputFormData.objectId == "") {
             data.dayRanges = [];
 
             for (const item of this.officeHourTime) {
@@ -554,10 +554,8 @@ export default class GeneralOfficeHour extends Vue {
                         this._("w_OfficeHour_AddFailed")
                     );
                 });
-        }
-
-        // edit
-        if (this.inputFormData.type === EPageStep.edit) {
+        } else {
+            // edit
             data.dayRanges = [];
 
             for (const item of this.officeHourTime) {
@@ -874,33 +872,6 @@ export default class GeneralOfficeHour extends Vue {
         `;
     }
 
-    IAddAndEditForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_OfficeHour_Name")}
-                 * @uiPlaceHolder - ${this._("w_OfficeHour_Name")}
-                 * @uiType - ${
-                     this.inputFormData.type === EPageStep.add
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
-                */
-                name: string;
-
-                title?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_Description")}
-                 * @uiPlaceHolder - ${this._("w_Description")}
-                 */
-                dayRanges?: any;
-
-            }
-        `;
-    }
-
     IViewForm() {
         return `
             interface {
@@ -922,6 +893,33 @@ export default class GeneralOfficeHour extends Vue {
                  * @uiType - iv-form-label
                  */
                 siteIdsText: string;
+
+            }
+        `;
+    }
+
+    IAddAndEditForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_OfficeHour_Name")}
+                 * @uiPlaceHolder - ${this._("w_OfficeHour_Name")}
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                */
+                name: string;
+
+                title?: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiPlaceHolder - ${this._("w_Description")}
+                 */
+                dayRanges?: any;
 
             }
         `;
