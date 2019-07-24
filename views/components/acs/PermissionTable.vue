@@ -165,22 +165,20 @@
                         ></iv-form-selection>
                     </template>
 
-                    <template #elevatorArea="{ $attrs, $listeners }">
-                        <iv-form-string
-                            v-if="deviceType === eDeviceType.elevator"
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :disabled="true"
-                            v-model="inputFormData.elevatorAreaOption"
-                        ></iv-form-string>
-                    </template>
-
                     <template #elevatorTimeFormat="{ $attrs, $listeners }">
                         <iv-form-selection
                             v-show="deviceType == eDeviceType.elevator"
                             v-bind="$attrs"
                             v-on="$listeners"
                             v-model="inputFormData.deviceTimeFormatOption"
+                        ></iv-form-selection>
+                    </template>
+                    <template #elevatorArea="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-if="deviceType === eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.elevatorAreaOption"
                         ></iv-form-selection>
                     </template>
 
@@ -248,7 +246,7 @@
 
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog/Dialog";
@@ -695,14 +693,27 @@ export default class PermissionTable extends Vue {
 
             // elevator
             case "elevatorName":
+                console.log("elevatorName changed",data);
+                this.floorOptions={};
+                let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == data.value);                
+                if(elevator&&elevator.reader){
+                    for(let floor of elevator.reader){
+                        this.floorOptions[floor.objectId]=floor.floorname;
+                    }
+                }else{
+                    this.inputFormData.elevatorAreaOption="";
+                }
                 for (const key in this.selectItem.elevatorDevice) {
                     if (data.value === key) {
                         this.inputFormData.elevatorNameOption = key;
                         break;
                     }
                 }
+                break;            
+            case "elevatorArea":
+                console.log("elevatorArea changed",data);
+                this.inputFormData.elevatorAreaOption = data.value;                
                 break;
-
             case "elevatorTimeFormat":
                 for (const key in this.selectItem.timeSchedule) {
                     if (data.value === key) {
@@ -713,12 +724,15 @@ export default class PermissionTable extends Vue {
                 break;
         }
     }
-
+    floorOptions:any={};
     selectedDeviceType(data) {
         this.deviceType = data;
         this.inputFormData.data.deviceType = data;
     }
-
+    // @Watch("inputFormData.elevatorAreaOption", {immediate:true})
+    // elevatorChanged(value, oldValue){
+    //     console.log("elevatorAreaOption", value, oldValue)
+    // }
     clickAddDeviceInTable() {
         let deviceData: any = {
             objectId: "",
@@ -792,6 +806,17 @@ export default class PermissionTable extends Vue {
                     return false;
                 }
                 deviceData.deviceName.id = this.inputFormData.elevatorNameOption;
+                if(this.inputFormData.elevatorAreaOption){
+                    let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id );    
+                    console.log("elevator", elevator);
+                    if(elevator&&elevator.reader){
+                        deviceData.area.id = this.inputFormData.elevatorAreaOption;
+                        let floor = elevator.reader.find(x=>x.objectId == deviceData.area.id);
+                        if(floor)deviceData.area.text=floor.floorname;
+                    }
+                    
+                }
+                
                 for (let loopKey in this.selectItem.elevatorDevice) {
                     if (loopKey == deviceData.deviceName.id) {
                         deviceData.deviceName.text = this.selectItem.elevatorDevice[
@@ -853,8 +878,9 @@ export default class PermissionTable extends Vue {
             tablename: this.inputFormData.permissionName,
             accesslevels: []
         };
-
+        
         for (let tempData of this.inputFormData.data) {
+            console.log("tempData", tempData);
             if (tempData.objectId != undefined && tempData.objectId != "") {
                 premissionParam.accesslevels.push(tempData.objectId);
             } else {
@@ -947,23 +973,14 @@ export default class PermissionTable extends Vue {
 
                     case EDeviceType.elevator:
                         accessParam.elevator = tempData.deviceName.id;
-                        for (let elevator of this.selectItemOriginal.elevator) {
-                            if (
-                                elevator.objectId != undefined &&
-                                elevator.elevatorid != undefined &&
-                                elevator.objectId == accessParam.elevator
-                            ) {
-                                if (elevator.reader != undefined) {
-                                    for (let reader of elevator.reader) {
-                                        if (reader.objectId != undefined) {
-                                            accessParam.reader.push(
-                                                reader.objectId
-                                            );
-                                        }
-                                    }
-                                }
-                            }
+                        if(tempData.area){
+                            accessParam.floor=[tempData.area.id];
                         }
+                        // TODO: ask pm about this reader
+                        // let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == accessParam.elevator);
+                        // if(elevator && elevator.reader){
+                        //     accessParam.reader = elevator.reader.map(x=>x.objectId);
+                        // }
                         break;
 
                     case EDeviceType.elevatorGroup:
@@ -971,7 +988,7 @@ export default class PermissionTable extends Vue {
                     default:
                         break;
                 }
-
+                
                 await this.$server
                     .C("/acs/accesslevel", accessParam)
                     .then((response: any) => {
@@ -1220,14 +1237,9 @@ export default class PermissionTable extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Permission_DeviceArea")}
                  * @uiColumnGroup - row112
-                 * @uiType - ${
-                    this.deviceType === EDeviceType.elevator
-                        ? "iv-form-string"
-                        : "iv-form-label"
-                }
-                * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                * @uiHidden - ${this.pageStep === EPageStep.view ? "true" : "false"}
                 */
-                 elevatorArea?: string;
+                 elevatorArea?:  ${toEnumInterface(this.floorOptions, false)};
 
 
                  /**
