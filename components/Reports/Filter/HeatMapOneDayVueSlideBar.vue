@@ -6,13 +6,14 @@
             :range="slider.range"
             :labelStyles="{ color: '#4a4a4a', backgroundColor: '#4a4a4a' }"
             :processStyle="{ backgroundColor: '#d8d8d8' }"
+            class="mb-4"
             @callbackRange="callbackRange">
             <template slot="tooltip" slot-scope="tooltip">
                 <img src="../images/rectangle-slider.svg">
             </template>
         </VueSlideBar>
-        <h2>Value: {{slider.value}}</h2>
-        <h2>Label: {{rangeValue}}</h2>
+<!--        <h2>Value: {{slider.value}}</h2>-->
+<!--        <h2>Label: {{rangeValue}}</h2>-->
     </div>
 </template>
 

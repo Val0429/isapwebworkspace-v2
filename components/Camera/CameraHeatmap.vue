@@ -28,7 +28,10 @@
                     </div>
                 </div>
             </div>
-            <div class="center">
+            <div
+                class="center"
+                v-if="heatMapPosition.length > 0"
+            >
                 <b-form-input
                     @mousemove="changeAlpha(alpha)"
                     v-model="alpha"
