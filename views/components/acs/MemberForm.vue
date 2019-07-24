@@ -406,9 +406,7 @@ export default class MemberForm extends Vue {
     infoOfViolation2: "",
     dateOfViolation2: null,
     infoOfViolation3: "",
-    dateOfViolation3: null,
-    Token:"-1",
-    Status:1
+    dateOfViolation3: null
   };
 
   clearInputData() {    
@@ -515,11 +513,10 @@ export default class MemberForm extends Vue {
       this.inputFormData.objectId = detailData.objectId;      
 
       if (detailData.AccessRules) {
-        console.log("pushing from access rules1",  this.permissionSelected);
+        console.log("pushing from access rules")
         for (let rule of detailData.AccessRules) {
               this.permissionSelected.push(rule.RuleToken ? rule.RuleToken: rule);            
         }
-        console.log("pushing from access rules2",  this.permissionSelected);
       }
       let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
       this.inputFormData.personType = (detailData.PrimaryWorkgroupId || (defaultWg ? defaultWg.groupid : 1)).toString();
@@ -582,9 +579,7 @@ export default class MemberForm extends Vue {
       if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
       for(let field of CustomFields){
         this.inputFormData[field.name] = this.getFieldValue(field.fieldName, detailData.CustomFields, field.date);
-      }
-      this.inputFormData.Token = detailData.Token || "-1";
-      this.inputFormData.Status = detailData.Status || 1;
+      }           
   }
 
   tempSaveInputData(data) {
@@ -728,14 +723,14 @@ export default class MemberForm extends Vue {
         StartDate: this.inputFormData.startDate || credential.StartDate,
         EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
         SmartCardProfileId:"0",
-        Status: this.inputFormData.Status,
+        Status:1,
         //new addition
         GeneralInformation:"",
         Attributes:{},
         NonPartitionWorkGroups:[],
         NonPartitionWorkgroupAccessRules:[],
         PrimaryWorkGroupAccessRule:[],       
-        Token: this.inputFormData.Token,
+        Token: "-1",
         Vehicle1: {},
         Vehicle2: {},
         VisitorDetails: {
