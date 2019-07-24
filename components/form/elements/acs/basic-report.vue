@@ -27,7 +27,7 @@
             
         <template v-if="isMounted" >            
             <div class="float-right">
-                <b-button class="btn-filter" size="lg" v-bind="$refs.filter.submitBindings.$attrs" v-on="$refs.filter.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                <b-button :disabled="selectedColumns.length==0" class="btn-filter" size="lg" v-bind="$refs.filter.submitBindings.$attrs" v-on="$refs.filter.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
                 <b-button class="btn-filter" size="lg" v-bind="$refs.filter.resetBindings.$attrs" v-on="$refs.filter.resetBindings.$listeners" @click="onReset()">{{ _("wb_Reset") }}</b-button>                
             </div>
         </template>
