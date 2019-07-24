@@ -351,8 +351,8 @@ export default class UserGroup extends Vue {
     async pageToEdit(type: string) {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-        this.getInputData();
         await this.initSelectItemSite();
+        this.getInputData();
         this.selecteds = [];
         this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(
@@ -642,7 +642,7 @@ export default class UserGroup extends Vue {
         `;
     }
 
-    
+
 }
 </script>
 

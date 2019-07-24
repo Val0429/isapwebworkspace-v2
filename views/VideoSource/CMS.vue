@@ -786,8 +786,8 @@ export default class CMS extends Vue {
 
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
-        this.getInputData();
         await this.initSelectItemFRSServer();
+        this.getInputData();
         // await this.initSelectItemDeviceGroup();
         // await this.initSelectItemArea();
         this.inputFormData.stepType = stepType;
