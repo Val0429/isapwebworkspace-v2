@@ -968,13 +968,19 @@ export default class HumanDetection extends Vue {
     }
 
     showGroups(datas) {
-        var groups = [];
-        for (let data of datas) {
-            let groupName = this.groupNameItem.filter(g => g.id == data)[0]
-                .text;
-            groups.push(groupName);
+        let result = '';
+        let groups = [];
+        if (this.groupNameItem.length > 0) {
+            for (let data of datas) {
+
+                let groupName = this.groupNameItem.filter(g => g.id == data)[0]
+                    .text;
+                groups.push(groupName);
+            }
+            return groups.join(",");
+        } else {
+            return result;
         }
-        return groups.join(",");
     }
 
     ITableList() {
@@ -1043,9 +1049,9 @@ export default class HumanDetection extends Vue {
                 * @uiLabel - ${this._("w_VSHumanDetection_CustomId")}
                 * @uiPlaceHolder - ${this._("w_VSHumanDetection_CustomId")}
                 * @uiType - ${
-                        this.inputFormData.objectId == ""
-                            ? "iv-form-string"
-                            : "iv-form-label"
+                    this.inputFormData.objectId == ""
+                        ? "iv-form-string"
+                        : "iv-form-label"
                 }
                 */
                 customId: string;

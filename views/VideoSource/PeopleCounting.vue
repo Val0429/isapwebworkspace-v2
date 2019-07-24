@@ -1,9 +1,17 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label="_('w_VSPeopleCounting_List')"
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
+
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_VSPeopleCounting_List')"
+            >
             <template #toolbox>
 
                 <iv-toolbox-view
@@ -56,11 +64,13 @@
             </iv-table>
         </iv-card>
 
-        <!-- 選擇增加方式 -->
-        <iv-card
-            v-show="addStep === eAddStep.select"
-            :label="_('w_VSPeopleCounting_Add') "
-        >
+            <!-- 選擇增加方式 -->
+            <!-- v-show="addStep === eAddStep.select" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :label="_('w_VSPeopleCounting_Add') "
+            >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList" />
             </template>
@@ -131,9 +141,12 @@
         </iv-card>
 
         <!-- add and edit by Hanwha -->
-        <iv-auto-card
-            v-show="(addStep === eAddStep.hanwha && pageStep === ePageStep.add) || (addStep === eAddStep.hanwha && pageStep === ePageStep.edit)"
-            :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_EdithanwhaUse')"
+        <!--             v-show="(addStep === eAddStep.hanwha && pageStep === ePageStep.add) || (addStep === eAddStep.hanwha && pageStep === ePageStep.edit)"
+         -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_EdithanwhaUse')"
         >
             <template #toolbox>
                 <iv-toolbox-leave
@@ -199,12 +212,19 @@
 
         </iv-auto-card>
 
-        <!-- view by Hanwha -->
-        <iv-card
-            v-show="pageStep === ePageStep.view && addStep === eAddStep.hanwha"
-            :visible="true"
-            :label="_('w_VSPeopleCounting_View')"
-        >
+            <!-- view by Hanwha -->
+            <!--        <iv-card-->
+            <!--            v-show="pageStep === ePageStep.view && addStep === eAddStep.hanwha"-->
+            <!--            :visible="true"-->
+            <!--            :label="_('w_VSPeopleCounting_View')"-->
+            <!--        >-->
+
+            <iv-card
+                key="transition_4"
+                v-show="transition.step === 4"
+                :visible="true"
+                :label="_('w_VSPeopleCounting_View')"
+            >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
             </template>
@@ -228,10 +248,17 @@
         </iv-card>
 
         <!-- add and edit by iSap FRS and FRS Manager  -->
-        <iv-auto-card
-            v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "
-            :label=showLabelTitle()
-        >
+<!--        <iv-auto-card-->
+<!--            v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "-->
+<!--            :label=showLabelTitle()-->
+<!--        >-->
+
+            <iv-auto-card
+                key="transition_5"
+                v-show="transition.step === 5"
+                :label=showLabelTitle()
+            >
+
             <template #toolbox>
                 <iv-toolbox-leave
                     v-show="pageStep === ePageStep.add"
@@ -297,12 +324,19 @@
 
         </iv-auto-card>
 
-        <!-- view by iSap FRS and FRS Manager -->
-        <iv-card
-            v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"
-            :visible="true"
-            :label="_('w_VSPeopleCounting_View')"
-        >
+            <!-- view by iSap FRS and FRS Manager -->
+            <!--        <iv-card-->
+            <!--            v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"-->
+            <!--            :visible="true"-->
+            <!--            :label="_('w_VSPeopleCounting_View')"-->
+            <!--        >-->
+
+            <iv-card
+                key="transition_6"
+                v-show="transition.step === 6"
+                :visible="true"
+                :label="_('w_VSPeopleCounting_View')"
+            >
             <template #toolbox>
                 <iv-toolbox-back @click="pageToList()" />
             </template>
@@ -325,8 +359,11 @@
 
         </iv-card>
 
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
+            <!-- region tree select -->
+            <!-- v-show="pageStep === ePageStep.chooseTree" -->
+            <region-tree-select
+                key="transition_7"
+                v-show="transition.step === 7"
             v-on:click-back="pageToShowResult"
             :multiple="false"
             :regionTreeItem="regionTreeItem"
@@ -334,6 +371,8 @@
             :selecteds="selecteds"
         >
         </region-tree-select>
+        </iv-auto-transition>
+
 
     </div>
 </template>
@@ -363,6 +402,10 @@ import Dialog from "@/services/Dialog";
 import RegionAPI from "@/services/RegionAPI";
 import Loading from "@/services/Loading";
 
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
 enum EPageStep {
     list = "list",
     add = "add",
@@ -390,6 +433,13 @@ enum ECameraMode {
     components: {}
 })
 export default class PeopleCounting extends Vue {
+
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -600,8 +650,10 @@ export default class PeopleCounting extends Vue {
             };
         }
 
-        if (this.inputFormData.serverId !== "") {
-            this.selectSourceIdAndLocation(this.inputFormData.serverId);
+        if (this.pageStep === EPageStep.edit) {
+            if (this.inputFormData.serverId !== "") {
+                this.selectSourceIdAndLocation(this.inputFormData.serverId);
+            }
         }
     }
 
@@ -872,7 +924,17 @@ export default class PeopleCounting extends Vue {
         }
     }
 
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        this.addStep = EAddStep.none;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
     async pageToAdd(stepType: string) {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
         this.clearInputData();
         await this.initSelectItemSite();
         this.pageStep = EPageStep.add;
@@ -897,10 +959,14 @@ export default class PeopleCounting extends Vue {
 
         if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
         }
 
         if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 5;
         }
 
         switch (this.inputFormData.brand) {
@@ -917,17 +983,15 @@ export default class PeopleCounting extends Vue {
         this.getInputData();
         if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 4;
         }
 
         if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 6;
         }
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        this.addStep = EAddStep.none;
-        (this.$refs.listTable as any).reload();
     }
 
     async pageToAddByHanwha(brand: string) {
@@ -935,6 +999,8 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemSite();
         this.addStep = EAddStep.hanwha;
         this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.inputFormData.brand = brand;
     }
 
@@ -943,8 +1009,10 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         this.addStep = EAddStep.isapFrs;
-        this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 5;
+        this.inputFormData.brand = brand;
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
@@ -952,17 +1020,23 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemSite();
 
         this.addStep = EAddStep.isapFrsManager;
-        this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 5;
+        this.inputFormData.brand = brand;
     }
 
     pageStepBackward() {
         this.clearInputData();
         this.addStep = EAddStep.select;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
     }
 
     async pageToChooseTree() {
         this.pageStep = EPageStep.chooseTree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 7;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
@@ -985,6 +1059,7 @@ export default class PeopleCounting extends Vue {
     async pageToShowResult() {
         if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
+            this.transition.step = this.transition.prevStep;
 
             // siteId clear
             this.inputFormData.siteId = "";
@@ -998,6 +1073,8 @@ export default class PeopleCounting extends Vue {
 
         if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
+            this.transition.step = this.transition.prevStep;
+
             // siteId clear
             this.inputFormData.siteId = "";
 
