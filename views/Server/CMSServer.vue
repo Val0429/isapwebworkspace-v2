@@ -416,10 +416,10 @@ export default class CMSServer extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                        this.inputFormData.objectId === ""
-                            ? "iv-form-string"
-                            : "iv-form-label"
-                    }
+                     this.inputFormData.objectId === ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
                 customId: string;
 
