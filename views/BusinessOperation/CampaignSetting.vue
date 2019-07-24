@@ -1,147 +1,163 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label="_('w_BOCampaign_List')"
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
-
-            </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/event/campaign' }"
-                @selected="selectedItem($event)"
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_BOCampaign_List')"
             >
-                <template #startDate="{$attrs}">
-                    {{ dateToYYYY_MM_DD($attrs.value) }}
+                <template #toolbox>
+
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+
                 </template>
 
-                <template #endDate="{$attrs}">
-                    {{ dateToYYYY_MM_DD($attrs.value) }}
-                </template>
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/event/campaign' }"
+                    @selected="selectedItem($event)"
+                >
+                    <template #startDate="{$attrs}">
+                        {{ dateToYYYY_MM_DD($attrs.value) }}
+                    </template>
 
-                <template #sites="{$attrs}">
-                    {{ showFirst($attrs.value) }}
-                </template>
+                    <template #endDate="{$attrs}">
+                        {{ dateToYYYY_MM_DD($attrs.value) }}
+                    </template>
 
-                <template #Actions="{$attrs, $listeners}">
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
-                </template>
+                    <template #sites="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
 
-            </iv-table>
-        </iv-card>
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
 
-        <!--From (Add and Edit)-->
-        <iv-auto-card
-            v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit"
-            :visible="true"
-            :label="pageStep === ePageStep.add ? _('w_BOCampaign_Add') :  _('w_BOCampaign_Edit')"
-        >
-            <template #toolbox>
+                </iv-table>
+            </iv-card>
 
-                <iv-toolbox-back @click="pageToList()" />
-
-            </template>
-
-            <iv-form
-                :interface="IAddAndEditForm()"
-                :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAddOrEdit($event)"
+            <!-- view -->
+            <!-- v-show="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label="_('w_BOCampaign_View')"
             >
-
-                <template #year="{$attrs, $listeners}">
-                    <iv-form-selection
-                        v-bind="$attrs"
-                        v-on="$listeners"
-                        v-model="inputFormData.year"
-                        :multiple="false"
-                        :options="yearSelectItem"
-                    >
-                    </iv-form-selection>
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
                 </template>
 
-                <template #selectTree="{ $attrs, $listeners }">
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
 
-                    <div class="mt-2 ml-3">
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
                 </template>
 
-            </iv-form>
+            </iv-card>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- view -->
-        <iv-card
-            v-show="pageStep === ePageStep.view"
-            :visible="true"
-            :label="_('w_BOCampaign_View')"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
+            <!--From (Add and Edit)-->
+            <!-- v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit" -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_BOCampaign_Add') :  _('w_BOCampaign_Edit')"
             >
+                <template #toolbox>
 
-            </iv-form>
+                    <iv-toolbox-back @click="pageToList()" />
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                </template>
 
-        </iv-card>
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEdit($event)"
+                >
 
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            v-on:click-back="pageToShowResult"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-        >
-        </region-tree-select>
+                    <template #year="{$attrs, $listeners}">
+                        <iv-form-selection
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.year"
+                            :multiple="false"
+                            :options="yearSelectItem"
+                        >
+                        </iv-form-selection>
+                    </template>
+
+                    <template #selectTree="{ $attrs, $listeners }">
+
+                        <div class="mt-2 ml-3">
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <!-- v-show="pageStep === ePageStep.chooseTree" -->
+            <region-tree-select
+                key="transition_4"
+                v-show="transition.step === 4"
+                v-on:click-back="pageToShowResult"
+                :multiple="true"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+            >
+            </region-tree-select>
+
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -159,12 +175,16 @@ import {
     IEditBusinessOperationCampaign
 } from "@/config/default/api/interfaces";
 
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
 // Region Tree
 import {
     ERegionType,
     IRegionItem,
-    RegionTreeItem,
-    IRegionTreeSelected
+    IRegionTreeSelected,
+    RegionTreeItem
 } from "@/components/RegionTree";
 
 // Service
@@ -179,35 +199,25 @@ interface IinputFormData
         IEditBusinessOperationCampaign {
     siteIdsText?: string;
     tempSiteIds?: any;
-    stepType?: string;
     startDateText?: string;
     endDateText?: string;
     sites?: any;
     year: any;
 }
 
-enum EPageStep {
-    list = "list",
-    add = "add",
-    edit = "edit",
-    view = "view",
-    none = "none",
-    showResult = "showResult",
-    chooseTree = "chooseTree"
-}
-
 @Component({
     components: {}
 })
 export default class CampaignSetting extends Vue {
-    ePageStep = EPageStep;
-    pageStep: EPageStep = EPageStep.list;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
     isSelected: any = [];
     tableMultiple: boolean = true;
-
     selectedDetail: any = [];
-
     sitesSelectItem: any = {};
     yearSelectItem: any = [];
 
@@ -225,7 +235,6 @@ export default class CampaignSetting extends Vue {
         siteIds: [],
         startDate: new Date(),
         endDate: new Date(),
-        stepType: "",
         siteIdsText: "",
         startDateText: "",
         endDateText: "",
@@ -235,6 +244,71 @@ export default class CampaignSetting extends Vue {
     created() {}
 
     mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+        this.initYear();
+        await this.initSelectItemSite();
+        this.selecteds = [];
+    }
+
+    async pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.getInputData();
+        this.initYear();
+        await this.initSelectItemSite();
+        this.inputFormData.year = this.inputFormData.year.toString();
+        this.inputFormData.siteIds = JSON.parse(
+            JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
+        );
+    }
+
+    async pageToChooseTree() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selecteds = [];
+        for (const id of this.inputFormData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    pageToShowResult() {
+        this.transition.step = this.transition.prevStep;
+
+        // siteIds clear
+        this.inputFormData.siteIds = [];
+
+        // from selecteds push siteIds
+        for (const item of this.selecteds) {
+            this.inputFormData.siteIds.push(item.objectId);
+        }
+    }
 
     clearInputData() {
         this.inputFormData = {
@@ -246,7 +320,6 @@ export default class CampaignSetting extends Vue {
             siteIds: [],
             startDate: new Date(),
             endDate: new Date(),
-            stepType: "",
             siteIdsText: "",
             startDateText: "",
             endDateText: "",
@@ -328,7 +401,6 @@ export default class CampaignSetting extends Vue {
                 type: param.type,
                 siteIdsText: this.idsToText(param.sites),
                 sites: param.sites,
-                stepType: "",
                 year: param.year.toString()
             };
         }
@@ -375,86 +447,8 @@ export default class CampaignSetting extends Vue {
         }
     }
 
-    async pageToAdd(stepType: string) {
-        this.pageStep = EPageStep.add;
-        this.clearInputData();
-        this.initYear();
-        await this.initSelectItemSite();
-
-        this.selecteds = [];
-        this.inputFormData.stepType = stepType;
-    }
-
-    async pageToEdit(stepType: string) {
-        this.pageStep = EPageStep.edit;
-        this.getInputData();
-        this.initYear();
-        await this.initSelectItemSite();
-
-        this.inputFormData.stepType = stepType;
-        this.inputFormData.year = this.inputFormData.year.toString();
-
-        this.inputFormData.siteIds = JSON.parse(
-            JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
-        );
-    }
-
-    pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        (this.$refs.listTable as any).reload();
-    }
-
-    async pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
-        this.initRegionTreeSelect();
-        await this.initSelectItemTree();
-        this.selecteds = [];
-        for (const id of this.inputFormData.siteIds) {
-            for (const detail in this.sitesSelectItem) {
-                if (id === detail) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail,
-                        type: ERegionType.site,
-                        name: this.sitesSelectItem[detail]
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
-            }
-        }
-    }
-
-    pageToShowResult() {
-        if (this.inputFormData.stepType === EPageStep.edit) {
-            this.pageStep = EPageStep.edit;
-            // siteIds clear
-            this.inputFormData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
-        }
-
-        if (this.inputFormData.stepType === EPageStep.add) {
-            this.pageStep = EPageStep.add;
-
-            // siteIds clear
-            this.inputFormData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
-        }
-    }
-
     async saveAddOrEdit(data) {
-        if (this.inputFormData.stepType === EPageStep.add) {
+        if (this.inputFormData.objectId == "") {
             const datas: any = [
                 {
                     name: data.name,
@@ -497,10 +491,8 @@ export default class CampaignSetting extends Vue {
                         this._("w_BOCampaign_ADDFailed")
                     );
                 });
-        }
-
-        // edit
-        if (this.inputFormData.stepType === EPageStep.edit) {
+        } else {
+            // Edit
             const datas: any = [
                 {
                     objectId: data.objectId,
@@ -660,78 +652,6 @@ export default class CampaignSetting extends Vue {
         `;
     }
 
-    IAddAndEditForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventName")}
-                 * @uiPlaceHolder - ${this._("w_BOCampaign_EventName")}
-                 * @uiType - ${
-                     this.inputFormData.stepType === EPageStep.add
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
-                */
-                name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_EventType")}
-                 * @uiPlaceHolder - ${this._("w_BOCampaign_EventType")}
-                 */
-                type: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_Budget")}
-                 * @uiPlaceHolder - ${this._("w_BOCampaign_Budget")}
-                 * @uiAttrs - { min: 0 }
-                 */
-                budget: number;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Description")}
-                 * @uiPlaceHolder - ${this._("w_Description")}
-                 * @uiType - iv-form-textarea
-                 */
-                description: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_BOCampaign_FiscalYear")}
-                 */
-                year: any;
-
-
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_StartDate")}
-                * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
-                * @uiType - iv-form-date
-                */
-                startDate: any;
-
-
-                /**
-                * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
-                * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
-                * @uiType - iv-form-date
-                */
-                endDate: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-
-                selectTree?: any;
-
-            }
-        `;
-    }
-
     IViewForm() {
         return `
             interface {
@@ -791,6 +711,78 @@ export default class CampaignSetting extends Vue {
                  * @uiType - iv-form-label
                  */
                 siteIdsText: string;
+
+            }
+        `;
+    }
+
+    IAddAndEditForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_EventName")}
+                 * @uiPlaceHolder - ${this._("w_BOCampaign_EventName")}
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                */
+                name: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_EventType")}
+                 * @uiPlaceHolder - ${this._("w_BOCampaign_EventType")}
+                 */
+                type: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_Budget")}
+                 * @uiPlaceHolder - ${this._("w_BOCampaign_Budget")}
+                 * @uiAttrs - { min: 0 }
+                 */
+                budget: number;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Description")}
+                 * @uiPlaceHolder - ${this._("w_Description")}
+                 * @uiType - iv-form-textarea
+                 */
+                description: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_BOCampaign_FiscalYear")}
+                 */
+                year: any;
+
+
+                /**
+                * @uiLabel - ${this._("w_BOCampaign_StartDate")}
+                * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
+                * @uiType - iv-form-date
+                */
+                startDate: any;
+
+
+                /**
+                * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
+                * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
+                * @uiType - iv-form-date
+                */
+                endDate: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                 */
+                siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+
+                selectTree?: any;
 
             }
         `;
