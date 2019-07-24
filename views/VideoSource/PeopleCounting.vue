@@ -12,57 +12,57 @@
                 v-show="transition.step === 1"
                 :label="_('w_VSPeopleCounting_List')"
             >
-            <template #toolbox>
+                <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit(ePageStep.edit)"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
 
-            </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/device' }"
-                :params="params"
-                @selected="selectedItem($event)"
-            >
-
-                <template #site="{$attrs}">
-                    <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
-                    {{ $attrs.value ? $attrs.value.name : ""}}
                 </template>
 
-                <template #area="{$attrs}">
-                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}
-                </template>
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/device' }"
+                    :params="params"
+                    @selected="selectedItem($event)"
+                >
 
-                <template #groups="{$attrs}">
-                    {{ showFirst($attrs.value) }}
-                </template>
+                    <template #site="{$attrs}">
+                        <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
+                        {{ $attrs.value ? $attrs.value.name : ""}}
+                    </template>
 
-                <template #Actions="{$attrs, $listeners}">
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
-                </template>
+                    <template #area="{$attrs}">
+                        {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}
+                    </template>
 
-            </iv-table>
-        </iv-card>
+                    <template #groups="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
 
             <!-- 選擇增加方式 -->
             <!-- v-show="addStep === eAddStep.select" -->
@@ -71,146 +71,146 @@
                 v-show="transition.step === 2"
                 :label="_('w_VSPeopleCounting_Add') "
             >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList" />
-            </template>
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList" />
+                </template>
 
-            <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_Addhanwha') }}</div>
+                <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_Addhanwha') }}</div>
 
-            <b-button
-                class="button mt-3 mb-1"
-                size="md"
-                variant="success"
-                type="button"
-                @click="pageToAddByHanwha(eAddStep.hanwha)"
-            >
-                {{ _('w_Hanwha') }}
-            </b-button>
-
-            <hr>
-
-            <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
-
-            <b-button
-                class="button mt-3 mb-1"
-                size="md"
-                variant="success"
-                type="button"
-                @click="pageToAddByiSapFRS(eAddStep.isapFrs)"
-            >
-                {{ _('w_iSapFRS') }}
-            </b-button>
-
-            <b-button
-                variant="link"
-                class="mt-4"
-                @click="goToSetFRSServer"
-            >
-                {{ _('w_SetFRS') }}
-            </b-button>
-
-            <br>
-
-            <b-button
-                class="button mt-3 mb-1"
-                size="md"
-                variant="success"
-                type="button"
-                @click="pageToAddByiSapFRSManager(eAddStep.isapFrsManager)"
-            >
-                {{ _('w_iSapFRSManager') }}
-            </b-button>
-
-            <b-button
-                variant="link"
-                class="mt-4"
-                @click="goToSetFRSManager"
-            >
-                {{ _('w_SetFRSManger') }}
-            </b-button>
-
-            <template #footer>
                 <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByHanwha(eAddStep.hanwha)"
+                >
+                    {{ _('w_Hanwha') }}
                 </b-button>
-            </template>
 
-        </iv-card>
+                <hr>
 
-        <!-- add and edit by Hanwha -->
-        <!--             v-show="(addStep === eAddStep.hanwha && pageStep === ePageStep.add) || (addStep === eAddStep.hanwha && pageStep === ePageStep.edit)"
+                <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
+
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByiSapFRS(eAddStep.isapFrs)"
+                >
+                    {{ _('w_iSapFRS') }}
+                </b-button>
+
+                <b-button
+                    variant="link"
+                    class="mt-4"
+                    @click="goToSetFRSServer"
+                >
+                    {{ _('w_SetFRS') }}
+                </b-button>
+
+                <br>
+
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByiSapFRSManager(eAddStep.isapFrsManager)"
+                >
+                    {{ _('w_iSapFRSManager') }}
+                </b-button>
+
+                <b-button
+                    variant="link"
+                    class="mt-4"
+                    @click="goToSetFRSManager"
+                >
+                    {{ _('w_SetFRSManger') }}
+                </b-button>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!-- add and edit by Hanwha -->
+            <!--             v-show="(addStep === eAddStep.hanwha && pageStep === ePageStep.add) || (addStep === eAddStep.hanwha && pageStep === ePageStep.edit)"
          -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
                 :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddhanwhaUse') : _('w_VSPeopleCounting_EdithanwhaUse')"
-        >
-            <template #toolbox>
-                <iv-toolbox-leave
-                    v-show="pageStep === ePageStep.add"
-                    @click="pageToList"
-                />
-                <iv-toolbox-step-backward
-                    v-show="pageStep === ePageStep.add"
-                    @click="pageStepBackward"
-                />
-                <iv-toolbox-back
-                    v-show="pageStep === ePageStep.edit"
-                    @click="pageToList"
-                />
-            </template>
-
-            <iv-form
-                :interface="IAddAndEditFromHanwha()"
-                :value="inputFormData"
-                @update:siteId="selectAreaId($event)"
-                @update:areaId="selectGroupDeviceId($event)"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAddOrEditHanwha($event)"
             >
-                <template #selectTree="{ $atrs, $listeners }">
-
-                    <div class="m-3">
-
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-
+                <template #toolbox>
+                    <iv-toolbox-leave
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageToList"
+                    />
+                    <iv-toolbox-step-backward
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageStepBackward"
+                    />
+                    <iv-toolbox-back
+                        v-show="pageStep === ePageStep.edit"
+                        @click="pageToList"
+                    />
                 </template>
 
-            </iv-form>
+                <iv-form
+                    :interface="IAddAndEditFromHanwha()"
+                    :value="inputFormData"
+                    @update:siteId="selectAreaId($event)"
+                    @update:areaId="selectGroupDeviceId($event)"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEditHanwha($event)"
+                >
+                    <template #selectTree="{ $atrs, $listeners }">
 
-            <template #footer-before>
-                <b-button
-                    v-show="pageStep === ePageStep.add"
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Leave') }}
-                </b-button>
+                        <div class="m-3">
 
-                <b-button
-                    v-show="pageStep === ePageStep.add"
-                    variant="secondary"
-                    size="lg"
-                    @click="pageStepBackward"
-                >{{ _('w_StepBackward') }}
-                </b-button>
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
 
-                <b-button
-                    v-show="pageStep === ePageStep.edit"
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                    </template>
 
-        </iv-auto-card>
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Leave') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.edit"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
 
             <!-- view by Hanwha -->
             <!--        <iv-card-->
@@ -225,33 +225,33 @@
                 :visible="true"
                 :label="_('w_VSPeopleCounting_View')"
             >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
 
-            <iv-form
-                :interface="IViewFromHanwha()"
-                :value="inputFormData"
-            >
+                <iv-form
+                    :interface="IViewFromHanwha()"
+                    :value="inputFormData"
+                >
 
-            </iv-form>
+                </iv-form>
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
-        </iv-card>
+            </iv-card>
 
-        <!-- add and edit by iSap FRS and FRS Manager  -->
-<!--        <iv-auto-card-->
-<!--            v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "-->
-<!--            :label=showLabelTitle()-->
-<!--        >-->
+            <!-- add and edit by iSap FRS and FRS Manager  -->
+            <!--        <iv-auto-card-->
+            <!--            v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "-->
+            <!--            :label=showLabelTitle()-->
+            <!--        >-->
 
             <iv-auto-card
                 key="transition_5"
@@ -259,70 +259,70 @@
                 :label=showLabelTitle()
             >
 
-            <template #toolbox>
-                <iv-toolbox-leave
-                    v-show="pageStep === ePageStep.add"
-                    @click="pageToList"
-                />
-                <iv-toolbox-step-backward
-                    v-show="pageStep === ePageStep.add"
-                    @click="pageStepBackward"
-                />
-                <iv-toolbox-back
-                    v-show="pageStep === ePageStep.edit"
-                    @click="pageToList"
-                />
-            </template>
-
-            <iv-form
-                :interface="IAddAndEditFromiSap()"
-                :value="inputFormData"
-                @update:serverId="selectSourceIdAndLocation($event)"
-                @update:siteId="selectAreaId($event)"
-                @update:areaId="selectGroupDeviceId($event)"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAddOrEditiSap($event)"
-            >
-                <template #selectTree="{ $atrs, $listeners }">
-
-                    <div class="m-3">
-
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-
+                <template #toolbox>
+                    <iv-toolbox-leave
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageToList"
+                    />
+                    <iv-toolbox-step-backward
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageStepBackward"
+                    />
+                    <iv-toolbox-back
+                        v-show="pageStep === ePageStep.edit"
+                        @click="pageToList"
+                    />
                 </template>
 
-            </iv-form>
+                <iv-form
+                    :interface="IAddAndEditFromiSap()"
+                    :value="inputFormData"
+                    @update:serverId="selectSourceIdAndLocation($event)"
+                    @update:siteId="selectAreaId($event)"
+                    @update:areaId="selectGroupDeviceId($event)"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEditiSap($event)"
+                >
+                    <template #selectTree="{ $atrs, $listeners }">
 
-            <template #footer-before>
-                <b-button
-                    v-show="pageStep === ePageStep.add"
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Leave') }}
-                </b-button>
+                        <div class="m-3">
 
-                <b-button
-                    v-show="pageStep === ePageStep.add"
-                    variant="secondary"
-                    size="lg"
-                    @click="pageStepBackward"
-                >{{ _('w_StepBackward') }}
-                </b-button>
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
 
-                <b-button
-                    v-show="pageStep === ePageStep.edit"
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                    </template>
 
-        </iv-auto-card>
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Leave') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.edit"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
 
             <!-- view by iSap FRS and FRS Manager -->
             <!--        <iv-card-->
@@ -337,42 +337,41 @@
                 :visible="true"
                 :label="_('w_VSPeopleCounting_View')"
             >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
 
-            <iv-form
-                :interface="IViewFromiSap()"
-                :value="inputFormData"
-            >
+                <iv-form
+                    :interface="IViewFromiSap()"
+                    :value="inputFormData"
+                >
 
-            </iv-form>
+                </iv-form>
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
-        </iv-card>
+            </iv-card>
 
             <!-- region tree select -->
             <!-- v-show="pageStep === ePageStep.chooseTree" -->
             <region-tree-select
                 key="transition_7"
                 v-show="transition.step === 7"
-            v-on:click-back="pageToShowResult"
-            :multiple="false"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-        >
-        </region-tree-select>
+                v-on:click-back="pageToShowResult"
+                :multiple="false"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+            >
+            </region-tree-select>
         </iv-auto-transition>
-
 
     </div>
 </template>
@@ -433,7 +432,6 @@ enum ECameraMode {
     components: {}
 })
 export default class PeopleCounting extends Vue {
-
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -1065,10 +1063,12 @@ export default class PeopleCounting extends Vue {
             this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputFormData.siteId = this.selecteds[
+            if (this.selecteds.length > 0) {
+                this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
-            ].objectId;
-            await this.selectAreaId(this.inputFormData.siteId);
+                    ].objectId;
+                await this.selectAreaId(this.inputFormData.siteId);
+            }
         }
 
         if (this.inputFormData.stepType === EPageStep.edit) {
@@ -1079,10 +1079,12 @@ export default class PeopleCounting extends Vue {
             this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputFormData.siteId = this.selecteds[
+            if (this.selecteds.length > 0) {
+                this.inputFormData.siteId = this.selecteds[
                 this.selecteds.length - 1
-            ].objectId;
-            await this.selectAreaId(this.inputFormData.siteId);
+                    ].objectId;
+                await this.selectAreaId(this.inputFormData.siteId);
+            }
         }
     }
 

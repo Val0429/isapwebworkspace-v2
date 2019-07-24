@@ -1,233 +1,261 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            v-show="pageStep === ePageStep.list"
-            :label="_('w_VSVIP_Stranger_Visitor_List')"
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <template #toolbox>
 
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit(ePageStep.edit)"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
-
-            </template>
-
-            <iv-table
-                ref="listTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/device' }"
-                :params="params"
-                @selected="selectedItem($event)"
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_VSVIP_Stranger_Visitor_List')"
             >
+                <template #toolbox>
 
-                <template #FRSServer="{$attrs}">
-                    <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
-                    {{ $attrs.row && $attrs.row.config && $attrs.row.config.server && $attrs.row.config.server.name ? $attrs.row.config.server.name : '' }}
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit(ePageStep.edit)"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd(ePageStep.add)" />
+
                 </template>
 
-                <template #site="{$attrs}">
-                    <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
-                    {{ $attrs.value ? $attrs.value.name : ""}}
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/device' }"
+                    :params="params"
+                    @selected="selectedItem($event)"
+                >
+
+                    <template #FRSServer="{$attrs}">
+                        <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
+                        {{ $attrs.row && $attrs.row.config && $attrs.row.config.server && $attrs.row.config.server.name ? $attrs.row.config.server.name : '' }}
+                    </template>
+
+                    <template #site="{$attrs}">
+                        <!--                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}-->
+                        {{ $attrs.value ? $attrs.value.name : ""}}
+                    </template>
+
+                    <template #area="{$attrs}">
+                        {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}
+                    </template>
+
+                    <template #groups="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- 選擇增加方式 -->
+            <!-- v-show="addStep === eAddStep.select" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :label="_('w_VSVIP_Stranger_Visitor_Add') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList" />
                 </template>
 
-                <template #area="{$attrs}">
-                    {{ $attrs && $attrs.value && $attrs.value.name ? $attrs.value.name : "" }}
-                </template>
+                <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
 
-                <template #groups="{$attrs}">
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #Actions="{$attrs, $listeners}">
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
-                </template>
-
-            </iv-table>
-        </iv-card>
-
-        <!-- 選擇增加方式 -->
-        <iv-card
-            v-show="addStep === eAddStep.select"
-            :label="_('w_VSVIP_Stranger_Visitor_Add') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList" />
-            </template>
-
-            <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
-
-            <b-button
-                class="button mt-3 mb-1"
-                size="md"
-                variant="success"
-                type="button"
-                @click="pageToAddByiSapFRS(eAddStep.isapFrs)"
-            >
-                {{ _('w_iSapFRS') }}
-            </b-button>
-
-            <b-button
-                variant="link"
-                class="mt-4"
-                @click="goToSetFRSServer"
-            >
-                {{ _('w_SetFRS') }}
-            </b-button>
-
-            <br>
-
-            <b-button
-                class="button mt-3 mb-1"
-                size="md"
-                variant="success"
-                type="button"
-                @click="pageToAddByiSapFRSManager(eAddStep.isapFrsManager)"
-            >
-                {{ _('w_iSapFRSManager') }}
-            </b-button>
-
-            <b-button
-                variant="link"
-                class="mt-4"
-                @click="goToSetFRSManager"
-            >
-                {{ _('w_SetFRSManger') }}
-            </b-button>
-
-            <template #footer>
                 <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-card>
-
-        <!-- add and edit by iSap FRS and FRS Manager  -->
-        <iv-auto-card
-            v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "
-            :label=showLabelTitle()
-        >
-            <template #toolbox>
-                <iv-toolbox-leave
-                    v-show="pageStep === ePageStep.add"
-                    @click="pageToList"
-                />
-                <iv-toolbox-step-backward
-                    v-show="pageStep === ePageStep.add"
-                    @click="pageStepBackward"
-                />
-                <iv-toolbox-back
-                    v-show="pageStep === ePageStep.edit"
-                    @click="pageToList"
-                />
-            </template>
-
-            <iv-form
-                :interface="IAddAndEditFromiSap()"
-                :value="inputFormData"
-                @update:serverId="selectSourceIdAndLocation($event)"
-                @update:siteId="selectAreaId($event)"
-                @update:areaId="selectGroupDeviceId($event)"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAddOrEditiSap($event)"
-            >
-                <template #selectTree="{ $atrs, $listeners }">
-
-                    <div class="m-3">
-
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-
-                </template>
-
-            </iv-form>
-
-            <template #footer-before>
-                <b-button
-                    v-show="pageStep === ePageStep.add"
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Leave') }}
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByiSapFRS(eAddStep.isapFrs)"
+                >
+                    {{ _('w_iSapFRS') }}
                 </b-button>
 
                 <b-button
-                    v-show="pageStep === ePageStep.add"
-                    variant="secondary"
-                    size="lg"
-                    @click="pageStepBackward"
-                >{{ _('w_StepBackward') }}
+                    variant="link"
+                    class="mt-4"
+                    @click="goToSetFRSServer"
+                >
+                    {{ _('w_SetFRS') }}
+                </b-button>
+
+                <br>
+
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByiSapFRSManager(eAddStep.isapFrsManager)"
+                >
+                    {{ _('w_iSapFRSManager') }}
                 </b-button>
 
                 <b-button
-                    v-show="pageStep === ePageStep.edit"
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList"
-                >{{ _('w_Back') }}
+                    variant="link"
+                    class="mt-4"
+                    @click="goToSetFRSManager"
+                >
+                    {{ _('w_SetFRSManger') }}
                 </b-button>
-            </template>
 
-        </iv-auto-card>
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
 
-        <!-- view by iSap FRS and FRS Manager -->
-        <iv-card
-            v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"
-            :visible="true"
-            :label="_('w_VSVIP_Stranger_Visitor_View')"
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
+            </iv-card>
 
-            <iv-form
-                :interface="IViewFromiSap()"
-                :value="inputFormData"
+            <!-- add and edit by iSap FRS and FRS Manager  -->
+            <!--            <iv-auto-card-->
+            <!--                v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "-->
+            <!--                :label=showLabelTitle()-->
+            <!--            >-->
+
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :label=showLabelTitle()
+            >
+                <template #toolbox>
+                    <iv-toolbox-leave
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageToList"
+                    />
+                    <iv-toolbox-step-backward
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageStepBackward"
+                    />
+                    <iv-toolbox-back
+                        v-show="pageStep === ePageStep.edit"
+                        @click="pageToList"
+                    />
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditFromiSap()"
+                    :value="inputFormData"
+                    @update:serverId="selectSourceIdAndLocation($event)"
+                    @update:siteId="selectAreaId($event)"
+                    @update:areaId="selectGroupDeviceId($event)"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEditiSap($event)"
+                >
+                    <template #selectTree="{ $atrs, $listeners }">
+
+                        <div class="m-3">
+
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Leave') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.edit"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <!-- view by iSap FRS and FRS Manager -->
+            <!--            <iv-card-->
+            <!--                v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"-->
+            <!--                :visible="true"-->
+            <!--                :label="_('w_VSDemographic_View')"-->
+            <!--            >-->
+
+            <iv-card
+                key="transition_4"
+                v-show="transition.step === 4"
+                :visible="true"
+                :label="_('w_VSVIP_Stranger_Visitor_View')"
             >
 
-            </iv-form>
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
 
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
+                <iv-form
+                    :interface="IViewFromiSap()"
+                    :value="inputFormData"
+                >
 
-        </iv-card>
+                </iv-form>
 
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            v-on:click-back="pageToShowResult"
-            :multiple="false"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-        >
-        </region-tree-select>
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!-- region tree select -->
+            <!-- v-show="pageStep === ePageStep.chooseTree" -->
+            <region-tree-select
+                key="transition_5"
+                v-show="transition.step === 5"
+                v-on:click-back="pageToShowResult"
+                :multiple="false"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+            >
+            </region-tree-select>
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -257,6 +285,10 @@ import RegionAPI from "@/services/RegionAPI";
 import Datetime from "@/services/Datetime";
 import Loading from "@/services/Loading";
 
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
 enum EPageStep {
     list = "list",
     add = "add",
@@ -283,6 +315,12 @@ enum ECameraMode {
     components: {}
 })
 export default class VIP_Stranger_Visitor extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -716,12 +754,22 @@ export default class VIP_Stranger_Visitor extends Vue {
         }
     }
 
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        this.addStep = EAddStep.none;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
     async pageToAdd(stepType: string) {
         this.clearInputData();
         await this.initSelectItemSite();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
         this.inputFormData.stepType = stepType;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
         this.selecteds = [];
     }
 
@@ -741,6 +789,8 @@ export default class VIP_Stranger_Visitor extends Vue {
 
         if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
         }
     }
 
@@ -750,13 +800,9 @@ export default class VIP_Stranger_Visitor extends Vue {
 
         if (this.inputFormData.serverId !== "") {
             this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 4;
         }
-    }
-
-    pageToList() {
-        this.pageStep = EPageStep.list;
-        this.addStep = EAddStep.none;
-        (this.$refs.listTable as any).reload();
     }
 
     async pageToAddByiSapFRS(brand: string) {
@@ -766,6 +812,8 @@ export default class VIP_Stranger_Visitor extends Vue {
         this.addStep = EAddStep.isapFrs;
         this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
     }
 
     async pageToAddByiSapFRSManager(brand: string) {
@@ -775,15 +823,21 @@ export default class VIP_Stranger_Visitor extends Vue {
         this.addStep = EAddStep.isapFrsManager;
         this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
     }
 
     pageStepBackward() {
         this.clearInputData();
         this.addStep = EAddStep.select;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
     }
 
     async pageToChooseTree() {
         this.pageStep = EPageStep.chooseTree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 5;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
@@ -806,23 +860,34 @@ export default class VIP_Stranger_Visitor extends Vue {
     async pageToShowResult() {
         if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
+            this.transition.step = this.transition.prevStep;
 
             // siteId clear
             this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputFormData.siteId = this.selecteds[0].objectId;
-            await this.selectAreaId(this.inputFormData.siteId);
+            if (this.selecteds.length > 0) {
+                this.inputFormData.siteId = this.selecteds[
+                this.selecteds.length - 1
+                    ].objectId;
+                await this.selectAreaId(this.inputFormData.siteId);
+            }
         }
 
         if (this.inputFormData.stepType === EPageStep.edit) {
             this.pageStep = EPageStep.edit;
+            this.transition.step = this.transition.prevStep;
+
             // siteId clear
             this.inputFormData.siteId = "";
 
             // from selecteds push siteId
-            this.inputFormData.siteId = this.selecteds[0].objectId;
-            await this.selectAreaId(this.inputFormData.siteId);
+            if (this.selecteds.length > 0) {
+                this.inputFormData.siteId = this.selecteds[
+                this.selecteds.length - 1
+                    ].objectId;
+                await this.selectAreaId(this.inputFormData.siteId);
+            }
         }
     }
 
@@ -952,7 +1017,6 @@ export default class VIP_Stranger_Visitor extends Vue {
                     this.$server
                         .D("/device", deleteParam)
                         .then((response: any) => {
-
                             for (const returnValue of response) {
                                 if (returnValue.statusCode === 200) {
                                     this.pageToList();
