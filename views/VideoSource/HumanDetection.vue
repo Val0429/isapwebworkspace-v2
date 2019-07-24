@@ -1,7 +1,18 @@
 <template>
     <div class="animated fadeIn">
-        <div v-show="pageStep === ePageStep.list">
-            <iv-card :label="_('w_VSHumanDetection_List')">
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
+        >
+
+            <!-- v-show="pageStep === ePageStep.list" -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_VSHumanDetection_List')"
+            >
+
                 <template #toolbox>
 
                     <iv-toolbox-view
@@ -52,13 +63,126 @@
 
                 </iv-table>
             </iv-card>
-        </div>
 
-        <div
-            v-if="pageStep === ePageStep.add || pageStep ===  ePageStep.edit ||  pageStep === ePageStep.chooseTree "
-            v-show="pageStep != ePageStep.chooseTree"
-        >
-            <iv-auto-card :label="pageStep == ePageStep.add ? _('w_VSHumanDetection_Add') :  _('w_VSHumanDetection_Edit')">
+            <!-- View-->
+            <!-- v-if="pageStep === ePageStep.view" -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :label="_('w_VSHumanDetection_View')"
+            >
+
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="inf4()"
+                    :value="inputFormData"
+                >
+
+                    <template #brand="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="brandItem"
+                            :value="inputFormData ? inputFormData.brand : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #hdServerId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="hdServerItem"
+                            :value="inputFormData ? inputFormData.hdServerName : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #serverId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="cmsItem"
+                            :value="inputFormData.serverName ? inputFormData.serverName : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #nvrId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="nvrItem"
+                            :value="$attrs.value ? $attrs.value : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #channelId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="inputFormData ?  showChannelName(inputFormData.channelId) : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #siteId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="inputFormData ? inputFormData.siteName : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #areaId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="inputFormData ? inputFormData.areaName : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                    <template #groupIds="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="channelItem"
+                            :value="$attrs ? showGroups($attrs.value) : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="secondary"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+            </iv-card>
+
+            <!--
+                v-if="pageStep === ePageStep.add || pageStep ===  ePageStep.edit ||  pageStep === ePageStep.chooseTree "
+                v-show="pageStep != ePageStep.chooseTree"
+            -->
+            <iv-auto-card
+                key="transition_3"
+                v-if="transition.step === 3 || transition.step === 4 || transition.step === 5"
+                v-show="transition.step === 3"
+                :label="inputFormData.objectId == '' ? _('w_VSHumanDetection_Add') :  _('w_VSHumanDetection_Edit')"
+            >
 
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -206,123 +330,19 @@
                 </iv-step-progress>
 
             </iv-auto-card>
-        </div>
 
-        <!-- View-->
-        <div v-if="pageStep === ePageStep.view">
-            <iv-card :label="_('w_VSHumanDetection_View')">
-
-                <template #toolbox>
-                    <iv-toolbox-back @click="pageToList()" />
-                </template>
-
-                <iv-form
-                    :interface="inf4()"
-                    :value="inputFormData"
-                >
-
-                    <template #brand="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="brandItem"
-                            :value="inputFormData ? inputFormData.brand : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                    <template #hdServerId="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="hdServerItem"
-                            :value="inputFormData ? inputFormData.hdServerName : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                    <template #serverId="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="cmsItem"
-                            :value="inputFormData.serverName ? inputFormData.serverName : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                    <template #nvrId="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="nvrItem"
-                            :value="$attrs.value ? $attrs.value : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                    <template #channelId="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="channelItem"
-                            :value="inputFormData ?  showChannelName(inputFormData.channelId) : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                    <template #siteId="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="channelItem"
-                            :value="inputFormData ? inputFormData.siteName : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                    <template #areaId="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="channelItem"
-                            :value="inputFormData ? inputFormData.areaName : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                    <template #groupIds="{$attrs, $listeners}">
-                        <iv-form-label
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            :options="channelItem"
-                            :value="$attrs ? showGroups($attrs.value) : ''"
-                        >
-                        </iv-form-label>
-                    </template>
-
-                </iv-form>
-
-                <template #footer>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="pageToList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
-            </iv-card>
-        </div>
-
-        <region-tree-select
-            v-show="pageStep === ePageStep.chooseTree"
-            v-on:click-back="pageToShowResult"
-            :multiple="false"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-        >
-        </region-tree-select>
+            <!-- v-show="pageStep === ePageStep.chooseTree" -->
+            <region-tree-select
+                key="transition_4"
+                v-show="transition.step === 4"
+                v-on:click-back="pageToShowResult"
+                :multiple="false"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+            >
+            </region-tree-select>
+        </iv-auto-transition>
 
     </div>
 </template>
@@ -335,6 +355,10 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Region Tree
 import {
@@ -369,6 +393,12 @@ enum ECameraMode {
     components: {}
 })
 export default class HumanDetection extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     lastPageStep: EPageStep = EPageStep.none;
@@ -588,11 +618,16 @@ export default class HumanDetection extends Vue {
     }
 
     showChannelName(data) {
+        let result = "";
         if (this.channelItem.length > 0) {
-            return this.channelItem.filter(x => x.id == data.toString())[0]
-                .text;
+            let tempFilter = this.channelItem.filter(
+                x => x.id == data.toString()
+            )[0];
+            if (tempFilter != undefined) {
+                result = tempFilter.text;
+            }
         }
-        return "";
+        return result;
     }
 
     initChannelItem(data) {
@@ -652,15 +687,40 @@ export default class HumanDetection extends Vue {
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
+
+    pageToList() {
+        // this.pageStep = EPageStep.list;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        this.initCMSItem();
+        this.initBrandItem();
+        this.initHdServerItem();
+        (this.$refs.humanDetectionTable as any).reload();
+    }
+
+    async pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.initGroupItem();
+        await this.initDeviceData(this.inputFormData.serverId);
+        await this.initChannelItem(this.inputFormData.nvrId);
+
+        // this.pageStep = EPageStep.view;
+    }
+
     async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         this.clearInputData();
         await this.initSelectItemSite();
         this.canvasDetail = [];
         this.selecteds = [];
-        this.pageStep = EPageStep.add;
+        // this.pageStep = EPageStep.add;
     }
 
     async pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
         await this.initSelectItemSite();
         await this.initDeviceData(this.inputFormData.serverId);
         await this.initChannelItem(this.inputFormData.nvrId);
@@ -704,22 +764,6 @@ export default class HumanDetection extends Vue {
                     );
                 });
         }
-    }
-
-    async pageToView() {
-        this.initGroupItem();
-        await this.initDeviceData(this.inputFormData.serverId);
-        await this.initChannelItem(this.inputFormData.nvrId);
-
-        this.pageStep = EPageStep.view;
-    }
-
-    pageToList() {
-        this.initCMSItem();
-        this.initBrandItem();
-        this.initHdServerItem();
-        this.pageStep = EPageStep.list;
-        (this.$refs.humanDetectionTable as any).reload();
     }
 
     async doDelete() {
@@ -849,8 +893,10 @@ export default class HumanDetection extends Vue {
     }
 
     async pageToChooseTree() {
-        this.lastPageStep = this.pageStep;
-        this.pageStep = EPageStep.chooseTree;
+        // this.lastPageStep = this.pageStep;
+        // this.pageStep = EPageStep.chooseTree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
         this.initRegionTreeSelect();
         await this.initSelectItemTree();
         this.selecteds = [];
@@ -871,7 +917,9 @@ export default class HumanDetection extends Vue {
     }
 
     async pageToShowResult() {
-        this.pageStep = this.lastPageStep;
+        // this.pageStep = this.lastPageStep;
+        this.transition.step = this.transition.prevStep;
+
 
         // siteId clear
         this.inputFormData.siteId = "";
@@ -1022,9 +1070,9 @@ export default class HumanDetection extends Vue {
                 * @uiLabel - ${this._("w_VSHumanDetection_CustomId")}
                 * @uiPlaceHolder - ${this._("w_VSHumanDetection_CustomId")}
                 * @uiType - ${
-                    this.pageStep === EPageStep.add
-                        ? "iv-form-string"
-                        : "iv-form-label"
+                        this.inputFormData.objectId == ""
+                            ? "iv-form-string"
+                            : "iv-form-label"
                 }
                 */
                 customId: string;
@@ -1205,7 +1253,7 @@ export default class HumanDetection extends Vue {
     canvasDetail = [];
 
     async stepsubmit(data) {
-        if (this.pageStep == EPageStep.add) {
+        if (this.inputFormData.objectId == "") {
             const datas: any[] = [
                 {
                     customId: data[1].customId,
@@ -1245,7 +1293,7 @@ export default class HumanDetection extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.base(this, e);
                 });
-        } else if (this.pageStep == EPageStep.edit) {
+        } else {
             const datas: any[] = [
                 {
                     objectId: this.inputFormData.objectId,
@@ -1272,11 +1320,11 @@ export default class HumanDetection extends Vue {
             const editParam = { datas };
 
             const editAreaParam = { datas };
-              Loading.show();
+            Loading.show();
             await this.$server
                 .U("/device/human-detection", editParam)
                 .then((response: any) => {
-                      Loading.hide();
+                    Loading.hide();
                     if (response[0].statusCode === 200) {
                         Dialog.success(this._("w_Success"));
                         this.pageToList();
