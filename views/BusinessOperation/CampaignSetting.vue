@@ -426,10 +426,6 @@ export default class CampaignSetting extends Vue {
         this.inputFormData.siteIds = JSON.parse(
             JSON.stringify(this.inputFormData.sites.map(item => item.objectId))
         );
-
-        console.log("@@@", this.sitesSelectItem);
-
-        console.log("!!!", this.inputFormData.siteIds);
     }
 
     async pageToChooseTree() {
