@@ -9,6 +9,15 @@
                 key="transition_1"
                 v-show="transition.step === 1"
             >
+                <!-- <siteList
+                    v-on:pageToSiteView="pageToSiteView"
+                    v-on:pageToSiteEdit="pageToSiteEdit"
+                    v-on:pageToSiteAdd="pageToSiteAdd"
+                    v-on:pageToAreaList="pageToAreaList"
+                    v-on:pageToDeviceGroupList="pageToDeviceGroupList(1)"
+                    v-on:selectedSite="selectedSite"
+                ></siteList> -->
+
                 <iv-card :label="_('w_Site_SiteList')">
 
                     <template #toolbox>
@@ -71,7 +80,7 @@
                 key="transition_3_4"
                 v-if="transition.step === 3  || transition.step === 4"
             >
-                <iv-auto-card :label="pageStep == ePageStep.siteAdd ? _('w_Site_AddSite') :  _('w_Site_EditSite')">
+                <iv-auto-card :label="transition.step === 3 ? _('w_Site_AddSite') :  _('w_Site_EditSite')">
 
                     <template #toolbox>
                         <iv-toolbox-back @click="pageToSiteList()" />
@@ -313,7 +322,7 @@
                 key="transition_7_8"
                 v-if="transition.step === 7  || transition.step === 8"
             >
-                <iv-auto-card :label="pageStep == ePageStep.areaAdd ? _('w_Site_AddArea') :  _('w_Site_EditArea')">
+                <iv-auto-card :label="transition.step === 7  ? _('w_Site_AddArea') :  _('w_Site_EditArea')">
                     <template #toolbox>
                         <iv-toolbox-back @click="pageToAreaList()" />
                     </template>
@@ -448,7 +457,7 @@
 
                         <iv-toolbox-divider />
                         <iv-toolbox-add @click="pageToDeviceGroupAdd(9)" />
-                        <iv-toolbox-back @click="lastPageStep == ePageStep.siteList ? pageToSiteList() : pageToAreaList()" />
+                        <iv-toolbox-back @click="transition.prevStep === 1? pageToSiteList() : pageToAreaList()" />
 
                     </template>
 
@@ -486,9 +495,9 @@
                 key="transition_11_12"
                 v-if="transition.step === 11 || transition.step === 12"
             >
-                <iv-auto-card :label="pageStep == ePageStep.deviceGroupAdd ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')">
+                <iv-auto-card :label="transition.step === 11 ? _('w_Site_AddDevice') :  _('w_Site_EditDevice')">
                     <template #toolbox>
-                        <iv-toolbox-back @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceGroupList(0)" />
+                        <iv-toolbox-back @click="pageToDeviceGroupList(0)" />
                     </template>
 
                     <iv-form
@@ -500,13 +509,13 @@
 
                         <template #siteName="{$attrs, $listeners}">
                             <iv-form-label
-                                v-if="pageStep === ePageStep.deviceGroupAdd"
+                                v-if="transition.step === 11"
                                 v-bind="$attrs"
                                 v-on="$listeners"
                                 :value="site.name ? site.name : '' "
                             />
                             <iv-form-label
-                                v-if="pageStep === ePageStep.deviceGroupEdit"
+                                v-if="transition.step === 12"
                                 v-bind="$attrs"
                                 v-on="$listeners"
                                 :value="deviceGroup.site ? deviceGroup.site.name : '' "
@@ -515,7 +524,7 @@
 
                         <template #areaName="{$attrs, $listeners}">
                             <iv-form-selection
-                                v-if="pageStep === ePageStep.deviceGroupAdd && isEmptyObject(area)"
+                                v-if="transition.step === 11 && isEmptyObject(area)"
                                 v-bind="$attrs"
                                 :value="$attrs.value ? $attrs.value : ''"
                                 v-on="$listeners"
@@ -525,13 +534,13 @@
                             </iv-form-selection>
 
                             <iv-form-label
-                                v-if="pageStep === ePageStep.deviceGroupAdd && !isEmptyObject(area)"
+                                v-if="transition.step === 11 && !isEmptyObject(area)"
                                 v-bind="$attrs"
                                 v-on="$listeners"
                                 :value="area ? area.name : '' "
                             />
                             <iv-form-label
-                                v-if="pageStep === ePageStep.deviceGroupEdit"
+                                v-if="transition.step === 12"
                                 v-bind="$attrs"
                                 v-on="$listeners"
                                 :value="deviceGroup.area ? deviceGroup.area.name : '' "
@@ -540,7 +549,7 @@
 
                         <template #mode="{$attrs, $listeners}">
                             <iv-form-selection
-                                v-if="pageStep === ePageStep.deviceGroupAdd"
+                                v-if="transition.step === 11"
                                 v-bind="$attrs"
                                 :value="$attrs.value ? $attrs.value : ''"
                                 v-on="$listeners"
@@ -549,7 +558,7 @@
                             >
                             </iv-form-selection>
                             <iv-form-label
-                                v-if="pageStep === ePageStep.deviceGroupEdit"
+                                v-if="transition.step === 12"
                                 v-bind="$attrs"
                                 v-on="$listeners"
                                 :value="$attrs.value ? $attrs.value : ''"
@@ -570,7 +579,7 @@
                         <b-button
                             variant="secondary"
                             size="lg"
-                            @click="lastPageStep === ePageStep.areaAdd ? pageToAreaAdd() : lastPageStep == ePageStep.areaEdit ? pageToAreaEdit() : pageToDeviceGroupList(0)"
+                            @click="pageToDeviceGroupList(0)"
                         >{{ _('w_Back') }}
                         </b-button>
                     </template>
@@ -697,24 +706,8 @@ import Loading from "@/services/Loading";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
-enum EPageStep {
-    siteList = "siteList",
-    siteView = "siteView",
-    siteAdd = "siteAdd",
-    siteEdit = "siteEdit",
-
-    areaList = "areaList",
-    areaView = "areaView",
-    areaAdd = "areaAdd",
-    areaEdit = "areaEdit",
-
-    deviceGroupList = "deviceGroupList",
-    deviceGroupView = "deviceGroupView",
-    deviceGroupAdd = "deviceGroupAdd",
-    deviceGroupEdit = "deviceGroupEdit",
-
-    none = "none"
-}
+//sunComponent
+import { SiteList } from "./SiteList.vue";
 
 interface IGoogleMap {
     src: string;
@@ -731,16 +724,13 @@ enum ECameraMode {
 }
 
 @Component({
-    components: {}
+    components: { siteList: SiteList }
 })
 export default class Site extends Vue {
     serverUrl = ServerConfig.url;
     newImg = new Image();
     newImgSrc = "";
     tableMultiple = false;
-    ePageStep = EPageStep;
-    lastPageStep: EPageStep = EPageStep.none;
-    pageStep: EPageStep = EPageStep.none;
     imageMap = new ImageMapItem();
     isMounted = false;
 
@@ -1120,6 +1110,7 @@ export default class Site extends Vue {
             : this.transition.step;
         this.transition.step = 9;
         this.initCameraItem();
+        (this.$refs.deviceGroupTable as any).reload();
     }
 
     pageToDeviceGroupView() {
@@ -1409,7 +1400,7 @@ export default class Site extends Vue {
     }
 
     async saveSite(data) {
-        if (this.pageStep == EPageStep.siteAdd) {
+        if (this.transition.step === 3) {
             const datas: ISiteAddData[] = [
                 {
                     // regionId: "uCsinPqUj1",
@@ -1444,7 +1435,7 @@ export default class Site extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
-        } else if (this.pageStep == EPageStep.siteEdit) {
+        } else if (this.transition.step === 4) {
             const datas: ISiteEditData[] = [
                 {
                     // regionId: "uCsinPqUj1",
@@ -1486,7 +1477,7 @@ export default class Site extends Vue {
     }
 
     async saveArea(data) {
-        if (this.pageStep == EPageStep.areaAdd) {
+        if (this.transition.step === 7) {
             const datas: IAreaAddData[] = [
                 {
                     siteId: this.site.objectId,
@@ -1510,7 +1501,7 @@ export default class Site extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
-        } else if (this.pageStep == EPageStep.areaEdit) {
+        } else if (this.transition.step === 8) {
             const datas: IAreaEditData[] = [
                 {
                     objectId: data.objectId,
@@ -1613,7 +1604,7 @@ export default class Site extends Vue {
     }
 
     async saveDeviceGroup(data) {
-        if (this.pageStep == EPageStep.deviceGroupAdd) {
+        if (this.transition.step === 11) {
             const datas: IDeviceGroupAddData[] = [
                 {
                     areaId: this.area.objectId
@@ -1632,17 +1623,13 @@ export default class Site extends Vue {
                     Loading.hide();
                     if (response != undefined) {
                         Dialog.success(this._("w_Site_AddDeviceGroupSuccess"));
-                        this.lastPageStep === EPageStep.areaAdd
-                            ? this.pageToAreaAdd()
-                            : this.lastPageStep == EPageStep.areaEdit
-                            ? this.pageToAreaEdit()
-                            : this.pageToDeviceGroupList(0);
+                        this.pageToDeviceGroupList(0);
                     }
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
-        } else if (this.pageStep == EPageStep.deviceGroupEdit) {
+        } else if (this.transition.step === 12) {
             const datas: IDeviceGroupEditData[] = [
                 {
                     objectId: data.objectId,
@@ -1658,11 +1645,7 @@ export default class Site extends Vue {
                     Loading.hide();
                     if (response != undefined) {
                         Dialog.success(this._("w_Site_EditDeviceGroupSuccess"));
-                        this.lastPageStep === EPageStep.areaAdd
-                            ? this.pageToAreaAdd()
-                            : this.lastPageStep == EPageStep.areaEdit
-                            ? this.pageToAreaEdit()
-                            : this.pageToDeviceGroupList(0);
+                        this.pageToDeviceGroupList(0);
                     }
                 })
                 .catch((e: any) => {
@@ -1794,17 +1777,15 @@ export default class Site extends Vue {
     }
 
     selectedSite(data) {
-        this.newImgSrc = "";
-        this.gooleMapSrc = "";
-        this.initManagerItem();
-        this.initTagItem();
-        this.initOfficeHourItem();
+        console.log("selectedSite", data);
         if (data && data.objectId) {
+            this.site = data;
+            this.isSelectSite = data;
             data.managerId = data.manager
                 ? data.manager.objectId
                 : data.manager;
             data.establishment = new Date(data.establishment);
-            this.site = this.isSelectSite = data;
+
             this.areaParams = {
                 siteId: data.objectId
             };
@@ -1812,6 +1793,9 @@ export default class Site extends Vue {
                 siteId: data.objectId
             };
 
+            this.initManagerItem();
+            this.initTagItem();
+            this.initOfficeHourItem();
             this.initAreaNameItem();
         } else {
             this.clearSiteData();
@@ -1840,7 +1824,7 @@ export default class Site extends Vue {
         this.isSelectSite = false;
         this.gooleMapSrc = "";
         this.newImgSrc = "";
-        this.site = {};
+        this.site = { latitude: 0, longitude: 0 };
     }
 
     showFirst(data): string {
@@ -2195,7 +2179,7 @@ export default class Site extends Vue {
                 * @uiPlaceHolder - ${this._("w_Site_Photo")}
                 * @uiType - iv-form-file
                 */
-                areaPhoto?: string;
+                areaPhoto: string;
 
                 imageSrc?:any;
 
@@ -2286,7 +2270,7 @@ export default class Site extends Vue {
                  * @uiPlaceHolder - ${this._("w_Site_GroupName")}
                  * @uiType - iv-form-string
                  */
-                name?: string;
+                name: string;
 
                   /**
                 * @uiLabel - ${this._("w_Site_Model")}
