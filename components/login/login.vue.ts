@@ -9,10 +9,10 @@ import Loading from '@/services/Loading';
     path: '/login',
 
     // Min server
-    // permission: '/user/user/login',
+    permission: '/user/user/login',
 
     // master
-    permission: '/users/login',
+    // permission: '/users/login',
 
     disableContainer: true,
 })
