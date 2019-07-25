@@ -11,6 +11,9 @@ export default class LangObject {
     w_Selection = 'Selection';
     w_Multi = 'Multi';
 
+    w_Login_LoginTitle = '登入';
+    w_Login_ForgotPassword = '忘記密碼';
+
     w_Username = '使用者名稱';
     w_Roles = '權限';
     w_Email = 'Email';
