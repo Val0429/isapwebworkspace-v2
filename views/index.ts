@@ -1,29 +1,29 @@
 import { RegisterRouter as $ } from '@/../core';
 
-// components
-import Components from './components/index.vue';
-import Forms from './components/Forms.vue';
-import StepProgress from './components/StepProgress.vue';
-import Tab from './components/Tab.vue';
-import Toolbox from './components/Toolbox.vue';
-import Cards from './components/Cards.vue';
-import AutoCards from './components/AutoCards.vue';
-import Table from './components/Table.vue';
-import Tree from './components/Tree.vue';
-import Transition from './components/Transition.vue';
-import Modal from './components/Modal.vue';
-import Utilities from './components/Utilities.vue';
-import Test from './components/Utilities.vue';
+// // components
+// import Components from './components/index.vue';
+// import Forms from './components/Forms.vue';
+// import StepProgress from './components/StepProgress.vue';
+// import Tab from './components/Tab.vue';
+// import Toolbox from './components/Toolbox.vue';
+// import Cards from './components/Cards.vue';
+// import AutoCards from './components/AutoCards.vue';
+// import Table from './components/Table.vue';
+// import Tree from './components/Tree.vue';
+// import Transition from './components/Transition.vue';
+// import Modal from './components/Modal.vue';
+// import Utilities from './components/Utilities.vue';
+// import Test from './components/Utilities.vue';
 
-// Demo
-import DemoDialog from './Demos/DemoDialog.vue';
-import DemoFilterConditionComponent from './Demos/DemoFilterConditionComponent.vue';
-import DemoImageMap from './Demos/DemoImageMap.vue';
-import DemoLoading from './Demos/DemoLoading.vue';
-import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
-import DemoROI from './Demos/DemoROI.vue';
-import DemoSortSelect from './Demos/DemoSortSelect.vue';
-import DemoEncrypt from './Demos/DemoEncrypt.vue';
+// // Demo
+// import DemoDialog from './Demos/DemoDialog.vue';
+// import DemoFilterConditionComponent from './Demos/DemoFilterConditionComponent.vue';
+// import DemoImageMap from './Demos/DemoImageMap.vue';
+// import DemoLoading from './Demos/DemoLoading.vue';
+// import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
+// import DemoROI from './Demos/DemoROI.vue';
+// import DemoSortSelect from './Demos/DemoSortSelect.vue';
+// import DemoEncrypt from './Demos/DemoEncrypt.vue';
 
 // Guest
 import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
@@ -69,9 +69,6 @@ import DwellTime from './VideoSource/DwellTime.vue';
 import FaceRecognition from './VideoSource/FaceRecognition.vue';
 import Heatmap from './VideoSource/Heatmap.vue';
 import HumanDetection from './VideoSource/HumanDetection.vue';
-import CMS from './VideoSource/CMS.vue';
-import VIP from './VideoSource/VIP.vue';
-import VIP_Stranger_Visitor from './VideoSource/VIP_Stranger_Visitor.vue';
 
 // Rules and Action
 
@@ -100,36 +97,36 @@ $({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, pe
 // MyProfile
 $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
 
-// Components
-$({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
-$({ path: '/components/forms', name: 'Forms', icon: 'fa-facebook', permission: '/announcements' })(Forms);
-$({ path: '/components/step-progress', name: 'Step Progress', icon: 'fa-twitter' })(StepProgress);
-$({ path: '/components/toolbox', name: 'Toolbox', icon: 'fa-twitter' })(Toolbox);
-$({ path: '/components/cards', name: 'Cards', icon: 'fa-twitter' })(Cards);
-$({ path: '/components/cards/auto', name: 'Auto Cards', icon: 'fa-twitter' })(AutoCards);
-$({ path: '/components/table', name: 'Table', icon: 'fa-twitter' })(Table);
-$({ path: '/components/tree', name: 'Tree', icon: 'fa-twitter' })(Tree);
-$({ path: '/components/transition', name: 'Transition', icon: 'fa-twitter' })(Transition);
-$({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
-$({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
-$({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
+// // Components
+// $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
+// $({ path: '/components/forms', name: 'Forms', icon: 'fa-facebook', permission: '/announcements' })(Forms);
+// $({ path: '/components/step-progress', name: 'Step Progress', icon: 'fa-twitter' })(StepProgress);
+// $({ path: '/components/toolbox', name: 'Toolbox', icon: 'fa-twitter' })(Toolbox);
+// $({ path: '/components/cards', name: 'Cards', icon: 'fa-twitter' })(Cards);
+// $({ path: '/components/cards/auto', name: 'Auto Cards', icon: 'fa-twitter' })(AutoCards);
+// $({ path: '/components/table', name: 'Table', icon: 'fa-twitter' })(Table);
+// $({ path: '/components/tree', name: 'Tree', icon: 'fa-twitter' })(Tree);
+// $({ path: '/components/transition', name: 'Transition', icon: 'fa-twitter' })(Transition);
+// $({ path: '/components/modal', name: 'Modal', icon: 'fa-twitter' })(Modal);
+// $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Utilities);
+// $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
-// Demo
-$({ path: '/demos', name: 'Demo', redirect: '/demos/region-tree-select' })();
-$({ path: '/demos/dialog', name: 'Dialog', permission: false })(DemoDialog);
-$({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component' })(DemoFilterConditionComponent);
-$({ path: '/demos/image-map', name: 'ImageMap', permission: false })(DemoImageMap);
-$({ path: '/demos/loading', name: 'Loading', permission: false })(DemoLoading);
-$({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: false })(DemoRegionTreeSelect);
-$({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
-$({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
-$({ path: '/demos/encrypt', name: 'SHA', permission: false })(DemoEncrypt);
+// // Demo
+// $({ path: '/demos', name: 'Demo', redirect: '/demos/region-tree-select' })();
+// $({ path: '/demos/dialog', name: 'Dialog', permission: false })(DemoDialog);
+// $({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component' })(DemoFilterConditionComponent);
+// $({ path: '/demos/image-map', name: 'ImageMap', permission: false })(DemoImageMap);
+// $({ path: '/demos/loading', name: 'Loading', permission: false })(DemoLoading);
+// $({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: false })(DemoRegionTreeSelect);
+// $({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
+// $({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
+// $({ path: '/demos/encrypt', name: 'SHA', permission: false })(DemoEncrypt);
 
-// Dashboard
-$({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();
+// // Dashboard
+// $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();
 
-// Analysis
-$({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-question', redirect: '/login' })();
+// // Analysis
+// $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-question', redirect: '/login' })();
 
 // Report
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-code', redirect: '/reports/report_template' })();
@@ -140,7 +137,7 @@ $({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'f
 $({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-check' })(ReportOccupancy);
 $({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-code' })(ReportVIPTracking);
 $({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-check' })(ReportRepeatVisitor);
-$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-code' })(ReportCampaign);
+$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-check' })(ReportCampaign);
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-check' })(ReportTemplate);
 
 // Users
@@ -169,10 +166,7 @@ $({ path: '/video_sources/demographic', name: 'VideoSources_Demographic', icon: 
 $({ path: '/video_sources/dwell_time', name: 'VideoSources_DwellTime', icon: 'fa-check' })(DwellTime);
 $({ path: '/video_sources/human_detection', name: 'VideoSources_HumanDetection', icon: 'fa-check' })(HumanDetection);
 $({ path: '/video_sources/heatmap', name: 'VideoSources_Heatmap', icon: 'fa-check' })(Heatmap);
-$({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-question', redirect: '/login' })(FaceRecognition);
-$({ path: '/video_sources/cms', name: 'VideoSources_CMS', icon: 'fa-question', redirect: '/login' })(CMS);
-$({ path: '/video_sources/vip', name: 'VideoSources_VIP', icon: 'fa-question', redirect: '/login' })(VIP);
-$({ path: '/video_sources/vip_stranger_visitor', name: 'VideoSources_VIP_Stranger_Visitor', icon: 'fa-check' })(VIP_Stranger_Visitor);
+$({ path: '/video_sources/face_recognition', name: 'VideoSources_FaceRecognition', icon: 'fa-code' })(FaceRecognition);
 
 // Rules and Action (?)
 $({ path: '/rules_actions', name: "_('w_Navigation_RulesActions')", icon: 'fa-question', redirect: '/login' })();
