@@ -337,6 +337,7 @@ export default class FaceRecognition extends Vue {
     areaSelectItem: any = {};
     serverIdSelectItem: any = {};
     sourceIdSelectItem: any = {};
+    demographicIdSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.visitor
@@ -362,6 +363,7 @@ export default class FaceRecognition extends Vue {
             groupIds: [],
             name: "",
             serverId: "",
+            demoServerId: "",
             sourceid: "",
             location: "",
             objectId: ""
@@ -436,6 +438,25 @@ export default class FaceRecognition extends Vue {
             });
     }
 
+    async initSelectItemDemographicServer() {
+        this.demographicIdSelectItem = {};
+
+        await this.$server
+            .R("/partner/demographic")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 demographicIdSelectItem 的 key 的方式
+                        this.demographicIdSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
@@ -463,6 +484,14 @@ export default class FaceRecognition extends Vue {
                         ? param.site["objectId"]
                         : "",
                 groupIds: param.groups,
+                demoServerId:
+                    param.demoServer && param.demoServer["objectId"]
+                        ? param.demoServer["objectId"]
+                        : "",
+                demoServerIdView:
+                    param.demoServer && param.demoServer["name"]
+                        ? param.demoServer["name"]
+                        : "",
                 serverId:
                     param.config &&
                     param.config.server &&
@@ -512,6 +541,9 @@ export default class FaceRecognition extends Vue {
                 break;
             case "customId":
                 this.inputFormData.customId = data.value;
+                break;
+            case "demoServerId":
+                this.inputFormData.demoServerId = data.value;
                 break;
             case "areaId":
                 this.inputFormData.areaId = data.value;
@@ -777,6 +809,7 @@ export default class FaceRecognition extends Vue {
         this.pageStep = EPageStep.edit;
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
+        await this.initSelectItemDemographicServer();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
         this.getInputData();
@@ -808,6 +841,7 @@ export default class FaceRecognition extends Vue {
     async pageToAddByiSapFRS(brand: string) {
         this.clearInputData();
         await this.initSelectItemFRSServer();
+        await this.initSelectItemDemographicServer();
         await this.initSelectItemSite();
         this.addStep = EAddStep.isapFrs;
         this.inputFormData.brand = brand;
@@ -910,6 +944,7 @@ export default class FaceRecognition extends Vue {
                 {
                     customId: data.customId,
                     name: data.name,
+                    demoServerId: data.demoServerId,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
                     config: configObject
@@ -957,6 +992,7 @@ export default class FaceRecognition extends Vue {
                 {
                     objectId: data.objectId,
                     name: data.name,
+                    demoServerId: data.demoServerId,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
                     config: configObject
@@ -1180,6 +1216,20 @@ export default class FaceRecognition extends Vue {
                 name: string;
 
 
+
+                /**
+                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
+                 * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
+                 * @uiHidden - ${
+                        this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                    }
+                 */
+                demoServerId: ${toEnumInterface(
+                    this.demographicIdSelectItem as any,
+                    false
+                )};
+
+
                 /**
                  * @uiLabel - ${this._("w_ServerId")}
                  * @uiPlaceHolder - ${this._("w_ServerId")}
@@ -1209,7 +1259,7 @@ export default class FaceRecognition extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteId?: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                siteId: ${toEnumInterface(this.sitesSelectItem as any, false)};
 
                 selectTree?: any;
 
@@ -1217,7 +1267,7 @@ export default class FaceRecognition extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Area")}
                  */
-                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+                areaId: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
@@ -1248,6 +1298,13 @@ export default class FaceRecognition extends Vue {
                  * @uiType - iv-form-label
                  */
                 name?: string;
+
+
+                /*
+                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
+                 * @uiType - iv-form-label
+                 */
+                demoServerIdView?: string;
 
 
                 /**
