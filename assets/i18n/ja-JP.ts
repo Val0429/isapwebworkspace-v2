@@ -75,6 +75,7 @@ export default class LangObject implements ILang {
     w_ExportExcel = 'Export Excel';
     w_ExportCSV = 'Export CSV';
     w_CopyToTemplate = 'Copy To Report Template';
+    w_ErrorResponseUndefined = "Can't get server response";
 
     // date
     w_Week_0 = 'Sunday';

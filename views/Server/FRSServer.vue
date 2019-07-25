@@ -282,10 +282,14 @@ export default class FRSServer extends Vue {
                         tempVIP[result.objectId] = result.name;
                         this.groupVIP = tempVIP;
                         break;
-                    case "Employee":
+                    case "Visitor":
                         tempEmployee[result.objectId] = result.name;
                         this.groupEmployee = tempEmployee;
                         break;
+                    // case "Employee":
+                    //     tempEmployee[result.objectId] = result.name;
+                    //     this.groupEmployee = tempEmployee;
+                    //     break;
                 }
             }
         }

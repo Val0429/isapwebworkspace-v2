@@ -289,6 +289,7 @@ import RegionAPI from "@/services/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+import Encrypt from "@/services/Encrypt";
 
 interface inputFormData extends IUserAddData, IUserEditData {
     siteIdsText?: string;
@@ -629,7 +630,7 @@ export default class User extends Vue {
                 name: data.name,
                 email: data.email,
                 phone: data.phone,
-                password: data.password,
+                password: Encrypt.sha256Timestamp(),
                 employeeId: data.employeeId,
                 siteIds: data.siteIds !== undefined ? data.siteIds : [],
                 groupIds: data.groupIds !== undefined ? data.groupIds : []
@@ -650,7 +651,7 @@ export default class User extends Vue {
                         Dialog.success(this._("w_User_AddUserSuccess"));
                         this.pageToList();
                     }
-                    if (returnValue.statusCode === 500) {
+                    if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
                         Dialog.error(this._("w_User_AddUserFailed"));
                         return false;
                     }
@@ -692,7 +693,7 @@ export default class User extends Vue {
                         Dialog.success(this._("w_User_EditUserSuccess"));
                         this.pageToList();
                     }
-                    if (returnValue.statusCode === 500) {
+                    if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
                         Dialog.error(this._("w_User_EditUserFailed"));
                         return false;
                     }

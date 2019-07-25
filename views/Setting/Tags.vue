@@ -499,7 +499,8 @@ export default class Tags extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        if (data.objectId == "") {
+
+        if (data.objectId === undefined || !this.inputFormData.objectId) {
             const datas: ITag[] = [
                 {
                     name: data.name,
@@ -513,6 +514,7 @@ export default class Tags extends Vue {
             const addParam = {
                 datas
             };
+
             Loading.show();
             await this.$server
                 .C("/tag", addParam)
