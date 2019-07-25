@@ -7,7 +7,13 @@ import Loading from '@/services/Loading';
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
     path: '/login',
+
+    // Min server
     permission: '/user/user/login',
+
+    // master
+    // permission: '/users/login',
+
     disableContainer: true,
 })
 @Component

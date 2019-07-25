@@ -331,6 +331,7 @@ export default class DwellTime extends Vue {
     areaSelectItem: any = {};
     serverIdSelectItem: any = {};
     sourceIdSelectItem: any = {};
+    demographicIdSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.dwellTime
@@ -355,6 +356,7 @@ export default class DwellTime extends Vue {
             siteId: "",
             groupIds: [],
             name: "",
+            demoServerId: "",
             serverId: "",
             sourceid: "",
             location: "",
@@ -431,6 +433,25 @@ export default class DwellTime extends Vue {
             });
     }
 
+    async initSelectItemDemographicServer() {
+        this.demographicIdSelectItem = {};
+
+        await this.$server
+            .R("/partner/demographic")
+            .then((response: any) => {
+                if (response != undefined) {
+                    for (const returnValue of response.results) {
+                        // 自定義 demographicIdSelectItem 的 key 的方式
+                        this.demographicIdSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
@@ -471,6 +492,14 @@ export default class DwellTime extends Vue {
                     param.config.server.name
                         ? param.config.server.name
                         : "",
+                demoServerId:
+                    param.demoServer && param.demoServer["objectId"]
+                        ? param.demoServer["objectId"]
+                        : "",
+                demoServerIdView:
+                    param.demoServer && param.demoServer["name"]
+                        ? param.demoServer["name"]
+                        : "",
                 sourceid:
                     param.config && param.config.sourceid
                         ? param.config.sourceid
@@ -508,6 +537,9 @@ export default class DwellTime extends Vue {
                 break;
             case "customId":
                 this.inputFormData.customId = data.value;
+                break;
+            case "demoServerId":
+                this.inputFormData.demoServerId = data.value;
                 break;
             case "areaId":
                 this.inputFormData.areaId = data.value;
@@ -772,6 +804,7 @@ export default class DwellTime extends Vue {
         this.pageStep = EPageStep.edit;
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
+        await this.initSelectItemDemographicServer();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
         this.getInputData();
@@ -803,6 +836,7 @@ export default class DwellTime extends Vue {
     async pageToAddByiSapFRS(brand: string) {
         this.clearInputData();
         await this.initSelectItemFRSServer();
+        await this.initSelectItemDemographicServer();
         await this.initSelectItemSite();
         this.addStep = EAddStep.isapFrs;
         this.inputFormData.brand = brand;
@@ -897,7 +931,7 @@ export default class DwellTime extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid
+            sourceid: data.sourceid,
         };
 
         if (this.inputFormData.brand === EAddStep.isapFrs) {
@@ -905,6 +939,7 @@ export default class DwellTime extends Vue {
                 {
                     customId: data.customId,
                     name: data.name,
+                    demoServerId: data.demoServerId,
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -948,6 +983,7 @@ export default class DwellTime extends Vue {
                 {
                     objectId: data.objectId,
                     name: data.name,
+                    demoServerId: data.demoServerId,
                     areaId: data.areaId,
                     direction: data.direction,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1159,6 +1195,19 @@ export default class DwellTime extends Vue {
 
 
                 /**
+                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
+                 * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
+                 * @uiHidden - ${
+                        this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                    }
+                 */
+                demoServerId: ${toEnumInterface(
+                    this.demographicIdSelectItem as any,
+                    false
+                )};
+
+
+                /**
                  * @uiLabel - ${this._("w_ServerId")}
                  * @uiPlaceHolder - ${this._("w_ServerId")}
                  * @uiHidden - ${
@@ -1193,10 +1242,11 @@ export default class DwellTime extends Vue {
                     out: this._("w_Out")
                 })};
 
+
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteId?: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                siteId: ${toEnumInterface(this.sitesSelectItem as any, false)};
 
                 selectTree?: any;
 
@@ -1204,7 +1254,7 @@ export default class DwellTime extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Area")}
                  */
-                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+                areaId: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
@@ -1235,6 +1285,13 @@ export default class DwellTime extends Vue {
                  * @uiType - iv-form-label
                  */
                 name?: string;
+
+
+                /*
+                 * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
+                 * @uiType - iv-form-label
+                 */
+                demoServerIdView?: string;
 
 
                 /**

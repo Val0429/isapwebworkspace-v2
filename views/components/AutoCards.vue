@@ -142,6 +142,22 @@
                 </template>
             </iv-tab>
         </iv-auto-card>
+
+        <iv-auto-card
+            ref="card"
+            label="When submit, this card will auto close."
+        >
+            <iv-form
+                interface="
+                interface {
+                    account: string;
+                    password: string;
+                }
+                "
+                @submit="$refs.card.close()"
+                />
+        </iv-auto-card>
+
     </div>
 </template>
 

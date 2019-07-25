@@ -7,18 +7,19 @@
         <p>
             <b-button @click="visible = true">Open Normal Modal</b-button>
         </p>
-
         <iv-modal
             label="Modal Title"
             :visible.sync="visible"
         >
-            Normal Modal
+            <div style="width: 2000px; height: 2000px">
+                Normal Modal
+            </div>
         </iv-modal>
 
         <p>
             <b-button @click="visible2 = true">Open Form Modal</b-button>
         </p>
-        
+
         <iv-modal
             label="Modal Form"
             :visible.sync="visible2"
