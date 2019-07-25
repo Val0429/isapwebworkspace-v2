@@ -31,6 +31,7 @@
                         <b-form-radio-group
                             v-model="selectAllTags"
                             name="ifAllSites"
+                            class="mb-3"
                             :options="ifAllTagsSelectItem"
                             @change="changeAllTagsSelect"
                         ></b-form-radio-group>
@@ -42,7 +43,7 @@
                     <iv-form-selection
                         v-on="$listeners"
                         v-model="inputFormData.tagIds"
-                        class="select-site ml-3"
+                        class="select-site ml-3 mr-3"
                         :options="tagSelectItem"
                         :multiple="true"
                         @input="changeTagIds"
@@ -69,6 +70,7 @@
                         <b-form-radio-group
                             v-model="selectPeriodAddWay"
                             name="selectPeriodAddWay"
+                            class="mb-3"
                             :options="addPeriodSelectItem"
                             @change="changeAddPeriodSelect"
                         ></b-form-radio-group>
@@ -596,15 +598,10 @@ export class FilterConditionVIPAndBlacklist extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Tag")}
+                 * @uiColumnGroup - tag1
                  */
                 tagIds: any;
 
-
-
-                /**
-                 * @uiColumnGroup - tag
-                 */
-                 tag1?: any;
 
                  /**
                  * @uiLabel - ${this._("w_ReportTemplate_ReportPeriod1")}

@@ -26,6 +26,7 @@
                             <b-form-radio-group
                                 v-model="selectAllSites"
                                 name="ifAllSites"
+                                class="mb-3"
                                 :options="ifAllSitesSelectItem"
                                 @change="changeAllSitesSelect"
                             ></b-form-radio-group>
@@ -34,6 +35,7 @@
                     </template>
 
                     <template #siteIds="{$attrs, $listeners}">
+
                         <iv-form-selection
                             v-on="$listeners"
                             v-model="inputFormData.siteIds"
@@ -44,7 +46,7 @@
                         >
                         </iv-form-selection>
 
-                        <div class="ml-3">
+                        <div class="ml-3 mb-3">
                             <b-button
                                 variant="outline-secondary"
                                 @click="pageToChooseTree"
@@ -695,8 +697,14 @@ export class FilterCondition extends Vue {
                 ifAllSites?: any;
 
 
-                siteIds: any;
+                /**
+                 * @uiColumnGroup - site
+                 */
+                 siteIds: any;
 
+                /**
+                 * @uiColumnGroup - site
+                 */
                  selectTree?: any;
 
 
