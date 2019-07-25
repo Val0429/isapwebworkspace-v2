@@ -23,6 +23,7 @@ import DemoLoading from './Demos/DemoLoading.vue';
 import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
 import DemoROI from './Demos/DemoROI.vue';
 import DemoSortSelect from './Demos/DemoSortSelect.vue';
+import DemoEncrypt from './Demos/DemoEncrypt.vue';
 
 // Guest
 import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
@@ -122,6 +123,7 @@ $({ path: '/demos/loading', name: 'Loading', permission: false })(DemoLoading);
 $({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: false })(DemoRegionTreeSelect);
 $({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
 $({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
+$({ path: '/demos/encrypt', name: 'SHA', permission: false })(DemoEncrypt);
 
 // Dashboard
 $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();
@@ -132,13 +134,13 @@ $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-questio
 // Report
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-code', redirect: '/reports/report_template' })();
 $({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-check' })(ReportTraffic);
-$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-code', permission: false })(ReportDwellTime);
+$({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-code' })(ReportDwellTime);
 $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-code' })(ReportDemographic);
-$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-code', permission: false })(ReportHeatmap);
+$({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-code' })(ReportHeatmap);
 $({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-check' })(ReportOccupancy);
-$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-code', permission: false })(ReportVIPTracking);
+$({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-code' })(ReportVIPTracking);
 $({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-check' })(ReportRepeatVisitor);
-$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-code', permission: false })(ReportCampaign);
+$({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-code' })(ReportCampaign);
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-check' })(ReportTemplate);
 
 // Users
