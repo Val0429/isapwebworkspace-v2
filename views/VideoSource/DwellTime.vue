@@ -392,7 +392,7 @@ export default class DwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -408,7 +408,7 @@ export default class DwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -427,7 +427,7 @@ export default class DwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -579,7 +579,7 @@ export default class DwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_ErrorReadData")
@@ -622,7 +622,7 @@ export default class DwellTime extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_ErrorReadData")
@@ -658,7 +658,7 @@ export default class DwellTime extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_ErrorReadData")
@@ -701,7 +701,7 @@ export default class DwellTime extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_VSPeopleCounting_ADDFailed")
@@ -739,7 +739,7 @@ export default class DwellTime extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_VSPeopleCounting_ADDFailed")
@@ -935,7 +935,7 @@ export default class DwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSDwellTime_ADDFailed")
@@ -978,7 +978,7 @@ export default class DwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSDwellTime_EditFailed")
@@ -1014,7 +1014,7 @@ export default class DwellTime extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

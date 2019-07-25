@@ -778,7 +778,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             this.toDetailReportTable(
@@ -828,7 +828,7 @@ export default class ReportDwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1016,7 +1016,7 @@ export default class ReportDwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1036,7 +1036,7 @@ export default class ReportDwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1075,7 +1075,7 @@ export default class ReportDwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1105,7 +1105,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1140,7 +1140,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1162,7 +1162,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1183,7 +1183,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1223,7 +1223,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1246,7 +1246,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1273,7 +1273,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1302,7 +1302,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1327,7 +1327,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1354,7 +1354,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1382,7 +1382,7 @@ export default class ReportDwellTime extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1404,7 +1404,7 @@ export default class ReportDwellTime extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1447,7 +1447,7 @@ export default class ReportDwellTime extends Vue {
         //         }
         //     })
         //     .catch((e: any) => {
-        //         return ResponseFilter.base(this, e);
+        //         return ResponseFilter.catchError(this, e);
         //     });
     }
 

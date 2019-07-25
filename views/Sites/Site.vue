@@ -830,7 +830,7 @@ export default class Site extends Vue {
                 this.getDeviceData();
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -863,7 +863,7 @@ export default class Site extends Vue {
                     this.initImageMap();
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             this.initImageMap();
@@ -1154,7 +1154,7 @@ export default class Site extends Vue {
                 this.areaAll = response;
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1190,7 +1190,7 @@ export default class Site extends Vue {
                 this.deviceGroupAll = response.results;
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1251,7 +1251,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1286,7 +1286,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1314,7 +1314,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1342,7 +1342,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
 
         await this.$server
@@ -1359,7 +1359,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1387,7 +1387,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
 
         await this.$server
@@ -1404,7 +1404,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1442,7 +1442,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (this.pageStep == EPageStep.siteEdit) {
             const datas: ISiteEditData[] = [
@@ -1480,7 +1480,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1508,7 +1508,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (this.pageStep == EPageStep.areaEdit) {
             const datas: IAreaEditData[] = [
@@ -1535,7 +1535,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1560,7 +1560,7 @@ export default class Site extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1583,7 +1583,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         });
     }
@@ -1607,7 +1607,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         });
     }
@@ -1640,7 +1640,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (this.pageStep == EPageStep.deviceGroupEdit) {
             const datas: IDeviceGroupEditData[] = [
@@ -1666,7 +1666,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1700,7 +1700,7 @@ export default class Site extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         });
     }

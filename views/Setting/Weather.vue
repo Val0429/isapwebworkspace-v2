@@ -213,7 +213,7 @@ export default class Weather extends Vue {
             .catch((e: any) => {
                 (this.$refs["detail"] as any).hide() &&
                     (this.$refs["test"] as any).hide();
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_WeatherTest_Fail")
@@ -230,7 +230,7 @@ export default class Weather extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_Weather_Read_Fail")
@@ -254,7 +254,7 @@ export default class Weather extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_Weather_Setting_Fail")

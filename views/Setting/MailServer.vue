@@ -160,7 +160,7 @@ export default class MailServer extends Vue {
             })
             .catch((e: any) => {
                 this.modalShow = !this.modalShow;
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_MailServer_Test_Fail")
@@ -181,7 +181,7 @@ export default class MailServer extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_MailServer_Read_Fail")
@@ -222,7 +222,7 @@ export default class MailServer extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_MailServer_Setting_Fail")

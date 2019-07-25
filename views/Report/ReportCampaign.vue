@@ -182,7 +182,7 @@ export default class ReportCampaign extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -193,7 +193,7 @@ export default class ReportCampaign extends Vue {
         tempResult = await this.$server
             .R("/report/campaign/condition")
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
 
         for (const year in tempResult) {
@@ -244,7 +244,7 @@ export default class ReportCampaign extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (this.filterData.campaignIds.length === 1) {
             param = {
@@ -267,7 +267,7 @@ export default class ReportCampaign extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             return false;

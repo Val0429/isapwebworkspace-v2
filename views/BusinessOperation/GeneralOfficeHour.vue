@@ -546,7 +546,7 @@ export default class GeneralOfficeHour extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_OfficeHour_AddFailed")
@@ -611,7 +611,7 @@ export default class GeneralOfficeHour extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_OfficeHour_EditFailed")
@@ -647,7 +647,7 @@ export default class GeneralOfficeHour extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

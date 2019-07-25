@@ -494,7 +494,7 @@ export default class SalesRecords extends Vue {
                 this.pageTo3();
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_BOSalesRecords_ErrorFileResolve")
@@ -574,7 +574,7 @@ export default class SalesRecords extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 

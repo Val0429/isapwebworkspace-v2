@@ -397,7 +397,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -413,7 +413,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -432,7 +432,7 @@ export default class FaceRecognition extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -584,7 +584,7 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_ErrorReadData")
@@ -627,7 +627,7 @@ export default class FaceRecognition extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_ErrorReadData")
@@ -663,7 +663,7 @@ export default class FaceRecognition extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_ErrorReadData")
@@ -706,7 +706,7 @@ export default class FaceRecognition extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_VSPeopleCounting_ADDFailed")
@@ -744,7 +744,7 @@ export default class FaceRecognition extends Vue {
                         }
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.base(
+                        return ResponseFilter.catchError(
                             this,
                             e,
                             this._("w_VSPeopleCounting_ADDFailed")
@@ -944,7 +944,7 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSVIP_Stranger_Visitor_ADDFailed")
@@ -991,7 +991,7 @@ export default class FaceRecognition extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSVIP_Stranger_Visitor_EditFailed")
@@ -1028,7 +1028,7 @@ export default class FaceRecognition extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();
