@@ -202,11 +202,10 @@ export default class MyProfile extends Vue {
         await this.$server
             .U("/user/base/password", editPasswordParam)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_MyProfile_ChangePasswordSuccess"));
                     this.$logout();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
@@ -235,11 +234,10 @@ export default class MyProfile extends Vue {
         await this.$server
             .U("/user/user", editMyProfileParam)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_MyProfile_EditSuccess"));
                     this.pageToView();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(

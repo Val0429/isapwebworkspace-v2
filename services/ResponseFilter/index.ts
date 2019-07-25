@@ -10,13 +10,18 @@ interface IResponseFilter {
 export class ResponseFilter {
     constructor() {}
 
-    successCheck(viewItem: any, response: any, callback: Function) {
+    successCheck(viewItem: any, response: any, callback: Function, errorMessage: string = '', check: boolean = true) {
         Loading.hide();
         let responseItem: IResponseFilter = {
             totalLength: 0,
             errorLength: 0,
             errorMessageList: [],
         };
+
+        // if control for page
+        if (!check) {
+            callback(response);
+        }
 
         // response undefined
         if (response == undefined) {
@@ -39,7 +44,11 @@ export class ResponseFilter {
             if (typeof data.statusCode == 'number' && data.statusCode != 200) {
                 responseItem.errorLength++;
                 if (data.message != undefined && typeof data.message == 'string') {
-                    responseItem.errorMessageList.push(data.message);
+                    if (errorMessage != '') {
+                        responseItem.errorMessageList.push(errorMessage);
+                    } else {
+                        responseItem.errorMessageList.push(data.message);
+                    }
                 }
             }
         }
