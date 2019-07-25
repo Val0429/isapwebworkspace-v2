@@ -41,7 +41,7 @@
                     </template>
                 </iv-permission>
 
-                <iv-permission allow="User">
+                <iv-permission allow="Visitor">
                     Only 'Visitor' can see this.
                     <template #else>
                         You are not 'Visitor'.
@@ -61,14 +61,17 @@
                         You are 'Administrator'.
                     </template>
                 </iv-permission>
+            </iv-card>
 
+            <iv-card
+                label="Url permitted content"
+                >
                 <iv-permission url="/announcements">
                     You have '/announcements' permission.
                     <template #else>
                         You don't have '/announcements' permission.
                     </template>
                 </iv-permission>
-
             </iv-card>
 
         </div>
