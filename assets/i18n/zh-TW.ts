@@ -629,4 +629,5 @@ export default class LangObject implements ILang {
 
     w_Error_DuplicateCardNumber="重複卡號";
     w_Error_DuplicateEmployeeNumber="重複工號";
+    w_DeviceAreaOrFloor = "裝置區域 / 樓層";
 }

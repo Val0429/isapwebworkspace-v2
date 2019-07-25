@@ -364,11 +364,12 @@ export default class PermissionTable extends Vue {
             title: [
                 this._("w_DeviceType"),
                 this._("w_DeviceName"),
-                this._("w_DeviceArea"),
+                this._("w_DeviceAreaOrFloor"),
                 this._("w_TimeFormat"),
                 this._("w_Action")
             ]}, this.defaultFormData
         );
+        this.inputFormData.data=[];
     }
 
     pageToList() {
@@ -456,13 +457,8 @@ export default class PermissionTable extends Vue {
         this.inputFormData.permissionName = this.selectedDetail.tablename;
         if(!this.selectedDetail.accesslevels)return;
         for (const tempAccesslevels of this.selectedDetail.accesslevels) {
-            if (tempAccesslevels.objectId == undefined) {
-                continue;
-            }
-
-            if (tempAccesslevels.type == undefined) {
-                continue;
-            }
+            
+            if (!tempAccesslevels.type) continue;
 
             let deviceData: any = {
                 objectId: tempAccesslevels.objectId,
@@ -472,90 +468,40 @@ export default class PermissionTable extends Vue {
                 timeFormat: { id: "", text: "" }
             };
 
-            if (
-                tempAccesslevels.timeschedule != undefined &&
-                tempAccesslevels.timeschedule.objectId != undefined &&
-                tempAccesslevels.timeschedule.timename != undefined
-            ) {
-                deviceData.timeFormat.id =
-                    tempAccesslevels.timeschedule.objectId;
-                deviceData.timeFormat.text =
-                    tempAccesslevels.timeschedule.timename;
+            if (tempAccesslevels.timeschedule ) {
+                deviceData.timeFormat.id = tempAccesslevels.timeschedule.objectId;
+                deviceData.timeFormat.text = tempAccesslevels.timeschedule.timename;
             }
-
+            let origin:any;
             switch (tempAccesslevels.type) {
                 case EDeviceType.door:
-                    if (
-                        tempAccesslevels.door != undefined &&
-                        tempAccesslevels.door.objectId != undefined
-                    ) {
-                        deviceData.deviceName.id =
-                            tempAccesslevels.door.objectId;
-                        for (let key in this.selectItem.doorDevice) {
-                            if (key == tempAccesslevels.door.objectId) {
-                                deviceData.deviceName.text = this.selectItem.doorDevice[
-                                    key
-                                ];
-                                break;
-                            }
-                        }
-                    }
+                    if (!tempAccesslevels.door) break;
+                    deviceData.deviceName.id = tempAccesslevels.door.objectId;
+                    let key = Object.keys(this.selectItem.doorDevice).find(x=>x==tempAccesslevels.door.objectId);
+                    deviceData.deviceName.text = key ? this.selectItem.doorDevice[key] : "";                    
                     break;
                 case EDeviceType.doorGroup:
-                    if (
-                        tempAccesslevels.doorgroup != undefined &&
-                        tempAccesslevels.doorgroup.objectId != undefined
-                    ) {
-                        deviceData.deviceName.id =
-                            tempAccesslevels.doorgroup.objectId;
-
-                        for (let origin of this.selectItemOriginal.doorGroup) {
-                            if (
-                                origin.objectId != undefined &&
-                                origin.objectId == deviceData.deviceName.id
-                            ) {
-                                if (origin.groupname != undefined) {
-                                    deviceData.deviceName.text =
-                                        origin.groupname;
-                                }
-                                if (
-                                    origin.area != undefined &&
-                                    origin.area.name != undefined
-                                ) {
-                                    deviceData.area.id = origin.area.name;
-                                    deviceData.area.text = origin.area.name;
-                                }
-                                break;
-                            }
-                        }
-                        for (let key in this.selectItem.doorGroupDevice) {
-                            if (key == tempAccesslevels.doorgroup.objectId) {
-                                deviceData.deviceName.text = this.selectItem.doorGroupDevice[
-                                    key
-                                ];
-                                break;
-                            }
-                        }
-                    }
-
+                    if (!tempAccesslevels.doorgroup) break;
+                    deviceData.deviceName.id = tempAccesslevels.doorgroup.objectId;
+                    origin = this.selectItemOriginal.doorGroup.find(x=>x.objectId == deviceData.deviceName.id);                        
+                    if (!origin) break;
+                    deviceData.deviceName.text = origin.groupname;                                
+                    if(!origin.area )break
+                    deviceData.area.id = origin.area.name;
+                    deviceData.area.text = origin.area.name;
                     break;
                 case EDeviceType.elevator:
-                    if (
-                        tempAccesslevels.elevator != undefined &&
-                        tempAccesslevels.elevator.objectId != undefined
-                    ) {
-                        deviceData.deviceName.id =
-                            tempAccesslevels.elevator.objectId;
-                        for (let key in this.selectItem.elevatorDevice) {
-                            if (key == tempAccesslevels.elevator.objectId) {
-                                deviceData.deviceName.text = this.selectItem.elevatorDevice[
-                                    key
-                                ];
-                                break;
-                            }
-                        }
-                    }
-
+                    console.log("tempAccesslevels", tempAccesslevels);
+                    if (!tempAccesslevels.elevator) break;
+                    deviceData.deviceName.id = tempAccesslevels.elevator.objectId;
+                    origin = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id);                        
+                    if (!origin) break;                    
+                    deviceData.deviceName.text = origin.elevatorname;                    
+                    if(!origin.reader || !tempAccesslevels.floor || tempAccesslevels.floor.length<=0) break;                    
+                    let floor = origin.reader.find(x=>x.objectId == tempAccesslevels.floor[0].objectId);                    
+                    if(!floor)break;
+                    deviceData.area.id = floor.floorname;
+                    deviceData.area.text = floor.floorname;
                     break;
                 case EDeviceType.elevatorGroup:
                 case EDeviceType.elevatorGroup:
@@ -1067,7 +1013,7 @@ export default class PermissionTable extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 * @uiLabel - ${this._("w_Floor")}
                  * @uiColumnGroup - row112
                 * @uiHidden - ${this.pageStep === EPageStep.view ? "true" : "false"}
                 */
