@@ -25,12 +25,51 @@
                 </iv-scrollbar>
             </iv-card>
 
-            <h1>Permission (Todo)</h1>
-            <pre>
+            <h1>Permission</h1>
+            <!-- <pre>
                 &lt;iv-permission url="/announcements"&gt;
                     Only show content if permitted.
                 &lt;/iv-permission&gt;
-            </pre>
+            </pre> -->
+            <iv-card
+                label="Role permitted content"
+                >
+                <iv-permission allow="Administrator">
+                    Only 'Administrator' can see this.
+                    <template #else>
+                        You are not 'Administrator'.
+                    </template>
+                </iv-permission>
+
+                <iv-permission allow="User">
+                    Only 'Visitor' can see this.
+                    <template #else>
+                        You are not 'Visitor'.
+                    </template>
+                </iv-permission>
+
+                <iv-permission :allow="['Administrator', 'User']">
+                    Both 'Administrator' and 'User' can see this.
+                    <template #else>
+                        You are not 'Administrator' or 'User'.
+                    </template>
+                </iv-permission>
+
+                <iv-permission deny="Administrator">
+                    You can see this only if you are not 'Administrator'.
+                    <template #else>
+                        You are 'Administrator'.
+                    </template>
+                </iv-permission>
+
+                <iv-permission url="/announcements">
+                    You have '/announcements' permission.
+                    <template #else>
+                        You don't have '/announcements' permission.
+                    </template>
+                </iv-permission>
+
+            </iv-card>
 
         </div>
     </iv-route-transition>

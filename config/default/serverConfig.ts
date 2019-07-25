@@ -8,8 +8,10 @@ var config: Config = {
 export default config;
 
 export interface Config {
-    ip: string;
-    port: number;
+    /// for debug only. normally client & server share different port
+    /// if without specific ip / port / ssl, will use current browser url
+    ip?: string;
+    port?: number;
     ssl?: boolean;
 
     /// only allow server framework > THIS to do login

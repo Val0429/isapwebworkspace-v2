@@ -11,9 +11,6 @@
             <iv-form :interface="inf1()" />
         </template>
         <template #1-title>註冊帳號</template>
-        <template #1-footer-before>
-            <div>test</div>
-        </template>
 
         <template #2>
             <iv-form :interface="inf2()">
