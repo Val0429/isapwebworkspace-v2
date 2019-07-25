@@ -707,14 +707,8 @@ export default class PermissionTable extends Vue {
         }
 
         deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption;
-        for (let loopKey in this.selectItem.timeSchedule) {
-            if (loopKey == deviceData.timeFormat.id) {
-                deviceData.timeFormat.text = this.selectItem.timeSchedule[
-                    loopKey
-                ];
-                break;
-            }
-        }
+        let timeSchedule = Object.keys(this.selectItem.timeSchedule).find(x=>x==deviceData.timeFormat.id);
+        deviceData.timeFormat.text = this.selectItem.timeSchedule[timeSchedule];
 
         switch (this.deviceType) {
             case EDeviceType.door:
@@ -722,44 +716,21 @@ export default class PermissionTable extends Vue {
                     return false;
                 }
                 deviceData.deviceName.id = this.inputFormData.doorNameOption;
-                for (let loopKey in this.selectItem.doorDevice) {
-                    if (loopKey == deviceData.deviceName.id) {
-                        deviceData.deviceName.text = this.selectItem.doorDevice[
-                            loopKey
-                        ];
-                        break;
-                    }
-                }
-
+                let door = Object.keys(this.selectItem.doorDevice).find(x=>x==deviceData.deviceName.id);
+                deviceData.deviceName.text = this.selectItem.doorDevice[door];
                 break;
             case EDeviceType.doorGroup:
                 if (this.inputFormData.doorGroupNameOption === "0") {
                     return false;
                 }
                 deviceData.deviceName.id = this.inputFormData.doorGroupNameOption;
-                for (let origin of this.selectItemOriginal.doorGroup) {
-                    if (
-                        origin.objectId ==
-                        this.inputFormData.doorGroupNameOption
-                    ) {
-                        if (
-                            origin.area != undefined &&
-                            origin.area.name != undefined
-                        ) {
-                            deviceData.area.id = origin.area.name;
-                            deviceData.area.text = origin.area.name;
-                        }
-                        break;
-                    }
-                }
-                for (let loopKey in this.selectItem.doorGroupDevice) {
-                    if (loopKey == deviceData.deviceName.id) {
-                        deviceData.deviceName.text = this.selectItem.doorGroupDevice[
-                            loopKey
-                        ];
-                        break;
-                    }
-                }
+                let origin = this.selectItemOriginal.doorGroup.find(x=>x.objectId == this.inputFormData.doorGroupNameOption);                
+                if (origin && origin.area) {
+                    deviceData.area.id = origin.area.name;
+                    deviceData.area.text = origin.area.name;
+                }        
+                let doorGroup = Object.keys(this.selectItem.doorGroupDevice).find(x=>x==deviceData.deviceName.id);                
+                deviceData.deviceName.text = this.selectItem.doorGroupDevice[doorGroup];
                 break;
             case EDeviceType.elevator:
                 if (this.inputFormData.elevatorNameOption === "0") {
@@ -773,20 +744,13 @@ export default class PermissionTable extends Vue {
                         deviceData.area.id = this.inputFormData.elevatorAreaOption;
                         let floor = elevator.reader.find(x=>x.objectId == deviceData.area.id);
                         if(floor)deviceData.area.text=floor.floorname;
-                    }
-                    
+                    }                    
                 }
-                
-                for (let loopKey in this.selectItem.elevatorDevice) {
-                    if (loopKey == deviceData.deviceName.id) {
-                        deviceData.deviceName.text = this.selectItem.elevatorDevice[
-                            loopKey
-                        ];
-                        break;
-                    }
-                }
+                let elevator = Object.keys(this.selectItem.elevatorDevice).find(x=>x==deviceData.deviceName.id);                
+                deviceData.deviceName.text = this.selectItem.elevatorDevice[elevator];
                 break;
-        }
+            }
+        
         this.inputFormData.data.push(deviceData);
         this.clearDeviceSelection();
     }
