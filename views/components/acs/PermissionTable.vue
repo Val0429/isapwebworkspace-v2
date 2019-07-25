@@ -414,43 +414,57 @@ export default class PermissionTable extends Vue {
         this.selectItem.doorGroupDevice = { "0": this._("w_Select") };
         this.selectItem.elevatorDevice = { "0": this._("w_Select") };
 
-        await this.$server
-            .R("/acs/timeschedule", {"paging.all":"true"})
-            .then((response: any) => {
-                for (let tempItem of response.results) {                        
-                    this.selectItem.timeSchedule[tempItem.objectId] = tempItem.timename;
-                    this.selectItemOriginal.timeSchedule.push(tempItem);
-                }
-            });
-
-        await this.$server
-            .R("/acs/door", {"paging.all":"true"})
-            .then((response: any) => {
-                for (let tempItem of response.results) {
-                    this.selectItem.doorDevice[tempItem.objectId] = tempItem.doorname;
-                    this.selectItemOriginal.door.push(tempItem);
-                }
-            });
-
-        await this.$server
-            .R("/acs/doorgroup",  {"paging.all":"true"})
-            .then((response: any) => {
-                for (let tempItem of response.results) {                    
-                    this.selectItem.doorGroupDevice[tempItem.objectId] =tempItem.groupname;
-                    this.selectItemOriginal.doorGroup.push(tempItem);                    
-                }
-            });
-
-        await this.$server
-            .R("/acs/elevator",  {"paging.all":"true"})
-            .then((response: any) => {
-                for (let tempItem of response.results) {                    
-                        this.selectItem.elevatorDevice[tempItem.objectId] = tempItem.elevatorname;
-                        this.selectItemOriginal.elevator.push(tempItem);
-                   }
-                
-            });
+        await Promise.all([
+            this.getTimeSchedule(),
+            this.getDoor(),
+            this.getDoorGroup(),
+            this.getElevator()
+        ]);
     }
+
+  private async getElevator() {
+    await this.$server
+      .R("/acs/elevator",{ "paging.all": "true" })
+      .then((response: any) => {
+        for(let tempItem of response.results) {
+          this.selectItem.elevatorDevice[tempItem.objectId]=tempItem.elevatorname;
+          this.selectItemOriginal.elevator.push(tempItem);
+        }
+      });
+  }
+
+  private async getDoorGroup() {
+    await this.$server
+      .R("/acs/doorgroup",{ "paging.all": "true" })
+      .then((response: any) => {
+        for(let tempItem of response.results) {
+          this.selectItem.doorGroupDevice[tempItem.objectId]=tempItem.groupname;
+          this.selectItemOriginal.doorGroup.push(tempItem);
+        }
+      });
+  }
+
+  private async getDoor() {
+    await this.$server
+      .R("/acs/door",{ "paging.all": "true" })
+      .then((response: any) => {
+        for(let tempItem of response.results) {
+          this.selectItem.doorDevice[tempItem.objectId]=tempItem.doorname;
+          this.selectItemOriginal.door.push(tempItem);
+        }
+      });
+  }
+
+  private async getTimeSchedule() {
+    await this.$server
+      .R("/acs/timeschedule",{ "paging.all": "true" })
+      .then((response: any) => {
+        for(let tempItem of response.results) {
+          this.selectItem.timeSchedule[tempItem.objectId]=tempItem.timename;
+          this.selectItemOriginal.timeSchedule.push(tempItem);
+        }
+      });
+  }
 
     async initInputFormData() {
         this.inputFormData.id = this.selectedDetail.objectId;
@@ -698,69 +712,33 @@ export default class PermissionTable extends Vue {
                 switch (tempData.deviceType) {
                     case EDeviceType.door:
                         accessParam.door = tempData.deviceName.id;
-                        for (let door of this.selectItemOriginal.door) {
-                            if (
-                                door.objectId != undefined &&
-                                door.doorid != undefined &&
-                                door.objectId == accessParam.door
-                            ) {
-                                if (door.readerin != undefined) {
-                                    for (let reader of door.readerin) {
-                                        if (reader.objectId != undefined) {
-                                            accessParam.reader.push(
-                                                reader.objectId
-                                            );
-                                        }
-                                    }
-                                }
-                                if (door.readerout != undefined) {
-                                    for (let reader of door.readerout) {
-                                        if (reader.objectId != undefined) {
-                                            accessParam.reader.push(
-                                                reader.objectId
-                                            );
-                                        }
-                                    }
-                                }
-                                break;
+                        let door = this.selectItemOriginal.door.find(x=>x.objectId==accessParam.door);                            
+                        if (!door)break;
+                        if(door.readerin) {
+                            for (let reader of door.readerin) {
+                                accessParam.reader.push(reader.objectId);
                             }
                         }
+                        if (door.readerout) {
+                            for (let reader of door.readerout) {                                
+                                accessParam.reader.push(reader.objectId);
+                            }
+                        }                                              
                         break;
                     case EDeviceType.doorGroup:
                         accessParam.doorgroup = tempData.deviceName.id;
-                        for (let doorGroup of this.selectItemOriginal
-                            .doorGroup) {
-                            if (
-                                doorGroup.objectId != undefined &&
-                                doorGroup.objectId == accessParam.doorgroup
-                            ) {
-                                if (doorGroup.doors != undefined) {
-                                    for (let door of doorGroup.doors) {
-                                        if (door.readerin != undefined) {
-                                            for (let reader of door.readerin) {
-                                                if (
-                                                    reader.objectId != undefined
-                                                ) {
-                                                    accessParam.reader.push(
-                                                        reader.objectId
-                                                    );
-                                                }
-                                            }
-                                        }
-                                        if (door.readerout != undefined) {
-                                            for (let reader of door.readerout) {
-                                                if (
-                                                    reader.objectId != undefined
-                                                ) {
-                                                    accessParam.reader.push(
-                                                        reader.objectId
-                                                    );
-                                                }
-                                            }
-                                        }
-                                    }
+                        let doorGroup = this.selectItemOriginal.doorGroup.find(x=>x.objectId == accessParam.doorgroup);
+                        if(!doorGroup || !doorGroup.doors)break;
+                        for (let door of doorGroup.doors) {
+                            if (door.readerin) {
+                                for (let reader of door.readerin) {
+                                    accessParam.reader.push(reader.objectId);                                    
                                 }
-                                break;
+                            }
+                            if (door.readerout) {
+                                for (let reader of door.readerout) {                                    
+                                    accessParam.reader.push(reader.objectId);
+                                }
                             }
                         }
                         break;
@@ -791,7 +769,7 @@ export default class PermissionTable extends Vue {
             }
         }
 
-        if (this.inputFormData.id !=undefined && this.inputFormData.id  != "") {
+        if (this.inputFormData.id && this.inputFormData.id  != "") {
             premissionParam.objectId = this.inputFormData.id;
               await this.$server
             .U("/acs/permissiontable", premissionParam)
