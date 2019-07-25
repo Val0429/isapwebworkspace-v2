@@ -3,7 +3,7 @@
         <p><iv-language-button /></p>
 
         <iv-form-selection
-            :options="[{ id: 'iv-direction-slide', text: 'Direction' }, { id: 'iv-fade-slide', text: 'Fade' }]"
+            :options="[{ id: 'iv-direction-slide', text: 'Direction' }, { id: 'iv-fade-slide', text: 'Fade' }, { id: 'iv-flip-slide', text: 'Flip' }, { id: 'iv-kontext-slide', text: 'Kontext' }]"
             v-model="type"
             />
 

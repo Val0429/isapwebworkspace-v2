@@ -2,7 +2,6 @@
     <iv-route-transition>
         <div key="main">
         <p><iv-language-button /></p>
-
             <h1>Scrollbar</h1>
 
             <iv-card style="width: 50vw" label="Scrollbar in Card">
@@ -46,6 +45,9 @@ export default class Utilities extends Vue {
     private isMounted: boolean = false;
     private doMounted() {
         this.isMounted = true;
+    }
+    private log() {
+        console.log(...arguments);
     }
 }
 </script>

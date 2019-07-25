@@ -17,7 +17,31 @@
                 </SidebarNavItem> -->
 
                 <SidebarNavTitle label="基本元件" />
-                <SidebarNavItem url="/components" />
+
+                <SidebarNavItem url="/components">
+                    <SidebarNavItem url="/components/form2" />
+                    <SidebarNavItem url="/components/step2" />
+
+                    <SidebarNavItem url="/components/forms" />
+                    <SidebarNavItem url="/components/step-progress" />
+                    <SidebarNavItem url="/components/tab" />
+                    <SidebarNavItem url="/components/toolbox" />
+                    <SidebarNavItem url="/components/cards" />
+                    <SidebarNavItem url="/components/cards/auto" />
+                    <SidebarNavItem url="/components/table" />
+                    <SidebarNavItem url="/components/tree" />
+                    <SidebarNavItem url="/components/transition" />
+                    <SidebarNavItem url="/components/modal" />
+                    <SidebarNavItem url="/components/utilities" />
+                </SidebarNavItem>
+
+
+
+                <!-- <SidebarNavItem url="/components" />
+
+                <SidebarNavItem url="/components/form2" />
+                <SidebarNavItem url="/components/step2" />
+
                 <SidebarNavItem url="/components/forms" />
                 <SidebarNavItem url="/components/step-progress" />
                 <SidebarNavItem url="/components/tab" />
@@ -28,7 +52,7 @@
                 <SidebarNavItem url="/components/tree" />
                 <SidebarNavItem url="/components/transition" />
                 <SidebarNavItem url="/components/modal" />
-                <SidebarNavItem url="/components/utilities" />
+                <SidebarNavItem url="/components/utilities" /> -->
 
                 <SidebarNavTitle label="選單特殊樣式" />
                 <SidebarNavItem url="/menu-style/1" />

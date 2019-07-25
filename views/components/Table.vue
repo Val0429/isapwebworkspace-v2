@@ -22,6 +22,10 @@
             }
             "
             />
+
+        <iv-table
+            :server="{ path: '/announcements' }"
+            />            
     </div>
 </template>
 

@@ -1,6 +1,7 @@
 <template>
     <iv-route-transition>
     <div key="main">
+        <b-button @click="logout">Logout</b-button>
 
         <ul>
             <li>server requirement
@@ -27,5 +28,11 @@ import { toEnumInterface } from '@/../core';
 
 @Component
 export default class Components extends Vue {
+    private async logout() {
+        await this.$logout();
+        console.log('push go');
+        this.$goHome();
+        //this.$router.push('//');
+    }
 }
 </script>

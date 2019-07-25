@@ -4,6 +4,7 @@
 
         <iv-auto-card
             label="Auto Card - Form"
+            ref="card"
         >
             <iv-form
                 interface="
@@ -12,6 +13,7 @@
                     password: string;
                 }
                 "
+                @submit="$refs.card.close()"
                 />
 
             <template #footer-before>
@@ -24,6 +26,8 @@
 
         <iv-auto-card
             label="Auto Card - Step"
+            :visible="visible"
+            @submit="visible = false"
         >
             <template #1-footer-before>
                 <b>1-footer-before</b>
@@ -157,6 +161,8 @@ export default class AutoCards extends Vue {
         value: new BehaviorSubject<number>(0)
     })
     test: BehaviorSubject<number>;
+
+    private visible: boolean = true;
 
     private inf1() {
         return `
