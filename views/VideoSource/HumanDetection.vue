@@ -968,11 +968,10 @@ export default class HumanDetection extends Vue {
     }
 
     showGroups(datas) {
-        let result = '';
+        let result = "";
         let groups = [];
         if (this.groupNameItem.length > 0) {
             for (let data of datas) {
-
                 let groupName = this.groupNameItem.filter(g => g.id == data)[0]
                     .text;
                 groups.push(groupName);
@@ -1118,7 +1117,7 @@ export default class HumanDetection extends Vue {
                  * @uiLabel - ${this._("w_Area")}
                 * @uiType - iv-form-selection
                  */
-                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+                areaId: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**

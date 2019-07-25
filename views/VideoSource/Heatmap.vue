@@ -87,6 +87,16 @@
                         </iv-form-label>
                     </template>
 
+                    <template #hdServerId="{$attrs, $listeners}">
+                        <iv-form-label
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            :options="hdServerItem"
+                            :value="inputFormData ? inputFormData.hdServerName : ''"
+                        >
+                        </iv-form-label>
+                    </template>
+
                     <template #serverId="{$attrs, $listeners}">
                         <iv-form-label
                             v-bind="$attrs"
@@ -203,6 +213,23 @@
                                     :value="$attrs ? $attrs.value : ''"
                                 >
                                 </iv-form-selection>
+                            </template>
+
+                            <template #hdServerId="{$attrs, $listeners}">
+                                <iv-form-selection
+                                    v-bind="$attrs"
+                                    v-on="$listeners"
+                                    :options="hdServerItem"
+                                    :value="$attrs ?  $attrs.value : ''"
+                                >
+                                </iv-form-selection>
+                                <b-button
+                                    class="linkPadding"
+                                    variant="link"
+                                    @click="goToSetHDServer()"
+                                >
+                                    {{ _('w_VSHumanDetection_SetCMS') }}
+                                </b-button>
                             </template>
 
                             <template #serverId="{$attrs, $listeners}">
@@ -364,6 +391,7 @@ export default class HumanDetection extends Vue {
     // options
     groupNameItem: any = [];
     brandItem: any = [];
+    hdServerItem: any = [];
     cmsItem: any = [];
     devices: any = [];
     nvrItem: any = [];
@@ -382,6 +410,8 @@ export default class HumanDetection extends Vue {
         dataWindowX: 0,
         dataWindowY: 0,
         groupIds: [],
+        hdServerId: "",
+        hdServerName: "",
         serverId: "",
         serverName: "",
         nvrId: "",
@@ -419,6 +449,8 @@ export default class HumanDetection extends Vue {
         this.inputFormData.dataWindowX = 0;
         this.inputFormData.dataWindowY = 0;
         this.inputFormData.groupIds = [];
+        this.inputFormData.hdServerId = "";
+        this.inputFormData.hdServerName = "";
         this.inputFormData.serverId = "";
         this.inputFormData.serverName = "";
         this.inputFormData.nvrId = "";
@@ -469,6 +501,36 @@ export default class HumanDetection extends Vue {
     initBrandItem() {
         this.brandItem = [];
         this.brandItem = [{ id: "isap", text: "ISAP" }];
+    }
+
+    async initHdServerItem() {
+        let body: {
+            paging: {
+                page: number;
+                pageSize: number;
+            };
+        } = {
+            paging: {
+                page: 1,
+                pageSize: 999
+            }
+        };
+
+        await this.$server
+            .R("/partner/human-detection", body)
+            .then((response: any) => {
+                if (response != undefined) {
+                    this.hdServerItem = [];
+                    for (let item of response.results) {
+                        let cms = { id: item.objectId, text: item.name };
+
+                        this.hdServerItem.push(cms);
+                    }
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     async initCMSItem() {
@@ -576,6 +638,8 @@ export default class HumanDetection extends Vue {
             groupIds.push(group);
         }
         this.inputFormData.groupIds = groupIds;
+        this.inputFormData.hdServerId = data.hdServer.objectId;
+        this.inputFormData.hdServerName = data.hdServer.name;
         this.inputFormData.serverId = data.config.server.objectId;
         this.inputFormData.serverName = data.config.server.name;
         this.inputFormData.nvrId = data.config.nvrId;
@@ -609,6 +673,7 @@ export default class HumanDetection extends Vue {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         this.initCMSItem();
+        this.initHdServerItem();
         this.initBrandItem();
         (this.$refs.heatMapTable as any).reload();
     }
@@ -784,6 +849,16 @@ export default class HumanDetection extends Vue {
         }
         result = result.substring(0, result.length - 2);
         return result;
+    }
+
+    goToSetHDServer() {
+        Dialog.confirm(
+            this._("w_VSHumanDetection_PageToHDServerAlter"),
+            this._("w_DeleteConfirm"),
+            () => {
+                this.$router.push("/server/hd_server");
+            }
+        );
     }
 
     goToSetCMS() {
@@ -992,7 +1067,12 @@ export default class HumanDetection extends Vue {
                 */
                 brand?: any;
 
-
+                 /*
+                * @uiLabel - ${this._("w_VSHumanDetection_HDserver")}
+                * @uiType - iv-form-selection
+                * @uiAttrs - { multiple: false }
+                */
+                 hdServerId?: any;
 
                 /*
                 * @uiLabel - ${this._("w_VSHeatmap_CMS")}
@@ -1035,7 +1115,7 @@ export default class HumanDetection extends Vue {
                  * @uiLabel - ${this._("w_Area")}
                 * @uiType - iv-form-selection
                  */
-                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+                areaId: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
@@ -1151,6 +1231,7 @@ export default class HumanDetection extends Vue {
                         nvrId: data[1].nvrId,
                         channelId: data[1].channelId
                     },
+                    hdServerId: data[1].hdServerId,
                     rois: this.canvasDetail
                 }
             ];
