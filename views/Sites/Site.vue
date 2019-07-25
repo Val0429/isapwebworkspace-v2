@@ -1777,7 +1777,10 @@ export default class Site extends Vue {
     }
 
     selectedSite(data) {
-        console.log("selectedSite", data);
+        this.initManagerItem();
+        this.initTagItem();
+        this.initOfficeHourItem();
+        this.initAreaNameItem();
         if (data && data.objectId) {
             this.site = data;
             this.isSelectSite = data;
@@ -1792,11 +1795,6 @@ export default class Site extends Vue {
             this.deviceGroupParams = {
                 siteId: data.objectId
             };
-
-            this.initManagerItem();
-            this.initTagItem();
-            this.initOfficeHourItem();
-            this.initAreaNameItem();
         } else {
             this.clearSiteData();
         }
