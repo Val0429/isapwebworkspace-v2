@@ -600,7 +600,54 @@ export class AnalysisDashboard extends Vue {
     }
 
     showWeather() {
-        let result = HighchartsService.weatherIcon(this.weather);
+        let result;
+        let style = "font-size:1.1rem; color:#924da3";
+        switch (this.weather as any) {
+            case "day-sunny":
+                result = `<i class="wi wi-day-sunny" style="${style}"></i>`;
+                break;
+
+            case "night-clear":
+                result = `<i class="wi wi-night-clear" style="${style}"></i>`;
+                break;
+
+            case "rain":
+                result = `<i class="wi wi-rain" style="${style}"></i>`;
+                break;
+
+            case "snow":
+                result = `<i class="wi wi-snow" style="${style}"></i>`;
+                break;
+
+            case "sleet":
+                result = `<i class="wi wi-sleet" style="${style}"></i>`;
+                break;
+
+            case "strong-wind":
+                result = `<i class="wi wi-strong-wind" style="${style}"></i>`;
+                break;
+
+            case "fog":
+                result = `<i class="wi wi-fog" style="${style}"></i>`;
+                break;
+
+            case "cloudy":
+                result = `<i class="wi wi-cloudy" style="${style}"></i>`;
+                break;
+
+            case "day-cloudy":
+                result = `<i class="wi wi-day-cloudy" style="${style}"></i>`;
+                break;
+
+            case "night-alt-cloudy":
+                result = `<i class="wi wi-night-alt-cloudy" style="${style}"></i>`;
+                break;
+
+            case "":
+            default:
+                result = `<i class="fa fa-question" style="${style}"></i>`;
+                break;
+        }
         return result;
     }
 }
