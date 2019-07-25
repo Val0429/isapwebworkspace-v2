@@ -1162,6 +1162,11 @@ export default class HumanDetection extends Vue {
                 })}
 
 
+                  /*
+                * @uiLabel - ${this._("w_VSHumanDetection_HDserver")}
+                * @uiType - iv-form-label
+                */
+                hdServerId?: any;
 
                 /*
                 * @uiLabel - ${this._("w_VSHeatmap_CMS")}
