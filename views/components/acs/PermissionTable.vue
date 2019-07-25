@@ -640,55 +640,21 @@ export default class PermissionTable extends Vue {
                 break;
 
             // door
-            case "doorName":
-                for (const key in this.selectItem.doorDevice) {
-                    if (data.value === key) {
-                        this.inputFormData.doorNameOption = key;
-                        break;
-                    }
-                }
+            case "doorName": this.inputFormData.doorNameOption = data.value;                        
                 break;
 
-            case "doorTimeFormat":
-                for (const key in this.selectItem.timeSchedule) {
-                    if (data.value === key) {
-                        this.inputFormData.deviceTimeFormatOption = key;
-                        break;
-                    }
-                }
+            case "doorTimeFormat": this.inputFormData.deviceTimeFormatOption = data.value;                        
                 break;
 
             // doorGroup
-            case "doorGroupName":
-                for (const key in this.selectItem.doorGroupDevice) {
-                    if (data.value === key) {
-                        this.inputFormData.doorGroupNameOption = key;
-                        break;
-                    }
-                }
-                for (let origin of this.selectItemOriginal.doorGroup) {
-                    if (origin.objectId != undefined) {
-                        if (data.value == origin.objectId) {
-                            if (
-                                origin.area != undefined &&
-                                origin.area.name != undefined
-                            ) {
-                                this.inputFormData.doorGroupAreaOption =
-                                    origin.area.name;
-                            }
-                            break;
-                        }
-                    }
+            case "doorGroupName": this.inputFormData.doorGroupNameOption = data.value;
+                let origin = this.selectItemOriginal.doorGroup.find(x=>x.objectId == data.value);
+                if (origin && origin.area) {
+                    this.inputFormData.doorGroupAreaOption = origin.area.name;
                 }
                 break;
 
-            case "doorGroupTimeFormat":
-                for (const key in this.selectItem.timeSchedule) {
-                    if (data.value === key) {
-                        this.inputFormData.deviceTimeFormatOption = key;
-                        break;
-                    }
-                }
+            case "doorGroupTimeFormat":   this.inputFormData.deviceTimeFormatOption = data.value;
                 break;
 
             // elevator
@@ -714,13 +680,7 @@ export default class PermissionTable extends Vue {
                 console.log("elevatorArea changed",data);
                 this.inputFormData.elevatorAreaOption = data.value;                
                 break;
-            case "elevatorTimeFormat":
-                for (const key in this.selectItem.timeSchedule) {
-                    if (data.value === key) {
-                        this.inputFormData.deviceTimeFormatOption = key;
-                        break;
-                    }
-                }
+            case "elevatorTimeFormat":  this.inputFormData.deviceTimeFormatOption = data.value;                       
                 break;
         }
     }
