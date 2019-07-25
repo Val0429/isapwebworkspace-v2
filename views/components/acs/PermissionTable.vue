@@ -306,8 +306,8 @@ export default class PermissionTable extends Vue {
     tableMultiple = true;
     isSelected: any = [];
     selectedDetail: any = [];
-    inputFormData: any = {
-        title: [],
+    inputFormData:any={};
+    defaultFormData: any = {
         id: "",
         permissionName: "",
         deviceType: "door",
@@ -357,26 +357,18 @@ export default class PermissionTable extends Vue {
                 name: datas.permissionName
             };
         }
-        //(this.$refs.mainTable as any).reload();
     }
 
     clearInputFormData() {
-        this.inputFormData = {
+        this.inputFormData = Object.assign({
             title: [
                 this._("w_DeviceType"),
                 this._("w_DeviceName"),
                 this._("w_DeviceArea"),
                 this._("w_TimeFormat"),
                 this._("w_Action")
-            ],
-            id: "",
-            permissionName: "",
-            deviceType: "door",
-            deviceNameOption: "",
-            deviceAreaOption: "",
-            deviceTimeFormatOption: "",
-            data: [] // subTable use
-        };
+            ]}, this.defaultFormData
+        );
     }
 
     pageToList() {
@@ -424,88 +416,38 @@ export default class PermissionTable extends Vue {
         await this.$server
             .R("/acs/timeschedule", {"paging.all":"true"})
             .then((response: any) => {
-                if (response != undefined && response.results != undefined) {
-                    for (let tempItem of response.results) {
-                        if (
-                            tempItem.objectId != undefined &&
-                            tempItem.timename != undefined &&
-                            typeof tempItem.objectId == "string" &&
-                            typeof tempItem.timename == "string"
-                        ) {
-                            this.selectItem.timeSchedule[tempItem.objectId] =
-                                tempItem.timename;
-                            this.selectItemOriginal.timeSchedule.push(tempItem);
-                        }
-                    }
+                for (let tempItem of response.results) {                        
+                    this.selectItem.timeSchedule[tempItem.objectId] = tempItem.timename;
+                    this.selectItemOriginal.timeSchedule.push(tempItem);
                 }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
             });
 
         await this.$server
             .R("/acs/door", {"paging.all":"true"})
             .then((response: any) => {
-                if (response != undefined && response.results != undefined) {
-                    for (let tempItem of response.results) {
-                        if (
-                            tempItem.objectId != undefined &&
-                            tempItem.doorname != undefined &&
-                            typeof tempItem.objectId == "string" &&
-                            typeof tempItem.doorname == "string"
-                        ) {
-                            this.selectItem.doorDevice[tempItem.objectId] =
-                                tempItem.doorname;
-                            this.selectItemOriginal.door.push(tempItem);
-                        }
-                    }
+                for (let tempItem of response.results) {
+                    this.selectItem.doorDevice[tempItem.objectId] = tempItem.doorname;
+                    this.selectItemOriginal.door.push(tempItem);
                 }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
             });
 
         await this.$server
             .R("/acs/doorgroup",  {"paging.all":"true"})
             .then((response: any) => {
-                for (let tempItem of response.results) {
-                    if (
-                        tempItem.objectId != undefined &&
-                        tempItem.groupname != undefined &&
-                        typeof tempItem.objectId == "string" &&
-                        typeof tempItem.groupname == "string"
-                    ) {
-                        this.selectItem.doorGroupDevice[tempItem.objectId] =
-                            tempItem.groupname;
-                        this.selectItemOriginal.doorGroup.push(tempItem);
-                    }
+                for (let tempItem of response.results) {                    
+                    this.selectItem.doorGroupDevice[tempItem.objectId] =tempItem.groupname;
+                    this.selectItemOriginal.doorGroup.push(tempItem);                    
                 }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
             });
 
         await this.$server
             .R("/acs/elevator",  {"paging.all":"true"})
             .then((response: any) => {
-                for (let tempItem of response.results) {
-                    if (
-                        tempItem.objectId != undefined &&
-                        tempItem.elevatorname != undefined &&
-                        typeof tempItem.elevatorname == "string"
-                    ) {
-                        this.selectItem.elevatorDevice[tempItem.objectId] =
-                            tempItem.elevatorname;
+                for (let tempItem of response.results) {                    
+                        this.selectItem.elevatorDevice[tempItem.objectId] = tempItem.elevatorname;
                         this.selectItemOriginal.elevator.push(tempItem);
-                    }
-                }
-            })
-            .catch((e: any) => {
-                console.log(e);
-                return false;
+                   }
+                
             });
     }
 
@@ -628,7 +570,7 @@ export default class PermissionTable extends Vue {
     selectedItem(data) {
         this.isSelected = data;
     }
-
+    floorOptions:any={};
     updateInputData(data) {
         switch (data.key) {
             case "permissionName":
@@ -668,13 +610,8 @@ export default class PermissionTable extends Vue {
                     }
                 }else{
                     this.inputFormData.elevatorAreaOption="";
-                }
-                for (const key in this.selectItem.elevatorDevice) {
-                    if (data.value === key) {
-                        this.inputFormData.elevatorNameOption = key;
-                        break;
-                    }
-                }
+                }                
+                this.inputFormData.elevatorNameOption = data.value;                        
                 break;            
             case "elevatorArea":
                 console.log("elevatorArea changed",data);
@@ -684,15 +621,12 @@ export default class PermissionTable extends Vue {
                 break;
         }
     }
-    floorOptions:any={};
+
     selectedDeviceType(data) {
         this.deviceType = data;
         this.inputFormData.data.deviceType = data;
     }
-    // @Watch("inputFormData.elevatorAreaOption", {immediate:true})
-    // elevatorChanged(value, oldValue){
-    //     console.log("elevatorAreaOption", value, oldValue)
-    // }
+    
     clickAddDeviceInTable() {
         let deviceData: any = {
             objectId: "",
@@ -773,23 +707,13 @@ export default class PermissionTable extends Vue {
         await Dialog.confirm(
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
-            () => {
+            async () => {
+                let promises=[];
                 for (const param of this.isSelected) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
-
-                    this.$server
-                        .D("/acs/permissiontable", deleteParam)
-                        .then((response: any) => {
-                            this.pageToList();
-                        })
-                        .catch((e: any) => {
-                            console.log(e);
-                        });
+                    promises.push(this.$server.D("/acs/permissiontable", { objectId: param.objectId }));
                 }
+                await Promise.all(promises);
+                this.pageToList();
             }
         );
     }
@@ -915,18 +839,8 @@ export default class PermissionTable extends Vue {
                 
                 await this.$server
                     .C("/acs/accesslevel", accessParam)
-                    .then((response: any) => {
-                        if (
-                            response != undefined &&
-                            response.objectId != undefined
-                        ) {
-                            premissionParam.accesslevels.push(
-                                response.objectId
-                            );
-                        }
-                    })
-                    .catch((e: any) => {
-                        console.log(e);
+                    .then((response: any) => {                        
+                            premissionParam.accesslevels.push(response.objectId);
                     });
             }
         }
@@ -937,18 +851,12 @@ export default class PermissionTable extends Vue {
             .U("/acs/permissiontable", premissionParam)
             .then((response: any) => {
                 this.pageToList();
-            })
-            .catch((e: any) => {
-                console.log(e);
             });
         } else {
             await this.$server
             .C("/acs/permissiontable", premissionParam)
             .then((response: any) => {
                 this.pageToList();
-            })
-            .catch((e: any) => {
-                console.log(e);
             });
         }
 
