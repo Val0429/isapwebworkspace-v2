@@ -10,7 +10,7 @@
                 :label="_('w_User_UserList')"
             >
                 <template #toolbox>
-                    <iv-toolbox-search @keyup="cardSearch"></iv-toolbox-search>
+<!--                    <iv-toolbox-search @keyup="cardSearch"></iv-toolbox-search>-->
                     <iv-toolbox-view
                         :disabled="isSelected.length !== 1"
                         @click="pageToView"
@@ -58,6 +58,7 @@
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
+                            <iv-toolbox-resend-verification-code @click="resendVerificationCode" />
                         </iv-toolbox-more>
                     </template>
 
@@ -333,6 +334,8 @@ export default class User extends Vue {
         groupIds: []
     };
 
+    isAdmin: boolean = false;
+
     created() {}
 
     mounted() {}
@@ -478,6 +481,13 @@ export default class User extends Vue {
                 break;
             case "role":
                 this.inputFormData.role = data.value;
+                if (this.inputFormData.role === "Admin") {
+                    this.isAdmin = true;
+                    this.inputFormData.siteIds = [];
+                    this.inputFormData.groupIds = [];
+                } else if (this.inputFormData.role === "User") {
+                    this.isAdmin = false;
+                }
                 break;
         }
 
@@ -525,6 +535,13 @@ export default class User extends Vue {
         await this.initSelectItemSite();
         await this.initSelectItemUserGroup();
         this.getInputData();
+
+        if (this.inputFormData.role === "Admin") {
+            this.isAdmin = true;
+        } else if (this.inputFormData.role === "User") {
+            this.isAdmin = false;
+        }
+
         this.selecteds = [];
 
         this.inputFormData.siteIds = JSON.parse(
@@ -600,6 +617,9 @@ export default class User extends Vue {
                 );
             });
     }
+
+    // TODO
+    resendVerificationCode() {}
 
     async saveAdd(data) {
         const datas: IUserAddData[] = [
@@ -907,8 +927,9 @@ export default class User extends Vue {
                  * @uiPlaceHolder - ${this._("w_Password")}
                  * @uiType - iv-form-password
                  * @uiColumnGroup - password
+                 * @uiHidden - true
                  */
-                password: string;
+                password?: string;
 
 
                 /**
@@ -918,8 +939,9 @@ export default class User extends Vue {
                  * @uiColumnGroup - password
                  * @uiValidation - (value, all) => value === all.password
                  * @uiInvalidMessage - ${this._("w_Error_Password")}
+                 * @uiHidden - true
                  */
-                confirmPassword: string;
+                confirmPassword?: string;
 
 
                 /**
@@ -942,6 +964,9 @@ export default class User extends Vue {
                  */
                 email: string;
 
+                /*
+                * @uiHidden - true
+                */
                 test?: any;
 
                 /**
@@ -962,6 +987,7 @@ export default class User extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
+                 * @uiHidden - ${ (this.isAdmin) }
                  */
                 groupIds?: ${toEnumInterface(
                     this.userGroupSelectItem as any,
@@ -971,9 +997,13 @@ export default class User extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
+                 * @uiHidden - ${ (this.isAdmin) }
                  */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
+               /*
+                * @uiHidden - ${ (this.isAdmin) }
+                */
                 selectTree?: any;
 
             }
@@ -1013,7 +1043,11 @@ export default class User extends Vue {
                  */
                 email: string;
 
+                /*
+                * @uiHidden - true
+                */
                 test?: any;
+
 
                 /**
                  * @uiLabel - ${this._("w_Phone")}
@@ -1033,6 +1067,7 @@ export default class User extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
+                 * @uiHidden - ${ (this.isAdmin) }
                  */
                 groupIds?: ${toEnumInterface(
                     this.userGroupSelectItem as any,
@@ -1042,9 +1077,13 @@ export default class User extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
+                 * @uiHidden - ${ (this.isAdmin) }
                  */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
+               /*
+                * @uiHidden - ${ (this.isAdmin) }
+                */
                 selectTree?: any;
 
             }

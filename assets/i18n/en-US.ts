@@ -401,6 +401,7 @@ export default class LangObject {
     w_User_EditUserSuccess = 'Edit User Success';
     w_User_EditUserFailed = 'Edit User Failed';
     w_User_DeleteConfirm = 'Are you sure to delete selected user(s)?';
+    w_User_Resend_VerificationCode = 'Resend Verification Code';
 
     // UserGroup
     w_UserGroup_UserGroupList = 'Group List';
