@@ -26,17 +26,22 @@
             <SidebarHeader :label="_('w_Navigation_Label')" />
             <SidebarNav>
 
+                <!-- Rules : SuperAdministrator, Admin, User -->
+
+                <!-- TODO: Waitting Login API -->
+                <!-- <iv-permission :allow="['Admin', 'User']" > -->
+
                 <!-- Dashboard -->
                 <!-- <SidebarNavItem
-                    :label="_('w_Navigation_Dashboards')"
-                    url="/dashboards"
-                /> -->
+                        :label="_('w_Navigation_Dashboards')"
+                        url="/dashboards"
+                    /> -->
 
                 <!-- Analysis -->
                 <!-- <SidebarNavItem
-                    :label="_('w_Navigation_Analysises')"
-                    url="/analysises"
-                />  -->
+                        :label="_('w_Navigation_Analysises')"
+                        url="/analysises"
+                    /> -->
 
                 <!-- Report -->
                 <SidebarNavItem
@@ -81,151 +86,160 @@
                     />
                 </SidebarNavItem>
 
-                <!-- Users -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_Users')"
-                    url="/users"
-                >
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Users_User')"
-                        url="/users/user"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Users_UserGroup')"
-                        url="/users/user_group"
-                    />
-                </SidebarNavItem>
+                <!-- TODO: Waitting Login API -->
+                <!-- </iv-permission> -->
 
-                <!-- Site -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_Site')"
-                    url="/site"
-                />
+                <!-- TODO: Waitting Login API -->
+                <!-- <iv-permission :allow="['SuperAdministrator', 'Admin']"> -->
 
-                <!-- Region -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_Region')"
-                    url="/region"
-                />
+                    <!-- Users -->
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Users')"
+                        url="/users"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Users_User')"
+                            url="/users/user"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Users_UserGroup')"
+                            url="/users/user_group"
+                        />
+                    </SidebarNavItem>
 
-                <!-- Server -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_Server')"
-                    url="/server"
-                >
+                    <!-- Site -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_Server_CMSServer')"
-                        url="/server/cms_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_FRSServer')"
-                        url="/server/frs_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_FRSManagerServer')"
-                        url="/server/frs_manager_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_DemographicServer')"
-                        url="/server/demographic_server"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Server_HDServer')"
-                        url="/server/hd_server"
+                        :label="_('w_Navigation_Site')"
+                        url="/site"
                     />
 
-                </SidebarNavItem>
+                    <!-- Region -->
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Region')"
+                        url="/region"
+                    />
 
-                <!-- Video Source -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_VideoSources')"
-                    url="/video_sources"
-                >
+                    <!-- Server -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_PeopleCounting')"
-                        url="/video_sources/people_counting"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_Demographic')"
-                        url="/video_sources/demographic"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_DwellTime')"
-                        url="/video_sources/dwell_time"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_HumanDetection')"
-                        url="/video_sources/human_detection"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_Heatmap')"
-                        url="/video_sources/heatmap"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_FaceRecognition')"
-                        url="/video_sources/face_recognition"
-                    />
-                </SidebarNavItem>
+                        :label="_('w_Navigation_Server')"
+                        url="/server"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Server_CMSServer')"
+                            url="/server/cms_server"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Server_FRSServer')"
+                            url="/server/frs_server"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Server_FRSManagerServer')"
+                            url="/server/frs_manager_server"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Server_DemographicServer')"
+                            url="/server/demographic_server"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Server_HDServer')"
+                            url="/server/hd_server"
+                        />
 
-                <!-- Rules and Action -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_RulesActions')"
-                    url="/rules_actions"
-                />
+                    </SidebarNavItem>
 
-                <!-- Business Operation -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_BusinessOperation')"
-                    url="/business_operations"
-                >
+                    <!-- Video Source -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_BO_CampaignSetting')"
-                        url="/business_operations/campaign_setting"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_BO_SalesRecords')"
-                        url="/business_operations/sales_records"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_BO_GeneralOfficeHour')"
-                        url="/business_operations/general_office_hour"
-                    />
-                </SidebarNavItem>
+                        :label="_('w_Navigation_VideoSources')"
+                        url="/video_sources"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_VideoSources_PeopleCounting')"
+                            url="/video_sources/people_counting"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_VideoSources_Demographic')"
+                            url="/video_sources/demographic"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_VideoSources_DwellTime')"
+                            url="/video_sources/dwell_time"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_VideoSources_HumanDetection')"
+                            url="/video_sources/human_detection"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_VideoSources_Heatmap')"
+                            url="/video_sources/heatmap"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_VideoSources_FaceRecognition')"
+                            url="/video_sources/face_recognition"
+                        />
+                    </SidebarNavItem>
 
-                <!-- Setting -->
-                <SidebarNavItem
-                    :label="_('w_Navigation_Setting')"
-                    url="/setting"
-                >
+                    <!-- Rules and Action -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_Setting_MailServer')"
-                        url="/setting/mail_server"
+                        :label="_('w_Navigation_RulesActions')"
+                        url="/rules_actions"
                     />
+
+                    <!-- Business Operation -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_Setting_SMS')"
-                        url="/setting/sms"
-                    />
+                        :label="_('w_Navigation_BusinessOperation')"
+                        url="/business_operations"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_BO_CampaignSetting')"
+                            url="/business_operations/campaign_setting"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_BO_SalesRecords')"
+                            url="/business_operations/sales_records"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_BO_GeneralOfficeHour')"
+                            url="/business_operations/general_office_hour"
+                        />
+                    </SidebarNavItem>
+
+                    <!-- Setting -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_Setting_Weather')"
-                        url="/setting/weather"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Setting_Backup')"
-                        url="/setting/backup"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Setting_Restore')"
-                        url="/setting/restore"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Setting_License')"
-                        url="/setting/license"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Setting_Tag')"
-                        url="/setting/tag"
-                    />
-                </SidebarNavItem>
+                        :label="_('w_Navigation_Setting')"
+                        url="/setting"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setting_MailServer')"
+                            url="/setting/mail_server"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setting_SMS')"
+                            url="/setting/sms"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setting_Weather')"
+                            url="/setting/weather"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setting_Backup')"
+                            url="/setting/backup"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setting_Restore')"
+                            url="/setting/restore"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setting_License')"
+                            url="/setting/license"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setting_Tag')"
+                            url="/setting/tag"
+                        />
+                    </SidebarNavItem>
+
+                <!-- TODO: Waitting Login API -->
+                <!-- </iv-permission> -->
 
             </SidebarNav>
 
@@ -256,6 +270,7 @@ import {
 })
 export default class CoreUI extends Vue {
     logoutPath = "/user/base/logout";
+
     clickLogout() {
         try {
             this.$logout(this.logoutPath);
