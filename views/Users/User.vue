@@ -386,7 +386,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -402,7 +402,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -421,7 +421,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -610,7 +610,7 @@ export default class User extends Vue {
             })
             .catch((e: any) => {
                 this.modalShow = !this.modalShow;
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_MailServer_Test_Fail")
@@ -657,7 +657,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_User_AddUserFailed")
@@ -699,7 +699,7 @@ export default class User extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_User_EditUserFailed")
@@ -734,7 +734,7 @@ export default class User extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

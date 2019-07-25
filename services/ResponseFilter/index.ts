@@ -4,7 +4,7 @@ import Loading from '@/services/Loading';
 export class ResponseFilter {
     constructor() {}
 
-    base(viewItem: any, e: any, message: string = '') {
+    catchError(viewItem: any, e: any, message: string = '') {
         console.log('error: ', e);
         Loading.hide();
         if (e.err != undefined && e.err == 'Failed to fetch') {

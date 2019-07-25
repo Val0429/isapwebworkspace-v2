@@ -273,7 +273,7 @@ export default class Tags extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -294,7 +294,7 @@ export default class Tags extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -311,7 +311,7 @@ export default class Tags extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -530,7 +530,7 @@ export default class Tags extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_Tag_AddTagFailed")
@@ -567,7 +567,7 @@ export default class Tags extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_Tag_EditTagFailed")
@@ -603,7 +603,7 @@ export default class Tags extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

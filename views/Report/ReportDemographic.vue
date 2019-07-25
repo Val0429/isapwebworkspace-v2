@@ -795,7 +795,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 			} else {
 				// this.toDetailReportTable(thatDay, sunTime, sunSite, sunArea);
@@ -845,7 +845,7 @@ export default class ReportDemographic extends Vue {
 					}
 				})
 				.catch((e: any) => {
-					return ResponseFilter.base(this, e);
+					return ResponseFilter.catchError(this, e);
 				});
 		}
 
@@ -865,7 +865,7 @@ export default class ReportDemographic extends Vue {
 					}
 				})
 				.catch((e: any) => {
-					return ResponseFilter.base(this, e);
+					return ResponseFilter.catchError(this, e);
 				});
 		}
 
@@ -904,7 +904,7 @@ export default class ReportDemographic extends Vue {
 					}
 				})
 				.catch((e: any) => {
-					return ResponseFilter.base(this, e);
+					return ResponseFilter.catchError(this, e);
 				});
 		}
 
@@ -934,7 +934,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 			}
 		}
@@ -969,7 +969,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 			} else if (
@@ -992,7 +992,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 			} else if (
@@ -1014,7 +1014,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 			}
 		}
@@ -1054,7 +1054,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 			} else if (
@@ -1078,7 +1078,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 			} else if (
@@ -1106,7 +1106,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 
@@ -1137,7 +1137,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 			} else if (
@@ -1163,7 +1163,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 			} else if (
@@ -1191,7 +1191,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 
 			} else if (
@@ -1220,7 +1220,7 @@ export default class ReportDemographic extends Vue {
 						}
 					})
 					.catch((e: any) => {
-						return ResponseFilter.base(this, e);
+						return ResponseFilter.catchError(this, e);
 					});
 			}
 		}
@@ -1242,7 +1242,7 @@ export default class ReportDemographic extends Vue {
 					}
 				})
 				.catch((e: any) => {
-					return ResponseFilter.base(this, e);
+					return ResponseFilter.catchError(this, e);
 				});
 		}
 
@@ -1281,7 +1281,7 @@ export default class ReportDemographic extends Vue {
 					}
 				})
 				.catch((e: any) => {
-					return ResponseFilter.base(this, e);
+					return ResponseFilter.catchError(this, e);
                 });
 
         }

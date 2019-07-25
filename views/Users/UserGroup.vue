@@ -257,7 +257,7 @@ export default class UserGroup extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -273,7 +273,7 @@ export default class UserGroup extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -425,7 +425,7 @@ export default class UserGroup extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_UserGroup_AddUserGroupFailed")
@@ -465,7 +465,7 @@ export default class UserGroup extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_UserGroup_EditUserGroupFailed")
@@ -502,7 +502,7 @@ export default class UserGroup extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

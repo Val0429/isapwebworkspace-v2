@@ -242,7 +242,7 @@ export default class Region extends Vue {
                 this.noSiteBeBinding = siteCount < 1;
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
 
         this.transition.prevStep = this.transition.step;
@@ -293,7 +293,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
 
         this.regionTreeItem.region.tagIds = [];
@@ -321,7 +321,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -505,7 +505,7 @@ export default class Region extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             await this.$server
@@ -515,7 +515,7 @@ export default class Region extends Vue {
                     this.pageToTree();
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -558,7 +558,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -576,7 +576,7 @@ export default class Region extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 

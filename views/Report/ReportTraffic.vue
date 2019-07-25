@@ -928,7 +928,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             // this.toDetailReportTable(thatDay, sunTime, sunSite, sunArea);
@@ -978,7 +978,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -999,7 +999,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1039,7 +1039,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1070,7 +1070,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1106,7 +1106,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
             // 選擇site和單一area
         } else if (
@@ -1128,7 +1128,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
             // 選擇site和all area
         } else if (
@@ -1149,7 +1149,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1189,7 +1189,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1212,7 +1212,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1239,7 +1239,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1268,7 +1268,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1293,7 +1293,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1320,7 +1320,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -1348,7 +1348,7 @@ export default class ReportTraffic extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -1371,7 +1371,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1418,7 +1418,7 @@ export default class ReportTraffic extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 

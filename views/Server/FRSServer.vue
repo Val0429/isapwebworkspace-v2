@@ -260,7 +260,7 @@ export default class FRSServer extends Vue {
             //     }
             // })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e, this._("w_WrongConfig"));
+                return ResponseFilter.catchError(this, e, this._("w_WrongConfig"));
             });
         Loading.hide();
         this.groupData = results;
@@ -476,7 +476,7 @@ export default class FRSServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_ServerFRS_ADDFailed")
@@ -522,7 +522,7 @@ export default class FRSServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_ServerFRS_EditFailed")
@@ -558,7 +558,7 @@ export default class FRSServer extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

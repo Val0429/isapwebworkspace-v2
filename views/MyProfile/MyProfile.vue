@@ -209,7 +209,7 @@ export default class MyProfile extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_MyProfile_ChangePasswordFailed")
@@ -242,7 +242,7 @@ export default class MyProfile extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_MyProfile_EditFailed")

@@ -282,7 +282,7 @@ export default class LangObject {
     w_Navigation_BO_SalesRecords = 'Sales Records';
     w_Navigation_BO_GeneralOfficeHour = 'General Office Hour';
 
-    w_Navigation_Setting = 'Setting';
+    w_Navigation_Setting = 'General Setting';
     w_Navigation_Setting_MailServer = 'Mail Server';
     w_Navigation_Setting_SMS = 'SMS';
     w_Navigation_Setting_Weather = 'Weather';

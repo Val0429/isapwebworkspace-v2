@@ -556,7 +556,7 @@ export default class SalesRecords extends Vue {
                 this.pageTo4();
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_BOSalesRecords_ErrorFileResolve")

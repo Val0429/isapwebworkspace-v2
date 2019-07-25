@@ -400,7 +400,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -420,7 +420,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -459,7 +459,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -497,7 +497,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             await this.$server
@@ -518,7 +518,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -553,7 +553,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
             // 選擇site和單一area
         } else if (
@@ -575,7 +575,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
             // 選擇site和all area
         } else if (
@@ -596,7 +596,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -635,7 +635,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -658,7 +658,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -685,7 +685,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
 
             // 選擇site和單一area和單一device group和 all device
@@ -715,7 +715,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -740,7 +740,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -767,7 +767,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -795,7 +795,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -817,7 +817,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -857,7 +857,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1524,7 +1524,7 @@ export default class ReportOccupancy extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             this.toDetailReportTable(
@@ -1574,7 +1574,7 @@ export default class ReportOccupancy extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 

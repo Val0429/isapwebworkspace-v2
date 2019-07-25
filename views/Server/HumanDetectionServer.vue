@@ -382,7 +382,7 @@ export default class HumanDetectionServer extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -422,7 +422,7 @@ export default class HumanDetectionServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             const datas = [
@@ -462,7 +462,7 @@ export default class HumanDetectionServer extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -489,7 +489,7 @@ export default class HumanDetectionServer extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

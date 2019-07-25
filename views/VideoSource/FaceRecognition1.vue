@@ -341,7 +341,7 @@ import { toEnumInterface } from "@/../core";
 // Vue
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
-// API Interface
+// Api Interface
 import { IConfig, IConfigiSap } from "@/config/default/api/interfaces";
 
 // Region Tree
@@ -385,7 +385,7 @@ enum ECameraMode {
 @Component({
     components: {}
 })
-export default class VIP extends Vue {
+export default class FaceRecognition extends Vue {
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
 
@@ -467,7 +467,7 @@ export default class VIP extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -483,7 +483,7 @@ export default class VIP extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -500,7 +500,7 @@ export default class VIP extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -517,7 +517,7 @@ export default class VIP extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -534,7 +534,7 @@ export default class VIP extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -653,7 +653,6 @@ export default class VIP extends Vue {
             } = {
                 objectId: data
             };
-
             Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
@@ -681,7 +680,7 @@ export default class VIP extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSPeopleCounting_ADDFailed")
@@ -697,7 +696,6 @@ export default class VIP extends Vue {
             } = {
                 objectId: data
             };
-
             Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
@@ -725,7 +723,7 @@ export default class VIP extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSPeopleCounting_ADDFailed")
@@ -741,7 +739,6 @@ export default class VIP extends Vue {
             } = {
                 objectId: data
             };
-
             Loading.show();
             await this.$server
                 .C("/partner/frs/device", readParam)
@@ -769,7 +766,7 @@ export default class VIP extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSPeopleCounting_ADDFailed")
@@ -948,7 +945,6 @@ export default class VIP extends Vue {
             const addParam = {
                 datas
             };
-
             Loading.show();
             await this.$server
                 .C("/device/people-counting", addParam)
@@ -973,7 +969,7 @@ export default class VIP extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSPeopleCounting_ADDFailed")
@@ -997,7 +993,6 @@ export default class VIP extends Vue {
             const editParam = {
                 datas
             };
-
             Loading.show();
             await this.$server
                 .U("/device/people-counting", editParam)
@@ -1022,7 +1017,7 @@ export default class VIP extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSPeopleCounting_EditFailed")
@@ -1053,7 +1048,6 @@ export default class VIP extends Vue {
             const addParam = {
                 datas
             };
-
             Loading.show();
             await this.$server
                 .C("/device/people-counting", addParam)
@@ -1078,7 +1072,7 @@ export default class VIP extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
                         this._("w_VSPeopleCounting_ADDFailed")
@@ -1102,7 +1096,6 @@ export default class VIP extends Vue {
             const editParam = {
                 datas
             };
-
             Loading.show();
             await this.$server
                 .U("/device/people-counting", editParam)
@@ -1127,10 +1120,10 @@ export default class VIP extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(
+                    return ResponseFilter.catchError(
                         this,
                         e,
-                        this._("w_VSPeopleCounting_EditFailed")
+                        this._("w_VSPeopleCounting_ADDFailed")
                     );
                 });
         }
@@ -1163,7 +1156,7 @@ export default class VIP extends Vue {
                             }
                         })
                         .catch((e: any) => {
-                            return ResponseFilter.base(this, e);
+                            return ResponseFilter.catchError(this, e);
                         });
                 }
                 Loading.hide();

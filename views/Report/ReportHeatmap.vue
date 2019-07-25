@@ -375,7 +375,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -395,7 +395,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -434,7 +434,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -464,7 +464,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -499,7 +499,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -521,7 +521,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -542,7 +542,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -582,7 +582,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -605,7 +605,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -632,7 +632,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -661,7 +661,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -686,7 +686,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -713,7 +713,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         } else if (
             this.filterData.firstSiteId &&
@@ -741,7 +741,7 @@ export default class ReportHeatmap extends Vue {
                     }
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.base(this, e);
+                    return ResponseFilter.catchError(this, e);
                 });
         }
     }
@@ -763,7 +763,7 @@ export default class ReportHeatmap extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -1490,7 +1490,7 @@ export default class ReportHeatmap extends Vue {
         //         }
         //     })
         //     .catch((e: any) => {
-        //         return ResponseFilter.base(this, e);
+        //         return ResponseFilter.catchError(this, e);
         //     });
 
         // Ben  //TODO for test and delete it when have api

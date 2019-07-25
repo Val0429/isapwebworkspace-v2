@@ -261,7 +261,7 @@ export default class License extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(this, e);
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -334,7 +334,7 @@ export default class License extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_License_Setting_Fail")
@@ -359,7 +359,7 @@ export default class License extends Vue {
                 }
             })
             .catch((e: any) => {
-                return ResponseFilter.base(
+                return ResponseFilter.catchError(
                     this,
                     e,
                     this._("w_License_Setting_Fail")

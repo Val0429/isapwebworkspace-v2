@@ -27,16 +27,16 @@
             <SidebarNav>
 
                 <!-- Dashboard -->
-                <SidebarNavItem
+                <!-- <SidebarNavItem
                     :label="_('w_Navigation_Dashboards')"
                     url="/dashboards"
-                />
+                /> -->
 
                 <!-- Analysis -->
-                <SidebarNavItem
+                <!-- <SidebarNavItem
                     :label="_('w_Navigation_Analysises')"
                     url="/analysises"
-                />
+                />  -->
 
                 <!-- Report -->
                 <SidebarNavItem
@@ -164,18 +164,6 @@
                     <SidebarNavItem
                         :label="_('w_Navigation_VideoSources_FaceRecognition')"
                         url="/video_sources/face_recognition"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_CMS')"
-                        url="/video_sources/cms"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_VIP')"
-                        url="/video_sources/vip"
-                    />
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources_VIP_Stranger_Visitor')"
-                        url="/video_sources/vip_stranger_visitor"
                     />
                 </SidebarNavItem>
 
