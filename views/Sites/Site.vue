@@ -631,7 +631,7 @@
                             <iv-form-label
                                 v-bind="$attrs"
                                 v-on="$listeners"
-                                :value="$attrs.value ? $attrs.value : ''"
+                                :value="$attrs.value ? showDeviceModel($attrs.value) : ''"
                             />
                         </template>
 
@@ -1876,6 +1876,18 @@ export default class Site extends Vue {
         return count;
     }
 
+    showDeviceModel(datas) {
+        if (datas) {
+            if (
+                this.cameraModeItem.filter(b => b.id == datas).map(c => c.text)
+            ) {
+                return this.cameraModeItem
+                    .filter(b => b.id == datas)
+                    .map(c => c.text)[0];
+            }
+        }
+    }
+
     showDeviceDtail(datas) {
         let modalContext = "";
         if (datas) {
@@ -2024,14 +2036,14 @@ export default class Site extends Vue {
                 * @uiLabel - ${this._("w_Site_Tag")}
                 * @uiPlaceHolder - ${this._("w_Site_Tag")}
                 */
-                tag?: any;
+                tag: any;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Photo")}
                 * @uiPlaceHolder - ${this._("w_Site_Photo")}
                 * @uiType - iv-form-file
                 */
-                sitePhoto?: string;
+                sitePhoto: string;
 
                 imageSrc?:any;
 
