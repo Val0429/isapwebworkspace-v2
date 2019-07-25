@@ -36,9 +36,7 @@
                     Only show content if permitted.
                 &lt;/iv-permission&gt;
             </pre> -->
-            <iv-card
-                label="Role permitted content"
-                >
+            <iv-card label="Role permitted content">
                 <iv-permission allow="Administrator">
                     Only 'Administrator' can see this.
                     <template #else>
@@ -68,9 +66,7 @@
                 </iv-permission>
             </iv-card>
 
-            <iv-card
-                label="Url permitted content"
-                >
+            <iv-card label="Url permitted content">
                 <iv-permission url="/announcements">
                     You have '/announcements' permission.
                     <template #else>
