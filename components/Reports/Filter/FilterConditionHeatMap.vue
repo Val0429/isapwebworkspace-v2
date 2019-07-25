@@ -33,7 +33,7 @@
                         >
                         </iv-form-selection>
 
-                        <div class="ml-3">
+                        <div class="ml-3 mb-3">
                             <b-button
                                 variant="outline-secondary"
                                 @click="pageToChooseTree"
@@ -633,7 +633,11 @@ export class FilterConditionHeatMap extends Vue {
                  */
                 ifAllSites?: any;
 
-                siteIds: any;
+
+                /**
+                 * @uiColumnGroup - site
+                 */
+                 siteIds: any;
 
 
                 /**

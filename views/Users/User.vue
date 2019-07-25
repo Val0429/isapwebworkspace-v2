@@ -482,13 +482,13 @@ export default class User extends Vue {
                 break;
             case "role":
                 this.inputFormData.role = data.value;
-                if (this.inputFormData.role === "Admin") {
-                    this.isAdmin = true;
-                    this.inputFormData.siteIds = [];
-                    this.inputFormData.groupIds = [];
-                } else if (this.inputFormData.role === "User") {
-                    this.isAdmin = false;
-                }
+                // if (this.inputFormData.role === "Admin") {
+                //     this.isAdmin = true;
+                //     this.inputFormData.siteIds = [];
+                //     this.inputFormData.groupIds = [];
+                // } else if (this.inputFormData.role === "User") {
+                //     this.isAdmin = false;
+                // }
                 break;
         }
 
@@ -537,11 +537,11 @@ export default class User extends Vue {
         await this.initSelectItemUserGroup();
         this.getInputData();
 
-        if (this.inputFormData.role === "Admin") {
-            this.isAdmin = true;
-        } else if (this.inputFormData.role === "User") {
-            this.isAdmin = false;
-        }
+        // if (this.inputFormData.role === "Admin") {
+        //     this.isAdmin = true;
+        // } else if (this.inputFormData.role === "User") {
+        //     this.isAdmin = false;
+        // }
 
         this.selecteds = [];
 
@@ -630,7 +630,7 @@ export default class User extends Vue {
                 name: data.name,
                 email: data.email,
                 phone: data.phone,
-                password: Encrypt.sha256Timestamp(),
+                password: data.password,
                 employeeId: data.employeeId,
                 siteIds: data.siteIds !== undefined ? data.siteIds : [],
                 groupIds: data.groupIds !== undefined ? data.groupIds : []
@@ -928,7 +928,6 @@ export default class User extends Vue {
                  * @uiPlaceHolder - ${this._("w_Password")}
                  * @uiType - iv-form-password
                  * @uiColumnGroup - password
-                 * @uiHidden - true
                  */
                 password?: string;
 
@@ -940,7 +939,6 @@ export default class User extends Vue {
                  * @uiColumnGroup - password
                  * @uiValidation - (value, all) => value === all.password
                  * @uiInvalidMessage - ${this._("w_Error_Password")}
-                 * @uiHidden - true
                  */
                 confirmPassword?: string;
 
@@ -965,9 +963,6 @@ export default class User extends Vue {
                  */
                 email: string;
 
-                /*
-                * @uiHidden - true
-                */
                 test?: any;
 
                 /**
@@ -988,23 +983,15 @@ export default class User extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
-                 * @uiHidden - ${ (this.isAdmin) }
                  */
                 groupIds?: ${toEnumInterface(
                     this.userGroupSelectItem as any,
                     true
                 )};
 
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 * @uiHidden - ${ (this.isAdmin) }
-                 */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
-               /*
-                * @uiHidden - ${ (this.isAdmin) }
-                */
+
                 selectTree?: any;
 
             }
@@ -1068,7 +1055,6 @@ export default class User extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
-                 * @uiHidden - ${ (this.isAdmin) }
                  */
                 groupIds?: ${toEnumInterface(
                     this.userGroupSelectItem as any,
@@ -1078,13 +1064,10 @@ export default class User extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
-                 * @uiHidden - ${ (this.isAdmin) }
                  */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
-               /*
-                * @uiHidden - ${ (this.isAdmin) }
-                */
+
                 selectTree?: any;
 
             }
