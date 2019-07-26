@@ -952,7 +952,6 @@ export default class ReportHeatmap extends Vue {
         const selectedDate = Datetime.DateTime2String(new Date(selectDate), 'HH');
         const fromApiDate = Datetime.DateTime2String(new Date(apiDate), 'HH');
 
-
         return (
             Datetime.DateToZero(new Date(selectedDate)).getTime() ===
             Datetime.DateToZero(new Date(fromApiDate)).getTime()
@@ -990,8 +989,6 @@ export default class ReportHeatmap extends Vue {
 
     sortOutChartData(datas: any) {
 
-        console.log('!!! ~ ', )
-
         let heatmap: IHeatMapPosition[] = [];
         this.heatMapPosition = [];
 
@@ -1000,7 +997,8 @@ export default class ReportHeatmap extends Vue {
 
         for (const summary of datas) {
 
-            if (this.checkDateTheSameHour(this.hour, summary.date)) {
+            // TODO: 建德兄
+            // if (this.checkDateTheSameHour(this.hour, summary.date) && this.inputFormData.deviceId === summary.device.objectId) {
                 if(summary.scores.length > 0) {
                     let heatmaps = summary.scores.map((value, index, array) => {
                         return value.map((value1, index1, array1) => {
@@ -1014,7 +1012,7 @@ export default class ReportHeatmap extends Vue {
                     heatmap = [].concat(...heatmaps);
                 }
                 this.mapImage.src = ServerConfig.url + summary.imageSrc
-            }
+            // }
         }
 
         this.heatMapPosition = heatmap;
@@ -1042,8 +1040,6 @@ export default class ReportHeatmap extends Vue {
                     }
                 }
             }
-
-            console.log('this.areaSummaryFilter ~ ', this.areaSummaryFilter)
 
             this.sortOutChartData(this.areaSummaryFilter);
             this.areaMode = EAreaMode.single;
@@ -1076,6 +1072,7 @@ export default class ReportHeatmap extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+
             this.sortOutChartData(this.responseData.summaryDatas);
             this.areaMode = EAreaMode.all;
 
