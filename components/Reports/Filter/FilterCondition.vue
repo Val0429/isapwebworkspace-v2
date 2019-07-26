@@ -65,6 +65,7 @@
                             <b-form-radio-group
                                 v-model="selectPeriodAddWay"
                                 name="selectPeriodAddWay"
+                                class="mb-3"
                                 :options="addPeriodSelectItem"
                                 @change="changeAddPeriodSelect"
                             ></b-form-radio-group>
