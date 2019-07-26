@@ -152,11 +152,10 @@ export default class MailServer extends Vue {
         await this.$server
             .C("/setting/smtp/test", mailServerObject)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_MailServer_Test_Success"));
                     this.modalShow = !this.modalShow;
-                }
+                });
             })
             .catch((e: any) => {
                 this.modalShow = !this.modalShow;
@@ -172,13 +171,13 @@ export default class MailServer extends Vue {
         await this.$server
             .R("/setting/smtp")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.inputFormData.enable = response.enable;
                     this.inputFormData.host = response.host;
                     this.inputFormData.port = response.port;
                     this.inputFormData.email = response.email;
                     this.inputFormData.password = response.password;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
@@ -216,10 +215,9 @@ export default class MailServer extends Vue {
         await this.$server
             .U("/setting/smtp", mailServerObject)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_MailServer_Setting_Success"));
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(

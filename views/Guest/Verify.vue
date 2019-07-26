@@ -80,7 +80,9 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { ServerName, ServerVersion } from "@/../core/server";
+import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
 @Component({
     components: {}
@@ -97,7 +99,7 @@ export default class Verify extends Vue {
         this.initVerifyCode();
     }
 
-    verify() {
+    async verify() {
         if (this.token == "") {
             Dialog.error(this._("w_Verify_ErrorNoToken"));
             return false;
@@ -118,10 +120,39 @@ export default class Verify extends Vue {
             return false;
         }
 
-        // TODO: Waitting API
-        Dialog.success(
-            `Waitting API, password: ${this.password}, confirmPassword: ${this.confirmPassword}, token: ${this.token}`
-        );
+        let param = {
+            verification: this.token,
+            password: this.password
+        };
+
+        Loading.show();
+        await this.$server
+            .C("/user/enable/step1", param)
+            .then((response: any) => {
+                let param = {
+                    username: response.user.username,
+                    password: this.password
+                };
+                this.$login(param)
+                    .then(() => {
+                        Loading.hide();
+                        this.$router.push("/");
+                    })
+                    .catch((e: any) => {
+                        Loading.hide();
+                        console.log(e);
+                        if (
+                            e.res != undefined &&
+                            e.res.statusCode != undefined &&
+                            e.res.statusCode == 401
+                        ) {
+                            Dialog.error(this._("w_UserSession_Empty"));
+                        }
+                    });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     // Author: Morris

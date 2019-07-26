@@ -794,8 +794,10 @@ export default class ReportDwellTime extends Vue {
         let summaryTableDatas;
         let officeHours;
         Loading.show();
+
+        // TODO: wait api
         await this.$server
-            .C("/report/human-detection/summary-threshold", filterData) //TODO wait api
+            .C("/report/human-detection/summary-threshold", filterData) 
             .then((response: any) => {
                 Loading.hide();
                 if (response !== undefined) {

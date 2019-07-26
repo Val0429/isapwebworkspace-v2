@@ -408,6 +408,8 @@ export default class LangObject implements ILang {
     w_User_EditUserFailed = 'Edit User Failed';
     w_User_DeleteConfirm = 'Are you sure to delete selected user(s)?';
     w_User_Resend_VerificationCode = 'Resend Verification Code';
+    w_User_Resend_VerificationCode_Success = 'Resend Verification Code Success';
+    w_User_Resend_VerificationCode_Failed = 'Resend Verification Code Failed';
 
     // UserGroup
     w_UserGroup_UserGroupList = 'Group List';

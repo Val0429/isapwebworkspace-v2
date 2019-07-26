@@ -832,7 +832,6 @@ export default class ReportHeatmap extends Vue {
         // 去掉重複的值
         this.dayArray = [...new Set(tempDayArray)];
 
-        console.log('this.dayArray ~ ', this.dayArray)
     }
 
     async receiveUserData(data) {
@@ -864,8 +863,6 @@ export default class ReportHeatmap extends Vue {
             isIncludedEmployee: "no"
         };
 
-
-
         await this.$server
             .C("/report/heatmap/summary", param)
             .then((response: any) => {
@@ -883,7 +880,7 @@ export default class ReportHeatmap extends Vue {
                     } else {
                         this.initDayArray();
                     }
-                    this.firstHourSortOutChartData(this.responseData.summaryDatas);
+                    this.firstSortOutChartData(this.responseData.summaryDatas);
 
                 }
             })
@@ -891,14 +888,12 @@ export default class ReportHeatmap extends Vue {
                 return ResponseFilter.catchError(this, e);
             });
 
-        // Ben  //TODO for test and delete it when have api
+        // Ben  
+        // TODO: for test and delete it when have api
         // this.initHeatmap();
     }
 
     resolveSummary() {
-
-        console.log('this.responseData ~ ', this.responseData.summaryDatas);
-
             this.initSelectItemArea();
             this.initSelectItemDeviceGroup();
             this.initSelectItemDevice();
@@ -952,14 +947,13 @@ export default class ReportHeatmap extends Vue {
         const selectedDate = Datetime.DateTime2String(new Date(selectDate), 'HH');
         const fromApiDate = Datetime.DateTime2String(new Date(apiDate), 'HH');
 
-
         return (
             Datetime.DateToZero(new Date(selectedDate)).getTime() ===
             Datetime.DateToZero(new Date(fromApiDate)).getTime()
         );
     }
 
-    firstHourSortOutChartData(datas: any) {
+    firstSortOutChartData(datas: any) {
 
         let heatmap: IHeatMapPosition[] = [];
         this.heatMapPosition = [];
@@ -990,8 +984,6 @@ export default class ReportHeatmap extends Vue {
 
     sortOutChartData(datas: any) {
 
-        console.log('!!! ~ ', )
-
         let heatmap: IHeatMapPosition[] = [];
         this.heatMapPosition = [];
 
@@ -1000,7 +992,8 @@ export default class ReportHeatmap extends Vue {
 
         for (const summary of datas) {
 
-            if (this.checkDateTheSameHour(this.hour, summary.date)) {
+            // TODO: 建德兄
+            // if (this.checkDateTheSameHour(this.hour, summary.date) && this.inputFormData.deviceId === summary.device.objectId) {
                 if(summary.scores.length > 0) {
                     let heatmaps = summary.scores.map((value, index, array) => {
                         return value.map((value1, index1, array1) => {
@@ -1014,7 +1007,7 @@ export default class ReportHeatmap extends Vue {
                     heatmap = [].concat(...heatmaps);
                 }
                 this.mapImage.src = ServerConfig.url + summary.imageSrc
-            }
+            // }
         }
 
         this.heatMapPosition = heatmap;
@@ -1042,8 +1035,6 @@ export default class ReportHeatmap extends Vue {
                     }
                 }
             }
-
-            console.log('this.areaSummaryFilter ~ ', this.areaSummaryFilter)
 
             this.sortOutChartData(this.areaSummaryFilter);
             this.areaMode = EAreaMode.single;
@@ -1076,6 +1067,7 @@ export default class ReportHeatmap extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+
             this.sortOutChartData(this.responseData.summaryDatas);
             this.areaMode = EAreaMode.all;
 
@@ -1346,13 +1338,6 @@ export default class ReportHeatmap extends Vue {
 
         this.sortOutChartData(this.responseData.summaryDatas);
 
-        // this.checkDateTheSameHour();
-
-        // let d =Datetime.DateTime2String(new Date('2000-01-01T01:00:00.000Z'), 'HH')
-        // let d1 =Datetime.DateTime2String(new Date(this.hour), 'HH')
-        // console.log('d - ', d);
-        // console.log('d1 - ', d1);
-        // console.log('?? - ', d1 === d);
     }
 
     // 多天的其中一天
@@ -1362,7 +1347,7 @@ export default class ReportHeatmap extends Vue {
                 this.dayArrayData = this.dayArray[index];
             }
         }
-
+        this.sortOutChartData(this.responseData.summaryDatas);
         console.log('this.dayArrayData ~ ', this.dayArrayData)
     }
 

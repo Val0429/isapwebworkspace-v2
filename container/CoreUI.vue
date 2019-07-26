@@ -2,7 +2,7 @@
     <CoreUIBase>
         <template #header>
             <div class="float-right navbar-nav">
-                <div class="navbar-nav-user-name">{{ $user && $user.name ? $user.name : "" }}</div>
+                <div class="navbar-nav-user-name">{{ $user && $user.user && $user.user.name ? $user.user.name : "" }}</div>
                 <a href="/my_profile">
                     <img
                         class="img-avatar"

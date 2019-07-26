@@ -79,6 +79,9 @@ import { VSDwellTimeUpdate, VSDwellTimeCreate } from '@/config/default/api/Video
 // Video Source VIP Stranger Visitor
 import { VSVIPStrangerVisitorCreate, VSVIPStrangerVisitorUpdate } from '@/config/default/api/VideoSourceVIPStrangerVisitor';
 
+// Verify and create password
+import { EnablePasswordCreate } from '@/config/default/api/Verify';
+
 interface RestfulRequest extends ApisRequestBase {
     // create
     Post: {
@@ -87,6 +90,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/users/logout': [UsersLogoutPost.Input, any, true];
         '/users': [any, any, true];
 
+        // verify and create password
+        '/user/enable/step1': [EnablePasswordCreate.Input, any, true];
+        '/user/enable/resend': [any, any, false];
         // User
         // '/user/user/login': [UserLoginPost.Input, UserLoginPost.Output, false];
         '/user/base/logout': [UserLogoutPost.Input, UserLogoutPost.Output, false];
