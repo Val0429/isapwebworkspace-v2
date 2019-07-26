@@ -28,7 +28,6 @@
 
                 <!-- Rules : SuperAdministrator, Admin, User -->
 
-                <!-- TODO: Waitting Login API -->
                 <iv-permission :allow="['Admin', 'User']">
 
                     <!-- Dashboard -->
@@ -86,10 +85,8 @@
                         />
                     </SidebarNavItem>
 
-                    <!-- TODO: Waitting Login API -->
                 </iv-permission>
 
-                <!-- TODO: Waitting Login API -->
                 <iv-permission :allow="['SuperAdministrator', 'Admin']">
 
                     <!-- Users -->
@@ -238,7 +235,6 @@
                         />
                     </SidebarNavItem>
 
-                    <!-- TODO: Waitting Login API -->
                 </iv-permission>
 
             </SidebarNav>
@@ -310,7 +306,7 @@ export default class CoreUI extends Vue {
     });
 
     mounted() {
-        this.initWS();
+        // this.initWS();
     }
 
     beforeDestroy() {
