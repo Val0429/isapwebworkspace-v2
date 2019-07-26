@@ -166,12 +166,12 @@ export default class MyProfile extends Vue {
 
     initUserDetail() {
         this.inputMyProfile = {
-            objectId: this.$user.objectId,
-            account: this.$user.username,
-            name: this.$user.name,
-            employeeId: this.$user.employeeId,
-            email: this.$user.email,
-            phone: this.$user.phone
+            objectId: this.$user.user.objectId,
+            account: this.$user.user.username,
+            name: this.$user.user.name,
+            employeeId: this.$user.user.employeeId,
+            email: this.$user.user.email,
+            phone: this.$user.user.phone
         };
     }
 

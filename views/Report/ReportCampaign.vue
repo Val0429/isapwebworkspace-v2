@@ -156,7 +156,7 @@ export default class ReportCampaign extends Vue {
 
     // Author: Tina
     siteFilterPermission() {
-        for (const detail of this.$user.allowSites) {
+        for (const detail of this.$user.user.allowSites) {
             let site = { id: detail.objectId, text: detail.name };
             this.sitesSelectItem.push(site);
 

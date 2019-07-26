@@ -54,7 +54,7 @@ export default class Login extends Vue {
                 }
 
                 // TODO: check first login
-                console.log(this.$user);
+                console.log(this.$user.user);
             })
             .catch((e: any) => {
                 Loading.hide();

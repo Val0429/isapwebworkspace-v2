@@ -188,7 +188,7 @@ export default class ReportVIPTracking extends Vue {
 
     siteFilterPermission() {
         let tempSitesSelectItem = {};
-        for (const detail of this.$user.allowSites) {
+        for (const detail of this.$user.user.allowSites) {
             tempSitesSelectItem[detail.objectId] = detail.name;
         }
         this.sitesSelectItem = tempSitesSelectItem;

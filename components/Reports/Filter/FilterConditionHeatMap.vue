@@ -273,7 +273,7 @@ export class FilterConditionHeatMap extends Vue {
     }
 
     siteFilterPermission() {
-        for (const detail of this.$user.allowSites) {
+        for (const detail of this.$user.user.allowSites) {
             this.inputFormData.allSiteIds.push(detail.objectId);
         }
     }
