@@ -202,6 +202,8 @@ export class SortSelect extends Vue {
 
     initValue() {
         console.log("initValue");
+        this.optionSearchText="";
+        this.chooseSearchText="";
         this.optionsSelected = [];
         this.chooseSelected = [];
         this.optionsSelectItem = [];
