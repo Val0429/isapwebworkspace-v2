@@ -2,6 +2,7 @@
     <div
         id="app"
         class="app flex-row align-items-center"
+        @keyup.enter="Login"
     >
         <div class="container">
             <b-row class="justify-content-center">
