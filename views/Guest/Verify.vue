@@ -120,8 +120,6 @@ export default class Verify extends Vue {
             return false;
         }
 
-        this.$server.C("/user/enable/step1");
-
         let param = {
             verification: this.token,
             password: this.password
