@@ -960,7 +960,7 @@ export default class ReportDwellTime extends Vue {
 
     siteFilterPermission() {
         let tempSitesSelectItem = {};
-        for (const detail of this.$user.allowSites) {
+        for (const detail of this.$user.user.allowSites) {
             let site = { id: detail.objectId, text: detail.name };
             this.sitesSelectItem.push(site);
 
@@ -1024,8 +1024,8 @@ export default class ReportDwellTime extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     tempTree = response;
-                    if (this.$user.allowSites.length > 0) {
-                        this.$user.allowSites.map(site => {
+                    if (this.$user.user.allowSites.length > 0) {
+                        this.$user.user.allowSites.map(site => {
                             if (response.childrens.length > 0) {
                                 response.childrens.map(item => {
                                     if (item.objectId === site.objectId) {

@@ -345,7 +345,6 @@ export default class ReportHeatmap extends Vue {
 
     siteFilterPermission() {
         let tempSitesSelectItem = {};
-
         for (const detail of this.$user.user.allowSites) {
             let site = { id: detail.objectId, text: detail.name };
             this.sitesSelectItem.push(site);

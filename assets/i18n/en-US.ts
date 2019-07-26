@@ -569,6 +569,15 @@ export default class LangObject {
 
     w_ForgetPassword_VerificationCode = 'Verification code';
 
+    // Verify
+    w_Verify_VerifyTitle = "Create you'r password";
+    w_Verify_ButtonSubmit = 'Create';
+    w_Verify_ComfirmPasswordPlaceholder = 'Confirm password';
+    w_Verify_ErrorNoToken = "Please use email link to create you'r password";
+    w_Verify_ErrorPasswordEmpty = 'Please input password';
+    w_Verify_ErrorConfirmPasswordEmpty = 'Please input confirm password';
+    w_Verify_ErrorConfirmPasswordDifferent = 'Password and confirm is different';
+
     // SmsServer
     w_SmsServer_Enable = 'SMS Enable';
     w_SmsServer_Setting = 'Set SMS Server';
