@@ -1480,24 +1480,26 @@ export default class ReportHeatmap extends Vue {
             this.initDayArray();
         }
 
-        // await this.$server
-        //     .C("/report/demographic/summary", param)
-        //     .then((response: any) => {
-        //         if (response !== undefined) {
-        //             this.responseData = response;
-        //             this.officeHourItemDetail = this.responseData.officeHours;
-        //             this.resolveSummary();
-        //         }
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .C("/report/heatmap/summary", param)
+            .then((response: any) => {
+                if (response !== undefined) {
+                    this.responseData = response;
+                    this.resolveSummary();
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
 
         // Ben  //TODO for test and delete it when have api
-        this.initHeatmap();
+        // this.initHeatmap();
     }
 
     resolveSummary() {
+
+        console.log('this.responseData ~ ', this.responseData)
+
         if (this.filterData.siteIds.length === 1) {
             this.initSelectItemArea();
             this.initSelectItemDeviceGroup();
