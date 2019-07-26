@@ -41,6 +41,17 @@
                 </iv-form-selection>
             </template>
 
+            <template #submitButton>
+                <b-button
+                    v-if="siteIds && siteIds.length === 1"
+                    class="submit ml-3"
+                    size="md"
+                    @click="doSubmit"
+                >
+                    {{ _('wb_Submit') }}
+                </b-button>
+            </template>
+
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
@@ -285,6 +296,8 @@ export class AnalysisFilterTraffic extends Vue {
         this.$emit("business_chart_type", this.inputFormData.businessChartType);
     }
 
+    doSubmit() {}
+
     IAnalysisFilterForm() {
         return `
             interface {
@@ -308,6 +321,12 @@ export class AnalysisFilterTraffic extends Vue {
                  * @uiColumnGroup - analysis
                  */
                 deviceId?: ${toEnumInterface(this.deviceSelectItem as any, false)};
+
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                submitButton: any;
 
 
                 /**
@@ -351,4 +370,13 @@ Vue.component("analysis-filter-traffic", AnalysisFilterTraffic);
 .click_button {
     margin-top: 27px;
 }
+
+.submit {
+    margin-top: 27px;
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+    height: 25%;
+}
+
+
 </style>

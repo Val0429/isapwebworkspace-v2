@@ -17,9 +17,6 @@
             :visible="visible"
             :label="filterData.tagIds.length !== 0 ? analysisTitle() : '' "
         >
-            <!--                        :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
--->
-
             <template #toolbox>
                 <!-- Ben -->
                 <iv-toolbox-export-excel

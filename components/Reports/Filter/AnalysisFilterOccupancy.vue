@@ -7,7 +7,6 @@
             @update:deviceId="whenSelectedDeviceId($event)"
             @update:type="whenSelectedType($event)"
             @update:isIncludedEmployee="whenSelectedIsIncludedEmployee($event)"
-            @update:businessChartType="whenSelectedBusinessChartType($event)"
         >
 
             <template #areaId="{ $attrs, $listeners }">
@@ -20,15 +19,15 @@
                 </iv-form-selection>
             </template>
 
-            <template #groupId="{ $attrs, $listeners }">
-                <iv-form-selection
-                    v-if="siteIds && siteIds.length === 1"
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.groupId"
-                >
-                </iv-form-selection>
-            </template>
+<!--            <template #groupId="{ $attrs, $listeners }">-->
+<!--                <iv-form-selection-->
+<!--                    v-if="siteIds && siteIds.length === 1"-->
+<!--                    v-bind="$attrs"-->
+<!--                    v-on="$listeners"-->
+<!--                    v-model="inputFormData.groupId"-->
+<!--                >-->
+<!--                </iv-form-selection>-->
+<!--            </template>-->
 
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
@@ -43,7 +42,7 @@
             <template #submitButton>
                 <b-button
                     v-if="siteIds && siteIds.length === 1"
-                    class="submit ml-3"
+                    class="submit"
                     size="md"
                     @click="doSubmit"
                 >
@@ -52,7 +51,6 @@
             </template>
 
             <template #type="{ $attrs, $listeners }">
-
                 <iv-form-selection
                     v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
                     v-bind="$attrs"
@@ -60,7 +58,6 @@
                     v-model="inputFormData.type"
                 >
                 </iv-form-selection>
-
             </template>
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
@@ -69,16 +66,6 @@
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.isIncludedEmployee"
-                >
-                </iv-form-selection>
-            </template>
-
-            <template #businessChartType="{ $attrs, $listeners }">
-                <iv-form-selection
-                    v-if="siteIds.length !== 0"
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.businessChartType"
                 >
                 </iv-form-selection>
             </template>
@@ -104,7 +91,7 @@ let config = require("@/config/default/debug");
 @Component({
     components: {}
 })
-export class AnalysisFilterDwellTime extends Vue {
+export class AnalysisFilterOccupancy extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: {}
@@ -123,7 +110,6 @@ export class AnalysisFilterDwellTime extends Vue {
     })
     deviceSelectItem: object;
 
-
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default:{}
@@ -137,18 +123,10 @@ export class AnalysisFilterDwellTime extends Vue {
     isIncludedEmployeeSelectItem: object;
 
     @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default:{}
-    })
-    businessChartTypeSelectItem: object;
-
-
-    @Prop({
         type: Array, // Boolean, Number, String, Array, Object
         default: () => []
     })
     siteIds: object;
-
 
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
@@ -180,28 +158,18 @@ export class AnalysisFilterDwellTime extends Vue {
     })
     isIncludedEmployee: string;
 
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: "revenue"
-    })
-    businessChartType: string;
-
     inputFormData: any = {
         areaId: "all",
         groupId: "all",
         deviceId: "all",
         type: "day",
-        isIncludedEmployee: 'no',
-        businessChartType: 'revenue'
+        inOrOut: "in",
+        isIncludedEmployee: 'no'
     };
 
-    created() {
+    created() {}
 
-    }
-
-    mounted() {
-        console.log('type ~ ', this.type)
-    }
+    mounted() {}
 
     @Watch("areaId", { deep: true })
     private areaIdChanged(newVal, oldVal) {
@@ -225,12 +193,7 @@ export class AnalysisFilterDwellTime extends Vue {
 
     @Watch("isIncludedEmployee", { deep: true })
     private isIncludedEmployeeChanged(newVal, oldVal) {
-        this.inputFormData.isIncludedEmployee = newVal;
-    }
-
-    @Watch("businessChartType", { deep: true })
-    private businessChartTypeChanged(newVal, oldVal) {
-        this.inputFormData.businessChartType = newVal;
+        this.inputFormData.is = newVal;
     }
 
     async whenSelectedAreaId() {
@@ -253,10 +216,6 @@ export class AnalysisFilterDwellTime extends Vue {
         this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
     }
 
-    whenSelectedBusinessChartType() {
-        this.$emit("business_chart_type", this.inputFormData.businessChartType);
-    }
-
     doSubmit() {}
 
     IAnalysisFilterForm() {
@@ -271,16 +230,6 @@ export class AnalysisFilterDwellTime extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_DeviceGroups")}
-                 * @uiColumnGroup - analysis
-                 */
-                groupId?: ${toEnumInterface(
-                    this.deviceGroupSelectItem as any,
-                    false
-                )};
-
-
-                /**
                  * @uiLabel - ${this._("w_Devices")}
                  * @uiColumnGroup - analysis
                  */
@@ -288,7 +237,6 @@ export class AnalysisFilterDwellTime extends Vue {
                     this.deviceSelectItem as any,
                     false
                 )};
-
 
 
                 /**
@@ -299,23 +247,16 @@ export class AnalysisFilterDwellTime extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_countSelect")}
-                 * @uiColumnGroup - row
+                 * @uiColumnGroup - row2
                  */
                 type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_isIncludedEmployee")}
-                 * @uiColumnGroup - row
+                 * @uiColumnGroup - row2
                  */
                 isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
-
-
-                /**
-                 * @uiLabel - ${this._("w_businessChartType")}
-                 * @uiColumnGroup - row
-                 */
-                businessChartType?: ${toEnumInterface(this.businessChartTypeSelectItem as any, false)};
 
 
             }
@@ -323,8 +264,8 @@ export class AnalysisFilterDwellTime extends Vue {
     }
 }
 
-export default AnalysisFilterDwellTime;
-Vue.component("analysis-filter-dwell-time", AnalysisFilterDwellTime);
+export default AnalysisFilterOccupancy;
+Vue.component("analysis-filter-occupancy", AnalysisFilterOccupancy);
 </script>
 
 <style lang="scss" scoped>
@@ -338,5 +279,4 @@ Vue.component("analysis-filter-dwell-time", AnalysisFilterDwellTime);
     border: 1px solid #5c7895;
     height: 25%;
 }
-
 </style>

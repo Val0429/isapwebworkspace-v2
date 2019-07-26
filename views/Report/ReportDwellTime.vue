@@ -45,31 +45,6 @@
                 />
             </template>
 
-            <!-- Tina -->
-            <analysis-filter-dwell-time
-                class="mb-4"
-                :areaSelectItem="areaSelectItem"
-                :deviceGroupSelectItem="deviceGroupSelectItem"
-                :deviceSelectItem="deviceSelectItem"
-                :timeModeSelectItem="timeModeSelectItem"
-                :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                :businessChartTypeSelectItem="businessChartTypeSelectItem"
-                :siteIds="filterData.siteIds"
-                :areaId="inputFormData.areaId"
-                :groupId="inputFormData.groupId"
-                :deviceId="inputFormData.deviceId"
-                :type="inputFormData.type"
-                :isIncludedEmployee="inputFormData.isIncludedEmployee"
-                @area_id="receiveAreaId"
-                @group_id="receiveGroupId"
-                @device_id="receiveDeviceId"
-                @type="receiveType"
-                @is_included_employee="receiveIsIncludedEmployee"
-                @business_chart_type="receiveBusinessChartType"
-            >
-
-            </analysis-filter-dwell-time>
-
             <template #toolbox>
                 <!-- Ben -->
                 <iv-toolbox-export-excel
@@ -97,6 +72,18 @@
                 />
             </template>
 
+            <!-- Ben -->
+            <anlysis-dashboard
+                ref="analysisDashboard"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type="dTimeMode"
+                :siteIds="pSiteIds"
+                :tagIds="tags"
+                :pageType="dPageType"
+            >
+            </anlysis-dashboard>
+
             <!-- Tina -->
             <analysis-filter-dwell-time
                 class="mb-4"
@@ -121,18 +108,6 @@
             >
 
             </analysis-filter-dwell-time>
-
-            <!-- Ben -->
-            <anlysis-dashboard
-                ref="analysisDashboard"
-                :startDate="startDate"
-                :endDate="endDate"
-                :type="dTimeMode"
-                :siteIds="pSiteIds"
-                :tagIds="tags"
-                :pageType="dPageType"
-            >
-            </anlysis-dashboard>
 
             <!-- Morris -->
             <highcharts-dwell-time
@@ -1423,8 +1398,12 @@ export default class ReportDwellTime extends Vue {
         filterData: IFilterCondition,
         designationPeriod: EDesignationPeriod
     ) {
+
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
+
+        console.log('this.filterData ~ ', this.filterData)
+
         this.designationPeriod = designationPeriod;
         this.inputFormData = {
             areaId: "",

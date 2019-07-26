@@ -45,29 +45,6 @@
 					/>
 				</template>
 
-				<!-- Tina -->
-				<analysis-filter
-					class="mb-4"
-					:areaSelectItem="areaSelectItem"
-					:deviceGroupSelectItem="deviceGroupSelectItem"
-					:deviceSelectItem="deviceSelectItem"
-					:timeModeSelectItem="timeModeSelectItem"
-					:isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-					:siteIds="filterData.siteIds"
-					:areaId="inputFormData.areaId"
-					:groupId="inputFormData.groupId"
-					:deviceId="inputFormData.deviceId"
-					:type="inputFormData.type"
-					:isIncludedEmployee="inputFormData.isIncludedEmployee"
-					@area_id="receiveAreaId"
-					@group_id="receiveGroupId"
-					@device_id="receiveDeviceId"
-					@type="receiveType"
-					@is_included_employee="receiveIsIncludedEmployee"
-				>
-
-				</analysis-filter>
-
 				<!-- Ben -->
 				<anlysis-dashboard
 					ref="analysisDashboard"
@@ -80,7 +57,30 @@
 				>
 				</anlysis-dashboard>
 
-                <!-- Morris -->
+			<!-- Tina -->
+			<analysis-filter
+				class="mb-4"
+				:areaSelectItem="areaSelectItem"
+				:deviceGroupSelectItem="deviceGroupSelectItem"
+				:deviceSelectItem="deviceSelectItem"
+				:timeModeSelectItem="timeModeSelectItem"
+				:isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
+				:siteIds="filterData.siteIds"
+				:areaId="inputFormData.areaId"
+				:groupId="inputFormData.groupId"
+				:deviceId="inputFormData.deviceId"
+				:type="inputFormData.type"
+				:isIncludedEmployee="inputFormData.isIncludedEmployee"
+				@area_id="receiveAreaId"
+				@group_id="receiveGroupId"
+				@device_id="receiveDeviceId"
+				@type="receiveType"
+				@is_included_employee="receiveIsIncludedEmployee"
+			>
+
+			</analysis-filter>
+
+			<!-- Morris -->
 				<highcharts-demographic
 					ref="test"
 					:startDate="startDate"
