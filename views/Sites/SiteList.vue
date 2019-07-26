@@ -93,6 +93,10 @@ export class SiteList extends Vue {
         this.initSiteListDeviceGroup();
     }
 
+    reload() {
+        (this.$refs.siteTable as any).reload();
+    }
+
     async initSiteListDeviceGroup() {
         this.deviceGroupAll = [];
 
@@ -176,23 +180,47 @@ export class SiteList extends Vue {
     }
 
     selectedSite(data) {
+        this.isSelectSite = false;
         if (data && data.objectId) {
             data.managerId = data.manager
                 ? data.manager.objectId
                 : data.manager;
-            data.establishment = new Date(data.establishment);
+            data.officeHourId = data.officeHour
+                ? data.officeHour.objectId
+                : data.officeHour;
+            data.tagIds = data.tags
+                ? data.tags.map(t => t.objectId)
+                : data.tags;
+            data.establishment = data.establishment
+                ? new Date(data.establishment)
+                : "";
             this.site = this.isSelectSite = data;
-        } else {
-            this.clearSiteData();
         }
         this.$emit("selectedSite", data);
     }
 
-    clearSiteData() {
-        this.isSelectSite = false;
-        this.gooleMapSrc = "";
-        this.newImgSrc = "";
-        this.site = {};
+       async deleteSite() {
+        Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
+            var body: {
+                objectId: string;
+            } = {
+                objectId: this.site.objectId
+            };
+
+            Loading.show();
+            this.$server
+                .D("/location/site", body)
+                .then((response: any) => {
+                    Loading.hide();
+                    if (response) {
+                        Dialog.success(this._("w_Success"));
+                        (this.$refs.siteTable as any).reload();
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        });
     }
 
     pageToSiteView() {

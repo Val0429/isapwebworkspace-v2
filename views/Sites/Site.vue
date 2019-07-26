@@ -9,70 +9,15 @@
                 key="transition_1"
                 v-show="transition.step === 1"
             >
-                <!-- <siteList
+                <siteList
+                    ref="siteTable"
                     v-on:pageToSiteView="pageToSiteView"
                     v-on:pageToSiteEdit="pageToSiteEdit"
                     v-on:pageToSiteAdd="pageToSiteAdd"
                     v-on:pageToAreaList="pageToAreaList"
                     v-on:pageToDeviceGroupList="pageToDeviceGroupList(1)"
                     v-on:selectedSite="selectedSite"
-                ></siteList> -->
-
-                <iv-card :label="_('w_Site_SiteList')">
-
-                    <template #toolbox>
-
-                        <iv-toolbox-view
-                            :disabled="!isSelectSite"
-                            @click="pageToSiteView()"
-                        />
-                        <iv-toolbox-edit
-                            :disabled="!isSelectSite"
-                            @click="pageToSiteEdit()"
-                        />
-                        <iv-toolbox-delete
-                            :disabled="!isSelectSite"
-                            @click="deleteSite()"
-                        />
-
-                        <iv-toolbox-divider />
-                        <iv-toolbox-add @click="pageToSiteAdd()" />
-
-                    </template>
-
-                    <iv-table
-                        ref="siteTable"
-                        :interface="ISiteList()"
-                        @selected="selectedSite($event)"
-                        :server="{ path: '/location/site' }"
-                        :multiple="tableMultiple"
-                    >
-
-                        <template #establishment="{$attrs, $listeners}">
-                            {{$attrs.row.establishment ? showTime($attrs.row.establishment) : ""}}
-                        </template>
-
-                        <template #manager="{$attrs, $listeners}">
-                            {{$attrs.row.manager ? $attrs.row.manager.name : ""}}
-                        </template>
-
-                        <template #areaName="{$attrs, $listeners}">
-                            {{showArea($attrs.row.objectId)}}
-                        </template>
-
-                        <template #deviceGroupName="{$attrs, $listeners}">
-                            {{showDeviceGroup($attrs.row.objectId,'site')}}
-                        </template>
-
-                        <template #Actions="{$attrs, $listeners}">
-                            <iv-toolbox-more :disabled="!isSelectSite">
-                                <iv-toolbox-area @click="pageToAreaList()" />
-                                <iv-toolbox-device-group @click="pageToDeviceGroupList(1)" />
-                            </iv-toolbox-more>
-                        </template>
-                    </iv-table>
-
-                </iv-card>
+                ></siteList>
             </div>
 
             <!--Site Form (Add and Edit)-->
@@ -80,96 +25,11 @@
                 key="transition_3_4"
                 v-if="transition.step === 3  || transition.step === 4"
             >
-                <iv-auto-card :label="transition.step === 3 ? _('w_Site_AddSite') :  _('w_Site_EditSite')">
-
-                    <template #toolbox>
-                        <iv-toolbox-back @click="pageToSiteList()" />
-                    </template>
-
-                    <iv-form
-                        :interface="ISiteForm()"
-                        :value="site"
-                        @update:*="updateSiteForm($event)"
-                        @submit="saveSite($event)"
-                    >
-
-                        <template #officeHour="{$attrs, $listeners}">
-                            <iv-form-selection
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :options="officeHourItem"
-                            >
-                            </iv-form-selection>
-                        </template>
-
-                        <template #managerId="{$attrs, $listeners}">
-                            <iv-form-selection
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :options="managerItem"
-                            >
-                            </iv-form-selection>
-                        </template>
-
-                        <template #tag="{$attrs, $listeners}">
-                            <iv-form-selection
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :options="tagItem"
-                                :multiple="true"
-                            >
-                            </iv-form-selection>
-                        </template>
-
-                        <template #imageSrc="{ $attrs, $listeners}">
-                            <img
-                                class="imgSide"
-                                v-if="newImgSrc"
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :src="newImgSrc"
-                            />
-                        </template>
-
-                        <template #mapping="{ $attrs, $listeners }">
-                            <div class="googleMap">
-                                <b-button
-                                    variant="secondary"
-                                    size="md"
-                                    @click="googleMapMapping()"
-                                >{{ _('w_Site_Mapping') }}
-                                </b-button>
-                            </div>
-                        </template>
-
-                        <template #googleMap="{ $attrs, $listeners, index }">
-                            <iframe
-                                v-if="gooleMapSrc != ''"
-                                class="googleMap"
-                                allowfullscreen=""
-                                width="800"
-                                height="600"
-                                frameborder="0"
-                                scrolling="no"
-                                marginheight="0"
-                                marginwidth="0"
-                                :src="gooleMapSrc"
-                            >
-                            </iframe>
-                        </template>
-
-                    </iv-form>
-
-                    <template #footer-before>
-                        <b-button
-                            variant="secondary"
-                            size="lg"
-                            @click="pageToSiteList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
-
-                </iv-auto-card>
+                <siteForm
+                    :site="site"
+                    :transition="transition"
+                    v-on:pageToSiteList="pageToSiteList"
+                ></siteForm>
             </div>
 
             <!--Site View-->
@@ -177,89 +37,10 @@
                 key="transition_2"
                 v-if="transition.step === 2"
             >
-                <iv-card :label="_('w_Site_ViewSite')">
-
-                    <template #toolbox>
-                        <iv-toolbox-back @click="pageToSiteList()" />
-                    </template>
-
-                    <iv-form
-                        :interface="ISiteView()"
-                        :value="site"
-                    >
-
-                        <template #establishment="{$attrs, $listeners}">
-                            <iv-form-label
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :value="$attrs.value ? showTime($attrs.value) : ''"
-                            />
-                        </template>
-
-                        <template #officeHour="{$attrs, $listeners}">
-                            <iv-form-label
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :value="$attrs.value ? showOfficeHour($attrs.value) : ''"
-                            />
-                        </template>
-
-                        <template #managerId="{$attrs, $listeners}">
-                            <iv-form-label
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :value="$attrs.value ? showManager($attrs.value) : ''"
-                            />
-                        </template>
-
-                        <template #tag="{$attrs, $listeners}">
-                            <iv-form-label
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :value="site.tag ? showTags(site.tag) : ''"
-                            />
-                        </template>
-
-                        <template #imageSrc="{ $attrs, $listeners}">
-                            <label class="col-md-12">
-                                {{_("w_Site_Photo")}}
-                            </label>
-                            <img
-                                class="imgSide"
-                                v-if="newImgSrc"
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :src="newImgSrc"
-                            />
-                        </template>
-
-                        <template #googleMap="{ $attrs, $listeners, index }">
-                            <iframe
-                                v-if="gooleMapSrc != ''"
-                                class="googleMap"
-                                allowfullscreen=""
-                                width="800"
-                                height="600"
-                                frameborder="0"
-                                scrolling="no"
-                                marginheight="0"
-                                marginwidth="0"
-                                :src="gooleMapSrc"
-                            >
-                            </iframe>
-                        </template>
-
-                    </iv-form>
-
-                    <template #footer>
-                        <b-button
-                            variant="secondary"
-                            size="lg"
-                            @click="pageToSiteList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
-                </iv-card>
+                <siteView
+                    :site="site"
+                    v-on:pageToSiteList="pageToSiteList"
+                ></siteView>
             </div>
 
             <!--Area List-->
@@ -267,54 +48,16 @@
                 key="transition_5"
                 v-show="transition.step === 5"
             >
-                <iv-card :label=" _('w_Site_AreaList') ">
-
-                    <template #toolbox>
-
-                        <iv-toolbox-view
-                            :disabled="!isSelectArea"
-                            @click="pageToAreaView()"
-                        />
-                        <iv-toolbox-edit
-                            :disabled="!isSelectArea"
-                            @click="pageToAreaEdit()"
-                        />
-                        <iv-toolbox-delete
-                            :disabled="!isSelectArea"
-                            @click="deleteArea()"
-                        />
-
-                        <iv-toolbox-divider />
-                        <iv-toolbox-add @click="pageToAreaAdd()" />
-                        <iv-toolbox-back @click="pageToSiteList()" />
-
-                    </template>
-
-                    <iv-table
-                        ref="areaTable"
-                        :interface="IAreaList()"
-                        @selected="selectedArea($event)"
-                        :multiple="tableMultiple"
-                        :server="{  path: '/location/area' }"
-                        :params="areaParams"
-                    >
-
-                        <template #siteName="{$attrs, $listeners}">
-                            {{$attrs.row.site ? $attrs.row.site.name : ""}}
-                        </template>
-
-                        <template #deviceGroupName="{$attrs, $listeners}">
-                            {{showDeviceGroup($attrs.row.objectId,'area')}}
-                        </template>
-
-                        <template #Actions="{$attrs, $listeners}">
-                            <iv-toolbox-more :disabled="!isSelectArea">
-                                <iv-toolbox-device-group @click="pageToDeviceGroupList(5)" />
-                            </iv-toolbox-more>
-                        </template>
-                    </iv-table>
-
-                </iv-card>
+                <siteAreaList
+                    ref="areaTable"
+                    :areaParams="areaParams"
+                    v-on:pageToAreaView="pageToAreaView"
+                    v-on:pageToAreaEdit="pageToAreaEdit"
+                    v-on:pageToAreaAdd="pageToAreaAdd"
+                    v-on:pageToSiteList="pageToSiteList"
+                    v-on:pageToDeviceGroupList="pageToDeviceGroupList(5)"
+                    v-on:selectedArea="selectedArea"
+                ></siteAreaList>
             </div>
 
             <!--Area Form (Add and Edit)-->
@@ -322,52 +65,14 @@
                 key="transition_7_8"
                 v-if="transition.step === 7  || transition.step === 8"
             >
-                <iv-auto-card :label="transition.step === 7  ? _('w_Site_AddArea') :  _('w_Site_EditArea')">
-                    <template #toolbox>
-                        <iv-toolbox-back @click="pageToAreaList()" />
-                    </template>
 
-                    <iv-form
-                        :interface="IAreaForm()"
-                        :value="area"
-                        @update:*="updateAreaForm($event)"
-                        @submit="saveArea($event)"
-                    >
+                <siteAreaForm
+                    :site="site"
+                    :area="area"
+                    :transition="transition"
+                    v-on:pageToAreaList="pageToAreaList"
+                ></siteAreaForm>
 
-                        <template #imageSrc="{ $attrs, $listeners}">
-                            <img
-                                class="imgSide"
-                                v-if="areaPhotoSrc"
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :src="areaPhotoSrc"
-                            />
-                        </template>
-
-                        <template #imageMap="{ $attrs, $listeners}">
-                            <div class="card-content iv-form-group col-md-12">
-                                <image-map
-                                    ref="imageMap"
-                                    v-on:click-device="clickDevice"
-                                    v-on:drop="drop"
-                                    :imageMap="imageMap"
-                                >
-                                </image-map>
-                            </div>
-                        </template>
-
-                    </iv-form>
-
-                    <template #footer-before>
-                        <b-button
-                            variant="secondary"
-                            size="lg"
-                            @click="pageToAreaList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
-
-                </iv-auto-card>
             </div>
 
             <!--Area View-->
@@ -375,62 +80,11 @@
                 key="transition_6"
                 v-if="transition.step === 6"
             >
-                <iv-card :label=" _('w_Site_ViewArea')">
-
-                    <template #toolbox>
-                        <iv-toolbox-back @click="pageToAreaList()" />
-                    </template>
-
-                    <iv-form
-                        :interface="IAreaView()"
-                        :value="area"
-                    >
-
-                        <template #siteName="{$attrs, $listeners}">
-                            <iv-form-label
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :value="area.site ? area.site.name  : ''"
-                            />
-                        </template>
-
-                        <template #imageSrc="{ $attrs, $listeners}">
-                            <label class="col-md-12">
-                                {{_("w_Site_Photo")}}
-                            </label>
-                            <img
-                                class="imgSide"
-                                v-if="areaPhotoSrc"
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :src="areaPhotoSrc"
-                            />
-                        </template>
-
-                        <template #imageMap="{ $attrs, $listeners}">
-                            <div class="card-content iv-form-group col-md-12">
-                                <image-map
-                                    ref="imageMap"
-                                    v-on:click-device="clickDevice"
-                                    v-on:drop="drop"
-                                    :imageMap="imageMap"
-                                >
-                                </image-map>
-                            </div>
-                        </template>
-
-                    </iv-form>
-
-                    <template #footer>
-                        <b-button
-                            variant="secondary"
-                            size="lg"
-                            @click="pageToAreaList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
-
-                </iv-card>
+                <SiteAreaView
+                    :site="site"
+                    :area="area"
+                    v-on:pageToAreaList="pageToAreaList"
+                ></SiteAreaView>
             </div>
 
             <!--Device Group List-->
@@ -665,9 +319,6 @@
 import { Vue, Component } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 
-// Vue
-import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
-
 // API Interface
 import {
     ISiteAddData,
@@ -680,24 +331,8 @@ import {
     IOfficeHourEditData
 } from "@/config/default/api/interfaces";
 
-// Image Map
-import {
-    EDragType,
-    EVideoSource,
-    ESetupMode,
-    ImageMapItem,
-    ImageBoxItem,
-    DeviceGroupItem,
-    DeviceNormalCameraItem,
-    DeviceFisheyeCameraItem,
-    DataWindowLicensePlateRecognitionItem,
-    DataWindowOccupancyItem,
-    DataWindowPeopleCountingItem
-} from "@/components/ImageMap";
-
 // Service
 import ResponseFilter from "@/services/ResponseFilter";
-import ImageBase64 from "@/services/ImageBase64";
 import ServerConfig from "@/services/ServerConfig";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
@@ -708,6 +343,11 @@ import { ITransition } from "@/services/Transition";
 
 //sunComponent
 import { SiteList } from "./SiteList.vue";
+import { SiteView } from "./SiteView.vue";
+import { SiteForm } from "./SiteForm.vue";
+import { SiteAreaList } from "./SiteAreaList.vue";
+import { SiteAreaForm } from "./SiteAreaForm.vue";
+import { SiteAreaView } from "./SiteAreaView.vue";
 
 interface IGoogleMap {
     src: string;
@@ -724,14 +364,20 @@ enum ECameraMode {
 }
 
 @Component({
-    components: { siteList: SiteList }
+    components: {
+        siteList: SiteList,
+        siteView: SiteView,
+        siteForm: SiteForm,
+        siteAreaList: SiteAreaList,
+        siteAreaForm: SiteAreaForm,
+        SiteAreaView: SiteAreaView
+    }
 })
 export default class Site extends Vue {
     serverUrl = ServerConfig.url;
     newImg = new Image();
-    newImgSrc = "";
     tableMultiple = false;
-    imageMap = new ImageMapItem();
+    newImgSrc = "";
     isMounted = false;
 
     transition: ITransition = {
@@ -747,7 +393,6 @@ export default class Site extends Vue {
     };
 
     //site datas
-    isSelectSite = false;
     sites = {};
     site: any = {};
     gooleMapSrc = "";
@@ -790,286 +435,6 @@ export default class Site extends Vue {
         this.pageToSiteList();
     }
 
-    drop(event: any) {
-        // TODO: do something?
-        console.log("!!! drop", event);
-    }
-
-    clickDevice(event: any, data: any) {
-        // TODO: do something?
-        console.log("!!! clickDevice", event, data);
-    }
-
-    async initMap() {
-        this.getDeviceGroupData();
-    }
-
-    async getDeviceGroupData() {
-        let body: {
-            siteId: string;
-            areaId: string;
-        } = {
-            siteId: this.site.objectId,
-            areaId: this.area.objectId
-        };
-
-        await this.$server
-            .R("/device/group/all", body)
-            .then((response: any) => {
-                this.devicesGroupDevices = response;
-                this.getDeviceData();
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
-    async getDeviceData() {
-        if (this.area) {
-            let body: {
-                paging: {
-                    page: number;
-                    pageSize: number;
-                };
-            } = {
-                paging: {
-                    page: 1,
-                    pageSize: 999
-                }
-            };
-
-            await this.$server
-                .R("/device", body)
-                .then((response: any) => {
-                    this.devices = [];
-                    for (let item of response.results) {
-                        if (
-                            item.area &&
-                            item.area.objectId == this.area.objectId
-                        ) {
-                            this.devices.push(item);
-                        }
-                    }
-                    this.initImageMap();
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else {
-            this.initImageMap();
-        }
-    }
-
-    initImageMap() {
-        let imageMapRef: any = this.$refs.imageMap;
-
-        // imageMap mode
-        // this.imageMap.setupMode = ESetupMode.preview;
-        this.imageMap.setupMode = ESetupMode.setup;
-
-        // imageMap setting
-        this.imageMap.draw.deviceGroupInTagLabel = true;
-        this.imageMap.draw.deviceInTagLabel = true;
-        this.imageMap.draw.dataWindowInMap = true;
-        this.imageMap.draw.dataWindowInDeviceGroup = true;
-        this.imageMap.draw.dataWindowInDevice = true;
-        this.imageMap.draw.deviceInMap = true;
-        this.imageMap.draw.nameInDevice = true;
-        this.imageMap.draw.viewerInDevice = true;
-
-        // image box
-        this.imageMap.imageBox = new ImageBoxItem(this.areaMapSrc, {
-            width: 1170,
-            height: 665
-        });
-
-        ////////////////////////////////////////////////////////////////////
-
-        // dataWindow in map
-        // let dataWindow_license_map_1 = new DataWindowLicensePlateRecognitionItem(
-        //     "License",
-        //     EDragType.dataWindowInMap
-        // );
-        // let dataWindow_occupancy_map_1 = new DataWindowOccupancyItem(
-        //     "Occupancy",
-        //     EDragType.dataWindowInMap
-        // );
-        // let dataWindow_people_map_1 = new DataWindowPeopleCountingItem(
-        //     "PeopleCounting",
-        //     EDragType.dataWindowInMap
-        // );
-
-        // dataWindow_license_map_1.originalPosition = { x: 250, y: 100 };
-        // dataWindow_occupancy_map_1.originalPosition = { x: 250, y: 250 };
-        // dataWindow_people_map_1.originalPosition = { x: 250, y: 400 };
-
-        // this.imageMap.imageBox.dataWindows = [];
-        // this.imageMap.imageBox.dataWindows.push(dataWindow_license_map_1);
-        // this.imageMap.imageBox.dataWindows.push(dataWindow_occupancy_map_1);
-        // this.imageMap.imageBox.dataWindows.push(dataWindow_people_map_1);
-
-        ////////////////////////////////////////////////////////////////////
-
-        // device group
-        this.imageMap.deviceGroups = [];
-        for (let device of this.devices) {
-            if (
-                this.imageMap.deviceGroups.some(
-                    i => i.objectId === device.groups.objectId
-                )
-            ) {
-                continue;
-            }
-
-            let deviceGroup = new DeviceGroupItem(
-                device.groups[0].name,
-                EDragType.dataWindowInDeviceGroup,
-                device.mode
-            );
-
-            deviceGroup.dataWindow.mode = ESetupMode.setup;
-            deviceGroup.dataWindow.originalPosition = {
-                x: device.dataWindowX,
-                y: device.dataWindowY
-            };
-
-            this.imageMap.deviceGroups.push(deviceGroup);
-        }
-
-        ////////////////////////////////////////////////////////////////////
-
-        // device
-        this.imageMap.devices = [];
-        for (let device of this.devices) {
-            let deviceCamera = new DeviceNormalCameraItem(
-                device.name,
-                EDragType.deviceInTagLabel,
-                device.mode
-            );
-
-            deviceCamera.dataWindow.mode = ESetupMode.setup;
-            deviceCamera.originalPosition = {
-                x: device.x,
-                y: device.y
-            };
-
-            deviceCamera.rotate = device.visibleAngle;
-            deviceCamera.viewerAngle = device.angle;
-            //deviceCamera.visibleDistance = device.visibleDistance;
-
-            this.imageMap.devices.push(deviceCamera);
-        }
-
-        // let deviceNormalCamera_1 = new DeviceFisheyeCameraItem(
-        //     "Fisheye1",
-        //     EDragType.deviceInTagLabel,
-        //     EVideoSource.licensePlateRecognition
-        // );
-
-        // let deviceNormalCamera_2 = new DeviceFisheyeCameraItem(
-        //     "Fisheye 2",
-        //     EDragType.deviceInTagLabel,
-        //     EVideoSource.occupancy
-        // );
-
-        // let deviceNormalCamera_3 = new DeviceNormalCameraItem(
-        //     "Normal 3",
-        //     EDragType.deviceInTagLabel,
-        //     EVideoSource.peopleCounting
-        // );
-
-        // this.imageMap.devices = [];
-        // this.imageMap.devices.push(deviceNormalCamera_1);
-        // this.imageMap.devices.push(deviceNormalCamera_2);
-        // this.imageMap.devices.push(deviceNormalCamera_3);
-
-        // let deviceNormalCamera_4 = new DeviceFisheyeCameraItem(
-        //     "Fisheye 4",
-        //     EDragType.deviceInMap,
-        //     EVideoSource.licensePlateRecognition
-        // );
-
-        // let deviceNormalCamera_5 = new DeviceNormalCameraItem(
-        //     "Normal 5",
-        //     EDragType.deviceInMap,
-        //     EVideoSource.occupancy
-        // );
-
-        // let deviceNormalCamera_6 = new DeviceNormalCameraItem(
-        //     "Normal 6",
-        //     EDragType.deviceInMap,
-        //     EVideoSource.peopleCounting
-        // );
-
-        // deviceNormalCamera_5.rotate = "0";
-        // deviceNormalCamera_6.rotate = "150";
-
-        // deviceNormalCamera_5.viewerAngle = "160";
-        // deviceNormalCamera_6.viewerAngle = "45";
-
-        // deviceNormalCamera_4.originalPosition = {
-        //     x: 100,
-        //     y: 100
-        // };
-
-        // deviceNormalCamera_5.originalPosition = {
-        //     x: 300,
-        //     y: 250
-        // };
-
-        // deviceNormalCamera_6.originalPosition = {
-        //     x: 100,
-        //     y: 500
-        // };
-
-        // deviceNormalCamera_4.dataWindow.originalPosition = {
-        //     x: 800,
-        //     y: 100
-        // };
-
-        // deviceNormalCamera_5.dataWindow.originalPosition = {
-        //     x: 800,
-        //     y: 250
-        // };
-
-        // deviceNormalCamera_6.dataWindow.originalPosition = {
-        //     x: 800,
-        //     y: 400
-        // };
-
-        // this.imageMap.devices.push(deviceNormalCamera_4);
-        // this.imageMap.devices.push(deviceNormalCamera_5);
-        // this.imageMap.devices.push(deviceNormalCamera_6);
-
-        // deviceNormalCamera_6.dataWindow.inPerson = 10;
-        // deviceNormalCamera_6.dataWindow.outPerson = 30;
-
-        // deviceNormalCamera_6.dataWindow.inToday = 100;
-        // deviceNormalCamera_6.dataWindow.outToday = 297;
-
-        ////////////////////////////////////////////////////////////////////
-        if (imageMapRef != undefined) {
-            imageMapRef.start();
-        }
-
-        //TODO 可能用不到，先註解。
-        // this.updateCheckboxControllers();
-    }
-
-    // updateCheckboxControllers() {
-    //     this.checkboxControllers.setupMode =
-    //         this.imageMap.setupMode == ESetupMode.setup;
-    //     if (
-    //         this.imageMap.draw.dataWindowInMap ||
-    //         this.imageMap.draw.dataWindowInDeviceGroup ||
-    //         this.imageMap.draw.dataWindowInDevice
-    //     ) {
-    //         this.checkboxControllers.showAllDataWindow = true;
-    //     } else {
-    //         this.checkboxControllers.showAllDataWindow = false;
-    //     }
-    // }
-
     pageToAreaList() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 5;
@@ -1080,26 +445,17 @@ export default class Site extends Vue {
     pageToAreaView() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 6;
-        this.areaPhotoSrc = this.serverUrl + this.area.imageSrc;
-        this.areaMapSrc = this.serverUrl + this.area.mapSrc;
-        this.initMap();
-        this.imageMap.setupMode = ESetupMode.preview;
     }
 
     pageToAreaAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 7;
         this.clearAreaData();
-        this.areaMapSrc = ImageBase64.pngEmpty;
-        this.initMap();
-        this.imageMap.setupMode = ESetupMode.setup;
     }
 
     pageToAreaEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 8;
-        this.areaMapSrc = this.serverUrl + this.area.mapSrc;
-        this.initMap();
     }
 
     pageToDeviceGroupList(lastPageStep) {
@@ -1136,19 +492,6 @@ export default class Site extends Vue {
         this.initDeviceTypeItem();
     }
 
-    async initSiteListArea() {
-        this.areaAll = [];
-
-        await this.$server
-            .R("/location/area/all", {})
-            .then((response: any) => {
-                this.areaAll = response;
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
     initCameraItem() {
         this.cameraModeItem = [
             { id: "peopleCounting", text: ECameraMode.peopleCounting },
@@ -1160,36 +503,9 @@ export default class Site extends Vue {
         ];
     }
 
-    async initSiteListDeviceGroup() {
-        this.deviceGroupAll = [];
-
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
-        await this.$server
-            .R("/device/group", body)
-            .then((response: any) => {
-                this.deviceGroupAll = response.results;
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
     pageToSiteList() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
-        this.initSiteListArea();
-        this.initSiteListDeviceGroup();
         this.clearAreaData();
         this.clearDeviceData();
         (this.$refs.siteTable as any).reload();
@@ -1198,8 +514,6 @@ export default class Site extends Vue {
     pageToSiteView() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
-        this.newImgSrc = this.serverUrl + this.site.imageSrc;
-        this.googleMapMapping();
     }
 
     pageToSiteAdd() {
@@ -1281,256 +595,6 @@ export default class Site extends Vue {
             });
     }
 
-    async initManagerItem() {
-        this.managerItem = [];
-
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
-        await this.$server
-            .R("/user/user/all", body)
-            .then((response: any) => {
-                for (let user of response) {
-                    let manager = { id: user.objectId, text: user.name };
-                    this.managerItem.push(manager);
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
-    async initOfficeHourItem() {
-        this.officeHourItem = [];
-
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
-        await this.$server
-            .R("/office-hour/all", body)
-            .then((response: any) => {
-                for (let itme of response) {
-                    let officeHour = { id: itme.objectId, text: itme.name };
-                    this.officeHourItem.push(officeHour);
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-
-        await this.$server
-            .R("/office-hour", body)
-            .then((response: any) => {
-                this.site.officeHour = [];
-                for (let item of response.results) {
-                    for (let subItem of item.sites) {
-                        if (subItem.objectId == this.site.objectId) {
-                            this.site.officeHour = item.objectId;
-                            break;
-                        }
-                    }
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
-    async initTagItem() {
-        this.tagItem = [];
-
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
-        await this.$server
-            .R("/tag/all", body)
-            .then((response: any) => {
-                for (let itme of response) {
-                    let tag = { id: itme.objectId, text: itme.name };
-                    this.tagItem.push(tag);
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-
-        await this.$server
-            .R("/tag", body)
-            .then((response: any) => {
-                this.site.tag = [];
-                for (let item of response.results) {
-                    for (let subItem of item.sites) {
-                        if (subItem.objectId == this.site.objectId) {
-                            this.site.tag.push(item.objectId);
-                            break;
-                        }
-                    }
-                }
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
-    async saveSite(data) {
-        if (this.transition.step === 3) {
-            const datas: ISiteAddData[] = [
-                {
-                    // regionId: "uCsinPqUj1",
-                    name: data.name,
-                    customId: data.customId,
-                    managerId: data.managerId,
-                    address: data.address,
-                    phone: data.phone,
-                    establishment: data.establishment,
-                    squareMeter: data.squareMeter,
-                    staffNumber: data.staffNumber,
-                    officeHourId: data.officeHour,
-                    imageBase64: this.newImgSrc,
-                    longitude: data.longitude,
-                    latitude: data.latitude,
-                    tagIds: data.tag
-                }
-            ];
-
-            const addSiteParam = { datas };
-            Loading.show();
-            await this.$server
-                .C("/location/site", addSiteParam)
-                .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        data.objectId = response[0].objectId;
-                        Dialog.success(this._("w_Site_AddSiteSuccess"));
-                        this.pageToSiteList();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (this.transition.step === 4) {
-            const datas: ISiteEditData[] = [
-                {
-                    // regionId: "uCsinPqUj1",
-                    objectId: data.objectId,
-                    name: data.name,
-                    customId: data.customId,
-                    managerId: data.managerId,
-                    address: data.address,
-                    phone: data.phone,
-                    establishment: data.establishment,
-                    squareMeter: data.squareMeter,
-                    staffNumber: data.staffNumber,
-                    officeHourId: data.officeHour,
-                    longitude: data.longitude,
-                    latitude: data.latitude,
-                    tagIds: data.tag
-                }
-            ];
-
-            if (this.newImg.src) {
-                datas[0].imageBase64 = this.newImgSrc;
-            }
-
-            const editSiteParam = { datas };
-            Loading.show();
-            await this.$server
-                .U("/location/site", editSiteParam)
-                .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_EditSiteSuccess"));
-                        this.pageToSiteList();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        }
-    }
-
-    async saveArea(data) {
-        if (this.transition.step === 7) {
-            const datas: IAreaAddData[] = [
-                {
-                    siteId: this.site.objectId,
-                    name: data.name,
-                    imageBase64: this.areaPhotoSrc,
-                    mapBase64: this.imageMap.imageBox.src
-                }
-            ];
-
-            const addAreaParam = { datas };
-            Loading.show();
-            await this.$server
-                .C("/location/area", addAreaParam)
-                .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_AddAreaSuccess"));
-                        this.pageToAreaList();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (this.transition.step === 8) {
-            const datas: IAreaEditData[] = [
-                {
-                    objectId: data.objectId,
-                    name: data.name
-                }
-            ];
-
-            if (this.newImg.src) {
-                datas[0].imageBase64 = this.areaPhotoSrc;
-                datas[0].mapBase64 = this.imageMap.imageBox.src;
-            }
-
-            const editAreaParam = { datas };
-            Loading.show();
-            await this.$server
-                .U("/location/area", editAreaParam)
-                .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_EditAreaSuccess"));
-                        this.pageToAreaList();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        }
-    }
-
     async updateDevicePosition() {
         const datas: IAreaEditData[] = [
             {
@@ -1553,54 +617,6 @@ export default class Site extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-    }
-
-    async deleteSite() {
-        Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
-            var body: {
-                objectId: string;
-            } = {
-                objectId: this.site.objectId
-            };
-
-            Loading.show();
-            this.$server
-                .D("/location/site", body)
-                .then((response: any) => {
-                    Loading.hide();
-                    if (response) {
-                        Dialog.success(this._("w_Success"));
-                        (this.$refs.siteTable as any).reload();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        });
-    }
-
-    async deleteArea() {
-        Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
-            var body: {
-                objectId: string;
-            } = {
-                objectId: this.area.objectId
-            };
-
-            Loading.show();
-            this.$server
-                .D("/location/area", body)
-                .then((response: any) => {
-                    Loading.hide();
-                    if (response) {
-                        Dialog.success(this._("w_Success"));
-                        (this.$refs.areaTable as any).reload();
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        });
     }
 
     async saveDeviceGroup(data) {
@@ -1688,66 +704,6 @@ export default class Site extends Vue {
         });
     }
 
-    googleMapMapping() {
-        if (this.site) {
-            if (
-                parseFloat(this.site.longitude) > 180 ||
-                parseFloat(this.site.longitude) < -180
-            ) {
-                Dialog.error(this._("w_Site_Longitude_Range"));
-                return;
-            }
-
-            if (
-                parseFloat(this.site.latitude) > 90 ||
-                parseFloat(this.site.latitude) < -90
-            ) {
-                Dialog.error(this._("w_Site_Latitude_Range"));
-                return;
-            }
-            this.gooleMapSrc =
-                this.googleMap.src +
-                "&z=" +
-                this.googleMap.zSize +
-                "&q=" +
-                this.site.latitude +
-                "," +
-                this.site.longitude;
-        }
-    }
-
-    updateSiteForm(data) {
-        if (data) {
-            this.site[data.key] = data.value;
-            if (data.key == "sitePhoto") {
-                this.uploadFile(data.value);
-            }
-        }
-    }
-
-    async updateAreaForm(data) {
-        if (data) {
-            this.area[data.key] = data.value;
-            if (data.key == "areaPhoto") {
-                this.uploadFile(data.value);
-                setTimeout(() => {
-                    this.areaPhotoSrc = this.newImg.src;
-                }, 300);
-            }
-
-            if (data.key == "mapPhoto") {
-                this.uploadFile(data.value);
-                setTimeout(() => {
-                    this.imageMap.imageBox.src = this.newImg.src;
-                    this.imageMap.imageBox.originalSize = {
-                        width: this.newImg.width,
-                        height: this.newImg.height
-                    };
-                }, 300);
-            }
-        }
-    }
-
     updateDeviceGroupForm(data) {
         if (data) {
             this.deviceGroup[data.key] = data.value;
@@ -1764,10 +720,8 @@ export default class Site extends Vue {
     }
 
     selectedArea(data) {
-        this.newImgSrc = "";
-        this.areaPhotoSrc = "";
         if (data && data.objectId) {
-            this.area = this.isSelectArea = data;
+            this.area = data;
             this.deviceGroupParams = {
                 areaId: data.objectId
             };
@@ -1777,17 +731,8 @@ export default class Site extends Vue {
     }
 
     selectedSite(data) {
-        this.initManagerItem();
-        this.initTagItem();
-        this.initOfficeHourItem();
-        this.initAreaNameItem();
         if (data && data.objectId) {
             this.site = data;
-            this.isSelectSite = data;
-            data.managerId = data.manager
-                ? data.manager.objectId
-                : data.manager;
-            data.establishment = new Date(data.establishment);
 
             this.areaParams = {
                 siteId: data.objectId
@@ -1795,6 +740,7 @@ export default class Site extends Vue {
             this.deviceGroupParams = {
                 siteId: data.objectId
             };
+            this.initAreaNameItem();
         } else {
             this.clearSiteData();
         }
@@ -1819,51 +765,9 @@ export default class Site extends Vue {
     }
 
     clearSiteData() {
-        this.isSelectSite = false;
         this.gooleMapSrc = "";
         this.newImgSrc = "";
         this.site = { latitude: 0, longitude: 0 };
-    }
-
-    showFirst(data): string {
-        if (data.length >= 2) {
-            return data.map(item => item)[0] + "...";
-        }
-        if (data.length === 1) {
-            return data.map(item => item)[0];
-        }
-        if (data.length == 0) {
-            return "";
-        }
-    }
-
-    showArea(data) {
-        let areas = [];
-        for (let area of this.areaAll) {
-            if (area.site.objectId == data) {
-                areas.push(area.name);
-            }
-        }
-
-        return this.showFirst(areas);
-    }
-
-    showDeviceGroup(data, type) {
-        let deviceGroups = [];
-        for (let devicegroup of this.deviceGroupAll) {
-            var mapId = "";
-            if (type == "site") {
-                mapId = devicegroup.site.objectId;
-            } else if (type == "area") {
-                mapId = devicegroup.area.objectId;
-            }
-
-            if (mapId == data) {
-                deviceGroups.push(devicegroup.name);
-            }
-        }
-
-        return this.showFirst(deviceGroups);
     }
 
     showDevices(datas) {
@@ -1898,333 +802,6 @@ export default class Site extends Vue {
             }
             return modalContext.slice(0, -1);
         }
-    }
-
-    showTags(datas) {
-        var tags = [];
-        for (let data of datas) {
-            if (this.tagItem.filter(m => m.id == data)[0]) {
-                tags.push(this.tagItem.filter(m => m.id == data)[0].text);
-            }
-        }
-        return tags.join(",");
-    }
-
-    showOfficeHour(data) {
-        return this.officeHourItem.filter(m => m.id == data)[0]
-            ? this.officeHourItem.filter(m => m.id == data)[0].text
-            : "";
-    }
-
-    showManager(data) {
-        return this.managerItem.filter(m => m.id == data)[0]
-            ? this.managerItem.filter(m => m.id == data)[0].text
-            : "";
-    }
-
-    showTime(data) {
-        return Datetime.DateTime2String(new Date(data), "YYYY-MM-DD");
-    }
-
-    ISiteList() {
-        return `interface {
-                /**
-                * @uiLabel - ${this._("w_Site_SiteID")}
-                */
-                customId: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_SiteName")}
-                */
-                name: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Address")}
-                */
-                address?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Establishment")}
-                */
-                establishment: any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Manager")}
-                */
-                manager: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_StaffNumber")}
-                */
-                staffNumber: number;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Area")}
-                */
-                areaName: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_DeviceGroup")}
-                */
-                deviceGroupName: string;
-
-                 /**
-                * @uiLabel -
-                */
-                Actions: any;
-
-            }`;
-    }
-
-    ISiteForm() {
-        return `interface {
-                /**
-                * @uiLabel - ${this._("w_Site_SiteID")}
-                * @uiPlaceHolder - ${this._("w_Site_SiteID")}
-                * @uiType - iv-form-string
-                */
-                customId: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_SiteName")}
-                * @uiPlaceHolder - ${this._("w_Site_SiteName")}
-                * @uiType - iv-form-string
-                */
-                name: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Address")}
-                * @uiPlaceHolder - ${this._("w_Site_Address")}
-                * @uiType - iv-form-string
-                */
-                address?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_PhoneNumber")}
-                * @uiPlaceHolder - ${this._("w_Site_PhoneNumber")}
-                * @uiType - iv-form-string
-                */
-                phone?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Establishment")}
-                * @uiPlaceHolder - ${this._("w_Site_Establishment")}
-                * @uiType - iv-form-date
-                */
-                establishment?: any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_StaffNumber")}
-                * @uiPlaceHolder - ${this._("w_Site_StaffNumber")}
-                * @uiType - iv-form-number
-                */
-                staffNumber: number;
-
-                /**
-                * @uiLabel - ${this._("w_Site_OfficeHour")}
-                * @uiPlaceHolder - ${this._("w_Site_OfficeHour")}
-                */
-                officeHour: any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Manager")}
-                * @uiPlaceHolder - ${this._("w_Site_Manager")}
-                */
-                managerId: any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Tag")}
-                * @uiPlaceHolder - ${this._("w_Site_Tag")}
-                */
-                tag: any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Photo")}
-                * @uiPlaceHolder - ${this._("w_Site_Photo")}
-                * @uiType - iv-form-file
-                */
-                sitePhoto: string;
-
-                imageSrc?:any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Latitude")}
-                * @uiPlaceHolder - ${this._("w_Site_Latitude")}
-                * @uiType - iv-form-number
-                * @uiColumnGroup - location
-                */
-                latitude?: number;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Longitude")}
-                * @uiPlaceHolder - ${this._("w_Site_Longitude")}
-                * @uiType - iv-form-number
-                * @uiColumnGroup - location
-                */
-                longitude?: number;
-
-                 /**
-                * @uiColumnGroup - btuuon
-                */
-                mapping?: any;
-
-                googleMap?:any;
-
-            }`;
-    }
-
-    ISiteView() {
-        return `interface {
-                /**
-                * @uiLabel - ${this._("w_Site_SiteID")}
-                 * @uiType - iv-form-label
-                */
-                customId?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_SiteName")}
-                * @uiType - iv-form-label
-                */
-                name?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Address")}
-                * @uiType - iv-form-label
-                */
-                address?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_PhoneNumber")}
-                * @uiType - iv-form-label
-                */
-                phone?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Establishment")}
-                */
-                establishment?: any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_StaffNumber")}
-                * @uiType - iv-form-label
-                */
-                staffNumber?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_OfficeHour")}
-               * @uiType - iv-form-label
-                */
-                officeHour?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Manager")}
-                * @uiType - iv-form-label
-                */
-                managerId?: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Tag")}
-                * @uiType - iv-form-label
-                */
-                tag?: string;
-
-                imageSrc:any;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Latitude")}
-                * @uiType - iv-form-label
-                * @uiColumnGroup - location
-                */
-                latitude?: number;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Longitude")}
-                * @uiType - iv-form-label
-                * @uiColumnGroup - location
-                */
-                longitude?: number;
-
-                googleMap:any;
-
-            }`;
-    }
-
-    IAreaList() {
-        return `interface {
-                 /**
-                 * @uiLabel - ${this._("w_No")}
-                 * @uiType - iv-cell-auto-index
-                 */
-                no: string;
-
-                 /**
-                 * @uiLabel - ${this._("w_Site_SiteName")}
-                 */
-                siteName: any;
-
-                 /**
-                 * @uiLabel - ${this._("w_Site_AreaName")}
-                 */
-                name: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_DeviceGroup")}
-                */
-                deviceGroupName: string;
-
-                Actions: any;
-            }`;
-    }
-
-    IAreaForm() {
-        return `interface {
-                 /**
-                 * @uiLabel - ${this._("w_Site_AreaName")}
-                 * @uiPlaceHolder - ${this._("w_Site_AreaName")}
-                 */
-                name: string;
-
-                /**
-                * @uiLabel - ${this._("w_Site_Photo")}
-                * @uiPlaceHolder - ${this._("w_Site_Photo")}
-                * @uiType - iv-form-file
-                */
-                areaPhoto: string;
-
-                imageSrc?:any;
-
-                 /**
-                * @uiLabel - ${this._("w_Site_MapPhoto")}
-                * @uiPlaceHolder - ${this._("w_Site_MapPhoto")}
-                * @uiType - iv-form-file
-                */
-                mapPhoto?: string;
-
-                imageMap?:any;
-            }`;
-    }
-
-    IAreaView() {
-        return `interface {
-
-                 /**
-                 * @uiLabel - ${this._("w_Site_SiteName")}
-                 * @uiType - iv-form-label
-                 */
-                siteName: any;
-
-                 /**
-                 * @uiLabel - ${this._("w_Site_AreaName")}
-                 * @uiType - iv-form-label
-                 */
-                name?: string;
-
-                imageSrc:any;
-
-                imageMap?:any;
-
-
-            }`;
     }
 
     IDeviceGroupList() {
@@ -2324,23 +901,6 @@ export default class Site extends Vue {
                 devices?: string;
 
             }`;
-    }
-
-    async uploadFile(file) {
-        if (file) {
-            ImageBase64.fileToBase64(file, (base64 = "") => {
-                if (base64 != "") {
-                    this.newImg = new Image();
-                    this.newImg.src = base64;
-                    this.newImg.onload = () => {
-                        this.newImgSrc = base64;
-                        return;
-                    };
-                } else {
-                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
-                }
-            });
-        }
     }
 
     isEmptyObject(obj) {
