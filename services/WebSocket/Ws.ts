@@ -76,10 +76,10 @@ export class Ws {
 
     public Close = (): void => {
         this._isClose = true;
-
-        (<WebSocket>this._websocket).close();
+        if (this._websocket != null) {
+            (<WebSocket>this._websocket).close();
+        }
         (<null>this._websocket) = null;
-
         // Print.Message('Ws', `${this.url} is close`, 'warning');
     };
 
