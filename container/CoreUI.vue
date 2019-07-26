@@ -282,74 +282,74 @@ export default class CoreUI extends Vue {
     }
 
     // WebSocket Alive
-    showLoadingSecond = 2000;
-    wsOpenStatus: boolean = false;
-    ws: Ws = new Ws({
-        url: "",
-        OnOpen: async (e: Event): Promise<void> => {
-            this.setWsOpenStatus(true);
-            console.log("WS Alive Open");
-        },
-        OnMessage: async (e: MessageEvent): Promise<void> => {
-            if (e.data.length > 0) {
-                this.handleWs(e.data);
-            }
-        },
-        OnError: async (e: Event): Promise<void> => {
-            this.setWsOpenStatus(false);
-            console.log("WS Alive Error");
-        },
-        OnClose: async (e: CloseEvent): Promise<void> => {
-            this.setWsOpenStatus(false);
-            console.log("WS Alive Colse");
-        }
-    });
+    // showLoadingSecond = 2000;
+    // wsOpenStatus: boolean = false;
+    // ws: Ws = new Ws({
+    //     url: "",
+    //     OnOpen: async (e: Event): Promise<void> => {
+    //         this.setWsOpenStatus(true);
+    //         console.log("WS Alive Open");
+    //     },
+    //     OnMessage: async (e: MessageEvent): Promise<void> => {
+    //         if (e.data.length > 0) {
+    //             this.handleWs(e.data);
+    //         }
+    //     },
+    //     OnError: async (e: Event): Promise<void> => {
+    //         this.setWsOpenStatus(false);
+    //         console.log("WS Alive Error");
+    //     },
+    //     OnClose: async (e: CloseEvent): Promise<void> => {
+    //         this.setWsOpenStatus(false);
+    //         console.log("WS Alive Colse");
+    //     }
+    // });
 
     mounted() {
         // this.initWS();
     }
 
     beforeDestroy() {
-        this.ws.Close();
+        // this.ws.Close();
     }
 
-    initWS() {
-        if (this.$user.sessionId != undefined) {
-            let url = `ws://${ServerConfig.host}:${ServerConfig.port}/server/alive?sessionId=${this.$user.sessionId}`;
-            this.ws.url = url;
-            this.ws.Connect();
-        } else {
-            setTimeout(this.initWS, this.showLoadingSecond);
-        }
-    }
+    // initWS() {
+    //     if (this.$user.sessionId != undefined) {
+    //         let url = `ws://${ServerConfig.host}:${ServerConfig.port}/server/alive?sessionId=${this.$user.sessionId}`;
+    //         this.ws.url = url;
+    //         this.ws.Connect();
+    //     } else {
+    //         setTimeout(this.initWS, this.showLoadingSecond);
+    //     }
+    // }
 
-    setWsOpenStatus(value: boolean) {
-        this.wsOpenStatus = value;
-        if (value) {
-            console.log("Loading hide");
-            Loading.hide();
-        } else {
-            setTimeout(this.setLoading, this.showLoadingSecond);
-        }
-    }
+    // setWsOpenStatus(value: boolean) {
+    //     this.wsOpenStatus = value;
+    //     if (value) {
+    //         console.log("Loading hide");
+    //         Loading.hide();
+    //     } else {
+    //         setTimeout(this.setLoading, this.showLoadingSecond);
+    //     }
+    // }
 
-    setLoading() {
-        if (!this.wsOpenStatus) {
-            Loading.show();
-        }
-    }
+    // setLoading() {
+    //     if (!this.wsOpenStatus) {
+    //         Loading.show();
+    //     }
+    // }
 
-    handleWs(wsData: string) {
-        Loading.hide();
-        try {
-            let data: any = JSON.parse(wsData);
-            if (data.statusCode != undefined && data.statusCode == 401) {
-                this.clickLogout();
-            }
-        } catch (e) {
-            console.log("WS handle error: ", e);
-        }
-    }
+    // handleWs(wsData: string) {
+    //     Loading.hide();
+    //     try {
+    //         let data: any = JSON.parse(wsData);
+    //         if (data.statusCode != undefined && data.statusCode == 401) {
+    //             this.clickLogout();
+    //         }
+    //     } catch (e) {
+    //         console.log("WS handle error: ", e);
+    //     }
+    // }
 }
 </script>
 
