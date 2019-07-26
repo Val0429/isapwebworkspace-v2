@@ -38,11 +38,8 @@ export default class Login extends Vue {
             .then(() => {
                 Loading.hide();
                 let userRole = '';
-                if (this.$user.roles != undefined && this.$user.roles[0] != undefined) {
-                    userRole = this.$user.roles[0];
-                }
-                if (this.$user.user != undefined && this.$user.user.roles[0] != undefined) {
-                    userRole = this.$user.user.roles[0];
+                if (this.$user.user != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
+                    userRole = this.$user.user.roles[0].name;
                 }
                 switch (userRole) {
                     case EUserRole.SuperAdministrator:

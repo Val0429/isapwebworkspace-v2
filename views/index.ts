@@ -26,7 +26,8 @@ import { RegisterRouter as $ } from '@/../core';
 // import DemoEncrypt from './Demos/DemoEncrypt.vue';
 
 // Guest
-import ForgotPassword from './Password/ForgotPassword.vue';
+import ForgotPassword from './Guest/ForgotPassword.vue';
+import Verify from './Guest/Verify.vue';
 
 // MyProfile
 import MyProfile from './MyProfile/MyProfile.vue';
@@ -93,6 +94,7 @@ $({ path: '/', name: 'Home', redirect: '/region' })();
 
 // Guest
 $({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(ForgotPassword);
+$({ path: '/verify', name: 'Verify', disableContainer: true, permission: false })(Verify);
 
 // MyProfile
 $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);

@@ -92,151 +92,151 @@
                 <!-- TODO: Waitting Login API -->
                 <!-- <iv-permission :allow="['SuperAdministrator', 'Admin']"> -->
 
-                    <!-- Users -->
+                <!-- Users -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Users')"
+                    url="/users"
+                >
                     <SidebarNavItem
-                        :label="_('w_Navigation_Users')"
-                        url="/users"
-                    >
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Users_User')"
-                            url="/users/user"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Users_UserGroup')"
-                            url="/users/user_group"
-                        />
-                    </SidebarNavItem>
+                        :label="_('w_Navigation_Users_User')"
+                        url="/users/user"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Users_UserGroup')"
+                        url="/users/user_group"
+                    />
+                </SidebarNavItem>
 
-                    <!-- Site -->
+                <!-- Site -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Site')"
+                    url="/site"
+                />
+
+                <!-- Region -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Region')"
+                    url="/region"
+                />
+
+                <!-- Server -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Server')"
+                    url="/server"
+                >
                     <SidebarNavItem
-                        :label="_('w_Navigation_Site')"
-                        url="/site"
+                        :label="_('w_Navigation_Server_CMSServer')"
+                        url="/server/cms_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_FRSServer')"
+                        url="/server/frs_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_FRSManagerServer')"
+                        url="/server/frs_manager_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_DemographicServer')"
+                        url="/server/demographic_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Server_HDServer')"
+                        url="/server/hd_server"
                     />
 
-                    <!-- Region -->
+                </SidebarNavItem>
+
+                <!-- Video Source -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_VideoSources')"
+                    url="/video_sources"
+                >
                     <SidebarNavItem
-                        :label="_('w_Navigation_Region')"
-                        url="/region"
+                        :label="_('w_Navigation_VideoSources_PeopleCounting')"
+                        url="/video_sources/people_counting"
                     />
-
-                    <!-- Server -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_Server')"
-                        url="/server"
-                    >
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Server_CMSServer')"
-                            url="/server/cms_server"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Server_FRSServer')"
-                            url="/server/frs_server"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Server_FRSManagerServer')"
-                            url="/server/frs_manager_server"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Server_DemographicServer')"
-                            url="/server/demographic_server"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Server_HDServer')"
-                            url="/server/hd_server"
-                        />
-
-                    </SidebarNavItem>
-
-                    <!-- Video Source -->
-                    <SidebarNavItem
-                        :label="_('w_Navigation_VideoSources')"
-                        url="/video_sources"
-                    >
-                        <SidebarNavItem
-                            :label="_('w_Navigation_VideoSources_PeopleCounting')"
-                            url="/video_sources/people_counting"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_VideoSources_Demographic')"
-                            url="/video_sources/demographic"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_VideoSources_DwellTime')"
-                            url="/video_sources/dwell_time"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_VideoSources_HumanDetection')"
-                            url="/video_sources/human_detection"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_VideoSources_Heatmap')"
-                            url="/video_sources/heatmap"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_VideoSources_FaceRecognition')"
-                            url="/video_sources/face_recognition"
-                        />
-                    </SidebarNavItem>
-
-                    <!-- Rules and Action -->
-                    <SidebarNavItem
-                        :label="_('w_Navigation_RulesActions')"
-                        url="/rules_actions"
+                        :label="_('w_Navigation_VideoSources_Demographic')"
+                        url="/video_sources/demographic"
                     />
-
-                    <!-- Business Operation -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_BusinessOperation')"
-                        url="/business_operations"
-                    >
-                        <SidebarNavItem
-                            :label="_('w_Navigation_BO_CampaignSetting')"
-                            url="/business_operations/campaign_setting"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_BO_SalesRecords')"
-                            url="/business_operations/sales_records"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_BO_GeneralOfficeHour')"
-                            url="/business_operations/general_office_hour"
-                        />
-                    </SidebarNavItem>
-
-                    <!-- Setting -->
+                        :label="_('w_Navigation_VideoSources_DwellTime')"
+                        url="/video_sources/dwell_time"
+                    />
                     <SidebarNavItem
-                        :label="_('w_Navigation_Setting')"
-                        url="/setting"
-                    >
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setting_MailServer')"
-                            url="/setting/mail_server"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setting_SMS')"
-                            url="/setting/sms"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setting_Weather')"
-                            url="/setting/weather"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setting_Backup')"
-                            url="/setting/backup"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setting_Restore')"
-                            url="/setting/restore"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setting_License')"
-                            url="/setting/license"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setting_Tag')"
-                            url="/setting/tag"
-                        />
-                    </SidebarNavItem>
+                        :label="_('w_Navigation_VideoSources_HumanDetection')"
+                        url="/video_sources/human_detection"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_Heatmap')"
+                        url="/video_sources/heatmap"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_VideoSources_FaceRecognition')"
+                        url="/video_sources/face_recognition"
+                    />
+                </SidebarNavItem>
+
+                <!-- Rules and Action -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_RulesActions')"
+                    url="/rules_actions"
+                />
+
+                <!-- Business Operation -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_BusinessOperation')"
+                    url="/business_operations"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_BO_CampaignSetting')"
+                        url="/business_operations/campaign_setting"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_BO_SalesRecords')"
+                        url="/business_operations/sales_records"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_BO_GeneralOfficeHour')"
+                        url="/business_operations/general_office_hour"
+                    />
+                </SidebarNavItem>
+
+                <!-- Setting -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Setting')"
+                    url="/setting"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_MailServer')"
+                        url="/setting/mail_server"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_SMS')"
+                        url="/setting/sms"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Weather')"
+                        url="/setting/weather"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Backup')"
+                        url="/setting/backup"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Restore')"
+                        url="/setting/restore"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_License')"
+                        url="/setting/license"
+                    />
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setting_Tag')"
+                        url="/setting/tag"
+                    />
+                </SidebarNavItem>
 
                 <!-- TODO: Waitting Login API -->
                 <!-- </iv-permission> -->
@@ -258,6 +258,10 @@ import {
     SidebarNavItem
 } from "@/../containers/CoreUI";
 
+import { Ws } from "@/services/WebSocket/Ws";
+import ServerConfig from "@/services/ServerConfig";
+import Loading from "@/services/Loading";
+
 @Component({
     components: {
         CoreUIBase,
@@ -269,8 +273,8 @@ import {
     }
 })
 export default class CoreUI extends Vue {
+    // Logout
     logoutPath = "/user/base/logout";
-
     clickLogout() {
         try {
             this.$logout(this.logoutPath);
@@ -278,6 +282,76 @@ export default class CoreUI extends Vue {
             console.log(e);
         } finally {
             this.$router.push("/login");
+        }
+    }
+
+    // WebSocket Alive
+    showLoadingSecond = 2000;
+    wsOpenStatus: boolean = false;
+    ws: Ws = new Ws({
+        url: "",
+        OnOpen: async (e: Event): Promise<void> => {
+            this.setWsOpenStatus(true);
+            console.log("WS Alive Open");
+        },
+        OnMessage: async (e: MessageEvent): Promise<void> => {
+            if (e.data.length > 0) {
+                this.handleWs(e.data);
+            }
+        },
+        OnError: async (e: Event): Promise<void> => {
+            this.setWsOpenStatus(false);
+            console.log("WS Alive Error");
+        },
+        OnClose: async (e: CloseEvent): Promise<void> => {
+            this.setWsOpenStatus(false);
+            console.log("WS Alive Colse");
+        }
+    });
+
+    mounted() {
+        this.initWS();
+    }
+
+    beforeDestroy() {
+        this.ws.Close();
+    }
+
+    initWS() {
+        if (this.$user.sessionId != undefined) {
+            let url = `ws://${ServerConfig.host}:${ServerConfig.port}/server/alive?sessionId=${this.$user.sessionId}`;
+            this.ws.url = url;
+            this.ws.Connect();
+        } else {
+            setTimeout(this.initWS, this.showLoadingSecond);
+        }
+    }
+
+    setWsOpenStatus(value: boolean) {
+        this.wsOpenStatus = value;
+        if (value) {
+            console.log("Loading hide");
+            Loading.hide();
+        } else {
+            setTimeout(this.setLoading, this.showLoadingSecond);
+        }
+    }
+
+    setLoading() {
+        if (!this.wsOpenStatus) {
+            Loading.show();
+        }
+    }
+
+    handleWs(wsData: string) {
+        Loading.hide();
+        try {
+            let data: any = JSON.parse(wsData);
+            if (data.statusCode != undefined && data.statusCode == 401) {
+                this.clickLogout();
+            }
+        } catch (e) {
+            console.log("WS handle error: ", e);
         }
     }
 }
