@@ -1052,7 +1052,7 @@ export default class Site extends Vue {
             imageMapRef.start();
         }
 
-        //TODO 可能用不到，先註解。
+        // TODO: 可能用不到，先註解。
         // this.updateCheckboxControllers();
     }
 
