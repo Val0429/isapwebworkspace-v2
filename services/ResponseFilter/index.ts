@@ -23,17 +23,26 @@ export class ResponseFilter {
             callback(response);
         }
 
+        // not array
+        if (response.length == undefined) {
+            callback(response);
+        }
+
         // response undefined
         if (response == undefined) {
             Dialog.error(viewItem._('w_ErrorResponseUndefined'));
             return false;
         }
 
+        // TODO: watting new api, set array in response.datas
         // response.data undefined, not multiple response
-        if (response.datas == undefined) {
-            callback(response);
-            return false;
-        }
+        // if (response.datas == undefined) {
+        //     callback(response);
+        //     return false;
+        // }
+        // let responseDatas = response.datas;
+
+        let responseDatas = response;
 
         // check response data for multiple response
         for (let data of response.datas) {
