@@ -416,7 +416,7 @@ export class FilterConditionHeatMap extends Vue {
             startDate: Date;
             endDate: Date;
             firstSiteId?: string;
-            siteIds: string;
+            siteId: string;
             // tagIds: string[];
             type: ETimeMode;
         } = {
@@ -424,7 +424,7 @@ export class FilterConditionHeatMap extends Vue {
             endDate: Datetime.DateToZero(new Date()),
             type: ETimeMode.none,
             firstSiteId: "",
-            siteIds: this.inputFormData.siteIds
+            siteId: this.inputFormData.siteIds
             // tagIds:this.inputFormData.tagIds === [] ? [] : this.inputFormData.tagIds,
         };
 
@@ -435,7 +435,7 @@ export class FilterConditionHeatMap extends Vue {
             return false;
         }
 
-        doSubmitParam.siteIds = this.inputFormData.siteIds;
+        doSubmitParam.siteId = this.inputFormData.siteIds;
         doSubmitParam.firstSiteId = this.inputFormData.siteIds;
 
         // 選擇 period

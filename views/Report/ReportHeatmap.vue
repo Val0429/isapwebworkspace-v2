@@ -39,7 +39,7 @@
                 :deviceGroupSelectItem="deviceGroupSelectItem"
                 :deviceSelectItem="deviceSelectItem"
                 :isIncludedEmployeeSelectItem="isIncludedEmployeeSelectItem"
-                :siteIds="filterData.siteIds"
+                :siteIds="filterData.siteId"
                 :areaId="inputFormData.areaId"
                 :groupId="inputFormData.groupId"
                 :deviceId="inputFormData.deviceId"
@@ -126,6 +126,7 @@ import ReportService from "@/components/Reports/models/ReportService";
 import WeatherService from "@/components/Reports/models/WeatherService";
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import Loading from "@/services/Loading";
+import ServerConfig from "@/services/ServerConfig";
 
 // Export
 import toExcel from "@/services/Excel/json2excel";
@@ -770,23 +771,27 @@ export default class ReportHeatmap extends Vue {
     initHourArray() {
         let weekDay = new Date().getDay();
 
-        const dayRanges = [
-            {
-                startDay: "1",
-                endDay: "5",
-                startDate: "2000-01-01T01:00:00.000Z",
-                endDate: "2000-01-01T09:00:00.000Z"
-            },
-            {
-                startDay: "6",
-                endDay: "0",
-                startDate: "2000-01-01T00:00:00.000Z",
-                endDate: "2000-01-01T14:00:00.000Z"
-            }
-        ];
+        let dayRanges = [];
+
+        for (const officeHour of this.officeHourItemDetail) {
+            dayRanges = officeHour.dayRanges;
+        }
+        // const dayRanges = [
+        //     {
+        //         startDay: "1",
+        //         endDay: "5",
+        //         startDate: "2000-01-01T01:00:00.000Z",
+        //         endDate: "2000-01-01T09:00:00.000Z"
+        //     },
+        //     {
+        //         startDay: "6",
+        //         endDay: "0",
+        //         startDate: "2000-01-01T00:00:00.000Z",
+        //         endDate: "2000-01-01T14:00:00.000Z"
+        //     }
+        // ];
 
         let result = HighchartsService.siteOfficeHour(weekDay, dayRanges);
-        console.log(result);
 
         this.slider = {
             value: 0,
@@ -805,9 +810,6 @@ export default class ReportHeatmap extends Vue {
             tempDataArray.push(i);
         }
 
-        console.log("tempDataArray - ", tempDataArray);
-        console.log("tempRangeArray - ", tempRangeArray);
-
         this.slider = {
             value: result.startHour,
             data: tempDataArray,
@@ -816,613 +818,11 @@ export default class ReportHeatmap extends Vue {
     }
 
     initDayArray() {
-        const summaryDatas = [
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "8CVfWZLlPD",
-                        name: "1F peopleCounting STU48區"
-                    }
-                ],
-                device: {
-                    objectId: "RiZtGia7MQ",
-                    name: "台北 1F 80L_1-out"
-                },
-                date: "2019-06-30T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 2,
-                prevOut: 61,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "73iC8Xtl1t",
-                        name: "2F peopleCounting 女裝區"
-                    }
-                ],
-                device: {
-                    objectId: "iYJLYUjHWF",
-                    name: "台北 2F 80L_1-out"
-                },
-                date: "2019-06-30T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 2,
-                prevOut: 61,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "jzthfNUGky",
-                        name: "2F peopleCounting 童裝區"
-                    }
-                ],
-                device: {
-                    objectId: "bWBAWOHIn1",
-                    name: "台北 2F 80L_1-in"
-                },
-                date: "2019-06-30T16:00:00.000Z",
-                type: "day",
-                in: 1,
-                prevIn: 62,
-                out: 0,
-                prevOut: 0,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "sfs8VJbvFE",
-                        name: "1F peopleCounting HKT48區"
-                    }
-                ],
-                device: {
-                    objectId: "bZpj6O9hW1",
-                    name: "台北 1F 80L_1-in"
-                },
-                date: "2019-06-30T16:00:00.000Z",
-                type: "day",
-                in: 1,
-                prevIn: 62,
-                out: 0,
-                prevOut: 0,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "8CVfWZLlPD",
-                        name: "1F peopleCounting STU48區"
-                    }
-                ],
-                device: {
-                    objectId: "RiZtGia7MQ",
-                    name: "台北 1F 80L_1-out"
-                },
-                date: "2019-07-01T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 50,
-                prevOut: 82,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "73iC8Xtl1t",
-                        name: "2F peopleCounting 女裝區"
-                    }
-                ],
-                device: {
-                    objectId: "iYJLYUjHWF",
-                    name: "台北 2F 80L_1-out"
-                },
-                date: "2019-07-01T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 50,
-                prevOut: 82,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "jzthfNUGky",
-                        name: "2F peopleCounting 童裝區"
-                    }
-                ],
-                device: {
-                    objectId: "bWBAWOHIn1",
-                    name: "台北 2F 80L_1-in"
-                },
-                date: "2019-07-01T16:00:00.000Z",
-                type: "day",
-                in: 21,
-                prevIn: 70,
-                out: 0,
-                prevOut: 0,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "sfs8VJbvFE",
-                        name: "1F peopleCounting HKT48區"
-                    }
-                ],
-                device: {
-                    objectId: "bZpj6O9hW1",
-                    name: "台北 1F 80L_1-in"
-                },
-                date: "2019-07-01T16:00:00.000Z",
-                type: "day",
-                in: 21,
-                prevIn: 70,
-                out: 0,
-                prevOut: 0,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "jzthfNUGky",
-                        name: "2F peopleCounting 童裝區"
-                    }
-                ],
-                device: {
-                    objectId: "bWBAWOHIn1",
-                    name: "台北 2F 80L_1-in"
-                },
-                date: "2019-07-02T16:00:00.000Z",
-                type: "day",
-                in: 60,
-                prevIn: 86,
-                out: 0,
-                prevOut: 0,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "sfs8VJbvFE",
-                        name: "1F peopleCounting HKT48區"
-                    }
-                ],
-                device: {
-                    objectId: "bZpj6O9hW1",
-                    name: "台北 1F 80L_1-in"
-                },
-                date: "2019-07-02T16:00:00.000Z",
-                type: "day",
-                in: 60,
-                prevIn: 86,
-                out: 0,
-                prevOut: 0,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "8CVfWZLlPD",
-                        name: "1F peopleCounting STU48區"
-                    }
-                ],
-                device: {
-                    objectId: "RiZtGia7MQ",
-                    name: "台北 1F 80L_1-out"
-                },
-                date: "2019-07-02T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 85,
-                prevOut: 82,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "73iC8Xtl1t",
-                        name: "2F peopleCounting 女裝區"
-                    }
-                ],
-                device: {
-                    objectId: "iYJLYUjHWF",
-                    name: "台北 2F 80L_1-out"
-                },
-                date: "2019-07-02T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 85,
-                prevOut: 82,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "8CVfWZLlPD",
-                        name: "1F peopleCounting STU48區"
-                    }
-                ],
-                device: {
-                    objectId: "RiZtGia7MQ",
-                    name: "台北 1F 80L_1-out"
-                },
-                date: "2019-07-03T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 56,
-                prevOut: 2,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "73iC8Xtl1t",
-                        name: "2F peopleCounting 女裝區"
-                    }
-                ],
-                device: {
-                    objectId: "iYJLYUjHWF",
-                    name: "台北 2F 80L_1-out"
-                },
-                date: "2019-07-03T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: 0,
-                out: 56,
-                prevOut: 2,
-                inEmployee: 0,
-                prevInEmployee: 0,
-                outEmployee: 0,
-                prevOutEmployee: 0
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "jzthfNUGky",
-                        name: "2F peopleCounting 童裝區"
-                    }
-                ],
-                device: {
-                    objectId: "bWBAWOHIn1",
-                    name: "台北 2F 80L_1-in"
-                },
-                date: "2019-07-03T16:00:00.000Z",
-                type: "day",
-                in: 38,
-                prevIn: null,
-                out: 0,
-                prevOut: null,
-                inEmployee: 0,
-                prevInEmployee: null,
-                outEmployee: 0,
-                prevOutEmployee: null
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "sfs8VJbvFE",
-                        name: "1F peopleCounting HKT48區"
-                    }
-                ],
-                device: {
-                    objectId: "bZpj6O9hW1",
-                    name: "台北 1F 80L_1-in"
-                },
-                date: "2019-07-03T16:00:00.000Z",
-                type: "day",
-                in: 38,
-                prevIn: null,
-                out: 0,
-                prevOut: null,
-                inEmployee: 0,
-                prevInEmployee: null,
-                outEmployee: 0,
-                prevOutEmployee: null
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "jzthfNUGky",
-                        name: "2F peopleCounting 童裝區"
-                    }
-                ],
-                device: {
-                    objectId: "bWBAWOHIn1",
-                    name: "台北 2F 80L_1-in"
-                },
-                date: "2019-07-04T16:00:00.000Z",
-                type: "day",
-                in: 37,
-                prevIn: null,
-                out: 0,
-                prevOut: null,
-                inEmployee: 0,
-                prevInEmployee: null,
-                outEmployee: 0,
-                prevOutEmployee: null
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "sfs8VJbvFE",
-                        name: "1F peopleCounting HKT48區"
-                    }
-                ],
-                device: {
-                    objectId: "bZpj6O9hW1",
-                    name: "台北 1F 80L_1-in"
-                },
-                date: "2019-07-04T16:00:00.000Z",
-                type: "day",
-                in: 37,
-                prevIn: null,
-                out: 0,
-                prevOut: null,
-                inEmployee: 0,
-                prevInEmployee: null,
-                outEmployee: 0,
-                prevOutEmployee: null
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "1zK9b3J0Nq",
-                    name: "1F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "8CVfWZLlPD",
-                        name: "1F peopleCounting STU48區"
-                    }
-                ],
-                device: {
-                    objectId: "RiZtGia7MQ",
-                    name: "台北 1F 80L_1-out"
-                },
-                date: "2019-07-04T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: null,
-                out: 46,
-                prevOut: null,
-                inEmployee: 0,
-                prevInEmployee: null,
-                outEmployee: 0,
-                prevOutEmployee: null
-            },
-            {
-                site: {
-                    objectId: "iVTCTzctbF",
-                    name: "台北店"
-                },
-                area: {
-                    objectId: "pfLGgj8Hf5",
-                    name: "2F"
-                },
-                deviceGroups: [
-                    {
-                        objectId: "73iC8Xtl1t",
-                        name: "2F peopleCounting 女裝區"
-                    }
-                ],
-                device: {
-                    objectId: "iYJLYUjHWF",
-                    name: "台北 2F 80L_1-out"
-                },
-                date: "2019-07-04T16:00:00.000Z",
-                type: "day",
-                in: 0,
-                prevIn: null,
-                out: 46,
-                prevOut: null,
-                inEmployee: 0,
-                prevInEmployee: null,
-                outEmployee: 0,
-                prevOutEmployee: null
-            }
-        ];
 
         let tempDayArray = [];
 
-        if (summaryDatas.length > 0) {
-            summaryDatas.map(item => {
+        if (this.responseData.summaryDatas.length > 0) {
+            this.responseData.summaryDatas.map(item => {
                 tempDayArray.push(item.date);
             });
         } else {
@@ -1432,12 +832,6 @@ export default class ReportHeatmap extends Vue {
         // 去掉重複的值
         this.dayArray = [...new Set(tempDayArray)];
 
-        // this.dayArray = [
-        //     "2019-07-01T16:00:00.000Z",
-        //     "2019-07-02T16:00:00.000Z",
-        //     "2019-07-03T16:00:00.000Z",
-        //     "2019-07-04T16:00:00.000Z"
-        // ];
     }
 
     async receiveUserData(data) {
@@ -1469,40 +863,39 @@ export default class ReportHeatmap extends Vue {
             isIncludedEmployee: "no"
         };
 
-        if (
-            this.checkDateTheSameDay(
-                this.filterData.startDate,
-                this.filterData.endDate
-            )
-        ) {
-            this.initHourArray();
-        } else {
-            this.initDayArray();
-        }
+        await this.$server
+            .C("/report/heatmap/summary", param)
+            .then((response: any) => {
+                if (response !== undefined) {
+                    this.responseData = response;
+                    this.officeHourItemDetail = this.responseData.officeHours;
+                    this.resolveSummary();
+                    if (
+                        this.checkDateTheSameDay(
+                            this.filterData.startDate,
+                            this.filterData.endDate
+                        )
+                    ) {
+                        this.initHourArray();
+                    } else {
+                        this.initDayArray();
+                    }
+                    this.firstSortOutChartData(this.responseData.summaryDatas);
 
-        // await this.$server
-        //     .C("/report/demographic/summary", param)
-        //     .then((response: any) => {
-        //         if (response !== undefined) {
-        //             this.responseData = response;
-        //             this.officeHourItemDetail = this.responseData.officeHours;
-        //             this.resolveSummary();
-        //         }
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+                }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
 
         // Ben  //TODO for test and delete it when have api
-        this.initHeatmap();
+        // this.initHeatmap();
     }
 
     resolveSummary() {
-        if (this.filterData.siteIds.length === 1) {
             this.initSelectItemArea();
             this.initSelectItemDeviceGroup();
             this.initSelectItemDevice();
-        }
 
         this.inputFormData = {
             areaId: "all",
@@ -1511,47 +904,6 @@ export default class ReportHeatmap extends Vue {
             type: this.filterData.type,
             isIncludedEmployee: "no"
         };
-
-        // get office hour data
-        let tempISite: any = {};
-        this.sites = [];
-
-        for (const filterSiteId of this.filterData.siteIds) {
-            for (const detail of this.officeHourItemDetail) {
-                for (const officeHourSiteId of detail.sites) {
-                    if (this.filterData.siteIds === officeHourSiteId.objectId) {
-                        let tempOfficeHours = [];
-                        for (const dayRangesValue of detail.dayRanges) {
-                            let tempOfficeHour: any = {};
-                            tempOfficeHour = {
-                                startDay: dayRangesValue.startDay,
-                                endDay: dayRangesValue.endDay,
-                                startDate: dayRangesValue.startDate,
-                                endDate: dayRangesValue.endDate
-                            };
-                            tempOfficeHours.push(tempOfficeHour);
-                        }
-                        tempISite = {
-                            objectId: officeHourSiteId.objectId,
-                            name: officeHourSiteId.name,
-                            officeHour: tempOfficeHours
-                        };
-                        this.sites.push(tempISite);
-                        break;
-                    }
-                }
-            }
-        }
-
-        // this.sites.push(tempISite);
-        this.dTimeMode = this.filterData.type;
-        this.pSiteIds = this.filterData.siteIds;
-        this.tags = this.filterData.tagIds;
-        this.startDate = new Date(this.filterData.startDate);
-        this.endDate = new Date(this.filterData.endDate);
-        this.timeMode = this.filterData.type;
-        this.areaMode = EAreaMode.all;
-        this.sortOutChartData(this.responseData.summaryDatas);
 
         // Ben
         this.initHeatmap();
@@ -1589,402 +941,76 @@ export default class ReportHeatmap extends Vue {
         );
     }
 
+    checkDateTheSameHour(selectDate: string, apiDate: string) {
+
+        const selectedDate = Datetime.DateTime2String(new Date(selectDate), 'HH');
+        const fromApiDate = Datetime.DateTime2String(new Date(apiDate), 'HH');
+
+        return (
+            Datetime.DateToZero(new Date(selectedDate)).getTime() ===
+            Datetime.DateToZero(new Date(fromApiDate)).getTime()
+        );
+    }
+
+    firstSortOutChartData(datas: any) {
+
+        let heatmap: IHeatMapPosition[] = [];
+        this.heatMapPosition = [];
+
+        let gridUnit = 10;
+        let valueZoom = 10;
+
+        // for (const summary of datas) {
+            if(datas[0].scores.length > 0) {
+                let heatmaps = datas[0].scores.map((value, index, array) => {
+                    return value.map((value1, index1, array1) => {
+                        return {
+                            x: index1 * gridUnit + gridUnit / 2,
+                            y: index * gridUnit + gridUnit / 2,
+                            value: value1 * valueZoom,
+                        };
+                    });
+                });
+                heatmap = [].concat(...heatmaps);
+            }
+            this.mapImage.src = datas[0];
+
+
+        this.heatMapPosition = heatmap;
+        this.mapImage.src = ServerConfig.url + datas[0].imageSrc;
+        console.log('this.heatMapPosition ~ ', this.heatMapPosition)
+    }
+
     sortOutChartData(datas: any) {
-        let tempChartDatas: IChartDemographicData[] = [];
-        let isOneDay = false;
-        this.chartDatas = [];
 
-        // 取得date、siteObjectId資料
-        if (
-            Datetime.IsOneDate(
-                this.filterData.startDate,
-                this.filterData.endDate
-            )
-        ) {
-            isOneDay = true;
+        let heatmap: IHeatMapPosition[] = [];
+        this.heatMapPosition = [];
 
-            // one day
-            for (let i = 0; i < 24; i++) {
-                let tempDate = Datetime.DateToZero(this.filterData.startDate);
-                tempDate.setHours(i);
-                let tempDateChartDataLower20 = {
-                    date: tempDate,
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.lower20,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM21_30 = {
-                    date: tempDate,
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m21_30,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM31_40 = {
-                    date: tempDate,
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m31_40,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM41_50 = {
-                    date: tempDate,
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m41_50,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM51_60 = {
-                    date: tempDate,
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m51_60,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataUpper61 = {
-                    date: tempDate,
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.upper61,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
+        let gridUnit = 10;
+        let valueZoom = 10;
 
-                for (let siteId of this.filterData.siteIds) {
-                    let tempSiteChartDataLower20 = JSON.parse(
-                        JSON.stringify(tempDateChartDataLower20)
-                    );
-                    tempSiteChartDataLower20.date = new Date(
-                        tempSiteChartDataLower20.date
-                    );
-                    tempSiteChartDataLower20.siteObjectId = siteId;
+        for (const summary of datas) {
 
-                    let tempSiteChartDataM21_30 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM21_30)
-                    );
-                    tempSiteChartDataM21_30.date = new Date(
-                        tempSiteChartDataM21_30.date
-                    );
-                    tempSiteChartDataM21_30.siteObjectId = siteId;
-
-                    let tempSiteChartDataM31_40 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM31_40)
-                    );
-                    tempSiteChartDataM31_40.date = new Date(
-                        tempSiteChartDataM31_40.date
-                    );
-                    tempSiteChartDataM31_40.siteObjectId = siteId;
-
-                    let tempSiteChartDataM41_50 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM41_50)
-                    );
-                    tempSiteChartDataM41_50.date = new Date(
-                        tempSiteChartDataM41_50.date
-                    );
-                    tempSiteChartDataM41_50.siteObjectId = siteId;
-
-                    let tempSiteChartDataM51_60 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM51_60)
-                    );
-                    tempSiteChartDataM51_60.date = new Date(
-                        tempSiteChartDataM51_60.date
-                    );
-                    tempSiteChartDataM51_60.siteObjectId = siteId;
-
-                    let tempSiteChartDataUpper61 = JSON.parse(
-                        JSON.stringify(tempDateChartDataUpper61)
-                    );
-                    tempSiteChartDataUpper61.date = new Date(
-                        tempSiteChartDataUpper61.date
-                    );
-                    tempSiteChartDataUpper61.siteObjectId = siteId;
-
-                    tempChartDatas.push(
-                        tempSiteChartDataLower20,
-                        tempSiteChartDataM21_30,
-                        tempSiteChartDataM31_40,
-                        tempSiteChartDataM41_50,
-                        tempSiteChartDataM51_60,
-                        tempSiteChartDataUpper61
-                    );
+            // TODO: 建德兄
+            // if (this.checkDateTheSameHour(this.hour, summary.date) && this.inputFormData.deviceId === summary.device.objectId) {
+                if(summary.scores.length > 0) {
+                    let heatmaps = summary.scores.map((value, index, array) => {
+                        return value.map((value1, index1, array1) => {
+                            return {
+                                x: index1 * gridUnit + gridUnit / 2,
+                                y: index * gridUnit + gridUnit / 2,
+                                value: value1 * valueZoom,
+                            };
+                        });
+                    });
+                    heatmap = [].concat(...heatmaps);
                 }
-            }
-        } else {
-            // multiple days
-            let dateList = Datetime.DateList(
-                this.filterData.startDate,
-                this.filterData.endDate
-            );
-
-            for (let dateItem of dateList) {
-                let tempDateChartDataLower20 = {
-                    date: new Date(dateItem.getTime()),
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.lower20,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM21_30 = {
-                    date: new Date(dateItem.getTime()),
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m21_30,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM31_40 = {
-                    date: new Date(dateItem.getTime()),
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m31_40,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM41_50 = {
-                    date: new Date(dateItem.getTime()),
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m41_50,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataM51_60 = {
-                    date: new Date(dateItem.getTime()),
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.m51_60,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-                let tempDateChartDataUpper61 = {
-                    date: new Date(dateItem.getTime()),
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.upper61,
-                    maleCount: 0,
-                    femaleCount: 0
-                };
-
-                for (let siteId of this.filterData.siteIds) {
-                    let tempSiteChartDataLower20 = JSON.parse(
-                        JSON.stringify(tempDateChartDataLower20)
-                    );
-                    tempSiteChartDataLower20.date = new Date(
-                        tempSiteChartDataLower20.date
-                    );
-                    tempSiteChartDataLower20.siteObjectId = siteId;
-
-                    let tempSiteChartDataM21_30 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM21_30)
-                    );
-                    tempSiteChartDataM21_30.date = new Date(
-                        tempSiteChartDataM21_30.date
-                    );
-                    tempSiteChartDataM21_30.siteObjectId = siteId;
-
-                    let tempSiteChartDataM31_40 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM31_40)
-                    );
-                    tempSiteChartDataM31_40.date = new Date(
-                        tempSiteChartDataM31_40.date
-                    );
-                    tempSiteChartDataM31_40.siteObjectId = siteId;
-
-                    let tempSiteChartDataM41_50 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM41_50)
-                    );
-                    tempSiteChartDataM41_50.date = new Date(
-                        tempSiteChartDataM41_50.date
-                    );
-                    tempSiteChartDataM41_50.siteObjectId = siteId;
-
-                    let tempSiteChartDataM51_60 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM51_60)
-                    );
-                    tempSiteChartDataM51_60.date = new Date(
-                        tempSiteChartDataM51_60.date
-                    );
-                    tempSiteChartDataM51_60.siteObjectId = siteId;
-
-                    let tempSiteChartDataUpper61 = JSON.parse(
-                        JSON.stringify(tempDateChartDataUpper61)
-                    );
-                    tempSiteChartDataUpper61.date = new Date(
-                        tempSiteChartDataUpper61.date
-                    );
-                    tempSiteChartDataUpper61.siteObjectId = siteId;
-
-                    tempChartDatas.push(
-                        tempSiteChartDataLower20,
-                        tempSiteChartDataM21_30,
-                        tempSiteChartDataM31_40,
-                        tempSiteChartDataM41_50,
-                        tempSiteChartDataM51_60,
-                        tempSiteChartDataUpper61
-                    );
-                }
-            }
+                this.mapImage.src = ServerConfig.url + summary.imageSrc
+            // }
         }
 
-        for (let tempChartData of tempChartDatas) {
-            let tempDateFormat = isOneDay
-                ? Datetime.DateTime2String(
-                      tempChartData.date,
-                      ReportService.datetimeFormat.hour
-                  )
-                : Datetime.DateTime2String(
-                      tempChartData.date,
-                      ReportService.datetimeFormat.date
-                  );
-
-            // 計算 maleCount、femaleCount
-            for (let summary of datas) {
-                let summaryDateFormat = isOneDay
-                    ? Datetime.DateTime2String(
-                          new Date(summary.date),
-                          ReportService.datetimeFormat.hour
-                      )
-                    : Datetime.DateTime2String(
-                          new Date(summary.date),
-                          ReportService.datetimeFormat.date
-                      );
-
-                if (
-                    summaryDateFormat == tempDateFormat &&
-                    summary.site.objectId == tempChartData.siteObjectId
-                ) {
-                    let ageRangeIndex = 0;
-                    switch (tempChartData.ageRange) {
-                        case EAgeRange.lower20:
-                            ageRangeIndex = 0;
-                            break;
-                        case EAgeRange.m21_30:
-                            ageRangeIndex = 1;
-                            break;
-                        case EAgeRange.m31_40:
-                            ageRangeIndex = 2;
-                            break;
-                        case EAgeRange.m41_50:
-                            ageRangeIndex = 3;
-                            break;
-                        case EAgeRange.m51_60:
-                            ageRangeIndex = 4;
-                            break;
-                        case EAgeRange.upper61:
-                            ageRangeIndex = 5;
-                            break;
-                    }
-
-                    summary.maleRanges[ageRangeIndex] =
-                        summary.maleRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.maleRanges[ageRangeIndex];
-                    summary.femaleRanges[ageRangeIndex] =
-                        summary.femaleRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.femaleRanges[ageRangeIndex];
-                    summary.maleEmployeeRanges[ageRangeIndex] =
-                        summary.maleEmployeeRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.maleEmployeeRanges[ageRangeIndex];
-                    summary.femaleEmployeeRanges[ageRangeIndex] =
-                        summary.femaleEmployeeRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.femaleEmployeeRanges[ageRangeIndex];
-
-                    tempChartData.maleCount +=
-                        summary.maleRanges[ageRangeIndex];
-                    tempChartData.femaleCount +=
-                        summary.femaleRanges[ageRangeIndex];
-
-                    if (
-                        this.inputFormData.isIncludedEmployee ===
-                        EIncludedEmployee.no
-                    ) {
-                        tempChartData.maleCount -=
-                            summary.maleEmployeeRanges[ageRangeIndex];
-                        tempChartData.femaleCount -=
-                            summary.femaleEmployeeRanges[ageRangeIndex];
-                    }
-                }
-            }
-
-            // 取得天氣
-            for (let i in this.responseData.weathers) {
-                let weather = this.responseData.weathers[i];
-                let weatherDateFormat = isOneDay
-                    ? Datetime.DateTime2String(
-                          new Date(weather.date),
-                          ReportService.datetimeFormat.hour
-                      )
-                    : Datetime.DateTime2String(
-                          new Date(weather.date),
-                          ReportService.datetimeFormat.date
-                      );
-
-                if (
-                    weatherDateFormat == tempDateFormat &&
-                    weather.site.objectId == tempChartData.siteObjectId
-                ) {
-                    tempChartData.weather = WeatherService.WeatherIcon(
-                        weather.icon
-                    );
-                    tempChartData.temperatureMin = weather.temperatureMin;
-                    tempChartData.temperatureMax = weather.temperatureMax;
-                    break;
-                }
-            }
-
-            // TODO: Dwell time
-            let tempRandomDwellTime = Math.floor(Math.random() * 6);
-            if (tempRandomDwellTime == 0) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
-            } else if (tempRandomDwellTime == 1) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
-            } else if (tempRandomDwellTime == 2) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
-            } else if (tempRandomDwellTime == 3) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
-            } else if (tempRandomDwellTime == 4) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
-            } else {
-                tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
-            }
-            // TODO: Dwell time
-        }
-
-        this.chartDatas = tempChartDatas;
+        this.heatMapPosition = heatmap;
+        console.log('this.heatMapPosition ~ ', this.heatMapPosition)
     }
 
     async receiveAreaId(areaId) {
@@ -2040,6 +1066,7 @@ export default class ReportHeatmap extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
+
             this.sortOutChartData(this.responseData.summaryDatas);
             this.areaMode = EAreaMode.all;
 
@@ -2303,13 +1330,13 @@ export default class ReportHeatmap extends Vue {
         tempHour.setHours(parseInt(hour), 0, 0, 0);
 
         this.hour = new Date(tempHour).toISOString();
-        console.log("this.hour - ", this.hour);
 
-        // let d =Datetime.DateTime2String(new Date('2000-01-01T01:00:00.000Z'), 'HH')
-        // let d1 =Datetime.DateTime2String(new Date(this.hour), 'HH')
-        // console.log('d - ', d);
-        // console.log('d1 - ', d1);
-        // console.log('?? - ', d1 === d);
+        Datetime.DateTime2String(new Date(this.hour), 'HH');
+
+        console.log('this.hour ~ ', this.hour);
+
+        this.sortOutChartData(this.responseData.summaryDatas);
+
     }
 
     // 多天的其中一天
@@ -2319,7 +1346,7 @@ export default class ReportHeatmap extends Vue {
                 this.dayArrayData = this.dayArray[index];
             }
         }
-
+        this.sortOutChartData(this.responseData.summaryDatas);
         console.log('this.dayArrayData ~ ', this.dayArrayData)
     }
 

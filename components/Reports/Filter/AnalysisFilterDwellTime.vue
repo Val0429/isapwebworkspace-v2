@@ -200,7 +200,6 @@ export class AnalysisFilterDwellTime extends Vue {
     }
 
     mounted() {
-        console.log('type ~ ', this.type)
     }
 
     @Watch("areaId", { deep: true })
@@ -288,7 +287,6 @@ export class AnalysisFilterDwellTime extends Vue {
                     this.deviceSelectItem as any,
                     false
                 )};
-
 
 
                 /**

@@ -11,7 +11,6 @@
 
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds !== ''"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -23,7 +22,6 @@
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds !== ''"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -34,7 +32,6 @@
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds !== ''"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -44,13 +41,23 @@
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds !== ''"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.isIncludedEmployee"
                 >
                 </iv-form-selection>
+            </template>
+
+            <template #submitButton>
+                <b-button
+                    v-if="siteIds !== ''"
+                    class="submit ml-3"
+                    size="md"
+                    @click="doSubmit"
+                >
+                    {{ _('wb_Submit') }}
+                </b-button>
             </template>
 
         </iv-form>
@@ -173,9 +180,12 @@ export class AnalysisFilterHeatMap extends Vue {
     }
 
 
-    whenSelectedIsIncludedEmployee() {
+    async whenSelectedIsIncludedEmployee() {
         this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
     }
+
+    doSubmit() {}
+
 
     IAnalysisFilterForm() {
         return `
@@ -215,6 +225,12 @@ export class AnalysisFilterHeatMap extends Vue {
                 isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
 
 
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                submitButton: any;
+
+
             }
         `;
     }
@@ -228,4 +244,13 @@ Vue.component("analysis-filter-heat-map", AnalysisFilterHeatMap);
 .click_button {
     margin-top: 27px;
 }
+
+.submit {
+    margin-top: 27px;
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+    height: 25%;
+}
+
+
 </style>

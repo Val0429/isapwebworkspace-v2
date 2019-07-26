@@ -107,6 +107,13 @@ export class CameraHeatmap extends Vue {
             data: []
         };
 
+        //clear oragin heatmap
+        var elements = document.getElementsByClassName("heatmap-canvas");
+        for (let element of elements) {
+            var inputParent = element.parentNode;
+            inputParent.removeChild(element);
+        }
+
         me.heatmapCanvs = Heatmap.create({
             container: me.$refs.heatmap as any
         });
