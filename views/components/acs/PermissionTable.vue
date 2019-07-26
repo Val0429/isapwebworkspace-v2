@@ -491,14 +491,17 @@ export default class PermissionTable extends Vue {
                 case EDeviceType.door:
                     if (!tempAccesslevels.door) break;
                     deviceData.deviceName.id = tempAccesslevels.door.objectId;
-                    let key = Object.keys(this.selectItem.doorDevice).find(x=>x==tempAccesslevels.door.objectId);
-                    deviceData.deviceName.text = key ? this.selectItem.doorDevice[key] : "";                    
+                    origin = this.selectItemOriginal.door.find(x=>x.objectId == deviceData.deviceName.id);    
+                    //skip orphan door
+                    if(!origin)continue;
+                    deviceData.deviceName.text = origin.doorname;
                     break;
                 case EDeviceType.doorGroup:
                     if (!tempAccesslevels.doorgroup) break;
                     deviceData.deviceName.id = tempAccesslevels.doorgroup.objectId;
                     origin = this.selectItemOriginal.doorGroup.find(x=>x.objectId == deviceData.deviceName.id);                        
-                    if (!origin) break;
+                    //skip orphan door group
+                    if (!origin) continue;
                     deviceData.deviceName.text = origin.groupname;                                
                     if(!origin.area )break
                     deviceData.area.id = origin.area.name;
@@ -509,7 +512,8 @@ export default class PermissionTable extends Vue {
                     if (!tempAccesslevels.elevator) break;
                     deviceData.deviceName.id = tempAccesslevels.elevator.objectId;
                     origin = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id);                        
-                    if (!origin) break;                    
+                    //skip orphan elevator
+                    if (!origin) continue;                    
                     deviceData.deviceName.text = origin.elevatorname;                    
                     if(!origin.reader || !tempAccesslevels.floor || tempAccesslevels.floor.length<=0) break;                    
                     let floor = origin.reader.find(x=>x.objectId == tempAccesslevels.floor[0].objectId);                    
@@ -588,6 +592,7 @@ export default class PermissionTable extends Vue {
     }
     
     clickAddDeviceInTable() {
+        console.log("this.inputFormData", this.inputFormData);
         let deviceData: any = {
             objectId: "",
             deviceType: this.inputFormData.deviceType,
@@ -596,13 +601,12 @@ export default class PermissionTable extends Vue {
             timeFormat: { id: "", text: "" }
         };
 
-        if (this.inputFormData.deviceTimeFormatOption === "0") {
+        if (!this.inputFormData.deviceTimeFormatOption || this.inputFormData.deviceTimeFormatOption === "0") {
             return false;
         }
 
         deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption;
-        let timeSchedule = Object.keys(this.selectItem.timeSchedule).find(x=>x==deviceData.timeFormat.id);
-        deviceData.timeFormat.text = this.selectItem.timeSchedule[timeSchedule];
+        deviceData.timeFormat.text = this.selectItem.timeSchedule[deviceData.timeFormat.id];
 
         switch (this.deviceType) {
             case EDeviceType.door:
@@ -610,8 +614,7 @@ export default class PermissionTable extends Vue {
                     return false;
                 }
                 deviceData.deviceName.id = this.inputFormData.doorNameOption;
-                let door = Object.keys(this.selectItem.doorDevice).find(x=>x==deviceData.deviceName.id);
-                deviceData.deviceName.text = this.selectItem.doorDevice[door];
+                deviceData.deviceName.text = this.selectItem.doorDevice[deviceData.deviceName.id];
                 break;
             case EDeviceType.doorGroup:
                 if (this.inputFormData.doorGroupNameOption === "0") {
@@ -622,9 +625,8 @@ export default class PermissionTable extends Vue {
                 if (origin && origin.area) {
                     deviceData.area.id = origin.area.name;
                     deviceData.area.text = origin.area.name;
-                }        
-                let doorGroup = Object.keys(this.selectItem.doorGroupDevice).find(x=>x==deviceData.deviceName.id);                
-                deviceData.deviceName.text = this.selectItem.doorGroupDevice[doorGroup];
+                }                      
+                deviceData.deviceName.text = this.selectItem.doorGroupDevice[deviceData.deviceName.id];
                 break;
             case EDeviceType.elevator:
                 if (this.inputFormData.elevatorNameOption === "0") {
@@ -639,9 +641,8 @@ export default class PermissionTable extends Vue {
                         let floor = elevator.reader.find(x=>x.objectId == deviceData.area.id);
                         if(floor)deviceData.area.text=floor.floorname;
                     }                    
-                }
-                let elevator = Object.keys(this.selectItem.elevatorDevice).find(x=>x==deviceData.deviceName.id);                
-                deviceData.deviceName.text = this.selectItem.elevatorDevice[elevator];
+                }       
+                deviceData.deviceName.text = this.selectItem.elevatorDevice[deviceData.deviceName.id];
                 break;
             }
         
@@ -689,7 +690,7 @@ export default class PermissionTable extends Vue {
         
         for (let tempData of this.inputFormData.data) {
             console.log("tempData", tempData);
-            if (tempData.objectId != undefined && tempData.objectId != "") {
+            if (tempData.objectId && tempData.objectId != "") {
                 premissionParam.accesslevels.push(tempData.objectId);
             } else {
                 let accessParam: any = {
