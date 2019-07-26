@@ -92,7 +92,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         // verify and create password
         '/user/enable/step1': [EnablePasswordCreate.Input, any, true];
-
+        '/user/enable/resend': [any, any, false];
         // User
         // '/user/user/login': [UserLoginPost.Input, UserLoginPost.Output, false];
         '/user/base/logout': [UserLogoutPost.Input, UserLogoutPost.Output, false];

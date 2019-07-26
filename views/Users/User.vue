@@ -625,8 +625,38 @@
                 });
         }
 
-        // TODO
-        resendVerificationCode() {}
+        async resendVerificationCode() {
+
+            this.getInputData();
+
+            let param = {
+                objectId: this.inputFormData.objectId
+            };
+
+            Loading.show();
+            await this.$server
+                .C("/user/enable/resend", param)
+                .then((response: any) => {
+                    Loading.hide();
+                    for (const returnValue of response) {
+                        if (returnValue.statusCode === 200) {
+                            Dialog.success(this._("w_User_Resend_VerificationCode_Success"));
+                            this.pageToList();
+                        }
+                        if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
+                            Dialog.error(this._("w_User_Resend_VerificationCode_Failed"));
+                            return false;
+                        }
+                    }
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_User_Resend_VerificationCode_Failed")
+                    );
+                });
+        }
 
         async saveAdd(data) {
             const datas: IUserAddData[] = [
