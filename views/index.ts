@@ -26,7 +26,7 @@ import { RegisterRouter as $ } from '@/../core';
 // import DemoEncrypt from './Demos/DemoEncrypt.vue';
 
 // Guest
-import ForgotPassword from './ForgotPassword/ForgotPassword.vue';
+import ForgotPassword from './Password/ForgotPassword.vue';
 
 // MyProfile
 import MyProfile from './MyProfile/MyProfile.vue';

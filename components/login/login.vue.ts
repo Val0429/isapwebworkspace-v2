@@ -55,6 +55,8 @@ export default class Login extends Vue {
                         this.$router.push('/reports/traffic');
                         break;
                 }
+
+                // TODO: check first login
                 console.log(this.$user);
             })
             .catch((e: any) => {
