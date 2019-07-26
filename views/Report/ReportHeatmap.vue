@@ -888,7 +888,8 @@ export default class ReportHeatmap extends Vue {
                 return ResponseFilter.catchError(this, e);
             });
 
-        // Ben  //TODO for test and delete it when have api
+        // Ben  
+        // TODO: for test and delete it when have api
         // this.initHeatmap();
     }
 
