@@ -45,8 +45,20 @@
                 />
             </template>
 
+            <!-- Ben -->
+            <anlysis-dashboard
+                ref="analysisDashboard"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type="dTimeMode"
+                :siteIds="pSiteIds"
+                :tagIds="tags"
+                :pageType="dPageType"
+            >
+            </anlysis-dashboard>
+
             <!-- Tina -->
-            <analysis-filter
+            <analysis-filter-occupancy
                 class="mb-4"
                 :areaSelectItem="areaSelectItem"
                 :deviceGroupSelectItem="deviceGroupSelectItem"
@@ -66,19 +78,8 @@
                 @is_included_employee="receiveIsIncludedEmployee"
             >
 
-            </analysis-filter>
+            </analysis-filter-occupancy>
 
-            <!-- Ben -->
-            <anlysis-dashboard
-                ref="analysisDashboard"
-                :startDate="startDate"
-                :endDate="endDate"
-                :type="dTimeMode"
-                :siteIds="pSiteIds"
-                :tagIds="tags"
-                :pageType="dPageType"
-            >
-            </anlysis-dashboard>
 
             <!-- Morris -->
             <highcharts-occupancy

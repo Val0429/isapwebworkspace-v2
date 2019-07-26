@@ -12,7 +12,6 @@
 
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds && siteIds.length === 1"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -24,7 +23,6 @@
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds && siteIds.length === 1"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -35,7 +33,6 @@
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds && siteIds.length === 1"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -43,9 +40,20 @@
                 </iv-form-selection>
             </template>
 
+            <template #submitButton>
+                <b-button
+                    v-if="siteIds && siteIds.length === 1"
+                    class="submit ml-3"
+                    size="md"
+                    @click="doSubmit"
+                >
+                    {{ _('wb_Submit') }}
+                </b-button>
+            </template>
+
             <template #type="{ $attrs, $listeners }">
+
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -57,7 +65,6 @@
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-1"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -68,7 +75,6 @@
 
             <template #businessChartType="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -189,9 +195,13 @@ export class AnalysisFilterDwellTime extends Vue {
         businessChartType: 'revenue'
     };
 
-    created() {}
+    created() {
 
-    mounted() {}
+    }
+
+    mounted() {
+        console.log('type ~ ', this.type)
+    }
 
     @Watch("areaId", { deep: true })
     private areaIdChanged(newVal, oldVal) {
@@ -247,6 +257,8 @@ export class AnalysisFilterDwellTime extends Vue {
         this.$emit("business_chart_type", this.inputFormData.businessChartType);
     }
 
+    doSubmit() {}
+
     IAnalysisFilterForm() {
         return `
             interface {
@@ -276,6 +288,13 @@ export class AnalysisFilterDwellTime extends Vue {
                     this.deviceSelectItem as any,
                     false
                 )};
+
+
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                submitButton: any;
 
 
                 /**
@@ -312,4 +331,12 @@ Vue.component("analysis-filter-dwell-time", AnalysisFilterDwellTime);
 .click_button {
     margin-top: 27px;
 }
+
+.submit {
+    margin-top: 27px;
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+    height: 25%;
+}
+
 </style>

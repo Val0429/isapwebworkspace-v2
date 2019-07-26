@@ -11,7 +11,6 @@
 
             <template #areaId="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds && siteIds.length === 1"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -23,7 +22,6 @@
             <template #groupId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds && siteIds.length === 1"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.groupId"
@@ -34,7 +32,6 @@
             <template #deviceId="{ $attrs, $listeners }">
                 <iv-form-selection
                     v-if="siteIds && siteIds.length === 1"
-                    class="col-md-2"
                     v-bind="$attrs"
                     v-on="$listeners"
                     v-model="inputFormData.deviceId"
@@ -42,9 +39,19 @@
                 </iv-form-selection>
             </template>
 
+            <template #submitButton>
+                <b-button
+                    v-if="siteIds && siteIds.length === 1"
+                    class="submit ml-3"
+                    size="md"
+                    @click="doSubmit"
+                >
+                    {{ _('wb_Submit') }}
+                </b-button>
+            </template>
+
             <template #type="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="((siteIds.length !== 0 || siteIds.length >= 2) && type !== 'hour') || siteIds.length >= 2 && type === 'day'"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -55,7 +62,6 @@
 
             <template #isIncludedEmployee="{ $attrs, $listeners }">
                 <iv-form-selection
-                    class="col-md-2"
                     v-if="siteIds.length !== 0"
                     v-bind="$attrs"
                     v-on="$listeners"
@@ -210,6 +216,8 @@ export class AnalysisFilter extends Vue {
         this.$emit("is_included_employee", this.inputFormData.isIncludedEmployee);
     }
 
+    doSubmit() {}
+
     IAnalysisFilterForm() {
         return `
             interface {
@@ -242,15 +250,21 @@ export class AnalysisFilter extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_countSelect")}
                  * @uiColumnGroup - analysis
+                 */
+                submitButton: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_countSelect")}
+                 * @uiColumnGroup - row2
                  */
                 type?: ${toEnumInterface(this.timeModeSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_isIncludedEmployee")}
-                 * @uiColumnGroup - analysis
+                 * @uiColumnGroup - row2
                  */
                 isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
 
@@ -268,4 +282,12 @@ Vue.component("analysis-filter", AnalysisFilter);
 .click_button {
     margin-top: 27px;
 }
+
+.submit {
+    margin-top: 27px;
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+    height: 25%;
+}
+
 </style>

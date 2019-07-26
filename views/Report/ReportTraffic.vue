@@ -41,6 +41,17 @@
                     @click="pageToReportTemplate()"
                 />
             </template>
+            <!-- Ben -->
+            <anlysis-dashboard
+                ref="analysisDashboard"
+                :startDate="startDate"
+                :endDate="endDate"
+                :type="dTimeMode"
+                :siteIds="pSiteIds"
+                :tagIds="tags"
+                :pageType="dPageType"
+            >
+            </anlysis-dashboard>
 
             <!-- Tina -->
             <analysis-filter-traffic
@@ -70,17 +81,6 @@
             >
             </analysis-filter-traffic>
 
-            <!-- Ben -->
-            <anlysis-dashboard
-                ref="analysisDashboard"
-                :startDate="startDate"
-                :endDate="endDate"
-                :type="dTimeMode"
-                :siteIds="pSiteIds"
-                :tagIds="tags"
-                :pageType="dPageType"
-            >
-            </anlysis-dashboard>
 
             <!-- Morris -->
             <highcharts-traffic
