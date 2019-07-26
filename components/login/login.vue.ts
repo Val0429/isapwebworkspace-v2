@@ -4,6 +4,12 @@ import { ServerName, ServerVersion } from '@/../core/server';
 import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
 
+enum EUserRole {
+    SuperAdministrator = 'SuperAdministrator',
+    Admin = 'Admin',
+    User = 'User',
+}
+
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
     path: '/login',
@@ -11,7 +17,7 @@ import Loading from '@/services/Loading';
     // Min server
     permission: '/user/user/login',
 
-    // master
+    // Master
     // permission: '/users/login',
 
     disableContainer: true,
@@ -31,7 +37,25 @@ export default class Login extends Vue {
         await this.$login(param)
             .then(() => {
                 Loading.hide();
-                this.$router.push('/');
+                let userRole = '';
+                if (this.$user.roles != undefined && this.$user.roles[0] != undefined) {
+                    userRole = this.$user.roles[0];
+                }
+                if (this.$user.user != undefined && this.$user.user.roles[0] != undefined) {
+                    userRole = this.$user.user.roles[0];
+                }
+                switch (userRole) {
+                    case EUserRole.SuperAdministrator:
+                        this.$router.push('/users/user');
+                        break;
+                    case EUserRole.Admin:
+                        this.$router.push('/reports/traffic');
+                        break;
+                    case EUserRole.User:
+                        this.$router.push('/reports/traffic');
+                        break;
+                }
+                console.log(this.$user);
             })
             .catch((e: any) => {
                 Loading.hide();
