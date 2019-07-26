@@ -89,9 +89,7 @@ export class ResponseFilter {
             viewItem.$router.push({ path: '/login' });
             return true;
         }
-        if (message != '') {
-            Dialog.error(message);
-        }
+        Dialog.error(message != '' ? message : e.message);
         return true;
     }
 }
