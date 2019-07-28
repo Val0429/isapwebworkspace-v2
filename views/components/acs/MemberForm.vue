@@ -610,7 +610,7 @@ export default class MemberForm extends Vue {
   async initPremission() {
     if(this.storedPermissionOptions.length==0){
       await this.$server
-        .R("/acs/permissiontable", {"paging.all":"true"})
+        .R("/acs/permissiontable", {"paging.all":"true","system":0})
         .then((response: any) => {
           this.storedPermissionOptions=response.results
           .filter((x, index, self)=>{ return x.tableid && x.tablename && self.indexOf(x)===index})

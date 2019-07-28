@@ -316,7 +316,7 @@ export default class PermissionTable extends Vue {
         deviceTimeFormatOption: "",
         data: [] // subTable use
     };
-    SearchParams: any = {};
+    SearchParams: any = {system:0};
 
     //options
     deviceNameItem: any = {};
@@ -354,7 +354,8 @@ export default class PermissionTable extends Vue {
         this.SearchParams = {};
         for (var i in datas) {
             this.SearchParams = {
-                name: datas.permissionName
+                name: datas.permissionName,
+                system:0
             };
         }
     }
