@@ -613,7 +613,7 @@ export default class MemberForm extends Vue {
         .R("/acs/permissiontable", {"paging.all":"true"})
         .then((response: any) => {
           this.storedPermissionOptions=response.results
-          .filter((x, index, self)=>{ return  x.system && x.tableid && x.tablename && self.indexOf(x)===index})
+          .filter((x, index, self)=>{ return x.tableid && x.tablename && self.indexOf(x)===index})
           .map(content=>{
             return{
               value: content.tableid.toString(),
@@ -675,7 +675,7 @@ export default class MemberForm extends Vue {
               PagerServiceProviderId: "0",
               PhoneNumber: this.inputFormData.phone || "",
               },
-              DateOfBirth: this.inputFormData.birthday && !isNaN(this.inputFormData.birthday.getTime()) ? this.inputFormData.birthday.toISOString(): "",
+              DateOfBirth: this.inputFormData.birthday && !isNaN(this.inputFormData.birthday.getTime()) ? this.inputFormData.birthday.toISOString().split("T")[0]: "",
               PayrollNumber: "",
               Title: "",
               UserDetails: {
@@ -703,7 +703,7 @@ export default class MemberForm extends Vue {
     let tempCustomFieldsList: any = [];
     for(let field of CustomFields){
       if(field.date){
-        let dt = this.inputFormData[field.name] && !isNaN(this.inputFormData[field.name].getTime()) ? this.inputFormData[field.name].toISOString() : "";
+        let dt = this.inputFormData[field.name] && !isNaN(this.inputFormData[field.name].getTime()) ? this.inputFormData[field.name].toISOString().split("T")[0] : "";
         tempCustomFieldsList.push({FiledName:field.fieldName,  FieldValue:dt});
       }else{
         tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});
