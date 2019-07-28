@@ -206,7 +206,9 @@ export default class ReaderForm extends BasicFormQuick implements IFormQuick2 {
     isMounted:boolean=false;
     doMounted(){
         this.isMounted=true;
-        
+        this.canEdit=false;
+        this.canDelete=false;
+        this.canAdd=false;
     }
     filterInterface():string{
         return `interface {
