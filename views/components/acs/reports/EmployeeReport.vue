@@ -108,8 +108,9 @@ export default class AttendanceReport extends Vue  {
                 newMember.TimeSchedule = access.timeschedule.timename;
                 newMember.DoorName = access.door?access.door.doorname:'';
                 newMember.DoorGroupName = access.doorgroup?access.doorgroup.groupname:'';
-                
-                this.records.push(newMember);
+                //no need to display multiple row for the same access level
+                let exists = this.records.find(x=>x.PermissionName == newMember.PermissionName && x.TimeSchedule == newMember.TimeSchedule && x.DoorName == newMember.DoorName );
+                if(!exists)this.records.push(newMember);
             }
             
         }
