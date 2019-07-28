@@ -117,7 +117,9 @@ export default class DoorReport extends Vue  {
                 newMember.TimeSchedule = access.timeschedule.timename;
                 newMember.DoorName = access.door?access.door.doorname:'';
                 newMember.DoorGroupName = access.doorgroup?access.doorgroup.groupname:'';
-                
+                //no need to display multiple row for the same access level
+                let exists = this.records.find(x=>x.PermissionName == newMember.PermissionName && x.TimeSchedule == newMember.TimeSchedule && x.DoorName == newMember.DoorName );
+                if(!exists)this.records.push(newMember);
                 this.records.push(newMember);
             }
             
@@ -125,7 +127,7 @@ export default class DoorReport extends Vue  {
     }
   }
    private async getPermissiontable() {    
-    let resp: any=await this.$server.R("/acs/permissiontable" as any, Object.assign({"paging.all":"true"}, this.filter));
+    let resp: any=await this.$server.R("/acs/permissiontable" as any, Object.assign({"paging.all":"true","system":0}, this.filter));
     this.permissions=resp.results;
   }
 
