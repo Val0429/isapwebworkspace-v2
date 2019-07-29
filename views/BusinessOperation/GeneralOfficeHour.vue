@@ -211,7 +211,6 @@
                                         @click="removeOfficeHour(index)"
                                     >
                                         <i class="fa fa-minus"></i>
-
                                     </b-button>
                                 </b-col>
 
@@ -224,7 +223,6 @@
                                         @click="removeOfficeHour(index)"
                                     >
                                         <i class="fa fa-minus"></i>
-
                                     </b-button>
                                 </b-col>
 

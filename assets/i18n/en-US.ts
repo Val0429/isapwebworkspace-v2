@@ -451,11 +451,11 @@ export default class LangObject {
     w_License_Step1_mac = 'Add by license key and mac';
     w_License_Step1_offline = 'Add by upload offline key';
 
-	// System
-	w_System_WebHost = 'Web Host';
-	w_System_Setting = 'Set System';
-	w_System_Setting_Success = 'System set success.';
-	w_System_Setting_Fail = 'System set failed.';
+    // System
+    w_System_WebHost = 'Web Host';
+    w_System_Setting = 'Set System';
+    w_System_Setting_Success = 'System set success.';
+    w_System_Setting_Fail = 'System set failed.';
 
     // Mail Server
     w_MailServer_Email = 'Email Account';
@@ -1096,4 +1096,14 @@ export default class LangObject {
     w_RuleAndActions_Start = 'Start';
     w_RuleAndActions_End = 'End';
 
+    w_RuleAndActions_RuleList = 'Rule List';
+    w_RuleAndActions_RuleAdd = 'Rule Add';
+    w_RuleAndActions_RuleEdit = 'Rule Edit';
+    w_RuleAndActions_RuleAView = 'Rule View';
+
+    w_RuleAndActions_Traffic_RuleName = 'Rule Name';
+    w_RuleAndActions_Traffic_StoreAreaDevice = 'Store/Area/Device';
+    w_RuleAndActions_Traffic_Active = 'Active';
+    w_RuleAndActions_Traffic_RunTime = 'Run Time';
+    w_RuleAndActions_Traffic_Condition = 'Condition';
 }
