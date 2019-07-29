@@ -241,8 +241,9 @@ export class AnalysisFilterOccupancy extends Vue {
 
                 /**
                  * @uiColumnGroup - analysis
+                 * @uiHidden - true
                  */
-                submitButton: any;
+                submitButton?: any;
 
 
                 /**

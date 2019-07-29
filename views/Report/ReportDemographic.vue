@@ -59,7 +59,7 @@
 
 			<!-- Tina -->
 			<analysis-filter
-				class="mb-4"
+				class="mb-4 mt-3"
 				:areaSelectItem="areaSelectItem"
 				:deviceGroupSelectItem="deviceGroupSelectItem"
 				:deviceSelectItem="deviceSelectItem"
