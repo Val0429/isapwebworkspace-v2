@@ -223,6 +223,10 @@
                         url="/setting"
                     >
                         <SidebarNavItem
+                            :label="_('w_Navigation_Setting_System')"
+                            url="/setting/system"
+                        />
+                        <SidebarNavItem
                             :label="_('w_Navigation_Setting_MailServer')"
                             url="/setting/mail_server"
                         />
