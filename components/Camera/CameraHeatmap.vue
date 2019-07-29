@@ -1,6 +1,9 @@
 <template>
-    <div class="animated fadeIn">
-        <div class="card-content">
+    <div class="animated fadeIn center">
+        <div
+            class="card-content"
+            v-show="this.heatMapPosition.length > 0"
+        >
             <div class="form-group col-md-12 center">
                 <div
                     class="canvas-div"
@@ -40,6 +43,12 @@
                     max="10"
                 ></b-form-input>
             </div>
+        </div>
+        <div
+            v-show="this.heatMapPosition.length === 0"
+            class="center canvas-div"
+        >
+            N/A
         </div>
     </div>
 </template>
