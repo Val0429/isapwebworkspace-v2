@@ -28,7 +28,32 @@
 
                 <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
                 <template #2>
-                    Step 2
+
+                    <iv-form
+                        :interface="IStep2()"
+                        :value="step2Item"
+                        @submit="stepTo3($event)"
+                    >
+
+                        <template #title="{ $attrs, $listeners }">
+                            <div class="ml-3 mb-2 w-100">{{ _('w_OfficeHour') }}</div>
+                        </template>
+
+                        <template #condition="{ $attrs, $listeners }">
+                            <b-form-group class="ml-3">
+                                <b-row
+                                    v-for="(value, index) in step2Datas"
+                                    :key="'officeHourTime__' + index"
+                                >
+                                    <b-col>
+                                        <div>test</div>
+                                    </b-col>
+                                </b-row>
+                            </b-form-group>
+                        </template>
+
+                    </iv-form>
+
                 </template>
 
                 <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
@@ -53,6 +78,13 @@ import { ITransition } from "@/services/Transition";
 // Service
 import Dialog from "@/services/Dialog";
 
+interface IStep2Data {
+    ruleMode: string;
+    equalMode: string;
+    fillValue: number;
+    andMode: string;
+}
+
 @Component({
     components: {}
 })
@@ -63,16 +95,33 @@ export default class RuleAndActionsTraffic extends Vue {
         step: 1
     };
 
+    step2Item: any = {
+        condition: []
+    };
+    step2Datas: IStep2Data[] = [];
+
     isMounted: boolean = false;
     doMounted() {
         this.isMounted = true;
     }
 
-    created() {
+    created() {}
+
+    mounted() {
+        // TODO: Developer
         this.transition.step = 2;
+        let stepRef: any = this.$refs.step;
+        stepRef.currentStep = 2;
     }
 
-    mounted() {}
+    IStep2() {
+        return `
+            interface {
+                title?: any;
+                condition?: any
+            }
+        `;
+    }
 }
 </script>
 
