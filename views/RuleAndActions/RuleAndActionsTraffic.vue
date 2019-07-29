@@ -11,7 +11,46 @@
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
             >
-                Rule and Action Traffic 1
+                <iv-card :label="_('w_RuleAndActions_RuleList')">
+                    <template #toolbox>
+                        <iv-toolbox-view
+                            :disabled="isSelected.length !== 1"
+                            @click="pageToView"
+                        />
+                        <iv-toolbox-edit
+                            :disabled="isSelected.length !== 1"
+                            @click="pageToEdit"
+                        />
+                        <iv-toolbox-delete
+                            :disabled="isSelected.length === 0"
+                            @click="doDelete"
+                        />
+                        <iv-toolbox-divider />
+                        <iv-toolbox-add @click="pageToAdd()" />
+                    </template>
+
+                    <iv-table
+                        ref="listTable"
+                        :interface="ITableList()"
+                        :multiple="tableMultiple"
+                        :server="{ path: '/rule/peopleCounting' }"
+                        @selected="selectedItem($event)"
+                    >
+
+                        <template #Actions="{$attrs, $listeners}">
+                            <iv-toolbox-more
+                                size="sm"
+                                :disabled="isSelected.length !== 1"
+                            >
+                                <iv-toolbox-view @click="pageToView" />
+                                <iv-toolbox-edit @click="pageToEdit" />
+                                <iv-toolbox-delete @click="doDelete" />
+                            </iv-toolbox-more>
+                        </template>
+
+                    </iv-table>
+                </iv-card>
+
             </div>
 
             <iv-step-progress
@@ -77,6 +116,8 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
 
 interface IStep2Data {
     ruleMode: string;
@@ -101,6 +142,10 @@ export default class RuleAndActionsTraffic extends Vue {
     step2Datas: IStep2Data[] = [];
 
     isMounted: boolean = false;
+    isSelected: any = [];
+    tableMultiple: boolean = true;
+    selectedDetail: any = [];
+
     doMounted() {
         this.isMounted = true;
     }
@@ -118,7 +163,112 @@ export default class RuleAndActionsTraffic extends Vue {
         return `
             interface {
                 title?: any;
-                condition?: any
+                condition?: any;
+            }`;
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                Loading.show();
+                for (const param of this.selectedDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
+                    // DO TO wait API
+                    // this.$server
+                    //     .D("/rule/peopleCounting", deleteParam)
+                    //     .then((response: any) => {
+                    //         for (const returnValue of response) {
+                    //             if (returnValue.statusCode === 200) {
+                    //                 this.pageToList();
+                    //             }
+                    //             if (returnValue.statusCode === 500) {
+                    //                 Dialog.error(this._("w_DeleteFailed"));
+                    //                 return false;
+                    //             }
+                    //         }
+                    //     })
+                    //     .catch((e: any) => {
+                    //         return ResponseFilter.catchError(this, e);
+                    //     });
+                }
+                Loading.hide();
+            }
+        );
+    }
+
+    ITableList() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_No")}
+                 * @uiType - iv-cell-auto-index
+                 */
+                no: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_RuleName")}
+                 */
+                ruleName: string;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_Traffic_StoreAreaDevice"
+                 )}
+                 */
+                storeAreaDevice: string;
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_Active")}
+                 */
+                active: string;
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_RunTime")}
+                 */
+                runTime: string;
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_Condition")}
+                 */
+                condition: string;
+
+                Actions?: any;
+
             }
         `;
     }

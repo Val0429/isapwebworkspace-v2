@@ -1087,4 +1087,10 @@ export default class LangObject implements ILang {
     w_RuleAndActions_EditStep1 = 'Choose Metrics & Store';
     w_RuleAndActions_EditStep2 = 'Choose Rule';
     w_RuleAndActions_EditStep3 = 'Action';
+
+    w_RuleAndActions_Traffic_RuleName = 'Rule Name';
+    w_RuleAndActions_Traffic_StoreAreaDevice = 'Store/Area/Device';
+    w_RuleAndActions_Traffic_Active = 'Active';
+    w_RuleAndActions_Traffic_RunTime = 'Run Time';
+    w_RuleAndActions_Traffic_Condition = 'Condition';
 }

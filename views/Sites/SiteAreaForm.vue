@@ -467,6 +467,7 @@ export class SiteAreaForm extends Vue {
                     name: data.name,
                     imageBase64: this.areaPhotoSrc,
                     mapBase64: this.imageMap.imageBox.src
+                    //TO DO add high medium low param
                 }
             ];
 
