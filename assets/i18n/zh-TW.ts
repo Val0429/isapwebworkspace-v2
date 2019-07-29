@@ -174,11 +174,13 @@ export default class LangObject implements ILang {
     w_q3 = 'Q3';
     w_q4 = 'Q4';
     w_thisYear = 'This Year';
-    w_SelectArea = 'Select Area';
+    w_SelectArea = 'Select Areas';
     w_AllAreas = 'All Areas';
     w_AllDeviceGroups = 'All Entrances';
+    w_SelectDeviceGroups = 'Select Entrances';
     // w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDevices = 'All Devices';
+    w_SelectDevice = 'Select Devices';
     w_Employee = 'Employee';
     w_VIP = 'VIP';
     w_Blacklist = 'Blacklist';
@@ -192,6 +194,9 @@ export default class LangObject implements ILang {
     w_AllTags = 'All Tags';
     w_Selected_Date = '* Select Date(s)';
     w_AllCampaign = 'All Campaign';
+    w_Area1 = '* Area(s)';
+    w_DeviceGroup1 = '* Entrances(s)';
+    w_Devices1 = '* Devices(s)';
 
     w_yes = 'Yes';
     w_no = 'No';
@@ -1087,6 +1092,19 @@ export default class LangObject implements ILang {
     w_RuleAndActions_EditStep1 = 'Choose Metrics & Store';
     w_RuleAndActions_EditStep2 = 'Choose Rule';
     w_RuleAndActions_EditStep3 = 'Action';
+
+    w_RuleAndActions_RuleName = 'Rule Name';
+    w_RuleAndActions_Active = 'Active';
+    w_RuleAndActions_Runtime = 'Run time';
+    w_RuleAndActions_Anytime = 'Any time';
+    w_RuleAndActions_DesignationTime = 'Designation time';
+    w_RuleAndActions_Start = 'Start';
+    w_RuleAndActions_End = 'End';
+
+    w_RuleAndActions_RuleList = 'Rule List';
+    w_RuleAndActions_RuleAdd = 'Rule Add';
+    w_RuleAndActions_RuleEdit = 'Rule Edit';
+    w_RuleAndActions_RuleAView = 'Rule View';
 
     w_RuleAndActions_Traffic_RuleName = 'Rule Name';
     w_RuleAndActions_Traffic_StoreAreaDevice = 'Store/Area/Device';

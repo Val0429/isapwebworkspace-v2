@@ -1,6 +1,8 @@
 <template>
     <div class="animated fadeIn">
 
+        <choose-metrics :deviceMode="deviceMode"></choose-metrics>
+
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
@@ -53,55 +55,73 @@
 
             </div>
 
-            <iv-step-progress
-                ref="step"
+            <!-- add & edit -->
+            <div
                 key="transition_2"
                 v-show="transition.step === 2"
-                @mounted="doMounted"
+                :label="'Empty 2'"
             >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_User_ViewUser') "
+                >
 
-                <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
-                <template #1>
-                    Step 1
-                </template>
-
-                <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
-                <template #2>
-
-                    <iv-form
-                        :interface="IStep2()"
-                        :value="step2Item"
-                        @submit="stepTo3($event)"
+                    <iv-step-progress
+                        ref="step"
+                        @mounted="doMounted"
                     >
 
-                        <template #title="{ $attrs, $listeners }">
-                            <div class="ml-3 mb-2 w-100">{{ _('w_OfficeHour') }}</div>
+                        <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
+                        <template #1>
+                            Step 1
                         </template>
 
-                        <template #condition="{ $attrs, $listeners }">
-                            <b-form-group class="ml-3">
-                                <b-row
-                                    v-for="(value, index) in step2Datas"
-                                    :key="'officeHourTime__' + index"
-                                >
-                                    <b-col>
-                                        <div>test</div>
-                                    </b-col>
-                                </b-row>
-                            </b-form-group>
+                        <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
+                        <template #2>
+                            Step 2
                         </template>
 
+                        <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
+                        <template #3>
+                            Step 3
+                        </template>
+
+                    </iv-step-progress>
+
+                </iv-auto-card>
+            </div>
+
+            <!-- view -->
+            <div
+                key="transition_3"
+                v-show="transition.step === 3"
+                :label="'Empty 3'"
+            >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_RuleAndActions_RuleAView') "
+                >
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
+
+                    <iv-form
+                        :interface="IViewForm()"
+                        :value="inputFormData"
+                    >
                     </iv-form>
 
-                </template>
+                    <template #footer>
+                        <b-button
+                            variant="dark"
+                            size="lg"
+                            @click="pageToList()"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
 
-                <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
-                <template #3>
-                    Step 3
-                </template>
-
-            </iv-step-progress>
-
+                </iv-auto-card>
+            </div>
         </iv-auto-transition>
 
     </div>
@@ -116,6 +136,7 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import { EDeviceMode } from "@/components/Reports";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 
@@ -136,6 +157,7 @@ export default class RuleAndActionsTraffic extends Vue {
         step: 1
     };
 
+    deviceMode: string = EDeviceMode.peopleCounting;
     step2Item: any = {
         condition: []
     };
@@ -145,6 +167,7 @@ export default class RuleAndActionsTraffic extends Vue {
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
+    inputFormData: any = {};
 
     doMounted() {
         this.isMounted = true;
@@ -264,6 +287,48 @@ export default class RuleAndActionsTraffic extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_RuleAndActions_Traffic_Condition")}
+                 */
+                condition: string;
+
+                Actions?: any;
+
+            }
+        `;
+    }
+
+    IViewForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_RuleName")}
+                   * @uiType - iv-form-label
+                 */
+                ruleName: string;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_Traffic_StoreAreaDevice"
+                 )}
+                 *  @uiType - iv-form-label
+                 */
+                storeAreaDevice: string;
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_Active")}
+                 *  @uiType - iv-form-label
+                 */
+                active: string;
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_RunTime")}
+                 *  @uiType - iv-form-label
+                 */
+                runTime: string;
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Traffic_Condition")}
+                 *  @uiType - iv-form-label
                  */
                 condition: string;
 
