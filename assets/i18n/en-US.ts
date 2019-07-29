@@ -276,7 +276,11 @@ export default class LangObject {
     w_Navigation_VideoSources_VIP_Stranger_Visitor = 'VIP / Stranger / Visitor';
     w_Navigation_VideoSources_Visitor = 'Visitor';
 
-    w_Navigation_RulesActions = 'Rules and Action';
+    w_Navigation_RuleAndActions = 'Rule and Actions';
+    w_Navigation_RuleAndActions_Traffic = 'Traffic';
+    w_Navigation_RuleAndActions_Occupancy = 'Occupancy';
+    w_Navigation_RuleAndActions_VipBlacklist = 'VIP/Blacklist';
+    w_Navigation_RuleAndActions_RepeatVisitor = 'Repeat Visitor';
 
     w_Navigation_BusinessOperation = 'Business Operation';
     w_Navigation_BO_CampaignSetting = 'Campaign Setting';
@@ -520,6 +524,9 @@ export default class LangObject {
     w_Site_AddDeviceGroupFailed = 'Add Entrance Failed';
     w_Site_EditDeviceGroupSuccess = 'Edit Entrance Success';
     w_Site_EditDeviceGroupFailed = 'Edit Entrance Failed';
+    w_Site_High = 'High';
+    w_Site_Medium = 'Medium';
+    w_Site_Low = 'Low';
 
     // Backup
     w_Backup_List = 'Function List';

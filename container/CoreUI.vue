@@ -9,7 +9,7 @@
                         src="@/assets/images/default-user-icon.svg"
                     />
                 </a>
-                <b-button @click="clickLogout">{{ _('w_Logout') }}</b-button>
+                <b-button @click="Logout">{{ _('w_Logout') }}</b-button>
             </div>
         </template>
 
@@ -175,11 +175,28 @@
                         />
                     </SidebarNavItem>
 
-                    <!-- Rules and Action -->
+                    <!-- Rule and Actions -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_RulesActions')"
-                        url="/rules_actions"
-                    />
+                        :label="_('w_Navigation_RuleAndActions')"
+                        url="/rule_actions"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleAndActions_Traffic')"
+                            url="/rule_actions/traffic"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleAndActions_Occupancy')"
+                            url="/rule_actions/occupancy"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleAndActions_VipBlacklist')"
+                            url="/rule_actions/vip_blacklist"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleAndActions_RepeatVisitor')"
+                            url="/rule_actions/repeat_visitor"
+                        />
+                    </SidebarNavItem>
 
                     <!-- Business Operation -->
                     <SidebarNavItem
@@ -217,14 +234,14 @@
                             :label="_('w_Navigation_Setting_Weather')"
                             url="/setting/weather"
                         />
-                        <SidebarNavItem
+                        <!-- <SidebarNavItem
                             :label="_('w_Navigation_Setting_Backup')"
                             url="/setting/backup"
                         />
                         <SidebarNavItem
                             :label="_('w_Navigation_Setting_Restore')"
                             url="/setting/restore"
-                        />
+                        /> -->
                         <SidebarNavItem
                             :label="_('w_Navigation_Setting_License')"
                             url="/setting/license"
@@ -271,7 +288,8 @@ import Loading from "@/services/Loading";
 export default class CoreUI extends Vue {
     // Logout
     logoutPath = "/user/base/logout";
-    clickLogout() {
+
+    Logout() {
         try {
             this.$logout(this.logoutPath);
         } catch (e) {
@@ -281,75 +299,9 @@ export default class CoreUI extends Vue {
         }
     }
 
-    // WebSocket Alive
-    // showLoadingSecond = 2000;
-    // wsOpenStatus: boolean = false;
-    // ws: Ws = new Ws({
-    //     url: "",
-    //     OnOpen: async (e: Event): Promise<void> => {
-    //         this.setWsOpenStatus(true);
-    //         console.log("WS Alive Open");
-    //     },
-    //     OnMessage: async (e: MessageEvent): Promise<void> => {
-    //         if (e.data.length > 0) {
-    //             this.handleWs(e.data);
-    //         }
-    //     },
-    //     OnError: async (e: Event): Promise<void> => {
-    //         this.setWsOpenStatus(false);
-    //         console.log("WS Alive Error");
-    //     },
-    //     OnClose: async (e: CloseEvent): Promise<void> => {
-    //         this.setWsOpenStatus(false);
-    //         console.log("WS Alive Colse");
-    //     }
-    // });
+    mounted() {}
 
-    mounted() {
-        // this.initWS();
-    }
-
-    beforeDestroy() {
-        // this.ws.Close();
-    }
-
-    // initWS() {
-    //     if (this.$user.sessionId != undefined) {
-    //         let url = `ws://${ServerConfig.host}:${ServerConfig.port}/server/alive?sessionId=${this.$user.sessionId}`;
-    //         this.ws.url = url;
-    //         this.ws.Connect();
-    //     } else {
-    //         setTimeout(this.initWS, this.showLoadingSecond);
-    //     }
-    // }
-
-    // setWsOpenStatus(value: boolean) {
-    //     this.wsOpenStatus = value;
-    //     if (value) {
-    //         console.log("Loading hide");
-    //         Loading.hide();
-    //     } else {
-    //         setTimeout(this.setLoading, this.showLoadingSecond);
-    //     }
-    // }
-
-    // setLoading() {
-    //     if (!this.wsOpenStatus) {
-    //         Loading.show();
-    //     }
-    // }
-
-    // handleWs(wsData: string) {
-    //     Loading.hide();
-    //     try {
-    //         let data: any = JSON.parse(wsData);
-    //         if (data.statusCode != undefined && data.statusCode == 401) {
-    //             this.clickLogout();
-    //         }
-    //     } catch (e) {
-    //         console.log("WS handle error: ", e);
-    //     }
-    // }
+    beforeDestroy() {}
 }
 </script>
 
