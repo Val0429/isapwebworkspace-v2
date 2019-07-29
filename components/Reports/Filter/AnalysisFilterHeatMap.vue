@@ -39,16 +39,6 @@
                 </iv-form-selection>
             </template>
 
-            <template #isIncludedEmployee="{ $attrs, $listeners }">
-                <iv-form-selection
-                    v-if="siteIds !== ''"
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    v-model="inputFormData.isIncludedEmployee"
-                >
-                </iv-form-selection>
-            </template>
-
             <template #submitButton>
                 <b-button
                     v-if="siteIds !== ''"
@@ -216,13 +206,6 @@ export class AnalysisFilterHeatMap extends Vue {
                     this.deviceSelectItem as any,
                     false
                 )};
-
-
-                /**
-                 * @uiLabel - ${this._("w_isIncludedEmployee")}
-                 * @uiColumnGroup - analysis
-                 */
-                isIncludedEmployee?: ${toEnumInterface(this.isIncludedEmployeeSelectItem as any, false)};
 
 
                 /**

@@ -1783,6 +1783,7 @@ export default class ReportTraffic extends Vue {
     // Author: Tina
     async receiveGroupId(groupId) {
         this.inputFormData.groupId = groupId;
+
         this.deviceGroupSummaryFilter = [];
 
         if (
@@ -1790,16 +1791,20 @@ export default class ReportTraffic extends Vue {
             this.inputFormData.groupId !== "all"
         ) {
             // 依照單一deviceGroup篩選
+
             for (const singleData of this.areaSummaryFilter) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
                     if (detailKey === "deviceGroups") {
-                        if (
-                            this.inputFormData.groupId ===
-                            tempSingleData[0].objectId
-                        ) {
-                            this.deviceGroupSummaryFilter.push(singleData);
+                        if (tempSingleData.length > 0) {
+                            if (
+                                this.inputFormData.groupId ===
+                                tempSingleData[0].objectId
+                            ) {
+                                this.deviceGroupSummaryFilter.push(singleData);
+                            }
                         }
+
                     }
                 }
             }
@@ -1983,6 +1988,8 @@ export default class ReportTraffic extends Vue {
                 return false;
             }
         }
+
+        console.log('this.deviceSummaryFilter ~ ', this.deviceSummaryFilter)
     }
 
     // Author: Tina
