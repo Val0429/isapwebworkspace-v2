@@ -350,7 +350,7 @@ export default class Site extends Vue {
         this.isSelectArea = false;
         this.newImgSrc = "";
         this.areaPhotoSrc = "";
-        this.area = {};
+        this.area = { high: 0, medium: 0, low: 0 };
     }
 
     clearSiteData() {
@@ -362,7 +362,7 @@ export default class Site extends Vue {
     clearDeviceGroupData() {
         this.isSelectDeviceGroup = false;
         this.newImgSrc = "";
-        this.deviceGroup = {};
+        this.deviceGroup = { high: 0, medium: 0, low: 0 };
     }
 
     pageSize(data) {

@@ -222,6 +222,7 @@ export default class ReportHeatmap extends Vue {
     // 時間多天
     dayArray: any = [];
     dayArrayData: string = "";
+    dayArrayDataIndex: string = "";
 
     //// Analysis Filter End ////
 
@@ -853,8 +854,6 @@ export default class ReportHeatmap extends Vue {
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
 
-        console.log("this.filterData - ", this.filterData);
-
         this.inputFormData = {
             areaId: "",
             groupId: "",
@@ -862,6 +861,8 @@ export default class ReportHeatmap extends Vue {
             type: "",
             isIncludedEmployee: "no"
         };
+
+        console.log("this.filterData - ", this.filterData);
 
         await this.$server
             .C("/report/heatmap/summary", param)
@@ -880,34 +881,45 @@ export default class ReportHeatmap extends Vue {
                     } else {
                         this.initDayArray();
                     }
-                    this.firstSortOutChartData(this.responseData.summaryDatas);
-
                 }
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
 
-        // Ben  
+        await this.firstSortOutChartData(this.responseData.summaryDatas);
+
+
+        // Ben
         // TODO: for test and delete it when have api
         // this.initHeatmap();
     }
 
-    resolveSummary() {
-            this.initSelectItemArea();
-            this.initSelectItemDeviceGroup();
-            this.initSelectItemDevice();
+    async resolveSummary() {
 
-        this.inputFormData = {
-            areaId: "all",
-            groupId: "all",
-            deviceId: "all",
-            type: this.filterData.type,
-            isIncludedEmployee: "no"
-        };
+        this.initSelectItemArea();
+        this.initSelectItemDeviceGroup();
+        this.initSelectItemDevice();
+
+        if(this.responseData.summaryDatas[0] !== undefined) {
+            this.inputFormData.areaId = this.responseData.summaryDatas[0].area.objectId;
+            this.inputFormData.deviceId = this.responseData.summaryDatas[0].device.objectId;
+            if(this.responseData.summaryDatas[0].deviceGroups.length > 0) {
+                this.inputFormData.groupId = this.responseData.summaryDatas[0].deviceGroups[0].objectId;
+            } else {
+                this.inputFormData.groupId = "all";
+            }
+        } else {
+            this.inputFormData = {
+                areaId: "all",
+                deviceId: "all",
+                type: this.filterData.type,
+                isIncludedEmployee: "no"
+            };
+        }
 
         // Ben
-        this.initHeatmap();
+        // this.initHeatmap();
         // this.initDashboardData();
         // this.initReportTable();
     }
@@ -953,9 +965,28 @@ export default class ReportHeatmap extends Vue {
         );
     }
 
-    firstSortOutChartData(datas: any) {
+   async firstSortOutChartData(datas: any) {
 
-        let heatmap: IHeatMapPosition[] = [];
+        if(datas[0] !== undefined) {
+            this.inputFormData.areaId = datas[0].area.objectId;
+            this.inputFormData.deviceId = datas[0].device.objectId;
+            if(datas[0].deviceGroups.length > 0) {
+                this.inputFormData.groupId = datas[0].deviceGroups[0].objectId;
+            } else {
+                this.inputFormData.groupId = "all";
+            }
+        } else {
+            this.inputFormData = {
+                areaId: "all",
+                deviceId: "all",
+                type: this.filterData.type,
+                isIncludedEmployee: "no"
+            };
+        }
+
+       this.sortDeviceSummaryFilterData();
+
+       let heatmap: IHeatMapPosition[] = [];
         this.heatMapPosition = [];
 
         let gridUnit = 10;
@@ -982,18 +1013,18 @@ export default class ReportHeatmap extends Vue {
         console.log('this.heatMapPosition ~ ', this.heatMapPosition)
     }
 
-    sortOutChartData(datas: any) {
+    sortOutChartDataOneDay(datas: any) {
 
         let heatmap: IHeatMapPosition[] = [];
         this.heatMapPosition = [];
+        this.mapImage.src = '';
 
         let gridUnit = 10;
         let valueZoom = 10;
 
         for (const summary of datas) {
 
-            // TODO: 建德兄
-            // if (this.checkDateTheSameHour(this.hour, summary.date) && this.inputFormData.deviceId === summary.device.objectId) {
+            if (this.checkDateTheSameHour(this.hour, summary.date)) {
                 if(summary.scores.length > 0) {
                     let heatmaps = summary.scores.map((value, index, array) => {
                         return value.map((value1, index1, array1) => {
@@ -1007,11 +1038,169 @@ export default class ReportHeatmap extends Vue {
                     heatmap = [].concat(...heatmaps);
                 }
                 this.mapImage.src = ServerConfig.url + summary.imageSrc
-            // }
+            }
         }
 
         this.heatMapPosition = heatmap;
         console.log('this.heatMapPosition ~ ', this.heatMapPosition)
+        console.log('this.mapImage.src ~ ', this.mapImage.src)
+    }
+
+    sortOutChartDataManyDay(datas: any) {
+
+        let heatmap: IHeatMapPosition[] = [];
+        this.heatMapPosition = [];
+        this.mapImage.src = '';
+
+        let gridUnit = 10;
+        let valueZoom = 10;
+
+        for (const summary of datas) {
+
+            if (this.checkDateTheSameDay(new Date(this.dayArrayData), new Date(summary.date))) {
+                if(summary.scores.length > 0) {
+                    let heatmaps = summary.scores.map((value, index, array) => {
+                        return value.map((value1, index1, array1) => {
+                            return {
+                                x: index1 * gridUnit + gridUnit / 2,
+                                y: index * gridUnit + gridUnit / 2,
+                                value: value1 * valueZoom,
+                            };
+                        });
+                    });
+                    heatmap = [].concat(...heatmaps);
+                }
+                this.mapImage.src = ServerConfig.url + summary.imageSrc
+            }
+        }
+
+        this.heatMapPosition = heatmap;
+        console.log('this.heatMapPosition ~ ', this.heatMapPosition)
+        console.log('this.mapImage.src ~ ', this.mapImage.src)
+    }
+
+    sortDeviceSummaryFilterData() {
+        this.areaSummaryFilter = [];
+        this.deviceSummaryFilter = [];
+        this.deviceGroupSummaryFilter = [];
+
+        // console.log('!!!!! ~ ', )
+        // console.log('this.inputFormData.areaId ~ ', this.inputFormData.areaId)
+        // console.log('this.inputFormData.groupId ~ ', this.inputFormData.groupId)
+        // console.log('this.inputFormData.deviceId ~ ', this.inputFormData.deviceId)
+
+        // area
+        if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
+            for (const singleData of this.responseData.summaryDatas) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+                    if (detailKey === "area") {
+                        if (
+                            this.inputFormData.areaId ===
+                            tempSingleData.objectId
+                        ) {
+                            this.areaSummaryFilter.push(singleData);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // group
+        if (
+            this.inputFormData.groupId &&
+            this.inputFormData.groupId !== "all"
+        ) {
+            // 依照單一deviceGroup篩選
+            for (const singleData of this.areaSummaryFilter) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === "deviceGroups") {
+                        if (
+                            this.inputFormData.groupId ===
+                            tempSingleData[0].objectId
+                        ) {
+                            this.deviceGroupSummaryFilter.push(singleData);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // device
+        // 判斷沒有 deviceGroup
+        if (
+            ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
+            this.inputFormData.groupId === "all"
+        ) {
+            // 依照device篩選
+            for (const singleData of this.areaSummaryFilter) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+                    if (detailKey === "device") {
+                        if (
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
+                        ) {
+                            this.deviceSummaryFilter.push(singleData);
+                        }
+                    }
+                }
+            }
+
+            // 判斷有 deviceGroup，groupId 為 'all'，
+        } else if (
+            !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
+            this.inputFormData.groupId &&
+            this.inputFormData.groupId === "all"
+        ) {
+            // 依照device篩選
+            for (const singleData of this.deviceGroupSummaryFilter) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === "device") {
+                        if (
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
+                        ) {
+                            this.deviceSummaryFilter.push(singleData);
+                        }
+                    }
+                }
+            }
+
+            // 判斷有 deviceGroup，groupId 不為 'all'，
+        } else if (
+            !ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
+            this.inputFormData.groupId &&
+            this.inputFormData.groupId !== "all"
+        ) {
+            // 依照device篩選
+            for (const singleData of this.deviceGroupSummaryFilter) {
+                for (const detailKey in singleData) {
+                    const tempSingleData = singleData[detailKey];
+
+                    if (detailKey === "device") {
+                        if (
+                            this.inputFormData.deviceId ===
+                            tempSingleData.objectId
+                        ) {
+                            this.deviceSummaryFilter.push(singleData);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        console.log('@@@@@@', )
+        // console.log('this.areaSummaryFilter ~ ', this.areaSummaryFilter)
+        // console.log('this.deviceGroupSummaryFilter ~ ', this.deviceGroupSummaryFilter)
+        console.log('this.deviceSummaryFilter ~ ', this.deviceSummaryFilter)
     }
 
     async receiveAreaId(areaId) {
@@ -1036,8 +1225,6 @@ export default class ReportHeatmap extends Vue {
                 }
             }
 
-            this.sortOutChartData(this.areaSummaryFilter);
-            this.areaMode = EAreaMode.single;
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
 
@@ -1052,8 +1239,6 @@ export default class ReportHeatmap extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
-            this.sortOutChartData(this.responseData.summaryDatas);
-            this.areaMode = EAreaMode.all;
 
             this.inputFormData.groupId = "";
             this.inputFormData.deviceId = "";
@@ -1067,9 +1252,6 @@ export default class ReportHeatmap extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-
-            this.sortOutChartData(this.responseData.summaryDatas);
-            this.areaMode = EAreaMode.all;
 
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
@@ -1102,17 +1284,17 @@ export default class ReportHeatmap extends Vue {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
-                        if (
-                            this.inputFormData.groupId ===
-                            tempSingleData[0].objectId
-                        ) {
-                            this.deviceGroupSummaryFilter.push(singleData);
+                        if (tempSingleData.length > 0) {
+                            if (
+                                this.inputFormData.groupId ===
+                                tempSingleData[0].objectId
+                            ) {
+                                this.deviceGroupSummaryFilter.push(singleData);
+                            }
                         }
                     }
                 }
             }
-
-            this.sortOutChartData(this.deviceGroupSummaryFilter);
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
@@ -1124,7 +1306,6 @@ export default class ReportHeatmap extends Vue {
             this.inputFormData.groupId &&
             this.inputFormData.groupId === "all"
         ) {
-            this.sortOutChartData(this.areaSummaryFilter);
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
@@ -1133,7 +1314,6 @@ export default class ReportHeatmap extends Vue {
 
             // 清除deviceGroups篩選
         } else if (this.inputFormData.areaId && !this.inputFormData.groupId) {
-            this.sortOutChartData(this.areaSummaryFilter);
 
             this.inputFormData.deviceId = "";
             await this.initSelectItemDevice();
@@ -1148,6 +1328,7 @@ export default class ReportHeatmap extends Vue {
         this.inputFormData.deviceId = deviceId;
         this.deviceSummaryFilter = [];
 
+
         // 判斷沒有 deviceGroup
         if (
             ReportService.CheckObjectIfEmpty(this.deviceGroupSummaryFilter) &&
@@ -1157,8 +1338,11 @@ export default class ReportHeatmap extends Vue {
             for (const singleData of this.areaSummaryFilter) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
-
                     if (detailKey === "device") {
+                        // console.log('receiveDeviceId  deviceId~ ', this.inputFormData.deviceId)
+                        // console.log('tempSingleData.objectId~ ', tempSingleData.objectId)
+                        // console.log('??? ~ ',  this.inputFormData.deviceId === tempSingleData.objectId)
+
                         if (
                             this.inputFormData.deviceId ===
                             tempSingleData.objectId
@@ -1168,7 +1352,23 @@ export default class ReportHeatmap extends Vue {
                     }
                 }
             }
-            this.sortOutChartData(this.deviceSummaryFilter);
+
+            console.log('^^^^^^^^^^ ~ ', )
+
+            if (
+                this.checkDateTheSameDay(
+                    this.filterData.startDate,
+                    this.filterData.endDate
+                )
+            ) {
+                console.log('Hour ~ ', )
+                this.receiveHour(this.slider.value);
+            } else {
+                console.log('Day ~ ', )
+                this.receiveDayArrayIndex(this.dayArrayDataIndex);
+            }
+
+            console.log('receiveDeviceId deviceSummaryFilter ~ ', this.deviceSummaryFilter)
 
             // 清除device篩選
             if (
@@ -1176,7 +1376,6 @@ export default class ReportHeatmap extends Vue {
                 this.inputFormData.groupId &&
                 !this.inputFormData.deviceId
             ) {
-                this.sortOutChartData(this.areaSummaryFilter);
 
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
@@ -1188,7 +1387,6 @@ export default class ReportHeatmap extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-                this.sortOutChartData(this.areaSummaryFilter);
 
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
@@ -1218,7 +1416,6 @@ export default class ReportHeatmap extends Vue {
                     }
                 }
             }
-            this.sortOutChartData(this.deviceSummaryFilter);
 
             // 清除device篩選
             if (
@@ -1226,7 +1423,6 @@ export default class ReportHeatmap extends Vue {
                 this.inputFormData.groupId &&
                 !this.inputFormData.deviceId
             ) {
-                this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
@@ -1238,7 +1434,6 @@ export default class ReportHeatmap extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-                this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
@@ -1268,7 +1463,6 @@ export default class ReportHeatmap extends Vue {
                     }
                 }
             }
-            this.sortOutChartData(this.deviceSummaryFilter);
 
             // 清除device篩選
             if (
@@ -1276,7 +1470,6 @@ export default class ReportHeatmap extends Vue {
                 this.inputFormData.groupId &&
                 !this.inputFormData.deviceId
             ) {
-                this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
@@ -1288,7 +1481,6 @@ export default class ReportHeatmap extends Vue {
                 this.inputFormData.groupId &&
                 this.inputFormData.deviceId === "all"
             ) {
-                this.sortOutChartData(this.deviceGroupSummaryFilter);
 
                 this.inputFormData.deviceId = "";
                 await this.initSelectItemDevice();
@@ -1309,7 +1501,7 @@ export default class ReportHeatmap extends Vue {
 
         // 單一site
         if (this.filterData.firstSiteId) {
-            this.sortOutChartData(this.responseData.summaryDatas);
+            this.sortOutChartDataOneDay(this.responseData.summaryDatas);
 
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
@@ -1326,29 +1518,66 @@ export default class ReportHeatmap extends Vue {
     }
 
     // 一天的其中一小時
-    receiveHour(hour) {
+    async receiveHour(hour) {
+        console.log(' ~ ', hour)
         let tempHour = new Date();
         tempHour.setHours(parseInt(hour), 0, 0, 0);
-
         this.hour = new Date(tempHour).toISOString();
-
         Datetime.DateTime2String(new Date(this.hour), 'HH');
 
-        console.log('this.hour ~ ', this.hour);
-
-        this.sortOutChartData(this.responseData.summaryDatas);
+        this.sortDeviceSummaryFilterData();
+        this.sortOutChartDataOneDay(this.deviceSummaryFilter);
 
     }
 
     // 多天的其中一天
-    receiveDayArrayIndex(timeArrayIndex) {
+    async receiveDayArrayIndex(timeArrayIndex) {
+        console.log(' ~ ', timeArrayIndex)
+
+        this.dayArrayDataIndex = timeArrayIndex;
+
         for (const index in this.dayArray) {
             if (timeArrayIndex === index) {
                 this.dayArrayData = this.dayArray[index];
             }
         }
-        this.sortOutChartData(this.responseData.summaryDatas);
-        console.log('this.dayArrayData ~ ', this.dayArrayData)
+
+        this.sortDeviceSummaryFilterData();
+
+        // const param = this.filterData;
+        // this.filterData.startDate = this.dayArrayData;
+        // this.filterData.endDate = this.dayArrayData;
+        //
+        // console.log(this.filterData);
+        //
+        // await this.$server
+        //     .C("/report/heatmap/summary", param)
+        //     .then((response: any) => {
+        //         if (response !== undefined) {
+        //             this.responseData = response;
+        //             this.officeHourItemDetail = this.responseData.officeHours;
+        //             this.resolveSummary();
+        //             if (
+        //                 this.checkDateTheSameDay(
+        //                     this.filterData.startDate,
+        //                     this.filterData.endDate
+        //                 )
+        //             ) {
+        //                 this.initHourArray();
+        //             } else {
+        //                 this.initDayArray();
+        //             }
+        //             this.firstSortOutChartData(this.responseData.summaryDatas);
+        //
+        //         }
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(this, e);
+        //     });
+
+        console.log('this.dayArrayData ~ ', this.dayArrayData);
+        console.log('this.responseData.deviceSummaryFilter ~ ', this.deviceSummaryFilter)
+        this.sortOutChartDataManyDay(this.deviceSummaryFilter);
     }
 
     // Author: Tina

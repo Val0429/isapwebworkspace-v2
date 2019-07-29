@@ -276,7 +276,6 @@ export class SiteForm extends Vue {
                 .then((response: any) => {
                     Loading.hide();
                     if (response != undefined) {
-                        data.objectId = response[0].objectId;
                         Dialog.success(this._("w_Site_AddSiteSuccess"));
                         this.pageToSiteList();
                     }

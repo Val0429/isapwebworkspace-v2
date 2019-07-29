@@ -193,7 +193,7 @@ export class SiteList extends Vue {
                 : data.tags;
             data.establishment = data.establishment
                 ? new Date(data.establishment)
-                : "";
+                : null;
             this.site = this.isSelectSite = data;
         }
         this.$emit("selectedSite", data);

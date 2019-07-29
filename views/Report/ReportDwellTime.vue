@@ -797,7 +797,7 @@ export default class ReportDwellTime extends Vue {
 
         // TODO: wait api
         await this.$server
-            .C("/report/human-detection/summary-threshold", filterData) 
+            .C("/report/human-detection/summary-threshold", filterData)
             .then((response: any) => {
                 Loading.hide();
                 if (response !== undefined) {
@@ -2076,11 +2076,13 @@ export default class ReportDwellTime extends Vue {
                     const tempSingleData = singleData[detailKey];
 
                     if (detailKey === "deviceGroups") {
-                        if (
-                            this.inputFormData.groupId ===
-                            tempSingleData[0].objectId
-                        ) {
-                            this.deviceGroupSummaryFilter.push(singleData);
+                        if (tempSingleData.length > 0) {
+                            if (
+                                this.inputFormData.groupId ===
+                                tempSingleData[0].objectId
+                            ) {
+                                this.deviceGroupSummaryFilter.push(singleData);
+                            }
                         }
                     }
                 }
