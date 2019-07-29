@@ -211,6 +211,7 @@ export class SiteDeviceGroupForm extends Vue {
                         : data.areaName,
                     name: data.name,
                     mode: data.mode
+                    //TO DO add high medium low param
                 }
             ];
 
