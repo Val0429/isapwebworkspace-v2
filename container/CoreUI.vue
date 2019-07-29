@@ -175,11 +175,28 @@
                         />
                     </SidebarNavItem>
 
-                    <!-- Rules and Action -->
+                    <!-- Rule Engine -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_RulesActions')"
-                        url="/rules_actions"
-                    />
+                        :label="_('w_Navigation_RuleEngine')"
+                        url="/rule_engine"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleEngine_Traffic')"
+                            url="/rule_engine/traffic"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleEngine_demographic')"
+                            url="/rule_engine/demographic"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleEngine_heatmap')"
+                            url="/rule_engine/heatmap"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_RuleEngine_repeat_visitor')"
+                            url="/rule_engine/repeat_visitor"
+                        />
+                    </SidebarNavItem>
 
                     <!-- Business Operation -->
                     <SidebarNavItem
