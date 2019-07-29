@@ -1,6 +1,10 @@
 <template>
     <div class="animated fadeIn">
 
+        <choose-metrics
+            :deviceMode="deviceMode"
+        ></choose-metrics>
+
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
@@ -52,6 +56,7 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import { EDeviceMode } from '@/components/Reports';
 
 @Component({
     components: {}
@@ -62,6 +67,8 @@ export default class RuleAndActionsTraffic extends Vue {
         prevStep: 1,
         step: 1
     };
+
+    deviceMode: string = EDeviceMode.peopleCounting;
 
     isMounted: boolean = false;
     doMounted() {

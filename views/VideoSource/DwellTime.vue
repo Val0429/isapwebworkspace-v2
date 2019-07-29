@@ -897,8 +897,8 @@ export default class DwellTime extends Vue {
             // from selecteds push siteId
             if (this.selecteds.length > 0) {
                 this.inputFormData.siteId = this.selecteds[
-                this.selecteds.length - 1
-                    ].objectId;
+                    this.selecteds.length - 1
+                ].objectId;
                 await this.selectAreaId(this.inputFormData.siteId);
             }
         }
@@ -913,8 +913,8 @@ export default class DwellTime extends Vue {
             // from selecteds push siteId
             if (this.selecteds.length > 0) {
                 this.inputFormData.siteId = this.selecteds[
-                this.selecteds.length - 1
-                    ].objectId;
+                    this.selecteds.length - 1
+                ].objectId;
                 await this.selectAreaId(this.inputFormData.siteId);
             }
         }
@@ -931,7 +931,7 @@ export default class DwellTime extends Vue {
     async saveAddOrEditiSap(data) {
         const configObject: IConfigiSap = {
             serverId: data.serverId,
-            sourceid: data.sourceid,
+            sourceid: data.sourceid
         };
 
         if (this.inputFormData.brand === EAddStep.isapFrs) {
@@ -1198,8 +1198,8 @@ export default class DwellTime extends Vue {
                  * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
                  * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
+                 }
                  */
                 demoServerId: ${toEnumInterface(
                     this.demographicIdSelectItem as any,

@@ -25,3 +25,6 @@ enum EWhoNotify {
     users = 'users',
     userGroup = 'userGroup',
 }
+
+
+export { EAction, ERunTimeType, ENotifyMethod, EWhoNotify }
