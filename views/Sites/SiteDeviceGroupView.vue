@@ -69,19 +69,8 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime";
-import Loading from "@/services/Loading";
-import ResponseFilter from "@/services/ResponseFilter";
-import ServerConfig from "@/services/ServerConfig";
 import ImageBase64 from "@/services/ImageBase64";
-import {
-    DeviceNormalCameraItem,
-    DeviceGroupItem,
-    EDragType,
-    ESetupMode,
-    ImageMapItem,
-    ImageBoxItem
-} from "@/components/ImageMap";
+import { ImageMapItem } from "@/components/ImageMap";
 import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
 
 interface IGoogleMap {
@@ -124,12 +113,7 @@ export class SiteDeviceGroupView extends Vue {
     })
     deviceGroup: any;
 
-    serverUrl = ServerConfig.url;
-    newImg = new Image();
     imageMap = new ImageMapItem();
-    tableMultiple = false;
-    newImgSrc = "";
-    gooleMapSrc = "";
 
     //options
     cameraModeItem = [];

@@ -129,7 +129,6 @@ export class SiteForm extends Vue {
 
     serverUrl = ServerConfig.url;
     newImg = new Image();
-    tableMultiple = false;
     newImgSrc = "";
     gooleMapSrc = "";
 
@@ -137,10 +136,6 @@ export class SiteForm extends Vue {
     managerItem = [];
     tagItem = [];
     officeHourItem = [];
-    deviceTypeItem = {};
-    deviceNameItem = [];
-    areaNameItem = [];
-    cameraModeItem = [];
 
     googleMap: IGoogleMap = {
         src: "https://maps.google.com/maps?output=embed",

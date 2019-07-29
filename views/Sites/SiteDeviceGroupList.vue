@@ -78,20 +78,12 @@ export class SiteDeviceGroupList extends Vue {
     transition;
 
     tableMultiple = false;
-    gooleMapSrc = "";
-    newImgSrc = "";
 
     //site datas
-    isSelectSite = false;
-    sites = {};
     site: any = {};
-
-    areaAll = [];
-    deviceGroupAll = [];
 
     //device Group datas
     isSelectDeviceGroup = false;
-    deviceGroups = {};
     deviceGroup: any = {};
 
     created() {}
@@ -161,7 +153,7 @@ export class SiteDeviceGroupList extends Vue {
     selectedDeviceGroup(data) {
         this.isSelectDeviceGroup = false;
         if (data && data.objectId) {
-         this.isSelectDeviceGroup = data;
+            this.isSelectDeviceGroup = data;
         }
         this.$emit("selectedDeviceGroup", data);
     }

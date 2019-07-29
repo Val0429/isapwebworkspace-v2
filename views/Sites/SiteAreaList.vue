@@ -68,16 +68,11 @@ export class SiteAreaList extends Vue {
     areaParams: object;
 
     tableMultiple = false;
-    gooleMapSrc = "";
-    newImgSrc = "";
 
     //area datas
     isSelectArea = false;
-    areaPhotoSrc = "";
-    areaMapSrc = "";
     areas = {};
     area: any = {};
-    areaAll = [];
 
     //device Group datas
     deviceGroupAll = [];
