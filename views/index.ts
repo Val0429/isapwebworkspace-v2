@@ -188,11 +188,11 @@ $({ path: '/business_operations/sales_records', name: "_('w_Navigation_BO_SalesR
 $({ path: '/business_operations/general_office_hour', name: "_('w_Navigation_BO_GeneralOfficeHour')", icon: 'fa-check' })(GeneralOfficeHour);
 
 // Setting
-$({ path: '/setting', name: "_('w_Navigation_Setting')", icon: 'fa-code', redirect: '/setting/mail_server' })();
-$({ path: '/setting/mail_server', name: "_('w_Navigation_Setting_MailServer')", icon: 'fa-check' })(MailServer);
-$({ path: '/setting/sms', name: "_('w_Navigation_Setting_SMS')", icon: 'fa-check' })(SMS);
-$({ path: '/setting/weather', name: "_('w_Navigation_Setting_Weather')", icon: 'fa-check' })(Weather);
+$({ path: '/setting', name: "_('w_Navigation_Setting')", redirect: '/setting/mail_server' })();
+$({ path: '/setting/mail_server', name: "_('w_Navigation_Setting_MailServer')" })(MailServer);
+$({ path: '/setting/sms', name: "_('w_Navigation_Setting_SMS')" })(SMS);
+$({ path: '/setting/weather', name: "_('w_Navigation_Setting_Weather')" })(Weather);
 // $({ path: '/setting/backup', name: "_('w_Navigation_Setting_Backup')", icon: 'fa-question' })(Backup);
 // $({ path: '/setting/restore', name: "_('w_Navigation_Setting_Restore')", icon: 'fa-question' })(Restore);
-$({ path: '/setting/license', name: "_('w_Navigation_Setting_License')", icon: 'fa-check' })(License);
-$({ path: '/setting/tag', name: "_('w_Navigation_Setting_Tag')", icon: 'fa-check' })(Tag);
+$({ path: '/setting/license', name: "_('w_Navigation_Setting_License')" })(License);
+$({ path: '/setting/tag', name: "_('w_Navigation_Setting_Tag')" })(Tag);
