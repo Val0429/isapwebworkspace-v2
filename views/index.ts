@@ -71,11 +71,11 @@ import FaceRecognition from './VideoSource/FaceRecognition.vue';
 import Heatmap from './VideoSource/Heatmap.vue';
 import HumanDetection from './VideoSource/HumanDetection.vue';
 
-// Rule Engine
-import RuleEngineTraffic from './RuleEngine/RuleEngineTraffic.vue';
-import RuleEngineDemographic from './RuleEngine/RuleEngineDemographic.vue';
-import RuleEngineHeatmap from './RuleEngine/RuleEngineHeatmap.vue';
-import RuleEngineRepeatVisitor from './RuleEngine/RuleEnigneRepeatVisitor.vue';
+// Rule and Actions
+import RuleAndActionsTraffic from './RuleAndActions/RuleAndActionsTraffic.vue';
+import RuleAndActionsOccupancy from './RuleAndActions/RuleAndActionsOccupancy.vue';
+import RuleAndActionsVipBlacklist from './RuleAndActions/RuleAndActionsVipBlacklist.vue';
+import RuleAndActionsRepeatVisitor from './RuleAndActions/RuleAndActionsRepeatVisitor.vue';
 
 // BusinessOperation
 import CampaignSetting from './BusinessOperation/CampaignSetting.vue';
@@ -175,11 +175,11 @@ $({ path: '/video_sources/heatmap', name: "_('w_Navigation_VideoSources_Heatmap'
 $({ path: '/video_sources/face_recognition', name: "_('w_Navigation_VideoSources_FaceRecognition')", icon: 'fa-code' })(FaceRecognition);
 
 // Rule Engine
-$({ path: '/rule_engine', name: "_('w_Navigation_RuleEngine')", icon: 'fa-code', redirect: '/rule_engine/traffic' })();
-$({ path: '/rule_engine/traffic', name: "_('w_Navigation_RuleEngine')", icon: 'fa-code' })(RuleEngineTraffic);
-$({ path: '/rule_engine/demographic', name: "_('w_Navigation_RuleEngine')", icon: 'fa-code' })(RuleEngineDemographic);
-$({ path: '/rule_engine/heatmap', name: "_('w_Navigation_RuleEngine')", icon: 'fa-code' })(RuleEngineHeatmap);
-$({ path: '/rule_engine/repeat_visitor', name: "_('w_Navigation_RuleEngine')", icon: 'fa-code' })(RuleEngineRepeatVisitor);
+$({ path: '/rule_actions', name: "_('w_Navigation_RuleAndActions')", icon: 'fa-code', redirect: '/rule_actions/traffic' })();
+$({ path: '/rule_actions/traffic', name: "_('w_Navigation_RuleAndActions_Traffic')", icon: 'fa-code' })(RuleAndActionsTraffic);
+$({ path: '/rule_actions/occupancy', name: "_('w_Navigation_RuleAndActions_Occupancy')", icon: 'fa-code' })(RuleAndActionsOccupancy);
+$({ path: '/rule_actions/vip_blacklist', name: "_('w_Navigation_RuleAndActions_VipBlacklist')", icon: 'fa-code' })(RuleAndActionsVipBlacklist);
+$({ path: '/rule_actions/repeat_visitor', name: "_('w_Navigation_RuleAndActions_RepeatVisitor')", icon: 'fa-code' })(RuleAndActionsRepeatVisitor);
 
 // Business Operation
 $({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", redirect: '/business_operations/campaign_setting' })();

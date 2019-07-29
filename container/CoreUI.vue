@@ -175,26 +175,26 @@
                         />
                     </SidebarNavItem>
 
-                    <!-- Rule Engine -->
+                    <!-- Rule and Actions -->
                     <SidebarNavItem
-                        :label="_('w_Navigation_RuleEngine')"
-                        url="/rule_engine"
+                        :label="_('w_Navigation_RuleAndActions')"
+                        url="/rule_actions"
                     >
                         <SidebarNavItem
-                            :label="_('w_Navigation_RuleEngine_Traffic')"
-                            url="/rule_engine/traffic"
+                            :label="_('w_Navigation_RuleAndActions_Traffic')"
+                            url="/rule_actions/traffic"
                         />
                         <SidebarNavItem
-                            :label="_('w_Navigation_RuleEngine_demographic')"
-                            url="/rule_engine/demographic"
+                            :label="_('w_Navigation_RuleAndActions_Occupancy')"
+                            url="/rule_actions/occupancy"
                         />
                         <SidebarNavItem
-                            :label="_('w_Navigation_RuleEngine_heatmap')"
-                            url="/rule_engine/heatmap"
+                            :label="_('w_Navigation_RuleAndActions_VipBlacklist')"
+                            url="/rule_actions/vip_blacklist"
                         />
                         <SidebarNavItem
-                            :label="_('w_Navigation_RuleEngine_repeat_visitor')"
-                            url="/rule_engine/repeat_visitor"
+                            :label="_('w_Navigation_RuleAndActions_RepeatVisitor')"
+                            url="/rule_actions/repeat_visitor"
                         />
                     </SidebarNavItem>
 
@@ -299,12 +299,9 @@ export default class CoreUI extends Vue {
         }
     }
 
-    mounted() {
-    }
+    mounted() {}
 
-    beforeDestroy() {
-    }
-
+    beforeDestroy() {}
 }
 </script>
 

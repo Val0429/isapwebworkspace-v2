@@ -11,7 +11,7 @@
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
             >
-                Rule Engine Repeat Visitor 1
+                Rule and Action Occupancy 1
             </div>
 
             <div
@@ -19,7 +19,7 @@
                 v-show="transition.step === 2"
                 :label="'Empty 2'"
             >
-                Rule Engine Repeat Visitor 2
+                Rule and Action Occupancy 2
             </div>
 
         </iv-auto-transition>
@@ -40,7 +40,7 @@ import Dialog from "@/services/Dialog";
 @Component({
     components: {}
 })
-export default class RuleEngineRepeatVisitor extends Vue {
+export default class RuleAndActionsOccupancy extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,

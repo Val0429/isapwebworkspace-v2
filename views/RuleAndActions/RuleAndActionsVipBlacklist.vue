@@ -11,7 +11,7 @@
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
             >
-                Rule Engine Traffic 1
+                Rule and Action VIP/Blacklist 1
             </div>
 
             <div
@@ -19,7 +19,7 @@
                 v-show="transition.step === 2"
                 :label="'Empty 2'"
             >
-                Rule Engine Traffic 2
+                Rule and Action VIP/Blacklist 2
             </div>
 
         </iv-auto-transition>
@@ -40,7 +40,7 @@ import Dialog from "@/services/Dialog";
 @Component({
     components: {}
 })
-export default class RuleEngineTraffice extends Vue {
+export default class RuleAndActionsVipBlacklist extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,

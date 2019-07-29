@@ -281,11 +281,11 @@ export default class LangObject implements ILang {
     w_Navigation_VideoSources_VIP_Stranger_Visitor = 'VIP / Stranger / Visitor';
     w_Navigation_VideoSources_Visitor = 'Visitor';
 
-    w_Navigation_RuleEngine = 'Rule Engine';
-    w_Navigation_RuleEngine_Traffic = 'Traffic';
-    w_Navigation_RuleEngine_demographic = 'Demographic';
-    w_Navigation_RuleEngine_heatmap = 'Heatmap';
-    w_Navigation_RuleEngine_repeat_visitor = 'Repeat Visitor';
+    w_Navigation_RuleAndActions = 'Rule and Actions';
+    w_Navigation_RuleAndActions_Traffic = 'Traffic';
+    w_Navigation_RuleAndActions_Occupancy = 'Occupancy';
+    w_Navigation_RuleAndActions_VipBlacklist = 'VIP/Blacklist';
+    w_Navigation_RuleAndActions_RepeatVisitor = 'Repeat Visitor';
 
     w_Navigation_BusinessOperation = 'Business Operation';
     w_Navigation_BO_CampaignSetting = 'Campaign Setting';
