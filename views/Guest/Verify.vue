@@ -157,6 +157,10 @@ export default class Verify extends Vue {
 
     // Author: Morris
     initVerifyCode() {
+        if (this.$route.query.t == undefined) {
+            this.$router.push("/login");
+            return false;
+        }
         if (this.$route.query.t != undefined) {
             this.token = this.$route.query.t as string;
         }

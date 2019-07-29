@@ -82,8 +82,8 @@ import GeneralOfficeHour from './BusinessOperation/GeneralOfficeHour.vue';
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
 import Weather from './Setting/Weather.vue';
-import Backup from './Setting/Backup.vue';
-import Restore from './Setting/Restore.vue';
+// import Backup from './Setting/Backup.vue';
+// import Restore from './Setting/Restore.vue';
 import License from './Setting/License.vue';
 import Tag from './Setting/Tags.vue';
 
@@ -184,7 +184,7 @@ $({ path: '/setting', name: "_('w_Navigation_Setting')", icon: 'fa-code', redire
 $({ path: '/setting/mail_server', name: "_('w_Navigation_Setting_MailServer')", icon: 'fa-check' })(MailServer);
 $({ path: '/setting/sms', name: "_('w_Navigation_Setting_SMS')", icon: 'fa-check' })(SMS);
 $({ path: '/setting/weather', name: "_('w_Navigation_Setting_Weather')", icon: 'fa-check' })(Weather);
-$({ path: '/setting/backup', name: "_('w_Navigation_Setting_Backup')", icon: 'fa-question' })(Backup);
-$({ path: '/setting/restore', name: "_('w_Navigation_Setting_Restore')", icon: 'fa-question' })(Restore);
+// $({ path: '/setting/backup', name: "_('w_Navigation_Setting_Backup')", icon: 'fa-question' })(Backup);
+// $({ path: '/setting/restore', name: "_('w_Navigation_Setting_Restore')", icon: 'fa-question' })(Restore);
 $({ path: '/setting/license', name: "_('w_Navigation_Setting_License')", icon: 'fa-check' })(License);
 $({ path: '/setting/tag', name: "_('w_Navigation_Setting_Tag')", icon: 'fa-check' })(Tag);
