@@ -90,7 +90,6 @@
             </div>
 
             <!-- view -->
-
             <div
                 key="transition_3"
                 v-show="transition.step === 3"
@@ -108,7 +107,6 @@
                         :interface="IViewForm()"
                         :value="inputFormData"
                     >
-
                     </iv-form>
 
                     <template #footer>
@@ -122,7 +120,6 @@
 
                 </iv-auto-card>
             </div>
-
         </iv-auto-transition>
 
     </div>
@@ -140,6 +137,13 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 
+interface IStep2Data {
+    ruleMode: string;
+    equalMode: string;
+    fillValue: number;
+    andMode: string;
+}
+
 @Component({
     components: {}
 })
@@ -150,22 +154,37 @@ export default class RuleAndActionsTraffic extends Vue {
         step: 1
     };
 
+    step2Item: any = {
+        condition: []
+    };
+    step2Datas: IStep2Data[] = [];
+
     isMounted: boolean = false;
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
-    inputFormData:any = {};
-    
+    inputFormData: any = {};
 
     doMounted() {
         this.isMounted = true;
     }
 
-    created() {
-        this.transition.step = 1;
+    created() {}
+
+    mounted() {
+        // TODO: Developer
+        this.transition.step = 2;
+        let stepRef: any = this.$refs.step;
+        stepRef.currentStep = 2;
     }
 
-    mounted() {}
+    IStep2() {
+        return `
+            interface {
+                title?: any;
+                condition?: any;
+            }`;
+    }
 
     pageToAdd() {
         this.transition.prevStep = this.transition.step;
