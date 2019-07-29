@@ -146,7 +146,6 @@ import { Vue, Component } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 
 // Service
-import ResponseFilter from "@/services/ResponseFilter";
 import ServerConfig from "@/services/ServerConfig";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";

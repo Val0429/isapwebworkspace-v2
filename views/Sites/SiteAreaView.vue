@@ -103,17 +103,11 @@ export class SiteAreaView extends Vue {
     serverUrl = ServerConfig.url;
     newImg = new Image();
     imageMap = new ImageMapItem();
-    tableMultiple = false;
     newImgSrc = "";
-    gooleMapSrc = "";
 
     //area datas
-    isSelectArea = false;
     areaPhotoSrc = "";
     areaMapSrc = "";
-    areas = {};
-    areaParams = {};
-    areaAll = [];
 
     //device datas
     devicesGroupDevices = [];
