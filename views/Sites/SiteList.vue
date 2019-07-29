@@ -66,21 +66,10 @@ import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 @Component({})
 export class SiteList extends Vue {
-    // @Prop({
-    //     type: Object,
-    //     default: () => {
-    //         return {};
-    //     }
-    // })
-    // heatMapPosition: object;
-
     tableMultiple = false;
-    gooleMapSrc = "";
-    newImgSrc = "";
 
     //site datas
     isSelectSite = false;
-    sites = {};
     site: any = {};
 
     areaAll = [];
@@ -199,7 +188,7 @@ export class SiteList extends Vue {
         this.$emit("selectedSite", data);
     }
 
-       async deleteSite() {
+    async deleteSite() {
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
             var body: {
                 objectId: string;

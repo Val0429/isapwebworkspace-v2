@@ -99,17 +99,6 @@ import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
-import ServerConfig from "@/services/ServerConfig";
-import ImageBase64 from "@/services/ImageBase64";
-import {
-    DeviceNormalCameraItem,
-    DeviceGroupItem,
-    EDragType,
-    ESetupMode,
-    ImageMapItem,
-    ImageBoxItem
-} from "@/components/ImageMap";
-import { ImageMap } from "@/components/ImageMap/ImageMap.vue";
 import {
     IDeviceGroupAddData,
     IDeviceGroupEditData
@@ -162,13 +151,6 @@ export class SiteDeviceGroupForm extends Vue {
         }
     })
     transition;
-
-    serverUrl = ServerConfig.url;
-    newImg = new Image();
-    imageMap = new ImageMapItem();
-    tableMultiple = false;
-    newImgSrc = "";
-    gooleMapSrc = "";
 
     //options
     cameraModeItem = [];

@@ -1077,4 +1077,9 @@ export default class LangObject {
     w_Campaign_Budget = 'Budget';
     w_Campaign_BudgetPercentage = 'Budget %';
     w_Campaign_TrafficGainPer = 'Traffic gain per $';
+
+    // Rule and Actions
+    w_RuleAndActions_EditStep1 = 'Choose Metrics & Store';
+    w_RuleAndActions_EditStep2 = 'Choose Rule';
+    w_RuleAndActions_EditStep3 = 'Action';
 }
