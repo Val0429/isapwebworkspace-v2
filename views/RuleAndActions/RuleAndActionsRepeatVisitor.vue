@@ -14,13 +14,29 @@
                 Rule and Action Repeat Visitor 1
             </div>
 
-            <div
+            <iv-step-progress
+                ref="step"
                 key="transition_2"
                 v-show="transition.step === 2"
-                :label="'Empty 2'"
+                @mounted="doMounted"
             >
-                Rule and Action Repeat Visitor 2
-            </div>
+
+                <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
+                <template #1>
+                    Step 1
+                </template>
+
+                <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
+                <template #2>
+                    Step 2
+                </template>
+
+                <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
+                <template #3>
+                    Step 3
+                </template>
+
+            </iv-step-progress>
 
         </iv-auto-transition>
 
@@ -46,6 +62,11 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         prevStep: 1,
         step: 1
     };
+
+    isMounted: boolean = false;
+    doMounted() {
+        this.isMounted = true;
+    }
 
     created() {}
 
