@@ -524,6 +524,9 @@ export default class LangObject {
     w_Site_AddDeviceGroupFailed = 'Add Entrance Failed';
     w_Site_EditDeviceGroupSuccess = 'Edit Entrance Success';
     w_Site_EditDeviceGroupFailed = 'Edit Entrance Failed';
+    w_Site_High = 'High';
+    w_Site_Medium = 'Medium';
+    w_Site_Low = 'Low';
 
     // Backup
     w_Backup_List = 'Function List';

@@ -212,6 +212,28 @@ export class SiteDeviceGroupView extends Vue {
                 */
                 devices?: string;
 
+                 
+                /**
+                 * @uiLabel - ${this._("w_Site_High")}
+                 * @uiType - iv-form-label
+                 * @uiColumnGroup - threshold 
+                 */
+                high?:number;
+
+                 /**
+                 * @uiLabel - ${this._("w_Site_Medium")}
+                 * @uiType - iv-form-label
+                 * @uiColumnGroup - threshold 
+                 */
+                medium?:number;
+
+                 /**
+                 * @uiLabel - ${this._("w_Site_Low")}
+                 * @uiType - iv-form-label
+                 * @uiColumnGroup - threshold 
+                 */
+                low?:number;
+
             }`;
     }
 }
