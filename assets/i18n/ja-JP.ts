@@ -307,6 +307,7 @@ export default class LangObject implements ILang {
     w_Navigation_Server_FRSServer = 'FRS Server';
     w_Navigation_Server_DemographicServer = 'Demographic Server';
     w_Navigation_Server_HDServer = 'Human Detection Server';
+    w_Navigation_Setting_System = 'System';
 
     w_Navigation_Report = 'Report';
     w_Navigation_Report_ReportTemplate = 'Report Template';
@@ -449,6 +450,12 @@ export default class LangObject implements ILang {
 
     w_License_Step1_mac = 'Add by license key and mac';
     w_License_Step1_offline = 'Add by upload offline key';
+
+    // System
+    w_System_WebHost = 'Web Host';
+    w_System_Setting = 'Set System';
+    w_System_Setting_Success = 'System set success.';
+    w_System_Setting_Fail = 'System set failed.';
 
     // Mail Server
     w_MailServer_Email = 'Email Account';

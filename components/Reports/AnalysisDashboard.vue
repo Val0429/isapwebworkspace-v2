@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
             </div>
             <!--/col-->

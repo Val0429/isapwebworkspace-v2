@@ -291,8 +291,9 @@ export class AnalysisFilterDwellTime extends Vue {
 
                 /**
                  * @uiColumnGroup - analysis
+                 * @uiHidden - true
                  */
-                submitButton: any;
+                submitButton?: any;
 
 
                 /**

@@ -46,7 +46,7 @@
         </div>
         <div
             v-show="this.heatMapPosition.length === 0"
-            class="center canvas-div"
+            class="center canvas-div border border-dark fa-2x"
         >
             N/A
         </div>

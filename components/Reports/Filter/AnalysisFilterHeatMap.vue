@@ -210,9 +210,9 @@ export class AnalysisFilterHeatMap extends Vue {
 
                 /**
                  * @uiColumnGroup - analysis
+                 * @uiHidden - true
                  */
-                submitButton: any;
-
+                submitButton?: any;
 
             }
         `;

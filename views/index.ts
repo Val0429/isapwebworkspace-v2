@@ -86,6 +86,7 @@ import GeneralOfficeHour from './BusinessOperation/GeneralOfficeHour.vue';
 import MailServer from './Setting/MailServer.vue';
 import SMS from './Setting/SMS.vue';
 import Weather from './Setting/Weather.vue';
+import System from './Setting/System.vue';
 // import Backup from './Setting/Backup.vue';
 // import Restore from './Setting/Restore.vue';
 import License from './Setting/License.vue';
@@ -196,3 +197,4 @@ $({ path: '/setting/weather', name: "_('w_Navigation_Setting_Weather')" })(Weath
 // $({ path: '/setting/restore', name: "_('w_Navigation_Setting_Restore')", icon: 'fa-question' })(Restore);
 $({ path: '/setting/license', name: "_('w_Navigation_Setting_License')" })(License);
 $({ path: '/setting/tag', name: "_('w_Navigation_Setting_Tag')" })(Tag);
+$({ path: '/setting/system', name: "_('w_Navigation_Setting_System')" })(System);
