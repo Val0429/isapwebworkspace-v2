@@ -1,3 +1,6 @@
+import { EAction, EWhoNotify } from './ERuleAndActions';
+import { ERunTimeType, ENotifyMethod } from '.';
+
 interface IChooseMetrics {
     active: EAction;
     siteIds: string[];
