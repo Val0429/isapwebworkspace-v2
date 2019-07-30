@@ -1086,5 +1086,5 @@ export default class LangObject implements ILang {
     w_RuleAndActions_UserGroup = 'User Group';
 
     w_RuleAndActions_Frequently = 'How frequently to notify ?';
-    w_RuleAndActions_Minute = 'Minute ( Fill in 0 if want to notice immediately )';
+    w_RuleAndActions_Minute = 'Minutes ( Fill in 0 if want to notice immediately )';
 }

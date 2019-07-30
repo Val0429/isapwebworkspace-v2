@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
-        <choose-metrics :deviceMode="deviceMode"></choose-metrics>
+        <actions></actions>
 
         <iv-auto-transition
             :step="transition.step"

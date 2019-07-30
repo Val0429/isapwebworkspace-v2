@@ -10,18 +10,9 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from "vue-property-decorator";
 
-	// Report
-	import {
-		EIfAllSelected,
-		ETimeMode,
-		EIncludedEmployee,
-	} from "@/components/Reports";
-
 	import { ERunTimeType } from '@/components/RuleAndActions'
 
 	// Service
-	import Datetime from "@/services/Datetime";
-	import Dialog from "@/services/Dialog";
 	import { toEnumInterface } from "../../../core";
 	import ResponseFilter from '@/services/ResponseFilter';
 	import RegionAPI from '@/services/RegionAPI';
@@ -46,63 +37,17 @@
 		ifAllDeviceSelectItem: any = [];
 		isAnyTimeSelectItem: any = [];
 
-		isActiveSelectItem: any = {};
 
-		// store 相關
-		sitesSelectItem: any = [];
-		areaSelectItem: any = [];
-		deviceGroupSelectItem: any = [];
-		deviceSelectItem: any = [];
-
-		// radio button v-modal 相關
-		selectAllSites: string = EIfAllSelected.select;
-		isAnyTime: string = ERunTimeType.anyTime;
-		isAllArea: string = EIfAllSelected.select;
-		isAllGroup: string = EIfAllSelected.select;
-		isAllDevice: string = EIfAllSelected.select;
-
-
-		// run time 相關
-		runTime: any = {
-			startHours: '',
-			endHours: '',
-			startMinutes: '',
-			endMinutes: '',
-		};
-
-		runTimeRange = {
-			hours: [],
-			minutes: []
-		};
-
-		anyTime = 'Any Time';
 
 		inputFormData: any = {
 			name: '',
-			siteIds: [],
-			allSiteIds: [],
-			firstSiteId: '',
-			isActive: EIncludedEmployee.yes,
-			areaIds: [],
-			groupIds: [],
-			deviceIds: [],
-			allAreaIds: [],
-			allGroupIds: [],
-			allDeviceIds: [],
 
-			startHours: '10',
-			startMinutes: '0',
-			endHours: '20',
-			endMinutes: '0',
 		};
 
 
 		created() {
 			// no api
 			this.initSelectItem();
-
-
-
 
 		}
 
@@ -112,36 +57,11 @@
 
 
 		initSelectItem() {
-			this.ifAllSitesSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllSites") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectSites") }
-			];
+			// this.ifAllSitesSelectItem = [
+			// 	{ value: EIfAllSelected.all, text: this._("w_AllSites") },
+			// 	{ value: EIfAllSelected.select, text: this._("w_SelectSites") }
+			// ];
 
-			this.ifAllAreasSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllAreas") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectArea") }
-			];
-
-			this.ifAllGroupsSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllDeviceGroups") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectDeviceGroups") }
-			];
-			this.ifAllDeviceSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllDevices") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectDevice") }
-			];
-
-			this.isAnyTimeSelectItem = [
-				{ value: ERunTimeType.anyTime, text: this._("w_RuleAndActions_Anytime") },
-				{ value: ERunTimeType.startAndEnd, text: this._("w_RuleAndActions_DesignationTime") }
-			];
-
-			this.isActiveSelectItem = {
-				yes: this._("w_yes"),
-				no: this._("w_no")
-			};
-
-			this.anyTime = this._('w_RuleAndActions_anyTime');
 		}
 
 		IFilterConditionForm() {
@@ -159,7 +79,7 @@
                  * @uiLabel - ${this._("w_RuleAndActions_Active")}
                  * @uiColumnGroup - row
                  */
-                isActive: ${toEnumInterface(this.isActiveSelectItem as any, false)};
+                isActive: any;
 
 
                 /**
@@ -169,94 +89,6 @@
 
 
                 anyTime?: string;
-
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                startHours?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_startTime")}
-                 * @uiColumnGroup - analysis
-                 */
-                startMinutes?: any;
-
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                endHours?: any;
-
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                endMinutes?: any;
-
-
-                /**
-                 * @uiColumnGroup - ifAllSites
-                 */
-                ifAllSites?: any;
-
-
-                /**
-                 * @uiColumnGroup - site
-                 */
-                 siteIds: any;
-
-
-                /**
-                 * @uiColumnGroup - site
-                 */
-                 selectTree?: any;
-
-
-                /**
-                 * @uiColumnGroup - ifAllAreas
-                 */
-                ifAllAreas?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Areas")}
-                 * @uiColumnGroup - analysis
-                 */
-                areaIds?: ${toEnumInterface(this.areaSelectItem as any, true)};
-
-
-                /**
-                 * @uiColumnGroup - ifAllGroups
-                 */
-                ifAllGroups?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_DeviceGroups")}
-                 * @uiColumnGroup - analysis
-                 */
-                groupIds?: ${toEnumInterface(
-				this.deviceGroupSelectItem as any,
-				true
-			)};
-
-
-                /**
-                 * @uiColumnGroup - ifAllDevice
-                 */
-                ifAllDevice?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Devices")}
-                 * @uiColumnGroup - analysis
-                 */
-                deviceIds?: ${toEnumInterface(
-				this.deviceSelectItem as any,
-				true
-			)};
 
 
             }
