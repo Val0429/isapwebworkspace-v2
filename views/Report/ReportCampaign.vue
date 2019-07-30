@@ -173,7 +173,6 @@ export default class ReportCampaign extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
                             returnValue.objectId
                         ] = `${returnValue.username} - ${returnValue.email}`;

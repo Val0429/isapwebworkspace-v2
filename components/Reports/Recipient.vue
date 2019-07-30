@@ -108,7 +108,6 @@ export class Recipient extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
-                        // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
                             returnValue.objectId
                         ] = `${returnValue.username} - ${returnValue.email}`;

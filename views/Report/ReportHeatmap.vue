@@ -1348,7 +1348,3 @@ export default class ReportHeatmap extends Vue {
 
 <style lang="scss" scoped>
 </style>
-
-
-
-

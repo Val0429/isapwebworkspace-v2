@@ -724,7 +724,6 @@ export default class HumanDetection extends Vue {
                 .then((response: any) => {
                     if (response != undefined) {
                         for (const returnValue of response) {
-                            // 自定義 deviceGroupSelectItem 的 key 的方式
                             this.$set(
                                 this.deviceGroupSelectItem,
                                 returnValue.objectId,
@@ -834,7 +833,6 @@ export default class HumanDetection extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -948,7 +946,6 @@ export default class HumanDetection extends Vue {
                                 this.inputFormData.areaId = "";
                                 this.inputFormData.groupIds = [];
                             }
-                            // 自定義 areaSelectItem 的 key 的方式
                             this.$set(
                                 this.areaSelectItem,
                                 returnValue.objectId,

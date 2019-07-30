@@ -203,17 +203,12 @@ export default class ReportVIPTracking extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response) {
-                        // 自定義 tagSelectItem 的 key 的方式
-                        // tempTagSelectItem[returnValue.objectId] =
-                        //     returnValue.name;
-
                         let tad = {
                             id: returnValue.objectId,
                             text: returnValue.name
                         };
                         this.tagSelectItem.push(tad);
                     }
-                    // this.tagSelectItem = tempTagSelectItem;
                 }
             })
             .catch((e: any) => {
@@ -228,16 +223,6 @@ export default class ReportVIPTracking extends Vue {
     async initTagIncludeSitesItem() {
         let result = await this.$server
             .R("/tag")
-            // .then((response: any) => {
-            //     if (response != undefined) {
-            //         for (const returnValue of response) {
-            //             // 自定義 tagSelectItem 的 key 的方式
-            //             tempTagSelectItem[returnValue.objectId] =
-            //                 returnValue.name;
-            //         }
-            //         this.tagSelectItem = tempTagSelectItem;
-            //     }
-            // })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
@@ -257,7 +242,7 @@ export default class ReportVIPTracking extends Vue {
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
 
-        console.log('this.filterData ~ ', this.filterData)
+        console.log("this.filterData ~ ", this.filterData);
 
         // await this.$server
         //     .C("/report/people-counting/summary", param)

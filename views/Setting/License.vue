@@ -253,7 +253,6 @@ export default class License extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 macSelectItem 的 key 的方式
                         this.macSelectItem[
                             returnValue.mac
                         ] = `${returnValue.mac}, ${returnValue.ifname}`;

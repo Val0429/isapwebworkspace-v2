@@ -476,7 +476,6 @@
 				.then((response: any) => {
 					if (response != undefined) {
 						for (const returnValue of response) {
-							// 自定義 sitesSelectItem 的 key 的方式
 							let site = { id: returnValue.objectId, text: returnValue.name };
 							this.sitesSelectItem.push(site);
 						}
@@ -527,7 +526,6 @@
 					.then((response: any) => {
 						if (response != undefined) {
 							for (const returnValue of response) {
-								// 自定義 sitesSelectItem 的 key 的方式
 								let area = { id: returnValue.objectId, text: returnValue.name };
 								this.areaSelectItem.push(area);
 							}

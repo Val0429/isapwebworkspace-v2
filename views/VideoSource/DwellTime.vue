@@ -384,7 +384,6 @@ export default class DwellTime extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -422,7 +421,6 @@ export default class DwellTime extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
-                        // 自定義 areaSelectItem 的 key 的方式
                         this.serverIdSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
@@ -441,7 +439,6 @@ export default class DwellTime extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
-                        // 自定義 demographicIdSelectItem 的 key 的方式
                         this.demographicIdSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
@@ -592,7 +589,6 @@ export default class DwellTime extends Vue {
                     if (response != undefined) {
                         for (const returnValue of response) {
                             for (const returnValue of response) {
-                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
                                     returnValue.sourceid,
@@ -644,7 +640,6 @@ export default class DwellTime extends Vue {
                             for (const returnValue of response) {
                                 this.inputFormData.areaId = "";
                                 this.inputFormData.groupIds = [];
-                                // 自定義 areaSelectItem 的 key 的方式
                                 this.$set(
                                     this.areaSelectItem,
                                     returnValue.objectId,
@@ -680,7 +675,6 @@ export default class DwellTime extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                // 自定義 areaSelectItem 的 key 的方式
                                 this.$set(
                                     this.areaSelectItem,
                                     returnValue.objectId,
@@ -723,7 +717,6 @@ export default class DwellTime extends Vue {
                         if (response != undefined) {
                             for (const returnValue of response) {
                                 this.inputFormData.groupIds = [];
-                                // 自定義 deviceGroupSelectItem 的 key 的方式
                                 this.$set(
                                     this.deviceGroupSelectItem,
                                     returnValue.objectId,
@@ -761,7 +754,6 @@ export default class DwellTime extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                // 自定義 deviceGroupSelectItem 的 key 的方式
                                 this.$set(
                                     this.deviceGroupSelectItem,
                                     returnValue.objectId,
