@@ -1062,9 +1062,29 @@ export default class LangObject implements ILang {
     w_RuleAndActions_RuleEdit = 'Rule Edit';
     w_RuleAndActions_RuleAView = 'Rule View';
 
-    w_RuleAndActions_Traffic_RuleName = 'Rule Name';
+    w_RuleAndActions_Traffic_RuleName = 'Rule Time';
     w_RuleAndActions_Traffic_StoreAreaDevice = 'Store/Area/Device';
     w_RuleAndActions_Traffic_Active = 'Active';
     w_RuleAndActions_Traffic_RunTime = 'Run Time';
     w_RuleAndActions_Traffic_Condition = 'Condition';
+
+    w_RuleAndActions_anyTime = 'Any Time';
+    w_RuleAndActions_startTime = 'Start Time';
+    w_RuleAndActions_endTime = 'End Time';
+
+    w_RuleAndActions_NotifyMethod = 'Notify Method';
+    w_RuleAndActions_MobileApp = 'Mobile App';
+    w_RuleAndActions_SMS = 'SMS';
+    w_RuleAndActions_Email = 'Email';
+    w_RuleAndActions_HttpCommand = 'http command';
+
+    w_RuleAndActions_NotifyTarget = 'Notify Target';
+    w_RuleAndActions_StoreManager = 'Store manager';
+    w_RuleAndActions_UsersHavePermission= 'Users who have permission of store';
+    w_RuleAndActions_UsersAndUserGroup = 'Users / User Group';
+    w_RuleAndActions_Users = 'Users';
+    w_RuleAndActions_UserGroup = 'User Group';
+
+    w_RuleAndActions_Frequently = 'How frequently to notify ?';
+    w_RuleAndActions_Minute = 'Minute ( Fill in 0 if want to notice immediately )';
 }

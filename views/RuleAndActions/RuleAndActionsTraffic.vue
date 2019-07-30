@@ -73,7 +73,7 @@
 
                         <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
                         <template #1>
-                            Step 1
+                            <choose-metrics :deviceMode="deviceMode"></choose-metrics>
                         </template>
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
