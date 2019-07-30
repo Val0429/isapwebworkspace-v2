@@ -263,67 +263,89 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 
-    // Vue
-    import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+// Vue
+import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
-    // API Interface
-    import { IUserAddData, IUserEditData } from "@/config/default/api/interfaces";
+// API Interface
+import { IUserAddData, IUserEditData } from "@/config/default/api/interfaces";
 
-    // Transition
-    import Transition from "@/services/Transition";
-    import { ITransition } from "@/services/Transition";
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
-    // Region Tree
-    import {
-        ERegionType,
-        IRegionItem,
-        RegionTreeItem,
-        IRegionTreeSelected
-    } from "@/components/RegionTree";
+// Region Tree
+import {
+    ERegionType,
+    IRegionItem,
+    RegionTreeItem,
+    IRegionTreeSelected
+} from "@/components/RegionTree";
 
-    // Service
-    import RegionAPI from "@/services/RegionAPI";
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
-    import Encrypt from "@/services/Encrypt";
+// Service
+import RegionAPI from "@/services/RegionAPI";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
+import Encrypt from "@/services/Encrypt";
 
-    interface inputFormData extends IUserAddData, IUserEditData {
-        siteIdsText?: string;
-        groupIdsText?: string;
-        confirmPassword?: string;
-    }
+interface inputFormData extends IUserAddData, IUserEditData {
+    siteIdsText?: string;
+    groupIdsText?: string;
+    confirmPassword?: string;
+}
 
-    @Component({
-        components: {}
-    })
-    export default class User extends Vue {
-        transition: ITransition = {
-            type: Transition.type,
-            prevStep: 1,
-            step: 1
-        };
+@Component({
+    components: {}
+})
+export default class User extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
-        isSelected: any = [];
-        tableMultiple: boolean = true;
-        selectedDetail: any = [];
-        sitesSelectItem: any = {};
-        userGroupSelectItem: any = {};
-        inputTestEmail: string = "";
-        modalShow: boolean = false;
+    isSelected: any = [];
+    tableMultiple: boolean = true;
+    selectedDetail: any = [];
+    sitesSelectItem: any = {};
+    userGroupSelectItem: any = {};
+    inputTestEmail: string = "";
+    modalShow: boolean = false;
 
-        // tree 相關
-        selectType = ERegionType.site;
-        regionTreeItem = new RegionTreeItem();
-        selecteds: IRegionTreeSelected[] = [];
+    // tree 相關
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
 
-        inputFormData: inputFormData = {
+    inputFormData: inputFormData = {
+        objectId: "",
+        username: "",
+        role: "",
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        employeeId: "",
+        siteIdsText: "",
+        groupIdsText: "",
+        siteIds: [],
+        groupIds: []
+    };
+
+    isAdmin: boolean = false;
+
+    created() {}
+
+    mounted() {}
+
+    clearInputData() {
+        this.inputFormData = {
             objectId: "",
             username: "",
-            role: "",
+            role: "User",
             name: "",
             email: "",
             phone: "",
@@ -334,501 +356,469 @@
             siteIds: [],
             groupIds: []
         };
+    }
 
-        isAdmin: boolean = false;
+    initRegionTreeSelect() {
+        this.regionTreeItem = new RegionTreeItem();
+        this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
+    }
 
-        created() {}
+    async initSelectItemSite() {
+        this.sitesSelectItem = {};
 
-        mounted() {}
+        const readAllSiteParam: {
+            type: string;
+        } = {
+            type: "all"
+        };
 
-        clearInputData() {
-            this.inputFormData = {
-                objectId: "",
-                username: "",
-                role: "User",
-                name: "",
-                email: "",
-                phone: "",
-                password: "",
-                employeeId: "",
-                siteIdsText: "",
-                groupIdsText: "",
-                siteIds: [],
-                groupIds: []
-            };
-        }
-
-        initRegionTreeSelect() {
-            this.regionTreeItem = new RegionTreeItem();
-            this.regionTreeItem.titleItem.card = this._("w_SiteTreeSelect");
-        }
-
-        async initSelectItemSite() {
-            this.sitesSelectItem = {};
-
-            const readAllSiteParam: {
-                type: string;
-            } = {
-                type: "all"
-            };
-
-            await this.$server
-                .R("/location/site/all", readAllSiteParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 sitesSelectItem 的 key 的方式
-                            this.sitesSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                            this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                                returnValue
-                            );
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        }
-
-        async initSelectItemTree() {
-            await this.$server
-                .R("/location/tree")
-                .then((response: any) => {
-                    if (response != undefined) {
+        await this.$server
+            .R("/location/site/all", readAllSiteParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        // 自定義 sitesSelectItem 的 key 的方式
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            response
+                            returnValue
                         );
-                        this.regionTreeItem.region = this.regionTreeItem.tree;
                     }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
                 });
-        }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
 
-        async initSelectItemUserGroup() {
-            this.userGroupSelectItem = {};
-
-            await this.$server
-                .R("/user/group/all")
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 userGroupSelectItem 的 key 的方式
-                            this.userGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
+    async initSelectItemTree() {
+        await this.$server
+            .R("/location/tree")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
                 });
-        }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
 
-        selectedItem(data) {
-            this.isSelected = data;
-            this.selectedDetail = [];
-            this.selectedDetail = data;
-        }
+    async initSelectItemUserGroup() {
+        this.userGroupSelectItem = {};
 
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.selectedDetail) {
-                this.inputFormData = {
-                    objectId: param.objectId,
-                    employeeId: param.employeeId,
-                    username: param.username,
-                    role: param.role,
-                    name: param.name,
-                    email: param.email,
-                    phone: param.phone,
-                    siteIdsText: this.idsToText(param.sites),
-                    groupIdsText: this.idsToText(param.groups),
-                    siteIds: param.sites,
-                    groupIds: param.groups
-                };
-            }
-        }
-
-        tempSaveInputData(data) {
-            switch (data.key) {
-                case "username":
-                    this.inputFormData.username = data.value;
-                    break;
-                case "password":
-                    this.inputFormData.password = data.value;
-                    break;
-                case "confirmPassword":
-                    this.inputFormData.confirmPassword = data.value;
-                    break;
-                case "employeeId":
-                    this.inputFormData.employeeId = data.value;
-                    break;
-                case "name":
-                    this.inputFormData.name = data.value;
-                    break;
-                case "email":
-                    this.inputFormData.email = data.value;
-                    break;
-                case "phone":
-                    this.inputFormData.phone = data.value;
-                    break;
-                case "siteIds":
-                    this.inputFormData.siteIds = data.value;
-                    break;
-                case "groupIds":
-                    this.inputFormData.groupIds = data.value;
-                    break;
-                case "role":
-                    this.inputFormData.role = data.value;
-                    if (this.inputFormData.role === "Admin") {
-                        this.isAdmin = true;
-                        this.inputFormData.siteIds = [];
-                        this.inputFormData.groupIds = [];
-                    } else if (this.inputFormData.role === "User") {
-                        this.isAdmin = false;
+        await this.$server
+            .R("/user/group/all")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        // 自定義 userGroupSelectItem 的 key 的方式
+                        this.userGroupSelectItem[returnValue.objectId] =
+                            returnValue.name;
                     }
-                    break;
-            }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
 
-            this.selecteds = [];
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
 
-            for (const id of this.inputFormData.siteIds) {
-                for (const detail in this.sitesSelectItem) {
-                    if (id === detail) {
-                        let selectedsObject: IRegionTreeSelected = {
-                            objectId: detail,
-                            type: ERegionType.site,
-                            name: this.sitesSelectItem[detail]
-                        };
-                        this.selecteds.push(selectedsObject);
-                    }
-                }
-            }
-        }
-
-        pageToList() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 1;
-            (this.$refs.listTable as any).reload();
-            this.selecteds = [];
-        }
-
-        pageToView() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 2;
-            this.getInputData();
-        }
-
-        async pageToAdd() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.clearInputData();
-            await this.initSelectItemSite();
-            await this.initSelectItemUserGroup();
-            this.selecteds = [];
-
-            if (this.inputFormData.role === "Admin") {
-                this.isAdmin = true;
-            } else if (this.inputFormData.role === "User") {
-                this.isAdmin = false;
-            }
-        }
-
-        async pageToEdit() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 4;
-            await this.initSelectItemSite();
-            await this.initSelectItemUserGroup();
-            this.getInputData();
-
-            if (this.inputFormData.role === "Admin") {
-                this.isAdmin = true;
-            } else if (this.inputFormData.role === "User") {
-                this.isAdmin = false;
-            }
-
-            this.selecteds = [];
-
-            this.inputFormData.siteIds = JSON.parse(
-                JSON.stringify(
-                    this.inputFormData.siteIds.map(item => item.objectId)
-                )
-            );
-            this.inputFormData.groupIds = JSON.parse(
-                JSON.stringify(
-                    this.inputFormData.groupIds.map(item => item.objectId)
-                )
-            );
-        }
-
-        async pageToChooseTree() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 5;
-            this.initRegionTreeSelect();
-            await this.initSelectItemTree();
-            this.selecteds = [];
-            for (const id of this.inputFormData.siteIds) {
-                for (const detail in this.sitesSelectItem) {
-                    if (id === detail) {
-                        let selectedsObject: IRegionTreeSelected = {
-                            objectId: detail,
-                            type: ERegionType.site,
-                            name: this.sitesSelectItem[detail]
-                        };
-                        this.selecteds.push(selectedsObject);
-                    }
-                }
-            }
-        }
-
-        pageToShowResult() {
-            this.transition.step = this.transition.prevStep;
-            // siteIds clear
-            this.inputFormData.siteIds = [];
-
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
-        }
-
-        pageToEmailTest() {
-            this.inputTestEmail = "";
-            this.modalShow = !this.modalShow;
-        }
-
-        async sendEmailTest() {
-            const mailServerObject: {
-                email: string;
-            } = {
-                email: this.inputTestEmail
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                employeeId: param.employeeId,
+                username: param.username,
+                role: param.role,
+                name: param.name,
+                email: param.email,
+                phone: param.phone,
+                siteIdsText: this.idsToText(param.sites),
+                groupIdsText: this.idsToText(param.groups),
+                siteIds: param.sites,
+                groupIds: param.groups
             };
-            Loading.show();
-            await this.$server
-                .C("/setting/smtp/test", mailServerObject)
-                .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_MailServer_Setting_Success"));
-                        this.modalShow = !this.modalShow;
-                    }
-                })
-                .catch((e: any) => {
+        }
+    }
+
+    tempSaveInputData(data) {
+        switch (data.key) {
+            case "username":
+                this.inputFormData.username = data.value;
+                break;
+            case "password":
+                this.inputFormData.password = data.value;
+                break;
+            case "confirmPassword":
+                this.inputFormData.confirmPassword = data.value;
+                break;
+            case "employeeId":
+                this.inputFormData.employeeId = data.value;
+                break;
+            case "name":
+                this.inputFormData.name = data.value;
+                break;
+            case "email":
+                this.inputFormData.email = data.value;
+                break;
+            case "phone":
+                this.inputFormData.phone = data.value;
+                break;
+            case "siteIds":
+                this.inputFormData.siteIds = data.value;
+                break;
+            case "groupIds":
+                this.inputFormData.groupIds = data.value;
+                break;
+            case "role":
+                this.inputFormData.role = data.value;
+                if (this.inputFormData.role === "Admin") {
+                    this.isAdmin = true;
+                    this.inputFormData.siteIds = [];
+                    this.inputFormData.groupIds = [];
+                } else if (this.inputFormData.role === "User") {
+                    this.isAdmin = false;
+                }
+                break;
+        }
+
+        this.selecteds = [];
+
+        for (const id of this.inputFormData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+        this.selecteds = [];
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+        await this.initSelectItemSite();
+        await this.initSelectItemUserGroup();
+        this.selecteds = [];
+
+        if (this.inputFormData.role === "Admin") {
+            this.isAdmin = true;
+        } else if (this.inputFormData.role === "User") {
+            this.isAdmin = false;
+        }
+    }
+
+    async pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
+        await this.initSelectItemSite();
+        await this.initSelectItemUserGroup();
+        this.getInputData();
+
+        if (this.inputFormData.role === "Admin") {
+            this.isAdmin = true;
+        } else if (this.inputFormData.role === "User") {
+            this.isAdmin = false;
+        }
+
+        this.selecteds = [];
+
+        this.inputFormData.siteIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.siteIds.map(item => item.objectId)
+            )
+        );
+        this.inputFormData.groupIds = JSON.parse(
+            JSON.stringify(
+                this.inputFormData.groupIds.map(item => item.objectId)
+            )
+        );
+    }
+
+    async pageToChooseTree() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 5;
+        this.initRegionTreeSelect();
+        await this.initSelectItemTree();
+        this.selecteds = [];
+        for (const id of this.inputFormData.siteIds) {
+            for (const detail in this.sitesSelectItem) {
+                if (id === detail) {
+                    let selectedsObject: IRegionTreeSelected = {
+                        objectId: detail,
+                        type: ERegionType.site,
+                        name: this.sitesSelectItem[detail]
+                    };
+                    this.selecteds.push(selectedsObject);
+                }
+            }
+        }
+    }
+
+    pageToShowResult() {
+        this.transition.step = this.transition.prevStep;
+        // siteIds clear
+        this.inputFormData.siteIds = [];
+
+        // from selecteds push siteIds
+        for (const item of this.selecteds) {
+            this.inputFormData.siteIds.push(item.objectId);
+        }
+    }
+
+    pageToEmailTest() {
+        this.inputTestEmail = "";
+        this.modalShow = !this.modalShow;
+    }
+
+    async sendEmailTest() {
+        const mailServerObject: {
+            email: string;
+        } = {
+            email: this.inputTestEmail
+        };
+        Loading.show();
+        await this.$server
+            .C("/setting/smtp/test", mailServerObject)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_MailServer_Setting_Success"));
                     this.modalShow = !this.modalShow;
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_MailServer_Test_Fail")
-                    );
                 });
-        }
+            })
+            .catch((e: any) => {
+                this.modalShow = !this.modalShow;
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_MailServer_Test_Fail")
+                );
+            });
+    }
 
-        async resendVerificationCode() {
+    async resendVerificationCode() {
+        this.getInputData();
 
-            this.getInputData();
+        let param = {
+            objectId: this.inputFormData.objectId
+        };
 
-            let param = {
-                objectId: this.inputFormData.objectId
-            };
+        Loading.show();
+        await this.$server
+            .C("/user/enable/resend", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        this.pageToList();
+                    },
+                    this._("w_User_Resend_VerificationCode_Success")
+                );
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_User_Resend_VerificationCode_Failed")
+                );
+            });
+    }
 
-            Loading.show();
-            await this.$server
-                .C("/user/enable/resend", param)
-                .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_User_Resend_VerificationCode_Success"));
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_User_Resend_VerificationCode_Failed"));
-                            return false;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_User_Resend_VerificationCode_Failed")
-                    );
-                });
-        }
-
-        async saveAdd(data) {
-            const datas: IUserAddData[] = [
-                {
-                    username: data.username,
-                    role: data.role,
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    password: Encrypt.sha256Timestamp(),
-                    employeeId: data.employeeId,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    groupIds: data.groupIds !== undefined ? data.groupIds : []
-                }
-            ];
-
-            const addParam = {
-                datas
-            };
-
-            Loading.show();
-            await this.$server
-                .C("/user/user", addParam)
-                .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_User_AddUserSuccess"));
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_User_AddUserFailed"));
-                            return false;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_User_AddUserFailed")
-                    );
-                });
-        }
-
-        async saveEdit(data) {
-            const datas: IUserEditData[] = [
-                {
-                    role: data.role,
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    objectId: data.objectId
-                }
-            ];
-
-            const editParam = {
-                datas
-            };
-
-            Loading.show();
-            await this.$server
-                .U("/user/user", editParam)
-                .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
-                            Dialog.success(this._("w_User_EditUserSuccess"));
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500 || returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_User_EditUserFailed"));
-                            return false;
-                        }
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_User_EditUserFailed")
-                    );
-                });
-        }
-
-        async doDelete() {
-            await Dialog.confirm(
-                this._("w_User_DeleteConfirm"),
-                this._("w_DeleteConfirm"),
-                () => {
-                    Loading.show();
-                    for (const param of this.selectedDetail) {
-                        const deleteParam: {
-                            objectId: string;
-                        } = {
-                            objectId: param.objectId
-                        };
-
-                        this.$server
-                            .D("/user/user", deleteParam)
-                            .then((response: any) => {
-                                for (const returnValue of response) {
-                                    if (returnValue.statusCode === 200) {
-                                        this.pageToList();
-                                    }
-                                    if (returnValue.statusCode === 500) {
-                                        Dialog.error(this._("w_DeleteFailed"));
-                                        return false;
-                                    }
-                                }
-                            })
-                            .catch((e: any) => {
-                                return ResponseFilter.catchError(this, e);
-                            });
-                    }
-                    Loading.hide();
-                }
-            );
-        }
-
-        showFirst(value): string {
-            if (value.length >= 2) {
-                return value.map(item => item.name)[0] + "...";
-            } else if (value.length === 1) {
-                return value.map(item => item.name)[0];
-            } else if (value.length == 0) {
-                return "";
+    async saveAdd(data) {
+        const datas: IUserAddData[] = [
+            {
+                username: data.username,
+                role: data.role,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                password: Encrypt.sha256Timestamp(),
+                employeeId: data.employeeId,
+                siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                groupIds: data.groupIds !== undefined ? data.groupIds : []
             }
-        }
+        ];
 
-        show30Words(
-            value: any,
-            startWord: number = 0,
-            endWord: number = 30
-        ): string {
-            return value.length < endWord
-                ? value.substring(startWord, endWord)
-                : value.substring(startWord, endWord) + "...";
-        }
+        const addParam = {
+            datas
+        };
 
-        idsToText(value: any): string {
-            let result = "";
-            for (let val of value) {
-                result += val.name + ", ";
+        Loading.show();
+        await this.$server
+            .C("/user/user", addParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        Dialog.success(this._("w_User_AddUserSuccess"));
+                        this.pageToList();
+                    },
+                    this._("w_User_AddUserFailed")
+                );
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_User_AddUserFailed")
+                );
+            });
+    }
+
+    async saveEdit(data) {
+        const datas: IUserEditData[] = [
+            {
+                role: data.role,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                objectId: data.objectId
             }
-            result = result.substring(0, result.length - 2);
-            return result;
-        }
+        ];
 
-        cardSearch(search: string) {
-            // TODO: finished search
-            // console.log('search - ', search)
-            this.searchKeywords(search);
-        }
+        const editParam = {
+            datas
+        };
 
-        searchKeywords(search: string) {
-            // TODO: finished search
-            if (search != "") {
-                const accountText = this.inputFormData.username.toLocaleLowerCase();
-                const nameText = this.inputFormData.name.toLocaleLowerCase();
-                const searchText = search.toLowerCase();
-                const searchResult =
-                    accountText.match(searchText) || nameText.match(searchText);
+        Loading.show();
+        await this.$server
+            .U("/user/user", editParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        Dialog.success(this._("w_User_EditUserSuccess"));
+                        this.pageToList();
+                    },
+                    this._("w_User_EditUserFailed")
+                );
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_User_EditUserFailed")
+                );
+            });
+    }
 
-                return searchResult;
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_User_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                Loading.show();
+                for (const param of this.selectedDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
+
+                    this.$server
+                        .D("/user/user", deleteParam)
+                        .then((response: any) => {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    this.pageToList();
+                                },
+                                this._("w_DeleteFailed")
+                            );
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
+                }
+                Loading.hide();
             }
-        }
+        );
+    }
 
-        ITableList() {
-            return `
+    showFirst(value): string {
+        if (value.length >= 2) {
+            return value.map(item => item.name)[0] + "...";
+        } else if (value.length === 1) {
+            return value.map(item => item.name)[0];
+        } else if (value.length == 0) {
+            return "";
+        }
+    }
+
+    show30Words(
+        value: any,
+        startWord: number = 0,
+        endWord: number = 30
+    ): string {
+        return value.length < endWord
+            ? value.substring(startWord, endWord)
+            : value.substring(startWord, endWord) + "...";
+    }
+
+    idsToText(value: any): string {
+        let result = "";
+        for (let val of value) {
+            result += val.name + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
+    cardSearch(search: string) {
+        // TODO: finished search
+        // console.log('search - ', search)
+        this.searchKeywords(search);
+    }
+
+    searchKeywords(search: string) {
+        // TODO: finished search
+        if (search != "") {
+            const accountText = this.inputFormData.username.toLocaleLowerCase();
+            const nameText = this.inputFormData.name.toLocaleLowerCase();
+            const searchText = search.toLowerCase();
+            const searchResult =
+                accountText.match(searchText) || nameText.match(searchText);
+
+            return searchResult;
+        }
+    }
+
+    ITableList() {
+        return `
             interface {
 
                 /**
@@ -883,10 +873,10 @@
 
             }
         `;
-        }
+    }
 
-        IViewForm() {
-            return `
+    IViewForm() {
+        return `
             interface {
 
                 /**
@@ -946,10 +936,10 @@
 
             }
         `;
-        }
+    }
 
-        IAddForm() {
-            return `
+    IAddForm() {
+        return `
             interface {
 
                 /**
@@ -1017,38 +1007,38 @@
                  * @uiLabel - ${this._("w_User_Role")}
                  */
                 role: ${toEnumInterface({
-                Admin: this._("w_User_UserGroup_Admin"),
-                User: this._("w_User_UserGroup_User")
-            })};
+                    Admin: this._("w_User_UserGroup_Admin"),
+                    User: this._("w_User_UserGroup_User")
+                })};
 
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
-                 * @uiHidden - ${ (this.isAdmin) }
+                 * @uiHidden - ${this.isAdmin}
                  */
                 groupIds?: ${toEnumInterface(
-                this.userGroupSelectItem as any,
-                true
-            )};
+                    this.userGroupSelectItem as any,
+                    true
+                )};
 
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
-                 * @uiHidden - ${ (this.isAdmin) }
+                 * @uiHidden - ${this.isAdmin}
                  */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
                /*
-                * @uiHidden - ${ (this.isAdmin) }
+                * @uiHidden - ${this.isAdmin}
                 */
                 selectTree?: any;
 
             }
         `;
-        }
+    }
 
-        IEditForm() {
-            return `
+    IEditForm() {
+        return `
             interface {
 
                 /**
@@ -1097,37 +1087,36 @@
                  * @uiLabel - ${this._("w_User_Role")}
                  */
                 role: ${toEnumInterface({
-                Admin: this._("w_User_UserGroup_Admin"),
-                User: this._("w_User_UserGroup_User")
-            })};
+                    Admin: this._("w_User_UserGroup_Admin"),
+                    User: this._("w_User_UserGroup_User")
+                })};
 
 
                 /**
                  * @uiLabel - ${this._("w_User_UserGroup")}
-                 * @uiHidden - ${ (this.isAdmin) }
+                 * @uiHidden - ${this.isAdmin}
                  */
                 groupIds?: ${toEnumInterface(
-                this.userGroupSelectItem as any,
-                true
-            )};
+                    this.userGroupSelectItem as any,
+                    true
+                )};
 
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
-                 * @uiHidden - ${ (this.isAdmin) }
+                 * @uiHidden - ${this.isAdmin}
                  */
                 siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
 
                /*
-                * @uiHidden - ${ (this.isAdmin) }
+                * @uiHidden - ${this.isAdmin}
                 */
                 selectTree?: any;
 
             }
         `;
-        }
-
     }
+}
 </script>
 
 <style lang="scss" scoped>

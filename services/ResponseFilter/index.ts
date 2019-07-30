@@ -34,15 +34,10 @@ export class ResponseFilter {
             return false;
         }
 
-        // TODO: watting new api, set array in response.datas
-        // response.data undefined, not multiple response
-        // if (response.datas == undefined) {
-        //     callback(response);
-        //     return false;
-        // }
-        // let responseDatas = response.datas;
-
-        let responseDatas = response;
+        if (response.datas == undefined) {
+            callback(response);
+            return false;
+        }
 
         // check response data for multiple response
         for (let data of response.datas) {
