@@ -508,8 +508,7 @@
 		}
 
 		async initSelectItemArea() {
-
-			this.areaSelectItem = [];
+			let tempAreaSelectItem = { all: this._("w_AllAreas") };
 
 			this.inputFormData.firstSiteId = this.inputFormData.siteIds[0];
 
@@ -521,30 +520,28 @@
 
 			if (!this.inputFormData.firstSiteId) {
 				return false;
-			} else {
-				await this.$server
-					.R("/location/area/all", readParam)
-					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
-								// 自定義 sitesSelectItem 的 key 的方式
-								let area = { id: returnValue.objectId, text: returnValue.name };
-								this.areaSelectItem.push(area);
-							}
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
 			}
 
-			for (const detail of this.areaSelectItem) {
-				this.inputFormData.allAreaIds.push(detail.id);
-			}
+			await this.$server
+				.R("/location/area/all", readParam)
+				.then((response: any) => {
+					ResponseFilter.successCheck(this, response, (response: any) => {
+						for (const returnValue of response) {
+							tempAreaSelectItem[returnValue.objectId] =
+								returnValue.name;
+							// this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+						}
+						this.areaSelectItem = tempAreaSelectItem;
+					});
+				})
+				.catch((e: any) => {
+					return ResponseFilter.catchError(this, e);
+				});
 		}
 
 		async initSelectItemDeviceGroup() {
-			this.deviceGroupSelectItem = [];
+			let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
+			this.deviceGroupSelectItem = {};
 
 			let readParam: {
 				siteId: string;
@@ -554,72 +551,37 @@
 				siteId: this.inputFormData.firstSiteId,
 				mode: this.deviceMode
 			};
+
 			if (!this.inputFormData.firstSiteId) {
 				return false;
-
-				// 只選擇site
-			} else if (this.inputFormData.firstSiteId && !this.inputFormData.areaId) {
-				await this.$server
-					.R("/device/group/all", readParam)
-					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
-								let group = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceGroupSelectItem.push(group);
-							}
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-				// 選擇site和單一area
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all"
-			) {
-				readParam.areaId = this.inputFormData.areaId;
-				await this.$server
-					.R("/device/group/all", readParam)
-					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
-								let group = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceGroupSelectItem.push(group);
-							}
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-				// 選擇site和all area
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId === "all"
-			) {
-				await this.$server
-					.R("/device/group/all", readParam)
-					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
-								let group = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceGroupSelectItem.push(group);
-							}
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
 			}
 
-			for (const detail of this.deviceGroupSelectItem) {
-				this.inputFormData.allGroupIds.push(detail.id);
+			if (this.inputFormData.areaId) {
+				readParam.areaId =
+					this.inputFormData.areaId !== "all"
+						? this.inputFormData.areaId
+						: "";
 			}
+
+			await this.$server
+				.R("/device/group/all", readParam)
+				.then((response: any) => {
+					ResponseFilter.successCheck(this, response, (response: any) => {
+						for (const returnValue of response) {
+							tempDeviceGroupSelectItem[returnValue.objectId] =
+								returnValue.name;
+						}
+						this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+					});
+				})
+				.catch((e: any) => {
+					return ResponseFilter.catchError(this, e);
+				});
 		}
 
 		async initSelectItemDevice() {
-			this.deviceSelectItem = [];
+			let tempDeviceSelectItem = { all: this._("w_AllDevices") };
+			this.deviceSelectItem = {};
 
 			const readParam: {
 				siteId: string;
@@ -630,179 +592,44 @@
 				siteId: this.inputFormData.firstSiteId,
 				mode: this.deviceMode
 			};
+
 			if (!this.inputFormData.firstSiteId) {
 				return false;
-			} else if (
-				this.inputFormData.firstSiteId &&
-				!this.inputFormData.areaId &&
-				!this.inputFormData.groupId
-			) {
-				// 只選擇site
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								let device = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceSelectItem.push(device);
-							}
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				!this.inputFormData.groupId
-			) {
-				// 選擇site和單一area
-				readParam.areaId = this.inputFormData.areaId;
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								let device = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceSelectItem.push(device);
-							}
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId !== "all"
-			) {
-				// 選擇site和單一area和單一device group
-				readParam.groupId = this.inputFormData.groupId;
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								let device = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceSelectItem.push(device);
-							}
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId !== "all" &&
-				this.inputFormData.deviceId === "all"
-			) {
-				// 選擇site和單一area和單一device group和 all device
-				readParam.groupId = this.inputFormData.groupId;
-
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								let device = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceSelectItem.push(device);
-							}
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId === "all" &&
-				(this.inputFormData.groupId === undefined ||
-					this.inputFormData.groupId === "") &&
-				this.inputFormData.groupId !== "all"
-			) {
-				// 選擇site和all area
-				readParam.areaId = "";
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								let device = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceSelectItem.push(device);
-							}
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId === "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId === "all"
-			) {
-				// 選擇site和all area和all device group
-				readParam.groupId = this.inputFormData.groupId;
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								let device = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceSelectItem.push(device);
-							}
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-			} else if (
-				this.inputFormData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId === "all"
-			) {
-				// 選擇site和單一area和all device group
-				readParam.areaId = this.inputFormData.areaId;
-				readParam.groupId = "";
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								let device = { id: returnValue.objectId, text: returnValue.name };
-								this.deviceSelectItem.push(device);
-							}
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
 			}
 
-			for (const detail of this.deviceSelectItem) {
-				this.inputFormData.allDeviceIds.push(detail.id);
+			if (this.inputFormData.areaId) {
+				readParam.areaId =
+					this.inputFormData.areaId !== "all"
+						? this.inputFormData.areaId
+						: "";
 			}
+
+			if (this.inputFormData.groupId) {
+				readParam.groupId =
+					this.inputFormData.groupId !== "all"
+						? this.inputFormData.groupId
+						: "";
+			}
+
+			await this.$server
+				.R("/device", readParam)
+				.then((response: any) => {
+					ResponseFilter.successCheck(this, response, (response: any) => {
+						if (
+							response.results != undefined &&
+							response.results.length > 0
+						) {
+							for (const returnValue of response.results) {
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
+					});
+				})
+				.catch((e: any) => {
+					return ResponseFilter.catchError(this, e);
+				});
 		}
 
 		changeTimeSelect(selected: string) {
@@ -1028,20 +855,6 @@
 
 			// return false;
 			this.$emit("submit-data", doSubmitParam);
-		}
-
-		doReset() {
-			this.inputFormData = {
-				siteIds: [],
-				tagIds: [],
-				allSiteIds: [],
-				startDate: new Date(),
-				endDate: new Date(),
-				designationPeriod: "today"
-			};
-
-			this.selectAllSites = EIfAllSelected.select;
-
 		}
 
 		IFilterConditionForm() {

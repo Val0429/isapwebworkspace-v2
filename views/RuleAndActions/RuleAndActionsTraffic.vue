@@ -1,8 +1,6 @@
 <template>
     <div class="animated fadeIn">
 
-        <actions></actions>
-
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
@@ -105,7 +103,7 @@
 
                         <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
                         <template #3>
-                            Step 3
+                            <actions></actions>
                         </template>
 
                     </iv-step-progress>

@@ -38,34 +38,41 @@
 		    </b-form-checkbox>
 	    </template>
 
+
+	    <template #userIdsTitle="{ $attrs, $listeners }">
+		    <p
+			    v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
+
+			    class="ml-3 mr-3 col-md-10">{{ _('w_RuleAndActions_Users1') }}</p>
+	    </template>
+
 	    <template #userIds="{ $attrs, $listeners }">
+
 		    <iv-form-selection
 			    v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
-			    v-bind="$attrs"
 			    v-on="$listeners"
 			    v-model="inputFormData.userIds"
+			    class="user"
 		    >
 		    </iv-form-selection>
+	    </template>
+
+	    <template #groupIdsTitle="{ $attrs, $listeners }">
+		    <p
+			    v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
+			    class="ml-3 mr-3 col-md-10">{{ _('w_RuleAndActions_UserGroup1') }}</p>
 	    </template>
 
 	    <template #groupIds="{ $attrs, $listeners }">
 		    <iv-form-selection
 			    v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
-			    v-bind="$attrs"
 			    v-on="$listeners"
 			    v-model="inputFormData.groupIds"
+			    class="user"
 		    >
 		    </iv-form-selection>
 	    </template>
 
-
-	    <template #notifyFrequently>
-
-	    </template>
-
-	    <template #notifyFrequentlyRemarks>
-
-	    </template>
 
     </iv-form>
 </template>
@@ -138,18 +145,16 @@ export class Actions extends Vue {
 
 	async initSelectItemUsers() {
 		let tempUserSelectItem = {};
-		this.userSelectItem = {};
 
 		await this.$server
 			.R("/user/user")
 			.then((response: any) => {
-				if (response != undefined) {
+				ResponseFilter.successCheck(this, response, (response: any) => {
 					for (const returnValue of response.results) {
-						// 自定義 userSelectItem 的 key 的方式
-						tempUserSelectItem[returnValue.objectId] = returnValue.username;
+						tempUserSelectItem[returnValue.objectId] = returnValue.username
 					}
 					this.userSelectItem = tempUserSelectItem;
-				}
+				});
 			})
 			.catch((e: any) => {
 				return ResponseFilter.catchError(this, e);
@@ -181,23 +186,31 @@ export class Actions extends Vue {
 	    return `
             interface {
 
-                notifyMethodTitle: any;
+                notifyMethodTitle?: any;
 
-                notifyMethodSelect: any;
+                notifyMethodSelect?: any;
 
-                notifyTargetTitle: any;
+                notifyTargetTitle?: any;
 
-                notifyTargetSelect: any;
+                notifyTargetSelect?: any;
 
-
-				/**
-                 * @uiLabel - ${this._("w_RuleAndActions_Users")}
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Users1")}
                  */
+                userIdsTitle?: any;
+
+
                 userIds?: ${toEnumInterface(this.userSelectItem as any, true)};
 
 
                 /**
-                 * @uiLabel - ${this._("w_RuleAndActions_UserGroup")}
+                 * @uiLabel - ${this._("w_RuleAndActions_UserGroup1")}
+                 */
+                groupIdsTitle?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_UserGroup1")}
                  */
                 groupIds?: ${toEnumInterface(
 				    this.userGroupSelectItem as any,
@@ -205,11 +218,13 @@ export class Actions extends Vue {
 			    )};
 
 
-                notifyFrequently: any;
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_Frequently") + this._("w_RuleAndActions_Minute") }
+                 * @uiAttrs - { min: 0}
+                 */
+                notifyFrequently: number;
 
-                notifyFrequentlyRemarks: any;
-
-
+                notifyFrequentlyRemarks?: any;
 
 
                 /**
@@ -217,16 +232,6 @@ export class Actions extends Vue {
                  * @uiColumnGroup - row
                  */
                 isActive: any;
-
-
-                /**
-                 * @uiColumnGroup - isAnytime
-                 */
-                isAnytime?: any;
-
-
-                anyTime?: string;
-
 
             }
         `;
@@ -236,3 +241,9 @@ export class Actions extends Vue {
 export default Actions;
 Vue.component("actions", Actions);
 </script>
+<style lang="scss" scoped>
+	.user {
+		width: 97%;
+		margin-left: 36px;
+	}
+</style>

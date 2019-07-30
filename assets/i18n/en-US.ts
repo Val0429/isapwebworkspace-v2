@@ -1089,7 +1089,9 @@ export default class LangObject {
     w_RuleAndActions_UsersAndUserGroup = 'Users / User Group';
     w_RuleAndActions_Users = 'Users';
     w_RuleAndActions_UserGroup = 'User Group';
+    w_RuleAndActions_Users1 = '* Users';
+    w_RuleAndActions_UserGroup1 = '* User Group';
 
-    w_RuleAndActions_Frequently = 'How frequently to notify ?';
-    w_RuleAndActions_Minute = 'Minutes ( Fill in 0 if want to notice immediately )';
+    w_RuleAndActions_Frequently = 'How frequently to notify. Unit : Minutes';
+    w_RuleAndActions_Minute = ' ( Fill in 0 if want to notice immediately )';
 }
