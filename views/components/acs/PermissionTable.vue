@@ -776,18 +776,29 @@ export default class PermissionTable extends Vue {
               await this.$server
             .U("/acs/permissiontable", premissionParam)
             .then((response: any) => {
+                this.checkError(response);
                 this.pageToList();
             });
         } else {
             await this.$server
             .C("/acs/permissiontable", premissionParam)
             .then((response: any) => {
+                this.checkError(response);
                 this.pageToList();
             });
         }
 
 
     }
+
+  private checkError(response: any) {
+    if(!response.errors||response.errors.length<=0)return;
+    let err = response.errors.find(x=>x.type=="accessLevelIsNotInCCure");
+    if(err){
+        Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"\n"+response.errors.filter(x=>x.type=="accessLevelIsNotInCCure").map(x=>x.message).join(", "));
+               
+    }
+  }
 
     ISerachFrom() {
         return `

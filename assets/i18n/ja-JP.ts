@@ -626,4 +626,5 @@ export default class LangObject implements ILang {
     w_Error_DuplicateCardNumber="Duplicate Card number";
     w_Error_DuplicateEmployeeNumber="Duplicate Employee number";
     w_DeviceAreaOrFloor = "Area / Floor";
+    w_Error_AccessLevelIsNotInCCure = "Access level is not in CCURE";
 }
