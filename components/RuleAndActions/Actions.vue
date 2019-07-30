@@ -1,156 +1,152 @@
 <template>
-	<iv-form
-		:interface="IFilterConditionForm()"
-	>
+    <iv-form :interface="IFilterConditionForm()">
 
-	</iv-form>
+    </iv-form>
 
 </template>
 
 <script lang="ts">
-	import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
-	// Report
-	import {
-		EIfAllSelected,
-		ETimeMode,
-		EIncludedEmployee,
-	} from "@/components/Reports";
+// Report
+import {
+    EIfAllSelected,
+    ETimeMode,
+    EIncludedEmployee
+} from "@/components/Reports";
 
-	import { ERunTimeType } from '@/components/RuleAndActions'
+import { ERunTimeType } from "@/components/RuleAndActions";
 
-	// Service
-	import Datetime from "@/services/Datetime";
-	import Dialog from "@/services/Dialog";
-	import { toEnumInterface } from "../../../core";
-	import ResponseFilter from '@/services/ResponseFilter';
-	import RegionAPI from '@/services/RegionAPI';
+// Service
+import Datetime from "@/services/Datetime";
+import Dialog from "@/services/Dialog";
+import { toEnumInterface } from "../../../core";
+import ResponseFilter from "@/services/ResponseFilter";
+import RegionAPI from "@/services/RegionAPI";
 
-	@Component({
-		components: {}
-	})
-	export class Actions extends Vue {
+@Component({
+    components: {}
+})
+export class Actions extends Vue {
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: ""
+    })
+    deviceMode: string;
 
-		@Prop({
-			type: String, // Boolean, Number, String, Array, Object
-			default: ""
-		})
-		deviceMode: string;
+    // select 相關
+    // radio button
+    ifAllSitesSelectItem: any = [];
+    ifAllAreasSelectItem: any = [];
+    ifAllGroupsSelectItem: any = [];
+    ifAllDeviceSelectItem: any = [];
+    isAnyTimeSelectItem: any = [];
 
+    isActiveSelectItem: any = {};
 
-		// select 相關
-		// radio button
-		ifAllSitesSelectItem: any = [];
-		ifAllAreasSelectItem: any = [];
-		ifAllGroupsSelectItem: any = [];
-		ifAllDeviceSelectItem: any = [];
-		isAnyTimeSelectItem: any = [];
+    // store 相關
+    sitesSelectItem: any = [];
+    areaSelectItem: any = [];
+    deviceGroupSelectItem: any = [];
+    deviceSelectItem: any = [];
 
-		isActiveSelectItem: any = {};
+    // radio button v-modal 相關
+    selectAllSites: string = EIfAllSelected.select;
+    isAnyTime: string = ERunTimeType.anyTime;
+    isAllArea: string = EIfAllSelected.select;
+    isAllGroup: string = EIfAllSelected.select;
+    isAllDevice: string = EIfAllSelected.select;
 
-		// store 相關
-		sitesSelectItem: any = [];
-		areaSelectItem: any = [];
-		deviceGroupSelectItem: any = [];
-		deviceSelectItem: any = [];
+    // tree
+    selectType = ERegionType.site;
+    regionTreeItem = new RegionTreeItem();
+    selecteds: IRegionTreeSelected[] = [];
 
-		// radio button v-modal 相關
-		selectAllSites: string = EIfAllSelected.select;
-		isAnyTime: string = ERunTimeType.anyTime;
-		isAllArea: string = EIfAllSelected.select;
-		isAllGroup: string = EIfAllSelected.select;
-		isAllDevice: string = EIfAllSelected.select;
+    // run time 相關
+    runTime: any = {
+        startHours: "",
+        endHours: "",
+        startMinutes: "",
+        endMinutes: ""
+    };
 
-		// tree
-		selectType = ERegionType.site;
-		regionTreeItem = new RegionTreeItem();
-		selecteds: IRegionTreeSelected[] = [];
+    runTimeRange = {
+        hours: [],
+        minutes: []
+    };
 
+    anyTime = "Any Time";
 
-		// run time 相關
-		runTime: any = {
-			startHours: '',
-			endHours: '',
-			startMinutes: '',
-			endMinutes: '',
-		};
+    inputFormData: any = {
+        name: "",
+        siteIds: [],
+        allSiteIds: [],
+        firstSiteId: "",
+        isActive: EIncludedEmployee.yes,
+        areaIds: [],
+        groupIds: [],
+        deviceIds: [],
+        allAreaIds: [],
+        allGroupIds: [],
+        allDeviceIds: [],
 
-		runTimeRange = {
-			hours: [],
-			minutes: []
-		};
+        startHours: "10",
+        startMinutes: "0",
+        endHours: "20",
+        endMinutes: "0"
+    };
 
-		anyTime = 'Any Time';
+    created() {
+        // no api
+        this.initSelectItem();
+    }
 
-		inputFormData: any = {
-			name: '',
-			siteIds: [],
-			allSiteIds: [],
-			firstSiteId: '',
-			isActive: EIncludedEmployee.yes,
-			areaIds: [],
-			groupIds: [],
-			deviceIds: [],
-			allAreaIds: [],
-			allGroupIds: [],
-			allDeviceIds: [],
+    mounted() {}
 
-			startHours: '10',
-			startMinutes: '0',
-			endHours: '20',
-			endMinutes: '0',
-		};
+    initSelectItem() {
+        this.ifAllSitesSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllSites") },
+            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
+        ];
 
+        this.ifAllAreasSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllAreas") },
+            { value: EIfAllSelected.select, text: this._("w_SelectArea") }
+        ];
 
-		created() {
-			// no api
-			this.initSelectItem();
+        this.ifAllGroupsSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllDeviceGroups") },
+            {
+                value: EIfAllSelected.select,
+                text: this._("w_SelectDeviceGroups")
+            }
+        ];
+        this.ifAllDeviceSelectItem = [
+            { value: EIfAllSelected.all, text: this._("w_AllDevices") },
+            { value: EIfAllSelected.select, text: this._("w_SelectDevice") }
+        ];
 
+        this.isAnyTimeSelectItem = [
+            {
+                value: ERunTimeType.anyTime,
+                text: this._("w_RuleAndActions_Anytime")
+            },
+            {
+                value: ERunTimeType.startAndEnd,
+                text: this._("w_RuleAndActions_DesignationTime")
+            }
+        ];
 
+        this.isActiveSelectItem = {
+            yes: this._("w_yes"),
+            no: this._("w_no")
+        };
 
+        this.anyTime = this._("w_RuleAndActions_anyTime");
+    }
 
-		}
-
-		mounted() {
-
-		}
-
-
-		initSelectItem() {
-			this.ifAllSitesSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllSites") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectSites") }
-			];
-
-			this.ifAllAreasSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllAreas") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectArea") }
-			];
-
-			this.ifAllGroupsSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllDeviceGroups") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectDeviceGroups") }
-			];
-			this.ifAllDeviceSelectItem = [
-				{ value: EIfAllSelected.all, text: this._("w_AllDevices") },
-				{ value: EIfAllSelected.select, text: this._("w_SelectDevice") }
-			];
-
-			this.isAnyTimeSelectItem = [
-				{ value: ERunTimeType.anyTime, text: this._("w_RuleAndActions_Anytime") },
-				{ value: ERunTimeType.startAndEnd, text: this._("w_RuleAndActions_DesignationTime") }
-			];
-
-			this.isActiveSelectItem = {
-				yes: this._("w_yes"),
-				no: this._("w_no")
-			};
-
-			this.anyTime = this._('w_RuleAndActions_anyTime');
-		}
-
-		IFilterConditionForm() {
-			return `
+    IFilterConditionForm() {
+        return `
             interface {
 
                 /**
@@ -164,7 +160,10 @@
                  * @uiLabel - ${this._("w_RuleAndActions_Active")}
                  * @uiColumnGroup - row
                  */
-                isActive: ${toEnumInterface(this.isActiveSelectItem as any, false)};
+                isActive: ${toEnumInterface(
+                    this.isActiveSelectItem as any,
+                    false
+                )};
 
 
                 /**
@@ -243,9 +242,9 @@
                  * @uiColumnGroup - analysis
                  */
                 groupIds?: ${toEnumInterface(
-				this.deviceGroupSelectItem as any,
-				true
-			)};
+                    this.deviceGroupSelectItem as any,
+                    true
+                )};
 
 
                 /**
@@ -259,20 +258,19 @@
                  * @uiColumnGroup - analysis
                  */
                 deviceIds?: ${toEnumInterface(
-				this.deviceSelectItem as any,
-				true
-			)};
+                    this.deviceSelectItem as any,
+                    true
+                )};
 
 
             }
         `;
-		}
-	}
+    }
+}
 
-	export default ChooseMetrics;
-	Vue.component("choose-metrics", ChooseMetrics);
+export default ChooseMetrics;
+Vue.component("choose-metrics", ChooseMetrics);
 </script>
 
 <style lang="scss" scoped>
-
 </style>
