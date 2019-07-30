@@ -1077,13 +1077,13 @@ export default class LangObject {
     w_RuleAndActions_startTime = 'Start Time';
     w_RuleAndActions_endTime = 'End Time';
 
-    w_RuleAndActions_NotifyMethod = 'Notify Method';
+    w_RuleAndActions_NotifyMethod = '* Notify Method';
     w_RuleAndActions_MobileApp = 'Mobile App';
     w_RuleAndActions_SMS = 'SMS';
     w_RuleAndActions_Email = 'Email';
     w_RuleAndActions_HttpCommand = 'http command';
 
-    w_RuleAndActions_NotifyTarget = 'Notify Target';
+    w_RuleAndActions_NotifyTarget = '* Notify Target';
     w_RuleAndActions_StoreManager = 'Store manager';
     w_RuleAndActions_UsersHavePermission= 'Users who have permission of store';
     w_RuleAndActions_UsersAndUserGroup = 'Users / User Group';

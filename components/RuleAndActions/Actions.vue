@@ -1,83 +1,82 @@
 <template>
     <iv-form :interface="IFilterConditionForm()">
 
+	    <template #notifyMethodTitle="{ $attrs, $listeners }">
+		    <p class="ml-3 mr-3 ">{{ _('w_RuleAndActions_NotifyMethod') }}</p>
+	    </template>
+
+	    <template #notifyMethodSelect="{ $attrs, $listeners }">
+		    <b-form-checkbox
+			    v-for="option in notifyMethodSelectItem"
+			    v-model="notifyMethodSelected"
+			    name="notifyMethodSelect"
+			    class="col-md-10"
+			    :key="option.value"
+			    :value="option.value"
+			    inline
+		    >
+			    {{ option.text }}
+		    </b-form-checkbox>
+	    </template>
+
+
+	    <template #notifyTargetTitle="{ $attrs, $listeners }">
+		    <p class="ml-3 mr-3 ">{{ _('w_RuleAndActions_NotifyTarget') }}</p>
+	    </template>
+
+	    <template #notifyTargetSelect="{ $attrs, $listeners }">
+		    <b-form-checkbox
+			    v-for="option in notifyTargetSelectItem"
+			    v-model="notifyTargetSelected"
+			    name="notifyMethodSelect"
+			    class=""
+			    :key="option.value"
+			    :value="option.value"
+			    inline
+		    >
+			    {{ option.text }}
+		    </b-form-checkbox>
+	    </template>
+
+	    <template #userIds="{ $attrs, $listeners }">
+		    <iv-form-selection
+			    v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
+			    v-bind="$attrs"
+			    v-on="$listeners"
+			    v-model="inputFormData.userIds"
+		    >
+		    </iv-form-selection>
+	    </template>
+
+	    <template #groupIds="{ $attrs, $listeners }">
+		    <iv-form-selection
+			    v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
+			    v-bind="$attrs"
+			    v-on="$listeners"
+			    v-model="inputFormData.groupIds"
+		    >
+		    </iv-form-selection>
+	    </template>
+
+
+	    <template #notifyFrequently>
+
+	    </template>
+
+	    <template #notifyFrequentlyRemarks>
+
+	    </template>
+
     </iv-form>
 </template>
 
 <script lang="ts">
-<<<<<<< HEAD
-	import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
-	import { ERunTimeType } from '@/components/RuleAndActions'
-
-	// Service
-	import { toEnumInterface } from "../../../core";
-	import ResponseFilter from '@/services/ResponseFilter';
-	import RegionAPI from '@/services/RegionAPI';
-
-	@Component({
-		components: {}
-	})
-	export class Actions extends Vue {
-
-		@Prop({
-			type: String, // Boolean, Number, String, Array, Object
-			default: ""
-		})
-		deviceMode: string;
-
-
-		// select 相關
-		// radio button
-		ifAllSitesSelectItem: any = [];
-		ifAllAreasSelectItem: any = [];
-		ifAllGroupsSelectItem: any = [];
-		ifAllDeviceSelectItem: any = [];
-		isAnyTimeSelectItem: any = [];
-
-
-
-		inputFormData: any = {
-			name: '',
-
-		};
-
-
-		created() {
-			// no api
-			this.initSelectItem();
-
-		}
-
-		mounted() {
-
-		}
-
-
-		initSelectItem() {
-			// this.ifAllSitesSelectItem = [
-			// 	{ value: EIfAllSelected.all, text: this._("w_AllSites") },
-			// 	{ value: EIfAllSelected.select, text: this._("w_SelectSites") }
-			// ];
-
-		}
-=======
-import { Vue, Component, Prop } from "vue-property-decorator";
-import { toEnumInterface } from "../../../core";
-
-// Report
-import {
-    EIfAllSelected,
-    ETimeMode,
-    EIncludedEmployee
-} from "@/components/Reports";
-
-import { ERunTimeType } from "@/components/RuleAndActions";
-import { ERegionType } from "../RegionTree";
+import { ENotifyMethod, EWhoNotify } from "@/components/RuleAndActions";
 
 // Service
-import Datetime from "@/services/Datetime";
-import Dialog from "@/services/Dialog";
+import { toEnumInterface } from "../../../core";
 import ResponseFilter from "@/services/ResponseFilter";
 import RegionAPI from "@/services/RegionAPI";
 
@@ -92,133 +91,132 @@ export class Actions extends Vue {
     deviceMode: string;
 
     // select 相關
-    // radio button
-    ifAllSitesSelectItem: any = [];
-    ifAllAreasSelectItem: any = [];
-    ifAllGroupsSelectItem: any = [];
-    ifAllDeviceSelectItem: any = [];
-    isAnyTimeSelectItem: any = [];
+    // checkbox
+	notifyMethodSelectItem: any = [];
+	notifyTargetSelectItem: any = [];
 
-    isActiveSelectItem: any = {};
+	// user, userGroup
+	userSelectItem: any = {};
+	userGroupSelectItem: any = {};
 
-    // store 相關
-    sitesSelectItem: any = [];
-    areaSelectItem: any = [];
-    deviceGroupSelectItem: any = [];
-    deviceSelectItem: any = [];
-
-    // radio button v-modal 相關
-    selectAllSites: string = EIfAllSelected.select;
-    isAnyTime: string = ERunTimeType.anyTime;
-    isAllArea: string = EIfAllSelected.select;
-    isAllGroup: string = EIfAllSelected.select;
-    isAllDevice: string = EIfAllSelected.select;
-
-    // run time 相關
-    runTime: any = {
-        startHours: "",
-        endHours: "",
-        startMinutes: "",
-        endMinutes: ""
-    };
-
-    runTimeRange = {
-        hours: [],
-        minutes: []
-    };
-
-    anyTime = "Any Time";
+	// be selected
+	notifyMethodSelected: any = [ENotifyMethod.email];
+	notifyTargetSelected: any = [EWhoNotify.storeManager, EWhoNotify.permissionOfStore, EWhoNotify.users, EWhoNotify.userGroup];
 
     inputFormData: any = {
-        name: "",
-        siteIds: [],
-        allSiteIds: [],
-        firstSiteId: "",
-        isActive: EIncludedEmployee.yes,
-        areaIds: [],
-        groupIds: [],
-        deviceIds: [],
-        allAreaIds: [],
-        allGroupIds: [],
-        allDeviceIds: [],
-
-        startHours: "10",
-        startMinutes: "0",
-        endHours: "20",
-        endMinutes: "0"
+	    userIds: '',
+	    groupIds: "",
     };
 
     created() {
         // no api
         this.initSelectItem();
+
+        // api
+	    this.initSelectItemUsers();
+	    this.initSelectItemUserGroup();
+
     }
 
     mounted() {}
 
     initSelectItem() {
-        this.ifAllSitesSelectItem = [
-            { value: EIfAllSelected.all, text: this._("w_AllSites") },
-            { value: EIfAllSelected.select, text: this._("w_SelectSites") }
+        this.notifyMethodSelectItem = [
+        	// { value: ENotifyMethod.mobileApp, text: this._("w_RuleAndActions_MobileApp") },
+        	// { value: ENotifyMethod.sms, text: this._("w_RuleAndActions_SMS") },
+        	{ value: ENotifyMethod.email, text: this._("w_RuleAndActions_Email") },
+        	// { value: ENotifyMethod.httpCommand, text: this._("w_RuleAndActions_HttpCommand") }
         ];
 
-        this.ifAllAreasSelectItem = [
-            { value: EIfAllSelected.all, text: this._("w_AllAreas") },
-            { value: EIfAllSelected.select, text: this._("w_SelectArea") }
-        ];
-
-        this.ifAllGroupsSelectItem = [
-            { value: EIfAllSelected.all, text: this._("w_AllDeviceGroups") },
-            {
-                value: EIfAllSelected.select,
-                text: this._("w_SelectDeviceGroups")
-            }
-        ];
-        this.ifAllDeviceSelectItem = [
-            { value: EIfAllSelected.all, text: this._("w_AllDevices") },
-            { value: EIfAllSelected.select, text: this._("w_SelectDevice") }
-        ];
-
-        this.isAnyTimeSelectItem = [
-            {
-                value: ERunTimeType.anyTime,
-                text: this._("w_RuleAndActions_Anytime")
-            },
-            {
-                value: ERunTimeType.startAndEnd,
-                text: this._("w_RuleAndActions_DesignationTime")
-            }
-        ];
-
-        this.isActiveSelectItem = {
-            yes: this._("w_yes"),
-            no: this._("w_no")
-        };
+	    this.notifyTargetSelectItem = [
+		    { value: EWhoNotify.storeManager, text: this._("w_RuleAndActions_StoreManager") },
+		    { value: EWhoNotify.permissionOfStore, text: this._("w_RuleAndActions_UsersHavePermission") },
+		    { value: EWhoNotify.users, text: this._("w_RuleAndActions_Users") },
+		    { value: EWhoNotify.userGroup, text: this._("w_RuleAndActions_UserGroup") },
+	    ];
     }
->>>>>>> cad7dd2d0e7643a469bf070aa2d8bf735ca17037
+
+	async initSelectItemUsers() {
+		let tempUserSelectItem = {};
+		this.userSelectItem = {};
+
+		await this.$server
+			.R("/user/user")
+			.then((response: any) => {
+				if (response != undefined) {
+					for (const returnValue of response.results) {
+						// 自定義 userSelectItem 的 key 的方式
+						tempUserSelectItem[returnValue.objectId] = returnValue.username;
+					}
+					this.userSelectItem = tempUserSelectItem;
+				}
+			})
+			.catch((e: any) => {
+				return ResponseFilter.catchError(this, e);
+			});
+	}
+
+	async initSelectItemUserGroup() {
+
+		let tempUserGroupSelectItem = {};
+		this.userGroupSelectItem = {};
+
+		await this.$server
+			.R("/user/group/all")
+			.then((response: any) => {
+				ResponseFilter.successCheck(this, response, (response: any) => {
+					for (const returnValue of response) {
+						tempUserGroupSelectItem[returnValue.objectId] = returnValue.name;
+					}
+					this.userGroupSelectItem = tempUserGroupSelectItem;
+
+				});
+			})
+			.catch((e: any) => {
+				return ResponseFilter.catchError(this, e);
+			});
+	}
 
     IFilterConditionForm() {
-        return `
+	    return `
             interface {
 
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_RuleName")}
-                 * @uiPlaceHolder - ${this._("w_RuleAndActions_RuleName")}
+                notifyMethodTitle: any;
+
+                notifyMethodSelect: any;
+
+                notifyTargetTitle: any;
+
+                notifyTargetSelect: any;
+
+
+				/**
+                 * @uiLabel - ${this._("w_RuleAndActions_Users")}
                  */
-                name: string;
+                userIds?: ${toEnumInterface(this.userSelectItem as any, true)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_UserGroup")}
+                 */
+                groupIds?: ${toEnumInterface(
+				    this.userGroupSelectItem as any,
+				    true
+			    )};
+
+
+                notifyFrequently: any;
+
+                notifyFrequentlyRemarks: any;
+
+
 
 
                 /**
                  * @uiLabel - ${this._("w_RuleAndActions_Active")}
                  * @uiColumnGroup - row
                  */
-<<<<<<< HEAD
                 isActive: any;
-=======
-                isActive: ${toEnumInterface(
-                    this.isActiveSelectItem as any,
-                    false
-                )};
->>>>>>> cad7dd2d0e7643a469bf070aa2d8bf735ca17037
 
 
                 /**
@@ -230,96 +228,6 @@ export class Actions extends Vue {
                 anyTime?: string;
 
 
-<<<<<<< HEAD
-=======
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                startHours?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_startTime")}
-                 * @uiColumnGroup - analysis
-                 */
-                startMinutes?: any;
-
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                endHours?: any;
-
-
-                /**
-                 * @uiColumnGroup - analysis
-                 */
-                endMinutes?: any;
-
-
-                /**
-                 * @uiColumnGroup - ifAllSites
-                 */
-                ifAllSites?: any;
-
-
-                /**
-                 * @uiColumnGroup - site
-                 */
-                 siteIds: any;
-
-
-                /**
-                 * @uiColumnGroup - site
-                 */
-                 selectTree?: any;
-
-
-                /**
-                 * @uiColumnGroup - ifAllAreas
-                 */
-                ifAllAreas?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Areas")}
-                 * @uiColumnGroup - analysis
-                 */
-                areaIds?: ${toEnumInterface(this.areaSelectItem as any, true)};
-
-
-                /**
-                 * @uiColumnGroup - ifAllGroups
-                 */
-                ifAllGroups?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_DeviceGroups")}
-                 * @uiColumnGroup - analysis
-                 */
-                groupIds?: ${toEnumInterface(
-                    this.deviceGroupSelectItem as any,
-                    true
-                )};
-
-
-                /**
-                 * @uiColumnGroup - ifAllDevice
-                 */
-                ifAllDevice?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Devices")}
-                 * @uiColumnGroup - analysis
-                 */
-                deviceIds?: ${toEnumInterface(
-                    this.deviceSelectItem as any,
-                    true
-                )};
-
->>>>>>> cad7dd2d0e7643a469bf070aa2d8bf735ca17037
             }
         `;
     }
