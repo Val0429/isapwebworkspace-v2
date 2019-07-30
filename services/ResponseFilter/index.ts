@@ -18,19 +18,21 @@ export class ResponseFilter {
             errorMessageList: [],
         };
 
+        // response undefined
+        if (response == undefined) {
+            Dialog.error(viewItem._('w_ErrorResponseUndefined'));
+            return false;
+        }
+
         // if control for page
         if (!check) {
             callback(response);
+            return false;
         }
 
         // not array
         if (response.length == undefined) {
             callback(response);
-        }
-
-        // response undefined
-        if (response == undefined) {
-            Dialog.error(viewItem._('w_ErrorResponseUndefined'));
             return false;
         }
 
@@ -64,6 +66,7 @@ export class ResponseFilter {
             Dialog.error(message);
         } else {
             callback(response);
+            return false;
         }
     }
 

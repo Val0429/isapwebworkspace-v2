@@ -136,7 +136,29 @@ class ReportService {
     }
 
     FormatNumber(str: string): string {
-        return str.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        return str.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    resolveUserSite(vue: any, response: any) {
+        let tempTree = {};
+        let tempChildrenArray = [];
+        tempTree = response;
+        if (vue.$user.user.allowSites.length > 0) {
+            vue.$user.user.allowSites.map((site) => {
+                if (response.childrens.length > 0) {
+                    response.childrens.map((item) => {
+                        if (item.objectId === site.objectId) {
+                            let tempTreeData = JSON.parse(JSON.stringify(tempTree));
+                            tempTreeData.childrens = [];
+                            tempChildrenArray.push(item);
+                            tempTreeData.childrens = tempChildrenArray;
+                            tempTree = tempTreeData;
+                        }
+                    });
+                }
+            });
+        }
+        return tempTree;
     }
 }
 

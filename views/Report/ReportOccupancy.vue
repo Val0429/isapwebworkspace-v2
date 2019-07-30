@@ -426,38 +426,14 @@ export default class ReportOccupancy extends Vue {
     }
 
     async initSelectItemTree() {
-        let tempTree = {};
-        let tempChildrenArray = [];
-
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                if (response != undefined) {
-                    tempTree = response;
-                    if (this.$user.user.allowSites.length > 0) {
-                        this.$user.user.allowSites.map(site => {
-                            if (response.childrens.length > 0) {
-                                response.childrens.map(item => {
-                                    if (item.objectId === site.objectId) {
-                                        let tempTreeData = JSON.parse(
-                                            JSON.stringify(tempTree)
-                                        );
-                                        tempTreeData.childrens = [];
-                                        tempChildrenArray.push(item);
-                                        tempTreeData.childrens = tempChildrenArray;
-                                        tempTree = tempTreeData;
-                                    }
-                                });
-                            }
-                        });
-                    }
-
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        tempTree
-                    );
-
+                 ResponseFilter.successCheck(this, response, (response: any) => {
+                    let tempTree = ReportService.resolveUserSite(this, response);
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(tempTree);
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

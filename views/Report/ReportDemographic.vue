@@ -196,107 +196,108 @@ enum ETableStep {
 	components: {}
 })
 export default class ReportDemographic extends Vue {
-		lastTableStep: ETableStep = ETableStep.none;
-		tableStep: ETableStep = ETableStep.none;
-		eTableStep = ETableStep;
-		ePageType = EPageType;
-		eWeather = EWeather;
-		eFileType = EFileType;
+        
+    lastTableStep: ETableStep = ETableStep.none;
+	tableStep: ETableStep = ETableStep.none;
+	eTableStep = ETableStep;
+	ePageType = EPageType;
+	eWeather = EWeather;
+	eFileType = EFileType;
 
-		templateItem: ITemplateItem | null = null;
+	templateItem: ITemplateItem | null = null;
 
-		startDate: Date = new Date("2019-01-01T00:00:00.000Z");
-		endDate: Date = new Date("2019-01-01T01:00:00.000Z");
-		timeMode: ETimeMode = ETimeMode.none;
-		areaMode: EAreaMode = EAreaMode.none;
-		sites: ISite[] = [];
-		chartDatas: IChartDemographicData[] = [];
+	startDate: Date = new Date("2019-01-01T00:00:00.000Z");
+	endDate: Date = new Date("2019-01-01T01:00:00.000Z");
+	timeMode: ETimeMode = ETimeMode.none;
+	areaMode: EAreaMode = EAreaMode.none;
+	sites: ISite[] = [];
+	chartDatas: IChartDemographicData[] = [];
 
-		////////////////////////////////////// Tina Start //////////////////////////////////////
+	////////////////////////////////////// Tina Start //////////////////////////////////////
 
-		//// Filter Condition Start ////
+	//// Filter Condition Start ////
 
-		// select 相關
-		sitesSelectItem: any = [];
-		ifAllSitesSelectItem: any = [];
-		addPeriodSelectItem: any = [];
-		tagSelectItem: any = {};
-		tags = [];
+	// select 相關
+	sitesSelectItem: any = [];
+	ifAllSitesSelectItem: any = [];
+	addPeriodSelectItem: any = [];
+	tagSelectItem: any = {};
+	tags = [];
 
-		// tree
-		selectType = ERegionType.site;
-		regionTreeItem = new RegionTreeItem();
-		selecteds: IRegionTreeSelected[] = [];
+	// tree
+	selectType = ERegionType.site;
+	regionTreeItem = new RegionTreeItem();
+	selecteds: IRegionTreeSelected[] = [];
 
-		// OfficeHour 相關
-        officeHourItemDetail: any = [];
+	// OfficeHour 相關
+    officeHourItemDetail: any = [];
 
-		// recipient 相關
-		modalShow: boolean = false;
+	// recipient 相關
+	modalShow: boolean = false;
 
-		// 收合card控制
-		visible: boolean = false;
+	// 收合card控制
+	visible: boolean = false;
 
-		// 接收 Filter Condition 資料 相關
-		filterData: IFilterCondition = {
-			startDate: new Date(),
-			endDate: new Date(),
-			firstSiteId: "",
-			siteIds: [],
-			tagIds: [],
-			type: ETimeMode.none
-		};
-		responseData: any = {};
-		userData: any = [];
-		//// Filter Condition End ////
+	// 接收 Filter Condition 資料 相關
+	filterData: IFilterCondition = {
+		startDate: new Date(),
+		endDate: new Date(),
+		firstSiteId: "",
+		siteIds: [],
+		tagIds: [],
+		type: ETimeMode.none
+	};
+	responseData: any = {};
+	userData: any = [];
+	//// Filter Condition End ////
 
-		//// Analysis Filter Start ////
-		deviceMode: string = EDeviceMode.demographic;
+	//// Analysis Filter Start ////
+	deviceMode: string = EDeviceMode.demographic;
 
-		// select 相關
-		areaSelectItem: any = {};
-		deviceGroupSelectItem: any = {};
-		deviceSelectItem: any = {};
-		timeModeSelectItem: any = {};
-		isIncludedEmployeeSelectItem: any = {};
+	// select 相關
+	areaSelectItem: any = {};
+	deviceGroupSelectItem: any = {};
+	deviceSelectItem: any = {};
+	timeModeSelectItem: any = {};
+	isIncludedEmployeeSelectItem: any = {};
 
-		inputFormData: any = {
-			areaId: "",
-			groupId: "",
-			deviceId: "",
-			type: "",
-			isIncludedEmployee: "no"
-		};
+	inputFormData: any = {
+		areaId: "",
+		groupId: "",
+		deviceId: "",
+		type: "",
+		isIncludedEmployee: "no"
+	};
 
-		// 整理 showReportData 相關
-		areaSummaryFilter: any = [];
-		deviceGroupSummaryFilter: any = [];
-		deviceSummaryFilter: any = [];
+	// 整理 showReportData 相關
+	areaSummaryFilter: any = [];
+	deviceGroupSummaryFilter: any = [];
+	deviceSummaryFilter: any = [];
 
-		//// Analysis Filter End ////
+	//// Analysis Filter End ////
 
-		// send user 相關
-		userSelectItem: any = {};
+	// send user 相關
+	userSelectItem: any = {};
 
-		// Report To Template相關
-		ReportToTemplateData: IReportToTemplateItem | null =  null;
-		designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
+	// Report To Template相關
+	ReportToTemplateData: IReportToTemplateItem | null =  null;
+	designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
-		//ReportDashboard 相關
-		dPageType: EPageType = EPageType.none;
-		dTimeMode: ETimeMode = ETimeMode.none;
-		pSiteIds = [];
+	//ReportDashboard 相關
+	dPageType: EPageType = EPageType.none;
+	dTimeMode: ETimeMode = ETimeMode.none;
+	pSiteIds = [];
 
-		//ReportTable 相關
-		rData = new ReportTableData();
+	//ReportTable 相關
+	rData = new ReportTableData();
 
-		 reportTableTitle: IReportTableTitle = {
+	reportTableTitle: IReportTableTitle = {
         titleCount:0
     };
-		//Sun ReportTable 相關
-		sunRData = new ReportTableData();
+	//Sun ReportTable 相關
+	sunRData = new ReportTableData();
 
-		////////////////////////////////////// Tina End //////////////////////////////////////
+	////////////////////////////////////// Tina End //////////////////////////////////////
 
 		created() {
 			this.initDatas();
@@ -576,7 +577,8 @@ export default class ReportDemographic extends Vue {
 
 			//body
 			this.rData.body = [];
-			let tempArray = [];
+            let tempArray = [];
+            
 			//篩選出所有店
 			for (let summaryData of this.responseData.summaryDatas) {
 				if (
@@ -803,9 +805,6 @@ export default class ReportDemographic extends Vue {
 			}
 		}
 
-
-
-
 		////////////////////////////////////// Tina Start //////////////////////////////////////
 
 		initRegionTreeSelect() {
@@ -839,7 +838,6 @@ export default class ReportDemographic extends Vue {
                     ResponseFilter.successCheck(this, response,
                         (response: any) => {
                             for (const returnValue of response) {
-                                // 自定義 sitesSelectItem 的 key 的方式
                                 tempSitesSelectItem[returnValue.objectId] =
                                     returnValue.name;
 						    }
@@ -861,7 +859,6 @@ export default class ReportDemographic extends Vue {
                     ResponseFilter.successCheck(this, response,
                         (response: any) => {
                            	for (const returnValue of response) {
-                                // 自定義 tagSelectItem 的 key 的方式
                                 tempTagSelectItem[returnValue.objectId] =
                                     returnValue.name;
                             }
@@ -875,40 +872,19 @@ export default class ReportDemographic extends Vue {
 		}
 
 		async initSelectItemTree() {
-			let tempTree = {};
-			let tempChildrenArray = [];
-
 			await this.$server
 				.R("/location/tree")
 				.then((response: any) => {
-                     ResponseFilter.successCheck(this, response,
-                        (response: any) => {
-                           	tempTree = response;
-                            if (this.$user.user.allowSites.length > 0) {
-                                this.$user.user.allowSites.map(site => {
-                                    if (response.childrens.length > 0) {
-                                        response.childrens.map(item => {
-                                            if (item.objectId === site.objectId) {
-                                                let tempTreeData = JSON.parse(
-                                                    JSON.stringify(tempTree)
-                                                );
-                                                tempTreeData.childrens = [];
-                                                tempChildrenArray.push(item);
-                                                tempTreeData.childrens = tempChildrenArray;
-                                                tempTree = tempTreeData;
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-
-                            this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                                tempTree
-                            );
-
-                            this.regionTreeItem.region = this.regionTreeItem.tree;
-                        }
-                    );
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        let tempTree = ReportService.resolveUserSite(
+                            this,
+                            response
+                        );
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            tempTree
+                        );
+                        this.regionTreeItem.region = this.regionTreeItem.tree;
+                    });
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -926,17 +902,16 @@ export default class ReportDemographic extends Vue {
 
 			if (!this.filterData.firstSiteId) {
 				return false;
-			} else {
-				await this.$server
+            } 
+
+            await this.$server
 					.R("/location/area/all", readParam)
 					.then((response: any) => {
                         ResponseFilter.successCheck(this, response,
                             (response: any) => {
                                 for (const returnValue of response) {
-                                    // 自定義 sitesSelectItem 的 key 的方式
                                     tempAreaSelectItem[returnValue.objectId] =
                                         returnValue.name;
-                                    // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
                                 }
                                 this.areaSelectItem = tempAreaSelectItem;
                             }
@@ -945,7 +920,7 @@ export default class ReportDemographic extends Vue {
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
 					});
-			}
+        
 		}
 
 		async initSelectItemDeviceGroup() {
@@ -959,19 +934,20 @@ export default class ReportDemographic extends Vue {
 			} = {
 				siteId: this.filterData.firstSiteId,
 				mode: this.deviceMode
-			};
+            };
+            
 			if (!this.filterData.firstSiteId) {
 				return false;
+            } 
 
-				// 只選擇site
-			} else if (this.filterData.firstSiteId && !this.inputFormData.areaId) {
+            if (this.filterData.firstSiteId && !this.inputFormData.areaId) {
+                // 只選擇site
 				await this.$server
 					.R("/device/group/all", readParam)
 					.then((response: any) => {
                         ResponseFilter.successCheck(this, response,
                             (response: any) => {
                                 for (const returnValue of response) {
-                                    // 自定義 tempDeviceGroupSelectItem 的 key 的方式
                                     tempDeviceGroupSelectItem[returnValue.objectId] =
                                         returnValue.name;
                                 }
@@ -996,7 +972,6 @@ export default class ReportDemographic extends Vue {
                         ResponseFilter.successCheck(this, response,
                             (response: any) => {
                                for (const returnValue of response) {
-                                    // 自定義 tempDeviceGroupSelectItem 的 key 的方式
                                     tempDeviceGroupSelectItem[returnValue.objectId] =
                                         returnValue.name;
                                 }
@@ -1020,11 +995,10 @@ export default class ReportDemographic extends Vue {
                         ResponseFilter.successCheck(this, response,
                             (response: any) => {
                                for (const returnValue of response) {
-								// 自定義 tempDeviceGroupSelectItem 的 key 的方式
-								tempDeviceGroupSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+                                    tempDeviceGroupSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                }
+							    this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
                             }
                         );
 					})
@@ -1035,6 +1009,7 @@ export default class ReportDemographic extends Vue {
 		}
 
 		async initSelectItemDevice() {
+
 			let tempDeviceSelectItem = {all: this._("w_AllDevices")};
 			this.deviceSelectItem = {};
 
@@ -1056,24 +1031,7 @@ export default class ReportDemographic extends Vue {
 				!this.inputFormData.areaId &&
 				!this.inputFormData.groupId
 			) {
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                              for (const returnValue of response.results) {
-                                    // 自定義 tempDeviceSelectItem 的 key 的方式
-                                    tempDeviceSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                }
-							    this.deviceSelectItem = tempDeviceSelectItem;
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-
+				this.deviceSelectItem = await this.requestDeviceApi(readParam);
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1082,23 +1040,7 @@ export default class ReportDemographic extends Vue {
 			) {
                 // 選擇site和單一area
 				readParam.areaId = this.inputFormData.areaId;
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                              for (const returnValue of response.results) {
-                                    // 自定義 tempDeviceSelectItem 的 key 的方式
-                                    tempDeviceSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-							    }
-							    this.deviceSelectItem = tempDeviceSelectItem;
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
+				this.deviceSelectItem = await this.requestDeviceApi(readParam);
 
 			} else if (
 				this.filterData.firstSiteId &&
@@ -1109,27 +1051,7 @@ export default class ReportDemographic extends Vue {
 			) {
                 // 選擇site和單一area和單一device group
 				readParam.groupId = this.inputFormData.groupId;
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                                for (const returnValue of response.results) {
-                                    // 自定義 tempDeviceSelectItem 的 key 的方式
-                                    tempDeviceSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                }
-                                this.deviceSelectItem = tempDeviceSelectItem;
-                                if (response.results.length === 0) {
-                                    this.deviceSelectItem = {};
-                                }
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-
+				this.deviceSelectItem = await this.requestDeviceApi(readParam);
 
 			} else if (
 				this.filterData.firstSiteId &&
@@ -1141,27 +1063,7 @@ export default class ReportDemographic extends Vue {
 			) {
                 // 選擇site和單一area和單一device group和 all device
 				readParam.groupId = this.inputFormData.groupId;
-
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                                for (const returnValue of response.results) {
-                                    // 自定義 tempDeviceSelectItem 的 key 的方式
-                                    tempDeviceSelectItem[returnValue.objectId] =
-                                    returnValue.name;
-                                }
-                                this.deviceSelectItem = tempDeviceSelectItem;
-                                if (response.results.length === 0) {
-                                    this.deviceSelectItem = {};
-                                }
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
+                this.deviceSelectItem = await this.requestDeviceApi(readParam);
 
 			} else if (
 				this.filterData.firstSiteId &&
@@ -1173,24 +1075,7 @@ export default class ReportDemographic extends Vue {
 			) {
                 // 選擇site和all area
 				readParam.areaId = "";
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                               for (const returnValue of response.results) {
-								// 自定義 tempDeviceSelectItem 的 key 的方式
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceSelectItem = tempDeviceSelectItem;
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-
+				this.deviceSelectItem = await this.requestDeviceApi(readParam);
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1199,28 +1084,8 @@ export default class ReportDemographic extends Vue {
 				this.inputFormData.groupId === "all"
 			) {
                 // 選擇site和all area和all device group
-				readParam.groupId = this.inputFormData.groupId;
-				await this.$server
-					.R("/device", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                               	for (const returnValue of response.results) {
-                                    // 自定義 tempDeviceSelectItem 的 key 的方式
-                                    tempDeviceSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                }
-                                this.deviceSelectItem = tempDeviceSelectItem;
-                                if (response.results.length === 0) {
-                                    this.deviceSelectItem = {};
-                                }
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-
+                readParam.groupId = this.inputFormData.groupId;
+                this.deviceSelectItem = await this.requestDeviceApi(readParam);
 			} else if (
 				this.filterData.firstSiteId &&
 				this.inputFormData.areaId &&
@@ -1231,28 +1096,31 @@ export default class ReportDemographic extends Vue {
                 // 選擇site和單一area和all device group
 				readParam.areaId = this.inputFormData.areaId;
 				readParam.groupId = "";
-				await this.$server
-					.R("/device", readParam)
+			}
+        }
+        
+        async requestDeviceApi (param: any) {
+            let tempDeviceSelectItem = {all: this._("w_AllDevices")}
+               await this.$server
+					.R("/device", param)
 					.then((response: any) => {
                         ResponseFilter.successCheck(this, response,
                             (response: any) => {
-                                for (const returnValue of response.results) {
-                                    // 自定義 tempDeviceSelectItem 的 key 的方式
+                                if (response.results != undefined && response.results.length > 0) {
+                                    for (const returnValue of response.results) {
                                     tempDeviceSelectItem[returnValue.objectId] =
                                         returnValue.name;
-                                }
-                                this.deviceSelectItem = tempDeviceSelectItem;
-                                if (response.results.length === 0) {
-                                    this.deviceSelectItem = {};
-                                }
+                                    }
+                                    this.deviceSelectItem = tempDeviceSelectItem;
+                                } 
                             }
                         );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
-					});
-			}
-		}
+                    });
+            return tempDeviceSelectItem;
+        }
 
 		async initSelectItemUsers() {
 			let tempUserSelectItem = {};
@@ -1263,7 +1131,6 @@ export default class ReportDemographic extends Vue {
                     ResponseFilter.successCheck(this, response,
                         (response: any) => {
                            for (const returnValue of response.results) {
-                                // 自定義 userSelectItem 的 key 的方式
                                 tempUserSelectItem[
                                     returnValue.objectId
                                     ] = `${returnValue.username} - ${returnValue.email}`;
@@ -1284,7 +1151,7 @@ export default class ReportDemographic extends Vue {
 
 		receiveModalShowData(data) {
 			this.modalShow = data;
-		}
+        }
 
 		//// 以下為 analysis filter ////
 
