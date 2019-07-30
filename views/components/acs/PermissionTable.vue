@@ -777,14 +777,13 @@ export default class PermissionTable extends Vue {
             .U("/acs/permissiontable", premissionParam)
             .then((response: any) => {
                 this.checkError(response);
-                this.pageToList();
             });
         } else {
             await this.$server
             .C("/acs/permissiontable", premissionParam)
             .then((response: any) => {
                 this.checkError(response);
-                this.pageToList();
+                
             });
         }
 
@@ -792,11 +791,21 @@ export default class PermissionTable extends Vue {
     }
 
   private checkError(response: any) {
-    if(!response.errors||response.errors.length<=0)return;
+    if(!response.errors||response.errors.length<=0){
+        this.pageToList();
+        return;
+    };
     let err = response.errors.find(x=>x.type=="accessLevelIsNotInCCure");
     if(err){
-        Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"\n"+response.errors.filter(x=>x.type=="accessLevelIsNotInCCure").map(x=>x.message).join(", "));
+        let messages = `<table class="table"><tr><th>${this._("w_Door")}</th><th>${this._("w_TimeSchedule")}</th></tr><tr>`;
+        for(let error of response.errors.filter(x=>x.type=="accessLevelIsNotInCCure")){
+            messages+=`<tr><td>${error.doorname || ""}</td><td>${error.timename  ||""}</td><td>${error.message || ""}</td></tr>`;
+        }
+        messages+="</tr></table>"
+        Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
                
+    }else{
+        this.pageToList();
     }
   }
 
