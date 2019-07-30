@@ -30,7 +30,6 @@ import { toEnumInterface } from '@/../core';
 export default class Components extends Vue {
     private async logout() {
         await this.$logout();
-        console.log('push go');
         this.$goHome();
         //this.$router.push('//');
     }

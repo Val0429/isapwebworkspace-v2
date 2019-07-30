@@ -24,16 +24,30 @@
                 </template>
 
                 <BR />
-                <div :key="index" v-for="(img, index) of result" style="position: relative; display: inline-table; float: left; width: 300px; height: 300px; border: 1px solid purple">
-                    <img
-                        v-b-tooltip.hover :title="`laplacian score: ${img.laplacianScore.toFixed(3)}\r\nshadow score: ${img.shadowScore.toFixed(3)}\r\nwidth adjustment: ${img.widthAdjustment.toFixed(3)}\r\nno face: ${img.faceNotFound}`"
-                        style="display: block; max-width: 280px; max-height: 220px; margin-top: 10px; margin-left: auto; margin-right: auto" :src="img.url"
-                        />
-                    <div style="position: absolute; bottom: 35px; left: 0; right: 0; font-size: 14px; font-family: 微軟正黑體; text-align: center">
+                <div :key="index" v-for="(img, index) of result" style="position: relative; display: inline-table; float: left; width: 300px; height: 350px; border: 1px solid purple">
+                    <div style="position: relative; display: flex; width: 280px; height: 180px; background: #EEE; margin-top: 10px; margin-left: auto; margin-right: auto">
+                        <img
+                            v-b-tooltip.hover :title="`laplacian score: ${img.laplacianScore.toFixed(3)}\r\nshadow score: ${img.shadowScore.toFixed(3)}\r\nwidth adjustment: ${img.widthAdjustment.toFixed(3)}\r\nno face: ${img.faceNotFound}`"
+                            style="display: block; max-width: 280px; max-height: 180px; margin: auto" :src="img.url"
+                            />
+                    </div>
+
+                    <div style="position: relative; display: flex; width: 140px; height: 90px; background: #EEE; margin-top: 5px; margin-left: 10px; float: left">
+                        <img
+                            style="display: block; max-width: 140px; max-height: 90px; margin: auto" :src="img.croppedImage"
+                            />
+                    </div>
+                    <div style="position: relative; display: flex; width: 140px; height: 90px; background: #EEE; margin-top: 5px; float: left">
+                        <img
+                            style="display: block; max-width: 140px; max-height: 90px; margin: auto" :src="img.histImage"
+                            />
+                    </div>
+
+                    <div style="clear: both; position: absolute; bottom: 35px; left: 0; right: 0; font-size: 14px; font-family: 微軟正黑體; text-align: center">
                         {{ getTitle(img) }}
                     </div>
                     <div
-                        style="position: absolute; bottom: 10px; left: 40%; font-size: 18px; font-family: 微軟正黑體">{{ Math.round(img.score * 10000) / 100 }} 分</div>
+                        style="position: absolute; bottom: 10px; left: 40%; font-size: 18px; font-family: 微軟正黑體; font-weight: bold">{{ Math.round(img.score * 10000) / 100 }} 分</div>
                 </div>
 
             </iv-card>
@@ -109,9 +123,9 @@ export default class FaceScore extends Vue {
     private async doMounted() {
         this.isMounted = true;
         this.server = new SmartCommunityServer({
-            // ip: "172.16.10.81",
-            ip: "localhost",
-            port: 6060,
+            ip: "172.16.10.81",
+            // ip: "localhost",
+            port: 6061,
             ssl: false
         });
         let user = await this.server.C("/users/login", {
