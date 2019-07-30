@@ -245,11 +245,11 @@ export default class ReportVIPTracking extends Vue {
         // await this.$server
         //     .C("/report/people-counting/summary", param)
         //     .then((response: any) => {
-        //         if (response !== undefined) {
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
         //             this.responseData = response;
         //             this.officeHourItemDetail = this.responseData.officeHours;
         //             this.resolveSummary();
-        //         }
+        //         });
         //     })
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
