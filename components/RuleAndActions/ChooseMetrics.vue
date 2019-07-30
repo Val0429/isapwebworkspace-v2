@@ -262,25 +262,6 @@
 
 				</iv-form>
 
-<!--				<template #footer>-->
-<!--					<b-button-->
-<!--						class="submit"-->
-<!--						size="lg"-->
-<!--						@click="doSubmit"-->
-<!--					>-->
-<!--						{{ _('wb_Submit') }}-->
-<!--					</b-button>-->
-
-<!--					<b-button-->
-<!--						class="reset"-->
-<!--						size="lg"-->
-<!--						@click="doReset"-->
-<!--					>-->
-<!--						{{ _('wb_Reset') }}-->
-<!--					</b-button>-->
-<!--				</template>-->
-
-
 			<region-tree-select
 				key="transition_2"
 				v-show="transition.step === 2"
@@ -422,10 +403,7 @@
 
 		}
 
-		mounted() {
-
-		}
-
+		mounted() {}
 
 		initSelectItem() {
 			this.ifAllSitesSelectItem = [
@@ -846,7 +824,6 @@
 				this.selecteds = [];
 			}
 		}
-
 
 		changeAllAreasSelect(selected: string) {
 

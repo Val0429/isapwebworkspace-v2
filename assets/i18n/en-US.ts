@@ -158,8 +158,8 @@ export default class LangObject {
     // w_SelectSites = 'Select Site(s)';
     // w_AllSites = 'All Sites';
     w_SelectSites = 'Select Store(s)';
-    w_SelectSite = '* Select Store';
     w_AllSites = 'All Stores';
+    w_SelectSite = '* Select Store';
     w_period = 'Period';
     w_Designation = 'Designation';
     w_Today = 'Today';
@@ -258,15 +258,20 @@ export default class LangObject {
 
     // Navigation
     w_Navigation_Label = 'iSAP Solution';
+
     w_Navigation_Dashboards = 'Dashboards';
+
     w_Navigation_Analysises = 'Analysises';
+
     w_Navigation_Reports = 'Reports';
+
     w_Navigation_Users = 'Users';
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
 
     // w_Navigation_Site = 'Site';
     w_Navigation_Site = 'Store';
+
     w_Navigation_Region = 'Region';
 
     w_Navigation_VideoSources = 'Video Source';
@@ -1110,4 +1115,20 @@ export default class LangObject {
     w_RuleAndActions_anyTime = 'Any Time';
     w_RuleAndActions_startTime = 'Start Time';
     w_RuleAndActions_endTime = 'End Time';
+
+    w_RuleAndActions_NotifyMethod = 'Notify Method';
+    w_RuleAndActions_MobileApp = 'Mobile App';
+    w_RuleAndActions_SMS = 'SMS';
+    w_RuleAndActions_Email = 'Email';
+    w_RuleAndActions_HttpCommand = 'http command';
+
+    w_RuleAndActions_NotifyTarget = 'Notify Target';
+    w_RuleAndActions_StoreManager = 'Store manager';
+    w_RuleAndActions_UsersHavePermission= 'Users who have permission of store';
+    w_RuleAndActions_UsersAndUserGroup = 'Users / User Group';
+    w_RuleAndActions_Users = 'Users';
+    w_RuleAndActions_UserGroup = 'User Group';
+
+    w_RuleAndActions_Frequently = 'How frequently to notify ?';
+    w_RuleAndActions_Minute = 'Minute ( Fill in 0 if want to notice immediately )';
 }
