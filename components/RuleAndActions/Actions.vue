@@ -2,11 +2,11 @@
     <iv-form :interface="IFilterConditionForm()">
 
     </iv-form>
-
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { toEnumInterface } from "../../../core";
 
 // Report
 import {
@@ -16,11 +16,11 @@ import {
 } from "@/components/Reports";
 
 import { ERunTimeType } from "@/components/RuleAndActions";
+import { ERegionType } from "../RegionTree";
 
 // Service
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
-import { toEnumInterface } from "../../../core";
 import ResponseFilter from "@/services/ResponseFilter";
 import RegionAPI from "@/services/RegionAPI";
 
@@ -56,11 +56,6 @@ export class Actions extends Vue {
     isAllArea: string = EIfAllSelected.select;
     isAllGroup: string = EIfAllSelected.select;
     isAllDevice: string = EIfAllSelected.select;
-
-    // tree
-    selectType = ERegionType.site;
-    regionTreeItem = new RegionTreeItem();
-    selecteds: IRegionTreeSelected[] = [];
 
     // run time 相關
     runTime: any = {
@@ -141,8 +136,6 @@ export class Actions extends Vue {
             yes: this._("w_yes"),
             no: this._("w_no")
         };
-
-        this.anyTime = this._("w_RuleAndActions_anyTime");
     }
 
     IFilterConditionForm() {
@@ -262,15 +255,11 @@ export class Actions extends Vue {
                     true
                 )};
 
-
             }
         `;
     }
 }
 
-export default ChooseMetrics;
-Vue.component("choose-metrics", ChooseMetrics);
+export default Actions;
+Vue.component("actions", Actions);
 </script>
-
-<style lang="scss" scoped>
-</style>
