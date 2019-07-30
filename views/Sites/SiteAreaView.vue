@@ -144,8 +144,10 @@ export class SiteAreaView extends Vue {
         await this.$server
             .R("/device/group/all", body)
             .then((response: any) => {
-                this.devicesGroupDevices = response;
-                this.getDeviceData();
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.devicesGroupDevices = response;
+                    this.getDeviceData();
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -166,19 +168,26 @@ export class SiteAreaView extends Vue {
                 }
             };
 
+            this.devices = [];
+
             await this.$server
                 .R("/device", body)
                 .then((response: any) => {
-                    this.devices = [];
-                    for (let item of response.results) {
-                        if (
-                            item.area &&
-                            item.area.objectId == this.area.objectId
-                        ) {
-                            this.devices.push(item);
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (let item of response.results) {
+                                if (
+                                    item.area &&
+                                    item.area.objectId == this.area.objectId
+                                ) {
+                                    this.devices.push(item);
+                                }
+                            }
+                            this.initImageMap();
                         }
-                    }
-                    this.initImageMap();
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

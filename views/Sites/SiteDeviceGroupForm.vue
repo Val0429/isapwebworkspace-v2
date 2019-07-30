@@ -175,10 +175,12 @@ export class SiteDeviceGroupForm extends Vue {
         await this.$server
             .R("/location/area/all", body)
             .then((response: any) => {
-                for (let item of response) {
-                    let area = { id: item.objectId, text: item.name };
-                    this.areaNameItem.push(area);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let item of response) {
+                        let area = { id: item.objectId, text: item.name };
+                        this.areaNameItem.push(area);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -220,11 +222,16 @@ export class SiteDeviceGroupForm extends Vue {
             await this.$server
                 .C("/device/group", addDeviceGroupParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_AddDeviceGroupSuccess"));
-                        this.pageToDeviceGroupList();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(
+                                this._("w_Site_AddDeviceGroupSuccess")
+                            );
+                            this.pageToDeviceGroupList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -242,11 +249,16 @@ export class SiteDeviceGroupForm extends Vue {
             await this.$server
                 .U("/device/group", editDeviceGroupParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_EditDeviceGroupSuccess"));
-                        this.pageToDeviceGroupList();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(
+                                this._("w_Site_EditDeviceGroupSuccess")
+                            );
+                            this.pageToDeviceGroupList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

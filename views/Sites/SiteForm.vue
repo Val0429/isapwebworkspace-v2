@@ -177,10 +177,12 @@ export class SiteForm extends Vue {
         await this.$server
             .R("/user/user/all", body)
             .then((response: any) => {
-                for (let user of response) {
-                    let manager = { id: user.objectId, text: user.name };
-                    this.managerItem.push(manager);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let user of response) {
+                        let manager = { id: user.objectId, text: user.name };
+                        this.managerItem.push(manager);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -205,10 +207,12 @@ export class SiteForm extends Vue {
         await this.$server
             .R("/office-hour/all", body)
             .then((response: any) => {
-                for (let itme of response) {
-                    let officeHour = { id: itme.objectId, text: itme.name };
-                    this.officeHourItem.push(officeHour);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let itme of response) {
+                        let officeHour = { id: itme.objectId, text: itme.name };
+                        this.officeHourItem.push(officeHour);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -233,10 +237,12 @@ export class SiteForm extends Vue {
         await this.$server
             .R("/tag/all", body)
             .then((response: any) => {
-                for (let itme of response) {
-                    let tag = { id: itme.objectId, text: itme.name };
-                    this.tagItem.push(tag);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let itme of response) {
+                        let tag = { id: itme.objectId, text: itme.name };
+                        this.tagItem.push(tag);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -269,11 +275,14 @@ export class SiteForm extends Vue {
             await this.$server
                 .C("/location/site", addSiteParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_AddSiteSuccess"));
-                        this.pageToSiteList();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Site_AddSiteSuccess"));
+                            this.pageToSiteList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -307,11 +316,14 @@ export class SiteForm extends Vue {
             await this.$server
                 .U("/location/site", editSiteParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_EditSiteSuccess"));
-                        this.pageToSiteList();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Site_EditSiteSuccess"));
+                            this.pageToSiteList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

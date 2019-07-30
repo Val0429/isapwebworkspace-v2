@@ -152,10 +152,12 @@ export class SiteView extends Vue {
         await this.$server
             .R("/user/user/all", body)
             .then((response: any) => {
-                for (let user of response) {
-                    let manager = { id: user.objectId, text: user.name };
-                    this.managerItem.push(manager);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let user of response) {
+                        let manager = { id: user.objectId, text: user.name };
+                        this.managerItem.push(manager);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -177,13 +179,17 @@ export class SiteView extends Vue {
             }
         };
 
+        this.site.officeHour = [];
+
         await this.$server
             .R("/office-hour/all", body)
             .then((response: any) => {
-                for (let itme of response) {
-                    let officeHour = { id: itme.objectId, text: itme.name };
-                    this.officeHourItem.push(officeHour);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let itme of response) {
+                        let officeHour = { id: itme.objectId, text: itme.name };
+                        this.officeHourItem.push(officeHour);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -192,15 +198,16 @@ export class SiteView extends Vue {
         await this.$server
             .R("/office-hour", body)
             .then((response: any) => {
-                this.site.officeHour = [];
-                for (let item of response.results) {
-                    for (let subItem of item.sites) {
-                        if (subItem.objectId == this.site.objectId) {
-                            this.site.officeHour = item.objectId;
-                            break;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let item of response.results) {
+                        for (let subItem of item.sites) {
+                            if (subItem.objectId == this.site.objectId) {
+                                this.site.officeHour = item.objectId;
+                                break;
+                            }
                         }
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -222,13 +229,17 @@ export class SiteView extends Vue {
             }
         };
 
+        this.site.tag = [];
+
         await this.$server
             .R("/tag/all", body)
             .then((response: any) => {
-                for (let itme of response) {
-                    let tag = { id: itme.objectId, text: itme.name };
-                    this.tagItem.push(tag);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let itme of response) {
+                        let tag = { id: itme.objectId, text: itme.name };
+                        this.tagItem.push(tag);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -237,15 +248,16 @@ export class SiteView extends Vue {
         await this.$server
             .R("/tag", body)
             .then((response: any) => {
-                this.site.tag = [];
-                for (let item of response.results) {
-                    for (let subItem of item.sites) {
-                        if (subItem.objectId == this.site.objectId) {
-                            this.site.tag.push(item.objectId);
-                            break;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let item of response.results) {
+                        for (let subItem of item.sites) {
+                            if (subItem.objectId == this.site.objectId) {
+                                this.site.tag.push(item.objectId);
+                                break;
+                            }
                         }
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

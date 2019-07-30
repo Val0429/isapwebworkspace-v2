@@ -101,7 +101,11 @@ export class SiteAreaList extends Vue {
         await this.$server
             .R("/device/group", body)
             .then((response: any) => {
-                this.deviceGroupAll = response.results;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (response.results != undefined) {
+                        this.deviceGroupAll = response.results;
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -162,11 +166,14 @@ export class SiteAreaList extends Vue {
             this.$server
                 .D("/location/area", body)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response) {
-                        Dialog.success(this._("w_Success"));
-                        (this.$refs.areaTable as any).reload();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Success"));
+                            (this.$refs.areaTable as any).reload();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

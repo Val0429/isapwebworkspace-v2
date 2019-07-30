@@ -106,21 +106,25 @@ export class SiteDeviceGroupList extends Vue {
             this.$server
                 .D("/device/group", body)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response) {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                (this.$refs.deviceGroupTable as any).reload();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(this._("w_DeleteFailed"));
-                                return false;
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response) {
+                                if (returnValue.statusCode === 200) {
+                                    (this.$refs
+                                        .deviceGroupTable as any).reload();
+                                }
+                                if (
+                                    returnValue.statusCode === 500 ||
+                                    returnValue.statusCode === 400
+                                ) {
+                                    Dialog.error(this._("w_DeleteFailed"));
+                                    return false;
+                                }
                             }
                         }
-                    }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
