@@ -508,7 +508,7 @@
 		}
 
 		async initSelectItemArea() {
-			let tempAreaSelectItem = { all: this._("w_AllAreas") };
+			this.areaSelectItem = [];
 
 			this.inputFormData.firstSiteId = this.inputFormData.siteIds[0];
 
@@ -527,21 +527,22 @@
 				.then((response: any) => {
 					ResponseFilter.successCheck(this, response, (response: any) => {
 						for (const returnValue of response) {
-							tempAreaSelectItem[returnValue.objectId] =
-								returnValue.name;
-							// this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+							let area = { id: returnValue.objectId, text: returnValue.name };
+							this.areaSelectItem.push(area);
 						}
-						this.areaSelectItem = tempAreaSelectItem;
 					});
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
 				});
+
+			for (const detail of this.areaSelectItem) {
+				this.inputFormData.allAreaIds.push(detail.id);
+			}
 		}
 
 		async initSelectItemDeviceGroup() {
-			let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
-			this.deviceGroupSelectItem = {};
+			this.deviceGroupSelectItem = [];
 
 			let readParam: {
 				siteId: string;
@@ -568,20 +569,23 @@
 				.then((response: any) => {
 					ResponseFilter.successCheck(this, response, (response: any) => {
 						for (const returnValue of response) {
-							tempDeviceGroupSelectItem[returnValue.objectId] =
-								returnValue.name;
+							let group = { id: returnValue.objectId, text: returnValue.name };
+							this.deviceGroupSelectItem.push(group);
 						}
-						this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
 					});
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
 				});
+
+			for (const detail of this.deviceGroupSelectItem) {
+				this.inputFormData.allGroupIds.push(detail.id);
+			}
 		}
 
 		async initSelectItemDevice() {
-			let tempDeviceSelectItem = { all: this._("w_AllDevices") };
-			this.deviceSelectItem = {};
+			this.deviceSelectItem = [];
+
 
 			const readParam: {
 				siteId: string;
@@ -620,16 +624,19 @@
 							response.results.length > 0
 						) {
 							for (const returnValue of response.results) {
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
+								let device = { id: returnValue.objectId, text: returnValue.name };
+								this.deviceSelectItem.push(device);
 							}
-							this.deviceSelectItem = tempDeviceSelectItem;
 						}
 					});
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
 				});
+
+			for (const detail of this.deviceSelectItem) {
+				this.inputFormData.allDeviceIds.push(detail.id);
+			}
 		}
 
 		changeTimeSelect(selected: string) {
@@ -650,6 +657,7 @@
 				this.inputFormData.siteIds = [];
 				this.selecteds = [];
 			}
+
 		}
 
 		changeAllAreasSelect(selected: string) {
@@ -728,6 +736,14 @@
 				await this.initSelectItemArea();
 				await this.initSelectItemDeviceGroup();
 				await this.initSelectItemDevice();
+
+				this.isAllArea = EIfAllSelected.select;
+				this.isAllGroup = EIfAllSelected.select;
+				this.isAllDevice = EIfAllSelected.select;
+
+				this.inputFormData.areaIds = [];
+				this.inputFormData.groupIds = [];
+				this.inputFormData.deviceIds = [];
 			}
 
 		}
@@ -772,6 +788,8 @@
 			) {
 				this.isAllDevice = EIfAllSelected.all;
 			}
+
+
 		}
 
 		async pageToChooseTree() {
