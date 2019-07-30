@@ -61,11 +61,6 @@
 		isAllGroup: string = EIfAllSelected.select;
 		isAllDevice: string = EIfAllSelected.select;
 
-		// tree
-		selectType = ERegionType.site;
-		regionTreeItem = new RegionTreeItem();
-		selecteds: IRegionTreeSelected[] = [];
-
 
 		// run time 相關
 		runTime: any = {
@@ -269,8 +264,8 @@
 		}
 	}
 
-	export default ChooseMetrics;
-	Vue.component("choose-metrics", ChooseMetrics);
+	export default Actions;
+	Vue.component("actions", Actions);
 </script>
 
 <style lang="scss" scoped>
