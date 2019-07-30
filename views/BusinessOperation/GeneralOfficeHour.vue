@@ -532,16 +532,14 @@ export default class GeneralOfficeHour extends Vue {
             await this.$server
                 .C("/office-hour", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_OfficeHour_AddFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_OfficeHour_AddFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -597,16 +595,14 @@ export default class GeneralOfficeHour extends Vue {
             await this.$server
                 .U("/office-hour", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_OfficeHour_EditFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_OfficeHour_EditFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -634,15 +630,14 @@ export default class GeneralOfficeHour extends Vue {
                     this.$server
                         .D("/office-hour", deleteParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);

@@ -192,8 +192,7 @@ export default class Weather extends Vue {
         await this.$server
             .C("/setting/weather/test", weatherObject)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.dataFromApi = {
                         latitude: response.latitude,
                         longitude: response.longitude,
@@ -208,7 +207,7 @@ export default class Weather extends Vue {
                     };
                     (this.$refs["detail"] as any).show();
                     setTimeout(() => (this.$refs["test"] as any).hide(), 10);
-                }
+                });
             })
             .catch((e: any) => {
                 (this.$refs["detail"] as any).hide() &&
@@ -225,9 +224,9 @@ export default class Weather extends Vue {
         await this.$server
             .R("/setting/weather")
             .then((response: any) => {
-                if (response !== undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.inputWeatherData.secretKey = response.secretKey;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
@@ -248,10 +247,9 @@ export default class Weather extends Vue {
         await this.$server
             .U("/setting/weather", weatherParam)
             .then((response: any) => {
-                Loading.hide();
-                if (response !== undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_Weather_Setting_Success"));
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(

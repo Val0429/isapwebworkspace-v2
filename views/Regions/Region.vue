@@ -233,13 +233,18 @@ export default class Region extends Vue {
         await this.$server
             .R("/location/site/all", param)
             .then((response: any) => {
-                if (response != undefined) {
-                    for (let resp of response) {
-                        this.selectItem.site[resp.objectId] = resp.name;
-                        siteCount++;
-                    }
-                }
-                this.noSiteBeBinding = siteCount < 1;
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        for (let resp of response) {
+                            this.selectItem.site[resp.objectId] = resp.name;
+                            siteCount++;
+                        }
+                        this.noSiteBeBinding = siteCount < 1;
+                    },
+                    this._("w_User_AddUserFailed")
+                );
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -287,10 +292,12 @@ export default class Region extends Vue {
         await this.$server
             .R("/tag/all", body)
             .then((response: any) => {
-                for (let itme of response) {
-                    let tag = { id: itme.objectId, text: itme.name };
-                    this.selectItem.tags.push(tag);
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let itme of response) {
+                        let tag = { id: itme.objectId, text: itme.name };
+                        this.selectItem.tags.push(tag);
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -312,13 +319,13 @@ export default class Region extends Vue {
         await this.$server
             .R("/location/tree", param)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
                     this.regionTreeItem.region.status.focusBar = true;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -499,10 +506,13 @@ export default class Region extends Vue {
             await this.$server
                 .C("/location/region", param)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        this.pageToTree();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.pageToTree();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -511,8 +521,13 @@ export default class Region extends Vue {
             await this.$server
                 .U("/location/region", param)
                 .then((response: any) => {
-                    Loading.hide();
-                    this.pageToTree();
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.pageToTree();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -552,10 +567,9 @@ export default class Region extends Vue {
         await this.$server
             .U("/location/site/binding-region", param)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.pageToTree();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -570,10 +584,9 @@ export default class Region extends Vue {
         await this.$server
             .D("/location/region", param)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.pageToTree();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

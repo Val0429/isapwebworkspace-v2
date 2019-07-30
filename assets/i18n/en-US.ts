@@ -42,7 +42,6 @@ export default class LangObject {
     w_Map = 'Map';
     w_Area = 'Area';
     w_Device = 'Device';
-    // w_DeviceGroup = 'Device Group';
     w_DeviceGroup = 'Entrance';
     w_EditMyProfile = 'Edit My Profile';
     w_ChangePassword = 'Change Password';
@@ -97,16 +96,13 @@ export default class LangObject {
     w_URL = 'URL';
     w_Host = 'Host';
     w_Phone = 'Phone';
-    w_ManagedSites = 'Managed sites';
+    w_ManagedSites = 'Managed stores';
     w_Description = 'Description';
-    // w_Sites = 'Site(s)';
     w_Sites = 'Store(s)';
     w_Sites1 = '* Store(s)';
     w_Tag = '* Tag(s)';
     w_Tag1 = 'Tag';
-    // w_Site = 'Site';
     w_Site = 'Store';
-    //w_Group = 'Group';
     w_Group = 'Entrance';
     w_Item = 'Item';
     w_Total = 'Total';
@@ -133,12 +129,10 @@ export default class LangObject {
     w_IPAddress = 'IP Address';
     w_Selected = 'Selected';
     w_RegionTreeSelect = 'Region Tree Select';
-    // w_SiteTreeSelect = 'Site Tree Select';
     w_SiteTreeSelect = 'Store Tree Select';
     w_Brand = 'Brand';
     w_Model = 'Model';
     w_DeviceName = 'Device Name';
-    // w_DeviceGroups = 'Device Group(s)';
     w_DeviceGroups = 'Entrance(s)';
     w_Hanwha = 'Hanwha';
     w_iSapFRS = 'FRS';
@@ -155,8 +149,6 @@ export default class LangObject {
     w_Location = 'Location';
     w_Areas = 'Area(s)';
     w_Devices = 'Device(s)';
-    // w_SelectSites = 'Select Site(s)';
-    // w_AllSites = 'All Sites';
     w_SelectSites = 'Select Store(s)';
     w_AllSites = 'All Stores';
     w_SelectSite = '* Select Store';
@@ -178,7 +170,6 @@ export default class LangObject {
     w_AllAreas = 'All Areas';
     w_AllDeviceGroups = 'All Entrances';
     w_SelectDeviceGroups = 'Select Entrances';
-    // w_AllDeviceGroups = 'All DeviceGroups';
     w_AllDevices = 'All Devices';
     w_SelectDevice = 'Select Devices';
     w_Employee = 'Employee';
@@ -225,8 +216,6 @@ export default class LangObject {
     w_WrongConfig = 'Please check IP, Port, WSPort, Protocol, Account and Password again';
 
     w_PeakHours = 'PEAK HOURS';
-
-    // w_SelectSiteTree = 'Select site tree';
     w_SelectSiteTree = 'Select store tree';
     w_SelectRegionTree = 'Select region tree';
 
@@ -269,7 +258,6 @@ export default class LangObject {
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
 
-    // w_Navigation_Site = 'Site';
     w_Navigation_Site = 'Store';
 
     w_Navigation_Region = 'Region';
@@ -362,7 +350,7 @@ export default class LangObject {
 
     w_Region_AddSameLayerRegion = 'Add Same Layer';
     w_Region_AddNextLayerRegion = 'Add Next Layer';
-    w_Region_BindingSite = 'Binding Site';
+    w_Region_BindingSite = 'Binding Store';
     w_Region_BackToTree = 'Back';
 
     w_Region_Name = 'Name';
@@ -376,9 +364,8 @@ export default class LangObject {
     w_Region_Tags = 'Tag';
     w_Region_Level = 'Level';
     w_Region_LevelRegion = 'Region';
-    w_Region_LevelSite = 'Site';
+    w_Region_LevelSite = 'Store';
     w_Region_LevelArea = 'Area';
-    // w_Region_Sites = 'Sites';
     w_Region_Sites = 'Stores';
 
     w_Region_NamePlaceholder = 'Please input name';
@@ -390,12 +377,11 @@ export default class LangObject {
     w_Region_LngPlaceholder = 'Please input longitude';
     w_Region_TagsPlaceholder = 'Please choose tag';
     w_Region_LevelPlaceholder = 'Please choose level';
-    // w_Region_SitesPlaceholder = 'Please choose site';
     w_Region_SitesPlaceholder = 'Please choose store';
 
     w_Region_ErrorLongitude = 'Longitude only -180~180';
     w_Region_ErrorLatitude = 'Latitude only -90~90';
-    w_Region_ErrorNoSiteBeBinding = 'No site can be binding';
+    w_Region_ErrorNoSiteBeBinding = 'No store can be binding';
     w_Region_ErrorFileToLarge = 'Image max size is 7MB';
 
     // User
@@ -475,12 +461,9 @@ export default class LangObject {
     w_MailServer_Read_Fail = 'Mail Server read failed.';
 
     // Site
-    // w_Site_SiteID = 'Site ID';
-    // w_Site_SiteName = 'Site Name';
     w_Site_SiteID = 'Store ID';
     w_Site_SiteName = 'Store Name';
     w_Site_AreaName = 'Area Name';
-    // w_Site_GroupName = 'Device Group Name';
     w_Site_GroupName = 'Entrance Name';
     w_Site_DeviceName = 'Device Name';
     w_Site_DeviceType = 'Device Type';
@@ -494,7 +477,6 @@ export default class LangObject {
     w_Site_Area = 'Area';
     w_Site_Tag = 'Tag';
     w_Site_Devices = 'Devices';
-    // w_Site_DeviceGroup = 'Device Group';
     w_Site_DeviceGroup = 'Entrance';
     w_Site_Model = 'Model';
     w_Site_Photo = 'Photo';
@@ -504,10 +486,6 @@ export default class LangObject {
     w_Site_Longitude_Range = 'Longitude range from 180° to -180°';
     w_Site_Latitude_Range = 'Latitude range from 90° to -90°';
     w_Site_Mapping = 'Mapping';
-    // w_Site_ViewSite = 'View Site';
-    // w_Site_AddSite = 'Add Site';
-    // w_Site_SiteList = 'Site List';
-    // w_Site_EditSite = 'Edit Site';
     w_Site_SiteList = 'Store List';
     w_Site_ViewSite = 'View Store';
     w_Site_AddSite = 'Add Store';
@@ -516,15 +494,10 @@ export default class LangObject {
     w_Site_ViewArea = 'View Area';
     w_Site_AddArea = 'Add Area';
     w_Site_EditArea = 'Edit Area';
-    // w_Site_DeviceGroupList = 'Device Group List';
     w_Site_DeviceGroupList = 'Entrance List';
     w_Site_ViewDevice = 'View Device';
     w_Site_AddDevice = 'Add Device';
     w_Site_EditDevice = 'Edit Device';
-    // w_Site_AddSiteSuccess = 'Add Site Success';
-    // w_Site_AddSiteFailed = 'Add Site Failed';
-    // w_Site_EditSiteSuccess = 'Edit Site Success';
-    // w_Site_EditSiteFailed = 'Edit Site Failed';
     w_Site_AddSiteSuccess = 'Add Store Success';
     w_Site_AddSiteFailed = 'Add Store Failed';
     w_Site_EditSiteSuccess = 'Edit Store Success';
@@ -533,10 +506,6 @@ export default class LangObject {
     w_Site_AddAreaFailed = 'Add Area Failed';
     w_Site_EditAreaSuccess = 'Edit Area Success';
     w_Site_EditAreaFailed = 'Edit Area Failed';
-    // w_Site_AddDeviceGroupSuccess = 'Add Device Group Success';
-    // w_Site_AddDeviceGroupFailed = 'Add Device Group Failed';
-    // w_Site_EditDeviceGroupSuccess = 'Edit Device Group Success';
-    // w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
     w_Site_AddDeviceGroupSuccess = 'Add Entrance Success';
     w_Site_AddDeviceGroupFailed = 'Add Entrance Failed';
     w_Site_EditDeviceGroupSuccess = 'Edit Entrance Success';
@@ -559,7 +528,7 @@ export default class LangObject {
     w_Tag_EditTag = 'Edit Tag';
     w_Tag_ViewTag = 'View Tag';
     w_Tag_TagName = 'Tag Name';
-    w_Tag_AppliedSites = 'Applied Sites';
+    w_Tag_AppliedSites = 'Applied Stores';
 
     w_Tag_AddTagSuccess = 'Add Tag Success';
     w_Tag_AddTagFailed = 'Add Tag Failed';
@@ -655,11 +624,9 @@ export default class LangObject {
     w_ServerCMS_Edit = 'Edit CMS Server';
     w_ServerCMS_View = 'View CMS Server';
     w_ServerCMS_AddSuccess = 'CMS Server add success.';
-    w_ServerCMS_ADDFailed = 'Add failed! Can not found the CMS Server, please try again.';
-    w_ServerCMS_ADDDuplicate = 'Add failed! CMS Server is duplicate, please try again.';
+    w_ServerCMS_ADDFailed = 'Add failed! Can not add the CMS Server, please try again.';
     w_ServerCMS_EditSuccess = 'CMS Server edit success.';
-    w_ServerCMS_EditFailed = 'Edit failed! Can not found the CMS Server, please try again.';
-    w_ServerCMS_EditDuplicate = 'Edit failed! CMS Server is duplicate, please try again.';
+    w_ServerCMS_EditFailed = 'Edit failed! Can not edit the CMS Server, please try again.';
     w_ServerCMSDeleteConfirm = 'Are you sure to delete selected CMS Server(s)?';
 
     // Demographic Server
@@ -709,11 +676,9 @@ export default class LangObject {
     w_ServerFRS_wsport = 'WS Port';
 
     w_ServerFRS_AddSuccess = 'FRS Server add success.';
-    w_ServerFRS_ADDFailed = 'Add failed! Can not found the FRS Server, please try again.';
-    w_ServerFRS_ADDDuplicate = 'Add failed! FRS Server is duplicate, please try again.';
+    w_ServerFRS_ADDFailed = 'Add failed! Can not add the FRS Server, please try again.';
     w_ServerFRS_EditSuccess = 'FRS Server edit success.';
-    w_ServerFRS_EditFailed = 'Edit failed! Can not found the FRS Server, please try again.';
-    w_ServerFRS_EditDuplicate = 'Edit failed! FRS Server is duplicate, please try again.';
+    w_ServerFRS_EditFailed = 'Edit failed! Can not edit the FRS Server, please try again.';
     w_ServerFRS_DeleteConfirm = 'Are you sure to delete selected FRS Server(s)?';
 
     // Business Operation Campaign
@@ -823,7 +788,6 @@ export default class LangObject {
     w_VSHeatmap_SetCMS = 'Not yet set? Go to set CMS';
     w_VSHeatmap_NVR = 'NVR';
     w_VSHeatmap_ChannelInNVR = 'Channel In NVR';
-    // w_VSHeatmap_Site = 'Site';
     w_VSHeatmap_Site = 'Store';
     w_VSHeatmap_Area = 'Area';
     w_VSHeatmap_DeviceGroup = 'Device Group';
@@ -848,7 +812,6 @@ export default class LangObject {
     w_VSHumanDetection_SetSHServer = 'Not yet set? Go to set SHServer';
     w_VSHumanDetection_NVR = 'NVR';
     w_VSHumanDetection_ChannelInNVR = 'Channel In NVR';
-    // w_VSHumanDetection_Site = 'Site';
     w_VSHumanDetection_Site = 'Store';
     w_VSHumanDetection_Area = 'Area';
     w_VSHumanDetection_DeviceGroup = 'Device Group';
@@ -1008,7 +971,6 @@ export default class LangObject {
     w_ReportDateError = 'EndDate must greater or equal than startDate.';
     w_countSelect = 'Time Mode';
     w_isIncludedEmployee = 'Staff Inclusion';
-    // w_PleaseSelectSites = 'Please Select Site(s)';
     w_PleaseSelectSites = 'Please Select Store(s)';
     w_PleaseSelectTags = 'Please Select Tags(s)';
     w_InOutType = 'In Out Type';
@@ -1047,7 +1009,6 @@ export default class LangObject {
 
     //Report Visitor
     w_ReportVisitor_Visitor = 'Visitor';
-    // w_ReportVisitor_Site = 'Site';
     w_ReportVisitor_Site = 'Store';
     w_ReportVisitor_Date = 'Date';
     w_ReportVisitor_1 = '1';

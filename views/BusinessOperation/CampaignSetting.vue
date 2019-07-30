@@ -288,7 +288,7 @@ export default class CampaignSetting extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
@@ -297,7 +297,7 @@ export default class CampaignSetting extends Vue {
                             returnValue
                         );
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -308,12 +308,12 @@ export default class CampaignSetting extends Vue {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -469,17 +469,15 @@ export default class CampaignSetting extends Vue {
             await this.$server
                 .C("/event/campaign", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_BOCampaign_AddSuccess"));
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_BOCampaign_ADDFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_BOCampaign_ADDFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -513,17 +511,15 @@ export default class CampaignSetting extends Vue {
             await this.$server
                 .U("/event/campaign", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_BOCampaign_EditSuccess"));
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_BOCampaign_EditFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_BOCampaign_EditFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -550,15 +546,14 @@ export default class CampaignSetting extends Vue {
                     this.$server
                         .D("/event/campaign", deleteParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);

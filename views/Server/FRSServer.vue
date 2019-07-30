@@ -240,27 +240,27 @@ export default class FRSServer extends Vue {
         const addParam = {
             config: configObject
         };
+        
         Loading.show();
         let results = await this.$server
             .C("/partner/frs/user-group", addParam)
-            // .then((response: any) => {
-            //     for (const returnValue of response) {
-            //         if (returnValue.statusCode === 200) {
-            //             Dialog.success(this._("w_ServerFRS_AddSuccess"));
-            //             this.pageToList();
-            //         }
-            //         if (returnValue.statusCode === 500) {
-            //             Dialog.error(this._("w_ServerFRS_ADDFailed"));
-            //             return false;
-            //         }
-            //         if (returnValue.statusCode === 400) {
-            //             Dialog.error(this._("w_ServerFRS_ADDDuplicate"));
-            //             return false;
-            //         }
-            //     }
-            // })
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        Dialog.success(this._("w_ServerFRS_AddSuccess"));
+                        this.pageToList();
+                    },
+                    this._("w_ServerFRS_ADDFailed")
+                );
+            })
             .catch((e: any) => {
-                return ResponseFilter.catchError(this, e, this._("w_WrongConfig"));
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_WrongConfig")
+                );
             });
         Loading.hide();
         this.groupData = results;
@@ -463,21 +463,15 @@ export default class FRSServer extends Vue {
             await this.$server
                 .C("/partner/frs", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_ServerFRS_AddSuccess"));
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_ServerFRS_ADDFailed"));
-                            return false;
-                        }
-                        if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerFRS_ADDDuplicate"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_ServerFRS_ADDFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -509,21 +503,15 @@ export default class FRSServer extends Vue {
             await this.$server
                 .U("/partner/frs", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_ServerFRS_EditSuccess"));
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_ServerFRS_EditFailed"));
-                            return false;
-                        }
-                        if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerFRS_EditDuplicate"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_ServerFRS_EditFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -551,15 +539,14 @@ export default class FRSServer extends Vue {
                     this.$server
                         .D("/partner/frs", deleteUserParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);

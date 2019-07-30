@@ -245,7 +245,7 @@ export default class UserGroup extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
@@ -254,7 +254,7 @@ export default class UserGroup extends Vue {
                             returnValue
                         );
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -265,12 +265,12 @@ export default class UserGroup extends Vue {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -408,21 +408,17 @@ export default class UserGroup extends Vue {
             await this.$server
                 .C("/user/group", addUParam)
                 .then((response: any) => {
-                    for (const returnValue of response) {
-                        Loading.hide();
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(
                                 this._("w_UserGroup_AddUserGroupSuccess")
                             );
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(
-                                this._("w_UserGroup_AddUserGroupFailed")
-                            );
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_UserGroup_AddUserGroupFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -448,21 +444,17 @@ export default class UserGroup extends Vue {
             await this.$server
                 .U("/user/group", editUserParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(
                                 this._("w_UserGroup_EditUserGroupSuccess")
                             );
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(
-                                this._("w_UserGroup_EditUserGroupFailed")
-                            );
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_UserGroup_EditUserGroupFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -489,17 +481,15 @@ export default class UserGroup extends Vue {
 
                     this.$server
                         .D("/user/group", deleteUserParam)
-
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);

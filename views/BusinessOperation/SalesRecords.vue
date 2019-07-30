@@ -523,59 +523,68 @@ export default class SalesRecords extends Vue {
         await this.$server
             .C("/report/sales-record", param)
             .then((response: any) => {
-                Loading.hide();
-                if (typeof response == "object" && response.length > 0) {
-                    for (let i in response) {
-                        let iNumber = parseInt(i);
-                        let tempLoopValue = response[iNumber];
-                        if (this.recordFileContent[iNumber] == undefined) {
-                            continue;
-                        }
-                        if (tempLoopValue.statusCode == 200) {
-                            this.recordFileContent[
-                                iNumber
-                            ].apiMessage = `<span style='color:green;'>${this._(
-                                "w_BOSalesRecords_ApiSuccess"
-                            )}</span>`;
-                        } else if (tempLoopValue.statusCode == 400) {
-                            if (
-                                tempLoopValue.message ==
-                                this.errorMessageFromServer.noSite
-                            ) {
-                                this.recordFileContent[
-                                    iNumber
-                                ].apiMessage = `<span style='color:red;'>${this._(
-                                    "w_BOSalesRecords_ErrorNoSite"
-                                )}</span>`;
-                            } else {
-                                this.recordFileContent[
-                                    iNumber
-                                ].apiMessage = `<span style='color:red;'>${this._(
-                                    "w_BOSalesRecords_ErrorServerError"
-                                )}</span>`;
-                            }
-                        } else if (tempLoopValue.statusCode == 401) {
-                            this.recordFileContent[
-                                iNumber
-                            ].apiMessage = `<span style='color:red;'>${this._(
-                                "w_BOSalesRecords_ErrorNoPremission"
-                            )}</span>`;
-                        } else {
-                            this.recordFileContent[
-                                iNumber
-                            ].apiMessage = `<span style='color:red;'>${this._(
-                                "w_BOSalesRecords_ErrorServerError"
-                            )}</span>`;
-                        }
-                    }
-                    this.pageTo4();
-                } else {
-                    this.sendError();
-                }
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    this.sendSuccess,
+                    "",
+                    false
+                );
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+    }
+
+    sendSuccess(response: any) {
+        if (typeof response == "object" && response.length > 0) {
+            for (let i in response) {
+                let iNumber = parseInt(i);
+                let tempLoopValue = response[iNumber];
+                if (this.recordFileContent[iNumber] == undefined) {
+                    continue;
+                }
+                if (tempLoopValue.statusCode == 200) {
+                    this.recordFileContent[
+                        iNumber
+                    ].apiMessage = `<span style='color:green;'>${this._(
+                        "w_BOSalesRecords_ApiSuccess"
+                    )}</span>`;
+                } else if (tempLoopValue.statusCode == 400) {
+                    if (
+                        tempLoopValue.message ==
+                        this.errorMessageFromServer.noSite
+                    ) {
+                        this.recordFileContent[
+                            iNumber
+                        ].apiMessage = `<span style='color:red;'>${this._(
+                            "w_BOSalesRecords_ErrorNoSite"
+                        )}</span>`;
+                    } else {
+                        this.recordFileContent[
+                            iNumber
+                        ].apiMessage = `<span style='color:red;'>${this._(
+                            "w_BOSalesRecords_ErrorServerError"
+                        )}</span>`;
+                    }
+                } else if (tempLoopValue.statusCode == 401) {
+                    this.recordFileContent[
+                        iNumber
+                    ].apiMessage = `<span style='color:red;'>${this._(
+                        "w_BOSalesRecords_ErrorNoPremission"
+                    )}</span>`;
+                } else {
+                    this.recordFileContent[
+                        iNumber
+                    ].apiMessage = `<span style='color:red;'>${this._(
+                        "w_BOSalesRecords_ErrorServerError"
+                    )}</span>`;
+                }
+            }
+            this.pageTo4();
+        } else {
+            this.sendError();
+        }
     }
 
     sendError() {

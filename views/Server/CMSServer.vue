@@ -244,21 +244,15 @@ export default class CMSServer extends Vue {
             await this.$server
                 .C("/partner/cms", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_ServerCMS_AddSuccess"));
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_ServerCMS_ADDFailed"));
-                            return false;
-                        }
-                        if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerCMS_ADDDuplicate"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_ServerCMS_ADDFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -287,21 +281,15 @@ export default class CMSServer extends Vue {
             await this.$server
                 .U("/partner/cms", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_ServerCMS_EditSuccess"));
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_ServerCMS_EditFailed"));
-                            return false;
-                        }
-                        if (returnValue.statusCode === 400) {
-                            Dialog.error(this._("w_ServerCMS_EditDuplicate"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_ServerCMS_EditFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -329,15 +317,14 @@ export default class CMSServer extends Vue {
                     this.$server
                         .D("/partner/cms", deleteUserParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);

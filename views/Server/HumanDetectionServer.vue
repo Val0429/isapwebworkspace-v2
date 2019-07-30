@@ -374,12 +374,11 @@ export default class HumanDetectionServer extends Vue {
         await this.$server
             .C("/partner/human-detection/test", humanObject)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.modalShow = !this.modalShow;
                     (this.$refs["detail"] as any).show();
                     this.returnImageBase64 = response.imageBase64;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -387,7 +386,7 @@ export default class HumanDetectionServer extends Vue {
     }
 
     async saveData(data) {
-        if (this.inputFormData.objectId == '') {
+        if (this.inputFormData.objectId == "") {
             const datas = [
                 {
                     customId: data.customId,
@@ -404,22 +403,15 @@ export default class HumanDetectionServer extends Vue {
             await this.$server
                 .C("/partner/human-detection", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(this._("w_ServerHD_AddSuccess"));
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(this._("w_ServerHD_AddFailed"));
-                                return false;
-                            }
-                        }
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_ServerHD_AddSuccess"));
+                            this.pageToList();
+                        },
+                        this._("w_ServerHD_AddFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -442,24 +434,15 @@ export default class HumanDetectionServer extends Vue {
             await this.$server
                 .U("/partner/human-detection", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_ServerHD_EditSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(this._("w_ServerHD_EditFailed"));
-                                return false;
-                            }
-                        }
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_ServerHD_EditSuccess"));
+                            this.pageToList();
+                        },
+                        this._("w_ServerHD_EditFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -483,10 +466,14 @@ export default class HumanDetectionServer extends Vue {
                     this.$server
                         .D("/partner/human-detection", deleteParam)
                         .then((response: any) => {
-                            if (response) {
-                                Dialog.success(this._("w_Success"));
-                                this.pageToList();
-                            }
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    Dialog.success(this._("w_Success"));
+                                    this.pageToList();
+                                }
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);

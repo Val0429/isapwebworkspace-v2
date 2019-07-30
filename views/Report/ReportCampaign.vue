@@ -171,7 +171,7 @@ export default class ReportCampaign extends Vue {
         await this.$server
             .R("/user/user")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
                         // 自定義 userSelectItem 的 key 的方式
                         tempUserSelectItem[
@@ -179,7 +179,7 @@ export default class ReportCampaign extends Vue {
                         ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -231,17 +231,20 @@ export default class ReportCampaign extends Vue {
             await this.$server
                 .C("/report/campaign/multi-campaign-summary", param)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response !== undefined) {
-                        this.responseDataAllCampaign = response;
-                        this.responseDataAllCampaignArray =
-                            response.summaryDatas;
-                        this.total = response.budgetTotal;
-                        this.sortOutChartDataAllCampaign(
-                            this.responseDataAllCampaign.summaryDatas
-                        );
-                        this.analysisTitle();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.responseDataAllCampaign = response;
+                            this.responseDataAllCampaignArray =
+                                response.summaryDatas;
+                            this.total = response.budgetTotal;
+                            this.sortOutChartDataAllCampaign(
+                                this.responseDataAllCampaign.summaryDatas
+                            );
+                            this.analysisTitle();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -256,15 +259,18 @@ export default class ReportCampaign extends Vue {
             await this.$server
                 .C("/report/campaign/single-campaign-summary", param)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response !== undefined) {
-                        this.responseDataSingleCampaign = response;
-                        this.responseDataSingleCampaignArray.push(response);
-                        this.sortOutChartDataSingleCampaign(
-                            this.responseDataSingleCampaign.summaryDatas
-                        );
-                        this.analysisTitle();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.responseDataSingleCampaign = response;
+                            this.responseDataSingleCampaignArray.push(response);
+                            this.sortOutChartDataSingleCampaign(
+                                this.responseDataSingleCampaign.summaryDatas
+                            );
+                            this.analysisTitle();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

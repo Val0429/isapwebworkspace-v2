@@ -33,17 +33,14 @@ interface IInputFormData {
     components: {}
 })
 export default class System extends Vue {
-
     // input框綁定model資料
     inputFormData: IInputFormData = {
-        host: ''
+        host: ""
     };
-
 
     created() {}
 
     mounted() {}
-
 
     // 新增MailServer
     async saveSystemData(data) {
@@ -58,24 +55,24 @@ export default class System extends Vue {
         const systemObject: {
             host: string;
         } = {
-            host: data.host,
+            host: data.host
         };
 
-        Loading.show();
-        await this.$server
-            // .U("/setting/smtp", systemObject)
-            // .then((response: any) => {
-            //     ResponseFilter.successCheck(this, response, (response: any) => {
-            //         Dialog.success(this._("w_System_Setting_Success"));
-            //     });
-            // })
-            // .catch((e: any) => {
-            //     return ResponseFilter.catchError(
-            //         this,
-            //         e,
-            //         this._("w_System_Setting_Fail")
-            //     );
-            // });
+        // Loading.show();
+        // await this.$server
+        //     .U("/setting/smtp", systemObject)
+        //     .then((response: any) => {
+        //          ResponseFilter.successCheck(this, response, (response: any) => {
+        //             Dialog.success(this._("w_System_Setting_Success"));
+        //         });
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_System_Setting_Fail")
+        //         );
+        //     });
     }
 
     IAddForm() {

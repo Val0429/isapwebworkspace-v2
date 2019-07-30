@@ -261,7 +261,7 @@ export default class Tags extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
@@ -270,7 +270,7 @@ export default class Tags extends Vue {
                             returnValue
                         );
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -281,7 +281,7 @@ export default class Tags extends Vue {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
@@ -291,7 +291,7 @@ export default class Tags extends Vue {
                         response
                     );
                     this.siteTreeItem.region = this.siteTreeItem.tree;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -302,13 +302,13 @@ export default class Tags extends Vue {
         await this.$server
             .R("/location/region/all")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         // 自定義 sitesSelectItem 的 key 的方式
                         this.regionsSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -499,7 +499,6 @@ export default class Tags extends Vue {
     }
 
     async saveAddOrEdit(data) {
-
         if (data.objectId === undefined || !this.inputFormData.objectId) {
             const datas: ITag[] = [
                 {
@@ -519,17 +518,14 @@ export default class Tags extends Vue {
             await this.$server
                 .C("/tag", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_Tag_AddTagSuccess"));
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_Tag_AddTagFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_Tag_AddTagFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -556,17 +552,14 @@ export default class Tags extends Vue {
             await this.$server
                 .U("/tag", editgParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_Tag_EditTagSuccess"));
-                            this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(this._("w_Tag_EditTagFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_Tag_EditTagFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -594,15 +587,14 @@ export default class Tags extends Vue {
                     this.$server
                         .D("/tag", deleteUserParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
