@@ -514,12 +514,18 @@ export default class ReportHeatmap extends Vue {
             .R("/user/user")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                         for (const returnValue of response.results) {
                         tempUserSelectItem[
                             returnValue.objectId
                         ] = `${returnValue.username} - ${returnValue.email}`;
                     }
                     this.userSelectItem = tempUserSelectItem;
+                    }
+                   
                 });
             })
             .catch((e: any) => {
@@ -1348,7 +1354,3 @@ export default class ReportHeatmap extends Vue {
 
 <style lang="scss" scoped>
 </style>
-
-
-
-

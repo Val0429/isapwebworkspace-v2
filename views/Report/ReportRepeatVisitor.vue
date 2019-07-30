@@ -321,14 +321,13 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
                         tempSitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.sitesSelectItem = tempSitesSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -341,14 +340,13 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .R("/tag/all")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 tagSelectItem 的 key 的方式
                         tempTagSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.tagSelectItem = tempTagSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -359,9 +357,14 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    let tempTree = ReportService.resolveUserSite(this, response);
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(tempTree);
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    let tempTree = ReportService.resolveUserSite(
+                        this,
+                        response
+                    );
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        tempTree
+                    );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
                 });
             })
@@ -381,25 +384,23 @@ export default class ReportRepeatVisitor extends Vue {
 
         if (!this.filterData.firstSiteId) {
             return false;
-        } else {
-            await this.$server
-                .R("/location/area/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 sitesSelectItem 的 key 的方式
-                            tempAreaSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                            // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
-                        }
-                        this.areaSelectItem = tempAreaSelectItem;
-                        this.allAreaItem = response;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
         }
+
+        await this.$server
+            .R("/location/area/all", readParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        tempAreaSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.areaSelectItem = tempAreaSelectItem;
+                    this.allAreaItem = response;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     async initSelectItemDeviceGroup() {
@@ -414,70 +415,32 @@ export default class ReportRepeatVisitor extends Vue {
             siteId: this.filterData.firstSiteId,
             mode: this.deviceMode
         };
+
         if (!this.filterData.firstSiteId) {
             return false;
-
-            // 只選擇site
-        } else if (this.filterData.firstSiteId && !this.inputFormData.areaId) {
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all"
-        ) {
-            // 選擇site和單一area
-            readParam.areaId = this.inputFormData.areaId;
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId === "all"
-        ) {
-            // 選擇site和all area
-            await this.$server
-                .R("/device/group/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            // 自定義 tempDeviceGroupSelectItem 的 key 的方式
-                            tempDeviceGroupSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
         }
+
+        if (this.inputFormData.areaId) {
+            readParam.areaId =
+                this.inputFormData.areaId !== "all"
+                    ? this.inputFormData.areaId
+                    : "";
+        }
+
+        await this.$server
+            .R("/device/group/all", readParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        tempDeviceGroupSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     async initSelectItemDevice() {
@@ -493,190 +456,44 @@ export default class ReportRepeatVisitor extends Vue {
             siteId: this.filterData.firstSiteId,
             mode: this.deviceMode
         };
+
         if (!this.filterData.firstSiteId) {
             return false;
-
-            // 只選擇site
-        } else if (
-            this.filterData.firstSiteId &&
-            !this.inputFormData.areaId &&
-            !this.inputFormData.groupId
-        ) {
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all" &&
-            !this.inputFormData.groupId
-        ) {
-            // 選擇site和單一area
-            readParam.areaId = this.inputFormData.areaId;
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all" &&
-            this.inputFormData.groupId &&
-            this.inputFormData.groupId !== "all"
-        ) {
-            // 選擇site和單一area和單一device group
-            readParam.groupId = this.inputFormData.groupId;
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all" &&
-            this.inputFormData.groupId &&
-            this.inputFormData.groupId !== "all" &&
-            this.inputFormData.deviceId === "all"
-        ) {
-            // 選擇site和單一area和單一device group和 all device
-            readParam.groupId = this.inputFormData.groupId;
-
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId === "all" &&
-            (this.inputFormData.groupId === undefined ||
-                this.inputFormData.groupId === "") &&
-            this.inputFormData.groupId !== "all"
-        ) {
-            // 選擇site和all area
-            readParam.areaId = "";
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId === "all" &&
-            this.inputFormData.groupId &&
-            this.inputFormData.groupId === "all"
-        ) {
-            // 選擇site和all area和all device group
-            readParam.groupId = this.inputFormData.groupId;
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (
-            this.filterData.firstSiteId &&
-            this.inputFormData.areaId &&
-            this.inputFormData.areaId !== "all" &&
-            this.inputFormData.groupId &&
-            this.inputFormData.groupId === "all"
-        ) {
-            // 選擇site和單一area和all device group
-            readParam.areaId = this.inputFormData.areaId;
-            readParam.groupId = "";
-            await this.$server
-                .R("/device", readParam)
-                .then((response: any) => {
-                    if (response.results.length > 0) {
-                        for (const returnValue of response.results) {
-                            // 自定義 tempDeviceSelectItem 的 key 的方式
-                            tempDeviceSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.deviceSelectItem = tempDeviceSelectItem;
-                    }
-                    if (response.results.length === 0) {
-                        this.deviceSelectItem = {};
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
         }
+
+        if (this.inputFormData.areaId) {
+            readParam.areaId =
+                this.inputFormData.areaId !== "all"
+                    ? this.inputFormData.areaId
+                    : "";
+        }
+
+        if (this.inputFormData.groupId) {
+            readParam.groupId =
+                this.inputFormData.groupId !== "all"
+                    ? this.inputFormData.groupId
+                    : "";
+        }
+
+        await this.$server
+            .R("/device", readParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (const returnValue of response.results) {
+                            tempDeviceSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                        this.deviceSelectItem = tempDeviceSelectItem;
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     async initSelectItemUsers() {
@@ -685,15 +502,19 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .R("/user/user")
             .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response.results) {
-                        // 自定義 userSelectItem 的 key 的方式
-                        tempUserSelectItem[
-                            returnValue.objectId
-                        ] = `${returnValue.username} - ${returnValue.email}`;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (const returnValue of response.results) {
+                            tempUserSelectItem[
+                                returnValue.objectId
+                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        }
+                        this.userSelectItem = tempUserSelectItem;
                     }
-                    this.userSelectItem = tempUserSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -729,12 +550,11 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .C("/report/repeat-visitor/summary", filterData)
             .then((response: any) => {
-                Loading.hide();
-                if (response !== undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
                     this.resolveSummary();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

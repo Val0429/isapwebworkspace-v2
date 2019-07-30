@@ -1,4 +1,3 @@
-import {EDesignationPeriod} from "../../components/Reports";
 <template>
     <div class="animated fadeIn">
 
@@ -7,269 +6,269 @@ import {EDesignationPeriod} from "../../components/Reports";
             :type="transition.type"
         >
 
-        <!-- List -->
-        <iv-card
-            key="transition_1"
-            v-show="transition.step === 1"
-            :label=" _('w_ReportTemplate_List') "
-        >
-            <template #toolbox>
-
-                <iv-toolbox-view
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToView"
-                />
-                <iv-toolbox-edit
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToEdit()"
-                />
-                <iv-toolbox-copy
-                    :disabled="isSelected.length !== 1"
-                    @click="pageToDuplicate()"
-                />
-                <iv-toolbox-delete
-                    :disabled="isSelected.length === 0"
-                    @click="doDelete"
-                />
-                <iv-toolbox-divider />
-                <iv-toolbox-add @click="pageToAdd()" />
-
-            </template>
-
-            <iv-table
-                ref="tagTable"
-                :interface="ITableList()"
-                :multiple="tableMultiple"
-                :server="{ path: '/report/template' }"
-                @selected="selectedItem($event)"
+            <!-- List -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label=" _('w_ReportTemplate_List') "
             >
+                <template #toolbox>
 
-                <template #sites="{$attrs}">
-                    {{ showFirst($attrs.value) }}
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-copy
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToDuplicate()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+
                 </template>
 
-                <template #mode="{$attrs}">
-                    {{ getMode($attrs.value) }}
-                </template>
-
-                <template #type="{$attrs}">
-                    {{ getType($attrs.value) }}
-                </template>
-
-                <template #startDate="{$attrs}">
-                    {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
-                </template>
-
-                <template #endDate="{$attrs}">
-                    {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
-                </template>
-
-                <template #sendDates="{$attrs}">
-                    <div v-html="getReportTimeTable($attrs.value)"></div>
-                </template>
-
-                <template #sendUsers="{$attrs}">
-                    {{ showFirst($attrs.value) }}
-                </template>
-
-                <template #Actions="{$attrs, $listeners}">
-                    <iv-toolbox-more :disabled="isSelected.length !== 1">
-                        <iv-toolbox-copy @click="pageToDuplicate()" />
-                        <iv-toolbox-view @click="pageToView" />
-                        <iv-toolbox-edit @click="pageToEdit()" />
-                        <iv-toolbox-delete @click="doDelete" />
-                    </iv-toolbox-more>
-                </template>
-
-                <template #goToReport="{$attrs}">
-                    <div class="mt-2 ml-3 mb-3">
-                        <b-button @click='goToReport($attrs)'>
-                            {{ _('w_ReportTemplate_goToReport') }}
-                        </b-button>
-                    </div>
-                </template>
-
-            </iv-table>
-        </iv-card>
-
-        <!-- view -->
-        <iv-card
-            key="transition_2"
-            v-show="transition.step === 2"
-            :visible="true"
-            :label=" _('w_ReportTemplate_View') "
-        >
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IViewForm()"
-                :value="inputFormData"
-            >
-            </iv-form>
-
-            <template #footer>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-card>
-
-        <!--From (Add and Edit and Duplicate)-->
-        <iv-auto-card
-            key="transition_3"
-            v-show="transition.step === 3"
-            :visible="true"
-            :label=showLabelTitle()
-        >
-
-            <template #toolbox>
-                <iv-toolbox-back @click="pageToList()" />
-            </template>
-
-            <iv-form
-                :interface="IAddAndEditForm()"
-                :value="inputFormData"
-                @update:*="tempSaveInputData($event)"
-                @submit="saveAddOrEdit($event)"
-            >
-
-                <template #selectTree="{ $attrs, $listeners }">
-
-                    <div class="mt-2 ml-3 mb-3">
-                        <b-button @click="pageToChooseTree">
-                            {{ _('w_SelectSiteTree') }}
-                        </b-button>
-                    </div>
-                </template>
-
-                <template #ReportPeriodTitle="{ $attrs, $listeners }">
-                    <div class="ml-3 mb-2 w-100">{{ _('w_ReportTemplate_ReportPeriod1') }}</div>
-                </template>
-
-                <template #selectPeriodAddWay="{ $attrs, $listeners }">
-                    <b-col
-                        cols="3"
-                        class="mb-3"
-                    >
-                        <b-form-radio-group
-                            v-model="selectPeriodAddWay"
-                            :options="addPeriodSelectItem"
-                            buttons
-                            button-variant="outline-success"
-                            name="radio-btn-outline"
-                            @change="changeAddPeriodSelect"
-                        ></b-form-radio-group>
-                    </b-col>
-                </template>
-
-                <iv-form-selection
-                    v-bind="$attrs"
-                    v-on="$listeners"
-                    :multiple="false"
-                    :options="designationPeriodSelectItem"
+                <iv-table
+                    ref="tagTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/report/template' }"
+                    @selected="selectedItem($event)"
                 >
-                </iv-form-selection>
 
-                <template #sendReportTimeTitle="{ $attrs, $listeners }">
-                    <div class="ml-3 mb-2 w-100">{{ _('w_ReportTemplate_SendReportTime1') }}</div>
+                    <template #sites="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                    <template #mode="{$attrs}">
+                        {{ getMode($attrs.value) }}
+                    </template>
+
+                    <template #type="{$attrs}">
+                        {{ getType($attrs.value) }}
+                    </template>
+
+                    <template #startDate="{$attrs}">
+                        {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                    </template>
+
+                    <template #endDate="{$attrs}">
+                        {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                    </template>
+
+                    <template #sendDates="{$attrs}">
+                        <div v-html="getReportTimeTable($attrs.value)"></div>
+                    </template>
+
+                    <template #sendUsers="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                            <iv-toolbox-copy @click="pageToDuplicate()" />
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                    <template #goToReport="{$attrs}">
+                        <div class="mt-2 ml-3 mb-3">
+                            <b-button @click='goToReport($attrs)'>
+                                {{ _('w_ReportTemplate_goToReport') }}
+                            </b-button>
+                        </div>
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- view -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label=" _('w_ReportTemplate_View') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
                 </template>
 
-                <template #sendDates="{$attrs, $listeners}">
-                    <b-form-group class="ml-3">
-                        <b-row
-                            v-for="(value, index) in sendReportTime"
-                            :key="'sendReportTime' + index"
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!--From (Add and Edit and Duplicate)-->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label=showLabelTitle()
+            >
+
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEdit($event)"
+                >
+
+                    <template #selectTree="{ $attrs, $listeners }">
+
+                        <div class="mt-2 ml-3 mb-3">
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
+                    </template>
+
+                    <template #ReportPeriodTitle="{ $attrs, $listeners }">
+                        <div class="ml-3 mb-2 w-100">{{ _('w_ReportTemplate_ReportPeriod1') }}</div>
+                    </template>
+
+                    <template #selectPeriodAddWay="{ $attrs, $listeners }">
+                        <b-col
+                            cols="3"
+                            class="mb-3"
                         >
-                            <b-col cols="4">
-                                <b-form-select
-                                    class="mb-2"
-                                    v-model="sendReportTime[index].week"
-                                    :plain="true"
-                                    :options="timeSelectItem.weeks"
-                                ></b-form-select>
-                            </b-col>
+                            <b-form-radio-group
+                                v-model="selectPeriodAddWay"
+                                :options="addPeriodSelectItem"
+                                buttons
+                                button-variant="outline-success"
+                                name="radio-btn-outline"
+                                @change="changeAddPeriodSelect"
+                            ></b-form-radio-group>
+                        </b-col>
+                    </template>
 
-                            <b-col cols="4">
-                                <b-form-select
-                                    v-model="sendReportTime[index].hour"
-                                    :plain="true"
-                                    :options="timeSelectItem.hours"
-                                ></b-form-select>
-                            </b-col>
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        :multiple="false"
+                        :options="designationPeriodSelectItem"
+                    >
+                    </iv-form-selection>
 
-                            <b-col cols="1">
-                                <b-button
-                                    class="button addButton"
-                                    variant="success"
-                                    type="button"
-                                    @click="addSendReportTime()"
-                                >
-                                    <i class="fa fa-plus"></i>
-                                </b-button>
-                            </b-col>
+                    <template #sendReportTimeTitle="{ $attrs, $listeners }">
+                        <div class="ml-3 mb-2 w-100">{{ _('w_ReportTemplate_SendReportTime1') }}</div>
+                    </template>
 
-                            <b-col cols="1">
-                                <b-button
-                                    v-show="index === 0"
-                                    class="button"
-                                    variant="danger"
-                                    type="button"
-                                    style="visibility:hidden"
-                                    @click="removeSendReportTime(index)"
-                                >
-                                    <i class="fa fa-minus"></i>
+                    <template #sendDates="{$attrs, $listeners}">
+                        <b-form-group class="ml-3">
+                            <b-row
+                                v-for="(value, index) in sendReportTime"
+                                :key="'sendReportTime' + index"
+                            >
+                                <b-col cols="4">
+                                    <b-form-select
+                                        class="mb-2"
+                                        v-model="sendReportTime[index].week"
+                                        :plain="true"
+                                        :options="timeSelectItem.weeks"
+                                    ></b-form-select>
+                                </b-col>
 
-                                </b-button>
-                            </b-col>
+                                <b-col cols="4">
+                                    <b-form-select
+                                        v-model="sendReportTime[index].hour"
+                                        :plain="true"
+                                        :options="timeSelectItem.hours"
+                                    ></b-form-select>
+                                </b-col>
 
-                            <b-col cols="1">
-                                <b-button
-                                    v-show="index !== 0"
-                                    class="button"
-                                    variant="danger"
-                                    type="button"
-                                    @click="removeSendReportTime(index)"
-                                >
-                                    <i class="fa fa-minus"></i>
+                                <b-col cols="1">
+                                    <b-button
+                                        class="button addButton"
+                                        variant="success"
+                                        type="button"
+                                        @click="addSendReportTime()"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </b-button>
+                                </b-col>
 
-                                </b-button>
-                            </b-col>
+                                <b-col cols="1">
+                                    <b-button
+                                        v-show="index === 0"
+                                        class="button"
+                                        variant="danger"
+                                        type="button"
+                                        style="visibility:hidden"
+                                        @click="removeSendReportTime(index)"
+                                    >
+                                        <i class="fa fa-minus"></i>
 
-                        </b-row>
-                    </b-form-group>
+                                    </b-button>
+                                </b-col>
 
+                                <b-col cols="1">
+                                    <b-button
+                                        v-show="index !== 0"
+                                        class="button"
+                                        variant="danger"
+                                        type="button"
+                                        @click="removeSendReportTime(index)"
+                                    >
+                                        <i class="fa fa-minus"></i>
+
+                                    </b-button>
+                                </b-col>
+
+                            </b-row>
+                        </b-form-group>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
                 </template>
 
-            </iv-form>
+            </iv-auto-card>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToList()"
-                >{{ _('w_Back') }}
-                </b-button>
-            </template>
-
-        </iv-auto-card>
-
-        <!-- region tree select -->
-        <region-tree-select
-            key="transition_4"
-            v-show="transition.step === 4"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
+            <!-- region tree select -->
+            <region-tree-select
+                key="transition_4"
+                v-show="transition.step === 4"
+                :multiple="true"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+                v-on:click-back="pageToShowResult"
+            >
+            </region-tree-select>
 
         </iv-auto-transition>
 
@@ -452,16 +451,15 @@ export default class ReportTemplate extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                             returnValue
                         );
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -472,12 +470,12 @@ export default class ReportTemplate extends Vue {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -490,14 +488,13 @@ export default class ReportTemplate extends Vue {
         await this.$server
             .R("/tag/all")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 tagSelectItem 的 key 的方式
                         tempTagSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.tagSelectItem = tempTagSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -510,14 +507,18 @@ export default class ReportTemplate extends Vue {
         await this.$server
             .R("/user/user")
             .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response.results) {
-                        // 自定義 userSelectItem 的 key 的方式
-                        this.userSelectItem[
-                            returnValue.objectId
-                        ] = `${returnValue.username} : ${returnValue.email}`;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (const returnValue of response.results) {
+                            this.userSelectItem[
+                                returnValue.objectId
+                            ] = `${returnValue.username} : ${returnValue.email}`;
+                        }
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -667,7 +668,7 @@ export default class ReportTemplate extends Vue {
         this.reportToTemplateData = {};
     }
 
-     pageToView() {
+    pageToView() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
         this.getInputData();
@@ -815,7 +816,6 @@ export default class ReportTemplate extends Vue {
         );
     }
 
-
     async pageToChooseTree() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 4;
@@ -840,12 +840,12 @@ export default class ReportTemplate extends Vue {
         this.transition.step = this.transition.prevStep;
 
         // siteIds clear
-            this.inputFormData.siteIds = [];
+        this.inputFormData.siteIds = [];
 
-            // from selecteds push siteIds
-            for (const item of this.selecteds) {
-                this.inputFormData.siteIds.push(item.objectId);
-            }
+        // from selecteds push siteIds
+        for (const item of this.selecteds) {
+            this.inputFormData.siteIds.push(item.objectId);
+        }
     }
 
     addSendReportTime() {
@@ -932,25 +932,19 @@ export default class ReportTemplate extends Vue {
             await this.$server
                 .C("/report/template", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(
                                 this._(
                                     "w_ReportTemplate_AddReportTemplateSuccess"
                                 )
                             );
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(
-                                this._(
-                                    "w_ReportTemplate_AddReportTemplateFailed"
-                                )
-                            );
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_ReportTemplate_AddReportTemplateFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -959,7 +953,7 @@ export default class ReportTemplate extends Vue {
                         this._("w_ReportTemplate_AddReportTemplateFailed")
                     );
                 });
-        } else  {
+        } else {
             if (this.selectPeriodAddWay === EAddPeriodSelect.period) {
                 const tempDatas: any = [
                     {
@@ -1004,29 +998,24 @@ export default class ReportTemplate extends Vue {
             }
 
             editParam = { datas };
+
             Loading.show();
             await this.$server
                 .U("/report/template", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(
                                 this._(
                                     "w_ReportTemplate_EditReportTemplateSuccess"
                                 )
                             );
                             this.pageToList();
-                        }
-                        if (returnValue.statusCode === 500) {
-                            Dialog.error(
-                                this._(
-                                    "w_ReportTemplate_EditReportTemplateFailed"
-                                )
-                            );
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_ReportTemplate_EditReportTemplateFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -1054,15 +1043,14 @@ export default class ReportTemplate extends Vue {
                     this.$server
                         .D("/report/template", deleteUserParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
@@ -1106,7 +1094,7 @@ export default class ReportTemplate extends Vue {
 
     showLabelTitle(): string {
         let result: string = "";
-        if (this.inputFormData.objectId == '') {
+        if (this.inputFormData.objectId == "") {
             result = this._("w_ReportTemplate_Add");
         } else {
             result = this._("w_ReportTemplate_Edit");
@@ -1435,7 +1423,7 @@ export default class ReportTemplate extends Vue {
                  * @uiLabel - ${this._("w_ReportTemplate_Name")}
                  * @uiPlaceHolder - ${this._("w_ReportTemplate_Name")}
                  * @uiType - ${
-                     this.inputFormData.objectId == ''
+                     this.inputFormData.objectId == ""
                          ? "iv-form-string"
                          : "iv-form-label"
                  }

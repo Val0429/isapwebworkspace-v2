@@ -940,8 +940,11 @@ export default class ReportDemographic extends Vue {
 				return false;
             } 
 
-            if (this.filterData.firstSiteId && !this.inputFormData.areaId) {
-                // 只選擇site
+            if (this.inputFormData.areaId) {
+                readParam.areaId = this.inputFormData.areaId !== "all" ? this.inputFormData.areaId : "";
+            }
+
+             // 只選擇site
 				await this.$server
 					.R("/device/group/all", readParam)
 					.then((response: any) => {
@@ -958,54 +961,6 @@ export default class ReportDemographic extends Vue {
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
 					});
-
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all"
-			) {
-                // 選擇site和單一area
-				readParam.areaId = this.inputFormData.areaId;
-				await this.$server
-					.R("/device/group/all", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                               for (const returnValue of response) {
-                                    tempDeviceGroupSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                }
-                                this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId === "all"
-			) {
-                // 選擇site和all area
-				await this.$server
-					.R("/device/group/all", readParam)
-					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                               for (const returnValue of response) {
-                                    tempDeviceGroupSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                }
-							    this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                            }
-                        );
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(this, e);
-					});
-			}
 		}
 
 		async initSelectItemDevice() {
@@ -1021,94 +976,34 @@ export default class ReportDemographic extends Vue {
 			} = {
 				siteId: this.filterData.firstSiteId,
 				mode: this.deviceMode
-			};
+            };
+            
 			if (!this.filterData.firstSiteId) {
-				return false;
+                return false;
+            }
 
-				// 只選擇site
-			} else if (
-				this.filterData.firstSiteId &&
-				!this.inputFormData.areaId &&
-				!this.inputFormData.groupId
-			) {
-				this.deviceSelectItem = await this.requestDeviceApi(readParam);
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				!this.inputFormData.groupId
-			) {
-                // 選擇site和單一area
-				readParam.areaId = this.inputFormData.areaId;
-				this.deviceSelectItem = await this.requestDeviceApi(readParam);
+            if (this.inputFormData.areaId) {
+                readParam.areaId =
+                    this.inputFormData.areaId !== "all"
+                        ? this.inputFormData.areaId
+                        : "";
+            }
 
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId !== "all"
-			) {
-                // 選擇site和單一area和單一device group
-				readParam.groupId = this.inputFormData.groupId;
-				this.deviceSelectItem = await this.requestDeviceApi(readParam);
+            if (this.inputFormData.groupId) {
+                readParam.groupId =
+                    this.inputFormData.groupId !== "all"
+                        ? this.inputFormData.groupId
+                        : "";
+            }
 
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId !== "all" &&
-				this.inputFormData.deviceId === "all"
-			) {
-                // 選擇site和單一area和單一device group和 all device
-				readParam.groupId = this.inputFormData.groupId;
-                this.deviceSelectItem = await this.requestDeviceApi(readParam);
-
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId === "all" &&
-				(this.inputFormData.groupId === undefined ||
-					this.inputFormData.groupId === "") &&
-				this.inputFormData.groupId !== "all"
-			) {
-                // 選擇site和all area
-				readParam.areaId = "";
-				this.deviceSelectItem = await this.requestDeviceApi(readParam);
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId === "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId === "all"
-			) {
-                // 選擇site和all area和all device group
-                readParam.groupId = this.inputFormData.groupId;
-                this.deviceSelectItem = await this.requestDeviceApi(readParam);
-			} else if (
-				this.filterData.firstSiteId &&
-				this.inputFormData.areaId &&
-				this.inputFormData.areaId !== "all" &&
-				this.inputFormData.groupId &&
-				this.inputFormData.groupId === "all"
-			) {
-                // 選擇site和單一area和all device group
-				readParam.areaId = this.inputFormData.areaId;
-				readParam.groupId = "";
-			}
-        }
-        
-        async requestDeviceApi (param: any) {
-            let tempDeviceSelectItem = {all: this._("w_AllDevices")}
-               await this.$server
-					.R("/device", param)
+            await this.$server
+					.R("/device", readParam)
 					.then((response: any) => {
                         ResponseFilter.successCheck(this, response,
                             (response: any) => {
                                 if (response.results != undefined && response.results.length > 0) {
                                     for (const returnValue of response.results) {
-                                    tempDeviceSelectItem[returnValue.objectId] =
+                                        tempDeviceSelectItem[returnValue.objectId] =
                                         returnValue.name;
                                     }
                                     this.deviceSelectItem = tempDeviceSelectItem;
@@ -1119,7 +1014,7 @@ export default class ReportDemographic extends Vue {
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
                     });
-            return tempDeviceSelectItem;
+
         }
 
 		async initSelectItemUsers() {
@@ -1130,12 +1025,14 @@ export default class ReportDemographic extends Vue {
 				.then((response: any) => {
                     ResponseFilter.successCheck(this, response,
                         (response: any) => {
-                           for (const returnValue of response.results) {
+                            if (response.results != undefined  && response.results.length > 0) {
+                                  for (const returnValue of response.results) {
                                 tempUserSelectItem[
                                     returnValue.objectId
                                     ] = `${returnValue.username} - ${returnValue.email}`;
                             }
                             this.userSelectItem = tempUserSelectItem;
+                            }
                         }
                     );
 				})

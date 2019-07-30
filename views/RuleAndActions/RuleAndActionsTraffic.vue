@@ -236,6 +236,8 @@ export default class RuleAndActionsTraffic extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
+    stepTo3() {}
+
     async doDelete() {
         await Dialog.confirm(
             this._("w_DeleteConfirm"),

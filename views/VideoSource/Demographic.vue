@@ -384,7 +384,6 @@ export default class Demographic extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -422,7 +421,6 @@ export default class Demographic extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
-                        // 自定義 areaSelectItem 的 key 的方式
                         this.serverIdSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
@@ -441,7 +439,6 @@ export default class Demographic extends Vue {
             .then((response: any) => {
                 if (response != undefined) {
                     for (const returnValue of response.results) {
-                        // 自定義 demographicIdSelectItem 的 key 的方式
                         this.demographicIdSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
@@ -588,7 +585,6 @@ export default class Demographic extends Vue {
                     if (response != undefined) {
                         for (const returnValue of response) {
                             for (const returnValue of response) {
-                                // 自定義 sourceIdSelectItem / locationSelectItem 的 key 的方式
                                 this.$set(
                                     this.sourceIdSelectItem,
                                     returnValue.sourceid,
@@ -640,7 +636,6 @@ export default class Demographic extends Vue {
                             for (const returnValue of response) {
                                 this.inputFormData.areaId = "";
                                 this.inputFormData.groupIds = [];
-                                // 自定義 areaSelectItem 的 key 的方式
                                 this.$set(
                                     this.areaSelectItem,
                                     returnValue.objectId,
@@ -676,7 +671,6 @@ export default class Demographic extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                // 自定義 areaSelectItem 的 key 的方式
                                 this.$set(
                                     this.areaSelectItem,
                                     returnValue.objectId,
@@ -719,7 +713,6 @@ export default class Demographic extends Vue {
                         if (response != undefined) {
                             for (const returnValue of response) {
                                 this.inputFormData.groupIds = [];
-                                // 自定義 deviceGroupSelectItem 的 key 的方式
                                 this.$set(
                                     this.deviceGroupSelectItem,
                                     returnValue.objectId,
@@ -757,7 +750,6 @@ export default class Demographic extends Vue {
                     .then((response: any) => {
                         if (response != undefined) {
                             for (const returnValue of response) {
-                                // 自定義 deviceGroupSelectItem 的 key 的方式
                                 this.$set(
                                     this.deviceGroupSelectItem,
                                     returnValue.objectId,
@@ -893,8 +885,8 @@ export default class Demographic extends Vue {
             // from selecteds push siteId
             if (this.selecteds.length > 0) {
                 this.inputFormData.siteId = this.selecteds[
-                this.selecteds.length - 1
-                    ].objectId;
+                    this.selecteds.length - 1
+                ].objectId;
                 await this.selectAreaId(this.inputFormData.siteId);
             }
         }
@@ -909,8 +901,8 @@ export default class Demographic extends Vue {
             // from selecteds push siteId
             if (this.selecteds.length > 0) {
                 this.inputFormData.siteId = this.selecteds[
-                this.selecteds.length - 1
-                    ].objectId;
+                    this.selecteds.length - 1
+                ].objectId;
                 await this.selectAreaId(this.inputFormData.siteId);
             }
         }

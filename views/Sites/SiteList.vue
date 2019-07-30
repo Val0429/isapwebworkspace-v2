@@ -104,7 +104,11 @@ export class SiteList extends Vue {
         await this.$server
             .R("/device/group", body)
             .then((response: any) => {
-                this.deviceGroupAll = response.results;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (response.results != undefined) {
+                        this.deviceGroupAll = response.results;
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -117,7 +121,9 @@ export class SiteList extends Vue {
         await this.$server
             .R("/location/area/all", {})
             .then((response: any) => {
-                this.areaAll = response;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.areaAll = response;
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -200,11 +206,14 @@ export class SiteList extends Vue {
             this.$server
                 .D("/location/site", body)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response) {
-                        Dialog.success(this._("w_Success"));
-                        (this.$refs.siteTable as any).reload();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Success"));
+                            (this.$refs.siteTable as any).reload();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

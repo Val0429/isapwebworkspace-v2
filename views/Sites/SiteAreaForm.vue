@@ -155,8 +155,10 @@ export class SiteAreaForm extends Vue {
         await this.$server
             .R("/device/group/all", body)
             .then((response: any) => {
-                this.devicesGroupDevices = response;
-                this.getDeviceData();
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.devicesGroupDevices = response;
+                    this.getDeviceData();
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -177,19 +179,31 @@ export class SiteAreaForm extends Vue {
                 }
             };
 
+            this.devices = [];
+
             await this.$server
                 .R("/device", body)
                 .then((response: any) => {
-                    this.devices = [];
-                    for (let item of response.results) {
-                        if (
-                            item.area &&
-                            item.area.objectId == this.area.objectId
-                        ) {
-                            this.devices.push(item);
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            if (
+                                response.results != undefined &&
+                                response.results.length > 0
+                            ) {
+                                for (let item of response.results) {
+                                    if (
+                                        item.area &&
+                                        item.area.objectId == this.area.objectId
+                                    ) {
+                                        this.devices.push(item);
+                                    }
+                                }
+                                this.initImageMap();
+                            }
                         }
-                    }
-                    this.initImageMap();
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -476,11 +490,14 @@ export class SiteAreaForm extends Vue {
             await this.$server
                 .C("/location/area", addAreaParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_AddAreaSuccess"));
-                        this.pageToAreaList();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Site_AddAreaSuccess"));
+                            this.pageToAreaList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -503,11 +520,14 @@ export class SiteAreaForm extends Vue {
             await this.$server
                 .U("/location/area", editAreaParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        Dialog.success(this._("w_Site_EditAreaSuccess"));
-                        this.pageToAreaList();
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Site_EditAreaSuccess"));
+                            this.pageToAreaList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

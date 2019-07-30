@@ -201,20 +201,15 @@ export default class ReportVIPTracking extends Vue {
         await this.$server
             .R("/tag/all")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 tagSelectItem 的 key 的方式
-                        // tempTagSelectItem[returnValue.objectId] =
-                        //     returnValue.name;
-
                         let tad = {
                             id: returnValue.objectId,
                             text: returnValue.name
                         };
                         this.tagSelectItem.push(tad);
                     }
-                    // this.tagSelectItem = tempTagSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -226,21 +221,9 @@ export default class ReportVIPTracking extends Vue {
     }
 
     async initTagIncludeSitesItem() {
-        let result = await this.$server
-            .R("/tag")
-            // .then((response: any) => {
-            //     if (response != undefined) {
-            //         for (const returnValue of response) {
-            //             // 自定義 tagSelectItem 的 key 的方式
-            //             tempTagSelectItem[returnValue.objectId] =
-            //                 returnValue.name;
-            //         }
-            //         this.tagSelectItem = tempTagSelectItem;
-            //     }
-            // })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+        let result = await this.$server.R("/tag").catch((e: any) => {
+            return ResponseFilter.catchError(this, e);
+        });
 
         if (result["results"].length > 0) {
             result["results"].map(item => {
@@ -257,16 +240,16 @@ export default class ReportVIPTracking extends Vue {
         this.filterData = filterData;
         this.designationPeriod = designationPeriod;
 
-        console.log('this.filterData ~ ', this.filterData)
+        console.log("this.filterData ~ ", this.filterData);
 
         // await this.$server
         //     .C("/report/people-counting/summary", param)
         //     .then((response: any) => {
-        //         if (response !== undefined) {
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
         //             this.responseData = response;
         //             this.officeHourItemDetail = this.responseData.officeHours;
         //             this.resolveSummary();
-        //         }
+        //         });
         //     })
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);

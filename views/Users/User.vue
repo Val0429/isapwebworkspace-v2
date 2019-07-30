@@ -377,7 +377,6 @@ export default class User extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 sitesSelectItem 的 key 的方式
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                         this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -415,7 +414,6 @@ export default class User extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        // 自定義 userGroupSelectItem 的 key 的方式
                         this.userGroupSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
