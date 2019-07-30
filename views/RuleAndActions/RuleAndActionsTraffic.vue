@@ -78,7 +78,29 @@
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
                         <template #2>
-                            Step 2
+                            <iv-form
+                                :interface="IStep2()"
+                                :value="step2Item"
+                                @submit="stepTo3($event)"
+                            >
+                                <template #title="{ $attrs, $listeners }">
+                                    <div class="ml-3 mb-2 w-100">{{ _('w_OfficeHour') }}</div>
+                                </template>
+
+                                <template #condition="{ $attrs, $listeners }">
+                                    <b-form-group class="ml-3">
+                                        <b-row
+                                            v-for="(value, index) in step2Datas"
+                                            :key="'officeHourTime__' + index"
+                                        >
+                                            <b-col>
+                                                <div>test</div>
+                                            </b-col>
+                                        </b-row>
+                                    </b-form-group>
+                                </template>
+                            </iv-form>
+
                         </template>
 
                         <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
@@ -158,6 +180,7 @@ export default class RuleAndActionsTraffic extends Vue {
     };
 
     deviceMode: string = EDeviceMode.peopleCounting;
+
     step2Item: any = {
         condition: []
     };
@@ -178,8 +201,6 @@ export default class RuleAndActionsTraffic extends Vue {
     mounted() {
         // TODO: Developer
         this.transition.step = 2;
-        let stepRef: any = this.$refs.step;
-        stepRef.currentStep = 2;
     }
 
     IStep2() {

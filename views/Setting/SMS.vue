@@ -149,11 +149,10 @@ export default class SMS extends Vue {
         await this.$server
             .C("/setting/sgsms/test", smsObject)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.modalShow = !this.modalShow;
                     Dialog.success(this._("w_SmsServer_Setting_Test_Success"));
-                }
+                });
             })
             .catch((e: any) => {
                 this.modalShow = !this.modalShow;
@@ -169,12 +168,12 @@ export default class SMS extends Vue {
         await this.$server
             .R("/setting/sgsms")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.inputFormData.enable = response.enable;
                     this.inputFormData.password = response.password;
                     this.inputFormData.account = response.account;
                     this.inputFormData.url = response.url;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
@@ -202,10 +201,9 @@ export default class SMS extends Vue {
         await this.$server
             .U("/setting/sgsms", smsObject)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_SmsServer_Setting_Success"));
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(

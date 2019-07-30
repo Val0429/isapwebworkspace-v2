@@ -251,14 +251,14 @@ export default class License extends Vue {
         await this.$server
             .R("/server/network")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         // 自定義 macSelectItem 的 key 的方式
                         this.macSelectItem[
                             returnValue.mac
                         ] = `${returnValue.mac}, ${returnValue.ifname}`;
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -327,11 +327,10 @@ export default class License extends Vue {
         await this.$server
             .C("/license", licenseParam)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_License_Setting_Success"));
                     this.pageToList();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
@@ -352,11 +351,10 @@ export default class License extends Vue {
         await this.$server
             .C("/license", licenseParam)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_License_Setting_Success"));
                     this.pageToList();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(

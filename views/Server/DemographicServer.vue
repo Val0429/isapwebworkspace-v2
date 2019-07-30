@@ -424,57 +424,59 @@ export default class DemographicServer extends Vue {
         await this.$server
             .C("/partner/demographic/test", humanObject)
             .then((response: any) => {
-                Loading.hide();
-                if (response.length > 0) {
-                    this.modalShow = !this.modalShow;
-                    this.initDate();
-                    for (const returnValue of response) {
-                        if (returnValue.age <= 20) {
-                            returnValue.age = "0~20";
-                        } else if (
-                            returnValue.age >= 21 &&
-                            returnValue.age <= 30
-                        ) {
-                            returnValue.age = "21~30";
-                        } else if (
-                            returnValue.age >= 31 &&
-                            returnValue.age <= 40
-                        ) {
-                            returnValue.age = "31~40";
-                        } else if (
-                            returnValue.age >= 31 &&
-                            returnValue.age <= 40
-                        ) {
-                            returnValue.age = "31~40";
-                        } else if (
-                            returnValue.age >= 41 &&
-                            returnValue.age <= 50
-                        ) {
-                            returnValue.age = "41~50";
-                        } else if (
-                            returnValue.age >= 51 &&
-                            returnValue.age <= 60
-                        ) {
-                            returnValue.age = "51~60";
-                        } else if (returnValue.age >= 61) {
-                            returnValue.age = "61~";
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        this.modalShow = !this.modalShow;
+                        this.initDate();
+                        for (const returnValue of response) {
+                            if (returnValue.age <= 20) {
+                                returnValue.age = "0~20";
+                            } else if (
+                                returnValue.age >= 21 &&
+                                returnValue.age <= 30
+                            ) {
+                                returnValue.age = "21~30";
+                            } else if (
+                                returnValue.age >= 31 &&
+                                returnValue.age <= 40
+                            ) {
+                                returnValue.age = "31~40";
+                            } else if (
+                                returnValue.age >= 31 &&
+                                returnValue.age <= 40
+                            ) {
+                                returnValue.age = "31~40";
+                            } else if (
+                                returnValue.age >= 41 &&
+                                returnValue.age <= 50
+                            ) {
+                                returnValue.age = "41~50";
+                            } else if (
+                                returnValue.age >= 51 &&
+                                returnValue.age <= 60
+                            ) {
+                                returnValue.age = "51~60";
+                            } else if (returnValue.age >= 61) {
+                                returnValue.age = "61~";
+                            }
+
+                            let detailObject = {
+                                age: returnValue.age,
+                                gender: returnValue.gender,
+                                imageBase64: returnValue.imageBase64
+                            };
+
+                            this.testDetailTable.tableDataFromApi.push(
+                                detailObject
+                            );
                         }
-
-                        let detailObject = {
-                            age: returnValue.age,
-                            gender: returnValue.gender,
-                            imageBase64: returnValue.imageBase64
-                        };
-
-                        this.testDetailTable.tableDataFromApi.push(
-                            detailObject
-                        );
-                    }
-                    (this.$refs["detail"] as any).show();
-                }
-                if (response.length === 0) {
-                    Dialog.error(this._("w_ErrorRecognize"));
-                }
+                        (this.$refs["detail"] as any).show();
+                    },
+                    "",
+                    false
+                );
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -482,7 +484,7 @@ export default class DemographicServer extends Vue {
     }
 
     async saveData(data) {
-        if (this.inputFormData.objectId == '') {
+        if (this.inputFormData.objectId == "") {
             const datas = [
                 {
                     customId: data.customId,
@@ -499,26 +501,17 @@ export default class DemographicServer extends Vue {
             await this.$server
                 .C("/partner/demographic", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_DemographicServer_AddSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_DemographicServer_AddFailed")
-                                );
-                                return false;
-                            }
-                        }
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(
+                                this._("w_DemographicServer_AddSuccess")
+                            );
+                            this.pageToList();
+                        },
+                        this._("w_DemographicServer_AddFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -541,26 +534,17 @@ export default class DemographicServer extends Vue {
             await this.$server
                 .U("/partner/demographic", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            if (returnValue.statusCode === 200) {
-                                Dialog.success(
-                                    this._("w_DemographicServer_EditSuccess")
-                                );
-                                this.pageToList();
-                            }
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(
-                                    this._("w_DemographicServer_EditFailed")
-                                );
-                                return false;
-                            }
-                        }
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(
+                                this._("w_DemographicServer_EditSuccess")
+                            );
+                            this.pageToList();
+                        },
+                        this._("w_DemographicServer_EditFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -584,10 +568,14 @@ export default class DemographicServer extends Vue {
                     this.$server
                         .D("/partner/demographic", deleteParam)
                         .then((response: any) => {
-                            if (response) {
-                                Dialog.success(this._("w_Success"));
-                                this.pageToList();
-                            }
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    Dialog.success(this._("w_Success"));
+                                    this.pageToList();
+                                }
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
