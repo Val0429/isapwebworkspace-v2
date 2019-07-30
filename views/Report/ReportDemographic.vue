@@ -788,11 +788,12 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.C("/report/demographic/summary", filterData)
 					.then((response: any) => {
-                        Loading.hide();
-						if (response !== undefined) {
-							summaryTableDatas = response.summaryDatas;
-							this.initSunReportTable(summaryTableDatas);
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                                    summaryTableDatas = response.summaryDatas;
+                                this.initSunReportTable(summaryTableDatas);
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -835,14 +836,16 @@ export default class ReportDemographic extends Vue {
 			await this.$server
 				.R("/location/site/all", readAllSiteParam)
 				.then((response: any) => {
-					if (response != undefined) {
-						for (const returnValue of response) {
-							// 自定義 sitesSelectItem 的 key 的方式
-							tempSitesSelectItem[returnValue.objectId] =
-								returnValue.name;
-						}
-						this.sitesSelectItem = tempSitesSelectItem;
-					}
+                    ResponseFilter.successCheck(this, response,
+                        (response: any) => {
+                            for (const returnValue of response) {
+                                // 自定義 sitesSelectItem 的 key 的方式
+                                tempSitesSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+						    }
+						    this.sitesSelectItem = tempSitesSelectItem
+                        }
+                    );
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -855,14 +858,16 @@ export default class ReportDemographic extends Vue {
 			await this.$server
 				.R("/tag/all")
 				.then((response: any) => {
-					if (response != undefined) {
-						for (const returnValue of response) {
-							// 自定義 tagSelectItem 的 key 的方式
-							tempTagSelectItem[returnValue.objectId] =
-								returnValue.name;
-						}
-						this.tagSelectItem = tempTagSelectItem;
-					}
+                    ResponseFilter.successCheck(this, response,
+                        (response: any) => {
+                           	for (const returnValue of response) {
+                                // 自定義 tagSelectItem 的 key 的方式
+                                tempTagSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+                            }
+                            this.tagSelectItem = tempTagSelectItem;
+                        }
+                    );
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -876,32 +881,34 @@ export default class ReportDemographic extends Vue {
 			await this.$server
 				.R("/location/tree")
 				.then((response: any) => {
-					if (response != undefined) {
-						tempTree = response;
-						if (this.$user.user.allowSites.length > 0) {
-							this.$user.user.allowSites.map(site => {
-								if (response.childrens.length > 0) {
-									response.childrens.map(item => {
-										if (item.objectId === site.objectId) {
-											let tempTreeData = JSON.parse(
-												JSON.stringify(tempTree)
-											);
-											tempTreeData.childrens = [];
-											tempChildrenArray.push(item);
-											tempTreeData.childrens = tempChildrenArray;
-											tempTree = tempTreeData;
-										}
-									});
-								}
-							});
-						}
+                     ResponseFilter.successCheck(this, response,
+                        (response: any) => {
+                           	tempTree = response;
+                            if (this.$user.user.allowSites.length > 0) {
+                                this.$user.user.allowSites.map(site => {
+                                    if (response.childrens.length > 0) {
+                                        response.childrens.map(item => {
+                                            if (item.objectId === site.objectId) {
+                                                let tempTreeData = JSON.parse(
+                                                    JSON.stringify(tempTree)
+                                                );
+                                                tempTreeData.childrens = [];
+                                                tempChildrenArray.push(item);
+                                                tempTreeData.childrens = tempChildrenArray;
+                                                tempTree = tempTreeData;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
 
-						this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-							tempTree
-						);
+                            this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                                tempTree
+                            );
 
-						this.regionTreeItem.region = this.regionTreeItem.tree;
-					}
+                            this.regionTreeItem.region = this.regionTreeItem.tree;
+                        }
+                    );
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -923,15 +930,17 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/location/area/all", readParam)
 					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
-								// 自定義 sitesSelectItem 的 key 的方式
-								tempAreaSelectItem[returnValue.objectId] =
-									returnValue.name;
-								// this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
-							}
-							this.areaSelectItem = tempAreaSelectItem;
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                                for (const returnValue of response) {
+                                    // 自定義 sitesSelectItem 的 key 的方式
+                                    tempAreaSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                    // this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+                                }
+                                this.areaSelectItem = tempAreaSelectItem;
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -959,14 +968,16 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device/group/all", readParam)
 					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
-								// 自定義 tempDeviceGroupSelectItem 的 key 的方式
-								tempDeviceGroupSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                                for (const returnValue of response) {
+                                    // 自定義 tempDeviceGroupSelectItem 的 key 的方式
+                                    tempDeviceGroupSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                }
+                                this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -982,14 +993,16 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device/group/all", readParam)
 					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
-								// 自定義 tempDeviceGroupSelectItem 的 key 的方式
-								tempDeviceGroupSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                               for (const returnValue of response) {
+                                    // 自定義 tempDeviceGroupSelectItem 的 key 的方式
+                                    tempDeviceGroupSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                }
+                                this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1004,14 +1017,16 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device/group/all", readParam)
 					.then((response: any) => {
-						if (response != undefined) {
-							for (const returnValue of response) {
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                               for (const returnValue of response) {
 								// 自定義 tempDeviceGroupSelectItem 的 key 的方式
 								tempDeviceGroupSelectItem[returnValue.objectId] =
 									returnValue.name;
 							}
 							this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-						}
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1044,14 +1059,16 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								// 自定義 tempDeviceSelectItem 的 key 的方式
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceSelectItem = tempDeviceSelectItem;
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                              for (const returnValue of response.results) {
+                                    // 自定義 tempDeviceSelectItem 的 key 的方式
+                                    tempDeviceSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                }
+							    this.deviceSelectItem = tempDeviceSelectItem;
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1068,14 +1085,16 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								// 自定義 tempDeviceSelectItem 的 key 的方式
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceSelectItem = tempDeviceSelectItem;
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                              for (const returnValue of response.results) {
+                                    // 自定義 tempDeviceSelectItem 的 key 的方式
+                                    tempDeviceSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+							    }
+							    this.deviceSelectItem = tempDeviceSelectItem;
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1093,17 +1112,19 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								// 自定義 tempDeviceSelectItem 的 key 的方式
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceSelectItem = tempDeviceSelectItem;
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                                for (const returnValue of response.results) {
+                                    // 自定義 tempDeviceSelectItem 的 key 的方式
+                                    tempDeviceSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                }
+                                this.deviceSelectItem = tempDeviceSelectItem;
+                                if (response.results.length === 0) {
+                                    this.deviceSelectItem = {};
+                                }
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1124,17 +1145,19 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								// 自定義 tempDeviceSelectItem 的 key 的方式
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceSelectItem = tempDeviceSelectItem;
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                                for (const returnValue of response.results) {
+                                    // 自定義 tempDeviceSelectItem 的 key 的方式
+                                    tempDeviceSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+                                }
+                                this.deviceSelectItem = tempDeviceSelectItem;
+                                if (response.results.length === 0) {
+                                    this.deviceSelectItem = {};
+                                }
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1153,14 +1176,16 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                               for (const returnValue of response.results) {
 								// 自定義 tempDeviceSelectItem 的 key 的方式
 								tempDeviceSelectItem[returnValue.objectId] =
 									returnValue.name;
 							}
 							this.deviceSelectItem = tempDeviceSelectItem;
-						}
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1178,17 +1203,19 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								// 自定義 tempDeviceSelectItem 的 key 的方式
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceSelectItem = tempDeviceSelectItem;
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                               	for (const returnValue of response.results) {
+                                    // 自定義 tempDeviceSelectItem 的 key 的方式
+                                    tempDeviceSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                }
+                                this.deviceSelectItem = tempDeviceSelectItem;
+                                if (response.results.length === 0) {
+                                    this.deviceSelectItem = {};
+                                }
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1207,17 +1234,19 @@ export default class ReportDemographic extends Vue {
 				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-						if (response.results.length > 0) {
-							for (const returnValue of response.results) {
-								// 自定義 tempDeviceSelectItem 的 key 的方式
-								tempDeviceSelectItem[returnValue.objectId] =
-									returnValue.name;
-							}
-							this.deviceSelectItem = tempDeviceSelectItem;
-						}
-						if (response.results.length === 0) {
-							this.deviceSelectItem = {};
-						}
+                        ResponseFilter.successCheck(this, response,
+                            (response: any) => {
+                                for (const returnValue of response.results) {
+                                    // 自定義 tempDeviceSelectItem 的 key 的方式
+                                    tempDeviceSelectItem[returnValue.objectId] =
+                                        returnValue.name;
+                                }
+                                this.deviceSelectItem = tempDeviceSelectItem;
+                                if (response.results.length === 0) {
+                                    this.deviceSelectItem = {};
+                                }
+                            }
+                        );
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -1231,15 +1260,17 @@ export default class ReportDemographic extends Vue {
 			await this.$server
 				.R("/user/user")
 				.then((response: any) => {
-					if (response != undefined) {
-						for (const returnValue of response.results) {
-							// 自定義 userSelectItem 的 key 的方式
-							tempUserSelectItem[
-								returnValue.objectId
-								] = `${returnValue.username} - ${returnValue.email}`;
-						}
-						this.userSelectItem = tempUserSelectItem;
-					}
+                    ResponseFilter.successCheck(this, response,
+                        (response: any) => {
+                           for (const returnValue of response.results) {
+                                // 自定義 userSelectItem 的 key 的方式
+                                tempUserSelectItem[
+                                    returnValue.objectId
+                                    ] = `${returnValue.username} - ${returnValue.email}`;
+                            }
+                            this.userSelectItem = tempUserSelectItem;
+                        }
+                    );
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -1273,12 +1304,13 @@ export default class ReportDemographic extends Vue {
 			await this.$server
 				.C("/report/demographic/summary", param)
 				.then((response: any) => {
-                     Loading.hide();
-					if (response !== undefined) {
-						this.responseData = response;
-                        this.officeHourItemDetail = this.responseData.officeHours;
-                        this.resolveSummary();
-					}
+                    ResponseFilter.successCheck(this, response,
+                        (response: any) => {
+                           this.responseData = response;
+                            this.officeHourItemDetail = this.responseData.officeHours;
+                            this.resolveSummary();
+                        },
+                    );
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
