@@ -365,7 +365,7 @@ export default class PermissionTable extends Vue {
             title: [
                 this._("w_DeviceType"),
                 this._("w_DeviceName"),
-                this._("w_DeviceAreaOrFloor"),
+                this._("w_Floor"),
                 this._("w_TimeFormat"),
                 this._("w_Action")
             ]}, this.defaultFormData
@@ -505,8 +505,8 @@ export default class PermissionTable extends Vue {
                     if (!origin) continue;
                     deviceData.deviceName.text = origin.groupname;                                
                     if(!origin.area )break
-                    deviceData.area.id = origin.area.name;
-                    deviceData.area.text = origin.area.name;
+                    //deviceData.area.id = origin.area.name;
+                    //deviceData.area.text = origin.area.name;
                     break;
                 case EDeviceType.elevator:
                     console.log("tempAccesslevels", tempAccesslevels);
@@ -624,8 +624,8 @@ export default class PermissionTable extends Vue {
                 deviceData.deviceName.id = this.inputFormData.doorGroupNameOption;
                 let origin = this.selectItemOriginal.doorGroup.find(x=>x.objectId == this.inputFormData.doorGroupNameOption);                
                 if (origin && origin.area) {
-                    deviceData.area.id = origin.area.name;
-                    deviceData.area.text = origin.area.name;
+                    // deviceData.area.id = origin.area.name;
+                    // deviceData.area.text = origin.area.name;
                 }                      
                 deviceData.deviceName.text = this.selectItem.doorGroupDevice[deviceData.deviceName.id];
                 break;
@@ -895,7 +895,7 @@ export default class PermissionTable extends Vue {
                          ? "iv-form-string"
                          : "iv-form-label"
                  }
-                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                 * @uiHidden - true
                 */
                  doorArea?: string;
 
@@ -953,7 +953,7 @@ export default class PermissionTable extends Vue {
                         ? "iv-form-string"
                         : "iv-form-label"
                 }
-               * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+               * @uiHidden - true
                 */
                  doorGroupArea?: string;
 
