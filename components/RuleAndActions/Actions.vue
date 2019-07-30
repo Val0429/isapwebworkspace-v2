@@ -5,6 +5,63 @@
 </template>
 
 <script lang="ts">
+<<<<<<< HEAD
+	import { Component, Prop, Vue } from "vue-property-decorator";
+
+	import { ERunTimeType } from '@/components/RuleAndActions'
+
+	// Service
+	import { toEnumInterface } from "../../../core";
+	import ResponseFilter from '@/services/ResponseFilter';
+	import RegionAPI from '@/services/RegionAPI';
+
+	@Component({
+		components: {}
+	})
+	export class Actions extends Vue {
+
+		@Prop({
+			type: String, // Boolean, Number, String, Array, Object
+			default: ""
+		})
+		deviceMode: string;
+
+
+		// select 相關
+		// radio button
+		ifAllSitesSelectItem: any = [];
+		ifAllAreasSelectItem: any = [];
+		ifAllGroupsSelectItem: any = [];
+		ifAllDeviceSelectItem: any = [];
+		isAnyTimeSelectItem: any = [];
+
+
+
+		inputFormData: any = {
+			name: '',
+
+		};
+
+
+		created() {
+			// no api
+			this.initSelectItem();
+
+		}
+
+		mounted() {
+
+		}
+
+
+		initSelectItem() {
+			// this.ifAllSitesSelectItem = [
+			// 	{ value: EIfAllSelected.all, text: this._("w_AllSites") },
+			// 	{ value: EIfAllSelected.select, text: this._("w_SelectSites") }
+			// ];
+
+		}
+=======
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { toEnumInterface } from "../../../core";
 
@@ -137,6 +194,7 @@ export class Actions extends Vue {
             no: this._("w_no")
         };
     }
+>>>>>>> cad7dd2d0e7643a469bf070aa2d8bf735ca17037
 
     IFilterConditionForm() {
         return `
@@ -153,10 +211,14 @@ export class Actions extends Vue {
                  * @uiLabel - ${this._("w_RuleAndActions_Active")}
                  * @uiColumnGroup - row
                  */
+<<<<<<< HEAD
+                isActive: any;
+=======
                 isActive: ${toEnumInterface(
                     this.isActiveSelectItem as any,
                     false
                 )};
+>>>>>>> cad7dd2d0e7643a469bf070aa2d8bf735ca17037
 
 
                 /**
@@ -168,6 +230,8 @@ export class Actions extends Vue {
                 anyTime?: string;
 
 
+<<<<<<< HEAD
+=======
                 /**
                  * @uiColumnGroup - analysis
                  */
@@ -255,6 +319,7 @@ export class Actions extends Vue {
                     true
                 )};
 
+>>>>>>> cad7dd2d0e7643a469bf070aa2d8bf735ca17037
             }
         `;
     }
