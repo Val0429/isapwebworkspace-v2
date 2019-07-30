@@ -358,7 +358,7 @@ export default class GeneralOfficeHour extends Vue {
     }
 
     initDayRanges() {
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 24; i++) {
             const tempHour =
                 i === 24 ? "00" : i < 10 ? "0" + i.toString() : i.toString();
             const tempValue =

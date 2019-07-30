@@ -6,34 +6,122 @@
 			:type="transition.type"
 		>
 
-			<iv-card
-				key="transition_1"
-				v-show="transition.step === 1"
-				:label="_('w_ReportFilterConditionComponent_')"
-			>
 				<iv-form
+					key="transition_1"
+					v-show="transition.step === 1"
 					:interface="IFilterConditionForm()"
-					@update:*="tempSaveInputData($event)"
 					@submit="doSubmit($event)"
 				>
 
-					<template #isAnyTime="{ $attrs, $listeners }">
+					<template #name="{ $attrs, $listeners }">
+						<iv-form-string
+							v-bind="$attrs"
+							v-on="$listeners"
+							v-model="inputFormData.name"
+						>
+						</iv-form-string>
+					</template>
 
-						<p class="ml-3">{{ _('w_Sites1') }}</p>
+
+					<template #isActive="{ $attrs, $listeners }">
+						<iv-form-selection
+							v-bind="$attrs"
+							v-on="$listeners"
+							v-model="inputFormData.isActive"
+						>
+						</iv-form-selection>
+					</template>
+
+
+					<!-- run time -->
+					<template #isAnytime="{ $attrs, $listeners }">
+
+						<p class="ml-3">{{ _('w_RuleAndActions_Traffic_RuleName') }}</p>
 
 						<b-col cols="9">
 							<b-form-radio-group
-								v-model="isAnytime"
-								name="ifAllSites"
+								v-model="isAnyTime"
+								name="isAnyTime"
 								class="mb-3"
 								:options="isAnyTimeSelectItem"
 								@change="changeTimeSelect"
 							></b-form-radio-group>
 						</b-col>
+					</template>
+
+					<template #startHours="{$attrs, $listeners}">
+
+						<p class="ml-3 mt-1 mr-3" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_startTime') }} </p>
+
+						<iv-form-selection
+							v-if="isAnyTime === 'startAndEnd'"
+							v-on="$listeners"
+							v-model="inputFormData.startHours"
+							class="time"
+							:options="runTimeRange.hours"
+							:multiple="false"
+							@input="changeSiteIds"
+						>
+						</iv-form-selection>
+					</template>
+
+					<template #startMinutes="{$attrs, $listeners}">
+
+						<iv-form-selection
+							v-if="isAnyTime === 'startAndEnd'"
+							v-on="$listeners"
+							v-model="inputFormData.startMinutes"
+							class="time ml-4"
+							:options="runTimeRange.minutes"
+							:multiple="false"
+							@input="changeSiteIds"
+						>
+						</iv-form-selection>
 
 					</template>
 
+					<template #endHours="{$attrs, $listeners}">
 
+						<p class="ml-4 mt-1 mr-3" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_endTime') }} </p>
+
+						<iv-form-selection
+							v-if="isAnyTime === 'startAndEnd'"
+							v-on="$listeners"
+							v-model="inputFormData.endHours"
+							class="time "
+							:options="runTimeRange.hours"
+							:multiple="false"
+							@input="changeSiteIds"
+						>
+						</iv-form-selection>
+
+					</template>
+
+					<template #endMinutes="{$attrs, $listeners}">
+
+						<iv-form-selection
+							v-if="isAnyTime === 'startAndEnd'"
+							v-on="$listeners"
+							v-model="inputFormData.endMinutes"
+							class="time ml-4"
+							:options="runTimeRange.minutes"
+							:multiple="false"
+							@input="changeSiteIds"
+						>
+						</iv-form-selection>
+
+					</template>
+
+					<template #anyTime>
+						<iv-form-label
+							v-if="isAnyTime === 'anyTime'"
+							v-model="anyTime"
+							class="col-md-12"
+						>
+						</iv-form-label>
+					</template>
+
+					<!-- site -->
 					<template #ifAllSites="{ $attrs, $listeners }">
 
 						<p class="ml-3">{{ _('w_Sites1') }}</p>
@@ -73,19 +161,14 @@
 
 					</template>
 
-
-
-
-
-
-
-
+					<!-- area -->
 					<template #ifAllAreas="{ $attrs, $listeners }">
 
-						<p class="ml-3">{{ _('w_Area1') }}</p>
+						<p class="ml-3" v-if="inputFormData.siteIds.length === 1">{{ _('w_Areas') }}</p>
 
 						<b-col cols="9">
 							<b-form-radio-group
+								v-if="inputFormData.siteIds.length === 1"
 								v-model="isAllArea"
 								name="ifAllAreas"
 								class="mb-3"
@@ -99,23 +182,26 @@
 					<template #areaIds="{$attrs, $listeners}">
 
 						<iv-form-selection
+							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
-							v-model="inputFormData.siteIds"
+							v-model="inputFormData.areaIds"
 							class="select-area ml-3"
 							:options="areaSelectItem"
 							:multiple="true"
-							@input="changeSiteIds"
+							@input="changeAreaIds"
 						>
 						</iv-form-selection>
 
 					</template>
 
+					<!-- group -->
 					<template #ifAllGroups="{ $attrs, $listeners }">
 
-						<p class="ml-3">{{ _('w_DeviceGroup1') }}</p>
+						<p class="ml-3" v-if="inputFormData.siteIds.length === 1">{{ _('w_DeviceGroups') }}</p>
 
 						<b-col cols="9">
 							<b-form-radio-group
+								v-if="inputFormData.siteIds.length === 1"
 								v-model="isAllGroup"
 								name="ifAllGroups"
 								class="mb-3"
@@ -129,23 +215,26 @@
 					<template #groupIds="{$attrs, $listeners}">
 
 						<iv-form-selection
+							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
-							v-model="inputFormData.siteIds"
+							v-model="inputFormData.groupIds"
 							class="select-area ml-3"
 							:options="deviceGroupSelectItem"
 							:multiple="true"
-							@input="changeSiteIds"
+							@input="changeGroupIds"
 						>
 						</iv-form-selection>
 
 					</template>
 
+					<!-- device -->
 					<template #ifAllDevice="{ $attrs, $listeners }">
 
-						<p class="ml-3">{{ _('w_Devices1') }}</p>
+						<p class="ml-3" v-if="inputFormData.siteIds.length === 1">{{ _('w_Devices') }}</p>
 
 						<b-col cols="9">
 							<b-form-radio-group
+								v-if="inputFormData.siteIds.length === 1"
 								v-model="isAllDevice"
 								name="ifAllDevice"
 								class="mb-3"
@@ -159,12 +248,13 @@
 					<template #deviceIds="{$attrs, $listeners}">
 
 						<iv-form-selection
+							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
-							v-model="inputFormData.siteIds"
+							v-model="inputFormData.deviceIds"
 							class="select-area ml-3"
 							:options="deviceSelectItem"
 							:multiple="true"
-							@input="changeSiteIds"
+							@input="changeDeviceIds"
 						>
 						</iv-form-selection>
 
@@ -172,25 +262,24 @@
 
 				</iv-form>
 
-				<template #footer>
-					<b-button
-						class="submit"
-						size="lg"
-						@click="doSubmit"
-					>
-						{{ _('wb_Submit') }}
-					</b-button>
+<!--				<template #footer>-->
+<!--					<b-button-->
+<!--						class="submit"-->
+<!--						size="lg"-->
+<!--						@click="doSubmit"-->
+<!--					>-->
+<!--						{{ _('wb_Submit') }}-->
+<!--					</b-button>-->
 
-					<b-button
-						class="reset"
-						size="lg"
-						@click="doReset"
-					>
-						{{ _('wb_Reset') }}
-					</b-button>
-				</template>
+<!--					<b-button-->
+<!--						class="reset"-->
+<!--						size="lg"-->
+<!--						@click="doReset"-->
+<!--					>-->
+<!--						{{ _('wb_Reset') }}-->
+<!--					</b-button>-->
+<!--				</template>-->
 
-			</iv-card>
 
 			<region-tree-select
 				key="transition_2"
@@ -252,16 +341,17 @@
 
 
 		// select 相關
-		sitesSelectItem: any = [];
+		// radio button
 		ifAllSitesSelectItem: any = [];
 		ifAllAreasSelectItem: any = [];
 		ifAllGroupsSelectItem: any = [];
 		ifAllDeviceSelectItem: any = [];
+		isAnyTimeSelectItem: any = [];
 
 		isActiveSelectItem: any = {};
 
-		isAnyTimeSelectItem: any = [];
-
+		// store 相關
+		sitesSelectItem: any = [];
 		areaSelectItem: any = [];
 		deviceGroupSelectItem: any = [];
 		deviceSelectItem: any = [];
@@ -272,7 +362,7 @@
 			step: 1
 		};
 
-		// radio button 相關
+		// radio button v-modal 相關
 		selectAllSites: string = EIfAllSelected.select;
 		isAnyTime: string = ERunTimeType.anyTime;
 		isAllArea: string = EIfAllSelected.select;
@@ -285,7 +375,23 @@
 		selecteds: IRegionTreeSelected[] = [];
 
 
+		// run time 相關
+		runTime: any = {
+			startHours: '',
+			endHours: '',
+			startMinutes: '',
+			endMinutes: '',
+		};
+
+		runTimeRange = {
+			hours: [],
+			minutes: []
+		};
+
+		anyTime = 'Any Time';
+
 		inputFormData: any = {
+			name: '',
 			siteIds: [],
 			allSiteIds: [],
 			firstSiteId: '',
@@ -293,6 +399,14 @@
 			areaIds: [],
 			groupIds: [],
 			deviceIds: [],
+			allAreaIds: [],
+			allGroupIds: [],
+			allDeviceIds: [],
+
+			startHours: '10',
+			startMinutes: '0',
+			endHours: '20',
+			endMinutes: '0',
 		};
 
 
@@ -300,6 +414,7 @@
 			// no api
 			this.initSelectItem();
 			this.initRegionTreeSelect();
+			this.initDayRanges();
 
 			// api
 			this.initSelectItemSite();
@@ -341,6 +456,28 @@
 				yes: this._("w_yes"),
 				no: this._("w_no")
 			};
+
+			this.anyTime = this._('w_RuleAndActions_anyTime');
+		}
+
+		initDayRanges() {
+			for (let i = 0; i < 24; i++) {
+				const tempHour =
+					i === 24 ? "00" : i < 10 ? "0" + i.toString() : i.toString();
+				const tempValue =
+					tempHour + ":00" + (i < 12 || i > 23 ? " am" : " pm");
+				const tempObject = { id: i.toString(), text: tempValue };
+				this.runTimeRange.hours.push(tempObject);
+			}
+
+			for (let i = 0; i < 60; i++) {
+				const tempMinute =
+					i === 60 ? "00" : i < 10 ? "0" + i.toString() : i.toString();
+				const tempObject = { id: i.toString(), text: tempMinute };
+				this.runTimeRange.minutes.push(tempObject);
+			}
+
+
 		}
 
 		initRegionTreeSelect() {
@@ -376,7 +513,6 @@
 			}
 		}
 
-
 		async initSelectItemTree() {
 			await this.$server
 				.R("/location/tree")
@@ -393,7 +529,6 @@
 				});
 		}
 
-		// Author: Tina
 		async initSelectItemArea() {
 
 			this.areaSelectItem = [];
@@ -424,9 +559,12 @@
 						return ResponseFilter.catchError(this, e);
 					});
 			}
+
+			for (const detail of this.areaSelectItem) {
+				this.inputFormData.allAreaIds.push(detail.id);
+			}
 		}
 
-		// Author: Tina
 		async initSelectItemDeviceGroup() {
 			this.deviceGroupSelectItem = [];
 
@@ -496,9 +634,12 @@
 						return ResponseFilter.catchError(this, e);
 					});
 			}
+
+			for (const detail of this.deviceGroupSelectItem) {
+				this.inputFormData.allGroupIds.push(detail.id);
+			}
 		}
 
-		// Author: Tina
 		async initSelectItemDevice() {
 			this.deviceSelectItem = [];
 
@@ -680,22 +821,9 @@
 						return ResponseFilter.catchError(this, e);
 					});
 			}
-		}
 
-		tempSaveInputData(data) {
-			switch (data.key) {
-				case "tagIds":
-					this.inputFormData.tagIds = data.value;
-					break;
-				case "startDate":
-					this.inputFormData.startDate = data.value;
-					break;
-				case "endDate":
-					this.inputFormData.endDate = data.value;
-					break;
-				case "designationPeriod":
-					this.inputFormData.designationPeriod = data.value;
-					break;
+			for (const detail of this.deviceSelectItem) {
+				this.inputFormData.allDeviceIds.push(detail.id);
 			}
 		}
 
@@ -721,20 +849,50 @@
 
 
 		changeAllAreasSelect(selected: string) {
+
 			this.isAllArea = selected;
+			this.inputFormData.areaIds = [];
+
+			if (this.isAllArea === EIfAllSelected.all) {
+				this.inputFormData.areaIds = [];
+
+				this.inputFormData.areaIds = this.inputFormData.allAreaIds;
+			} else {
+				this.inputFormData.areaIds = [];
+			}
 		}
 
 		changeAllGroupsSelect(selected: string) {
+
 			this.isAllGroup = selected;
+			this.inputFormData.groupIds = [];
+
+			if (this.isAllGroup === EIfAllSelected.all) {
+				this.inputFormData.groupIds = [];
+
+				this.inputFormData.groupIds = this.inputFormData.allGroupIds;
+			} else {
+				this.inputFormData.groupIds = [];
+			}
 
 		}
 
 		changeAllDevicesSelect(selected: string) {
+
 			this.isAllDevice = selected;
+			this.inputFormData.deviceIds = [];
+
+			if (this.isAllDevice === EIfAllSelected.all) {
+				this.inputFormData.deviceIds = [];
+
+				this.inputFormData.deviceIds = this.inputFormData.allDeviceIds;
+			} else {
+				this.inputFormData.deviceIds = [];
+			}
 
 		}
 
-		changeSiteIds() {
+		async changeSiteIds() {
 			if (
 				this.inputFormData.siteIds.length !==
 				this.inputFormData.allSiteIds.length
@@ -760,6 +918,55 @@
 						this.selecteds.push(selectedsObject);
 					}
 				}
+			}
+
+			if (this.inputFormData.siteIds.length === 1) {
+				await this.initSelectItemArea();
+				await this.initSelectItemDeviceGroup();
+				await this.initSelectItemDevice();
+			}
+
+		}
+
+		async changeAreaIds() {
+			if (
+				this.inputFormData.areaIds.length !==
+				this.inputFormData.allAreaIds.length
+			) {
+				this.isAllArea = EIfAllSelected.select;
+			} else if (
+				this.inputFormData.areaIds.length ===
+				this.inputFormData.allAreaIds.length
+			) {
+				this.isAllArea = EIfAllSelected.all;
+			}
+		}
+
+		changeGroupIds() {
+			if (
+				this.inputFormData.groupIds.length !==
+				this.inputFormData.allGroupIds.length
+			) {
+				this.isAllGroup = EIfAllSelected.select;
+			} else if (
+				this.inputFormData.groupIds.length ===
+				this.inputFormData.allGroupIds.length
+			) {
+				this.isAllGroup = EIfAllSelected.all;
+			}
+		}
+
+		changeDeviceIds() {
+			if (
+				this.inputFormData.deviceIds.length !==
+				this.inputFormData.allDeviceIds.length
+			) {
+				this.isAllDevice = EIfAllSelected.select;
+			} else if (
+				this.inputFormData.deviceIds.length ===
+				this.inputFormData.allDeviceIds.length
+			) {
+				this.isAllDevice = EIfAllSelected.all;
 			}
 		}
 
@@ -884,6 +1091,34 @@
                 isAnytime?: any;
 
 
+                anyTime?: string;
+
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                startHours?: any;
+
+
+                /**
+                 * @uiLabel - ${this._("w_RuleAndActions_startTime")}
+                 * @uiColumnGroup - analysis
+                 */
+                startMinutes?: any;
+
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                endHours?: any;
+
+
+                /**
+                 * @uiColumnGroup - analysis
+                 */
+                endMinutes?: any;
+
+
                 /**
                  * @uiColumnGroup - ifAllSites
                  */
@@ -984,8 +1219,12 @@
 		border: 1px solid #d7d7d7;
 	}
 
-
 	.select-area {
 		width: 98%;
 	}
+
+	.time {
+		width: 21%;
+	}
+
 </style>

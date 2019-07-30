@@ -1106,9 +1106,13 @@ export default class LangObject implements ILang {
     w_RuleAndActions_RuleEdit = 'Rule Edit';
     w_RuleAndActions_RuleAView = 'Rule View';
 
-    w_RuleAndActions_Traffic_RuleName = 'Rule Name';
+    w_RuleAndActions_Traffic_RuleName = 'Rule Time';
     w_RuleAndActions_Traffic_StoreAreaDevice = 'Store/Area/Device';
     w_RuleAndActions_Traffic_Active = 'Active';
     w_RuleAndActions_Traffic_RunTime = 'Run Time';
     w_RuleAndActions_Traffic_Condition = 'Condition';
+
+    w_RuleAndActions_anyTime = 'Any Time';
+    w_RuleAndActions_startTime = 'Start Time';
+    w_RuleAndActions_endTime = 'End Time';
 }
