@@ -497,6 +497,7 @@ export default class MemberForm extends Vue {
 
       try{        
         return isDate ? new Date(exists.FieldValue) :exists.FieldValue;
+        return isDate ? new Date(exists.FieldValue) : (typeof(exists.FieldValue)=="object" ? "" : exists.FieldValue);
       }catch(err){
         console.error(err);
         return isDate ? null : "";
@@ -831,7 +832,7 @@ export default class MemberForm extends Vue {
             fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF"
           ) {
             if (fidled.FieldValue != undefined) {
-              result = fidled.FieldValue;
+              result = typeof(fidled.FieldValue)=="object" ? "" : fidled.FieldValue;
             }
           }
 
@@ -841,7 +842,7 @@ export default class MemberForm extends Vue {
             fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF"
           ) {
             if (fidled.FieldValue != undefined) {
-              result = fidled.FieldValue;
+              result = typeof(fidled.FieldValue)=="object" ? "" : fidled.FieldValue;
             }
           }
         }
