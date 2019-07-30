@@ -920,11 +920,14 @@ export default class ReportTraffic extends Vue {
             await this.$server
                 .C("/report/people-counting/summary", filterData)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response !== undefined) {
-                        summaryTableDatas = response.summaryDatas;
-                        this.initSunReportTable(summaryTableDatas);
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            summaryTableDatas = response.summaryDatas;
+                            this.initSunReportTable(summaryTableDatas);
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -967,13 +970,13 @@ export default class ReportTraffic extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         tempSitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.sitesSelectItem = tempSitesSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -987,13 +990,13 @@ export default class ReportTraffic extends Vue {
         await this.$server
             .R("/tag/all")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         tempTagSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.tagSelectItem = tempTagSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -1038,13 +1041,13 @@ export default class ReportTraffic extends Vue {
         await this.$server
             .R("/location/area/all", readParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         tempAreaSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.areaSelectItem = tempAreaSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -1153,14 +1156,19 @@ export default class ReportTraffic extends Vue {
         await this.$server
             .R("/user/user")
             .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response.results) {
-                        tempUserSelectItem[
-                            returnValue.objectId
-                        ] = `${returnValue.username} - ${returnValue.email}`;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (const returnValue of response.results) {
+                            tempUserSelectItem[
+                                returnValue.objectId
+                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        }
+                        this.userSelectItem = tempUserSelectItem;
                     }
-                    this.userSelectItem = tempUserSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -1201,13 +1209,12 @@ export default class ReportTraffic extends Vue {
         await this.$server
             .C("/report/people-counting/summary", param)
             .then((response: any) => {
-                Loading.hide();
-                if (response !== undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
                     this.resolveSummary();
                     this.analysisTitle();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

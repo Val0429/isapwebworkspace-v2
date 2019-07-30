@@ -1003,7 +1003,7 @@ export default class ReportDemographic extends Vue {
                             (response: any) => {
                                 if (response.results != undefined && response.results.length > 0) {
                                     for (const returnValue of response.results) {
-                                    tempDeviceSelectItem[returnValue.objectId] =
+                                        tempDeviceSelectItem[returnValue.objectId] =
                                         returnValue.name;
                                     }
                                     this.deviceSelectItem = tempDeviceSelectItem;
@@ -1025,12 +1025,14 @@ export default class ReportDemographic extends Vue {
 				.then((response: any) => {
                     ResponseFilter.successCheck(this, response,
                         (response: any) => {
-                           for (const returnValue of response.results) {
+                            if (response.results != undefined  && response.results.length > 0) {
+                                  for (const returnValue of response.results) {
                                 tempUserSelectItem[
                                     returnValue.objectId
                                     ] = `${returnValue.username} - ${returnValue.email}`;
                             }
                             this.userSelectItem = tempUserSelectItem;
+                            }
                         }
                     );
 				})

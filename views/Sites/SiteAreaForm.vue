@@ -181,15 +181,20 @@ export class SiteAreaForm extends Vue {
                 .R("/device", body)
                 .then((response: any) => {
                     this.devices = [];
-                    for (let item of response.results) {
-                        if (
-                            item.area &&
-                            item.area.objectId == this.area.objectId
-                        ) {
-                            this.devices.push(item);
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (let item of response.results) {
+                            if (
+                                item.area &&
+                                item.area.objectId == this.area.objectId
+                            ) {
+                                this.devices.push(item);
+                            }
                         }
+                        this.initImageMap();
                     }
-                    this.initImageMap();
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

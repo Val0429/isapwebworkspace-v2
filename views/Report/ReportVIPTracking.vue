@@ -201,7 +201,7 @@ export default class ReportVIPTracking extends Vue {
         await this.$server
             .R("/tag/all")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         let tad = {
                             id: returnValue.objectId,
@@ -209,7 +209,7 @@ export default class ReportVIPTracking extends Vue {
                         };
                         this.tagSelectItem.push(tad);
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -221,11 +221,9 @@ export default class ReportVIPTracking extends Vue {
     }
 
     async initTagIncludeSitesItem() {
-        let result = await this.$server
-            .R("/tag")
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+        let result = await this.$server.R("/tag").catch((e: any) => {
+            return ResponseFilter.catchError(this, e);
+        });
 
         if (result["results"].length > 0) {
             result["results"].map(item => {

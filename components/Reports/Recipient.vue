@@ -106,7 +106,7 @@ export class Recipient extends Vue {
         await this.$server
             .R("/user/user")
             .then((response: any) => {
-                if (response != undefined) {
+                if (response.results != undefined) {
                     for (const returnValue of response.results) {
                         tempUserSelectItem[
                             returnValue.objectId

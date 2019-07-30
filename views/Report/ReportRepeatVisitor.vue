@@ -321,13 +321,13 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         tempSitesSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.sitesSelectItem = tempSitesSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -340,13 +340,13 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .R("/tag/all")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         tempTagSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.tagSelectItem = tempTagSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -384,23 +384,23 @@ export default class ReportRepeatVisitor extends Vue {
 
         if (!this.filterData.firstSiteId) {
             return false;
-        } 
-        
-         await this.$server
-                .R("/location/area/all", readParam)
-                .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            tempAreaSelectItem[returnValue.objectId] = returnValue.name;
-                        }
-                        this.areaSelectItem = tempAreaSelectItem;
-                        this.allAreaItem = response;
-                    }
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
+        }
 
+        await this.$server
+            .R("/location/area/all", readParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        tempAreaSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.areaSelectItem = tempAreaSelectItem;
+                    this.allAreaItem = response;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     async initSelectItemDeviceGroup() {
@@ -502,14 +502,19 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .R("/user/user")
             .then((response: any) => {
-                if (response != undefined) {
-                    for (const returnValue of response.results) {
-                        tempUserSelectItem[
-                            returnValue.objectId
-                        ] = `${returnValue.username} - ${returnValue.email}`;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (const returnValue of response.results) {
+                            tempUserSelectItem[
+                                returnValue.objectId
+                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        }
+                        this.userSelectItem = tempUserSelectItem;
                     }
-                    this.userSelectItem = tempUserSelectItem;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -545,12 +550,11 @@ export default class ReportRepeatVisitor extends Vue {
         await this.$server
             .C("/report/repeat-visitor/summary", filterData)
             .then((response: any) => {
-                Loading.hide();
-                if (response !== undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.responseData = response;
                     this.officeHourItemDetail = this.responseData.officeHours;
                     this.resolveSummary();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
