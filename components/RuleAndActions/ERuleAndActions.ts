@@ -32,14 +32,6 @@ enum ESiteCountMode {
     multiple = 'multiple',
 }
 
-enum ERuleMode {
-    none = 'none',
-    singleToday = 'singleToday',
-    singleCurrent = 'singleCurrent',
-    multipleToday = 'multipleToday',
-    multipleCurrent = 'multipleCurrent',
-}
-
 enum EEqualMode {
     none = 'none',
     more = 'more',
@@ -55,5 +47,22 @@ enum EAndMode {
     or = 'or',
 }
 
+enum ERuleMode {
+    none = 'none',
+    trafficSingleSiteToday = 'trafficSingleSiteToday',
+    trafficSingleSiteCurrent = 'trafficSingleSiteCurrent',
+    trafficMultipleSiteToday = 'trafficMultipleSiteToday',
+    trafficMultipleSiteCurrent = 'trafficMultipleSiteCurrent',
+    occupancySingleSite = 'occupancySingleSite',
+    occupancyMultipleSite = 'occupancyMultipleSite',
+}
+
+enum EThresholdMode {
+    none = 'none',
+    high = 'high',
+    medium = 'medium',
+    low = 'low',
+}
+
 export { EAction, ERunTimeType, ENotifyMethod, EWhoNotify };
-export { ESiteCountMode, ERuleMode, EEqualMode, EAndMode };
+export { ESiteCountMode, ERuleMode, EEqualMode, EAndMode, EThresholdMode };

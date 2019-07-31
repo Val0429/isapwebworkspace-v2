@@ -122,11 +122,11 @@
                                 :value="step2Item"
                                 @submit="stepTo3($event)"
                             >
-                                <template #title="{ $attrs, $listeners }">
-                                    <div class="ml-3 mb-2 w-100">{{ _('w_OfficeHour') }}</div>
+                                <template #conditionTitle="{ $attrs, $listeners }">
+                                    <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
                                 </template>
 
-                                <template #condition="{ $attrs, $listeners }">
+                                <template #conditionContent="{ $attrs, $listeners }">
                                     <b-form-group class="col-md-12">
                                         <b-row
                                             v-for="(value, index) in conditions"
@@ -139,6 +139,7 @@
                                                     :options="selectItem.ruleMode"
                                                 ></iv-form-selection>
                                             </b-col>
+
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
                                                     v-model="conditions[index].equalMode"
@@ -146,6 +147,7 @@
                                                     :options="selectItem.equalMode"
                                                 ></iv-form-selection>
                                             </b-col>
+
                                             <b-col class="col-md-2">
                                                 <iv-form-number
                                                     v-model="conditions[index].fillValue"
@@ -153,6 +155,7 @@
                                                     min="0"
                                                 ></iv-form-number>
                                             </b-col>
+
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
                                                     v-model="conditions[index].andMode"
@@ -160,6 +163,7 @@
                                                     :options="selectItem.andMode"
                                                 ></iv-form-selection>
                                             </b-col>
+                                            
                                             <b-col class="col-md-1">
                                                 <b-button
                                                     class="button addButton"
@@ -248,6 +252,11 @@ export default class RuleAndActionsTraffic extends Vue {
         step: 1
     };
 
+    isMounted: boolean = false;
+    doMounted() {
+        this.isMounted = true;
+    }
+
     // choose-metrics 使用
     deviceMode: string = EDeviceMode.peopleCounting;
 
@@ -293,10 +302,6 @@ export default class RuleAndActionsTraffic extends Vue {
         equalMode: [],
         andMode: []
     };
-    isMounted: boolean = false;
-    doMounted() {
-        this.isMounted = true;
-    }
 
     clearConditions() {
         this.conditions = [];
@@ -306,17 +311,17 @@ export default class RuleAndActionsTraffic extends Vue {
     addCondition() {
         let tempCondition: ICondition = {
             fillValue: 0,
-            ruleMode: ERuleMode.singleToday,
+            ruleMode: ERuleMode.trafficSingleSiteToday,
             equalMode: EEqualMode.equal,
             andMode: EAndMode.and
         };
 
         switch (this.siteCountMode) {
             case ESiteCountMode.single:
-                tempCondition.ruleMode = ERuleMode.singleToday;
+                tempCondition.ruleMode = ERuleMode.trafficSingleSiteToday;
                 break;
             case ESiteCountMode.multiple:
-                tempCondition.ruleMode = ERuleMode.multipleToday;
+                tempCondition.ruleMode = ERuleMode.trafficMultipleSiteToday;
                 break;
         }
         this.conditions.push(tempCondition);
@@ -344,23 +349,25 @@ export default class RuleAndActionsTraffic extends Vue {
     initSelectItem() {
         this.selectItem.ruleModeSingle = [
             {
-                id: ERuleMode.singleToday,
-                text: this._("w_RuleAndActions_RuleStatusSingleToday")
+                id: ERuleMode.trafficSingleSiteToday,
+                text: this._("w_RuleAndActions_RuleStatusTrafficSingleToday")
             },
             {
-                id: ERuleMode.singleCurrent,
-                text: this._("w_RuleAndActions_RuleStatusSingleCurrent")
+                id: ERuleMode.trafficSingleSiteCurrent,
+                text: this._("w_RuleAndActions_RuleStatusTrafficSingleCurrent")
             }
         ];
 
         this.selectItem.ruleModeMutliple = [
             {
-                id: ERuleMode.multipleToday,
-                text: this._("w_RuleAndActions_RuleStatusMultipleToday")
+                id: ERuleMode.trafficMultipleSiteToday,
+                text: this._("w_RuleAndActions_RuleStatusTrafficMultipleToday")
             },
             {
-                id: ERuleMode.multipleCurrent,
-                text: this._("w_RuleAndActions_RuleStatusMultipleCurrent")
+                id: ERuleMode.trafficMultipleSiteCurrent,
+                text: this._(
+                    "w_RuleAndActions_RuleStatusTrafficMultipleCurrent"
+                )
             }
         ];
 
@@ -411,6 +418,14 @@ export default class RuleAndActionsTraffic extends Vue {
         this.siteCountMode = ESiteCountMode.single;
         this.initConditionSelectItem();
         this.clearConditions();
+    }
+
+     IStep2() {
+        return `
+            interface {
+                conditionTitle?: any;
+                conditionContent?: any;
+            }`;
     }
 
     ////////////////////////////////// Morris End //////////////////////////////////
@@ -621,13 +636,6 @@ export default class RuleAndActionsTraffic extends Vue {
         `;
     }
 
-    IStep2() {
-        return `
-            interface {
-                title?: any;
-                condition?: any;
-            }`;
-    }
 }
 </script>
 

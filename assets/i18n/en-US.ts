@@ -1095,10 +1095,11 @@ export default class LangObject {
     w_RuleAndActions_Frequently = 'How frequently to notify. Unit : Minutes';
     w_RuleAndActions_Minute = ' ( Fill in 0 if want to notice immediately )';
 
-    w_RuleAndActions_RuleStatusSingleToday = 'Today traffic-in number per storaccumulatede';
-    w_RuleAndActions_RuleStatusSingleCurrent = 'Current difference between traffic-in and traffic-out per store';
-    w_RuleAndActions_RuleStatusMultipleToday = 'Today accumulated traffic number based on the smallest unit';
-    w_RuleAndActions_RuleStatusMultipleCurrent = 'Current sum of difference between traffic-in and traffic-out based on the smallest unit';
+    w_RuleAndActions_Condition = '* Condition';
+    w_RuleAndActions_OccupancyThreshold = '* Occupancy Threshold';
+    w_RuleAndActions_OccupancyThresholdHigh = 'High';
+    w_RuleAndActions_OccupancyThresholdMedium = 'Medium';
+    w_RuleAndActions_OccupancyThresholdLow = 'Low';
 
     w_RuleAndActions_EqualStatusMore = 'More than';
     w_RuleAndActions_EqualStatusMoreEqual = 'More than or equal to';
@@ -1108,4 +1109,19 @@ export default class LangObject {
 
     w_RuleAndActions_AndStatusAnd = 'And';
     w_RuleAndActions_AndStatusOr = 'Or';
+
+    w_RuleAndActions_ThresholdStatusHigh = 'High threshold';
+    w_RuleAndActions_ThresholdStatusMedium = 'Medium threshold';
+    w_RuleAndActions_ThresholdStatusLow = 'Low threshold';
+
+    w_RuleAndActions_RuleStatusTrafficSingleToday = 'Today traffic-in number per storaccumulatede';
+    w_RuleAndActions_RuleStatusTrafficSingleCurrent = 'Current difference between traffic-in and traffic-out per store';
+    w_RuleAndActions_RuleStatusTrafficMultipleToday = 'Today accumulated traffic number based on the smallest unit';
+    w_RuleAndActions_RuleStatusTrafficMultipleCurrent = 'Current sum of difference between traffic-in and traffic-out based on the smallest unit';
+
+    w_RuleAndActions_RuleStatusOccupancySingleSite = 'Current occupancy based on the smallest unit';
+    w_RuleAndActions_RuleStatusOccupancyMultipleSite = 'Current average occupancy per';
+
+    w_RuleAndActions_RuleStatusVip = 'When a VIP visits';
+    w_RuleAndActions_RuleStatusBlacklist = 'When a Blacklist visits';
 }
