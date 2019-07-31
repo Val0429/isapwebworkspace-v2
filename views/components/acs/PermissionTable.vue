@@ -326,7 +326,8 @@ export default class PermissionTable extends Vue {
     deviceTypeItem: any = {
         door: EDeviceType.door,
         doorGroup: EDeviceType.doorGroup,
-        elevator: EDeviceType.elevator
+        elevator: EDeviceType.elevator,
+        elevatorGroup: EDeviceType.elevatorGroup
     };
 
     selectItemOriginal: any = {
