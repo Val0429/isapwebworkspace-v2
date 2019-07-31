@@ -919,7 +919,10 @@
                  * @uiLabel - ${this._("w_RuleAndActions_Active")}
                  * @uiColumnGroup - row
                  */
-                isActive: ${toEnumInterface(this.isActiveSelectItem as any, false)};
+                isActive: ${toEnumInterface(
+                    this.isActiveSelectItem as any,
+                    false
+                )};
 
 
                 /**
@@ -998,9 +1001,9 @@
                  * @uiColumnGroup - analysis
                  */
                 groupIds?: ${toEnumInterface(
-				this.deviceGroupSelectItem as any,
-				true
-			)};
+                    this.deviceGroupSelectItem as any,
+                    true
+                )};
 
 
                 /**
@@ -1014,54 +1017,52 @@
                  * @uiColumnGroup - analysis
                  */
                 deviceIds?: ${toEnumInterface(
-				this.deviceSelectItem as any,
-				true
-			)};
-
+                    this.deviceSelectItem as any,
+                    true
+                )};
 
             }
         `;
-		}
-	}
+    }
+}
 
-	export default ChooseMetrics;
-	Vue.component("choose-metrics", ChooseMetrics);
+export default ChooseMetrics;
+Vue.component("choose-metrics", ChooseMetrics);
 </script>
 
 <style lang="scss" scoped>
-	.select_report_period_button {
-		margin-top: 27px;
-		margin-bottom: 16px;
-	}
+.select_report_period_button {
+    margin-top: 27px;
+    margin-bottom: 16px;
+}
 
-	.select-site {
-		width: 89%;
-	}
+.select-site {
+    width: 89%;
+}
 
-	.tree {
-		background-color: #fff;
-		border: 1px solid #d1d1d1;
-		color: #bbb;
-	}
+.tree {
+    background-color: #fff;
+    border: 1px solid #d1d1d1;
+    color: #bbb;
+}
 
-	.select_date_button {
-		margin-top: 29px;
-	}
-	.submit {
-		background-color: #5c7895;
-		border: 1px solid #5c7895;
-	}
-	.reset {
-		background-color: #d7d7d7;
-		border: 1px solid #d7d7d7;
-	}
+.select_date_button {
+    margin-top: 29px;
+}
+.submit {
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+}
+.reset {
+    background-color: #d7d7d7;
+    border: 1px solid #d7d7d7;
+}
 
-	.select-area {
-		width: 98%;
-	}
+.select-area {
+    width: 98%;
+}
 
-	.time {
-		width: 21%;
-	}
-
+.time {
+    width: 21%;
+}
 </style>

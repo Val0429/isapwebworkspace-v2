@@ -382,7 +382,7 @@ export default class DwellTime extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
@@ -390,7 +390,7 @@ export default class DwellTime extends Vue {
                             returnValue
                         );
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -401,12 +401,12 @@ export default class DwellTime extends Vue {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -419,12 +419,12 @@ export default class DwellTime extends Vue {
         await this.$server
             .R("/partner/frs")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
                         this.serverIdSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -437,12 +437,12 @@ export default class DwellTime extends Vue {
         await this.$server
             .R("/partner/demographic")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
                         this.demographicIdSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -585,9 +585,10 @@ export default class DwellTime extends Vue {
             await this.$server
                 .C("/partner/frs/device", readParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response != undefined) {
-                        for (const returnValue of response) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             for (const returnValue of response) {
                                 this.$set(
                                     this.sourceIdSelectItem,
@@ -595,16 +596,9 @@ export default class DwellTime extends Vue {
                                     returnValue.sourceid
                                 );
                             }
-
-                            if (
-                                returnValue.statusCode === 500 ||
-                                returnValue.statusCode === 400
-                            ) {
-                                Dialog.error(this._("w_ErrorReadData"));
-                                return false;
-                            }
-                        }
-                    }
+                        },
+                        this._("w_ErrorReadData")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -636,17 +630,21 @@ export default class DwellTime extends Vue {
                 await this.$server
                     .R("/location/area/all", readParam)
                     .then((response: any) => {
-                        if (response != undefined) {
-                            for (const returnValue of response) {
-                                this.inputFormData.areaId = "";
-                                this.inputFormData.groupIds = [];
-                                this.$set(
-                                    this.areaSelectItem,
-                                    returnValue.objectId,
-                                    returnValue.name
-                                );
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                for (const returnValue of response) {
+                                    this.inputFormData.areaId = "";
+                                    this.inputFormData.groupIds = [];
+                                    this.$set(
+                                        this.areaSelectItem,
+                                        returnValue.objectId,
+                                        returnValue.name
+                                    );
+                                }
                             }
-                        }
+                        );
                     })
                     .catch((e: any) => {
                         return ResponseFilter.catchError(
@@ -673,15 +671,19 @@ export default class DwellTime extends Vue {
                 await this.$server
                     .R("/location/area/all", readParam)
                     .then((response: any) => {
-                        if (response != undefined) {
-                            for (const returnValue of response) {
-                                this.$set(
-                                    this.areaSelectItem,
-                                    returnValue.objectId,
-                                    returnValue.name
-                                );
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                for (const returnValue of response) {
+                                    this.$set(
+                                        this.areaSelectItem,
+                                        returnValue.objectId,
+                                        returnValue.name
+                                    );
+                                }
                             }
-                        }
+                        );
                     })
                     .catch((e: any) => {
                         return ResponseFilter.catchError(
@@ -714,16 +716,20 @@ export default class DwellTime extends Vue {
                 await this.$server
                     .R("/device/group/all", readParam)
                     .then((response: any) => {
-                        if (response != undefined) {
-                            for (const returnValue of response) {
-                                this.inputFormData.groupIds = [];
-                                this.$set(
-                                    this.deviceGroupSelectItem,
-                                    returnValue.objectId,
-                                    returnValue.name
-                                );
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                for (const returnValue of response) {
+                                    this.inputFormData.groupIds = [];
+                                    this.$set(
+                                        this.deviceGroupSelectItem,
+                                        returnValue.objectId,
+                                        returnValue.name
+                                    );
+                                }
                             }
-                        }
+                        );
                     })
                     .catch((e: any) => {
                         return ResponseFilter.catchError(
@@ -752,15 +758,19 @@ export default class DwellTime extends Vue {
                 await this.$server
                     .R("/device/group/all", readParam)
                     .then((response: any) => {
-                        if (response != undefined) {
-                            for (const returnValue of response) {
-                                this.$set(
-                                    this.deviceGroupSelectItem,
-                                    returnValue.objectId,
-                                    returnValue.name
-                                );
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                for (const returnValue of response) {
+                                    this.$set(
+                                        this.deviceGroupSelectItem,
+                                        returnValue.objectId,
+                                        returnValue.name
+                                    );
+                                }
                             }
-                        }
+                        );
                     })
                     .catch((e: any) => {
                         return ResponseFilter.catchError(
@@ -946,20 +956,15 @@ export default class DwellTime extends Vue {
             await this.$server
                 .C("/device/dwell-time", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_VSDwellTime_AddSuccess"));
                             this.pageToList();
-                        }
-                        if (
-                            returnValue.statusCode === 500 ||
-                            returnValue.statusCode === 400
-                        ) {
-                            Dialog.error(this._("w_VSDwellTime_ADDFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_VSDwellTime_ADDFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -990,20 +995,15 @@ export default class DwellTime extends Vue {
             await this.$server
                 .U("/device/dwell-time", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    for (const returnValue of response) {
-                        if (returnValue.statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_VSDwellTime_EditSuccess"));
                             this.pageToList();
-                        }
-                        if (
-                            returnValue.statusCode === 500 ||
-                            returnValue.statusCode === 400
-                        ) {
-                            Dialog.error(this._("w_VSDwellTime_EditFailed"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_VSDwellTime_EditFailed")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -1031,15 +1031,14 @@ export default class DwellTime extends Vue {
                     this.$server
                         .D("/device", deleteParam)
                         .then((response: any) => {
-                            for (const returnValue of response) {
-                                if (returnValue.statusCode === 200) {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
                                     this.pageToList();
-                                }
-                                if (returnValue.statusCode === 500) {
-                                    Dialog.error(this._("w_DeleteFailed"));
-                                    return false;
-                                }
-                            }
+                                },
+                                this._("w_DeleteFailed")
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);

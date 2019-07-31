@@ -481,17 +481,16 @@ export default class HumanDetection extends Vue {
             mode: this.inputFormData.mode
         };
 
+        this.groupNameItem = [];
         await this.$server
             .R("/device/group/all", body)
             .then((response: any) => {
-                this.groupNameItem = [];
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let item of response) {
                         let group = { id: item.objectId, text: item.name };
-
                         this.groupNameItem.push(group);
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -516,17 +515,16 @@ export default class HumanDetection extends Vue {
             }
         };
 
+        this.hdServerItem = [];
         await this.$server
             .R("/partner/human-detection", body)
             .then((response: any) => {
-                if (response != undefined) {
-                    this.hdServerItem = [];
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let item of response.results) {
                         let cms = { id: item.objectId, text: item.name };
-
                         this.hdServerItem.push(cms);
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -546,17 +544,16 @@ export default class HumanDetection extends Vue {
             }
         };
 
+        this.cmsItem = [];
         await this.$server
             .R("/partner/cms", body)
             .then((response: any) => {
-                if (response != undefined) {
-                    this.cmsItem = [];
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let item of response.results) {
                         let cms = { id: item.objectId, text: item.name };
-
                         this.cmsItem.push(cms);
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -573,11 +570,10 @@ export default class HumanDetection extends Vue {
         await this.$server
             .C("/partner/cms/device", body)
             .then((response: any) => {
-                Loading.hide();
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.devices = response;
                     this.initNVRItem();
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -773,15 +769,19 @@ export default class HumanDetection extends Vue {
             await this.$server
                 .R("/device/group/all", readParam)
                 .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            this.$set(
-                                this.deviceGroupSelectItem,
-                                returnValue.objectId,
-                                returnValue.name
-                            );
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response) {
+                                this.$set(
+                                    this.deviceGroupSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
+                            }
                         }
-                    }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -809,8 +809,14 @@ export default class HumanDetection extends Vue {
                     this.$server
                         .D("/device", deleteParam)
                         .then((response: any) => {
-                            Dialog.success(this._("w_Success"));
-                            (this.$refs.heatMapTable as any).reload();
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    Dialog.success(this._("w_Success"));
+                                    (this.$refs.heatMapTable as any).reload();
+                                }
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
@@ -882,7 +888,7 @@ export default class HumanDetection extends Vue {
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         this.sitesSelectItem[returnValue.objectId] =
                             returnValue.name;
@@ -890,7 +896,7 @@ export default class HumanDetection extends Vue {
                             returnValue
                         );
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -906,12 +912,12 @@ export default class HumanDetection extends Vue {
         await this.$server
             .R("/location/tree")
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
                         response
                     );
                     this.regionTreeItem.region = this.regionTreeItem.tree;
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -938,19 +944,23 @@ export default class HumanDetection extends Vue {
             await this.$server
                 .R("/location/area/all", readParam)
                 .then((response: any) => {
-                    if (response != undefined) {
-                        for (const returnValue of response) {
-                            if (data === undefined || data === "") {
-                                this.inputFormData.areaId = "";
-                                this.inputFormData.groupIds = [];
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response) {
+                                if (data === undefined || data === "") {
+                                    this.inputFormData.areaId = "";
+                                    this.inputFormData.groupIds = [];
+                                }
+                                this.$set(
+                                    this.areaSelectItem,
+                                    returnValue.objectId,
+                                    returnValue.name
+                                );
                             }
-                            this.$set(
-                                this.areaSelectItem,
-                                returnValue.objectId,
-                                returnValue.name
-                            );
                         }
-                    }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
@@ -1243,20 +1253,15 @@ export default class HumanDetection extends Vue {
             await this.$server
                 .C("/device/heatmap", addParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response[0] != undefined) {
-                        if (response[0].statusCode === 200) {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
                             Dialog.success(this._("w_Success"));
                             this.pageToList();
-                        }
-                        if (
-                            response[0].statusCode === 500 ||
-                            response[0].statusCode === 400
-                        ) {
-                            Dialog.error(this._("w_Error"));
-                            return false;
-                        }
-                    }
+                        },
+                        this._("w_Error")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -1290,18 +1295,15 @@ export default class HumanDetection extends Vue {
             await this.$server
                 .U("/device/heatmap", editParam)
                 .then((response: any) => {
-                    Loading.hide();
-                    if (response[0].statusCode === 200) {
-                        Dialog.success(this._("w_Success"));
-                        this.pageToList();
-                    }
-                    if (
-                        response[0].statusCode === 500 ||
-                        response[0].statusCode === 400
-                    ) {
-                        Dialog.error(this._("w_Error"));
-                        return false;
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Success"));
+                            this.pageToList();
+                        },
+                        this._("w_Error")
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
