@@ -299,7 +299,6 @@
 	// Report
 	import {
 		EIfAllSelected,
-		ETimeMode,
         EIncludedEmployee,
 	} from "@/components/Reports";
 
@@ -371,7 +370,7 @@
 		inputFormData: any = {
 			name: '',
 			firstSiteId: '',
-			isActive: EIncludedEmployee.yes,
+			isActive: '',
 
 			siteIds: [],
 			areaIds: [],
@@ -404,10 +403,7 @@
 
 		}
 
-		mounted() {
-			// 如果沒有變更選擇，則是傳送預設值到父元件
-			this.updateActive(this.inputFormData.isActive);
-		}
+		mounted() {}
 
 		initSelectItem() {
 			this.ifAllSitesSelectItem = [

@@ -9,7 +9,6 @@
             <div
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
             >
                 <iv-card :label="_('w_RuleAndActions_RuleList')">
                     <template #toolbox>
@@ -57,7 +56,6 @@
             <div
                 key="transition_2"
                 v-show="transition.step === 2"
-                :label="'Empty 2'"
             >
                 <iv-auto-card
                     :visible="true"
@@ -89,7 +87,6 @@
             <div
                 key="transition_3"
                 v-show="transition.step === 3"
-                :label="'Empty 3'"
             >
                 <iv-auto-card
                     :visible="true"
@@ -259,6 +256,7 @@ export default class RuleAndActionsTraffic extends Vue {
 
     // choose-metrics 使用
     deviceMode: string = EDeviceMode.peopleCounting;
+
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
@@ -456,7 +454,7 @@ export default class RuleAndActionsTraffic extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
-    ////////////////////  以下資料來自 step1 choose-metrics   ////////////////////
+    ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {
         console.log("name ~ ", name);
         this.inputFormData.name = name;
@@ -513,7 +511,7 @@ export default class RuleAndActionsTraffic extends Vue {
         console.log("minutes ~ ", minutes);
         this.inputFormData.minutes = minutes;
     }
-    ////////////////////  以上資料來自 step3 Actions   ////////////////////
+    //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     async doDelete() {
         await Dialog.confirm(

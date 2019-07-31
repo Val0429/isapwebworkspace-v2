@@ -9,7 +9,6 @@
             <div
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
             >
                 <iv-card :label="_('w_RuleAndActions_RuleList')">
                     <template #toolbox>
@@ -52,11 +51,41 @@
                 </iv-card>
             </div>
 
+             <!-- view -->
+            <!-- <div
+                key="transition_2"
+                v-show="transition.step === 2"
+            >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_RuleAndActions_RuleAView') "
+                >
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
+
+                    <iv-form
+                        :interface="IViewForm()"
+                        :value="inputFormData"
+                    >
+                    </iv-form>
+
+                    <template #footer>
+                        <b-button
+                            variant="dark"
+                            size="lg"
+                            @click="pageToList()"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
+
+                </iv-auto-card>
+            </div> -->
+
             <!-- add & edit -->
             <div
                 key="transition_3"
                 v-show="transition.step === 3"
-                :label="'Empty 3'"
             >
                 <iv-auto-card
                     :visible="true"
