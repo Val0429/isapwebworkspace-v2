@@ -9,7 +9,6 @@
             <div
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
             >
                 <iv-card :label="_('w_RuleAndActions_RuleList')">
                     <template #toolbox>
@@ -52,34 +51,154 @@
                 </iv-card>
             </div>
 
-            <iv-step-progress
-                ref="step"
+            <!-- view -->
+            <!-- <div
                 key="transition_2"
                 v-show="transition.step === 2"
-                @mounted="doMounted"
             >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_RuleAndActions_RuleAView') "
+                >
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
 
-                <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
-                <template #1>
-                    Step 1
-                </template>
+                    <iv-form
+                        :interface="IViewForm()"
+                        :value="inputFormData"
+                    >
+                    </iv-form>
 
-                <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
-                <template #2>
-                    Step 2
-                </template>
+                    <template #footer>
+                        <b-button
+                            variant="dark"
+                            size="lg"
+                            @click="pageToList()"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
 
-                <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
-                <template #3>
-                    Step 3
-                </template>
+                </iv-auto-card>
+            </div> -->
 
-            </iv-step-progress>
+            <!-- add & edit -->
+            <div
+                key="transition_3"
+                v-show="transition.step === 3"
+            >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_User_ViewUser') "
+                >
+
+                    <iv-step-progress
+                        ref="step"
+                        @mounted="doMounted"
+                    >
+
+                        <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
+                        <template #1>
+                            Step 1
+                        </template>
+
+                        <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
+                        <template #2>
+
+                            <iv-form
+                                :interface="IStep2()"
+                                :value="step2Item"
+                                @submit="stepTo3($event)"
+                            >
+                                <template #conditionTitle="{ $attrs, $listeners }">
+                                    <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
+                                </template>
+
+                                <template #conditionContent="{ $attrs, $listeners }">
+                                    <b-form-group class="col-md-12">
+                                        <b-row
+                                            v-for="(value, index) in conditions"
+                                            :key="'condition__' + index"
+                                        >
+                                            <b-col class="col-md-10">
+                                                <b-row>
+                                                    <b-col class="col-md-3">{{ _('w_RuleAndActions_VipConditionText1') }}</b-col>
+                                                    <b-col class="col-md-2">
+                                                        <iv-form-selection
+                                                            v-model="conditions[index].equalMode"
+                                                            :plain="true"
+                                                            :options="selectItem.equalMode"
+                                                        ></iv-form-selection>
+                                                    </b-col>
+                                                    <b-col class="col-md-1">
+                                                        <iv-form-number
+                                                            v-model="conditions[index].fillValueTimes"
+                                                            :plain="true"
+                                                            min="0"
+                                                        ></iv-form-number>
+                                                    </b-col>
+                                                    <b-col class="col-md-2">{{ _('w_RuleAndActions_VipConditionText2') }}</b-col>
+                                                    <b-col class="col-md-1">
+                                                        <iv-form-number
+                                                            v-model="conditions[index].fillValueDays"
+                                                            :plain="true"
+                                                            min="0"
+                                                        ></iv-form-number>
+                                                    </b-col>
+                                                    <b-col class="col-md-1">{{ _('w_RuleAndActions_VipConditionText3') }}</b-col>
+                                                    <b-col class="col-md-2">
+                                                        <iv-form-selection
+                                                            v-model="conditions[index].andMode"
+                                                            :plain="true"
+                                                            :options="selectItem.andMode"
+                                                        ></iv-form-selection>
+                                                    </b-col>
+                                                </b-row>
+                                            </b-col>
+
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    class="button addButton"
+                                                    variant="success"
+                                                    type="button"
+                                                    @click="addCondition()"
+                                                >
+                                                    <i class="fa fa-plus"></i>
+                                                </b-button>
+                                            </b-col>
+
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    v-show="conditions.length > 1"
+                                                    class="button"
+                                                    variant="danger"
+                                                    type="button"
+                                                    @click="removeCondition(index)"
+                                                >
+                                                    <i class="fa fa-minus"></i>
+                                                </b-button>
+                                            </b-col>
+                                        </b-row>
+                                    </b-form-group>
+                                </template>
+                            </iv-form>
+                        </template>
+
+                        <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
+                        <template #3>
+                            Step 3
+                        </template>
+
+                    </iv-step-progress>
+
+                </iv-auto-card>
+            </div>
 
         </iv-auto-transition>
 
     </div>
 </template>
+
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
@@ -88,10 +207,21 @@ import { Vue, Component } from "vue-property-decorator";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
+// custom
+import { EDeviceMode, IValSelectItem } from "@/components/Reports";
+import { EEqualMode, EAndMode } from "@/components/RuleAndActions";
+
 // Service
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+
+interface ICondition {
+    fillValueTimes: number;
+    fillValueDays: number;
+    equalMode: EEqualMode;
+    andMode: EAndMode;
+}
 
 @Component({
     components: {}
@@ -103,33 +233,121 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         step: 1
     };
 
-    // choose-metrics 使用
-    isSelected: any = [];
-    tableMultiple: boolean = true;
-    selectedDetail: any = [];
-
     isMounted: boolean = false;
     doMounted() {
         this.isMounted = true;
     }
 
-    created() {}
+    // choose-metrics 使用
+    isSelected: any = [];
+    tableMultiple: boolean = true;
+    selectedDetail: any = [];
+    ////////////////////////////////// Morris Start //////////////////////////////////
+
+    step2Item: any = {
+        condition: []
+    };
+    conditions: ICondition[] = [];
+
+    selectItem: {
+        ruleMode: IValSelectItem[];
+        ruleModeSingle: IValSelectItem[];
+        ruleModeMutliple: IValSelectItem[];
+        equalMode: IValSelectItem[];
+        andMode: IValSelectItem[];
+    } = {
+        ruleMode: [],
+        ruleModeSingle: [],
+        ruleModeMutliple: [],
+        equalMode: [],
+        andMode: []
+    };
+
+    clearConditions() {
+        this.conditions = [];
+        this.addCondition();
+    }
+
+    addCondition() {
+        let tempCondition: ICondition = {
+            fillValueTimes: 0,
+            fillValueDays: 0,
+            equalMode: EEqualMode.more,
+            andMode: EAndMode.and
+        };
+
+        this.conditions.push(tempCondition);
+    }
+
+    removeCondition(index: number) {
+        this.conditions.splice(index, 1);
+    }
+
+    initSelectItem() {
+        this.selectItem.equalMode = [
+            {
+                id: EEqualMode.more,
+                text: this._("w_RuleAndActions_EqualStatusMore")
+            },
+            {
+                id: EEqualMode.moreEqual,
+                text: this._("w_RuleAndActions_EqualStatusMoreEqual")
+            },
+            {
+                id: EEqualMode.equal,
+                text: this._("w_RuleAndActions_EqualStatusEqual")
+            },
+            {
+                id: EEqualMode.less,
+                text: this._("w_RuleAndActions_EqualStatusLess")
+            },
+            {
+                id: EEqualMode.lessEqual,
+                text: this._("w_RuleAndActions_EqualStatusLessEqual")
+            }
+        ];
+
+        this.selectItem.andMode = [
+            { id: EAndMode.and, text: this._("w_RuleAndActions_AndStatusAnd") },
+            { id: EAndMode.or, text: this._("w_RuleAndActions_AndStatusOr") }
+        ];
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
+    }
+
+    IStep2() {
+        return `
+            interface {
+                conditionTitle?: any;
+                conditionContent?: any;
+            }`;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.conditions);
+    }
+
+    ////////////////////////////////// Morris End //////////////////////////////////
+
+    created() {
+        this.initSelectItem();
+    }
 
     mounted() {}
 
     pageToView() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
-    }
-
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-    }
-
-    pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
     }
 
     selectedItem(data) {
@@ -220,7 +438,6 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
 
 <style lang="scss" scoped>
 </style>
-
 
 
 
