@@ -178,13 +178,15 @@ export class CampaignDashboard extends Vue {
         this.$server
             .C("/report/complex", readParam) //TOD wiat API
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.anlysisData.pageType = this.pageType;
 
+                    // weather
                     if (response.weather) {
                         this.weather = response.weather.icon;
                     }
 
+                    // budget
                     if (response.budget) {
                         this.anlysisData.budget = {
                             sign:
@@ -202,6 +204,8 @@ export class CampaignDashboard extends Vue {
                             value: response.budget.variety
                         };
                     }
+
+                    // traffic Gain Per
                     if (response.trafficGainPer) {
                         this.anlysisData.trafficGainPer = {
                             sign:
@@ -219,7 +223,7 @@ export class CampaignDashboard extends Vue {
                             value: response.trafficGainPer.variety
                         };
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

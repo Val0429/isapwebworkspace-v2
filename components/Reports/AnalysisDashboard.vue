@@ -390,13 +390,15 @@ export class AnalysisDashboard extends Vue {
         this.$server
             .C("/report/complex", readParam)
             .then((response: any) => {
-                if (response != undefined) {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.anlysisData.pageType = this.pageType;
 
+                    // weather
                     if (response.weather) {
                         this.weather = response.weather.icon;
                     }
 
+                    // people Counting
                     if (response.peopleCounting) {
                         this.anlysisData.traffic = {
                             sign:
@@ -414,6 +416,8 @@ export class AnalysisDashboard extends Vue {
                             value: response.peopleCounting.variety
                         };
                     }
+
+                    // human Detection
                     if (response.humanDetection) {
                         this.anlysisData.averageOccupancy = {
                             sign:
@@ -432,6 +436,7 @@ export class AnalysisDashboard extends Vue {
                         };
                     }
 
+                    // average Dwell Time
                     if (response.averageDwellTime) {
                         this.anlysisData.averageDwellTime = {
                             sign:
@@ -450,6 +455,7 @@ export class AnalysisDashboard extends Vue {
                         };
                     }
 
+                    // demographic
                     if (response.demographic) {
                         this.anlysisData.demographic = {
                             sign:
@@ -472,6 +478,8 @@ export class AnalysisDashboard extends Vue {
                             valueRatio2: response.demographic.femalePercent
                         };
                     }
+
+                    // vip/Blacklist
                     if (response.vipBlacklist) {
                         this.anlysisData.vipBlacklist = {
                             sign:
@@ -495,6 +503,8 @@ export class AnalysisDashboard extends Vue {
                             valueRatio2: response.vipBlacklist.blacklistPercent
                         };
                     }
+
+                    // repeat Customer
                     if (response.repeatCustomer) {
                         this.anlysisData.repeatCustomer = {
                             sign:
@@ -512,6 +522,8 @@ export class AnalysisDashboard extends Vue {
                             value: response.repeatCustomer.variety
                         };
                     }
+
+                    // revenue
                     if (response.revenue) {
                         this.anlysisData.revenue = {
                             sign:
@@ -529,6 +541,8 @@ export class AnalysisDashboard extends Vue {
                             value: response.revenue.variety
                         };
                     }
+
+                    // transaction
                     if (response.transaction) {
                         this.anlysisData.transaction = {
                             sign:
@@ -546,6 +560,8 @@ export class AnalysisDashboard extends Vue {
                             value: response.transaction.variety
                         };
                     }
+
+                    // conversion
                     if (response.conversion) {
                         this.anlysisData.conversion = {
                             sign:
@@ -563,6 +579,8 @@ export class AnalysisDashboard extends Vue {
                             value: response.conversion.variety
                         };
                     }
+
+                    // ASP
                     if (response.asp) {
                         this.anlysisData.asp = {
                             sign:
@@ -579,7 +597,7 @@ export class AnalysisDashboard extends Vue {
                             value: response.asp.variety
                         };
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

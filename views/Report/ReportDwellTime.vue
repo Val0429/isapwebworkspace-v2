@@ -1138,9 +1138,13 @@ export default class ReportDwellTime extends Vue {
             .R("/device", readParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    if (response.results != undefined  && response.results.length > 0) {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
                         for (const returnValue of response.results) {
-                            tempDeviceSelectItem[returnValue.objectId] = returnValue.name;
+                            tempDeviceSelectItem[returnValue.objectId] =
+                                returnValue.name;
                         }
                         this.deviceSelectItem = tempDeviceSelectItem;
                     }
@@ -1158,13 +1162,16 @@ export default class ReportDwellTime extends Vue {
             .R("/user/user")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                     if (response.results != undefined && response.results.length > 0) {
-                         for (const returnValue of response.results) {
-                        tempUserSelectItem[
-                            returnValue.objectId
-                        ] = `${returnValue.username} - ${returnValue.email}`;
-                    }
-                    this.userSelectItem = tempUserSelectItem;
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (const returnValue of response.results) {
+                            tempUserSelectItem[
+                                returnValue.objectId
+                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        }
+                        this.userSelectItem = tempUserSelectItem;
                     }
                 });
             })
@@ -1207,12 +1214,11 @@ export default class ReportDwellTime extends Vue {
         // await this.$server
         //     .C("/report/demographic/summary", param)
         //     .then((response: any) => {
-        //          Loading.hide();
-        //         if (response !== undefined) {
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
         //             this.responseData = response;
         //             this.officeHourItemDetail = this.responseData.officeHours;
         //             this.resolveSummary();
-        //         }
+        //         });
         //     })
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);

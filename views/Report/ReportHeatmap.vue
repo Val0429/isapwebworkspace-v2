@@ -518,14 +518,13 @@ export default class ReportHeatmap extends Vue {
                         response.results != undefined &&
                         response.results.length > 0
                     ) {
-                         for (const returnValue of response.results) {
-                        tempUserSelectItem[
-                            returnValue.objectId
-                        ] = `${returnValue.username} - ${returnValue.email}`;
+                        for (const returnValue of response.results) {
+                            tempUserSelectItem[
+                                returnValue.objectId
+                            ] = `${returnValue.username} - ${returnValue.email}`;
+                        }
+                        this.userSelectItem = tempUserSelectItem;
                     }
-                    this.userSelectItem = tempUserSelectItem;
-                    }
-                   
                 });
             })
             .catch((e: any) => {
@@ -684,7 +683,7 @@ export default class ReportHeatmap extends Vue {
         return title;
     }
 
-    checkDateTheSameDay(startDate: Date, endDate: Date) {
+    checkDateTheSameDay(startDate: Date, endDate: Date): boolean {
         return (
             Datetime.DateToZero(endDate).getTime() ===
             Datetime.DateToZero(startDate).getTime()
@@ -1272,29 +1271,27 @@ export default class ReportHeatmap extends Vue {
         // const param = this.filterData;
         // this.filterData.startDate = this.dayArrayData;
         // this.filterData.endDate = this.dayArrayData;
-        //
+
         // console.log(this.filterData);
-        //
+
         // await this.$server
         //     .C("/report/heatmap/summary", param)
         //     .then((response: any) => {
-        //         if (response !== undefined) {
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
         //             this.responseData = response;
         //             this.officeHourItemDetail = this.responseData.officeHours;
         //             this.resolveSummary();
-        //             if (
-        //                 this.checkDateTheSameDay(
-        //                     this.filterData.startDate,
-        //                     this.filterData.endDate
-        //                 )
-        //             ) {
+        //             let tempCheck = this.checkDateTheSameDay(
+        //                 this.filterData.startDate,
+        //                 this.filterData.endDate
+        //             );
+        //             if (tempCheck) {
         //                 this.initHourArray();
         //             } else {
         //                 this.initDayArray();
         //             }
         //             this.firstSortOutChartData(this.responseData.summaryDatas);
-        //
-        //         }
+        //         });
         //     })
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
