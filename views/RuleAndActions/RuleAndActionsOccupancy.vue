@@ -442,7 +442,7 @@ export default class RuleAndActionsOccupancy extends Vue {
         return `
             interface {
 
-                thresholdeTitle? any;
+                thresholdeTitle?: any;
                 
                 /**
                  * @uiLabel - ${this._(
@@ -472,6 +472,10 @@ export default class RuleAndActionsOccupancy extends Vue {
 
                 conditionContent?: any;
             }`;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.conditions);
     }
 
     ////////////////////////////////// Morris End //////////////////////////////////
