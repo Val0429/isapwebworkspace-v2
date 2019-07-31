@@ -250,6 +250,7 @@ export default class RuleAndActionsTraffic extends Vue {
 
     // choose-metrics 使用
     deviceMode: string = EDeviceMode.peopleCounting;
+
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
@@ -441,7 +442,7 @@ export default class RuleAndActionsTraffic extends Vue {
         console.log(this.conditions);
     }
 
-    ////////////////////  以下資料來自 step1 choose-metrics   ////////////////////
+    ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {
         console.log("name ~ ", name);
         this.inputFormData.name = name;
@@ -498,7 +499,7 @@ export default class RuleAndActionsTraffic extends Vue {
         console.log("minutes ~ ", minutes);
         this.inputFormData.minutes = minutes;
     }
-    ////////////////////  以上資料來自 step3 Actions   ////////////////////
+    //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     async doDelete() {
         await Dialog.confirm(
