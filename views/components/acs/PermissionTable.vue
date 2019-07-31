@@ -795,15 +795,27 @@ export default class PermissionTable extends Vue {
         this.pageToList();
         return;
     };
-    let err = response.errors.find(x=>x.type=="accessLevelIsNotInCCure");
-    if(err){
-        let messages = `<table class="table"><tr><th>${this._("w_Door")}</th><th>${this._("w_TimeSchedule")}</th></tr><tr>`;
+    
+    if(response.errors.find(x=>x.type=="accessLevelIsNotInCCure")){
+        let messages = `<table class="table"><tr><th>${this._("w_Door")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;
         for(let error of response.errors.filter(x=>x.type=="accessLevelIsNotInCCure")){
-            messages+=`<tr><td>${error.doorname || ""}</td><td>${error.timename  ||""}</td><td>${error.message || ""}</td></tr>`;
+            messages+=`<tr><td>${error.devicename || ""}</td><td>${error.timename  ||""}</td><td>${error.message || ""}</td></tr>`;
         }
         messages+="</tr></table>"
         Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
                
+    }else if(response.errors.find(x=>x.type=="clearanceIsNotInCCure")){
+        let messages = ``;
+        for(let permTable of response.permTableNames){
+            messages+=`${this._("w_PermissionTable")}: ${permTable.permissionTableName || ""}<br/>`;
+            messages+=`<table class="table"><tr><th>${this._("w_Door")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;             
+            for(let dev of permTable.devices){                
+                messages+=`<tr><td>${dev.devicename || ""}</td><td>${dev.timename  ||""}</td><td>${dev.message || ""}</td></tr>`;
+            }
+             messages+="</tr></table>"
+        }
+       
+        Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
     }else{
         this.pageToList();
     }
