@@ -1080,7 +1080,7 @@ export default class LangObject implements ILang {
 
     w_RuleAndActions_NotifyTarget = '* Notify Target';
     w_RuleAndActions_StoreManager = 'Store manager';
-    w_RuleAndActions_UsersHavePermission= 'Users who have permission of store';
+    w_RuleAndActions_UsersHavePermission = 'Users who have permission of store';
     w_RuleAndActions_UsersAndUserGroup = 'Users / User Group';
     w_RuleAndActions_Users = 'Users';
     w_RuleAndActions_UserGroup = 'User Group';
@@ -1089,4 +1089,18 @@ export default class LangObject implements ILang {
 
     w_RuleAndActions_Frequently = 'How frequently to notify. Unit : Minutes';
     w_RuleAndActions_Minute = ' ( Fill in 0 if want to notice immediately )';
+
+    w_RuleAndActions_RuleStatusSingleToday = 'Today traffic-in number per storaccumulatede';
+    w_RuleAndActions_RuleStatusSingleCurrent = 'Current difference between traffic-in and traffic-out per store';
+    w_RuleAndActions_RuleStatusMultipleToday = 'Today accumulated traffic number based on the smallest unit';
+    w_RuleAndActions_RuleStatusMultipleCurrent = 'Current sum of difference between traffic-in and traffic-out based on the smallest unit';
+
+    w_RuleAndActions_EqualStatusMore = 'More than';
+    w_RuleAndActions_EqualStatusMoreEqual = 'More than or equal to';
+    w_RuleAndActions_EqualStatusEqual = 'Equal to';
+    w_RuleAndActions_EqualStatusLess = 'Less than';
+    w_RuleAndActions_EqualStatusLessEqual = 'Less than or equal to';
+
+    w_RuleAndActions_AndStatusAnd = 'And';
+    w_RuleAndActions_AndStatusOr = 'Or';
 }
