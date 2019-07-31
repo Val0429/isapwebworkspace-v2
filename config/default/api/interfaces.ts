@@ -243,11 +243,13 @@ interface IDeviceGroupAddData {
     areaId: string;
     name: string;
     mode: string;
+    threshold: object;
 }
 
 interface IDeviceGroupEditData {
     objectId: string;
     name?: string;
+    threshold?: object;
 }
 
 export { IDeviceGroupAddData, IDeviceGroupEditData };
@@ -258,6 +260,7 @@ interface IAreaAddData {
     name: string;
     imageBase64: string;
     mapBase64: string;
+    threshold: object;
 }
 
 interface IAreaEditData {
@@ -265,6 +268,7 @@ interface IAreaEditData {
     name: string;
     imageBase64?: string;
     mapBase64?: string;
+    threshold?: object;
 }
 
 export { IAreaAddData, IAreaEditData };

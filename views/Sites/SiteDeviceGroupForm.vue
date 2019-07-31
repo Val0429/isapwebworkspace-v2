@@ -29,7 +29,7 @@
 
                 <template #areaName="{$attrs, $listeners}">
                     <iv-form-selection
-                        v-if="transition.step === 11 && isEmptyObject(area)"
+                        v-if="transition.step === 11 && isEmptyObject(area.objectId)"
                         v-bind="$attrs"
                         :value="$attrs.value ? $attrs.value : ''"
                         v-on="$listeners"
@@ -39,7 +39,7 @@
                     </iv-form-selection>
 
                     <iv-form-label
-                        v-if="transition.step === 11 && !isEmptyObject(area)"
+                        v-if="transition.step === 11 && !isEmptyObject(area.objectId)"
                         v-bind="$attrs"
                         v-on="$listeners"
                         :value="area ? area.name : '' "
@@ -205,6 +205,7 @@ export class SiteDeviceGroupForm extends Vue {
     }
 
     async saveDeviceGroup(data) {
+        let threshold = { high: data.high, medium: data.medium, low: data.low };
         if (this.transition.step === 11) {
             const datas: IDeviceGroupAddData[] = [
                 {
@@ -212,8 +213,8 @@ export class SiteDeviceGroupForm extends Vue {
                         ? this.area.objectId
                         : data.areaName,
                     name: data.name,
-                    mode: data.mode
-                    //TO DO add high medium low param
+                    mode: data.mode,
+                    threshold: threshold
                 }
             ];
 
@@ -240,7 +241,8 @@ export class SiteDeviceGroupForm extends Vue {
             const datas: IDeviceGroupEditData[] = [
                 {
                     objectId: data.objectId,
-                    name: data.name
+                    name: data.name,
+                    threshold: threshold
                 }
             ];
 

@@ -329,6 +329,13 @@ export default class Site extends Vue {
     selectedArea(data) {
         if (data && data.objectId) {
             this.area = data;
+
+            this.area.high = data.threshold.high ? data.threshold.high : 0;
+            this.area.medium = data.threshold.medium
+                ? data.threshold.medium
+                : 0;
+            this.area.low = data.threshold.low ? data.threshold.low : 0;
+
             this.deviceGroupParams = {
                 areaId: data.objectId
             };
@@ -340,6 +347,14 @@ export default class Site extends Vue {
     selectedDeviceGroup(data) {
         if (data && data.objectId) {
             this.deviceGroup = data;
+
+            this.deviceGroup.high = data.threshold.high
+                ? data.threshold.high
+                : 0;
+            this.deviceGroup.medium = data.threshold.medium
+                ? data.threshold.medium
+                : 0;
+            this.deviceGroup.low = data.threshold.low ? data.threshold.low : 0;
         } else {
             this.clearDeviceGroupData();
         }
