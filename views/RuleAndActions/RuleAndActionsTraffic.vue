@@ -254,12 +254,14 @@ export default class RuleAndActionsTraffic extends Vue {
         this.isMounted = true;
     }
 
-    // choose-metrics 使用
-    deviceMode: string = EDeviceMode.peopleCounting;
 
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
+
+
+    // choose-metrics 使用
+    deviceMode: string = EDeviceMode.peopleCounting;
 
     inputFormData: any = {
         // choose-metrics
