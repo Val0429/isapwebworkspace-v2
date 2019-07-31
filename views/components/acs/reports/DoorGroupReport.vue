@@ -25,7 +25,10 @@ export default class DoorGroupReport extends Vue  {
     permissions:any[]=[];
     created(){        
         this.fields = 
-       [       
+        [       
+            // {
+            //     key:"accessObjectId"
+            // },
             {
                 key:"DoorGroupName",
                 label: this._("w_DoorGroup")
@@ -109,19 +112,26 @@ export default class DoorGroupReport extends Vue  {
     let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter||{});
     this.records=[];
     for(let member of resp.results){
-        for(let tableid of member.PermissionTable){
-            let newMember = Object.assign({},member);
+        for(let tableid of member.PermissionTable){            
             let permission = this.permissions.find(x=>x.tableid==tableid);
             if(!permission || !permission.accesslevels)continue;
-            for(let access of permission.accesslevels){
-                newMember.PermissionName = permission.tablename;
-                newMember.TimeSchedule = access.timeschedule.timename;
-                newMember.DoorName = access.door?access.door.doorname:'';
-                newMember.DoorGroupName = access.doorgroup?access.doorgroup.groupname:'';
-                //no need to display multiple row for the same access level
-                let exists = this.records.find(x=>x.PermissionName == newMember.PermissionName && x.TimeSchedule == newMember.TimeSchedule && x.DoorName == newMember.DoorName );
-                if(!exists)this.records.push(newMember);
-                this.records.push(newMember);
+            for(let access of permission.accesslevels){                
+                if(!access.doorgroup)continue;
+                for(let door of access.doorgroup.doors){
+                    let newMember = Object.assign({},member);
+                    newMember.accessObjectId = access.objectId;
+                    newMember.PermissionName = permission.tablename;
+                    newMember.TimeSchedule = access.timeschedule.timename;
+                    newMember.DoorGroupName = access.doorgroup.groupname;
+                    newMember.doorGroupObjectId = access.doorgroup.objectId;
+                    newMember.DoorName = door.doorname;
+                    //no need to display multiple row for the same access level
+                    let exists = this.records.find(x=> x.objectId == newMember.objectId && 
+                                                    x.accessObjectId == newMember.accessObjectId &&                                                     
+                                                    x.doorGroupObjectId == newMember.doorGroupObjectId );
+                    if(!exists)this.records.push(newMember);
+                }
+                
             }
             
         }
