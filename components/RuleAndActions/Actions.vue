@@ -1,5 +1,8 @@
 <template>
-    <iv-form :interface="IFilterConditionForm()">
+    <iv-form
+        :interface="IFilterConditionForm()"
+        @update:minutes="updateMinutes($event)"
+    >
 
         <template #notifyMethodTitle="{ $attrs, $listeners }">
             <p class="ml-3 mr-3 ">{{ _('w_RuleAndActions_NotifyMethod') }}</p>
@@ -14,13 +17,14 @@
                 :key="option.value"
                 :value="option.value"
                 inline
+                @change="changeNotifyMethod"
             >
                 {{ option.text }}
             </b-form-checkbox>
         </template>
 
         <template #notifyTargetTitle="{ $attrs, $listeners }">
-            <p class="ml-3 mr-3 ">{{ _('w_RuleAndActions_NotifyTarget') }}</p>
+            <p class="ml-3 mr-3">{{ _('w_RuleAndActions_NotifyTarget') }}</p>
         </template>
 
         <template #notifyTargetSelect="{ $attrs, $listeners }">
@@ -28,10 +32,10 @@
                 v-for="option in notifyTargetSelectItem"
                 v-model="notifyTargetSelected"
                 name="notifyMethodSelect"
-                class=""
                 :key="option.value"
                 :value="option.value"
                 inline
+                @change="changeNotifyTarget"
             >
                 {{ option.text }}
             </b-form-checkbox>
@@ -51,6 +55,9 @@
                 v-on="$listeners"
                 v-model="inputFormData.userIds"
                 class="user"
+                :options="userSelectItem"
+                :multiple="true"
+                @input="selectUserIds"
             >
             </iv-form-selection>
         </template>
@@ -63,11 +70,15 @@
         </template>
 
         <template #groupIds="{ $attrs, $listeners }">
+
             <iv-form-selection
                 v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
                 v-on="$listeners"
                 v-model="inputFormData.groupIds"
                 class="user"
+                :options="userGroupSelectItem"
+                :multiple="true"
+                @input="selectUserGroupIds"
             >
             </iv-form-selection>
         </template>
@@ -101,10 +112,10 @@ export class Actions extends Vue {
     notifyTargetSelectItem: any = [];
 
     // user, userGroup
-    userSelectItem: any = {};
-    userGroupSelectItem: any = {};
+    userSelectItem: any = [];
+    userGroupSelectItem: any = [];
 
-    // be selected
+    // checkbox be selected
     notifyMethodSelected: any = [ENotifyMethod.email];
     notifyTargetSelected: any = [
         EWhoNotify.storeManager,
@@ -114,8 +125,9 @@ export class Actions extends Vue {
     ];
 
     inputFormData: any = {
-        userIds: "",
-        groupIds: ""
+        userIds: [],
+        groupIds: [],
+        minutes: 0
     };
 
     created() {
@@ -127,10 +139,15 @@ export class Actions extends Vue {
         this.initSelectItemUserGroup();
     }
 
-    mounted() {}
+    mounted() {
+        // 如果沒有變更選擇，則是傳送預設值到父元件
+        this.changeNotifyMethod(this.notifyMethodSelected);
+        this.changeNotifyTarget(this.notifyTargetSelected);
+    }
 
     initSelectItem() {
         this.notifyMethodSelectItem = [
+            // 註解掉的是未來會增加的
             // { value: ENotifyMethod.mobileApp, text: this._("w_RuleAndActions_MobileApp") },
             // { value: ENotifyMethod.sms, text: this._("w_RuleAndActions_SMS") },
             {
@@ -158,17 +175,17 @@ export class Actions extends Vue {
     }
 
     async initSelectItemUsers() {
-        let tempUserSelectItem = {};
+
+        this.userSelectItem = [];
 
         await this.$server
             .R("/user/user")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        tempUserSelectItem[returnValue.objectId] =
-                            returnValue.username;
+                        let user = { id: returnValue.objectId, text: returnValue.username };
+                        this.userSelectItem.push(user);
                     }
-                    this.userSelectItem = tempUserSelectItem;
                 });
             })
             .catch((e: any) => {
@@ -177,24 +194,47 @@ export class Actions extends Vue {
     }
 
     async initSelectItemUserGroup() {
-        let tempUserGroupSelectItem = {};
-        this.userGroupSelectItem = {};
+
+        this.userGroupSelectItem = [];
 
         await this.$server
             .R("/user/group/all")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        this.$set(this.userGroupSelectItem, returnValue.objectId, returnValue.name)
-                        tempUserGroupSelectItem[returnValue.objectId] =
-                            returnValue.name;
+                        let userGroup = { id: returnValue.objectId, text: returnValue.name };
+                        this.userGroupSelectItem.push(userGroup);
                     }
-                    this.userGroupSelectItem = tempUserGroupSelectItem;
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+    }
+
+    changeNotifyMethod(selected: object) {
+        this.notifyMethodSelected = selected;
+        this.$emit('notify-method', this.notifyMethodSelected);
+    }
+
+    changeNotifyTarget(selected: object) {
+        this.notifyTargetSelected = selected;
+        this.$emit('notify-target', this.notifyTargetSelected);
+    }
+
+    selectUserIds(selected: object) {
+        this.inputFormData.userIds = selected;
+        this.$emit('user-ids', this.inputFormData.userIds);
+    }
+
+    selectUserGroupIds(selected: object) {
+        this.inputFormData.groupIds = selected;
+        this.$emit('user-group-ids', this.inputFormData.groupIds);
+    }
+
+    updateMinutes(minutes: number) {
+        this.inputFormData.minutes = minutes;
+        this.$emit('minutes', this.inputFormData.minutes);
     }
 
     IFilterConditionForm() {
@@ -238,16 +278,7 @@ export class Actions extends Vue {
                      this._("w_RuleAndActions_Minute")}
                  * @uiAttrs - { min: 0}
                  */
-                notifyFrequently: number;
-
-                notifyFrequentlyRemarks?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_Active")}
-                 * @uiColumnGroup - row
-                 */
-                isActive: any;
+                minutes: number;
 
             }
         `;

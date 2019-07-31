@@ -39,15 +39,16 @@
                         <iv-form-selection
                             v-on="$listeners"
                             v-model="inputFormData.siteIds"
-                            class="select-site ml-3"
+                            class="col-md-10"
                             :options="sitesSelectItem"
                             :multiple="true"
                             @input="changeSiteIds"
                         >
                         </iv-form-selection>
 
-                        <div class="ml-3 mb-3">
+                        <div class="col-md-2">
                             <b-button
+                                class="col-md-12"
                                 variant="outline-secondary"
                                 @click="pageToChooseTree"
                             >
