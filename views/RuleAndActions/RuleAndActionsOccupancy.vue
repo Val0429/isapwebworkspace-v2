@@ -163,6 +163,7 @@
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
                                                     v-model="conditions[index].andMode"
+                                                    :disabled="true"
                                                     :plain="true"
                                                     :options="selectItem.andMode"
                                                 ></iv-form-selection>
@@ -338,7 +339,7 @@ export default class RuleAndActionsOccupancy extends Vue {
         let tempCondition: ICondition = {
             ruleMode: ERuleMode.occupancySingleSite,
             equalMode: EEqualMode.more,
-            andMode: EAndMode.and,
+            andMode: EAndMode.or,
             thresholdMode: EThresholdMode.high
         };
 
@@ -410,7 +411,6 @@ export default class RuleAndActionsOccupancy extends Vue {
         ];
 
         this.selectItem.andMode = [
-            { id: EAndMode.and, text: this._("w_RuleAndActions_AndStatusAnd") },
             { id: EAndMode.or, text: this._("w_RuleAndActions_AndStatusOr") }
         ];
     }
