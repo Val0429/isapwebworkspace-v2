@@ -163,7 +163,7 @@
                                                     :options="selectItem.andMode"
                                                 ></iv-form-selection>
                                             </b-col>
-                                            
+
                                             <b-col class="col-md-1">
                                                 <b-button
                                                     class="button addButton"
@@ -419,12 +419,16 @@ export default class RuleAndActionsTraffic extends Vue {
         this.clearConditions();
     }
 
-     IStep2() {
+    IStep2() {
         return `
             interface {
                 conditionTitle?: any;
                 conditionContent?: any;
             }`;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.conditions);
     }
 
     ////////////////////////////////// Morris End //////////////////////////////////
@@ -450,10 +454,6 @@ export default class RuleAndActionsTraffic extends Vue {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         (this.$refs.listTable as any).reload();
-    }
-
-    stepTo3(event: any) {
-        console.log(this.conditions);
     }
 
     ////////////////////  以下資料來自 step1 choose-metrics   ////////////////////
@@ -634,7 +634,6 @@ export default class RuleAndActionsTraffic extends Vue {
             }
         `;
     }
-
 }
 </script>
 

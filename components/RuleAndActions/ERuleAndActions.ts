@@ -55,6 +55,8 @@ enum ERuleMode {
     trafficMultipleSiteCurrent = 'trafficMultipleSiteCurrent',
     occupancySingleSite = 'occupancySingleSite',
     occupancyMultipleSite = 'occupancyMultipleSite',
+    vipVip = 'vipVip',
+    vipBlacklist = 'vipBlacklist',
 }
 
 enum EThresholdMode {
