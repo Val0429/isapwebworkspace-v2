@@ -1056,7 +1056,7 @@ export default class LangObject {
 
     w_RuleAndActions_RuleName = 'Rule Name';
     w_RuleAndActions_Active = 'Active';
-    w_RuleAndActions_Runtime = 'Run time';
+    w_RuleAndActions_Runtime = '* Run time';
     w_RuleAndActions_Anytime = 'Any time';
     w_RuleAndActions_DesignationTime = 'Designation time';
     w_RuleAndActions_Start = 'Start';
@@ -1067,7 +1067,7 @@ export default class LangObject {
     w_RuleAndActions_RuleEdit = 'Rule Edit';
     w_RuleAndActions_RuleAView = 'Rule View';
 
-    w_RuleAndActions_Traffic_RuleName = 'Rule Time';
+    w_RuleAndActions_Traffic_RuleName = 'Run Time';
     w_RuleAndActions_Traffic_StoreAreaDevice = 'Store/Area/Device';
     w_RuleAndActions_Traffic_Active = 'Active';
     w_RuleAndActions_Traffic_RunTime = 'Run Time';

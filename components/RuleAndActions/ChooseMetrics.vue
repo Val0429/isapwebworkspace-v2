@@ -38,7 +38,7 @@
 					<!-- run time -->
 					<template #isAnytime="{ $attrs, $listeners }">
 
-						<p class="ml-3">{{ _('w_RuleAndActions_Traffic_RuleName') }}</p>
+						<p class="ml-3">{{ _('w_RuleAndActions_Runtime') }}</p>
 
 						<b-col cols="9">
 							<b-form-radio-group
@@ -715,6 +715,8 @@
 
 		////////////////////  以上為 radio button 相關   ////////////////////
 
+		// TODO: runtime
+
 		updateName(name: string) {
 			this.inputFormData.name = name;
 			this.$emit('name', this.inputFormData.name);
@@ -864,44 +866,6 @@
 			) {
 				this.selectAllSites = EIfAllSelected.all;
 			}
-		}
-
-		async doSubmit() {
-			const doSubmitParam: {
-				startDate: Date;
-				endDate: Date;
-				firstSiteId?: string;
-				siteIds: string[];
-				tagIds: string[];
-				type: ETimeMode;
-			} = {
-				startDate: Datetime.DateToZero(new Date()),
-				endDate: Datetime.DateToZero(new Date()),
-				type: ETimeMode.none,
-				firstSiteId: "",
-				siteIds: [],
-				tagIds:
-					this.inputFormData.tagIds === []
-						? []
-						: this.inputFormData.tagIds
-			};
-
-
-			if (this.inputFormData.siteIds.length === 0) {
-				Dialog.error(this._("w_PleaseSelectSites"));
-				return false;
-			}
-
-			if (this.selectAllSites === "all") {
-				this.inputFormData.siteIds = this.inputFormData.allSiteIds;
-			}
-
-			doSubmitParam.siteIds = this.inputFormData.siteIds;
-			doSubmitParam.firstSiteId = doSubmitParam.siteIds[0];
-
-
-			// return false;
-			this.$emit("submit-data", doSubmitParam);
 		}
 
 		IFilterConditionForm() {

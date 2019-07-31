@@ -4,48 +4,98 @@
         @update:minutes="updateMinutes($event)"
     >
 
-        <template #notifyMethodTitle="{ $attrs, $listeners }">
-            <p class="ml-3 mr-3 ">{{ _('w_RuleAndActions_NotifyMethod') }}</p>
+        <template #notifyMethodTitle>
+            <p class="col-md-12 mb-2">{{ _('w_RuleAndActions_NotifyMethod') }}</p>
         </template>
 
         <template #notifyMethodSelect="{ $attrs, $listeners }">
+
+
             <b-form-checkbox
                 v-for="option in notifyMethodSelectItem"
                 v-model="notifyMethodSelected"
-                name="notifyMethodSelect"
-                class="col-md-10"
                 :key="option.value"
                 :value="option.value"
+                name="notifyMethodSelected"
+                class="col-md-12 ml-4 mb-2"
                 inline
-                @change="changeNotifyMethod"
+                @input="changeNotifyMethod"
             >
                 {{ option.text }}
             </b-form-checkbox>
+
+
+<!--            <b-form-checkbox-group-->
+<!--                v-model="notifyMethodSelected"-->
+<!--                id="notifyMethodSelected"-->
+<!--                name="notifyMethodSelected"-->
+<!--                class="col-md-12 mb-2"-->
+<!--                @input="changeNotifyMethod"-->
+<!--            >-->
+<!--                <b-form-checkbox-->
+<!--                    value="email"-->
+<!--                    class="col-md-12 ml-4"-->
+<!--                >-->
+<!--                    {{ _('w_RuleAndActions_Email') }}-->
+<!--                </b-form-checkbox>-->
+<!--                                <b-form-checkbox value="mobileApp">{{ _('w_RuleAndActions_MobileApp') }}</b-form-checkbox>-->
+<!--                                <b-form-checkbox value="sms">{{ _('w_RuleAndActions_SMS') }}</b-form-checkbox>-->
+<!--                                <b-form-checkbox value="httpCommand">{{ _('w_RuleAndActions_HttpCommand') }}</b-form-checkbox>-->
+
+<!--            </b-form-checkbox-group>-->
+
         </template>
 
         <template #notifyTargetTitle="{ $attrs, $listeners }">
-            <p class="ml-3 mr-3">{{ _('w_RuleAndActions_NotifyTarget') }}</p>
+            <p class="col-md-12 mt-3 mb-2">{{ _('w_RuleAndActions_NotifyTarget') }}</p>
         </template>
 
-        <template #notifyTargetSelect="{ $attrs, $listeners }">
+        <template #notifyTargetSelect>
+
             <b-form-checkbox
                 v-for="option in notifyTargetSelectItem"
                 v-model="notifyTargetSelected"
-                name="notifyMethodSelect"
                 :key="option.value"
                 :value="option.value"
+                name="notifyTargetSelected"
+                class="col-md-12 ml-4 mb-2"
                 inline
-                @change="changeNotifyTarget"
+                @input="changeNotifyTarget"
             >
                 {{ option.text }}
             </b-form-checkbox>
+
+<!--            <b-form-checkbox-group-->
+<!--                v-model="notifyTargetSelected"-->
+<!--                id="notifyTargetSelected"-->
+<!--                name="notifyTargetSelected"-->
+<!--                class="col-md-12"-->
+<!--                @input="changeNotifyTarget"-->
+<!--            >-->
+<!--                <b-form-checkbox-->
+<!--                    value="storeManager"-->
+<!--                    class="col-md-12 ml-4 mb-2"-->
+<!--                >{{ _('w_RuleAndActions_StoreManager') }}</b-form-checkbox>-->
+<!--                <b-form-checkbox-->
+<!--                    value="permissionOfStore"-->
+<!--                    class="col-md-12 ml-4 mb-2"-->
+<!--                >{{ _('w_RuleAndActions_UsersHavePermission') }}</b-form-checkbox>-->
+<!--                <b-form-checkbox-->
+<!--                    value="users"-->
+<!--                    class="col-md-12 ml-4 mb-2"-->
+<!--                >{{ _('w_RuleAndActions_Users') }}</b-form-checkbox>-->
+<!--                <b-form-checkbox-->
+<!--                    value="userGroup"-->
+<!--                    class="col-md-12 ml-4 mb-4"-->
+<!--                >{{ _('w_RuleAndActions_UserGroup') }}</b-form-checkbox>-->
+<!--            </b-form-checkbox-group>-->
+
         </template>
 
         <template #userIdsTitle="{ $attrs, $listeners }">
             <p
                 v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
-                class="ml-3 mr-3 col-md-10"
-            >{{ _('w_RuleAndActions_Users1') }}</p>
+                class="ml-3 mr-3 col-md-10 mt-2">{{ _('w_RuleAndActions_Users1') }}</p>
         </template>
 
         <template #userIds="{ $attrs, $listeners }">
@@ -63,10 +113,10 @@
         </template>
 
         <template #groupIdsTitle="{ $attrs, $listeners }">
+
             <p
                 v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
-                class="ml-3 mr-3 col-md-10"
-            >{{ _('w_RuleAndActions_UserGroup1') }}</p>
+                class="ml-3 mr-3 col-md-10 mt-2">{{ _('w_RuleAndActions_UserGroup1') }}</p>
         </template>
 
         <template #groupIds="{ $attrs, $listeners }">
@@ -82,6 +132,18 @@
             >
             </iv-form-selection>
         </template>
+
+
+        <template #minutes="{ $attrs, $listeners }">
+            <iv-form-number
+                v-bind="$attrs"
+                v-on="$listeners"
+                v-model="inputFormData.minutes"
+                class="mt-3"
+            >
+            </iv-form-number>
+        </template>
+
 
     </iv-form>
 </template>
@@ -116,13 +178,8 @@ export class Actions extends Vue {
     userGroupSelectItem: any = [];
 
     // checkbox be selected
-    notifyMethodSelected: any = [ENotifyMethod.email];
-    notifyTargetSelected: any = [
-        EWhoNotify.storeManager,
-        EWhoNotify.permissionOfStore,
-        EWhoNotify.users,
-        EWhoNotify.userGroup
-    ];
+    notifyMethodSelected: any = [];
+    notifyTargetSelected: any = [];
 
     inputFormData: any = {
         userIds: [],
@@ -139,11 +196,7 @@ export class Actions extends Vue {
         this.initSelectItemUserGroup();
     }
 
-    mounted() {
-        // 如果沒有變更選擇，則是傳送預設值到父元件
-        this.changeNotifyMethod(this.notifyMethodSelected);
-        this.changeNotifyTarget(this.notifyTargetSelected);
-    }
+    mounted() {}
 
     initSelectItem() {
         this.notifyMethodSelectItem = [
@@ -175,7 +228,6 @@ export class Actions extends Vue {
     }
 
     async initSelectItemUsers() {
-
         this.userSelectItem = [];
 
         await this.$server
@@ -183,7 +235,10 @@ export class Actions extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        let user = { id: returnValue.objectId, text: returnValue.username };
+                        let user = {
+                            id: returnValue.objectId,
+                            text: returnValue.username
+                        };
                         this.userSelectItem.push(user);
                     }
                 });
@@ -194,7 +249,6 @@ export class Actions extends Vue {
     }
 
     async initSelectItemUserGroup() {
-
         this.userGroupSelectItem = [];
 
         await this.$server
@@ -202,7 +256,10 @@ export class Actions extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        let userGroup = { id: returnValue.objectId, text: returnValue.name };
+                        let userGroup = {
+                            id: returnValue.objectId,
+                            text: returnValue.name
+                        };
                         this.userGroupSelectItem.push(userGroup);
                     }
                 });
@@ -212,29 +269,34 @@ export class Actions extends Vue {
             });
     }
 
-    changeNotifyMethod(selected: object) {
-        this.notifyMethodSelected = selected;
-        this.$emit('notify-method', this.notifyMethodSelected);
+    changeNotifyMethod() {
+        this.$emit("notify-method", this.notifyMethodSelected);
     }
 
-    changeNotifyTarget(selected: object) {
-        this.notifyTargetSelected = selected;
-        this.$emit('notify-target', this.notifyTargetSelected);
+    changeNotifyTarget() {
+
+        if (this.notifyTargetSelected.filter(item => item === EWhoNotify.users).join() !== EWhoNotify.users) {
+            this.inputFormData.userIds = [];
+        } else if (this.notifyTargetSelected.filter(item => item === EWhoNotify.userGroup).join() !== EWhoNotify.userGroup) {
+            this.inputFormData.groupIds = [];
+        }
+        
+        this.$emit("notify-target", this.notifyTargetSelected);
     }
 
     selectUserIds(selected: object) {
         this.inputFormData.userIds = selected;
-        this.$emit('user-ids', this.inputFormData.userIds);
+        this.$emit("user-ids", this.inputFormData.userIds);
     }
 
     selectUserGroupIds(selected: object) {
         this.inputFormData.groupIds = selected;
-        this.$emit('user-group-ids', this.inputFormData.groupIds);
+        this.$emit("user-group-ids", this.inputFormData.groupIds);
     }
 
     updateMinutes(minutes: number) {
         this.inputFormData.minutes = minutes;
-        this.$emit('minutes', this.inputFormData.minutes);
+        this.$emit("minutes", this.inputFormData.minutes);
     }
 
     IFilterConditionForm() {
