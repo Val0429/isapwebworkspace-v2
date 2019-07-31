@@ -631,4 +631,8 @@ export default class LangObject implements ILang {
     w_Error_DuplicateEmployeeNumber="重複工號";
     w_DeviceAreaOrFloor = "裝置區域 / 樓層";
     w_Error_AccessLevelIsNotInCCure = "該許可表不存在，請先至CCure800建立許可表";
+
+    w_FloorGroup="Floor Group";
+    w_FloorGroupAdd="Add Floor Group";
+    w_FloorGroupEdit="Edit Floor Group";
 }
