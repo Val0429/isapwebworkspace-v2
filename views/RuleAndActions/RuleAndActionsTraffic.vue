@@ -108,6 +108,7 @@
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
                         <template #2>
+
                             <iv-form
                                 :interface="IStep2()"
                                 :value="step2Item"
@@ -125,27 +126,28 @@
                                         >
                                             <b-col class="col-md-4">
                                                 <iv-form-selection
-                                                    :value="conditions[index].ruleMode"
+                                                    v-model="conditions[index].ruleMode"
                                                     :plain="true"
                                                     :options="selectItem.ruleMode"
                                                 ></iv-form-selection>
                                             </b-col>
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    :value="conditions[index].equalMode"
+                                                    v-model="conditions[index].equalMode"
                                                     :plain="true"
                                                     :options="selectItem.equalMode"
                                                 ></iv-form-selection>
                                             </b-col>
                                             <b-col class="col-md-2">
                                                 <iv-form-number
-                                                    :value="conditions[index].fillValue"
+                                                    v-model="conditions[index].fillValue"
                                                     :plain="true"
+                                                    min="0"
                                                 ></iv-form-number>
                                             </b-col>
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    :value="conditions[index].andMode"
+                                                    v-model="conditions[index].andMode"
                                                     :plain="true"
                                                     :options="selectItem.andMode"
                                                 ></iv-form-selection>
@@ -203,6 +205,12 @@ import { ITransition } from "@/services/Transition";
 
 // custom
 import { EDeviceMode, IValSelectItem } from "@/components/Reports";
+import {
+    ESiteCountMode,
+    ERuleMode,
+    EEqualMode,
+    EAndMode
+} from "@/components/RuleAndActions";
 
 // Service
 import Dialog from "@/services/Dialog";
@@ -210,10 +218,10 @@ import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 
 interface ICondition {
-    ruleMode: string;
-    equalMode: string;
     fillValue: number;
-    andMode: string;
+    ruleMode: ERuleMode;
+    equalMode: EEqualMode;
+    andMode: EAndMode;
 }
 
 @Component({
@@ -239,23 +247,19 @@ export default class RuleAndActionsTraffic extends Vue {
     };
     conditions: ICondition[] = [];
 
+    siteCountMode: ESiteCountMode = ESiteCountMode.none;
     selectItem: {
         ruleMode: IValSelectItem[];
+        ruleModeSingle: IValSelectItem[];
+        ruleModeMutliple: IValSelectItem[];
         equalMode: IValSelectItem[];
         andMode: IValSelectItem[];
     } = {
-        ruleMode: [
-            { id: "today", text: "Toady" },
-            { id: "current", text: "Current" }
-        ],
-        equalMode: [
-            { id: "More", text: "More than" },
-            { id: "MoreEqual", text: "More than or equal to" },
-            { id: "equal", text: "Equal to" },
-            { id: "less", text: "Less than" },
-            { id: "lessEqual", text: "Less than or equal to" }
-        ],
-        andMode: [{ id: "and", text: "And" }, { id: "or", text: "Or" }]
+        ruleMode: [],
+        ruleModeSingle: [],
+        ruleModeMutliple: [],
+        equalMode: [],
+        andMode: []
     };
     isMounted: boolean = false;
     doMounted() {
@@ -274,35 +278,122 @@ export default class RuleAndActionsTraffic extends Vue {
     }
 
     addCondition() {
-        this.conditions.push({
-            ruleMode: "today",
-            equalMode: "equal",
+        let tempCondition: ICondition = {
             fillValue: 0,
-            andMode: "and"
-        });
+            ruleMode: ERuleMode.singleToday,
+            equalMode: EEqualMode.equal,
+            andMode: EAndMode.and
+        };
+
+        switch (this.siteCountMode) {
+            case ESiteCountMode.single:
+                tempCondition.ruleMode = ERuleMode.singleToday;
+                break;
+            case ESiteCountMode.multiple:
+                tempCondition.ruleMode = ERuleMode.multipleToday;
+                break;
+        }
+        this.conditions.push(tempCondition);
     }
 
     removeCondition(index: number) {
         this.conditions.splice(index, 1);
     }
 
-    ////////////////////////////////// Morris Start //////////////////////////////////
+    initConditionSelectItem() {
+        switch (this.siteCountMode) {
+            case ESiteCountMode.single:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeSingle)
+                );
+                break;
+            case ESiteCountMode.multiple:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeMutliple)
+                );
+                break;
+        }
+    }
 
-    created() {}
+    initSelectItem() {
+        this.selectItem.ruleModeSingle = [
+            {
+                id: ERuleMode.singleToday,
+                text: this._("w_RuleAndActions_RuleStatusSingleToday")
+            },
+            {
+                id: ERuleMode.singleCurrent,
+                text: this._("w_RuleAndActions_RuleStatusSingleCurrent")
+            }
+        ];
 
-    mounted() {}
+        this.selectItem.ruleModeMutliple = [
+            {
+                id: ERuleMode.multipleToday,
+                text: this._("w_RuleAndActions_RuleStatusMultipleToday")
+            },
+            {
+                id: ERuleMode.multipleCurrent,
+                text: this._("w_RuleAndActions_RuleStatusMultipleCurrent")
+            }
+        ];
+
+        this.selectItem.equalMode = [
+            {
+                id: EEqualMode.more,
+                text: this._("w_RuleAndActions_EqualStatusMore")
+            },
+            {
+                id: EEqualMode.moreEqual,
+                text: this._("w_RuleAndActions_EqualStatusMoreEqual")
+            },
+            {
+                id: EEqualMode.equal,
+                text: this._("w_RuleAndActions_EqualStatusEqual")
+            },
+            {
+                id: EEqualMode.less,
+                text: this._("w_RuleAndActions_EqualStatusLess")
+            },
+            {
+                id: EEqualMode.lessEqual,
+                text: this._("w_RuleAndActions_EqualStatusLessEqual")
+            }
+        ];
+
+        this.selectItem.andMode = [
+            { id: EAndMode.and, text: this._("w_RuleAndActions_AndStatusAnd") },
+            { id: EAndMode.or, text: this._("w_RuleAndActions_AndStatusOr") }
+        ];
+    }
 
     pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+
+        // TODO: ESiteCountMode from step 1
+        this.siteCountMode = ESiteCountMode.single;
+        this.initConditionSelectItem();
         this.clearConditions();
     }
 
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+
+        // TODO: ESiteCountMode from step 1
+        this.siteCountMode = ESiteCountMode.single;
+        this.initConditionSelectItem();
         this.clearConditions();
     }
+
+    ////////////////////////////////// Morris End //////////////////////////////////
+
+    created() {
+        this.initSelectItem();
+    }
+
+    mounted() {}
 
     pageToView() {
         this.transition.prevStep = this.transition.step;
@@ -321,7 +412,9 @@ export default class RuleAndActionsTraffic extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
-    stepTo3() {}
+    stepTo3(event: any) {
+        console.log(this.conditions);
+    }
 
     async doDelete() {
         await Dialog.confirm(
