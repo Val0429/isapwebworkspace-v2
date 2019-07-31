@@ -52,29 +52,155 @@
                 </iv-card>
             </div>
 
-            <iv-step-progress
-                ref="step"
+            <!-- view -->
+            <!-- <div
                 key="transition_2"
                 v-show="transition.step === 2"
-                @mounted="doMounted"
+                :label="'Empty 2'"
             >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_RuleAndActions_RuleAView') "
+                >
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
 
-                <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
-                <template #1>
-                    Step 1
-                </template>
+                    <iv-form
+                        :interface="IViewForm()"
+                        :value="inputFormData"
+                    >
+                    </iv-form>
 
-                <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
-                <template #2>
-                    Step 2
-                </template>
+                    <template #footer>
+                        <b-button
+                            variant="dark"
+                            size="lg"
+                            @click="pageToList()"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
 
-                <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
-                <template #3>
-                    Step 3
-                </template>
+                </iv-auto-card>
+            </div> -->
 
-            </iv-step-progress>
+            <!-- add & edit -->
+            <div
+                key="transition_3"
+                v-show="transition.step === 3"
+                :label="'Empty 3'"
+            >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_User_ViewUser') "
+                >
+
+                    <iv-step-progress
+                        ref="step"
+                        @mounted="doMounted"
+                    >
+
+                        <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
+                        <template #1>
+                            Step 1
+                        </template>
+
+                        <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
+                        <template #2>
+
+                            <iv-form
+                                :interface="IStep2()"
+                                :value="step2Item"
+                                @submit="stepTo3($event)"
+                                @update:*="updateCondition"
+                            >
+
+                                <template #thresholdeTitle="{ $attrs, $listeners }">
+                                    <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_OccupancyThreshold') }}</div>
+                                </template>
+
+                                <template #conditionTitle="{ $attrs, $listeners }">
+                                    <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
+                                </template>
+
+                                <template #conditionContent="{ $attrs, $listeners }">
+                                    <b-form-group class="col-md-12">
+                                        <b-row
+                                            v-for="(value, index) in conditions"
+                                            :key="'condition__' + index"
+                                        >
+                                            <b-col class="col-md-4">
+                                                <iv-form-selection
+                                                    v-model="conditions[index].ruleMode"
+                                                    :disabled="true"
+                                                    :plain="true"
+                                                    :options="selectItem.ruleMode"
+                                                ></iv-form-selection>
+                                            </b-col>
+
+                                            <b-col class="col-md-2">
+                                                <iv-form-selection
+                                                    v-model="conditions[index].equalMode"
+                                                    :disabled="true"
+                                                    :plain="true"
+                                                    :options="selectItem.equalMode"
+                                                ></iv-form-selection>
+                                            </b-col>
+
+                                            <b-col class="col-md-2">
+                                                <iv-form-selection
+                                                    v-model="conditions[index].thresholdMode"
+                                                    :plain="true"
+                                                    :options="selectItem.thresholdMode"
+                                                ></iv-form-selection>
+                                            </b-col>
+
+                                            <b-col class="col-md-2">
+                                                <iv-form-selection
+                                                    v-model="conditions[index].andMode"
+                                                    :plain="true"
+                                                    :options="selectItem.andMode"
+                                                ></iv-form-selection>
+                                            </b-col>
+
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    class="button addButton"
+                                                    variant="success"
+                                                    type="button"
+                                                    @click="addCondition()"
+                                                >
+                                                    <i class="fa fa-plus"></i>
+                                                </b-button>
+                                            </b-col>
+
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    v-show="conditions.length > 1"
+                                                    class="button"
+                                                    variant="danger"
+                                                    type="button"
+                                                    @click="removeCondition(index)"
+                                                >
+                                                    <i class="fa fa-minus"></i>
+                                                </b-button>
+                                            </b-col>
+                                        </b-row>
+                                    </b-form-group>
+                                </template>
+                            </iv-form>
+
+                        </template>
+
+                        <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
+                        <template #3>
+                            Step 3
+                        </template>
+
+                    </iv-step-progress>
+
+                </iv-auto-card>
+            </div>
 
         </iv-auto-transition>
 
@@ -88,8 +214,25 @@ import { Vue, Component } from "vue-property-decorator";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
+// custom
+import { EDeviceMode, IValSelectItem } from "@/components/Reports";
+import {
+    ESiteCountMode,
+    ERuleMode,
+    EEqualMode,
+    EAndMode,
+    EThresholdMode
+} from "@/components/RuleAndActions";
+
 // Service
 import Dialog from "@/services/Dialog";
+
+interface ICondition {
+    ruleMode: ERuleMode;
+    equalMode: EEqualMode;
+    andMode: EAndMode;
+    thresholdMode: EThresholdMode;
+}
 
 @Component({
     components: {}
@@ -100,25 +243,209 @@ export default class RuleAndActionsOccupancy extends Vue {
         prevStep: 1,
         step: 1
     };
+    isMounted: boolean = false;
+    doMounted() {
+        this.isMounted = true;
+    }
 
     // choose-metrics 使用
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
 
-    isMounted: boolean = false;
-    doMounted() {
-        this.isMounted = true;
+    ////////////////////////////////// Morris Start //////////////////////////////////
+
+    step2Item: any = {
+        thresholdHigh: 0,
+        thresholdMedium: 0,
+        thresholdLow: 0,
+        condition: []
+    };
+    conditions: ICondition[] = [];
+
+    siteCountMode: ESiteCountMode = ESiteCountMode.none;
+    selectItem: {
+        ruleMode: IValSelectItem[];
+        ruleModeSingle: IValSelectItem[];
+        ruleModeMutliple: IValSelectItem[];
+        equalMode: IValSelectItem[];
+        andMode: IValSelectItem[];
+        thresholdMode: IValSelectItem[];
+    } = {
+        ruleMode: [],
+        ruleModeSingle: [],
+        ruleModeMutliple: [],
+        equalMode: [],
+        andMode: [],
+        thresholdMode: []
+    };
+
+    clearConditions() {
+        this.step2Item.thresholdHigh = 0;
+        this.step2Item.thresholdMedium = 0;
+        this.step2Item.thresholdLow = 0;
+        this.conditions = [];
+        this.addCondition();
     }
 
-    created() {}
+    updateCondition(data: any) {
+        switch (data.key) {
+            case "thresholdHigh":
+                this.step2Item.thresholdHigh = data.value;
+                break;
+            case "thresholdMedium":
+                this.step2Item.thresholdMedium = data.value;
+                break;
+            case "thresholdLow":
+                this.step2Item.thresholdLow = data.value;
+                break;
+        }
+    }
 
-    mounted() {}
+    addCondition() {
+        let tempCondition: ICondition = {
+            ruleMode: ERuleMode.occupancySingleSite,
+            equalMode: EEqualMode.more,
+            andMode: EAndMode.and,
+            thresholdMode: EThresholdMode.high
+        };
+
+        switch (this.siteCountMode) {
+            case ESiteCountMode.single:
+                tempCondition.ruleMode = ERuleMode.occupancySingleSite;
+                break;
+            case ESiteCountMode.multiple:
+                tempCondition.ruleMode = ERuleMode.occupancyMultipleSite;
+                break;
+        }
+        this.conditions.push(tempCondition);
+    }
+
+    removeCondition(index: number) {
+        this.conditions.splice(index, 1);
+    }
+
+    initConditionSelectItem() {
+        switch (this.siteCountMode) {
+            case ESiteCountMode.single:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeSingle)
+                );
+                break;
+            case ESiteCountMode.multiple:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeMutliple)
+                );
+                break;
+        }
+    }
+
+    initSelectItem() {
+        this.selectItem.ruleModeSingle = [
+            {
+                id: ERuleMode.occupancySingleSite,
+                text: this._("w_RuleAndActions_RuleStatusOccupancySingleSite")
+            }
+        ];
+
+        this.selectItem.ruleModeMutliple = [
+            {
+                id: ERuleMode.occupancyMultipleSite,
+                text: this._("w_RuleAndActions_RuleStatusOccupancyMultipleSite")
+            }
+        ];
+
+        this.selectItem.equalMode = [
+            {
+                id: EEqualMode.more,
+                text: this._("w_RuleAndActions_EqualStatusMore")
+            }
+        ];
+
+        this.selectItem.thresholdMode = [
+            {
+                id: EThresholdMode.high,
+                text: this._("w_RuleAndActions_ThresholdStatusHigh")
+            },
+            {
+                id: EThresholdMode.medium,
+                text: this._("w_RuleAndActions_ThresholdStatusMedium")
+            },
+            {
+                id: EThresholdMode.low,
+                text: this._("w_RuleAndActions_ThresholdStatusLow")
+            }
+        ];
+
+        this.selectItem.andMode = [
+            { id: EAndMode.and, text: this._("w_RuleAndActions_AndStatusAnd") },
+            { id: EAndMode.or, text: this._("w_RuleAndActions_AndStatusOr") }
+        ];
+    }
 
     pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+
+        // TODO: ESiteCountMode from step 1
+        this.siteCountMode = ESiteCountMode.single;
+        this.initConditionSelectItem();
+        this.clearConditions();
     }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+
+        // TODO: ESiteCountMode from step 1
+        this.siteCountMode = ESiteCountMode.single;
+        this.initConditionSelectItem();
+        this.clearConditions();
+    }
+
+    IStep2() {
+        return `
+            interface {
+
+                thresholdeTitle? any;
+                
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_OccupancyThresholdHigh"
+                 )}
+                 * @uiAttrs - { min: 0 }
+                 */
+                thresholdHigh: number;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_OccupancyThresholdMedium"
+                 )}
+                 * @uiAttrs - { min: 0 }
+                 */
+                thresholdMedium: number;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_OccupancyThresholdLow"
+                 )}
+                 * @uiAttrs - { min: 0 }
+                 */
+                thresholdLow: number;
+
+                conditionTitle?: any;
+
+                conditionContent?: any;
+            }`;
+    }
+
+    ////////////////////////////////// Morris End //////////////////////////////////
+
+    created() {
+        this.initSelectItem();
+    }
+
+    mounted() {}
 
     selectedItem(data) {
         this.isSelected = data;
