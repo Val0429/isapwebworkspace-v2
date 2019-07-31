@@ -1051,7 +1051,7 @@ export default class LangObject implements ILang {
 
     w_RuleAndActions_RuleName = 'Rule Name';
     w_RuleAndActions_Active = 'Active';
-    w_RuleAndActions_Runtime = 'Run time';
+    w_RuleAndActions_Runtime = '* Run time';
     w_RuleAndActions_Anytime = 'Any time';
     w_RuleAndActions_DesignationTime = 'Designation time';
     w_RuleAndActions_Start = 'Start';

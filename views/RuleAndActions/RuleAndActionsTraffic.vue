@@ -489,7 +489,7 @@ export default class RuleAndActionsTraffic extends Vue {
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
-    receiveNotifyMethod(notifyMethod: object) {
+    receiveNotifyMethod(notifyMethod: string) {
         console.log("notifyMethod ~ ", notifyMethod);
         this.inputFormData.notifyMethod = notifyMethod;
     }
