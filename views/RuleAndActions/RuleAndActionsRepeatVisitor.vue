@@ -85,12 +85,16 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3"
+                v-show="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
-                    :label="_('w_User_ViewUser') "
+                    :label="transition.step === 3  ?_('w_RuleAndActions_RuleAdd') : _('w_RuleAndActions_RuleEdit')  "
                 >
+
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
 
                     <iv-step-progress
                         ref="step"

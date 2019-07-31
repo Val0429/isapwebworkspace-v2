@@ -51,7 +51,7 @@
                 </iv-card>
             </div>
 
-             <!-- view -->
+            <!-- view -->
             <!-- <div
                 key="transition_2"
                 v-show="transition.step === 2"
@@ -85,100 +85,104 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3"
+                v-show="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
-                    :label="_('w_User_ViewUser') "
+                    :label="transition.step === 3  ?_('w_RuleAndActions_RuleAdd') : _('w_RuleAndActions_RuleEdit')  "
                 >
+
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
                     <iv-step-progress>
 
-                    <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
-                    <template #1>
-                        <choose-metrics
-                            :deviceMode="deviceMode"
-                            @name="receiveName"
-                            @active="receiveActive"
-                            @site-ids="receiveSiteIds"
-                            @area-ids="receiveAreaIds"
-                            @device-group-ids="receiveDeviceGroupIds"
-                            @device-ids="receiveDeviceIds"
-                        ></choose-metrics>
-                    </template>
+                        <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
+                        <template #1>
+                            <choose-metrics
+                                :deviceMode="deviceMode"
+                                @name="receiveName"
+                                @active="receiveActive"
+                                @site-ids="receiveSiteIds"
+                                @area-ids="receiveAreaIds"
+                                @device-group-ids="receiveDeviceGroupIds"
+                                @device-ids="receiveDeviceIds"
+                            ></choose-metrics>
+                        </template>
 
-                    <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
-                    <template #2>
+                        <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
+                        <template #2>
 
-                        <iv-form
-                            :interface="IStep2()"
-                            :value="step2Item"
-                            @submit="stepTo3($event)"
-                        >
-                            <template #conditionTitle="{ $attrs, $listeners }">
-                                <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
-                            </template>
+                            <iv-form
+                                :interface="IStep2()"
+                                :value="step2Item"
+                                @submit="stepTo3($event)"
+                            >
+                                <template #conditionTitle="{ $attrs, $listeners }">
+                                    <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
+                                </template>
 
-                            <template #conditionContent="{ $attrs, $listeners }">
-                                <b-form-group class="col-md-12">
-                                    <b-row
-                                        v-for="(value, index) in conditions"
-                                        :key="'condition__' + index"
-                                    >
-                                        <b-col class="col-md-8">
-                                            <iv-form-selection
-                                                v-model="conditions[index].ruleMode"
-                                                :plain="true"
-                                                :options="selectItem.ruleMode"
-                                            ></iv-form-selection>
-                                        </b-col>
+                                <template #conditionContent="{ $attrs, $listeners }">
+                                    <b-form-group class="col-md-12">
+                                        <b-row
+                                            v-for="(value, index) in conditions"
+                                            :key="'condition__' + index"
+                                        >
+                                            <b-col class="col-md-8">
+                                                <iv-form-selection
+                                                    v-model="conditions[index].ruleMode"
+                                                    :plain="true"
+                                                    :options="selectItem.ruleMode"
+                                                ></iv-form-selection>
+                                            </b-col>
 
-                                        <b-col class="col-md-2">
-                                            <iv-form-selection
-                                                v-model="conditions[index].andMode"
-                                                :plain="true"
-                                                :options="selectItem.andMode"
-                                            ></iv-form-selection>
-                                        </b-col>
+                                            <b-col class="col-md-2">
+                                                <iv-form-selection
+                                                    v-model="conditions[index].andMode"
+                                                    :plain="true"
+                                                    :options="selectItem.andMode"
+                                                ></iv-form-selection>
+                                            </b-col>
 
-                                        <b-col class="col-md-1">
-                                            <b-button
-                                                class="button addButton"
-                                                variant="success"
-                                                type="button"
-                                                @click="addCondition()"
-                                            >
-                                                <i class="fa fa-plus"></i>
-                                            </b-button>
-                                        </b-col>
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    class="button addButton"
+                                                    variant="success"
+                                                    type="button"
+                                                    @click="addCondition()"
+                                                >
+                                                    <i class="fa fa-plus"></i>
+                                                </b-button>
+                                            </b-col>
 
-                                        <b-col class="col-md-1">
-                                            <b-button
-                                                v-show="conditions.length > 1"
-                                                class="button"
-                                                variant="danger"
-                                                type="button"
-                                                @click="removeCondition(index)"
-                                            >
-                                                <i class="fa fa-minus"></i>
-                                            </b-button>
-                                        </b-col>
-                                    </b-row>
-                                </b-form-group>
-                            </template>
-                        </iv-form>
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    v-show="conditions.length > 1"
+                                                    class="button"
+                                                    variant="danger"
+                                                    type="button"
+                                                    @click="removeCondition(index)"
+                                                >
+                                                    <i class="fa fa-minus"></i>
+                                                </b-button>
+                                            </b-col>
+                                        </b-row>
+                                    </b-form-group>
+                                </template>
+                            </iv-form>
 
-                    </template>
+                        </template>
 
-                    <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
-                    <template #3>
-                        <actions
-                            @notify-method="receiveNotifyMethod"
-                            @notify-target="receiveNotifyTarget"
-                            @user-ids="receiveUserIds"
-                            @user-group-ids="receiveUserGroupIds"
-                            @minutes="receiveMinutes"
-                        ></actions>
-                    </template>
+                        <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
+                        <template #3>
+                            <actions
+                                @notify-method="receiveNotifyMethod"
+                                @notify-target="receiveNotifyTarget"
+                                @user-ids="receiveUserIds"
+                                @user-group-ids="receiveUserGroupIds"
+                                @minutes="receiveMinutes"
+                            ></actions>
+                        </template>
 
                     </iv-step-progress>
 
