@@ -1,5 +1,8 @@
 <template>
-    <iv-form :interface="IFilterConditionForm()">
+    <iv-form
+        :interface="IFilterConditionForm()"
+        @update:minutes="updateMinutes($event)"
+    >
 
         <template #notifyMethodTitle="{ $attrs, $listeners }">
             <p class="ml-3 mr-3 ">{{ _('w_RuleAndActions_NotifyMethod') }}</p>
@@ -14,13 +17,14 @@
                 :key="option.value"
                 :value="option.value"
                 inline
+                @change="changeNotifyMethod"
             >
                 {{ option.text }}
             </b-form-checkbox>
         </template>
 
         <template #notifyTargetTitle="{ $attrs, $listeners }">
-            <p class="ml-3 mr-3 ">{{ _('w_RuleAndActions_NotifyTarget') }}</p>
+            <p class="ml-3 mr-3">{{ _('w_RuleAndActions_NotifyTarget') }}</p>
         </template>
 
         <template #notifyTargetSelect="{ $attrs, $listeners }">
@@ -28,10 +32,10 @@
                 v-for="option in notifyTargetSelectItem"
                 v-model="notifyTargetSelected"
                 name="notifyMethodSelect"
-                class=""
                 :key="option.value"
                 :value="option.value"
                 inline
+                @change="changeNotifyTarget"
             >
                 {{ option.text }}
             </b-form-checkbox>
@@ -53,6 +57,7 @@
                 class="user"
                 :options="userSelectItem"
                 :multiple="true"
+                @input="selectUserIds"
             >
             </iv-form-selection>
         </template>
@@ -73,6 +78,7 @@
                 class="user"
                 :options="userGroupSelectItem"
                 :multiple="true"
+                @input="selectUserGroupIds"
             >
             </iv-form-selection>
         </template>
@@ -109,7 +115,7 @@ export class Actions extends Vue {
     userSelectItem: any = [];
     userGroupSelectItem: any = [];
 
-    // be selected
+    // checkbox be selected
     notifyMethodSelected: any = [ENotifyMethod.email];
     notifyTargetSelected: any = [
         EWhoNotify.storeManager,
@@ -119,8 +125,9 @@ export class Actions extends Vue {
     ];
 
     inputFormData: any = {
-        userIds: "",
-        groupIds: ""
+        userIds: [],
+        groupIds: [],
+        minutes: 0
     };
 
     created() {
@@ -132,10 +139,15 @@ export class Actions extends Vue {
         this.initSelectItemUserGroup();
     }
 
-    mounted() {}
+    mounted() {
+        // 如果沒有變更選擇，則是傳送預設值到父元件
+        this.changeNotifyMethod(this.notifyMethodSelected);
+        this.changeNotifyTarget(this.notifyTargetSelected);
+    }
 
     initSelectItem() {
         this.notifyMethodSelectItem = [
+            // 註解掉的是未來會增加的
             // { value: ENotifyMethod.mobileApp, text: this._("w_RuleAndActions_MobileApp") },
             // { value: ENotifyMethod.sms, text: this._("w_RuleAndActions_SMS") },
             {
@@ -200,6 +212,31 @@ export class Actions extends Vue {
             });
     }
 
+    changeNotifyMethod(selected: object) {
+        this.notifyMethodSelected = selected;
+        this.$emit('notify-method', this.notifyMethodSelected);
+    }
+
+    changeNotifyTarget(selected: object) {
+        this.notifyTargetSelected = selected;
+        this.$emit('notify-target', this.notifyTargetSelected);
+    }
+
+    selectUserIds(selected: object) {
+        this.inputFormData.userIds = selected;
+        this.$emit('user-ids', this.inputFormData.userIds);
+    }
+
+    selectUserGroupIds(selected: object) {
+        this.inputFormData.groupIds = selected;
+        this.$emit('user-group-ids', this.inputFormData.groupIds);
+    }
+
+    updateMinutes(minutes: number) {
+        this.inputFormData.minutes = minutes;
+        this.$emit('minutes', this.inputFormData.minutes);
+    }
+
     IFilterConditionForm() {
         return `
             interface {
@@ -241,16 +278,7 @@ export class Actions extends Vue {
                      this._("w_RuleAndActions_Minute")}
                  * @uiAttrs - { min: 0}
                  */
-                notifyFrequently: number;
-
-                notifyFrequentlyRemarks?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_Active")}
-                 * @uiColumnGroup - row
-                 */
-                isActive: any;
+                minutes: number;
 
             }
         `;

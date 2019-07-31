@@ -71,7 +71,15 @@
 
                         <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
                         <template #1>
-                            <choose-metrics :deviceMode="deviceMode"></choose-metrics>
+                            <choose-metrics
+                                :deviceMode="deviceMode"
+                                @name="receiveName"
+                                @active="receiveActive"
+                                @site-ids="receiveSiteIds"
+                                @area-ids="receiveAreaIds"
+                                @device-group-ids="receiveDeviceGroupIds"
+                                @device-ids="receiveDeviceIds"
+                            ></choose-metrics>
                         </template>
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
@@ -103,7 +111,13 @@
 
                         <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
                         <template #3>
-                            <actions></actions>
+                            <actions
+                                @notify-method="receiveNotifyMethod"
+                                @notify-target="receiveNotifyTarget"
+                                @user-ids="receiveUserIds"
+                                @user-group-ids="receiveUserGroupIds"
+                                @minutes="receiveMinutes"
+                            ></actions>
                         </template>
 
                     </iv-step-progress>
@@ -177,6 +191,7 @@ export default class RuleAndActionsTraffic extends Vue {
         step: 1
     };
 
+    // choose-metrics 使用
     deviceMode: string = EDeviceMode.peopleCounting;
 
     step2Item: any = {
@@ -188,7 +203,23 @@ export default class RuleAndActionsTraffic extends Vue {
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
-    inputFormData: any = {};
+
+    inputFormData: any = {
+        // choose-metrics
+        name: '',
+        active: '',
+        siteIds: [],
+        areaIds: [],
+        deviceGroupIds: [],
+        deviceIds: [],
+
+        // actions
+        notifyMethod: [],
+        notifyTarget: [],
+        userIds: [],
+        userGroupIds: [],
+        minutes: 0,
+    };
 
     doMounted() {
         this.isMounted = true;
@@ -199,14 +230,6 @@ export default class RuleAndActionsTraffic extends Vue {
     mounted() {
         // TODO: Developer
         this.transition.step = 2;
-    }
-
-    IStep2() {
-        return `
-            interface {
-                title?: any;
-                condition?: any;
-            }`;
     }
 
     pageToAdd() {
@@ -237,6 +260,67 @@ export default class RuleAndActionsTraffic extends Vue {
     }
 
     stepTo3() {}
+
+
+    ////////////////////  以下資料來自 step1 choose-metrics   ////////////////////
+    receiveName(name: string) {
+        console.log('name ~ ', name);
+        this.inputFormData.name = name;
+    }
+
+    receiveActive(active: string) {
+        console.log('active ~ ', active);
+        this.inputFormData.active = active;
+    }
+
+    receiveSiteIds(siteIds: object) {
+        console.log('siteIds ~ ', siteIds);
+        this.inputFormData.siteIds = siteIds;
+    }
+
+    receiveAreaIds(areaIds: object) {
+        console.log('areaIds ~ ', areaIds);
+        this.inputFormData.areaIds = areaIds;
+    }
+
+    receiveDeviceGroupIds(deviceGroupIds: object) {
+        console.log('deviceGroupIds ~ ', deviceGroupIds);
+        this.inputFormData.deviceGroupIds = deviceGroupIds;
+    }
+
+    receiveDeviceIds(deviceIds: object) {
+        console.log('deviceIds ~ ', deviceIds);
+        this.inputFormData.deviceIds = deviceIds;
+    }
+    ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
+
+    ////////////////////  以下資料來自 step3 Actions   ////////////////////
+    receiveNotifyMethod(notifyMethod: object) {
+        console.log('notifyMethod ~ ', notifyMethod);
+        this.inputFormData.notifyMethod = notifyMethod;
+    }
+
+    receiveNotifyTarget(notifyTarget: object) {
+        console.log('notifyTarget ~ ', notifyTarget);
+        this.inputFormData.notifyTarget = notifyTarget;
+    }
+
+    receiveUserIds(userIds: object) {
+        console.log('userIds ~ ', userIds);
+        this.inputFormData.userIds = userIds;
+    }
+
+    receiveUserGroupIds(userGroupIds: object) {
+        console.log('userGroupIds ~ ', userGroupIds);
+        this.inputFormData.userGroupIds = userGroupIds;
+    }
+
+    receiveMinutes(minutes: number) {
+        console.log('minutes ~ ', minutes);
+        this.inputFormData.minutes = minutes;
+    }
+    ////////////////////  以上資料來自 step3 Actions   ////////////////////
+
 
     async doDelete() {
         await Dialog.confirm(
@@ -357,6 +441,15 @@ export default class RuleAndActionsTraffic extends Vue {
 
             }
         `;
+    }
+
+
+    IStep2() {
+        return `
+            interface {
+                title?: any;
+                condition?: any;
+            }`;
     }
 }
 </script>

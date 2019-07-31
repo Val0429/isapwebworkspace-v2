@@ -10,6 +10,8 @@
 					key="transition_1"
 					v-show="transition.step === 1"
 					:interface="IFilterConditionForm()"
+					@update:name="updateName($event)"
+					@update:isActive="updateActive($event)"
 					@submit="doSubmit($event)"
 				>
 
@@ -51,13 +53,13 @@
 
 					<template #startHours="{$attrs, $listeners}">
 
-						<p class="ml-3 mt-1 mr-3" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_startTime') }} </p>
+						<p class="col-md-1 mt-1" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_startTime') }} </p>
 
 						<iv-form-selection
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.startHours"
-							class="time"
+							class="col-md-3"
 							:options="runTimeRange.hours"
 							:multiple="false"
 							@input="changeSiteIds"
@@ -71,7 +73,7 @@
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.startMinutes"
-							class="time ml-4"
+							class="col-md-2"
 							:options="runTimeRange.minutes"
 							:multiple="false"
 							@input="changeSiteIds"
@@ -82,13 +84,13 @@
 
 					<template #endHours="{$attrs, $listeners}">
 
-						<p class="ml-4 mt-1 mr-3" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_endTime') }} </p>
+						<p class="col-md-1 mt-1" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_endTime') }} </p>
 
 						<iv-form-selection
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.endHours"
-							class="time "
+							class="col-md-3"
 							:options="runTimeRange.hours"
 							:multiple="false"
 							@input="changeSiteIds"
@@ -103,7 +105,7 @@
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.endMinutes"
-							class="time ml-4"
+							class="col-md-2"
 							:options="runTimeRange.minutes"
 							:multiple="false"
 							@input="changeSiteIds"
@@ -143,15 +145,16 @@
 						<iv-form-selection
 							v-on="$listeners"
 							v-model="inputFormData.siteIds"
-							class="select-site ml-3"
+							class="col-md-10"
 							:options="sitesSelectItem"
 							:multiple="true"
 							@input="changeSiteIds"
 						>
 						</iv-form-selection>
 
-						<div class="ml-3 mb-3">
+						<div class="col-md-2">
 							<b-button
+								class="col-md-12"
 								variant="outline-secondary"
 								@click="pageToChooseTree"
 							>
@@ -185,7 +188,7 @@
 							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
 							v-model="inputFormData.areaIds"
-							class="select-area ml-3"
+							class="col-md-12"
 							:options="areaSelectItem"
 							:multiple="true"
 							@input="changeAreaIds"
@@ -218,7 +221,7 @@
 							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
 							v-model="inputFormData.groupIds"
-							class="select-area ml-3"
+							class="col-md-12"
 							:options="deviceGroupSelectItem"
 							:multiple="true"
 							@input="changeGroupIds"
@@ -251,7 +254,7 @@
 							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
 							v-model="inputFormData.deviceIds"
-							class="select-area ml-3"
+							class="col-md-12"
 							:options="deviceSelectItem"
 							:multiple="true"
 							@input="changeDeviceIds"
@@ -280,7 +283,7 @@
 
 
 <script lang="ts">
-	import { Component, Prop, Vue } from "vue-property-decorator";
+	import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 	// Transition
 	import Transition from "@/services/Transition";
@@ -320,6 +323,11 @@
 		})
 		deviceMode: string;
 
+		transition: ITransition = {
+			type: Transition.type,
+			prevStep: 1,
+			step: 1
+		};
 
 		// select 相關
 		// radio button
@@ -329,6 +337,7 @@
 		ifAllDeviceSelectItem: any = [];
 		isAnyTimeSelectItem: any = [];
 
+		// active 相關
 		isActiveSelectItem: any = {};
 
 		// store 相關
@@ -337,10 +346,11 @@
 		deviceGroupSelectItem: any = [];
 		deviceSelectItem: any = [];
 
-		transition: ITransition = {
-			type: Transition.type,
-			prevStep: 1,
-			step: 1
+
+		// run time 相關
+		runTimeRange = {
+			hours: [],
+			minutes: []
 		};
 
 		// radio button v-modal 相關
@@ -356,34 +366,25 @@
 		selecteds: IRegionTreeSelected[] = [];
 
 
-		// run time 相關
-		runTime: any = {
-			startHours: '',
-			endHours: '',
-			startMinutes: '',
-			endMinutes: '',
-		};
-
-		runTimeRange = {
-			hours: [],
-			minutes: []
-		};
-
 		anyTime = 'Any Time';
 
 		inputFormData: any = {
 			name: '',
-			siteIds: [],
-			allSiteIds: [],
 			firstSiteId: '',
 			isActive: EIncludedEmployee.yes,
+
+			siteIds: [],
 			areaIds: [],
 			groupIds: [],
 			deviceIds: [],
+
+			// 全選 site 相關
+			allSiteIds: [],
 			allAreaIds: [],
 			allGroupIds: [],
 			allDeviceIds: [],
 
+			// run time 相關
 			startHours: '10',
 			startMinutes: '0',
 			endHours: '20',
@@ -403,7 +404,10 @@
 
 		}
 
-		mounted() {}
+		mounted() {
+			// 如果沒有變更選擇，則是傳送預設值到父元件
+			this.updateActive(this.inputFormData.isActive);
+		}
 
 		initSelectItem() {
 			this.ifAllSitesSelectItem = [
@@ -585,7 +589,6 @@
 		async initSelectItemDevice() {
 			this.deviceSelectItem = [];
 
-
 			const readParam: {
 				siteId: string;
 				areaId?: string;
@@ -638,6 +641,7 @@
 			}
 		}
 
+		////////////////////  以下為 radio button 相關   ////////////////////
 		changeTimeSelect(selected: string) {
 			this.isAnyTime = selected
 		}
@@ -657,6 +661,7 @@
 				this.selecteds = [];
 			}
 
+			this.$emit('site-ids', this.inputFormData.siteIds);
 		}
 
 		changeAllAreasSelect(selected: string) {
@@ -671,6 +676,8 @@
 			} else {
 				this.inputFormData.areaIds = [];
 			}
+
+			this.$emit('area-ids', this.inputFormData.areaIds);
 		}
 
 		changeAllGroupsSelect(selected: string) {
@@ -686,6 +693,7 @@
 				this.inputFormData.groupIds = [];
 			}
 
+			this.$emit('device-group-ids', this.inputFormData.groupIds);
 		}
 
 		changeAllDevicesSelect(selected: string) {
@@ -701,6 +709,20 @@
 				this.inputFormData.deviceIds = [];
 			}
 
+			this.$emit('device-ids', this.inputFormData.deviceIds);
+
+		}
+
+		////////////////////  以上為 radio button 相關   ////////////////////
+
+		updateName(name: string) {
+			this.inputFormData.name = name;
+			this.$emit('name', this.inputFormData.name);
+		}
+
+		updateActive(isactive: string) {
+			this.inputFormData.isActive = isactive;
+			this.$emit('active', this.inputFormData.isActive);
 		}
 
 		async changeSiteIds() {
@@ -745,9 +767,10 @@
 				this.inputFormData.deviceIds = [];
 			}
 
+			this.$emit('site-ids', this.inputFormData.siteIds);
 		}
 
-		async changeAreaIds() {
+		changeAreaIds() {
 			if (
 				this.inputFormData.areaIds.length !==
 				this.inputFormData.allAreaIds.length
@@ -759,6 +782,9 @@
 			) {
 				this.isAllArea = EIfAllSelected.all;
 			}
+
+			this.$emit('area-ids', this.inputFormData.areaIds);
+
 		}
 
 		changeGroupIds() {
@@ -773,6 +799,9 @@
 			) {
 				this.isAllGroup = EIfAllSelected.all;
 			}
+
+			this.$emit('device-group-ids', this.inputFormData.groupIds);
+
 		}
 
 		changeDeviceIds() {
@@ -788,6 +817,7 @@
 				this.isAllDevice = EIfAllSelected.all;
 			}
 
+			this.$emit('device-ids', this.inputFormData.deviceIds);
 
 		}
 
