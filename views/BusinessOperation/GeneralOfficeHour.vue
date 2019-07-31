@@ -203,20 +203,7 @@
 
                                 <b-col>
                                     <b-button
-                                        v-show="index === 0"
-                                        class="button"
-                                        variant="danger"
-                                        type="button"
-                                        style="visibility:hidden"
-                                        @click="removeOfficeHour(index)"
-                                    >
-                                        <i class="fa fa-minus"></i>
-                                    </b-button>
-                                </b-col>
-
-                                <b-col>
-                                    <b-button
-                                        v-show="index !== 0"
+                                        v-show="officeHourTime.length > 1"
                                         class="button"
                                         variant="danger"
                                         type="button"

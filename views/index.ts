@@ -177,10 +177,10 @@ $({ path: '/video_sources/face_recognition', name: "_('w_Navigation_VideoSources
 
 // Rule Engine
 $({ path: '/rule_actions', name: "_('w_Navigation_RuleAndActions')", icon: 'fa-code', redirect: '/rule_actions/traffic' })();
-$({ path: '/rule_actions/traffic', name: "_('w_Navigation_RuleAndActions_Traffic')", icon: 'fa-code', permission: false })(RuleAndActionsTraffic);
-$({ path: '/rule_actions/occupancy', name: "_('w_Navigation_RuleAndActions_Occupancy')", icon: 'fa-code', permission: false })(RuleAndActionsOccupancy);
-$({ path: '/rule_actions/vip_blacklist', name: "_('w_Navigation_RuleAndActions_VipBlacklist')", icon: 'fa-code', permission: false })(RuleAndActionsVipBlacklist);
-$({ path: '/rule_actions/repeat_visitor', name: "_('w_Navigation_RuleAndActions_RepeatVisitor')", icon: 'fa-code', permission: false })(RuleAndActionsRepeatVisitor);
+$({ path: '/rule_actions/traffic', name: "_('w_Navigation_RuleAndActions_Traffic')", icon: 'fa-code' })(RuleAndActionsTraffic);
+$({ path: '/rule_actions/occupancy', name: "_('w_Navigation_RuleAndActions_Occupancy')", icon: 'fa-code' })(RuleAndActionsOccupancy);
+$({ path: '/rule_actions/vip_blacklist', name: "_('w_Navigation_RuleAndActions_VipBlacklist')", icon: 'fa-code' })(RuleAndActionsVipBlacklist);
+$({ path: '/rule_actions/repeat_visitor', name: "_('w_Navigation_RuleAndActions_RepeatVisitor')", icon: 'fa-code' })(RuleAndActionsRepeatVisitor);
 
 // Business Operation
 $({ path: '/business_operations', name: "_('w_Navigation_BusinessOperation')", redirect: '/business_operations/campaign_setting' })();
