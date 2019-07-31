@@ -51,6 +51,8 @@
                 v-on="$listeners"
                 v-model="inputFormData.userIds"
                 class="user"
+                :options="userSelectItem"
+                :multiple="true"
             >
             </iv-form-selection>
         </template>
@@ -63,11 +65,14 @@
         </template>
 
         <template #groupIds="{ $attrs, $listeners }">
+
             <iv-form-selection
                 v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
                 v-on="$listeners"
                 v-model="inputFormData.groupIds"
                 class="user"
+                :options="userGroupSelectItem"
+                :multiple="true"
             >
             </iv-form-selection>
         </template>
@@ -101,8 +106,8 @@ export class Actions extends Vue {
     notifyTargetSelectItem: any = [];
 
     // user, userGroup
-    userSelectItem: any = {};
-    userGroupSelectItem: any = {};
+    userSelectItem: any = [];
+    userGroupSelectItem: any = [];
 
     // be selected
     notifyMethodSelected: any = [ENotifyMethod.email];
@@ -158,17 +163,17 @@ export class Actions extends Vue {
     }
 
     async initSelectItemUsers() {
-        let tempUserSelectItem = {};
+
+        this.userSelectItem = [];
 
         await this.$server
             .R("/user/user")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        tempUserSelectItem[returnValue.objectId] =
-                            returnValue.username;
+                        let user = { id: returnValue.objectId, text: returnValue.username };
+                        this.userSelectItem.push(user);
                     }
-                    this.userSelectItem = tempUserSelectItem;
                 });
             })
             .catch((e: any) => {
@@ -177,19 +182,17 @@ export class Actions extends Vue {
     }
 
     async initSelectItemUserGroup() {
-        let tempUserGroupSelectItem = {};
-        this.userGroupSelectItem = {};
+
+        this.userGroupSelectItem = [];
 
         await this.$server
             .R("/user/group/all")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
-                        this.$set(this.userGroupSelectItem, returnValue.objectId, returnValue.name)
-                        tempUserGroupSelectItem[returnValue.objectId] =
-                            returnValue.name;
+                        let userGroup = { id: returnValue.objectId, text: returnValue.name };
+                        this.userGroupSelectItem.push(userGroup);
                     }
-                    this.userGroupSelectItem = tempUserGroupSelectItem;
                 });
             })
             .catch((e: any) => {
