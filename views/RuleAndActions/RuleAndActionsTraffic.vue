@@ -53,11 +53,43 @@
 
             </div>
 
-            <!-- add & edit -->
+            <!-- view -->
             <div
                 key="transition_2"
                 v-show="transition.step === 2"
                 :label="'Empty 2'"
+            >
+                <iv-auto-card
+                    :visible="true"
+                    :label="_('w_RuleAndActions_RuleAView') "
+                >
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
+
+                    <iv-form
+                        :interface="IViewForm()"
+                        :value="inputFormData"
+                    >
+                    </iv-form>
+
+                    <template #footer>
+                        <b-button
+                            variant="dark"
+                            size="lg"
+                            @click="pageToList()"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
+
+                </iv-auto-card>
+            </div>
+
+            <!-- add & edit -->
+            <div
+                key="transition_3"
+                v-show="transition.step === 3"
+                :label="'Empty 3'"
             >
                 <iv-auto-card
                     :visible="true"
@@ -94,13 +126,59 @@
                                 </template>
 
                                 <template #condition="{ $attrs, $listeners }">
-                                    <b-form-group class="ml-3">
+                                    <b-form-group class="col-md-12">
                                         <b-row
-                                            v-for="(value, index) in step2Datas"
-                                            :key="'officeHourTime__' + index"
+                                            v-for="(value, index) in conditions"
+                                            :key="'condition__' + index"
                                         >
-                                            <b-col>
-                                                <div>test</div>
+                                            <b-col class="col-md-4">
+                                                <iv-form-selection
+                                                    :value="conditions[index].ruleMode"
+                                                    :plain="true"
+                                                    :options="selectItem.ruleMode"
+                                                ></iv-form-selection>
+                                            </b-col>
+                                            <b-col class="col-md-2">
+                                                <iv-form-selection
+                                                    :value="conditions[index].equalMode"
+                                                    :plain="true"
+                                                    :options="selectItem.equalMode"
+                                                ></iv-form-selection>
+                                            </b-col>
+                                            <b-col class="col-md-2">
+                                                <iv-form-number
+                                                    :value="conditions[index].fillValue"
+                                                    :plain="true"
+                                                ></iv-form-number>
+                                            </b-col>
+                                            <b-col class="col-md-2">
+                                                <iv-form-selection
+                                                    :value="conditions[index].andMode"
+                                                    :plain="true"
+                                                    :options="selectItem.andMode"
+                                                ></iv-form-selection>
+                                            </b-col>
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    class="button addButton"
+                                                    variant="success"
+                                                    type="button"
+                                                    @click="addCondition()"
+                                                >
+                                                    <i class="fa fa-plus"></i>
+                                                </b-button>
+                                            </b-col>
+
+                                            <b-col class="col-md-1">
+                                                <b-button
+                                                    v-show="conditions.length > 1"
+                                                    class="button"
+                                                    variant="danger"
+                                                    type="button"
+                                                    @click="removeCondition(index)"
+                                                >
+                                                    <i class="fa fa-minus"></i>
+                                                </b-button>
                                             </b-col>
                                         </b-row>
                                     </b-form-group>
@@ -125,37 +203,6 @@
                 </iv-auto-card>
             </div>
 
-            <!-- view -->
-            <div
-                key="transition_3"
-                v-show="transition.step === 3"
-                :label="'Empty 3'"
-            >
-                <iv-auto-card
-                    :visible="true"
-                    :label="_('w_RuleAndActions_RuleAView') "
-                >
-                    <template #toolbox>
-                        <iv-toolbox-back @click="pageToList()" />
-                    </template>
-
-                    <iv-form
-                        :interface="IViewForm()"
-                        :value="inputFormData"
-                    >
-                    </iv-form>
-
-                    <template #footer>
-                        <b-button
-                            variant="dark"
-                            size="lg"
-                            @click="pageToList()"
-                        >{{ _('w_Back') }}
-                        </b-button>
-                    </template>
-
-                </iv-auto-card>
-            </div>
         </iv-auto-transition>
 
     </div>
@@ -168,13 +215,15 @@ import { Vue, Component } from "vue-property-decorator";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
+// custom
+import { EDeviceMode, IValSelectItem } from "@/components/Reports";
+
 // Service
 import Dialog from "@/services/Dialog";
-import { EDeviceMode } from "@/components/Reports";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 
-interface IStep2Data {
+interface ICondition {
     ruleMode: string;
     equalMode: string;
     fillValue: number;
@@ -193,21 +242,14 @@ export default class RuleAndActionsTraffic extends Vue {
 
     // choose-metrics 使用
     deviceMode: string = EDeviceMode.peopleCounting;
-
-    step2Item: any = {
-        condition: []
-    };
-    step2Datas: IStep2Data[] = [];
-
-    isMounted: boolean = false;
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
 
     inputFormData: any = {
         // choose-metrics
-        name: '',
-        active: '',
+        name: "",
+        active: "",
         siteIds: [],
         areaIds: [],
         deviceGroupIds: [],
@@ -218,33 +260,78 @@ export default class RuleAndActionsTraffic extends Vue {
         notifyTarget: [],
         userIds: [],
         userGroupIds: [],
-        minutes: 0,
+        minutes: 0
     };
 
+    ////////////////////////////////// Morris Start //////////////////////////////////
+
+    step2Item: any = {
+        condition: []
+    };
+    conditions: ICondition[] = [];
+
+    selectItem: {
+        ruleMode: IValSelectItem[];
+        equalMode: IValSelectItem[];
+        andMode: IValSelectItem[];
+    } = {
+        ruleMode: [
+            { id: "today", text: "Toady" },
+            { id: "current", text: "Current" }
+        ],
+        equalMode: [
+            { id: "More", text: "More than" },
+            { id: "MoreEqual", text: "More than or equal to" },
+            { id: "equal", text: "Equal to" },
+            { id: "less", text: "Less than" },
+            { id: "lessEqual", text: "Less than or equal to" }
+        ],
+        andMode: [{ id: "and", text: "And" }, { id: "or", text: "Or" }]
+    };
+    isMounted: boolean = false;
     doMounted() {
         this.isMounted = true;
     }
 
+    clearConditions() {
+        this.conditions = [];
+        this.addCondition();
+    }
+
+    addCondition() {
+        this.conditions.push({
+            ruleMode: "today",
+            equalMode: "equal",
+            fillValue: 0,
+            andMode: "and"
+        });
+    }
+
+    removeCondition(index: number) {
+        this.conditions.splice(index, 1);
+    }
+
+    ////////////////////////////////// Morris Start //////////////////////////////////
+
     created() {}
 
-    mounted() {
-        // TODO: Developer
-        this.transition.step = 2;
-    }
+    mounted() {}
 
     pageToAdd() {
         this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
+        this.transition.step = 3;
+        this.clearConditions();
     }
 
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
+        this.transition.step = 3;
+        this.clearConditions();
     }
 
     pageToView() {
         this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
+        this.transition.step = 2;
     }
 
     selectedItem(data) {
@@ -261,66 +348,64 @@ export default class RuleAndActionsTraffic extends Vue {
 
     stepTo3() {}
 
-
     ////////////////////  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {
-        console.log('name ~ ', name);
+        console.log("name ~ ", name);
         this.inputFormData.name = name;
     }
 
     receiveActive(active: string) {
-        console.log('active ~ ', active);
+        console.log("active ~ ", active);
         this.inputFormData.active = active;
     }
 
     receiveSiteIds(siteIds: object) {
-        console.log('siteIds ~ ', siteIds);
+        console.log("siteIds ~ ", siteIds);
         this.inputFormData.siteIds = siteIds;
     }
 
     receiveAreaIds(areaIds: object) {
-        console.log('areaIds ~ ', areaIds);
+        console.log("areaIds ~ ", areaIds);
         this.inputFormData.areaIds = areaIds;
     }
 
     receiveDeviceGroupIds(deviceGroupIds: object) {
-        console.log('deviceGroupIds ~ ', deviceGroupIds);
+        console.log("deviceGroupIds ~ ", deviceGroupIds);
         this.inputFormData.deviceGroupIds = deviceGroupIds;
     }
 
     receiveDeviceIds(deviceIds: object) {
-        console.log('deviceIds ~ ', deviceIds);
+        console.log("deviceIds ~ ", deviceIds);
         this.inputFormData.deviceIds = deviceIds;
     }
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveNotifyMethod(notifyMethod: object) {
-        console.log('notifyMethod ~ ', notifyMethod);
+        console.log("notifyMethod ~ ", notifyMethod);
         this.inputFormData.notifyMethod = notifyMethod;
     }
 
     receiveNotifyTarget(notifyTarget: object) {
-        console.log('notifyTarget ~ ', notifyTarget);
+        console.log("notifyTarget ~ ", notifyTarget);
         this.inputFormData.notifyTarget = notifyTarget;
     }
 
     receiveUserIds(userIds: object) {
-        console.log('userIds ~ ', userIds);
+        console.log("userIds ~ ", userIds);
         this.inputFormData.userIds = userIds;
     }
 
     receiveUserGroupIds(userGroupIds: object) {
-        console.log('userGroupIds ~ ', userGroupIds);
+        console.log("userGroupIds ~ ", userGroupIds);
         this.inputFormData.userGroupIds = userGroupIds;
     }
 
     receiveMinutes(minutes: number) {
-        console.log('minutes ~ ', minutes);
+        console.log("minutes ~ ", minutes);
         this.inputFormData.minutes = minutes;
     }
     ////////////////////  以上資料來自 step3 Actions   ////////////////////
-
 
     async doDelete() {
         await Dialog.confirm(
@@ -441,7 +526,6 @@ export default class RuleAndActionsTraffic extends Vue {
             }
         `;
     }
-
 
     IStep2() {
         return `
