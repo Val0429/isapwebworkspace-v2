@@ -96,7 +96,7 @@ export default class AttendanceReport extends Vue  {
   private async getMember() {
     if(this.filter && this.filter.ResignDate)
       this.filter.ResignationDate=this.filter.ResignDate.toISOString();
-    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter||{});
+    let resp: any=await this.$server.R("/report/memberrecord" as any, Object.assign({ShowEmptyCardNumber:true}, this.filter));
     this.records=[];
     for(let member of resp.results){
         for(let tableid of member.PermissionTable){
