@@ -90,6 +90,8 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}
@@ -115,7 +117,17 @@ export default class RuleAndActionsOccupancy extends Vue {
 
     mounted() {}
 
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
     pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+    }
+
+    pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }
@@ -124,6 +136,40 @@ export default class RuleAndActionsOccupancy extends Vue {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
+    }
+
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                Loading.show();
+                for (const param of this.selectedDetail) {
+                    const deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
+                    // DO TO wait API
+                    // this.$server
+                    //     .D("/rule/peopleCounting", deleteParam)
+                    //     .then((response: any) => {
+                    //         ResponseFilter.successCheck(
+                    //             this,
+                    //             response,
+                    //             (response: any) => {
+                    //                 this.pageToList();
+                    //             },
+                    //             this._("w_DeleteFailed")
+                    //         );
+                    //     })
+                    //     .catch((e: any) => {
+                    //         return ResponseFilter.catchError(this, e);
+                    //     });
+                }
+                Loading.hide();
+            }
+        );
     }
 
     ITableList() {
