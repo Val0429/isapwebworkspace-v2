@@ -95,7 +95,7 @@
         <template #userIdsTitle="{ $attrs, $listeners }">
             <p
                 v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
-                class="ml-3 mr-3 col-md-10 mt-2">{{ _('w_RuleAndActions_Users1') }}</p>
+                class="col-md-12 mt-2">{{ _('w_RuleAndActions_Users1') }}</p>
         </template>
 
         <template #userIds="{ $attrs, $listeners }">
@@ -104,7 +104,7 @@
                 v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
                 v-on="$listeners"
                 v-model="inputFormData.userIds"
-                class="user"
+                class="col-md-12"
                 :options="userSelectItem"
                 :multiple="true"
                 @input="selectUserIds"
@@ -116,7 +116,7 @@
 
             <p
                 v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
-                class="ml-3 mr-3 col-md-10 mt-2">{{ _('w_RuleAndActions_UserGroup1') }}</p>
+                class="col-md-12 mt-2">{{ _('w_RuleAndActions_UserGroup1') }}</p>
         </template>
 
         <template #groupIds="{ $attrs, $listeners }">
@@ -125,7 +125,7 @@
                 v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
                 v-on="$listeners"
                 v-model="inputFormData.groupIds"
-                class="user"
+                class="col-md-12"
                 :options="userGroupSelectItem"
                 :multiple="true"
                 @input="selectUserGroupIds"
@@ -280,7 +280,7 @@ export class Actions extends Vue {
         } else if (this.notifyTargetSelected.filter(item => item === EWhoNotify.userGroup).join() !== EWhoNotify.userGroup) {
             this.inputFormData.groupIds = [];
         }
-        
+
         this.$emit("notify-target", this.notifyTargetSelected);
     }
 
