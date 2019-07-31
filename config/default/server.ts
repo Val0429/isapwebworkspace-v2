@@ -302,6 +302,9 @@ interface RestfulRequest extends ApisRequestBase {
         // report
         '/report/template': [any, any, false];
         '/report/campaign/condition': [any, any, false];
+
+        //system
+        '/setting/system': [any, any, false];
     };
 
     // update
@@ -390,6 +393,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // report
         '/report/template': [any, any, false];
+
+        //system
+        '/setting/system': [any, any, false];
     };
 
     // delete
