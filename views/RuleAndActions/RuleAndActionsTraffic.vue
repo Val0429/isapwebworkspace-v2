@@ -309,7 +309,7 @@ export default class RuleAndActionsTraffic extends Vue {
         let tempCondition: ICondition = {
             fillValue: 0,
             ruleMode: ERuleMode.trafficSingleSiteToday,
-            equalMode: EEqualMode.equal,
+            equalMode: EEqualMode.more,
             andMode: EAndMode.and
         };
 
