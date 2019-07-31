@@ -474,14 +474,15 @@ export class SiteAreaForm extends Vue {
     }
 
     async saveArea(data) {
+        let threshold = { high: data.high, medium: data.medium, low: data.low };
         if (this.transition.step === 7) {
             const datas: IAreaAddData[] = [
                 {
                     siteId: this.site.objectId,
                     name: data.name,
                     imageBase64: this.areaPhotoSrc,
-                    mapBase64: this.imageMap.imageBox.src
-                    //TO DO add high medium low param
+                    mapBase64: this.imageMap.imageBox.src,
+                    threshold: threshold
                 }
             ];
 
@@ -506,7 +507,8 @@ export class SiteAreaForm extends Vue {
             const datas: IAreaEditData[] = [
                 {
                     objectId: data.objectId,
-                    name: data.name
+                    name: data.name,
+                    threshold: threshold
                 }
             ];
 
