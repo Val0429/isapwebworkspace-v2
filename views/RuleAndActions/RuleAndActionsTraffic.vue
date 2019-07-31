@@ -9,7 +9,6 @@
             <div
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
             >
                 <iv-card :label="_('w_RuleAndActions_RuleList')">
                     <template #toolbox>
@@ -57,7 +56,6 @@
             <div
                 key="transition_2"
                 v-show="transition.step === 2"
-                :label="'Empty 2'"
             >
                 <iv-auto-card
                     :visible="true"
@@ -89,7 +87,6 @@
             <div
                 key="transition_3"
                 v-show="transition.step === 3"
-                :label="'Empty 3'"
             >
                 <iv-auto-card
                     :visible="true"
