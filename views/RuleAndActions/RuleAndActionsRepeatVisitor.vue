@@ -363,6 +363,12 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         this.clearConditions();
     }
 
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
     IStep2() {
         return `
             interface {
