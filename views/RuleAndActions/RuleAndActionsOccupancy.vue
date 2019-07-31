@@ -440,7 +440,7 @@ export default class RuleAndActionsOccupancy extends Vue {
             interface {
 
                 thresholdeTitle?: any;
-                
+
                 /**
                  * @uiLabel - ${this._(
                      "w_RuleAndActions_OccupancyThresholdHigh"
@@ -496,60 +496,60 @@ export default class RuleAndActionsOccupancy extends Vue {
 
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {
-        console.log("name ~ ", name);
         this.inputFormData.name = name;
+        console.log("name ~ ", this.inputFormData.name);
     }
 
     receiveActive(active: string) {
-        console.log("active ~ ", active);
         this.inputFormData.active = active;
+        console.log("active ~ ", this.inputFormData.active);
     }
 
     receiveSiteIds(siteIds: object) {
-        console.log("siteIds ~ ", siteIds);
         this.inputFormData.siteIds = siteIds;
+        console.log("siteIds ~ ", this.inputFormData.siteIds);
     }
 
     receiveAreaIds(areaIds: object) {
-        console.log("areaIds ~ ", areaIds);
         this.inputFormData.areaIds = areaIds;
+        console.log("areaIds ~ ", this.inputFormData.areaIds);
     }
 
     receiveDeviceGroupIds(deviceGroupIds: object) {
-        console.log("deviceGroupIds ~ ", deviceGroupIds);
         this.inputFormData.deviceGroupIds = deviceGroupIds;
+        console.log("deviceGroupIds ~ ", this.inputFormData.deviceGroupIds);
     }
 
     receiveDeviceIds(deviceIds: object) {
-        console.log("deviceIds ~ ", deviceIds);
         this.inputFormData.deviceIds = deviceIds;
+        console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveNotifyMethod(notifyMethod: string) {
-        console.log("notifyMethod ~ ", notifyMethod);
         this.inputFormData.notifyMethod = notifyMethod;
+        console.log("notifyMethod ~ ", this.inputFormData.notifyMethod);
     }
 
     receiveNotifyTarget(notifyTarget: object) {
-        console.log("notifyTarget ~ ", notifyTarget);
         this.inputFormData.notifyTarget = notifyTarget;
+        console.log("notifyTarget ~ ", this.inputFormData.notifyTarget);
     }
 
     receiveUserIds(userIds: object) {
-        console.log("userIds ~ ", userIds);
         this.inputFormData.userIds = userIds;
+        console.log("userIds ~ ", this.inputFormData.userIds);
     }
 
     receiveUserGroupIds(userGroupIds: object) {
-        console.log("userGroupIds ~ ", userGroupIds);
         this.inputFormData.userGroupIds = userGroupIds;
+        console.log("userGroupIds ~ ", this.inputFormData.userGroupIds);
     }
 
     receiveMinutes(minutes: number) {
-        console.log("minutes ~ ", minutes);
         this.inputFormData.minutes = minutes;
+        console.log("minutes ~ ", this.inputFormData.minutes);
     }
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 

@@ -99,7 +99,15 @@
 
                         <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
                         <template #1>
-                            Step 1
+                            <choose-metrics
+                                :deviceMode="deviceMode"
+                                @name="receiveName"
+                                @active="receiveActive"
+                                @site-ids="receiveSiteIds"
+                                @area-ids="receiveAreaIds"
+                                @device-group-ids="receiveDeviceGroupIds"
+                                @device-ids="receiveDeviceIds"
+                            ></choose-metrics>
                         </template>
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
@@ -186,7 +194,13 @@
 
                         <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
                         <template #3>
-                            Step 3
+                            <actions
+                                @notify-method="receiveNotifyMethod"
+                                @notify-target="receiveNotifyTarget"
+                                @user-ids="receiveUserIds"
+                                @user-group-ids="receiveUserGroupIds"
+                                @minutes="receiveMinutes"
+                            ></actions>
                         </template>
 
                     </iv-step-progress>
@@ -238,10 +252,30 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         this.isMounted = true;
     }
 
-    // choose-metrics 使用
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
+
+    // choose-metrics 使用
+    deviceMode: string = EDeviceMode.peopleCounting;
+
+    inputFormData: any = {
+        // choose-metrics
+        name: "",
+        active: "",
+        siteIds: [],
+        areaIds: [],
+        deviceGroupIds: [],
+        deviceIds: [],
+
+        // actions
+        notifyMethod: [],
+        notifyTarget: [],
+        userIds: [],
+        userGroupIds: [],
+        minutes: 0
+    };
+
     ////////////////////////////////// Morris Start //////////////////////////////////
 
     step2Item: any = {
@@ -355,6 +389,65 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
+
+    ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
+    receiveName(name: string) {
+        this.inputFormData.name = name;
+        console.log("name ~ ", this.inputFormData.name);
+    }
+
+    receiveActive(active: string) {
+        this.inputFormData.active = active;
+        console.log("active ~ ", this.inputFormData.active);
+    }
+
+    receiveSiteIds(siteIds: object) {
+        this.inputFormData.siteIds = siteIds;
+        console.log("siteIds ~ ", this.inputFormData.siteIds);
+    }
+
+    receiveAreaIds(areaIds: object) {
+        this.inputFormData.areaIds = areaIds;
+        console.log("areaIds ~ ", this.inputFormData.areaIds);
+    }
+
+    receiveDeviceGroupIds(deviceGroupIds: object) {
+        this.inputFormData.deviceGroupIds = deviceGroupIds;
+        console.log("deviceGroupIds ~ ", this.inputFormData.deviceGroupIds);
+    }
+
+    receiveDeviceIds(deviceIds: object) {
+        this.inputFormData.deviceIds = deviceIds;
+        console.log("deviceIds ~ ", this.inputFormData.deviceIds);
+    }
+    ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
+
+    ////////////////////  以下資料來自 step3 Actions   ////////////////////
+    receiveNotifyMethod(notifyMethod: string) {
+        this.inputFormData.notifyMethod = notifyMethod;
+        console.log("notifyMethod ~ ", this.inputFormData.notifyMethod);
+    }
+
+    receiveNotifyTarget(notifyTarget: object) {
+        this.inputFormData.notifyTarget = notifyTarget;
+        console.log("notifyTarget ~ ", this.inputFormData.notifyTarget);
+    }
+
+    receiveUserIds(userIds: object) {
+        this.inputFormData.userIds = userIds;
+        console.log("userIds ~ ", this.inputFormData.userIds);
+    }
+
+    receiveUserGroupIds(userGroupIds: object) {
+        this.inputFormData.userGroupIds = userGroupIds;
+        console.log("userGroupIds ~ ", this.inputFormData.userGroupIds);
+    }
+
+    receiveMinutes(minutes: number) {
+        this.inputFormData.minutes = minutes;
+        console.log("minutes ~ ", this.inputFormData.minutes);
+    }
+    //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     async doDelete() {
         await Dialog.confirm(
