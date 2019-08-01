@@ -12,6 +12,7 @@
 					:interface="IFilterConditionForm()"
 					@update:name="updateName($event)"
 					@update:isActive="updateActive($event)"
+					@update:*="updateTime($event)"
 					@submit="doSubmit($event)"
 				>
 
@@ -393,6 +394,8 @@
 			name: '',
 			firstSiteId: '',
 			isActive: '',
+			isActiveApi: true,
+			time: undefined,
 
 			siteIds: [],
 			areaIds: [],
@@ -661,7 +664,31 @@
 
 		////////////////////  以下為 radio button 相關   ////////////////////
 		changeTimeSelect(selected: string) {
-			this.isAnyTime = selected
+			this.isAnyTime = selected;
+			if (this.isAnyTime === ERunTimeType.anyTime) {
+				this.inputFormData.time = undefined;
+			} else {
+				const startDate = new Date(
+					2000,
+					1,
+					1,
+					parseInt(this.inputFormData.startHours.toString(), 10),
+					parseInt(this.inputFormData.startMinutes.toString(), 10)
+				);
+				const endDate = new Date(
+					2000,
+					1,
+					1,
+					parseInt(this.inputFormData.endHours, 10),
+					parseInt(this.inputFormData.endMinutes, 10)
+				);
+
+				this.inputFormData.time = {
+					startDate, endDate
+				}
+			}
+
+			this.$emit('time', this.inputFormData.time);
 		}
 
 		changeAllSitesSelect(selected: string) {
@@ -733,16 +760,56 @@
 
 		////////////////////  以上為 radio button 相關   ////////////////////
 
-		// TODO: runtime
-
 		updateName(name: string) {
 			this.inputFormData.name = name;
 			this.$emit('name', this.inputFormData.name);
 		}
 
-		updateActive(isactive: string) {
-			this.inputFormData.isActive = isactive;
-			this.$emit('active', this.inputFormData.isActive);
+		updateActive(isActive: string) {
+			this.inputFormData.isActive = isActive;
+
+			this.inputFormData.isActive === EIncludedEmployee.no ? this.inputFormData.isActiveApi = false : true;
+
+			this.$emit('active', this.inputFormData.isActiveApi);
+		}
+
+		updateTime(data) {
+
+			switch (data.key) {
+				case 'startHours':
+					this.inputFormData.startHours = data.value;
+					break;
+				case 'startMinutes':
+					this.inputFormData.startMinutes = data.value;
+					break;
+				case 'endHours':
+					this.inputFormData.endHours = data.value;
+					break;
+				case 'endMinutes':
+					this.inputFormData.endMinutes = data.value;
+					break;
+			}
+
+			const startDate = new Date(
+				2000,
+				1,
+				1,
+				parseInt(this.inputFormData.startHours.toString(), 10),
+				parseInt(this.inputFormData.startMinutes.toString(), 10)
+			);
+			const endDate = new Date(
+				2000,
+				1,
+				1,
+				parseInt(this.inputFormData.endHours, 10),
+				parseInt(this.inputFormData.endMinutes, 10)
+			);
+
+			this.inputFormData.time = {
+				startDate, endDate
+			};
+
+			this.$emit('time', this.inputFormData.time);
 		}
 
 		async changeSiteIds() {
