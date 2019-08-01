@@ -120,8 +120,7 @@
                         <template #2>
 
                             <iv-form
-                                :interface="IStep2()"
-                                :value="step2Item"
+                                :interface="IConditionForm()"
                                 @submit="stepTo3($event)"
                             >
                                 <template #conditionTitle="{ $attrs, $listeners }">
@@ -130,23 +129,20 @@
 
                                 <template #conditionContent="{ $attrs, $listeners }">
                                     <b-form-group class="col-md-12">
-                                        <b-row
-                                            v-for="(value, index) in conditions"
-                                            :key="'condition__' + index"
-                                        >
+                                        <b-row>
                                             <b-col class="col-md-10">
                                                 <b-row>
                                                     <b-col class="col-md-3">{{ _('w_RuleAndActions_VipConditionText1') }}</b-col>
                                                     <b-col class="col-md-2">
                                                         <iv-form-selection
-                                                            v-model="conditions[index].equalMode"
+                                                            v-model="condition.equalMode"
                                                             :plain="true"
                                                             :options="selectItem.equalMode"
                                                         ></iv-form-selection>
                                                     </b-col>
                                                     <b-col class="col-md-1">
                                                         <iv-form-number
-                                                            v-model="conditions[index].fillValueTimes"
+                                                            v-model="condition.fillValueTimes"
                                                             :plain="true"
                                                             min="0"
                                                         ></iv-form-number>
@@ -154,20 +150,23 @@
                                                     <b-col class="col-md-2">{{ _('w_RuleAndActions_VipConditionText2') }}</b-col>
                                                     <b-col class="col-md-1">
                                                         <iv-form-number
-                                                            v-model="conditions[index].fillValueDays"
+                                                            v-model="condition.fillValueDays"
                                                             :plain="true"
                                                             min="0"
                                                         ></iv-form-number>
                                                     </b-col>
                                                     <b-col class="col-md-1">{{ _('w_RuleAndActions_VipConditionText3') }}</b-col>
+
                                                     <b-col class="col-md-2">
                                                         <iv-form-selection
-                                                            v-model="conditions[index].andMode"
+                                                            v-model="condition.andMode"
                                                             :plain="true"
                                                             :options="selectItem.andMode"
                                                         ></iv-form-selection>
                                                     </b-col>
+
                                                 </b-row>
+
                                             </b-col>
 
                                             <b-col class="col-md-1">
@@ -181,9 +180,15 @@
                                                 </b-button>
                                             </b-col>
 
+                                        </b-row>
+
+                                        <b-row
+                                            v-for="(value, index) in inputFormData.conditions"
+                                            :key="'condition__' + index"
+                                        >
+                                            <b-col class="col-md-11">{{ conditionText(index) }}</b-col>
                                             <b-col class="col-md-1">
                                                 <b-button
-                                                    v-show="conditions.length > 1"
                                                     class="button"
                                                     variant="danger"
                                                     type="button"
@@ -193,6 +198,7 @@
                                                 </b-button>
                                             </b-col>
                                         </b-row>
+
                                     </b-form-group>
                                 </template>
                             </iv-form>
@@ -247,6 +253,7 @@ import { EEqualMode, EAndMode } from "@/components/RuleAndActions";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import RuleActionsService from "@/services/RuleActions";
 
 interface ICondition {
     fillValueTimes: number;
@@ -287,6 +294,9 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         deviceGroupIds: [],
         deviceIds: [],
 
+        // conditions
+        conditions: [],
+
         // actions
         notifyMethod: [],
         notifyTarget: [],
@@ -297,10 +307,12 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
 
     ////////////////////////////////// Morris Start //////////////////////////////////
 
-    step2Item: any = {
-        condition: []
+    condition: ICondition = {
+        fillValueTimes: 0,
+        fillValueDays: 0,
+        equalMode: EEqualMode.more,
+        andMode: EAndMode.and
     };
-    conditions: ICondition[] = [];
 
     selectItem: {
         ruleMode: IValSelectItem[];
@@ -316,24 +328,41 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         andMode: []
     };
 
-    clearConditions() {
-        this.conditions = [];
-        this.addCondition();
+    ////////////////////////////////// Morris End //////////////////////////////////
+
+    created() {
+        this.initSelectItem();
     }
 
-    addCondition() {
-        let tempCondition: ICondition = {
-            fillValueTimes: 0,
-            fillValueDays: 0,
-            equalMode: EEqualMode.more,
-            andMode: EAndMode.and
-        };
+    mounted() {}
 
-        this.conditions.push(tempCondition);
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
     }
 
-    removeCondition(index: number) {
-        this.conditions.splice(index, 1);
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
     }
 
     initSelectItem() {
@@ -364,55 +393,6 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
             { id: EAndMode.and, text: this._("w_RuleAndActions_AndStatusAnd") },
             { id: EAndMode.or, text: this._("w_RuleAndActions_AndStatusOr") }
         ];
-    }
-
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearConditions();
-    }
-
-    pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearConditions();
-    }
-
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
-    }
-
-    IStep2() {
-        return `
-            interface {
-                conditionTitle?: any;
-                conditionContent?: any;
-            }`;
-    }
-
-    stepTo3(event: any) {
-        console.log(this.conditions);
-    }
-
-    ////////////////////////////////// Morris End //////////////////////////////////
-
-    created() {
-        this.initSelectItem();
-    }
-
-    mounted() {}
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-    }
-
-    selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        this.selectedDetail = data;
     }
 
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
@@ -451,6 +431,77 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
+
+    ////////////////////////////////// Step 2 Start //////////////////////////////////
+
+    clearConditions() {
+        this.initSelectItem();
+        this.inputFormData.conditions = [];
+        this.condition.fillValueTimes = 0;
+        this.condition.fillValueDays = 0;
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.andMode = EAndMode.and;
+    }
+
+    addCondition() {
+        if (this.condition.equalMode == EEqualMode.none) {
+            return false;
+        }
+
+        if (this.condition.andMode == EAndMode.none) {
+            return false;
+        }
+
+        let tempCondition: ICondition = JSON.parse(
+            JSON.stringify(this.condition)
+        );
+        this.inputFormData.conditions.push(tempCondition);
+        this.resetCondition();
+    }
+
+    removeCondition(index: number) {
+        this.inputFormData.conditions.splice(index, 1);
+        this.resetCondition();
+    }
+
+    resetCondition() {
+        this.condition.fillValueTimes = 0;
+        this.condition.fillValueDays = 0;
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.andMode = EAndMode.and;
+    }
+
+    conditionText(index: number): string {
+        let result: string = "";
+        result += this._("w_RuleAndActions_VipConditionText1");
+        result += " ";
+        result += RuleActionsService.equalModeText(
+            this,
+            this.inputFormData.conditions[index].equalMode
+        );
+        result += " ";
+        result += this.inputFormData.conditions[
+            index
+        ].fillValueTimes.toString();
+        result += " ";
+        result += this._("w_RuleAndActions_VipConditionText2");
+        result += " ";
+        result += this.inputFormData.conditions[index].fillValueDays.toString();
+        result += " ";
+        result += this._("w_RuleAndActions_VipConditionText3");
+        result += " ";
+        result += RuleActionsService.andModeText(
+            this,
+            this.inputFormData.conditions[index].andMode
+        );
+        return result;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.inputFormData.conditions);
+    }
+
+    ////////////////////////////////// Step 2 End //////////////////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveNotifyMethod(notifyMethod: string) {
@@ -585,6 +636,14 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
 
             }
         `;
+    }
+
+    IConditionForm() {
+        return `
+            interface {
+                conditionTitle?: any;
+                conditionContent?: any;
+            }`;
     }
 }
 </script>

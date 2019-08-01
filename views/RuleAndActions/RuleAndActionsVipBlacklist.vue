@@ -116,8 +116,7 @@
                         <template #2>
 
                             <iv-form
-                                :interface="IStep2()"
-                                :value="step2Item"
+                                :interface="IConditionForm()"
                                 @submit="stepTo3($event)"
                             >
                                 <template #conditionTitle="{ $attrs, $listeners }">
@@ -126,13 +125,12 @@
 
                                 <template #conditionContent="{ $attrs, $listeners }">
                                     <b-form-group class="col-md-12">
-                                        <b-row
-                                            v-for="(value, index) in conditions"
-                                            :key="'condition__' + index"
-                                        >
-                                            <b-col class="col-md-8">
+                                        <b-row>
+                                            <b-col class="col-md-9">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].ruleMode"
+                                                    v-if="isConditionItem"
+                                                    v-model="condition.ruleMode"
+                                                    :disabled="disabledCondition()"
                                                     :plain="true"
                                                     :options="selectItem.ruleMode"
                                                 ></iv-form-selection>
@@ -140,7 +138,8 @@
 
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].andMode"
+                                                    v-model="condition.andMode"
+                                                    :disabled="disabledCondition()"
                                                     :plain="true"
                                                     :options="selectItem.andMode"
                                                 ></iv-form-selection>
@@ -148,6 +147,7 @@
 
                                             <b-col class="col-md-1">
                                                 <b-button
+                                                    v-if="!disabledCondition()"
                                                     class="button addButton"
                                                     variant="success"
                                                     type="button"
@@ -157,9 +157,15 @@
                                                 </b-button>
                                             </b-col>
 
+                                        </b-row>
+
+                                        <b-row
+                                            v-for="(value, index) in inputFormData.conditions"
+                                            :key="'condition__' + index"
+                                        >
+                                            <b-col class="col-md-11">{{ conditionText(index) }}</b-col>
                                             <b-col class="col-md-1">
                                                 <b-button
-                                                    v-show="conditions.length > 1"
                                                     class="button"
                                                     variant="danger"
                                                     type="button"
@@ -169,6 +175,7 @@
                                                 </b-button>
                                             </b-col>
                                         </b-row>
+
                                     </b-form-group>
                                 </template>
                             </iv-form>
@@ -223,6 +230,7 @@ import { ERuleMode, EAndMode } from "@/components/RuleAndActions";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import RuleActionsService from "@/services/RuleActions";
 
 interface ICondition {
     ruleMode: ERuleMode;
@@ -261,6 +269,9 @@ export default class RuleAndActionsVipBlacklist extends Vue {
         deviceGroupIds: [],
         deviceIds: [],
 
+        // conditions
+        conditions: [],
+
         // actions
         notifyMethod: [],
         notifyTarget: [],
@@ -271,10 +282,11 @@ export default class RuleAndActionsVipBlacklist extends Vue {
 
     ////////////////////////////////// Morris Start //////////////////////////////////
 
-    step2Item: any = {
-        condition: []
+    isConditionItem = true;
+    condition: ICondition = {
+        ruleMode: ERuleMode.vipVip,
+        andMode: EAndMode.and
     };
-    conditions: ICondition[] = [];
 
     selectItem: {
         ruleMode: IValSelectItem[];
@@ -284,21 +296,41 @@ export default class RuleAndActionsVipBlacklist extends Vue {
         andMode: []
     };
 
-    clearConditions() {
-        this.conditions = [];
-        this.addCondition();
+    ////////////////////////////////// Morris End //////////////////////////////////
+
+    created() {
+        this.initSelectItem();
     }
 
-    addCondition() {
-        let tempCondition: ICondition = {
-            ruleMode: ERuleMode.vipVip,
-            andMode: EAndMode.and
-        };
-        this.conditions.push(tempCondition);
+    mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
     }
 
-    removeCondition(index: number) {
-        this.conditions.splice(index, 1);
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
     }
 
     initSelectItem() {
@@ -317,57 +349,6 @@ export default class RuleAndActionsVipBlacklist extends Vue {
             { id: EAndMode.and, text: this._("w_RuleAndActions_AndStatusAnd") },
             { id: EAndMode.or, text: this._("w_RuleAndActions_AndStatusOr") }
         ];
-    }
-
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearConditions();
-    }
-
-    pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearConditions();
-    }
-
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
-    }
-
-    IStep2() {
-        return `
-            interface {
-
-                conditionTitle?: any;
-
-                conditionContent?: any;
-            }`;
-    }
-
-    stepTo3(event: any) {
-        console.log(this.conditions);
-    }
-
-    ////////////////////////////////// Morris End //////////////////////////////////
-
-    created() {
-        this.initSelectItem();
-    }
-
-    mounted() {}
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-    }
-
-    selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        this.selectedDetail = data;
     }
 
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
@@ -407,6 +388,110 @@ export default class RuleAndActionsVipBlacklist extends Vue {
     }
 
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
+
+    ////////////////////////////////// Step 2 Start //////////////////////////////////
+
+    clearConditions() {
+        this.initSelectItem();
+        this.inputFormData.conditions = [];
+        this.condition.ruleMode = ERuleMode.vipVip;
+        this.condition.andMode = EAndMode.and;
+    }
+
+    addCondition() {
+        if (this.condition.ruleMode == ERuleMode.none) {
+            return false;
+        }
+
+        if (this.condition.andMode == EAndMode.none) {
+            return false;
+        }
+
+        let tempCondition: ICondition = JSON.parse(
+            JSON.stringify(this.condition)
+        );
+        this.inputFormData.conditions.push(tempCondition);
+        this.resetCondition();
+    }
+
+    removeCondition(index: number) {
+        this.inputFormData.conditions.splice(index, 1);
+        this.resetCondition();
+    }
+
+    resetCondition() {
+        let haveVip = false;
+        let haveBlacklist = false;
+        for (let tempCondition of this.inputFormData.conditions) {
+            switch (tempCondition.ruleMode) {
+                case ERuleMode.vipVip:
+                    haveVip = true;
+                    break;
+                case ERuleMode.vipBlacklist:
+                    haveBlacklist = true;
+                    break;
+            }
+        }
+        this.selectItem.ruleMode = [];
+        if (!haveVip) {
+            this.selectItem.ruleMode.push({
+                id: ERuleMode.vipVip,
+                text: this._("w_RuleAndActions_RuleStatusVip")
+            });
+        }
+        if (!haveBlacklist) {
+            this.selectItem.ruleMode.push({
+                id: ERuleMode.vipBlacklist,
+                text: this._("w_RuleAndActions_RuleStatusBlacklist")
+            });
+        }
+
+        console.log(this.selectItem.ruleMode[0]);
+
+        if (this.selectItem.ruleMode[0] != undefined) {
+            switch (this.selectItem.ruleMode[0].id) {
+                case "vipVip":
+                    this.condition.ruleMode = ERuleMode.vipVip;
+                    break;
+                case "vipBlacklist":
+                    this.condition.ruleMode = ERuleMode.vipBlacklist;
+                    break;
+            }
+        }
+
+        // Morris: Need reset selection in Vue
+        setTimeout(() => {
+            this.isConditionItem = true;
+        }, 10);
+    }
+
+    conditionText(index: number): string {
+        let result: string = "";
+        result += RuleActionsService.ruleModeText(
+            this,
+            this.inputFormData.conditions[index].ruleMode
+        );
+        result += " ";
+        result += RuleActionsService.andModeText(
+            this,
+            this.inputFormData.conditions[index].andMode
+        );
+        return result;
+    }
+
+    disabledCondition(): boolean {
+        let result = false;
+        if (this.inputFormData.conditions.length > 1) {
+            result = true;
+        }
+        return result;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.inputFormData.conditions);
+    }
+
+    ////////////////////////////////// Step 2 End //////////////////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveNotifyMethod(notifyMethod: string) {
@@ -541,6 +626,16 @@ export default class RuleAndActionsVipBlacklist extends Vue {
 
             }
         `;
+    }
+
+    IConditionForm() {
+        return `
+            interface {
+
+                conditionTitle?: any;
+
+                conditionContent?: any;
+            }`;
     }
 }
 </script>

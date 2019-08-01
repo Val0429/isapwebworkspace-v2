@@ -147,7 +147,7 @@
                                 <template #conditionContent="{ $attrs, $listeners }">
                                     <b-form-group class="col-md-12">
                                         <b-row>
-                                            <b-col class="col-md-4">
+                                            <b-col class="col-md-5">
                                                 <iv-form-selection
                                                     v-model="condition.ruleMode"
                                                     :disabled="true"
@@ -465,6 +465,11 @@ export default class RuleAndActionsOccupancy extends Vue {
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
 
+    receiveTime(time: undefined | object) {
+        this.inputFormData.time = time;
+        console.log("time ~ ", this.inputFormData.time);
+    }
+
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     stepTo2(data) {
@@ -576,14 +581,16 @@ export default class RuleAndActionsOccupancy extends Vue {
         this.condition.andMode = EAndMode.or;
         this.condition.thresholdMode = EThresholdMode.high;
         for (let tempValue of this.inputFormData.conditions) {
-            if (tempValue.thresholdMode == EThresholdMode.high) {
-                haveHigh = true;
-            }
-            if (tempValue.thresholdMode == EThresholdMode.medium) {
-                haveMedium = true;
-            }
-            if (tempValue.thresholdMode == EThresholdMode.low) {
-                haveLow = true;
+            switch (tempValue.thresholdMode) {
+                case EThresholdMode.high:
+                    haveHigh = true;
+                    break;
+                case EThresholdMode.medium:
+                    haveMedium = true;
+                    break;
+                case EThresholdMode.low:
+                    haveLow = true;
+                    break;
             }
         }
 
@@ -652,11 +659,6 @@ export default class RuleAndActionsOccupancy extends Vue {
             this.inputFormData.conditions[index].andMode
         );
         return result;
-    }
-
-    receiveTime(time: undefined | object) {
-        this.inputFormData.time = time;
-        console.log("time ~ ", this.inputFormData.time);
     }
 
     disabledCondition(): boolean {

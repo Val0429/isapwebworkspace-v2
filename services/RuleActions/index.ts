@@ -22,6 +22,12 @@ export class RuleActionsService {
             case ERuleMode.occupancyMultipleSite:
                 result = vue._('w_RuleAndActions_RuleStatusOccupancyMultipleSite');
                 break;
+            case ERuleMode.vipVip:
+                result = vue._('w_RuleAndActions_RuleStatusVip');
+                break;
+            case ERuleMode.vipBlacklist:
+                result = vue._('w_RuleAndActions_RuleStatusBlacklist');
+                break;
         }
         return result;
     }
