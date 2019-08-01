@@ -86,7 +86,7 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3 || transition.step === 4"
+                v-if="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
@@ -475,18 +475,12 @@ export default class RuleAndActionsTraffic extends Vue {
     pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-
-        // TODO: ESiteCountMode from step 1
-        this.siteCountMode = ESiteCountMode.single;
         this.clearConditions();
     }
 
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-
-        // TODO: ESiteCountMode from step 1
-        this.siteCountMode = ESiteCountMode.single;
         this.clearConditions();
     }
 
