@@ -130,7 +130,7 @@
                                 <template #conditionContent="{ $attrs, $listeners }">
                                     <b-form-group class="col-md-12">
                                         <b-row>
-                                            <b-col class="col-md-10">
+                                            <b-col class="col-md-11">
                                                 <b-row>
                                                     <b-col class="col-md-3">{{ _('w_RuleAndActions_VipConditionText1') }}</b-col>
                                                     <b-col class="col-md-2">
