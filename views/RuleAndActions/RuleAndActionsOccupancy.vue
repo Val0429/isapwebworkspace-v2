@@ -300,7 +300,7 @@ export default class RuleAndActionsOccupancy extends Vue {
     inputFormData: any = {
         // choose-metrics
         name: "",
-        active: "",
+        active: true,
         time: undefined,
         siteIds: [],
         areaIds: [],
@@ -535,7 +535,7 @@ export default class RuleAndActionsOccupancy extends Vue {
         console.log("name ~ ", this.inputFormData.name);
     }
 
-    receiveActive(active: string) {
+    receiveActive(active: boolean) {
         this.inputFormData.active = active;
         console.log("active ~ ", this.inputFormData.active);
     }
@@ -592,11 +592,23 @@ export default class RuleAndActionsOccupancy extends Vue {
     receiveNotifyMethod(notifyMethod: string) {
         this.inputFormData.notifyMethod = notifyMethod;
         console.log("notifyMethod ~ ", this.inputFormData.notifyMethod);
+
+        // TODO: 整理資料格式
+        // if (this.inputFormData.notifyMethod.filter(item => item === ENotifyMethod.email).join() === ENotifyMethod.email) {
+        //
+        // }
     }
 
     receiveNotifyTarget(notifyTarget: object) {
         this.inputFormData.notifyTarget = notifyTarget;
         console.log("notifyTarget ~ ", this.inputFormData.notifyTarget);
+
+        // TODO: 整理資料格式
+        // if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.storeManager).join() === EWhoNotify.storeManager) {
+        //
+        // } else if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.permissionOfStore).join() === EWhoNotify.permissionOfStore) {
+        //
+        // }
     }
 
     receiveUserIds(userIds: object) {

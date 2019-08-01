@@ -372,6 +372,7 @@
 			name: '',
 			firstSiteId: '',
 			isActive: '',
+			isActiveApi: true,
 			time: undefined,
 
 			siteIds: [],
@@ -744,7 +745,10 @@
 
 		updateActive(isActive: string) {
 			this.inputFormData.isActive = isActive;
-			this.$emit('active', this.inputFormData.isActive);
+
+			this.inputFormData.isActive === EIncludedEmployee.no ? this.inputFormData.isActiveApi = false : true;
+
+			this.$emit('active', this.inputFormData.isActiveApi);
 		}
 
 		updateTime(data) {
