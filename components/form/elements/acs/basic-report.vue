@@ -43,7 +43,7 @@
            <b-table 
                 striped hover 
                 ref="table"
-                :items="records" 
+                :items="processedRecords" 
                 :fields="sortedFields" 
                 :per-page="perPage"
                 :busy="isBusy"
@@ -51,7 +51,7 @@
            ></b-table>
            <b-pagination
             v-model="currentPage"
-            :total-rows="records.length"
+            :total-rows="processedRecords.length"
             :per-page="perPage"
             aria-controls="my-table"
             ></b-pagination>

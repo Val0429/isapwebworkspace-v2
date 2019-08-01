@@ -1,4 +1,4 @@
-import { Component, Vue, Prop, Model } from '@/../core';
+import { Component, Vue, Prop, Model, Watch } from '@/../core';
 import * as XLSX from 'xlsx';
 
 @Component
@@ -17,6 +17,7 @@ export class BasicReport extends Vue{
         required: true
     })
     records: any[];
+    processedRecords:any[];
     @Prop({   
         type:String,     
         required: true
@@ -52,6 +53,30 @@ export class BasicReport extends Vue{
         this.sortedFields = [];//Object.assign([], this.fields);
         //console.log(this.options.length);        
     }
+    @Watch("records",{immediate:true})
+    onRecordUpdated(value:any[], oldValue:any[]){
+        this.reprocessRecords();
+    }
+    // @Watch("fields",{immediate:true})
+    // onFieldsUpdated(value:any[], oldValue:any[]){
+    //     this.reprocessRecords();
+    // }
+    private reprocessRecords() {
+        console.log("record updated");
+        let processedRecords = [];
+        for (let record of this.records) {
+            let newItem = {};
+            for (let field of this.sortedFields) {
+                newItem[field.key] = record[field.key];
+            }
+            let exists = processedRecords.find(x=>JSON.stringify(x) === JSON.stringify(newItem));
+            if(!exists){
+                console.log("new Item",JSON.stringify(newItem) , processedRecords.length);
+                processedRecords.push(newItem);
+            }
+        }
+        this.processedRecords = processedRecords;//.filter((value, index, self) => self.indexOf(value) === index);
+    }
 
     onUpdate(value: any) {
         if (value) {            
@@ -60,14 +85,14 @@ export class BasicReport extends Vue{
     }
     exportToExcel(){
         let headers= this.sortedFields;
-        let exportList =[];
-        for (let item of this.records){
-            let newItem = {};
-            for(let h of headers.map(x=>x.key)){
-                newItem[h]=item[h];
-            }
-            exportList.push(newItem);
-        }
+        let exportList =this.processedRecords;
+        // for (let item of this.processedRecords){
+        //     let newItem = {};
+        //     for(let h of headers.map(x=>x.key)){
+        //         newItem[h]=item[h];
+        //     }
+        //     exportList.push(newItem);
+        // }
         console.log("headers", headers);
         let workbook = XLSX.utils.book_new();
         let ws = XLSX.utils.aoa_to_sheet([headers.map(x=>x.label)]);        
@@ -85,6 +110,7 @@ export class BasicReport extends Vue{
         for(let key of $event){
             this.sortedFields.push(this.fields.find(x=>x.key==key));
         }    
+        this.reprocessRecords();
     }
     onSubmit($event:any){        
         this.showTable = true;
