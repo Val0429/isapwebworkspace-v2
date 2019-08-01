@@ -104,15 +104,26 @@
 
                         <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
                         <template #1>
-                            <choose-metrics
-                                :deviceMode="deviceMode"
-                                @name="receiveName"
-                                @active="receiveActive"
-                                @site-ids="receiveSiteIds"
-                                @area-ids="receiveAreaIds"
-                                @device-group-ids="receiveDeviceGroupIds"
-                                @device-ids="receiveDeviceIds"
-                            ></choose-metrics>
+
+                            <iv-form
+                                :interface="IStep1()"
+                                :value="inputFormData"
+                                @submit="stepTo2($event)"
+                            >
+                                <template #step1>
+                                    <choose-metrics
+                                        :deviceMode="deviceMode"
+                                        class="col-md-12"
+                                        @name="receiveName"
+                                        @active="receiveActive"
+                                        @site-ids="receiveSiteIds"
+                                        @area-ids="receiveAreaIds"
+                                        @device-group-ids="receiveDeviceGroupIds"
+                                        @device-ids="receiveDeviceIds"
+                                    ></choose-metrics>
+                                </template>
+
+                            </iv-form>
                         </template>
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
@@ -351,7 +362,7 @@ export default class RuleAndActionsTraffic extends Vue {
 
     clearConditions() {
         this.inputFormData.conditions = [];
-         switch (this.siteCountMode) {
+        switch (this.siteCountMode) {
             case ESiteCountMode.single:
                 this.selectItem.ruleMode = JSON.parse(
                     JSON.stringify(this.selectItem.ruleModeSingle)
@@ -399,16 +410,19 @@ export default class RuleAndActionsTraffic extends Vue {
         for (let tempCondition of this.inputFormData.conditions) {
             switch (tempCondition.ruleMode) {
                 case ERuleMode.trafficSingleSiteToday:
-                    this.condition.ruleMode = ERuleMode.trafficSingleSiteCurrent;
+                    this.condition.ruleMode =
+                        ERuleMode.trafficSingleSiteCurrent;
                     break;
                 case ERuleMode.trafficSingleSiteCurrent:
                     this.condition.ruleMode = ERuleMode.trafficSingleSiteToday;
                     break;
                 case ERuleMode.trafficMultipleSiteToday:
-                    this.condition.ruleMode = ERuleMode.trafficMultipleSiteCurrent;
+                    this.condition.ruleMode =
+                        ERuleMode.trafficMultipleSiteCurrent;
                     break;
                 case ERuleMode.trafficMultipleSiteCurrent:
-                    this.condition.ruleMode = ERuleMode.trafficMultipleSiteToday;
+                    this.condition.ruleMode =
+                        ERuleMode.trafficMultipleSiteToday;
                     break;
             }
         }
@@ -564,6 +578,27 @@ export default class RuleAndActionsTraffic extends Vue {
         this.inputFormData.deviceIds = deviceIds;
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
+
+    stepTo2(data) {
+        if (this.inputFormData.siteIds.length === 1) {
+            this.siteCountMode = ESiteCountMode.single;
+        } else if (this.inputFormData.siteIds.length > 2) {
+            this.siteCountMode = ESiteCountMode.multiple;
+        } else {
+            Dialog.error(this._("w_PleaseSelectSites"));
+            return false;
+        }
+
+        this.clearConditions();
+    }
+
+    IStep1() {
+        return `
+            interface {
+                step1?: any;
+            }`;
+    }
+
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
@@ -602,8 +637,8 @@ export default class RuleAndActionsTraffic extends Vue {
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     doSubmit(data) {
-        console.log('data ~ ', data);
-        console.log('this.inputFormData ~ ', this.inputFormData);
+        console.log("data ~ ", data);
+        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     async doDelete() {
@@ -611,7 +646,6 @@ export default class RuleAndActionsTraffic extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -624,22 +658,22 @@ export default class RuleAndActionsTraffic extends Vue {
 
                 Loading.show();
 
-                    // DO TO wait API
-                    // this.$server
-                    //     .D("/rule/peopleCounting", deleteParam)
-                    //     .then((response: any) => {
-                    //         ResponseFilter.successCheck(
-                    //             this,
-                    //             response,
-                    //             (response: any) => {
-                    //                 this.pageToList();
-                    //             },
-                    //             this._("w_DeleteFailed")
-                    //         );
-                    //     })
-                    //     .catch((e: any) => {
-                    //         return ResponseFilter.catchError(this, e);
-                    //     });
+                // DO TO wait API
+                // this.$server
+                //     .D("/rule/peopleCounting", deleteParam)
+                //     .then((response: any) => {
+                //         ResponseFilter.successCheck(
+                //             this,
+                //             response,
+                //             (response: any) => {
+                //                 this.pageToList();
+                //             },
+                //             this._("w_DeleteFailed")
+                //         );
+                //     })
+                //     .catch((e: any) => {
+                //         return ResponseFilter.catchError(this, e);
+                //     });
 
                 Loading.hide();
             }
