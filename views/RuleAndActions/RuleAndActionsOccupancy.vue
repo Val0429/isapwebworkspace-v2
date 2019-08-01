@@ -204,13 +204,25 @@
 
                         <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
                         <template #3>
-                            <actions
-                                @notify-method="receiveNotifyMethod"
-                                @notify-target="receiveNotifyTarget"
-                                @user-ids="receiveUserIds"
-                                @user-group-ids="receiveUserGroupIds"
-                                @minutes="receiveMinutes"
-                            ></actions>
+
+                            <iv-form
+                                :interface="IStep3()"
+                                :value="inputFormData"
+                                @submit="doSubmit($event)"
+                            >
+                                <template #step3>
+                                    <actions
+                                        class="col-md-12"
+                                        @notify-method="receiveNotifyMethod"
+                                        @notify-target="receiveNotifyTarget"
+                                        @user-ids="receiveUserIds"
+                                        @user-group-ids="receiveUserGroupIds"
+                                        @minutes="receiveMinutes"
+                                    ></actions>
+                                </template>
+
+                            </iv-form>
+
                         </template>
 
                     </iv-step-progress>
@@ -561,7 +573,19 @@ export default class RuleAndActionsOccupancy extends Vue {
         this.inputFormData.minutes = minutes;
         console.log("minutes ~ ", this.inputFormData.minutes);
     }
+
+    IStep3() {
+        return `
+            interface {
+                step3?: any;
+            }`;
+    }
+
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
+
+    doSubmit() {
+        console.log('this.inputFormData ~ ', this.inputFormData)
+    }
 
     async doDelete() {
         await Dialog.confirm(
