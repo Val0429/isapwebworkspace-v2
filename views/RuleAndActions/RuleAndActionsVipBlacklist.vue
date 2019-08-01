@@ -101,8 +101,10 @@
                         <template #1>
                             <choose-metrics
                                 :deviceMode="deviceMode"
+                                class="col-md-12"
                                 @name="receiveName"
                                 @active="receiveActive"
+                                @time="receiveTime"
                                 @site-ids="receiveSiteIds"
                                 @area-ids="receiveAreaIds"
                                 @device-group-ids="receiveDeviceGroupIds"
@@ -253,6 +255,7 @@ export default class RuleAndActionsVipBlacklist extends Vue {
         // choose-metrics
         name: "",
         active: "",
+        time: undefined,
         siteIds: [],
         areaIds: [],
         deviceGroupIds: [],
@@ -378,6 +381,11 @@ export default class RuleAndActionsVipBlacklist extends Vue {
         console.log("active ~ ", this.inputFormData.active);
     }
 
+    receiveTime(time: undefined | object) {
+        this.inputFormData.time = time;
+        console.log("time ~ ", this.inputFormData.time);
+    }
+
     receiveSiteIds(siteIds: object) {
         this.inputFormData.siteIds = siteIds;
         console.log("siteIds ~ ", this.inputFormData.siteIds);
@@ -397,6 +405,7 @@ export default class RuleAndActionsVipBlacklist extends Vue {
         this.inputFormData.deviceIds = deviceIds;
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
+
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////

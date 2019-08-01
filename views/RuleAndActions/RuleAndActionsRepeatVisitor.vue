@@ -105,8 +105,10 @@
                         <template #1>
                             <choose-metrics
                                 :deviceMode="deviceMode"
+                                class="col-md-12"
                                 @name="receiveName"
                                 @active="receiveActive"
+                                @time="receiveTime"
                                 @site-ids="receiveSiteIds"
                                 @area-ids="receiveAreaIds"
                                 @device-group-ids="receiveDeviceGroupIds"
@@ -279,6 +281,7 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         // choose-metrics
         name: "",
         active: "",
+        time: undefined,
         siteIds: [],
         areaIds: [],
         deviceGroupIds: [],
@@ -416,6 +419,11 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     receiveName(name: string) {
         this.inputFormData.name = name;
         console.log("name ~ ", this.inputFormData.name);
+    }
+
+    receiveTime(time: undefined | object) {
+        this.inputFormData.time = time;
+        console.log("time ~ ", this.inputFormData.time);
     }
 
     receiveActive(active: string) {

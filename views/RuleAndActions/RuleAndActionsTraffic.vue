@@ -116,6 +116,7 @@
                                         class="col-md-12"
                                         @name="receiveName"
                                         @active="receiveActive"
+                                        @time="receiveTime"
                                         @site-ids="receiveSiteIds"
                                         @area-ids="receiveAreaIds"
                                         @device-group-ids="receiveDeviceGroupIds"
@@ -299,6 +300,7 @@ export default class RuleAndActionsTraffic extends Vue {
         // choose-metrics
         name: "",
         active: "",
+        time: undefined,
         siteIds: [],
         areaIds: [],
         deviceGroupIds: [],
@@ -557,6 +559,11 @@ export default class RuleAndActionsTraffic extends Vue {
     receiveActive(active: string) {
         this.inputFormData.active = active;
         console.log("active ~ ", this.inputFormData.active);
+    }
+
+    receiveTime(time: undefined | object) {
+        this.inputFormData.time = time;
+        console.log("time ~ ", this.inputFormData.time);
     }
 
     receiveSiteIds(siteIds: object) {

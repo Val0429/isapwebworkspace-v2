@@ -103,15 +103,27 @@
 
                         <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
                         <template #1>
-                            <choose-metrics
-                                :deviceMode="deviceMode"
-                                @name="receiveName"
-                                @active="receiveActive"
-                                @site-ids="receiveSiteIds"
-                                @area-ids="receiveAreaIds"
-                                @device-group-ids="receiveDeviceGroupIds"
-                                @device-ids="receiveDeviceIds"
-                            ></choose-metrics>
+
+                            <iv-form
+                                :interface="IStep1()"
+                                :value="inputFormData"
+                                @submit="stepTo2($event)"
+                            >
+                                <template #step1>
+                                    <choose-metrics
+                                        :deviceMode="deviceMode"
+                                        class="col-md-12"
+                                        @name="receiveName"
+                                        @active="receiveActive"
+                                        @time="receiveTime"
+                                        @site-ids="receiveSiteIds"
+                                        @area-ids="receiveAreaIds"
+                                        @device-group-ids="receiveDeviceGroupIds"
+                                        @device-ids="receiveDeviceIds"
+                                    ></choose-metrics>
+                                </template>
+
+                            </iv-form>
                         </template>
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
@@ -289,6 +301,7 @@ export default class RuleAndActionsOccupancy extends Vue {
         // choose-metrics
         name: "",
         active: "",
+        time: undefined,
         siteIds: [],
         areaIds: [],
         deviceGroupIds: [],
@@ -527,6 +540,11 @@ export default class RuleAndActionsOccupancy extends Vue {
         console.log("active ~ ", this.inputFormData.active);
     }
 
+    receiveTime(time: undefined | object) {
+        this.inputFormData.time = time;
+        console.log("time ~ ", this.inputFormData.time);
+    }
+
     receiveSiteIds(siteIds: object) {
         this.inputFormData.siteIds = siteIds;
         console.log("siteIds ~ ", this.inputFormData.siteIds);
@@ -546,6 +564,28 @@ export default class RuleAndActionsOccupancy extends Vue {
         this.inputFormData.deviceIds = deviceIds;
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
+
+
+    stepTo2(data) {
+        if (this.inputFormData.siteIds.length === 1) {
+            this.siteCountMode = ESiteCountMode.single;
+        } else if (this.inputFormData.siteIds.length > 2) {
+            this.siteCountMode = ESiteCountMode.multiple;
+        } else {
+            Dialog.error(this._("w_PleaseSelectSites"));
+            return false;
+        }
+
+        this.clearConditions();
+    }
+
+    IStep1() {
+        return `
+            interface {
+                step1?: any;
+            }`;
+    }
+
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
