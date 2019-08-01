@@ -118,8 +118,8 @@
                         <template #2>
 
                             <iv-form
-                                :interface="IStep2()"
-                                :value="step2Item"
+                                :interface="IConditionForm()"
+                                :value="inputFormData"
                                 @submit="stepTo3($event)"
                                 @update:*="updateCondition"
                             >
@@ -134,13 +134,10 @@
 
                                 <template #conditionContent="{ $attrs, $listeners }">
                                     <b-form-group class="col-md-12">
-                                        <b-row
-                                            v-for="(value, index) in conditions"
-                                            :key="'condition__' + index"
-                                        >
+                                        <b-row>
                                             <b-col class="col-md-4">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].ruleMode"
+                                                    v-model="condition.ruleMode"
                                                     :disabled="true"
                                                     :plain="true"
                                                     :options="selectItem.ruleMode"
@@ -149,7 +146,7 @@
 
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].equalMode"
+                                                    v-model="condition.equalMode"
                                                     :disabled="true"
                                                     :plain="true"
                                                     :options="selectItem.equalMode"
@@ -158,7 +155,9 @@
 
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].thresholdMode"
+                                                    v-if="isConditionItem"
+                                                    v-model="condition.thresholdMode"
+                                                    :disabled="disabledCondition()"
                                                     :plain="true"
                                                     :options="selectItem.thresholdMode"
                                                 ></iv-form-selection>
@@ -166,7 +165,7 @@
 
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].andMode"
+                                                    v-model="condition.andMode"
                                                     :disabled="true"
                                                     :plain="true"
                                                     :options="selectItem.andMode"
@@ -175,6 +174,7 @@
 
                                             <b-col class="col-md-1">
                                                 <b-button
+                                                    v-if="!disabledCondition()"
                                                     class="button addButton"
                                                     variant="success"
                                                     type="button"
@@ -183,10 +183,15 @@
                                                     <i class="fa fa-plus"></i>
                                                 </b-button>
                                             </b-col>
+                                        </b-row>
 
+                                        <b-row
+                                            v-for="(value, index) in inputFormData.conditions"
+                                            :key="'condition__' + index"
+                                        >
+                                            <b-col class="col-md-11">{{ conditionText(index) }}</b-col>
                                             <b-col class="col-md-1">
                                                 <b-button
-                                                    v-show="conditions.length > 1"
                                                     class="button"
                                                     variant="danger"
                                                     type="button"
@@ -196,6 +201,7 @@
                                                 </b-button>
                                             </b-col>
                                         </b-row>
+
                                     </b-form-group>
                                 </template>
                             </iv-form>
@@ -256,6 +262,7 @@ import {
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import RuleActionsService from "@/services/RuleActions";
 
 interface ICondition {
     ruleMode: ERuleMode;
@@ -294,6 +301,12 @@ export default class RuleAndActionsOccupancy extends Vue {
         deviceGroupIds: [],
         deviceIds: [],
 
+        // conditions
+        thresholdHigh: 0,
+        thresholdMedium: 0,
+        thresholdLow: 0,
+        conditions: [],
+
         // actions
         notifyMethod: [],
         notifyTarget: [],
@@ -304,15 +317,15 @@ export default class RuleAndActionsOccupancy extends Vue {
 
     ////////////////////////////////// Morris Start //////////////////////////////////
 
-    step2Item: any = {
-        thresholdHigh: 0,
-        thresholdMedium: 0,
-        thresholdLow: 0,
-        condition: []
+    isConditionItem = true;
+    condition: ICondition = {
+        ruleMode: ERuleMode.occupancySingleSite,
+        equalMode: EEqualMode.more,
+        andMode: EAndMode.or,
+        thresholdMode: EThresholdMode.high
     };
-    conditions: ICondition[] = [];
 
-    siteCountMode: ESiteCountMode = ESiteCountMode.none;
+    siteCountMode: ESiteCountMode = ESiteCountMode.single;
     selectItem: {
         ruleMode: IValSelectItem[];
         ruleModeSingle: IValSelectItem[];
@@ -329,64 +342,41 @@ export default class RuleAndActionsOccupancy extends Vue {
         thresholdMode: []
     };
 
-    clearConditions() {
-        this.step2Item.thresholdHigh = 0;
-        this.step2Item.thresholdMedium = 0;
-        this.step2Item.thresholdLow = 0;
-        this.conditions = [];
-        this.addCondition();
+    ////////////////////////////////// Morris End //////////////////////////////////
+
+    created() {
+        this.initSelectItem();
     }
 
-    updateCondition(data: any) {
-        switch (data.key) {
-            case "thresholdHigh":
-                this.step2Item.thresholdHigh = data.value;
-                break;
-            case "thresholdMedium":
-                this.step2Item.thresholdMedium = data.value;
-                break;
-            case "thresholdLow":
-                this.step2Item.thresholdLow = data.value;
-                break;
-        }
+    mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
     }
 
-    addCondition() {
-        let tempCondition: ICondition = {
-            ruleMode: ERuleMode.occupancySingleSite,
-            equalMode: EEqualMode.more,
-            andMode: EAndMode.or,
-            thresholdMode: EThresholdMode.high
-        };
-
-        switch (this.siteCountMode) {
-            case ESiteCountMode.single:
-                tempCondition.ruleMode = ERuleMode.occupancySingleSite;
-                break;
-            case ESiteCountMode.multiple:
-                tempCondition.ruleMode = ERuleMode.occupancyMultipleSite;
-                break;
-        }
-        this.conditions.push(tempCondition);
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
     }
 
-    removeCondition(index: number) {
-        this.conditions.splice(index, 1);
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
     }
 
-    initConditionSelectItem() {
-        switch (this.siteCountMode) {
-            case ESiteCountMode.single:
-                this.selectItem.ruleMode = JSON.parse(
-                    JSON.stringify(this.selectItem.ruleModeSingle)
-                );
-                break;
-            case ESiteCountMode.multiple:
-                this.selectItem.ruleMode = JSON.parse(
-                    JSON.stringify(this.selectItem.ruleModeMutliple)
-                );
-                break;
-        }
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearConditions();
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
     }
 
     initSelectItem() {
@@ -431,91 +421,6 @@ export default class RuleAndActionsOccupancy extends Vue {
         ];
     }
 
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-
-        // TODO: ESiteCountMode from step 1
-        this.siteCountMode = ESiteCountMode.single;
-        this.initConditionSelectItem();
-        this.clearConditions();
-    }
-
-    pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-
-        // TODO: ESiteCountMode from step 1
-        this.siteCountMode = ESiteCountMode.single;
-        this.initConditionSelectItem();
-        this.clearConditions();
-    }
-
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
-    }
-
-    IStep2() {
-        return `
-            interface {
-
-                thresholdeTitle?: any;
-
-                /**
-                 * @uiLabel - ${this._(
-                     "w_RuleAndActions_OccupancyThresholdHigh"
-                 )}
-                 * @uiAttrs - { min: 0 }
-                 */
-                thresholdHigh: number;
-
-                /**
-                 * @uiLabel - ${this._(
-                     "w_RuleAndActions_OccupancyThresholdMedium"
-                 )}
-                 * @uiAttrs - { min: 0 }
-                 */
-                thresholdMedium: number;
-
-                /**
-                 * @uiLabel - ${this._(
-                     "w_RuleAndActions_OccupancyThresholdLow"
-                 )}
-                 * @uiAttrs - { min: 0 }
-                 */
-                thresholdLow: number;
-
-                conditionTitle?: any;
-
-                conditionContent?: any;
-            }`;
-    }
-
-    stepTo3(event: any) {
-        console.log(this.conditions);
-    }
-
-    ////////////////////////////////// Morris End //////////////////////////////////
-
-    created() {
-        this.initSelectItem();
-    }
-
-    mounted() {}
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-    }
-
-    selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        this.selectedDetail = data;
-    }
-
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {
         this.inputFormData.name = name;
@@ -547,6 +452,185 @@ export default class RuleAndActionsOccupancy extends Vue {
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
+
+    ////////////////////////////////// Step 2 Start //////////////////////////////////
+
+    clearConditions() {
+        this.initSelectItem();
+        this.inputFormData.thresholdHigh = 0;
+        this.inputFormData.thresholdMedium = 0;
+        this.inputFormData.thresholdLow = 0;
+        this.inputFormData.conditions = [];
+        switch (this.siteCountMode) {
+            case ESiteCountMode.single:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeSingle)
+                );
+                this.condition.ruleMode = ERuleMode.occupancySingleSite;
+                break;
+            case ESiteCountMode.multiple:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeMutliple)
+                );
+                this.condition.ruleMode = ERuleMode.occupancyMultipleSite;
+                break;
+        }
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.andMode = EAndMode.or;
+        this.condition.thresholdMode = EThresholdMode.high;
+    }
+
+    updateCondition(data: any) {
+        switch (data.key) {
+            case "thresholdHigh":
+                this.inputFormData.thresholdHigh = data.value;
+                break;
+            case "thresholdMedium":
+                this.inputFormData.thresholdMedium = data.value;
+                break;
+            case "thresholdLow":
+                this.inputFormData.thresholdLow = data.value;
+                break;
+        }
+    }
+
+    addCondition() {
+        if (this.condition.ruleMode == ERuleMode.none) {
+            return false;
+        }
+
+        if (this.condition.equalMode == EEqualMode.none) {
+            return false;
+        }
+
+        if (this.condition.andMode == EAndMode.none) {
+            return false;
+        }
+
+        if (this.condition.thresholdMode == EThresholdMode.none) {
+            return false;
+        }
+
+        let tempCondition: ICondition = JSON.parse(
+            JSON.stringify(this.condition)
+        );
+        this.inputFormData.conditions.push(tempCondition);
+        this.resetCondition();
+    }
+
+    removeCondition(index: number) {
+        this.inputFormData.conditions.splice(index, 1);
+        this.resetCondition();
+    }
+
+    resetCondition() {
+        this.isConditionItem = false;
+        let haveHigh = false;
+        let haveMedium = false;
+        let haveLow = false;
+        switch (this.siteCountMode) {
+            case ESiteCountMode.single:
+                this.condition.ruleMode = ERuleMode.occupancySingleSite;
+                break;
+            case ESiteCountMode.multiple:
+                this.condition.ruleMode = ERuleMode.occupancyMultipleSite;
+                break;
+        }
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.andMode = EAndMode.or;
+        this.condition.thresholdMode = EThresholdMode.high;
+        for (let tempValue of this.inputFormData.conditions) {
+            if (tempValue.thresholdMode == EThresholdMode.high) {
+                haveHigh = true;
+            }
+            if (tempValue.thresholdMode == EThresholdMode.medium) {
+                haveMedium = true;
+            }
+            if (tempValue.thresholdMode == EThresholdMode.low) {
+                haveLow = true;
+            }
+        }
+
+        this.selectItem.thresholdMode = [];
+
+        if (!haveHigh) {
+            this.selectItem.thresholdMode.push({
+                id: EThresholdMode.high,
+                text: this._("w_RuleAndActions_ThresholdStatusHigh")
+            });
+        }
+
+        if (!haveMedium) {
+            this.selectItem.thresholdMode.push({
+                id: EThresholdMode.medium,
+                text: this._("w_RuleAndActions_ThresholdStatusMedium")
+            });
+        }
+
+        if (!haveLow) {
+            this.selectItem.thresholdMode.push({
+                id: EThresholdMode.low,
+                text: this._("w_RuleAndActions_ThresholdStatusLow")
+            });
+        }
+
+        if (this.selectItem.thresholdMode[0] != undefined) {
+            switch (this.selectItem.thresholdMode[0].id) {
+                case "high":
+                    this.condition.thresholdMode = EThresholdMode.high;
+                    break;
+                case "medium":
+                    this.condition.thresholdMode = EThresholdMode.medium;
+                    break;
+                case "low":
+                    this.condition.thresholdMode = EThresholdMode.low;
+                    break;
+            }
+        }
+
+        // Morris: Need reset selection in Vue
+        setTimeout(() => {
+            this.isConditionItem = true;
+        }, 10);
+    }
+
+    conditionText(index: number): string {
+        let result: string = "";
+        result += RuleActionsService.ruleModeText(
+            this,
+            this.inputFormData.conditions[index].ruleMode
+        );
+        result += " ";
+        result += RuleActionsService.equalModeText(
+            this,
+            this.inputFormData.conditions[index].equalMode
+        );
+        result += " ";
+        result += RuleActionsService.thresholdModeText(
+            this,
+            this.inputFormData.conditions[index].thresholdMode
+        );
+        result += " ";
+        result += RuleActionsService.andModeText(
+            this,
+            this.inputFormData.conditions[index].andMode
+        );
+        return result;
+    }
+
+    disabledCondition(): boolean {
+        let result = false;
+        if (this.inputFormData.conditions.length > 2) {
+            result = true;
+        }
+        return result;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.inputFormData.conditions);
+    }
+
+    ////////////////////////////////// Step 2 End //////////////////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveNotifyMethod(notifyMethod: string) {
@@ -584,8 +668,8 @@ export default class RuleAndActionsOccupancy extends Vue {
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     doSubmit(data) {
-        console.log('data ~ ', data);
-        console.log('this.inputFormData ~ ', this.inputFormData);
+        console.log("data ~ ", data);
+        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     async doDelete() {
@@ -593,7 +677,6 @@ export default class RuleAndActionsOccupancy extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -670,6 +753,42 @@ export default class RuleAndActionsOccupancy extends Vue {
 
             }
         `;
+    }
+
+    IConditionForm() {
+        return `
+            interface {
+
+                thresholdeTitle?: any;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_OccupancyThresholdHigh"
+                 )}
+                 * @uiAttrs - { min: 0 }
+                 */
+                thresholdHigh: number;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_OccupancyThresholdMedium"
+                 )}
+                 * @uiAttrs - { min: 0 }
+                 */
+                thresholdMedium: number;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_RuleAndActions_OccupancyThresholdLow"
+                 )}
+                 * @uiAttrs - { min: 0 }
+                 */
+                thresholdLow: number;
+
+                conditionTitle?: any;
+
+                conditionContent?: any;
+            }`;
     }
 }
 </script>

@@ -218,7 +218,6 @@
                                         @minutes="receiveMinutes"
                                     ></actions>
                                 </template>
-
                             </iv-form>
 
                         </template>
@@ -313,7 +312,7 @@ export default class RuleAndActionsTraffic extends Vue {
         andMode: EAndMode.and
     };
 
-    siteCountMode: ESiteCountMode = ESiteCountMode.none;
+    siteCountMode: ESiteCountMode = ESiteCountMode.single;
     selectItem: {
         ruleMode: IValSelectItem[];
         ruleModeSingle: IValSelectItem[];
@@ -327,118 +326,6 @@ export default class RuleAndActionsTraffic extends Vue {
         equalMode: [],
         andMode: []
     };
-
-    conditionText(index: number): string {
-        let result: string = "";
-        result += RuleActionsService.ruleModeText(
-            this,
-            this.inputFormData.conditions[index].ruleMode
-        );
-        result += " ";
-        result += RuleActionsService.equalModeText(
-            this,
-            this.inputFormData.conditions[index].equalMode
-        );
-        result += " ";
-        result += this.inputFormData.conditions[index].fillValue.toString();
-        result += " ";
-        result += RuleActionsService.andModeText(
-            this,
-            this.inputFormData.conditions[index].andMode
-        );
-        return result;
-    }
-
-    clearConditions() {
-        this.inputFormData.conditions = [];
-        switch (this.siteCountMode) {
-            case ESiteCountMode.single:
-                this.selectItem.ruleMode = JSON.parse(
-                    JSON.stringify(this.selectItem.ruleModeSingle)
-                );
-                this.condition.ruleMode = ERuleMode.trafficSingleSiteToday;
-                break;
-            case ESiteCountMode.multiple:
-                this.selectItem.ruleMode = JSON.parse(
-                    JSON.stringify(this.selectItem.ruleModeMutliple)
-                );
-                this.condition.ruleMode = ERuleMode.trafficMultipleSiteToday;
-                break;
-        }
-        this.condition.equalMode = EEqualMode.more;
-        this.condition.fillValue = 0;
-        this.condition.andMode = EAndMode.and;
-    }
-
-    addCondition() {
-        if (this.condition.ruleMode == ERuleMode.none) {
-            return false;
-        }
-
-        if (this.condition.equalMode == EEqualMode.none) {
-            return false;
-        }
-
-        if (this.condition.andMode == EAndMode.none) {
-            return false;
-        }
-
-        let tempCondition: ICondition = JSON.parse(
-            JSON.stringify(this.condition)
-        );
-        this.inputFormData.conditions.push(tempCondition);
-        this.resetCondition();
-    }
-
-    removeCondition(index: number) {
-        this.inputFormData.conditions.splice(index, 1);
-        this.resetCondition();
-    }
-
-    resetCondition() {
-        for (let tempCondition of this.inputFormData.conditions) {
-            switch (tempCondition.ruleMode) {
-                case ERuleMode.trafficSingleSiteToday:
-                    this.condition.ruleMode =
-                        ERuleMode.trafficSingleSiteCurrent;
-                    break;
-                case ERuleMode.trafficSingleSiteCurrent:
-                    this.condition.ruleMode = ERuleMode.trafficSingleSiteToday;
-                    break;
-                case ERuleMode.trafficMultipleSiteToday:
-                    this.condition.ruleMode =
-                        ERuleMode.trafficMultipleSiteCurrent;
-                    break;
-                case ERuleMode.trafficMultipleSiteCurrent:
-                    this.condition.ruleMode =
-                        ERuleMode.trafficMultipleSiteToday;
-                    break;
-            }
-        }
-        this.condition.equalMode = EEqualMode.more;
-        this.condition.fillValue = 0;
-        this.condition.andMode = EAndMode.and;
-    }
-
-    stepTo3(event: any) {
-        console.log(this.inputFormData.conditions);
-    }
-
-    disableConditionRuleMode(): boolean {
-        let result = false;
-        if (this.inputFormData.conditions.length > 0) {
-            result = true;
-        }
-        return result;
-    }
-
-    disabledCondition(): boolean {
-        let result = false;
-        if (this.inputFormData.conditions.length > 1) {
-            result = true;
-        }
-        return result;
-    }
 
     ////////////////////////////////// Morris End //////////////////////////////////
 
@@ -562,6 +449,123 @@ export default class RuleAndActionsTraffic extends Vue {
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
+
+    ////////////////////////////////// Step 2 Start //////////////////////////////////
+
+    clearConditions() {
+        this.initSelectItem();
+        this.inputFormData.conditions = [];
+        switch (this.siteCountMode) {
+            case ESiteCountMode.single:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeSingle)
+                );
+                this.condition.ruleMode = ERuleMode.trafficSingleSiteToday;
+                break;
+            case ESiteCountMode.multiple:
+                this.selectItem.ruleMode = JSON.parse(
+                    JSON.stringify(this.selectItem.ruleModeMutliple)
+                );
+                this.condition.ruleMode = ERuleMode.trafficMultipleSiteToday;
+                break;
+        }
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.fillValue = 0;
+        this.condition.andMode = EAndMode.and;
+    }
+
+    addCondition() {
+        if (this.condition.ruleMode == ERuleMode.none) {
+            return false;
+        }
+
+        if (this.condition.equalMode == EEqualMode.none) {
+            return false;
+        }
+
+        if (this.condition.andMode == EAndMode.none) {
+            return false;
+        }
+
+        let tempCondition: ICondition = JSON.parse(
+            JSON.stringify(this.condition)
+        );
+        this.inputFormData.conditions.push(tempCondition);
+        this.resetCondition();
+    }
+
+    removeCondition(index: number) {
+        this.inputFormData.conditions.splice(index, 1);
+        this.resetCondition();
+    }
+
+    resetCondition() {
+        for (let tempCondition of this.inputFormData.conditions) {
+            switch (tempCondition.ruleMode) {
+                case ERuleMode.trafficSingleSiteToday:
+                    this.condition.ruleMode =
+                        ERuleMode.trafficSingleSiteCurrent;
+                    break;
+                case ERuleMode.trafficSingleSiteCurrent:
+                    this.condition.ruleMode = ERuleMode.trafficSingleSiteToday;
+                    break;
+                case ERuleMode.trafficMultipleSiteToday:
+                    this.condition.ruleMode =
+                        ERuleMode.trafficMultipleSiteCurrent;
+                    break;
+                case ERuleMode.trafficMultipleSiteCurrent:
+                    this.condition.ruleMode =
+                        ERuleMode.trafficMultipleSiteToday;
+                    break;
+            }
+        }
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.fillValue = 0;
+        this.condition.andMode = EAndMode.and;
+    }
+
+    conditionText(index: number): string {
+        let result: string = "";
+        result += RuleActionsService.ruleModeText(
+            this,
+            this.inputFormData.conditions[index].ruleMode
+        );
+        result += " ";
+        result += RuleActionsService.equalModeText(
+            this,
+            this.inputFormData.conditions[index].equalMode
+        );
+        result += " ";
+        result += this.inputFormData.conditions[index].fillValue.toString();
+        result += " ";
+        result += RuleActionsService.andModeText(
+            this,
+            this.inputFormData.conditions[index].andMode
+        );
+        return result;
+    }
+
+    disableConditionRuleMode(): boolean {
+        let result = false;
+        if (this.inputFormData.conditions.length > 0) {
+            result = true;
+        }
+        return result;
+    }
+
+    disabledCondition(): boolean {
+        let result = false;
+        if (this.inputFormData.conditions.length > 1) {
+            result = true;
+        }
+        return result;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.inputFormData.conditions);
+    }
+
+    ////////////////////////////////// Step 2 End //////////////////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveNotifyMethod(notifyMethod: string) {
