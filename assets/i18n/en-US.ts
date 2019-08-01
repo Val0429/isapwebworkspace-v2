@@ -1128,4 +1128,6 @@ export default class LangObject {
     w_RuleAndActions_VipConditionText1 = "When a repeat visitor visits";
     w_RuleAndActions_VipConditionText2 = "times in past";
     w_RuleAndActions_VipConditionText3 = "days";
+
+    w_RuleAndActions_ErrorTip = 'Active and Rule Name cant not be empty'
 }

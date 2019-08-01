@@ -307,7 +307,7 @@ export default class RuleAndActionsOccupancy extends Vue {
     inputFormData: any = {
         // choose-metrics
         name: "",
-        active: true,
+        active: undefined,
         time: undefined,
         siteIds: [],
         areaIds: [],
@@ -473,15 +473,24 @@ export default class RuleAndActionsOccupancy extends Vue {
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     stepTo2(data) {
+
+        let stepRef: any = this.$refs.step;
+
+        if (!this.inputFormData.name || !this.inputFormData.active) {
+            Dialog.error(this._("w_RuleAndActions_ErrorTip"));
+            stepRef.currentStep = 0;
+            return false;
+        }
+
         if (this.inputFormData.siteIds.length === 1) {
             this.siteCountMode = ESiteCountMode.single;
         } else if (this.inputFormData.siteIds.length > 2) {
             this.siteCountMode = ESiteCountMode.multiple;
         } else {
             Dialog.error(this._("w_PleaseSelectSites"));
+            stepRef.currentStep = 0;
             return false;
         }
-
         this.clearConditions();
     }
 

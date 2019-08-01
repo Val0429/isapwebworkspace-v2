@@ -103,17 +103,27 @@
 
                         <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
                         <template #1>
-                            <choose-metrics
-                                :deviceMode="deviceMode"
-                                class="col-md-12"
-                                @name="receiveName"
-                                @active="receiveActive"
-                                @time="receiveTime"
-                                @site-ids="receiveSiteIds"
-                                @area-ids="receiveAreaIds"
-                                @device-group-ids="receiveDeviceGroupIds"
-                                @device-ids="receiveDeviceIds"
-                            ></choose-metrics>
+
+                            <iv-form
+                                :interface="IStep1()"
+                                :value="inputFormData"
+                                @submit="stepTo2($event)"
+                            >
+                                <template #step1>
+                                    <choose-metrics
+                                        :deviceMode="deviceMode"
+                                        class="col-md-12"
+                                        @name="receiveName"
+                                        @active="receiveActive"
+                                        @time="receiveTime"
+                                        @site-ids="receiveSiteIds"
+                                        @area-ids="receiveAreaIds"
+                                        @device-group-ids="receiveDeviceGroupIds"
+                                        @device-ids="receiveDeviceIds"
+                                    ></choose-metrics>
+                                </template>
+
+                            </iv-form>
                         </template>
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
@@ -287,7 +297,7 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     inputFormData: any = {
         // choose-metrics
         name: "",
-        active: true,
+        active: undefined,
         time: undefined,
         siteIds: [],
         areaIds: [],
@@ -430,6 +440,32 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         this.inputFormData.deviceIds = deviceIds;
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
+
+    stepTo2(data) {
+
+        let stepRef: any = this.$refs.step;
+
+        if (this.inputFormData.name || !this.inputFormData.active) {
+            Dialog.error(this._("w_RuleAndActions_ErrorTip"));
+            stepRef.currentStep = 0;
+            return false;
+        }
+
+        if (this.inputFormData.siteIds.length === 0) {
+            Dialog.error(this._("w_PleaseSelectSites"));
+            stepRef.currentStep = 0;
+            return false;
+        }
+        this.clearConditions();
+    }
+
+    IStep1() {
+        return `
+            interface {
+                step1?: any;
+            }`;
+    }
+
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////////////////// Step 2 Start //////////////////////////////////
