@@ -115,54 +115,56 @@
                         <template #2>
 
                             <iv-form
-                                :interface="IStep2()"
-                                :value="step2Item"
+                                :interface="IConditionForm()"
                                 @submit="stepTo3($event)"
                             >
+
                                 <template #conditionTitle="{ $attrs, $listeners }">
                                     <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
                                 </template>
 
                                 <template #conditionContent="{ $attrs, $listeners }">
                                     <b-form-group class="col-md-12">
-                                        <b-row
-                                            v-for="(value, index) in conditions"
-                                            :key="'condition__' + index"
-                                        >
-                                            <b-col class="col-md-4">
+                                        <b-row>
+                                            <b-col class="col-md-5">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].ruleMode"
+                                                    v-model="condition.ruleMode"
                                                     :plain="true"
+                                                    :disabled="disableConditionRuleMode()"
                                                     :options="selectItem.ruleMode"
                                                 ></iv-form-selection>
                                             </b-col>
 
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].equalMode"
+                                                    v-model="condition.equalMode"
                                                     :plain="true"
+                                                    :disabled="disabledCondition()"
                                                     :options="selectItem.equalMode"
                                                 ></iv-form-selection>
                                             </b-col>
 
                                             <b-col class="col-md-2">
                                                 <iv-form-number
-                                                    v-model="conditions[index].fillValue"
-                                                    :plain="true"
+                                                    v-model="condition.fillValue"
                                                     min="0"
+                                                    :plain="true"
+                                                    :disabled="disabledCondition()"
                                                 ></iv-form-number>
                                             </b-col>
 
                                             <b-col class="col-md-2">
                                                 <iv-form-selection
-                                                    v-model="conditions[index].andMode"
+                                                    v-model="condition.andMode"
                                                     :plain="true"
+                                                    :disabled="disabledCondition()"
                                                     :options="selectItem.andMode"
                                                 ></iv-form-selection>
                                             </b-col>
 
                                             <b-col class="col-md-1">
                                                 <b-button
+                                                    v-if="!disabledCondition()"
                                                     class="button addButton"
                                                     variant="success"
                                                     type="button"
@@ -171,10 +173,15 @@
                                                     <i class="fa fa-plus"></i>
                                                 </b-button>
                                             </b-col>
+                                        </b-row>
 
+                                        <b-row
+                                            v-for="(value, index) in inputFormData.conditions"
+                                            :key="'condition__' + index"
+                                        >
+                                            <b-col class="col-md-11">{{ conditionText(index) }}</b-col>
                                             <b-col class="col-md-1">
                                                 <b-button
-                                                    v-show="conditions.length > 1"
                                                     class="button"
                                                     variant="danger"
                                                     type="button"
@@ -187,7 +194,6 @@
                                     </b-form-group>
                                 </template>
                             </iv-form>
-
                         </template>
 
                         <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
@@ -231,6 +237,7 @@ import {
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import RuleActionsService from "@/services/RuleActions";
 
 interface ICondition {
     fillValue: number;
@@ -254,11 +261,9 @@ export default class RuleAndActionsTraffic extends Vue {
         this.isMounted = true;
     }
 
-
     isSelected: any = [];
     tableMultiple: boolean = true;
     selectedDetail: any = [];
-
 
     // choose-metrics 使用
     deviceMode: string = EDeviceMode.peopleCounting;
@@ -272,6 +277,9 @@ export default class RuleAndActionsTraffic extends Vue {
         deviceGroupIds: [],
         deviceIds: [],
 
+        // conditions
+        conditions: [],
+
         // actions
         notifyMethod: [],
         notifyTarget: [],
@@ -282,10 +290,12 @@ export default class RuleAndActionsTraffic extends Vue {
 
     ////////////////////////////////// Morris Start //////////////////////////////////
 
-    step2Item: any = {
-        condition: []
+    condition: ICondition = {
+        fillValue: 0,
+        ruleMode: ERuleMode.trafficSingleSiteToday,
+        equalMode: EEqualMode.more,
+        andMode: EAndMode.and
     };
-    conditions: ICondition[] = [];
 
     siteCountMode: ESiteCountMode = ESiteCountMode.none;
     selectItem: {
@@ -302,47 +312,150 @@ export default class RuleAndActionsTraffic extends Vue {
         andMode: []
     };
 
+    conditionText(index: number): string {
+        let result: string = "";
+        result += RuleActionsService.ruleModeText(
+            this,
+            this.inputFormData.conditions[index].ruleMode
+        );
+        result += " ";
+        result += RuleActionsService.equalModeText(
+            this,
+            this.inputFormData.conditions[index].equalMode
+        );
+        result += " ";
+        result += this.inputFormData.conditions[index].fillValue.toString();
+        result += " ";
+        result += RuleActionsService.andModeText(
+            this,
+            this.inputFormData.conditions[index].andMode
+        );
+        return result;
+    }
+
     clearConditions() {
-        this.conditions = [];
-        this.addCondition();
-    }
-
-    addCondition() {
-        let tempCondition: ICondition = {
-            fillValue: 0,
-            ruleMode: ERuleMode.trafficSingleSiteToday,
-            equalMode: EEqualMode.more,
-            andMode: EAndMode.and
-        };
-
-        switch (this.siteCountMode) {
-            case ESiteCountMode.single:
-                tempCondition.ruleMode = ERuleMode.trafficSingleSiteToday;
-                break;
-            case ESiteCountMode.multiple:
-                tempCondition.ruleMode = ERuleMode.trafficMultipleSiteToday;
-                break;
-        }
-        this.conditions.push(tempCondition);
-    }
-
-    removeCondition(index: number) {
-        this.conditions.splice(index, 1);
-    }
-
-    initConditionSelectItem() {
-        switch (this.siteCountMode) {
+        this.inputFormData.conditions = [];
+         switch (this.siteCountMode) {
             case ESiteCountMode.single:
                 this.selectItem.ruleMode = JSON.parse(
                     JSON.stringify(this.selectItem.ruleModeSingle)
                 );
+                this.condition.ruleMode = ERuleMode.trafficSingleSiteToday;
                 break;
             case ESiteCountMode.multiple:
                 this.selectItem.ruleMode = JSON.parse(
                     JSON.stringify(this.selectItem.ruleModeMutliple)
                 );
+                this.condition.ruleMode = ERuleMode.trafficMultipleSiteToday;
                 break;
         }
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.fillValue = 0;
+        this.condition.andMode = EAndMode.and;
+    }
+
+    addCondition() {
+        if (this.condition.ruleMode == ERuleMode.none) {
+            return false;
+        }
+
+        if (this.condition.equalMode == EEqualMode.none) {
+            return false;
+        }
+
+        if (this.condition.andMode == EAndMode.none) {
+            return false;
+        }
+
+        let tempCondition: ICondition = JSON.parse(
+            JSON.stringify(this.condition)
+        );
+        this.inputFormData.conditions.push(tempCondition);
+        this.resetCondition();
+    }
+
+    removeCondition(index: number) {
+        this.inputFormData.conditions.splice(index, 1);
+        this.resetCondition();
+    }
+
+    resetCondition() {
+        for (let tempCondition of this.inputFormData.conditions) {
+            switch (tempCondition.ruleMode) {
+                case ERuleMode.trafficSingleSiteToday:
+                    this.condition.ruleMode = ERuleMode.trafficSingleSiteCurrent;
+                    break;
+                case ERuleMode.trafficSingleSiteCurrent:
+                    this.condition.ruleMode = ERuleMode.trafficSingleSiteToday;
+                    break;
+                case ERuleMode.trafficMultipleSiteToday:
+                    this.condition.ruleMode = ERuleMode.trafficMultipleSiteCurrent;
+                    break;
+                case ERuleMode.trafficMultipleSiteCurrent:
+                    this.condition.ruleMode = ERuleMode.trafficMultipleSiteToday;
+                    break;
+            }
+        }
+        this.condition.equalMode = EEqualMode.more;
+        this.condition.fillValue = 0;
+        this.condition.andMode = EAndMode.and;
+    }
+
+    stepTo3(event: any) {
+        console.log(this.inputFormData.conditions);
+    }
+
+    disableConditionRuleMode(): boolean {
+        let result = false;
+        if (this.inputFormData.conditions.length > 0) {
+            result = true;
+        }
+        return result;
+    }
+
+    disabledCondition(): boolean {
+        let result = false;
+        if (this.inputFormData.conditions.length > 1) {
+            result = true;
+        }
+        return result;
+    }
+
+    ////////////////////////////////// Morris End //////////////////////////////////
+
+    created() {
+        this.initSelectItem();
+    }
+
+    mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+
+        // TODO: ESiteCountMode from step 1
+        this.siteCountMode = ESiteCountMode.single;
+        this.clearConditions();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+
+        // TODO: ESiteCountMode from step 1
+        this.siteCountMode = ESiteCountMode.single;
+        this.clearConditions();
     }
 
     initSelectItem() {
@@ -399,61 +512,10 @@ export default class RuleAndActionsTraffic extends Vue {
         ];
     }
 
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-
-        // TODO: ESiteCountMode from step 1
-        this.siteCountMode = ESiteCountMode.single;
-        this.initConditionSelectItem();
-        this.clearConditions();
-    }
-
-    pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-
-        // TODO: ESiteCountMode from step 1
-        this.siteCountMode = ESiteCountMode.single;
-        this.initConditionSelectItem();
-        this.clearConditions();
-    }
-
-    IStep2() {
-        return `
-            interface {
-                conditionTitle?: any;
-                conditionContent?: any;
-            }`;
-    }
-
-    stepTo3(event: any) {
-        console.log(this.conditions);
-    }
-
-    ////////////////////////////////// Morris End //////////////////////////////////
-
-    created() {
-        this.initSelectItem();
-    }
-
-    mounted() {}
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-    }
-
     selectedItem(data) {
         this.isSelected = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
-    }
-
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
     }
 
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
@@ -633,6 +695,14 @@ export default class RuleAndActionsTraffic extends Vue {
 
             }
         `;
+    }
+
+    IConditionForm() {
+        return `
+            interface {
+                conditionTitle?: any;
+                conditionContent?: any;
+            }`;
     }
 }
 </script>

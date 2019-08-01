@@ -33,7 +33,7 @@ enum ESiteCountMode {
 }
 
 enum EEqualMode {
-    none = 'none',
+    none = '',
     more = 'more',
     moreEqual = 'moreEqual',
     equal = 'equal',
@@ -42,13 +42,13 @@ enum EEqualMode {
 }
 
 enum EAndMode {
-    none = 'none',
+    none = '',
     and = 'and',
     or = 'or',
 }
 
 enum ERuleMode {
-    none = 'none',
+    none = '',
     trafficSingleSiteToday = 'trafficSingleSiteToday',
     trafficSingleSiteCurrent = 'trafficSingleSiteCurrent',
     trafficMultipleSiteToday = 'trafficMultipleSiteToday',
@@ -60,7 +60,7 @@ enum ERuleMode {
 }
 
 enum EThresholdMode {
-    none = 'none',
+    none = '',
     high = 'high',
     medium = 'medium',
     low = 'low',
