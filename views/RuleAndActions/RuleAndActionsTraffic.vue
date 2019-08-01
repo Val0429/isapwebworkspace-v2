@@ -65,11 +65,50 @@
                         <iv-toolbox-back @click="pageToList()" />
                     </template>
 
+                    <choose-metrics
+                        :disabled="true"
+                        :deviceMode="deviceMode"
+                        @name="receiveName"
+                        @active="receiveActive"
+                        @site-ids="receiveSiteIds"
+                        @area-ids="receiveAreaIds"
+                        @device-group-ids="receiveDeviceGroupIds"
+                        @device-ids="receiveDeviceIds"
+                    ></choose-metrics>
+
                     <iv-form
-                        :interface="IViewForm()"
-                        :value="inputFormData"
+                        :interface="IConditionForm()"
+                        @submit="stepTo3($event)"
                     >
+
+                        <template #conditionTitle="{ $attrs, $listeners }">
+                            <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
+                        </template>
+
+                        <template #conditionContent="{ $attrs, $listeners }">
+                            <b-form-group class="col-md-12">
+
+                                <b-row
+                                    v-for="(value, index) in inputFormData.conditions"
+                                    :key="'condition__' + index"
+                                >
+                                    <b-col class="col-md-11">{{ conditionText(index) }}</b-col>
+                                    <b-col class="col-md-1">
+                                    </b-col>
+                                </b-row>
+                            </b-form-group>
+                        </template>
                     </iv-form>
+
+                    <actions
+                        :disabled="true"
+                        class="col-md-12"
+                        @notify-method="receiveNotifyMethod"
+                        @notify-target="receiveNotifyTarget"
+                        @user-ids="receiveUserIds"
+                        @user-group-ids="receiveUserGroupIds"
+                        @minutes="receiveMinutes"
+                    ></actions>
 
                     <template #footer>
                         <b-button

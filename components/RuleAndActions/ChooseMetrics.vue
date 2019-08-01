@@ -18,6 +18,7 @@
 
 					<template #name="{ $attrs, $listeners }">
 						<iv-form-string
+                            :disabled="disabled"
 							v-bind="$attrs"
 							v-on="$listeners"
 							v-model="inputFormData.name"
@@ -28,6 +29,7 @@
 
 					<template #isActive="{ $attrs, $listeners }">
 						<iv-form-selection
+                              :disabled="disabled"
 							v-bind="$attrs"
 							v-on="$listeners"
 							v-model="inputFormData.isActive"
@@ -43,6 +45,7 @@
 
 						<b-col cols="9">
 							<b-form-radio-group
+                              :disabled="disabled"
 								v-model="isAnyTime"
 								name="isAnyTime"
 								class="mb-3"
@@ -57,6 +60,7 @@
 						<p class="col-md-1 mt-1" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_startTime') }} </p>
 
 						<iv-form-selection
+                            :disabled="disabled"
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.startHours"
@@ -71,6 +75,7 @@
 					<template #startMinutes="{$attrs, $listeners}">
 
 						<iv-form-selection
+                            :disabled="disabled"
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.startMinutes"
@@ -88,6 +93,7 @@
 						<p class="col-md-1 mt-1" v-if="isAnyTime === 'startAndEnd'"> {{ _('w_RuleAndActions_endTime') }} </p>
 
 						<iv-form-selection
+                              :disabled="disabled"
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.endHours"
@@ -103,6 +109,7 @@
 					<template #endMinutes="{$attrs, $listeners}">
 
 						<iv-form-selection
+                              :disabled="disabled"
 							v-if="isAnyTime === 'startAndEnd'"
 							v-on="$listeners"
 							v-model="inputFormData.endMinutes"
@@ -131,6 +138,7 @@
 
 						<b-col cols="9">
 							<b-form-radio-group
+                              :disabled="disabled"
 								v-model="selectAllSites"
 								name="ifAllSites"
 								class="mb-3"
@@ -144,9 +152,10 @@
 					<template #siteIds="{$attrs, $listeners}">
 
 						<iv-form-selection
+                          :disabled="disabled"
 							v-on="$listeners"
 							v-model="inputFormData.siteIds"
-							class="col-md-10"
+							:class="disabled ? 'col-md-12' : 'col-md-10'"
 							:options="sitesSelectItem"
 							:multiple="true"
 							@input="changeSiteIds"
@@ -155,6 +164,7 @@
 
 						<div class="col-md-2">
 							<b-button
+                                 :hidden="disabled"
 								class="col-md-12"
 								variant="outline-secondary"
 								@click="pageToChooseTree"
@@ -172,6 +182,7 @@
 
 						<b-col cols="9">
 							<b-form-radio-group
+                                    :disabled="disabled"
 								v-if="inputFormData.siteIds.length === 1"
 								v-model="isAllArea"
 								name="ifAllAreas"
@@ -186,6 +197,7 @@
 					<template #areaIds="{$attrs, $listeners}">
 
 						<iv-form-selection
+                            :disabled="disabled"
 							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
 							v-model="inputFormData.areaIds"
@@ -205,6 +217,7 @@
 
 						<b-col cols="9">
 							<b-form-radio-group
+                                :disabled="disabled"
 								v-if="inputFormData.siteIds.length === 1"
 								v-model="isAllGroup"
 								name="ifAllGroups"
@@ -219,6 +232,7 @@
 					<template #groupIds="{$attrs, $listeners}">
 
 						<iv-form-selection
+                            :disabled="disabled"
 							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
 							v-model="inputFormData.groupIds"
@@ -238,6 +252,7 @@
 
 						<b-col cols="9">
 							<b-form-radio-group
+                                :disabled="disabled"
 								v-if="inputFormData.siteIds.length === 1"
 								v-model="isAllDevice"
 								name="ifAllDevice"
@@ -252,6 +267,7 @@
 					<template #deviceIds="{$attrs, $listeners}">
 
 						<iv-form-selection
+                            :disabled="disabled"
 							v-if="inputFormData.siteIds.length === 1"
 							v-on="$listeners"
 							v-model="inputFormData.deviceIds"
@@ -321,7 +337,13 @@
 			type: String, // Boolean, Number, String, Array, Object
 			default: ""
 		})
-		deviceMode: string;
+        deviceMode: string;
+        
+        @Prop({
+			type: Boolean,
+			default: false
+		})
+		disabled: boolean;
 
 		transition: ITransition = {
 			type: Transition.type,
