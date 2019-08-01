@@ -537,8 +537,9 @@ export default class RuleAndActionsTraffic extends Vue {
 
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
-    doSubmit() {
-        console.log('this.inputFormData ~ ', this.inputFormData)
+    doSubmit(data) {
+        console.log('data ~ ', data);
+        console.log('this.inputFormData ~ ', this.inputFormData);
     }
 
     async doDelete() {
