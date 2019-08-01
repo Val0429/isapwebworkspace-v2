@@ -547,13 +547,19 @@ export default class RuleAndActionsTraffic extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
+
                     // DO TO wait API
                     // this.$server
                     //     .D("/rule/peopleCounting", deleteParam)
@@ -570,7 +576,7 @@ export default class RuleAndActionsTraffic extends Vue {
                     //     .catch((e: any) => {
                     //         return ResponseFilter.catchError(this, e);
                     //     });
-                }
+
                 Loading.hide();
             }
         );

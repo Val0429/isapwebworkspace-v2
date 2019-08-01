@@ -240,7 +240,7 @@ export default class FRSServer extends Vue {
         const addParam = {
             config: configObject
         };
-        
+
         Loading.show();
         let results = await this.$server
             .C("/partner/frs/user-group", addParam)
@@ -528,16 +528,20 @@ export default class FRSServer extends Vue {
             this._("w_ServerFRS_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
-                for (const param of this.selectedDetail) {
-                    const deleteUserParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
 
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
+                for (const param of this.selectedDetail) {
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
                     this.$server
-                        .D("/partner/frs", deleteUserParam)
+                        .D("/partner/frs", deleteParam)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,
@@ -551,7 +555,7 @@ export default class FRSServer extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );

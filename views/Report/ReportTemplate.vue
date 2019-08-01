@@ -1032,16 +1032,21 @@ export default class ReportTemplate extends Vue {
             this._("w_ReportTemplate_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteUserParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
 
                     this.$server
-                        .D("/report/template", deleteUserParam)
+                        .D("/report/template", deleteParam)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,
@@ -1055,7 +1060,7 @@ export default class ReportTemplate extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+                
                 Loading.hide();
             }
         );

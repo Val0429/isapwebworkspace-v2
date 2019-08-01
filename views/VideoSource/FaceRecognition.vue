@@ -1031,13 +1031,18 @@ export default class FaceRecognition extends Vue {
             this._("w_VSVIP_Stranger_Visitor_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
 
                     Loading.show();
                     this.$server
@@ -1055,7 +1060,7 @@ export default class FaceRecognition extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );

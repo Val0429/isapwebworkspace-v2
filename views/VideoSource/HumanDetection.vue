@@ -747,13 +747,18 @@ export default class HumanDetection extends Vue {
             this._("w_VSHumanDetection_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
 
                     this.$server
                         .D("/device", deleteParam)
@@ -771,7 +776,7 @@ export default class HumanDetection extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );

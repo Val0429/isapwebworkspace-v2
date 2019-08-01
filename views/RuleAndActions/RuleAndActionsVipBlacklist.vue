@@ -444,30 +444,36 @@ export default class RuleAndActionsVipBlacklist extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
-                    // DO TO wait API
-                    // this.$server
-                    //     .D("/rule/peopleCounting", deleteParam)
-                    //     .then((response: any) => {
-                    //         ResponseFilter.successCheck(
-                    //             this,
-                    //             response,
-                    //             (response: any) => {
-                    //                 this.pageToList();
-                    //             },
-                    //             this._("w_DeleteFailed")
-                    //         );
-                    //     })
-                    //     .catch((e: any) => {
-                    //         return ResponseFilter.catchError(this, e);
-                    //     });
+                    deleteParam.objectId.push(param.objectId);
                 }
+
+                Loading.show();
+
+                // DO TO wait API
+                // this.$server
+                //     .D("/rule/peopleCounting", deleteParam)
+                //     .then((response: any) => {
+                //         ResponseFilter.successCheck(
+                //             this,
+                //             response,
+                //             (response: any) => {
+                //                 this.pageToList();
+                //             },
+                //             this._("w_DeleteFailed")
+                //         );
+                //     })
+                //     .catch((e: any) => {
+                //         return ResponseFilter.catchError(this, e);
+                //     });
+
                 Loading.hide();
             }
         );

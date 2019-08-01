@@ -306,16 +306,20 @@ export default class CMSServer extends Vue {
             this._("w_ServerCMSDeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
-                for (const param of this.selectedDetail) {
-                    const deleteUserParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
 
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
+                for (const param of this.selectedDetail) {
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
                     this.$server
-                        .D("/partner/cms", deleteUserParam)
+                        .D("/partner/cms", deleteParam)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,
@@ -329,7 +333,7 @@ export default class CMSServer extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );
