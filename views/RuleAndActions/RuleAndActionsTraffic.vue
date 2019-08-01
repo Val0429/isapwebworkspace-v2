@@ -76,10 +76,7 @@
                         @device-ids="receiveDeviceIds"
                     ></choose-metrics>
 
-                    <iv-form
-                        :interface="IConditionForm()"
-                        @submit="stepTo3($event)"
-                    >
+                    <iv-form :interface="IConditionForm()">
 
                         <template #conditionTitle="{ $attrs, $listeners }">
                             <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
