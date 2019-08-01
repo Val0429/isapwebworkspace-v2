@@ -122,7 +122,7 @@
                             >
                                 <b-col>
                                     <b-form-select
-                                        class="selectWeekWidth mb-2"
+                                        class="select mb-4"
                                         v-model="officeHourTime[index].startDay"
                                         :plain="true"
                                         :options="dayRanges.weeks"
@@ -130,12 +130,12 @@
                                 </b-col>
 
                                 <b-col>
-                                    <span>{{ _('w_To') }}</span>
+                                    <span class="mb-4">{{ _('w_To') }}</span>
                                 </b-col>
 
                                 <b-col>
                                     <b-form-select
-                                        class="selectWeekWidth"
+                                        class="select mb-4"
                                         v-model="officeHourTime[index].endDay"
                                         :plain="true"
                                         :options="dayRanges.weeks"
@@ -144,7 +144,7 @@
 
                                 <b-col>
                                     <b-form-select
-                                        class="selectHourWidth"
+                                        class="select mb-4"
                                         v-model="officeHourTime[index].startHour"
                                         :plain="true"
                                         :options="dayRanges.hours"
@@ -152,25 +152,25 @@
                                 </b-col>
 
                                 <b-col>
-                                    <span> ： </span>
+                                    <span class="mb-4"> ： </span>
                                 </b-col>
 
                                 <b-col>
                                     <b-form-select
-                                        class="selectMinuteWidth"
+                                        class="select mb-4"
                                         v-model="officeHourTime[index].startMinute"
                                         :plain="true"
                                         :options="dayRanges.minutes"
                                     ></b-form-select>
                                 </b-col>
 
-                                <b-col>
+                                <b-col class="mb-4">
                                     <span>{{ _('w_To') }}</span>
                                 </b-col>
 
-                                <b-col>
+                                <b-col >
                                     <b-form-select
-                                        class="selectHourWidth"
+                                        class="select mb-4"
                                         v-model="officeHourTime[index].endHour"
                                         :plain="true"
                                         :options="dayRanges.hours"
@@ -178,12 +178,12 @@
                                 </b-col>
 
                                 <b-col>
-                                    <span> ： </span>
+                                    <span class="mb-4"> ： </span>
                                 </b-col>
 
                                 <b-col>
                                     <b-form-select
-                                        class="selectMinuteWidth"
+                                        class="select mb-4"
                                         v-model="officeHourTime[index].endMinute"
                                         :plain="true"
                                         :options="dayRanges.minutes"
@@ -192,7 +192,7 @@
 
                                 <b-col>
                                     <b-button
-                                        class="button addButton"
+                                        class="mb-4"
                                         variant="success"
                                         type="button"
                                         @click="addOfficeHour()"
@@ -204,7 +204,7 @@
                                 <b-col>
                                     <b-button
                                         v-show="officeHourTime.length > 1"
-                                        class="button"
+                                        class="mb-4"
                                         variant="danger"
                                         type="button"
                                         @click="removeOfficeHour(index)"
@@ -606,13 +606,18 @@ export default class GeneralOfficeHour extends Vue {
             this._("w_OfficeHour_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
 
                     this.$server
                         .D("/office-hour", deleteParam)
@@ -629,7 +634,7 @@ export default class GeneralOfficeHour extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );
@@ -906,15 +911,8 @@ export default class GeneralOfficeHour extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.selectWeekWidth {
-    width: 130px;
+.select {
+    width: 190px;
 }
 
-.selectHourWidth {
-    width: 130px;
-}
-
-.selectMinuteWidth {
-    width: 80px;
-}
 </style>

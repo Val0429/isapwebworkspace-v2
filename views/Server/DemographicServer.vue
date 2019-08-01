@@ -557,13 +557,18 @@ export default class DemographicServer extends Vue {
             this._("w_DemographicServer_DeleteConfirm"),
             this._("w_Confirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
 
                     this.$server
                         .D("/partner/demographic", deleteParam)
@@ -580,7 +585,7 @@ export default class DemographicServer extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );

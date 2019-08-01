@@ -85,12 +85,16 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3"
+                v-show="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
-                    :label="_('w_User_ViewUser') "
+                    :label="transition.step === 3  ?_('w_RuleAndActions_RuleAdd') : _('w_RuleAndActions_RuleEdit')  "
                 >
+
+                    <template #toolbox>
+                        <iv-toolbox-back @click="pageToList()" />
+                    </template>
 
                     <iv-step-progress
                         ref="step"
@@ -200,13 +204,25 @@
 
                         <template #3-title>{{ _('w_RuleAndActions_EditStep3') }}</template>
                         <template #3>
-                            <actions
-                                @notify-method="receiveNotifyMethod"
-                                @notify-target="receiveNotifyTarget"
-                                @user-ids="receiveUserIds"
-                                @user-group-ids="receiveUserGroupIds"
-                                @minutes="receiveMinutes"
-                            ></actions>
+
+                            <iv-form
+                                :interface="IStep3()"
+                                :value="inputFormData"
+                                @submit="doSubmit($event)"
+                            >
+                                <template #step3>
+                                    <actions
+                                        class="col-md-12"
+                                        @notify-method="receiveNotifyMethod"
+                                        @notify-target="receiveNotifyTarget"
+                                        @user-ids="receiveUserIds"
+                                        @user-group-ids="receiveUserGroupIds"
+                                        @minutes="receiveMinutes"
+                                    ></actions>
+                                </template>
+
+                            </iv-form>
+
                         </template>
 
                     </iv-step-progress>
@@ -435,6 +451,12 @@ export default class RuleAndActionsOccupancy extends Vue {
         this.clearConditions();
     }
 
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
     IStep2() {
         return `
             interface {
@@ -551,37 +573,56 @@ export default class RuleAndActionsOccupancy extends Vue {
         this.inputFormData.minutes = minutes;
         console.log("minutes ~ ", this.inputFormData.minutes);
     }
+
+    IStep3() {
+        return `
+            interface {
+                step3?: any;
+            }`;
+    }
+
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
+
+    doSubmit(data) {
+        console.log('data ~ ', data);
+        console.log('this.inputFormData ~ ', this.inputFormData);
+    }
 
     async doDelete() {
         await Dialog.confirm(
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
+
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
                 for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
-                    // DO TO wait API
-                    // this.$server
-                    //     .D("/rule/peopleCounting", deleteParam)
-                    //     .then((response: any) => {
-                    //         ResponseFilter.successCheck(
-                    //             this,
-                    //             response,
-                    //             (response: any) => {
-                    //                 this.pageToList();
-                    //             },
-                    //             this._("w_DeleteFailed")
-                    //         );
-                    //     })
-                    //     .catch((e: any) => {
-                    //         return ResponseFilter.catchError(this, e);
-                    //     });
+                    deleteParam.objectId.push(param.objectId);
                 }
+
+                Loading.show();
+
+                // DO TO wait API
+                // this.$server
+                //     .D("/rule/peopleCounting", deleteParam)
+                //     .then((response: any) => {
+                //         ResponseFilter.successCheck(
+                //             this,
+                //             response,
+                //             (response: any) => {
+                //                 this.pageToList();
+                //             },
+                //             this._("w_DeleteFailed")
+                //         );
+                //     })
+                //     .catch((e: any) => {
+                //         return ResponseFilter.catchError(this, e);
+                //     });
+
                 Loading.hide();
             }
         );

@@ -1018,14 +1018,18 @@ export default class Demographic extends Vue {
             this._("w_VSDemographic_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
-                for (const param of this.selectedDetail) {
-                    const deleteParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
 
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
+                for (const param of this.selectedDetail) {
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
                     this.$server
                         .D("/device", deleteParam)
                         .then((response: any) => {
@@ -1041,7 +1045,7 @@ export default class Demographic extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );

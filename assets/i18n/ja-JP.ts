@@ -1120,7 +1120,7 @@ export default class LangObject implements ILang {
     w_RuleAndActions_RuleStatusVip = 'When a VIP visits';
     w_RuleAndActions_RuleStatusBlacklist = 'When a Blacklist visits';
 
-        w_RuleAndActions_VipConditionText1 = "When a repeat visitor visits";
-    w_RuleAndActions_VipConditionText2 = "times in past";
-    w_RuleAndActions_VipConditionText3 = "days";
+    w_RuleAndActions_VipConditionText1 = 'When a repeat visitor visits';
+    w_RuleAndActions_VipConditionText2 = 'times in past';
+    w_RuleAndActions_VipConditionText3 = 'days';
 }

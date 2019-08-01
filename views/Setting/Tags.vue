@@ -521,6 +521,7 @@ export default class Tags extends Vue {
                         response,
                         (response: any) => {
                             Dialog.success(this._("w_Tag_AddTagSuccess"));
+                            this.pageToList();
                         },
                         this._("w_Tag_AddTagFailed")
                     );
@@ -574,16 +575,20 @@ export default class Tags extends Vue {
             this._("w_Tag_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                Loading.show();
-                for (const param of this.selectedDetail) {
-                    const deleteUserParam: {
-                        objectId: string;
-                    } = {
-                        objectId: param.objectId
-                    };
 
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
+                for (const param of this.selectedDetail) {
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
                     this.$server
-                        .D("/tag", deleteUserParam)
+                        .D("/tag", deleteParam)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,
@@ -597,7 +602,7 @@ export default class Tags extends Vue {
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
                         });
-                }
+
                 Loading.hide();
             }
         );
