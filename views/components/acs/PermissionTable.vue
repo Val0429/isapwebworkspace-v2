@@ -869,7 +869,7 @@ private async getFloorGroup() {
     };
     
     if(response.errors.find(x=>x.type=="accessLevelIsNotInCCure")){
-        let messages = `<table class="table"><tr><th>${this._("w_Door")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;
+        let messages = `<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;
         for(let error of response.errors.filter(x=>x.type=="accessLevelIsNotInCCure")){
             messages+=`<tr><td>${error.devicename || ""}</td><td>${error.timename  ||""}</td><td>${error.message || ""}</td></tr>`;
         }
@@ -880,7 +880,7 @@ private async getFloorGroup() {
         let messages = ``;
         for(let permTable of response.permTableNames){
             messages+=`${this._("w_PermissionTable")}: ${permTable.permissionTableName || ""}<br/>`;
-            messages+=`<table class="table"><tr><th>${this._("w_Door")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;             
+            messages+=`<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;             
             for(let dev of permTable.devices){                
                 messages+=`<tr><td>${dev.devicename || ""}</td><td>${dev.timename  ||""}</td><td>${dev.message || ""}</td></tr>`;
             }
