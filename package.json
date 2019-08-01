@@ -1,10 +1,13 @@
 {
     "name": "vms-server",
     "version": "1.0.0",
-    "description": "VMS Server",
+    "description": "CMS",
     "scripts": {
         "start": "npm run start --prefix ../",
         "build": "npm run build --prefix ../",
         "create-project": "git checkout --orphan"
+    },
+    "dependencies": {
+        "vue-loading-overlay": "^3.2.0"
     }
 }

@@ -16,8 +16,6 @@ import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
 
 // Demo
-import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
-import DemoImageMap from './Demos/DemoImageMap.vue';
 import DemoROI from './Demos/DemoROI.vue';
 import DemoDialog from './Demos/DemoDialog.vue';
 import DemoSortSelect from './Demos/DemoSortSelect.vue';
@@ -44,8 +42,6 @@ $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission
 
 // Demo
 $({ path: '/demos', name: 'Demo', icon: 'fa-check', redirect: '/demos/region-tree-select' })();
-$({ path: '/demos/region-tree-select', name: 'Region Tree Select', icon: 'fa-check', permission: false })(DemoRegionTreeSelect);
-$({ path: '/demos/image-map', name: 'Image Map', icon: 'fa-check', permission: false })(DemoImageMap);
 $({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(DemoROI);
 $({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
 $({ path: '/demos/sort_select', name: 'Sort Select', icon: 'fa-check', permission: false })(DemoSortSelect);

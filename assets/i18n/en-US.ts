@@ -11,30 +11,48 @@ export default class LangObject {
     w_Selection = 'Selection';
     w_Multi = 'Multi';
 
-    w_Login_LoginTitle = '登入';
-    w_Login_ForgotPassword = '忘記密碼';
-
-    w_Username = '使用者名稱';
-    w_Roles = '權限';
+    w_Username = 'User name';
+    w_Roles = 'Role';
     w_Email = 'Email';
-    w_CreatedAt = '建立日期';
-    w_UpdatedAt = '修改日期';
-    w_Actions = '動作';
-    w_ConfirmPassword = '重複輸入密碼';
+    w_CreatedAt = 'Created date';
+    w_UpdatedAt = 'Updated date';
+    w_Actions = 'Actions';
+    w_ConfirmPassword = 'Confirm password';
 
-    w_User = '使用者';
-    w_UserAdd = '新增使用者';
-    w_UserEdit = '修改使用者';
+    w_User = 'User';
+    w_UserAdd = 'Add user';
+    w_UserEdit = 'Edit user';
 
-    m_PasswordShouldBeSame = '兩個密碼必須相同';
+    m_PasswordShouldBeSame = 'Password should be same';
 
     /////////////////////////////////////////////
 
     w_Options = 'Options';
     w_Chooses = 'Choose';
-
     w_AllChoose = 'All';
     w_Reset = 'Reset';
     w_Back = 'Back';
     w_Submit = 'Submit';
+    w_Confirm = 'Confirm';
+    w_Cancel = 'Cancel';
+    w_Dialog_SuccessTitle = "Success";
+    w_Dialog_ErrorTitle = "Error";
+
+    /////////////////////////////////////////////
+
+    // Login
+    w_Login_LoginTitle = 'Login';
+    w_Login_ForgotPassword = 'Forgot password';
+
+    // failed to fetch
+    w_FailedToFetch = "We can't connect to server, please try again!";
+
+    // 401
+    w_UserSession_Empty = 'Not find User, Please login again';
+
+    /////////////////////////////////////////////
+
+
+
+
 }

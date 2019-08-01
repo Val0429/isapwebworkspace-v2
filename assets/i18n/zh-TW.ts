@@ -2,39 +2,54 @@ import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
-    w_Name = '名前';
-    w_Enabled = '有効';
-    w_Value = '値';
-    w_Startdate = '開始日';
-    w_Enddate = '終了日';
-    w_Password = '密碼';
-    w_Selection = '選択';
-    w_Multi = '複数';
+     w_Name = 'Name';
+    w_Enabled = 'Enabled';
+    w_Value = 'Value';
+    w_Startdate = 'Start Date';
+    w_Enddate = 'End Date';
+    w_Password = 'Password';
+    w_Selection = 'Selection';
+    w_Multi = 'Multi';
 
-    w_Login_LoginTitle = '登入';
-    w_Login_ForgotPassword = '忘記密碼';
-
-    w_Username = '使用者名稱';
-    w_Roles = '權限';
+    w_Username = 'User name';
+    w_Roles = 'Role';
     w_Email = 'Email';
-    w_CreatedAt = '建立日期';
-    w_UpdatedAt = '修改日期';
-    w_Actions = '動作';
-    w_ConfirmPassword = '重複輸入密碼';
+    w_CreatedAt = 'Created date';
+    w_UpdatedAt = 'Updated date';
+    w_Actions = 'Actions';
+    w_ConfirmPassword = 'Confirm password';
 
-    w_User = '使用者';
-    w_UserAdd = '新增使用者';
-    w_UserEdit = '修改使用者';
+    w_User = 'User';
+    w_UserAdd = 'Add user';
+    w_UserEdit = 'Edit user';
 
-    m_PasswordShouldBeSame = '兩個密碼必須相同';
+    m_PasswordShouldBeSame = 'Password should be same';
 
     /////////////////////////////////////////////
 
-    w_Options = '可用選項';
-    w_Chooses = '已選擇';
+    w_Options = 'Options';
+    w_Chooses = 'Choose';
+    w_AllChoose = 'All';
+    w_Reset = 'Reset';
+    w_Back = 'Back';
+    w_Submit = 'Submit';
+    w_Confirm = 'Confirm';
+    w_Cancel = 'Cancel';
+    w_Dialog_SuccessTitle = "Success";
+    w_Dialog_ErrorTitle = "Error";
 
-    w_AllChoose = '全選';
-    w_Reset = '重設';
-    w_Back = '返回';
-    w_Submit = '送出';
+    /////////////////////////////////////////////
+
+    // Login
+    w_Login_LoginTitle = 'Login';
+    w_Login_ForgotPassword = 'Forgot password';
+
+    // failed to fetch
+    w_FailedToFetch = "We can't connect to server, please try again!";
+
+    // 401
+    w_UserSession_Empty = 'Not find User, Please login again';
+
+    /////////////////////////////////////////////
+
 }

@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import Dialog from "@/services/Dialog/Dialog";
+import Dialog from "@/services/Dialog";
 
 @Component({
     components: {}

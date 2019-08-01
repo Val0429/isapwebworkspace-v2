@@ -1,4 +1,4 @@
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Emit, Prop, Watch } from 'vue-property-decorator';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import { BehaviorSubject } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
