@@ -85,7 +85,7 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3 || transition.step === 4"
+                v-if="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
@@ -584,8 +584,8 @@ export default class RuleAndActionsOccupancy extends Vue {
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     doSubmit(data) {
-        console.log('data ~ ', data);
-        console.log('this.inputFormData ~ ', this.inputFormData);
+        console.log("data ~ ", data);
+        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     async doDelete() {
@@ -593,7 +593,6 @@ export default class RuleAndActionsOccupancy extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {

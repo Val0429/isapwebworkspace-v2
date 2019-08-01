@@ -86,7 +86,7 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3 || transition.step === 4"
+                v-if="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
