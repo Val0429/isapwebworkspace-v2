@@ -373,7 +373,8 @@
 			firstSiteId: '',
 			isActive: '',
 			isActiveApi: true,
-			time: undefined,
+			anytime: undefined,
+			selectTime: {},
 
 			siteIds: [],
 			areaIds: [],
@@ -406,7 +407,9 @@
 
 		}
 
-		mounted() {}
+		mounted() {
+			this.changeTimeSelect(this.isAnyTime)
+		}
 
 		initSelectItem() {
 			this.ifAllSitesSelectItem = [
@@ -644,7 +647,9 @@
 		changeTimeSelect(selected: string) {
 			this.isAnyTime = selected;
 			if (this.isAnyTime === ERunTimeType.anyTime) {
-				this.inputFormData.time = undefined;
+				this.inputFormData.anytime = undefined;
+				this.$emit('time', this.inputFormData.anytime);
+
 			} else {
 				const startDate = new Date(
 					2000,
@@ -661,12 +666,14 @@
 					parseInt(this.inputFormData.endMinutes, 10)
 				);
 
-				this.inputFormData.time = {
+				this.inputFormData.selectTime = {
 					startDate, endDate
-				}
+				};
+
+				this.$emit('time', this.inputFormData.selectTime);
+
 			}
 
-			this.$emit('time', this.inputFormData.time);
 		}
 
 		changeAllSitesSelect(selected: string) {
