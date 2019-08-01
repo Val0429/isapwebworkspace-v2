@@ -85,7 +85,7 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3 || transition.step === 4"
+                v-if="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
@@ -105,8 +105,10 @@
                         <template #1>
                             <choose-metrics
                                 :deviceMode="deviceMode"
+                                class="col-md-12"
                                 @name="receiveName"
                                 @active="receiveActive"
+                                @time="receiveTime"
                                 @site-ids="receiveSiteIds"
                                 @area-ids="receiveAreaIds"
                                 @device-group-ids="receiveDeviceGroupIds"
@@ -278,7 +280,8 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     inputFormData: any = {
         // choose-metrics
         name: "",
-        active: "",
+        active: true,
+        time: undefined,
         siteIds: [],
         areaIds: [],
         deviceGroupIds: [],
@@ -418,7 +421,12 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         console.log("name ~ ", this.inputFormData.name);
     }
 
-    receiveActive(active: string) {
+    receiveTime(time: undefined | object) {
+        this.inputFormData.time = time;
+        console.log("time ~ ", this.inputFormData.time);
+    }
+
+    receiveActive(active: boolean) {
         this.inputFormData.active = active;
         console.log("active ~ ", this.inputFormData.active);
     }
@@ -448,11 +456,23 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     receiveNotifyMethod(notifyMethod: string) {
         this.inputFormData.notifyMethod = notifyMethod;
         console.log("notifyMethod ~ ", this.inputFormData.notifyMethod);
+
+        // TODO: 整理資料格式
+        // if (this.inputFormData.notifyMethod.filter(item => item === ENotifyMethod.email).join() === ENotifyMethod.email) {
+        //
+        // }
     }
 
     receiveNotifyTarget(notifyTarget: object) {
         this.inputFormData.notifyTarget = notifyTarget;
         console.log("notifyTarget ~ ", this.inputFormData.notifyTarget);
+
+        // TODO: 整理資料格式
+        // if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.storeManager).join() === EWhoNotify.storeManager) {
+        //
+        // } else if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.permissionOfStore).join() === EWhoNotify.permissionOfStore) {
+        //
+        // }
     }
 
     receiveUserIds(userIds: object) {
@@ -480,8 +500,8 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     doSubmit(data) {
-        console.log('data ~ ', data);
-        console.log('this.inputFormData ~ ', this.inputFormData);
+        console.log("data ~ ", data);
+        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     async doDelete() {
@@ -489,7 +509,6 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
             this._("w_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {

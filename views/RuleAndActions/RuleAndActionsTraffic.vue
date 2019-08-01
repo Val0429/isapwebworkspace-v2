@@ -65,11 +65,50 @@
                         <iv-toolbox-back @click="pageToList()" />
                     </template>
 
+                    <choose-metrics
+                        :disabled="true"
+                        :deviceMode="deviceMode"
+                        @name="receiveName"
+                        @active="receiveActive"
+                        @site-ids="receiveSiteIds"
+                        @area-ids="receiveAreaIds"
+                        @device-group-ids="receiveDeviceGroupIds"
+                        @device-ids="receiveDeviceIds"
+                    ></choose-metrics>
+
                     <iv-form
-                        :interface="IViewForm()"
-                        :value="inputFormData"
+                        :interface="IConditionForm()"
+                        @submit="stepTo3($event)"
                     >
+
+                        <template #conditionTitle="{ $attrs, $listeners }">
+                            <div class="ml-3 mb-2 w-100">{{ _('w_RuleAndActions_Condition') }}</div>
+                        </template>
+
+                        <template #conditionContent="{ $attrs, $listeners }">
+                            <b-form-group class="col-md-12">
+
+                                <b-row
+                                    v-for="(value, index) in inputFormData.conditions"
+                                    :key="'condition__' + index"
+                                >
+                                    <b-col class="col-md-11">{{ conditionText(index) }}</b-col>
+                                    <b-col class="col-md-1">
+                                    </b-col>
+                                </b-row>
+                            </b-form-group>
+                        </template>
                     </iv-form>
+
+                    <actions
+                        :disabled="true"
+                        class="col-md-12"
+                        @notify-method="receiveNotifyMethod"
+                        @notify-target="receiveNotifyTarget"
+                        @user-ids="receiveUserIds"
+                        @user-group-ids="receiveUserGroupIds"
+                        @minutes="receiveMinutes"
+                    ></actions>
 
                     <template #footer>
                         <b-button
@@ -86,7 +125,7 @@
             <!-- add & edit -->
             <div
                 key="transition_3"
-                v-show="transition.step === 3 || transition.step === 4"
+                v-if="transition.step === 3 || transition.step === 4"
             >
                 <iv-auto-card
                     :visible="true"
@@ -104,15 +143,27 @@
 
                         <template #1-title>{{ _('w_RuleAndActions_EditStep1') }}</template>
                         <template #1>
-                            <choose-metrics
-                                :deviceMode="deviceMode"
-                                @name="receiveName"
-                                @active="receiveActive"
-                                @site-ids="receiveSiteIds"
-                                @area-ids="receiveAreaIds"
-                                @device-group-ids="receiveDeviceGroupIds"
-                                @device-ids="receiveDeviceIds"
-                            ></choose-metrics>
+
+                            <iv-form
+                                :interface="IStep1()"
+                                :value="inputFormData"
+                                @submit="stepTo2($event)"
+                            >
+                                <template #step1>
+                                    <choose-metrics
+                                        :deviceMode="deviceMode"
+                                        class="col-md-12"
+                                        @name="receiveName"
+                                        @active="receiveActive"
+                                        @time="receiveTime"
+                                        @site-ids="receiveSiteIds"
+                                        @area-ids="receiveAreaIds"
+                                        @device-group-ids="receiveDeviceGroupIds"
+                                        @device-ids="receiveDeviceIds"
+                                    ></choose-metrics>
+                                </template>
+
+                            </iv-form>
                         </template>
 
                         <template #2-title>{{ _('w_RuleAndActions_EditStep2') }}</template>
@@ -245,7 +296,9 @@ import {
     ESiteCountMode,
     ERuleMode,
     EEqualMode,
-    EAndMode
+    EAndMode,
+    EWhoNotify,
+    ENotifyMethod
 } from "@/components/RuleAndActions";
 
 // Service
@@ -286,7 +339,8 @@ export default class RuleAndActionsTraffic extends Vue {
     inputFormData: any = {
         // choose-metrics
         name: "",
-        active: "",
+        active: true,
+        time: undefined,
         siteIds: [],
         areaIds: [],
         deviceGroupIds: [],
@@ -424,9 +478,14 @@ export default class RuleAndActionsTraffic extends Vue {
         console.log("name ~ ", this.inputFormData.name);
     }
 
-    receiveActive(active: string) {
+    receiveActive(active: boolean) {
         this.inputFormData.active = active;
         console.log("active ~ ", this.inputFormData.active);
+    }
+
+    receiveTime(time: undefined | object) {
+        this.inputFormData.time = time;
+        console.log("time ~ ", this.inputFormData.time);
     }
 
     receiveSiteIds(siteIds: object) {
@@ -448,6 +507,27 @@ export default class RuleAndActionsTraffic extends Vue {
         this.inputFormData.deviceIds = deviceIds;
         console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
+
+    stepTo2(data) {
+        if (this.inputFormData.siteIds.length === 1) {
+            this.siteCountMode = ESiteCountMode.single;
+        } else if (this.inputFormData.siteIds.length > 2) {
+            this.siteCountMode = ESiteCountMode.multiple;
+        } else {
+            Dialog.error(this._("w_PleaseSelectSites"));
+            return false;
+        }
+
+        this.clearConditions();
+    }
+
+    IStep1() {
+        return `
+            interface {
+                step1?: any;
+            }`;
+    }
+
     ////////////////////  以上資料來自 step1 choose-metrics   ////////////////////
 
     ////////////////////////////////// Step 2 Start //////////////////////////////////
@@ -571,11 +651,23 @@ export default class RuleAndActionsTraffic extends Vue {
     receiveNotifyMethod(notifyMethod: string) {
         this.inputFormData.notifyMethod = notifyMethod;
         console.log("notifyMethod ~ ", this.inputFormData.notifyMethod);
+
+        // TODO: 整理資料格式
+        // if (this.inputFormData.notifyMethod.filter(item => item === ENotifyMethod.email).join() === ENotifyMethod.email) {
+        //
+        // }
     }
 
     receiveNotifyTarget(notifyTarget: object) {
         this.inputFormData.notifyTarget = notifyTarget;
         console.log("notifyTarget ~ ", this.inputFormData.notifyTarget);
+
+        // TODO: 整理資料格式
+        // if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.storeManager).join() === EWhoNotify.storeManager) {
+        //
+        // } else if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.permissionOfStore).join() === EWhoNotify.permissionOfStore) {
+        //
+        // }
     }
 
     receiveUserIds(userIds: object) {
