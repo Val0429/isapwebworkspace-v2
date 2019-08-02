@@ -7,8 +7,7 @@ import Dashboard from './Dashboard/Dashboard.vue';
 import Invitation from './Invitation/Invitation.vue';
 
 // General Settings
-import GeneralSettingsBackground from './GeneralSettings/GeneralSettingsBackground.vue';
-import GeneralSettingsRemoveWorker from './GeneralSettings/GeneralSettingsRemoveWorker.vue';
+import GeneralSettings from './GeneralSettings/GeneralSettings.vue';
 
 ///////////////////////////////////////////////////////////////////
 
@@ -19,6 +18,4 @@ $({ path: '/dashboard', name: "_('w_Navigation_Dashboard')", icon: 'fa-code', pe
 
 $({ path: '/invitation', name: "_('w_Navigation_Invitation')", icon: 'fa-code', permission: false })(Invitation);
 
-$({ path: '/settings', name: "_('w_Navigation_GeneralSettings')", icon: 'fa-code', redirect: '/settings/background' })();
-$({ path: '/settings/background', name: "_('w_Navigation_GeneralSettings_Background')", icon: 'fa-code', permission: false })(GeneralSettingsBackground);
-$({ path: '/settings/remove_worker', name: "_('w_Navigation_GeneralSettings_RemoveWorker')", icon: 'fa-code', permission: false })(GeneralSettingsRemoveWorker);
+$({ path: '/settings', name: "_('w_Navigation_GeneralSettings')", icon: 'fa-code', permission: false })(GeneralSettings);

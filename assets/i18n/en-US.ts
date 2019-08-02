@@ -10,6 +10,7 @@ export default class LangObject {
     w_Password = 'Password';
     w_Selection = 'Selection';
     w_Multi = 'Multi';
+    w_Upload = 'Upload';
 
     w_Username = 'User name';
     w_Roles = 'Role';
@@ -40,6 +41,10 @@ export default class LangObject {
 
     /////////////////////////////////////////////
 
+    w_Error_FileToLarge = 'File to large';
+
+    /////////////////////////////////////////////
+
     // Login
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot password';
@@ -61,8 +66,6 @@ export default class LangObject {
     w_Navigation_GeneralSettings_Background = 'Background';
     w_Navigation_GeneralSettings_RemoveWorker = 'Remove Worker';
 
-
-
     // Invitation
     // Search Condition
     w_Invitation_SearchCondition = 'Search Condition';
@@ -77,7 +80,7 @@ export default class LangObject {
     w_Invitation_WorkType = 'Work Type';
     w_Invitation_Unit = 'Unit #';
     w_Invitation_ContactPerson = 'Contact Person';
-    w_Invitation_Contractor= 'Contractor';
+    w_Invitation_Contractor = 'Contractor';
     w_Invitation_WorkersName = 'Worker’s Name';
 
     w_Invitation_Search = 'Search';
@@ -100,4 +103,8 @@ export default class LangObject {
     w_Invitation_CompanyEmail = 'Company Email';
     w_Invitation_WorkDescription = 'Work Description';
 
+    /////////////////////// General Settings //////////////////////
+
+    w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
+    w_GeneralSettings_RemoveWorkerDaysFormLabel = 'Remove Worker Data from Days';
 }

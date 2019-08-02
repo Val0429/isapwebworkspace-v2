@@ -28,17 +28,7 @@
                 <SidebarNavItem
                     :label="_('w_Navigation_GeneralSettings')"
                     url="/settings"
-                >
-                    <SidebarNavItem
-                        :label="_('w_Navigation_GeneralSettings_Background')"
-                        url="/settings/background"
-                    />
-
-                    <SidebarNavItem
-                        :label="_('w_Navigation_GeneralSettings_RemoveWorker')"
-                        url="/settings/remove_worker"
-                    />
-                </SidebarNavItem>
+                />
 
             </SidebarNav>
 
