@@ -1,6 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
+        <view-ptw></view-ptw>
 
         <iv-auto-transition
             :step="transition.step"
@@ -39,7 +40,6 @@
                         :server="{ path: '/partner/cms' }"
                         @selected="selectedItem($event)"
                     >
-
                         <template #Actions="{$attrs, $listeners}">
 
                             <iv-toolbox-more :disabled="isSelected.length !== 1">
@@ -56,38 +56,13 @@
                 key="transition_2"
                 v-show="transition.step === 2"
             >
-
                 <add-ptw @back-to-list="pageToList"></add-ptw>
+            </div>
 
-<!--                <iv-auto-card-->
-<!--                    key="transition_3"-->
-<!--                    v-show="transition.step === 3"-->
-<!--                    :visible="true"-->
-<!--                    :label="_('w_Invitation_CompanyAddPTW')"-->
-<!--                >-->
-<!--                    <template #toolbox>-->
-
-<!--                        <iv-toolbox-back @click="pageToList()" />-->
-
-<!--                    </template>-->
-
-<!--                    <iv-form-->
-<!--                        :interface="IAddForm()"-->
-<!--                        :value="inputFormData"-->
-<!--                        @submit="saveAddOrEdit($event)"-->
-<!--                    ></iv-form>-->
-
-<!--                    <template #footer-before>-->
-<!--                        <b-button-->
-<!--                            variant="dark"-->
-<!--                            size="lg"-->
-<!--                            @click="pageToList()"-->
-<!--                        >{{ _('w_Back') }}-->
-<!--                        </b-button>-->
-<!--                    </template>-->
-
-<!--                </iv-auto-card>-->
-
+            <div
+                key="transition_3"
+                v-show="transition.step === 3"
+            >
             </div>
 
         </iv-auto-transition>
@@ -99,6 +74,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import SearchCondition from "./SearchCondition.vue";
 import AddPTW from "./AddPTW.vue";
+import ViewPTW from "./ViewPTW.vue";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -108,9 +84,10 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Loading from '@/services/Loading';
 import ResponseFilter from '@/services/ResponseFilter';
+import Datetime from '@/services/Datetime';
 
 @Component({
-    components: { SearchCondition, AddPTW }
+    components: { SearchCondition, AddPTW, ViewPTW }
 })
 export default class Invitation extends Vue {
     transition: ITransition = {
@@ -178,6 +155,10 @@ export default class Invitation extends Vue {
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
         //     });
+    }
+
+    dateToYYYY_MM_DD(value) {
+        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
     ITableList() {

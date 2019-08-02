@@ -1,6 +1,21 @@
 <template>
     <div>
-        Components Empty
+
+        <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step1_content') }} </div>
+
+        <div class="row justify-content-center align-items-center mt-3 font-weight-bold" >
+            <b-form-checkbox
+                v-model="isAccepted"
+                name="status"
+                value="accepted"
+                unchecked-value="not_accepted"
+                @input="changeStatus"
+            >
+                {{ _('w_ViewPTW_Step1_agreement') }}
+            </b-form-checkbox>
+        </div>
+
+
     </div>
 </template>
 
@@ -12,37 +27,17 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 })
 export class Step1 extends Vue {
     // Prop
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
-    })
-    label: string;
 
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
+    isAccepted:string = 'not_accepted';
 
-    inputData = "Test input data";
-    modelData = "";
+    created() {}
 
-    created() {
-        this.modelData = this.value;
+    mounted() {}
+
+    changeStatus() {
+        this.$emit('isAccepted', this.isAccepted)
     }
 
-    mounted() {
-        this.start();
-    }
-
-    start() {
-        this.$emit("input", this.inputData);
-    }
-
-    putModel() {
-        this.$emit("model", this.modelData);
-    }
 }
 
 export default Step1;
@@ -50,4 +45,7 @@ Vue.component("step1", Step1);
 </script>
 
 <style lang="scss" scoped>
+    .center {
+        margin: 0 auto;
+    }
 </style>

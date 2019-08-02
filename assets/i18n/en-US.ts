@@ -66,8 +66,8 @@ export default class LangObject {
     w_Navigation_GeneralSettings_Background = 'Background';
     w_Navigation_GeneralSettings_RemoveWorker = 'Remove Worker';
 
-    // Invitation
-    // Search Condition
+    /////////////////////// Invitation //////////////////////
+
     w_Invitation_SearchCondition = 'Search Condition';
     w_Invitation_DateFrom = 'Date From';
     w_Invitation_DateTo = 'Date To';
@@ -102,6 +102,30 @@ export default class LangObject {
     w_Invitation_CompanyAddPTW = 'Add PTW';
     w_Invitation_CompanyEmail = 'Company Email';
     w_Invitation_WorkDescription = 'Work Description';
+
+    // ViewPTW
+    w_ViewPTW_StepTitle = 'Permit To Work Request Form';
+
+    // step1
+    w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
+    w_ViewPTW_Step1_content = 'This Data Protection Notice (“Notice”) sets out the basis which  Hong Kong  Land  (“we”, “us”, or “our”) may collect, use, disclose or otherwise process personal data of our customers in accordance with the Personal Data Protection Act (“PDPA”). This Notice applies to personal data in our possession or under our control, including personal data in the possession of organizations which we have engaged to collect, use, disclose or process personal data for our purposes.';
+    w_ViewPTW_Step1_agreement = 'I accept the agreement';
+    w_ViewPTW_Step1_ErrorTip = 'Please check the agreement is accepted';
+
+    // step2
+    w_ViewPTW_Step2_Tip = '* Please help to complete all data fields. All workers’ particulars must be completed before submitting the work order.';
+    w_ViewPTW_Step2_PTWTitle = 'PTW Data';
+    w_ViewPTW_Step2_ContractorTitle = 'Contractor Information';
+    w_ViewPTW_Step2_NameofApplicant = 'Name of Applicant';
+    w_ViewPTW_Step2_CompanyName = 'Company Name';
+    w_ViewPTW_Step2_CompanyAddress = 'Company Address';
+    w_ViewPTW_Step2_EmailAddress = 'Email Address';
+    w_ViewPTW_Step2_ContactNumber = 'Contact Number';
+    w_ViewPTW_Step2CompanyFaxNo_ = 'Company Fax No';
+
+
+
+    //w_ViewPTW_Step = '';
 
     /////////////////////// General Settings //////////////////////
 

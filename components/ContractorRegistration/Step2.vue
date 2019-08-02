@@ -6,42 +6,90 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { toEnumInterface } from '@/../core';
 
 @Component({
     components: {}
 })
 export class Step2 extends Vue {
-    // Prop
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
-    })
-    label: string;
 
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
-
-    inputData = "Test input data";
-    modelData = "";
+    tenantSelectItem: any = {};
+    workCategorySelectItem: any = {};
 
     created() {
-        this.modelData = this.value;
     }
 
     mounted() {
-        this.start();
     }
 
-    start() {
-        this.$emit("input", this.inputData);
-    }
 
-    putModel() {
-        this.$emit("model", this.modelData);
+    IFilterConditionForm() {
+        return `
+            interface {
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_PTWID")}
+                 * @uiPlaceHolder - ${this._("w_Invitation_PTWID")}
+                 * @uiColumnGroup - row1
+                 */
+                ptwId?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_Email")}
+                 * @uiPlaceHolder - ${this._("w_Invitation_Email_Placeholder")}
+                 * @uiColumnGroup - row2
+                 */
+                email?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_Tenant")}
+                 * @uiColumnGroup - row2
+                 */
+                tenant?:  ${toEnumInterface(this.tenantSelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_PTWStatus")}
+                 * @uiColumnGroup - row2
+                 */
+                workCategory?:  ${toEnumInterface(this.workCategorySelectItem as any, false)};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_Unit")}
+                 * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
+                 * @uiColumnGroup - row3
+                 */
+                unit?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_ContactPerson")}
+                 * @uiPlaceHolder - ${this._("w_Invitation_ContactPerson")}
+                 * @uiColumnGroup - row3
+                 */
+                contactPerson?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_Contractor")}
+                 * @uiPlaceHolder - ${this._("w_Invitation_Contractor")}
+                 * @uiColumnGroup - row3
+                 */
+                contractor?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_WorkersName")}
+                 * @uiPlaceHolder - ${this._("w_Invitation_WorkersName")}
+                 * @uiColumnGroup - row3
+                 */
+                workersName?: string;
+            }
+        `;
     }
 }
 
