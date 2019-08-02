@@ -35,8 +35,8 @@ export default class LangObject {
     w_Submit = 'Submit';
     w_Confirm = 'Confirm';
     w_Cancel = 'Cancel';
-    w_Dialog_SuccessTitle = "Success";
-    w_Dialog_ErrorTitle = "Error";
+    w_Dialog_SuccessTitle = 'Success';
+    w_Dialog_ErrorTitle = 'Error';
 
     /////////////////////////////////////////////
 
@@ -52,7 +52,11 @@ export default class LangObject {
 
     /////////////////////////////////////////////
 
+    w_Navigation_Dashboard = 'Dashboard';
 
+    w_Navigation_Invitation = 'Invitation';
 
-
+    w_Navigation_GeneralSettings = 'General Settings';
+    w_Navigation_GeneralSettings_Background = 'Background';
+    w_Navigation_GeneralSettings_RemoveWorker = 'Remove Worker';
 }

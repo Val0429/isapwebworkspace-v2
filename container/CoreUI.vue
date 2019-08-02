@@ -11,40 +11,35 @@
         <template #nav>
             <SidebarHeader label="iSAP Web Framework" />
             <SidebarNav>
-                <!-- <SidebarNavTitle label="Components" /> -->
-                <!-- <SidebarNavItem url="/components">
-                    <SidebarNavItem url="/components/forms" />
-                </SidebarNavItem> -->
 
-                <SidebarNavTitle label="基本元件" />
-                <SidebarNavItem url="/components" />
-                <SidebarNavItem url="/components/forms" />
-                <SidebarNavItem url="/components/step-progress" />
-                <SidebarNavItem url="/components/tab" />
-                <SidebarNavItem url="/components/toolbox" />
-                <SidebarNavItem url="/components/cards" />
-                <SidebarNavItem url="/components/cards/auto" />
-                <SidebarNavItem url="/components/table" />
-                <SidebarNavItem url="/components/tree" />
-                <SidebarNavItem url="/components/transition" />
-                <SidebarNavItem url="/components/modal" />
-                <SidebarNavItem url="/components/utilities" />
+                <!-- Dahsboard -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Dashboard')"
+                    url="/dashboard"
+                />
 
-                <SidebarNavTitle label="選單特殊樣式" />
-                <SidebarNavItem url="/menu-style/1" />
-                <SidebarNavItem url="/menu-style/2" />
+                <!-- Invitation -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_Invitation')"
+                    url="/invitation"
+                />
 
-                <!-- <SidebarNavItem url="/home">
-                    <SidebarNavItem url="/home">
-                        <SidebarNavItem url="/home/about" />                
-                        <SidebarNavItem url="/home" />
-                        <SidebarNavItem url="/home/about" />                
-                    </SidebarNavItem>
-                    <SidebarNavItem url="/home/about" />
-                    <SidebarNavItem url="/home" />
-                    <SidebarNavItem url="/home/about" />
+                <!-- General Settings -->
+                <SidebarNavItem
+                    :label="_('w_Navigation_GeneralSettings')"
+                    url="/settings"
+                >
+                    <SidebarNavItem
+                        :label="_('w_Navigation_GeneralSettings_Background')"
+                        url="/settings/background"
+                    />
+
+                    <SidebarNavItem
+                        :label="_('w_Navigation_GeneralSettings_RemoveWorker')"
+                        url="/settings/remove_worker"
+                    />
                 </SidebarNavItem>
-                <SidebarNavItem url="/home/about" /> -->
+
             </SidebarNav>
 
         </template>
@@ -52,18 +47,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { CoreUI as CoreUIBase,
-    SidebarHeader, SidebarNav, SidebarNavTitle, SidebarNavDivider, SidebarNavItem
-} from '@/../containers/CoreUI';
+import { Component, Vue } from "vue-property-decorator";
+import {
+    CoreUI as CoreUIBase,
+    SidebarHeader,
+    SidebarNav,
+    SidebarNavTitle,
+    SidebarNavDivider,
+    SidebarNavItem
+} from "@/../containers/CoreUI";
 
 @Component({
     components: {
         CoreUIBase,
-        SidebarHeader, SidebarNav, SidebarNavTitle, SidebarNavDivider, SidebarNavItem
+        SidebarHeader,
+        SidebarNav,
+        SidebarNavTitle,
+        SidebarNavDivider,
+        SidebarNavItem
     }
 })
-export default class CoreUI extends Vue {
-
-}
+export default class CoreUI extends Vue {}
 </script>
