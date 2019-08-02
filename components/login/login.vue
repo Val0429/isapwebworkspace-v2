@@ -2,6 +2,7 @@
     <div
         id="app"
         class="app flex-row align-items-center"
+        @keyup.enter="Login"
     >
         <div class="container">
             <b-row class="justify-content-center">
@@ -73,14 +74,15 @@
                                             <!--== language ==-->
 
                                             <!-- forgot password -->
-                                            <b-button
+                                            <!-- <b-button
                                                 variant="link"
                                                 class="px-0"
                                                 @click="forgotPassword"
                                             >
                                                 {{ _('w_Login_ForgotPassword') }}
-                                            </b-button>
+                                            </b-button> -->
                                             <!--== forgot password ==-->
+
                                         </b-col>
                                     </b-row>
                                 </div>

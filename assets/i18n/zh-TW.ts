@@ -2,39 +2,72 @@ import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
-    w_Name = '名前';
-    w_Enabled = '有効';
-    w_Value = '値';
-    w_Startdate = '開始日';
-    w_Enddate = '終了日';
-    w_Password = '密碼';
-    w_Selection = '選択';
-    w_Multi = '複数';
+    w_Name = 'Name';
+    w_Enabled = 'Enabled';
+    w_Value = 'Value';
+    w_Startdate = 'Start Date';
+    w_Enddate = 'End Date';
+    w_Password = 'Password';
+    w_Selection = 'Selection';
+    w_Multi = 'Multi';
 
-    w_Login_LoginTitle = '登入';
-    w_Login_ForgotPassword = '忘記密碼';
-
-    w_Username = '使用者名稱';
-    w_Roles = '權限';
+    w_Username = 'User name';
+    w_Roles = 'Roles';
     w_Email = 'Email';
-    w_CreatedAt = '建立日期';
-    w_UpdatedAt = '修改日期';
-    w_Actions = '動作';
-    w_ConfirmPassword = '重複輸入密碼';
+    w_CreatedAt = 'Created Date';
+    w_UpdatedAt = 'Updated Date';
+    w_Actions = 'Actions';
+    w_ConfirmPassword = 'Confirm Password';
 
-    w_User = '使用者';
-    w_UserAdd = '新增使用者';
-    w_UserEdit = '修改使用者';
+    w_User = 'User';
+    w_UserAdd = 'Add User';
+    w_UserEdit = 'Edit User';
 
-    m_PasswordShouldBeSame = '兩個密碼必須相同';
+    m_PasswordShouldBeSame = 'Both password should same';
 
     /////////////////////////////////////////////
 
-    w_Options = '可用選項';
-    w_Chooses = '已選擇';
+    w_Options = 'Options';
+    w_Chooses = 'Choose';
 
-    w_AllChoose = '全選';
-    w_Reset = '重設';
-    w_Back = '返回';
-    w_Submit = '送出';
+    w_AllChoose = 'All';
+    w_Reset = 'Reset';
+    w_Back = 'Back';
+    w_Submit = 'Submit';
+
+    /////////////////////////////////////////////
+
+    // Login
+    w_Login_LoginTitle = 'Login';
+    w_Login_ForgotPassword = 'Forgot Password';
+
+    // failed to fetch
+    w_FailedToFetch = "We can't connect to server, please try again!";
+
+    // 401
+    w_UserSession_Empty = 'Not find User, Please login again';
+
+    ////////////////// Navigation //////////////////
+
+    w_Navigation_MyProfile = 'My Profile';
+
+    w_Navigation_Reports = 'Report';
+    w_Navigation_Reports_Dashboard = 'Dashboard';
+    w_Navigation_Reports_Investigation = 'Investigation';
+
+    w_Navigation_Setups = 'Setup';
+    w_Navigation_Setups_Floor = 'Floor Managerment';
+    w_Navigation_Setups_Company = 'Company Management';
+    w_Navigation_Setups_Account = 'Account Managerment';
+    w_Navigation_Setups_Kiosk = 'Kiosk Managerment';
+    w_Navigation_Setups_License = 'License';
+    w_Navigation_Setups_FRS = 'FRS Setting';
+    w_Navigation_Setups_Email = 'Email Setting';
+    w_Navigation_Setups_SMS = 'SMS Setting';
+    w_Navigation_Setups_SMSOnline = 'Online SMS Provider (SG only)';
+    w_Navigation_Setups_VisitorCard = 'Visitor Card';
+
+    w_Navigation_Tenants = 'Tenant';
+    w_Navigation_Tenants_Invitation = 'Invitation';
+    w_Navigation_Tenants_Visitor = 'Visitor';
 }
