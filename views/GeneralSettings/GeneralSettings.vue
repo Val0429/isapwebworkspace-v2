@@ -11,7 +11,7 @@
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
             >
-                GeneralSettingsBackground 1
+                GeneralSetting 1
             </div>
 
             <div
@@ -19,7 +19,7 @@
                 v-show="transition.step === 2"
                 :label="'Empty 2'"
             >
-                GeneralSettingsBackground 2
+                GeneralSetting 2
             </div>
 
         </iv-auto-transition>
@@ -40,7 +40,7 @@ import Dialog from "@/services/Dialog";
 @Component({
     components: {}
 })
-export default class GeneralSettingsBackground extends Vue {
+export default class GeneralSettings extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,

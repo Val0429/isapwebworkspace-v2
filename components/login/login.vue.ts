@@ -37,7 +37,8 @@ export default class Login extends Vue {
         await this.$login(param)
             .then(() => {
                 Loading.hide();
-                Dialog.success("Login success, waitting index page");
+                this.$router.push('/dashboard');
+
                 // let userRole = '';
                 // if (this.$user.user != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
                 //     userRole = this.$user.user.roles[0].name;
