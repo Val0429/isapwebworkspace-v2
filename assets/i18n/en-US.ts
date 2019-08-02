@@ -46,6 +46,7 @@ export default class LangObject {
 
     // failed to fetch
     w_FailedToFetch = "We can't connect to server, please try again!";
+    w_ErrorResponseUndefined = "Can't get server response";
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
@@ -59,4 +60,44 @@ export default class LangObject {
     w_Navigation_GeneralSettings = 'General Settings';
     w_Navigation_GeneralSettings_Background = 'Background';
     w_Navigation_GeneralSettings_RemoveWorker = 'Remove Worker';
+
+
+
+    // Invitation
+    // Search Condition
+    w_Invitation_SearchCondition = 'Search Condition';
+    w_Invitation_DateFrom = 'Date From';
+    w_Invitation_DateTo = 'Date To';
+    w_Invitation_PTWStatus = 'PTW Status';
+    w_Invitation_PTWID = 'PTW ID';
+    w_Invitation_Email = 'Email';
+    w_Invitation_Email_Placeholder = 'ex : admin@isap.com';
+    w_Invitation_Tenant = 'Tenant';
+    w_Invitation_WorkCategory = 'Work Category';
+    w_Invitation_WorkType = 'Work Type';
+    w_Invitation_Unit = 'Unit #';
+    w_Invitation_ContactPerson = 'Contact Person';
+    w_Invitation_Contractor= 'Contractor';
+    w_Invitation_WorkersName = 'Worker’s Name';
+
+    w_Invitation_Search = 'Search';
+    w_Invitation_ExportData = 'Export Data';
+
+    w_Invitation_List = 'Invitation List';
+    w_No = 'No';
+    w_Invitation_StartDate = 'Start Date';
+    w_Invitation_EndDate = 'End Date';
+    w_Invitation_ContractorCompany = 'Contractor Company';
+
+    w_Invitation_Approved = 'Approved';
+    w_Invitation_PendingApproved = 'Pending Approved';
+    w_Invitation_Rejected = 'Rejected';
+
+    w_Invitation_DateError = 'End date must greater or equal than start date';
+    w_Invitation_EmailError = 'Email format wrong';
+
+    w_Invitation_CompanyAddPTW = 'Add PTW';
+    w_Invitation_CompanyEmail = 'Company Email';
+    w_Invitation_WorkDescription = 'Work Description';
+
 }

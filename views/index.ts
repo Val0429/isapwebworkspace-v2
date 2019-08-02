@@ -13,7 +13,7 @@ import GeneralSettingsRemoveWorker from './GeneralSettings/GeneralSettingsRemove
 ///////////////////////////////////////////////////////////////////
 
 // Home
-$({ path: '/', name: 'Home', redirect: '/components' })();
+$({ path: '/', name: 'Home', redirect: '/dashboard' })();
 
 $({ path: '/dashboard', name: "_('w_Navigation_Dashboard')", icon: 'fa-code', permission: false })(Dashboard);
 
