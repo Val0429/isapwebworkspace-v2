@@ -10,8 +10,18 @@
                 key="transition_1"
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
+                class="row"
             >
-                Dashboard 1
+                <div class="col-lg-6">
+                    <submitted-dashboard></submitted-dashboard>
+                </div>
+                <div class="col-lg-6">
+                    <highchart-dashboard :chartMode="0"></highchart-dashboard>
+                </div>
+                <div class="col-lg-12">
+                    <highchart-dashboard :chartMode="1"></highchart-dashboard>
+                </div>
+
             </div>
 
             <div
