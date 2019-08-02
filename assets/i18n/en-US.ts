@@ -10,6 +10,7 @@ export default class LangObject {
     w_Password = 'Password';
     w_Selection = 'Selection';
     w_Multi = 'Multi';
+    w_Upload = 'Upload';
 
     w_Username = 'User name';
     w_Roles = 'Role';
@@ -40,6 +41,10 @@ export default class LangObject {
 
     /////////////////////////////////////////////
 
+    w_Error_FileToLarge = 'File to large';
+
+    /////////////////////////////////////////////
+
     // Login
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot password';
@@ -59,4 +64,9 @@ export default class LangObject {
     w_Navigation_GeneralSettings = 'General Settings';
     w_Navigation_GeneralSettings_Background = 'Background';
     w_Navigation_GeneralSettings_RemoveWorker = 'Remove Worker';
+
+    /////////////////////// General Settings //////////////////////
+
+    w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
+    w_GeneralSettings_RemoveWorkerDaysFormLabel = 'Remove Worker Data from Days';
 }
