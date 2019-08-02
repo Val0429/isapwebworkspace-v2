@@ -97,15 +97,14 @@
                     </iv-form>
 
                     <actions
-                        :disabled="true"
                         class="col-md-12"
-                        @notify-method="receiveNotifyMethod"
-                        @notify-target="receiveNotifyTarget"
+                        @email="receiveEmail"
+                        @store-manager="receiveStoreManager"
+                        @permission-of-store="receivePermissionOfStore"
                         @user-ids="receiveUserIds"
                         @user-group-ids="receiveUserGroupIds"
                         @minutes="receiveMinutes"
                     ></actions>
-
                     <template #footer>
                         <b-button
                             variant="dark"
@@ -267,8 +266,9 @@
                                 <template #step3>
                                     <actions
                                         class="col-md-12"
-                                        @notify-method="receiveNotifyMethod"
-                                        @notify-target="receiveNotifyTarget"
+                                        @email="receiveEmail"
+                                        @store-manager="receiveStoreManager"
+                                        @permission-of-store="receivePermissionOfStore"
                                         @user-ids="receiveUserIds"
                                         @user-group-ids="receiveUserGroupIds"
                                         @minutes="receiveMinutes"
@@ -357,8 +357,9 @@ export default class RuleAndActionsOccupancy extends Vue {
         conditions: [],
 
         // actions
-        notifyMethod: [],
-        notifyTarget: [],
+        email: undefined,
+        storeManager: undefined,
+        permissionOfStore: undefined,
         userIds: [],
         userGroupIds: [],
         minutes: 0
@@ -523,7 +524,7 @@ export default class RuleAndActionsOccupancy extends Vue {
         } else if (this.inputFormData.siteIds.length > 2) {
             this.siteCountMode = ESiteCountMode.multiple;
         } else {
-            Dialog.error(this._("w_PleaseSelectSites"));
+            Dialog.error(this._("w_RuleAndActions_ErrorTip"));
             stepRef.currentStep = 0;
             return false;
         }
@@ -721,26 +722,19 @@ export default class RuleAndActionsOccupancy extends Vue {
     ////////////////////////////////// Step 2 End //////////////////////////////////
 
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
-    receiveNotifyMethod(notifyMethod: string) {
-        this.inputFormData.notifyMethod = notifyMethod;
-        console.log("notifyMethod ~ ", this.inputFormData.notifyMethod);
-
-        // TODO: 整理資料格式
-        // if (this.inputFormData.notifyMethod.filter(item => item === ENotifyMethod.email).join() === ENotifyMethod.email) {
-        //
-        // }
+    receiveEmail(email: boolean) {
+        this.inputFormData.email = email;
+        console.log("email ~ ", this.inputFormData.email);
     }
 
-    receiveNotifyTarget(notifyTarget: object) {
-        this.inputFormData.notifyTarget = notifyTarget;
-        console.log("notifyTarget ~ ", this.inputFormData.notifyTarget);
+    receiveStoreManager(storeManager: boolean) {
+        this.inputFormData.storeManager = storeManager;
+        console.log("storeManager ~ ", this.inputFormData.storeManager);
+    }
 
-        // TODO: 整理資料格式
-        // if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.storeManager).join() === EWhoNotify.storeManager) {
-        //
-        // } else if (this.inputFormData.notifyTarget.filter(item => item === EWhoNotify.permissionOfStore).join() === EWhoNotify.permissionOfStore) {
-        //
-        // }
+    receivePermissionOfStore(permissionOfStore: boolean) {
+        this.inputFormData.permissionOfStore = permissionOfStore;
+        console.log("permissionOfStore ~ ", this.inputFormData.permissionOfStore);
     }
 
     receiveUserIds(userIds: object) {

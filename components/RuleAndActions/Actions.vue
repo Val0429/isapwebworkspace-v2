@@ -191,9 +191,13 @@ export class Actions extends Vue {
     notifyTargetSelected: any = [];
 
     inputFormData: any = {
+        email: undefined,
+        storeManager: undefined,
+        permissionOfStore: undefined,
+
         userIds: [],
         groupIds: [],
-        minutes: 0
+        minutes: 0,
     };
 
     created() {
@@ -279,10 +283,23 @@ export class Actions extends Vue {
     }
 
     changeNotifyMethod() {
-        this.$emit("notify-method", this.notifyMethodSelected);
+
+        if (this.notifyMethodSelected.filter(item => item === ENotifyMethod.email).join() === ENotifyMethod.email) {
+            this.inputFormData.email = true;
+        } else {
+            this.inputFormData.email = false;
+
+        }
+
+        this.$emit("email", this.inputFormData.email);
     }
 
     changeNotifyTarget() {
+
+        this.inputFormData.storeManager = this.notifyTargetSelected.filter(item => item === EWhoNotify.storeManager).join() === EWhoNotify.storeManager;
+
+        this.inputFormData.permissionOfStore = this.notifyTargetSelected.filter(item => item === EWhoNotify.permissionOfStore).join() === EWhoNotify.permissionOfStore;
+
         if (
             this.notifyTargetSelected
                 .filter(item => item === EWhoNotify.users)
@@ -297,7 +314,8 @@ export class Actions extends Vue {
             this.inputFormData.groupIds = [];
         }
 
-        this.$emit("notify-target", this.notifyTargetSelected);
+        this.$emit("store-manager", this.inputFormData.storeManager);
+        this.$emit("permission-of-store", this.inputFormData.permissionOfStore);
     }
 
     selectUserIds(selected: object) {
