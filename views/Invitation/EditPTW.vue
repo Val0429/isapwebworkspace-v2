@@ -124,7 +124,7 @@
                         <template #step7>
                             <step7
                                 class="col-md-12"
-                                @step6="receiveStep7Data"
+                                @step7="receiveStep7Data"
                             ></step7>
                         </template>
 
@@ -135,7 +135,7 @@
                 <template #8>
 
                     <iv-form
-                        :interface="IStep7()"
+                        :interface="IStep8()"
                         :value="inputFormData"
                         @submit="doSubmit($event)"
                     >
@@ -166,7 +166,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import Step1 from "@/components/ContractorRegistration/Step1.vue";
 import Step2 from "@/components/ContractorRegistration/Step2.vue";
 import Step3 from "@/components/ContractorRegistration/Step3.vue";
@@ -178,11 +178,19 @@ import Step8 from "@/components/ContractorRegistration/Step8.vue";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
 })
-export class ViewPTW extends Vue {
+export class EditPTW extends Vue {
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: () => {}
+    })
+    selectedDetail: string;
+
     // step 相關
     isMounted: boolean = false;
     doMounted() {
@@ -238,14 +246,20 @@ export class ViewPTW extends Vue {
         // step5
 
         // step6
-        step6Accepted: ""
+        step6Accepted: "",
 
         // step7
+        step7PersonDetail: undefined,
 
         // step8
+        step8StartDate: new Date(),
+        step8EndDate: new Date(),
+        step8AccessGroup: ""
     };
 
-    created() {}
+    created() {
+        this.inputFormData = this.selectedDetail;
+    }
 
     mounted() {}
 
@@ -259,11 +273,12 @@ export class ViewPTW extends Vue {
     stepTo2() {
         let stepRef: any = this.$refs.step;
 
-        if (!this.inputFormData.step1Accepted) {
-            Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-            stepRef.currentStep = 0;
-            return false;
-        }
+        // TODO: 全部step OK
+        // if (!this.inputFormData.step1Accepted) {
+        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+        //     stepRef.currentStep = 0;
+        //     return false;
+        // }
     }
 
     IStep1() {
@@ -480,14 +495,20 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 7  //////////////////////////////
 
-    receiveStep7Data(step7Date) {}
+    receiveStep7Data(step7Date) {
+        this.inputFormData.step7PersonDetail = step7Date;
+        console.log(
+            "this.inputFormData.step7PersonDetail ~ ",
+            this.inputFormData.step7PersonDetail
+        );
+    }
 
     stepTo8() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
-        // if (!this.inputFormData.step1Accepted) {
-        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+        // if (!this.inputFormData.personDetail) {
+        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
         //     stepRef.currentStep = 6;
         //     return false;
         // }
@@ -504,9 +525,45 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 8  //////////////////////////////
 
-    receiveStep8Data(step8Date) {}
+    receiveStep8Data(step8Date) {
+        this.inputFormData.step8StartDate = step8Date.startDate;
+        this.inputFormData.step8EndDate = step8Date.endDate;
+        this.inputFormData.step8AccessGroup = step8Date.accessGroup;
 
-    doSubmit() {}
+        console.log("this.inputFormData ~ ", this.inputFormData);
+    }
+
+    async doSubmit() {
+        // TODO: wait api
+        const datas: any = [];
+
+        const doSubmitParam = {
+            datas
+        };
+
+        // Loading.show();
+        // await this.$server
+        //     .U("/", doSubmitParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {
+        //                 Dialog.success(this._("w_Dialog_SuccessTitle"));
+        //             },
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     });
+
+        this.$emit("submit-data", doSubmitParam);
+    }
 
     IStep8() {
         return `
@@ -518,8 +575,8 @@ export class ViewPTW extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 }
 
-export default ViewPTW;
-Vue.component("view-ptw", ViewPTW);
+export default EditPTW;
+Vue.component("edit-ptw", EditPTW);
 </script>
 
 <style lang="scss" scoped>

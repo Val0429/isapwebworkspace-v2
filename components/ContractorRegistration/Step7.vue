@@ -1,47 +1,323 @@
 <template>
     <div>
-        Components Empty
+        <!-- 主頁 -->
+
+        <b-row v-show="pageStep === ePageStep.list">
+            <b-col cols="11">
+                <h5 class="col-md-12 mb-0 mt-4">{{_('w_ViewPTW_Step7_PersonList')}}</h5>
+            </b-col>
+
+            <b-col cols="1">
+                <b-button
+                    class="col-md-12 mb-3 mt-4"
+                    variant="primary"
+                    type="button"
+                    @click="pageToAdd"
+                >{{_('w_ViewPTW_Step7_AddPerson')}}
+                </b-button>
+            </b-col>
+
+
+        </b-row>
+
+
+        <table
+            v-show="pageStep === ePageStep.list"
+            class="table b-table table-striped table-hover text-center">
+
+            <thead>
+            <tr>
+                <th
+                    v-for="(value, index) in personTable.title"
+                    :key="'title_' + index"
+                >{{ value }}
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr
+                v-for="(value, index) in personTable.tableDataFromApi"
+                :key="'data_' + index"
+            >
+
+                <td class="align-middle">{{ value.phone }}</td>
+                <td class="align-middle">{{ value.name }}</td>
+                <td class="align-middle">{{ value.occupation }}</td>
+                <td class="align-middle">{{ value.nric }}</td>
+                <td class="align-middle">{{ value.shift }}</td>
+                <td class="align-middle">{{ value.unit }}</td>
+                <td class="align-middle">{{ value.vehicle }}</td>
+                <td class="align-middle">{{ value.company }}</td>
+                <td>
+                    <b-button
+                        variant="transparent"
+                        @click="pageToEdit(value, index)"
+                    >
+                        <i class="fa fa-pencil text-dark"></i>
+                    </b-button>
+                </td>
+                <td>
+                    <b-button
+                        variant="transparent"
+                        @click="doDelete(index)"
+                    >
+                        <i class="fa fa-trash-o text-dark"></i>
+                    </b-button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <iv-auto-card
+            v-show="pageStep === ePageStep.edit || pageStep === ePageStep.add"
+            :label="pageStep === ePageStep.add ? _('w_ViewPTW_Step7_AddPerson') : _('w_ViewPTW_Step7_EditPerson')"
+            class="mt-3"
+        >
+            <template #toolbox>
+
+                <iv-toolbox-back @click="pageToList()"
+                                 v-show="pageStep === ePageStep.add"
+                />
+
+            </template>
+
+            <iv-form
+                :interface="IForm()"
+                :value="inputFormData"
+                @submit="doSubmit($event)"
+            >
+
+            </iv-form>
+
+            <template #footer-before>
+                <b-button
+                    v-show="pageStep === ePageStep.add"
+                    variant="dark"
+                    size="lg"
+                    @click="pageToList()"
+                >{{ _('w_Back') }}
+                </b-button>
+            </template>
+
+        </iv-auto-card>
+
+
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { toEnumInterface } from '@/../core'
+import Dialog from '@/services/Dialog';
+
+enum EPageStep {
+    list = 'list',
+    add = 'add',
+    edit = 'edit',
+    remove = 'remove',
+}
 
 @Component({
     components: {}
 })
 export class Step7 extends Vue {
-    // Prop
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
-    })
-    label: string;
 
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
+    ePageStep = EPageStep;
+    pageStep: EPageStep = EPageStep.list;
 
-    inputData = "Test input data";
-    modelData = "";
+    shiftSelectItem: any = [];
+
+    personTable: any = {
+        title: [],
+        tableDataFromApi: [],
+    };
+
+    inputFormData: any = {
+        phone: 0,
+        name: '',
+        occupation: '',
+        nric: '',
+        shift: "",
+        unit: '',
+        vehicle: '',
+        company: '',
+    };
 
     created() {
-        this.modelData = this.value;
     }
 
     mounted() {
-        this.start();
+        this.initData();
     }
 
-    start() {
-        this.$emit("input", this.inputData);
+    initData() {
+
+        this.shiftSelectItem = {
+            day: this._('w_ViewPTW_Step7_Day'),
+            night: this._('w_ViewPTW_Step7_Night'),
+            midnight: this._('w_ViewPTW_Step7_Midnight'),
+        };
+
+        this.personTable.title = [
+            this._("w_ViewPTW_Step2_ContactNumber"),
+            this._("w_ViewPTW_Step7_FullName"),
+            this._("w_ViewPTW_Step7_Occupation"),
+            this._("w_ViewPTW_Step7_NRIC"),
+            this._("w_ViewPTW_Step7_Shift"),
+            this._("w_Invitation_Unit"),
+            this._("w_ViewPTW_Step7_Vehicle"),
+            this._("w_ViewPTW_Step7_Company"),
+            this._("w_ViewPTW_Step7_EditPerson"),
+            this._("w_ViewPTW_Step7_RemovePerson")
+        ];
+
+        // this.personTable.tableDataFromApi = [
+        //     {
+        //         phone: 12345647890,
+        //         name: 'sci',
+        //         occupation: 'Plumber',
+        //         nric: '423N',
+        //         shift: "day",
+        //         unit: '04-45',
+        //         vehicle: 'SGX-23423',
+        //         company: 'ABC Corp',
+        //     },
+        //     {
+        //         phone: 12345647890,
+        //         name: 'zh',
+        //         occupation: 'Foreman',
+        //         nric: '473Z',
+        //         shift: "midnight",
+        //         unit: '04-45',
+        //         vehicle: 'SGX-23003',
+        //         company: 'ABC Corp',
+        //     },
+        // ];
     }
 
-    putModel() {
-        this.$emit("model", this.modelData);
+    clearInputFormData() {
+        this.inputFormData = {
+            phone: 0,
+            name: '',
+            occupation: '',
+            nric: '',
+            shift: "",
+            unit: '',
+            vehicle: '',
+            company: '',
+        };
+    }
+
+    pageToList() {
+        this.pageStep = EPageStep.list;
+        console.log('this.personTable.tableDataFromApi ~ ', this.personTable.tableDataFromApi)
+    }
+
+    pageToAdd(){
+        this.clearInputFormData();
+        this.pageStep = EPageStep.add;
+    }
+
+    pageToEdit(item: any, index: number){
+        this.clearInputFormData();
+        this.pageStep = EPageStep.edit;
+        this.inputFormData = item;
+        this.personTable.tableDataFromApi.splice(index, 1);
+    }
+
+    doSubmit(data) {
+        let personObject: any = {
+            phone: data.phone,
+            name: data.name,
+            occupation: data.occupation,
+            nric: data.nric,
+            shift: data.shift,
+            unit: data.unit,
+            vehicle: data.vehicle,
+            company: data.company,
+        };
+
+        this.personTable.tableDataFromApi.push(personObject);
+        this.pageStep = EPageStep.list;
+
+        this.$emit('step7', this.personTable.tableDataFromApi)
+    }
+
+    doDelete(index: number) {
+
+        Dialog.confirm(
+            this._("w_ViewPTW_Step7_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                this.personTable.tableDataFromApi.splice(index, 1);
+            }
+        );
+    }
+
+    IForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step7_FullName")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_FullName")}
+                 */
+                name: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiAttrs - { min: 0 }
+                 */
+                phone: number;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step7_NRICFIN")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_NRICFIN")}
+                 */
+                nric?: string;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step7_Occupation")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Occupation")}
+                 */
+                occupation?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Invitation_Unit")}
+                 * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
+                 */
+                unit?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step7_Vehicle")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Vehicle")}
+                 */
+                vehicle?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step7_Company")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Company")}
+                 */
+                company?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step7_Shift")}
+                 */
+                shift?: ${toEnumInterface(this.shiftSelectItem as any, false)};
+
+            }
+        `;
     }
 }
 
