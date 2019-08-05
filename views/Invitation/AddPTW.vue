@@ -136,7 +136,7 @@ export class AddPTW extends Vue {
     }
 
     pageToList() {
-        this.$emit('back-to-list');
+        this.$emit('add-ptw-back-to-list', this.inputFormData);
         this.clearInputData();
     }
 

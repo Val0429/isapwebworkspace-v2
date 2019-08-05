@@ -56,7 +56,7 @@
                 key="transition_2"
                 v-show="transition.step === 2"
             >
-                <add-ptw @back-to-list="pageToList"></add-ptw>
+                <add-ptw @add-ptw-back-to-list="addPTWToList"></add-ptw>
             </div>
 
             <div
@@ -106,6 +106,7 @@ export default class Invitation extends Vue {
     responseData: any = {};
 
     inputFormData: any = {
+        objectId: '',
         name: '',
         email: '',
         tenant: '',
@@ -154,6 +155,39 @@ export default class Invitation extends Vue {
         //     })
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
+        //     });
+    }
+
+    async addPTWToList(addPTWParam: object) {
+        this.inputFormData = addPTWParam;
+
+        // TODO: wait api
+        // const datas =  [];
+        //
+        // const addParam = {
+        //     datas
+        // };
+        //
+        // Loading.show();
+        // await this.$server
+        //     .C("/", addParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {
+        //                 Dialog.success(this._("w_Dialog_SuccessTitle"));
+        //                 this.pageToList();
+        //             },
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("")
+        //         );
         //     });
     }
 

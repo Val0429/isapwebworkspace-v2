@@ -105,6 +105,9 @@ export default class LangObject {
 
     // ViewPTW
     w_ViewPTW_StepTitle = 'Permit To Work Request Form';
+    w_Save = 'Save';
+
+    w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
 
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
@@ -116,16 +119,52 @@ export default class LangObject {
     w_ViewPTW_Step2_Tip = '* Please help to complete all data fields. All workers’ particulars must be completed before submitting the work order.';
     w_ViewPTW_Step2_PTWTitle = 'PTW Data';
     w_ViewPTW_Step2_ContractorTitle = 'Contractor Information';
-    w_ViewPTW_Step2_NameofApplicant = 'Name of Applicant';
+    w_ViewPTW_Step2_NameOfApplicant = 'Name of Applicant';
     w_ViewPTW_Step2_CompanyName = 'Company Name';
     w_ViewPTW_Step2_CompanyAddress = 'Company Address';
     w_ViewPTW_Step2_EmailAddress = 'Email Address';
     w_ViewPTW_Step2_ContactNumber = 'Contact Number';
-    w_ViewPTW_Step2CompanyFaxNo_ = 'Company Fax No';
+    w_ViewPTW_Step2CompanyFaxNo = 'Company Fax No';
+
+    // step3
+    w_ViewPTW_Step3_WorkInformationTitle = 'Work Information';
+    w_ViewPTW_Step3_WorkPremisesUnit = 'Work Premises Unit';
+    w_ViewPTW_Step3_ExactLocation = 'Provide Exact Location(s) & Areas to be cordoned off and where the machineries / vehicles / equipment to be deployed';
+    w_ViewPTW_Step3_ExactLocation_PlaceHolder = 'Exact Location(s) & Areas';
+    w_ViewPTW_Step3_Description = 'Brief Description of the works to be carried out';
+    w_ViewPTW_Step3_Description_PlaceHolder = 'Description of the works';
+
+    w_ViewPTW_Step3_TypesOfWorkInvolved = 'Types of work involved. Please tick all that apply';
+    w_ViewPTW_Step3_TypesOfWorkInvolved1 = 'Hot Works';
+    w_ViewPTW_Step3_TypesOfWorkInvolved2 = 'Lifting Operations';
+    w_ViewPTW_Step3_TypesOfWorkInvolved3 = 'Entry into Confined Space';
+    w_ViewPTW_Step3_TypesOfWorkInvolved4 = 'Use of bottom lift or aerial platform';
+    w_ViewPTW_Step3_TypesOfWorkInvolved5 = 'Installation & Use of Gondola';
+    w_ViewPTW_Step3_TypesOfWorkInvolved6 = 'Installation & Use of Scaffold';
+    w_ViewPTW_Step3_TypesOfWorkInvolved7 = 'Installation of Temporary Generator';
+    w_ViewPTW_Step3_TypesOfWorkInvolved8 = 'Others i.e.. Structural works';
+
+    w_ViewPTW_Step3_From = 'Expected Duration of Work – From :';
+    w_ViewPTW_Step3_To = 'To';
+    w_ViewPTW_Step3_NameOfApplicant = 'Name of Applicant’s Service Provider(s) in the works :';
+    w_ViewPTW_Step3_HandPhoneContactNumber = 'Handphone Contact Number';
 
 
-
+    // step
     //w_ViewPTW_Step = '';
+
+
+    // step
+    //w_ViewPTW_Step = '';
+
+
+    // step
+    //w_ViewPTW_Step = '';
+
+
+    // step
+    //w_ViewPTW_Step = '';
+
 
     /////////////////////// General Settings //////////////////////
 

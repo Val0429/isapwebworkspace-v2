@@ -35,7 +35,7 @@ export class Step1 extends Vue {
     mounted() {}
 
     changeStatus() {
-        this.$emit('isAccepted', this.isAccepted)
+        this.$emit('step1', this.isAccepted)
     }
 
 }

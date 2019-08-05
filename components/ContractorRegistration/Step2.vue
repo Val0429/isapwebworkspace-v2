@@ -1,6 +1,20 @@
 <template>
     <div>
-        Components Empty
+        <iv-form
+            :interface="IAddForm()"
+            :value="inputFormData"
+            @update:*="updateInputFormData"
+        >
+            <template #ptwTitle>
+                <div class="font-weight-bold col-md-12 mb-3">{{ _('w_ViewPTW_Step2_PTWTitle') }}</div>
+            </template>
+
+            <template #contractorTitle>
+                <div class="font-weight-bold col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step2_ContractorTitle') }}</div>
+            </template>
+
+        </iv-form>
+
     </div>
 </template>
 
@@ -16,78 +30,189 @@ export class Step2 extends Vue {
     tenantSelectItem: any = {};
     workCategorySelectItem: any = {};
 
+    inputFormData: any = {
+
+        // PTW Data
+        ptwId: '',
+        tenant: '',
+        workCategory: '',
+
+        // Contractor Information
+        nameOfApplicant: '',
+        companyName: '',
+        companyAddress: '',
+        email: '',
+        contactNumber: 0,
+        companyFaxNo: 0,
+
+    };
+
     created() {
     }
 
     mounted() {
+        this.initTenantSelectItem();
+        this.initWorkCategorySelectItem();
     }
 
+    async initTenantSelectItem() {
 
-    IFilterConditionForm() {
+        this.tenantSelectItem = {};
+        let tempTenantSelectItem = {};
+
+        // TODO: wait api
+        // await this.$server
+        //     .R("/")
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
+        //             for (const returnValue of response) {
+        //                 tempTenantSelectItem[returnValue.objectId] =
+        //                     returnValue.name;
+        //             }
+        //             this.tenantSelectItem = tempTenantSelectItem;
+        //         });
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(this, e);
+        //     });
+
+    }
+
+    async initWorkCategorySelectItem() {
+
+        this.workCategorySelectItem = {};
+        let tempWorkCategorySelectItem = {};
+
+        // TODO: wait api
+        // await this.$server
+        //     .R("/")
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
+        //             for (const returnValue of response) {
+        //                 tempWorkCategorySelectItem[returnValue.objectId] =
+        //                     returnValue.name;
+        //             }
+        //             this.workCategorySelectItem = tempWorkCategorySelectItem;
+        //         });
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(this, e);
+        //     });
+
+    }
+
+    updateInputFormData(data) {
+        switch (data.key) {
+
+            // PTW Data
+            case 'ptwId':
+                this.inputFormData.ptwId = data.value;
+                break;
+            case 'tenant':
+                this.inputFormData.tenant = data.value;
+                break;
+            case 'workCategory':
+                this.inputFormData.workCategory = data.value;
+                break;
+
+
+            // Contractor Information
+            case 'nameOfApplicant':
+                this.inputFormData.nameOfApplicant = data.value;
+                break;
+            case 'companyName':
+                this.inputFormData.companyName = data.value;
+                break;
+            case 'companyAddress':
+                this.inputFormData.companyAddress = data.value;
+                break;
+            case 'email':
+                this.inputFormData.email = data.value;
+                break;
+            case 'contactNumber':
+                this.inputFormData.contactNumber = data.value;
+                break;
+            case 'companyFaxNo':
+                this.inputFormData.companyFaxNo = data.value;
+                break;
+
+        }
+
+        this.$emit('step2', this.inputFormData)
+    }
+
+    IAddForm() {
         return `
             interface {
+
+                ptwTitle?: any;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_PTWID")}
                  * @uiPlaceHolder - ${this._("w_Invitation_PTWID")}
-                 * @uiColumnGroup - row1
                  */
                 ptwId?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_Email")}
-                 * @uiPlaceHolder - ${this._("w_Invitation_Email_Placeholder")}
-                 * @uiColumnGroup - row2
-                 */
-                email?: string;
-
-
-                /**
                  * @uiLabel - ${this._("w_Invitation_Tenant")}
-                 * @uiColumnGroup - row2
                  */
                 tenant?:  ${toEnumInterface(this.tenantSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_PTWStatus")}
-                 * @uiColumnGroup - row2
                  */
                 workCategory?:  ${toEnumInterface(this.workCategorySelectItem as any, false)};
 
-
-                /**
-                 * @uiLabel - ${this._("w_Invitation_Unit")}
-                 * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
-                 * @uiColumnGroup - row3
-                 */
-                unit?: string;
+                contractorTitle?: any;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_ContactPerson")}
-                 * @uiPlaceHolder - ${this._("w_Invitation_ContactPerson")}
-                 * @uiColumnGroup - row3
+                 * @uiLabel - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
                  */
-                contactPerson?: string;
+                nameOfApplicant?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_Contractor")}
-                 * @uiPlaceHolder - ${this._("w_Invitation_Contractor")}
-                 * @uiColumnGroup - row3
+                 * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyName")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyName")}
                  */
-                contractor?: string;
+                companyName?: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_WorkersName")}
-                 * @uiPlaceHolder - ${this._("w_Invitation_WorkersName")}
-                 * @uiColumnGroup - row3
+                 * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyAddress")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyAddress")}
                  */
-                workersName?: string;
+                companyAddress?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
+                 */
+                email?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiAttrs - { min: 0 }
+                 */
+                contactNumber?: number;
+
+
+                /**
+                 * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
+                 * @uiAttrs - { min: 0 }
+                 */
+                companyFaxNo?: number;
+
+
             }
         `;
     }
