@@ -92,6 +92,7 @@ export default class LangObject {
     w_Invitation_EndDate = 'End Date';
     w_Invitation_ContractorCompany = 'Contractor Company';
 
+    w_Invitation_New = 'New';
     w_Invitation_Approved = 'Approved';
     w_Invitation_PendingApproved = 'Pending Approved';
     w_Invitation_Rejected = 'Rejected';
@@ -108,6 +109,7 @@ export default class LangObject {
     w_Save = 'Save';
 
     w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
+    w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';
 
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
@@ -149,10 +151,27 @@ export default class LangObject {
     w_ViewPTW_Step3_NameOfApplicant = 'Name of Applicant’s Service Provider(s) in the works :';
     w_ViewPTW_Step3_HandPhoneContactNumber = 'Handphone Contact Number';
 
+    // step4
+    w_ViewPTW_Step4_ChecklistForApplicantTitle = 'Checklist for Applicant';
 
-    // step
-    //w_ViewPTW_Step = '';
+    w_ViewPTW_Step4_1 = '1. Has comprehensive risk assessment (RA) been carried out for the works involved ?';
+    w_ViewPTW_Step4_2 = '2. Have everyone involved been informed of the RA and control measure(s) ?';
+    w_ViewPTW_Step4_3 = '3. Are proper barricades and safety signs available for the closure of work area(s) ?';
+    w_ViewPTW_Step4_4 = '4. Is/are the service provider(s) engaged for the work competent ?';
+    w_ViewPTW_Step4_5 = '5. Is/are the work(s) to be carried out supervised by a competent person ?';
+    w_ViewPTW_Step4_6 = '6. Are the locations/areas involved suitable for the works ?';
+    w_ViewPTW_Step4_7 = '7. Are the machinery/equipment used approved by the relevant authorities ?';
+    w_ViewPTW_Step4_8 = 'I/We am/are fully aware of the safety and health requirements under the Singapore Legislation and Regulations, and undertake to comply with these requirements and any other safety requirements imposed by the relevant authorities';
+    w_ViewPTW_Step4_9 = 'Briefed on';
+    w_ViewPTW_Step4_91 = 'EHS In-House';
+    w_ViewPTW_Step4_93 = ' Rules ?';
 
+    w_ViewPTW_Step4_Remarks = 'Remarks';
+    w_ViewPTW_Step4_Answer = 'Answer';
+    w_ViewPTW_Step4_Item = 'Item';
+
+    w_yes = 'Yes';
+    w_no = 'No';
 
     // step
     //w_ViewPTW_Step = '';

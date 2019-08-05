@@ -2,7 +2,7 @@
     <div class="animated fadeIn">
 
         <iv-auto-card
-            :label="_('w_ViewPTW_StepTitle')  "
+            :label="_('w_ViewPTW_StepTitle') "
         >
             <iv-step-progress
                 ref="step"
@@ -64,7 +64,7 @@
                     </iv-form>
                 </template>
 
-                <template #4-title>{{ _('') }}</template>
+                <template #4-title>{{ _('w_ViewPTW_Step4_ChecklistForApplicantTitle') }}</template>
                 <template #4>
 
                     <iv-form
@@ -127,13 +127,32 @@
                     <iv-form
                         :interface="IStep7()"
                         :value="inputFormData"
-                        @submit="doSubmit($event)"
+                        @submit="stepTo8($event)"
                     >
                         <template #step7>
                             <step7
                                 class="col-md-12"
-                                @step7="receiveStep7Data"
+                                @step6="receiveStep7Data"
                             ></step7>
+                        </template>
+
+                    </iv-form>
+                </template>
+
+
+                <template #8-title>{{ _('') }}</template>
+                <template #8>
+
+                    <iv-form
+                        :interface="IStep7()"
+                        :value="inputFormData"
+                        @submit="doSubmit($event)"
+                    >
+                        <template #step8>
+                            <step8
+                                class="col-md-12"
+                                @step8="receiveStep8Data"
+                            ></step8>
                         </template>
 
                     </iv-form>
@@ -165,12 +184,13 @@ import Step4 from "@/components/ContractorRegistration/Step4.vue";
 import Step5 from "@/components/ContractorRegistration/Step5.vue";
 import Step6 from "@/components/ContractorRegistration/Step6.vue";
 import Step7 from "@/components/ContractorRegistration/Step7.vue";
+import Step8 from "@/components/ContractorRegistration/Step8.vue";
 
 // Service
 import Dialog from "@/services/Dialog";
 
 @Component({
-    components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7  }
+    components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
 })
 export class ViewPTW extends Vue {
 
@@ -206,14 +226,34 @@ export class ViewPTW extends Vue {
         step3StartDate: new Date(),
         step3EndDate: new Date(),
         step3NameOfApplicantService:'',
-        step3HandPhoneContactNumber: 0
+        step3HandPhoneContactNumber: 0,
+
         // step4
+        step4Checklist1: false,
+        step4Checklist2: false,
+        step4Checklist3: false,
+        step4Checklist4: false,
+        step4Checklist5: false,
+        step4Checklist6: false,
+        step4Checklist7: false,
+        step4Checklist8: false,
+        step4Checklist9: false,
+
+        step4Checklist1Remarks: '',
+        step4Checklist2Remarks: '',
+        step4Checklist3Remarks: '',
+        step4Checklist4Remarks: '',
+        step4Checklist5Remarks: '',
+        step4Checklist6Remarks: '',
 
         // step5
 
         // step6
 
         // step7
+
+        // step8
+
     };
 
     created() {}
@@ -269,7 +309,7 @@ export class ViewPTW extends Vue {
     stepTo3() {
         let stepRef: any = this.$refs.step;
 
-        // TODO: wait下拉選單
+        // TODO: wait下拉選單 和 全部step OK
         // if (
         //     !this.inputFormData.step2PtwId ||
         //     !this.inputFormData.step2Tenant ||
@@ -318,20 +358,21 @@ export class ViewPTW extends Vue {
 
         let stepRef: any = this.$refs.step;
 
-        if (
-            !this.inputFormData.step3Unit ||
-            !this.inputFormData.step3Location ||
-            !this.inputFormData.step3Description ||
-            this.inputFormData.step3TypeOfWork.length === 0 ||
-            !this.inputFormData.step3StartDate ||
-            !this.inputFormData.step3EndDate ||
-            !this.inputFormData.step3NameOfApplicantService ||
-            !this.inputFormData.step3HandPhoneContactNumber
-        ) {
-            Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
-            stepRef.currentStep = 2;
-            return false;
-        }
+        // TODO: 全部step OK
+        // if (
+        //     !this.inputFormData.step3Unit ||
+        //     !this.inputFormData.step3Location ||
+        //     !this.inputFormData.step3Description ||
+        //     this.inputFormData.step3TypeOfWork.length === 0 ||
+        //     !this.inputFormData.step3StartDate ||
+        //     !this.inputFormData.step3EndDate ||
+        //     !this.inputFormData.step3NameOfApplicantService ||
+        //     !this.inputFormData.step3HandPhoneContactNumber
+        // ) {
+        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
+        //     stepRef.currentStep = 2;
+        //     return false;
+        // }
     }
 
     IStep3() {
@@ -345,9 +386,50 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 4  //////////////////////////////
 
-    receiveStep4Data(step4Date) {}
+    receiveStep4Data(step4Date) {
+        this.inputFormData.step4Checklist1 = step4Date.checklist1;
+        this.inputFormData.step4Checklist2 = step4Date.checklist2;
+        this.inputFormData.step4Checklist3 = step4Date.checklist3;
+        this.inputFormData.step4Checklist4 = step4Date.checklist4;
+        this.inputFormData.step4Checklist5 = step4Date.checklist5;
+        this.inputFormData.step4Checklist6 = step4Date.checklist6;
+        this.inputFormData.step4Checklist7 = step4Date.checklist7;
+        this.inputFormData.step4Checklist8 = step4Date.checklist8;
+        this.inputFormData.step4Checklist9 = step4Date.checklist9;
 
-    stepTo5() {}
+        this.inputFormData.step4Checklist1Remarks = step4Date.checklist1Remarks;
+        this.inputFormData.step4Checklist2Remarks = step4Date.checklist2Remarks;
+        this.inputFormData.step4Checklist3Remarks = step4Date.checklist3Remarks;
+        this.inputFormData.step4Checklist4Remarks = step4Date.checklist4Remarks;
+        this.inputFormData.step4Checklist5Remarks = step4Date.checklist5Remarks;
+        this.inputFormData.step4Checklist6Remarks = step4Date.checklist6Remarks;
+        this.inputFormData.step4Checklist7Remarks = step4Date.checklist7Remarks;
+
+        console.log(' ~ ', this.inputFormData)
+
+    }
+
+    stepTo5() {
+
+        let stepRef: any = this.$refs.step;
+
+        // TODO: 全部step OK
+        // if (
+        //     !this.inputFormData.step4Checklist1 ||
+        //     !this.inputFormData.step4Checklist2 ||
+        //     !this.inputFormData.step4Checklist3 ||
+        //     !this.inputFormData.step4Checklist4 ||
+        //     !this.inputFormData.step4Checklist5 ||
+        //     !this.inputFormData.step4Checklist6 ||
+        //     !this.inputFormData.step4Checklist7 ||
+        //     !this.inputFormData.step4Checklist8 ||
+        //     !this.inputFormData.step4Checklist9
+        // ) {
+        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipYes"));
+        //     stepRef.currentStep = 3;
+        //     return false;
+        // }
+    }
 
     IStep4() {
         return `
@@ -389,12 +471,12 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 6  //////////////////////////////
 
+
     ////////////////////////////// step 7  //////////////////////////////
 
     receiveStep7Data(step7Date) {}
 
-
-    doSubmit() {}
+    stepTo8() {}
 
     IStep7() {
         return `
@@ -404,6 +486,22 @@ export class ViewPTW extends Vue {
     }
 
     ////////////////////////////// step 7  //////////////////////////////
+
+    ////////////////////////////// step 8  //////////////////////////////
+
+    receiveStep8Data(step8Date) {}
+
+
+    doSubmit() {}
+
+    IStep8() {
+        return `
+            interface {
+                step8?: any;
+            }`;
+    }
+
+    ////////////////////////////// step 8  //////////////////////////////
 
 }
 
