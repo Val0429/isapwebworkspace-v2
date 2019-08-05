@@ -11,7 +11,6 @@ enum EUserRole {
     TenantUser = 'Tenant User',
     Visitor = 'Visitor ',
 }
-
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
     path: '/users/login',
@@ -32,7 +31,6 @@ export default class Login extends Vue {
         await this.$login(param)
             .then(() => {
                 Loading.hide();
-                console.log(this.$user);
                 let userRole = '';
                 if (this.$user.user != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
                     userRole = this.$user.user.roles[0].name;

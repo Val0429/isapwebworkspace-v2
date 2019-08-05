@@ -1,7 +1,11 @@
 import Utility from '../Utility';
 
 enum DatetimeFormat {
-    'default' = 'YYYY/MM/DD HH:mm:ss',
+    'default' = 'YYYY-MM-DD HH:mm:ss',
+}
+
+enum DateFormat {
+    'default' = 'YYYY-MM-DD',
 }
 
 class Datetime {
@@ -464,7 +468,7 @@ class Datetime {
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
         const weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
-        return this.DateTime2String(weekStartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(weekStartDate, DateFormat.default);
     }
 
     //獲得本周的結束日期
@@ -481,7 +485,7 @@ class Datetime {
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
         const weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek));
-        return this.DateTime2String(weekEndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(weekEndDate, DateFormat.default);
     }
 
     //獲得上周的開始日期
@@ -498,7 +502,7 @@ class Datetime {
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
         const weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 7);
-        return this.DateTime2String(weekStartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(weekStartDate, DateFormat.default);
     }
 
     //獲得上周的結束日期
@@ -515,7 +519,7 @@ class Datetime {
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
         const weekEndDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 1);
-        return this.DateTime2String(weekEndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(weekEndDate, DateFormat.default);
     }
 
     //獲得本月的開始日期
@@ -530,7 +534,7 @@ class Datetime {
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
         const monthStartDate = new Date(nowYear, nowMonth, 1);
-        return this.DateTime2String(monthStartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(monthStartDate, DateFormat.default);
     }
 
     //獲得本月的結束日期
@@ -545,7 +549,7 @@ class Datetime {
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
         const monthEndDate = new Date(nowYear, nowMonth, this.ThisMonthDays(nowYear, nowMonth + 1));
-        return this.DateTime2String(monthEndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(monthEndDate, DateFormat.default);
     }
 
     //獲得上月開始日期
@@ -561,7 +565,7 @@ class Datetime {
         const lastMonth = lastMonthDate.getMonth();
 
         const lastMonthStartDate = new Date(nowYear, lastMonth, 1);
-        return this.DateTime2String(lastMonthStartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(lastMonthStartDate, DateFormat.default);
     }
 
     //獲得上月結束日期
@@ -577,7 +581,7 @@ class Datetime {
         const lastMonth = lastMonthDate.getMonth();
 
         const lastMonthEndDate = new Date(nowYear, lastMonth, this.LastMonthDays(nowYear, nowMonth));
-        return this.DateTime2String(lastMonthEndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(lastMonthEndDate, DateFormat.default);
     }
 
     //獲得Q1開始日期
@@ -587,7 +591,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q1StartDate = new Date(nowYear, 0, 1);
-        return this.DateTime2String(Q1StartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q1StartDate, DateFormat.default);
     }
 
     //獲得Q1結束日期
@@ -597,7 +601,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q1EndDate = new Date(nowYear, 2, 31);
-        return this.DateTime2String(Q1EndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q1EndDate, DateFormat.default);
     }
 
     //獲得Q2開始日期
@@ -607,7 +611,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q2StartDate = new Date(nowYear, 3, 1);
-        return this.DateTime2String(Q2StartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q2StartDate, DateFormat.default);
     }
 
     //獲得Q2結束日期
@@ -617,7 +621,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q2EndDate = new Date(nowYear, 5, 30);
-        return this.DateTime2String(Q2EndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q2EndDate, DateFormat.default);
     }
 
     //獲得Q3開始日期
@@ -627,7 +631,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q3StartDate = new Date(nowYear, 6, 1);
-        return this.DateTime2String(Q3StartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q3StartDate, DateFormat.default);
     }
 
     //獲得Q3結束日期
@@ -637,7 +641,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q3EndDate = new Date(nowYear, 8, 30);
-        return this.DateTime2String(Q3EndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q3EndDate, DateFormat.default);
     }
 
     //獲得Q4開始日期
@@ -647,7 +651,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q4StartDate = new Date(nowYear, 9, 1);
-        return this.DateTime2String(Q4StartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q4StartDate, DateFormat.default);
     }
 
     //獲得Q4結束日期
@@ -657,7 +661,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const Q4EndDate = new Date(nowYear, 11, 31);
-        return this.DateTime2String(Q4EndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(Q4EndDate, DateFormat.default);
     }
 
     //獲得ThisYear開始日期
@@ -667,7 +671,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const thisYearStartDate = new Date(nowYear, 0, 1);
-        return this.DateTime2String(thisYearStartDate, 'YYYY/MM/DD');
+        return this.DateTime2String(thisYearStartDate, DateFormat.default);
     }
 
     //獲得ThisYear結束日期
@@ -677,7 +681,7 @@ class Datetime {
         nowYear += nowYear < 2000 ? 1900 : 0;
 
         const lastYearEndDate = new Date(nowYear, 11, 31);
-        return this.DateTime2String(lastYearEndDate, 'YYYY/MM/DD');
+        return this.DateTime2String(lastYearEndDate, DateFormat.default);
     }
 
     // 以今年為基準，取得前後五年，2019 --> 2014-2024

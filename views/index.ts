@@ -8,14 +8,14 @@ $({ path: '/', name: 'Home', redirect: '/dashboard' })();
 // MyProfile
 import MyProfile from './MyProfile/MyProfile.vue';
 
-$({ path: '/my_profile', name: "_('w_Navigation_MyProfile')", icon: 'fa-code' })(MyProfile);
+$({ path: '/my_profile', name: "_('w_Navigation_MyProfile')", icon: 'fa-check' })(MyProfile);
 
 // Reports
 import ReportsDashboard from './Reports/ReportsDashboard.vue';
 import ReportsInversigation from './Reports/ReportsInversigation.vue';
 
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-code', redirect: '/reports/dashboard' })();
-$({ path: '/reports/dashboard', name: "_('w_Navigation_Reports_Dashboard')", icon: 'fa-code' })(ReportsDashboard);
+$({ path: '/reports/dashboard', name: "_('w_Navigation_Reports_Dashboard')", icon: 'fa-check' })(ReportsDashboard);
 $({ path: '/reports/investigation', name: "_('w_Navigation_Reports_Investigation')", icon: 'fa-code' })(ReportsInversigation);
 
 // Setups

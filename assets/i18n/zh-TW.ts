@@ -2,7 +2,7 @@ import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
-    w_Name = 'Name';
+     w_Name = 'Name';
     w_Enabled = 'Enabled';
     w_Value = 'Value';
     w_Startdate = 'Start Date';
@@ -25,7 +25,10 @@ export default class LangObject implements ILang {
 
     m_PasswordShouldBeSame = 'Both password should same';
 
-    /////////////////////////////////////////////
+    ////////////////// Common //////////////////
+    w_ThisMonth = 'This Month';
+    w_ThisWeek = 'This Week';
+    w_Today = 'Today';
 
     w_Options = 'Options';
     w_Chooses = 'Choose';
@@ -34,6 +37,12 @@ export default class LangObject implements ILang {
     w_Reset = 'Reset';
     w_Back = 'Back';
     w_Submit = 'Submit';
+
+    w_Confirm = 'Confirm';
+    w_Cancel = 'Cancel';
+
+    w_Dialog_ErrorTitle = 'Error';
+    w_Dialog_SuccessTitle = 'Success';
 
     /////////////////////////////////////////////
 
@@ -51,6 +60,8 @@ export default class LangObject implements ILang {
     w_UserSession_Empty = 'Not find User, Please login again';
 
     ////////////////// Navigation //////////////////
+
+    w_Navigation_About = 'About';
 
     w_Navigation_MyProfile = 'My Profile';
 
@@ -73,4 +84,41 @@ export default class LangObject implements ILang {
     w_Navigation_Tenants = 'Tenant';
     w_Navigation_Tenants_Invitation = 'Invitation';
     w_Navigation_Tenants_Visitor = 'Visitor';
+
+    ////////////////// Dashboard //////////////////
+    w_Dashboard_VisitorOnSite = 'Visitor On Site';
+    w_Dashboard_dailyTotalVisitor = 'Daily Total Visitor';
+
+    w_Dashboard_ChartStatisticTitle = 'Check In Statistic';
+    w_Dashboard_ChartRecurringTitle = 'Recurring Visitor';
+
+    w_Dashboard_ChartStatisticSuccess = 'Success';
+    w_Dashboard_ChartStatisticException = 'Exception';
+
+    ////////////////// User //////////////////
+    w_User_UserName = 'User Name';
+    w_User_CompanyName = 'Company Name';
+    w_User_Email = 'Email';
+    w_User_FloorName = 'Floor Name';
+
+    ////////////////// MyProfile //////////////////
+    w_MyProfile_ViewMyProfile = "My Profile";
+    w_MyProfile_ChangePassword = "Change Password";
+    w_MyProfile_ChangePasswordSuccess="Change Password Success";
+    w_MyProfile_ChangePasswordFailed="Change Password Failed";
+    w_MyProfile_OldPassword="Old Password";
+    w_MyProfile_NewPassword="New Password";
+    w_MyProfile_ConfirmPassword="Confirm Password";
+    w_MyProfile_ErrorPasswordNotSame="New Password and Confirm is different"
+
+    ////////////////// About //////////////////
+    w_About_About = "About";
+    w_About_SystemTitle = "Visitor Management Service";
+    w_About_Copyright = "Copyright iSAP Solution";
+    w_About_ServerVersion = "Server Version";
+    w_About_FrameworkVersion = "Framework Version";
+    w_About_WebClientVersion = "Web Client Version";
+
+
+
 }

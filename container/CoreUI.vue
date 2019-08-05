@@ -18,7 +18,7 @@
                 <a
                     href="http://www.isapsolution.com/"
                     target="_blank"
-                >www.isapsolution.com</a>&copy;2019
+                >{{ _('w_About_Copyright') }}</a>&copy;2019
             </div>
         </template>
 

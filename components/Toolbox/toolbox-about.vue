@@ -2,8 +2,8 @@
 
     <iv-toolbox-element-base
         v-bind="$attrs"
-        :title="_('w_MyProfile_ChangePassword')"
-        icon="fa fa-key isap-toolbox-icon"
+        :title="_('w_About_About')"
+        icon="fa fa-info isap-toolbox-icon"
         v-show="visible"
         :variant="variant"
         :size="size"
@@ -48,7 +48,7 @@ import $ from "jquery";
 @Component({
     components: { FormMergeBindings }
 })
-export class ToolboxChangePassword extends Vue {
+export class ToolboxAbout extends Vue {
     @Prop({
         type: String,
         required: false,
@@ -82,8 +82,8 @@ export class ToolboxChangePassword extends Vue {
         return;
     }
 }
-export default ToolboxChangePassword;
-Vue.component("iv-toolbox-changepassword", ToolboxChangePassword);
+export default ToolboxAbout;
+Vue.component("iv-toolbox-about", ToolboxAbout);
 </script>
 
 
