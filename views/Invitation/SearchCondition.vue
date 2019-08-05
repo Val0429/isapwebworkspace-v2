@@ -96,6 +96,7 @@ export class SearchCondition extends Vue {
     initSelectItem() {
 
         this.ptwStatusSelectItem = {
+            new: this._('w_Invitation_New'),
             approved: this._('w_Invitation_Approved'),
             pendingApproved: this._('w_Invitation_PendingApproved'),
             rejected: this._('w_Invitation_Rejected'),

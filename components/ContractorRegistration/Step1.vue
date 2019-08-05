@@ -45,7 +45,4 @@ Vue.component("step1", Step1);
 </script>
 
 <style lang="scss" scoped>
-    .center {
-        margin: 0 auto;
-    }
 </style>

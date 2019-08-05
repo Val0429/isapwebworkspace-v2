@@ -92,6 +92,7 @@ export default class LangObject {
     w_Invitation_EndDate = 'End Date';
     w_Invitation_ContractorCompany = 'Contractor Company';
 
+    w_Invitation_New = 'New';
     w_Invitation_Approved = 'Approved';
     w_Invitation_PendingApproved = 'Pending Approved';
     w_Invitation_Rejected = 'Rejected';
@@ -108,6 +109,7 @@ export default class LangObject {
     w_Save = 'Save';
 
     w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
+    w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';
 
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
@@ -149,17 +151,69 @@ export default class LangObject {
     w_ViewPTW_Step3_NameOfApplicant = 'Name of Applicant’s Service Provider(s) in the works :';
     w_ViewPTW_Step3_HandPhoneContactNumber = 'Handphone Contact Number';
 
-    // step
-    //w_ViewPTW_Step = '';
+    // step4
+    w_ViewPTW_Step4_ChecklistForApplicantTitle = 'Checklist for Applicant';
 
-    // step
-    //w_ViewPTW_Step = '';
+    w_ViewPTW_Step4_1 = '1. Has comprehensive risk assessment (RA) been carried out for the works involved ?';
+    w_ViewPTW_Step4_2 = '2. Have everyone involved been informed of the RA and control measure(s) ?';
+    w_ViewPTW_Step4_3 = '3. Are proper barricades and safety signs available for the closure of work area(s) ?';
+    w_ViewPTW_Step4_4 = '4. Is/are the service provider(s) engaged for the work competent ?';
+    w_ViewPTW_Step4_5 = '5. Is/are the work(s) to be carried out supervised by a competent person ?';
+    w_ViewPTW_Step4_6 = '6. Are the locations/areas involved suitable for the works ?';
+    w_ViewPTW_Step4_7 = '7. Are the machinery/equipment used approved by the relevant authorities ?';
+    w_ViewPTW_Step4_8 = 'I/We am/are fully aware of the safety and health requirements under the Singapore Legislation and Regulations, and undertake to comply with these requirements and any other safety requirements imposed by the relevant authorities';
+    w_ViewPTW_Step4_9 = 'Briefed on';
+    w_ViewPTW_Step4_91 = 'EHS In-House';
+    w_ViewPTW_Step4_93 = ' Rules ?';
 
-    // step
-    //w_ViewPTW_Step = '';
+    w_ViewPTW_Step4_Remarks = 'Remarks';
+    w_ViewPTW_Step4_Answer = 'Answer';
+    w_ViewPTW_Step4_Item = 'Item';
 
-    // step
-    //w_ViewPTW_Step = '';
+    w_yes = 'Yes';
+    w_no = 'No';
+
+    // step5
+    w_ViewPTW_Step5_SupportingDocumentationTitle = 'Supporting Documentation';
+    w_ViewPTW_Step5_SupportingDocument = 'Please remember to attach any PTW supporting documentation such as :';
+    w_ViewPTW_Step5_Forms = 'Risk Assessment Evaluation Forms';
+    w_ViewPTW_Step5_License = 'Heavy Works License';
+    w_ViewPTW_Step5_Others = 'Others';
+    w_ViewPTW_Step5_UploadFiles = 'Upload File(s)';
+    w_ViewPTW_Step5_supported = 'Only .PDF , .JPEG and .PNG files are supported';
+
+    // step6
+    w_ViewPTW_Step6_TermsConditionsTitle = 'Terms & Conditions';
+    w_ViewPTW_Step6_TermsConditionsInfo = 'The tenant and the contractor must comply with the following:';
+
+    w_ViewPTW_Step6_1 = '1. Noisy works and work which emit toxic fumes must be performed outside normal office hours (i.e. must be performed between 2400 hrs. to 0500 hrs.), unless the Landlord has first approved otherwise.';
+    w_ViewPTW_Step6_2 = '2. The work process and all materials must be confined to the tenant’s premises and the tenant must ensure it or its contractor removes all debris from site at the end of each working days to prevent fire hazards.';
+    w_ViewPTW_Step6_3 = '3. Before starting any works, all people who will work in the premises must obtain a site pass from the landlord’s Building Security Office at Checkpoint level 1. The landlord may require a worker found on site without a site pass to leave the building immediately.';
+    w_ViewPTW_Step6_4 = '4. Smoking and gambling is strictly prohibited.';
+    w_ViewPTW_Step6_5 = '5. Fire exit doors must not be wedged open and corridors must not be obstructed at any time.';
+    w_ViewPTW_Step6_6 = '6. Throughout the works period the contractor must provide adequate fire extinguishers in the premises.';
+    w_ViewPTW_Step6_7 = '7. A worker found urinating or defecating in areas other than a toilet designated by the landlord will be required to leave the building immediately.';
+
+    // step7
+    w_ViewPTW_Step7_AddPerson = 'Add Person';
+    w_ViewPTW_Step7_PersonList = 'Person List';
+    w_ViewPTW_Step7_FullName = 'Full Name';
+    w_ViewPTW_Step7_Occupation = 'Occupation';
+    w_ViewPTW_Step7_NRIC = 'NRIC';
+    w_ViewPTW_Step7_Shift = 'Shift';
+    w_ViewPTW_Step7_Vehicle = 'Vehicle #';
+    w_ViewPTW_Step7_Company = 'Company';
+
+    w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
+
+    w_ViewPTW_Step7_Day = 'Day';
+    w_ViewPTW_Step7_Night = 'Night';
+    w_ViewPTW_Step7_Midnight = 'Midnight';
+
+    // step8
+    w_ViewPTW_Step8_Title = 'Confirmation review';
+    w_ViewPTW_Step8_ValidityOfApproval = 'Validity of Approval';
+    w_ViewPTW_Step8_AccessGroup = 'Access Group';
 
     /////////////////////// General Settings //////////////////////
 
