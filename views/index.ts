@@ -37,8 +37,6 @@ import VisitorCardReport from './components/acs/reports/VisitorCardReport.vue';
 import Redirector from '@/../src/components/login/redirector.vue';
 import User from './components/acs/User.vue';
 import UserPermission from './components/acs/UserPermission.vue';
-import Site from './components/bar/Site.vue';
-import Region from './components/bar/Region.vue';
 import License from './components/bar/License.vue';
 import QueryPermission from './components/acs/QueryPermission.vue';
 
@@ -71,12 +69,6 @@ $({ path: '/floorgroup', name: "_('w_FloorGroup')"})(FloorGroup);
 
 $({ path: '/userpermission', name: "_('w_UserPermission')" })(UserPermission);
 $({ path: '/user', name: "_('w_Navigation_Users_User')" })(User);
-
-// Sites
-$({ path: '/site', name: "_('w_Navigation_Site')" })(Site);
-
-// Regions
-$({ path: '/region', name: "_('w_Navigation_Region')" })(Region);
 
 $({ path: '/member', name: "_('w_Member')" })(Member);
 $({ path: '/user', name: "_('w_User')" })(User);

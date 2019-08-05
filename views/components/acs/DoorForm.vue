@@ -18,42 +18,8 @@
         
         <!-- 6) custom edit / add template with <template #add.* /> -->
 
-        <!-- <template #add.ccurein="{$attrs, $listeners}">
-            <ivc-single-selection
-            v-bind="$attrs" 
-            v-on="$listeners" 
-            :options="ccureOptions" 
-            />
-        </template>
-        <template #add.ccureout="{$attrs, $listeners}">
-            <ivc-single-selection
-            v-bind="$attrs" 
-            v-on="$listeners" 
-            :options="ccureOptions" 
-            />
-        </template>
-        <template #add.sipassin="{$attrs, $listeners}">
-            <ivc-single-selection
-            v-bind="$attrs" 
-            v-on="$listeners" 
-            :options="sipassOptions" 
-            />
-        </template>
-        <template #add.sipassout="{$attrs, $listeners}">
-            <ivc-single-selection
-            v-bind="$attrs" 
-            v-on="$listeners" 
-            :options="sipassOptions" 
-            />
-        </template> -->
         <template #view.doorgroup="{$attrs, $listeners}">
-            {{getInfo($attrs.row).doorgroup}}
-        </template>
-        <template #view.area="{$attrs, $listeners}">
-            {{getInfo($attrs.row).area}}
-        </template>
-        <template #view.site="{$attrs, $listeners}">
-            {{getInfo($attrs.row).site}}
+            {{getInfo($attrs.row).map(x=>x.groupname).join(", ")}}
         </template>
     </ivc-form-quick>
     </div>
@@ -83,15 +49,7 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {   
-                /**
-                * @uiLabel - ${this._("w_Region_LevelSite")}
-                */
-                site:string;
-                /**
-                * @uiLabel - ${this._("w_Region_LevelArea")}
-                */
-                area:string;
+                interface {
                 /**
                 * @uiLabel - ${this._("w_DoorGroup")}
                 */
@@ -114,22 +72,27 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
                 
                 /**
                 * @uiLabel - ${this._("doorname")}
+                * @uiColumnGroup - row1
                 */
                 doorname:string;                
                 
                 /**
                 * @uiLabel - ${"SIPASS"+" "+this._("readerin")}
+                * @uiColumnGroup - row2
                 */
                 sipassin?:  ${toEnumInterface(this.sipassOptions, false)};
                  /**
                 * @uiLabel - ${"SIPASS"+" "+this._("readerout")}
+                * @uiColumnGroup - row2
                 */
                 sipassout?: ${toEnumInterface(this.sipassOptions, false)};
                 /**
                 * @uiLabel - ${"CCURE"+" "+this._("readerin")}
+                * @uiColumnGroup - row3
                 */
                 ccurein?: ${toEnumInterface(this.ccureOptions, false)};
                 /**
+                 * @uiColumnGroup - row3
                 * @uiLabel - ${"CCURE"+" "+this._("readerout")}
                 */
                 ccureout?: ${toEnumInterface(this.ccureOptions, false)};
@@ -167,16 +130,7 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
     }
     filterInterface(){
          return `interface {
-            /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Site")}
-              */
-             sitename?:string;
-             /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Area")}
-              */
-             areaname?:string;
+           
              /**
                * @uiColumnGroup - row2
               * @uiLabel - ${this._("w_DoorGroup")}
@@ -233,7 +187,6 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
     private ccureOptions:any={};
     private options:{key:any, value:any, system:any}[]=[];
     private doorGroups:any[]=[];
-    private areas:any[]=[];
     async created() {
         this.permissionName = PermissionName.door;
         await this.getDoorGroups();
@@ -243,10 +196,6 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         let resp: any=await this.$server.R("/acs/doorgroup" as any,{ "paging.all": "true" });
         this.doorGroups=resp.results;
         console.log("doorGroups", this.doorGroups)    
-    }
-    private async getAreas(){
-        let resp:any = await this.$server.R("/location/area" as any, {"paging.all":"true"});
-        this.areas =  resp.results;
     }
 
     private async getOptions(readerin?:any[],readerout?:any[]):Promise<void> {
@@ -268,11 +217,9 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         console.log("ccureOptions", this.ccureOptions);
     }
     getInfo(door:any){
-        let group = this.doorGroups.find(x=>x.doors && x.doors.length>0 && x.doors.find(y=>y.objectId==door.objectId));
-        let doorgroup = group ? group.groupname : "";
-        let area = group && group.area ? group.area.name : "";
-        let site = group && group.area && group.area.site ? group.area.site.name : "";
-        return {doorgroup, area, site};
+        let doorgroups = this.doorGroups.filter(x=>x.doors && x.doors.length>0 && x.doors.find(y=>y.objectId==door.objectId));
+       
+        return doorgroups;
     }
     
     getReadersCount(door:any){

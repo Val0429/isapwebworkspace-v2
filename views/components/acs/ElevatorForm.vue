@@ -18,13 +18,7 @@
             {{ $attrs.value ? $attrs.value.length : 0 }}
         </template>
         <template #view.elevatorgroup="{$attrs, $listeners}">
-            {{getInfo($attrs.row).elevatorgroup}}
-        </template>
-        <template #view.area="{$attrs, $listeners}">
-            {{getInfo($attrs.row).area}}
-        </template>
-        <template #view.site="{$attrs, $listeners}">
-            {{getInfo($attrs.row).site}}
+            {{getInfo($attrs.row).map(x=>x.groupname).join(", ")}}
         </template>
         <!-- 6) custom edit / add template with <template #add.* /> -->
         <template #add.reader="{$attrs, $listeners}">
@@ -69,14 +63,6 @@ export default class ElevatorForm extends BasicFormQuick implements IFormQuick2 
                 * @uiLabel - ${this._("system")}
                 */    
                 system:string;
-                /**
-                * @uiLabel - ${this._("w_Region_LevelSite")}
-                */
-                site:string;
-                /**
-                * @uiLabel - ${this._("w_Region_LevelArea")}
-                */
-                area:string;
                 /**
                 * @uiLabel - ${this._("w_ElevatorGroup")}
                 */
@@ -150,25 +136,12 @@ export default class ElevatorForm extends BasicFormQuick implements IFormQuick2 
         console.log("elevatorGroups", this.elevatorGroups)    
     }
      getInfo(elevator:any){
-        let group = this.elevatorGroups.find(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId));
-        let elevatorgroup = group ? group.groupname : "";
-        let area = group && group.area ? group.area.name : "";
-        let site = group && group.area && group.area.site ? group.area.site.name : "";
-        return {elevatorgroup, area, site};
+        let group = this.elevatorGroups.filter(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId));
+        return group;
     }
     filterInterface(){
         return `
             interface {
-                /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Site")}
-              */
-             sitename?:string;
-             /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Area")}
-              */
-             areaname?:string;
              /**
                * @uiColumnGroup - row2
               * @uiLabel - ${this._("w_ElevatorGroup")}

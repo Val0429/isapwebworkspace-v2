@@ -11,12 +11,7 @@
             :canDelete="canDelete"
             :allowEdit="allowEdit">
         <!-- 5) custom view templates with <template #view.* /> -->
-        <template #view.area="{$attrs, $listeners}">
-            {{$attrs.value ? $attrs.value.name : ''}}
-        </template>
-        <template #view.site="{$attrs, $listeners}">
-            {{$attrs.row.area && $attrs.row.area.site ? $attrs.row.area.site.name : ''}}
-        </template>
+       
        <template #view.floors="{$attrs, $listeners}">
             {{ $attrs.value? $attrs.value.length : '0'}}
         </template>  
@@ -25,12 +20,6 @@
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="options" 
-            />
-        </template>
-        <template #add.area="{$attrs, $listeners}">
-            <ivc-site-area 
-            v-bind="$attrs" 
-            v-on="$listeners"              
             />
         </template>
         
@@ -66,14 +55,6 @@ export default class FloorGroupForm extends BasicFormQuick implements IFormQuick
                 return `
                 interface {   
                     /**
-                    * @uiLabel - ${this._("w_Region_LevelSite")}
-                    */
-                    site:string;
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelArea")}
-                    */
-                    area:string;
-                    /**
                     * @uiLabel - ${this._("groupname")}
                     */
                     groupname: string;
@@ -87,10 +68,6 @@ export default class FloorGroupForm extends BasicFormQuick implements IFormQuick
             case EFormQuick.Edit:
                 return `
                 interface {
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelArea")}
-                    */
-                    area:string;
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -131,15 +108,6 @@ export default class FloorGroupForm extends BasicFormQuick implements IFormQuick
         
         console.log("floors", this.options)
     }
-    // getReadersCount(doors:any){
-    //     if(!doors)return 0;
-    //     let count=0;
-    //     for(let item of doors){
-    //         count += item.readerin?item.readerin.length:0;
-    //         count += item.readerout?item.readerout.length:0;
-    //     }
-    //     return count;
-    // }
 }
 </script>
 

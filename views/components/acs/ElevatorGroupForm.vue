@@ -12,12 +12,7 @@
             :allowEdit="allowEdit"
         v-on:viewChange="viewChange($event)">    
         <!-- 5) custom view templates with <template #view.* /> -->
-        <template #view.area="{$attrs, $listeners}">
-            {{$attrs.value ? $attrs.value.name : ''}}
-        </template>
-        <template #view.site="{$attrs, $listeners}">
-            {{$attrs.row.area && $attrs.row.area.site ? $attrs.row.area.site.name : ''}}
-        </template>
+        
         <template #view.elevators="{$attrs, $listeners}">
             {{ $attrs.value ? $attrs.value.length : 0  }}
         </template>
@@ -61,14 +56,7 @@ export default class ElevatorGroupForm extends BasicFormQuick implements IFormQu
             case EFormQuick.View:
                 return `
                 interface {     
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelSite")}
-                    */
-                    site:string;
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelArea")}
-                    */
-                    area:string;  
+                    
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -87,11 +75,6 @@ export default class ElevatorGroupForm extends BasicFormQuick implements IFormQu
             case EFormQuick.Edit:
                 return `
                 interface {     
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelArea")}
-                    * @uiType - ivc-site-area
-                    */
-                    area:string;
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */

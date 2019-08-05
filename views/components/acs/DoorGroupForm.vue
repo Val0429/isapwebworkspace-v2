@@ -11,12 +11,7 @@
             :canDelete="canDelete"
             :allowEdit="allowEdit">
         <!-- 5) custom view templates with <template #view.* /> -->
-        <template #view.area="{$attrs, $listeners}">
-            {{$attrs.value ? $attrs.value.name : ''}}
-        </template>
-        <template #view.site="{$attrs, $listeners}">
-            {{$attrs.row.area && $attrs.row.area.site ? $attrs.row.area.site.name : ''}}
-        </template>
+        
         <template #view.readerscount="{$attrs, $listeners}">
             {{ getReadersCount($attrs.row.doors)}}
         </template>  
@@ -28,12 +23,6 @@
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="options" 
-            />
-        </template>
-        <template #add.area="{$attrs, $listeners}">
-            <ivc-site-area 
-            v-bind="$attrs" 
-            v-on="$listeners"              
             />
         </template>
         
@@ -67,15 +56,7 @@ export default class DoorGroupForm extends BasicFormQuick implements IFormQuick2
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {   
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelSite")}
-                    */
-                    site:string;
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelArea")}
-                    */
-                    area:string;
+                interface {                       
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */
@@ -95,10 +76,6 @@ export default class DoorGroupForm extends BasicFormQuick implements IFormQuick2
             case EFormQuick.Edit:
                 return `
                 interface {
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelArea")}
-                    */
-                    area:string;
                     /**
                     * @uiLabel - ${this._("groupname")}
                     */

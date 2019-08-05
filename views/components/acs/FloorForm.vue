@@ -48,13 +48,7 @@
                 {{getInfo($attrs.row).elevatorname}}
             </template>
             <template #view.elevatorgroup="{$attrs, $listeners}">
-                {{getInfo($attrs.row).elevatorgroup}}
-            </template>
-            <template #view.areaname="{$attrs, $listeners}">
-                {{getInfo($attrs.row).areaname}}
-            </template>
-            <template #view.sitename="{$attrs, $listeners}">
-                {{getInfo($attrs.row).sitename}}
+                {{getInfo($attrs.row).elevatorgroups.map(x=>x.groupname).join(", ")}}
             </template>
         </ivc-form-quick>
     <div class="float-right">                
@@ -89,14 +83,6 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
                 return `
                     interface {
                     
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelSite")}
-                    */
-                    sitename:string;
-                    /**
-                    * @uiLabel - ${this._("w_Region_LevelArea")}
-                    */
-                    areaname:string;
                     /**
                     * @uiLabel - ${this._("w_ElevatorGroup")}
                     */
@@ -158,16 +144,6 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
     }
     filterInterface():string{
         return `interface {
-              /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Site")}
-              */
-             sitename?:string;
-             /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Area")}
-              */
-             areaname?:string;
              /**
                * @uiColumnGroup - row2
               * @uiLabel - ${this._("w_ElevatorGroup")}
@@ -221,12 +197,10 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
      getInfo(floor:any){
         let elevator = this.elevators.find(x=>x.reader&& x.reader.length>0 && x.reader.find(y=> y.objectId == floor.objectId));
         let elevatorname = elevator ? elevator.elevatorname : "";
-        let group = elevator ? this.elevatorGroups.find(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId)) : "";
-        let elevatorgroup = group ? group.groupname : "";
-        let areaname = group && group.area ? group.area.name : "";
-        let sitename = group && group.area && group.area.site ? group.area.site.name : "";
+        let elevatorgroups = elevator ? this.elevatorGroups.filter(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId)) : "";
         
-        return {elevatorname, elevatorgroup, areaname, sitename};
+        
+        return {elevatorname, elevatorgroups};
     }
 }
 </script>

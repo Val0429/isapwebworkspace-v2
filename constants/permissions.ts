@@ -41,8 +41,6 @@ export const PermissionList = [
     {key:PermissionName.reportVisitor, route :"/visitorreport", group:"Report", access:{C:false,R:true,U:false,D:false}},    
 
     {key:PermissionName.area, route :"", group:"Setting", access:{C:false,R:false,U:false,D:false}},
-    {key:PermissionName.site, route :"/site", group:"Setting", access:{C:true,R:true,U:true,D:true}},
-    {key:PermissionName.region, route :"/region", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.door, route :"/door", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.doorgroup, route :"/doorgroup", group:"Setting", access:{C:true,R:true,U:true,D:true}},
     {key:PermissionName.floor, route :"/floor", group:"Setting", access:{C:false,R:true,U:false,D:false}},
