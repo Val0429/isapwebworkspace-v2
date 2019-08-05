@@ -83,7 +83,7 @@
                 </template>
 
 
-                <template #5-title>{{ _('') }}</template>
+                <template #5-title>{{ _('w_ViewPTW_Step5_SupportingDocumentationTitle') }}</template>
                 <template #5>
 
                     <iv-form
@@ -102,7 +102,7 @@
                 </template>
 
 
-                <template #6-title>{{ _('') }}</template>
+                <template #6-title>{{ _('w_ViewPTW_Step6_TermsConditionsTitle') }}</template>
                 <template #6>
 
                     <iv-form
@@ -121,7 +121,7 @@
                 </template>
 
 
-                <template #7-title>{{ _('') }}</template>
+                <template #7-title>{{ _('w_ViewPTW_Step7_AddPerson') }}</template>
                 <template #7>
 
                     <iv-form
@@ -140,7 +140,7 @@
                 </template>
 
 
-                <template #8-title>{{ _('') }}</template>
+                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>
                 <template #8>
 
                     <iv-form
@@ -249,6 +249,7 @@ export class ViewPTW extends Vue {
         // step5
 
         // step6
+        step6Accepted: '',
 
         // step7
 
@@ -445,7 +446,16 @@ export class ViewPTW extends Vue {
 
     receiveStep5Data(step5Date) {}
 
-    stepTo6() {}
+    stepTo6() {
+        let stepRef: any = this.$refs.step;
+
+        // TODO: 全部step OK
+        // if (判斷條件) {
+        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+        //     stepRef.currentStep = 4;
+        //     return false;
+        // }
+    }
 
     IStep5() {
         return `
@@ -458,9 +468,20 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 6  //////////////////////////////
 
-    receiveStep6Data(step6Date) {}
+    receiveStep6Data(step6Date) {
+        this.inputFormData.step6Accepted = step6Date;
+    }
 
-    stepTo7() {}
+    stepTo7() {
+        let stepRef: any = this.$refs.step;
+
+        // TODO: 全部step OK
+        // if (!this.inputFormData.step6Accepted) {
+        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+        //     stepRef.currentStep = 5;
+        //     return false;
+        // }
+    }
 
     IStep6() {
         return `
@@ -476,7 +497,16 @@ export class ViewPTW extends Vue {
 
     receiveStep7Data(step7Date) {}
 
-    stepTo8() {}
+    stepTo8() {
+        let stepRef: any = this.$refs.step;
+
+        // TODO: 全部step OK
+        // if (!this.inputFormData.step1Accepted) {
+        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+        //     stepRef.currentStep = 6;
+        //     return false;
+        // }
+    }
 
     IStep7() {
         return `

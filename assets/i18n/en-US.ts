@@ -184,6 +184,7 @@ export default class LangObject {
 
     // step6
     w_ViewPTW_Step6_TermsConditionsTitle = 'Terms & Conditions';
+    w_ViewPTW_Step6_TermsConditionsInfo = 'The tenant and the contractor must comply with the following:';
 
     w_ViewPTW_Step6_1 = '1. Noisy works and work which emit toxic fumes must be performed outside normal office hours (i.e. must be performed between 2400 hrs. to 0500 hrs.), unless the Landlord has first approved otherwise.';
     w_ViewPTW_Step6_2 = '2. The work process and all materials must be confined to the tenant’s premises and the tenant must ensure it or its contractor removes all debris from site at the end of each working days to prevent fire hazards.';
@@ -194,6 +195,8 @@ export default class LangObject {
     w_ViewPTW_Step6_7 = '7. A worker found urinating or defecating in areas other than a toilet designated by the landlord will be required to leave the building immediately.';
 
     // step7
+    w_ViewPTW_Step7_AddPerson = 'Add Person';
+    w_ViewPTW_Step7_PersonList = 'Person List';
     w_ViewPTW_Step7_FullName = 'Full Name';
     w_ViewPTW_Step7_Occupation = 'Occupation';
     w_ViewPTW_Step7_NRIC = 'NRIC';
@@ -208,9 +211,10 @@ export default class LangObject {
     w_ViewPTW_Step7_Midnight = 'Midnight';
 
     // step8
+    w_ViewPTW_Step8_Title = 'Confirmation review';
     w_ViewPTW_Step8_ValidityOfApproval = 'Validity of Approval';
     w_ViewPTW_Step8_AccessGroup = 'Access Group';
-    
+
 
     /////////////////////// General Settings //////////////////////
 
