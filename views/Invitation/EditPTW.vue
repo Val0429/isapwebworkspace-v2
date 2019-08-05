@@ -194,7 +194,7 @@ import ResponseFilter from '@/services/ResponseFilter';
 @Component({
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
 })
-export class ViewPTW extends Vue {
+export class EditPTW extends Vue {
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -590,8 +590,8 @@ export class ViewPTW extends Vue {
 }
 
 
-export default ViewPTW;
-Vue.component("view-ptw", ViewPTW);
+export default EditPTW;
+Vue.component("edit-ptw", EditPTW);
 </script>
 
 <style lang="scss" scoped>

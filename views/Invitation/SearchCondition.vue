@@ -241,7 +241,9 @@ export class SearchCondition extends Vue {
         };
     }
 
-    doExportData() {}
+    doExportData() {
+        this.$emit('excel')
+    }
 
     IFilterConditionForm() {
         return `

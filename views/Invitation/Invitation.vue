@@ -1,8 +1,8 @@
 <template>
     <div class="animated fadeIn">
 
-        <view-ptw
-            :selectedDetail="selectedDetail"></view-ptw>
+        <edit-ptw
+            :selectedDetail="selectedDetail"></edit-ptw>
 
         <iv-auto-transition
             :step="transition.step"
@@ -16,6 +16,7 @@
 
                 <search-condition
                     @submit-data="receiveSearchConditionData"
+                    @excel="downloadExcel"
                 ></search-condition>
 
                 <iv-card
@@ -75,7 +76,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import SearchCondition from "./SearchCondition.vue";
 import AddPTW from "./AddPTW.vue";
-import ViewPTW from "./ViewPTW.vue";
+import EditPTW from "./EditPTW.vue";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -88,7 +89,7 @@ import ResponseFilter from '@/services/ResponseFilter';
 import Datetime from '@/services/Datetime';
 
 @Component({
-    components: { SearchCondition, AddPTW, ViewPTW }
+    components: { SearchCondition, AddPTW, EditPTW }
 })
 export default class Invitation extends Vue {
     transition: ITransition = {
@@ -191,6 +192,8 @@ export default class Invitation extends Vue {
         //         );
         //     });
     }
+
+    downloadExcel() {}
 
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
