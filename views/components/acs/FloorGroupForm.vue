@@ -101,7 +101,7 @@ export default class FloorGroupForm extends BasicFormQuick implements IFormQuick
     private options:{key:any, value:any}[]=[];
     
     async created() {
-        this.permissionName = PermissionName.floor;
+        this.permissionName = PermissionName.floorgroup;
         let resp:any = await this.$server.R("/acs/floor" as any, {"paging.all":"true"});
 
         this.options = resp.results.map(floor=>{return{key:floor.objectId, value:floor.floorname}});

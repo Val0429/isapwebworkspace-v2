@@ -72,7 +72,7 @@ export default class CoreUI extends Vue {
             this.menuNavigations.push({url:perm.route, group:perm.group});
             //extra permission menu
             //if(perm.key == PermissionName.permissionTable) this.menuNavigations.push({url:"/querypermission", group:perm.group});
-            if(perm.key == PermissionName.floor) this.menuNavigations.push({url:"/floorgroup", group:perm.group});
+            //if(perm.key == PermissionName.floor) this.menuNavigations.push({url:"/floorgroup", group:perm.group});
             
         }
     }
