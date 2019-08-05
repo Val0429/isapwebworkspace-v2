@@ -173,17 +173,44 @@ export default class LangObject {
     w_yes = 'Yes';
     w_no = 'No';
 
-    // step
-    //w_ViewPTW_Step = '';
+    // step5
+    w_ViewPTW_Step5_SupportingDocumentationTitle = 'Supporting Documentation';
+    w_ViewPTW_Step5_SupportingDocument = 'Please remember to attach any PTW supporting documentation such as :';
+    w_ViewPTW_Step5_Forms = 'Risk Assessment Evaluation Forms';
+    w_ViewPTW_Step5_License = 'Heavy Works License';
+    w_ViewPTW_Step5_Others = 'Others';
+    w_ViewPTW_Step5_UploadFiles = 'Upload File(s)';
+    w_ViewPTW_Step5_supported = 'Only .PDF , .JPEG and .PNG files are supported';
 
+    // step6
+    w_ViewPTW_Step6_TermsConditionsTitle = 'Terms & Conditions';
 
-    // step
-    //w_ViewPTW_Step = '';
+    w_ViewPTW_Step6_1 = '1. Noisy works and work which emit toxic fumes must be performed outside normal office hours (i.e. must be performed between 2400 hrs. to 0500 hrs.), unless the Landlord has first approved otherwise.';
+    w_ViewPTW_Step6_2 = '2. The work process and all materials must be confined to the tenant’s premises and the tenant must ensure it or its contractor removes all debris from site at the end of each working days to prevent fire hazards.';
+    w_ViewPTW_Step6_3 = '3. Before starting any works, all people who will work in the premises must obtain a site pass from the landlord’s Building Security Office at Checkpoint level 1. The landlord may require a worker found on site without a site pass to leave the building immediately.';
+    w_ViewPTW_Step6_4 = '4. Smoking and gambling is strictly prohibited.';
+    w_ViewPTW_Step6_5 = '5. Fire exit doors must not be wedged open and corridors must not be obstructed at any time.';
+    w_ViewPTW_Step6_6 = '6. Throughout the works period the contractor must provide adequate fire extinguishers in the premises.';
+    w_ViewPTW_Step6_7 = '7. A worker found urinating or defecating in areas other than a toilet designated by the landlord will be required to leave the building immediately.';
 
+    // step7
+    w_ViewPTW_Step7_FullName = 'Full Name';
+    w_ViewPTW_Step7_Occupation = 'Occupation';
+    w_ViewPTW_Step7_NRIC = 'NRIC';
+    w_ViewPTW_Step7_Shift = 'Shift';
+    w_ViewPTW_Step7_Vehicle = 'Vehicle #';
+    w_ViewPTW_Step7_Company = 'Company';
 
-    // step
-    //w_ViewPTW_Step = '';
+    w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
 
+    w_ViewPTW_Step7_Day = 'Day';
+    w_ViewPTW_Step7_Night= 'Night';
+    w_ViewPTW_Step7_Midnight = 'Midnight';
+
+    // step8
+    w_ViewPTW_Step8_ValidityOfApproval = 'Validity of Approval';
+    w_ViewPTW_Step8_AccessGroup = 'Access Group';
+    
 
     /////////////////////// General Settings //////////////////////
 
