@@ -1,9 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
-        <iv-auto-card
-            :label="_('w_ViewPTW_StepTitle') "
-        >
+        <iv-auto-card :label="_('w_ViewPTW_StepTitle') ">
             <iv-step-progress
                 ref="step"
                 @mounted="doMounted"
@@ -18,14 +16,11 @@
                         @submit="stepTo2($event)"
                     >
                         <template #step1>
-                            <step1
-                                @step1="receiveStep1Data"
-                            ></step1>
+                            <step1 @step1="receiveStep1Data"></step1>
                         </template>
 
                     </iv-form>
                 </template>
-
 
                 <template #2-title>{{ _('w_ViewPTW_Step2_ContractorTitle') }}</template>
                 <template #2>
@@ -45,7 +40,6 @@
                     </iv-form>
                 </template>
 
-
                 <template #3-title>{{ _('w_ViewPTW_Step3_WorkInformationTitle') }}</template>
                 <template #3>
 
@@ -54,12 +48,12 @@
                         :value="inputFormData"
                         @submit="stepTo4($event)"
                     >
-                            <template #step3>
-                                <step3
-                                    class="col-md-12"
-                                    @step3="receiveStep3Data"
-                                ></step3>
-                            </template>
+                        <template #step3>
+                            <step3
+                                class="col-md-12"
+                                @step3="receiveStep3Data"
+                            ></step3>
+                        </template>
 
                     </iv-form>
                 </template>
@@ -82,7 +76,6 @@
                     </iv-form>
                 </template>
 
-
                 <template #5-title>{{ _('w_ViewPTW_Step5_SupportingDocumentationTitle') }}</template>
                 <template #5>
 
@@ -95,12 +88,12 @@
                             <step5
                                 class="col-md-12"
                                 @step5="receiveStep5Data"
+                                @putStep5File="putStep5File"
                             ></step5>
                         </template>
 
                     </iv-form>
                 </template>
-
 
                 <template #6-title>{{ _('w_ViewPTW_Step6_TermsConditionsTitle') }}</template>
                 <template #6>
@@ -120,7 +113,6 @@
                     </iv-form>
                 </template>
 
-
                 <template #7-title>{{ _('w_ViewPTW_Step7_AddPerson') }}</template>
                 <template #7>
 
@@ -139,7 +131,6 @@
                     </iv-form>
                 </template>
 
-
                 <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>
                 <template #8>
 
@@ -157,7 +148,6 @@
 
                     </iv-form>
                 </template>
-
 
             </iv-step-progress>
 
@@ -193,7 +183,6 @@ import Dialog from "@/services/Dialog";
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
 })
 export class ViewPTW extends Vue {
-
     // step 相關
     isMounted: boolean = false;
     doMounted() {
@@ -202,30 +191,30 @@ export class ViewPTW extends Vue {
 
     inputFormData: any = {
         // step1
-        step1Accepted: '',
+        step1Accepted: "",
 
         // step2
         // PTW Data
-        step2PtwId: '',
-        step2Tenant: '',
-        step2WorkCategory: '',
+        step2PtwId: "",
+        step2Tenant: "",
+        step2WorkCategory: "",
 
         // Contractor Information
-        step2NameOfApplicant: '',
-        step2CompanyName: '',
-        step2CompanyAddress: '',
-        step2Email: '',
+        step2NameOfApplicant: "",
+        step2CompanyName: "",
+        step2CompanyAddress: "",
+        step2Email: "",
         step2ContactNumber: 0,
         step2CompanyFaxNo: 0,
 
         // step3
-        step3Unit: '',
-        step3Location: '',
-        step3Description: '',
+        step3Unit: "",
+        step3Location: "",
+        step3Description: "",
         step3TypeOfWork: [],
         step3StartDate: new Date(),
         step3EndDate: new Date(),
-        step3NameOfApplicantService:'',
+        step3NameOfApplicantService: "",
         step3HandPhoneContactNumber: 0,
 
         // step4
@@ -239,22 +228,21 @@ export class ViewPTW extends Vue {
         step4Checklist8: false,
         step4Checklist9: false,
 
-        step4Checklist1Remarks: '',
-        step4Checklist2Remarks: '',
-        step4Checklist3Remarks: '',
-        step4Checklist4Remarks: '',
-        step4Checklist5Remarks: '',
-        step4Checklist6Remarks: '',
+        step4Checklist1Remarks: "",
+        step4Checklist2Remarks: "",
+        step4Checklist3Remarks: "",
+        step4Checklist4Remarks: "",
+        step4Checklist5Remarks: "",
+        step4Checklist6Remarks: "",
 
         // step5
 
         // step6
-        step6Accepted: '',
+        step6Accepted: ""
 
         // step7
 
         // step8
-
     };
 
     created() {}
@@ -265,7 +253,7 @@ export class ViewPTW extends Vue {
 
     receiveStep1Data(step1Date) {
         this.inputFormData.step1Accepted = step1Date;
-//        console.log(' ~ ', this.inputFormData.accepted)
+        //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
     stepTo2() {
@@ -290,7 +278,6 @@ export class ViewPTW extends Vue {
     ////////////////////////////// step 2  //////////////////////////////
 
     receiveStep2Data(step2Date) {
-
         // PTW Data
         this.inputFormData.step2PtwId = step2Date.ptwId;
         this.inputFormData.step2Tenant = step2Date.tenant;
@@ -304,7 +291,7 @@ export class ViewPTW extends Vue {
         this.inputFormData.step2ContactNumber = step2Date.contactNumber;
         this.inputFormData.step2CompanyFaxNo = step2Date.companyFaxNo;
 
-        console.log('inputFormData ~ ', this.inputFormData)
+        console.log("inputFormData ~ ", this.inputFormData);
     }
 
     stepTo3() {
@@ -337,26 +324,24 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 2  //////////////////////////////
 
-
     ////////////////////////////// step 3  //////////////////////////////
 
     receiveStep3Data(step3Date) {
-
         this.inputFormData.step3Unit = step3Date.unit;
         this.inputFormData.step3Location = step3Date.location;
         this.inputFormData.step3Description = step3Date.description;
         this.inputFormData.step3TypeOfWork = step3Date.typeOfWork;
         this.inputFormData.step3StartDate = step3Date.startDate;
         this.inputFormData.step3EndDate = step3Date.endDate;
-        this.inputFormData.step3NameOfApplicantService = step3Date.nameOfApplicantService;
-        this.inputFormData.step3HandPhoneContactNumber = step3Date.handPhoneContactNumber;
+        this.inputFormData.step3NameOfApplicantService =
+            step3Date.nameOfApplicantService;
+        this.inputFormData.step3HandPhoneContactNumber =
+            step3Date.handPhoneContactNumber;
 
-        console.log('inputFormData ~ ', this.inputFormData)
-
+        console.log("inputFormData ~ ", this.inputFormData);
     }
 
     stepTo4() {
-
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -406,12 +391,10 @@ export class ViewPTW extends Vue {
         this.inputFormData.step4Checklist6Remarks = step4Date.checklist6Remarks;
         this.inputFormData.step4Checklist7Remarks = step4Date.checklist7Remarks;
 
-        console.log(' ~ ', this.inputFormData)
-
+        console.log(" ~ ", this.inputFormData);
     }
 
     stepTo5() {
-
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -441,10 +424,13 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 4  //////////////////////////////
 
-
     ////////////////////////////// step 5  //////////////////////////////
 
     receiveStep5Data(step5Date) {}
+
+    putStep5File(file) {
+        console.log("putStep5File", file);
+    }
 
     stepTo6() {
         let stepRef: any = this.$refs.step;
@@ -492,7 +478,6 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 6  //////////////////////////////
 
-
     ////////////////////////////// step 7  //////////////////////////////
 
     receiveStep7Data(step7Date) {}
@@ -521,7 +506,6 @@ export class ViewPTW extends Vue {
 
     receiveStep8Data(step8Date) {}
 
-
     doSubmit() {}
 
     IStep8() {
@@ -532,9 +516,7 @@ export class ViewPTW extends Vue {
     }
 
     ////////////////////////////// step 8  //////////////////////////////
-
 }
-
 
 export default ViewPTW;
 Vue.component("view-ptw", ViewPTW);

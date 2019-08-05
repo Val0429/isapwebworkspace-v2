@@ -175,10 +175,19 @@ export default class LangObject {
 
     // step5
     w_ViewPTW_Step5_SupportingDocumentationTitle = 'Supporting Documentation';
+    // for Admin
+    w_ViewPTW_Step5_SupportingDocuments = 'Please attach supporting documents:';
+    w_ViewPTW_Step5_RiskAssessment = 'Risk Assessment';
+    w_ViewPTW_Step5_MethodOfStatement = 'Method of Statement';
+    w_ViewPTW_Step5_SafeWorkProcedure = 'Safe Work Procedure';
+    w_ViewPTW_Step5_AnyRelevantLicensesOrPasses = 'Any relevant licenses or passes';
+    w_ViewPTW_Step5_BizsafeCertificate = 'Bizsafe certificate';
+    // for Worker
     w_ViewPTW_Step5_SupportingDocument = 'Please remember to attach any PTW supporting documentation such as :';
     w_ViewPTW_Step5_Forms = 'Risk Assessment Evaluation Forms';
     w_ViewPTW_Step5_License = 'Heavy Works License';
     w_ViewPTW_Step5_Others = 'Others';
+
     w_ViewPTW_Step5_UploadFiles = 'Upload File(s)';
     w_ViewPTW_Step5_supported = 'Only .PDF , .JPEG and .PNG files are supported';
 

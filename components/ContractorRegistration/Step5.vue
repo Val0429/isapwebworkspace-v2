@@ -1,6 +1,39 @@
 <template>
     <div>
-        Components Empty
+        <iv-form
+            :interface="IStep5()"
+            :value="inputFormData"
+        >
+            <template #file="{$attrs, $listeners}">
+                <ul>
+                    <span class="luTitle">{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>
+                    　<li>{{_('w_ViewPTW_Step5_RiskAssessment')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_MethodOfStatement')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_SafeWorkProcedure')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_AnyRelevantLicensesOrPasses')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_BizsafeCertificate')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
+                </ul>
+                <ul>
+                    <span class="luTitle">{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>
+                    　<li>{{_('w_ViewPTW_Step5_RiskAssessment')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_MethodOfStatement')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_SafeWorkProcedure')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_AnyRelevantLicensesOrPasses')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_BizsafeCertificate')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
+                </ul>
+                <iv-form-file
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    multiple
+                    accept=".jpeg, .png, .pdf"
+                    value="file"
+                ></iv-form-file>
+                <span>{{_('w_ViewPTW_Step5_supported')}}</span>
+            </template>
+        </iv-form>
+
     </div>
 </template>
 
@@ -11,37 +44,29 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
     components: {}
 })
 export class Step5 extends Vue {
-    // Prop
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
-    })
-    label: string;
+    inputFormData: any = {
+        file: null
+    };
 
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
+    created() {}
 
-    inputData = "Test input data";
-    modelData = "";
+    mounted() {}
 
-    created() {
-        this.modelData = this.value;
+    putFile() {
+        console.log("putFile", this.inputFormData);
+        this.$emit("putStep5File", this.inputFormData);
     }
 
-    mounted() {
-        this.start();
-    }
-
-    start() {
-        this.$emit("input", this.inputData);
-    }
-
-    putModel() {
-        this.$emit("model", this.modelData);
+    IStep5() {
+        return `
+           interface {
+                /**
+                * @uiLabel -  ${this._("w_ViewPTW_Step5_UploadFiles")}
+                * @uiType - iv-form-file
+                */
+                file?:file
+            }
+       `;
     }
 }
 
@@ -50,4 +75,9 @@ Vue.component("step5", Step5);
 </script>
 
 <style lang="scss" scoped>
+ul {
+    li {
+        margin: 20px;
+    }
+}
 </style>
