@@ -110,6 +110,7 @@ export default class LangObject {
 
     w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
     w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';
+    w_ViewPTW_Step_ErrorTipPerson = 'Please add person';
 
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
@@ -196,6 +197,8 @@ export default class LangObject {
 
     // step7
     w_ViewPTW_Step7_AddPerson = 'Add Person';
+    w_ViewPTW_Step7_RemovePerson = 'Remove Person';
+    w_ViewPTW_Step7_EditPerson = 'Edit Person';
     w_ViewPTW_Step7_PersonList = 'Person List';
     w_ViewPTW_Step7_FullName = 'Full Name';
     w_ViewPTW_Step7_Occupation = 'Occupation';
@@ -209,6 +212,10 @@ export default class LangObject {
     w_ViewPTW_Step7_Day = 'Day';
     w_ViewPTW_Step7_Night= 'Night';
     w_ViewPTW_Step7_Midnight = 'Midnight';
+
+    w_ViewPTW_Step7_DeleteConfirm = 'Are you sure to delete selected person?';
+    w_DeleteConfirm = 'Delete Confirm';
+
 
     // step8
     w_ViewPTW_Step8_Title = 'Confirmation review';

@@ -132,7 +132,7 @@
                         <template #step7>
                             <step7
                                 class="col-md-12"
-                                @step6="receiveStep7Data"
+                                @step7="receiveStep7Data"
                             ></step7>
                         </template>
 
@@ -252,6 +252,7 @@ export class ViewPTW extends Vue {
         step6Accepted: '',
 
         // step7
+        step7PersonDetail: undefined,
 
         // step8
 
@@ -271,11 +272,12 @@ export class ViewPTW extends Vue {
     stepTo2() {
         let stepRef: any = this.$refs.step;
 
-        if (!this.inputFormData.step1Accepted) {
-            Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-            stepRef.currentStep = 0;
-            return false;
-        }
+        // TODO: 全部step OK
+        // if (!this.inputFormData.step1Accepted) {
+        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+        //     stepRef.currentStep = 0;
+        //     return false;
+        // }
     }
 
     IStep1() {
@@ -495,14 +497,17 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 7  //////////////////////////////
 
-    receiveStep7Data(step7Date) {}
+    receiveStep7Data(step7Date) {
+        this.inputFormData.step7PersonDetail = step7Date;
+        console.log('this.inputFormData.step7PersonDetail ~ ', this.inputFormData.step7PersonDetail)
+    }
 
     stepTo8() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
-        // if (!this.inputFormData.step1Accepted) {
-        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+        // if (!this.inputFormData.personDetail) {
+        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
         //     stepRef.currentStep = 6;
         //     return false;
         // }
