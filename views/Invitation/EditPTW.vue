@@ -87,6 +87,7 @@
                         <template #step5>
                             <step5
                                 class="col-md-12"
+                                :permission="true"
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>

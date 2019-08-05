@@ -3,10 +3,11 @@
         <iv-form
             :interface="IStep5()"
             :value="inputFormData"
+            @update:file="putFile($event)"
         >
             <template #file="{$attrs, $listeners}">
-                <ul>
-                    <span class="luTitle">{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>
+                <ul :hidden="permission">
+                    <span>{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>
                     　<li>{{_('w_ViewPTW_Step5_RiskAssessment')}}</li>
                     　<li>{{_('w_ViewPTW_Step5_MethodOfStatement')}}</li>
                     　<li>{{_('w_ViewPTW_Step5_SafeWorkProcedure')}}</li>
@@ -14,13 +15,10 @@
                     　<li>{{_('w_ViewPTW_Step5_BizsafeCertificate')}}</li>
                     　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
                 </ul>
-                <ul>
-                    <span class="luTitle">{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>
-                    　<li>{{_('w_ViewPTW_Step5_RiskAssessment')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_MethodOfStatement')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_SafeWorkProcedure')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_AnyRelevantLicensesOrPasses')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_BizsafeCertificate')}}</li>
+                <ul :hidden="!permission">
+                    <span>{{_('w_ViewPTW_Step5_SupportingDocument')}}</span>
+                    　<li>{{_('w_ViewPTW_Step5_Forms')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_License')}}</li>
                     　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
                 </ul>
                 <iv-form-file
@@ -30,7 +28,7 @@
                     accept=".jpeg, .png, .pdf"
                     value="file"
                 ></iv-form-file>
-                <span>{{_('w_ViewPTW_Step5_supported')}}</span>
+
             </template>
         </iv-form>
 
@@ -44,6 +42,14 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
     components: {}
 })
 export class Step5 extends Vue {
+    @Prop({
+        type: Boolean,
+        default: function() {
+            return false;
+        }
+    })
+    permission: boolean;
+
     inputFormData: any = {
         file: null
     };
@@ -52,9 +58,9 @@ export class Step5 extends Vue {
 
     mounted() {}
 
-    putFile() {
-        console.log("putFile", this.inputFormData);
-        this.$emit("putStep5File", this.inputFormData);
+    putFile(data) {
+        console.log("putFile", data);
+        this.$emit("putStep5File", data);
     }
 
     IStep5() {
@@ -62,6 +68,7 @@ export class Step5 extends Vue {
            interface {
                 /**
                 * @uiLabel -  ${this._("w_ViewPTW_Step5_UploadFiles")}
+                * @uiPlaceHolder -   ${this._("w_ViewPTW_Step5_supported")} 
                 * @uiType - iv-form-file
                 */
                 file?:file
@@ -76,8 +83,11 @@ Vue.component("step5", Step5);
 
 <style lang="scss" scoped>
 ul {
+    span {
+        margin-left: -25px;
+    }
     li {
-        margin: 20px;
+        margin-top: 20px;
     }
 }
 </style>

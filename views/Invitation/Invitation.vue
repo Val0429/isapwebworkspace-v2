@@ -1,8 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
-        <edit-ptw
-            :selectedDetail="selectedDetail"></edit-ptw>
+        <edit-ptw :selectedDetail="selectedDetail"></edit-ptw>
 
         <iv-auto-transition
             :step="transition.step"
@@ -84,9 +83,9 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
-import Loading from '@/services/Loading';
-import ResponseFilter from '@/services/ResponseFilter';
-import Datetime from '@/services/Datetime';
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
 
 @Component({
     components: { SearchCondition, AddPTW, EditPTW }
@@ -108,11 +107,11 @@ export default class Invitation extends Vue {
     responseData: any = {};
 
     inputFormData: any = {
-        objectId: '',
-        name: '',
-        email: '',
-        tenant: '',
-        workDescription: ''
+        objectId: "",
+        name: "",
+        email: "",
+        tenant: "",
+        workDescription: ""
     };
 
     created() {}
@@ -141,9 +140,7 @@ export default class Invitation extends Vue {
         // TODO: 7steps
     }
 
-
     async receiveSearchConditionData(searchConditionData: any) {
-
         let param = JSON.parse(JSON.stringify(searchConditionData));
 
         // TODO: wait api
@@ -193,7 +190,9 @@ export default class Invitation extends Vue {
         //     });
     }
 
-    downloadExcel() {}
+    downloadExcel() {
+        console.log("downloadExcel");
+    }
 
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
@@ -338,7 +337,6 @@ export default class Invitation extends Vue {
 
             }`;
     }
-
 }
 </script>
 
