@@ -210,7 +210,7 @@ export default class LangObject {
     w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
 
     w_ViewPTW_Step7_Day = 'Day';
-    w_ViewPTW_Step7_Night= 'Night';
+    w_ViewPTW_Step7_Night = 'Night';
     w_ViewPTW_Step7_Midnight = 'Midnight';
 
     w_ViewPTW_Step7_DeleteConfirm = 'Are you sure to delete selected person?';
@@ -222,9 +222,17 @@ export default class LangObject {
     w_ViewPTW_Step8_ValidityOfApproval = 'Validity of Approval';
     w_ViewPTW_Step8_AccessGroup = 'Access Group';
 
-
     /////////////////////// General Settings //////////////////////
 
     w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
     w_GeneralSettings_RemoveWorkerDaysFormLabel = 'Remove Worker Data from Days';
+
+    w_Dashboard_Dashboard = 'Dashboard';
+    w_Dashboard_FilterCondition = 'Filter Condition';
+    w_Dashboard_RealTimeContractorTraffic = 'Real Time Contractor Traffic';
+    w_Dashboard_WorkFrequencyHistory = 'Work Frequency History';
+    w_Dashboard_Submitted = 'Submitted';
+    w_Dashboard_Approved = 'Approved';
+    w_Dashboard_AwaitingApproval = 'Awaiting Approval';
+    w_Dashboard_Total = 'TOTAl';
 }

@@ -6,23 +6,61 @@
             :type="transition.type"
         >
 
-            <div
+            <iv-card
+                :label="_('w_Dashboard_FilterCondition')"
+                key="transition_0"
+                v-show="transition.step === 1"
+                :visible="visible"
+            >
+                <iv-form
+                    :interface="IFilterConditionForm()"
+                    @submit="doSubmit($event)"
+                >
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        class="submit"
+                        size="lg"
+                        @click="doSubmit"
+                    >
+                        {{ _('wb_Submit') }}
+                    </b-button>
+
+                </template>
+
+            </iv-card>
+
+            <iv-card
+                :label="_('w_Dashboard_Dashboard')"
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
-                class="row"
+                :visible="!visible"
             >
-                <div class="col-lg-6">
-                    <submitted-dashboard></submitted-dashboard>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <submitted-dashboard :data="dashboardData"></submitted-dashboard>
+                    </div>
+                    <div class="col-lg-6">
+                        <highchart-dashboard
+                            :startTime="startTimeByHours"
+                            :endTime="endTimeByHours"
+                            :chartData="chartDataByHours"
+                            :chartMode="EChartMode.chartByHours"
+                            :chartTitle="_('w_Dashboard_RealTimeContractorTraffic')"
+                        ></highchart-dashboard>
+                    </div>
+                    <div class="col-lg-12">
+                        <highchart-dashboard
+                            :startTime="startTimeByDays"
+                            :endTime="endTimeByDays"
+                            :chartData="chartDataByDays"
+                            :chartMode="EChartMode.chartByDays"
+                            :chartTitle="_('w_Dashboard_WorkFrequencyHistory')"
+                        ></highchart-dashboard>
+                    </div>
                 </div>
-                <div class="col-lg-6">
-                    <highchart-dashboard :chartMode="0"></highchart-dashboard>
-                </div>
-                <div class="col-lg-12">
-                    <highchart-dashboard :chartMode="1"></highchart-dashboard>
-                </div>
-
-            </div>
+            </iv-card>
 
             <div
                 key="transition_2"
@@ -46,6 +84,24 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import { chart } from "highcharts";
+
+enum EChartMode {
+    chartByHours,
+    chartByDays
+}
+
+interface ISeries {
+    name: string;
+    data: number[];
+}
+
+interface IDashboardData {
+    submitted: number;
+    approved: number;
+    awaitingApproval: number;
+    total: number;
+}
 
 @Component({
     components: {}
@@ -57,9 +113,109 @@ export default class Dashboard extends Vue {
         step: 1
     };
 
+    visible: boolean = true;
+    EChartMode = EChartMode;
+    startTimeByDays = new Date("1990-1-1 00:00");
+    endTimeByDays = new Date("1990-1-2 00:00");
+    startTimeByHours = new Date("1990-1-1 00:00");
+    endTimeByHours = new Date("1990-1-2 00:00");
+    chartDataByHours: ISeries[] = [];
+    chartDataByDays: ISeries[] = [];
+    dashboardData: IDashboardData = {
+        submitted: 0,
+        approved: 0,
+        awaitingApproval: 0,
+        total: 0
+    };
+
     created() {}
 
     mounted() {}
+
+    initdata() {
+        //false data
+        this.dashboardData = {
+            submitted: 7,
+            approved: 15,
+            awaitingApproval: 70,
+            total: 93
+        };
+
+        this.startTimeByHours = new Date("2019-8-5 00:00");
+        this.endTimeByHours = new Date("2019-8-6 00:00");
+        this.chartDataByHours = [
+            {
+                name: "all",
+                data: [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    12.4,
+                    23.2,
+                    24.5,
+                    39.7,
+                    10,
+                    45.5,
+                    57.4,
+                    40.4,
+                    27.6,
+                    29.1,
+                    1.8,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ];
+
+        this.startTimeByDays = new Date("2019-8-5 00:00");
+        this.endTimeByDays = new Date("2019-8-6 00:00");
+        this.chartDataByDays = [
+            {
+                name: "Visitor",
+                data: [42.4, 99.1]
+            },
+            {
+                name: "Unregistered",
+                data: [0, 0]
+            }
+        ];
+    }
+
+    async doSubmit() {
+        // TODO waiting for api
+        this.initdata();
+        this.visible = false;
+    }
+
+    IFilterConditionForm() {
+        return `
+            interface {
+
+
+                /**
+                 * @uiLabel - ${this._("w_Startdate")}
+                 * @uiColumnGroup - timeGroup
+                 * @uiType - iv-form-date
+                 */
+                startTime?: Date;
+
+                  /**
+                 * @uiLabel - ${this._("w_Enddate")}
+                 * @uiColumnGroup - timeGroup
+                 * @uiType - iv-form-date
+                 */
+                endTime?: Date;
+            }
+        `;
+    }
 }
 </script>
 
