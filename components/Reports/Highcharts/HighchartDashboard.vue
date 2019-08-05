@@ -123,7 +123,7 @@ export class HighchartDashboard extends Vue {
         let eDate = this.endTime;
         while (sDate.getTime() < eDate.getTime()) {
             categories.push(
-                (sDate.getHours() > 10
+                (sDate.getHours() >= 10
                     ? sDate.getHours()
                     : "0" + sDate.getHours()) + ":00"
             );
@@ -134,11 +134,18 @@ export class HighchartDashboard extends Vue {
             chart: {
                 type: "column"
             },
+            yAxis: {
+                title: {
+                    text: null
+                }
+            },
+            exporting: { enabled: false },
             title: {
                 text: this.chartTitle,
                 align: "left",
                 style: { color: "#ababab", fontSize: "42px" }
             },
+
             xAxis: {
                 categories: categories
             },
@@ -160,10 +167,16 @@ export class HighchartDashboard extends Vue {
             chart: {
                 type: "column"
             },
+            exporting: { enabled: false },
             title: {
                 text: this.chartTitle,
                 align: "left",
                 style: { color: "#ababab", fontSize: "42px" }
+            },
+            yAxis: {
+                title: {
+                    text: null
+                }
             },
             xAxis: {
                 categories: categories
