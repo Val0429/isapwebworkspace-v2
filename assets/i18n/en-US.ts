@@ -222,6 +222,7 @@ export default class LangObject {
     w_ViewPTW_Step8_ValidityOfApproval = 'Validity of Approval';
     w_ViewPTW_Step8_AccessGroup = 'Access Group';
 
+
     /////////////////////// General Settings //////////////////////
 
     w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';

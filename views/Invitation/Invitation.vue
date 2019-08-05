@@ -1,7 +1,8 @@
 <template>
     <div class="animated fadeIn">
 
-        <view-ptw></view-ptw>
+        <view-ptw
+            :selectedDetail="selectedDetail"></view-ptw>
 
         <iv-auto-transition
             :step="transition.step"
@@ -100,7 +101,7 @@ export default class Invitation extends Vue {
     path: string = "";
     isSelected: any = [];
     tableMultiple: boolean = true;
-    selectedDetail: any = [];
+    selectedDetail: any = {};
 
     // api 回來資料
     responseData: any = {};
@@ -119,7 +120,7 @@ export default class Invitation extends Vue {
 
     selectedItem(data) {
         this.isSelected = data;
-        this.selectedDetail = [];
+        this.selectedDetail = {};
         this.selectedDetail = data;
     }
 

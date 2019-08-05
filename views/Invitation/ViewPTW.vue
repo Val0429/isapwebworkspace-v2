@@ -144,7 +144,7 @@
                 <template #8>
 
                     <iv-form
-                        :interface="IStep7()"
+                        :interface="IStep8()"
                         :value="inputFormData"
                         @submit="doSubmit($event)"
                     >
@@ -176,7 +176,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import Step1 from "@/components/ContractorRegistration/Step1.vue";
 import Step2 from "@/components/ContractorRegistration/Step2.vue";
 import Step3 from "@/components/ContractorRegistration/Step3.vue";
@@ -188,11 +188,20 @@ import Step8 from "@/components/ContractorRegistration/Step8.vue";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Loading from '@/services/Loading';
+import ResponseFilter from '@/services/ResponseFilter';
 
 @Component({
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
 })
 export class ViewPTW extends Vue {
+
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: () => {}
+    })
+    selectedDetail: string;
+
 
     // step 相關
     isMounted: boolean = false;
@@ -255,10 +264,14 @@ export class ViewPTW extends Vue {
         step7PersonDetail: undefined,
 
         // step8
-
+        step8StartDate: new Date(),
+        step8EndDate: new Date(),
+        step8AccessGroup: ''
     };
 
-    created() {}
+    created() {
+        this.inputFormData = this.selectedDetail;
+    }
 
     mounted() {}
 
@@ -524,10 +537,46 @@ export class ViewPTW extends Vue {
 
     ////////////////////////////// step 8  //////////////////////////////
 
-    receiveStep8Data(step8Date) {}
+    receiveStep8Data(step8Date) {
+        this.inputFormData.step8StartDate = step8Date.startDate;
+        this.inputFormData.step8EndDate = step8Date.endDate;
+        this.inputFormData.step8AccessGroup = step8Date.accessGroup;
 
+        console.log('this.inputFormData ~ ', this.inputFormData)
+    }
 
-    doSubmit() {}
+    async doSubmit() {
+
+        // TODO: wait api
+        const datas:any = [];
+
+        const doSubmitParam = {
+            datas
+        };
+
+        // Loading.show();
+        // await this.$server
+        //     .U("/", doSubmitParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {
+        //                 Dialog.success(this._("w_Dialog_SuccessTitle"));
+        //             },
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     });
+
+        this.$emit("submit-data", doSubmitParam);
+    }
 
     IStep8() {
         return `
