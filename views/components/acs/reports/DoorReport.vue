@@ -22,7 +22,6 @@ export default class DoorReport extends Vue  {
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
-    permissions:any[]=[];
     created(){        
         this.fields = 
        [       
@@ -92,8 +91,9 @@ export default class DoorReport extends Vue  {
   private async getData() {        
         try{    
             this.isBusy=true;
-            await this.getPermissiontable();
-            await this.getMember();
+            if(this.filter && this.filter.ResignDate) this.filter.ResignationDate=this.filter.ResignDate.toISOString();
+            let resp: any=await this.$server.R("/report/door" as any,this.filter||{});
+            this.records=resp.results;
         }catch(err){
             console.error(err);
         }finally{
@@ -102,56 +102,6 @@ export default class DoorReport extends Vue  {
   }
 
 
-  private async getMember() {
-    if(this.filter && this.filter.ResignDate)
-      this.filter.ResignationDate=this.filter.ResignDate.toISOString();
-    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter||{});
-    this.records=[];
-    for(let member of resp.results){
-        for(let tableid of member.PermissionTable){            
-            let permission = this.permissions.find(x=>x.tableid==tableid);
-            if(!permission || !permission.accesslevels)continue;
-            for(let access of permission.accesslevels){                
-                if(access.doorgroup){
-                    for(let door of access.doorgroup.doors){
-                        let newMember = Object.assign({},member);
-                        newMember.accessObjectId = access.objectId;
-                        newMember.PermissionName = permission.tablename;
-                        newMember.TimeSchedule = access.timeschedule.timename;
-                        newMember.DoorGroupName = access.doorgroup.groupname;
-                        newMember.doorGroupObjectId = access.doorgroup.objectId;
-                        newMember.DoorName = door.doorname;
-                        //no need to display multiple row for the same access level
-                        let exists = this.records.find(x=> x.objectId == newMember.objectId && 
-                                                        x.accessObjectId == newMember.accessObjectId &&                                                     
-                                                        x.doorGroupObjectId == newMember.doorGroupObjectId );
-                        if(!exists)this.records.push(newMember);
-                    }
-                }
-                if(access.door){
-                    let newMember = Object.assign({},member);
-                        newMember.accessObjectId = access.objectId;
-                        newMember.PermissionName = permission.tablename;
-                        newMember.TimeSchedule = access.timeschedule.timename;
-                        newMember.DoorName = access.door.doorname;
-                        newMember.doorObjectId = access.door.objectId;
-                        //no need to display multiple row for the same access level
-                        let exists = this.records.find(x=> x.objectId == newMember.objectId && 
-                                                        x.accessObjectId == newMember.accessObjectId &&                                                     
-                                                        x.doorObjectId == newMember.doorObjectId );
-                        if(!exists)this.records.push(newMember);
-                }
-                
-                
-            }
-            
-        }
-    }
-  }
-   private async getPermissiontable() {    
-    let resp: any=await this.$server.R("/report/permissionrecord" as any, Object.assign({"paging.all":"true","system":0}, this.filter));
-    this.permissions=resp.results;
-  }
 
 
     inf():string{

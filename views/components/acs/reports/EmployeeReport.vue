@@ -22,7 +22,6 @@ export default class AttendanceReport extends Vue  {
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
-    permissions: any[];
     created(){        
         
         this.fields = 
@@ -83,8 +82,9 @@ export default class AttendanceReport extends Vue  {
   private async getData() {        
         try{    
             this.isBusy=true;
-            await this.getPermissiontable();
-            await this.getMember();
+            if(this.filter && this.filter.ResignDate) this.filter.ResignationDate=this.filter.ResignDate.toISOString();
+            let resp: any=await this.$server.R("/report/employee" as any, Object.assign({ShowEmptyCardNumber:true}, this.filter));
+            this.records=resp.results;
         }catch(err){
             console.error(err);
         }finally{
@@ -93,33 +93,6 @@ export default class AttendanceReport extends Vue  {
   }
 
 
-  private async getMember() {
-    if(this.filter && this.filter.ResignDate)
-      this.filter.ResignationDate=this.filter.ResignDate.toISOString();
-    let resp: any=await this.$server.R("/report/memberrecord" as any, Object.assign({ShowEmptyCardNumber:true}, this.filter));
-    this.records=[];
-    for(let member of resp.results){
-        for(let tableid of member.PermissionTable){
-            let newMember = Object.assign({},member);
-            let permission = this.permissions.find(x=>x.tableid==tableid);
-            if(!permission || !permission.accesslevels)continue;
-            for(let access of permission.accesslevels){
-                newMember.PermissionName = permission.tablename;
-                newMember.TimeSchedule = access.timeschedule.timename;
-                newMember.DoorName = access.door?access.door.doorname:'';
-                newMember.DoorGroupName = access.doorgroup?access.doorgroup.groupname:'';
-                //no need to display multiple row for the same access level
-                let exists = this.records.find(x=>x.PermissionName == newMember.PermissionName && x.TimeSchedule == newMember.TimeSchedule && x.DoorName == newMember.DoorName );
-                if(!exists)this.records.push(newMember);
-            }
-            
-        }
-    }
-  }
-   private async getPermissiontable() {    
-    let resp: any=await this.$server.R("/report/permissionrecord" as any, {"paging.all":"true","system":0});
-    this.permissions=resp.results;
-  }
 
     inf():string{
         return `interface {

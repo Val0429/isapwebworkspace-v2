@@ -94,43 +94,20 @@ export default class DemographicReport extends Vue  {
             return;
         }
         this.isBusy=true;           
-        await this.getMemberData();
-        await this.getAttendanceRecord();
+        this.filter.Start.setHours(0,0,0,0);        
+        this.filter.End.setHours(23,59,59,999);
+        // let card_no = this.filter.CardNumber;
+        let start = this.filter.Start.toISOString();
+        let end = this.filter.End.toISOString();
+        let resp: any=await this.$server.R("/report/demographic" as any, Object.assign(this.filter, {start, end}));
+        this.records = resp.results;
       }catch(err){
           console.error(err);
       }finally{
         this.isBusy=false;
       }
   }
-  async getMemberData() {
-    let resp: any=await this.$server.R("/report/memberrecord" as any,this.filter);
-    this.records=resp.results;
-    
-  }
-async getAttendanceRecord(){   
-        
-        this.filter.Start.setHours(0,0,0,0);        
-        this.filter.End.setHours(23,59,59,999);
-        // let card_no = this.filter.CardNumber;
-        let start = this.filter.Start.toISOString();
-        let end = this.filter.End.toISOString();
-        let resp: any=await this.$server.R("/report/attendancerecord" as any, Object.assign(this.filter, {start, end}));
-        
-        let i=0;
-        while(i<resp.results.length){            
-            let item = resp.results[i];
-            let item2 = resp.results[i+1];
-            i+=2;
-            let member = this.records.find(x=>x.CardNumber == item.card_no);
-            if(!member|| !item2)continue;
-            if(!member.InOutDailyCount)member.InOutDailyCount=0;
-            if(member.LastDateOccured !== item.date_occurred){
-                member.LastDateOccured = item.date_occurred;
-                member.InOutDailyCount +=1;            
-            }
-        }
-        
-    }
+
 
     inf():string{
         return `interface {
