@@ -149,25 +149,29 @@ export default class LangObject {
     w_ViewPTW_Step3_NameOfApplicant = 'Name of Applicant’s Service Provider(s) in the works :';
     w_ViewPTW_Step3_HandPhoneContactNumber = 'Handphone Contact Number';
 
+    // step
+    //w_ViewPTW_Step = '';
 
     // step
     //w_ViewPTW_Step = '';
 
-
     // step
     //w_ViewPTW_Step = '';
 
-
     // step
     //w_ViewPTW_Step = '';
-
-
-    // step
-    //w_ViewPTW_Step = '';
-
 
     /////////////////////// General Settings //////////////////////
 
     w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
     w_GeneralSettings_RemoveWorkerDaysFormLabel = 'Remove Worker Data from Days';
+
+    w_Dashboard_Dashboard = 'Dashboard';
+    w_Dashboard_FilterCondition = 'Filter Condition';
+    w_Dashboard_RealTimeContractorTraffic = 'Real Time Contractor Traffic';
+    w_Dashboard_WorkFrequencyHistory = 'Work Frequency History';
+    w_Dashboard_Submitted = 'Submitted';
+    w_Dashboard_Approved = 'Approved';
+    w_Dashboard_AwaitingApproval = 'Awaiting Approval';
+    w_Dashboard_Total = 'TOTAl';
 }

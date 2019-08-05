@@ -32,6 +32,11 @@ enum EChartMode {
     chartByDays
 }
 
+interface ISeries {
+    name: string;
+    data: number[];
+}
+
 @Component({
     components: {
         highcharts: Chart
@@ -42,7 +47,7 @@ export class HighchartDashboard extends Vue {
     @Prop({
         type: Date,
         default: function() {
-            return new Date();
+            return null;
         }
     })
     startTime: Date;
@@ -50,7 +55,7 @@ export class HighchartDashboard extends Vue {
     @Prop({
         type: Date,
         default: function() {
-            return new Date();
+            return null;
         }
     })
     endTime: Date;
@@ -64,21 +69,32 @@ export class HighchartDashboard extends Vue {
     chartMode: EChartMode;
 
     @Prop({
-        type: Object,
+        type: Array,
         default: function() {
-            return {};
+            return [];
         }
     })
-    chartData: object;
+    chartData: ISeries;
 
-    // @Watch("value", { deep: true })
-    // private onValueChanged(
-    //     newval: IChartTrafficData[],
-    //     oldval: IChartTrafficData[]
-    // ) {
-    //     this.start();
-    // }
+    @Prop({
+        type: String,
+        default: function() {
+            return "";
+        }
+    })
+    chartTitle: string;
 
+    @Watch("startTime", { deep: true })
+    private onstartTimeChanged() {
+        this.start();
+    }
+
+    @Watch("endTime", { deep: true })
+    private onendTimeChanged() {
+        this.start();
+    }
+
+    oneHour = 1 * 60 * 60 * 1000;
     chartOptions = {};
 
     created() {}
@@ -90,7 +106,7 @@ export class HighchartDashboard extends Vue {
     start() {
         switch (this.chartMode) {
             case EChartMode.chartByHours:
-                this.initChartByHourss();
+                this.initChartByHours();
                 break;
             case EChartMode.chartByDays:
                 this.initChartByDays();
@@ -100,152 +116,59 @@ export class HighchartDashboard extends Vue {
         }
     }
 
-    initChartByHourss() {
-        console.log("initChartByHourss");
+    initChartByHours() {
+        let categories = [];
+
+        let sDate = this.startTime;
+        let eDate = this.endTime;
+        while (sDate.getTime() < eDate.getTime()) {
+            categories.push(
+                (sDate.getHours() > 10
+                    ? sDate.getHours()
+                    : "0" + sDate.getHours()) + ":00"
+            );
+            sDate = new Date(sDate.getTime() + this.oneHour);
+        }
+
         this.chartOptions = {
             chart: {
                 type: "column"
             },
             title: {
-                text: "Monthly Average Rainfall"
-            },
-            subtitle: {
-                text: "Source: WorldClimate.com"
+                text: this.chartTitle,
+                align: "left",
+                style: { color: "#ababab", fontSize: "42px" }
             },
             xAxis: {
-                categories: [
-                    "00:00",
-                    "01:00",
-                    "02:00",
-                    "03:00",
-                    "04:00",
-                    "05:00",
-                    "06:00",
-                    "07:00",
-
-                    "08:00",
-                    "09:00",
-                    "10:00",
-                    "11:00",
-                    "12:00",
-                    "13:00",
-                    "14:00",
-                    "15:00",
-                    "16:00",
-                    "17:00",
-                    "18:00",
-                    "19:00",
-                    "20:00",
-                    "21:00",
-                    "22:00",
-                    "23:00"
-                ],
-                crosshair: true
+                categories: categories
             },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: "Rainfall (mm)"
-                }
-            },
-            tooltip: {
-                headerFormat:
-                    '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat:
-                    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                footerFormat: "</table>",
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [
-                {
-                    name: "all",
-                    data: [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        12.4,
-                        23.2,
-                        24.5,
-                        39.7,
-                        10,
-                        45.5,
-                        57.4,
-                        40.4,
-                        27.6,
-                        29.1,
-                        1.8,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    ]
-                }
-            ]
+            series: this.chartData
         };
     }
 
     initChartByDays() {
-        console.log("initChartByDays");
+        let categories = [];
+
+        let sDate = this.startTime;
+        let eDate = this.endTime;
+        while (sDate.getTime() <= eDate.getTime()) {
+            categories.push(Datetime.DateTime2String(sDate, "YYYY-MM-DD"));
+            sDate = new Date(sDate.getTime() + this.oneHour * 24);
+        }
+
         this.chartOptions = {
             chart: {
                 type: "column"
             },
             title: {
-                text: "Monthly Average Rainfall"
-            },
-            subtitle: {
-                text: "Source: WorldClimate.com"
+                text: this.chartTitle,
+                align: "left",
+                style: { color: "#ababab", fontSize: "42px" }
             },
             xAxis: {
-                categories: ["2018-09-17", "2018-09-18"],
-                crosshair: true
+                categories: categories
             },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: "Rainfall (mm)"
-                }
-            },
-            tooltip: {
-                headerFormat:
-                    '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat:
-                    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                footerFormat: "</table>",
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [
-                {
-                    name: "Visitor",
-                    data: [42.4, 99.1]
-                },
-                {
-                    name: "Unregistered",
-                    data: [0, 0]
-                }
-            ]
+            series: this.chartData
         };
     }
 }
