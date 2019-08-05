@@ -631,4 +631,29 @@ export default class LangObject implements ILang {
     w_FloorGroup="Floor Group";
     w_FloorGroupAdd="Add Floor Group";
     w_FloorGroupEdit="Edit Floor Group";
+
+    user_Permission_CRUD="user_Permission_CRUD";
+    user_Management_CRUD="user_Management_CRUD";
+    report_door_R="report_door_R";
+    report_member_R="report_member_R";
+    report_doorgroup_R="report_doorgroup_R";
+    report_card_R="report_card_R";
+    report_contractor_R="report_contractor_R";
+    report_demographic_R="report_demographic_R";
+    report_attendance_R="report_attendance_R";
+    report_visitor_R="report_visitor_R";
+    door_permissiontable_CRUD="door_permissiontable_CRUD";
+    door_member_CRUD="door_member_CRUD";
+    door_doorgroup_CRUD="door_doorgroup_CRUD";
+    door_door_CRUD="door_door_CRUD";
+    door_reader_CRUD="door_reader_CRUD";
+    door_elevatorgroup_CRUD="door_elevatorgroup_CRUD";
+    door_elevator_CRUD="door_elevator_CRUD";
+    door_floor_CRUD="door_floor_CRUD";
+    door_floorgroup_CRUD="door_floorgroup_CRUD";
+    notification_sync_CRUD="notification_sync_CRUD";
+    door_accesslevel_CRUD="door_accesslevel_CRUD";
+    system_hurmanresource_CRUD="system_hurmanresource_CRUD";
+    system_license_CRUD="system_license_CRUD";
+    system_operationlog_R="system_operationlog_R";
 }

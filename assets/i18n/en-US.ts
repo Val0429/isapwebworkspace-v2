@@ -210,7 +210,7 @@ export default class LangObject {
     w_Location = 'Location';
     
 
-    w_Port_PlaceHolder = 'Port , 1~65535';
+    w_Port_PlaceHolder = 'Port ; 1~65535';
     w_Email_Placeholder = 'ex : admin@isap.com';
     w_Phone_Placeholder = 'ex : +xxxxxxxxxx';
 
@@ -222,8 +222,8 @@ export default class LangObject {
     w_Error_Password = 'Password and PasswordConfirm should be same';
     w_ErrorLongitude = 'Longitude only -180~180';
     w_ErrorLatitude = 'Latitude only -90~90';
-    w_ErrorReadData = 'Read data failed, please try again.';
-    w_ErrorRecognize = 'Recognize failed, please try again.';
+    w_ErrorReadData = 'Read data failed; please try again.';
+    w_ErrorRecognize = 'Recognize failed; please try again.';
 
     w_SelectSiteTree = 'Select site tree';
     w_SelectRegionTree = 'Select region tree';
@@ -636,4 +636,29 @@ export default class LangObject {
     w_FloorGroup="Floor Group";
     w_FloorGroupAdd="Add Floor Group";
     w_FloorGroupEdit="Edit Floor Group";
+
+    user_Permission_CRUD="user_Permission_CRUD";
+    user_Management_CRUD="user_Management_CRUD";
+    report_door_R="report_door_R";
+    report_member_R="report_member_R";
+    report_doorgroup_R="report_doorgroup_R";
+    report_card_R="report_card_R";
+    report_contractor_R="report_contractor_R";
+    report_demographic_R="report_demographic_R";
+    report_attendance_R="report_attendance_R";
+    report_visitor_R="report_visitor_R";
+    door_permissiontable_CRUD="door_permissiontable_CRUD";
+    door_member_CRUD="door_member_CRUD";
+    door_doorgroup_CRUD="door_doorgroup_CRUD";
+    door_door_CRUD="door_door_CRUD";
+    door_reader_CRUD="door_reader_CRUD";
+    door_elevatorgroup_CRUD="door_elevatorgroup_CRUD";
+    door_elevator_CRUD="door_elevator_CRUD";
+    door_floor_CRUD="door_floor_CRUD";
+    door_floorgroup_CRUD="door_floorgroup_CRUD";
+    notification_sync_CRUD="notification_sync_CRUD";
+    door_accesslevel_CRUD="door_accesslevel_CRUD";
+    system_hurmanresource_CRUD="system_hurmanresource_CRUD";
+    system_license_CRUD="system_license_CRUD";
+    system_operationlog_R="system_operationlog_R";
 }

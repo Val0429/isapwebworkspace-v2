@@ -48,7 +48,7 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
     tAdd: string = "w_UserPermissionAdd";
     tEdit: string = "w_UserPermissionEdit";
     
-    tokenOptions :{key:any, value:any}[]=[];
+    tokenOptions :{key:any, value:any, name:any}[]=[];
     apiRoleOptions :{key:any, value:any}[]=[];
     /// 4) interfaces - view / edit / add
     inf(type: EFormQuick) {
@@ -104,7 +104,7 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
     getNewPermissions(row:any){
         let newPermissions=[];
         for(let perm of row.permissions) {
-            let data=PermissionList.find(x => x.key==this.tokenOptions.find(x => x.key==perm).value);
+            let data=PermissionList.find(x => x.key==this.tokenOptions.find(x => x.key==perm).name);
             if(!data)continue;
             newPermissions.push({objectId:perm, value:data.access})
         }
@@ -138,8 +138,13 @@ export default class UserPermissionForm extends BasicFormQuick implements IFormQ
         return resp.results.map(x=> x.of);
     }
     private async getApiToken(){
+        this.tokenOptions=[];
         let resp: any=await this.$server.R("/api-permissions/tokens" as any,{ "paging.all": "true" });
-        this.tokenOptions=resp.results.map(x=>{return {key:x.objectId, value:x.identifier} });
+        for(let perm of PermissionList.filter(x=>x.route)){
+            let exists = resp.results.find(x=>x.identifier == perm.key);
+            if(exists)this.tokenOptions.push( {key:exists.objectId, name: perm.key, value:this._(perm.key as any)} );
+        }
+        
         console.log("tokenOptions", this.tokenOptions);    
     }
     

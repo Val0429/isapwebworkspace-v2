@@ -635,4 +635,29 @@ export default class LangObject implements ILang {
     w_FloorGroup="樓層組";
     w_FloorGroupAdd="新增樓層組";
     w_FloorGroupEdit="編輯樓層組";
+
+    user_Permission_CRUD="編輯角色權限";
+    user_Management_CRUD="編輯使用者";
+    report_door_R="查詢門號報表";
+    report_member_R="查詢人員報表";
+    report_doorgroup_R="查詢門號群組報表";
+    report_card_R="查詢證卡到期";
+    report_contractor_R="查詢契約商報表";
+    report_demographic_R="查詢人口統計報表";
+    report_attendance_R="查詢差勤紀錄";
+    report_visitor_R="查詢訪客卡號紀錄";
+    door_permissiontable_CRUD="編輯門禁權限";
+    door_member_CRUD="編輯人員";
+    door_doorgroup_CRUD="編輯門號群組";
+    door_door_CRUD="編輯門號";
+    door_reader_CRUD="查詢讀卡機";
+    door_elevatorgroup_CRUD="編輯電梯群組";
+    door_elevator_CRUD="編輯電梯";
+    door_floor_CRUD="查詢樓層";
+    door_floorgroup_CRUD="編輯樓層群組";
+    notification_sync_CRUD="編輯人事同步通知人員";
+    door_accesslevel_CRUD="door_accesslevel_CRUD";
+    system_hurmanresource_CRUD="編輯系統設定";
+    system_license_CRUD="編輯憑證設定";
+    system_operationlog_R="查詢系統操作紀錄";
 }
