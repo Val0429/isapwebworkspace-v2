@@ -29,7 +29,7 @@
             :options="roleOptions" />
         </template>
         <template #add.apiRoles="{$attrs, $listeners}" >
-            <ivc-single-selection
+            <ivc-multi-selections
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="apiRoleOptions" />
@@ -41,7 +41,7 @@
             :options="roleOptions" />
         </template>
         <template #add.apiRolesTemp="{$attrs, $listeners}" >
-            <ivc-single-selection
+            <ivc-multi-selections
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="apiRoleOptions" />
@@ -110,7 +110,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
                       /**
                          * @uiLabel - ${this._("w_ApiRoles")}
                         */
-                      apiRoles:any;
+                      apiRoles:any[];
                 }
                 `;
             case EFormQuick.Edit:
@@ -124,7 +124,7 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
                     /**
                      * @uiLabel - ${this._("w_ApiRoles")}
                     */
-                    apiRolesTemp:any;
+                    apiRolesTemp:any[];
                     /**                        
                      * @uiLabel - ${this._("w_Roles")}
                     */
@@ -141,18 +141,18 @@ export default class UserForm extends BasicFormQuick implements IFormQuick2 {
     postAdd(row) {
         row.data={};
         row.roles = this.roleOptions.map(x=>x.key);
-        row.apiRoles=[row.apiRoles];
+        row.apiRoles=row.apiRoles;
         return row;
     }
     /// 9) pre-edit 送去修改表單前要做甚麼調整
     preEdit(row) {
         row.rolesTemp = row.roles.map(x=>x.name);
-        row.apiRolesTemp=row.apiRoles && row.apiRoles.length>0 ? row.apiRoles[0].objectId :"";
+        row.apiRolesTemp=row.apiRoles && row.apiRoles.length>0 ? row.apiRoles.map(x=>x.objectId):[];
         return row;
     }
     /// 10) post-edit 寫入修改前要做甚麼調整
     postEdit(row) {
-        row.apiRoles=[row.apiRolesTemp];
+        row.apiRoles=row.apiRolesTemp;
         row.roles=row.rolesTemp;
         return row;
     }
