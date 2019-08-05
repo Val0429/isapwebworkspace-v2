@@ -138,7 +138,7 @@ export default class DoorGroupReport extends Vue  {
     }
   }
    private async getPermissiontable() {    
-    let resp: any=await this.$server.R("/acs/permissiontable" as any, Object.assign({"paging.all":"true","system":0}, this.filter));
+    let resp: any=await this.$server.R("/report/permissionrecord" as any, Object.assign({"paging.all":"true","system":0}, this.filter));
     this.permissions=resp.results;
   }
 

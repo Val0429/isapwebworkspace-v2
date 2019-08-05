@@ -117,7 +117,7 @@ export default class AttendanceReport extends Vue  {
     }
   }
    private async getPermissiontable() {    
-    let resp: any=await this.$server.R("/acs/permissiontable" as any, {"paging.all":"true","system":0});
+    let resp: any=await this.$server.R("/report/permissionrecord" as any, {"paging.all":"true","system":0});
     this.permissions=resp.results;
   }
 
