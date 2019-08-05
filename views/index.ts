@@ -3,7 +3,7 @@ import { RegisterRouter as $ } from '@/../core';
 ///////////////////////////////////////////////////////////////////
 
 // Home
-$({ path: '/', name: 'Home', redirect: '/dashboard' })();
+$({ path: '/', name: 'Home', redirect: '/reports/dashboard' })();
 
 // MyProfile
 import MyProfile from './MyProfile/MyProfile.vue';

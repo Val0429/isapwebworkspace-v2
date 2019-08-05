@@ -6,13 +6,62 @@
             :type="transition.type"
         >
 
-            <div
+            <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
+                :label="_('w_User_UserList')"
             >
-                Empty 1
-            </div>
+                <template #toolbox>
+                    <iv-toolbox-view
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="isSelected.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="isSelected.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+                </template>
+
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/user/user' }"
+                    @selected="selectedItem($event)"
+                >
+                    <template #email="{$attrs}">
+                        {{ show30Words($attrs.value) }}
+                    </template>
+
+                    <template #sites="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                    <template #groups="{$attrs}">
+                        {{ showFirst($attrs.value) }}
+                    </template>
+
+                    <template #Actions="{$attrs, $listeners}">
+
+                        <iv-toolbox-more
+                            size="sm"
+                            :disabled="isSelected.length !== 1"
+                        >
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <iv-toolbox-delete @click="doDelete" />
+                            <iv-toolbox-resend-verification-code @click="resendVerificationCode" />
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
 
             <div
                 key="transition_2"

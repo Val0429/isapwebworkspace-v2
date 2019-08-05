@@ -13,7 +13,7 @@ enum EUserRole {
 }
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
-    path: '/users/login',
+    path: '/login',
     disableContainer: true,
 })
 @Component
