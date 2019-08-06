@@ -29,37 +29,37 @@ export default class EmployeeReport extends Vue  {
         this.fields = 
         [     
             {
-                key: "EmployeeNumber",
+                key: "employeeNumber",
                 label: this._('w_Member_EmployeeNumber1')
             },   
             {
-                key: "CardNumber",
+                key: "cardNumber",
                 label: this._('w_Member_CardNumber1')
             },          
             {
-                key:"DepartmentName",
+                key:"department",
                 label: this._("w_Member_Department1")
             },
             {
-                key:"CostCenterName",
+                key:"costCenter",
                 label: this._("w_Member_CostCenter1")
             },
             {  
-                key:"LastName",
+                key:"chineseName",
                 label: this._('w_Member_ChineseName1'),
                 sortable: true
             },       
             {
-                key:"FirstName",
+                key:"englishName",
                 label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
             {
-                key:"DateOccurred",
+                key:"dateOccurred",
                 label: this._("w_Report_DateOccurred")
             },
             {
-                key:"StartTime",
+                key:"startTime",
                 label: this._("w_Report_StartTime")
             },
             {
@@ -67,7 +67,7 @@ export default class EmployeeReport extends Vue  {
                 label: this._("w_Report_DoorNumberStart")
             },
             {
-                key:"EndTime",
+                key:"endTime",
                 label: this._("w_Report_EndTime")
             },
             {
@@ -75,7 +75,7 @@ export default class EmployeeReport extends Vue  {
                 label: this._("w_Report_DoorNumberEnd")
             },
             {
-                key:"WorkTime",
+                key:"workTime",
                 label: this._("w_Report_WorkTime")
             }
 

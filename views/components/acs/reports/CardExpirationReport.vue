@@ -26,41 +26,41 @@ export default class CardExpirationReport extends Vue  {
         this.fields = 
         [     
             {
-                key:"CardNumber",
+                key:"cardNumber",
                 label: this._('w_Member_CardNumber1')
             },
             {
-                key:"DepartmentName",
+                key:"department",
                 label: this._("w_Member_Department1")
             },            
             {
-                key:"CostCenterName",
+                key:"costCenter",
                 label: this._("w_Member_CostCenter1")
             },
             {
-                key:"FirstName",
+                key:"englishName",
                 label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
             {  
-                key:"LastName",
+                key:"chineseName",
                 label: this._('w_Member_ChineseName1'),
                 sortable: true
             },
             {
-                key: "CompanyName",
+                key: "companyName",
                 label: this._('w_Member_CompanyName1')
             },
             {
-                key: "WorkArea",
+                key: "workArea",
                 label: this._('w_Member_WorkArea1')
             },
             {
-                key: "EndDate",
+                key: "endDate",
                 label: this._('w_Member_EndDate1')
             },
             {
-                key: "CardCustodian",
+                key: "cardCustodian",
                 label: this._('w_Member_CardCustodian1')
             }
 

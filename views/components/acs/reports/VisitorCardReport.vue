@@ -31,15 +31,15 @@ export default class VisitorCardReport extends Vue  {
         [   
             
             {
-                key:"CardNumber",
+                key:"cardNumber",
                 label: this._('w_Member_CardNumber1')
             },
             {
-                key:"DateOccurred",
+                key:"dateOccurred",
                 label: this._("w_Report_DateOccurred")
             },
             {
-                key:"StartTime",
+                key:"startTime",
                 label: this._("w_Report_StartTime")
             },
             {
@@ -47,7 +47,7 @@ export default class VisitorCardReport extends Vue  {
                 label: this._("w_Report_DoorNumberStart")
             },
             {
-                key:"EndTime",
+                key:"endTime",
                 label: this._("w_Report_EndTime")
             },
             {
@@ -55,7 +55,7 @@ export default class VisitorCardReport extends Vue  {
                 label: this._("w_Report_DoorNumberEnd")
             },
             {
-                key:"WorkTime",
+                key:"workTime",
                 label: this._("w_Report_WorkTime")
             }
 

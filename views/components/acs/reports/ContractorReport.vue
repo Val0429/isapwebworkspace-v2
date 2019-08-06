@@ -31,11 +31,11 @@ export default class ContractorReport extends Vue  {
         this.fields = 
         [     
             {
-                key:"CardNumber",
+                key:"cardNumber",
                 label: this._('w_Member_CardNumber1')
             },
             {
-                key:"DepartmentName",
+                key:"department",
                 label: this._("w_Member_Department1")
             },            
             {
@@ -43,53 +43,53 @@ export default class ContractorReport extends Vue  {
                 label: this._("w_Member_CostCenter1")
             },
             {
-                key:"FirstName",
+                key:"englishName",
                 label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
             {  
-                key:"LastName",
+                key:"chineseName",
                 label: this._('w_Member_ChineseName1'),
                 sortable: true
             },
             {
-                key: "CompanyName",
+                key: "companyName",
                 label: this._('w_Member_CompanyName1')
             },
             {
-                key: "WorkArea",
+                key: "workArea",
                 label: this._('w_Member_WorkArea1')
             },
             {
-                key: "CardType",
+                key: "cardType",
                 label: this._('w_Member_CardType1')
             },
             {
-                key: "StartDate",
+                key: "startDate",
                 label: this._('w_Member_StartDate1')
             },
             {
-                key: "EndDate",
+                key: "endDate",
                 label: this._('w_Member_EndDate1')
             },
             {
-                key: "CardCustodian",
+                key: "cardCustodian",
                 label: this._('w_Member_CardCustodian1')
             },
             {
-                key: "Status",
+                key: "status",
                 label: this._("w_Member_Status")
             },
             {
-                key: "Month1",
+                key: "month1",
                 label: this._("w_Report_Month1")
             },
             {
-                key: "Month2",
+                key: "month2",
                 label: this._("w_Report_Month2")
             },
             {
-                key: "Month3",
+                key: "month3",
                 label: this._("w_Report_Month3")
             }
         ];

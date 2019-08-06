@@ -29,62 +29,62 @@ export default class DoorGroupReport extends Vue  {
             //     key:"accessObjectId"
             // },
             {
-                key:"DoorGroupName",
+                key:"doorGroupName",
                 label: this._("w_DoorGroup")
             },
             {
-                key:"DoorName",
+                key:"doorName",
                 label: this._("w_Door")
             },
             {
-                key:"CardNumber",
+                key:"cardNumber",
                 label: this._('w_Member_CardNumber1')
             },                
             {
-                key:"DepartmentName",
+                key:"department",
                 label: this._("w_Member_Department1")
             },
             {
-                key:"CostCenterName",
+                key:"costCenter",
                 label: this._("w_Member_CostCenter1")
             },  
             {
-                key:"LastName",
+                key:"chineseName",
                 label: this._('w_Member_ChineseName1'),
                 sortable: true
             },
             {  
-                key:"FirstName",
+                key:"englishName",
                 label: this._('w_Member_EnglishName1'),
                 sortable: true
             },
             {
-                key:"CompanyName",
+                key:"companyName",
                 label: this._("w_Member_CompanyName1")
             },           
             {
-                key:"WorkAreaName",
+                key:"workArea",
                 label: this._("w_Member_WorkArea1")
             },           
             {
-                key: "EmployeeNumber",
+                key: "employeeNumber",
                 label: this._('w_Member_EmployeeNumber1')
             },
             {
-                key: "ResignationDate",
+                key: "resignationDate",
                 label: this._('w_Member_ResignationDate1')
             },
             {
-                key: "Status",
+                key: "status",
                 label: this._('w_Member_Status')
             },
             {
-                key:"PermissionName",
+                key:"permissionName",
                 label: this._("w_PermissionTable")
             },
             
             {
-                key:"TimeSchedule",
+                key:"timeSchedule",
                 label: this._("w_TimeSchedule")
             }
         ];
