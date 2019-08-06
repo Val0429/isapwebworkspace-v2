@@ -2,6 +2,26 @@ import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '@/../core/serv
 import { UserLogin, UserLogout } from './api/User';
 
 interface RestfulRequest extends ApisRequestBase {
+    Post: {
+        '/users/login': [UserLogin.Input, UserLogin.Output, false];
+        '/users/logout': [UserLogout.Input, any, false];
+
+        //License
+        '/license': [any, any, false];
+
+        // FRS Setting
+        '/config': [any, any, false];
+
+        // Mail Setting
+        '/test/email': [any, any, false];
+
+        //  Online SMS Provider (SG only)
+        '/test/sgsms': [any, any, false];
+
+        // SMS
+        '/test/sms': [any, any, false];
+    };
+
     Get: {
         '/users/login': [UserLogin.Input, UserLogin.Output, false];
         '/users/logout': [UserLogout.Input, any, false];
@@ -17,15 +37,17 @@ interface RestfulRequest extends ApisRequestBase {
         // Kiosks
         '/kiosks': [any, any, false];
 
+        //License
+        '/mac': [any, any, false];
+
+        // FRS Setting
+        '/config': [any, any, false];
+
         // Companies
         '/companies': [any, any, false];
 
         // Floor
         '/floors': [any, any, false];
-    };
-    Post: {
-        '/users/login': [UserLogin.Input, UserLogin.Output, false];
-        '/users/logout': [UserLogout.Input, any, false];
     };
     Put: {
         '/users/change-password': [any, any, false];

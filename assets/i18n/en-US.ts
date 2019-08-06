@@ -44,7 +44,13 @@ export default class LangObject {
     w_Dialog_ErrorTitle = 'Error';
     w_Dialog_SuccessTitle = 'Success';
 
-    w_No = 'NO';
+    w_Error_Port = 'Port should be in 1~65535';
+
+    w_No = 'No';
+    w_StepBackward = 'Step Backward';
+    w_Account = 'Account';
+    w_Test = 'Test';
+    w_Send = 'Send';
 
     /////////////////////////////////////////////
 
@@ -119,6 +125,14 @@ export default class LangObject {
     w_Role_TenantUser = 'Tenant User';
     w_Role_Visitor = 'Visitor';
 
+    ////////////////// About //////////////////
+    w_About_About = 'About';
+    w_About_SystemTitle = 'Visitor Management Service';
+    w_About_Copyright = 'Copyright iSAP Solution';
+    w_About_ServerVersion = 'Server Version';
+    w_About_FrameworkVersion = 'Framework Version';
+    w_About_WebClientVersion = 'Web Client Version';
+
     ////////////////// MyProfile //////////////////
     w_MyProfile_ViewMyProfile = 'My Profile';
     w_MyProfile_ChangePassword = 'Change Password';
@@ -129,11 +143,79 @@ export default class LangObject {
     w_MyProfile_ConfirmPassword = 'Confirm Password';
     w_MyProfile_ErrorPasswordNotSame = 'New Password and Confirm is different';
 
-    ////////////////// About //////////////////
-    w_About_About = 'About';
-    w_About_SystemTitle = 'Visitor Management Service';
-    w_About_Copyright = 'Copyright iSAP Solution';
-    w_About_ServerVersion = 'Server Version';
-    w_About_FrameworkVersion = 'Framework Version';
-    w_About_WebClientVersion = 'Web Client Version';
+    ////////////////// License //////////////////
+    w_License_List = 'License List';
+    w_License_Add = 'Add License';
+    w_License_LicenseKey = 'LicenseKey';
+    w_License_Mac = 'Mac';
+    w_License_productName = 'ProductName';
+    w_License_Quantity = 'Quantity';
+    w_License_Trial = 'Trial';
+    w_License_RegisterDate = 'Register Date';
+    w_License_ExpireDate = 'ExpireDate';
+    w_License_License_Key = 'License Key';
+    w_License_UploadOfflineKey = 'Upload offline key';
+    w_License_UploadOfflineKey1 = '* Upload offline key';
+    w_License_RegisterOnline = 'Register Online';
+    w_License_RegisterOffline = 'Register Offline';
+
+    w_License_License_KeyPlaceholder = 'License Key. Input 25 digits.  English alphabet or number only.  Format: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx';
+
+    w_License_Setting_Success = 'License set success.';
+    w_License_Setting_Fail = 'License set failed.';
+
+    w_License_MACAddress = 'MAC Address ';
+    w_License_Expired = 'Expired';
+
+    ////////////////// FRS Setting //////////////////
+    w_FRSSetting = 'FRS Setting';
+    w_FRSSetting_IPAddress = 'IP Address';
+    w_FRSSetting_HTTPPort = 'HTTP Port';
+    w_FRSSetting_Success = 'FRS Setting has been updated';
+    w_FRSSetting_Fail = 'FRS Setting failed';
+    w_FRSReading_Fail = 'FRS Reading failed';
+
+    ////////////////// Mail Setting //////////////////
+    w_MailServer_Enable = 'Enable';
+    w_MailServer_placeholder = 'Set Test Email to xxx@xxx.com';
+    w_MailServer_Test = 'Test Email';
+
+    w_MailServer_Setting_Fail = 'Email Server set failed';
+    w_MailServer_Test_Success = 'Email Server test success';
+    w_MailServer_Test_EmailSetting = 'Email Setting';
+    w_MailServer_Read_Fail = 'Mail Server read failed';
+    w_MailServer_Read_FailMsg = 'Internal Server Error, please contact administrator';
+
+    w_MailSetting_SMTPHostname = 'SMTP Hostname';
+    w_MailSetting_PortNumber = 'Port Number';
+    w_MailSetting_Email = 'Email';
+
+    w_MailSetting_EmailSuccess = 'Email Setting has been updated';
+
+    ////////////////// SMS Setting //////////////////
+    w_SmsServer_Enable = 'Enable';
+    w_SmsServer_Setting = 'Set SMS Server';
+    w_SmsServer_Test = 'Test SMS';
+    w_SmsServer_Phone = 'Phone Number';
+    w_SmsServer_Setting_Success = 'SMS Server set success.';
+    w_SmsServer_Setting_Fail = 'SMS Server set failed.';
+    w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
+    w_SmsServer_Setting_Test_Success = 'SMS has been sent';
+    w_SmsServer_Read_Fail = 'SMS Server read failed.';
+    w_URL = 'URL';
+    w_SMSSetting_Username = 'Username';
+    w_SMSSetting_EmailSuccess = 'SMS Setting has been updated';
+    w_SMSSetting_placeholder = 'Sent to +xxxxxxxxxx';
+    w_SMSSetting_COMPortNumber = 'COM Port Number';
+    w_SMSSetting_SMSSetting = 'SMS Setting';
+
+    ////////////////// Visitor Card Setting //////////////////
+    w_VisitorCardSetting = 'Visitor Card Setting';
+    w_VisitorCardSetting_RangeStart = 'Range Start';
+    w_VisitorCardSetting_RangeEnd = 'Range End';
+    w_VisitorCardSetting_Success = 'Visitor Card Setting has been updated';
+    w_VisitorCardSetting_Fail = 'Visitor Card Setting fail';
+    w_VisitorCardSetting_ReadFail = 'Visitor Card read fail';
+    w_VisitorCardSetting_error = 'Range Start, Range End need more than 10000';
+    w_VisitorCardSetting_error1 = 'Range End need more than Range Start';
 }
