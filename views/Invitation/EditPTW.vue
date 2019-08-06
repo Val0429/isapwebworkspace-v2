@@ -255,7 +255,8 @@ export class EditPTW extends Vue {
         // step8
         step8StartDate: new Date(),
         step8EndDate: new Date(),
-        step8AccessGroup: ""
+        step8AccessGroup: "",
+        step8Approval: false
     };
 
     created() {
@@ -530,6 +531,7 @@ export class EditPTW extends Vue {
         this.inputFormData.step8StartDate = step8Date.startDate;
         this.inputFormData.step8EndDate = step8Date.endDate;
         this.inputFormData.step8AccessGroup = step8Date.accessGroup;
+        this.inputFormData.step8Approval = step8Date.approval;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
     }

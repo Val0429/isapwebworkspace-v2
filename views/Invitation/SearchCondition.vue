@@ -298,14 +298,14 @@ export class SearchCondition extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_PTWStatus")}
+                 * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  * @uiColumnGroup - row2
                  */
                 workCategory?:  ${toEnumInterface(this.workCategorySelectItem as any, false)};
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_PTWStatus")}
+                 * @uiLabel - ${this._("w_Invitation_WorkType")}
                  * @uiColumnGroup - row2
                  */
                 workType?:  ${toEnumInterface(this.workTypeSelectItem as any, false)};

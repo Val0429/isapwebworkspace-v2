@@ -6,6 +6,7 @@
             @update:*="updateInputFormData"
         >
             <template #ptwTitle>
+                <div class="font-weight-bold col-md-12 mb-3 mt-3">{{ _('w_ViewPTW_Step2_Tip') }}</div>
                 <div class="font-weight-bold col-md-12 mb-3">{{ _('w_ViewPTW_Step2_PTWTitle') }}</div>
             </template>
 

@@ -9,8 +9,18 @@
             <template #qrCode>
                 <div v-if="qrCode">
                     <img :src="qrCode" alt="">
-                    <p></p>
+                    <p class="mt-3">{{ ptwText }}</p>
                 </div>
+            </template>
+
+            <template #approval>
+                <b-form-radio-group
+                    v-model="inputFormData.approval"
+                    :options="options"
+                    name="approval"
+                    class="col-md-2 mb-2 mt-2"
+                    @input="changeApproval"
+                ></b-form-radio-group>
             </template>
 
         </iv-form>
@@ -28,15 +38,19 @@
 
         accessGroupSelectItem: any = {};
 
+        options: any = [];
+
         inputFormData: any = {
             startDate: new Date(),
             endDate: new Date(),
-            accessGroup: ''
+            accessGroup: '',
+            approval: false
         };
 
         // TODO: wait api
         // qrCode: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QRcode_image.svg/220px-QRcode_image.svg.png';
         qrCode: string = '';
+        ptwText: string = '';
 
         created() {
         }
@@ -47,8 +61,11 @@
         }
 
         initSelectItem() {
+            this.options = [
+                { value: true, text: this._('w_Invitation_Approve') },
+                { value: false, text: this._('w_Invitation_Reject') },
+            ];
         }
-
 
         async initAccessGroupSelectItem() {
 
@@ -87,9 +104,11 @@
                     break;
             }
 
-            this.$emit('step8', this.inputFormData)
         }
 
+        changeApproval() {
+            this.$emit('step8', this.inputFormData)
+        }
 
         IAddForm() {
             return `
@@ -112,13 +131,14 @@
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_PTWStatus")}
+                 * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
                  */
                 accessGroup?:  ${toEnumInterface(this.accessGroupSelectItem as any, false)};
 
 
                 qrCode?: any;
 
+                approval?: any;
 
             }
         `;

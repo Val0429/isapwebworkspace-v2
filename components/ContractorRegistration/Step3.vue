@@ -150,8 +150,8 @@ export class Step3 extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_ViewPTW_Step3_ExactLocation")}
-                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_ExactLocation_PlaceHolder")}
+                 * @uiLabel - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
                  */
                 nameOfApplicantService?: string;
 

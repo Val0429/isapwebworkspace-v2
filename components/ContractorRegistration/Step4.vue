@@ -216,7 +216,8 @@ export class Step4 extends Vue {
         this.options = [
             { value: true, text: this._('w_yes') },
             { value: false, text: this._('w_no') },
-        ];}
+        ];
+    }
 
     changeChecklist1() {
         this.$emit('step4', this.inputFormData);
