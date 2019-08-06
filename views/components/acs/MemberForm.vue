@@ -496,8 +496,7 @@ export default class MemberForm extends Vue {
       if(!exists)return isDate ? null : "";
 
       try{        
-        return isDate ? new Date(exists.FieldValue) :exists.FieldValue;
-        return isDate ? new Date(exists.FieldValue) : (typeof(exists.FieldValue)=="object" ? "" : exists.FieldValue);
+        return isDate ? new Date(exists.FieldValue) : (exists.FieldValue || "");
       }catch(err){
         console.error(err);
         return isDate ? null : "";
