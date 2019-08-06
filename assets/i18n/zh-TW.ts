@@ -49,6 +49,8 @@ export default class LangObject implements ILang {
     w_No = 'No';
     w_StepBackward = 'Step Backward';
     w_Account = 'Account';
+    w_Test = 'Test';
+    w_Send = 'Send';
 
     /////////////////////////////////////////////
 
@@ -157,5 +159,22 @@ export default class LangObject implements ILang {
     w_FRSSetting_Fail = 'FRS Setting failed';
     w_FRSReading_Fail = 'FRS Reading failed';
 
+    ////////////////// Mail Setting //////////////////
+    w_MailServer_Email = 'Email Account';
+    w_MailServer_Enable = 'Enable';
+    w_MailServer_placeholder = 'Set Test Email to xxx@xxx.com';
+    w_MailServer_Test = 'Test Email';
 
+    w_MailServer_Setting_Success = 'Email Server set success';
+    w_MailServer_Setting_Fail = 'Email Server set failed';
+    w_MailServer_Test_Success = 'Email Server test success';
+    w_MailServer_Test_EmailSetting = 'Email Setting';
+    w_MailServer_Read_Fail = 'Mail Server read failed';
+    w_MailServer_Read_FailMsg = 'Internal Server Error, please contact administrator';
+
+    w_MailSetting_SMTPHostname = 'SMTP Hostname';
+    w_MailSetting_PortNumber = 'Port Number';
+    w_MailSetting_Email = 'Email';
+
+    w_MailSetting_EmailSuccess = 'Email Setting has been updated';
 }

@@ -12,6 +12,10 @@ interface RestfulRequest extends ApisRequestBase {
 
         // FRS Setting
         '/config': [any, any, false];
+
+        // Mail Setting
+        '/test/email': [any, any, false];
+
     };
 
     Get: {
