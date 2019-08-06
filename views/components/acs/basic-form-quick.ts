@@ -23,10 +23,10 @@ export class BasicFormQuick extends Vue {
           }`;
     } 
     syncEnabled:boolean = true;
-    async manualSync(){
+    async manualSync(type:string="door"){
         try{
             this.syncEnabled=false;
-            await this.$server.R("/acs/acssync" as any, {});
+            await this.$server.R((type=="door"? "/acs/doorsync" :"/acs/floorsync")as any, {});
             //refresh
             this.params={};
         }catch(err){

@@ -41,18 +41,20 @@
             :canDelete="canDelete"
             :allowEdit="allowEdit">  
             <!-- 5) custom view templates with <template #view.* /> -->
-            <template #view.system="{$attrs, $listeners}">
+             <template #view.system="{$attrs, $listeners}">
                 {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
             </template>
             <template #view.elevatorname="{$attrs, $listeners}">
                 {{getInfo($attrs.row).elevatorname}}
             </template>
+            
             <template #view.elevatorgroup="{$attrs, $listeners}">
-                {{getInfo($attrs.row).elevatorgroups.map(x=>x.groupname).join(", ")}}
+                {{getInfo($attrs.row).elevatorgroups}}
             </template>
         </ivc-form-quick>
+
     <div class="float-right">                
-        <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync()">{{_("w_Manual_Sync")}}</b-button>
+        <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync('floor')">{{_("w_Manual_Sync")}}</b-button>
     </div>
     </div>
 </template>
@@ -197,7 +199,7 @@ export default class FloorForm extends BasicFormQuick implements IFormQuick2 {
      getInfo(floor:any){
         let elevator = this.elevators.find(x=>x.reader&& x.reader.length>0 && x.reader.find(y=> y.objectId == floor.objectId));
         let elevatorname = elevator ? elevator.elevatorname : "";
-        let elevatorgroups = elevator ? this.elevatorGroups.filter(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId)) : "";
+        let elevatorgroups = elevator ? this.elevatorGroups.filter(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId)).map(x=>x.groupname).join(", ") : "";
         
         
         return {elevatorname, elevatorgroups};
