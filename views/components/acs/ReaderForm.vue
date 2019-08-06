@@ -211,17 +211,7 @@ export default class ReaderForm extends BasicFormQuick implements IFormQuick2 {
         this.canAdd=false;
     }
     filterInterface():string{
-        return `interface {
-              /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Site")}
-              */
-             sitename?:string;
-             /**
-               * @uiColumnGroup - row1
-              * @uiLabel - ${this._("w_Area")}
-              */
-             areaname?:string;
+        return `interface {              
              /**
                * @uiColumnGroup - row2
               * @uiLabel - ${this._("w_DoorGroup")}
