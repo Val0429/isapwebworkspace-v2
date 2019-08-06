@@ -32,9 +32,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import SearchCondition from "./SearchCondition.vue";
-import AddPTW from "./AddPTW.vue";
-import EditPTW from "./EditPTW.vue";
+import AddPTWByCR from "./AddPTWByCR.vue";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -50,7 +48,7 @@ import Datetime from "@/services/Datetime";
 import toExcel from "@/services/Excel/json2excel";
 
 @Component({
-    components: { SearchCondition, AddPTW, EditPTW }
+    components: { AddPTWByCR }
 })
 export default class ContractorRegistration extends Vue {
     transition: ITransition = {

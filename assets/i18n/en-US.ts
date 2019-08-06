@@ -62,6 +62,7 @@ export default class LangObject {
     w_Navigation_Dashboard = 'Dashboard';
 
     w_Navigation_Invitation = 'Invitation';
+    w_Navigation_ContractorRegistration = 'ContractorRegistration';
 
     w_Navigation_GeneralSettings = 'General Settings';
     w_Navigation_GeneralSettings_Background = 'Background';
