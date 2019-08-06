@@ -2,6 +2,15 @@ import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '@/../core/serv
 import { UserLogin, UserLogout } from './api/User';
 
 interface RestfulRequest extends ApisRequestBase {
+
+    Post: {
+        '/users/login': [UserLogin.Input, UserLogin.Output, false];
+        '/users/logout': [UserLogout.Input, any, false];
+
+        //License
+        '/license': [any, any, false];
+    };
+
     Get: {
         '/users/login': [UserLogin.Input, UserLogin.Output, false];
         '/users/logout': [UserLogout.Input, any, false];
@@ -16,10 +25,10 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Kiosks
         '/kiosks': [any, any, false];
-    };
-    Post: {
-        '/users/login': [UserLogin.Input, UserLogin.Output, false];
-        '/users/logout': [UserLogout.Input, any, false];
+
+        //License
+        '/mac': [any, any, false];
+
     };
     Put: {
         '/users/change-password': [any, any, false];
