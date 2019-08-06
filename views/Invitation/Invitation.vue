@@ -30,6 +30,8 @@
                             @click="pageToView"
                         />
                         <iv-toolbox-divider />
+
+                        <iv-toolbox-export-excel @click="downloadPageExcel" />
                         <iv-toolbox-add @click="pageToAdd" />
 
                     </template>
@@ -86,6 +88,9 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
+
+// Export
+import toExcel from "@/services/Excel/json2excel";
 
 @Component({
     components: { SearchCondition, AddPTW, EditPTW }
@@ -192,6 +197,37 @@ export default class Invitation extends Vue {
 
     downloadExcel() {
         console.log("downloadExcel");
+        //TODO wait API
+    }
+
+    downloadPageExcel() {
+        console.log("downloadPageExcel");
+        this.exportExcel();
+    }
+
+    exportExcel() {
+        let reportTable: any = null;
+        reportTable = this.$refs.listTable;
+        let tableData = reportTable.tableToArray();
+
+        //th
+        let th = [];
+        for (let title of tableData[0]) {
+            th.push(title);
+        }
+
+        //data
+        let data = [];
+        for (let bodys of tableData) {
+            if (tableData.indexOf(bodys) == 0) continue;
+            data.push(bodys);
+        }
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_Invitation"),
+            "xlsx",
+            "Sheet 1"
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
     }
 
     dateToYYYY_MM_DD(value) {
