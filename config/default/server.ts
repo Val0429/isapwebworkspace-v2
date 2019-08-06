@@ -19,6 +19,9 @@ interface RestfulRequest extends ApisRequestBase {
         //  Online SMS Provider (SG only)
         '/test/sgsms': [any, any, false];
 
+        // SMS
+        '/test/sms': [any, any, false];
+
     };
 
     Get: {

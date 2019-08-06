@@ -190,4 +190,6 @@ export default class LangObject {
     w_SMSSetting_Username = 'Username';
     w_SMSSetting_EmailSuccess = 'SMS Setting has been updated';
     w_SMSSetting_placeholder = 'Sent to +xxxxxxxxxx';
+    w_SMSSetting_COMPortNumber  = 'COM Port Number';
+    w_SMSSetting_SMSSetting  = 'SMS Setting';
 }
