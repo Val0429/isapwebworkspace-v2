@@ -79,10 +79,10 @@
 <script lang="ts" src="./login.vue.ts" />
 
 <style lang="scss" scoped>
-div.app{
+div.app {
     background-image: url(https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position:center;
+    background-position: center;
 }
 </style>

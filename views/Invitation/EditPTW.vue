@@ -102,6 +102,7 @@
                     <iv-form
                         :interface="IStep6()"
                         :value="inputFormData"
+                        :permission="true"
                         @submit="stepTo7($event)"
                     >
                         <template #step6>
@@ -126,6 +127,7 @@
                             <step7
                                 class="col-md-12"
                                 @step7="receiveStep7Data"
+                                :permission="true"
                             ></step7>
                         </template>
 

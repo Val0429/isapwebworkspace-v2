@@ -68,6 +68,12 @@ export default class LangObject {
     w_Navigation_GeneralSettings_Background = 'Background';
     w_Navigation_GeneralSettings_RemoveWorker = 'Remove Worker';
 
+    w_Navigation_Welcome = 'WELCOME!';
+    w_Navigation_ContractorManagementSystem = 'Contractor Management System';
+    w_Navigation_CreateWorkOrderRequest = 'Create Work Order Request';
+    w_Navigation_PTWNotFound = 'PTW Not Found';
+    w_Navigation_TheInvitationNumberDoesNotExistOrIsNoLongerOpen = 'The invitation number does not exist or is no longer open';
+
     /////////////////////// Invitation //////////////////////
 
     w_Invitation_SearchCondition = 'Search Condition';
@@ -248,4 +254,6 @@ export default class LangObject {
     w_Dashboard_Approved = 'Approved';
     w_Dashboard_AwaitingApproval = 'Awaiting Approval';
     w_Dashboard_Total = 'TOTAl';
+
+    //
 }

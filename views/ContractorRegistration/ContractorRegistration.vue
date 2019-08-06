@@ -1,6 +1,5 @@
 <template>
     <div class="animated fadeIn">
-
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
@@ -9,30 +8,26 @@
                 key="transition_1"
                 v-show="transition.step === 1"
             >
-                Welcome
+                <welcome @createWork="pageToStep2"></welcome>
             </div>
-
             <div
                 key="transition_2"
                 v-show="transition.step === 2"
             >
-                PTW Not Found
+                <not-found></not-found>
             </div>
-
             <div
                 key="transition_3"
                 v-show="transition.step === 3"
             >
                 <add-ptw-by-cr :selectedDetail="selectedDetail"></add-ptw-by-cr>
             </div>
-
         </iv-auto-transition>
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import AddPTWByCR from "./AddPTWByCR.vue";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -44,11 +39,16 @@ import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
 
+//components
+import NotFound from "./NotFound.vue";
+import Welcome from "./Welcome.vue";
+import AddPTWByCR from "./AddPTWByCR.vue";
+
 // Export
 import toExcel from "@/services/Excel/json2excel";
 
 @Component({
-    components: { AddPTWByCR }
+    components: { AddPTWByCR, NotFound, Welcome }
 })
 export default class ContractorRegistration extends Vue {
     transition: ITransition = {
@@ -77,6 +77,11 @@ export default class ContractorRegistration extends Vue {
     created() {}
 
     mounted() {}
+
+    pageToStep2() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+    }
 
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
