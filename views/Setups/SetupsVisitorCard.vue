@@ -1,61 +1,152 @@
 <template>
     <div class="animated fadeIn">
 
-        <iv-auto-transition
-            :step="transition.step"
-            :type="transition.type"
+        <iv-auto-card
+            :visible="true"
+            :label="_('w_VisitorCardSetting')"
         >
 
-            <div
-                key="transition_1"
-                v-show="transition.step === 1"
-                :label="'Empty 1'"
-            >
-                Empty 1
-            </div>
+            <iv-form
+                :interface="ISmsServerComponent()"
+                :value="inputFormData"
+                @submit="saveSmsServer($event)"
+            ></iv-form>
 
-            <div
-                key="transition_2"
-                v-show="transition.step === 2"
-                :label="'Empty 2'"
-            >
-                Empty 2
-            </div>
 
-        </iv-auto-transition>
+        </iv-auto-card>
+
 
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+    import { Vue, Component, Watch } from "vue-property-decorator";
 
-// Transition
-import Transition from "@/services/Transition";
-import { ITransition } from "@/services/Transition";
+    // Service
+    import ResponseFilter from "@/services/ResponseFilter";
+    import Dialog from "@/services/Dialog";
+    import Loading from "@/services/Loading";
 
-// Service
-import Dialog from "@/services/Dialog";
+    interface IInputFormData {
+        rangeend: number;
+        rangestart: number;
+    }
 
-@Component({
-    components: {}
-})
-export default class SetupsVisitorCard extends Vue {
-    transition: ITransition = {
-        type: Transition.type,
-        prevStep: 1,
-        step: 1
-    };
+    @Component({
+        components: {}
+    })
+    export default class SetupsVisitorCard extends Vue {
+        modalShow: boolean = false;
 
-    created() {}
+        // input框綁定model資料
+        inputFormData: IInputFormData = {
+            rangeend: 11000,
+            rangestart: 10000,
+        };
 
-    mounted() {}
-}
+
+        created() {
+            this.clearLicenseData();
+            this.readSmsServer();
+        }
+
+        mounted() {
+            this.readSmsServer();
+        }
+
+        clearLicenseData() {
+            this.inputFormData = {
+                rangeend: 11000,
+                rangestart: 10000,
+            };
+
+        }
+
+        async readSmsServer() {
+            await this.$server
+                .R("/config")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        this.inputFormData.rangestart = response.visitorcard.rangestart;
+                        this.inputFormData.rangeend = response.visitorcard.rangeend;
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_VisitorCardSetting_ReadFail")
+                    );
+                });
+        }
+
+        // 新增SmsServer
+        async saveSmsServer(data) {
+
+            if (data.rangestart < 10000 || data.rangeend < 10000) {
+                Dialog.error(this._("w_VisitorCardSetting_error"));
+                return false;
+            }
+
+            if (data.rangestart < data.rangeend ) {
+                Dialog.error(this._("w_VisitorCardSetting_error1"));
+                return false;
+            }
+
+            const visitorcard: {
+                rangeend: number;
+                rangestart: number;
+
+            } = {
+                rangeend: data.rangeend,
+                rangestart: data.rangestart,
+            };
+
+            const addParam = {
+                data: {
+                    visitorcard
+                }
+            };
+
+            Loading.show();
+            await this.$server
+                .C("/config", addParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        Dialog.success(this._("w_VisitorCardSetting_Success"));
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_VisitorCardSetting_Fail")
+                    );
+                });
+        }
+
+        ISmsServerComponent() {
+            return `
+            interface ISmsServerComponent {
+
+                /**
+                 * @uiLabel - ${this._("w_VisitorCardSetting_RangeStart")}
+                 * @uiPlaceHolder - ${this._("w_VisitorCardSetting_RangeStart")}
+                 * @uiAttrs - { min: 10000 }
+                 */
+                rangestart: number;
+
+
+                /**
+                 * @uiLabel - ${this._("w_VisitorCardSetting_RangeEnd")}
+                 * @uiPlaceHolder - ${this._("w_VisitorCardSetting_RangeEnd")}
+                 * @uiAttrs - { min: 10001}
+                 */
+                rangeend: number;
+
+            }
+        `;
+        }
+    }
 </script>
-
-<style lang="scss" scoped>
-</style>
-
-
-
 

@@ -192,4 +192,14 @@ export default class LangObject {
     w_SMSSetting_placeholder = 'Sent to +xxxxxxxxxx';
     w_SMSSetting_COMPortNumber  = 'COM Port Number';
     w_SMSSetting_SMSSetting  = 'SMS Setting';
+
+    ////////////////// Visitor Card Setting //////////////////
+    w_VisitorCardSetting = 'Visitor Card Setting';
+    w_VisitorCardSetting_RangeStart = 'Range Start';
+    w_VisitorCardSetting_RangeEnd  = 'Range End';
+    w_VisitorCardSetting_Success  = 'Visitor Card Setting has been updated';
+    w_VisitorCardSetting_Fail  = 'Visitor Card Setting fail';
+    w_VisitorCardSetting_ReadFail  = 'Visitor Card read fail';
+    w_VisitorCardSetting_error = 'Range Start, Range End need more than 10000';
+    w_VisitorCardSetting_error1 = 'Range End need more than Range Start';
 }
