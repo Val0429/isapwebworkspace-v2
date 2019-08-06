@@ -83,11 +83,11 @@ export default class LangObject implements ILang {
     timeid = '時間規格ID';
     timename = '時間規格名稱';
 
-    w_PermissionTable = '門禁權限表';
-    w_PermissionTableAdd = '新增門禁權限表';
-    w_PermissionTableEdit = '編輯門禁權限表';
-    tableid = '門禁權限表 ID';
-    tablename = '門禁權限表名稱';
+    w_PermissionTable = '門禁組';
+    w_PermissionTableAdd = '新增門禁組';
+    w_PermissionTableEdit = '編輯門禁組';
+    tableid = '門禁組 ID';
+    tablename = '門禁組名稱';
 
     w_Reader = '讀卡機';
     w_ReaderAdd = '新增讀卡機';
@@ -102,15 +102,15 @@ export default class LangObject implements ILang {
     emailaddress = 'Email';
     receivers = 'Receivers';
 
-    w_AccessLevel = '門禁權限';
-    w_AccessLevelAdd = '新增門禁權限';
-    w_AccessLevelEdit = '編輯門禁權限';
+    w_AccessLevel = '門禁級別';
+    w_AccessLevelAdd = '新增門禁級別';
+    w_AccessLevelEdit = '編輯門禁級別';
 
-    levelid = '門禁權限 ID';
-    levelname = '門禁權限名稱';
+    levelid = '門禁級別 ID';
+    levelname = '門禁級別名稱';
     door = '門號';
     reader = '讀卡機';
-    timeschedule = '時間規格';
+    timeschedule = '時間表';
 
     PersonalDetails = '人員詳細資訊';
 
@@ -294,7 +294,7 @@ export default class LangObject implements ILang {
     w_MailServer_Setting_Fail = '設定 Email Server 失敗';
     w_MailServer_Test_Success = '測試 Email Server 成功';
     w_MailServer_Test_Fail = '測試 Email Server 失敗';
-    w_MailServer_Read_Fail = '讀取 Mail Server 失敗';
+    w_MailServer_Read_Fail = '讀取 Email Server 失敗';
 
     // LocationRegion
     w_Region_Map = '地圖';
@@ -392,12 +392,12 @@ export default class LangObject implements ILang {
     w_Site_EditDeviceGroupFailed = 'Edit Device Group Failed';
 
     // Permission
-    w_Permission_PermissionManage = '門禁權限管理';
-    w_Permission_PermissionList = '門禁權限列表';
-    w_Permission_PermissionAdd = '新增門禁權限';
-    w_Permission_PermissionEdit = '編輯門禁權限';
-    w_Permission_PermissionView = '檢視門禁權限';
-    w_Permission_PermissionName = '門禁權限名稱';
+    w_Permission_PermissionManage = '門禁組管理';
+    w_Permission_PermissionList = '門禁組列表';
+    w_Permission_PermissionAdd = '新增門禁組';
+    w_Permission_PermissionEdit = '編輯門禁組';
+    w_Permission_PermissionView = '檢視門禁組';
+    w_Permission_PermissionName = '門禁組名稱';
     w_Permission_DeviceType = '裝置類型';
     w_Permission_DeviceName = '裝置名稱';
     w_Permission_DeviceArea = '裝置區域';
@@ -630,11 +630,11 @@ export default class LangObject implements ILang {
     w_Error_DuplicateCardNumber="重複卡號";
     w_Error_DuplicateEmployeeNumber="重複工號";
     w_DeviceAreaOrFloor = "裝置區域 / 樓層";
-    w_Error_AccessLevelIsNotInCCure = "該許可表不存在，請先至CCure800建立許可表";
+    w_Error_AccessLevelIsNotInCCure = "請先至CCure800建立相同權限許可表";
 
-    w_FloorGroup="樓層組";
-    w_FloorGroupAdd="新增樓層組";
-    w_FloorGroupEdit="編輯樓層組";
+    w_FloorGroup="樓層群組";
+    w_FloorGroupAdd="新增樓層群組";
+    w_FloorGroupEdit="編輯樓層群組";
 
     user_Permission_CRUD="編輯角色權限";
     user_Management_CRUD="編輯使用者";
