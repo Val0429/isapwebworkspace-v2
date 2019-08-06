@@ -177,4 +177,20 @@ export default class LangObject implements ILang {
     w_MailSetting_Email = 'Email';
 
     w_MailSetting_EmailSuccess = 'Email Setting has been updated';
+
+    ////////////////// SMS Setting //////////////////
+    w_SmsServer_Enable = 'Enable';
+    w_SmsServer_Setting = 'Set SMS Server';
+    w_SmsServer_Test = 'Test SMS';
+    w_SmsServer_Phone = 'Phone Number';
+    w_SmsServer_Setting_Success = 'SMS Server set success.';
+    w_SmsServer_Setting_Fail = 'SMS Server set failed.';
+    w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
+    w_SmsServer_Setting_Test_Success = 'SMS has been sent';
+    w_SmsServer_Read_Fail = 'SMS Server read failed.';
+    w_URL = 'URL';
+    w_SMSSetting_Username = 'Username';
+    w_SMSSetting_EmailSuccess = 'SMS Setting has been updated';
+
+
 }

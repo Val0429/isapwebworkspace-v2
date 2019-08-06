@@ -160,12 +160,10 @@ export default class LangObject {
     w_FRSReading_Fail = 'FRS Reading failed';
 
     ////////////////// Mail Setting //////////////////
-    w_MailServer_Email = 'Email Account';
     w_MailServer_Enable = 'Enable';
     w_MailServer_placeholder = 'Set Test Email to xxx@xxx.com';
     w_MailServer_Test = 'Test Email';
 
-    w_MailServer_Setting_Success = 'Email Server set success';
     w_MailServer_Setting_Fail = 'Email Server set failed';
     w_MailServer_Test_Success = 'Email Server test success';
     w_MailServer_Test_EmailSetting = 'Email Setting';
@@ -177,4 +175,19 @@ export default class LangObject {
     w_MailSetting_Email = 'Email';
 
     w_MailSetting_EmailSuccess = 'Email Setting has been updated';
+
+    ////////////////// SMS Setting //////////////////
+    w_SmsServer_Enable = 'Enable';
+    w_SmsServer_Setting = 'Set SMS Server';
+    w_SmsServer_Test = 'Test SMS';
+    w_SmsServer_Phone = 'Phone Number';
+    w_SmsServer_Setting_Success = 'SMS Server set success.';
+    w_SmsServer_Setting_Fail = 'SMS Server set failed.';
+    w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
+    w_SmsServer_Setting_Test_Success = 'SMS has been sent';
+    w_SmsServer_Read_Fail = 'SMS Server read failed.';
+    w_URL = 'URL';
+    w_SMSSetting_Username = 'Username';
+    w_SMSSetting_EmailSuccess = 'SMS Setting has been updated';
+    w_SMSSetting_placeholder = 'Sent to +xxxxxxxxxx';
 }
