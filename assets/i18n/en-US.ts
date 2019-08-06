@@ -44,8 +44,11 @@ export default class LangObject {
     w_Dialog_ErrorTitle = 'Error';
     w_Dialog_SuccessTitle = 'Success';
 
+    w_Error_Port = 'Port should be in 1~65535';
+
     w_No = 'No';
     w_StepBackward = 'Step Backward';
+    w_Account = 'Account';
 
     /////////////////////////////////////////////
 
@@ -112,7 +115,7 @@ export default class LangObject {
     w_MyProfile_OldPassword="Old Password";
     w_MyProfile_NewPassword="New Password";
     w_MyProfile_ConfirmPassword="Confirm Password";
-    w_MyProfile_ErrorPasswordNotSame="New Password and Confirm is different"
+    w_MyProfile_ErrorPasswordNotSame="New Password and Confirm is different";
 
     ////////////////// About //////////////////
     w_About_About = "About";
@@ -145,5 +148,14 @@ export default class LangObject {
 
     w_License_MACAddress = 'MAC Address ';
     w_License_Expired = 'Expired';
+
+    ////////////////// FRS Setting //////////////////
+    w_FRSSetting = 'FRS Setting';
+    w_FRSSetting_IPAddress = 'IP Address';
+    w_FRSSetting_HTTPPort = 'HTTP Port';
+    w_FRSSetting_Success = 'FRS Setting has been updated';
+    w_FRSSetting_Fail = 'FRS Setting failed';
+    w_FRSReading_Fail = 'FRS Reading failed';
+
 
 }

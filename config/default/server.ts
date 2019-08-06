@@ -9,6 +9,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         //License
         '/license': [any, any, false];
+
+        // FRS Setting
+        '/config': [any, any, false];
     };
 
     Get: {
@@ -29,6 +32,8 @@ interface RestfulRequest extends ApisRequestBase {
         //License
         '/mac': [any, any, false];
 
+        // FRS Setting
+        '/config': [any, any, false];
     };
     Put: {
         '/users/change-password': [any, any, false];

@@ -1,28 +1,19 @@
 <template>
     <div class="animated fadeIn">
 
-        <iv-auto-transition
-            :step="transition.step"
-            :type="transition.type"
+        <iv-auto-card
+            :visible="true"
+            :label="_('w_FRSSetting')"
         >
 
-            <div
-                key="transition_1"
-                v-show="transition.step === 1"
-                :label="'Empty 1'"
-            >
-                Empty 1
-            </div>
+            <iv-form
+                :interface="IForm()"
+                :value="inputFormData"
+                @submit="doSubmit($event)"
+            ></iv-form>
 
-            <div
-                key="transition_2"
-                v-show="transition.step === 2"
-                :label="'Empty 2'"
-            >
-                Empty 2
-            </div>
 
-        </iv-auto-transition>
+        </iv-auto-card>
 
     </div>
 </template>
@@ -36,6 +27,8 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import ResponseFilter from '@/services/ResponseFilter';
+import Loading from '@/services/Loading';
 
 @Component({
     components: {}
@@ -47,9 +40,123 @@ export default class SetupsFRS extends Vue {
         step: 1
     };
 
-    created() {}
+    inputFormData: any = {
+        ip: '',
+        wsport: 0,
+        account: '',
+        password: ''
+    };
+
+    created() {
+        this.readFRS();
+    }
 
     mounted() {}
+
+    async readFRS() {
+        await this.$server
+            .R("/config")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.inputFormData.account = response.frs.account;
+                    this.inputFormData.password = response.frs.password;
+                    this.inputFormData.ip = response.frs.ip;
+                    this.inputFormData.wsport = response.frs.port;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_FRSReading_Fail")
+                );
+            });
+    }
+
+    async doSubmit(data) {
+
+        // port正則
+        const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
+
+        if (!portRegex.test(data.wsport)) {
+            Dialog.error(this._("w_Error_Port"));
+            return false;
+        }
+
+        const frs: {
+            account: string;
+            password: string;
+            ip: string;
+            wsport: number;
+        } = {
+            account: data.account,
+            password: data.password,
+            ip: data.ip,
+            wsport: data.wsport
+        };
+
+        const addParam = {
+            data: {
+                frs
+            }
+        };
+
+        Loading.show();
+        await this.$server
+            .C("/config", addParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_FRSSetting_Success"));
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_FRSSetting_Fail")
+                );
+            });
+    }
+
+
+    IForm() {
+        return `
+             interface  {
+
+                /**
+                 * @uiLabel - ${this._("w_FRSSetting_IPAddress")}
+                 * @uiPlaceHolder - ${this._("w_FRSSetting_IPAddress")}
+                 * @uiType - iv-form-ip
+                 */
+                ip: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_FRSSetting_HTTPPort")}
+                 * @uiPlaceHolder - ${this._("w_FRSSetting_HTTPPort")}
+                 * @uiAttrs - { max: 65535, min: 1}
+                 */
+                wsport: number;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Account")}
+                 * @uiPlaceHolder - ${this._("w_Account")}
+                 */
+                account: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Password")}
+                 * @uiPlaceHolder - ${this._("w_Password")}
+                 * @uiType - iv-form-password
+                 *
+                 */
+                password: string;
+
+            }
+        `;
+    }
 }
 </script>
 
