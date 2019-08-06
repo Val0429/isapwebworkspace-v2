@@ -8,7 +8,7 @@
                 key="transition_1"
                 v-show="transition.step === 1"
             >
-                <welcome @createWork="pageToStep2"></welcome>
+                <welcome @createWork="pageToStep3"></welcome>
             </div>
             <div
                 key="transition_2"
@@ -53,8 +53,8 @@ import toExcel from "@/services/Excel/json2excel";
 export default class ContractorRegistration extends Vue {
     transition: ITransition = {
         type: Transition.type,
-        prevStep: 1,
-        step: 1
+        prevStep: 0,
+        step: 0
     };
 
     // table相關
@@ -76,9 +76,29 @@ export default class ContractorRegistration extends Vue {
 
     created() {}
 
-    mounted() {}
+    mounted() {
+        this.checkContractorRegistration();
+    }
+
+    checkContractorRegistration() {
+        if (this.$route.query.id) {
+            this.pageToStep1();
+        } else {
+            this.pageToStep2();
+        }
+    }
+
+    pageToStep1() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+    }
 
     pageToStep2() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
+    pageToStep3() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }
