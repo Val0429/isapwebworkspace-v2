@@ -2,7 +2,7 @@ import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
-     w_Name = 'Name';
+    w_Name = 'Name';
     w_Enabled = 'Enabled';
     w_Value = 'Value';
     w_Startdate = 'Start Date';
@@ -43,6 +43,8 @@ export default class LangObject implements ILang {
 
     w_Dialog_ErrorTitle = 'Error';
     w_Dialog_SuccessTitle = 'Success';
+
+    w_No = 'NO';
 
     /////////////////////////////////////////////
 
@@ -97,28 +99,41 @@ export default class LangObject implements ILang {
 
     ////////////////// User //////////////////
     w_User_UserName = 'User Name';
-    w_User_CompanyName = 'Company Name';
     w_User_Email = 'Email';
+    w_User_Phone = 'Phone';
+    w_User_Roles = 'Roles';
     w_User_FloorName = 'Floor Name';
+    w_User_CompanyName = 'Company Name';
+    w_User_AccountList = 'Account List';
+    w_User_ViewUser = 'Preview Account';
+    w_User_AddUser = 'Add Account';
+    w_User_EditUser = 'Edit Account';
+    w_User_Password = 'Password';
+    w_User_ConfirmPassword = 'Confirm Password';
+    w_User_EditPassword = 'Edit Account Password';
+
+    ////////////////// Role //////////////////
+    w_Role_SystemAdministrator = 'System Administrator';
+    w_Role_Administrator = 'Administrator';
+    w_Role_TenantAdministrator = 'Tenant Administrator';
+    w_Role_TenantUser = 'Tenant User';
+    w_Role_Visitor = 'Visitor';
 
     ////////////////// MyProfile //////////////////
-    w_MyProfile_ViewMyProfile = "My Profile";
-    w_MyProfile_ChangePassword = "Change Password";
-    w_MyProfile_ChangePasswordSuccess="Change Password Success";
-    w_MyProfile_ChangePasswordFailed="Change Password Failed";
-    w_MyProfile_OldPassword="Old Password";
-    w_MyProfile_NewPassword="New Password";
-    w_MyProfile_ConfirmPassword="Confirm Password";
-    w_MyProfile_ErrorPasswordNotSame="New Password and Confirm is different"
+    w_MyProfile_ViewMyProfile = 'My Profile';
+    w_MyProfile_ChangePassword = 'Change Password';
+    w_MyProfile_ChangePasswordSuccess = 'Change Password Success';
+    w_MyProfile_ChangePasswordFailed = 'Change Password Failed';
+    w_MyProfile_OldPassword = 'Old Password';
+    w_MyProfile_NewPassword = 'New Password';
+    w_MyProfile_ConfirmPassword = 'Confirm Password';
+    w_MyProfile_ErrorPasswordNotSame = 'New Password and Confirm is different';
 
     ////////////////// About //////////////////
-    w_About_About = "About";
-    w_About_SystemTitle = "Visitor Management Service";
-    w_About_Copyright = "Copyright iSAP Solution";
-    w_About_ServerVersion = "Server Version";
-    w_About_FrameworkVersion = "Framework Version";
-    w_About_WebClientVersion = "Web Client Version";
-
-
-
+    w_About_About = 'About';
+    w_About_SystemTitle = 'Visitor Management Service';
+    w_About_Copyright = 'Copyright iSAP Solution';
+    w_About_ServerVersion = 'Server Version';
+    w_About_FrameworkVersion = 'Framework Version';
+    w_About_WebClientVersion = 'Web Client Version';
 }

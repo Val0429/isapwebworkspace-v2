@@ -7,7 +7,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/users/logout': [UserLogout.Input, any, false];
 
         // APIs
-        '/apis' : [any, any, false];
+        '/apis': [any, any, false];
 
         // Report
         '/reports/exception': [any, any, false];
@@ -16,6 +16,12 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Kiosks
         '/kiosks': [any, any, false];
+
+        // Companies
+        '/companies': [any, any, false];
+
+        // Floor
+        '/floors': [any, any, false];
     };
     Post: {
         '/users/login': [UserLogin.Input, UserLogin.Output, false];

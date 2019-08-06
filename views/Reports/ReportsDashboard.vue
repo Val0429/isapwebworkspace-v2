@@ -67,6 +67,9 @@ import { toEnumInterface } from "@/../core";
 // Vue
 import { Dashboard } from "@/components/Dashboard/Dashboard.vue";
 
+// interface
+import { IValSelectItem, IBootstrapSelectItem } from "@/services/VMS";
+
 // Transition
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
@@ -100,16 +103,6 @@ interface IInputFormData {
     statistic: number;
     exception: number;
     recurring: any;
-}
-
-interface IValSelectItem {
-    id: string;
-    text: string;
-}
-
-interface IBootstrapSelectItem {
-    value: string;
-    text: string;
 }
 
 interface IChartRecurring {
