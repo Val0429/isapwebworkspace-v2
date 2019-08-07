@@ -245,6 +245,22 @@ export default class LangObject implements ILang {
     w_Company_ContactNumber = 'Contact Number';
     w_Company_Floor = 'Floor';
 
+    ////////////////// Kiosk //////////////////
+    w_Kiosk_List = 'Kiosk List';
+    w_Kiosk_Add = 'Add Kiosk';
+    w_Kiosk_Edit = 'Edit Kiosk';
+    w_Kiosk_View = 'View Kiosk';
+
+    w_Kiosk_AddSuccess = 'Kiosk add success';
+    w_Kiosk_ADDFailed = 'Kiosk add failed, please try again';
+    w_Kiosk_EditSuccess = 'Kiosk edit success';
+    w_Kiosk_EditFailed = 'Kiosk edit failed, please try again';
+    w_Kiosk_DeleteConfirm = 'Are you sure to delete selected Kiosk(s)?';
+
+    w_Kiosk_Username = 'Username';
+    w_Kiosk_Id = 'Kiosk Id';
+    w_Kiosk_KioskName = 'Kiosk Name';
+    w_Kiosk_Status = 'Status';
     ////////////////// Tenants Invitation //////////////////
     w_Tenants_InvitationList = 'Invitation List';
     w_Tenants_MobileNumber = 'Mobile number';
