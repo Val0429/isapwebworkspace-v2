@@ -14,6 +14,10 @@
                 <div class="font-weight-bold col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step2_ContractorTitle') }}</div>
             </template>
 
+            <template #contractorIsRequired>
+                <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+            </template>
+
         </iv-form>
 
     </div>
@@ -21,35 +25,39 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { toEnumInterface } from '@/../core';
+import { toEnumInterface } from "@/../core";
 
 @Component({
     components: {}
 })
 export class Step2 extends Vue {
+    @Prop({
+        type: Boolean,
+        default: function() {
+            return false;
+        }
+    })
+    permission: boolean;
 
     tenantSelectItem: any = {};
     workCategorySelectItem: any = {};
 
     inputFormData: any = {
-
         // PTW Data
-        ptwId: '',
-        tenant: '',
-        workCategory: '',
+        ptwId: "",
+        tenant: "",
+        workCategory: "",
 
         // Contractor Information
-        nameOfApplicant: '',
-        companyName: '',
-        companyAddress: '',
-        email: '',
+        nameOfApplicant: "",
+        companyName: "",
+        companyAddress: "",
+        email: "",
         contactNumber: 0,
-        companyFaxNo: 0,
-
+        companyFaxNo: 0
     };
 
-    created() {
-    }
+    created() {}
 
     mounted() {
         this.initTenantSelectItem();
@@ -57,7 +65,6 @@ export class Step2 extends Vue {
     }
 
     async initTenantSelectItem() {
-
         this.tenantSelectItem = {};
         let tempTenantSelectItem = {};
 
@@ -76,11 +83,9 @@ export class Step2 extends Vue {
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
         //     });
-
     }
 
     async initWorkCategorySelectItem() {
-
         this.workCategorySelectItem = {};
         let tempWorkCategorySelectItem = {};
 
@@ -99,47 +104,43 @@ export class Step2 extends Vue {
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
         //     });
-
     }
 
     updateInputFormData(data) {
         switch (data.key) {
-
             // PTW Data
-            case 'ptwId':
+            case "ptwId":
                 this.inputFormData.ptwId = data.value;
                 break;
-            case 'tenant':
+            case "tenant":
                 this.inputFormData.tenant = data.value;
                 break;
-            case 'workCategory':
+            case "workCategory":
                 this.inputFormData.workCategory = data.value;
                 break;
 
-
             // Contractor Information
-            case 'nameOfApplicant':
+            case "nameOfApplicant":
                 this.inputFormData.nameOfApplicant = data.value;
                 break;
-            case 'companyName':
+            case "companyName":
                 this.inputFormData.companyName = data.value;
                 break;
-            case 'companyAddress':
+            case "companyAddress":
                 this.inputFormData.companyAddress = data.value;
                 break;
-            case 'email':
+            case "email":
                 this.inputFormData.email = data.value;
                 break;
-            case 'contactNumber':
+            case "contactNumber":
                 this.inputFormData.contactNumber = data.value;
                 break;
-            case 'companyFaxNo':
+            case "companyFaxNo":
                 this.inputFormData.companyFaxNo = data.value;
                 break;
-
         }
 
-        this.$emit('step2', this.inputFormData)
+        this.$emit("step2", this.inputFormData);
     }
 
     IAddForm() {
@@ -152,20 +153,29 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_PTWID")}
                  * @uiPlaceHolder - ${this._("w_Invitation_PTWID")}
+                 * @uiDisabled - ${!this.permission}
                  */
                 ptwId?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_Tenant")}
+                    * @uiDisabled - ${!this.permission}
                  */
-                tenant?:  ${toEnumInterface(this.tenantSelectItem as any, false)};
+                tenant?:  ${toEnumInterface(
+                    this.tenantSelectItem as any,
+                    false
+                )};
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_PTWStatus")}
+                    * @uiDisabled - ${!this.permission}
                  */
-                workCategory?:  ${toEnumInterface(this.workCategorySelectItem as any, false)};
+                workCategory?:  ${toEnumInterface(
+                    this.workCategorySelectItem as any,
+                    false
+                )};
 
                 contractorTitle?: any;
 
@@ -174,28 +184,28 @@ export class Step2 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
                  */
-                nameOfApplicant?: string;
+                nameOfApplicant: string;
+          
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyName")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyName")}
-                 */
-                companyName?: string;
+               companyName: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyAddress")}
                  */
-                companyAddress?: string;
+                  companyAddress: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  */
-                email?: string;
+                 email: string;
 
 
                 /**
@@ -203,7 +213,7 @@ export class Step2 extends Vue {
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiAttrs - { min: 0 }
                  */
-                contactNumber?: number;
+                 contactNumber: number;
 
 
                 /**
@@ -211,7 +221,9 @@ export class Step2 extends Vue {
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiAttrs - { min: 0 }
                  */
-                companyFaxNo?: number;
+                 companyFaxNo: number;
+
+                contractorIsRequired?: any;
 
 
             }
@@ -224,4 +236,7 @@ Vue.component("step2", Step2);
 </script>
 
 <style lang="scss" scoped>
+.font-red {
+    color: red;
+}
 </style>

@@ -50,4 +50,7 @@ Vue.component("step6", Step6);
 </script>
 
 <style lang="scss" scoped>
+.font-red {
+    color: red;
+}
 </style>

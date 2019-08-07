@@ -43,6 +43,11 @@
                         :server="{ path: '/partner/cms' }"
                         @selected="selectedItem($event)"
                     >
+
+                        <template #ptwStatus="{$attrs, $listeners}">
+                            {{$attrs}}{{isExpired($attrs.row.endDate)}}
+                        </template>
+
                         <template #Actions="{$attrs, $listeners}">
 
                             <iv-toolbox-more :disabled="isSelected.length !== 1">
@@ -122,6 +127,14 @@ export default class Invitation extends Vue {
     created() {}
 
     mounted() {}
+
+    isExpired(date) {
+        if (date.getTime > new Date().getTime) {
+            return "(Expired)";
+        } else {
+            return "";
+        }
+    }
 
     selectedItem(data) {
         this.isSelected = data;

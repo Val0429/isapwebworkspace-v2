@@ -23,6 +23,10 @@
                 </div>
             </template>
 
+            <template #contractorIsRequired>
+                <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+            </template>
+
         </iv-form>
     </div>
 </template>
@@ -34,73 +38,89 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
     components: {}
 })
 export class Step3 extends Vue {
-
     typeOfWorkSelectItem: any = [];
 
     inputFormData: any = {
-        unit: '',
-        location: '',
-        description: '',
+        unit: "",
+        location: "",
+        description: "",
         typeOfWork: [],
         startDate: new Date(),
         endDate: new Date(),
-        nameOfApplicantService:'',
+        nameOfApplicantService: "",
         handPhoneContactNumber: 0
     };
 
-    created() {
-    }
+    created() {}
 
     mounted() {
         this.initSelectItem();
     }
 
     initSelectItem() {
-
         this.typeOfWorkSelectItem = [
-            { value: '1', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved1') },
-            { value: '2', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved2') },
-            { value: '3', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved3') },
-            { value: '4', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved4') },
-            { value: '5', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved5') },
-            { value: '6', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved6') },
-            { value: '7', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved7') },
-            { value: '8', text: this._('w_ViewPTW_Step3_TypesOfWorkInvolved8') },
+            {
+                value: "1",
+                text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved1")
+            },
+            {
+                value: "2",
+                text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved2")
+            },
+            {
+                value: "3",
+                text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved3")
+            },
+            {
+                value: "4",
+                text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved4")
+            },
+            {
+                value: "5",
+                text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved5")
+            },
+            {
+                value: "6",
+                text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved6")
+            },
+            {
+                value: "7",
+                text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved7")
+            },
+            { value: "8", text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved8") }
         ];
     }
 
-
     updateInputFormData(data) {
         switch (data.key) {
-
-            case 'unit':
+            case "unit":
                 this.inputFormData.unit = data.value;
                 break;
-            case 'location':
+            case "location":
                 this.inputFormData.location = data.value;
                 break;
-            case 'description':
+            case "description":
                 this.inputFormData.description = data.value;
                 break;
-            case 'startDate':
+            case "startDate":
                 this.inputFormData.startDate = data.value;
                 break;
-            case 'endDate':
+            case "endDate":
                 this.inputFormData.endDate = data.value;
                 break;
-            case 'nameOfApplicantService':
+            case "nameOfApplicantService":
                 this.inputFormData.nameOfApplicantService = data.value;
                 break;
-            case 'handPhoneContactNumber':
+            case "handPhoneContactNumber":
                 this.inputFormData.handPhoneContactNumber = data.value;
                 break;
         }
 
-        this.$emit('step3', this.inputFormData)
+        this.$emit("step3", this.inputFormData);
     }
 
     selectTypeOfWork() {
-        this.$emit('step3', this.inputFormData)
+        this.$emit("step3", this.inputFormData);
     }
 
     IAddForm() {
@@ -112,22 +132,26 @@ export class Step3 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step3_WorkPremisesUnit")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
                  */
-                unit?: string;
+                unit: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_ExactLocation")}
-                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_ExactLocation_PlaceHolder")}
+                 * @uiPlaceHolder - ${this._(
+                     "w_ViewPTW_Step3_ExactLocation_PlaceHolder"
+                 )}
                  */
-                location?: string;
+                location: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_Description")}
-                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_Description_PlaceHolder")}
+                 * @uiPlaceHolder - ${this._(
+                     "w_ViewPTW_Step3_Description_PlaceHolder"
+                 )}
                  * @uiType - iv-form-textarea
                  */
-                description?: string;
+                description: string;
 
 
                 typeOfWork?: any;
@@ -138,7 +162,7 @@ export class Step3 extends Vue {
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
                  */
-                startDate?: string;
+                startDate: string;
 
 
                 /**
@@ -146,22 +170,28 @@ export class Step3 extends Vue {
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
                  */
-                endDate?: string;
+                endDate: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
                  */
-                nameOfApplicantService?: string;
+                nameOfApplicantService: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_ViewPTW_Step3_HandPhoneContactNumber")}
-                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_HandPhoneContactNumber")}
+                 * @uiLabel - ${this._(
+                     "w_ViewPTW_Step3_HandPhoneContactNumber"
+                 )}
+                 * @uiPlaceHolder - ${this._(
+                     "w_ViewPTW_Step3_HandPhoneContactNumber"
+                 )}
                  * @uiAttrs - { min: 0 }
                  */
-                handPhoneContactNumber?: number;
+                handPhoneContactNumber: number;
+
+                contractorIsRequired?: any;
 
 
             }
@@ -174,4 +204,7 @@ Vue.component("step3", Step3);
 </script>
 
 <style lang="scss" scoped>
+.font-red {
+    color: red;
+}
 </style>

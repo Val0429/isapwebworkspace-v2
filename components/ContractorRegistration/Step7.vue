@@ -92,6 +92,10 @@
                 @submit="doSubmit($event)"
             >
 
+                <template #contractorIsRequired>
+                    <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+                </template>
+
             </iv-form>
 
             <template #footer-before>
@@ -288,7 +292,7 @@ export class Step7 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step7_NRICFIN")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_NRICFIN")}
                  */
-                nric?: string;
+                nric: string;
 
 
 
@@ -296,21 +300,21 @@ export class Step7 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Occupation")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Occupation")}
                  */
-                occupation?: string;
+                occupation: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_Unit")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
                  */
-                unit?: string;
+                unit: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Vehicle")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Vehicle")}
                  */
-                vehicle?: string;
+                vehicle: string;
 
 
                 /**
@@ -323,7 +327,9 @@ export class Step7 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Shift")}
                  */
-                shift?: ${toEnumInterface(this.shiftSelectItem as any, false)};
+                shift: ${toEnumInterface(this.shiftSelectItem as any, false)};
+
+                  contractorIsRequired?: any;
 
             }
         `;
@@ -335,4 +341,7 @@ Vue.component("step7", Step7);
 </script>
 
 <style lang="scss" scoped>
+.font-red {
+    color: red;
+}
 </style>
