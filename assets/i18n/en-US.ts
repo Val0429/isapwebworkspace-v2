@@ -268,10 +268,12 @@ export default class LangObject {
     w_Tenants_MobileNumber = 'Mobile number';
     w_Tenants_Name = 'Name';
     w_Tenants_Email = 'Email';
+    w_Tenants_Phone = 'Phone';
     w_Tenants_Status = 'Status';
     w_Tenants_StartDate = 'Start';
     w_Tenants_EndDate = 'End';
     w_Tenants_Purpose = 'Purpose';
+    w_Tenants_sms = 'SMS';
     w_Tenants_AddInvitation = 'Add Invitation';
     w_Tenants_EditInvitation = 'Edit Invitation';
 

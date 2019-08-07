@@ -97,6 +97,18 @@
                     @update:*="updateModifyForm"
                     @submit="saveModifyForm($event)"
                 >
+
+                    <template #purpose="{ $attrs, $listeners }">
+
+                        <iv-form-selection
+                            v-on="$listeners"
+                            v-bind="$attrs"
+                            :options="selectItem.purposes"
+                            :multiple="true"
+                        >
+                        </iv-form-selection>
+                    </template>
+
                 </iv-form>
 
                 <template #footer-before>
@@ -127,6 +139,8 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 
+import ResponseFilter from "@/services/ResponseFilter";
+
 @Component({
     components: {}
 })
@@ -156,12 +170,14 @@ export default class TenantsInvitation extends Vue {
     selectItem: {
         purposes: any;
     } = {
-        purposes: {}
+        purposes: []
     };
 
     created() {}
 
-    mounted() {}
+    mounted() {
+        this.initSelectItemPurpose();
+    }
 
     pageToList() {
         this.transition.prevStep = this.transition.step;
@@ -185,6 +201,29 @@ export default class TenantsInvitation extends Vue {
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+    }
+
+    async initSelectItemPurpose() {
+        const readParam: {} = {};
+
+        await this.$server
+            .R("/purposes", readParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    console.log("successCheck", response);
+                    for (const returnValue of response.results) {
+                        let item = {
+                            id: returnValue.objectId,
+                            text: returnValue.name
+                        };
+                        this.selectItem.purposes.push(item);
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+        console.log("initSelectItemPurpose", this.selectItem.purposes);
     }
 
     doDelete() {}
@@ -338,6 +377,20 @@ export default class TenantsInvitation extends Vue {
                     name: string;
                 };
 
+                notify: interface {
+                    visitor:  interface {
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Email")}
+                     */
+                    email: boolean;
+
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Phone")}
+                     */
+                    phone: boolean;
+                    };
+                };
+
                 Actions: any;
             }
         `;
@@ -391,6 +444,22 @@ export default class TenantsInvitation extends Vue {
                  */
                 purpose?: string;
 
+                notify: interface {
+                    visitor:  interface {
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Email")}
+                     * @uiDisabled - true
+                     */
+                    email: boolean;
+
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Phone")}
+                    * @uiDisabled - true
+                     */
+                    phone: boolean;
+                    };
+                };
+
             }
         `;
     }
@@ -427,10 +496,29 @@ export default class TenantsInvitation extends Vue {
                  */
                 endDate: Date;
 
+        
                 /**
                  * @uiLabel - ${this._("w_Tenants_Purpose")}
+                 * @uiType - iv-form-selection
                  */
-                purpose: string;
+                purpose?: ${toEnumInterface(
+                    this.selectItem.purposes as any,
+                    true
+                )};
+
+              notify: interface {
+                    visitor:  interface {
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Email")}
+                     */
+                    email: boolean;
+
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Phone")}
+                     */
+                    phone: boolean;
+                    };
+                };
             }
         `;
     }
