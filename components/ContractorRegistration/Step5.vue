@@ -60,6 +60,8 @@ export class Step5 extends Vue {
 
     putFile(data) {
         console.log("putFile", data);
+
+        // Min 收 base64 的 string[]
         this.$emit("putStep5File", data);
     }
 
@@ -68,7 +70,7 @@ export class Step5 extends Vue {
            interface {
                 /**
                 * @uiLabel -  ${this._("w_ViewPTW_Step5_UploadFiles")}
-                * @uiPlaceHolder -   ${this._("w_ViewPTW_Step5_supported")} 
+                * @uiPlaceHolder -   ${this._("w_ViewPTW_Step5_supported")}
                 * @uiType - iv-form-file
                 */
                 file?:file
