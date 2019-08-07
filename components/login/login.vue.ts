@@ -43,7 +43,7 @@ export default class Login extends Vue {
                         this.$router.push('/reports/dashboard');
                         break;
                     case EUserRole.TenantAdministrator:
-                        this.$router.push('/steups/account_mangerment');
+                        this.$router.push('/setups/account');
                         break;
                     case EUserRole.TenantUser:
                         this.$router.push('/tenants/invitation');
