@@ -660,4 +660,10 @@ export default class LangObject implements ILang {
     system_hurmanresource_CRUD="編輯系統設定";
     system_license_CRUD="編輯憑證設定";
     system_operationlog_R="查詢系統操作紀錄";
+
+    w_SystemLog="System Log";
+    w_log_message="Log Message";
+    w_log_title="Log Title";
+    w_log_date="Date";
+    w_log_time="Time";
 }

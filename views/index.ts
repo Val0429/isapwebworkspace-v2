@@ -39,13 +39,15 @@ import User from './components/acs/User.vue';
 import UserPermission from './components/acs/UserPermission.vue';
 import License from './components/bar/License.vue';
 import QueryPermission from './components/acs/QueryPermission.vue';
-
+import SystemLog from './components/acs/SystemLog.vue';
 // Demos
 import DemoFETCardPrint from './Demos/DemoFETCardPrint.vue';
 $({ path: '/demos/fet_card_print', name: 'FET ID Card Print', icon: 'fa-print', permission: false })(DemoFETCardPrint);
 
 $({ path: '/', name: 'Home', redirect: '/redirector' })();
 $({ path: '/redirector', name: 'redirector' })(Redirector);
+
+$({ path: '/operationLog', name: "_('w_SystemLog')"})(SystemLog);
 $({ path: '/elevator', name: "_('w_Elevator')"})(Elevator);
 $({ path: '/floor', name: "_('w_Floor')"})(Floor);
 $({ path: '/floorgroup', name: "_('w_FloorGroup')"})(FloorGroup);
