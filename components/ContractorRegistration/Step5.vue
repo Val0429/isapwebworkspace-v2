@@ -90,4 +90,8 @@ ul {
         margin-top: 20px;
     }
 }
+
+.font-red {
+    color: red;
+}
 </style>

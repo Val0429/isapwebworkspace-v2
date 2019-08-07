@@ -87,7 +87,6 @@
                         <template #step5>
                             <step5
                                 class="col-md-12"
-                                :permission="true"
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>
@@ -102,7 +101,6 @@
                     <iv-form
                         :interface="IStep6()"
                         :value="inputFormData"
-                        :permission="true"
                         @submit="stepTo7($event)"
                     >
                         <template #step6>
@@ -127,26 +125,7 @@
                             <step7
                                 class="col-md-12"
                                 @step7="receiveStep7Data"
-                                :permission="true"
                             ></step7>
-                        </template>
-
-                    </iv-form>
-                </template>
-
-                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>
-                <template #8>
-
-                    <iv-form
-                        :interface="IStep8()"
-                        :value="inputFormData"
-                        @submit="doSubmit($event)"
-                    >
-                        <template #step8>
-                            <step8
-                                class="col-md-12"
-                                @step8="receiveStep8Data"
-                            ></step8>
                         </template>
 
                     </iv-form>
@@ -187,7 +166,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 @Component({
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
 })
-export class EditPTW extends Vue {
+export class AddPTWByCR extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
@@ -224,9 +203,7 @@ export class EditPTW extends Vue {
         step3Description: "",
         step3TypeOfWork: [],
         step3StartDate: new Date(),
-        step3StartTime: new Date(),
         step3EndDate: new Date(),
-        step3EndTime: new Date(),
         step3NameOfApplicantService: "",
         step3HandPhoneContactNumber: 0,
 
@@ -257,6 +234,8 @@ export class EditPTW extends Vue {
         step7PersonDetail: undefined,
 
         // step8
+        step8StartDate: new Date(),
+        step8EndDate: new Date(),
         step8AccessGroup: "",
         step8Approval: false
     };
@@ -351,9 +330,7 @@ export class EditPTW extends Vue {
         this.inputFormData.step3Description = step3Date.description;
         this.inputFormData.step3TypeOfWork = step3Date.typeOfWork;
         this.inputFormData.step3StartDate = step3Date.startDate;
-        this.inputFormData.step3StartTime = step3Date.startTime;
         this.inputFormData.step3EndDate = step3Date.endDate;
-        this.inputFormData.step3EndTime = step3Date.endTime;
         this.inputFormData.step3NameOfApplicantService =
             step3Date.nameOfApplicantService;
         this.inputFormData.step3HandPhoneContactNumber =
@@ -532,10 +509,8 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 
     receiveStep8Data(step8Date) {
-        this.inputFormData.step3StartDate = step8Date.startDate;
-        this.inputFormData.step3StartTime = step8Date.startTime;
-        this.inputFormData.step3EndDate = step8Date.endDate;
-        this.inputFormData.step3EndTime = step8Date.endTime;
+        this.inputFormData.step8StartDate = step8Date.startDate;
+        this.inputFormData.step8EndDate = step8Date.endDate;
         this.inputFormData.step8AccessGroup = step8Date.accessGroup;
         this.inputFormData.step8Approval = step8Date.approval;
 
@@ -584,8 +559,8 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 }
 
-export default EditPTW;
-Vue.component("edit-ptw", EditPTW);
+export default AddPTWByCR;
+Vue.component("add-ptw-by-cr", AddPTWByCR);
 </script>
 
 <style lang="scss" scoped>

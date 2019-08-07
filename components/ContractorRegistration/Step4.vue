@@ -174,12 +174,10 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 
-
 @Component({
     components: {}
 })
 export class Step4 extends Vue {
-
     options: any = [];
 
     inputFormData: any = {
@@ -193,20 +191,19 @@ export class Step4 extends Vue {
         checklist8: false,
         checklist9: false,
 
-        checklist1Remarks: '',
-        checklist2Remarks: '',
-        checklist3Remarks: '',
-        checklist4Remarks: '',
-        checklist5Remarks: '',
-        checklist6Remarks: '',
-        checklist7Remarks: '',
+        checklist1Remarks: "",
+        checklist2Remarks: "",
+        checklist3Remarks: "",
+        checklist4Remarks: "",
+        checklist5Remarks: "",
+        checklist6Remarks: "",
+        checklist7Remarks: ""
     };
 
     // TODO: wait api
     path: string = "https://bootstrap-vue.js.org/docs/components/form-radio";
 
-    created() {
-    }
+    created() {}
 
     mounted() {
         this.initSelectItem();
@@ -214,72 +211,72 @@ export class Step4 extends Vue {
 
     initSelectItem() {
         this.options = [
-            { value: true, text: this._('w_yes') },
-            { value: false, text: this._('w_no') },
+            { value: true, text: this._("w_yes") },
+            { value: false, text: this._("w_no") }
         ];
     }
 
     changeChecklist1() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist2() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist3() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist4() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist5() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
     changeChecklist6() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist7() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist8() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist9() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist1Remarks() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist2Remarks() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist3Remarks() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist4Remarks() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist5Remarks() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist6Remarks() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     changeChecklist7Remarks() {
-        this.$emit('step4', this.inputFormData);
+        this.$emit("step4", this.inputFormData);
     }
 
     IAddForm() {
@@ -287,15 +284,15 @@ export class Step4 extends Vue {
             interface {
 
                 checklistTitle?: any;
-                checklist1?: any;
-                checklist2?: any;
-                checklist3?: any;
-                checklist4?: any;
-                checklist5?: any;
-                checklist6?: any;
-                checklist7?: any;
-                checklist8?: any;
-                checklist9?: any;
+                checklist1: any;
+                checklist2: any;
+                checklist3: any;
+                checklist4: any;
+                checklist5: any;
+                checklist6: any;
+                checklist7: any;
+                checklist8: any;
+                checklist9: any;
 
             }
         `;
@@ -307,4 +304,7 @@ Vue.component("step4", Step4);
 </script>
 
 <style lang="scss" scoped>
+.font-red {
+    color: red;
+}
 </style>

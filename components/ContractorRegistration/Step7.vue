@@ -7,7 +7,10 @@
                 <h5 class="col-md-12 mb-0 mt-4">{{_('w_ViewPTW_Step7_PersonList')}}</h5>
             </b-col>
 
-            <b-col cols="1">
+            <b-col
+                cols="1"
+                :hidden="permission"
+            >
                 <b-button
                     class="col-md-12 mb-3 mt-4"
                     variant="primary"
@@ -17,58 +20,57 @@
                 </b-button>
             </b-col>
 
-
         </b-row>
 
-
         <table
-            v-show="pageStep === ePageStep.list"
-            class="table b-table table-striped table-hover text-center">
+            v-show="
+                    pageStep===ePageStep.list"
+            class="table b-table table-striped table-hover text-center"
+        >
 
             <thead>
-            <tr>
-                <th
-                    v-for="(value, index) in personTable.title"
-                    :key="'title_' + index"
-                >{{ value }}
-                </th>
-            </tr>
+                <tr>
+                    <th
+                        v-for="(value, index) in personTable.title"
+                        :key="'title_' + index"
+                    >{{ value }}
+                    </th>
+                </tr>
             </thead>
 
             <tbody>
-            <tr
-                v-for="(value, index) in personTable.tableDataFromApi"
-                :key="'data_' + index"
-            >
+                <tr
+                    v-for="(value, index) in personTable.tableDataFromApi"
+                    :key="'data_' + index"
+                >
 
-                <td class="align-middle">{{ value.phone }}</td>
-                <td class="align-middle">{{ value.name }}</td>
-                <td class="align-middle">{{ value.occupation }}</td>
-                <td class="align-middle">{{ value.nric }}</td>
-                <td class="align-middle">{{ value.shift }}</td>
-                <td class="align-middle">{{ value.unit }}</td>
-                <td class="align-middle">{{ value.vehicle }}</td>
-                <td class="align-middle">{{ value.company }}</td>
-                <td>
-                    <b-button
-                        variant="transparent"
-                        @click="pageToEdit(value, index)"
-                    >
-                        <i class="fa fa-pencil text-dark"></i>
-                    </b-button>
-                </td>
-                <td>
-                    <b-button
-                        variant="transparent"
-                        @click="doDelete(index)"
-                    >
-                        <i class="fa fa-trash-o text-dark"></i>
-                    </b-button>
-                </td>
-            </tr>
+                    <td class="align-middle">{{ value.phone }}</td>
+                    <td class="align-middle">{{ value.name }}</td>
+                    <td class="align-middle">{{ value.occupation }}</td>
+                    <td class="align-middle">{{ value.nric }}</td>
+                    <td class="align-middle">{{ value.shift }}</td>
+                    <td class="align-middle">{{ value.unit }}</td>
+                    <td class="align-middle">{{ value.vehicle }}</td>
+                    <td class="align-middle">{{ value.company }}</td>
+                    <td>
+                        <b-button
+                            variant="transparent"
+                            @click="pageToEdit(value, index)"
+                        >
+                            <i class="fa fa-pencil text-dark"></i>
+                        </b-button>
+                    </td>
+                    <td>
+                        <b-button
+                            variant="transparent"
+                            @click="doDelete(index)"
+                        >
+                            <i class="fa fa-trash-o text-dark"></i>
+                        </b-button>
+                    </td>
+                </tr>
             </tbody>
         </table>
-
 
         <iv-auto-card
             v-show="pageStep === ePageStep.edit || pageStep === ePageStep.add"
@@ -77,8 +79,9 @@
         >
             <template #toolbox>
 
-                <iv-toolbox-back @click="pageToList()"
-                                 v-show="pageStep === ePageStep.add"
+                <iv-toolbox-back
+                    @click="pageToList()"
+                    v-show="pageStep === ePageStep.add"
                 />
 
             </template>
@@ -88,6 +91,10 @@
                 :value="inputFormData"
                 @submit="doSubmit($event)"
             >
+
+                <template #contractorIsRequired>
+                    <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+                </template>
 
             </iv-form>
 
@@ -103,26 +110,32 @@
 
         </iv-auto-card>
 
-
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { toEnumInterface } from '@/../core'
-import Dialog from '@/services/Dialog';
+import { toEnumInterface } from "@/../core";
+import Dialog from "@/services/Dialog";
 
 enum EPageStep {
-    list = 'list',
-    add = 'add',
-    edit = 'edit',
-    remove = 'remove',
+    list = "list",
+    add = "add",
+    edit = "edit",
+    remove = "remove"
 }
 
 @Component({
     components: {}
 })
 export class Step7 extends Vue {
+    @Prop({
+        type: Boolean,
+        default: function() {
+            return false;
+        }
+    })
+    permission: boolean;
 
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.list;
@@ -131,33 +144,31 @@ export class Step7 extends Vue {
 
     personTable: any = {
         title: [],
-        tableDataFromApi: [],
+        tableDataFromApi: []
     };
 
     inputFormData: any = {
         phone: 0,
-        name: '',
-        occupation: '',
-        nric: '',
+        name: "",
+        occupation: "",
+        nric: "",
         shift: "",
-        unit: '',
-        vehicle: '',
-        company: '',
+        unit: "",
+        vehicle: "",
+        company: ""
     };
 
-    created() {
-    }
+    created() {}
 
     mounted() {
         this.initData();
     }
 
     initData() {
-
         this.shiftSelectItem = {
-            day: this._('w_ViewPTW_Step7_Day'),
-            night: this._('w_ViewPTW_Step7_Night'),
-            midnight: this._('w_ViewPTW_Step7_Midnight'),
+            day: this._("w_ViewPTW_Step7_Day"),
+            night: this._("w_ViewPTW_Step7_Night"),
+            midnight: this._("w_ViewPTW_Step7_Midnight")
         };
 
         this.personTable.title = [
@@ -200,27 +211,30 @@ export class Step7 extends Vue {
     clearInputFormData() {
         this.inputFormData = {
             phone: 0,
-            name: '',
-            occupation: '',
-            nric: '',
+            name: "",
+            occupation: "",
+            nric: "",
             shift: "",
-            unit: '',
-            vehicle: '',
-            company: '',
+            unit: "",
+            vehicle: "",
+            company: ""
         };
     }
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        console.log('this.personTable.tableDataFromApi ~ ', this.personTable.tableDataFromApi)
+        console.log(
+            "this.personTable.tableDataFromApi ~ ",
+            this.personTable.tableDataFromApi
+        );
     }
 
-    pageToAdd(){
+    pageToAdd() {
         this.clearInputFormData();
         this.pageStep = EPageStep.add;
     }
 
-    pageToEdit(item: any, index: number){
+    pageToEdit(item: any, index: number) {
         this.clearInputFormData();
         this.pageStep = EPageStep.edit;
         this.inputFormData = item;
@@ -236,17 +250,16 @@ export class Step7 extends Vue {
             shift: data.shift,
             unit: data.unit,
             vehicle: data.vehicle,
-            company: data.company,
+            company: data.company
         };
 
         this.personTable.tableDataFromApi.push(personObject);
         this.pageStep = EPageStep.list;
 
-        this.$emit('step7', this.personTable.tableDataFromApi)
+        this.$emit("step7", this.personTable.tableDataFromApi);
     }
 
     doDelete(index: number) {
-
         Dialog.confirm(
             this._("w_ViewPTW_Step7_DeleteConfirm"),
             this._("w_DeleteConfirm"),
@@ -279,7 +292,7 @@ export class Step7 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step7_NRICFIN")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_NRICFIN")}
                  */
-                nric?: string;
+                nric: string;
 
 
 
@@ -287,21 +300,21 @@ export class Step7 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Occupation")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Occupation")}
                  */
-                occupation?: string;
+                occupation: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_Unit")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
                  */
-                unit?: string;
+                unit: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Vehicle")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Vehicle")}
                  */
-                vehicle?: string;
+                vehicle: string;
 
 
                 /**
@@ -314,7 +327,9 @@ export class Step7 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Shift")}
                  */
-                shift?: ${toEnumInterface(this.shiftSelectItem as any, false)};
+                shift: ${toEnumInterface(this.shiftSelectItem as any, false)};
+
+                  contractorIsRequired?: any;
 
             }
         `;
@@ -326,4 +341,7 @@ Vue.component("step7", Step7);
 </script>
 
 <style lang="scss" scoped>
+.font-red {
+    color: red;
+}
 </style>

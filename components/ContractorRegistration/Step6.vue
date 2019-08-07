@@ -10,7 +10,7 @@
         <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_6') }} </div>
         <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_7') }} </div>
 
-        <div class="row justify-content-center align-items-center mt-3 font-weight-bold" >
+        <div class="row justify-content-center align-items-center mt-3 font-weight-bold">
             <b-form-checkbox
                 v-model="isAccepted"
                 name="status"
@@ -22,34 +22,35 @@
             </b-form-checkbox>
         </div>
 
-
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 
-    @Component({
-        components: {}
-    })
-    export class Step6 extends Vue {
-        // Prop
+@Component({
+    components: {}
+})
+export class Step6 extends Vue {
+    // Prop
 
-        isAccepted:string = 'not_accepted';
+    isAccepted: string = "not_accepted";
 
-        created() {}
+    created() {}
 
-        mounted() {}
+    mounted() {}
 
-        changeStatus() {
-            this.$emit('step6', this.isAccepted)
-        }
-
+    changeStatus() {
+        this.$emit("step6", this.isAccepted);
     }
+}
 
-    export default Step6;
-    Vue.component("step6", Step6);
+export default Step6;
+Vue.component("step6", Step6);
 </script>
 
 <style lang="scss" scoped>
+.font-red {
+    color: red;
+}
 </style>

@@ -1,45 +1,42 @@
 <template>
     <div>
 
-
-            <iv-auto-card
-                :label="_('w_Invitation_SearchCondition')"
+        <iv-auto-card :label="_('w_Invitation_SearchCondition')">
+            <iv-form
+                :interface="IFilterConditionForm()"
+                :value="inputFormData"
+                @submit="doSubmit($event)"
             >
-                <iv-form
-                    :interface="IFilterConditionForm()"
-                    :value="inputFormData"
-                    @submit="doSubmit($event)"
+
+            </iv-form>
+
+            <template #footer-before>
+                <b-button
+                    variant="secondary"
+                    size="lg"
+                    @click="doExportData"
                 >
+                    {{ _('w_Invitation_ExportData') }}
+                </b-button>
 
-                </iv-form>
+                <!--                    <b-button-->
+                <!--                        class="submit"-->
+                <!--                        size="md"-->
+                <!--                        @click="doSubmit"-->
+                <!--                    >-->
+                <!--                        {{ _('w_Invitation_Search') }}-->
+                <!--                    </b-button>-->
 
-                <template #footer-before>
-                    <b-button
-                        variant="secondary"
-                        size="lg"
-                        @click="doExportData"
-                    >
-                        {{ _('w_Invitation_ExportData') }}
-                    </b-button>
+                <!--                    <b-button-->
+                <!--                        class="reset"-->
+                <!--                        size="md"-->
+                <!--                        @click="doReset"-->
+                <!--                    >-->
+                <!--                        {{ _('wb_Reset') }}-->
+                <!--                    </b-button>-->
+            </template>
 
-<!--                    <b-button-->
-<!--                        class="submit"-->
-<!--                        size="md"-->
-<!--                        @click="doSubmit"-->
-<!--                    >-->
-<!--                        {{ _('w_Invitation_Search') }}-->
-<!--                    </b-button>-->
-
-<!--                    <b-button-->
-<!--                        class="reset"-->
-<!--                        size="md"-->
-<!--                        @click="doReset"-->
-<!--                    >-->
-<!--                        {{ _('wb_Reset') }}-->
-<!--                    </b-button>-->
-                </template>
-
-            </iv-auto-card>
+        </iv-auto-card>
 
     </div>
 </template>
@@ -48,21 +45,20 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import Datetime from '@/services/Datetime';
-import Dialog from '@/services/Dialog';
-import ResponseFilter from '@/services/ResponseFilter';
+import Datetime from "@/services/Datetime";
+import Dialog from "@/services/Dialog";
+import ResponseFilter from "@/services/ResponseFilter";
 
 enum EPTWStatus {
-    approved = 'approved',
-    pendingApproved = 'pendingApproved',
-    rejected = 'rejected',
+    approved = "approved",
+    pendingApproved = "pendingApproved",
+    rejected = "rejected"
 }
 
 @Component({
     components: {}
 })
 export class SearchCondition extends Vue {
-
     // select
     ptwStatusSelectItem: any = {};
     tenantSelectItem: any = {};
@@ -72,16 +68,16 @@ export class SearchCondition extends Vue {
     inputFormData: any = {
         startDate: new Date(),
         endDate: new Date(),
-        ptwStatus: '',
-        ptwId: '',
-        email: '',
-        tenant: '',
-        workCategory: '',
-        workType: '',
-        unit: '',
-        contactPerson: '',
-        contractor: '',
-        workersName: '',
+        ptwStatus: "",
+        ptwId: "",
+        email: "",
+        tenant: "",
+        workCategory: "",
+        workType: "",
+        unit: "",
+        contactPerson: "",
+        contractor: "",
+        workersName: ""
     };
 
     created() {
@@ -94,17 +90,15 @@ export class SearchCondition extends Vue {
     mounted() {}
 
     initSelectItem() {
-
         this.ptwStatusSelectItem = {
-            new: this._('w_Invitation_New'),
-            approved: this._('w_Invitation_Approved'),
-            pendingApproved: this._('w_Invitation_PendingApproved'),
-            rejected: this._('w_Invitation_Rejected'),
-        }
+            new: this._("w_Invitation_New"),
+            approved: this._("w_Invitation_Approved"),
+            pendingApproved: this._("w_Invitation_PendingApproved"),
+            rejected: this._("w_Invitation_Rejected")
+        };
     }
 
     async initTenantSelectItem() {
-
         this.tenantSelectItem = {};
         let tempTenantSelectItem = {};
 
@@ -123,11 +117,9 @@ export class SearchCondition extends Vue {
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
         //     });
-
     }
 
     async initWorkCategorySelectItem() {
-
         this.workCategorySelectItem = {};
         let tempWorkCategorySelectItem = {};
 
@@ -146,11 +138,9 @@ export class SearchCondition extends Vue {
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
         //     });
-
     }
 
     async initWorkTypeSelectItem() {
-
         this.workTypeSelectItem = {};
         let tempWorkTypeSelectItem = {};
 
@@ -169,24 +159,22 @@ export class SearchCondition extends Vue {
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(this, e);
         //     });
-
     }
-
 
     async doSubmit(data) {
         const doSubmitParam: {
             startDate: Date;
-            endDate: Date,
-            ptwStatus: string,
-            ptwId: '',
-            email: '',
-            tenant: '',
-            workCategory: '',
-            workType: '',
-            unit: '',
-            contactPerson: '',
-            contractor: '',
-            workersName: '',
+            endDate: Date;
+            ptwStatus: string;
+            ptwId: "";
+            email: "";
+            tenant: "";
+            workCategory: "";
+            workType: "";
+            unit: "";
+            contactPerson: "";
+            contractor: "";
+            workersName: "";
         } = {
             startDate: new Date(),
             endDate: new Date(),
@@ -199,7 +187,7 @@ export class SearchCondition extends Vue {
             unit: data.unit,
             contactPerson: data.contactPerson,
             contractor: data.contractor,
-            workersName: data.workersName,
+            workersName: data.workersName
         };
 
         if (!Datetime.CheckDate(data.startDate, data.endDate)) {
@@ -211,15 +199,15 @@ export class SearchCondition extends Vue {
 
         // email正則
         const emailRule = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+(([.\-])[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-       // const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+        // const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
 
         if (!emailRule.test(data.email)) {
             Dialog.error(this._("w_Invitation_EmailError"));
-            this.inputFormData.email = '';
+            this.inputFormData.email = "";
             return false;
         }
 
-        console.log('doSubmitParam ~ ', doSubmitParam);
+        console.log("doSubmitParam ~ ", doSubmitParam);
 
         this.$emit("submit-data", doSubmitParam);
     }
@@ -228,21 +216,21 @@ export class SearchCondition extends Vue {
         this.inputFormData = {
             startDate: new Date(),
             endDate: new Date(),
-            ptwStatus: '',
-            ptwId: '',
-            email: '',
-            tenant: '',
-            workCategory: '',
-            workType: '',
-            unit: '',
-            contactPerson: '',
-            contractor: '',
-            workersName: '',
+            ptwStatus: "",
+            ptwId: "",
+            email: "",
+            tenant: "",
+            workCategory: "",
+            workType: "",
+            unit: "",
+            contactPerson: "",
+            contractor: "",
+            workersName: ""
         };
     }
 
     doExportData() {
-        this.$emit('excel')
+        this.$emit("excel");
     }
 
     IFilterConditionForm() {
@@ -271,7 +259,10 @@ export class SearchCondition extends Vue {
                  * @uiLabel - ${this._("w_Invitation_PTWStatus")}
                  * @uiColumnGroup - row1
                  */
-                ptwStatus?:  ${toEnumInterface(this.ptwStatusSelectItem as any, false)};
+                ptwStatus?:  ${toEnumInterface(
+                    this.ptwStatusSelectItem as any,
+                    false
+                )};
 
 
                 /**
@@ -294,21 +285,30 @@ export class SearchCondition extends Vue {
                  * @uiLabel - ${this._("w_Invitation_Tenant")}
                  * @uiColumnGroup - row2
                  */
-                tenant?:  ${toEnumInterface(this.tenantSelectItem as any, false)};
+                tenant?:  ${toEnumInterface(
+                    this.tenantSelectItem as any,
+                    false
+                )};
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  * @uiColumnGroup - row2
                  */
-                workCategory?:  ${toEnumInterface(this.workCategorySelectItem as any, false)};
+                workCategory?:  ${toEnumInterface(
+                    this.workCategorySelectItem as any,
+                    false
+                )};
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkType")}
                  * @uiColumnGroup - row2
                  */
-                workType?:  ${toEnumInterface(this.workTypeSelectItem as any, false)};
+                workType?:  ${toEnumInterface(
+                    this.workTypeSelectItem as any,
+                    false
+                )};
 
 
                 /**
@@ -351,13 +351,12 @@ Vue.component("search-condition", SearchCondition);
 </script>
 
 <style lang="scss" scoped>
-    .submit {
-        background-color: #5c7895;
-        border: 1px solid #5c7895;
-    }
-    .reset {
-        background-color: #d7d7d7;
-        border: 1px solid #d7d7d7;
-    }
-
+.submit {
+    background-color: #5c7895;
+    border: 1px solid #5c7895;
+}
+.reset {
+    background-color: #d7d7d7;
+    border: 1px solid #d7d7d7;
+}
 </style>

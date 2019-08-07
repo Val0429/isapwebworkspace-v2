@@ -11,6 +11,7 @@ export default class LangObject {
     w_Selection = 'Selection';
     w_Multi = 'Multi';
     w_Upload = 'Upload';
+    w_ExportExcel = 'Export Excel';
 
     w_Username = 'User name';
     w_Roles = 'Role';
@@ -61,10 +62,17 @@ export default class LangObject {
     w_Navigation_Dashboard = 'Dashboard';
 
     w_Navigation_Invitation = 'Invitation';
+    w_Navigation_ContractorRegistration = 'ContractorRegistration';
 
     w_Navigation_GeneralSettings = 'General Settings';
     w_Navigation_GeneralSettings_Background = 'Background';
     w_Navigation_GeneralSettings_RemoveWorker = 'Remove Worker';
+
+    w_Navigation_Welcome = 'WELCOME!';
+    w_Navigation_ContractorManagementSystem = 'Contractor Management System';
+    w_Navigation_CreateWorkOrderRequest = 'Create Work Order Request';
+    w_Navigation_PTWNotFound = 'PTW Not Found';
+    w_Navigation_TheInvitationNumberDoesNotExistOrIsNoLongerOpen = 'The invitation number does not exist or is no longer open';
 
     /////////////////////// Invitation //////////////////////
 
@@ -110,13 +118,15 @@ export default class LangObject {
 
     w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
     w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';
-    w_ViewPTW_Step1_ErrorTip = 'Please check the agreement is accepted';
     w_ViewPTW_Step_ErrorTipPerson = 'Please add person';
+
+    w_ViewPTW_Step_AsteriskIsRequired = '* Asterisk is required.';
 
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
     w_ViewPTW_Step1_content = 'This Data Protection Notice (“Notice”) sets out the basis which  Hong Kong  Land  (“we”, “us”, or “our”) may collect, use, disclose or otherwise process personal data of our customers in accordance with the Personal Data Protection Act (“PDPA”). This Notice applies to personal data in our possession or under our control, including personal data in the possession of organizations which we have engaged to collect, use, disclose or process personal data for our purposes.';
     w_ViewPTW_Step1_agreement = 'I accept the agreement';
+    w_ViewPTW_Step1_ErrorTip = 'Please check the agreement is accepted';
 
     // step2
     w_ViewPTW_Step2_Tip = '* Please help to complete all data fields. All workers’ particulars must be completed before submitting the work order.';
@@ -225,7 +235,6 @@ export default class LangObject {
     w_ViewPTW_Step7_DeleteConfirm = 'Are you sure to delete selected person?';
     w_DeleteConfirm = 'Delete Confirm';
 
-
     // step8
     w_ViewPTW_Step8_Title = 'Confirmation review';
     w_ViewPTW_Step8_ValidityOfApproval = 'Validity of Approval';
@@ -233,7 +242,6 @@ export default class LangObject {
 
     w_Invitation_Approve = 'Approve';
     w_Invitation_Reject = 'Reject';
-
 
     /////////////////////// General Settings //////////////////////
 
@@ -248,4 +256,6 @@ export default class LangObject {
     w_Dashboard_Approved = 'Approved';
     w_Dashboard_AwaitingApproval = 'Awaiting Approval';
     w_Dashboard_Total = 'TOTAl';
+
+    //
 }
