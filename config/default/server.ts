@@ -59,6 +59,7 @@ interface RestfulRequest extends ApisRequestBase {
     Put: {
         // Users
         '/users/change-password': [any, any, false];
+        '/users': [any, any, false];
 
         // companies
         '/companies': [any, any, false];
