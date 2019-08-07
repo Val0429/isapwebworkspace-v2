@@ -33,14 +33,14 @@ import SetupsVisitorCard from './Setups/SetupsVisitorCard.vue';
 $({ path: '/setups', name: "_('w_Navigation_Setups')", icon: 'fa-code', redirect: '/setups/account' })();
 $({ path: '/setups/floor', name: "_('w_Navigation_Setups_Floor')", icon: 'fa-code' })(SetupsFloor);
 $({ path: '/setups/company', name: "_('w_Navigation_Setups_Company')", icon: 'fa-code' })(SetupsCompany);
-$({ path: '/setups/account', name: "_('w_Navigation_Setups_Account')", icon: 'fa-code' })(SetupsAccount);
+$({ path: '/setups/account', name: "_('w_Navigation_Setups_Account')", icon: 'fa-check' })(SetupsAccount);
 $({ path: '/setups/kiosk', name: "_('w_Navigation_Setups_Kiosk')", icon: 'fa-code' })(SetupsKiosk);
 $({ path: '/setups/license', name: "_('w_Navigation_Setups_License')", icon: 'fa-code' })(SetupsLicense);
-$({ path: '/setups/frs', name: "_('w_Navigation_Setups_FRS')", icon: 'fa-code' })(SetupsFRS);
-$({ path: '/setups/email', name: "_('w_Navigation_Setups_Email')", icon: 'fa-code' })(SetupsEmail);
-$({ path: '/setups/sms', name: "_('w_Navigation_Setups_SMS')", icon: 'fa-code' })(SetupsSMS);
-$({ path: '/setups/sms_online', name: "_('w_Navigation_Setups_SMSOnline')", icon: 'fa-code' })(SetupsSMSOnline);
-$({ path: '/setups/visitor_card', name: "_('w_Navigation_Setups_VisitorCard')", icon: 'fa-code' })(SetupsVisitorCard);
+$({ path: '/setups/frs', name: "_('w_Navigation_Setups_FRS')", icon: 'fa-check' })(SetupsFRS);
+$({ path: '/setups/email', name: "_('w_Navigation_Setups_Email')", icon: 'fa-check' })(SetupsEmail);
+$({ path: '/setups/sms', name: "_('w_Navigation_Setups_SMS')", icon: 'fa-check' })(SetupsSMS);
+$({ path: '/setups/sms_online', name: "_('w_Navigation_Setups_SMSOnline')", icon: 'fa-check' })(SetupsSMSOnline);
+$({ path: '/setups/visitor_card', name: "_('w_Navigation_Setups_VisitorCard')", icon: 'fa-check' })(SetupsVisitorCard);
 
 // Tenants
 import TenantsInvitation from './Tenants/TenantsInvitation.vue';
