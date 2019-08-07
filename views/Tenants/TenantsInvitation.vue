@@ -252,7 +252,7 @@ export default class TenantsInvitation extends Vue {
                 });
         }
 
-        //this.pageToList();
+        this.pageToList();
     }
 
     clearInputData() {
