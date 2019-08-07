@@ -39,12 +39,8 @@
                     @selected="selectedItem($event)"
                 >
 
-                    <template #floor="{$attrs}">
-                        <div v-html="tableFloorString($attrs.value)"></div>
-                    </template>
-
-                    <template #contactNumber="{$attrs}">
-                        <div v-html="tablePhoneString($attrs.value)"></div>
+                    <template #status="{$attrs, $listeners}">
+<!--                        {{ checkKioskIdSame($attrs && $attrs.row && $attrs.row.data && $attrs.row.data.kioskId, wsData) ? 'Online' : status}}-->
                     </template>
 
                     <template #Actions="{$attrs, $listeners}">
@@ -107,54 +103,6 @@
                     @update:*="updateInputFormData"
                     @submit="saveAddOrEdit($event)"
                 >
-                    <template #contactNumber="{$attrs, $listeners}">
-
-                        <div class="col-md-12 mb-2">* {{ _('w_Company_ContactNumber') }}</div>
-
-                        <iv-form-string
-                            class="col-md-11"
-                            v-model="inputFormData.contactNumber"
-                            :placeholder="_('w_Company_ContactNumber')"
-                        ></iv-form-string>
-
-                        <div class="col-md-1">
-                            <b-button
-                                class="mb-2 col-md-12"
-                                variant="success"
-                                @click="addContactNumber()"
-                            >
-                                <i class="fa fa-plus"></i>
-                            </b-button>
-                        </div>
-
-                        <b-row
-                            class="col-md-12"
-                            v-for="(value, index) in inputFormData.contactNumbers"
-                            :key="'contactNumbers__' + index"
-                        >
-                            <b-col class="col-md-11">
-                                <iv-form-string
-                                    class="col-md-12"
-                                    :value="contactNumbersText(index)"
-                                    :disabled="true"
-                                >
-                                </iv-form-string>
-                            </b-col>
-
-                            <div class="col-md-1">
-                                <b-button
-                                    class="mb-2 col-md-12"
-                                    variant="danger"
-                                    type="button"
-                                    @click="removeContactNumber(index)"
-                                >
-                                    <i class="fa fa-minus"></i>
-                                </b-button>
-                            </div>
-
-                        </b-row>
-
-                    </template>
 
                 </iv-form>
 
@@ -177,6 +125,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+import { Ws } from "@/services/WebSocket/Ws";
 
 // Service
 import ResponseFilter from "@/services/ResponseFilter";
@@ -186,15 +135,7 @@ import Loading from "@/services/Loading";
 // Transition
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
-
-interface IInputFormData {
-    objectId?: string;
-    name: string;
-    contactPerson: string;
-    unitNumber: string;
-    contactNumber: string[];
-    floor: string[];
-}
+import ServerConfig from '@/services/ServerConfig';
 
 @Component({
     components: {}
@@ -214,19 +155,37 @@ export default class SetupsKiosk extends Vue {
     inputFormData: any = {
         objectId: "",
         name: "",
-        contactPerson: "",
-        unitNumber: "",
-        contactNumber: "",
-        contactNumbers: [],
-        floor: [],
-
-        floorView: "",
-        contactNumberView: ""
+        password: "",
+        confirmPassword: "",
+        kioskId: "",
+        kioskName: "",
+        roles: [],
     };
 
-    // select
-    floorsSelectItem: any = {};
-    floorsDetailItem: any = {};
+    status: string = 'Offline';
+    wsData: any = undefined;
+
+    ws: Ws = new Ws({
+        url: "",
+        OnOpen: async (e: Event): Promise<void> => {
+            console.log("WS Alive Open");
+            console.log("e: ", e);
+        },
+        OnMessage: async (e: MessageEvent): Promise<void> => {
+            console.log("WS Alive message");
+            console.log("e: ", e);
+            this.handleWs(e.data);
+        },
+        OnError: async (e: Event): Promise<void> => {
+            console.log("WS Alive Error");
+            console.log("e: ", e);
+        },
+        OnClose: async (e: CloseEvent): Promise<void> => {
+            console.log("WS Alive Close");
+            console.log("e: ", e);
+        }
+    });
+
 
     async created() {
         // let ws = await this.$server.WS("/kiosks/aliveness" as any);
@@ -238,42 +197,58 @@ export default class SetupsKiosk extends Vue {
     }
 
     mounted() {
-        this.initSelectItemFloor();
+        this.initWS();
     }
 
-    async initSelectItemFloor() {
-        this.floorsSelectItem = {};
-        let tempFloorSelectItem = {};
+    beforeDestroy() {
+        this.ws.Close();
+    }
 
-        await this.$server
-            .R("/floors")
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
-                        tempFloorSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.floorsSelectItem = tempFloorSelectItem;
-                    this.floorsDetailItem = response.results;
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+    initWS() {
+        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/kiosks/aliveness?sessionId=${ this.$user.sessionId }`;
+        // ws://172.16.10.30:6060/kiosks/aliveness?sessionId=r:ede5166019af8d95a3af2416bcc7cce6
+        this.ws.url = url;
+        this.ws.Connect();
+    }
+
+    handleWs(wsData: string) {
+        try {
+            let data: any = JSON.parse(wsData);
+            if (data.statusCode != undefined && data.statusCode == 401) {
+                this.$router.push({ path: "/" });
+            }
+            console.log("handleWs", data);
+        } catch (e) {
+            console.log("WS handle error: ", e);
+        }
+
+    }
+
+    getKioskIdFromWS(values: any) {
+        let kioskIds = [];
+        for (const value of values) {
+            kioskIds.push(value.data.kioskId);
+        }
+        return kioskIds;
+    }
+
+    checkKioskIdSame(checkId: string, kioskIds: any): boolean {
+        for (const kioskId of kioskIds) {
+            if (checkId === kioskId) {
+                return true;
+            }
+        }
     }
 
     clearInputData() {
         this.inputFormData = {
             objectId: "",
             name: "",
-            contactPerson: "",
-            unitNumber: "",
-            contactNumber: "",
-            contactNumbers: [],
-            floor: [],
-
-            floorView: "",
-            contactNumberView: ""
+            password: "",
+            confirmPassword: "",
+            kioskId: "",
+            kioskName: "",
+            roles: [],
         };
     }
 
@@ -288,14 +263,10 @@ export default class SetupsKiosk extends Vue {
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
-                name: param.name,
-                contactPerson: param.contactPerson,
-                unitNumber: param.unitNumber,
-                contactNumbers: param.contactNumber,
-                floor: param.floor,
+                username: param.username,
+                kioskId: param.data.kioskId,
+                kioskName: param.data.kioskName,
 
-                floorView: this.ViewFloorString(param.floor),
-                contactNumberView: this.ViewPhoneString(param.contactNumber)
             };
         }
     }
@@ -326,45 +297,17 @@ export default class SetupsKiosk extends Vue {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.getInputData();
-
-        this.inputFormData.floor
-            ? (this.inputFormData.floor = JSON.parse(
-                  JSON.stringify(
-                      this.inputFormData.floor.map(item => item.objectId)
-                  )
-              ))
-            : "";
-    }
-
-    addContactNumber() {
-        if (!this.inputFormData.contactNumber) {
-            return false;
-        }
-
-        const tempContactNumber = JSON.parse(
-            JSON.stringify(this.inputFormData.contactNumber)
-        );
-        this.inputFormData.contactNumbers.push(tempContactNumber);
-        this.inputFormData.contactNumber = "";
-    }
-
-    removeContactNumber(index: number) {
-        this.inputFormData.contactNumbers.splice(index, 1);
-    }
-
-    contactNumbersText(index: number): string {
-        let result: string = "";
-        result += this.inputFormData.contactNumbers[index];
-        return result;
     }
 
     async saveAddOrEdit(data) {
         let param: any = {
-            name: data.name,
-            contactPerson: data.contactPerson,
-            unitNumber: data.unitNumber,
-            contactNumber: data.contactNumbers,
-            floor: data.floor
+            username: data.username,
+            password: data.password,
+            data: {
+                kioskId: data.kioskId,
+                kioskName: data.kioskName,
+            },
+            roles: ["Kiosk"]
         };
 
         // add
@@ -417,6 +360,13 @@ export default class SetupsKiosk extends Vue {
         }
     }
 
+    tableStatus(values: any) {
+        let result = '';
+        for (const value of values) {
+            value
+        }
+    }
+
     async doDelete() {
         Dialog.confirm(
             this._("w_Kiosk_DeleteConfirm"),
@@ -452,50 +402,6 @@ export default class SetupsKiosk extends Vue {
         );
     }
 
-    tableFloorString(datas: any): string {
-        let result: string = "";
-        result += "<ul>";
-        if (datas != undefined) {
-            for (let loopData of datas) {
-                let tempText = loopData.name;
-                result += `<li>${tempText}</li>`;
-            }
-        }
-        result += "</ul>";
-        return result;
-    }
-
-    tablePhoneString(datas: any): string {
-        let result: string = "";
-        result += "<ul>";
-        if (datas != undefined) {
-            for (let loopData of datas) {
-                let tempText = loopData;
-                result += `<li>${tempText}</li>`;
-            }
-        }
-        result += "</ul>";
-        return result;
-    }
-
-    ViewFloorString(value: any): string {
-        let result = "";
-        for (let val of value) {
-            result += val.name + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
-    }
-
-    ViewPhoneString(value: any): string {
-        let result = "";
-        for (let val of value) {
-            result += val + ", ";
-        }
-        result = result.substring(0, result.length - 2);
-        return result;
-    }
-
     ITableList() {
         return `
             interface {
@@ -508,33 +414,27 @@ export default class SetupsKiosk extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Company_List")}
+                 * @uiLabel - ${this._("w_Kiosk_Username")}
                  */
-                name: string;
+                username: string;
 
+                data: interface {
+                    /**
+                     * @uiLabel - ${this._("w_Kiosk_Id")}
+                     */
+                    kioskId: string;
+
+                    /**
+                     * @uiLabel - ${this._("w_Kiosk_KioskName")}
+                     */
+                    kioskName: string;
+
+                };
 
                 /**
-                 * @uiLabel - ${this._("w_Company_Floor")}
+                 * @uiLabel - ${this._("w_Kiosk_Status")}
                  */
-                floor: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Company_ContactPerson")}
-                 */
-                contactPerson: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Company_UnitNumber")}
-                 */
-                unitNumber: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Company_ContactNumber")}
-                 */
-                contactNumber: string;
+                status: string;
 
 
                 Actions: any
@@ -549,37 +449,51 @@ export default class SetupsKiosk extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Company_Name")}
-                 * @uiPlaceHolder - ${this._("w_Company_Name")}
-                 */
-                name: string;
-
-
-                /**
                  * @uiLabel - ${this._("w_Company_UnitNumber")}
                  * @uiPlaceHolder - ${this._("w_Company_UnitNumber")}
-                 */
-                unitNumber: string;
+                 * @uiType - ${
+                        this.inputFormData.objectId === ""
+                            ? "iv-form-string"
+                            : "iv-form-label"
+                    }
+                */
+                username: string;
+
+
+                 /**
+                  * @uiLabel - ${this._("w_Password")}
+                  * @uiPlaceHolder - ${this._("w_Password")}
+                  * @uiType - iv-form-password
+                  * @uiColumnGroup - password
+                  * @uiHidden - ${ (!!this.inputFormData.objectId) }
+                  */
+                 password: string;
+
+
+                 /**
+                 * @uiLabel - ${this._("w_PasswordConfirm")}
+                 * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
+                 * @uiType - iv-form-password
+                 * @uiColumnGroup - password
+                 * @uiValidation - (value, all) => value === all.password
+                 * @uiInvalidMessage - ${this._("w_Error_Password")}
+                 * @uiHidden - ${ (!!this.inputFormData.objectId)}
+                */
+                 confirmPassword: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Company_ContactPerson")}
-                 * @uiPlaceHolder - ${this._("w_Company_ContactPerson")}
-                 *
+                 * @uiLabel - ${this._("w_Kiosk_Id")}
+                 * @uiPlaceHolder - ${this._("w_Kiosk_Id")}
                  */
-                contactPerson: string;
+                kioskId: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Company_ContactNumber")}
+                 * @uiLabel - ${this._("w_Kiosk_KioskName")}
+                 * @uiPlaceHolder - ${this._("w_Kiosk_KioskName")}
                  */
-                contactNumber?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Company_Floor")}
-                 */
-                floor: ${toEnumInterface(this.floorsSelectItem as any, true)};
+                kioskName: string;
 
             }
         `;
@@ -591,38 +505,24 @@ export default class SetupsKiosk extends Vue {
 
 
             /**
-             * @uiLabel - ${this._("w_Company_Name")}
+             * @uiLabel - ${this._("w_Kiosk_Username")}
              * @uiType - iv-form-label
              */
-            name: string;
+            username: string;
 
 
             /**
-             * @uiLabel - ${this._("w_Company_UnitNumber")}
+             * @uiLabel - ${this._("w_Kiosk_Id")}
              * @uiType - iv-form-label
              */
-            unitNumber: string;
+            kioskId: string;
 
 
             /**
-             * @uiLabel - ${this._("w_Company_ContactPerson")}
+             * @uiLabel - ${this._("w_Kiosk_KioskName")}
              * @uiType - iv-form-label
              */
-            contactPerson: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_ContactNumber")}
-             * @uiType - iv-form-label
-             */
-            contactNumberView: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_Floor")}
-             * @uiType - iv-form-label
-             */
-            floorView: string;
+            kioskName: string;
 
             }
         `;

@@ -8,6 +8,7 @@ export default class LangObject {
     w_Startdate = 'Start Date';
     w_Enddate = 'End Date';
     w_Password = 'Password';
+    w_PasswordConfirm = 'Confirm Password';
     w_Selection = 'Selection';
     w_Multi = 'Multi';
 
@@ -46,6 +47,7 @@ export default class LangObject {
 
     w_Error_Port = 'Port should be in 1~65535';
     w_Error_Phone = 'Please check Phone Format';
+    w_Error_Password = 'Password and PasswordConfirm should be same';
 
     w_No = 'No';
     w_StepBackward = 'Step Backward';
