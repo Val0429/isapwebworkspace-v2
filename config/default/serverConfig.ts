@@ -9,7 +9,7 @@ var config: Config = {
 
     port: 6060,
     ssl: false,
-
+    hideDefaultServerErrorModal:true,
     serverFrameworkVersionGreaterThan: '1.06.00',
 };
 export default config;
@@ -21,4 +21,6 @@ export interface Config {
 
     /// only allow server framework > THIS to do login
     serverFrameworkVersionGreaterThan: string;
+    /// hide server error popup?
+    hideDefaultServerErrorModal?: boolean;
 }
