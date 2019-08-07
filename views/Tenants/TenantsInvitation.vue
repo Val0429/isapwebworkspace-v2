@@ -6,21 +6,109 @@
             :type="transition.type"
         >
 
-            <div
+            <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
+                :label="_('w_Tenants_InvitationList')"
             >
-                Empty 1
-            </div>
+                <template #toolbox>
+                    <iv-toolbox-view
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="selectedDetail.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+                </template>
 
-            <div
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/visitors/invites' }"
+                    @selected="selectedItem($event)"
+                >
+                    <template #startDate="{$attrs}">
+                        <div>{{ resolveDatetimeStart($attrs.row.dates) }}</div>
+                    </template>
+
+                    <template #endDate="{$attrs}">
+                        <div>{{ resolveDatetimeEnd($attrs.row.dates) }}</div>
+                    </template>
+
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more
+                            size="sm"
+                            :disabled="selectedDetail.length !== 1"
+                        >
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- view -->
+            <iv-auto-card
                 key="transition_2"
                 v-show="transition.step === 2"
-                :label="'Empty 2'"
+                :visible="true"
+                :label="_('w_User_ViewUser') "
             >
-                Empty 2
-            </div>
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <!-- Modify -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_Tenants_AddInvitation') : _('w_Tenants_EditInvitation') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IModifyForm()"
+                    :value="inputFormData"
+                    @update:*="updateModifyForm"
+                    @submit="saveModifyForm($event)"
+                >
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
 
         </iv-auto-transition>
 
@@ -29,6 +117,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -36,6 +125,7 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
 
 @Component({
     components: {}
@@ -47,9 +137,303 @@ export default class TenantsInvitation extends Vue {
         step: 1
     };
 
+    tableMultiple: boolean = true;
+    selectedDetail: any = [];
+
+    inputFormData = {
+        objectId: "",
+        mobile: "",
+        name: "",
+        email: "",
+        status: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        purpose: "",
+        startString: "",
+        endString: ""
+    };
+
+    selectItem: {
+        purposes: any;
+    } = {
+        purposes: {}
+    };
+
     created() {}
 
     mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        this.clearInputData();
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.clearInputData();
+        this.getInputData();
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+    }
+
+    doDelete() {}
+
+    clearInputData() {
+        this.inputFormData = {
+            objectId: "",
+            mobile: "",
+            name: "",
+            email: "",
+            status: "",
+            startDate: new Date(),
+            endDate: new Date(),
+            purpose: "",
+            startString: "",
+            endString: ""
+        };
+    }
+
+    selectedItem(datas: any) {
+        this.selectedDetail = datas;
+    }
+
+    resolveDatetimeStartDate(dateStringList: any): Date {
+        let result = new Date();
+        let dataIndex = 0;
+        if (
+            dateStringList[dataIndex] != undefined &&
+            dateStringList[dataIndex].start != undefined
+        ) {
+            result = new Date(dateStringList[dataIndex].start);
+        }
+        return result;
+    }
+
+    resolveDatetimeEndDate(dateStringList: any): Date {
+        let result = new Date();
+        let dataIndex = dateStringList.length - 1;
+        if (
+            dateStringList[dataIndex] != undefined &&
+            dateStringList[dataIndex].end != undefined
+        ) {
+            result = new Date(dateStringList[dataIndex].end);
+        }
+        return result;
+    }
+
+    resolveDatetimeStart(dateStringList: any): string {
+        let result = "";
+        let dataIndex = 0;
+        if (
+            dateStringList[dataIndex] != undefined &&
+            dateStringList[dataIndex].start != undefined
+        ) {
+            result = Datetime.DateTime2String(
+                new Date(dateStringList[dataIndex].start),
+                "YYYY-MM-DD"
+            );
+        }
+        return result;
+    }
+
+    resolveDatetimeEnd(dateStringList: any): string {
+        let result = "";
+        let dataIndex = dateStringList.length - 1;
+        if (
+            dateStringList[dataIndex] != undefined &&
+            dateStringList[dataIndex].end != undefined
+        ) {
+            result = Datetime.DateTime2String(
+                new Date(dateStringList[dataIndex].end),
+                "YYYY-MM-DD"
+            );
+        }
+        return result;
+    }
+
+    getInputData() {
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                mobile: param.visitor.phone,
+                name: param.visitor.name,
+                email: param.visitor.email,
+                status: param.visitor.status,
+                startDate: this.resolveDatetimeStartDate(param.dates),
+                endDate: this.resolveDatetimeEndDate(param.dates),
+                purpose: param.purpose.name,
+                startString: this.resolveDatetimeStart(param.dates),
+                endString: this.resolveDatetimeEnd(param.dates)
+            };
+        }
+    }
+
+    updateModifyForm(datas: any) {
+        this.inputFormData[datas.key] = datas.value;
+    }
+
+    saveModifyForm() {
+        console.log(this.inputFormData);
+    }
+
+    ////////////////////////// interface //////////////////////////
+
+    ITableList() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_No")}
+                 * @uiType - iv-cell-auto-index
+                 */
+                no: string;
+
+                visitor: interface {
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_MobileNumber")}
+                     */
+                    phone: string;
+
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Name")}
+                     */
+                    name: string;
+
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Email")}
+                     */
+                    email: string;
+
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Status")}
+                     */
+                    status: string;
+
+                };
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_StartDate")}
+                 */
+                startDate: any;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_EndDate")}
+                 */
+                endDate: any;
+
+                purpose: interface {
+                    /**
+                     * @uiLabel - ${this._("w_Tenants_Purpose")}
+                     */
+                    name: string;
+                };
+
+                Actions: any;
+            }
+        `;
+    }
+
+    IViewForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_MobileNumber")}
+                 * @uiType - iv-form-label
+                 */
+                mobile?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Name")}
+                 * @uiType - iv-form-label
+                 */
+                name?: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Tenants_Email")}
+                 * @uiType - iv-form-label
+                 */
+                email?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Status")}
+                 * @uiType - iv-form-label
+                 */
+                status?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_StartDate")}
+                 * @uiType - iv-form-label
+                 * @uiColumnGroup - date
+                 */
+                startString?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_EndDate")}
+                 * @uiType - iv-form-label
+                 * @uiColumnGroup - date
+                 */
+                endString?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Purpose")}
+                 * @uiType - iv-form-label
+                 */
+                purpose?: string;
+
+            }
+        `;
+    }
+
+    IModifyForm() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_Tenants_MobileNumber")}
+                 */
+                mobile: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Name")}
+                 */
+                name: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Email")}
+                 */
+                email: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_StartDate")}
+                 * @uiType - iv-form-date
+                 * @uiColumnGroup - date
+                 */
+                startDate: Date;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_EndDate")}
+                 * @uiType - iv-form-date
+                 * @uiColumnGroup - date
+                 */
+                endDate: Date;
+
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Purpose")}
+                 */
+                purpose: string;
+            }
+        `;
+    }
 }
 </script>
 

@@ -53,6 +53,9 @@ export default class LangObject implements ILang {
     w_Test = 'Test';
     w_Send = 'Send';
 
+    w_Delete_ConfirmLabel = 'Confirm Delete';
+    w_Delete_ConfirmContent = 'Please confirm delete choose';
+
     /////////////////////////////////////////////
 
     // Login
@@ -121,6 +124,7 @@ export default class LangObject implements ILang {
     w_User_Password = 'Password';
     w_User_ConfirmPassword = 'Confirm Password';
     w_User_EditPassword = 'Edit Password';
+    w_User_VisitorCannotLogin = "Visitor can't login";
 
     ////////////////// Role //////////////////
     w_Role_SystemAdministrator = 'System Administrator';
@@ -257,4 +261,18 @@ export default class LangObject implements ILang {
     w_Kiosk_Id = 'Kiosk Id';
     w_Kiosk_KioskName = 'Kiosk Name';
     w_Kiosk_Status = 'Status';
+    ////////////////// Tenants Invitation //////////////////
+    w_Tenants_InvitationList = 'Invitation List';
+    w_Tenants_MobileNumber = 'Mobile number';
+    w_Tenants_Name = 'Name';
+    w_Tenants_Email = 'Email';
+    w_Tenants_Status = 'Status';
+    w_Tenants_StartDate = 'Start';
+    w_Tenants_EndDate = 'End';
+    w_Tenants_Purpose = 'Purpose';
+    w_Tenants_AddInvitation = 'Add Invitation';
+    w_Tenants_EditInvitation = 'Edit Invitation';
+
+    ////////////////// Tenants Visitor //////////////////
+    w_Tenants_VisitorList = 'Visitor List';
 }

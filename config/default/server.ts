@@ -58,6 +58,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Floor
         '/floors': [any, any, false];
+
+        // Tenant
+        '/visitors/invites': [any, any, false];
     };
     Put: {
         // Users

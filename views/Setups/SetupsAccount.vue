@@ -159,6 +159,7 @@ import { IValSelectItem } from "@/services/VMS";
 import Dialog from "@/services/Dialog";
 import RoleService from "@/services/Role/RoleService";
 import ResponseFilter from "@/services/ResponseFilter";
+import Loading from "@/services/Loading";
 
 @Component({
     components: {}
@@ -234,16 +235,86 @@ export default class SetupsAccount extends Vue {
         this.getInputData();
     }
 
-    doDelete() {}
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_Delete_ConfirmContent"),
+            this._("w_Delete_ConfirmLabel"),
+            () => {
+                Loading.show();
+                for (let detail of this.selectedDetail) {
+                    let param = {
+                        objectId: detail.objectId
+                    };
+                    this.$server
+                        .D("/users", param)
+                        .then((response: any) => {
+                            Loading.hide();
+                            this.pageToList();
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
+                }
+            }
+        );
+    }
 
     async initSelectItem() {
         this.selectItem.role = {};
         this.selectItem.company = {};
         this.selectItem.floor = {};
 
-        await this.initSelectItemRole();
-        await this.initSelectItemCompany();
-        await this.initSelectItemFloor();
+        let haveRequest = {
+            role: false,
+            company: false,
+            floor: false
+        };
+
+        if (RoleService.haveSystemAdministrator(this)) {
+            if (!haveRequest.role) {
+                await this.initSelectItemRole();
+                haveRequest.role = true;
+            }
+
+            if (!haveRequest.company) {
+                await this.initSelectItemCompany();
+                haveRequest.company = true;
+            }
+
+            if (!haveRequest.floor) {
+                await this.initSelectItemFloor();
+                haveRequest.floor = true;
+            }
+        }
+
+        if (RoleService.haveAdministrator(this)) {
+            if (!haveRequest.role) {
+                await this.initSelectItemRole();
+                haveRequest.role = true;
+            }
+
+            if (!haveRequest.company) {
+                await this.initSelectItemCompany();
+                haveRequest.company = true;
+            }
+
+            if (!haveRequest.floor) {
+                await this.initSelectItemFloor();
+                haveRequest.floor = true;
+            }
+        }
+
+        if (RoleService.haveTenantAdministrator(this)) {
+            if (!haveRequest.role) {
+                await this.initSelectItemRole();
+                haveRequest.role = true;
+            }
+
+            if (!haveRequest.floor) {
+                await this.initSelectItemFloor();
+                haveRequest.floor = true;
+            }
+        }
     }
 
     initSelectItemRole() {
@@ -254,53 +325,44 @@ export default class SetupsAccount extends Vue {
             TenantUser: false,
             Visitor: false
         };
-        if (
-            this.$user.user != undefined &&
-            this.$user.user.roles != undefined
-        ) {
-            for (let loopData of this.$user.user.roles) {
-                switch (loopData.name) {
-                    case EUserRole.SystemAdministrator:
-                        settingRole.SystemAdministrator = true;
-                        settingRole.Administrator = true;
-                        break;
-                    case EUserRole.Administrator:
-                        settingRole.TenantAdministrator = true;
-                        break;
-                    case EUserRole.TenantAdministrator:
-                        settingRole.TenantUser = true;
-                        break;
-                    case EUserRole.TenantUser:
-                        break;
-                    case EUserRole.Visitor:
-                        break;
-                }
-            }
-            if (settingRole.SystemAdministrator) {
-                this.selectItem.role[EUserRole.SystemAdministrator] = this._(
-                    "w_Role_SystemAdministrator"
-                );
-            }
-            if (settingRole.Administrator) {
-                this.selectItem.role[EUserRole.Administrator] = this._(
-                    "w_Role_Administrator"
-                );
-            }
-            if (settingRole.TenantAdministrator) {
-                this.selectItem.role[EUserRole.TenantAdministrator] = this._(
-                    "w_Role_TenantAdministrator"
-                );
-            }
-            if (settingRole.TenantUser) {
-                this.selectItem.role[EUserRole.TenantAdministrator] = this._(
-                    "w_Role_TenantUser"
-                );
-            }
-            if (settingRole.Visitor) {
-                this.selectItem.role[EUserRole.Visitor] = this._(
-                    "w_Role_Visitor"
-                );
-            }
+
+        // check role can setting
+        if (RoleService.haveSystemAdministrator(this)) {
+            settingRole.SystemAdministrator = true;
+            settingRole.Administrator = true;
+        }
+
+        if (RoleService.haveAdministrator(this)) {
+            settingRole.TenantAdministrator = true;
+        }
+
+        if (RoleService.haveTenantAdministrator(this)) {
+            settingRole.TenantUser = true;
+        }
+
+        // set setting
+        if (settingRole.SystemAdministrator) {
+            this.selectItem.role[EUserRole.SystemAdministrator] = this._(
+                "w_Role_SystemAdministrator"
+            );
+        }
+        if (settingRole.Administrator) {
+            this.selectItem.role[EUserRole.Administrator] = this._(
+                "w_Role_Administrator"
+            );
+        }
+        if (settingRole.TenantAdministrator) {
+            this.selectItem.role[EUserRole.TenantAdministrator] = this._(
+                "w_Role_TenantAdministrator"
+            );
+        }
+        if (settingRole.TenantUser) {
+            this.selectItem.role[EUserRole.TenantUser] = this._(
+                "w_Role_TenantUser"
+            );
+        }
+        if (settingRole.Visitor) {
+            this.selectItem.role[EUserRole.Visitor] = this._("w_Role_Visitor");
         }
     }
 
@@ -585,20 +647,39 @@ export default class SetupsAccount extends Vue {
             }
         }
 
+        // check TenantAdministrator and company
+        if (
+            param.data.company == "" &&
+            RoleService.haveTenantAdministrator(this)
+        ) {
+            if (
+                this.$user.user != undefined &&
+                this.$user.user.data != undefined &&
+                this.$user.user.data.company != undefined &&
+                this.$user.user.data.company.objectId != undefined
+            ) {
+                param.data.company = this.$user.user.data.company.objectId;
+            }
+        }
+
         if (param.objectId == "") {
             param.password = this.inputFormData.password;
+            Loading.show();
             await this.$server
                 .C("/users", param)
                 .then((response: any) => {
+                    Loading.hide();
                     this.pageToList();
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
         } else {
+            Loading.show();
             await this.$server
                 .U("/users", param)
                 .then((response: any) => {
+                    Loading.hide();
                     this.pageToList();
                 })
                 .catch((e: any) => {
@@ -644,6 +725,8 @@ export default class SetupsAccount extends Vue {
                  * @uiLabel - ${this._("w_User_Email")}
                  */
                 publicEmailAddress: string;
+
+                Actions: any;
 
             }
         `;

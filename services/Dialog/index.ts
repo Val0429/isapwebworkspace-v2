@@ -4,7 +4,7 @@ import Success from './Success.vue';
 import Error from './Error.vue';
 
 export class Dialog {
-    alert(content: string, label: string) {
+    async alert(content: string, label: string) {
         new Alert({
             propsData: {
                 label: label,
@@ -13,7 +13,7 @@ export class Dialog {
         }).$modal();
     }
 
-    confirm(content: string, label: string, callback: any) {
+    async confirm(content: string, label: string, callback: any) {
         new Confirm({
             propsData: {
                 label: label,
@@ -25,7 +25,7 @@ export class Dialog {
         }).$modal();
     }
 
-    success(content: string) {
+    async success(content: string) {
         new Success({
             propsData: {
                 content: content,
@@ -33,7 +33,7 @@ export class Dialog {
         }).$modal();
     }
 
-    error(content: string) {
+    async error(content: string) {
         new Error({
             propsData: {
                 content: content,

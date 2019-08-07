@@ -116,7 +116,6 @@
                         :label="_('w_Navigation_Tenants_Invitation')"
                         url="/tenants/invitation"
                     />
-
                     <SidebarNavItem
                         :label="_('w_Navigation_Tenants_Visitor')"
                         url="/tenants/visitor"

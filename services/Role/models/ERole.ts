@@ -2,8 +2,8 @@ enum EUserRole {
     SystemAdministrator = 'SystemAdministrator',
     Administrator = 'Administrator',
     TenantAdministrator = 'TenantAdministrator',
-    TenantUser = 'Tenant User',
-    Visitor = 'Visitor ',
+    TenantUser = 'TenantUser',
+    Visitor = 'Visitor',
 }
 
 export { EUserRole };
