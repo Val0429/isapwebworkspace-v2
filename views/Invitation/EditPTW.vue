@@ -249,6 +249,7 @@ export class EditPTW extends Vue {
         step4Checklist6Remarks: "",
 
         // step5
+	    step5Files: [],
 
         // step6
         step6Accepted: "",
@@ -450,6 +451,7 @@ export class EditPTW extends Vue {
     receiveStep5Data(step5Date) {}
 
     putStep5File(file) {
+	    this.inputFormData.step5Files = file;
         console.log("putStep5File", file);
     }
 
