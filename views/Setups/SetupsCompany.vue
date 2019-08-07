@@ -190,16 +190,6 @@
     import Transition from "@/services/Transition";
     import { ITransition } from "@/services/Transition";
 
-
-    interface IInputFormData {
-        objectId? : string;
-        name : string;
-        contactPerson : string;
-        unitNumber : string;
-        contactNumber : string[];
-        floor : string[];
-    }
-
     @Component({
         components: {}
     })
@@ -512,7 +502,7 @@
 
 
                 /**
-                 * @uiLabel - ${this._("w_Company_List")}
+                 * @uiLabel - ${this._("w_Company_Name")}
                  */
                 name: string;
 
