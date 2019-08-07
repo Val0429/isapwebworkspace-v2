@@ -29,6 +29,7 @@
     </iv-card>
     <iv-card v-show="pageStep === ePageStep.list" :label="_('w_Member_List')">
       <template #toolbox>
+         <iv-toolbox-export @click="exportToExcel()"/>
         <iv-toolbox-view :disabled="isSelected.length !== 1" @click="pageToView" />
         <iv-toolbox-edit
           v-show="canEdit"
@@ -53,19 +54,6 @@
         :server="{ path: '/acs/member' }"
         @selected="selectedItem($event)"
       >
-        <template #CardNumber="{$attrs}">{{ anysisTableColumn($attrs.row, "CardNumber") }}</template>
-
-        <template
-          #StartDate="{$attrs}"
-        >{{ $attrs.value === '' ? '' : dateToYYYY_MM_DD($attrs.value) }}</template>
-
-        <template
-          #EndDate="{$attrs}"
-        >{{ $attrs.value === '' ? '' : dateToYYYY_MM_DD($attrs.value) }}</template>
-
-        <template #Department="{$attrs}">{{ anysisTableColumn($attrs.row, "Department") }}</template>
-
-        <template #CostCenter="{$attrs}">{{ anysisTableColumn($attrs.row, "CostCenter") }}</template>
 
         <template #Actions="{$attrs, $listeners}">
           <iv-toolbox-more size="sm" :disabled="isSelected.length !== 1">
@@ -246,6 +234,7 @@ import CardTemplateBase64 from "@/components/FET_Card/models/cardTemplateBase64"
 import { PermissionName } from "@/../src/constants/permissions";
 import moment from 'moment';
 import { CustomFields } from "@/../src/constants/customfields";
+import * as XLSX from 'xlsx';
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
 import SortSelect from "@/components/SortSelect/SortSelect.vue";
@@ -321,92 +310,8 @@ export default class MemberForm extends Vue {
   permissionSelected:any[]=[];
   inputFormData: any = {};
   defaultFormData:any = {
-    // Master
-    objectId: undefined,
-    personType: "1",
-    cardType: "",
-    employeeNumber: "",
-    chineseName: "",
-    englishName: "",
-    cardNumber: "",
-    cardAllNumber: "",
-    startDate: null,
-    endDate: null,
-    personPhoto: "",
-    imageSrc: "",
-    companyName: "",
-    cardCustodian: "",
-    lastEditPerson: "",
-    lastEditTime: "",
     cardCertificate: "2",
-    profileName:"基礎",
-    technologyCode:10,
-    pinMode:1,
-    pinDigit:0,    
-    deviceNumber: 469,
-    pin: "",
-
-    // tab1
-    extensionNumber: "",
-    phone: "",
-    email: "",
-    birthday: null,
-    MVPN: "",
-    gender: "",
-    department: "",
-    costCenter: "",
-    area: "",
-    workArea: "",
-    registrationDate: null,
-    resignationDate: null,
-
-    // tab2
-    carLicenseCategory: "",
-    cardLicense: "",
-    carLicense: "",
-    carLicense1: "",
-    carLicense2: "",
-    carLicense3: "",
-    account: "",
-    password: "",
-
-    // tab3
-    resignationNote: "",
-    resignationRecordCardRecord: "",
-    reasonForCard1: "",
-    historyForCard1: "",
-    dateForCard1: null,
-    reasonForCard2: "",
-    historyForCard2: "",
-    dateForCard2: null,
-    reasonForCard3: "",
-    historyForCard3: "",
-    dateForCard3: null,
-    reasonForApplication1: "",
-    dateForApplication1: null,
-    reasonForApplication2: "",
-    dateForApplication2: null,
-    reasonForApplication3: "",
-    dateForApplication3: null,
-    resignationRecordCarLicense: "",
-
-    // tab4
-    cardTemplate: "",
-    imageSrcCard: "",
-
-    // tab 5
-    censusRecord1: "",
-    censusDate1: null,
-    censusRecord2: "",
-    censusDate2: null,
-    censusRecord3: "",
-    censusDate3: null,
-    infoOfViolation1: "",
-    dateOfViolation1: null,
-    infoOfViolation2: "",
-    dateOfViolation2: null,
-    infoOfViolation3: "",
-    dateOfViolation3: null
+    cardNumber:""
   };
 
   clearInputData() {    
@@ -434,7 +339,17 @@ export default class MemberForm extends Vue {
     await this.initCredentialProfile();
     
   }
-  
+  async exportToExcel(){
+        
+        let members:any = await this.$server.R("/acs/member", {"paging.all":"true"});
+        let exportList = members.results;
+        let headers= exportList&& exportList.length>0?Object.keys(exportList[0]):[];        
+        let workbook = XLSX.utils.book_new();
+        let ws = XLSX.utils.aoa_to_sheet([headers]);        
+        XLSX.utils.sheet_add_json(ws, exportList,  {skipHeader: true, origin: "A2"});
+        XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");    
+        XLSX.writeFile(workbook, `${this._("w_Member")}.xlsx`);    
+  }
   onCardCertificateUpdate(value:any){
     let profile = this.credentialProfiles.find(x=>x.Token == value);
     if(!profile)return;
@@ -489,20 +404,7 @@ export default class MemberForm extends Vue {
     this.selectedDetail = [];
     this.selectedDetail = data;
   }
-  getFieldValue(fieldName:string, customFields:any[], isDate:boolean=false){
-      
-      let exists = customFields.find(x=>x.FiledName == fieldName);
-      
-      if(!exists)return isDate ? null : "";
-
-      try{        
-        return isDate ? new Date(exists.FieldValue) : (exists.FieldValue || "");
-      }catch(err){
-        console.error(err);
-        return isDate ? null : "";
-      }
-      
-  }
+  
   getInputData() {
     this.clearInputData();
 
@@ -510,76 +412,17 @@ export default class MemberForm extends Vue {
       let detailData = this.selectedDetail[0];
 
       // Master form      
-      this.inputFormData.objectId = detailData.objectId;      
+      this.inputFormData = Object.assign({}, detailData);      
 
-      if (detailData.AccessRules) {
+      if (detailData.permissionTable) {
         console.log("pushing from access rules")
-        for (let rule of detailData.AccessRules) {
-              this.permissionSelected.push(rule.RuleToken ? rule.RuleToken: rule);            
+        for (let rule of detailData.permissionTable) {
+              this.permissionSelected.push(rule.toString());            
         }
       }
       let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
-      this.inputFormData.personType = (detailData.PrimaryWorkgroupId || (defaultWg ? defaultWg.groupid : 1)).toString();
-      this.inputFormData.employeeNumber = detailData.EmployeeNumber;      
-      this.inputFormData.chineseName = detailData.LastName;
-      this.inputFormData.englishName = detailData.FirstName;
-      console.log("this.inputFormData.personType",this.inputFormData.personType);
-    
-      if (detailData.Credentials && detailData.Credentials.length>0){
-        console.log("detailData.Credentials[0]",detailData.Credentials[0])
-        this.inputFormData.cardNumber = detailData.Credentials[0].CardNumber;
-        this.inputFormData.cardAllNumber = detailData.Credentials[0].CardNumber;
-        this.inputFormData.cardCertificate = (detailData.Credentials[0].ProfileId || 0).toString();
-        this.inputFormData.deviceNumber = detailData.Credentials[0].FacilityCode;
-        this.inputFormData.pinDigit = detailData.Credentials[0].PinDigit;
-        this.inputFormData.profileName = detailData.Credentials[0].ProfileName;
-        this.inputFormData.technologyCode = detailData.Credentials[0].CardTechnologyCode;    
-        this.inputFormData.pinMode = detailData.Credentials[0].PinMode;
-        this.inputFormData.startDate = detailData.Credentials[0].StartDate;
-        this.inputFormData.endDate = detailData.Credentials[0].StartDate;
-        this.inputFormData.pin = detailData.Credentials[0].Pin || "0";
-      }
-
-      if (detailData.StartDate) {
-        try {
-          this.inputFormData.startDate = new Date(detailData.StartDate);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-
-      if (detailData.EndDate) {
-        try {
-          this.inputFormData.endDate = new Date(detailData.EndDate);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-
-      // tab2
-      if (detailData.PersonalDetails) {
-        if(detailData.PersonalDetails.UserDetails){
-          this.inputFormData.account = detailData.PersonalDetails.UserDetails.UserName;
-          this.inputFormData.password = detailData.PersonalDetails.UserDetails.Password;
-        }
-        if(detailData.PersonalDetails.ContactDetails){
-          this.inputFormData.email = detailData.PersonalDetails.ContactDetails.Email;
-          this.inputFormData.phone = detailData.PersonalDetails.ContactDetails.PhoneNumber;
-          this.inputFormData.extensionNumber = detailData.PersonalDetails.ContactDetails.MobileNumber;
-        }
-        if (detailData.PersonalDetails.DateOfBirth) {
-          try {
-            this.inputFormData.birthday = new Date(detailData.PersonalDetails.DateOfBirth);
-          } catch (e) {
-            console.log(e);
-          }
-        }
-      }
-      //custom fields
-      if (!detailData.CustomFields || detailData.CustomFields.length<=0) return;
-      for(let field of CustomFields){
-        this.inputFormData[field.name] = this.getFieldValue(field.fieldName, detailData.CustomFields, field.date);
-      }           
+      this.inputFormData.personType = (detailData.primaryWorkgroupId || (defaultWg ? defaultWg.groupid : 1)).toString();
+              
   }
 
   tempSaveInputData(data) {
@@ -675,7 +518,7 @@ export default class MemberForm extends Vue {
               PagerServiceProviderId: "0",
               PhoneNumber: this.inputFormData.phone || "",
               },
-              DateOfBirth: this.inputFormData.birthday && !isNaN(this.inputFormData.birthday.getTime()) ? this.inputFormData.birthday.toISOString().split("T")[0]: "",
+              DateOfBirth: this.inputFormData.birthday || "",
               PayrollNumber: "",
               Title: "",
               UserDetails: {
@@ -685,14 +528,14 @@ export default class MemberForm extends Vue {
     };
     
     let credential = {
-          CardNumber: this.inputFormData.cardNumber,
+          CardNumber: this.inputFormData.cardNumber || "",
           Pin: this.inputFormData.pin || "0",
-          FacilityCode: parseInt(this.inputFormData.deviceNumber),
+          FacilityCode: parseInt(this.inputFormData.deviceNumber||"469"),
           ProfileId: !isNaN(parseInt(this.inputFormData.cardCertificate)) ? parseInt(this.inputFormData.cardCertificate) : 0,
-          ProfileName : this.inputFormData.profileName,
-          CardTechnologyCode : this.inputFormData.technologyCode,
-          PinMode: this.inputFormData.pinMode,          
-          PinDigit:this.inputFormData.pinDigit,
+          ProfileName : this.inputFormData.profileName || "基礎",
+          CardTechnologyCode : this.inputFormData.technologyCode || 10,
+          PinMode: this.inputFormData.pinMode || 1,          
+          PinDigit:this.inputFormData.pinDigit || 0,
           EndDate:this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
           StartDate:this.inputFormData.startDate || new Date()
         };
@@ -701,27 +544,22 @@ export default class MemberForm extends Vue {
     
 
     let tempCustomFieldsList: any = [];
-    for(let field of CustomFields){
-      if(field.date){
-        let dt = this.inputFormData[field.name] && !isNaN(this.inputFormData[field.name].getTime()) ? this.inputFormData[field.name].toISOString().split("T")[0] : "";
-        tempCustomFieldsList.push({FiledName:field.fieldName,  FieldValue:dt});
-      }else{
-        tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});
-      }
+    for(let field of CustomFields){      
+      tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});      
     }
     let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType || "1"));
     let member = {        
         // master
         objectId: this.inputFormData.objectId,
         AccessRules: this.permissionSelected,
-        PrimaryWorkgroupId:parseInt(this.inputFormData.personType),
-        ApbWorkgroupId:parseInt(this.inputFormData.personType),
+        PrimaryWorkgroupId: wg ? wg.groupid : 1,
+        ApbWorkgroupId: wg ? wg.groupid : 1,
         PrimaryWorkgroupName: wg? wg.groupname:"正職",
         EmployeeNumber: this.inputFormData.employeeNumber,
         LastName: this.inputFormData.chineseName,
         FirstName: this.inputFormData.englishName || "-",
         StartDate: this.inputFormData.startDate || credential.StartDate,
-        EndDate: this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
+        EndDate: this.inputFormData.endDate || credential.EndDate,
         SmartCardProfileId:"0",
         Status:1,
         //new addition
@@ -808,49 +646,8 @@ export default class MemberForm extends Vue {
     );
   }
 
-  dateToYYYY_MM_DD(value) {
-    return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
-  }
 
-  anysisTableColumn(row: any, key: string): string {
-    let result: string = "";
-    if (key == "CardNumber") {
-      if (
-        row.Credentials != undefined &&
-        row.Credentials[0] != undefined &&
-        row.Credentials[0].CardNumber != undefined
-      ) {
-        result = row.Credentials[0].CardNumber;
-      }
-    } else {
-      if (row.CustomFields != undefined) {
-        for (let fidled of row.CustomFields) {
-          if (
-            key == "Department" &&
-            fidled.FiledName != undefined &&
-            fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF"
-          ) {
-            if (fidled.FieldValue != undefined) {
-              result = typeof(fidled.FieldValue)=="object" ? "" : fidled.FieldValue;
-            }
-          }
-
-          if (
-            key == "CostCenter" &&
-            fidled.FiledName != undefined &&
-            fidled.FiledName == "CustomTextBoxControl5__CF_CF_CF_CF"
-          ) {
-            if (fidled.FieldValue != undefined) {
-              result = typeof(fidled.FieldValue)=="object" ? "" : fidled.FieldValue;
-            }
-          }
-        }
-      }
-    }
-
-    return result;
-  }
-
+ 
   ITableList() {
     return `
             interface {
@@ -858,47 +655,47 @@ export default class MemberForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Member_EmployeeNumber1")}
                  */
-                EmployeeNumber: string;
+                employeeNumber: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CardNumber1")}
                  */
-                CardNumber: string;
+                cardNumber: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_PersonType1")}
                  */
-                PrimaryWorkgroupName: string;
+                primaryWorkgroupName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_ChineseName1")}
                  */
-                LastName: string;
+                chineseName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_EnglishName1")}
                  */
-                FirstName: string;
+                englishName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_Department1")}
                  */
-                Department: string;
+                department: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_CostCenter1")}
                  */
-                CostCenter: string;
+                costCenter: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_StartDate1")}
                  */
-                StartDate: string;
+                startDate: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_EndDate1")}
                  */
-                EndDate: string;
+                endDate: string;
 
                 /**
                  * @uiLabel - ${this._("w_Member_Actions")}
