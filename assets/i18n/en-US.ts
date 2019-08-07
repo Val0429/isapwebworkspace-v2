@@ -45,6 +45,7 @@ export default class LangObject {
     w_Dialog_SuccessTitle = 'Success';
 
     w_Error_Port = 'Port should be in 1~65535';
+    w_Error_Phone = 'Please check Phone Format';
 
     w_No = 'No';
     w_StepBackward = 'Step Backward';
@@ -69,6 +70,9 @@ export default class LangObject {
 
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
+
+    w_DeleteConfirm = 'Delete Confirm';
+    w_DeleteFailed = 'Delete Failed';
 
     ////////////////// Navigation //////////////////
 
@@ -222,6 +226,24 @@ export default class LangObject {
     w_VisitorCardSetting_ReadFail = 'Visitor Card read fail';
     w_VisitorCardSetting_error = 'Range Start, Range End need more than 10000';
     w_VisitorCardSetting_error1 = 'Range End need more than Range Start';
+
+    ////////////////// Company //////////////////
+    w_Company_List = 'Company List';
+    w_Company_Add = 'Add Company';
+    w_Company_Edit = 'Edit Company';
+    w_Company_View = 'View Company';
+
+    w_Company_AddSuccess = 'Company add success';
+    w_Company_ADDFailed = 'Company add failed, please try again';
+    w_Company_EditSuccess = 'Company edit success';
+    w_Company_EditFailed = 'Company edit failed, please try again';
+    w_Company_DeleteConfirm = 'Are you sure to delete selected Company(s)?';
+
+    w_Company_Name = 'Company Name';
+    w_Company_UnitNumber = 'Unit Number';
+    w_Company_ContactPerson = 'Contact Person';
+    w_Company_ContactNumber = 'Contact Number';
+    w_Company_Floor = 'Floor';
 
     ////////////////// Tenants Invitation //////////////////
     w_Tenants_InvitationList = 'Invitation List';
