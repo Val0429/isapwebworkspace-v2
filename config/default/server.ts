@@ -20,6 +20,10 @@ interface RestfulRequest extends ApisRequestBase {
 
         // SMS
         '/test/sms': [any, any, false];
+
+        // companies
+        '/companies': [any, any, false];
+
     };
 
     Get: {
@@ -48,11 +52,19 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Floor
         '/floors': [any, any, false];
+
     };
     Put: {
         '/users/change-password': [any, any, false];
+
+        // companies
+        '/companies': [any, any, false];
     };
-    Delete: {};
+    Delete: {
+
+        // companies
+        '/companies': [any, any, false];
+    };
     Ws: {};
 }
 
