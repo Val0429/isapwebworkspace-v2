@@ -56,6 +56,8 @@ export default class LangObject {
     w_Delete_ConfirmLabel = 'Confirm Delete';
     w_Delete_ConfirmContent = 'Please confirm delete choose';
 
+    w_ExportPDF = 'Export PDF';
+
     /////////////////////////////////////////////
 
     // Login
@@ -109,6 +111,19 @@ export default class LangObject {
 
     w_Dashboard_ChartStatisticSuccess = 'Success';
     w_Dashboard_ChartStatisticException = 'Exception';
+
+    ////////////////// Investigation //////////////////
+    w_Investigation_FilterTitle = 'Filter';
+    w_Investigation_ContentTitle = 'Investigation';
+    w_Investigation_StartDate = 'Start';
+    w_Investigation_EndDate = 'End';
+    w_Investigation_Purpose = 'Purpose';
+    w_Investigation_Kiosk = 'Kiosk';
+    w_Investigation_VisitorName = 'Visitor Name';
+    w_Investigation_KioskName = 'Kiosk Name';
+    w_Investigation_Result = 'Result';
+    w_Investigation_Event = 'Event';
+    w_Investigation_EventTime = 'Event Time';
 
     ////////////////// User //////////////////
     w_User_UserName = 'User Name';
