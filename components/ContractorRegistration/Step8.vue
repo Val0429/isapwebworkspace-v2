@@ -42,7 +42,9 @@
 
         inputFormData: any = {
             startDate: new Date(),
+            startTime: new Date(),
             endDate: new Date(),
+            endTime: new Date(),
             accessGroup: '',
             approval: false
         };
@@ -95,9 +97,11 @@
 
                 case 'startDate':
                     this.inputFormData.startDate = data.value;
+                    this.inputFormData.startTime = data.value;
                     break;
                 case 'endDate':
                     this.inputFormData.endDate = data.value;
+                    this.inputFormData.endTime = data.value;
                     break;
                 case 'accessGroup':
                     this.inputFormData.accessGroup = data.value;
@@ -133,7 +137,7 @@
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
                  */
-                accessGroup?:  ${toEnumInterface(this.accessGroupSelectItem as any, false)};
+                accessGroup?:  ${toEnumInterface(this.accessGroupSelectItem as any, true)};
 
 
                 qrCode?: any;

@@ -222,7 +222,9 @@ export class EditPTW extends Vue {
         step3Description: "",
         step3TypeOfWork: [],
         step3StartDate: new Date(),
+        step3StartTime: new Date(),
         step3EndDate: new Date(),
+        step3EndTime: new Date(),
         step3NameOfApplicantService: "",
         step3HandPhoneContactNumber: 0,
 
@@ -253,8 +255,6 @@ export class EditPTW extends Vue {
         step7PersonDetail: undefined,
 
         // step8
-        step8StartDate: new Date(),
-        step8EndDate: new Date(),
         step8AccessGroup: "",
         step8Approval: false
     };
@@ -349,7 +349,9 @@ export class EditPTW extends Vue {
         this.inputFormData.step3Description = step3Date.description;
         this.inputFormData.step3TypeOfWork = step3Date.typeOfWork;
         this.inputFormData.step3StartDate = step3Date.startDate;
+        this.inputFormData.step3StartTime = step3Date.startTime;
         this.inputFormData.step3EndDate = step3Date.endDate;
+        this.inputFormData.step3EndTime = step3Date.endTime;
         this.inputFormData.step3NameOfApplicantService =
             step3Date.nameOfApplicantService;
         this.inputFormData.step3HandPhoneContactNumber =
@@ -528,8 +530,10 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 
     receiveStep8Data(step8Date) {
-        this.inputFormData.step8StartDate = step8Date.startDate;
-        this.inputFormData.step8EndDate = step8Date.endDate;
+        this.inputFormData.step3StartDate = step8Date.startDate;
+        this.inputFormData.step3StartTime = step8Date.startTime;
+        this.inputFormData.step3EndDate = step8Date.endDate;
+        this.inputFormData.step3EndTime = step8Date.endTime;
         this.inputFormData.step8AccessGroup = step8Date.accessGroup;
         this.inputFormData.step8Approval = step8Date.approval;
 

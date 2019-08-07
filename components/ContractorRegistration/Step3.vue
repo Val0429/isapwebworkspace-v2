@@ -43,7 +43,9 @@ export class Step3 extends Vue {
         description: '',
         typeOfWork: [],
         startDate: new Date(),
+        startTime: new Date(),
         endDate: new Date(),
+        endTime: new Date(),
         nameOfApplicantService:'',
         handPhoneContactNumber: 0
     };
@@ -84,9 +86,11 @@ export class Step3 extends Vue {
                 break;
             case 'startDate':
                 this.inputFormData.startDate = data.value;
+                this.inputFormData.startTime = data.value;
                 break;
             case 'endDate':
                 this.inputFormData.endDate = data.value;
+                this.inputFormData.endTime = data.value;
                 break;
             case 'nameOfApplicantService':
                 this.inputFormData.nameOfApplicantService = data.value;
