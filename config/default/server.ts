@@ -28,6 +28,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Kiosks
         '/kiosks': [any, any, false];
+
+        // visitors/invites
+        '/visitors/invites': [any, any, false];
     };
 
     Get: {
@@ -75,6 +78,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Kiosks
         '/kiosks': [any, any, false];
+
+        // visitors/invites
+        '/visitors/invites': [any, any, false];
     };
     Delete: {
         // companies
