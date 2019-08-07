@@ -52,6 +52,9 @@ export default class LangObject implements ILang {
     w_Test = 'Test';
     w_Send = 'Send';
 
+    w_Delete_ConfirmLabel = 'Confirm Delete';
+    w_Delete_ConfirmContent = 'Please confirm delete choose';
+
     /////////////////////////////////////////////
 
     // Login
@@ -117,6 +120,7 @@ export default class LangObject implements ILang {
     w_User_Password = 'Password';
     w_User_ConfirmPassword = 'Confirm Password';
     w_User_EditPassword = 'Edit Password';
+    w_User_VisitorCannotLogin = "Visitor can't login";
 
     ////////////////// Role //////////////////
     w_Role_SystemAdministrator = 'System Administrator';

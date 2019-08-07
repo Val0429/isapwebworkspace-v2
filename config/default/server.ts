@@ -58,7 +58,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/users/change-password': [any, any, false];
         '/users': [any, any, false];
     };
-    Delete: {};
+    Delete: {
+        '/users': [any, any, false];
+    };
     Ws: {};
 }
 

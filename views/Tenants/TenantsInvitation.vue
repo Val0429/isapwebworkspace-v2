@@ -11,7 +11,7 @@
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
             >
-                Empty 1
+                Tenants Invitation 1
             </div>
 
             <div
@@ -19,7 +19,7 @@
                 v-show="transition.step === 2"
                 :label="'Empty 2'"
             >
-                Empty 2
+                Tenants Invitation 2
             </div>
 
         </iv-auto-transition>

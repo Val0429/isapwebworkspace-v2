@@ -1,16 +1,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { RegisterLoginRouter } from '@/../core';
 import { ServerName, ServerVersion } from '@/../core/server';
+import { EUserRole } from '@/services/Role';
 import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
 
-enum EUserRole {
-    SystemAdministrator = 'SystemAdministrator',
-    Administrator = 'Administrator',
-    TenantAdministrator = 'TenantAdministrator',
-    TenantUser = 'Tenant User',
-    Visitor = 'Visitor ',
-}
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
     path: '/login',
@@ -32,9 +26,11 @@ export default class Login extends Vue {
             .then(() => {
                 Loading.hide();
                 let userRole = '';
-                if (this.$user.user != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
+                console.log('!!! check', this.$user.user != undefined, this.$user.user.roles != undefined, this.$user.user.roles[0] != undefined, this.$user.user.roles[0].name);
+                if (this.$user.user != undefined && this.$user.user.roles != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
                     userRole = this.$user.user.roles[0].name;
                 }
+                console.log('!!! userRole', userRole, EUserRole.TenantUser, userRole == EUserRole.TenantUser);
                 switch (userRole) {
                     case EUserRole.SystemAdministrator:
                         this.$router.push('/reports/dashboard');
@@ -49,7 +45,7 @@ export default class Login extends Vue {
                         this.$router.push('/tenants/invitation');
                         break;
                     case EUserRole.Visitor:
-                        this.$router.push('/tenants/visitor');
+                        Dialog.error(this._('w_User_VisitorCannotLogin'));
                         break;
                 }
             })

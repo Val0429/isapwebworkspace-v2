@@ -159,6 +159,7 @@ import { IValSelectItem } from "@/services/VMS";
 import Dialog from "@/services/Dialog";
 import RoleService from "@/services/Role/RoleService";
 import ResponseFilter from "@/services/ResponseFilter";
+import Loading from "@/services/Loading";
 
 @Component({
     components: {}
@@ -206,6 +207,7 @@ export default class SetupsAccount extends Vue {
     mounted() {}
 
     pageToList() {
+        console.log("!!! pageToList");
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         this.clearInputData();
@@ -234,7 +236,29 @@ export default class SetupsAccount extends Vue {
         this.getInputData();
     }
 
-    doDelete() {}
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_Delete_ConfirmContent"),
+            this._("w_Delete_ConfirmLabel"),
+            () => {
+                Loading.show();
+                for (let detail of this.selectedDetail) {
+                    let param = {
+                        objectId: detail.objectId
+                    };
+                    this.$server
+                        .D("/users", param)
+                        .then((response: any) => {
+                            Loading.hide();
+                            this.pageToList();
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
+                }
+            }
+        );
+    }
 
     async initSelectItem() {
         this.selectItem.role = {};
@@ -641,18 +665,22 @@ export default class SetupsAccount extends Vue {
 
         if (param.objectId == "") {
             param.password = this.inputFormData.password;
+            Loading.show();
             await this.$server
                 .C("/users", param)
                 .then((response: any) => {
+                    Loading.hide();
                     this.pageToList();
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
         } else {
+            Loading.show();
             await this.$server
                 .U("/users", param)
                 .then((response: any) => {
+                    Loading.hide();
                     this.pageToList();
                 })
                 .catch((e: any) => {
@@ -698,6 +726,8 @@ export default class SetupsAccount extends Vue {
                  * @uiLabel - ${this._("w_User_Email")}
                  */
                 publicEmailAddress: string;
+
+                Actions: any;
 
             }
         `;
