@@ -222,4 +222,19 @@ export default class LangObject implements ILang {
     w_VisitorCardSetting_ReadFail = 'Visitor Card read fail';
     w_VisitorCardSetting_error = 'Range Start, Range End need more than 10000';
     w_VisitorCardSetting_error1 = 'Range End need more than Range Start';
+
+    ////////////////// Tenants Invitation //////////////////
+    w_Tenants_InvitationList = 'Invitation List';
+    w_Tenants_MobileNumber = 'Mobile number';
+    w_Tenants_Name = 'Name';
+    w_Tenants_Email = 'Email';
+    w_Tenants_Status = 'Status';
+    w_Tenants_StartDate = 'Start';
+    w_Tenants_EndDate = 'End';
+    w_Tenants_Purpose = 'Purpose';
+    w_Tenants_AddInvitation = 'Add Invitation';
+    w_Tenants_EditInvitation = 'Edit Invitation';
+
+    ////////////////// Tenants Visitor //////////////////
+    w_Tenants_VisitorList = 'Visitor List';
 }

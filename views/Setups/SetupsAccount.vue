@@ -207,7 +207,6 @@ export default class SetupsAccount extends Vue {
     mounted() {}
 
     pageToList() {
-        console.log("!!! pageToList");
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
         this.clearInputData();
