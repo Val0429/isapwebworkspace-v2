@@ -120,7 +120,7 @@
             </iv-auto-card>
 
             <!-- Modify Password -->
-            <iv-auto-card
+            <!-- <iv-auto-card
                 key="transition_3_1"
                 v-if="inputFormData.objectId != ''"
                 v-show="transition.step === 3"
@@ -128,7 +128,7 @@
                 :label="_('w_User_EditPassword')"
             >
 
-             <iv-form
+                <iv-form
                     :interface="IPasswordForm()"
                     :value="inputFormData"
                     @update:*="updateModifyForm"
@@ -136,7 +136,7 @@
                 >
                 </iv-form>
 
-            </iv-auto-card>
+            </iv-auto-card> -->
 
         </iv-auto-transition>
 
@@ -403,7 +403,7 @@ export default class SetupsAccount extends Vue {
                 useFloor: false
             };
             if (param.roles != undefined && param.roles[0] != undefined) {
-                this.inputFormData.roles = param.roles[0].objectId;
+                this.inputFormData.roles = param.roles[0].name;
             }
             for (let loopData of param.roles) {
                 if (loopData.name == EUserRole.TenantAdministrator) {
@@ -413,7 +413,20 @@ export default class SetupsAccount extends Vue {
                 if (loopData.name == EUserRole.TenantUser) {
                     this.inputFormData.useFloor = true;
                 }
-                this.inputFormData.realRoles.push(loopData.objectId);
+                this.inputFormData.realRoles.push(loopData.name);
+            }
+            if (param.data != undefined) {
+                if (
+                    param.data.company != undefined &&
+                    param.data.company.objectId != undefined
+                ) {
+                    this.inputFormData.companies = param.data.company.objectId;
+                }
+                if (param.data.floor != undefined) {
+                    for (let loopFloor of param.data.floor) {
+                        this.inputFormData.floors.push(loopFloor.objectId);
+                    }
+                }
             }
         }
     }
@@ -541,15 +554,62 @@ export default class SetupsAccount extends Vue {
                 this.inputFormData.useFloor = false;
             }
         }
+        this.inputFormData[datas.key] = datas.value;
     }
 
-    saveModifyForm(event: any) {
-        console.log("!!! saveModifyForm", this.inputFormData);
+    async saveModifyForm(event: any) {
+        let param: any = {
+            objectId: this.inputFormData.objectId,
+            username: this.inputFormData.username,
+            phone: this.inputFormData.phone,
+            publicEmailAddress: this.inputFormData.email,
+            roles: [this.inputFormData.roles],
+            data: {
+                company: this.inputFormData.companies,
+                description: "",
+                floor: this.inputFormData.floors
+            }
+        };
+
+        // append old role
+        for (let loopData of this.inputFormData.realRoles) {
+            let haveLoopData = false;
+            for (let paramData of param.roles) {
+                if (loopData == paramData) {
+                    haveLoopData = true;
+                    break;
+                }
+            }
+            if (!haveLoopData) {
+                param.roles.push(loopData);
+            }
+        }
+
+        if (param.objectId == "") {
+            param.password = this.inputFormData.password;
+            await this.$server
+                .C("/users", param)
+                .then((response: any) => {
+                    this.pageToList();
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        } else {
+            await this.$server
+                .U("/users", param)
+                .then((response: any) => {
+                    this.pageToList();
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        }
     }
 
-    savePasswordForm(event: any){
-        console.log("!!! savePasswordForm", this.inputFormData);
-    }
+    // savePasswordForm(event: any) {
+    //     console.log("!!! savePasswordForm", this.inputFormData);
+    // }
 
     ITableList() {
         return `
@@ -698,14 +758,14 @@ export default class SetupsAccount extends Vue {
                  * @uiType - iv-form-password
                  * @uiHidden - ${this.inputFormData.objectId != ""}
                  * @uiRequired - true
-                 * @uiValidation - (value, all) => value === all.newPassword
+                 * @uiValidation - (value, all) => value === all.password
                  */
                 confirmPassword?: string;
             }
         `;
     }
 
-    IPasswordForm (){
+    IPasswordForm() {
         return `
             interface {
                 /**
@@ -717,7 +777,7 @@ export default class SetupsAccount extends Vue {
                 /**
                  * @uiLabel - ${this._("w_User_ConfirmPassword")}
                  * @uiType - iv-form-password
-                 * @uiValidation - (value, all) => value === all.newPassword
+                 * @uiValidation - (value, all) => value === all.password
                  */
                 confirmPassword: string;
             }

@@ -3,10 +3,12 @@ import { UserLogin, UserLogout } from './api/User';
 
 interface RestfulRequest extends ApisRequestBase {
     Post: {
+        // Users
         '/users/login': [UserLogin.Input, UserLogin.Output, false];
         '/users/logout': [UserLogout.Input, any, false];
+        '/users': [any, any, false];
 
-        //License
+        // License
         '/license': [any, any, false];
 
         // FRS Setting
@@ -15,7 +17,7 @@ interface RestfulRequest extends ApisRequestBase {
         // Mail Setting
         '/test/email': [any, any, false];
 
-        //  Online SMS Provider (SG only)
+        // Online SMS Provider (SG only)
         '/test/sgsms': [any, any, false];
 
         // SMS
@@ -23,12 +25,13 @@ interface RestfulRequest extends ApisRequestBase {
 
         // companies
         '/companies': [any, any, false];
-
     };
 
     Get: {
+        // Users
         '/users/login': [UserLogin.Input, UserLogin.Output, false];
         '/users/logout': [UserLogout.Input, any, false];
+        '/users': [any, any, false];
 
         // APIs
         '/apis': [any, any, false];
@@ -41,7 +44,7 @@ interface RestfulRequest extends ApisRequestBase {
         // Kiosks
         '/kiosks': [any, any, false];
 
-        //License
+        // License
         '/mac': [any, any, false];
 
         // FRS Setting
@@ -52,18 +55,18 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Floor
         '/floors': [any, any, false];
-
     };
     Put: {
+        // Users
         '/users/change-password': [any, any, false];
 
         // companies
         '/companies': [any, any, false];
     };
     Delete: {
-
         // companies
         '/companies': [any, any, false];
+        '/users': [any, any, false];
     };
     Ws: {};
 }

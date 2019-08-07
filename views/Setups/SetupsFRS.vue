@@ -12,7 +12,6 @@
                 @submit="doSubmit($event)"
             ></iv-form>
 
-
         </iv-auto-card>
 
     </div>
@@ -27,8 +26,8 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
-import ResponseFilter from '@/services/ResponseFilter';
-import Loading from '@/services/Loading';
+import ResponseFilter from "@/services/ResponseFilter";
+import Loading from "@/services/Loading";
 
 @Component({
     components: {}
@@ -41,10 +40,10 @@ export default class SetupsFRS extends Vue {
     };
 
     inputFormData: any = {
-        ip: '',
-        wsport: 0,
-        account: '',
-        password: ''
+        ip: "",
+        port: 0,
+        account: "",
+        password: ""
     };
 
     created() {
@@ -61,7 +60,7 @@ export default class SetupsFRS extends Vue {
                     this.inputFormData.account = response.frs.account;
                     this.inputFormData.password = response.frs.password;
                     this.inputFormData.ip = response.frs.ip;
-                    this.inputFormData.wsport = response.frs.port;
+                    this.inputFormData.port = response.frs.port;
                 });
             })
             .catch((e: any) => {
@@ -74,11 +73,10 @@ export default class SetupsFRS extends Vue {
     }
 
     async doSubmit(data) {
-
         // port正則
         const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
 
-        if (!portRegex.test(data.wsport)) {
+        if (!portRegex.test(data.port)) {
             Dialog.error(this._("w_Error_Port"));
             return false;
         }
@@ -87,12 +85,12 @@ export default class SetupsFRS extends Vue {
             account: string;
             password: string;
             ip: string;
-            wsport: number;
+            port: number;
         } = {
             account: data.account,
             password: data.password,
             ip: data.ip,
-            wsport: data.wsport
+            port: data.port
         };
 
         const addParam = {
@@ -118,7 +116,6 @@ export default class SetupsFRS extends Vue {
             });
     }
 
-
     IForm() {
         return `
              interface  {
@@ -136,7 +133,7 @@ export default class SetupsFRS extends Vue {
                  * @uiPlaceHolder - ${this._("w_FRSSetting_HTTPPort")}
                  * @uiAttrs - { max: 65535, min: 1}
                  */
-                wsport: number;
+                port: number;
 
 
                 /**

@@ -84,7 +84,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 
 // Server
-import { ServerName, ServerVersion } from '@/../core/server';
+import { ServerName, ServerVersion } from "@/../core/server";
 
 // Service
 import ResponseFilter from "@/services/ResponseFilter";
@@ -190,8 +190,8 @@ export default class MyProfile extends Vue {
         this.initAPIs();
     }
 
-    async initAPIs () {
-         await this.$server
+    async initAPIs() {
+        await this.$server
             .R("/apis")
             .then((response: any) => {
                 if (response.serverVersion != undefined) {
@@ -223,7 +223,10 @@ export default class MyProfile extends Vue {
             .then((response: any) => {
                 Loading.hide();
                 Dialog.success(this._("w_MyProfile_ChangePasswordSuccess"));
-                this.$login({username: this.$user.user.username, password: param.newPassword})
+                this.$login({
+                    username: this.$user.user.username,
+                    password: param.newPassword
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
