@@ -1,7 +1,12 @@
 <template>
     <div class="animated fadeIn">
 
-        <edit-ptw :selectedDetail="selectedDetail"></edit-ptw>
+        <div
+            key="transition_4"
+            v-show="transition.step === 4"
+        >
+            <edit-ptw :selectedDetail="selectedDetail"></edit-ptw>
+        </div>
 
         <iv-auto-transition
             :step="transition.step"
