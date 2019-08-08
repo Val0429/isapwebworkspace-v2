@@ -94,8 +94,8 @@
                             ></step5>
 
                             <div
-                                v-if="inputFormData.step5Files"
-                                v-for="file in  inputFormData.step5Files"
+                                v-if="inputFormData.attachments"
+                                v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
                                 <span
@@ -310,7 +310,6 @@ export class EditPTW extends Vue {
         checklistRemark7: "",
 
         // step5
-        step5Files: [],
         attachments: [],
 
         // step6
@@ -522,7 +521,7 @@ export class EditPTW extends Vue {
     receiveStep5Data(step5Date) {}
 
     deleteStep5File(base64) {
-        this.inputFormData.step5Files = this.inputFormData.step5Files.filter(
+        this.inputFormData.attachments = this.inputFormData.attachments.filter(
             s => s.base64 != base64
         );
     }
@@ -532,7 +531,7 @@ export class EditPTW extends Vue {
             if (file) {
                 ImageBase64.fileToBase64(file, (base64 = "") => {
                     if (base64 != "") {
-                        this.inputFormData.step5Files.push({
+                        this.inputFormData.attachments.push({
                             name: file.name,
                             type: file.type,
                             base64: base64
