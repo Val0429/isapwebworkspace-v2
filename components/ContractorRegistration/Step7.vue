@@ -128,7 +128,7 @@
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog";
-import { IStep7, IWorkPermitPerson} from '.';
+import { IStep7, IWorkPermitPerson } from ".";
 
 enum EPageStep {
     list = "list",
@@ -161,7 +161,7 @@ export class Step7 extends Vue {
 
     inputFormData: IWorkPermitPerson = {
         name: "",
-        phone: '',
+        phone: "",
         nric: "",
         occupation: "",
         unitNo: "",
@@ -223,7 +223,7 @@ export class Step7 extends Vue {
     clearInputFormData() {
         this.inputFormData = {
             name: "",
-            phone: '',
+            phone: "",
             nric: "",
             occupation: "",
             unitNo: "",
@@ -266,7 +266,7 @@ export class Step7 extends Vue {
         };
 
         if (!this.NRICRegExp(personObject.nric)) {
-            alert(this._("w_ViewPTW_Step7_NRICFIN_PlaceHolder"));
+            Dialog.error(this._("w_ViewPTW_Step7_NRICFIN_PlaceHolder"));
             return;
         }
 
