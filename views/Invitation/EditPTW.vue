@@ -180,7 +180,7 @@ import Step6 from "@/components/ContractorRegistration/Step6.vue";
 import Step7 from "@/components/ContractorRegistration/Step7.vue";
 import Step8 from "@/components/ContractorRegistration/Step8.vue";
 
-import { IStep1, IStep2, IStep3, IStep4, IStep5, IStep6, IStep7, IStep8, IPerson, IAccessGroup } from '@/components/ContractorRegistration/index'
+import { IStep1, IStep2, IStep3, IStep4, IStep5, IStep6, IStep7, IStep8, IWorkPermitPerson, IWorkPermitAccessGroup } from '@/components/ContractorRegistration/index'
 
 // Service
 import Dialog from "@/services/Dialog";
@@ -229,7 +229,14 @@ export class EditPTW extends Vue {
 	    workPremisesUnit: "",
 	    workLocation: "",
 	    workDescription: "",
-	    workType: [],
+	    workType1: false,
+	    workType2: false,
+	    workType3: false,
+	    workType4: false,
+	    workType5: false,
+	    workType6: false,
+	    workType7: false,
+	    workType8: false,
 	    workStartDate: new Date(),
 	    workStartTime: new Date(),
 	    workEndDate: new Date(),
@@ -359,7 +366,14 @@ export class EditPTW extends Vue {
         this.inputFormData.workPremisesUnit = step3Date.workPremisesUnit;
         this.inputFormData.workLocation = step3Date.workLocation;
         this.inputFormData.workDescription = step3Date.workDescription;
-        this.inputFormData.workType = step3Date.workType;
+        this.inputFormData.workType1 = step3Date.workType1;
+        this.inputFormData.workType2 = step3Date.workType2;
+        this.inputFormData.workType3 = step3Date.workType3;
+        this.inputFormData.workType4 = step3Date.workType4;
+        this.inputFormData.workType5 = step3Date.workType5;
+        this.inputFormData.workType6 = step3Date.workType6;
+        this.inputFormData.workType7 = step3Date.workType7;
+        this.inputFormData.workType8 = step3Date.workType8;
         this.inputFormData.workStartDate = step3Date.workStartDate;
         this.inputFormData.workStartTime = step3Date.workStartTime;
         this.inputFormData.workEndDate = step3Date.workEndDate;
@@ -378,7 +392,6 @@ export class EditPTW extends Vue {
         //     !this.inputFormData.workPremisesUnit ||
         //     !this.inputFormData.workLocation ||
         //     !this.inputFormData.workDescription ||
-        //     this.inputFormData.workType.length === 0 ||
         //     !this.inputFormData.workStartDate ||
         //     !this.inputFormData.workStartTime ||
         //     !this.inputFormData.workEndDate ||

@@ -23,7 +23,14 @@ interface IStep3 {
 	workPremisesUnit: string;
 	workLocation: string;
 	workDescription: string;
-	workType: number[];
+	workType1: boolean;
+	workType2: boolean;
+	workType3: boolean;
+	workType4: boolean;
+	workType5: boolean;
+	workType6: boolean;
+	workType7: boolean;
+	workType8: boolean;
 	workStartDate: Date;
 	workStartTime: Date;
 	workEndDate: Date;
@@ -60,14 +67,14 @@ interface IStep6 {
 }
 
 interface IStep7 {
-	persons: IPerson[];
+	persons: IWorkPermitPerson[];
 }
 
 interface IStep8 {
-	accessGroups: IAccessGroup[];
+	accessGroups: IWorkPermitAccessGroup[];
 }
 
-interface IPerson {
+interface IWorkPermitPerson {
 	name: string;
 	phone: string;
 	nric: string;
@@ -78,9 +85,9 @@ interface IPerson {
 	shift: string
 }
 
-interface IAccessGroup {
+interface IWorkPermitAccessGroup {
 	doorId: string;
 	doorName: string;
 }
 
-export { IStep1, IStep2, IStep3, IStep4, IStep5, IStep6, IStep7, IStep8, IPerson, IAccessGroup }
+export { IStep1, IStep2, IStep3, IStep4, IStep5, IStep6, IStep7, IStep8, IWorkPermitPerson, IWorkPermitAccessGroup }

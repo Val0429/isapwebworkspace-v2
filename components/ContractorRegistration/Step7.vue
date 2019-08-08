@@ -128,7 +128,7 @@
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog";
-import {IPerson, IStep7} from '.';
+import { IStep7, IWorkPermitPerson} from '.';
 
 enum EPageStep {
     list = "list",
@@ -159,7 +159,7 @@ export class Step7 extends Vue {
         tableDataFromApi: []
     };
 
-    inputFormData: IPerson = {
+    inputFormData: IWorkPermitPerson = {
         name: "",
         phone: '',
         nric: "",

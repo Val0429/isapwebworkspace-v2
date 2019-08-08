@@ -5,22 +5,98 @@
             :value="inputFormData"
             @update:*="updateInputFormData"
         >
-            <template #typeOfWork>
+            <template #workType>
                 <div class="mb-3 mt-2">
                     <p class="cpl-md-12 mb-2 ml-3">* {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved') }}</p>
+
                     <b-form-checkbox
-                        v-for="option in typeOfWorkSelectItem"
-                        v-model="inputFormData.workType"
-                        :key="option.value"
-                        :value="option.value"
-                        name="typeOfWork"
-                        class="col-md-12 ml-4 mb-2"
-                        inline
-                        @input="selectTypeOfWork"
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType1"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType1"
                     >
-                        {{ option.text }}
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved1') }}
                     </b-form-checkbox>
-                </div>
+
+                    <b-form-checkbox
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType2"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType2"
+                    >
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved2') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType3"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType3"
+                    >
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved3') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType4"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType4"
+                    >
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved4') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType5"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType5"
+                    >
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved5') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType6"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType6"
+                    >
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved6') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType7"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType7"
+                    >
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved7') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox
+                        class="col-md-12 ml-4 mb-1"
+                        v-model="inputFormData.workType8"
+                        name="status"
+                        :value="true"
+                        :unchecked-value="false"
+                        @input="changeWorkType8"
+                    >
+                        {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved8') }}
+                    </b-form-checkbox>
+           </div>
             </template>
 
             <template #contractorIsRequired>
@@ -45,7 +121,14 @@ export class Step3 extends Vue {
         workPremisesUnit: "",
         workLocation: "",
         workDescription: "",
-        workType: [],
+        workType1: false,
+        workType2: false,
+        workType3: false,
+        workType4: false,
+        workType5: false,
+        workType6: false,
+        workType7: false,
+        workType8: false,
         workStartDate: new Date(),
         workStartTime: new Date(),
         workEndDate: new Date(),
@@ -124,7 +207,35 @@ export class Step3 extends Vue {
         this.$emit("step3", this.inputFormData);
     }
 
-    selectTypeOfWork() {
+    changeWorkType1() {
+        this.$emit("step3", this.inputFormData);
+    }
+
+    changeWorkType2() {
+        this.$emit("step3", this.inputFormData);
+    }
+
+    changeWorkType3() {
+        this.$emit("step3", this.inputFormData);
+    }
+
+    changeWorkType4() {
+        this.$emit("step3", this.inputFormData);
+    }
+
+    changeWorkType5() {
+        this.$emit("step3", this.inputFormData);
+    }
+
+    changeWorkType6() {
+        this.$emit("step3", this.inputFormData);
+    }
+
+    changeWorkType7() {
+        this.$emit("step3", this.inputFormData);
+    }
+
+    changeWorkType8() {
         this.$emit("step3", this.inputFormData);
     }
 

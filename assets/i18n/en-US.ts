@@ -148,14 +148,14 @@ export default class LangObject {
     w_ViewPTW_Step3_Description_PlaceHolder = 'Description of the works';
 
     w_ViewPTW_Step3_TypesOfWorkInvolved = 'Types of work involved. Please tick all that apply';
-    w_ViewPTW_Step3_TypesOfWorkInvolved1 = 'Hot Works';
-    w_ViewPTW_Step3_TypesOfWorkInvolved2 = 'Lifting Operations';
-    w_ViewPTW_Step3_TypesOfWorkInvolved3 = 'Entry into Confined Space';
-    w_ViewPTW_Step3_TypesOfWorkInvolved4 = 'Use of bottom lift or aerial platform';
-    w_ViewPTW_Step3_TypesOfWorkInvolved5 = 'Installation & Use of Gondola';
-    w_ViewPTW_Step3_TypesOfWorkInvolved6 = 'Installation & Use of Scaffold';
-    w_ViewPTW_Step3_TypesOfWorkInvolved7 = 'Installation of Temporary Generator';
-    w_ViewPTW_Step3_TypesOfWorkInvolved8 = 'Others i.e.. Structural works';
+    w_ViewPTW_Step3_TypesOfWorkInvolved1 = '1. Hot Works';
+    w_ViewPTW_Step3_TypesOfWorkInvolved2 = '2. Lifting Operations';
+    w_ViewPTW_Step3_TypesOfWorkInvolved3 = '3. Entry into Confined Space';
+    w_ViewPTW_Step3_TypesOfWorkInvolved4 = '4. Use of bottom lift or aerial platform';
+    w_ViewPTW_Step3_TypesOfWorkInvolved5 = '5. Installation & Use of Gondola';
+    w_ViewPTW_Step3_TypesOfWorkInvolved6 = '6. Installation & Use of Scaffold';
+    w_ViewPTW_Step3_TypesOfWorkInvolved7 = '7. Installation of Temporary Generator';
+    w_ViewPTW_Step3_TypesOfWorkInvolved8 = '8. Others i.e.. Structural works';
 
     w_ViewPTW_Step3_From = 'Expected Duration of Work – From :';
     w_ViewPTW_Step3_To = 'To';
