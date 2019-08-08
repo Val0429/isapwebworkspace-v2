@@ -82,7 +82,7 @@ export default class LangObject implements ILang {
     schedule = '';
     timeid = '時間規格ID';
     timename = '時間規格名稱';
-
+    permissionTable = '門禁組';
     w_PermissionTable = '門禁組';
     w_PermissionTableAdd = '新增門禁組';
     w_PermissionTableEdit = '編輯門禁組';

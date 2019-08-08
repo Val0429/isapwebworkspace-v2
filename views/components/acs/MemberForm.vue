@@ -369,6 +369,7 @@ export default class MemberForm extends Vue {
   async exportToExcel($event){
     console.log("exportToExcel", $event);
         if(this.fieldSelected.length==0)return;
+        if(this.storedPermissionOptions.length==0) await this.initPremission();
 
         let members:any = await this.$server.R("/acs/member", {"paging.all":"true"});
         let exportList =[];
@@ -376,13 +377,24 @@ export default class MemberForm extends Vue {
         for(let field of this.fieldSelected){
           headers.push(this._(field as any));
         }
+        
         for (let member of members.results){
           let newMember:any = {};
           for(let field of  this.fieldSelected){
               newMember[field]=member[field];
+              if(field=="permissionTable"){
+                let permissions = [];
+                for(let perm of member.permissionTable){
+                    let permissiontable = this.storedPermissionOptions.find(x=> x.value == perm.toString());
+                    if(!permissiontable)continue;
+                    permissions.push(permissiontable.text);
+                }
+                newMember.permissionTable = permissions.join(",");
+              }
           }
           let exist = exportList.find(x=>JSON.stringify(x)==JSON.stringify(newMember));
           if(!exist) exportList.push(newMember);
+          
         }
            
         let workbook = XLSX.utils.book_new();
@@ -446,7 +458,7 @@ export default class MemberForm extends Vue {
   savedFieldOptions=[];
   fieldOptions=[];
   fieldSelected=[];
-  exceptionFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode", "permissionTable"]
+  exceptionFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode"];
   selectedItem(data) {
     if(this.savedFieldOptions.length==0 && data.length>0){
       for(let key of Object.keys(data[0])){

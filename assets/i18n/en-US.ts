@@ -84,7 +84,7 @@ export default class LangObject {
     schedule = 'Schedule';
     timeid = 'Time Id';
     timename = 'Time Name';
-
+    permissionTable = 'Permission Table';
     w_PermissionTable = 'Permission Table';
     w_PermissionTableAdd = 'Add Permission Table';
     w_PermissionTableEdit = 'Edit Permission Table';
