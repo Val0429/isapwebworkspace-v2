@@ -187,7 +187,7 @@
                 <b-button
                     variant="info"
                     size="lg"
-                    @click="pageToList()"
+                    @click="tempSave()"
                 >{{ _('w_Save') }}
                 </b-button>
             </template>
@@ -226,6 +226,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
+import DialogConfirm from "../../services/Dialog/Confirm.vue";
 
 interface IStep
     extends IStep1,
@@ -249,6 +250,7 @@ export class EditPTW extends Vue {
 
     // step 相關
     isMounted: boolean = false;
+    isChange: boolean = false;
     doMounted() {
         this.isMounted = true;
     }
@@ -341,6 +343,10 @@ export class EditPTW extends Vue {
         //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
+    tempSave() {
+        this.isChange = false;
+    }
+
     stepTo2() {
         let stepRef: any = this.$refs.step;
 
@@ -380,6 +386,7 @@ export class EditPTW extends Vue {
         this.inputFormData.companyFax = step2Date.companyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
+        this.isChange = true;
     }
 
     stepTo3() {
@@ -434,6 +441,7 @@ export class EditPTW extends Vue {
         this.inputFormData.workContactPhone = step3Date.workContactPhone;
 
         console.log("inputFormData ~ ", this.inputFormData);
+        this.isChange = true;
     }
 
     stepTo4() {
@@ -488,6 +496,7 @@ export class EditPTW extends Vue {
         this.inputFormData.checklistRemark7 = step4Date.checklistRemark7;
 
         console.log(" ~ ", this.inputFormData);
+        this.isChange = true;
     }
 
     stepTo5() {
@@ -522,16 +531,15 @@ export class EditPTW extends Vue {
 
     ////////////////////////////// step 5  //////////////////////////////
 
-    receiveStep5Data(step5Date) {}
+    receiveStep5Data(step5Date) {
+        this.isChange = true;
+    }
 
     deleteStep5File(base64) {
         this.inputFormData.attachments = this.inputFormData.attachments.filter(
             s => s.base64 != base64
         );
-        console.log(
-            "deleteStep5File",
-            this.inputFormData.attachments.map(x => x.base64)
-        );
+        this.isChange = true;
     }
 
     putStep5File(files) {
@@ -550,6 +558,7 @@ export class EditPTW extends Vue {
                 });
             }
         }
+        this.isChange = true;
     }
 
     stepTo6() {
@@ -607,6 +616,7 @@ export class EditPTW extends Vue {
             "this.inputFormData.step7PersonDetail ~ ",
             this.inputFormData.persons
         );
+        this.isChange = true;
     }
 
     stepTo8() {
@@ -639,9 +649,24 @@ export class EditPTW extends Vue {
         this.inputFormData.accessGroups = step8Date.accessGroup;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
+        this.isChange = true;
     }
 
     async doSubmit() {
+        if (this.isChange) {
+            Dialog.confirm(
+                this._("w_Save_Checked"),
+                this._("w_Save_Checked"),
+                () => {
+                    this.doSubmitApi();
+                }
+            );
+        } else {
+            this.doSubmitApi();
+        }
+    }
+
+    async doSubmitApi() {
         // TODO: wait api
         const datas: any = [];
 
