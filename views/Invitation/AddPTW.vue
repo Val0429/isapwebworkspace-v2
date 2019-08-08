@@ -73,10 +73,10 @@ export class AddPTW extends Vue {
 
     clearInputData() {
         this.inputFormData = {
-            name: '',
-            email: '',
-            tenant: '',
-            workDescription: ''
+            contact: '',
+            contactEmail: '',
+            companyId: '',
+            workCategory: ''
         };
     }
 
@@ -94,21 +94,20 @@ export class AddPTW extends Vue {
         this.tenantSelectItem = {};
         let tempTenantSelectItem = {};
 
-        // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempTenantSelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.tenantSelectItem = tempTenantSelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .R("/companies")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response.results) {
+                        tempTenantSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.tenantSelectItem = tempTenantSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
 
     }
 
@@ -117,21 +116,20 @@ export class AddPTW extends Vue {
         this.workDescriptionSelectItem = {};
         let tempDescriptionSelectItem = {};
 
-        // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempDescriptionSelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.workDescriptionSelectItem = tempDescriptionSelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .R("/purposes")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response.results) {
+                        tempDescriptionSelectItem[returnValue.name] =
+                            returnValue.name;
+                    }
+                    this.workDescriptionSelectItem = tempDescriptionSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
 
     }
 
@@ -142,27 +140,47 @@ export class AddPTW extends Vue {
 
     async doSubmit(data) {
         const doSubmitParam: {
-            name: '',
-            email: '',
-            tenant: '',
-            workDescription: '',
+            contact: string,
+            contactEmail: string,
+            companyId: string,
+            workCategory: string,
         } = {
-            name: data.name,
-            email: data.email,
-            tenant: data.tenant,
-            workDescription: data.workDescription,
-
+            contact: data.contact,
+            contactEmail: data.contactEmail,
+            companyId: data.companyId,
+            workCategory: data.workCategory,
         };
 
         // email正則
-        const emailRule = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+(([.\-])[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-       // const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+       //  const emailRule = /^([^@]+)@([\da-z\.-]+)\.([a-z\.]{2,6})([^\.])$/;
+       // // const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+       //
+       //  if (!emailRule.test(data.email)) {
+       //      Dialog.error(this._("w_Invitation_EmailError"));
+       //      this.inputFormData.email = '';
+       //      return false;
+       //  }
 
-        if (!emailRule.test(data.email)) {
-            Dialog.error(this._("w_Invitation_EmailError"));
-            this.inputFormData.email = '';
-            return false;
-        }
+        await this.$server
+            .C("/crms", doSubmitParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        Dialog.success(this._("w_Dialog_SuccessTitle"));
+                        this.pageToList();
+                    },
+                    this._("w_Dialog_ErrorTitle")
+                );
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Dialog_ErrorTitle")
+                );
+            });
 
         console.log('doSubmitParam ~ ', doSubmitParam);
 
@@ -180,26 +198,26 @@ export class AddPTW extends Vue {
                  * @uiLabel - ${this._("w_Invitation_ContactPerson")}
                  * @uiPlaceHolder - ${this._("w_Invitation_ContactPerson")}
                  */
-                name: string;
+                contact: string;
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_CompanyEmail")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Email_Placeholder")}
                  */
-                email: string;
+                contactEmail: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_Tenant")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Tenant")}
                  */
-                tenant: ${toEnumInterface(this.tenantSelectItem as any, false)};
+                companyId: ${toEnumInterface(this.tenantSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkDescription")}
                  */
-                workDescription:  ${toEnumInterface(this.workDescriptionSelectItem as any, false)};
+                workCategory:  ${toEnumInterface(this.workDescriptionSelectItem as any, false)};
 
             }
         `;

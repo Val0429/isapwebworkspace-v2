@@ -8,7 +8,7 @@ import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
     // Min server
-    ip: '172.16.10.21',
+    ip: '172.16.10.30',
 
     // Rebaca server
     // ip: '172.16.10.194',
@@ -16,7 +16,7 @@ var config: Config = {
     // Tina server
     // ip: '172.16.10.136',
 
-    port: 6066,
+    port: 6060,
     ssl: false,
 
     serverFrameworkVersionGreaterThan: '1.06.00',

@@ -2,6 +2,7 @@
     <div
         id="app"
         class="app flex-row align-items-center"
+        @keyup.enter="Login"
     >
         <div class="container">
             <b-row class="justify-content-center">
@@ -48,6 +49,12 @@
 
                                     </div>
 
+                                    <!-- language -->
+                                    <!-- <div class="input-group mb-4">
+                                        <iv-language-button class="mb-4" />
+                                    </div> -->
+                                    <!--== language ==-->
+
                                     <b-row>
                                         <b-col cols="6">
                                             <b-button
@@ -62,12 +69,43 @@
                                             cols="6"
                                             class="text-right"
                                         >
+                                            <!-- language -->
+                                            <iv-language-button />
+                                            <!--== language ==-->
+
+                                            <!-- forgot password -->
+                                            <!-- <b-button
+                                                variant="link"
+                                                class="px-0"
+                                                @click="forgotPassword"
+                                            >
+                                                {{ _('w_Login_ForgotPassword') }}
+                                            </b-button> -->
+                                            <!--== forgot password ==-->
 
                                         </b-col>
                                     </b-row>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Signup -->
+                        <!-- <div
+                            class="card text-white bg-primary py-5 d-md-down-none"
+                            style="width:44%"
+                        >
+                            <div class="card-body text-center">
+                                <div>
+                                    <h2>{{ _('w_Login_SignUpTitle') }}</h2>
+                                    <p>{{ _('w_Login_SignUpContent') }}</p>
+                                    <b-button
+                                        variant="primary"
+                                        class="active mt-3"
+                                    >{{ _('Register Now') }}!</b-button>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!--== Signup ==-->
 
                     </div>
                 </b-col>
@@ -79,10 +117,10 @@
 <script lang="ts" src="./login.vue.ts" />
 
 <style lang="scss" scoped>
-div.app {
-    background-image: url(https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
+    div.app {
+        background-image: url(https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
 </style>

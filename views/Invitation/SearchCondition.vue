@@ -102,21 +102,20 @@ export class SearchCondition extends Vue {
         this.tenantSelectItem = {};
         let tempTenantSelectItem = {};
 
-        // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempTenantSelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.tenantSelectItem = tempTenantSelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .R("/companies")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response.results) {
+                        tempTenantSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.tenantSelectItem = tempTenantSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     async initWorkCategorySelectItem() {

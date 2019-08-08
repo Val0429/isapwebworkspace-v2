@@ -40,7 +40,7 @@
                         ref="listTable"
                         :interface="ITableList()"
                         :multiple="tableMultiple"
-                        :server="{ path: '/partner/cms' }"
+                        :server="{ path: '/crms' }"
                         @selected="selectedItem($event)"
                     >
 
@@ -118,10 +118,10 @@ export default class Invitation extends Vue {
 
     inputFormData: any = {
         objectId: "",
-        name: "",
-        email: "",
-        tenant: "",
-        workDescription: ""
+        contact: "",
+        contactEmail: "",
+        companyId: "",
+        workCategory: ""
     };
 
     created() {}
@@ -145,6 +145,7 @@ export default class Invitation extends Vue {
     pageToList() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
     }
 
     pageToAdd() {
@@ -176,36 +177,14 @@ export default class Invitation extends Vue {
     }
 
     async addPTWToList(addPTWParam: object) {
+
+        this.pageToList();
+
         this.inputFormData = addPTWParam;
 
-        // TODO: wait api
-        // const datas =  [];
-        //
-        // const addParam = {
-        //     datas
-        // };
-        //
-        // Loading.show();
-        // await this.$server
-        //     .C("/", addParam)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(
-        //             this,
-        //             response,
-        //             (response: any) => {
-        //                 Dialog.success(this._("w_Dialog_SuccessTitle"));
-        //                 this.pageToList();
-        //             },
-        //             this._("w_Dialog_ErrorTitle")
-        //         );
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("")
-        //         );
-        //     });
+
+
+
     }
 
     downloadExcel() {
@@ -267,19 +246,22 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_PTWStatus")}
                  */
-                ptwStatus: string;
+                status: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_Email")}
                  */
-                email: string;
+                contactEmail: string;
 
 
-                /**
-                 * @uiLabel - ${this._("w_Invitation_Tenant")}
-                 */
-                tenant: string;
+                company: interface {
+                    /**
+                     * @uiLabel - ${this._("w_Invitation_Tenant")}
+                     */
+                    name: string;
+
+                };
 
 
                 /**
@@ -297,7 +279,7 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_StartDate")}
                  */
-                startDate: string;
+                createdAt: string;
 
 
                 /**
@@ -312,7 +294,6 @@ export default class Invitation extends Vue {
                 contractor: string;
 
                 Actions: any
-
 
             }`;
     }

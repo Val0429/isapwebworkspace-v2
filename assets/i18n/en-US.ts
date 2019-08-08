@@ -260,4 +260,5 @@ export default class LangObject {
     w_Dashboard_Total = 'TOTAl';
 
     //
+    w_User_VisitorCannotLogin = ''
 }

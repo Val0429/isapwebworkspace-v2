@@ -1,25 +1,13 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { RegisterLoginRouter } from '@/../core';
 import { ServerName, ServerVersion } from '@/../core/server';
+import { EUserRole } from '@/services/Role';
 import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
-
-enum EUserRole {
-    SuperAdministrator = 'SuperAdministrator',
-    Admin = 'Admin',
-    User = 'User',
-}
 
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
     path: '/login',
-
-    // Min server
-    permission: '/user/user/login',
-
-    // Master
-    // permission: '/users/login',
-
     disableContainer: true,
 })
 @Component
@@ -37,23 +25,29 @@ export default class Login extends Vue {
         await this.$login(param)
             .then(() => {
                 Loading.hide();
-                this.$router.push('/dashboard');
-
-                // let userRole = '';
-                // if (this.$user.user != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
-                //     userRole = this.$user.user.roles[0].name;
-                // }
-                // switch (userRole) {
-                //     case EUserRole.SuperAdministrator:
-                //         this.$router.push('/users/user');
-                //         break;
-                //     case EUserRole.Admin:
-                //         this.$router.push('/reports/traffic');
-                //         break;
-                //     case EUserRole.User:
-                //         this.$router.push('/reports/traffic');
-                //         break;
-                // }
+                let userRole = '';
+                console.log('!!! check', this.$user.user != undefined, this.$user.user.roles != undefined, this.$user.user.roles[0] != undefined, this.$user.user.roles[0].name);
+                if (this.$user.user != undefined && this.$user.user.roles != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
+                    userRole = this.$user.user.roles[0].name;
+                }
+                console.log('!!! userRole', userRole, EUserRole.TenantUser, userRole == EUserRole.TenantUser);
+                switch (userRole) {
+                    case EUserRole.SystemAdministrator:
+                        this.$router.push('/dashboard');
+                        break;
+                    case EUserRole.Administrator:
+                        this.$router.push('/dashboard');
+                        break;
+                    case EUserRole.TenantAdministrator:
+                        this.$router.push('/dashboard');
+                        break;
+                    case EUserRole.TenantUser:
+                        this.$router.push('/dashboard');
+                        break;
+                    case EUserRole.Visitor:
+                        Dialog.error(this._('w_User_VisitorCannotLogin'));
+                        break;
+                }
             })
             .catch((e: any) => {
                 Loading.hide();
@@ -66,5 +60,9 @@ export default class Login extends Vue {
                     Dialog.error(this._('w_UserSession_Empty'));
                 }
             });
+    }
+
+    forgotPassword() {
+        this.$router.push('/forgot_password');
     }
 }
