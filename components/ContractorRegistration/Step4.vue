@@ -153,7 +153,7 @@
                 <p class="col-md-10 mt-2">
                     <span>{{ _('w_ViewPTW_Step4_9') }}</span> &nbsp;
                     <a
-                        :href="path"
+                        href="/Briefing_Of_HSE_ORL_CLM.pdf"
                         target="_blank"
                     >{{ _('w_ViewPTW_Step4_91') }}</a>
                     <span>{{ _('w_ViewPTW_Step4_93') }}</span> &nbsp;
@@ -202,7 +202,8 @@ export class Step4 extends Vue {
     };
 
     // TODO: wait api
-    path: string = "https://bootstrap-vue.js.org/docs/components/form-radio";
+    // path: string = require('@/assets/pdf/Briefing_Of_HSE_ORL_CLM.pdf');
+    path: string = "";
 
     created() {}
 
