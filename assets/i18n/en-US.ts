@@ -41,6 +41,7 @@ export default class LangObject {
 
     w_Confirm = 'Confirm';
     w_Cancel = 'Cancel';
+    w_Cancelled = 'Cancelled';
 
     w_Dialog_ErrorTitle = 'Error';
     w_Dialog_SuccessTitle = 'Success';
@@ -103,6 +104,8 @@ export default class LangObject {
     w_Navigation_Tenants = 'Tenant';
     w_Navigation_Tenants_Invitation = 'Invitation';
     w_Navigation_Tenants_Visitor = 'Visitor';
+
+    w_Navigation_Registration_Potrait = 'Potrait';
 
     ////////////////// Dashboard //////////////////
     w_Dashboard_VisitorOnSite = 'Visitor On Site';
@@ -311,4 +314,11 @@ export default class LangObject {
     w_Floor_FloorName = 'Floor Name';
     w_Floor_Floor = 'Floor';
 
+    ////////////////// Potrait //////////////////
+    w_Potrait_Photo = 'Your Photo';
+    w_Potrait_PhotoPlaceholder = 'Photo size must bigger than 300 x 300';
+    w_Potrait_ErrorFileToLarge = 'Photo size to large';
+    w_Potrait_SuccessTitle = 'Registration Completed!';
+    w_Potrait_SuccessContent_1 = 'Please take note of the PIN CODE sent to you for your Check-In';
+    w_Potrait_SuccessContent_2 = 'kindly proceed to the Check-in Kiosk and Click "Check-in"';
 }

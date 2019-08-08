@@ -33,7 +33,7 @@
                 >
 
                     <template #visitor.status="{$attrs}">
-                        <div>{{$attrs.row.cancelled ? "Cancelled" : $attrs.row.visitor.status}}</div>
+                        <div>{{$attrs.row.cancelled ? _('w_Cancelled') : $attrs.row.visitor.status}}</div>
                     </template>
 
                     <template #startDate="{$attrs}">
