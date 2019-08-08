@@ -140,6 +140,7 @@ export class HighchartDashboard extends Vue {
                 }
             },
             exporting: { enabled: false },
+            legend: { enabled: null },
             title: {
                 text: this.chartTitle,
                 align: "left",
@@ -168,6 +169,7 @@ export class HighchartDashboard extends Vue {
                 type: "column"
             },
             exporting: { enabled: false },
+            legend: { enabled: null },
             title: {
                 text: this.chartTitle,
                 align: "left",

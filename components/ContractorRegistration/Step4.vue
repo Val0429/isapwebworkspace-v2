@@ -173,7 +173,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { IStep4 } from '.';
+import { IStep4 } from ".";
 
 @Component({
     components: {}

@@ -221,12 +221,14 @@ export default class LangObject {
     w_ViewPTW_Step7_PersonList = 'Person List';
     w_ViewPTW_Step7_FullName = 'Full Name';
     w_ViewPTW_Step7_Occupation = 'Occupation';
-    w_ViewPTW_Step7_NRIC = 'NRIC';
+    w_ViewPTW_Step7_NRIC = 'NRIC / FIN';
     w_ViewPTW_Step7_Shift = 'Shift';
     w_ViewPTW_Step7_Vehicle = 'Vehicle #';
     w_ViewPTW_Step7_Company = 'Company';
 
     w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
+
+    w_ViewPTW_Step7_NRICFIN_PlaceHolder = 'NRIC / FIN Required 4 Word With English/Number';
 
     w_ViewPTW_Step7_Day = 'Day';
     w_ViewPTW_Step7_Night = 'Night';
@@ -252,9 +254,9 @@ export default class LangObject {
     w_Dashboard_FilterCondition = 'Filter Condition';
     w_Dashboard_RealTimeContractorTraffic = 'Real Time Contractor Traffic';
     w_Dashboard_WorkFrequencyHistory = 'Work Frequency History';
-    w_Dashboard_Submitted = 'Submitted';
+    w_Dashboard_Submitted = 'New';
     w_Dashboard_Approved = 'Approved';
-    w_Dashboard_AwaitingApproval = 'Awaiting Approval';
+    w_Dashboard_AwaitingApproval = 'Pending Approval';
     w_Dashboard_Total = 'TOTAl';
 
     //
