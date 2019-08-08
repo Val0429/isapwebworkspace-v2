@@ -226,7 +226,6 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
-import DialogConfirm from "../../services/Dialog/Confirm.vue";
 
 interface IStep
     extends IStep1,
