@@ -247,7 +247,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(value, index) in inputFormData.data" v-bind:key="index">
-                            <td>{{ value.deviceType }}</td>
+                            <td>{{ deviceTypeItem[value.deviceType] }}</td>
                             <td>{{ value.deviceName.text }}</td>
                             <td>{{ value.area.text}}</td>
                             <td>{{ value.timeFormat.text }}</td>
@@ -358,12 +358,7 @@ export default class PermissionTable extends Vue {
     deviceAreaItem: any = {};
     deviceTimeFromatItem: any = {};
     showdeviceTimeFromatItem: any = {};
-    deviceTypeItem: any = {
-        door: EDeviceType.door,
-        doorGroup: EDeviceType.doorGroup,
-        elevator: EDeviceType.elevator,
-        floorGroup: EDeviceType.floorGroup
-    };
+    deviceTypeItem: any = {};
 
     selectItemOriginal: any = {
         timeSchedule: [],
@@ -384,6 +379,10 @@ export default class PermissionTable extends Vue {
 
     mounted() {
         this.pageToList();
+        this.deviceTypeItem.door = this._("door");
+        this.deviceTypeItem.doorGroup = this._("w_DoorGroup");
+        this.deviceTypeItem.elevator = this._("w_Elevator");
+        this.deviceTypeItem.floorGroup = this._("w_FloorGroup");
     }
 
     searchTable($event) {
