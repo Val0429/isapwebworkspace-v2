@@ -129,7 +129,7 @@
                     @input="changeChecklist7"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist1Remarks"
+                    v-model="inputFormData.checklist7Remarks"
                     class="col-md-4 mt-2"
                     @input="changeChecklist7Remarks"
                 >
