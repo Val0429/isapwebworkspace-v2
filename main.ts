@@ -3,7 +3,7 @@ import Dialog from "@/services/Dialog/Dialog";
 import debug from '@/config/default/debug';
 
 
-//if(debug.prodMode){
+if(debug.prodMode){
     Vue.config.errorHandler = async (error, vm, info) => {
         let lang = new Language();
         console.error("Vue.config.errorHandler", vm.$route, error);
@@ -25,6 +25,6 @@ import debug from '@/config/default/debug';
         
     }
     //remove console log
-if(debug.prodMode){
+//if(debug.prodMode){
     window.console.log = function(){}
 }
