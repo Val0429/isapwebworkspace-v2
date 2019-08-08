@@ -667,4 +667,5 @@ export default class LangObject {
     w_log_title="Log Title";
     w_log_date="Date";
     w_log_time="Time";
+    w_MemberFields="Member Fields";
 }

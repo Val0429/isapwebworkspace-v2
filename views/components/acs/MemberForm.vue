@@ -1,5 +1,22 @@
 <template>
   <div class="animated fadeIn">
+    <iv-modal :label="_('w_MemberFields')" :visible.sync="exportVisible">
+            <iv-form
+                  ref="fieldForm"
+                    :interface="exportInterface()"
+                    @submit="exportToExcel($event)"
+                >
+                <template #fieldSelection="{$attrs, $listeners}">
+                  <iv-sort-select
+                    v-if="fieldOptions.length > 0"
+                    v-model="fieldSelected"
+                    class="col-md-12"
+                    :options="fieldOptions"
+                  ></iv-sort-select>
+                </template>
+                </iv-form>
+                
+        </iv-modal>
     <iv-card v-show="pageStep === ePageStep.list" :label="_('w_Filter')">
       <iv-form
         ref="filterForm"
@@ -29,7 +46,7 @@
     </iv-card>
     <iv-card v-show="pageStep === ePageStep.list" :label="_('w_Member_List')">
       <template #toolbox>
-         <iv-toolbox-export @click="exportToExcel()"/>
+         <iv-toolbox-export :disabled="isSelected.length !== 1" @click="showExportDialog()"/>
         <iv-toolbox-view :disabled="isSelected.length !== 1" @click="pageToView" />
         <iv-toolbox-edit
           v-show="canEdit"
@@ -297,7 +314,7 @@ export default class MemberForm extends Vue {
   applyReason1Options: any = {};
   applyReason2Options: any = {};
   applyReason3Options: any = {};
-
+  exportVisible:boolean=false;
   inputTestEmail: string = "";
   newImg = new Image();
   newImgSrc = "";
@@ -339,17 +356,42 @@ export default class MemberForm extends Vue {
     await this.initCredentialProfile();
     
   }
-  async exportToExcel(){
-        
+  showExportDialog(){
+    this.exportVisible=true;
+  }
+  exportInterface(){
+    return `
+      interface {        
+        fieldSelection?:any[];
+      }
+    `; 
+  }
+  async exportToExcel($event){
+    console.log("exportToExcel", $event);
+        if(this.fieldSelected.length==0)return;
+
         let members:any = await this.$server.R("/acs/member", {"paging.all":"true"});
-        let exportList = members.results;
-        let headers= exportList&& exportList.length>0?Object.keys(exportList[0]):[];        
+        let exportList =[];
+        let headers= this.fieldSelected;     
+        for (let member of members.results){
+          let newMember:any = {};
+          for(let field of headers){
+              newMember[field]=member[field];
+          }
+          let exist = exportList.find(x=>JSON.stringify(x)==JSON.stringify(newMember));
+          if(!exist) exportList.push(newMember);
+        }
+           
         let workbook = XLSX.utils.book_new();
         let ws = XLSX.utils.aoa_to_sheet([headers]);        
         XLSX.utils.sheet_add_json(ws, exportList,  {skipHeader: true, origin: "A2"});
         XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");    
-        XLSX.writeFile(workbook, `${this._("w_Member")}.xlsx`);    
+        XLSX.writeFile(workbook, `${this._("w_Member")}.xlsx`);
+        this.exportVisible=false;
+        this.fieldSelected=[];
+        this.fieldOptions = this.savedFieldOptions;
   }
+  
   onCardCertificateUpdate(value:any){
     let profile = this.credentialProfiles.find(x=>x.Token == value);
     if(!profile)return;
@@ -398,10 +440,19 @@ export default class MemberForm extends Vue {
        }
        return result;
     }
-
+  savedFieldOptions=[];
+  fieldOptions=[];
+  fieldSelected=[];
   selectedItem(data) {
+    if(this.savedFieldOptions.length==0 && data.length>0){
+      for(let key of Object.keys(data[0])){
+        this.savedFieldOptions.push({value:key, text:key});
+      }
+      //to trigger option changed
+      this.fieldOptions=this.savedFieldOptions;
+    }
+    
     this.isSelected = data;
-    this.selectedDetail = [];
     this.selectedDetail = data;
   }
   
