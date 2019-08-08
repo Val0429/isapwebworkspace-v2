@@ -40,7 +40,8 @@
                 >
 
                     <template #status="{$attrs, $listeners}">
-<!--                        {{ checkKioskIdSame($attrs && $attrs.row && $attrs.row.data && $attrs.row.data.kioskId, wsData) ? 'Online' : status}}-->
+                        <!--                        {{ checkKioskIdSame($attrs && $attrs.row && $attrs.row.data && $attrs.row.data.kioskId, wsData) ? 'Online' : status}}-->
+                        {{ resolveStatus($attrs) }}
                     </template>
 
                     <template #Actions="{$attrs, $listeners}">
@@ -135,7 +136,17 @@ import Loading from "@/services/Loading";
 // Transition
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
-import ServerConfig from '@/services/ServerConfig';
+import ServerConfig from "@/services/ServerConfig";
+
+enum EStatus {
+    Offline = "Offline",
+    Online = "Online"
+}
+
+interface IKioskStatus {
+    objectId : string;
+    status: EStatus;
+}
 
 @Component({
     components: {}
@@ -159,11 +170,11 @@ export default class SetupsKiosk extends Vue {
         confirmPassword: "",
         kioskId: "",
         kioskName: "",
-        roles: [],
+        roles: []
     };
 
-    status: string = 'Offline';
-    wsData: any = undefined;
+    kioskStatus: IKioskStatus[] = [];
+    alive: number = 0;
 
     ws: Ws = new Ws({
         url: "",
@@ -171,21 +182,23 @@ export default class SetupsKiosk extends Vue {
             console.log("WS Alive Open");
             console.log("e: ", e);
         },
+
         OnMessage: async (e: MessageEvent): Promise<void> => {
             console.log("WS Alive message");
             console.log("e: ", e);
             this.handleWs(e.data);
         },
+
         OnError: async (e: Event): Promise<void> => {
             console.log("WS Alive Error");
             console.log("e: ", e);
         },
+
         OnClose: async (e: CloseEvent): Promise<void> => {
             console.log("WS Alive Close");
             console.log("e: ", e);
         }
     });
-
 
     async created() {
         // let ws = await this.$server.WS("/kiosks/aliveness" as any);
@@ -194,6 +207,7 @@ export default class SetupsKiosk extends Vue {
         //     console.log("ws message", message);
         // });
         // ws.closeGracefully();
+
     }
 
     mounted() {
@@ -205,7 +219,7 @@ export default class SetupsKiosk extends Vue {
     }
 
     initWS() {
-        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/kiosks/aliveness?sessionId=${ this.$user.sessionId }`;
+        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/kiosks/aliveness?sessionId=${this.$user.sessionId}`;
         // ws://172.16.10.30:6060/kiosks/aliveness?sessionId=r:ede5166019af8d95a3af2416bcc7cce6
         this.ws.url = url;
         this.ws.Connect();
@@ -217,27 +231,41 @@ export default class SetupsKiosk extends Vue {
             if (data.statusCode != undefined && data.statusCode == 401) {
                 this.$router.push({ path: "/" });
             }
+
+            for (let i in this.kioskStatus) {
+                let status =  this.kioskStatus[i];
+                if (status.objectId == data.instance.objectId) {
+                    console.log("!!! data.alive", data.alive);
+                    this.kioskStatus[i].status = data.alive == 1 ? EStatus.Online : EStatus.Offline;
+                    break;
+                }
+            }
+
+            console.log("!!!!", this.kioskStatus);
+
             console.log("handleWs", data);
         } catch (e) {
             console.log("WS handle error: ", e);
         }
-
     }
 
-    getKioskIdFromWS(values: any) {
-        let kioskIds = [];
-        for (const value of values) {
-            kioskIds.push(value.data.kioskId);
-        }
-        return kioskIds;
-    }
-
-    checkKioskIdSame(checkId: string, kioskIds: any): boolean {
-        for (const kioskId of kioskIds) {
-            if (checkId === kioskId) {
-                return true;
+    resolveStatus (data: any): string {
+        let haveObjectId = false;
+        let tempKioskStatus: IKioskStatus = {
+            objectId: "",
+            status: EStatus.Offline
+        };
+        tempKioskStatus.objectId = data.row.objectId;
+        for (let statInfo of this.kioskStatus) {
+            if (statInfo.objectId == data.row.objectId) {
+                haveObjectId = true;
+                tempKioskStatus.status = statInfo.status;
             }
         }
+        if (!haveObjectId) {
+            this.kioskStatus.push(tempKioskStatus);
+        }
+        return tempKioskStatus.status;
     }
 
     clearInputData() {
@@ -248,7 +276,7 @@ export default class SetupsKiosk extends Vue {
             confirmPassword: "",
             kioskId: "",
             kioskName: "",
-            roles: [],
+            roles: []
         };
     }
 
@@ -265,8 +293,7 @@ export default class SetupsKiosk extends Vue {
                 objectId: param.objectId,
                 username: param.username,
                 kioskId: param.data.kioskId,
-                kioskName: param.data.kioskName,
-
+                kioskName: param.data.kioskName
             };
         }
     }
@@ -305,7 +332,7 @@ export default class SetupsKiosk extends Vue {
             password: data.password,
             data: {
                 kioskId: data.kioskId,
-                kioskName: data.kioskName,
+                kioskName: data.kioskName
             },
             roles: ["Kiosk"]
         };
@@ -361,9 +388,9 @@ export default class SetupsKiosk extends Vue {
     }
 
     tableStatus(values: any) {
-        let result = '';
+        let result = "";
         for (const value of values) {
-            value
+            value;
         }
     }
 
@@ -452,10 +479,10 @@ export default class SetupsKiosk extends Vue {
                  * @uiLabel - ${this._("w_Company_UnitNumber")}
                  * @uiPlaceHolder - ${this._("w_Company_UnitNumber")}
                  * @uiType - ${
-                        this.inputFormData.objectId === ""
-                            ? "iv-form-string"
-                            : "iv-form-label"
-                    }
+                     this.inputFormData.objectId === ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                 */
                 username: string;
 
@@ -465,7 +492,7 @@ export default class SetupsKiosk extends Vue {
                   * @uiPlaceHolder - ${this._("w_Password")}
                   * @uiType - iv-form-password
                   * @uiColumnGroup - password
-                  * @uiHidden - ${ (!!this.inputFormData.objectId) }
+                  * @uiHidden - ${!!this.inputFormData.objectId}
                   */
                  password: string;
 
@@ -477,7 +504,7 @@ export default class SetupsKiosk extends Vue {
                  * @uiColumnGroup - password
                  * @uiValidation - (value, all) => value === all.password
                  * @uiInvalidMessage - ${this._("w_Error_Password")}
-                 * @uiHidden - ${ (!!this.inputFormData.objectId)}
+                 * @uiHidden - ${!!this.inputFormData.objectId}
                 */
                  confirmPassword: string;
 
