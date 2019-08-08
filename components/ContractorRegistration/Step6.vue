@@ -12,10 +12,10 @@
 
         <div class="row justify-content-center align-items-center mt-3 font-weight-bold">
             <b-form-checkbox
-                v-model="isAccepted"
+                v-model="termsAccepted"
                 name="status"
-                value="accepted"
-                unchecked-value="not_accepted"
+                :value="true"
+                :unchecked-value="false"
                 @input="changeStatus"
             >
                 {{ _('w_ViewPTW_Step1_agreement') }}
@@ -34,14 +34,14 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 export class Step6 extends Vue {
     // Prop
 
-    isAccepted: string = "not_accepted";
+    termsAccepted: boolean = false;
 
     created() {}
 
     mounted() {}
 
     changeStatus() {
-        this.$emit("step6", this.isAccepted);
+        this.$emit("step6", this.termsAccepted);
     }
 }
 

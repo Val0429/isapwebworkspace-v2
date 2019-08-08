@@ -34,6 +34,7 @@
                             <step2
                                 class="col-md-12"
                                 @step2="receiveStep2Data"
+                                :permission="true"
                             ></step2>
                         </template>
 
@@ -203,11 +204,34 @@ import Step6 from "@/components/ContractorRegistration/Step6.vue";
 import Step7 from "@/components/ContractorRegistration/Step7.vue";
 import Step8 from "@/components/ContractorRegistration/Step8.vue";
 
+import {
+    IStep1,
+    IStep2,
+    IStep3,
+    IStep4,
+    IStep5,
+    IStep6,
+    IStep7,
+    IStep8,
+    IPerson,
+    IAccessGroup
+} from "@/components/ContractorRegistration/index";
+
 // Service
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
+
+interface IStep
+    extends IStep1,
+        IStep2,
+        IStep3,
+        IStep4,
+        IStep5,
+        IStep6,
+        IStep7,
+        IStep8 {}
 
 @Component({
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
@@ -229,68 +253,73 @@ export class EditPTW extends Vue {
 
     inputFormData: any = {
         // step1
-        step1Accepted: "",
+        pdpaAccepted: false,
 
         // step2
         // PTW Data
-        step2PtwId: "",
-        step2Tenant: "",
-        step2WorkCategory: "",
+        ptwId: "",
+        tenant: "",
+        workCategory: "",
 
         // Contractor Information
-        step2NameOfApplicant: "",
-        step2CompanyName: "",
-        step2CompanyAddress: "",
-        step2Email: "",
-        step2ContactNumber: 0,
-        step2CompanyFaxNo: 0,
+        applicantName: "",
+
+        // Company
+        companyName: "",
+        companyAddress: "",
+        companyEmail: "",
+        companyContactPhone: "",
+        companyFax: "",
 
         // step3
-        step3Unit: "",
-        step3Location: "",
-        step3Description: "",
-        step3TypeOfWork: [],
-        step3StartDate: new Date(),
-        step3StartTime: new Date(),
-        step3EndDate: new Date(),
-        step3EndTime: new Date(),
-        step3NameOfApplicantService: "",
-        step3HandPhoneContactNumber: 0,
+        workPremisesUnit: "",
+        workLocation: "",
+        workDescription: "",
+        workType: [],
+        workStartDate: new Date(),
+        workStartTime: new Date(),
+        workEndDate: new Date(),
+        workEndTime: new Date(),
+        workContact: "",
+        workContactPhone: "",
 
         // step4
-        step4Checklist1: false,
-        step4Checklist2: false,
-        step4Checklist3: false,
-        step4Checklist4: false,
-        step4Checklist5: false,
-        step4Checklist6: false,
-        step4Checklist7: false,
-        step4Checklist8: false,
-        step4Checklist9: false,
+        checklist1: false,
+        checklist2: false,
+        checklist3: false,
+        checklist4: false,
+        checklist5: false,
+        checklist6: false,
+        checklist7: false,
+        checklist8: false,
+        checklist9: false,
 
-        step4Checklist1Remarks: "",
-        step4Checklist2Remarks: "",
-        step4Checklist3Remarks: "",
-        step4Checklist4Remarks: "",
-        step4Checklist5Remarks: "",
-        step4Checklist6Remarks: "",
+        checklistRemark1: "",
+        checklistRemark2: "",
+        checklistRemark3: "",
+        checklistRemark4: "",
+        checklistRemark5: "",
+        checklistRemark6: "",
+        checklistRemark7: "",
 
         // step5
         step5Files: [],
+        attachments: [],
 
         // step6
-        step6Accepted: "",
+        termsAccepted: false,
 
         // step7
-        step7PersonDetail: undefined,
+        persons: [],
 
         // step8
-        step8AccessGroup: "",
-        step8Approval: false
+        accessGroups: []
     };
 
     created() {
-        //     this.inputFormData = this.selectedDetail;
+        if (this.selectedDetail.length) {
+            this.inputFormData = this.selectedDetail as any;
+        }
     }
 
     mounted() {}
@@ -298,7 +327,7 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 1  //////////////////////////////
 
     receiveStep1Data(step1Date) {
-        this.inputFormData.step1Accepted = step1Date;
+        this.inputFormData.pdpaAccepted = step1Date;
         //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
@@ -306,7 +335,7 @@ export class EditPTW extends Vue {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
-        // if (!this.inputFormData.step1Accepted) {
+        // if (!this.inputFormData.pdpaAccepted) {
         //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
         //     stepRef.currentStep = 0;
         //     return false;
@@ -326,17 +355,19 @@ export class EditPTW extends Vue {
 
     receiveStep2Data(step2Date) {
         // PTW Data
-        this.inputFormData.step2PtwId = step2Date.ptwId;
-        this.inputFormData.step2Tenant = step2Date.tenant;
-        this.inputFormData.step2WorkCategory = step2Date.workCategory;
+        this.inputFormData.ptwId = step2Date.ptwId;
+        this.inputFormData.tenant = step2Date.tenant;
+        this.inputFormData.workCategory = step2Date.workCategory;
 
         // Contractor Information
-        this.inputFormData.step2NameOfApplicant = step2Date.nameOfApplicant;
-        this.inputFormData.step2CompanyName = step2Date.companyName;
-        this.inputFormData.step2CompanyAddress = step2Date.companyAddress;
-        this.inputFormData.step2Email = step2Date.email;
-        this.inputFormData.step2ContactNumber = step2Date.contactNumber;
-        this.inputFormData.step2CompanyFaxNo = step2Date.companyFaxNo;
+        this.inputFormData.applicantName = step2Date.applicantName;
+
+        // Company
+        this.inputFormData.companyName = step2Date.companyName;
+        this.inputFormData.companyAddress = step2Date.companyAddress;
+        this.inputFormData.companyEmail = step2Date.companyEmail;
+        this.inputFormData.companyContactPhone = step2Date.companyContactPhone;
+        this.inputFormData.companyFax = step2Date.companyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
     }
@@ -346,15 +377,15 @@ export class EditPTW extends Vue {
 
         // TODO: wait下拉選單 和 全部step OK
         // if (
-        //     !this.inputFormData.step2PtwId ||
-        //     !this.inputFormData.step2Tenant ||
-        //     !this.inputFormData.step2WorkCategory ||
-        //     !this.inputFormData.step2NameOfApplicant ||
-        //     !this.inputFormData.step2CompanyName ||
-        //     !this.inputFormData.step2CompanyAddress ||
-        //     !this.inputFormData.step2Email ||
-        //     !this.inputFormData.step2ContactNumber ||
-        //     !this.inputFormData.step2CompanyFaxNo
+        //     !this.inputFormData.ptwId ||
+        //     !this.inputFormData.tenant ||
+        //     !this.inputFormData.workCategory ||
+        //     !this.inputFormData.applicantName ||
+        //     !this.inputFormData.companyName ||
+        //     !this.inputFormData.companyAddress ||
+        //     !this.inputFormData.companyEmail ||
+        //     !this.inputFormData.companyContactPhone ||
+        //     !this.inputFormData.companyFax
         // ) {
         //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
         //     stepRef.currentStep = 1;
@@ -374,18 +405,16 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 3  //////////////////////////////
 
     receiveStep3Data(step3Date) {
-        this.inputFormData.step3Unit = step3Date.unit;
-        this.inputFormData.step3Location = step3Date.location;
-        this.inputFormData.step3Description = step3Date.description;
-        this.inputFormData.step3TypeOfWork = step3Date.typeOfWork;
-        this.inputFormData.step3StartDate = step3Date.startDate;
-        this.inputFormData.step3StartTime = step3Date.startTime;
-        this.inputFormData.step3EndDate = step3Date.endDate;
-        this.inputFormData.step3EndTime = step3Date.endTime;
-        this.inputFormData.step3NameOfApplicantService =
-            step3Date.nameOfApplicantService;
-        this.inputFormData.step3HandPhoneContactNumber =
-            step3Date.handPhoneContactNumber;
+        this.inputFormData.workPremisesUnit = step3Date.workPremisesUnit;
+        this.inputFormData.workLocation = step3Date.workLocation;
+        this.inputFormData.workDescription = step3Date.workDescription;
+        this.inputFormData.workType = step3Date.workType;
+        this.inputFormData.workStartDate = step3Date.workStartDate;
+        this.inputFormData.workStartTime = step3Date.workStartTime;
+        this.inputFormData.workEndDate = step3Date.workEndDate;
+        this.inputFormData.workEndTime = step3Date.workEndTime;
+        this.inputFormData.workContact = step3Date.workContact;
+        this.inputFormData.workContactPhone = step3Date.workContactPhone;
 
         console.log("inputFormData ~ ", this.inputFormData);
     }
@@ -395,14 +424,16 @@ export class EditPTW extends Vue {
 
         // TODO: 全部step OK
         // if (
-        //     !this.inputFormData.step3Unit ||
-        //     !this.inputFormData.step3Location ||
-        //     !this.inputFormData.step3Description ||
-        //     this.inputFormData.step3TypeOfWork.length === 0 ||
-        //     !this.inputFormData.step3StartDate ||
-        //     !this.inputFormData.step3EndDate ||
-        //     !this.inputFormData.step3NameOfApplicantService ||
-        //     !this.inputFormData.step3HandPhoneContactNumber
+        //     !this.inputFormData.workPremisesUnit ||
+        //     !this.inputFormData.workLocation ||
+        //     !this.inputFormData.workDescription ||
+        //     this.inputFormData.workType.length === 0 ||
+        //     !this.inputFormData.workStartDate ||
+        //     !this.inputFormData.workStartTime ||
+        //     !this.inputFormData.workEndDate ||
+        //     !this.inputFormData.workEndTime ||
+        //     !this.inputFormData.workContact ||
+        //     !this.inputFormData.workContactPhone
         // ) {
         //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
         //     stepRef.currentStep = 2;
@@ -422,23 +453,23 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 4  //////////////////////////////
 
     receiveStep4Data(step4Date) {
-        this.inputFormData.step4Checklist1 = step4Date.checklist1;
-        this.inputFormData.step4Checklist2 = step4Date.checklist2;
-        this.inputFormData.step4Checklist3 = step4Date.checklist3;
-        this.inputFormData.step4Checklist4 = step4Date.checklist4;
-        this.inputFormData.step4Checklist5 = step4Date.checklist5;
-        this.inputFormData.step4Checklist6 = step4Date.checklist6;
-        this.inputFormData.step4Checklist7 = step4Date.checklist7;
-        this.inputFormData.step4Checklist8 = step4Date.checklist8;
-        this.inputFormData.step4Checklist9 = step4Date.checklist9;
+        this.inputFormData.checklist1 = step4Date.checklist1;
+        this.inputFormData.checklist2 = step4Date.checklist2;
+        this.inputFormData.checklist3 = step4Date.checklist3;
+        this.inputFormData.checklist4 = step4Date.checklist4;
+        this.inputFormData.checklist5 = step4Date.checklist5;
+        this.inputFormData.checklist6 = step4Date.checklist6;
+        this.inputFormData.checklist7 = step4Date.checklist7;
+        this.inputFormData.checklist8 = step4Date.checklist8;
+        this.inputFormData.checklist9 = step4Date.checklist9;
 
-        this.inputFormData.step4Checklist1Remarks = step4Date.checklist1Remarks;
-        this.inputFormData.step4Checklist2Remarks = step4Date.checklist2Remarks;
-        this.inputFormData.step4Checklist3Remarks = step4Date.checklist3Remarks;
-        this.inputFormData.step4Checklist4Remarks = step4Date.checklist4Remarks;
-        this.inputFormData.step4Checklist5Remarks = step4Date.checklist5Remarks;
-        this.inputFormData.step4Checklist6Remarks = step4Date.checklist6Remarks;
-        this.inputFormData.step4Checklist7Remarks = step4Date.checklist7Remarks;
+        this.inputFormData.checklistRemark1 = step4Date.checklistRemark1;
+        this.inputFormData.checklistRemark2 = step4Date.checklistRemark2;
+        this.inputFormData.checklistRemark3 = step4Date.checklistRemark3;
+        this.inputFormData.checklistRemark4 = step4Date.checklistRemark4;
+        this.inputFormData.checklistRemark5 = step4Date.checklistRemark5;
+        this.inputFormData.checklistRemark6 = step4Date.checklistRemark6;
+        this.inputFormData.checklistRemark7 = step4Date.checklistRemark7;
 
         console.log(" ~ ", this.inputFormData);
     }
@@ -448,15 +479,15 @@ export class EditPTW extends Vue {
 
         // TODO: 全部step OK
         // if (
-        //     !this.inputFormData.step4Checklist1 ||
-        //     !this.inputFormData.step4Checklist2 ||
-        //     !this.inputFormData.step4Checklist3 ||
-        //     !this.inputFormData.step4Checklist4 ||
-        //     !this.inputFormData.step4Checklist5 ||
-        //     !this.inputFormData.step4Checklist6 ||
-        //     !this.inputFormData.step4Checklist7 ||
-        //     !this.inputFormData.step4Checklist8 ||
-        //     !this.inputFormData.step4Checklist9
+        //     !this.inputFormData.checklist1 ||
+        //     !this.inputFormData.checklist2 ||
+        //     !this.inputFormData.checklist3 ||
+        //     !this.inputFormData.checklist4 ||
+        //     !this.inputFormData.checklist5 ||
+        //     !this.inputFormData.checklist6 ||
+        //     !this.inputFormData.checklist7 ||
+        //     !this.inputFormData.checklist8 ||
+        //     !this.inputFormData.checklist9
         // ) {
         //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipYes"));
         //     stepRef.currentStep = 3;
@@ -485,10 +516,8 @@ export class EditPTW extends Vue {
 
     putStep5File(files) {
         for (let file of files) {
-            console.log("putStep5File", file, file.type);
             if (file) {
                 ImageBase64.fileToBase64(file, (base64 = "") => {
-                    console.log("fileToBase64", base64);
                     if (base64 != "") {
                         this.inputFormData.step5Files.push({
                             name: file.name,
@@ -507,7 +536,7 @@ export class EditPTW extends Vue {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
-        // if (判斷條件) {
+        // if (!this.inputFormData.attachments) {
         //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
         //     stepRef.currentStep = 4;
         //     return false;
@@ -527,14 +556,14 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 6  //////////////////////////////
 
     receiveStep6Data(step6Date) {
-        this.inputFormData.step6Accepted = step6Date;
+        this.inputFormData.termsAccepted = step6Date;
     }
 
     stepTo7() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
-        // if (!this.inputFormData.step6Accepted) {
+        // if (!this.inputFormData.termsAccepted) {
         //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
         //     stepRef.currentStep = 5;
         //     return false;
@@ -553,10 +582,10 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 7  //////////////////////////////
 
     receiveStep7Data(step7Date) {
-        this.inputFormData.step7PersonDetail = step7Date;
+        this.inputFormData.persons = step7Date;
         console.log(
             "this.inputFormData.step7PersonDetail ~ ",
-            this.inputFormData.step7PersonDetail
+            this.inputFormData.persons
         );
     }
 
@@ -564,7 +593,7 @@ export class EditPTW extends Vue {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
-        // if (!this.inputFormData.personDetail) {
+        // if (this.inputFormData.persons === 0) {
         //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
         //     stepRef.currentStep = 6;
         //     return false;
@@ -583,12 +612,11 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 
     receiveStep8Data(step8Date) {
-        this.inputFormData.step3StartDate = step8Date.startDate;
-        this.inputFormData.step3StartTime = step8Date.startTime;
-        this.inputFormData.step3EndDate = step8Date.endDate;
-        this.inputFormData.step3EndTime = step8Date.endTime;
-        this.inputFormData.step8AccessGroup = step8Date.accessGroup;
-        this.inputFormData.step8Approval = step8Date.approval;
+        this.inputFormData.workStartDate = step8Date.startDate;
+        this.inputFormData.workStartTime = step8Date.startTime;
+        this.inputFormData.workEndDate = step8Date.endDate;
+        this.inputFormData.workEndTime = step8Date.endTime;
+        this.inputFormData.accessGroups = step8Date.accessGroup;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
     }

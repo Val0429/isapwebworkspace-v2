@@ -21,7 +21,7 @@
                     @input="changeChecklist1"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist1Remarks"
+                    v-model="inputFormData.checklistRemark1"
                     class="col-md-4 mt-2"
                     @input="changeChecklist1Remarks"
                 >
@@ -39,7 +39,7 @@
                     @input="changeChecklist2"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist2Remarks"
+                    v-model="inputFormData.checklistRemark2"
                     class="col-md-4 mt-2"
                     @input="changeChecklist2Remarks"
                 >
@@ -57,7 +57,7 @@
                     @input="changeChecklist3"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist3Remarks"
+                    v-model="inputFormData.checklistRemark3"
                     class="col-md-4 mt-2"
                     @input="changeChecklist3Remarks"
                 >
@@ -75,7 +75,7 @@
                     @input="changeChecklist4"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist4Remarks"
+                    v-model="inputFormData.checklistRemark4"
                     class="col-md-4 mt-2"
                     @input="changeChecklist4Remarks"
                 >
@@ -93,7 +93,7 @@
                     @input="changeChecklist5"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist5Remarks"
+                    v-model="inputFormData.checklistRemark5"
                     class="col-md-4 mt-2"
                     @input="changeChecklist5Remarks"
                 >
@@ -111,7 +111,7 @@
                     @input="changeChecklist6"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist6Remarks"
+                    v-model="inputFormData.checklistRemark6"
                     class="col-md-4 mt-2"
                     @input="changeChecklist6Remarks"
                 >
@@ -129,7 +129,7 @@
                     @input="changeChecklist7"
                 ></b-form-radio-group>
                 <iv-form-string
-                    v-model="inputFormData.checklist7Remarks"
+                    v-model="inputFormData.checklistRemark7"
                     class="col-md-4 mt-2"
                     @input="changeChecklist7Remarks"
                 >
@@ -173,6 +173,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { IStep4 } from ".";
 
 @Component({
     components: {}
@@ -180,7 +181,7 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 export class Step4 extends Vue {
     options: any = [];
 
-    inputFormData: any = {
+    inputFormData: IStep4 = {
         checklist1: false,
         checklist2: false,
         checklist3: false,
@@ -191,13 +192,13 @@ export class Step4 extends Vue {
         checklist8: false,
         checklist9: false,
 
-        checklist1Remarks: "",
-        checklist2Remarks: "",
-        checklist3Remarks: "",
-        checklist4Remarks: "",
-        checklist5Remarks: "",
-        checklist6Remarks: "",
-        checklist7Remarks: ""
+        checklistRemark1: "",
+        checklistRemark2: "",
+        checklistRemark3: "",
+        checklistRemark4: "",
+        checklistRemark5: "",
+        checklistRemark6: "",
+        checklistRemark7: ""
     };
 
     // TODO: wait api
@@ -284,15 +285,15 @@ export class Step4 extends Vue {
             interface {
 
                 checklistTitle?: any;
-                checklist1: any;
-                checklist2: any;
-                checklist3: any;
-                checklist4: any;
-                checklist5: any;
-                checklist6: any;
-                checklist7: any;
-                checklist8: any;
-                checklist9: any;
+                checklist1?: any;
+                checklist2?: any;
+                checklist3?: any;
+                checklist4?: any;
+                checklist5?: any;
+                checklist6?: any;
+                checklist7?: any;
+                checklist8?: any;
+                checklist9?: any;
 
             }
         `;

@@ -47,7 +47,7 @@ export class Step8 extends Vue {
         startTime: new Date(),
         endDate: new Date(),
         endTime: new Date(),
-        accessGroup: "",
+        accessGroups: "",
         approval: false
     };
 
@@ -101,8 +101,8 @@ export class Step8 extends Vue {
                 this.inputFormData.endDate = data.value;
                 this.inputFormData.endTime = data.value;
                 break;
-            case "accessGroup":
-                this.inputFormData.accessGroup = data.value;
+            case "accessGroups":
+                this.inputFormData.accessGroups = data.value;
                 break;
         }
     }
@@ -134,7 +134,7 @@ export class Step8 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
                  */
-                accessGroup?:  ${toEnumInterface(
+                accessGroups?:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,
                     true
                 )};
