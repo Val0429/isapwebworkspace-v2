@@ -28,6 +28,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Kiosks
         '/kiosks': [any, any, false];
+
+        // Floor
+        '/floors': [any, any, false];
     };
 
     Get: {
@@ -75,6 +78,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Kiosks
         '/kiosks': [any, any, false];
+
+        // Floor
+        '/floors': [any, any, false];
     };
     Delete: {
         // companies
@@ -83,6 +89,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Kiosks
         '/kiosks': [any, any, false];
+
+        // Floor
+        '/floors': [any, any, false];
     };
     Ws: {};
 }
