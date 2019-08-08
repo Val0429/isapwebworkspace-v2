@@ -118,6 +118,7 @@ interface ITableItem {
 enum EWsType {
     none = "none",
     status = "status",
+    response = "response",
     event = "event"
 }
 
@@ -194,13 +195,14 @@ export default class ReportsInversigation extends Vue {
 
     handleWs(wsData: string) {
         try {
-            let tempWsData: any = JSON.parse(wsData);
+            let data: any = JSON.parse(wsData);
             let wsType: EWsType = EWsType.none;
-            let data: any = tempWsData.results;
 
             // check webSocket type
-            if (tempWsData.statusCode != undefined) {
+            if (data.statusCode != undefined) {
                 wsType = EWsType.status;
+            } else if (data.results != undefined) {
+                wsType = EWsType.response;
             } else {
                 wsType = EWsType.event;
             }
@@ -208,15 +210,17 @@ export default class ReportsInversigation extends Vue {
             // do something for different type
             switch (wsType) {
                 case EWsType.status:
-                    if (tempWsData.statusCode == 401) {
-                        this.ws.Close();
-                        // this.$router.push({ path: "/" });
+                    if (data.statusCode == 401) {
+                        this.$router.push({ path: "/" });
+                    }
+                    break;
+                case EWsType.response:
+                    for (let tempResponse of data.results) {
+                        this.resolveInvestigationResponse(tempResponse);
                     }
                     break;
                 case EWsType.event:
-                    for (let loopData of data) {
-                        this.resolveWsData(loopData);
-                    }
+                    this.resolveWsData(data);
                     break;
             }
         } catch (e) {
@@ -225,7 +229,6 @@ export default class ReportsInversigation extends Vue {
     }
 
     resolveWsData(data: any) {
-        console.log("!!! resolveWsData", data);
         let tempItem: ITableItem = {
             visitorName: data.visitor.name,
             purpose: data.invitation.purpose.name,
