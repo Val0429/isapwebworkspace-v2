@@ -92,6 +92,15 @@
                 @submit="doSubmit($event)"
             >
 
+                <template #nric="{ $attrs, $listeners }">
+                    <iv-form-string
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                    >
+                        {{$attrs}}
+                    </iv-form-string>
+                </template>
+
                 <template #contractorIsRequired>
                     <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
                 </template>
@@ -253,10 +262,28 @@ export class Step7 extends Vue {
             company: data.company
         };
 
+        if (!this.NRICRegExp(personObject.nric)) {
+            alert(this._("w_ViewPTW_Step7_NRICFIN_PlaceHolder"));
+            return;
+        }
+
         this.personTable.tableDataFromApi.push(personObject);
         this.pageStep = EPageStep.list;
 
         this.$emit("step7", this.personTable.tableDataFromApi);
+    }
+
+    NRICRegExp(data) {
+        var pattern = new RegExp("^[A-Za-z0-9]+$");
+
+        if (data.length != 4) {
+            return false;
+        }
+        if (!pattern.test(data)) {
+            return false;
+        }
+
+        return true;
     }
 
     doDelete(index: number) {
@@ -290,7 +317,9 @@ export class Step7 extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step7_NRICFIN")}
-                 * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_NRICFIN")}
+                 * @uiPlaceHolder - ${this._(
+                     "w_ViewPTW_Step7_NRICFIN_PlaceHolder"
+                 )}
                  */
                 nric: string;
 

@@ -228,6 +228,8 @@ export default class LangObject {
 
     w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
 
+    w_ViewPTW_Step7_NRICFIN_PlaceHolder = 'NRIC / FIN Required 4 Word With English/Number';
+
     w_ViewPTW_Step7_Day = 'Day';
     w_ViewPTW_Step7_Night = 'Night';
     w_ViewPTW_Step7_Midnight = 'Midnight';
