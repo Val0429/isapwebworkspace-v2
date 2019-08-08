@@ -295,4 +295,19 @@ export default class LangObject implements ILang {
 
     ////////////////// Tenants Visitor //////////////////
     w_Tenants_VisitorList = 'Visitor List';
+
+    ////////////////// Floor  //////////////////
+    w_Floor_List = 'Floor List';
+    w_Floor_Add = 'Add Floor';
+    w_Floor_Edit = 'Edit Floor';
+    w_Floor_View = 'View Floor';
+
+    w_Floor_AddSuccess = 'Floor add success';
+    w_Floor_ADDFailed = 'Floor add failed, please try again';
+    w_Floor_EditSuccess = 'Floor edit success';
+    w_Floor_EditFailed = 'Floor edit failed, please try again';
+    w_Floor_DeleteConfirm = 'Are you sure to delete selected Floor(s)?';
+
+    w_Floor_FloorName = 'Floor Name';
+    w_Floor_Floor = 'Floor';
 }
