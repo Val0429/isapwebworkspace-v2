@@ -92,6 +92,30 @@
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>
+
+                            <div
+                                v-if="inputFormData.step5Files"
+                                v-for="file in  inputFormData.step5Files"
+                                class="step5Div"
+                            >
+                                <span
+                                    class="close"
+                                    @click="deleteStep5File(file.base64)"
+                                ></span>
+
+                                <img
+                                    v-if="file.type != 'application/pdf'"
+                                    class="step5Imgs"
+                                    :src="file.base64"
+                                >
+                                <img
+                                    v-else
+                                    class="step5Imgs"
+                                    :src="imageBase64.pdfEmpty"
+                                >
+                                <span>{{file.name}}</span>
+                            </div>
+
                         </template>
 
                     </iv-form>
@@ -180,14 +204,34 @@ import Step6 from "@/components/ContractorRegistration/Step6.vue";
 import Step7 from "@/components/ContractorRegistration/Step7.vue";
 import Step8 from "@/components/ContractorRegistration/Step8.vue";
 
-import { IStep1, IStep2, IStep3, IStep4, IStep5, IStep6, IStep7, IStep8, IWorkPermitPerson, IWorkPermitAccessGroup } from '@/components/ContractorRegistration/index'
+import {
+    IStep1,
+    IStep2,
+    IStep3,
+    IStep4,
+    IStep5,
+    IStep6,
+    IStep7,
+    IStep8,
+    IWorkPermitPerson,
+    IWorkPermitAccessGroup
+} from "@/components/ContractorRegistration/index";
 
 // Service
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import ImageBase64 from "@/services/ImageBase64";
 
-interface IStep extends IStep1, IStep2, IStep3, IStep4, IStep5, IStep6, IStep7, IStep8 {}
+interface IStep
+    extends IStep1,
+        IStep2,
+        IStep3,
+        IStep4,
+        IStep5,
+        IStep6,
+        IStep7,
+        IStep8 {}
 
 @Component({
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
@@ -205,79 +249,84 @@ export class EditPTW extends Vue {
         this.isMounted = true;
     }
 
-    inputFormData: IStep = {
+    imageBase64 = ImageBase64;
+
+    inputFormData: any = {
         // step1
-	    pdpaAccepted: false,
+        pdpaAccepted: false,
 
         // step2
         // PTW Data
-	    ptwId: "",
-	    tenant: "",
-	    workCategory: "",
+        ptwId: "",
+        tenant: "",
+        workCategory: "",
 
-	    // Contractor Information
-	    applicantName: "",
+        // Contractor Information
+        applicantName: "",
 
-	    // Company
-	    companyName: "",
-	    companyAddress: "",
-	    companyEmail: "",
-	    companyContactPhone: '',
-	    companyFax: '',
+        // Company
+        companyName: "",
+        companyAddress: "",
+        companyEmail: "",
+        companyContactPhone: "",
+        companyFax: "",
 
         // step3
-	    workPremisesUnit: "",
-	    workLocation: "",
-	    workDescription: "",
-	    workType1: false,
-	    workType2: false,
-	    workType3: false,
-	    workType4: false,
-	    workType5: false,
-	    workType6: false,
-	    workType7: false,
-	    workType8: false,
-	    workStartDate: new Date(),
-	    workStartTime: new Date(),
-	    workEndDate: new Date(),
-	    workEndTime: new Date(),
-	    workContact: "",
-	    workContactPhone: '',
+        workPremisesUnit: "",
+        workLocation: "",
+        workDescription: "",
+        workType1: false,
+        workType2: false,
+        workType3: false,
+        workType4: false,
+        workType5: false,
+        workType6: false,
+        workType7: false,
+        workType8: false,
+        workStartDate: new Date(),
+        workStartTime: new Date(),
+        workEndDate: new Date(),
+        workEndTime: new Date(),
+        workContact: "",
+        workContactPhone: "",
 
         // step4
-	    checklist1: false,
-	    checklist2: false,
-	    checklist3: false,
-	    checklist4: false,
-	    checklist5: false,
-	    checklist6: false,
-	    checklist7: false,
-	    checklist8: false,
-	    checklist9: false,
+        checklist1: false,
+        checklist2: false,
+        checklist3: false,
+        checklist4: false,
+        checklist5: false,
+        checklist6: false,
+        checklist7: false,
+        checklist8: false,
+        checklist9: false,
 
-	    checklistRemark1: "",
-	    checklistRemark2: "",
-	    checklistRemark3: "",
-	    checklistRemark4: "",
-	    checklistRemark5: "",
-	    checklistRemark6: "",
-	    checklistRemark7: "",
+        checklistRemark1: "",
+        checklistRemark2: "",
+        checklistRemark3: "",
+        checklistRemark4: "",
+        checklistRemark5: "",
+        checklistRemark6: "",
+        checklistRemark7: "",
 
         // step5
-	    attachments: [],
+        step5Files: [],
+        attachments: [],
 
         // step6
-	    termsAccepted: false,
+        termsAccepted: false,
 
         // step7
-	    persons: [],
+        persons: [],
 
         // step8
-	    accessGroups: [],
+        accessGroups: []
     };
 
     created() {
-        this.inputFormData = this.selectedDetail as any;
+        if (this.selectedDetail.length) {
+            this.inputFormData = this.selectedDetail as any;
+        }
     }
 
     mounted() {}
@@ -320,8 +369,8 @@ export class EditPTW extends Vue {
         // Contractor Information
         this.inputFormData.applicantName = step2Date.applicantName;
 
-	    // Company
-	    this.inputFormData.companyName = step2Date.companyName;
+        // Company
+        this.inputFormData.companyName = step2Date.companyName;
         this.inputFormData.companyAddress = step2Date.companyAddress;
         this.inputFormData.companyEmail = step2Date.companyEmail;
         this.inputFormData.companyContactPhone = step2Date.companyContactPhone;
@@ -472,9 +521,28 @@ export class EditPTW extends Vue {
 
     receiveStep5Data(step5Date) {}
 
-    putStep5File(file) {
-	    this.inputFormData.attachments = file;
-        console.log("putStep5File", file);
+    deleteStep5File(base64) {
+        this.inputFormData.step5Files = this.inputFormData.step5Files.filter(
+            s => s.base64 != base64
+        );
+    }
+
+    putStep5File(files) {
+        for (let file of files) {
+            if (file) {
+                ImageBase64.fileToBase64(file, (base64 = "") => {
+                    if (base64 != "") {
+                        this.inputFormData.step5Files.push({
+                            name: file.name,
+                            type: file.type,
+                            base64: base64
+                        });
+                    } else {
+                        Dialog.error(this._("w_Error_FileToLarge"));
+                    }
+                });
+            }
+        }
     }
 
     stepTo6() {
@@ -492,6 +560,7 @@ export class EditPTW extends Vue {
         return `
             interface {
                 step5?: any;
+
             }`;
     }
 
@@ -612,6 +681,41 @@ Vue.component("edit-ptw", EditPTW);
 </script>
 
 <style lang="scss" scoped>
+.step5Imgs {
+    width: 100%;
+    height: 100%;
+}
+.step5Div {
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+    position: relative;
+    margin: 10px;
+}
+.close {
+    /* still bad on picking color */
+    background: orange;
+    color: red;
+    /* make a round button */
+    border-radius: 12px;
+    /* center text */
+    line-height: 20px;
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    font-size: 18px;
+    padding: 1px;
+}
+/* use cross as close button */
+.close::before {
+    content: "\2716";
+}
+/* place the button on top-right */
+.close {
+    top: -10px;
+    right: -10px;
+    position: absolute;
+}
 </style>
 
 
