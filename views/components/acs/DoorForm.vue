@@ -21,6 +21,9 @@
         <template #view.doorgroup="{$attrs, $listeners}">
             {{getInfo($attrs.row).map(x=>x.groupname).join(", ")}}
         </template>
+        <template #view.systemname="{$attrs, $listeners}">
+            {{getSystemName($attrs.row)}}
+        </template>
     </ivc-form-quick>
     </div>
 </template>
@@ -63,6 +66,10 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
                 * @uiLabel - ${this._("readerscount")}
                 */
                 readerscount:string;
+                /**
+                * @uiLabel - ${this._("system")}
+                */
+                systemname:string;
                 }
                 `;
             case EFormQuick.Add:
@@ -197,7 +204,20 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         this.doorGroups=resp.results;
         console.log("doorGroups", this.doorGroups)    
     }
+    getSystemName(door:any){
+        let readers=[]; 
+        if(door.readerin)readers.push(...door.readerin);
+        if(door.readerout)readers.push(...door.readerout);
+        let systemname= "UNKNOWN";
+        if(readers.length>0){
+            systemname= "CCURE"; 
+            //if(readers.find(x=>x.readername.length>=2 && x.system==System.SIPASS && x.readername.substring(0,2)=="A_"))systemname= "CCURE";        
+            if(readers.find(x=>x.readername.length>=2 && x.system==System.CCURE && x.readername.substring(0,2)=="D_"))systemname= "SIPASS";
+        }
+        
+        return systemname;
 
+    }
     private async getOptions(readerin?:any[],readerout?:any[]):Promise<void> {
         let resp: any=await this.$server.R("/acs/reader" as any,{ "paging.all": "true", "vacant":"true" });
         let tempOptions=resp.results;        
