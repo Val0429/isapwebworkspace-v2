@@ -372,10 +372,13 @@ export default class MemberForm extends Vue {
 
         let members:any = await this.$server.R("/acs/member", {"paging.all":"true"});
         let exportList =[];
-        let headers= this.fieldSelected;     
+        let headers=[];
+        for(let field of this.fieldSelected){
+          headers.push(this._(field as any));
+        }
         for (let member of members.results){
           let newMember:any = {};
-          for(let field of headers){
+          for(let field of  this.fieldSelected){
               newMember[field]=member[field];
           }
           let exist = exportList.find(x=>JSON.stringify(x)==JSON.stringify(newMember));
@@ -443,10 +446,12 @@ export default class MemberForm extends Vue {
   savedFieldOptions=[];
   fieldOptions=[];
   fieldSelected=[];
+  exceptionFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode", "permissionTable"]
   selectedItem(data) {
     if(this.savedFieldOptions.length==0 && data.length>0){
       for(let key of Object.keys(data[0])){
-        this.savedFieldOptions.push({value:key, text:key});
+        if(this.exceptionFields.find(x=>x==key))continue;
+        this.savedFieldOptions.push({value:key, text:this._(key as any)});
       }
       //to trigger option changed
       this.fieldOptions=this.savedFieldOptions;
@@ -704,47 +709,47 @@ export default class MemberForm extends Vue {
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_Member_EmployeeNumber1")}
+                 * @uiLabel - ${this._("employeeNumber")}
                  */
                 employeeNumber: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardNumber1")}
+                 * @uiLabel - ${this._("cardNumber")}
                  */
                 cardNumber: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_PersonType1")}
+                 * @uiLabel - ${this._("primaryWorkgroupName")}
                  */
                 primaryWorkgroupName: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ChineseName1")}
+                 * @uiLabel - ${this._("chineseName")}
                  */
                 chineseName: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_EnglishName1")}
+                 * @uiLabel - ${this._("englishName")}
                  */
                 englishName: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Department1")}
+                 * @uiLabel - ${this._("department")}
                  */
                 department: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CostCenter1")}
+                 * @uiLabel - ${this._("costCenter")}
                  */
                 costCenter: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_StartDate1")}
+                 * @uiLabel - ${this._("startDate")}
                  */
                 startDate: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_EndDate1")}
+                 * @uiLabel - ${this._("endDate")}
                  */
                 endDate: string;
 
@@ -761,7 +766,7 @@ export default class MemberForm extends Vue {
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CompanyName")}
+                 * @uiLabel - ${this._("companyName")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -773,7 +778,7 @@ export default class MemberForm extends Vue {
                 companyName?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_PersonType")}
+                 * @uiLabel - ${this._("personType")}
                  * @uiColumnGroup - row1
                  * @uiDisabled - ${
                    this.pageStep === EPageStep.add ||
@@ -788,7 +793,7 @@ export default class MemberForm extends Vue {
                 )};
 
                 /**
-                 * @uiLabel - ${this._("w_Member_EmployeeNumber")}
+                 * @uiLabel - ${this._("employeeNumber")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -800,7 +805,7 @@ export default class MemberForm extends Vue {
                 employeeNumber: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ChineseName")}
+                 * @uiLabel - ${this._("chineseName")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -812,7 +817,7 @@ export default class MemberForm extends Vue {
                 chineseName: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_EnglishName")}
+                 * @uiLabel - ${this._("englishName")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -824,7 +829,7 @@ export default class MemberForm extends Vue {
                 englishName?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardType")}
+                 * @uiLabel - ${this._("cardType")}
                  * @uiColumnGroup - row2
                  * @uiDisabled - ${
                    this.pageStep === EPageStep.add ||
@@ -838,7 +843,7 @@ export default class MemberForm extends Vue {
 
 
                /**
-                * @uiLabel - ${this._("w_Member_UpLoadPersonPic")}
+                * @uiLabel - ${this._("personPhoto")}
                 * @uiColumnGroup - row3
                 * @uiType - iv-form-file
                 * @uiHidden - ${
@@ -852,7 +857,7 @@ export default class MemberForm extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardCustodian")}
+                 * @uiLabel - ${this._("cardCustodian")}
                  * @uiColumnGroup - row3
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -886,7 +891,7 @@ export default class MemberForm extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardNumber")}
+                 * @uiLabel - ${this._("cardNumber")}
                  * @uiColumnGroup - row33
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -899,7 +904,7 @@ export default class MemberForm extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardVoucherType")}
+                 * @uiLabel - ${this._("cardCertificate")}
                  * @uiColumnGroup - row33
                  * @uiDisabled - ${
                    this.pageStep === EPageStep.add ||
@@ -917,7 +922,7 @@ export default class MemberForm extends Vue {
 
                 /**
                  * @uiHidden - true
-                 * @uiLabel - ${this._("w_Member_deviceNumber")}
+                 * @uiLabel - ${this._("deviceNumber")}
                  * @uiColumnGroup - row33
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -931,7 +936,7 @@ export default class MemberForm extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Member_pin")}
+                 * @uiLabel - ${this._("pin")}
                  * @uiColumnGroup - row173
                  * @uiDisabled - ${!this.inputFormData.cardNumber || this.inputFormData.cardNumber=="" ? "true":"false"}
                  * @uiType - ${
@@ -966,8 +971,8 @@ export default class MemberForm extends Vue {
                 info?: any;
 
                 /**
-                * @uiLabel - ${this._("w_Member_StartDate")}
-                * @uiPlaceHolder - ${this._("w_Member_StartDate")}
+                * @uiLabel - ${this._("startDate")}
+                * @uiPlaceHolder - ${this._("startDate")}
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
                 * @uiDisabled - ${
@@ -980,8 +985,8 @@ export default class MemberForm extends Vue {
                 startDate?: any;
 
                 /**
-                * @uiLabel - ${this._("w_Member_EndDate")}
-                * @uiPlaceHolder - ${this._("w_Member_EndDate")}
+                * @uiLabel - ${this._("endDate")}
+                * @uiPlaceHolder - ${this._("endDate")}
                 * @uiColumnGroup - row5
                 * @uiType - iv-form-date
                 * @uiDisabled - ${
@@ -994,16 +999,16 @@ export default class MemberForm extends Vue {
                 endDate?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_LastEditPerson")}
-                 * @uiPlaceHolder - ${this._("w_Member_LastEditPerson")}
+                 * @uiLabel - ${this._("lastEditPerson")}
+                 * @uiPlaceHolder - ${this._("lastEditPerson")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-label
                  */
                 lastEditPerson?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_LastEditTime")}
-                 * @uiPlaceHolder - ${this._("w_Member_LastEditTime")}
+                 * @uiLabel - ${this._("lastEditTime")}
+                 * @uiPlaceHolder - ${this._("lastEditTime")}
                  * @uiColumnGroup - row6
                  * @uiType - iv-form-label
                  */
@@ -1039,7 +1044,7 @@ export default class MemberForm extends Vue {
                 personInfo?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ExtensionNumber")}
+                 * @uiLabel - ${this._("extensionNumber")}
                  * @uiAttrs - { min: 0}
                  * @uiColumnGroup - row1
                  * @uiType - ${
@@ -1052,7 +1057,7 @@ export default class MemberForm extends Vue {
                 extensionNumber?: number;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_MVPN")}
+                 * @uiLabel - ${this._("MVPN")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1064,7 +1069,7 @@ export default class MemberForm extends Vue {
                 MVPN?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Phone")}
+                 * @uiLabel - ${this._("phone")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1076,7 +1081,7 @@ export default class MemberForm extends Vue {
                 phone?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Email")}
+                 * @uiLabel - ${this._("email")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1088,7 +1093,7 @@ export default class MemberForm extends Vue {
                 email?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Gender")}
+                 * @uiLabel - ${this._("gender")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1100,7 +1105,7 @@ export default class MemberForm extends Vue {
                 gender?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Birthday")}
+                 * @uiLabel - ${this._("birthday")}
                  * @uiColumnGroup - row2
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1115,7 +1120,7 @@ export default class MemberForm extends Vue {
                 companyInfo?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Department")}
+                 * @uiLabel - ${this._("department")}
                  * @uiColumnGroup - row4
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1127,7 +1132,7 @@ export default class MemberForm extends Vue {
                 department?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CostCenter")}
+                 * @uiLabel - ${this._("costCenter")}
                  * @uiColumnGroup - row4
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1139,7 +1144,7 @@ export default class MemberForm extends Vue {
                 costCenter?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Area")}
+                 * @uiLabel - ${this._("area")}
                  * @uiColumnGroup - row4
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1151,7 +1156,7 @@ export default class MemberForm extends Vue {
                 area?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_WorkArea")}
+                 * @uiLabel - ${this._("workArea")}
                  * @uiColumnGroup - row5
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1163,7 +1168,7 @@ export default class MemberForm extends Vue {
                 workArea?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_RegistrationDate")}
+                 * @uiLabel - ${this._("registrationDate")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1176,7 +1181,7 @@ export default class MemberForm extends Vue {
                 registrationDate?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ResignationDate")}
+                 * @uiLabel - ${this._("resignationDate")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1197,13 +1202,13 @@ export default class MemberForm extends Vue {
                 carLicenseData?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CarLicenseCategory")}
+                 * @uiLabel - ${this._("carLicenseCategory")}
                  * @uiColumnGroup - row1
                  */
                 carLicenseCategory?: ${toEnumInterface(this.carLicenseOptions, false)};
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CardLicense")}
+                 * @uiLabel - ${this._("cardLicense")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1215,7 +1220,7 @@ export default class MemberForm extends Vue {
                 cardLicense?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CarLicense")}
+                 * @uiLabel - ${this._("carLicense")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1227,7 +1232,7 @@ export default class MemberForm extends Vue {
                 carLicense?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CarLicense1")}
+                 * @uiLabel - ${this._("carLicense1")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1239,7 +1244,7 @@ export default class MemberForm extends Vue {
                 carLicense1?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CarLicense2")}
+                 * @uiLabel - ${this._("carLicense2")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1251,7 +1256,7 @@ export default class MemberForm extends Vue {
                 carLicense2?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CarLicense3")}
+                 * @uiLabel - ${this._("carLicense3")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1267,14 +1272,14 @@ export default class MemberForm extends Vue {
                 accountInfo?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Account")}
+                 * @uiLabel - ${this._("account")}
                  * @uiColumnGroup - row2
                  * @uiHidden - true
                  */
                 account?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_Password")}
+                 * @uiLabel - ${this._("password")}
                  * @uiColumnGroup - row2
                  * @uiType - iv-form-password
                  * @uiHidden - true
@@ -1297,7 +1302,7 @@ export default class MemberForm extends Vue {
                 cardRecord?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ResignationNote")}
+                 * @uiLabel - ${this._("resignationNote")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1309,7 +1314,7 @@ export default class MemberForm extends Vue {
                 resignationNote?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ResignationRecordCardRecord")}
+                 * @uiLabel - ${this._("resignationRecordCardRecord")}
                  * @uiColumnGroup - row1
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1327,13 +1332,13 @@ export default class MemberForm extends Vue {
                 row13?: string;
 
                 /**
-                 * @uiLabel - ${this._("ReasonForCard1")}
+                 * @uiLabel - ${this._("reasonForCard1")}
                  * @uiColumnGroup - row2
                  */
                 reasonForCard1?: ${toEnumInterface(this.createReason1Options, false)};
 
                 /**
-                 * @uiLabel - ${this._("w_Member_HistoryForCard1")}
+                 * @uiLabel - ${this._("historyForCard1")}
                  * @uiColumnGroup - row2
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1345,7 +1350,7 @@ export default class MemberForm extends Vue {
                 historyForCard1?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateForCard1")}
+                 * @uiLabel - ${this._("dateForCard1")}
                  * @uiColumnGroup - row2
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1358,13 +1363,13 @@ export default class MemberForm extends Vue {
                 dateForCard1?: string;
 
                 /**
-                 * @uiLabel - ${this._("ReasonForCard2")}
+                 * @uiLabel - ${this._("reasonForCard2")}
                  * @uiColumnGroup - row3
                  */
                 reasonForCard2?: ${toEnumInterface(this.createReason2Options, false)};
 
                 /**
-                 * @uiLabel - ${this._("w_Member_HistoryForCard2")}
+                 * @uiLabel - ${this._("historyForCard2")}
                  * @uiColumnGroup - row3
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1376,7 +1381,7 @@ export default class MemberForm extends Vue {
                 historyForCard2?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateForCard2")}
+                 * @uiLabel - ${this._("dateForCard2")}
                  * @uiColumnGroup - row3
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1389,13 +1394,13 @@ export default class MemberForm extends Vue {
                 dateForCard2?: string;
 
                 /**
-                 * @uiLabel - ${this._("ReasonForCard3")}
+                 * @uiLabel - ${this._("reasonForCard3")}
                  * @uiColumnGroup - row4
                  */
                 reasonForCard3?: ${toEnumInterface(this.createReason3Options, false)};
 
                 /**
-                 * @uiLabel - ${this._("w_Member_HistoryForCard3")}
+                 * @uiLabel - ${this._("historyForCard3")}
                  * @uiColumnGroup - row4
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1407,7 +1412,7 @@ export default class MemberForm extends Vue {
                 historyForCard3?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateForCard3")}
+                 * @uiLabel - ${this._("dateForCard3")}
                  * @uiColumnGroup - row4
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1422,13 +1427,13 @@ export default class MemberForm extends Vue {
                 carLicenseRecord?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ReasonForApplication1")}
+                 * @uiLabel - ${this._("reasonForApplication1")}
                  * @uiColumnGroup - row5
                  */
                 reasonForApplication1?: ${toEnumInterface(this.applyReason1Options, false)};;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateForApplication1")}
+                 * @uiLabel - ${this._("dateForApplication1")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1447,13 +1452,13 @@ export default class MemberForm extends Vue {
                 row53?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ReasonForApplication2")}
+                 * @uiLabel - ${this._("reasonForApplication2")}
                  * @uiColumnGroup - row6
                  */
                 reasonForApplication2?: ${toEnumInterface(this.applyReason2Options, false)};;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateForApplication2")}
+                 * @uiLabel - ${this._("dateForApplication2")}
                  * @uiColumnGroup - row6
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1472,13 +1477,13 @@ export default class MemberForm extends Vue {
                 row63?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ReasonForApplication3")}
+                 * @uiLabel - ${this._("reasonForApplication3")}
                  * @uiColumnGroup - row7
                  */
                 reasonForApplication3?: ${toEnumInterface(this.applyReason3Options, false)};;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateForApplication3")}
+                 * @uiLabel - ${this._("dateForApplication3")}
                  * @uiColumnGroup - row7
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1497,7 +1502,7 @@ export default class MemberForm extends Vue {
                 row73?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_ResignationRecordCarLicense")}
+                 * @uiLabel - ${this._("resignationRecordCarLicense")}
                  * @uiColumnGroup - row8
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1556,7 +1561,7 @@ export default class MemberForm extends Vue {
                censusRecord?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusRecord1")}
+                 * @uiLabel - ${this._("censusRecord1")}
                  * @uiColumnGroup - row5
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1568,7 +1573,7 @@ export default class MemberForm extends Vue {
                 censusRecord1?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusDate1")}
+                 * @uiLabel - ${this._("censusDate1")}
                  * @uiColumnGroup - row5
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1587,7 +1592,7 @@ export default class MemberForm extends Vue {
                 row53?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusRecord2")}
+                 * @uiLabel - ${this._("censusRecord2")}
                  * @uiColumnGroup - row6
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1599,7 +1604,7 @@ export default class MemberForm extends Vue {
                 censusRecord2?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusDate2")}
+                 * @uiLabel - ${this._("censusDate2")}
                  * @uiColumnGroup - row6
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1618,7 +1623,7 @@ export default class MemberForm extends Vue {
                 row63?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusRecord3")}
+                 * @uiLabel - ${this._("censusRecord3")}
                  * @uiColumnGroup - row7
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1630,7 +1635,7 @@ export default class MemberForm extends Vue {
                 censusRecord3?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_CensusDate3")}
+                 * @uiLabel - ${this._("censusDate3")}
                  * @uiColumnGroup - row7
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1651,7 +1656,7 @@ export default class MemberForm extends Vue {
                parkingViolation?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_InfoOfViolation1")}
+                 * @uiLabel - ${this._("infoOfViolation1")}
                  * @uiColumnGroup - row15
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1663,7 +1668,7 @@ export default class MemberForm extends Vue {
                 infoOfViolation1?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateOfViolation1")}
+                 * @uiLabel - ${this._("dateOfViolation1")}
                  * @uiColumnGroup - row15
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1682,7 +1687,7 @@ export default class MemberForm extends Vue {
                 row153?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_InfoOfViolation2")}
+                 * @uiLabel - ${this._("infoOfViolation2")}
                  * @uiColumnGroup - row16
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1694,7 +1699,7 @@ export default class MemberForm extends Vue {
                 infoOfViolation2?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateOfViolation2")}
+                 * @uiLabel - ${this._("dateOfViolation2")}
                  * @uiColumnGroup - row16
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1713,7 +1718,7 @@ export default class MemberForm extends Vue {
                 row163?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_InfoOfViolation3")}
+                 * @uiLabel - ${this._("infoOfViolation3")}
                  * @uiColumnGroup - row17
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1725,7 +1730,7 @@ export default class MemberForm extends Vue {
                 infoOfViolation3?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Member_DateOfViolation3")}
+                 * @uiLabel - ${this._("dateOfViolation3")}
                  * @uiColumnGroup - row17
                  * @uiType - iv-form-date
                  * @uiDisabled - ${
@@ -1754,42 +1759,42 @@ export default class MemberForm extends Vue {
     return `interface {
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._("w_Member_EmployeeNumber1")}
+             * @uiLabel - ${this._("employeeNumber")}
              */
             EmployeeNumber?: string;
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._("w_Member_CardNumber1")}
+             * @uiLabel - ${this._("cardNumber")}
              */
             CardNumber?: string;
              /**
              * @uiColumnGroup - row2
-             * @uiLabel - ${this._("w_Member_CardType1")}
+             * @uiLabel - ${this._("cardType")}
              */
             CardType?: ${toEnumInterface(this.certificateOptions as any, false)};
             /**
              * @uiColumnGroup - row2
-             * @uiLabel - ${this._("w_Member_ChineseName1")}
+             * @uiLabel - ${this._("chineseName")}
              */
             LastName?: string;
             /**
              * @uiColumnGroup - row3
-             * @uiLabel - ${this._("w_Member_EnglishName1")}
+             * @uiLabel - ${this._("englishName")}
              */
             FirstName?: string;
             /**
              * @uiColumnGroup - row3
-             * @uiLabel - ${this._("w_Member_Department1")}
+             * @uiLabel - ${this._("department")}
              */
             DepartmentName?:string;
             /**
              * @uiColumnGroup - row4
-             * @uiLabel - ${this._("w_Member_CostCenter1")}
+             * @uiLabel - ${this._("costCenter")}
              */
             CostCenterName?:string;
             /**
              * @uiColumnGroup - row4
-             * @uiLabel - ${this._("w_Member_WorkArea1")}
+             * @uiLabel - ${this._("workArea")}
              */
             WorkAreaName?:string;
             /**

@@ -139,13 +139,13 @@ export default class QueryPermission extends Vue {
 
         console.log("filter", this.filter);
 
-        let promise = this.$server.R('/acs/permissiontable'as any, Object.assign({system:System.CCURE,paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+        let promise = this.$server.R('/acs/permissiontable'as any, Object.assign({system:0,paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
 
         return promise.then(async (data:any) => {
           this.total = data.paging.total;
           let members = await this.getMembers(data.results.map(x=>x.tableid).join(","));
             for(let item of data.results){
-                item.members = members.filter(x=>x.PermissionTable.find(y=> y == item.tableid));
+                item.members = members.filter(x=>x.permissionTable.find(y=> y == item.tableid));
                 item.membercount = item.members.length;
                 item.doors = [];
                 item.doorcount = 0;
@@ -171,7 +171,7 @@ export default class QueryPermission extends Vue {
       }
    
     async getMembers(permissions:any[]){
-         let resp:any = await this.$server.R("/report/memberrecord" as any, {PermissionTable:permissions});
+         let resp:any = await this.$server.R("/acs/member" as any, {PermissionTable:permissions});
          return resp.results;
     }
     created() {
@@ -214,30 +214,30 @@ export default class QueryPermission extends Vue {
                 label: this._('w_Number')
             },
             {
-                key: "EmployeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
+                key: "employeeNumber",
+                label: this._('employeeNumber')
             },            
             {
-                key:"DepartmentName",
-                label: this._("w_Member_Department1")
+                key:"department",
+                label: this._("department")
             },
             {
-                key:"CostCenterName",
-                label: this._("w_Member_CostCenter1")
+                key:"costCenter",
+                label: this._("costCenter")
             },
             {  
-                key:"LastName",
-                label: this._('w_Member_ChineseName1'),
+                key:"chineseName",
+                label: this._('chineseName'),
                 sortable: true
             },       
             {
-                key:"FirstName",
-                label: this._('w_Member_EnglishName1'),
+                key:"englishName",
+                label: this._('englishName'),
                 sortable: true
             },
             {
-                key:"CardNumber",
-                label: this._('w_Member_CardNumber1')
+                key:"cardNumber",
+                label: this._('cardNumber')
             }
 
         ];

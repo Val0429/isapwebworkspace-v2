@@ -27,41 +27,41 @@ export default class CardExpirationReport extends Vue  {
         [     
             {
                 key:"cardNumber",
-                label: this._('w_Member_CardNumber1')
+                label: this._('cardNumber')
             },
             {
                 key:"department",
-                label: this._("w_Member_Department1")
+                label: this._("department")
             },            
             {
                 key:"costCenter",
-                label: this._("w_Member_CostCenter1")
+                label: this._("costCenter")
             },
             {
                 key:"englishName",
-                label: this._('w_Member_EnglishName1'),
+                label: this._('englishName'),
                 sortable: true
             },
             {  
                 key:"chineseName",
-                label: this._('w_Member_ChineseName1'),
+                label: this._('chineseName'),
                 sortable: true
             },
             {
                 key: "companyName",
-                label: this._('w_Member_CompanyName1')
+                label: this._('companyName')
             },
             {
                 key: "workArea",
-                label: this._('w_Member_WorkArea1')
+                label: this._('workArea')
             },
             {
                 key: "endDate",
-                label: this._('w_Member_EndDate1')
+                label: this._('endDate')
             },
             {
                 key: "cardCustodian",
-                label: this._('w_Member_CardCustodian1')
+                label: this._('cardCustodian')
             }
 
         ];
@@ -87,27 +87,27 @@ export default class CardExpirationReport extends Vue  {
         return `interface {
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_CardCustodian1')}
+             * @uiLabel - ${this._('cardCustodian')}
              */
             CardCustodian?:string;
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_CardNumber1')}
+             * @uiLabel - ${this._('cardNumber')}
              */
             CardNumber?: string;
             /**
              * @uiColumnGroup - row2
-             * @uiLabel - ${this._('w_Member_ChineseName1')}
+             * @uiLabel - ${this._('chineseName')}
              */
             LastName?: string;
             /**
              * @uiColumnGroup - row2
-             * @uiLabel - ${this._('w_Member_EnglishName1')}
+             * @uiLabel - ${this._('englishName')}
              */
             FirstName?: string;
             /**
              * @uiColumnGroup - row4
-             * @uiLabel - ${this._('w_Member_CompanyName1')}
+             * @uiLabel - ${this._('companyName')}
              */
             CompanyName?:string;
             

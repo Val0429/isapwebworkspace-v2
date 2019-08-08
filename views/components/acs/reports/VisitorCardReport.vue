@@ -32,7 +32,7 @@ export default class VisitorCardReport extends Vue  {
             
             {
                 key:"cardNumber",
-                label: this._('w_Member_CardNumber1')
+                label: this._('cardNumber')
             },
             {
                 key:"dateOccurred",
@@ -90,7 +90,7 @@ export default class VisitorCardReport extends Vue  {
         return `interface {            
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_CardNumber1')}
+             * @uiLabel - ${this._('cardNumber')}
              */
             CardNumber?: string;
             

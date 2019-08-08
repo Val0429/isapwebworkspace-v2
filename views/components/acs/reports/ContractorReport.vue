@@ -32,49 +32,49 @@ export default class ContractorReport extends Vue  {
         [     
             {
                 key:"cardNumber",
-                label: this._('w_Member_CardNumber1')
+                label: this._('cardNumber')
             },
             {
                 key:"department",
-                label: this._("w_Member_Department1")
+                label: this._("department")
             },            
             {
-                key:"CostCenterName",
-                label: this._("w_Member_CostCenter1")
+                key:"costCenter",
+                label: this._("costCenter")
             },
             {
                 key:"englishName",
-                label: this._('w_Member_EnglishName1'),
+                label: this._('englishName'),
                 sortable: true
             },
             {  
                 key:"chineseName",
-                label: this._('w_Member_ChineseName1'),
+                label: this._('chineseName'),
                 sortable: true
             },
             {
                 key: "companyName",
-                label: this._('w_Member_CompanyName1')
+                label: this._('companyName')
             },
             {
                 key: "workArea",
-                label: this._('w_Member_WorkArea1')
+                label: this._('workArea')
             },
             {
                 key: "cardType",
-                label: this._('w_Member_CardType1')
+                label: this._('cardType')
             },
             {
                 key: "startDate",
-                label: this._('w_Member_StartDate1')
+                label: this._('startDate')
             },
             {
                 key: "endDate",
-                label: this._('w_Member_EndDate1')
+                label: this._('endDate')
             },
             {
                 key: "cardCustodian",
-                label: this._('w_Member_CardCustodian1')
+                label: this._('cardCustodian')
             },
             {
                 key: "status",
@@ -126,60 +126,60 @@ export default class ContractorReport extends Vue  {
         return `interface {
             /**
              * @uiColumnGroup - row0
-             * @uiLabel - ${this._('w_Member_CardCustodian1')}
+             * @uiLabel - ${this._('cardCustodian')}
              */
             CardCustodian?:string;
             /**
              * @uiColumnGroup - row0
-             * @uiLabel - ${this._('w_Member_CardNumber1')}
+             * @uiLabel - ${this._('cardNumber')}
              */
             CardNumber?: string;
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_ChineseName1')}
+             * @uiLabel - ${this._('chineseName')}
              */
             LastName?: string;
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_EnglishName1')}
+             * @uiLabel - ${this._('englishName')}
              */
             FirstName?: string;
             /**
              * @uiColumnGroup - row2
-             * @uiLabel - ${this._('w_Member_CardType1')}
+             * @uiLabel - ${this._('cardType')}
              */
             CardType?:string;
             /**
              * @uiColumnGroup - row2
-             * @uiLabel - ${this._('w_Member_CompanyName1')}
+             * @uiLabel - ${this._('companyName')}
              */
             CompanyName?:string;
             /**
              * @uiColumnGroup - row3
-             * @uiLabel - ${this._('w_Member_Department1')}
+             * @uiLabel - ${this._('department')}
              */
             DepartmentName?:string;
             /**
              * @uiColumnGroup - row3
-             * @uiLabel - ${this._('w_Member_CostCenter1')}
+             * @uiLabel - ${this._('costCenter')}
              */
             CostCenterName?:string;
             /**
              * @uiColumnGroup - row4
-             * @uiLabel - ${this._('w_Member_WorkArea1')}
+             * @uiLabel - ${this._('workArea')}
              */
             WorkAreaName?:string;
             /**
              * @uiColumnGroup - row4
              * @uiType - iv-form-date
-             * @uiLabel - ${this._('w_Member_StartDate1')}
+             * @uiLabel - ${this._('startDate')}
              */
             Start:Date;
             /**
              * @uiColumnGroup - row4
              * @uiType - iv-form-date
              * @uiDisabled - true
-             * @uiLabel - ${this._('w_Member_EndDate1')}
+             * @uiLabel - ${this._('endDate')}
              */
             End:Date;
         }`;

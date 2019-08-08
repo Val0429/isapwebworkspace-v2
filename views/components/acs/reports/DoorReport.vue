@@ -27,41 +27,41 @@ export default class DoorReport extends Vue  {
        [       
             {
                 key:"cardNumber",
-                label: this._('w_Member_CardNumber1')
+                label: this._('cardNumber')
             },                
             {
                 key:"department",
-                label: this._("w_Member_Department1")
+                label: this._("department")
             },
             {
                 key:"costCenter",
-                label: this._("w_Member_CostCenter1")
+                label: this._("costCenter")
             },  
             {
                 key:"chineseName",
-                label: this._('w_Member_ChineseName1'),
+                label: this._('chineseName'),
                 sortable: true
             },
             {  
                 key:"englishName",
-                label: this._('w_Member_EnglishName1'),
+                label: this._('englishName'),
                 sortable: true
             },
             {
                 key:"companyName",
-                label: this._("w_Member_CompanyName1")
+                label: this._("companyName")
             },           
             {
                 key:"workArea",
-                label: this._("w_Member_WorkArea1")
+                label: this._("workArea")
             },           
             {
                 key: "employeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
+                label: this._('employeeNumber')
             },
             {
                 key: "resignationDate",
-                label: this._('w_Member_ResignationDate1')
+                label: this._('resignationDate')
             },
             {
                 key: "Status",
@@ -115,7 +115,7 @@ export default class DoorReport extends Vue  {
             /**
              * @uiColumnGroup - row1
              * @uiType - iv-form-date
-             * @uiLabel - ${this._('w_Member_ResignationDate1')}
+             * @uiLabel - ${this._('resignationDate')}
              */
             ResignDate?:Date;
         }`;

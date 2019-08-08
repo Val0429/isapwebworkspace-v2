@@ -433,129 +433,7 @@ export default class LangObject implements ILang {
     w_Navigation_Site = '站點';
     w_Navigation_Region = '地區';
 
-    // Member
-    w_Member_List = '人員管理';
-    w_Member_Add = '新增人員資訊';
-    w_Member_Edit = '編輯人員資訊';
-    w_Member_View = '查看人員資訊';
-
-    w_Member_CompanyName = '公司名稱：';
-    w_Member_CompanyName1 = '公司名稱';
-    w_Member_PersonType = '人員類型：';
-    w_Member_PersonType1 = '人員類型';
-    w_Member_EmployeeNumber = '工號：';
-    w_Member_EmployeeNumber1 = '工號';
-    w_Member_ChineseName = '中文姓名：';
-    w_Member_ChineseName1 = '中文姓名';
-    w_Member_EnglishName = '英文姓名：';
-    w_Member_EnglishName1 = '英文姓名';
-    w_Member_CardNumber = '卡號：';
-    w_Member_CardNumber1 = '卡號';
-    w_Member_CardType = '證卡類型：';
-    w_Member_CardType1 = '證卡類型'; 
-    w_Member_CardAllNumber = '證卡全碼：';
-    w_Member_CardCustodian = '證卡保管人：';
-    w_Member_CardCustodian1 = '證卡保管人';
-    w_Member_Actions = '功能';
-    w_Member_PersonPic = '人員照片：';
-    w_Member_UpLoadPersonPic = '上傳照片：';
-    w_Member_CardVoucherType = '卡片憑證類型：';
-    w_Member_deviceNumber = '設備碼：';
-    w_Member_Status="狀態";
-    w_Member_CardInfo = '卡片資訊';
-    w_Member_pin = 'PIN：';
-
-    w_Member_Info = '資訊狀態';
-    w_Member_StartDate = '起始日期：';
-    w_Member_StartDate1 = '起始日期';
-    w_Member_EndDate = '結束日期：';
-    w_Member_EndDate1 = '結束日期';
-    w_Member_LastEditPerson = '上次修改人員：';
-    w_Member_LastEditTime = '上次修改時間：';
-
-    w_Member_PermissionTable = '權限表：';
-    w_Member_CanSelect = '可用選項：';
-    w_Member_BeSelected = '已選擇：';
-
-    w_Member_PersonInfo = '個人資訊';
-    w_Member_ExtensionNumber = '分機號碼：';
-    w_Member_MVPN = 'MVPN：';
-    w_Member_Phone = '行動電話：';
-    w_Member_Email = 'Email：';
-    w_Member_Gender = '性別：';
-    w_Member_Birthday = '出生日期：';
-    w_Member_CompanyInfo = '公司資訊：';
-    w_Member_Department = '部門：';
-    w_Member_Department1 = '部門';
-    w_Member_CostCenter = '成本中心：';
-    w_Member_CostCenter1 = '成本中心';
-    w_Member_Area = '地區：';
-    w_Member_WorkArea = '工作地區：';
-    w_Member_WorkArea1 = '工作地區';
-    w_Member_RegistrationDate = '報到日期：';
-    w_Member_ResignationDate = '離職日期：';
-    w_Member_ResignationDate1 = '離職日期';
-
-    w_Member_General = '一般';
-    w_Member_CarLicenseData = '車證資料';
-    w_Member_CarLicenseCategory = '車證類別：';
-    w_Member_CardLicense = '車證編號：';
-    w_Member_CarLicense = '車位編號：';
-    w_Member_CarLicense1 = '車牌號碼I：';
-    w_Member_CarLicense2 = '車牌號碼II：';
-    w_Member_CarLicense3 = '車牌號碼III：';
-
-    w_Member_AccountInfo = '用戶詳情：';
-    w_Member_Account = '用戶名：';
-    w_Member_Password = '密碼：';
-
-    w_Member_CardRecord = '證卡紀錄';
-    w_Member_ResignationNote = '離職備註：';
-    w_Member_ResignationRecordCardRecord = '離職繳回紀錄_證卡：';
-    ReasonForCard1 = '製卡原因I：';
-    w_Member_HistoryForCard1 = '歷史卡號I：';
-    w_Member_DateForCard1 = '發卡日期I：';
-    ReasonForCard2 = '製卡原因II：';
-    w_Member_HistoryForCard2 = '歷史卡號II：';
-    w_Member_DateForCard2 = '發卡日期II：';
-    ReasonForCard3 = '製卡原因III：';
-    w_Member_HistoryForCard3 = '歷史卡號III：';
-    w_Member_DateForCard3 = '發卡日期III：';
-
-    w_Member_SelectTemplate = '選擇模板';
-    w_Member_CardTemplate = '卡片模板';
-    w_Member_CardPhoto = '卡片樣式';
-
-    w_Member_CarLicenseRecord = '車證紀錄';
-    w_Member_ReasonForApplication1 = '申請原因I：';
-    w_Member_DateForApplication1 = '發證日期I：';
-    w_Member_ReasonForApplication2 = '申請原因II：';
-    w_Member_DateForApplication2 = '發證日期II：';
-    w_Member_ReasonForApplication3 = '申請原因III：';
-    w_Member_DateForApplication3 = '發證日期III：';
-    w_Member_ResignationRecordCarLicense = '離職繳回紀錄_車證：';
-
-    w_Member_Other = '其他';
-    w_Member_CensusRecord = '普查紀錄：';
-    w_Member_CensusRecord1 = '普查紀錄I：';
-    w_Member_CensusDate1 = '普查日期I：';
-    w_Member_CensusRecord2 = '普查紀錄II：';
-    w_Member_CensusDate2 = '普查日期II：';
-    w_Member_CensusRecord3 = '普查紀錄：III';
-    w_Member_CensusDate3 = '普查日期III：';
-
-    w_Member_ParkingViolation = '停車違規';
-    w_Member_InfoOfViolation1 = '違規說明I：';
-    w_Member_DateOfViolation1 = '違規日期I：';
-    w_Member_InfoOfViolation2 = '違規說明II：';
-    w_Member_DateOfViolation2 = '違規日期II：';
-    w_Member_InfoOfViolation3 = '違規說明III：';
-    w_Member_DateOfViolation3 = '違規日期III：';
-
-    w_Member_DeleteConfirm = '你確定要刪除已選擇人員？';
-    w_Member_EditFailed = '編輯人員失敗';
-    w_Member_AddFailed = '新增人員失敗';
-    w_Member_ErrorUploadFile = '上傳失敗';
+    
 
     w_AttendanceReport = '差勤紀錄查詢';
     w_DoorReport = '門號報表';
@@ -661,10 +539,120 @@ export default class LangObject implements ILang {
     system_license_CRUD="編輯憑證設定";
     system_operationlog_R="查詢系統操作紀錄";
 
-    w_SystemLog="System Log";
-    w_log_message="Log Message";
-    w_log_title="Log Title";
-    w_log_date="Date";
-    w_log_time="Time";
-    w_MemberFields="Member Fields";
+    w_SystemLog="系統日誌";
+    w_log_message="日誌內容";
+    w_log_title="日誌標題";
+    w_log_date="日期";
+    w_log_time="時間";
+    w_MemberFields="使用者帳號";
+
+    
+    w_Member_DeleteConfirm = '你確定要刪除已選擇人員？';
+    w_Member_EditFailed = '編輯人員失敗';
+    w_Member_AddFailed = '新增人員失敗';
+    w_Member_ErrorUploadFile = '上傳失敗';
+    w_Member_Other = '其他';
+    w_Member_List = '人員管理';
+    w_Member_Add = '新增人員資訊';
+    w_Member_Edit = '編輯人員資訊';
+    w_Member_View = '查看人員資訊';
+
+    companyName = '公司名稱';
+    primaryWorkgroupName = '人員類型';
+	personType='人員類型';
+    employeeNumber = '工號';
+    chineseName = '中文姓名';
+    englishName = '英文姓名';
+    cardNumber = '卡號';
+    cardType = '證卡類型';  
+    w_Member_CardAllNumber = '證卡全碼';
+    cardCustodian = '證卡保管人';
+    w_Member_Actions = '功能';
+    w_Member_PersonPic = '人員照片';
+    personPhoto = '上傳照片';
+    cardCertificate = '卡片憑證類型';
+    deviceNumber = '設備碼';
+    w_Member_Status="Status";
+    w_Member_CardInfo = '卡片資訊';
+    pin = 'PIN';
+
+    w_Member_Info = '資訊狀態';
+    startDate = '起始日期';
+    endDate = '結束日期';
+    lastEditPerson = '上次修改人員';
+    lastEditTime = '上次修改時間';
+
+    w_Member_PermissionTable = '權限表';
+    w_Member_CanSelect = '可用選項';
+    w_Member_BeSelected = '已選擇';
+
+    w_Member_PersonInfo = '個人資訊';
+    extensionNumber = '分機號碼';
+    MVPN = 'MVPN';
+    phone = '行動電話';
+    email = 'Email';
+    gender = '性別';
+    birthday = '出生日期';
+    w_Member_CompanyInfo = '公司資訊';
+    department = '部門';
+    costCenter = '成本中心';
+    area = '地區';
+    workArea = '工作地區';
+    registrationDate = '報到日期';
+    resignationDate = '離職日期';
+
+    w_Member_General = '一般';
+    w_Member_CarLicenseData = '車證資料';
+    carLicenseCategory = '車證類別';
+    cardLicense = '車證編號';
+    carLicense = '車位編號';
+    carLicense1 = '車牌號碼I';
+    carLicense2 = '車牌號碼II';
+    carLicense3 = '車牌號碼III';
+
+    accountInfo = '用戶詳情';
+    account = '用戶名';
+    password = '密碼';
+
+    w_Member_CardRecord = '證卡紀錄';
+    resignationNote = '離職備註';
+    resignationRecordCardRecord = '離職繳回紀錄_證卡';
+    reasonForCard1 = '製卡原因I';
+    historyForCard1 = '歷史卡號I';
+    dateForCard1 = '發卡日期I';
+    reasonForCard2 = '製卡原因II';
+    historyForCard2 = '歷史卡號II';
+    dateForCard2 = '發卡日期II';
+    reasonForCard3 = '製卡原因III';
+    historyForCard3 = '歷史卡號III';
+    dateForCard3 = '發卡日期III';
+
+    w_Member_SelectTemplate = '選擇模板';
+    w_Member_CardTemplate = '卡片模板';
+    w_Member_CardPhoto = '卡片樣式';
+
+    w_Member_CarLicenseRecord = '車證紀錄';
+    reasonForApplication1 = '申請原因I';
+    dateForApplication1 = '發證日期I';
+    reasonForApplication2 = '申請原因II';
+    dateForApplication2 = '發證日期II';
+    reasonForApplication3 = '申請原因III';
+    dateForApplication3 = '發證日期III';
+    resignationRecordCarLicense = '離職繳回紀錄_車證';
+
+    w_Member_CensusRecord = '普查紀錄';
+    censusRecord1 = '普查紀錄I';
+    censusDate1 = '普查日期I';
+    censusRecord2 = '普查紀錄II';
+    censusDate2 = '普查日期II';
+    censusRecord3 = '普查紀錄III';
+    censusDate3 = '普查日期III';
+
+    w_Member_ParkingViolation = '停車違規';
+    infoOfViolation1 = '違規說明I';
+    dateOfViolation1 = '違規日期I';
+    infoOfViolation2 = '違規說明II';
+    dateOfViolation2 = '違規日期II';
+    infoOfViolation3 = '違規說明III';
+    dateOfViolation3 = '違規日期III';
 }

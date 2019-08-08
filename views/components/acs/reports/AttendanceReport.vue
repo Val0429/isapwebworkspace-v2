@@ -30,28 +30,28 @@ export default class EmployeeReport extends Vue  {
         [     
             {
                 key: "employeeNumber",
-                label: this._('w_Member_EmployeeNumber1')
+                label: this._('employeeNumber')
             },   
             {
                 key: "cardNumber",
-                label: this._('w_Member_CardNumber1')
+                label: this._('cardNumber')
             },          
             {
                 key:"department",
-                label: this._("w_Member_Department1")
+                label: this._("department")
             },
             {
                 key:"costCenter",
-                label: this._("w_Member_CostCenter1")
+                label: this._("costCenter")
             },
             {  
                 key:"chineseName",
-                label: this._('w_Member_ChineseName1'),
+                label: this._('chineseName'),
                 sortable: true
             },       
             {
                 key:"englishName",
-                label: this._('w_Member_EnglishName1'),
+                label: this._('englishName'),
                 sortable: true
             },
             {
@@ -115,33 +115,33 @@ export default class EmployeeReport extends Vue  {
         return `interface {
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_EmployeeNumber1')}
+             * @uiLabel - ${this._('employeeNumber')}
              */
             EmployeeNumber?: string;
             /**
              * @uiColumnGroup - row1
-             * @uiLabel - ${this._('w_Member_CardNumber1')}
+             * @uiLabel - ${this._('cardNumber')}
              */
             CardNumber?: string;
             /**
              * @uiColumnGroup - name
-             * @uiLabel - ${this._('w_Member_ChineseName1')}
+             * @uiLabel - ${this._('chineseName')}
              */
             LastName?: string;
             /**
              * @uiColumnGroup - name
-             * @uiLabel - ${this._('w_Member_EnglishName1')}
+             * @uiLabel - ${this._('englishName')}
              */
             FirstName?: string;
             
             /**
              * @uiColumnGroup - area
-             * @uiLabel - ${this._('w_Member_Department1')}
+             * @uiLabel - ${this._('department')}
              */
             DepartmentName?:string;
             /**
              * @uiColumnGroup - area
-             * @uiLabel - ${this._('w_Member_CostCenter1')}
+             * @uiLabel - ${this._('costCenter')}
              */
             CostCenterName?:string;
             /**
