@@ -5,6 +5,11 @@ import { RegisterRouter as $ } from '@/../core';
 // Home
 $({ path: '/', name: 'Home', redirect: '/login' })();
 
+// Visitor Registration
+import Potrait from './Registration/Potrait.vue';
+
+$({ path: '/registration/potrait', name: "_('w_Navigation_Registration_Potrait')", icon: 'fa-code', disableContainer: true, permission: false })(Potrait);
+
 // MyProfile
 import MyProfile from './MyProfile/MyProfile.vue';
 

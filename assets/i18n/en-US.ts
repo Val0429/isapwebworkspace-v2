@@ -41,6 +41,7 @@ export default class LangObject {
 
     w_Confirm = 'Confirm';
     w_Cancel = 'Cancel';
+    w_Cancelled = 'Cancelled';
 
     w_Dialog_ErrorTitle = 'Error';
     w_Dialog_SuccessTitle = 'Success';
@@ -103,6 +104,8 @@ export default class LangObject {
     w_Navigation_Tenants = 'Tenant';
     w_Navigation_Tenants_Invitation = 'Invitation';
     w_Navigation_Tenants_Visitor = 'Visitor';
+
+    w_Navigation_Registration_Potrait = 'Potrait';
 
     ////////////////// Dashboard //////////////////
     w_Dashboard_VisitorOnSite = 'Visitor On Site';
@@ -310,5 +313,4 @@ export default class LangObject {
 
     w_Floor_FloorName = 'Floor Name';
     w_Floor_Floor = 'Floor';
-
 }

@@ -18,8 +18,8 @@
                     :server="{ path: '/visitors' }"
                 >
 
-                    <template #visitor.status="{$attrs}">
-                        <div>{{$attrs.row.cancelled ? "Cancelled" : $attrs.row.visitor.status}}</div>
+                    <template #status="{$attrs}">
+                        <div>{{$attrs.row.cancelled ? _('w_Cancelled') : $attrs.row.status}}</div>
                     </template>
 
                 </iv-table>
@@ -74,61 +74,26 @@ export default class TenantsVisitor extends Vue {
                  */
                 no: string;
 
-                visitor: interface {
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_MobileNumber")}
-                     */
-                    phone: string;
-
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Name")}
-                     */
-                    name: string;
-
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Email")}
-                     */
-                    email: string;
-
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Status")}
-                     */
-                    status: string;
-
-                };
+                /**
+                 * @uiLabel - ${this._("w_Tenants_MobileNumber")}
+                 */
+                phone: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Tenants_StartDate")}
+                 * @uiLabel - ${this._("w_Tenants_Name")}
                  */
-                startDate: any;
+                name: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Tenants_EndDate")}
+                 * @uiLabel - ${this._("w_Tenants_Email")}
                  */
-                endDate: any;
+                email: string;
 
-                purpose: interface {
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Purpose")}
-                     */
-                    name: string;
-                };
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Status")}
+                 */
+                status: string;
 
-                notify: interface {
-                    visitor:  interface {
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Email")}
-                     */
-                    email: boolean;
-
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Phone")}
-                     */
-                    phone: boolean;
-                    };
-                };
-
-                Actions: any;
             }
         `;
     }
