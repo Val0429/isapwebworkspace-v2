@@ -143,8 +143,15 @@ enum EStatus {
     Online = "Online"
 }
 
+enum EWsType {
+    none = "none",
+    status = "status",
+    initKiosk = "initKiosk",
+    changeKiosk = "changeKiosk"
+}
+
 interface IKioskStatus {
-    objectId : string;
+    objectId: string;
     status: EStatus;
 }
 
@@ -207,7 +214,6 @@ export default class SetupsKiosk extends Vue {
         //     console.log("ws message", message);
         // });
         // ws.closeGracefully();
-
     }
 
     mounted() {
@@ -220,7 +226,6 @@ export default class SetupsKiosk extends Vue {
 
     initWS() {
         let url = `ws://${ServerConfig.host}:${ServerConfig.port}/kiosks/aliveness?sessionId=${this.$user.sessionId}`;
-        // ws://172.16.10.30:6060/kiosks/aliveness?sessionId=r:ede5166019af8d95a3af2416bcc7cce6
         this.ws.url = url;
         this.ws.Connect();
     }
@@ -228,28 +233,69 @@ export default class SetupsKiosk extends Vue {
     handleWs(wsData: string) {
         try {
             let data: any = JSON.parse(wsData);
-            if (data.statusCode != undefined && data.statusCode == 401) {
-                this.$router.push({ path: "/" });
+            let wsType: EWsType = EWsType.none;
+
+            // check webSocket type
+            if (data.statusCode != undefined) {
+                wsType = EWsType.status;
+            } else if (data.length > 0) {
+                wsType = EWsType.initKiosk;
+            } else if (data.alive != undefined) {
+                wsType = EWsType.changeKiosk;
             }
 
-            for (let i in this.kioskStatus) {
-                let status =  this.kioskStatus[i];
-                if (status.objectId == data.instance.objectId) {
-                    console.log("!!! data.alive", data.alive);
-                    this.kioskStatus[i].status = data.alive == 1 ? EStatus.Online : EStatus.Offline;
+            // do something for different type
+            switch (wsType) {
+                case EWsType.status:
+                    if (data.statusCode == 401) {
+                        this.$router.push({ path: "/" });
+                    }
                     break;
-                }
+                case EWsType.initKiosk:
+                    for (let kiokData of data) {
+                        this.reoloveWsStatus(kiokData);
+                    }
+                    break;
+                case EWsType.changeKiosk:
+                    for (let i in this.kioskStatus) {
+                        let status = this.kioskStatus[i];
+                        if (
+                            data.instance != undefined &&
+                            data.instance.objectId != undefined &&
+                            status.objectId == data.instance.objectId
+                        ) {
+                            console.log("!!! data.alive", data.alive);
+                            this.kioskStatus[i].status =
+                                data.alive == 1
+                                    ? EStatus.Online
+                                    : EStatus.Offline;
+                            break;
+                        }
+                    }
+                    break;
             }
-
-            console.log("!!!!", this.kioskStatus);
-
-            console.log("handleWs", data);
         } catch (e) {
             console.log("WS handle error: ", e);
         }
     }
 
-    resolveStatus (data: any): string {
+    reoloveWsStatus(data: any) {
+        console.log(data);
+        let haveObjectId = false;
+        for (let statInfo of this.kioskStatus) {
+            if (statInfo.objectId == data.objectId) {
+                haveObjectId = true;
+            }
+        }
+        if (!haveObjectId) {
+            this.kioskStatus.push({
+                objectId: data.objectId,
+                status: EStatus.Online
+            });
+        }
+    }
+
+    resolveStatus(data: any): string {
         let haveObjectId = false;
         let tempKioskStatus: IKioskStatus = {
             objectId: "",
