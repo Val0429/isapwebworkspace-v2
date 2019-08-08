@@ -87,9 +87,34 @@
                         <template #step5>
                             <step5
                                 class="col-md-12"
+                                :permission="true"
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>
+
+                            <div
+                                v-if="inputFormData.step5Files"
+                                v-for="file in  inputFormData.step5Files"
+                                class="step5Div"
+                            >
+                                <span
+                                    class="close"
+                                    @click="deleteStep5File(file.base64)"
+                                ></span>
+
+                                <img
+                                    v-if="file.type != 'application/pdf'"
+                                    class="step5Imgs"
+                                    :src="file.base64"
+                                >
+                                <img
+                                    v-else
+                                    class="step5Imgs"
+                                    :src="imageBase64.pdfEmpty"
+                                >
+                                <span>{{file.name}}</span>
+                            </div>
+
                         </template>
 
                     </iv-form>
@@ -162,6 +187,7 @@ import Step8 from "@/components/ContractorRegistration/Step8.vue";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import ImageBase64 from "@/services/ImageBase64";
 
 @Component({
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
@@ -172,6 +198,8 @@ export class AddPTWByCR extends Vue {
         default: () => {}
     })
     selectedDetail: string;
+
+    imageBase64 = ImageBase64;
 
     // step 相關
     isMounted: boolean = false;
@@ -226,6 +254,7 @@ export class AddPTWByCR extends Vue {
         step4Checklist6Remarks: "",
 
         // step5
+        step5Files: [],
 
         // step6
         step6Accepted: "",
@@ -241,7 +270,9 @@ export class AddPTWByCR extends Vue {
     };
 
     created() {
-        this.inputFormData = this.selectedDetail;
+        if (this.selectedDetail.length) {
+            this.inputFormData = this.selectedDetail as any;
+        }
     }
 
     mounted() {}
@@ -426,8 +457,28 @@ export class AddPTWByCR extends Vue {
 
     receiveStep5Data(step5Date) {}
 
-    putStep5File(file) {
-        console.log("putStep5File", file);
+    deleteStep5File(base64) {
+        this.inputFormData.step5Files = this.inputFormData.step5Files.filter(
+            s => s.base64 != base64
+        );
+    }
+
+    putStep5File(files) {
+        for (let file of files) {
+            if (file) {
+                ImageBase64.fileToBase64(file, (base64 = "") => {
+                    if (base64 != "") {
+                        this.inputFormData.step5Files.push({
+                            name: file.name,
+                            type: file.type,
+                            base64: base64
+                        });
+                    } else {
+                        Dialog.error(this._("w_Error_FileToLarge"));
+                    }
+                });
+            }
+        }
     }
 
     stepTo6() {
@@ -564,6 +615,41 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
 </script>
 
 <style lang="scss" scoped>
+.step5Imgs {
+    width: 100%;
+    height: 100%;
+}
+.step5Div {
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+    position: relative;
+    margin: 10px;
+}
+.close {
+    /* still bad on picking color */
+    background: orange;
+    color: red;
+    /* make a round button */
+    border-radius: 12px;
+    /* center text */
+    line-height: 20px;
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    font-size: 18px;
+    padding: 1px;
+}
+/* use cross as close button */
+.close::before {
+    content: "\2716";
+}
+/* place the button on top-right */
+.close {
+    top: -10px;
+    right: -10px;
+    position: absolute;
+}
 </style>
 
 
