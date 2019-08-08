@@ -39,7 +39,7 @@
                     :interface="IMainTable()"
                     :multiple="tableMultiple"
                     :server="{ path: '/acs/permissiontable' }"
-                    :params="SearchParams"
+                    :params="searchParams"
                     @selected="selectedItem($event)"
                 >
                     <template #Actions="{$attrs, $listeners}">
@@ -351,7 +351,7 @@ export default class PermissionTable extends Vue {
         deviceTimeFormatOption: "",
         data: [] // subTable use
     };
-    SearchParams: any = {system:0};
+    searchParams: any = {system:0};
 
     //options
     deviceNameItem: any = {};
@@ -386,14 +386,12 @@ export default class PermissionTable extends Vue {
         this.pageToList();
     }
 
-    searchTable(datas) {
-        this.SearchParams = {};
-        for (var i in datas) {
-            this.SearchParams = {
-                name: datas.permissionName,
-                system:0
-            };
+    searchTable($event) {
+        let filter:any={system:0};
+        if($event.permissionName){
+            filter.name= $event.permissionName
         }
+        this.searchParams = filter;
     }
 
     clearInputFormData() {
