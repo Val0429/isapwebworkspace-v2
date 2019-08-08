@@ -56,6 +56,7 @@
                         <b-button
                             variant="transparent"
                             @click="pageToEdit(value, index)"
+                            :disabled="permission"
                         >
                             <i class="fa fa-pencil text-dark"></i>
                         </b-button>
@@ -64,6 +65,7 @@
                         <b-button
                             variant="transparent"
                             @click="doDelete(index)"
+                            :disabled="permission"
                         >
                             <i class="fa fa-trash-o text-dark"></i>
                         </b-button>
@@ -117,6 +119,7 @@
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog";
+import {IPerson, IStep7} from '.';
 
 enum EPageStep {
     list = "list",
@@ -147,15 +150,15 @@ export class Step7 extends Vue {
         tableDataFromApi: []
     };
 
-    inputFormData: any = {
-        phone: 0,
+    inputFormData: IPerson = {
         name: "",
-        occupation: "",
+        phone: '',
         nric: "",
-        shift: "",
-        unit: "",
+        occupation: "",
+        unitNo: "",
         vehicle: "",
-        company: ""
+        companyName: "",
+        shift: ""
     };
 
     created() {}
@@ -210,14 +213,14 @@ export class Step7 extends Vue {
 
     clearInputFormData() {
         this.inputFormData = {
-            phone: 0,
             name: "",
-            occupation: "",
+            phone: '',
             nric: "",
-            shift: "",
-            unit: "",
+            occupation: "",
+            unitNo: "",
             vehicle: "",
-            company: ""
+            companyName: "",
+            shift: ""
         };
     }
 
@@ -243,14 +246,14 @@ export class Step7 extends Vue {
 
     doSubmit(data) {
         let personObject: any = {
-            phone: data.phone,
             name: data.name,
-            occupation: data.occupation,
+            phone: data.phone,
             nric: data.nric,
-            shift: data.shift,
-            unit: data.unit,
+            occupation: data.occupation,
+            unitNo: data.unitNo,
             vehicle: data.vehicle,
-            company: data.company
+            companyName: data.companyName,
+            shift: data.shift
         };
 
         this.personTable.tableDataFromApi.push(personObject);
@@ -283,9 +286,8 @@ export class Step7 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
-                 * @uiAttrs - { min: 0 }
                  */
-                phone: number;
+                phone: string;
 
 
                 /**
@@ -307,21 +309,21 @@ export class Step7 extends Vue {
                  * @uiLabel - ${this._("w_Invitation_Unit")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
                  */
-                unit: string;
+                unitNo: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Vehicle")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Vehicle")}
                  */
-                vehicle: string;
+                vehicle?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step7_Company")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step7_Company")}
                  */
-                company?: string;
+                companyName: string;
 
 
                 /**

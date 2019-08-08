@@ -26,6 +26,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+import { IStep2 } from '.';
 
 @Component({
     components: {}
@@ -42,19 +43,21 @@ export class Step2 extends Vue {
     tenantSelectItem: any = {};
     workCategorySelectItem: any = {};
 
-    inputFormData: any = {
+    inputFormData: IStep2 = {
         // PTW Data
         ptwId: "",
         tenant: "",
         workCategory: "",
 
         // Contractor Information
-        nameOfApplicant: "",
+        applicantName: "",
+
+        // Company
         companyName: "",
         companyAddress: "",
-        email: "",
-        contactNumber: 0,
-        companyFaxNo: 0
+        companyEmail: "",
+        companyContactPhone: '',
+        companyFax: ''
     };
 
     created() {}
@@ -120,8 +123,8 @@ export class Step2 extends Vue {
                 break;
 
             // Contractor Information
-            case "nameOfApplicant":
-                this.inputFormData.nameOfApplicant = data.value;
+            case "applicantName":
+                this.inputFormData.applicantName = data.value;
                 break;
             case "companyName":
                 this.inputFormData.companyName = data.value;
@@ -129,14 +132,14 @@ export class Step2 extends Vue {
             case "companyAddress":
                 this.inputFormData.companyAddress = data.value;
                 break;
-            case "email":
-                this.inputFormData.email = data.value;
+            case "companyEmail":
+                this.inputFormData.companyEmail = data.value;
                 break;
-            case "contactNumber":
-                this.inputFormData.contactNumber = data.value;
+            case "companyContactPhone":
+                this.inputFormData.companyContactPhone = data.value;
                 break;
-            case "companyFaxNo":
-                this.inputFormData.companyFaxNo = data.value;
+            case "companyFax":
+                this.inputFormData.companyFax = data.value;
                 break;
         }
 
@@ -153,14 +156,14 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_PTWID")}
                  * @uiPlaceHolder - ${this._("w_Invitation_PTWID")}
-                 * @uiDisabled - ${!this.permission}
+                 * @uiType - iv-form-label
                  */
                 ptwId?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_Tenant")}
-                    * @uiDisabled - ${!this.permission}
+                 * @uiDisabled - ${!this.permission}
                  */
                 tenant?:  ${toEnumInterface(
                     this.tenantSelectItem as any,
@@ -169,8 +172,8 @@ export class Step2 extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Invitation_PTWStatus")}
-                    * @uiDisabled - ${!this.permission}
+                 * @uiLabel - ${this._("w_Invitation_WorkCategory")}
+                 * @uiDisabled - ${!this.permission}
                  */
                 workCategory?:  ${toEnumInterface(
                     this.workCategorySelectItem as any,
@@ -184,8 +187,8 @@ export class Step2 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
                  */
-                nameOfApplicant: string;
-          
+                applicantName: string;
+
 
 
                 /**
@@ -205,23 +208,21 @@ export class Step2 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  */
-                 email: string;
+                 companyEmail: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
-                 * @uiAttrs - { min: 0 }
                  */
-                 contactNumber: number;
+                 companyContactPhone: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
-                 * @uiAttrs - { min: 0 }
                  */
-                 companyFaxNo: number;
+                 companyFax: string;
 
                 contractorIsRequired?: any;
 

@@ -7,10 +7,10 @@
         >
             <template #typeOfWork>
                 <div class="mb-3 mt-2">
-                    <p class="cpl-md-12 mb-2 ml-3">{{ _('w_ViewPTW_Step3_TypesOfWorkInvolved') }}</p>
+                    <p class="cpl-md-12 mb-2 ml-3">* {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved') }}</p>
                     <b-form-checkbox
                         v-for="option in typeOfWorkSelectItem"
-                        v-model="inputFormData.typeOfWork"
+                        v-model="inputFormData.workType"
                         :key="option.value"
                         :value="option.value"
                         name="typeOfWork"
@@ -33,6 +33,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { IStep3 } from '.';
 
 @Component({
     components: {}
@@ -40,17 +41,17 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 export class Step3 extends Vue {
     typeOfWorkSelectItem: any = [];
 
-    inputFormData: any = {
-        unit: "",
-        location: "",
-        description: "",
-        typeOfWork: [],
-        startDate: new Date(),
-        startTime: new Date(),
-        endDate: new Date(),
-        endTime: new Date(),
-        nameOfApplicantService: "",
-        handPhoneContactNumber: 0
+    inputFormData: IStep3 = {
+        workPremisesUnit: "",
+        workLocation: "",
+        workDescription: "",
+        workType: [],
+        workStartDate: new Date(),
+        workStartTime: new Date(),
+        workEndDate: new Date(),
+        workEndTime: new Date(),
+        workContact: "",
+        workContactPhone: ''
     };
 
     created() {}
@@ -62,61 +63,61 @@ export class Step3 extends Vue {
     initSelectItem() {
         this.typeOfWorkSelectItem = [
             {
-                value: "1",
+                value: 1,
                 text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved1")
             },
             {
-                value: "2",
+                value: 2,
                 text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved2")
             },
             {
-                value: "3",
+                value: 3,
                 text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved3")
             },
             {
-                value: "4",
+                value: 4,
                 text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved4")
             },
             {
-                value: "5",
+                value: 5,
                 text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved5")
             },
             {
-                value: "6",
+                value: 6,
                 text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved6")
             },
             {
-                value: "7",
+                value: 7,
                 text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved7")
             },
-            { value: "8", text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved8") }
+            { value: 8, text: this._("w_ViewPTW_Step3_TypesOfWorkInvolved8") }
         ];
     }
 
     updateInputFormData(data) {
         switch (data.key) {
-            case "unit":
-                this.inputFormData.unit = data.value;
+            case "workPremisesUnit":
+                this.inputFormData.workPremisesUnit = data.value;
                 break;
-            case "location":
-                this.inputFormData.location = data.value;
+            case "workLocation":
+                this.inputFormData.workLocation = data.value;
                 break;
-            case "description":
-                this.inputFormData.description = data.value;
+            case "workDescription":
+                this.inputFormData.workDescription = data.value;
                 break;
-            case "startDate":
-                this.inputFormData.startDate = data.value;
-                this.inputFormData.startTime = data.value;
+            case "workStartDate":
+                this.inputFormData.workStartDate = data.value;
+                this.inputFormData.workStartTime = data.value;
                 break;
-            case "endDate":
-                this.inputFormData.endDate = data.value;
-                this.inputFormData.endTime = data.value;
+            case "workEndDate":
+                this.inputFormData.workEndDate = data.value;
+                this.inputFormData.workEndTime = data.value;
                 break;
-            case "nameOfApplicantService":
-                this.inputFormData.nameOfApplicantService = data.value;
+            case "workContact":
+                this.inputFormData.workContact = data.value;
                 break;
-            case "handPhoneContactNumber":
-                this.inputFormData.handPhoneContactNumber = data.value;
+            case "workContactPhone":
+                this.inputFormData.workContactPhone = data.value;
                 break;
         }
 
@@ -136,7 +137,7 @@ export class Step3 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step3_WorkPremisesUnit")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
                  */
-                unit: string;
+                workPremisesUnit: string;
 
 
                 /**
@@ -145,7 +146,7 @@ export class Step3 extends Vue {
                      "w_ViewPTW_Step3_ExactLocation_PlaceHolder"
                  )}
                  */
-                location: string;
+                workLocation: string;
 
 
                 /**
@@ -155,10 +156,10 @@ export class Step3 extends Vue {
                  )}
                  * @uiType - iv-form-textarea
                  */
-                description: string;
+                workDescription: string;
 
 
-                typeOfWork?: any;
+                workType?: any;
 
 
                 /**
@@ -166,7 +167,7 @@ export class Step3 extends Vue {
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
                  */
-                startDate: string;
+                workStartDate: string;
 
 
                 /**
@@ -174,14 +175,14 @@ export class Step3 extends Vue {
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
                  */
-                endDate: string;
+                workEndDate: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
                  */
-                nameOfApplicantService: string;
+                workContact: string;
 
 
                 /**
@@ -191,9 +192,8 @@ export class Step3 extends Vue {
                  * @uiPlaceHolder - ${this._(
                      "w_ViewPTW_Step3_HandPhoneContactNumber"
                  )}
-                 * @uiAttrs - { min: 0 }
                  */
-                handPhoneContactNumber: number;
+                workContactPhone: string;
 
                 contractorIsRequired?: any;
 
