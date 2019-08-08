@@ -126,16 +126,18 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
+// WebSocket
 import { Ws } from "@/services/WebSocket/Ws";
 
 // Service
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
-
-// Transition
-import Transition from "@/services/Transition";
-import { ITransition } from "@/services/Transition";
 import ServerConfig from "@/services/ServerConfig";
 
 enum EStatus {
@@ -144,7 +146,7 @@ enum EStatus {
 }
 
 interface IKioskStatus {
-    objectId : string;
+    objectId: string;
     status: EStatus;
 }
 
@@ -207,7 +209,6 @@ export default class SetupsKiosk extends Vue {
         //     console.log("ws message", message);
         // });
         // ws.closeGracefully();
-
     }
 
     mounted() {
@@ -233,23 +234,21 @@ export default class SetupsKiosk extends Vue {
             }
 
             for (let i in this.kioskStatus) {
-                let status =  this.kioskStatus[i];
+                let status = this.kioskStatus[i];
                 if (status.objectId == data.instance.objectId) {
                     console.log("!!! data.alive", data.alive);
-                    this.kioskStatus[i].status = data.alive == 1 ? EStatus.Online : EStatus.Offline;
+                    this.kioskStatus[i].status =
+                        data.alive == 1 ? EStatus.Online : EStatus.Offline;
                     break;
                 }
             }
-
-            console.log("!!!!", this.kioskStatus);
-
             console.log("handleWs", data);
         } catch (e) {
             console.log("WS handle error: ", e);
         }
     }
 
-    resolveStatus (data: any): string {
+    resolveStatus(data: any): string {
         let haveObjectId = false;
         let tempKioskStatus: IKioskStatus = {
             objectId: "",

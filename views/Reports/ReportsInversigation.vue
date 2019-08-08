@@ -61,23 +61,14 @@
                                 <th>{{ _('w_Investigation_EventTime') }}</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>No</td>
-                                    <td>Visitor Name</td>
-                                    <td>Purpose</td>
-                                    <td>Kiosk Name</td>
-                                    <td>Result</td>
-                                    <td>Event</td>
-                                    <td>Event Time</td>
-                                </tr>
-                                <tr>
-                                    <td>No</td>
-                                    <td>Visitor Name</td>
-                                    <td>Purpose</td>
-                                    <td>Kiosk Name</td>
-                                    <td>Result</td>
-                                    <td>Event</td>
-                                    <td>Event Time</td>
+                                <tr v-for="(value, index) of tableDatas">
+                                    <td>{{ index + 1}}</td>
+                                    <td>{{ value.visitorName }}</td>
+                                    <td>{{ value.purpose }}</td>
+                                    <td>{{ value.kioskName }}</td>
+                                    <td>{{ value.result }}</td>
+                                    <td>{{ value.event }}</td>
+                                    <td>{{ value.eventDateString }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -95,6 +86,9 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 
+// WebSocket
+import { Ws } from "@/services/WebSocket/Ws";
+
 // Transition
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
@@ -103,22 +97,22 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import ServerConfig from "@/services/ServerConfig";
 
 // Export PDF
 import * as jspdf from "jspdf";
 import VueHtml2Canvas from "vue-html2canvas";
-import Datetime from "../../services/Datetime";
 Vue.use(VueHtml2Canvas);
 
 interface ITableItem {
-    no: number;
     visitorName: string;
     purpose: string;
     kioskName: string;
     result: string;
     event: string;
-    eventTime: string;
     eventDate: Date;
+    eventDateString: string;
 }
 
 @Component({
@@ -132,7 +126,26 @@ export default class ReportsInversigation extends Vue {
     };
     exportTableId = "exportPDf";
 
-    tableDatas: ITableItem[] = [];
+    tableDatas: ITableItem[] = [
+        {
+            visitorName: "visitorName 1",
+            purpose: "purpose 1",
+            kioskName: "kioskName 1",
+            result: "Success 1",
+            event: "event 1",
+            eventDate: new Date(),
+            eventDateString: "2019-12-23 00:00:00"
+        },
+        {
+            visitorName: "visitorName 2",
+            purpose: "purpose 2",
+            kioskName: "kioskName 2",
+            result: "Success 2",
+            event: "event 2",
+            eventDate: new Date(),
+            eventDateString: "2019-12-23 00:00:00"
+        }
+    ];
 
     inputFilterData: any = {
         startDate: new Date(),
@@ -146,18 +159,54 @@ export default class ReportsInversigation extends Vue {
         kiosk: []
     };
 
+    ws: Ws = new Ws({
+        url: "",
+        OnOpen: async (e: Event): Promise<void> => {
+            console.log("WS Alive Open");
+        },
+
+        OnMessage: async (e: MessageEvent): Promise<void> => {
+            console.log("WS Alive message");
+            console.log("e: ", e);
+            this.handleWs(e.data);
+        },
+
+        OnError: async (e: Event): Promise<void> => {
+            console.log("WS Alive Error");
+        },
+
+        OnClose: async (e: CloseEvent): Promise<void> => {
+            console.log("WS Alive Close");
+        }
+    });
+
     created() {
         this.initSelectItemPurpose();
         this.initSelectItemKiosk();
         this.initDate();
     }
 
-    mounted() {}
+    mounted() {
+        this.initWS();
+    }
+
+    beforeDestroy() {
+        this.ws.Close();
+    }
 
     initDate() {
         this.inputFilterData.startDate = Datetime.MonthStart(new Date());
         this.inputFilterData.endDate = Datetime.MonthEnd(new Date());
     }
+
+    // Web Socket
+    initWS() {
+        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/visitors/monitor?sessionId=?sessionId=${this.$user.sessionId}`;
+        this.ws.url = url;
+        this.ws.Connect();
+    }
+
+    handleWs(wsData: string) {}
 
     async initSelectItemPurpose() {
         let param: {} = {};
@@ -234,6 +283,8 @@ export default class ReportsInversigation extends Vue {
     }
 
     async submitFilterForm() {
+        this.tableDatas = [];
+
         let param: any = {
             paging: { all: true },
             start: this.inputFilterData.startDate.toISOString(),
@@ -253,12 +304,61 @@ export default class ReportsInversigation extends Vue {
             .R("/visitors/investigation", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    console.log("!!! response", response);
+                    for (let result of response.results) {
+                        this.resolveInvestigationResponse(result);
+                    }
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+    }
+
+    resolveInvestigationResponse(data: any) {
+        let tempItem: ITableItem = {
+            visitorName: data.visitor.name,
+            purpose: data.purpose.name,
+            kioskName: data.kiosk.data.kioskName,
+            result: "",
+            event: "",
+            eventDateString: "",
+            eventDate: new Date()
+        };
+
+        if (data.events.length < 1) {
+            return false;
+        }
+
+        let lastEvent: any = data.events[data.events.length - 1];
+        tempItem.result = lastEvent.result;
+        tempItem.event = this.resolveEventString(lastEvent.action);
+        tempItem.eventDate = new Date(lastEvent.createdAt);
+        tempItem.eventDateString = Datetime.DateTime2String(
+            new Date(lastEvent.createdAt),
+            "YYYY-MM-DD HH:mm:ss"
+        );
+        this.tableDatas.push(tempItem);
+    }
+
+    resolveEventString(event: string) {
+        let result = "";
+        switch (event) {
+            case "EventStrictCompareFace":
+                result = this._("w_Investigation_EventStrictCompareFace");
+                break;
+            case "EventStrictCompleteCheckIn":
+                result = this._("w_Investigation_EventStrictCompleteCheckIn");
+                break;
+            case "EventStrictConfirmPhoneNumber":
+                result = this._(
+                    "w_Investigation_EventStrictConfirmPhoneNumber"
+                );
+                break;
+            case "EventStrictTryCheckIn":
+                result = this._("w_Investigation_EventStrictTryCheckIn");
+                break;
+        }
+        return result;
     }
 
     IFilterForm() {
