@@ -115,6 +115,12 @@ interface ITableItem {
     eventDateString: string;
 }
 
+enum EWsType {
+    none = "none",
+    status = "status",
+    event = "event"
+}
+
 @Component({
     components: {}
 })
@@ -125,27 +131,6 @@ export default class ReportsInversigation extends Vue {
         step: 1
     };
     exportTableId = "exportPDf";
-
-    tableDatas: ITableItem[] = [
-        {
-            visitorName: "visitorName 1",
-            purpose: "purpose 1",
-            kioskName: "kioskName 1",
-            result: "Success 1",
-            event: "event 1",
-            eventDate: new Date(),
-            eventDateString: "2019-12-23 00:00:00"
-        },
-        {
-            visitorName: "visitorName 2",
-            purpose: "purpose 2",
-            kioskName: "kioskName 2",
-            result: "Success 2",
-            event: "event 2",
-            eventDate: new Date(),
-            eventDateString: "2019-12-23 00:00:00"
-        }
-    ];
 
     inputFilterData: any = {
         startDate: new Date(),
@@ -158,6 +143,9 @@ export default class ReportsInversigation extends Vue {
         purposes: [],
         kiosk: []
     };
+
+    tableDatas: ITableItem[] = [];
+    eventTimeFormat = "YYYY-MM-DD HH:mm:ss";
 
     ws: Ws = new Ws({
         url: "",
@@ -186,9 +174,7 @@ export default class ReportsInversigation extends Vue {
         this.initDate();
     }
 
-    mounted() {
-        this.initWS();
-    }
+    mounted() {}
 
     beforeDestroy() {
         this.ws.Close();
@@ -201,12 +187,59 @@ export default class ReportsInversigation extends Vue {
 
     // Web Socket
     initWS() {
-        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/visitors/monitor?sessionId=?sessionId=${this.$user.sessionId}`;
+        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/visitors/monitor?sessionId=${this.$user.sessionId}`;
         this.ws.url = url;
         this.ws.Connect();
     }
 
-    handleWs(wsData: string) {}
+    handleWs(wsData: string) {
+        try {
+            let tempWsData: any = JSON.parse(wsData);
+            let wsType: EWsType = EWsType.none;
+            let data: any = tempWsData.results;
+
+            // check webSocket type
+            if (tempWsData.statusCode != undefined) {
+                wsType = EWsType.status;
+            } else {
+                wsType = EWsType.event;
+            }
+
+            // do something for different type
+            switch (wsType) {
+                case EWsType.status:
+                    if (tempWsData.statusCode == 401) {
+                        this.ws.Close();
+                        // this.$router.push({ path: "/" });
+                    }
+                    break;
+                case EWsType.event:
+                    for (let loopData of data) {
+                        this.resolveWsData(loopData);
+                    }
+                    break;
+            }
+        } catch (e) {
+            console.log("WS handle error: ", e);
+        }
+    }
+
+    resolveWsData(data: any) {
+        console.log("!!! resolveWsData", data);
+        let tempItem: ITableItem = {
+            visitorName: data.visitor.name,
+            purpose: data.invitation.purpose.name,
+            kioskName: data.kiosk.data.kioskName,
+            result: data.result,
+            event: this.resolveEventString(data.action),
+            eventDateString: Datetime.DateTime2String(
+                data.createdAt,
+                this.eventTimeFormat
+            ),
+            eventDate: new Date(data.createdAt)
+        };
+        this.tableDatas.push(tempItem);
+    }
 
     async initSelectItemPurpose() {
         let param: {} = {};
@@ -283,6 +316,7 @@ export default class ReportsInversigation extends Vue {
     }
 
     async submitFilterForm() {
+        this.ws.Close();
         this.tableDatas = [];
 
         let param: any = {
@@ -307,6 +341,7 @@ export default class ReportsInversigation extends Vue {
                     for (let result of response.results) {
                         this.resolveInvestigationResponse(result);
                     }
+                    this.initWS();
                 });
             })
             .catch((e: any) => {
@@ -335,7 +370,7 @@ export default class ReportsInversigation extends Vue {
         tempItem.eventDate = new Date(lastEvent.createdAt);
         tempItem.eventDateString = Datetime.DateTime2String(
             new Date(lastEvent.createdAt),
-            "YYYY-MM-DD HH:mm:ss"
+            this.eventTimeFormat
         );
         this.tableDatas.push(tempItem);
     }
