@@ -44,8 +44,9 @@
                         @selected="selectedItem($event)"
                     >
 
-                        <template #ptwStatus="{$attrs, $listeners}">
-                            {{$attrs}}{{isExpired($attrs.row.endDate)}}
+                        <template #status="{$attrs, $listeners}">
+<!--                            {{ $attrs.value }}-->
+                            {{ tableShowStatus($attrs.value) }} {{ statusText }}
                         </template>
 
                         <template #Actions="{$attrs, $listeners}">
@@ -124,6 +125,8 @@ export default class Invitation extends Vue {
         workCategory: ""
     };
 
+    statusText: string = '';
+
     created() {}
 
     mounted() {}
@@ -183,8 +186,6 @@ export default class Invitation extends Vue {
         this.inputFormData = addPTWParam;
 
 
-
-
     }
 
     downloadExcel() {
@@ -224,6 +225,23 @@ export default class Invitation extends Vue {
 
     dateToYYYY_MM_DD(value) {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+    }
+
+    tableShowStatus(status: number) {
+        switch (status) {
+            case 1:
+                this.statusText = this._('w_Invitation_New') ;
+                break;
+            case 2:
+                this.statusText = this._('w_Invitation_PendingApproved') ;
+                break;
+            case 3:
+                this.statusText = this._('w_Invitation_Approved') ;
+                break;
+            case 4:
+                this.statusText = this._('w_Invitation_Rejected') ;
+                break;
+        }
     }
 
     ITableList() {
@@ -279,7 +297,7 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_StartDate")}
                  */
-                createdAt: string;
+                startDate: string;
 
 
                 /**
