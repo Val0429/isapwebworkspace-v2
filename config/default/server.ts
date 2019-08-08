@@ -31,6 +31,8 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Floor
         '/floors': [any, any, false];
+        // visitors/invites
+        '/visitors/invites': [any, any, false];
     };
 
     Get: {
@@ -46,6 +48,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/reports/exception': [any, any, false];
         '/reports/recurring': [any, any, false];
         '/reports/statistic': [any, any, false];
+
+        // Investigation
+        '/visitors/investigation': [any, any, false];
 
         // Kiosks
         '/kiosks': [any, any, false];
@@ -81,6 +86,8 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Floor
         '/floors': [any, any, false];
+        // visitors/invites
+        '/visitors/invites': [any, any, false];
     };
     Delete: {
         // companies

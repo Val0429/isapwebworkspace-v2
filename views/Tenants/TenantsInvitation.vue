@@ -31,6 +31,11 @@
                     :server="{ path: '/visitors/invites' }"
                     @selected="selectedItem($event)"
                 >
+
+                    <template #visitor.status="{$attrs}">
+                        <div>{{$attrs.row.cancelled ? "Cancelled" : $attrs.row.visitor.status}}</div>
+                    </template>
+
                     <template #startDate="{$attrs}">
                         <div>{{ resolveDatetimeStart($attrs.row.dates) }}</div>
                     </template>
@@ -104,7 +109,7 @@
                             v-on="$listeners"
                             v-bind="$attrs"
                             :options="selectItem.purposes"
-                            :multiple="true"
+                            :multiple="false"
                         >
                         </iv-form-selection>
                     </template>
@@ -154,7 +159,7 @@ export default class TenantsInvitation extends Vue {
     tableMultiple: boolean = true;
     selectedDetail: any = [];
 
-    inputFormData = {
+    inputFormData: any = {
         objectId: "",
         mobile: "",
         name: "",
@@ -163,6 +168,7 @@ export default class TenantsInvitation extends Vue {
         startDate: new Date(),
         endDate: new Date(),
         purpose: "",
+        notify: {},
         startString: "",
         endString: ""
     };
@@ -223,10 +229,31 @@ export default class TenantsInvitation extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-        console.log("initSelectItemPurpose", this.selectItem.purposes);
     }
 
-    doDelete() {}
+    async doDelete() {
+        for (let item of this.selectedDetail) {
+            const deleteParam = {
+                objectId: item.objectId,
+                cancelled: true
+            };
+
+            await this.$server
+                .U("/visitors/invites", deleteParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {}
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        }
+
+        this.pageToList();
+    }
 
     clearInputData() {
         this.inputFormData = {
@@ -238,6 +265,7 @@ export default class TenantsInvitation extends Vue {
             startDate: new Date(),
             endDate: new Date(),
             purpose: "",
+            notify: {},
             startString: "",
             endString: ""
         };
@@ -312,6 +340,7 @@ export default class TenantsInvitation extends Vue {
                 startDate: this.resolveDatetimeStartDate(param.dates),
                 endDate: this.resolveDatetimeEndDate(param.dates),
                 purpose: param.purpose.name,
+                notify: param.notify,
                 startString: this.resolveDatetimeStart(param.dates),
                 endString: this.resolveDatetimeEnd(param.dates)
             };
@@ -322,8 +351,50 @@ export default class TenantsInvitation extends Vue {
         this.inputFormData[datas.key] = datas.value;
     }
 
-    saveModifyForm() {
-        console.log(this.inputFormData);
+    async saveModifyForm() {
+        //dates
+        let dates = [];
+        let sTime = this.inputFormData.startDate;
+        let eTime = this.inputFormData.endDate;
+        while (sTime.getTime() < eTime.getTime()) {
+            let date = {
+                start: JSON.parse(JSON.stringify(sTime)),
+                end: JSON.parse(
+                    JSON.stringify(sTime.setDate(sTime.getDate() + 1))
+                )
+            };
+            dates.push(date);
+        }
+
+        this.inputFormData.startDate;
+
+        //post api
+        const createParam = {
+            visitor: {
+                name: this.inputFormData.name,
+                phone: this.inputFormData.mobile,
+                email: this.inputFormData.email
+            },
+            purpose: this.inputFormData.purpose,
+            notify: {
+                visitor: {
+                    email: this.inputFormData["notify.visitor.email"],
+                    phone: this.inputFormData["notify.visitor.phone"]
+                }
+            },
+            dates: dates
+        };
+
+        await this.$server
+            .C("/visitors/invites", createParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.pageToList();
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     ////////////////////////// interface //////////////////////////
@@ -450,13 +521,13 @@ export default class TenantsInvitation extends Vue {
                      * @uiLabel - ${this._("w_Tenants_Email")}
                      * @uiDisabled - true
                      */
-                    email: boolean;
+                    email?: boolean;
 
                     /**
                      * @uiLabel - ${this._("w_Tenants_Phone")}
                     * @uiDisabled - true
                      */
-                    phone: boolean;
+                    phone?: boolean;
                     };
                 };
 
@@ -503,7 +574,7 @@ export default class TenantsInvitation extends Vue {
                  */
                 purpose?: ${toEnumInterface(
                     this.selectItem.purposes as any,
-                    true
+                    false
                 )};
 
               notify: interface {
@@ -511,12 +582,12 @@ export default class TenantsInvitation extends Vue {
                     /**
                      * @uiLabel - ${this._("w_Tenants_Email")}
                      */
-                    email: boolean;
+                    email?: boolean;
 
                     /**
                      * @uiLabel - ${this._("w_Tenants_Phone")}
                      */
-                    phone: boolean;
+                    phone?: boolean;
                     };
                 };
             }
