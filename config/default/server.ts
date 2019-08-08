@@ -52,6 +52,9 @@ interface RestfulRequest extends ApisRequestBase {
         // Investigation
         '/visitors/investigation': [any, any, false];
 
+        // Visitor
+        '/visitors': [any, any, false];
+
         // Kiosks
         '/kiosks': [any, any, false];
 
