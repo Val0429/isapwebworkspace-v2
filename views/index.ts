@@ -40,6 +40,7 @@ import UserPermission from './components/acs/UserPermission.vue';
 import License from './components/bar/License.vue';
 import QueryPermission from './components/acs/QueryPermission.vue';
 import SystemLog from './components/acs/SystemLog.vue';
+import SystemSettings from './components/acs/SystemSettings.vue';
 // Demos
 import DemoFETCardPrint from './Demos/DemoFETCardPrint.vue';
 $({ path: '/demos/fet_card_print', name: 'FET ID Card Print', icon: 'fa-print', permission: false })(DemoFETCardPrint);
@@ -66,6 +67,7 @@ $({ path: '/floorgroup', name: "_('w_FloorGroup')"})(FloorGroup);
     $({ path: '/visitorreport', name: "_('w_VisitorCardReport')"})(VisitorCardReport);
     $({ path: '/license', name: "_('w_License')"})(License);
     $({ path: '/querypermission', name: "_('w_QueryPermission')"})(QueryPermission);
+    $({ path: '/syssettings', name: "_('w_Settings')"})(SystemSettings);
     
 // Users
 

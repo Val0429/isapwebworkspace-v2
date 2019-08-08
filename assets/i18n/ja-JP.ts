@@ -651,4 +651,5 @@ export default class LangObject implements ILang {
     dateOfViolation2 = '違規日期II';
     infoOfViolation3 = '違規說明III';
     dateOfViolation3 = '違規日期III';
+    w_Settings = "System Settings";
 }
