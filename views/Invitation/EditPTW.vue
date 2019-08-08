@@ -113,7 +113,11 @@
                                     class="step5Imgs"
                                     :src="imageBase64.pdfEmpty"
                                 >
-                                <span>{{file.name}}</span>
+                                <a
+                                    :href="file.base64"
+                                    :download="file.name"
+                                    target="_blank"
+                                >{{file.name}}</a>
                             </div>
 
                         </template>
@@ -523,6 +527,10 @@ export class EditPTW extends Vue {
     deleteStep5File(base64) {
         this.inputFormData.attachments = this.inputFormData.attachments.filter(
             s => s.base64 != base64
+        );
+        console.log(
+            "deleteStep5File",
+            this.inputFormData.attachments.map(x => x.base64)
         );
     }
 

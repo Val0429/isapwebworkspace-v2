@@ -112,7 +112,11 @@
                                     class="step5Imgs"
                                     :src="imageBase64.pdfEmpty"
                                 >
-                                <span>{{file.name}}</span>
+                                <a
+                                    :href="file.base64"
+                                    :download="file.name"
+                                    target="_blank"
+                                >{{file.name}}</a>
                             </div>
 
                         </template>
