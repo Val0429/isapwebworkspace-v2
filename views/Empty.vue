@@ -9,7 +9,6 @@
             <div
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="'Empty 1'"
             >
                 Empty 1
             </div>
@@ -17,7 +16,6 @@
             <div
                 key="transition_2"
                 v-show="transition.step === 2"
-                :label="'Empty 2'"
             >
                 Empty 2
             </div>
