@@ -21,10 +21,10 @@
                         @submit="stepTo2($event)"
                     >
                         <template #step1>
-                            <step1
+                            <view-step1
                                 :selectedDetail="selectedDetail"
                                 @step1="receiveStep1Data"
-                            ></step1>
+                            ></view-step1>
                         </template>
 
                     </iv-form>
@@ -39,12 +39,12 @@
                         @submit="stepTo3($event)"
                     >
                         <template #step2>
-                            <step2
+                            <view-step2
                                 :permission="true"
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 @step2="receiveStep2Data"
-                            ></step2>
+                            ></view-step2>
                         </template>
 
                     </iv-form>
@@ -59,11 +59,11 @@
                         @submit="stepTo4($event)"
                     >
                         <template #step3>
-                            <step3
+                            <view-step3
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 @step3="receiveStep3Data"
-                            ></step3>
+                            ></view-step3>
                         </template>
 
                     </iv-form>
@@ -78,11 +78,11 @@
                         @submit="stepTo5($event)"
                     >
                         <template #step4>
-                            <step4
+                            <view-step4
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 @step4="receiveStep4Data"
-                            ></step4>
+                            ></view-step4>
                         </template>
 
                     </iv-form>
@@ -97,13 +97,13 @@
                         @submit="stepTo6($event)"
                     >
                         <template #step5>
-                            <step5
+                            <view-step5
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 :permission="true"
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
-                            ></step5>
+                            ></view-step5>
 
                             <div
                                 v-if="inputFormData.attachments"
@@ -147,11 +147,11 @@
                         @submit="stepTo7($event)"
                     >
                         <template #step6>
-                            <step6
+                            <view-step6
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 @step6="receiveStep6Data"
-                            ></step6>
+                            ></view-step6>
                         </template>
 
                     </iv-form>
@@ -166,12 +166,12 @@
                         @submit="stepTo8($event)"
                     >
                         <template #step7>
-                            <step7
+                            <view-step7
                                 :selectedDetail="selectedDetail"
                                 :permission="true"
                                 class="col-md-12"
                                 @step7="receiveStep7Data"
-                            ></step7>
+                            ></view-step7>
                         </template>
 
                     </iv-form>
@@ -186,11 +186,11 @@
                         @submit="doSubmit($event)"
                     >
                         <template #step8>
-                            <step8
+                            <view-step8
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 @step8="receiveStep8Data"
-                            ></step8>
+                            ></view-step8>
                         </template>
 
                     </iv-form>
@@ -207,12 +207,6 @@
                 >{{ _('w_Back') }}
                 </b-button>
 
-                <b-button
-                    variant="info"
-                    size="lg"
-                    @click="tempSave()"
-                >{{ _('w_Save') }}
-                </b-button>
             </template>
 
         </iv-auto-card>
@@ -222,14 +216,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import Step1 from "@/components/ContractorRegistration/Step1.vue";
-import Step2 from "@/components/ContractorRegistration/Step2.vue";
-import Step3 from "@/components/ContractorRegistration/Step3.vue";
-import Step4 from "@/components/ContractorRegistration/Step4.vue";
-import Step5 from "@/components/ContractorRegistration/Step5.vue";
-import Step6 from "@/components/ContractorRegistration/Step6.vue";
-import Step7 from "@/components/ContractorRegistration/Step7.vue";
-import Step8 from "@/components/ContractorRegistration/Step8.vue";
+import ViewStep1 from "@/components/ContractorRegistration/ViewStep1.vue";
+import ViewStep2 from "@/components/ContractorRegistration/ViewStep2.vue";
+import ViewStep3 from "@/components/ContractorRegistration/ViewStep3.vue";
+import ViewStep4 from "@/components/ContractorRegistration/ViewStep4.vue";
+import ViewStep5 from "@/components/ContractorRegistration/ViewStep5.vue";
+import ViewStep6 from "@/components/ContractorRegistration/ViewStep6.vue";
+import ViewStep7 from "@/components/ContractorRegistration/ViewStep7.vue";
+import ViewStep8 from "@/components/ContractorRegistration/ViewStep8.vue";
 
 import {
     IStep1,
@@ -261,9 +255,9 @@ interface IStep
         IStep8 {}
 
 @Component({
-    components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
+    components: { ViewStep1, ViewStep2, ViewStep3, ViewStep4, ViewStep5, ViewStep6, ViewStep7, ViewStep8 }
 })
-export class EditPTW extends Vue {
+export class StatusNewView extends Vue {
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
@@ -723,7 +717,7 @@ export class EditPTW extends Vue {
         //         );
         //     });
 
-        this.$emit("submit-data", doSubmitParam);
+        this.$emit("view-done", doSubmitParam);
     }
 
     IStep8() {
@@ -736,8 +730,8 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 }
 
-export default EditPTW;
-Vue.component("edit-ptw", EditPTW);
+export default StatusNewView;
+Vue.component("status-new-view", StatusNewView);
 </script>
 
 <style lang="scss" scoped>

@@ -16,6 +16,7 @@
                 name="status"
                 :value="true"
                 :unchecked-value="false"
+                :disabled="true"
                 @input="changeStatus"
             >
                 {{ _('w_ViewPTW_Step1_agreement') }}
@@ -31,7 +32,7 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 @Component({
     components: {}
 })
-export class Step6 extends Vue {
+export class ViewStep6 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -50,8 +51,8 @@ export class Step6 extends Vue {
     }
 }
 
-export default Step6;
-Vue.component("step6", Step6);
+export default ViewStep6;
+Vue.component("view-step6", ViewStep6);
 </script>
 
 <style lang="scss" scoped>

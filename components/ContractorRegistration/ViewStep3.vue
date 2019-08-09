@@ -15,6 +15,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType1"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved1') }}
@@ -26,6 +27,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType2"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved2') }}
@@ -37,6 +39,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType3"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved3') }}
@@ -48,6 +51,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType4"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved4') }}
@@ -59,6 +63,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType5"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved5') }}
@@ -70,6 +75,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType6"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved6') }}
@@ -81,6 +87,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType7"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved7') }}
@@ -92,6 +99,7 @@
                         name="status"
                         :value="true"
                         :unchecked-value="false"
+                        :disabled="true"
                         @input="changeWorkType8"
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved8') }}
@@ -114,7 +122,7 @@ import { IStep3 } from '.';
 @Component({
     components: {}
 })
-export class Step3 extends Vue {
+export class ViewStep3 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -136,9 +144,9 @@ export class Step3 extends Vue {
         workType6: false,
         workType7: false,
         workType8: false,
-        workStartDate: new Date(),
+        workStartDate: null,
         workStartTime: new Date(),
-        workEndDate: new Date(),
+        workEndDate: null,
         workEndTime: new Date(),
         workContact: "",
         workContactPhone: ''
@@ -254,12 +262,14 @@ export class Step3 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_WorkPremisesUnit")}
                  * @uiPlaceHolder - ${this._("w_Invitation_Unit")}
+                 * @uiType - iv-form-label
                  */
                 workPremisesUnit: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_ExactLocation")}
+                 * @uiType - iv-form-label
                  * @uiPlaceHolder - ${this._(
                      "w_ViewPTW_Step3_ExactLocation_PlaceHolder"
                  )}
@@ -269,10 +279,10 @@ export class Step3 extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_Description")}
+                 * @uiType - iv-form-label
                  * @uiPlaceHolder - ${this._(
                      "w_ViewPTW_Step3_Description_PlaceHolder"
                  )}
-                 * @uiType - iv-form-textarea
                  */
                 workDescription: string;
 
@@ -284,6 +294,7 @@ export class Step3 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step3_From")}
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
+                 * @uiDisabled - true
                  */
                 workStartDate: string;
 
@@ -292,6 +303,7 @@ export class Step3 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step3_To")}
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
+                 * @uiDisabled - true
                  */
                 workEndDate: string;
 
@@ -299,6 +311,7 @@ export class Step3 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step3_NameOfApplicant")}
+                 * @uiType - iv-form-label
                  */
                 workContact: string;
 
@@ -310,6 +323,7 @@ export class Step3 extends Vue {
                  * @uiPlaceHolder - ${this._(
                      "w_ViewPTW_Step3_HandPhoneContactNumber"
                  )}
+                 * @uiType - iv-form-label
                  */
                 workContactPhone: string;
 
@@ -321,8 +335,8 @@ export class Step3 extends Vue {
     }
 }
 
-export default Step3;
-Vue.component("step3", Step3);
+export default ViewStep3;
+Vue.component("view-step3", ViewStep3);
 </script>
 
 <style lang="scss" scoped>

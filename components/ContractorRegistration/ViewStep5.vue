@@ -6,7 +6,7 @@
             @update:file="putFile($event)"
         >
             <template #file="{$attrs, $listeners}">
-                <ul :hidden="permission">
+                <ul >
                     <span>{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>
                     　<li>{{_('w_ViewPTW_Step5_RiskAssessment')}}</li>
                     　<li>{{_('w_ViewPTW_Step5_MethodOfStatement')}}</li>
@@ -15,15 +15,16 @@
                     　<li>{{_('w_ViewPTW_Step5_BizsafeCertificate')}}</li>
                     　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
                 </ul>
-                <ul :hidden="!permission">
-                    <span>{{_('w_ViewPTW_Step5_SupportingDocument')}}</span>
-                    　<li>{{_('w_ViewPTW_Step5_Forms')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_License')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
-                </ul>
+<!--                <ul :hidden="!permission">-->
+<!--                    <span>{{_('w_ViewPTW_Step5_SupportingDocument')}}</span>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_Forms')}}</li>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_License')}}</li>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_Others')}}</li>-->
+<!--                </ul>-->
                 <iv-form-file
                     v-bind="$attrs"
                     v-on="$listeners"
+                    :disabled="true"
                     multiple
                     accept=".jpeg,.jpg, .png, .pdf"
                     value="file"
@@ -41,7 +42,7 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 @Component({
     components: {}
 })
-export class Step5 extends Vue {
+export class ViewStep5 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -86,8 +87,8 @@ export class Step5 extends Vue {
     }
 }
 
-export default Step5;
-Vue.component("step5", Step5);
+export default ViewStep5;
+Vue.component("view-step5", ViewStep5);
 </script>
 
 <style lang="scss" scoped>

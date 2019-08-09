@@ -16,6 +16,7 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist1"
                     :options="options"
+                    :disabled="true"
                     name="checklist1"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist1"
@@ -23,6 +24,7 @@
                 <iv-form-string
                     v-model="inputFormData.checklistRemark1"
                     class="col-md-4 mt-2"
+                    :disabled="true"
                     @input="changeChecklist1Remarks"
                 >
                 </iv-form-string>
@@ -34,12 +36,14 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist2"
                     :options="options"
+                    :disabled="true"
                     name="checklist2"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist2"
                 ></b-form-radio-group>
                 <iv-form-string
                     v-model="inputFormData.checklistRemark2"
+                    :disabled="true"
                     class="col-md-4 mt-2"
                     @input="changeChecklist2Remarks"
                 >
@@ -52,12 +56,14 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist3"
                     :options="options"
+                    :disabled="true"
                     name="checklist3"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist3"
                 ></b-form-radio-group>
                 <iv-form-string
                     v-model="inputFormData.checklistRemark3"
+                    :disabled="true"
                     class="col-md-4 mt-2"
                     @input="changeChecklist3Remarks"
                 >
@@ -70,12 +76,14 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist4"
                     :options="options"
+                    :disabled="true"
                     name="checklist4"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist4"
                 ></b-form-radio-group>
                 <iv-form-string
                     v-model="inputFormData.checklistRemark4"
+                    :disabled="true"
                     class="col-md-4 mt-2"
                     @input="changeChecklist4Remarks"
                 >
@@ -88,12 +96,14 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist5"
                     :options="options"
+                    :disabled="true"
                     name="checklist5"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist5"
                 ></b-form-radio-group>
                 <iv-form-string
                     v-model="inputFormData.checklistRemark5"
+                    :disabled="true"
                     class="col-md-4 mt-2"
                     @input="changeChecklist5Remarks"
                 >
@@ -106,12 +116,14 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist6"
                     :options="options"
+                    :disabled="true"
                     name="checklist6"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist6"
                 ></b-form-radio-group>
                 <iv-form-string
                     v-model="inputFormData.checklistRemark6"
+                    :disabled="true"
                     class="col-md-4 mt-2"
                     @input="changeChecklist6Remarks"
                 >
@@ -124,12 +136,14 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist7"
                     :options="options"
+                    :disabled="true"
                     name="checklist7"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist7"
                 ></b-form-radio-group>
                 <iv-form-string
                     v-model="inputFormData.checklistRemark7"
+                    :disabled="true"
                     class="col-md-4 mt-2"
                     @input="changeChecklist7Remarks"
                 >
@@ -142,6 +156,7 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist8"
                     :options="options"
+                    :disabled="true"
                     name="checklist8"
                     class="col-md-2 mb-2 mt-5"
                     @input="changeChecklist8"
@@ -161,6 +176,7 @@
                 <b-form-radio-group
                     v-model="inputFormData.checklist9"
                     :options="options"
+                    :disabled="true"
                     name="checklist9"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeChecklist9"
@@ -178,7 +194,7 @@ import { IStep4 } from ".";
 @Component({
     components: {}
 })
-export class Step4 extends Vue {
+export class ViewStep4 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -308,8 +324,8 @@ export class Step4 extends Vue {
     }
 }
 
-export default Step4;
-Vue.component("step4", Step4);
+export default ViewStep4;
+Vue.component("view-step4", ViewStep4);
 </script>
 
 <style lang="scss" scoped>

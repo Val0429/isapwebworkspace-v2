@@ -21,6 +21,7 @@
                     v-model="inputFormData.approval"
                     :options="options"
                     name="approval"
+                    :disabled="true"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeApproval"
                 ></b-form-radio-group>
@@ -37,7 +38,7 @@ import { toEnumInterface } from "@/../core";
 @Component({
     components: {}
 })
-export class Step8 extends Vue {
+export class ViewStep8 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -50,10 +51,10 @@ export class Step8 extends Vue {
     options: any = [];
 
     inputFormData: any = {
-        startDate: new Date(),
-        startTime: new Date(),
-        endDate: new Date(),
-        endTime: new Date(),
+        startDate: null,
+        startTime: null,
+        endDate: null,
+        endTime: null,
         accessGroups: "",
         approval: false
     };
@@ -126,6 +127,7 @@ export class Step8 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step8_ValidityOfApproval")}
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
+                 * @uiDisabled - true
                  */
                 startDate?: string;
 
@@ -134,12 +136,14 @@ export class Step8 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step3_To")}
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
+                 * @uiDisabled - true
                  */
                 endDate?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
+                 * @uiType - iv-form-label
                  */
                 accessGroups?:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,
@@ -156,8 +160,8 @@ export class Step8 extends Vue {
     }
 }
 
-export default Step8;
-Vue.component("step8", Step8);
+export default ViewStep8;
+Vue.component("view-step8", ViewStep8);
 </script>
 
 <style lang="scss" scoped>

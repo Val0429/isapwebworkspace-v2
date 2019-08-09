@@ -7,6 +7,7 @@
             <b-form-checkbox
                 v-model="pdpaAccepted"
                 name="status"
+                :disabled="true"
                 :value="true"
                 :unchecked-value="false"
                 @input="changeStatus"
@@ -25,7 +26,7 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 @Component({
     components: {}
 })
-export class Step1 extends Vue {
+export class ViewStep1 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -36,7 +37,6 @@ export class Step1 extends Vue {
     pdpaAccepted: boolean = false;
 
     created() {
-        console.log('selectedDetail ~ ', this.selectedDetail)
     }
 
     mounted() {}
@@ -47,8 +47,8 @@ export class Step1 extends Vue {
 
 }
 
-export default Step1;
-Vue.component("step1", Step1);
+export default ViewStep1;
+Vue.component("view-step1", ViewStep1);
 </script>
 
 <style lang="scss" scoped>

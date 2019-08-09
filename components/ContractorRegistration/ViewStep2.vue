@@ -32,7 +32,7 @@ import ResponseFilter from '@/services/ResponseFilter';
 @Component({
     components: {}
 })
-export class Step2 extends Vue {
+export class ViewStep2 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -73,6 +73,12 @@ export class Step2 extends Vue {
     mounted() {
         this.initTenantSelectItem();
         this.initWorkCategorySelectItem();
+
+        this.inputFormData.ptwId = this.selectedDetail.ptwId;
+        this.inputFormData.tenant = this.selectedDetail.company.objectId;
+        this.inputFormData.workCategory = this.selectedDetail.workCategory;
+
+        console.log('step2 ~ ', this.selectedDetail)
     }
 
     async initTenantSelectItem() {
@@ -165,13 +171,14 @@ export class Step2 extends Vue {
                  * @uiLabel - ${this._("w_Invitation_PTWID")}
                  * @uiPlaceHolder - ${this._("w_Invitation_PTWID")}
                  * @uiType - iv-form-label
+                 * @uiDisabled - ${!this.permission}
                  */
                 ptwId?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_Tenant")}
-                 * @uiDisabled - ${!this.permission}
+                 * @uiDisabled - true
                  */
                 tenant?:  ${toEnumInterface(
                     this.tenantSelectItem as any,
@@ -181,7 +188,7 @@ export class Step2 extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
-                 * @uiDisabled - ${!this.permission}
+                 * @uiDisabled - true
                  */
                 workCategory?:  ${toEnumInterface(
                     this.workCategorySelectItem as any,
@@ -194,6 +201,7 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_NameOfApplicant")}
+                 * @uiType - iv-form-label
                  */
                 applicantName: string;
 
@@ -202,12 +210,15 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyName")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyName")}
+                 * @uiType - iv-form-label
+                 */
                companyName: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyAddress")}
+                 * @uiType - iv-form-label
                  */
                   companyAddress: string;
 
@@ -215,6 +226,7 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
+                 * @uiType - iv-form-label
                  */
                  companyEmail: string;
 
@@ -222,6 +234,7 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiType - iv-form-label
                  */
                  companyContactPhone: string;
 
@@ -229,6 +242,7 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
+                 * @uiType - iv-form-label
                  */
                  companyFax: string;
 
@@ -240,8 +254,8 @@ export class Step2 extends Vue {
     }
 }
 
-export default Step2;
-Vue.component("step2", Step2);
+export default ViewStep2;
+Vue.component("view-step2", ViewStep2);
 </script>
 
 <style lang="scss" scoped>

@@ -5,7 +5,6 @@
             key="transition_4"
             v-show="transition.step === 4"
         >
-            <edit-ptw :selectedDetail="selectedDetail"></edit-ptw>
         </div>
 
         <iv-auto-transition
@@ -30,8 +29,7 @@
                 >
                     <template #toolbox>
 
-                        <iv-toolbox-view
-                            :disabled="isSelected.length !== 1"
+                        <iv-toolbox-edit
                             @click="pageToView"
                         />
                         <iv-toolbox-divider />
@@ -50,14 +48,13 @@
                     >
 
                         <template #status="{$attrs, $listeners}">
-<!--                            {{ $attrs.value }}-->
-                            {{ tableShowStatus($attrs.value) }} {{ statusText }}
+                            {{ tableShowStatus($attrs.value) }}
                         </template>
 
                         <template #Actions="{$attrs, $listeners}">
 
-                            <iv-toolbox-more :disabled="isSelected.length !== 1">
-                                <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-more >
+                                <iv-toolbox-edit @click="pageToView" />
                             </iv-toolbox-more>
                         </template>
 
@@ -77,6 +74,18 @@
                 key="transition_3"
                 v-show="transition.step === 3"
             >
+                <edit-ptw
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status !== 1 "
+                    :selectedDetail="selectedDetail"
+                    @edit-ptw-back-to-list="editPtwBackToList"
+                ></edit-ptw>
+
+                <status-new-view
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 1"
+                    :selectedDetail="selectedDetail"
+                    @view-done="editPtwBackToList"
+                ></status-new-view>
+
             </div>
 
         </iv-auto-transition>
@@ -89,6 +98,7 @@ import { Vue, Component } from "vue-property-decorator";
 import SearchCondition from "./SearchCondition.vue";
 import AddPTW from "./AddPTW.vue";
 import EditPTW from "./EditPTW.vue";
+import StatusNewView from "./StatusNewView.vue";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -104,7 +114,7 @@ import Datetime from "@/services/Datetime";
 import toExcel from "@/services/Excel/json2excel";
 
 @Component({
-    components: { SearchCondition, AddPTW, EditPTW }
+    components: { SearchCondition, AddPTW, EditPTW, StatusNewView }
 })
 export default class Invitation extends Vue {
     transition: ITransition = {
@@ -115,8 +125,7 @@ export default class Invitation extends Vue {
 
     // table相關
     path: string = "";
-    isSelected: any = [];
-    tableMultiple: boolean = true;
+    tableMultiple: boolean = false;
     selectedDetail: any = {};
 
     // api 回來資料
@@ -130,7 +139,6 @@ export default class Invitation extends Vue {
         workCategory: ""
     };
 
-    statusText: string = '';
 
     created() {}
 
@@ -145,9 +153,9 @@ export default class Invitation extends Vue {
     }
 
     selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = {};
-        this.selectedDetail = data;
+        data.length === 0 ? this.selectedDetail = {} : this.selectedDetail = data;
+
+        console.log(' ~ ', this.selectedDetail)
     }
 
     pageToList() {
@@ -185,11 +193,12 @@ export default class Invitation extends Vue {
     }
 
     async addPTWToList(addPTWParam: object) {
-
         this.pageToList();
-
         this.inputFormData = addPTWParam;
+    }
 
+    editPtwBackToList() {
+        this.pageToList();
 
     }
 
@@ -232,21 +241,29 @@ export default class Invitation extends Vue {
         return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
     }
 
-    tableShowStatus(status: number) {
+    tableShowStatus(status: number): string {
+        let result = '';
         switch (status) {
             case 1:
-                this.statusText = this._('w_Invitation_New') ;
+                result = this._('w_Invitation_New') ;
                 break;
             case 2:
-                this.statusText = this._('w_Invitation_PendingApproved') ;
+                result = this._('w_Invitation_PendingApproved') ;
                 break;
             case 3:
-                this.statusText = this._('w_Invitation_Approved') ;
+                result = this._('w_Invitation_Approved') ;
                 break;
             case 4:
-                this.statusText = this._('w_Invitation_Rejected') ;
+                result = this._('w_Invitation_Rejected') ;
                 break;
         }
+
+        return result;
+    }
+
+    CheckObjectIfEmpty(obj: object): boolean {
+        const result = Object.keys(obj);
+        return result.length === 0;
     }
 
     ITableList() {

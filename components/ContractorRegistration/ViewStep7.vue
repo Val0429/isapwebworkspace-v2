@@ -140,7 +140,7 @@ enum EPageStep {
 @Component({
     components: {}
 })
-export class Step7 extends Vue {
+export class ViewStep7 extends Vue {
     // Prop
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -374,8 +374,8 @@ export class Step7 extends Vue {
     }
 }
 
-export default Step7;
-Vue.component("step7", Step7);
+export default ViewStep7;
+Vue.component("view-step7", ViewStep7);
 </script>
 
 <style lang="scss" scoped>

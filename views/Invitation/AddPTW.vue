@@ -6,9 +6,7 @@
             :label="_('w_Invitation_CompanyAddPTW')"
         >
             <template #toolbox>
-
                 <iv-toolbox-back @click="pageToList()" />
-
             </template>
 
             <iv-form
