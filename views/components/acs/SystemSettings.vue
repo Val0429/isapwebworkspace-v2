@@ -1,46 +1,61 @@
 <template>
      <div key="main">
-         <iv-auto-card :label="_('w_SmtpConfig')">
+         <b-table 
+                v-show="currentConfig=='none'"
+                striped hover 
+                ref="table"
+                :items="sysSettings" 
+                :fields="fields"                 
+           >
+            <!-- A virtual column -->
+                    <template slot="index" slot-scope="data">
+                        {{ data.index+1}}
+                    </template>
+                    <template slot="Actions" slot-scope="data">                        
+                        <iv-toolbox-edit @click="editConfig(data)" />                        
+                    </template>
+           </b-table>
+         <iv-auto-card :label="_('smtp')" v-show="currentConfig=='smtp'">
                 <iv-form
                     :interface="smptpConfigInf()"                    
-                    :value="smtpConfig"
-                    @mounted="doMounted"                    
+                    :value="smtp"
+                                      
                     @submit="submitConfig({smtp:$event})"
                 >
                 </iv-form>
          </iv-auto-card>
-            <iv-auto-card :label="_('w_CcureConfig')">
+            <iv-auto-card :label="_('ccureconnect')" v-show="currentConfig=='ccureconnect'">
                 <iv-form
-                    :interface="ccureConfigInf()"                    
-                    :value="ccureConfig"
-                    @mounted="doMounted"                    
+                    :interface="ccureconnectInf()"                    
+                    :value="ccureconnect"
+                                      
                     @submit="submitConfig({ccureconnect:$event})"
                 >
                 </iv-form>
          </iv-auto-card>
-         <iv-auto-card :label="_('w_CcureDbConfig')">
+         <iv-auto-card :label="_('ccuresqlserver')" v-show="currentConfig=='ccuresqlserver'">
                 <iv-form
-                    :interface="ccureSqlServerConfigInf()"                    
-                    :value="ccureSqlServerConfig"
-                    @mounted="doMounted"                    
+                    :interface="ccuresqlserverInf()"                    
+                    :value="ccuresqlserver"
+                                      
                     @submit="submitConfig({ccuresqlserver:$event})"
                 >
                 </iv-form>
          </iv-auto-card>
-         <iv-auto-card :label="_('w_SipassConfig')">
+         <iv-auto-card :label="_('sipassconnect')" v-show="currentConfig=='sipassconnect'">
                 <iv-form
-                    :interface="sipassConfigInf()"                    
-                    :value="sipassConfig"
-                    @mounted="doMounted"                    
+                    :interface="sipassconnectInf()"                    
+                    :value="sipassconnect"
+                                      
                     @submit="submitConfig({sipassconnect:$event})"
                 >
                 </iv-form>
          </iv-auto-card>
-         <iv-auto-card :label="_('w_SipassDbConfig')">
+         <iv-auto-card :label="_('sipassdb')" v-show="currentConfig=='sipassdb'">
                 <iv-form
-                    :interface="sipassDbConfigInf()"                    
-                    :value="sipassDbConfig"
-                    @mounted="doMounted"                    
+                    :interface="sipassdbInf()"                    
+                    :value="sipassdb"
+                                      
                     @submit="submitConfig({sipassdb:$event})"
                 >
                 </iv-form>
@@ -59,34 +74,60 @@ import SyncReceiverForm from './SyncReceiverForm.vue';
     components: { }
 })
 export default class SyncReceiver extends Vue {
-    private isMounted: boolean = false;
+    currentConfig="none";
     allConfig:any={};
-    ccureConfig: any={};
-    smtpConfig:any={};
-    ccureSqlServerConfig:any={};
-    sipassConfig:any={};
-    sipassDbConfig:any={};
-    private async doMounted() {
-        if(this.isMounted)return;
-        await this.getConfigs();
-        this.isMounted = true;
-    }
+    ccureconnect: any={};
+    smtp:any={};
+    ccuresqlserver:any={};
+    sipassconnect:any={};
+    sipassdb:any={};
+    sysSettings:any[]=[];
+    fields=[];
   private async getConfigs() {
     this.allConfig=await this.$server.R("/config" as any,{});
     console.log("allconfig",this.allConfig);
-    this.smtpConfig=Object.assign({},this.allConfig.smtp);
-    this.ccureConfig=Object.assign({},this.allConfig.ccureconnect);
-    this.ccureSqlServerConfig=Object.assign({},this.allConfig.ccuresqlserver);
-    this.sipassConfig=Object.assign({},this.allConfig.sipassconnect);
-    this.sipassDbConfig=Object.assign({},this.allConfig.sipassdb);
+    this.smtp=Object.assign({},this.allConfig.smtp);
+    this.ccureconnect=Object.assign({},this.allConfig.ccureconnect);
+    this.ccuresqlserver=Object.assign({},this.allConfig.ccuresqlserver);
+    this.sipassconnect=Object.assign({},this.allConfig.sipassconnect);
+    this.sipassdb=Object.assign({},this.allConfig.sipassdb);
+    this.sysSettings=[];
+    this.sysSettings.push({name:"smtp", label:this._("smtp"), config:this.smtp});
+    this.sysSettings.push({name:"ccureconnect", label:this._("ccureconnect"), config:this.ccureconnect});
+    this.sysSettings.push({name:"ccuresqlserver", label:this._("ccuresqlserver"), config:this.ccuresqlserver});
+    this.sysSettings.push({name:"sipassconnect", label:this._("sipassconnect"), config:this.sipassconnect});
+    this.sysSettings.push({name:"sipassdb", label:this._("sipassdb"), config:this.sipassdb});
   }
+    
+    async created(){
+      this.fields = [
+            {
+                key: "index",
+                label: this._('w_Number')
+            },
+            {
+                key: "label",
+                label: this._('w_Name')
+            },
+            {
+                key: "Actions",
+                label: this._('w_Action')
+            }
 
+        ];
+        await this.getConfigs();
+}
     async submitConfig($event){
         console.log("submitConfig", $event);
         await this.$server.C("/config" as any, {data: $event});
+        this.currentConfig="none";
         await this.getConfigs();
     }
-    ccureConfigInf(){
+    editConfig(data){
+        console.log("editConfig", data);
+        this.currentConfig=data.item.name;
+    }
+    ccureconnectInf(){
         return `
             interface {
             server: string;
@@ -99,7 +140,7 @@ export default class SyncReceiver extends Vue {
             }
         `;
     }
-    sipassDbConfigInf(){
+    sipassdbInf(){
         return `
             interface {
                 server: string;
@@ -111,7 +152,7 @@ export default class SyncReceiver extends Vue {
             }
         `;
     }
-    sipassConfigInf(){
+    sipassconnectInf(){
         return `
             interface {
                 server: string;
@@ -122,7 +163,7 @@ export default class SyncReceiver extends Vue {
             }
         `;
     }
-    ccureSqlServerConfigInf(){
+    ccuresqlserverInf(){
         return `
             interface {
                 server: string;

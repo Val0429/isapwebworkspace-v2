@@ -657,4 +657,10 @@ export default class LangObject {
     dateOfViolation3 = '違規日期III';
 
     w_Settings = "System Settings";
+
+    sipassdb="sipassdb";
+    smtp="smtp";
+    ccuresqlserver="ccuresqlserver";
+    sipassconnect="sipassconnect";
+    ccureconnect= "ccureconnect";
 }

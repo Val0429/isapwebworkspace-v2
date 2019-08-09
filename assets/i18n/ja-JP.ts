@@ -652,4 +652,9 @@ export default class LangObject implements ILang {
     infoOfViolation3 = '違規說明III';
     dateOfViolation3 = '違規日期III';
     w_Settings = "System Settings";
+    sipassdb="sipassdb";
+    smtp="smtp";
+    ccuresqlserver="ccuresqlserver";
+    sipassconnect="sipassconnect";
+    ccureconnect= "ccureconnect";
 }
