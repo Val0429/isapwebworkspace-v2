@@ -9,6 +9,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         // crms
         "/crms": [any, any, true],
+        "/crms/tenant": [any, any, true],
 
     },
 
@@ -25,6 +26,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         // crms
         "/crms": [any, any, true],
+        "/crms/tenant": [any, any, true],
 
     },
 
@@ -33,6 +35,8 @@ interface RestfulRequest extends ApisRequestBase {
 
         // crms
         "/crms": [any, any, true],
+        "/crms/tenant": [any, any, true],
+        "/crms/tenant-submit": [any, any, true],
 
     },
     "Delete": {

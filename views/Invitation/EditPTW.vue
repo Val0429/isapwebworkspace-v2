@@ -684,7 +684,7 @@ export class EditPTW extends Vue {
             companyId: this.selectedDetail.company.objectId,
             workCategory: this.selectedDetail.workCategory,
             contact: this.selectedDetail.contact,
-            contactEmail: this.selectedDetail.contact,
+            contactEmail: this.selectedDetail.contactEmail,
 
             // Step 1
             pdpaAccepted: this.inputFormData.pdpaAccepted,
