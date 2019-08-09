@@ -38,7 +38,7 @@ export class ViewStep2 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     @Prop({
         type: Boolean,
@@ -78,7 +78,6 @@ export class ViewStep2 extends Vue {
         this.inputFormData.tenant = this.selectedDetail.company.objectId;
         this.inputFormData.workCategory = this.selectedDetail.workCategory;
 
-        console.log('step2 ~ ', this.selectedDetail)
     }
 
     async initTenantSelectItem() {

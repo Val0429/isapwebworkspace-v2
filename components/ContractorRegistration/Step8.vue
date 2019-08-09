@@ -33,6 +33,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
+import { IWorkPermitAccessGroup } from '.';
 
 @Component({
     components: {}
@@ -43,7 +44,7 @@ export class Step8 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     accessGroupSelectItem: any = {};
 
@@ -54,7 +55,7 @@ export class Step8 extends Vue {
         startTime: new Date(),
         endDate: new Date(),
         endTime: new Date(),
-        accessGroups: "",
+        accessGroups: [],
         approval: false
     };
 

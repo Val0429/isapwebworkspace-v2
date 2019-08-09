@@ -116,6 +116,7 @@ export default class LangObject {
     // ViewPTW
     w_ViewPTW_StepTitle = 'Permit To Work Request Form';
     w_Save = 'Save';
+    w_SaveSuccess = 'Save Success';
 
     w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
     w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';

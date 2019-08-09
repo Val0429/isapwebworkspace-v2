@@ -31,12 +31,11 @@ export class Step1 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     pdpaAccepted: boolean = false;
 
     created() {
-        console.log('selectedDetail ~ ', this.selectedDetail)
     }
 
     mounted() {}

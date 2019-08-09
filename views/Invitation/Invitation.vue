@@ -153,7 +153,13 @@ export default class Invitation extends Vue {
     }
 
     selectedItem(data) {
-        data.length === 0 ? this.selectedDetail = {} : this.selectedDetail = data;
+        // data.length === 0 || !!data ?  : ;
+
+        if (!data) {
+            this.selectedDetail = {}
+        } else {
+            this.selectedDetail = data
+        }
 
         console.log(' ~ ', this.selectedDetail)
     }

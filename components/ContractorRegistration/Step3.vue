@@ -120,7 +120,7 @@ export class Step3 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     typeOfWorkSelectItem: any = [];
 

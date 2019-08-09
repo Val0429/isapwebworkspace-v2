@@ -37,7 +37,7 @@ export class Step6 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     termsAccepted: boolean = false;
 

@@ -47,7 +47,7 @@ export class Step5 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     @Prop({
         type: Boolean,
