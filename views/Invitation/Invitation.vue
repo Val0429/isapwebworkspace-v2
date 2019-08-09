@@ -74,17 +74,36 @@
                 key="transition_3"
                 v-show="transition.step === 3"
             >
+                <!-- status-pendding-edit -->
                 <edit-ptw
                     v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status !== 1 "
                     :selectedDetail="selectedDetail"
                     @edit-ptw-back-to-list="editPtwBackToList"
                 ></edit-ptw>
 
+                <!-- status-new-view -->
                 <status-new-view
                     v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 1"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
                 ></status-new-view>
+
+                <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
+<!--                <status-approve-not-expire-date-edit-->
+<!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
+<!--                    :selectedDetail="selectedDetail"-->
+<!--                    @view-done="editPtwBackToList">-->
+<!--                    -->
+<!--                </status-approve-not-expire-date-edit>-->
+
+                <!-- status-reject-view ， 還需要 加上 Approve到期後的條件 -->
+<!--                <status-reject-approve-expire-date-view-->
+<!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
+<!--                    :selectedDetail="selectedDetail"-->
+<!--                    @view-done="editPtwBackToList"-->
+<!--                >-->
+
+<!--                </status-reject-approve-expire-date-view>-->
 
             </div>
 
@@ -99,6 +118,8 @@ import SearchCondition from "./SearchCondition.vue";
 import AddPTW from "./AddPTW.vue";
 import EditPTW from "./EditPTW.vue";
 import StatusNewView from "./StatusNewView.vue";
+import StatusRejectOrApproveExpireDateView from "./StatusRejectOrApproveExpireDateView.vue";
+import StatusApproveNotExpireDate from "./StatusApproveNotExpireDate.vue";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -114,7 +135,7 @@ import Datetime from "@/services/Datetime";
 import toExcel from "@/services/Excel/json2excel";
 
 @Component({
-    components: { SearchCondition, AddPTW, EditPTW, StatusNewView }
+    components: { SearchCondition, AddPTW, EditPTW, StatusNewView, StatusRejectOrApproveExpireDateView, StatusApproveNotExpireDate }
 })
 export default class Invitation extends Vue {
     transition: ITransition = {
