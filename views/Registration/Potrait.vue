@@ -77,6 +77,7 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import ImageBase64 from "@/services/ImageBase64";
 import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}
@@ -149,15 +150,16 @@ export default class Potrait extends Vue {
         await this.$server
             .U("/visitors/pre-registration", param)
             .then((response: any) => {
-                this.pageToSuccess();
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.pageToSuccess();
+                });
             })
             .catch((e: any) => {
-                Loading.hide();
-                console.log(e);
-                if (e.err != undefined && e.err == "Failed to fetch") {
-                    Dialog.error(this._("w_FailedToFetch"));
-                    return true;
-                }
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_FailedToFetch")
+                );
             });
     }
 

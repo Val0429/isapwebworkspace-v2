@@ -248,8 +248,13 @@ export default class SetupsAccount extends Vue {
                     this.$server
                         .D("/users", param)
                         .then((response: any) => {
-                            Loading.hide();
-                            this.pageToList();
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    this.pageToList();
+                                }
+                            );
                         })
                         .catch((e: any) => {
                             return ResponseFilter.catchError(this, e);
@@ -371,24 +376,25 @@ export default class SetupsAccount extends Vue {
         await this.$server
             .R("/companies", param)
             .then((response: any) => {
-                if (
-                    response != undefined &&
-                    response.results != undefined &&
-                    response.results.length > 0
-                ) {
-                    for (let ret of response.results) {
-                        if (
-                            ret.objectId != undefined &&
-                            ret.name != undefined
-                        ) {
-                            this.$set(
-                                this.selectItem.company,
-                                ret.objectId,
-                                ret.name
-                            );
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (let ret of response.results) {
+                            if (
+                                ret.objectId != undefined &&
+                                ret.name != undefined
+                            ) {
+                                this.$set(
+                                    this.selectItem.company,
+                                    ret.objectId,
+                                    ret.name
+                                );
+                            }
                         }
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -400,24 +406,25 @@ export default class SetupsAccount extends Vue {
         await this.$server
             .R("/floors", param)
             .then((response: any) => {
-                if (
-                    response != undefined &&
-                    response.results != undefined &&
-                    response.results.length > 0
-                ) {
-                    for (let ret of response.results) {
-                        if (
-                            ret.objectId != undefined &&
-                            ret.name != undefined
-                        ) {
-                            this.$set(
-                                this.selectItem.floor,
-                                ret.objectId,
-                                ret.name
-                            );
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (let ret of response.results) {
+                            if (
+                                ret.objectId != undefined &&
+                                ret.name != undefined
+                            ) {
+                                this.$set(
+                                    this.selectItem.floor,
+                                    ret.objectId,
+                                    ret.name
+                                );
+                            }
                         }
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -668,8 +675,13 @@ export default class SetupsAccount extends Vue {
             await this.$server
                 .C("/users", param)
                 .then((response: any) => {
-                    Loading.hide();
-                    this.pageToList();
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.pageToList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -679,8 +691,13 @@ export default class SetupsAccount extends Vue {
             await this.$server
                 .U("/users", param)
                 .then((response: any) => {
-                    Loading.hide();
-                    this.pageToList();
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.pageToList();
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);

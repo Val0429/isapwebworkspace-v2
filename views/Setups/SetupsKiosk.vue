@@ -209,14 +209,7 @@ export default class SetupsKiosk extends Vue {
         }
     });
 
-    async created() {
-        // let ws = await this.$server.WS("/kiosks/aliveness" as any);
-        // ws.send("123");
-        // ws.io.on("message", (message) => {
-        //     console.log("ws message", message);
-        // });
-        // ws.closeGracefully();
-    }
+    created() {}
 
     mounted() {
         this.initWS();

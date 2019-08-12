@@ -194,12 +194,15 @@ export default class MyProfile extends Vue {
         await this.$server
             .R("/apis")
             .then((response: any) => {
-                if (response.serverVersion != undefined) {
-                    this.server.serverVersion = response.serverVersion;
-                }
-                if (response.frameworkVersion != undefined) {
-                    this.server.frameworkVersion = response.frameworkVersion;
-                }
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (response.serverVersion != undefined) {
+                        this.server.serverVersion = response.serverVersion;
+                    }
+                    if (response.frameworkVersion != undefined) {
+                        this.server.frameworkVersion =
+                            response.frameworkVersion;
+                    }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
@@ -221,11 +224,12 @@ export default class MyProfile extends Vue {
         await this.$server
             .U("/users/change-password", param)
             .then((response: any) => {
-                Loading.hide();
-                Dialog.success(this._("w_MyProfile_ChangePasswordSuccess"));
-                this.$login({
-                    username: this.$user.user.username,
-                    password: param.newPassword
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_MyProfile_ChangePasswordSuccess"));
+                    this.$login({
+                        username: this.$user.user.username,
+                        password: param.newPassword
+                    });
                 });
             })
             .catch((e: any) => {

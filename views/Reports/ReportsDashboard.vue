@@ -199,28 +199,29 @@ export default class ReportsDashboard extends Vue {
         await this.$server
             .R("/kiosks", param)
             .then((response: any) => {
-                if (
-                    response != undefined &&
-                    response.results != undefined &&
-                    response.results.length > 0
-                ) {
-                    for (let ret of response.results) {
-                        if (
-                            ret.objectId != undefined &&
-                            ret.username != undefined &&
-                            ret.data != undefined &&
-                            ret.data.activated != undefined &&
-                            ret.data.activated
-                        ) {
-                            this.$set(
-                                this.selectItem.kioskIds,
-                                ret.objectId,
-                                ret.username
-                            );
-                            this.inputFormData.kioskIds.push(ret.objectId);
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (let ret of response.results) {
+                            if (
+                                ret.objectId != undefined &&
+                                ret.username != undefined &&
+                                ret.data != undefined &&
+                                ret.data.activated != undefined &&
+                                ret.data.activated
+                            ) {
+                                this.$set(
+                                    this.selectItem.kioskIds,
+                                    ret.objectId,
+                                    ret.username
+                                );
+                                this.inputFormData.kioskIds.push(ret.objectId);
+                            }
                         }
                     }
-                }
+                });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -237,25 +238,45 @@ export default class ReportsDashboard extends Vue {
         await this.$server
             .R("/reports/recurring", param)
             .then((response: any) => {
-                if (response.data != undefined) {
-                    for (let res of response.data) {
-                        let tempItem: IChartRecurring = {
-                            categorie: "",
-                            value: 0
-                        };
-                        if (
-                            res.visitor != undefined &&
-                            res.visitor != undefined &&
-                            res.visitor.name != undefined
-                        ) {
-                            tempItem.categorie = res.visitor.name;
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (response.data != undefined) {
+                        for (let res of response.data) {
+                            let tempItem: IChartRecurring = {
+                                categorie: "",
+                                value: 0
+                            };
+
+                            if (res.totalVisit != undefined) {
+                                tempItem.value = res.totalVisit;
+                            }
+
+                            if (
+                                res.visitor != undefined &&
+                                res.visitor != undefined &&
+                                res.visitor.name != undefined
+                            ) {
+                                let recurringIndex = -1;
+                                for (let i in this.inputFormData.recurring) {
+                                    if (
+                                        this.inputFormData.recurring[i]
+                                            .categorie == res.visitor.name
+                                    ) {
+                                        recurringIndex = parseInt(i);
+                                        break;
+                                    }
+                                }
+                                if (recurringIndex < 0) {
+                                    tempItem.categorie = res.visitor.name;
+                                    this.inputFormData.recurring.push(tempItem);
+                                } else {
+                                    this.inputFormData.recurring[
+                                        recurringIndex
+                                    ].value += tempItem.value;
+                                }
+                            }
                         }
-                        if (res.totalVisit != undefined) {
-                            tempItem.value = res.totalVisit;
-                        }
-                        this.inputFormData.recurring.push(tempItem);
                     }
-                }
+                });
                 this.initRecurringChart();
             })
             .catch((e: any) => {
@@ -277,18 +298,24 @@ export default class ReportsDashboard extends Vue {
             await this.$server
                 .R("/reports/statistic", param)
                 .then((response: any) => {
-                    if (
-                        response.data != undefined &&
-                        response.data[0] != undefined &&
-                        response.data[0].totalVisitor != undefined
-                    ) {
-                        this.inputFormData.visitorOnSite =
-                            response.data[0].totalVisitor;
-                        this.inputFormData.dailyTotalVisitor =
-                            response.data[0].totalVisitor;
-                        this.inputFormData.statistic =
-                            response.data[0].totalVisitor;
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            if (response.data != undefined) {
+                                for (let resData of response.data) {
+                                    if (resData.totalVisitor != undefined) {
+                                        this.inputFormData.visitorOnSite +=
+                                            resData.totalVisitor;
+                                        this.inputFormData.dailyTotalVisitor +=
+                                            resData.totalVisitor;
+                                        this.inputFormData.statistic +=
+                                            resData.totalVisitor;
+                                    }
+                                }
+                            }
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -307,14 +334,20 @@ export default class ReportsDashboard extends Vue {
             await this.$server
                 .R("/reports/exception", param)
                 .then((response: any) => {
-                    if (
-                        response.data != undefined &&
-                        response.data[0] != undefined &&
-                        response.data[0].totalException != undefined
-                    ) {
-                        this.inputFormData.exception =
-                            response.data[0].totalException;
-                    }
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            if (response.data != undefined) {
+                                for (let tempLoop of response.data) {
+                                    if (tempLoop.totalException != undefined) {
+                                        this.inputFormData.exception +=
+                                            tempLoop.totalException;
+                                    }
+                                }
+                            }
+                        }
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
