@@ -21,6 +21,6 @@ var config: Config = {
 
     serverFrameworkVersionGreaterThan: '1.06.00',
 
-    hideDefaultServerErrorModal: true,
+    hideDefaultServerErrorModal: false,
 };
 export default config;
