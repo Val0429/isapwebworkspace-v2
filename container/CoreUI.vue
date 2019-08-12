@@ -25,10 +25,10 @@
                 />
 
                 <!-- General Settings -->
-                <!-- <SidebarNavItem
+                <SidebarNavItem
                     :label="_('w_Navigation_GeneralSettings')"
                     url="/settings"
-                /> -->
+                />
 
             </SidebarNav>
 
