@@ -666,7 +666,10 @@ private async getFloorGroup() {
         if (!this.inputFormData.deviceTimeFormatOption || this.inputFormData.deviceTimeFormatOption === "0") {
             return false;
         }
-
+        if(!this.inputFormData.deviceAreaOption && (this.inputFormData.deviceType=="floorGroup" || this.inputFormData.deviceType=="elevator")){            
+            return false;
+        }   
+        
         deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption;
         deviceData.timeFormat.text = this.selectItem.timeSchedule[deviceData.timeFormat.id];
 
@@ -745,8 +748,9 @@ private async getFloorGroup() {
             }
         );
     }
-
+    savedAccessLevels: any[];
     async doSave() {
+        this.savedAccessLevels=[];
         let premissionParam: any = {
             status: 1,
 
@@ -776,7 +780,7 @@ private async getFloorGroup() {
                     console.log("!!! accessParam.timeschedule not find");
                     continue;
                 }
-
+                
                 switch (tempData.deviceType) {
                     case EDeviceType.door:
                         accessParam.door = tempData.deviceName.id;
@@ -791,7 +795,9 @@ private async getFloorGroup() {
                             for (let reader of door.readerout) {                                
                                 accessParam.reader.push(reader.objectId);
                             }
-                        }                                              
+                        }       
+                        
+                        this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: tempData.deviceName.text});
                         break;
                     case EDeviceType.doorGroup:
                         accessParam.doorgroup = tempData.deviceName.id;
@@ -808,25 +814,29 @@ private async getFloorGroup() {
                                     accessParam.reader.push(reader.objectId);
                                 }
                             }
+                            this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: door.doorname});
                         }
                         break;
 
                     case EDeviceType.elevator:
-                        accessParam.elevator = tempData.deviceName.id;
-                        if(tempData.area){
-                            accessParam.floor=[tempData.area.id];
-                        }
+                        accessParam.elevator = tempData.deviceName.id;                        
+                        accessParam.floor=[tempData.area.id];                        
+                        this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}-${tempData.area.text}`});
                         break;
 
                     case EDeviceType.floorGroup:
-                        accessParam.elevator = tempData.deviceName.id;
-                        if(tempData.area){
-                            accessParam.floorgroup=tempData.area.id;
-                            let floorgroup = this.selectItemOriginal.floorGroup.find(x=>x.objectId ==accessParam.floorgroup);
-                            if(floorgroup && floorgroup.floors){
-                                accessParam.floor = floorgroup.floors.map(x=>x.objectId);
-                            }
+                        accessParam.elevator = tempData.deviceName.id;                        
+                        accessParam.floorgroup=tempData.area.id;
+                        let floorgroup = this.selectItemOriginal.floorGroup.find(x=>x.objectId ==accessParam.floorgroup);
+                        accessParam.floor=[];
+                        if(floorgroup && floorgroup.floors){
+                            for(let floor of floorgroup.floors){
+                                accessParam.floor.push(floor.objectId);
+                                this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}-${tempData.area.text}`});
+                            }                             
                         }
+                        break;
+                        
                     case EDeviceType.none:
                     default:
                         break;
@@ -875,19 +885,31 @@ private async getFloorGroup() {
                
     }else if(response.errors.find(x=>x.type=="clearanceIsNotInCCure")){
         let messages = ``;
-        for(let permTable of response.permTableNames){
-            messages+=`${this._("w_PermissionTable")}: ${permTable.permissionTableName || ""}<br/>`;
-            messages+=`<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;             
-            for(let dev of permTable.devices){                
-                messages+=`<tr><td>${dev.devicename || ""}</td><td>${dev.timename  ||""}</td><td>${dev.message || ""}</td></tr>`;
-            }
-             messages+="</tr></table>"
+        let existname = response.permTableNames.find(x=>x.permissionTableName == this.inputFormData.permissionName);
+        if(existname){
+                messages=this.createPermTableMessage(messages, existname);
+        }else{
+            messages=this.createPermTableMessage(messages, {permissionTableName:this.inputFormData.permissionName, devices:Object.assign([], this.savedAccessLevels)});
+            // for(let permTable of response.permTableNames){
+            //     messages=this.createPermTableMessage(messages, permTable);
+            // }
         }
        
         Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
     }else{
         this.pageToList();
     }
+  }
+
+  private createPermTableMessage(messages: string,permTable: any) {
+    messages+=`${this._("w_PermissionTable")}: ${permTable.permissionTableName||""}<br/>`;
+    messages+=`<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;
+    for(let dev of this.savedAccessLevels) {
+        let exists = permTable.devices.find(x=>x.devicename==dev.devicename && x.timename==dev.timename);
+        messages+=`<tr ${exists ? 'style="color:red"' : ''}><td>${dev.devicename||""}</td><td>${dev.timename||""}</td><td>${dev.message||""}</td></tr>`;
+    }
+    messages+="</tr></table>";
+    return messages;
   }
 
     ISerachFrom() {
