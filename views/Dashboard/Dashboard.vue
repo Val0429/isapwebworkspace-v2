@@ -14,6 +14,8 @@
             >
                 <iv-form
                     :interface="IFilterConditionForm()"
+                    :value="inputFilterData"
+                    @update:*="updateFilter"
                     @submit="doSubmit($event)"
                 >
                 </iv-form>
@@ -113,6 +115,11 @@ export default class Dashboard extends Vue {
         step: 1
     };
 
+    inputFilterData = {
+        startTime: new Date(),
+        endTime: new Date()
+    };
+
     visible: boolean = true;
     EChartMode = EChartMode;
     startTimeByDays = new Date("1990-1-1 00:00");
@@ -187,6 +194,11 @@ export default class Dashboard extends Vue {
                 data: [0, 0]
             }
         ];
+    }
+
+    updateFilter(datas: any) {
+        this.inputFilterData[datas.key] = datas.value;
+        console.log(this.inputFilterData);
     }
 
     async doSubmit() {
