@@ -210,7 +210,7 @@ export default class Invitation extends Vue {
             this.selectedDetail = data;
         }
 
-        console.log(" ~ ", this.selectedDetail);
+        // console.log(" ~ ", this.selectedDetail);
     }
 
     async initWorkDescriptionSelectItem() {
@@ -232,10 +232,6 @@ export default class Invitation extends Vue {
                 return ResponseFilter.catchError(this, e);
             });
 
-        console.log(
-            "workDescriptionSelectItem ~ ",
-            this.workDescriptionSelectItem
-        );
     }
 
     pageToList() {

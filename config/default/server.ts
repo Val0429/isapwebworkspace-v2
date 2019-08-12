@@ -28,6 +28,8 @@ interface RestfulRequest extends ApisRequestBase {
 
         // General Setting
         '/flow1/crms/remove_worker_data_days': [any, any, true];
+
+        '/flow1/crms/access-group': [any, any, true];
     };
 
     Put: {

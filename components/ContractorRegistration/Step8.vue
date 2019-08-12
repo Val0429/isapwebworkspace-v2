@@ -34,6 +34,7 @@
 import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { IWorkPermitAccessGroup } from '.';
+import ResponseFilter from '@/services/ResponseFilter';
 
 @Component({
     components: {}
@@ -99,20 +100,21 @@ export class Step8 extends Vue {
         let tempAccessGroupSelectItem = {};
 
         // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempAccessGroupSelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.accessGroupSelectItem = tempAccessGroupSelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .R("/flow1/crms/access-group")
+            .then((response: any) => {
+                console.log('response ~ ', response)
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        tempAccessGroupSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.accessGroupSelectItem = tempAccessGroupSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     updateInputFormData(data) {

@@ -346,7 +346,6 @@ export class StatusNewView extends Vue {
 
     created() {
         console.log('selectedDetail ~ ', this.selectedDetail)
-
     }
 
     mounted() {
