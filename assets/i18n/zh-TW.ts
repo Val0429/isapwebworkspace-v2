@@ -76,6 +76,9 @@ export default class LangObject implements ILang {
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
 
+    // 404
+    w_APINotFind = 'API Not Find';
+
     w_DeleteConfirm = 'Delete Confirm';
     w_DeleteFailed = 'Delete Failed';
 

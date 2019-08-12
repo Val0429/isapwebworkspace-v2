@@ -87,6 +87,11 @@ export class ResponseFilter {
             vue.$router.push({ path: '/login' });
             return true;
         }
+
+        if (e.res.statusCode == 404) {
+            Dialog.error(vue._('w_APINotFind'));
+            return true;
+        }
         Dialog.error(message != '' ? message : e.message);
         return true;
     }
