@@ -45,9 +45,9 @@
                         @selected="selectedItem($event)"
                     >
 
-<!--                        <template #status="{$attrs, $listeners}">-->
-<!--                            {{ tableShowStatus($attrs.value) }}-->
-<!--                        </template>-->
+                        <!--                        <template #status="{$attrs, $listeners}">-->
+                        <!--                            {{ tableShowStatus($attrs.value) }}-->
+                        <!--                        </template>-->
 
                         <template #workCategory="{$attrs, $listeners}">
                             {{ tableShowWorkCategory($attrs.value) }}
@@ -199,7 +199,6 @@ export default class Invitation extends Vue {
     }
 
     async initWorkDescriptionSelectItem() {
-
         this.workDescriptionSelectItem = {};
         let tempDescriptionSelectItem = {};
 
@@ -218,7 +217,10 @@ export default class Invitation extends Vue {
                 return ResponseFilter.catchError(this, e);
             });
 
-        console.log('workDescriptionSelectItem ~ ', this.workDescriptionSelectItem)
+        console.log(
+            "workDescriptionSelectItem ~ ",
+            this.workDescriptionSelectItem
+        );
     }
 
     pageToList() {
@@ -275,8 +277,7 @@ export default class Invitation extends Vue {
     }
 
     exportExcel() {
-        let reportTable: any = null;
-        reportTable = this.$refs.listTable;
+        let reportTable: any = this.$refs.listTable;
         let tableData = reportTable.tableToArray();
 
         //th
@@ -328,7 +329,7 @@ export default class Invitation extends Vue {
 
         for (const id in this.workDescriptionSelectItem) {
             if (workCategory === id) {
-                result = this.workDescriptionSelectItem[id]
+                result = this.workDescriptionSelectItem[id];
             }
         }
 
