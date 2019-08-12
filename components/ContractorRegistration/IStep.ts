@@ -12,11 +12,11 @@ interface IStep2 {
 	applicantName: string;
 
 	// Company
-	companyName: string;
-	companyAddress: string;
-	companyEmail: string;
-	companyContactPhone: string;
-	companyFax: string;
+	contractorCompanyName: string;
+	contractorCompanyAddress: string;
+	contractorCompanyEmail: string;
+	contractorCompanyContactPhone: string;
+	contractorCompanyFax: string;
 }
 
 interface IStep3 {

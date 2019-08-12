@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { IWorkPermitAccessGroup } from '.';
 
@@ -70,13 +70,21 @@ export class Step8 extends Vue {
         this.initSelectItem();
         this.initAccessGroupSelectItem();
 
-        this.inputFormData.startDate = this.selectedDetail.startDate;
-        this.inputFormData.startTime = this.selectedDetail.startTime;
-        this.inputFormData.endDate = this.selectedDetail.endDate;
-        this.inputFormData.endTime = this.selectedDetail.endTime;
+    }
+
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
+
+        this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
+        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
+        this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
+        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
         this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
         this.inputFormData.approval = this.selectedDetail.approval;
-
     }
 
     initSelectItem() {

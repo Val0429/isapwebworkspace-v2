@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { IStep2 } from '.';
 import ResponseFilter from '@/services/ResponseFilter';
@@ -61,11 +61,11 @@ export class Step2 extends Vue {
         applicantName: "",
 
         // Company
-        companyName: "",
-        companyAddress: "",
-        companyEmail: "",
-        companyContactPhone: '',
-        companyFax: ''
+        contractorCompanyName: "",
+        contractorCompanyAddress: "",
+        contractorCompanyEmail: "",
+        contractorCompanyContactPhone: '',
+        contractorCompanyFax: ''
     };
 
     created() {
@@ -76,20 +76,27 @@ export class Step2 extends Vue {
         this.initTenantSelectItem();
         this.initWorkCategorySelectItem();
 
+
+    }
+
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
         this.inputFormData.workCategory = this.selectedDetail.workCategory;
-
-        if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
-            this.inputFormData.tenant = this.selectedDetail.company.objectId;
-        }
-
+        this.inputFormData.tenant = this.selectedDetail.tenant;
+        // if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
+        //     this.inputFormData.tenant = this.selectedDetail.company.objectId;
+        // }
         this.inputFormData.applicantName = this.selectedDetail.applicantName;
-        this.inputFormData.companyName = this.selectedDetail.companyName;
-        this.inputFormData.companyAddress = this.selectedDetail.companyAddress;
-        this.inputFormData.companyEmail = this.selectedDetail.companyEmail;
-        this.inputFormData.companyContactPhone = this.selectedDetail.companyContactPhone;
-        this.inputFormData.companyFax = this.selectedDetail.companyFax;
-
+        this.inputFormData.contractorCompanyName = this.selectedDetail.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = this.selectedDetail.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
     }
 
     async initTenantSelectItem() {
@@ -152,20 +159,20 @@ export class Step2 extends Vue {
             case "applicantName":
                 this.inputFormData.applicantName = data.value;
                 break;
-            case "companyName":
-                this.inputFormData.companyName = data.value;
+            case "contractorCompanyName":
+                this.inputFormData.contractorCompanyName = data.value;
                 break;
-            case "companyAddress":
-                this.inputFormData.companyAddress = data.value;
+            case "contractorCompanyAddress":
+                this.inputFormData.contractorCompanyAddress = data.value;
                 break;
-            case "companyEmail":
-                this.inputFormData.companyEmail = data.value;
+            case "contractorCompanyEmail":
+                this.inputFormData.contractorCompanyEmail = data.value;
                 break;
-            case "companyContactPhone":
-                this.inputFormData.companyContactPhone = data.value;
+            case "contractorCompanyContactPhone":
+                this.inputFormData.contractorCompanyContactPhone = data.value;
                 break;
-            case "companyFax":
-                this.inputFormData.companyFax = data.value;
+            case "contractorCompanyFax":
+                this.inputFormData.contractorCompanyFax = data.value;
                 break;
         }
 
@@ -216,39 +223,39 @@ export class Step2 extends Vue {
                 applicantName: string;
 
 
-
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyName")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyName")}
-               companyName: string;
+                 */
+               contractorCompanyName: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_CompanyAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_CompanyAddress")}
                  */
-                  companyAddress: string;
+                contractorCompanyAddress: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  */
-                 companyEmail: string;
+                 contractorCompanyEmail: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  */
-                 companyContactPhone: string;
+                 contractorCompanyContactPhone: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  */
-                 companyFax: string;
+                 contractorCompanyFax: string;
 
                 contractorIsRequired?: any;
 

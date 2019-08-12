@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 
 @Component({
     components: {}
@@ -36,11 +36,19 @@ export class Step1 extends Vue {
     pdpaAccepted: boolean = false;
 
     created() {
-        this.pdpaAccepted = this.selectedDetail.pdpaAccepted;
-
     }
 
     mounted() {}
+
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
+        this.pdpaAccepted = this.selectedDetail.pdpaAccepted;
+    }
+
 
     changeStatus() {
         this.$emit('step1', this.pdpaAccepted)

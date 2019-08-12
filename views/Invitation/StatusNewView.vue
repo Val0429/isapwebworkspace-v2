@@ -286,12 +286,12 @@ export class StatusNewView extends Vue {
         // Contractor Information
         applicantName: "",
 
-        // Company
-        companyName: "",
-        companyAddress: "",
-        companyEmail: "",
-        companyContactPhone: "",
-        companyFax: "",
+        // Contractor Information
+        contractorCompanyName: "",
+        contractorCompanyAddress: "",
+        contractorCompanyEmail: "",
+        contractorCompanyContactPhone: 0,
+        contractorCompanyFax: 0,
 
         // step3
         workPremisesUnit: "",
@@ -401,11 +401,11 @@ export class StatusNewView extends Vue {
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.companyName = step2Date.companyName;
-        this.inputFormData.companyAddress = step2Date.companyAddress;
-        this.inputFormData.companyEmail = step2Date.companyEmail;
-        this.inputFormData.companyContactPhone = step2Date.companyContactPhone;
-        this.inputFormData.companyFax = step2Date.companyFax;
+        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;

@@ -108,7 +108,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { IStep3 } from '.';
 
 @Component({
@@ -148,7 +148,14 @@ export class Step3 extends Vue {
 
     mounted() {
         this.initSelectItem();
+    }
 
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
         this.inputFormData.workPremisesUnit = this.selectedDetail.workPremisesUnit;
         this.inputFormData.workLocation = this.selectedDetail.workLocation;
         this.inputFormData.workDescription = this.selectedDetail.workDescription;
@@ -160,10 +167,10 @@ export class Step3 extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
-        this.inputFormData.workStartDate = this.selectedDetail.workStartDate;
-        this.inputFormData.workStartTime = this.selectedDetail.workStartTime;
-        this.inputFormData.workEndDate = this.selectedDetail.workEndDate;
-        this.inputFormData.workEndTime = this.selectedDetail.workEndTime;
+        this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
+        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
+        this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
+        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
     }

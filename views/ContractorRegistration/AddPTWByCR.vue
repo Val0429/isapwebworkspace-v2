@@ -34,11 +34,11 @@
                         @submit="stepTo3($event)"
                     >
                         <template #step2>
-                            <step2
+                            <step2-add-use
                                 class="col-md-12"
                                 :selectedDetail="selectedDetail"
                                 @step2="receiveStep2Data"
-                            ></step2>
+                            ></step2-add-use>
                         </template>
 
                     </iv-form>
@@ -157,7 +157,7 @@
                         :interface="IStep7()"
                         :selectedDetail="selectedDetail"
                         :value="inputFormData"
-                        @submit="stepTo8($event)"
+                        @submit="doSubmit($event)"
                     >
                         <template #step7>
                             <step7
@@ -196,6 +196,7 @@ import Step5 from "@/components/ContractorRegistration/Step5.vue";
 import Step6 from "@/components/ContractorRegistration/Step6.vue";
 import Step7 from "@/components/ContractorRegistration/Step7.vue";
 import Step8 from "@/components/ContractorRegistration/Step8.vue";
+import Step2AddUse from "@/components/ContractorRegistration/Step2AddUse.vue";
 
 // Service
 import Dialog from "@/services/Dialog";
@@ -204,7 +205,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
 
 @Component({
-    components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
+    components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step2AddUse }
 })
 export class AddPTWByCR extends Vue {
     // @Prop({
@@ -238,11 +239,11 @@ export class AddPTWByCR extends Vue {
 
         // Contractor Information
         applicantName: "",
-        companyName: "",
-        companyAddress: "",
-        companyEmail: "",
-        companyContactPhone: 0,
-        companyFax: 0,
+        contractorCompanyName: "",
+        contractorCompanyAddress: "",
+        contractorCompanyEmail: "",
+        contractorCompanyContactPhone: '',
+        contractorCompanyFax: '',
 
         // step3
         workPremisesUnit: "",
@@ -325,18 +326,20 @@ export class AddPTWByCR extends Vue {
             verify: this.inputFormData.verify
         };
 
-
-        // TODO: wait api
         await this.$server
             .R("/flow1/crms/tenant", readParam)
             .then((response: any) => {
                 console.log('response ~ ', response);
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (response.company && response.company.objectId) {
-                        this.selectedDetail.tenant = response.company.objectId;
+                        this.selectedDetail.tenant = response.company.name;
                     }
+
+                    if (response.company && response.workCategory.objectId) {
+                        this.selectedDetail.workCategory = response.workCategory.name;
+                    }
+
                     this.selectedDetail.ptwId = response.ptwId;
-                    this.selectedDetail.workCategory = response.workCategory;
 
 
                     this.selectedDetail.pdpaAccepted = response.pdpaAccepted;
@@ -345,7 +348,7 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.contractorCompanyAddress = response.contractorCompanyAddress;
                     this.selectedDetail.contractorCompanyEmail = response.contractorCompanyEmail;
                     this.selectedDetail.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
-                    this.selectedDetail.contractorCompanyFax = response.workPremisesUnit;
+                    this.selectedDetail.contractorCompanyFax = response.contractorCompanyFax;
                     this.selectedDetail.workLocation = response.workLocation;
                     this.selectedDetail.workDescription = response.workDescription;
                     this.selectedDetail.workType1 = response.workType1;
@@ -402,7 +405,7 @@ export class AddPTWByCR extends Vue {
         //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
-    stepTo2() {
+    async stepTo2() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -411,6 +414,8 @@ export class AddPTWByCR extends Vue {
         //     stepRef.currentStep = 0;
         //     return false;
         // }
+
+        await this.tempSave();
     }
 
     IStep1() {
@@ -434,16 +439,16 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.companyName = step2Date.companyName;
-        this.inputFormData.companyAddress = step2Date.companyAddress;
-        this.inputFormData.companyEmail = step2Date.companyEmail;
-        this.inputFormData.companyContactPhone = step2Date.companyContactPhone;
-        this.inputFormData.companyFax = step2Date.companyFax;
+        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
     }
 
-    stepTo3() {
+    async stepTo3() {
         let stepRef: any = this.$refs.step;
 
         // TODO: wait下拉選單 和 全部step OK
@@ -462,6 +467,8 @@ export class AddPTWByCR extends Vue {
         //     stepRef.currentStep = 1;
         //     return false;
         // }
+
+        await this.tempSave();
     }
 
     IStep2() {
@@ -497,7 +504,7 @@ export class AddPTWByCR extends Vue {
         console.log("inputFormData ~ ", this.inputFormData);
     }
 
-    stepTo4() {
+    async stepTo4() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -515,6 +522,8 @@ export class AddPTWByCR extends Vue {
         //     stepRef.currentStep = 2;
         //     return false;
         // }
+
+        await this.tempSave();
     }
 
     IStep3() {
@@ -550,7 +559,7 @@ export class AddPTWByCR extends Vue {
         console.log(" ~ ", this.inputFormData);
     }
 
-    stepTo5() {
+    async stepTo5() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -569,6 +578,9 @@ export class AddPTWByCR extends Vue {
         //     stepRef.currentStep = 3;
         //     return false;
         // }
+
+        await this.tempSave();
+
     }
 
     IStep4() {
@@ -608,7 +620,7 @@ export class AddPTWByCR extends Vue {
         }
     }
 
-    stepTo6() {
+    async stepTo6() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -617,6 +629,8 @@ export class AddPTWByCR extends Vue {
         //     stepRef.currentStep = 4;
         //     return false;
         // }
+
+        await this.tempSave();
     }
 
     IStep5() {
@@ -634,7 +648,7 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.termsAccepted = step6Date;
     }
 
-    stepTo7() {
+    async stepTo7() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -643,6 +657,7 @@ export class AddPTWByCR extends Vue {
         //     stepRef.currentStep = 5;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep6() {
@@ -664,7 +679,7 @@ export class AddPTWByCR extends Vue {
         );
     }
 
-    stepTo8() {
+    async stepTo8() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -673,6 +688,7 @@ export class AddPTWByCR extends Vue {
         //     stepRef.currentStep = 6;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep7() {
@@ -698,14 +714,16 @@ export class AddPTWByCR extends Vue {
 
     async doSubmit() {
 
+        await this.tempSave();
+
         const doSubmitParam = {
-            // verify: ???,
+            verify: this.inputFormData.verify,
         };
 
-        // TODO: 問 Min
+
         Loading.show();
         await this.$server
-            .U("/flow1/crms/tenant-submit", doSubmitParam)
+            .U("/flow1/crms/status-pedding", doSubmitParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(
                     this,
@@ -741,7 +759,6 @@ export class AddPTWByCR extends Vue {
         this.isChange = false;
 
         const updateParam = {
-            // TODO 問 Min verify（必填）, contact, contactEmail 去哪邊撈資料？
             verify: this.inputFormData.verify,
             // contact: ???.contact,
             // contactEmail: ???.contactEmail,
@@ -754,11 +771,11 @@ export class AddPTWByCR extends Vue {
             applicantName: this.inputFormData.applicantName,
 
             // Company
-            companyName: this.inputFormData.companyName,
-            companyAddress: this.inputFormData.companyAddress,
-            companyEmail: this.inputFormData.companyEmail,
-            companyContactPhone: this.inputFormData.companyContactPhone,
-            companyFax: this.inputFormData.companyFax,
+            contractorCompanyName: this.inputFormData.contractorCompanyName,
+            contractorCompanyAddress: this.inputFormData.contractorCompanyAddress,
+            contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
+            contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
+            contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
             // step3
             workPremisesUnit: this.inputFormData.workPremisesUnit,
@@ -800,7 +817,7 @@ export class AddPTWByCR extends Vue {
 
             // step5
             // TODO: 問 Min  attachments?: Parse.File[];
-            attachments: [],
+            attachments: this.inputFormData.attachments ? this.inputFormData.attachments.map(item => item.base64) : [],
 
             // step6
             termsAccepted: this.inputFormData.termsAccepted,

@@ -172,7 +172,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { IStep4 } from ".";
 
 @Component({
@@ -216,6 +216,15 @@ export class Step4 extends Vue {
 
     mounted() {
         this.initSelectItem();
+
+    }
+
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
 
         this.inputFormData.checklist1 = this.selectedDetail.checklist1;
         this.inputFormData.checklist2 = this.selectedDetail.checklist2;

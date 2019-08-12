@@ -266,7 +266,7 @@ export class StatusApproveNotExpireDate extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     // step 相關
     isMounted: boolean = false;
@@ -290,12 +290,12 @@ export class StatusApproveNotExpireDate extends Vue {
         // Contractor Information
         applicantName: "",
 
-        // Company
-        companyName: "",
-        companyAddress: "",
-        companyEmail: "",
-        companyContactPhone: "",
-        companyFax: "",
+        // Contractor Information
+        contractorCompanyName: "",
+        contractorCompanyAddress: "",
+        contractorCompanyEmail: "",
+        contractorCompanyContactPhone: 0,
+        contractorCompanyFax: 0,
 
         // step3
         workPremisesUnit: "",
@@ -369,10 +369,6 @@ export class StatusApproveNotExpireDate extends Vue {
         //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
-    tempSave() {
-        this.isChange = false;
-    }
-
     stepTo2() {
         let stepRef: any = this.$refs.step;
 
@@ -405,11 +401,11 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.companyName = step2Date.companyName;
-        this.inputFormData.companyAddress = step2Date.companyAddress;
-        this.inputFormData.companyEmail = step2Date.companyEmail;
-        this.inputFormData.companyContactPhone = step2Date.companyContactPhone;
-        this.inputFormData.companyFax = step2Date.companyFax;
+        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
@@ -732,6 +728,101 @@ export class StatusApproveNotExpireDate extends Vue {
     }
 
     ////////////////////////////// step 8  //////////////////////////////
+
+    async tempSave() {
+        this.isChange = false;
+
+        const updateParam = {
+            // add PTW的參數
+            objectId: this.selectedDetail.objectId,
+
+            // step2可更改的部份
+            companyId: this.inputFormData.tenant,
+            workCategory: this.inputFormData.workCategory,
+
+            contact: this.inputFormData.contact,
+
+            contactEmail: this.inputFormData.contactEmail,
+
+            // Step 1
+            pdpaAccepted: this.inputFormData.pdpaAccepted,
+
+            // step2
+            // Contractor Information
+            applicantName: this.inputFormData.applicantName,
+
+            // Company
+            contractorCompanyName: this.inputFormData.contractorCompanyName,
+            contractorCompanyAddress: this.inputFormData.contractorCompanyAddress,
+            contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
+            contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
+            contractorCompanyFax: this.inputFormData.contractorCompanyFax,
+
+            // step3
+            workPremisesUnit: this.inputFormData.workPremisesUnit,
+            workLocation: this.inputFormData.workLocation,
+            workDescription: this.inputFormData.workDescription,
+            workType1: this.inputFormData.workType1,
+            workType2: this.inputFormData.workType2,
+            workType3: this.inputFormData.workType3,
+            workType4: this.inputFormData.workType4,
+            workType5: this.inputFormData.workType5,
+            workType6: this.inputFormData.workType6,
+            workType7: this.inputFormData.workType7,
+            workType8: this.inputFormData.workType8,
+            workStartDate: this.inputFormData.workStartDate,
+            workStartTime: this.inputFormData.workStartTime,
+            workEndDate: this.inputFormData.workEndDate,
+            workEndTime: this.inputFormData.workEndTime,
+            workContact: this.inputFormData.workContact,
+            workContactPhone: this.inputFormData.workContactPhone,
+
+            // step4
+            checklist1: this.inputFormData.checklist1,
+            checklist2: this.inputFormData.checklist2,
+            checklist3: this.inputFormData.checklist3,
+            checklist4: this.inputFormData.checklist4,
+            checklist5: this.inputFormData.checklist5,
+            checklist6: this.inputFormData.checklist6,
+            checklist7: this.inputFormData.checklist7,
+            checklist8: this.inputFormData.checklist8,
+            checklist9: this.inputFormData.checklist9,
+
+            checklistRemark1: this.inputFormData.checklistRemark1,
+            checklistRemark2: this.inputFormData.checklistRemark2,
+            checklistRemark3: this.inputFormData.checklistRemark3,
+            checklistRemark4: this.inputFormData.checklistRemark4,
+            checklistRemark5: this.inputFormData.checklistRemark5,
+            checklistRemark6: this.inputFormData.checklistRemark6,
+            checklistRemark7: this.inputFormData.checklistRemark7,
+
+            // step5
+            // TODO: 問 Min  attachments?: Parse.File[];
+            attachments: this.inputFormData.attachments,
+
+            // step6
+            termsAccepted: this.inputFormData.termsAccepted,
+
+            // step7
+            persons: this.inputFormData.persons,
+
+            // step8
+            accessGroups: this.inputFormData.accessGroups
+
+        };
+
+        await this.$server
+            .U("/flow1/crms", updateParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_SaveSuccess"));
+
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
 }
 
 export default StatusApproveNotExpireDate;

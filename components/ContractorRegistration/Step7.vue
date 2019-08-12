@@ -49,9 +49,9 @@
                     <td class="align-middle">{{ value.occupation }}</td>
                     <td class="align-middle">{{ value.nric }}</td>
                     <td class="align-middle">{{ value.shift }}</td>
-                    <td class="align-middle">{{ value.unit }}</td>
+                    <td class="align-middle">{{ value.unitNo }}</td>
                     <td class="align-middle">{{ value.vehicle }}</td>
-                    <td class="align-middle">{{ value.company }}</td>
+                    <td class="align-middle">{{ value.companyName }}</td>
                     <td>
                         <b-button
                             variant="transparent"
@@ -125,7 +125,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog";
 import { IStep7, IWorkPermitPerson } from ".";
@@ -181,6 +181,14 @@ export class Step7 extends Vue {
 
     mounted() {
         this.initData();
+    }
+
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
         this.personTable.tableDataFromApi = this.selectedDetail.persons;
     }
 

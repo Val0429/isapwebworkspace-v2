@@ -292,12 +292,12 @@ export class EditPTW extends Vue {
         // Contractor Information
         applicantName: "",
 
-        // Company
-        companyName: "",
-        companyAddress: "",
-        companyEmail: "",
-        companyContactPhone: "",
-        companyFax: "",
+        // Contractor Information
+        contractorCompanyName: "",
+        contractorCompanyAddress: "",
+        contractorCompanyEmail: "",
+        contractorCompanyContactPhone: 0,
+        contractorCompanyFax: 0,
 
         // step3
         workPremisesUnit: "",
@@ -402,11 +402,11 @@ export class EditPTW extends Vue {
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.companyName = step2Date.companyName;
-        this.inputFormData.companyAddress = step2Date.companyAddress;
-        this.inputFormData.companyEmail = step2Date.companyEmail;
-        this.inputFormData.companyContactPhone = step2Date.companyContactPhone;
-        this.inputFormData.companyFax = step2Date.companyFax;
+        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
@@ -678,6 +678,7 @@ export class EditPTW extends Vue {
     async tempSave() {
         this.isChange = false;
 
+
         const updateParam = {
             // add PTW的參數
             objectId: this.selectedDetail.objectId,
@@ -698,11 +699,11 @@ export class EditPTW extends Vue {
             applicantName: this.inputFormData.applicantName,
 
             // Company
-            companyName: this.inputFormData.companyName,
-            companyAddress: this.inputFormData.companyAddress,
-            companyEmail: this.inputFormData.companyEmail,
-            companyContactPhone: this.inputFormData.companyContactPhone,
-            companyFax: this.inputFormData.companyFax,
+            contractorCompanyName: this.inputFormData.contractorCompanyName,
+            contractorCompanyAddress: this.inputFormData.contractorCompanyAddress,
+            contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
+            contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
+            contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
             // step3
             workPremisesUnit: this.inputFormData.workPremisesUnit,
@@ -744,7 +745,7 @@ export class EditPTW extends Vue {
 
             // step5
             // TODO: 問 Min  attachments?: Parse.File[];
-            attachments: [],
+            attachments: this.inputFormData.attachments,
 
             // step6
             termsAccepted: this.inputFormData.termsAccepted,

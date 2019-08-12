@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 
 @Component({
     components: {}
@@ -44,6 +44,14 @@ export class Step6 extends Vue {
     created() {}
 
     mounted() {
+    }
+
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
         this.termsAccepted = this.selectedDetail.termsAccepted;
     }
 

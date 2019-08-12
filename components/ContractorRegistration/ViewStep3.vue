@@ -168,10 +168,10 @@ export class ViewStep3 extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
-        this.inputFormData.workStartDate = this.selectedDetail.workStartDate;
-        this.inputFormData.workStartTime = this.selectedDetail.workStartTime;
-        this.inputFormData.workEndDate = this.selectedDetail.workEndDate;
-        this.inputFormData.workEndTime = this.selectedDetail.workEndTime;
+        this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
+        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
+        this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
+        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
     }
