@@ -74,7 +74,7 @@ export class AddPTW extends Vue {
             contact: '',
             contactEmail: '',
             companyId: '',
-            workCategory: ''
+            workCategoryId: ''
         };
     }
 
@@ -141,12 +141,12 @@ export class AddPTW extends Vue {
             contact: string,
             contactEmail: string,
             companyId: string,
-            workCategory: string,
+            workCategoryId: string,
         } = {
             contact: data.contact,
             contactEmail: data.contactEmail,
             companyId: data.companyId,
-            workCategory: data.workCategory,
+            workCategoryId: data.workCategoryId,
         };
 
         // email正則
@@ -215,7 +215,7 @@ export class AddPTW extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkDescription")}
                  */
-                workCategory:  ${toEnumInterface(this.workDescriptionSelectItem as any, false)};
+                workCategoryId:  ${toEnumInterface(this.workDescriptionSelectItem as any, false)};
 
             }
         `;

@@ -341,7 +341,6 @@ export class AddPTWByCR extends Vue {
 
                     this.selectedDetail.ptwId = response.ptwId;
 
-
                     this.selectedDetail.pdpaAccepted = response.pdpaAccepted;
                     this.selectedDetail.applicantName = response.applicantName;
                     this.selectedDetail.contractorCompanyName = response.contractorCompanyName;
@@ -359,10 +358,10 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.workType6 = response.workType6;
                     this.selectedDetail.workType7 = response.workType7;
                     this.selectedDetail.workType8 = response.workType8;
-                    this.selectedDetail.workStartDate = response.workStartDate;
-                    this.selectedDetail.workStartTime = response.workStartTime;
-                    this.selectedDetail.workEndDate = response.workEndDate;
-                    this.selectedDetail.workEndTime = response.workEndTime;
+                    this.selectedDetail.workStartDate = response.workStartDate ? response.workStartDate : new Date();
+                    this.selectedDetail.workStartTime = response.workStartTime ? response.workStartTime : new Date();
+                    this.selectedDetail.workEndDate = response.workEndDate ? response.workEndDate : new Date();
+                    this.selectedDetail.workEndTime = response.workEndTime? response.workEndTime : new Date();
                     this.selectedDetail.workContact = response.workContact;
                     this.selectedDetail.workContactPhone = response.workContactPhone;
 
@@ -387,6 +386,65 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.attachments = response.attachments;
                     this.selectedDetail.termsAccepted = response.termsAccepted;
                     this.selectedDetail.persons = response.persons;
+
+
+                    /////// inputFormData
+
+                    if (response.company && response.company.objectId) {
+                        this.inputFormData.tenant = response.company.name;
+                    }
+
+                    if (response.workCategory && response.workCategory.objectId) {
+                        this.inputFormData.workCategory = response.workCategory.name;
+                    }
+
+                    this.inputFormData.ptwId = response.ptwId;
+
+                    this.inputFormData.pdpaAccepted = response.pdpaAccepted;
+                    this.inputFormData.applicantName = response.applicantName;
+                    this.inputFormData.contractorCompanyName = response.contractorCompanyName;
+                    this.inputFormData.contractorCompanyAddress = response.contractorCompanyAddress;
+                    this.inputFormData.contractorCompanyEmail = response.contractorCompanyEmail;
+                    this.inputFormData.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
+                    this.inputFormData.contractorCompanyFax = response.contractorCompanyFax;
+                    this.inputFormData.workLocation = response.workLocation;
+                    this.inputFormData.workDescription = response.workDescription;
+                    this.inputFormData.workType1 = response.workType1;
+                    this.inputFormData.workType2 = response.workType2;
+                    this.inputFormData.workType3 = response.workType3;
+                    this.inputFormData.workType4 = response.workType4;
+                    this.inputFormData.workType5 = response.workType5;
+                    this.inputFormData.workType6 = response.workType6;
+                    this.inputFormData.workType7 = response.workType7;
+                    this.inputFormData.workType8 = response.workType8;
+                    this.inputFormData.workStartDate = response.workStartDate ? response.workStartDate : new Date();
+                    this.inputFormData.workStartTime = response.workStartTime ? response.workStartTime : new Date();
+                    this.inputFormData.workEndDate = response.workEndDate ? response.workEndDate : new Date();
+                    this.inputFormData.workEndTime = response.workEndTime? response.workEndTime : new Date();
+                    this.inputFormData.workContact = response.workContact;
+                    this.inputFormData.workContactPhone = response.workContactPhone;
+
+                    this.inputFormData.checklist1 = response.checklist1;
+                    this.inputFormData.checklistRemark1 = response.checklistRemark1;
+                    this.inputFormData.checklist2 = response.checklist2;
+                    this.inputFormData.checklistRemark2 = response.checklistRemark2;
+                    this.inputFormData.checklist3 = response.checklist3;
+                    this.inputFormData.checklistRemark3 = response.checklistRemark3;
+                    this.inputFormData.checklist4 = response.checklist4;
+                    this.inputFormData.checklistRemark4 = response.checklistRemark4;
+                    this.inputFormData.checklist5 = response.checklist5;
+                    this.inputFormData.checklistRemark5 = response.checklistRemark5;
+                    this.inputFormData.checklist6 = response.checklist6;
+                    this.inputFormData.checklistRemark6 = response.checklistRemark6;
+                    this.inputFormData.checklist7 = response.checklist7;
+                    this.inputFormData.checklistRemark7 = response.checklistRemark7;
+                    this.inputFormData.checklist8 = response.checklist8;
+                    this.inputFormData.checklist9 = response.checklist9;
+
+
+                    this.inputFormData.attachments = response.attachments;
+                    this.inputFormData.termsAccepted = response.termsAccepted;
+                    this.inputFormData.persons = response.persons;
 
                 });
             })
@@ -426,21 +484,22 @@ export class AddPTWByCR extends Vue {
 
     ////////////////////////////// step 2  //////////////////////////////
 
-    receiveStep2Data(step2Date) {
+    receiveStep2Data(step2Data) {
+
         // PTW Data
-        this.inputFormData.ptwId = step2Date.ptwId;
-        this.inputFormData.tenant = step2Date.tenant;
-        this.inputFormData.workCategory = step2Date.workCategory;
+        this.inputFormData.ptwId = step2Data.ptwId;
+        this.inputFormData.tenant = step2Data.tenant;
+        this.inputFormData.workCategory = step2Data.workCategory;
 
         // Contractor Information
-        this.inputFormData.applicantName = step2Date.applicantName;
+        this.inputFormData.applicantName = step2Data.applicantName;
 
         // Company
-        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
-        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
-        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
+        this.inputFormData.contractorCompanyName = step2Data.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = step2Data.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = step2Data.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = step2Data.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = step2Data.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
     }
@@ -828,8 +887,6 @@ export class AddPTWByCR extends Vue {
             .U("/flow1/crms/tenant", updateParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    Dialog.success(this._("w_SaveSuccess"));
-
                 });
             })
             .catch((e: any) => {

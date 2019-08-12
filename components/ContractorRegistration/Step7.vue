@@ -286,6 +286,8 @@ export class Step7 extends Vue {
             return;
         }
 
+        console.log('personObject ~ ', personObject)
+
         this.personTable.tableDataFromApi.push(personObject);
         this.pageStep = EPageStep.list;
 

@@ -345,7 +345,6 @@ export class StatusNewView extends Vue {
     };
 
     created() {
-        console.log('step1 ~ ', )
         console.log('selectedDetail ~ ', this.selectedDetail)
 
     }

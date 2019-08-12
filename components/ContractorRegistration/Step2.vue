@@ -75,8 +75,6 @@ export class Step2 extends Vue {
     mounted() {
         this.initTenantSelectItem();
         this.initWorkCategorySelectItem();
-
-
     }
 
     @Watch("selectedDetail", { deep: true })
@@ -87,7 +85,7 @@ export class Step2 extends Vue {
     initInputFormData() {
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
         this.inputFormData.workCategory = this.selectedDetail.workCategory.objectId;
-        this.inputFormData.tenant = this.selectedDetail.tenant.objectId;
+        this.inputFormData.tenant = this.selectedDetail.company.objectId;
         // if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
         //     this.inputFormData.tenant = this.selectedDetail.company.objectId;
         // }

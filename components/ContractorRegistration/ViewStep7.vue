@@ -49,9 +49,9 @@
                     <td class="align-middle">{{ value.occupation }}</td>
                     <td class="align-middle">{{ value.nric }}</td>
                     <td class="align-middle">{{ value.shift }}</td>
-                    <td class="align-middle">{{ value.unit }}</td>
+                    <td class="align-middle">{{ value.unitNo }}</td>
                     <td class="align-middle">{{ value.vehicle }}</td>
-                    <td class="align-middle">{{ value.company }}</td>
+                    <td class="align-middle">{{ value.companyName }}</td>
                     <td>
                         <b-button
                             variant="transparent"

@@ -86,14 +86,14 @@
             >
                 <!-- status-pendding-edit -->
                 <edit-ptw
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.pendding "
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'pendding'"
                     :selectedDetail="selectedDetail"
                     @edit-ptw-back-to-list="editPtwBackToList"
                 ></edit-ptw>
 
                 <!-- status-new-view -->
                 <status-new-view
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.new"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'new'"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
                     @edit-ptw-back-to-list="editPtwBackToList"
@@ -101,7 +101,7 @@
 
                 <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
                 <status-approve-not-expire-date-edit
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.approve && CheckDate(selectedDetail.endDate, new Date())"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && CheckDate(selectedDetail.endDate, new Date())"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
                 >
@@ -110,7 +110,7 @@
 
                 <!-- status-reject-view ，只看，還需要 加上 Approve到期後的條件 -->
                 <status-reject-approve-expire-date-view
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.reject || !CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.approve && !CheckDate(selectedDetail.endDate, new Date())"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'reject' || !CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && !CheckDate(selectedDetail.endDate, new Date())"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
                 >

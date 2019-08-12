@@ -76,7 +76,7 @@ export class ViewStep2 extends Vue {
 
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
         this.inputFormData.workCategory = this.selectedDetail.workCategory.objectId;
-        this.inputFormData.tenant = this.selectedDetail.tenant.objectId;
+        this.inputFormData.tenant = this.selectedDetail.company.objectId;
 
         // if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
         //     this.inputFormData.tenant = this.selectedDetail.company.objectId;
