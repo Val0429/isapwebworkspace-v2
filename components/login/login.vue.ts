@@ -16,6 +16,10 @@ export default class Login extends Vue {
     private username: string = '';
     private password: string = '';
 
+    backgroundImage = `url(${require('@/public/background.jpg')})`;
+
+    mounted() {}
+
     async Login() {
         Loading.show();
         let param = {
@@ -26,11 +30,9 @@ export default class Login extends Vue {
             .then(() => {
                 Loading.hide();
                 let userRole = '';
-                console.log('!!! check', this.$user.user != undefined, this.$user.user.roles != undefined, this.$user.user.roles[0] != undefined, this.$user.user.roles[0].name);
                 if (this.$user.user != undefined && this.$user.user.roles != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
                     userRole = this.$user.user.roles[0].name;
                 }
-                console.log('!!! userRole', userRole, EUserRole.TenantUser, userRole == EUserRole.TenantUser);
                 switch (userRole) {
                     case EUserRole.SystemAdministrator:
                         this.$router.push('/dashboard');

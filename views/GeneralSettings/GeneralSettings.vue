@@ -19,7 +19,7 @@
                     </iv-form>
                 </iv-auto-card>
 
-                <iv-auto-card :label="'Login background'">
+                <!-- <iv-auto-card :label="'Login background'">
 
                     <iv-form
                         :interface="loginBackgroundInf()"
@@ -49,7 +49,7 @@
                         </template>
                     </iv-form>
 
-                </iv-auto-card>
+                </iv-auto-card> -->
 
             </div>
 
