@@ -255,7 +255,16 @@ interface IStep
         IStep8 {}
 
 @Component({
-    components: { ViewStep1, ViewStep2, ViewStep3, ViewStep4, ViewStep5, ViewStep6, ViewStep7, ViewStep8 }
+    components: {
+        ViewStep1,
+        ViewStep2,
+        ViewStep3,
+        ViewStep4,
+        ViewStep5,
+        ViewStep6,
+        ViewStep7,
+        ViewStep8
+    }
 })
 export class StatusNewView extends Vue {
     @Prop({
@@ -281,7 +290,7 @@ export class StatusNewView extends Vue {
         // PTW Data
         ptwId: "",
         tenant: "",
-        workCategory: "",
+        workCategoryId: "",
 
         // Contractor Information
         applicantName: "",
@@ -345,7 +354,7 @@ export class StatusNewView extends Vue {
     };
 
     created() {
-        console.log('selectedDetail ~ ', this.selectedDetail)
+        console.log("selectedDetail ~ ", this.selectedDetail);
     }
 
     mounted() {
@@ -353,7 +362,7 @@ export class StatusNewView extends Vue {
     }
 
     pageToList() {
-        this.$emit('edit-ptw-back-to-list');
+        this.$emit("edit-ptw-back-to-list");
     }
 
     ////////////////////////////// step 1  //////////////////////////////
@@ -393,17 +402,22 @@ export class StatusNewView extends Vue {
         // PTW Data
         this.inputFormData.ptwId = step2Date.ptwId;
         this.inputFormData.tenant = step2Date.tenant;
-        this.inputFormData.workCategory = step2Date.workCategory;
+        this.inputFormData.workCategoryId = step2Date.workCategoryId;
 
         // Contractor Information
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
-        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
-        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
+        this.inputFormData.contractorCompanyName =
+            step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress =
+            step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail =
+            step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone =
+            step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax =
+            step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
@@ -416,7 +430,7 @@ export class StatusNewView extends Vue {
         // if (
         //     !this.inputFormData.ptwId ||
         //     !this.inputFormData.tenant ||
-        //     !this.inputFormData.workCategory ||
+        //     !this.inputFormData.workCategoryId ||
         //     !this.inputFormData.applicantName ||
         //     !this.inputFormData.companyName ||
         //     !this.inputFormData.companyAddress ||
@@ -515,7 +529,6 @@ export class StatusNewView extends Vue {
         this.inputFormData.checklistRemark6 = step4Date.checklistRemark6;
         this.inputFormData.checklistRemark7 = step4Date.checklistRemark7;
 
-        console.log(" ~ ", this.inputFormData);
         this.isChange = true;
     }
 

@@ -221,7 +221,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import Step1 from "@/components/ContractorRegistration/Step1.vue";
 import Step2 from "@/components/ContractorRegistration/Step2.vue";
 import Step3 from "@/components/ContractorRegistration/Step3.vue";
@@ -287,7 +287,7 @@ export class EditPTW extends Vue {
         // PTW Data
         ptwId: "",
         tenant: "",
-        workCategory: "",
+        workCategoryId: "",
 
         // Contractor Information
         applicantName: "",
@@ -296,8 +296,8 @@ export class EditPTW extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -352,25 +352,36 @@ export class EditPTW extends Vue {
 
     isApproval: boolean = false;
 
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
+
     created() {
-        console.log('selectedDetail ~ ', this.selectedDetail)
+        console.log("selectedDetail ~ ", this.selectedDetail);
     }
 
     mounted() {
-       this.initInputFormData();
+        this.initInputFormData();
     }
 
     pageToList() {
-        this.$emit('edit-ptw-back-to-list');
+        this.$emit("edit-ptw-back-to-list");
     }
 
     initInputFormData() {
-        if (this.selectedDetail.company && this.selectedDetail.company.objectId) {
+        if (
+            this.selectedDetail.company &&
+            this.selectedDetail.company.objectId
+        ) {
             this.inputFormData.tenant = this.selectedDetail.company.objectId;
         }
 
-        if (this.selectedDetail.workCategory && this.selectedDetail.workCategory.objectId) {
-            this.inputFormData.workCategory = this.selectedDetail.workCategory.objectId;
+        if (
+            this.selectedDetail.workCategoryId &&
+            this.selectedDetail.workCategory.objectId
+        ) {
+            this.inputFormData.workCategoryId = this.selectedDetail.workCategory.objectId;
         }
 
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
@@ -392,10 +403,18 @@ export class EditPTW extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
-        this.inputFormData.workStartDate = this.selectedDetail.workStartDate ? this.selectedDetail.workStartDate : new Date();
-        this.inputFormData.workStartTime = this.selectedDetail.workStartTime ? this.selectedDetail.workStartTime : new Date();
-        this.inputFormData.workEndDate = this.selectedDetail.workEndDate ? this.selectedDetail.workEndDate : new Date();
-        this.inputFormData.workEndTime = this.selectedDetail.workEndTime? this.selectedDetail.workEndTime : new Date();
+        this.inputFormData.workStartDate = this.selectedDetail.workStartDate
+            ? this.selectedDetail.workStartDate
+            : new Date();
+        this.inputFormData.workStartTime = this.selectedDetail.workStartTime
+            ? this.selectedDetail.workStartTime
+            : new Date();
+        this.inputFormData.workEndDate = this.selectedDetail.workEndDate
+            ? this.selectedDetail.workEndDate
+            : new Date();
+        this.inputFormData.workEndTime = this.selectedDetail.workEndTime
+            ? this.selectedDetail.workEndTime
+            : new Date();
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
 
@@ -416,12 +435,11 @@ export class EditPTW extends Vue {
         this.inputFormData.checklist8 = this.selectedDetail.checklist8;
         this.inputFormData.checklist9 = this.selectedDetail.checklist9;
 
-
         this.inputFormData.attachments = this.selectedDetail.attachments;
         this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
         this.inputFormData.persons = this.selectedDetail.persons;
 
-        console.log('this.inputFormData ~ ', this.inputFormData)
+        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     ////////////////////////////// step 1  //////////////////////////////
@@ -458,17 +476,22 @@ export class EditPTW extends Vue {
         // PTW Data
         this.inputFormData.ptwId = step2Date.ptwId;
         this.inputFormData.tenant = step2Date.tenant;
-        this.inputFormData.workCategory = step2Date.workCategory;
+        this.inputFormData.workCategoryId = step2Date.workCategoryId;
 
         // Contractor Information
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
-        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
-        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
+        this.inputFormData.contractorCompanyName =
+            step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress =
+            step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail =
+            step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone =
+            step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax =
+            step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
@@ -750,14 +773,13 @@ export class EditPTW extends Vue {
     async tempSave() {
         this.isChange = false;
 
-
         const updateParam = {
             // add PTW的參數
             objectId: this.selectedDetail.objectId,
 
             // step2可更改的部份
             companyId: this.inputFormData.tenant,
-            workCategory: this.inputFormData.workCategory,
+            workCategoryId: this.inputFormData.workCategoryId,
 
             contact: this.inputFormData.contact,
 
@@ -772,9 +794,11 @@ export class EditPTW extends Vue {
 
             // Company
             contractorCompanyName: this.inputFormData.contractorCompanyName,
-            contractorCompanyAddress: this.inputFormData.contractorCompanyAddress,
+            contractorCompanyAddress: this.inputFormData
+                .contractorCompanyAddress,
             contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-            contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
+            contractorCompanyContactPhone: this.inputFormData
+                .contractorCompanyContactPhone,
             contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
             // step3
@@ -827,15 +851,16 @@ export class EditPTW extends Vue {
 
             // step8
             accessGroups: this.inputFormData.accessGroups
-
         };
 
         await this.$server
             .U("/flow1/crms", updateParam)
             .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-
-                });
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {}
+                );
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -843,11 +868,10 @@ export class EditPTW extends Vue {
     }
 
     async doSubmit() {
-
         await this.tempSave();
 
         const doSubmitParam = {
-            objectId: this.selectedDetail.objectId,
+            objectId: this.selectedDetail.objectId
         };
 
         if (this.isApproval) {
@@ -897,8 +921,6 @@ export class EditPTW extends Vue {
 
             this.$emit("submit-data", doSubmitParam);
         }
-
-
 
         // if (this.isChange) {
         //     Dialog.confirm(

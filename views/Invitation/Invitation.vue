@@ -29,7 +29,7 @@
                 >
                     <template #toolbox>
 
-                        <iv-toolbox-edit @click="pageToView" />
+                        <iv-toolbox-edit @click="pageToEdit" />
                         <iv-toolbox-divider />
 
                         <iv-toolbox-export-excel @click="downloadPageExcel" />
@@ -57,14 +57,14 @@
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
 
-                        <template #workCategory="{$attrs, $listeners}">
+                        <template #workCategoryId="{$attrs, $listeners}">
                             {{ tableShowWorkCategory($attrs.value) }}
                         </template>
 
                         <template #Actions="{$attrs, $listeners}">
 
                             <iv-toolbox-more>
-                                <iv-toolbox-edit @click="pageToView" />
+                                <iv-toolbox-edit @click="pageToEdit" />
                             </iv-toolbox-more>
                         </template>
 
@@ -184,7 +184,7 @@ export default class Invitation extends Vue {
         contact: "",
         contactEmail: "",
         companyId: "",
-        workCategory: ""
+        workCategoryId: ""
     };
 
     created() {
@@ -202,15 +202,11 @@ export default class Invitation extends Vue {
     }
 
     selectedItem(data) {
-        // data.length === 0 || !!data ?  : ;
-
         if (!data) {
             this.selectedDetail = {};
         } else {
             this.selectedDetail = data;
         }
-
-        // console.log(" ~ ", this.selectedDetail);
     }
 
     async initWorkDescriptionSelectItem() {
@@ -231,7 +227,6 @@ export default class Invitation extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
     }
 
     pageToList() {
@@ -245,10 +240,9 @@ export default class Invitation extends Vue {
         this.transition.step = 2;
     }
 
-    pageToView() {
+    pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-        // TODO: 7steps
     }
 
     async receiveSearchConditionData(searchConditionData: any) {
@@ -335,11 +329,11 @@ export default class Invitation extends Vue {
         return result;
     }
 
-    tableShowWorkCategory(workCategory: string): string {
+    tableShowWorkCategory(workCategoryId: string): string {
         let result = "";
 
         for (const id in this.workDescriptionSelectItem) {
-            if (workCategory === id) {
+            if (workCategoryId === id) {
                 result = this.workDescriptionSelectItem[id];
             }
         }
@@ -412,7 +406,7 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
-                workCategory: string;
+                workCategoryId: string;
 
 
                 /**
@@ -481,7 +475,7 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
-                workCategory: string;
+                workCategoryId: string;
 
 
                 /**

@@ -26,8 +26,8 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { IStep2 } from '.';
-import ResponseFilter from '@/services/ResponseFilter';
+import { IStep2 } from ".";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}
@@ -55,7 +55,7 @@ export class ViewStep2 extends Vue {
         // PTW Data
         ptwId: "",
         tenant: "",
-        workCategory: "",
+        workCategoryId: "",
 
         // Contractor Information
         applicantName: "",
@@ -64,8 +64,8 @@ export class ViewStep2 extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: ''
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: ""
     };
 
     created() {}
@@ -75,7 +75,7 @@ export class ViewStep2 extends Vue {
         this.initWorkCategorySelectItem();
 
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
-        this.inputFormData.workCategory = this.selectedDetail.workCategory.objectId;
+        this.inputFormData.workCategoryId = this.selectedDetail.workCategory.objectId;
         this.inputFormData.tenant = this.selectedDetail.company.objectId;
 
         // if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
@@ -88,11 +88,9 @@ export class ViewStep2 extends Vue {
         this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
         this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
         this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
-
     }
 
     async initTenantSelectItem() {
-
         this.tenantSelectItem = {};
         let tempTenantSelectItem = {};
 
@@ -110,7 +108,6 @@ export class ViewStep2 extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
     }
 
     async initWorkCategorySelectItem() {
@@ -142,8 +139,8 @@ export class ViewStep2 extends Vue {
             case "tenant":
                 this.inputFormData.tenant = data.value;
                 break;
-            case "workCategory":
-                this.inputFormData.workCategory = data.value;
+            case "workCategoryId":
+                this.inputFormData.workCategoryId = data.value;
                 break;
 
             // Contractor Information
@@ -200,7 +197,7 @@ export class ViewStep2 extends Vue {
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  * @uiDisabled - true
                  */
-                workCategory?:  ${toEnumInterface(
+                workCategoryId?:  ${toEnumInterface(
                     this.workCategorySelectItem as any,
                     false
                 )};

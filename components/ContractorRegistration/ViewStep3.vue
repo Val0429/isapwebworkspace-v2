@@ -104,7 +104,7 @@
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved8') }}
                     </b-form-checkbox>
-           </div>
+                </div>
             </template>
 
             <template #contractorIsRequired>
@@ -117,7 +117,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { IStep3 } from '.';
+import { IStep3 } from ".";
 
 @Component({
     components: {}
@@ -149,7 +149,7 @@ export class ViewStep3 extends Vue {
         workEndDate: null,
         workEndTime: new Date(),
         workContact: "",
-        workContactPhone: ''
+        workContactPhone: ""
     };
 
     created() {}
@@ -168,10 +168,18 @@ export class ViewStep3 extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
-        this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
-        this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
+        this.inputFormData.workStartDate = new Date(
+            this.selectedDetail.workStartDate
+        );
+        this.inputFormData.workStartTime = new Date(
+            this.selectedDetail.workStartTime
+        );
+        this.inputFormData.workEndDate = new Date(
+            this.selectedDetail.workEndDate
+        );
+        this.inputFormData.workEndTime = new Date(
+            this.selectedDetail.workEndTime
+        );
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
     }

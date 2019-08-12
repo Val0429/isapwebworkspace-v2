@@ -24,10 +24,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { IStep2 } from '.';
-import ResponseFilter from '@/services/ResponseFilter';
+import { IStep2 } from ".";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}
@@ -55,7 +62,7 @@ export class Step2AddUse extends Vue {
         // PTW Data
         ptwId: this.selectedDetail.ptwId,
         tenant: "",
-        workCategory: "",
+        workCategoryId: "",
 
         // Contractor Information
         applicantName: "",
@@ -64,13 +71,11 @@ export class Step2AddUse extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: ''
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: ""
     };
 
-    created() {
-
-    }
+    created() {}
 
     mounted() {
         // this.initTenantSelectItem();
@@ -84,7 +89,7 @@ export class Step2AddUse extends Vue {
 
     initInputFormData() {
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
-        this.inputFormData.workCategory = this.selectedDetail.workCategory;
+        this.inputFormData.workCategoryId = this.selectedDetail.workCategory;
         this.inputFormData.tenant = this.selectedDetail.tenant;
         // if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
         //     this.inputFormData.tenant = this.selectedDetail.company.objectId;
@@ -98,7 +103,6 @@ export class Step2AddUse extends Vue {
     }
 
     async initTenantSelectItem() {
-
         this.tenantSelectItem = {};
         let tempTenantSelectItem = {};
 
@@ -116,7 +120,6 @@ export class Step2AddUse extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
     }
 
     async initWorkCategorySelectItem() {
@@ -137,7 +140,6 @@ export class Step2AddUse extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
     }
 
     updateInputFormData(data) {
@@ -149,8 +151,8 @@ export class Step2AddUse extends Vue {
             case "tenant":
                 this.inputFormData.tenant = data.value;
                 break;
-            case "workCategory":
-                this.inputFormData.workCategory = data.value;
+            case "workCategoryId":
+                this.inputFormData.workCategoryId = data.value;
                 break;
 
             // Contractor Information
@@ -202,7 +204,7 @@ export class Step2AddUse extends Vue {
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  * @uiType - iv-form-label
                  */
-                workCategory?:  string;
+                workCategoryId?:  string;
 
                 contractorTitle?: any;
 
