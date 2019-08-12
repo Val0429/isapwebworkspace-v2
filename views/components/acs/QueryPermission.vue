@@ -152,8 +152,13 @@ export default class QueryPermission extends Vue {
                 if(!item.accesslevels || item.accesslevels.length<=0) continue;                
                 let doors = [];
                 for(let accesslevel of item.accesslevels){
-                    if(!accesslevel.type || accesslevel.type!="door" || !accesslevel.door)continue;
-                    doors.push(accesslevel.door);
+                    if(accesslevel.type=="doorgroup" && accesslevel.doorgroup){
+                        doors.push(...accesslevel.doorgroup.doors);
+                    }
+                    if(accesslevel.type=="door" && accesslevel.door){
+                        doors.push(accesslevel.door);
+                    }
+                    
                 }
                 item.doors = doors;
                 item.doorcount = doors.length;               
