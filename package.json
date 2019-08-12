@@ -1,6 +1,7 @@
 {
     "name": "vms-server",
     "version": "1.0.0",
+    "flow": "flow1",
     "description": "CMS",
     "scripts": {
         "start": "npm run start --prefix ../",
