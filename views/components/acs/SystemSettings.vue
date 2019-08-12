@@ -16,6 +16,9 @@
                     </template>
            </b-table>
          <iv-auto-card :label="_('smtp')" v-show="currentConfig=='smtp'">
+                <template #footer-before>
+                    <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
+                </template>
                 <iv-form
                     :interface="smptpConfigInf()"                    
                     :value="smtp"
@@ -25,6 +28,9 @@
                 </iv-form>
          </iv-auto-card>
             <iv-auto-card :label="_('ccureconnect')" v-show="currentConfig=='ccureconnect'">
+                <template #footer-before>
+                    <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
+                </template>
                 <iv-form
                     :interface="ccureconnectInf()"                    
                     :value="ccureconnect"
@@ -34,6 +40,9 @@
                 </iv-form>
          </iv-auto-card>
          <iv-auto-card :label="_('ccuresqlserver')" v-show="currentConfig=='ccuresqlserver'">
+                <template #footer-before>
+                    <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
+                </template>
                 <iv-form
                     :interface="ccuresqlserverInf()"                    
                     :value="ccuresqlserver"
@@ -43,6 +52,9 @@
                 </iv-form>
          </iv-auto-card>
          <iv-auto-card :label="_('sipassconnect')" v-show="currentConfig=='sipassconnect'">
+                <template #footer-before>
+                    <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
+                </template>
                 <iv-form
                     :interface="sipassconnectInf()"                    
                     :value="sipassconnect"
@@ -52,6 +64,9 @@
                 </iv-form>
          </iv-auto-card>
          <iv-auto-card :label="_('sipassdb')" v-show="currentConfig=='sipassdb'">
+                <template #footer-before>
+                    <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
+                </template>
                 <iv-form
                     :interface="sipassdbInf()"                    
                     :value="sipassdb"
