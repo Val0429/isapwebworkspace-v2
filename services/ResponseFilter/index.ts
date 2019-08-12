@@ -70,11 +70,11 @@ export class ResponseFilter {
         }
     }
 
-    catchError(viewItem: any, e: any, message: string = '') {
+    catchError(vue: any, e: any, message: string = '') {
         console.log('error: ', e);
         Loading.hide();
         if (e.err != undefined && e.err == 'Failed to fetch') {
-            Dialog.error(viewItem._('w_FailedToFetch'));
+            Dialog.error(vue._('w_FailedToFetch'));
             return true;
         }
         if (!e.res) {
@@ -84,7 +84,12 @@ export class ResponseFilter {
             return false;
         }
         if (e.res.statusCode == 401) {
-            viewItem.$router.push({ path: '/login' });
+            vue.$router.push({ path: '/login' });
+            return true;
+        }
+
+        if (e.res.statusCode == 404) {
+            Dialog.error(vue._('w_APINotFind'));
             return true;
         }
         Dialog.error(message != '' ? message : e.message);

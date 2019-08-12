@@ -45,9 +45,9 @@
                         @selected="selectedItem($event)"
                     >
 
-<!--                        <template #status="{$attrs, $listeners}">-->
-<!--                            {{ tableShowStatus($attrs.value) }}-->
-<!--                        </template>-->
+                        <!--                        <template #status="{$attrs, $listeners}">-->
+                        <!--                            {{ tableShowStatus($attrs.value) }}-->
+                        <!--                        </template>-->
 
                         <template #startDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
@@ -103,7 +103,8 @@
                 <status-approve-not-expire-date-edit
                     v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.approve && CheckDate(selectedDetail.endDate, new Date())"
                     :selectedDetail="selectedDetail"
-                    @view-done="editPtwBackToList">
+                    @view-done="editPtwBackToList"
+                >
 
                 </status-approve-not-expire-date-edit>
 
@@ -145,10 +146,10 @@ import Datetime from "@/services/Datetime";
 import toExcel from "@/services/Excel/json2excel";
 
 enum EStatus {
-    new = 'new',
-    pendding = 'pendding',
-    approve = 'approve',
-    reject = 'reject',
+    new = "new",
+    pendding = "pendding",
+    approve = "approve",
+    reject = "reject"
 }
 
 @Component({
@@ -213,7 +214,6 @@ export default class Invitation extends Vue {
     }
 
     async initWorkDescriptionSelectItem() {
-
         this.workDescriptionSelectItem = {};
         let tempDescriptionSelectItem = {};
 
@@ -231,6 +231,11 @@ export default class Invitation extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+
+        console.log(
+            "workDescriptionSelectItem ~ ",
+            this.workDescriptionSelectItem
+        );
     }
 
     pageToList() {
@@ -287,8 +292,7 @@ export default class Invitation extends Vue {
     }
 
     exportExcel() {
-        let reportTable: any = null;
-        reportTable = this.$refs.listTable;
+        let reportTable: any = this.$refs.listTable;
         let tableData = reportTable.tableToArray();
 
         //th
@@ -340,7 +344,7 @@ export default class Invitation extends Vue {
 
         for (const id in this.workDescriptionSelectItem) {
             if (workCategory === id) {
-                result = this.workDescriptionSelectItem[id]
+                result = this.workDescriptionSelectItem[id];
             }
         }
 
@@ -359,7 +363,10 @@ export default class Invitation extends Vue {
     }
 
     CheckDate(today: Date, endDate: Date) {
-        return this.DateToZero(endDate).getTime() >= this.DateToZero(today).getTime();
+        return (
+            this.DateToZero(endDate).getTime() >=
+            this.DateToZero(today).getTime()
+        );
     }
 
     ITableList() {
