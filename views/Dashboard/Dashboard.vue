@@ -14,6 +14,8 @@
             >
                 <iv-form
                     :interface="IFilterConditionForm()"
+                    :value="inputFilterData"
+                    @update:*="updateFilter"
                     @submit="doSubmit($event)"
                 >
                 </iv-form>
@@ -84,6 +86,7 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
 import { chart } from "highcharts";
 
 enum EChartMode {
@@ -111,6 +114,11 @@ export default class Dashboard extends Vue {
         type: Transition.type,
         prevStep: 1,
         step: 1
+    };
+
+    inputFilterData = {
+        startTime: Datetime.WeekStart(new Date()),
+        endTime: Datetime.WeekEnd(new Date())
     };
 
     visible: boolean = true;
@@ -187,6 +195,11 @@ export default class Dashboard extends Vue {
                 data: [0, 0]
             }
         ];
+    }
+
+    updateFilter(datas: any) {
+        this.inputFilterData[datas.key] = datas.value;
+        console.log(this.inputFilterData);
     }
 
     async doSubmit() {
