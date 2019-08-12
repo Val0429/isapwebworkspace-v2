@@ -189,23 +189,19 @@ export default class SetupsKiosk extends Vue {
         url: "",
         OnOpen: async (e: Event): Promise<void> => {
             console.log("WS Alive Open");
-            console.log("e: ", e);
         },
 
         OnMessage: async (e: MessageEvent): Promise<void> => {
             console.log("WS Alive message");
-            console.log("e: ", e);
             this.handleWs(e.data);
         },
 
         OnError: async (e: Event): Promise<void> => {
             console.log("WS Alive Error");
-            console.log("e: ", e);
         },
 
         OnClose: async (e: CloseEvent): Promise<void> => {
             console.log("WS Alive Close");
-            console.log("e: ", e);
         }
     });
 

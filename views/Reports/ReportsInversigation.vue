@@ -156,7 +156,7 @@ export default class ReportsInversigation extends Vue {
 
         OnMessage: async (e: MessageEvent): Promise<void> => {
             console.log("WS Alive message");
-            console.log("e: ", e);
+
             this.handleWs(e.data);
         },
 
