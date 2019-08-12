@@ -119,7 +119,7 @@ export class AddPTW extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        tempDescriptionSelectItem[returnValue.name] =
+                        tempDescriptionSelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.workDescriptionSelectItem = tempDescriptionSelectItem;

@@ -43,7 +43,9 @@ export class Step6 extends Vue {
 
     created() {}
 
-    mounted() {}
+    mounted() {
+        this.termsAccepted = this.selectedDetail.termsAccepted;
+    }
 
     changeStatus() {
         this.$emit("step6", this.termsAccepted);

@@ -36,6 +36,8 @@ export class Step1 extends Vue {
     pdpaAccepted: boolean = false;
 
     created() {
+        this.pdpaAccepted = this.selectedDetail.pdpaAccepted;
+
     }
 
     mounted() {}
