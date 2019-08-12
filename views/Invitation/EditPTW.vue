@@ -350,6 +350,8 @@ export class EditPTW extends Vue {
         accessGroups: []
     };
 
+    isApproval: boolean = false;
+
     created() {
         console.log('selectedDetail ~ ', this.selectedDetail)
     }
@@ -676,7 +678,9 @@ export class EditPTW extends Vue {
         this.inputFormData.workStartTime = step8Date.startTime;
         this.inputFormData.workEndDate = step8Date.endDate;
         this.inputFormData.workEndTime = step8Date.endTime;
-        this.inputFormData.accessGroups = step8Date.accessGroup;
+        this.inputFormData.accessGroups = step8Date.accessGroups;
+
+        this.isApproval = step8Date.approval;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
         this.isChange = true;
@@ -780,19 +784,73 @@ export class EditPTW extends Vue {
 
     async doSubmit() {
 
+        await this.tempSave();
 
+        const doSubmitParam = {
+            objectId: this.selectedDetail.objectId,
+        };
 
-        if (this.isChange) {
-            Dialog.confirm(
-                this._("w_Save_Checked"),
-                this._("w_Save_Checked"),
-                () => {
-                    this.doSubmitApi();
-                }
-            );
+        if (this.isApproval) {
+            Loading.show();
+            await this.$server
+                .U("/flow1/crms/status-approve", doSubmitParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Dialog_SuccessTitle"));
+                        },
+                        this._("w_Dialog_ErrorTitle")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Dialog_ErrorTitle")
+                    );
+                });
+
+            this.$emit("submit-data", doSubmitParam);
         } else {
-            this.doSubmitApi();
+            Loading.show();
+            await this.$server
+                .U("/flow1/crms/status-reject", doSubmitParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Dialog_SuccessTitle"));
+                        },
+                        this._("w_Dialog_ErrorTitle")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Dialog_ErrorTitle")
+                    );
+                });
+
+            this.$emit("submit-data", doSubmitParam);
         }
+
+
+
+        // if (this.isChange) {
+        //     Dialog.confirm(
+        //         this._("w_Save_Checked"),
+        //         this._("w_Save_Checked"),
+        //         () => {
+        //             this.doSubmitApi();
+        //         }
+        //     );
+        // } else {
+        //     this.doSubmitApi();
+        // }
     }
 
     async doSubmitApi() {

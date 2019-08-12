@@ -38,6 +38,8 @@ interface RestfulRequest extends ApisRequestBase {
         "/flow1/crms/status-pedding": [any, any, true],
         "/flow1/crms/tenant": [any, any, true],
         "/flow1/crms/tenant-submit": [any, any, true],
+        "/flow1/crms/status-approve": [any, any, true],
+        "/flow1/crms/status-reject": [any, any, true],
 
     },
     "Delete": {

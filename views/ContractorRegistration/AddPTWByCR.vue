@@ -393,9 +393,6 @@ export class AddPTWByCR extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
-        console.log('this.selectedDetail ~ ', this.selectedDetail)
-
     }
 
     ////////////////////////////// step 1  //////////////////////////////

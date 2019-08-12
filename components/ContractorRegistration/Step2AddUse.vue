@@ -73,10 +73,8 @@ export class Step2AddUse extends Vue {
     }
 
     mounted() {
-        this.initTenantSelectItem();
-        this.initWorkCategorySelectItem();
-
-
+        // this.initTenantSelectItem();
+        // this.initWorkCategorySelectItem();
     }
 
     @Watch("selectedDetail", { deep: true })

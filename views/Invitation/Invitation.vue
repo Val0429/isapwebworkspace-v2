@@ -49,6 +49,14 @@
 <!--                            {{ tableShowStatus($attrs.value) }}-->
 <!--                        </template>-->
 
+                        <template #startDate="{$attrs}">
+                            {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                        </template>
+
+                        <template #endDate="{$attrs}">
+                            {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
+                        </template>
+
                         <template #workCategory="{$attrs, $listeners}">
                             {{ tableShowWorkCategory($attrs.value) }}
                         </template>
@@ -78,35 +86,34 @@
             >
                 <!-- status-pendding-edit -->
                 <edit-ptw
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status !== 1 "
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.pendding "
                     :selectedDetail="selectedDetail"
                     @edit-ptw-back-to-list="editPtwBackToList"
                 ></edit-ptw>
 
                 <!-- status-new-view -->
                 <status-new-view
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'new'"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.new"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
                     @edit-ptw-back-to-list="editPtwBackToList"
                 ></status-new-view>
 
                 <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
-                <!--                <status-approve-not-expire-date-edit-->
-                <!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
-                <!--                    :selectedDetail="selectedDetail"-->
-                <!--                    @view-done="editPtwBackToList">-->
-                <!--                    -->
-                <!--                </status-approve-not-expire-date-edit>-->
+                <status-approve-not-expire-date-edit
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.approve && CheckDate(selectedDetail.endDate, new Date())"
+                    :selectedDetail="selectedDetail"
+                    @view-done="editPtwBackToList">
 
-                <!-- status-reject-view ， 還需要 加上 Approve到期後的條件 -->
-                <!--                <status-reject-approve-expire-date-view-->
-                <!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
-                <!--                    :selectedDetail="selectedDetail"-->
-                <!--                    @view-done="editPtwBackToList"-->
-                <!--                >-->
+                </status-approve-not-expire-date-edit>
 
-                <!--                </status-reject-approve-expire-date-view>-->
+                <!-- status-reject-view ，只看，還需要 加上 Approve到期後的條件 -->
+                <status-reject-approve-expire-date-view
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.reject || !CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === EStatus.approve && !CheckDate(selectedDetail.endDate, new Date())"
+                    :selectedDetail="selectedDetail"
+                    @view-done="editPtwBackToList"
+                >
+                </status-reject-approve-expire-date-view>
 
             </div>
 
@@ -136,6 +143,13 @@ import Datetime from "@/services/Datetime";
 
 // Export
 import toExcel from "@/services/Excel/json2excel";
+
+enum EStatus {
+    new = 'new',
+    pendding = 'pendding',
+    approve = 'approve',
+    reject = 'reject',
+}
 
 @Component({
     components: {
@@ -217,8 +231,6 @@ export default class Invitation extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
-        console.log('workDescriptionSelectItem ~ ', this.workDescriptionSelectItem)
     }
 
     pageToList() {
@@ -338,6 +350,16 @@ export default class Invitation extends Vue {
     CheckObjectIfEmpty(obj: object): boolean {
         const result = Object.keys(obj);
         return result.length === 0;
+    }
+
+    DateToZero(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setHours(0, 0, 0, 0);
+        return date;
+    }
+
+    CheckDate(today: Date, endDate: Date) {
+        return this.DateToZero(endDate).getTime() >= this.DateToZero(today).getTime();
     }
 
     ITableList() {

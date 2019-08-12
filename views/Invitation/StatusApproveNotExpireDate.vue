@@ -186,11 +186,11 @@
                         @submit="doSubmit($event)"
                     >
                         <template #step8>
-                            <step8
+                            <step8-not-expire
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 @step8="receiveStep8Data"
-                            ></step8>
+                            ></step8-not-expire>
                         </template>
 
                     </iv-form>
@@ -224,6 +224,7 @@ import ViewStep5 from "@/components/ContractorRegistration/ViewStep5.vue";
 import ViewStep6 from "@/components/ContractorRegistration/ViewStep6.vue";
 import ViewStep7 from "@/components/ContractorRegistration/ViewStep7.vue";
 import Step8 from "@/components/ContractorRegistration/Step8.vue";
+import Step8NotExpire from "@/components/ContractorRegistration/Step8NotExpire.vue";
 
 import {
     IStep1,
@@ -255,7 +256,7 @@ interface IStep
         IStep8 {}
 
 @Component({
-    components: { ViewStep1, ViewStep2, ViewStep3, ViewStep4, ViewStep5, ViewStep6, ViewStep7, Step8 }
+    components: { ViewStep1, ViewStep2, ViewStep3, ViewStep4, ViewStep5, ViewStep6, ViewStep7, Step8, Step8NotExpire }
 })
 export class StatusApproveNotExpireDate extends Vue {
 
@@ -668,24 +669,53 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workStartTime = step8Date.startTime;
         this.inputFormData.workEndDate = step8Date.endDate;
         this.inputFormData.workEndTime = step8Date.endTime;
-        this.inputFormData.accessGroups = step8Date.accessGroup;
+        this.inputFormData.accessGroups = step8Date.accessGroups;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
     async doSubmit() {
-        if (this.isChange) {
-            Dialog.confirm(
-                this._("w_Save_Checked"),
-                this._("w_Save_Checked"),
-                () => {
-                    this.doSubmitApi();
-                }
-            );
-        } else {
-            this.doSubmitApi();
-        }
+        // if (this.isChange) {
+        //     Dialog.confirm(
+        //         this._("w_Save_Checked"),
+        //         this._("w_Save_Checked"),
+        //         () => {
+        //             this.doSubmitApi();
+        //         }
+        //     );
+        // } else {
+        //     this.doSubmitApi();
+        // }
+
+        await this.tempSave();
+
+        const doSubmitParam = {
+            objectId: this.selectedDetail.objectId,
+        };
+
+        Loading.show();
+        await this.$server
+            .U("/flow1/crms/status-approve", doSubmitParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {
+                        Dialog.success(this._("w_Dialog_SuccessTitle"));
+                    },
+                    this._("w_Dialog_ErrorTitle")
+                );
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Dialog_ErrorTitle")
+                );
+            });
+
+        this.$emit("submit-data", doSubmitParam);
     }
 
     async doSubmitApi() {

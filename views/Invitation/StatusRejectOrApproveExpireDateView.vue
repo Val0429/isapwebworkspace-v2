@@ -672,7 +672,7 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         this.inputFormData.workStartTime = step8Date.startTime;
         this.inputFormData.workEndDate = step8Date.endDate;
         this.inputFormData.workEndTime = step8Date.endTime;
-        this.inputFormData.accessGroups = step8Date.accessGroup;
+        this.inputFormData.accessGroups = step8Date.accessGroups;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
         this.isChange = true;
