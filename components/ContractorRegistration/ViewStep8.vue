@@ -44,7 +44,7 @@ export class ViewStep8 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     accessGroupSelectItem: any = {};
 
@@ -69,6 +69,13 @@ export class ViewStep8 extends Vue {
     mounted() {
         this.initSelectItem();
         this.initAccessGroupSelectItem();
+
+        this.inputFormData.startDate = this.selectedDetail.startDate;
+        this.inputFormData.startTime = this.selectedDetail.startTime;
+        this.inputFormData.endDate = this.selectedDetail.endDate;
+        this.inputFormData.endTime = this.selectedDetail.endTime;
+        this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
+        this.inputFormData.approval = this.selectedDetail.approval;
     }
 
     initSelectItem() {

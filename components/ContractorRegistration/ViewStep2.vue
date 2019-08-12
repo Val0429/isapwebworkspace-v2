@@ -75,8 +75,18 @@ export class ViewStep2 extends Vue {
         this.initWorkCategorySelectItem();
 
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
-        this.inputFormData.tenant = this.selectedDetail.company.objectId;
         this.inputFormData.workCategory = this.selectedDetail.workCategory;
+
+        if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
+            this.inputFormData.tenant = this.selectedDetail.company.objectId;
+        }
+
+        this.inputFormData.applicantName = this.selectedDetail.applicantName;
+        this.inputFormData.companyName = this.selectedDetail.companyName;
+        this.inputFormData.companyAddress = this.selectedDetail.companyAddress;
+        this.inputFormData.companyEmail = this.selectedDetail.companyEmail;
+        this.inputFormData.companyContactPhone = this.selectedDetail.companyContactPhone;
+        this.inputFormData.companyFax = this.selectedDetail.companyFax;
 
     }
 
@@ -111,7 +121,7 @@ export class ViewStep2 extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        tempWorkCategorySelectItem[returnValue.name] =
+                        tempWorkCategorySelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.workCategorySelectItem = tempWorkCategorySelectItem;

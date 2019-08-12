@@ -38,13 +38,16 @@ export class ViewStep6 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     termsAccepted: boolean = false;
 
     created() {}
 
-    mounted() {}
+    mounted() {
+        this.termsAccepted = this.selectedDetail.termsAccepted;
+
+    }
 
     changeStatus() {
         this.$emit("step6", this.termsAccepted);
