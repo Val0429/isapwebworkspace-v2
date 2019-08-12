@@ -111,7 +111,7 @@ export class ViewStep2 extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        tempWorkCategorySelectItem[returnValue.name] =
+                        tempWorkCategorySelectItem[returnValue.objectId] =
                             returnValue.name;
                     }
                     this.workCategorySelectItem = tempWorkCategorySelectItem;

@@ -45,8 +45,12 @@
                         @selected="selectedItem($event)"
                     >
 
-                        <template #status="{$attrs, $listeners}">
-                            {{ tableShowStatus($attrs.value) }}
+<!--                        <template #status="{$attrs, $listeners}">-->
+<!--                            {{ tableShowStatus($attrs.value) }}-->
+<!--                        </template>-->
+
+                        <template #workCategory="{$attrs, $listeners}">
+                            {{ tableShowWorkCategory($attrs.value) }}
                         </template>
 
                         <template #Actions="{$attrs, $listeners}">
@@ -81,9 +85,10 @@
 
                 <!-- status-new-view -->
                 <status-new-view
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 1"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'new'"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
+                    @edit-ptw-back-to-list="editPtwBackToList"
                 ></status-new-view>
 
                 <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
@@ -157,6 +162,8 @@ export default class Invitation extends Vue {
     // api 回來資料
     responseData: any = {};
 
+    workDescriptionSelectItem: any = {};
+
     inputFormData: any = {
         objectId: "",
         contact: "",
@@ -165,7 +172,9 @@ export default class Invitation extends Vue {
         workCategory: ""
     };
 
-    created() {}
+    created() {
+        this.initWorkDescriptionSelectItem();
+    }
 
     mounted() {}
 
@@ -187,6 +196,29 @@ export default class Invitation extends Vue {
         }
 
         console.log(" ~ ", this.selectedDetail);
+    }
+
+    async initWorkDescriptionSelectItem() {
+
+        this.workDescriptionSelectItem = {};
+        let tempDescriptionSelectItem = {};
+
+        await this.$server
+            .R("/flow1/purposes")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response.results) {
+                        tempDescriptionSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.workDescriptionSelectItem = tempDescriptionSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+
+        console.log('workDescriptionSelectItem ~ ', this.workDescriptionSelectItem)
     }
 
     pageToList() {
@@ -286,6 +318,18 @@ export default class Invitation extends Vue {
             case 4:
                 result = this._("w_Invitation_Rejected");
                 break;
+        }
+
+        return result;
+    }
+
+    tableShowWorkCategory(workCategory: string): string {
+        let result = "";
+
+        for (const id in this.workDescriptionSelectItem) {
+            if (workCategory === id) {
+                result = this.workDescriptionSelectItem[id]
+            }
         }
 
         return result;
