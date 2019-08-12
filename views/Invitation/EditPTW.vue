@@ -681,9 +681,13 @@ export class EditPTW extends Vue {
         const updateParam = {
             // add PTW的參數
             objectId: this.selectedDetail.objectId,
-            companyId: this.selectedDetail.company.objectId,
-            workCategory: this.selectedDetail.workCategory,
+
+            // step2可更改的部份
+            companyId: this.inputFormData.tenant,
+            workCategory: this.inputFormData.workCategory,
+
             contact: this.selectedDetail.contact,
+
             contactEmail: this.selectedDetail.contactEmail,
 
             // Step 1
@@ -754,7 +758,7 @@ export class EditPTW extends Vue {
         };
 
         await this.$server
-            .U("/crms", updateParam)
+            .U("flow1/crms", updateParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                      Dialog.success(this._("w_SaveSuccess"));

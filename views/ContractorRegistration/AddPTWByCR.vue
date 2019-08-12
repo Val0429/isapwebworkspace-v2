@@ -213,6 +213,10 @@ export class AddPTWByCR extends Vue {
     }
 
     inputFormData: any = {
+
+        //
+        verify: '',
+
         // step1
         pdpaAccepted: "",
 
@@ -286,7 +290,39 @@ export class AddPTWByCR extends Vue {
         }
     }
 
-    mounted() {}
+    mounted() {
+        this.initTenant();
+    }
+
+   async initTenant() {
+        if (this.$route.query.id !== undefined) {
+            this.inputFormData.verify = this.$route.query.id;
+        }
+
+        const readParam: {
+            verify: string;
+        } = {
+            verify: this.inputFormData.verify
+        };
+
+        // TODO: wait api
+        await this.$server
+            .R("/", readParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        tempWorkCategorySelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.workCategorySelectItem = tempWorkCategorySelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+
+        console.log(' ~ ', this.inputFormData.verify)
+    }
 
     ////////////////////////////// step 1  //////////////////////////////
 
@@ -635,7 +671,7 @@ export class AddPTWByCR extends Vue {
 
         const updateParam = {
             // TODO 問 Min verify（必填）, contact, contactEmail 去哪邊撈資料？
-            // verify: 'wg2XHWrEZlSbuBJhxwAd',
+            verify: this.inputFormData.verify,
             // contact: ???.contact,
             // contactEmail: ???.contactEmail,
 

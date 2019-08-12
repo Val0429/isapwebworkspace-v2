@@ -93,7 +93,7 @@ export class AddPTW extends Vue {
         let tempTenantSelectItem = {};
 
         await this.$server
-            .R("/companies")
+            .R("flow1/companies")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -115,7 +115,7 @@ export class AddPTW extends Vue {
         let tempDescriptionSelectItem = {};
 
         await this.$server
-            .R("/purposes")
+            .R("flow1/purposes")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -160,7 +160,7 @@ export class AddPTW extends Vue {
        //  }
 
         await this.$server
-            .C("/crms", doSubmitParam)
+            .C("flow1/crms", doSubmitParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(
                     this,

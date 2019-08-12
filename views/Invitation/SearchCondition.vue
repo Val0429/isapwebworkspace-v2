@@ -103,7 +103,7 @@ export class SearchCondition extends Vue {
         let tempTenantSelectItem = {};
 
         await this.$server
-            .R("/companies")
+            .R("flow1/companies")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -193,16 +193,6 @@ export class SearchCondition extends Vue {
             Dialog.error(this._("w_Invitation_DateError"));
             this.inputFormData.startDate = new Date();
             this.inputFormData.endDate = new Date();
-            return false;
-        }
-
-        // email正則
-        const emailRule = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+(([.\-])[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-        // const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-
-        if (!emailRule.test(data.email)) {
-            Dialog.error(this._("w_Invitation_EmailError"));
-            this.inputFormData.email = "";
             return false;
         }
 

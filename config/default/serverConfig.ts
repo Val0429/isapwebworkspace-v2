@@ -8,7 +8,7 @@ import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
     // Min server
-    ip: '172.16.10.30',
+    ip: '172.16.10.122',
 
     // Rebaca server
     // ip: '172.16.10.194',
