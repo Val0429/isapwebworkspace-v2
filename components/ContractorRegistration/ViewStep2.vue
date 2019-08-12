@@ -86,7 +86,7 @@ export class ViewStep2 extends Vue {
         let tempTenantSelectItem = {};
 
         await this.$server
-            .R("flow1/companies")
+            .R("/flow1/companies")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -107,7 +107,7 @@ export class ViewStep2 extends Vue {
         let tempWorkCategorySelectItem = {};
 
         await this.$server
-            .R("flow1/purposes")
+            .R("/flow1/purposes")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {

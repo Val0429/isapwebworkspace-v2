@@ -8,8 +8,8 @@ interface RestfulRequest extends ApisRequestBase {
         "/users": [any, any, true],
 
         // crms
-        "flow1/crms": [any, any, true],
-        "flow1/crms/tenant": [any, any, true],
+        "/flow1/crms": [any, any, true],
+        "/flow1/crms/tenant": [any, any, true],
 
     },
 
@@ -19,14 +19,14 @@ interface RestfulRequest extends ApisRequestBase {
         "/announcements": [AnnouncementsGet.Input, AnnouncementsGet.Output, true],
 
         // Tenant
-        "flow1/companies": [any, any, true],
+        "/flow1/companies": [any, any, true],
 
         // purposes
-        "flow1/purposes": [any, any, true],
+        "/flow1/purposes": [any, any, true],
 
         // crms
-        "flow1/crms": [any, any, true],
-        "flow1/crms/tenant": [any, any, true],
+        "/flow1/crms": [any, any, true],
+        "/flow1/crms/tenant": [any, any, true],
 
     },
 
@@ -34,16 +34,16 @@ interface RestfulRequest extends ApisRequestBase {
         "/users": [any, any, true],
 
         // crms
-        "flow1/crms": [any, any, true],
-        "flow1/crms/tenant": [any, any, true],
-        "flow1/crms/tenant-submit": [any, any, true],
+        "/flow1/crms": [any, any, true],
+        "/flow1/crms/tenant": [any, any, true],
+        "/flow1/crms/tenant-submit": [any, any, true],
 
     },
     "Delete": {
         "/users": [any, any, true],
 
         // crms
-        "flow1/crms": [any, any, true],
+        "/flow1/crms": [any, any, true],
 
     },
     "Ws": {

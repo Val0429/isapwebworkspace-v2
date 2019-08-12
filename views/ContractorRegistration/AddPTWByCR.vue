@@ -307,14 +307,10 @@ export class AddPTWByCR extends Vue {
 
         // TODO: wait api
         await this.$server
-            .R("/", readParam)
+            .R("/flow1/crms/tenant", readParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response) {
-                        tempWorkCategorySelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.workCategorySelectItem = tempWorkCategorySelectItem;
+
                 });
             })
             .catch((e: any) => {
@@ -634,7 +630,7 @@ export class AddPTWByCR extends Vue {
         // TODO: 問 Min
         Loading.show();
         await this.$server
-            .U("/crms/tenant-submit", doSubmitParam)
+            .U("/flow1/crms/tenant-submit", doSubmitParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(
                     this,
@@ -740,7 +736,7 @@ export class AddPTWByCR extends Vue {
         };
 
         await this.$server
-            .U("/crms/tenant", updateParam)
+            .U("/flow1/crms/tenant", updateParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_SaveSuccess"));

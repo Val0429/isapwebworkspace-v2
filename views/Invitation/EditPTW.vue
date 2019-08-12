@@ -758,7 +758,7 @@ export class EditPTW extends Vue {
         };
 
         await this.$server
-            .U("flow1/crms", updateParam)
+            .U("/flow1/crms", updateParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                      Dialog.success(this._("w_SaveSuccess"));

@@ -103,7 +103,7 @@ export class SearchCondition extends Vue {
         let tempTenantSelectItem = {};
 
         await this.$server
-            .R("flow1/companies")
+            .R("/flow1/companies")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
