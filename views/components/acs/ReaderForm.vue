@@ -187,8 +187,8 @@ export default class ReaderForm extends BasicFormQuick implements IFormQuick2 {
         console.log("doorGroups",this.doorGroups);    
     }
     getInfo(objectId:string){
-        let doorin = this.doors.find(x=>x.readerin && x.readerin.length>0 && x.readerin.find(y=>y.objectId==objectId));
-        let doorout = this.doors.find(x=>x.readerout&& x.readerout.length>0 && x.readerout.find(y=>y.objectId==objectId));        
+        let doorin = this.doors.find(x=>x.readerin && x.readerin.length>0 && x.readerin.find(y=> y.status==1 && y.objectId==objectId));
+        let doorout = this.doors.find(x=>x.readerout&& x.readerout.length>0 && x.readerout.find(y=> y.status==1 && y.objectId==objectId));        
         let io = doorin ? "IN" : doorout ? "OUT" : "";
         let doorname= doorin ? doorin.doorname : doorout ? doorout.doorname : "";
         let groupin:any;
