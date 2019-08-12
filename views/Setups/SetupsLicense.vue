@@ -22,6 +22,7 @@
                     ref="licenseTable"
                     :interface="IList()"
                     :server="{ path: '/license' }"
+                    :hidePaging="true"
                 >
                 </iv-table>
 

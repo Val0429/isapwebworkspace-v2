@@ -47,9 +47,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/apis': [any, any, false];
 
         // Report
-        '/reports/exception': [any, any, false];
+        '/flow1/reports/exception': [any, any, false];
         '/flow1/reports/recurring': [any, any, false];
-        '/reports/statistic': [any, any, false];
+        '/flow1/reports/statistic': [any, any, false];
 
         // Investigation
         '/flow1/investigation': [any, any, false];

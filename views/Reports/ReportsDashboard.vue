@@ -297,7 +297,7 @@ export default class ReportsDashboard extends Vue {
                 kioskIds: this.kioskIdString()
             };
             await this.$server
-                .R("/reports/statistic", param)
+                .R("/flow1/reports/statistic", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
@@ -333,7 +333,7 @@ export default class ReportsDashboard extends Vue {
                 kioskIds: this.kioskIdString()
             };
             await this.$server
-                .R("/reports/exception", param)
+                .R("/flow1/reports/exception", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
