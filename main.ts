@@ -19,7 +19,7 @@ if(debug.prodMode){
               );
             
         }
-        if(err.res && err.res.statusCode && err.res.statusCode===400 && err.body ) { 
+        if(err.res && err.res.statusCode && (err.res.statusCode===400||err.res.statusCode===500) && err.body ) { 
             await Dialog.error(err.body);            
         }
         
