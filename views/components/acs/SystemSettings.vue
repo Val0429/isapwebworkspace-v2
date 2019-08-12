@@ -133,6 +133,9 @@ export default class SyncReceiver extends Vue {
             server: string;
                 port: number;
                 user: string;
+                /***
+                *@uiType - iv-form-password
+                */
                 password: string;
                 database: string;
                 connectionTimeout?: number;
@@ -146,6 +149,9 @@ export default class SyncReceiver extends Vue {
                 server: string;
                 port: number;
                 user: string;
+                /***
+                *@uiType - iv-form-password
+                */
                 password: string;
                 database: string;
                 connectionTimeout: number;
@@ -158,6 +164,9 @@ export default class SyncReceiver extends Vue {
                 server: string;
                 port: number;
                 user: string;
+                /***
+                *@uiType - iv-form-password
+                */
                 password: string;
                 uniqueId: string;
             }
@@ -169,6 +178,9 @@ export default class SyncReceiver extends Vue {
                 server: string;
                 port: number;
                 user: string;
+                /***
+                *@uiType - iv-form-password
+                */
                 password: string;
                 database: string;
                 connectionTimeout?: number;
@@ -183,6 +195,9 @@ export default class SyncReceiver extends Vue {
                 host: string;
                 port: number;
                 email: string;
+                /***
+                *@uiType - iv-form-password
+                */
                 password: string;
             }
         `;
