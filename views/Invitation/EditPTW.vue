@@ -207,12 +207,6 @@
                 >{{ _('w_Back') }}
                 </b-button>
 
-                <b-button
-                    variant="info"
-                    size="lg"
-                    @click="tempSave()"
-                >{{ _('w_Save') }}
-                </b-button>
             </template>
 
         </iv-auto-card>
@@ -221,7 +215,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import Step1 from "@/components/ContractorRegistration/Step1.vue";
 import Step2 from "@/components/ContractorRegistration/Step2.vue";
 import Step3 from "@/components/ContractorRegistration/Step3.vue";
@@ -261,7 +255,16 @@ interface IStep
         IStep8 {}
 
 @Component({
-    components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
+    components: {
+        Step1,
+        Step2,
+        Step3,
+        Step4,
+        Step5,
+        Step6,
+        Step7,
+        Step8
+    }
 })
 export class EditPTW extends Vue {
     @Prop({
@@ -296,8 +299,8 @@ export class EditPTW extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: "",
-        contractorCompanyFax: "",
+        contractorCompanyContactPhone: '',
+        contractorCompanyFax: '',
 
         // step3
         workPremisesUnit: "",
@@ -350,23 +353,13 @@ export class EditPTW extends Vue {
         accessGroups: []
     };
 
-    isApproval: boolean = false;
-
-    @Watch("selectedDetail", { deep: true })
-    private ptwIdChanged(newVal, oldVal) {
-        this.initInputFormData();
-    }
-
     created() {
-        console.log("selectedDetail ~ ", this.selectedDetail);
+
     }
 
     mounted() {
         this.initInputFormData();
-    }
-
-    pageToList() {
-        this.$emit("edit-ptw-back-to-list");
+        console.log('EditPTW selectedDetail ~ ', this.selectedDetail)
     }
 
     initInputFormData() {
@@ -378,7 +371,7 @@ export class EditPTW extends Vue {
         }
 
         if (
-            this.selectedDetail.workCategoryId &&
+            this.selectedDetail.workCategory &&
             this.selectedDetail.workCategory.objectId
         ) {
             this.inputFormData.workCategoryId = this.selectedDetail.workCategory.objectId;
@@ -442,6 +435,10 @@ export class EditPTW extends Vue {
         console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
+    pageToList() {
+        this.$emit("edit-ptw-back-to-list");
+    }
+
     ////////////////////////////// step 1  //////////////////////////////
 
     receiveStep1Data(step1Date) {
@@ -449,7 +446,11 @@ export class EditPTW extends Vue {
         //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
-    async stepTo2() {
+    tempSave() {
+        this.isChange = false;
+    }
+
+    stepTo2() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -458,7 +459,6 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 0;
         //     return false;
         // }
-        await this.tempSave();
     }
 
     IStep1() {
@@ -497,26 +497,25 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    async stepTo3() {
+    stepTo3() {
         let stepRef: any = this.$refs.step;
 
         // TODO: wait下拉選單 和 全部step OK
         // if (
         //     !this.inputFormData.ptwId ||
         //     !this.inputFormData.tenant ||
-        //     !this.inputFormData.workCategory ||
+        //     !this.inputFormData.workCategoryId ||
         //     !this.inputFormData.applicantName ||
-        //     !this.inputFormData.contractorCompanyName ||
-        //     !this.inputFormData.contractorCompanyAddress ||
-        //     !this.inputFormData.contractorCompanyEmail ||
-        //     !this.inputFormData.contractorCompanyContactPhone ||
-        //     !this.inputFormData.contractorCompanyFax
+        //     !this.inputFormData.companyName ||
+        //     !this.inputFormData.companyAddress ||
+        //     !this.inputFormData.companyEmail ||
+        //     !this.inputFormData.companyContactPhone ||
+        //     !this.inputFormData.companyFax
         // ) {
         //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
         //     stepRef.currentStep = 1;
         //     return false;
         // }
-        await this.tempSave();
     }
 
     IStep2() {
@@ -553,7 +552,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    async stepTo4() {
+    stepTo4() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -572,7 +571,6 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 2;
         //     return false;
         // }
-        await this.tempSave();
     }
 
     IStep3() {
@@ -605,11 +603,10 @@ export class EditPTW extends Vue {
         this.inputFormData.checklistRemark6 = step4Date.checklistRemark6;
         this.inputFormData.checklistRemark7 = step4Date.checklistRemark7;
 
-        console.log(" ~ ", this.inputFormData);
         this.isChange = true;
     }
 
-    async stepTo5() {
+    stepTo5() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -628,7 +625,6 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 3;
         //     return false;
         // }
-        await this.tempSave();
     }
 
     IStep4() {
@@ -653,7 +649,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    async putStep5File(files) {
+    putStep5File(files) {
         for (let file of files) {
             if (file) {
                 ImageBase64.fileToBase64(file, (base64 = "") => {
@@ -670,10 +666,9 @@ export class EditPTW extends Vue {
             }
         }
         this.isChange = true;
-        await this.tempSave();
     }
 
-    async stepTo6() {
+    stepTo6() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -682,7 +677,6 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 4;
         //     return false;
         // }
-        await this.tempSave();
     }
 
     IStep5() {
@@ -701,7 +695,7 @@ export class EditPTW extends Vue {
         this.inputFormData.termsAccepted = step6Date;
     }
 
-    async stepTo7() {
+    stepTo7() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -710,7 +704,6 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 5;
         //     return false;
         // }
-        await this.tempSave();
     }
 
     IStep6() {
@@ -733,7 +726,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    async stepTo8() {
+    stepTo8() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -742,8 +735,6 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 6;
         //     return false;
         // }
-
-        await this.tempSave();
     }
 
     IStep7() {
@@ -762,177 +753,24 @@ export class EditPTW extends Vue {
         this.inputFormData.workStartTime = step8Date.startTime;
         this.inputFormData.workEndDate = step8Date.endDate;
         this.inputFormData.workEndTime = step8Date.endTime;
-        this.inputFormData.accessGroups = step8Date.accessGroups;
-
-        this.isApproval = step8Date.approval;
+        this.inputFormData.accessGroups = step8Date.accessGroup;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
-    async tempSave() {
-        this.isChange = false;
-
-        const updateParam = {
-            // add PTW的參數
-            objectId: this.selectedDetail.objectId,
-
-            // step2可更改的部份
-            companyId: this.inputFormData.tenant,
-            workCategoryId: this.inputFormData.workCategoryId,
-
-            contact: this.inputFormData.contact,
-
-            contactEmail: this.inputFormData.contactEmail,
-
-            // Step 1
-            pdpaAccepted: this.inputFormData.pdpaAccepted,
-
-            // step2
-            // Contractor Information
-            applicantName: this.inputFormData.applicantName,
-
-            // Company
-            contractorCompanyName: this.inputFormData.contractorCompanyName,
-            contractorCompanyAddress: this.inputFormData
-                .contractorCompanyAddress,
-            contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-            contractorCompanyContactPhone: this.inputFormData
-                .contractorCompanyContactPhone,
-            contractorCompanyFax: this.inputFormData.contractorCompanyFax,
-
-            // step3
-            workPremisesUnit: this.inputFormData.workPremisesUnit,
-            workLocation: this.inputFormData.workLocation,
-            workDescription: this.inputFormData.workDescription,
-            workType1: this.inputFormData.workType1,
-            workType2: this.inputFormData.workType2,
-            workType3: this.inputFormData.workType3,
-            workType4: this.inputFormData.workType4,
-            workType5: this.inputFormData.workType5,
-            workType6: this.inputFormData.workType6,
-            workType7: this.inputFormData.workType7,
-            workType8: this.inputFormData.workType8,
-            workStartDate: this.inputFormData.workStartDate,
-            workStartTime: this.inputFormData.workStartTime,
-            workEndDate: this.inputFormData.workEndDate,
-            workEndTime: this.inputFormData.workEndTime,
-            workContact: this.inputFormData.workContact,
-            workContactPhone: this.inputFormData.workContactPhone,
-
-            // step4
-            checklist1: this.inputFormData.checklist1,
-            checklist2: this.inputFormData.checklist2,
-            checklist3: this.inputFormData.checklist3,
-            checklist4: this.inputFormData.checklist4,
-            checklist5: this.inputFormData.checklist5,
-            checklist6: this.inputFormData.checklist6,
-            checklist7: this.inputFormData.checklist7,
-            checklist8: this.inputFormData.checklist8,
-            checklist9: this.inputFormData.checklist9,
-
-            checklistRemark1: this.inputFormData.checklistRemark1,
-            checklistRemark2: this.inputFormData.checklistRemark2,
-            checklistRemark3: this.inputFormData.checklistRemark3,
-            checklistRemark4: this.inputFormData.checklistRemark4,
-            checklistRemark5: this.inputFormData.checklistRemark5,
-            checklistRemark6: this.inputFormData.checklistRemark6,
-            checklistRemark7: this.inputFormData.checklistRemark7,
-
-            // step5
-            // TODO: 問 Min  attachments?: Parse.File[];
-            attachments: this.inputFormData.attachments,
-
-            // step6
-            termsAccepted: this.inputFormData.termsAccepted,
-
-            // step7
-            persons: this.inputFormData.persons,
-
-            // step8
-            accessGroups: this.inputFormData.accessGroups
-        };
-
-        await this.$server
-            .U("/flow1/crms", updateParam)
-            .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {}
-                );
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
     async doSubmit() {
-        await this.tempSave();
-
-        const doSubmitParam = {
-            objectId: this.selectedDetail.objectId
-        };
-
-        if (this.isApproval) {
-            Loading.show();
-            await this.$server
-                .U("/flow1/crms/status-approve", doSubmitParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_Dialog_SuccessTitle"));
-                        },
-                        this._("w_Dialog_ErrorTitle")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_Dialog_ErrorTitle")
-                    );
-                });
-
-            this.$emit("submit-data", doSubmitParam);
+        if (this.isChange) {
+            Dialog.confirm(
+                this._("w_Save_Checked"),
+                this._("w_Save_Checked"),
+                () => {
+                    this.doSubmitApi();
+                }
+            );
         } else {
-            Loading.show();
-            await this.$server
-                .U("/flow1/crms/status-reject", doSubmitParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_Dialog_SuccessTitle"));
-                        },
-                        this._("w_Dialog_ErrorTitle")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_Dialog_ErrorTitle")
-                    );
-                });
-
-            this.$emit("submit-data", doSubmitParam);
+            this.doSubmitApi();
         }
-
-        // if (this.isChange) {
-        //     Dialog.confirm(
-        //         this._("w_Save_Checked"),
-        //         this._("w_Save_Checked"),
-        //         () => {
-        //             this.doSubmitApi();
-        //         }
-        //     );
-        // } else {
-        //     this.doSubmitApi();
-        // }
     }
 
     async doSubmitApi() {
@@ -964,7 +802,7 @@ export class EditPTW extends Vue {
         //         );
         //     });
 
-        this.$emit("submit-data", doSubmitParam);
+        this.$emit("view-done", doSubmitParam);
     }
 
     IStep8() {

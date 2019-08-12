@@ -177,24 +177,24 @@
                     </iv-form>
                 </template>
 
-                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>
-                <template #8>
+<!--                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>-->
+<!--                <template #8>-->
 
-                    <iv-form
-                        :interface="IStep8()"
-                        :value="inputFormData"
-                        @submit="doSubmit($event)"
-                    >
-                        <template #step8>
-                            <view-step8
-                                :selectedDetail="selectedDetail"
-                                class="col-md-12"
-                                @step8="receiveStep8Data"
-                            ></view-step8>
-                        </template>
+<!--                    <iv-form-->
+<!--                        :interface="IStep8()"-->
+<!--                        :value="inputFormData"-->
+<!--                        @submit="doSubmit($event)"-->
+<!--                    >-->
+<!--                        <template #step8>-->
+<!--                            <view-step8-->
+<!--                                :selectedDetail="selectedDetail"-->
+<!--                                class="col-md-12"-->
+<!--                                @step8="receiveStep8Data"-->
+<!--                            ></view-step8>-->
+<!--                        </template>-->
 
-                    </iv-form>
-                </template>
+<!--                    </iv-form>-->
+<!--                </template>-->
 
             </iv-step-progress>
 
@@ -299,8 +299,8 @@ export class StatusNewView extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: 0,
-        contractorCompanyFax: 0,
+        contractorCompanyContactPhone: '',
+        contractorCompanyFax: '',
 
         // step3
         workPremisesUnit: "",
@@ -354,11 +354,9 @@ export class StatusNewView extends Vue {
     };
 
     created() {
-        console.log("selectedDetail ~ ", this.selectedDetail);
     }
 
     mounted() {
-        // console.log('selectedDetail ~ ', this.selectedDetail)
     }
 
     pageToList() {
@@ -474,7 +472,6 @@ export class StatusNewView extends Vue {
         this.inputFormData.workContact = step3Date.workContact;
         this.inputFormData.workContactPhone = step3Date.workContactPhone;
 
-        console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
