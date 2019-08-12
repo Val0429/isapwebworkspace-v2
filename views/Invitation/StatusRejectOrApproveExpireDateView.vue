@@ -290,12 +290,12 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         // Contractor Information
         applicantName: "",
 
-        // Company
-        companyName: "",
-        companyAddress: "",
-        companyEmail: "",
-        companyContactPhone: "",
-        companyFax: "",
+        // Contractor Information
+        contractorCompanyName: "",
+        contractorCompanyAddress: "",
+        contractorCompanyEmail: "",
+        contractorCompanyContactPhone: '',
+        contractorCompanyFax: '',
 
         // step3
         workPremisesUnit: "",

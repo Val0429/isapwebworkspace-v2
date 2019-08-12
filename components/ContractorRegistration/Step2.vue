@@ -86,8 +86,8 @@ export class Step2 extends Vue {
 
     initInputFormData() {
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
-        this.inputFormData.workCategory = this.selectedDetail.workCategory;
-        this.inputFormData.tenant = this.selectedDetail.tenant;
+        this.inputFormData.workCategory = this.selectedDetail.workCategory.objectId;
+        this.inputFormData.tenant = this.selectedDetail.tenant.objectId;
         // if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
         //     this.inputFormData.tenant = this.selectedDetail.company.objectId;
         // }

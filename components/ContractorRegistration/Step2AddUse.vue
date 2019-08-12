@@ -188,7 +188,6 @@ export class Step2AddUse extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_PTWID")}
-                 * @uiPlaceHolder - ${this._("w_Invitation_PTWID")}
                  * @uiType - iv-form-label
                  */
                 ptwId?: string;
@@ -197,14 +196,12 @@ export class Step2AddUse extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_Tenant")}
                  * @uiType - iv-form-label
-                 * @uiType - iv-form-label
                  */
                 tenant?:  string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
-                 * @uiType - iv-form-label
                  * @uiType - iv-form-label
                  */
                 workCategory?:  string;
