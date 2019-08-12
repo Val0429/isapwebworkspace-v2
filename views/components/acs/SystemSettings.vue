@@ -136,7 +136,7 @@ export default class SyncReceiver extends Vue {
                 password: string;
                 database: string;
                 connectionTimeout?: number;
-                requestTimeout?: number;                
+                mdbpath?: string; 
             }
         `;
     }
