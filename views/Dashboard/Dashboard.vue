@@ -86,6 +86,7 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
 import { chart } from "highcharts";
 
 enum EChartMode {
@@ -116,8 +117,8 @@ export default class Dashboard extends Vue {
     };
 
     inputFilterData = {
-        startTime: new Date(),
-        endTime: new Date()
+        startTime: Datetime.WeekStart(new Date()),
+        endTime: Datetime.WeekEnd(new Date())
     };
 
     visible: boolean = true;
