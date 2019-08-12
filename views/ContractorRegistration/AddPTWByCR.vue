@@ -16,7 +16,10 @@
                         @submit="stepTo2($event)"
                     >
                         <template #step1>
-                            <step1 @step1="receiveStep1Data"></step1>
+                            <step1
+                                :selectedDetail="selectedDetail"
+                                @step1="receiveStep1Data"
+                            ></step1>
                         </template>
 
                     </iv-form>
@@ -33,6 +36,7 @@
                         <template #step2>
                             <step2
                                 class="col-md-12"
+                                :selectedDetail="selectedDetail"
                                 @step2="receiveStep2Data"
                             ></step2>
                         </template>
@@ -51,6 +55,7 @@
                         <template #step3>
                             <step3
                                 class="col-md-12"
+                                :selectedDetail="selectedDetail"
                                 @step3="receiveStep3Data"
                             ></step3>
                         </template>
@@ -69,6 +74,7 @@
                         <template #step4>
                             <step4
                                 class="col-md-12"
+                                :selectedDetail="selectedDetail"
                                 @step4="receiveStep4Data"
                             ></step4>
                         </template>
@@ -88,6 +94,7 @@
                             <step5
                                 class="col-md-12"
                                 :permission="true"
+                                :selectedDetail="selectedDetail"
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>
@@ -134,6 +141,7 @@
                     >
                         <template #step6>
                             <step6
+                                :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 @step6="receiveStep6Data"
                             ></step6>
@@ -147,12 +155,14 @@
 
                     <iv-form
                         :interface="IStep7()"
+                        :selectedDetail="selectedDetail"
                         :value="inputFormData"
                         @submit="stepTo8($event)"
                     >
                         <template #step7>
                             <step7
                                 class="col-md-12"
+                                :selectedDetail="selectedDetail"
                                 @step7="receiveStep7Data"
                             ></step7>
                         </template>
@@ -197,11 +207,11 @@ import ImageBase64 from "@/services/ImageBase64";
     components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
 })
 export class AddPTWByCR extends Vue {
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: () => {}
-    })
-    selectedDetail: string;
+    // @Prop({
+    //     type: Object, // Boolean, Number, String, Array, Object
+    //     default: () => {}
+    // })
+    // selectedDetail: string;
 
     imageBase64 = ImageBase64;
 
@@ -284,20 +294,30 @@ export class AddPTWByCR extends Vue {
         accessGroups: []
     };
 
-    created() {
+    selectedDetail: any = {
+        ptwId: '',
+        tenant: '',
+        workCategory: '',
+    };
+
+    async created() {
+        await this.initTenant();
+
         if (this.selectedDetail.length) {
             this.inputFormData = this.selectedDetail as any;
         }
+
     }
 
     mounted() {
-        this.initTenant();
     }
 
    async initTenant() {
+
         if (this.$route.query.id !== undefined) {
             this.inputFormData.verify = this.$route.query.id;
         }
+       console.log('initTenant verify', this.inputFormData.verify);
 
         const readParam: {
             verify: string;
@@ -305,11 +325,65 @@ export class AddPTWByCR extends Vue {
             verify: this.inputFormData.verify
         };
 
+
         // TODO: wait api
         await this.$server
             .R("/flow1/crms/tenant", readParam)
             .then((response: any) => {
+                console.log('response ~ ', response);
                 ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (response.company && response.company.objectId) {
+                        this.selectedDetail.tenant = response.company.objectId;
+                    }
+                    this.selectedDetail.ptwId = response.ptwId;
+                    this.selectedDetail.workCategory = response.workCategory;
+
+
+                    this.selectedDetail.pdpaAccepted = response.pdpaAccepted;
+                    this.selectedDetail.applicantName = response.applicantName;
+                    this.selectedDetail.contractorCompanyName = response.contractorCompanyName;
+                    this.selectedDetail.contractorCompanyAddress = response.contractorCompanyAddress;
+                    this.selectedDetail.contractorCompanyEmail = response.contractorCompanyEmail;
+                    this.selectedDetail.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
+                    this.selectedDetail.contractorCompanyFax = response.workPremisesUnit;
+                    this.selectedDetail.workLocation = response.workLocation;
+                    this.selectedDetail.workDescription = response.workDescription;
+                    this.selectedDetail.workType1 = response.workType1;
+                    this.selectedDetail.workType2 = response.workType2;
+                    this.selectedDetail.workType3 = response.workType3;
+                    this.selectedDetail.workType4 = response.workType4;
+                    this.selectedDetail.workType5 = response.workType5;
+                    this.selectedDetail.workType6 = response.workType6;
+                    this.selectedDetail.workType7 = response.workType7;
+                    this.selectedDetail.workType8 = response.workType8;
+                    this.selectedDetail.workStartDate = response.workStartDate;
+                    this.selectedDetail.workStartTime = response.workStartTime;
+                    this.selectedDetail.workEndDate = response.workEndDate;
+                    this.selectedDetail.workEndTime = response.workEndTime;
+                    this.selectedDetail.workContact = response.workContact;
+                    this.selectedDetail.workContactPhone = response.workContactPhone;
+
+                    this.selectedDetail.checklist1 = response.checklist1;
+                    this.selectedDetail.checklistRemark1 = response.checklistRemark1;
+                    this.selectedDetail.checklist2 = response.checklist2;
+                    this.selectedDetail.checklistRemark2 = response.checklistRemark2;
+                    this.selectedDetail.checklist3 = response.checklist3;
+                    this.selectedDetail.checklistRemark3 = response.checklistRemark3;
+                    this.selectedDetail.checklist4 = response.checklist4;
+                    this.selectedDetail.checklistRemark4 = response.checklistRemark4;
+                    this.selectedDetail.checklist5 = response.checklist5;
+                    this.selectedDetail.checklistRemark5 = response.checklistRemark5;
+                    this.selectedDetail.checklist6 = response.checklist6;
+                    this.selectedDetail.checklistRemark6 = response.checklistRemark6;
+                    this.selectedDetail.checklist7 = response.checklist7;
+                    this.selectedDetail.checklistRemark7 = response.checklistRemark7;
+                    this.selectedDetail.checklist8 = response.checklist8;
+                    this.selectedDetail.checklist9 = response.checklist9;
+
+
+                    this.selectedDetail.attachments = response.attachments;
+                    this.selectedDetail.termsAccepted = response.termsAccepted;
+                    this.selectedDetail.persons = response.persons;
 
                 });
             })
@@ -317,7 +391,8 @@ export class AddPTWByCR extends Vue {
                 return ResponseFilter.catchError(this, e);
             });
 
-        console.log(' ~ ', this.inputFormData.verify)
+        console.log('this.selectedDetail ~ ', this.selectedDetail)
+
     }
 
     ////////////////////////////// step 1  //////////////////////////////

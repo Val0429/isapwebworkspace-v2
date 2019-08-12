@@ -148,6 +148,24 @@ export class Step3 extends Vue {
 
     mounted() {
         this.initSelectItem();
+
+        this.inputFormData.workPremisesUnit = this.selectedDetail.workPremisesUnit;
+        this.inputFormData.workLocation = this.selectedDetail.workLocation;
+        this.inputFormData.workDescription = this.selectedDetail.workDescription;
+        this.inputFormData.workType1 = this.selectedDetail.workType1;
+        this.inputFormData.workType2 = this.selectedDetail.workType2;
+        this.inputFormData.workType3 = this.selectedDetail.workType3;
+        this.inputFormData.workType4 = this.selectedDetail.workType4;
+        this.inputFormData.workType5 = this.selectedDetail.workType5;
+        this.inputFormData.workType6 = this.selectedDetail.workType6;
+        this.inputFormData.workType7 = this.selectedDetail.workType7;
+        this.inputFormData.workType8 = this.selectedDetail.workType8;
+        this.inputFormData.workStartDate = this.selectedDetail.workStartDate;
+        this.inputFormData.workStartTime = this.selectedDetail.workStartTime;
+        this.inputFormData.workEndDate = this.selectedDetail.workEndDate;
+        this.inputFormData.workEndTime = this.selectedDetail.workEndTime;
+        this.inputFormData.workContact = this.selectedDetail.workContact;
+        this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
     }
 
     initSelectItem() {

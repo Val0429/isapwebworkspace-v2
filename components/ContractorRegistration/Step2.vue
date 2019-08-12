@@ -53,7 +53,7 @@ export class Step2 extends Vue {
 
     inputFormData: IStep2 = {
         // PTW Data
-        ptwId: "",
+        ptwId: this.selectedDetail.ptwId,
         tenant: "",
         workCategory: "",
 
@@ -68,15 +68,12 @@ export class Step2 extends Vue {
         companyFax: ''
     };
 
-    created() {}
+    created() {
+
+    }
 
     mounted() {
-        this.initTenantSelectItem();
-        this.initWorkCategorySelectItem();
 
-        this.inputFormData.ptwId = this.selectedDetail.ptwId;
-        this.inputFormData.tenant = this.selectedDetail.company.objectId;
-        this.inputFormData.workCategory = this.selectedDetail.workCategory;
     }
 
     async initTenantSelectItem() {
