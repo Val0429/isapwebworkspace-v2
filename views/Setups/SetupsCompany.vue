@@ -35,7 +35,7 @@
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/companies' }"
+                    :server="{ path: '/flow1/companies' }"
                     @selected="selectedItem($event)"
                 >
 
@@ -233,7 +233,7 @@
             let tempFloorSelectItem = {};
 
             await this.$server
-                .R("/floors")
+                .R("/flow1/floors")
                 .then((response: any) => {
                     ResponseFilter.successCheck(this, response, (response: any) => {
                         for (const returnValue of response.results) {
@@ -358,7 +358,7 @@
 
                 Loading.show();
                 await this.$server
-                    .C("/companies", param)
+                    .C("/flow1/companies", param)
                     .then((response: any) => {
                         ResponseFilter.successCheck(
                             this,
@@ -383,7 +383,7 @@
 
                 Loading.show();
                 await this.$server
-                    .U("/companies", param)
+                    .U("/flow1/companies", param)
                     .then((response: any) => {
                         ResponseFilter.successCheck(
                             this,
@@ -422,7 +422,7 @@
 
                         Loading.show();
                         this.$server
-                            .D("/companies", deleteParam)
+                            .D("/flow1/companies", deleteParam)
                             .then((response: any) => {
                                 ResponseFilter.successCheck(
                                     this,

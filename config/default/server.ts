@@ -1,5 +1,6 @@
 import { iSAPServerBase, ApisRequestBase, InputR, OutputR } from '@/../core/server';
 import { UserLogin, UserLogout } from './api/User';
+import ServerConfig from './serverConfig';
 
 interface RestfulRequest extends ApisRequestBase {
     Post: {
@@ -24,15 +25,16 @@ interface RestfulRequest extends ApisRequestBase {
         '/test/sms': [any, any, false];
 
         // companies
-        '/companies': [any, any, false];
+        '/flow1/companies': [any, any, false];
 
         // Kiosks
         '/kiosks': [any, any, false];
 
         // Floor
-        '/floors': [any, any, false];
+        '/flow1/floors': [any, any, false];
+
         // visitors/invites
-        '/visitors/invites': [any, any, false];
+        '/flow1/visitors/invites': [any, any, false];
     };
 
     Get: {
@@ -46,11 +48,11 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Report
         '/reports/exception': [any, any, false];
-        '/reports/recurring': [any, any, false];
+        '/flow1/reports/recurring': [any, any, false];
         '/reports/statistic': [any, any, false];
 
         // Investigation
-        '/visitors/investigation': [any, any, false];
+        '/flow1/investigation': [any, any, false];
 
         // Visitor
         '/visitors': [any, any, false];
@@ -65,16 +67,16 @@ interface RestfulRequest extends ApisRequestBase {
         '/config': [any, any, false];
 
         // Companies
-        '/companies': [any, any, false];
+        '/flow1/companies': [any, any, false];
 
         // Floor
-        '/floors': [any, any, false];
+        '/flow1/floors': [any, any, false];
 
         // Tenant
-        '/visitors/invites': [any, any, false];
+        '/flow1/visitors/invites': [any, any, false];
 
         //purposes
-        '/purposes': [any, any, false];
+        '/flow1/purposes': [any, any, false];
     };
     Put: {
         // Users
@@ -82,30 +84,30 @@ interface RestfulRequest extends ApisRequestBase {
         '/users': [any, any, false];
 
         // companies
-        '/companies': [any, any, false];
+        '/flow1/companies': [any, any, false];
 
         // Kiosks
         '/kiosks': [any, any, false];
 
         // Floor
-        '/floors': [any, any, false];
+        '/flow1/floors': [any, any, false];
 
         // visitors/invites
-        '/visitors/invites': [any, any, false];
+        '/flow1/visitors/invites': [any, any, false];
 
         // Registration
         '/visitors/pre-registration': [any, any, false];
     };
     Delete: {
         // companies
-        '/companies': [any, any, false];
+        '/flow1/companies': [any, any, false];
         '/users': [any, any, false];
 
         // Kiosks
         '/kiosks': [any, any, false];
 
         // Floor
-        '/floors': [any, any, false];
+        '/flow1/floors': [any, any, false];
     };
     Ws: {};
 }

@@ -28,7 +28,7 @@
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/visitors/invites' }"
+                    :server="{ path: '/flow1/visitors/invites' }"
                     @selected="selectedItem($event)"
                 >
 
@@ -212,7 +212,7 @@ export default class TenantsInvitation extends Vue {
         const readParam: {} = {};
 
         await this.$server
-            .R("/purposes", readParam)
+            .R("/flow1/purposes", readParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     console.log("successCheck", response);
@@ -238,7 +238,7 @@ export default class TenantsInvitation extends Vue {
             };
 
             await this.$server
-                .U("/visitors/invites", deleteParam)
+                .U("/flow1/visitors/invites", deleteParam)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
@@ -385,7 +385,7 @@ export default class TenantsInvitation extends Vue {
         };
 
         await this.$server
-            .C("/visitors/invites", createParam)
+            .C("/flow1/visitors/invites", createParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.pageToList();

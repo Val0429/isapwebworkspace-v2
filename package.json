@@ -1,6 +1,7 @@
 {
     "name": "Visitor Management Service",
     "version": "2.01.00",
+    "flow": "/flow1",
     "description": "Visitor Management Service",
     "scripts": {
         "start": "npm run start --prefix ../",

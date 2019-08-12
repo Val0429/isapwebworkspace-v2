@@ -35,7 +35,7 @@
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/floors' }"
+                    :server="{ path: '/flow1/floors' }"
                     @selected="selectedItem($event)"
                 >
 
@@ -119,202 +119,198 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
-    import { Ws } from "@/services/WebSocket/Ws";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import { Ws } from "@/services/WebSocket/Ws";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
-    // Transition
-    import Transition from "@/services/Transition";
-    import { ITransition } from "@/services/Transition";
-    import ServerConfig from '@/services/ServerConfig';
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+import ServerConfig from "@/services/ServerConfig";
 
-    @Component({
-        components: {}
-    })
-    export default class SetupsFloor extends Vue {
-        transition: ITransition = {
-            type: Transition.type,
-            prevStep: 1,
-            step: 1
-        };
+@Component({
+    components: {}
+})
+export default class SetupsFloor extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
-        isSelected: any = [];
-        tableMultiple: boolean = true;
+    isSelected: any = [];
+    tableMultiple: boolean = true;
 
-        selectedDetail: any = [];
+    selectedDetail: any = [];
 
-        inputFormData: any = {
+    inputFormData: any = {
+        objectId: "",
+        name: "",
+        floor: 0
+    };
+
+    async created() {}
+
+    mounted() {}
+
+    clearInputData() {
+        this.inputFormData = {
             objectId: "",
             name: "",
             floor: 0
         };
+    }
 
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
 
-        async created() {
-
-        }
-
-        mounted() {
-        }
-
-        clearInputData() {
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
             this.inputFormData = {
-                objectId: "",
-                name: "",
-                floor: 0
+                objectId: param.objectId,
+                name: param.name,
+                floor: param.floor
             };
         }
+    }
 
-        selectedItem(data) {
-            this.isSelected = data;
-            this.selectedDetail = [];
-            this.selectedDetail = data;
+    updateInputFormData(data) {
+        this.inputFormData[data.key] = data.value;
+    }
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.getInputData();
+    }
+
+    async saveAddOrEdit(data) {
+        let param: any = {
+            name: data.name,
+            floor: data.floor
+        };
+
+        // add
+        if (!this.inputFormData.objectId) {
+            Loading.show();
+            await this.$server
+                .C("/flow1/floors", param)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Floor_AddSuccess"));
+                            this.pageToList();
+                        },
+                        this._("w_Floor_ADDFailed")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Floor_ADDFailed")
+                    );
+                });
+        } else {
+            param.objectId = data.objectId;
+
+            Loading.show();
+            await this.$server
+                .U("/flow1/floors", param)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Floor_EditSuccess"));
+                            this.pageToList();
+                        },
+                        this._("w_Floor_EditFailed")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Floor_EditFailed")
+                    );
+                });
         }
+    }
 
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.selectedDetail) {
-                this.inputFormData = {
-                    objectId: param.objectId,
-                    name: param.name,
-                    floor: param.floor,
-                };
-            }
+    tableStatus(values: any) {
+        let result = "";
+        for (const value of values) {
+            value;
         }
+    }
 
-        updateInputFormData(data) {
-            this.inputFormData[data.key] = data.value;
-        }
+    async doDelete() {
+        Dialog.confirm(
+            this._("w_Floor_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.selectedDetail) {
+                    let deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
 
-        pageToList() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 1;
-            (this.$refs.listTable as any).reload();
-        }
+                    Loading.show();
+                    this.$server
+                        .D("/flow1/floors", deleteParam)
+                        .then((response: any) => {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    this.pageToList();
+                                },
+                                this._("w_DeleteFailed")
+                            );
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
 
-        pageToView() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 2;
-            this.getInputData();
-        }
-
-        pageToAdd() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.clearInputData();
-        }
-
-        pageToEdit() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.getInputData();
-        }
-
-        async saveAddOrEdit(data) {
-            let param: any = {
-                name: data.name,
-                floor: data.floor,
-            };
-
-            // add
-            if (!this.inputFormData.objectId) {
-                Loading.show();
-                await this.$server
-                    .C("/floors", param)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                Dialog.success(this._("w_Floor_AddSuccess"));
-                                this.pageToList();
-                            },
-                            this._("w_Floor_ADDFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Floor_ADDFailed")
-                        );
-                    });
-            } else {
-                param.objectId = data.objectId;
-
-                Loading.show();
-                await this.$server
-                    .U("/floors", param)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                Dialog.success(this._("w_Floor_EditSuccess"));
-                                this.pageToList();
-                            },
-                            this._("w_Floor_EditFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Floor_EditFailed")
-                        );
-                    });
-            }
-        }
-
-        tableStatus(values: any) {
-            let result = '';
-            for (const value of values) {
-                value
-            }
-        }
-
-        async doDelete() {
-            Dialog.confirm(
-                this._("w_Floor_DeleteConfirm"),
-                this._("w_DeleteConfirm"),
-                () => {
-                    for (const param of this.selectedDetail) {
-                        let deleteParam: {
-                            objectId: string;
-                        } = {
-                            objectId: param.objectId
-                        };
-
-                        Loading.show();
-                        this.$server
-                            .D("/floors", deleteParam)
-                            .then((response: any) => {
-                                ResponseFilter.successCheck(
-                                    this,
-                                    response,
-                                    (response: any) => {
-                                        this.pageToList();
-                                    },
-                                    this._("w_DeleteFailed")
-                                );
-                            })
-                            .catch((e: any) => {
-                                return ResponseFilter.catchError(this, e);
-                            });
-
-                        Loading.hide();
-                    }
+                    Loading.hide();
                 }
-            );
-        }
+            }
+        );
+    }
 
-        ITableList() {
-            return `
+    ITableList() {
+        return `
             interface {
 
                 /**
@@ -340,10 +336,10 @@
 
             }
         `;
-        }
+    }
 
-        IAddAndEditForm() {
-            return `
+    IAddAndEditForm() {
+        return `
             interface {
 
 
@@ -363,10 +359,10 @@
 
             }
         `;
-        }
+    }
 
-        IViewForm() {
-            return `
+    IViewForm() {
+        return `
             interface {
 
 
@@ -386,8 +382,8 @@
 
             }
         `;
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>

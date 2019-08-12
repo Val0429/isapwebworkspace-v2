@@ -78,6 +78,7 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
+import packageJson from "@/package.json";
 
 /// install Highcharts
 import Highcharts from "highcharts";
@@ -236,7 +237,7 @@ export default class ReportsDashboard extends Vue {
             end: this.inputFormData.endDate
         };
         await this.$server
-            .R("/reports/recurring", param)
+            .R("/flow1/reports/recurring", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (response.data != undefined) {

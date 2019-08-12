@@ -188,7 +188,7 @@ export default class ReportsInversigation extends Vue {
 
     // Web Socket
     initWS() {
-        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/visitors/monitor?sessionId=${this.$user.sessionId}`;
+        let url = `ws://${ServerConfig.host}:${ServerConfig.port}/flow1/monitor?sessionId=${this.$user.sessionId}`;
         this.ws.url = url;
         this.ws.Connect();
     }
@@ -248,7 +248,7 @@ export default class ReportsInversigation extends Vue {
         let param: {} = {};
 
         await this.$server
-            .R("/purposes", param)
+            .R("/flow1/purposes", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -338,7 +338,7 @@ export default class ReportsInversigation extends Vue {
 
         Loading.show();
         await this.$server
-            .R("/visitors/investigation", param)
+            .R("/flow1/investigation", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let result of response.results) {

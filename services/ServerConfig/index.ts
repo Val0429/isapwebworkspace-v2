@@ -1,4 +1,5 @@
 import config from '@/config/default/serverConfig';
+import packageJson from '@/package.json';
 
 interface IDeveloperServer {
     host: string;
@@ -16,6 +17,7 @@ export class ServerConfig {
     private _host: string = window.location.hostname;
     private _port: string = window.location.port;
     private _url: string = '';
+    private _flow: string = packageJson.flow;
 
     constructor() {
         this.initServerConfig();
@@ -72,6 +74,10 @@ export class ServerConfig {
 
     get url(): string {
         return this._url;
+    }
+
+    get flow(): string {
+        return this._flow;
     }
 }
 
