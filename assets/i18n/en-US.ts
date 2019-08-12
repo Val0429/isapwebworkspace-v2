@@ -58,6 +58,9 @@ export default class LangObject {
     // 401
     w_UserSession_Empty = 'Not find User, Please login again';
 
+    // 404
+    w_APINotFind = 'API not find';
+
     /////////////////////////////////////////////
 
     w_Navigation_Dashboard = 'Dashboard';
@@ -251,7 +254,9 @@ export default class LangObject {
 
     w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
     w_GeneralSettings_RemoveWorkerDaysFormLabel = 'Remove Worker Data from Days';
+    w_GeneralSettings_RemoveWorkerDaysUpdateSuccess = 'Update remove worker data days is success';
 
+    /////////////////////// Dashboard //////////////////////
     w_Dashboard_Dashboard = 'Dashboard';
     w_Dashboard_FilterCondition = 'Filter Condition';
     w_Dashboard_RealTimeContractorTraffic = 'Real Time Contractor Traffic';
@@ -262,5 +267,5 @@ export default class LangObject {
     w_Dashboard_Total = 'TOTAl';
 
     //
-    w_User_VisitorCannotLogin = ''
+    w_User_VisitorCannotLogin = '';
 }

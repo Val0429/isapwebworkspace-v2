@@ -19,38 +19,6 @@
                     </iv-form>
                 </iv-auto-card>
 
-                <!-- <iv-auto-card :label="'Login background'">
-
-                    <iv-form
-                        :interface="loginBackgroundInf()"
-                        @update:*="updateForm($event)"
-                        @submit="saveLoginBackground($event)"
-                    >
-
-                        <template #imageBase64="{ $attrs, $listeners }">
-                            <iv-form-file
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                v-bind:label="_('w_Upload')"
-                                v-bind:placeholder="_('w_Upload')"
-                                v-bind:drop-placeholder="_('w_Upload')"
-                                accept="image/jpeg,image/png,image/jpg"
-                            />
-                        </template>
-
-                        <template #imageSrc="{ $attrs, $listeners}">
-                            <img
-                                class="imgSide"
-                                v-if="inputFormData.loginBackgroundSrc"
-                                v-bind="$attrs"
-                                v-on="$listeners"
-                                :src="inputFormData.loginBackgroundSrc"
-                            />
-                        </template>
-                    </iv-form>
-
-                </iv-auto-card> -->
-
             </div>
 
         </iv-auto-transition>
@@ -68,6 +36,7 @@ import { ITransition } from "@/services/Transition";
 // Service
 import Dialog from "@/services/Dialog";
 import ImageBase64 from "@/services/ImageBase64";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}
@@ -81,71 +50,49 @@ export default class GeneralSettings extends Vue {
 
     inputFormData: {
         removeWorkerDays: number;
-        loginBackgroundSrc: string;
     } = {
-        removeWorkerDays: 0,
-        loginBackgroundSrc: ""
+        removeWorkerDays: 0
     };
-
-    newImg = new Image();
-    newImgSrc = "";
 
     created() {
         this.initRemoveWorkerDays();
-        this.initLoginBackground();
     }
 
     mounted() {}
 
-    initRemoveWorkerDays() {
-        // TODO: Morris, Waitting API
-        this.inputFormData.removeWorkerDays = 100;
-    }
-
-    initLoginBackground() {
-        // TODO: Morris, Waitting API
-        this.inputFormData.loginBackgroundSrc =
-            "https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg";
-    }
-
-    updateForm(data: any) {
-        if (data.key == "imageBase64") {
-            this.uploadFile(data.value);
-            setTimeout(() => {
-                this.inputFormData.loginBackgroundSrc = this.newImg.src;
-            }, 300);
-        }
-        console.log(data);
-    }
-
-    async uploadFile(file) {
-        if (file) {
-            ImageBase64.fileToBase64(file, (base64 = "") => {
-                if (base64 != "") {
-                    this.newImg = new Image();
-                    this.newImg.src = base64;
-                    this.newImg.onload = () => {
-                        this.newImgSrc = base64;
-                        return;
-                    };
-                } else {
-                    Dialog.error(this._("w_Error_FileToLarge"));
-                }
+    async initRemoveWorkerDays() {
+        await this.$server
+            .R("/flow1/crms/remove_worker_data_days")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (response.days != undefined) {
+                        this.inputFormData.removeWorkerDays = response.days;
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
             });
-        }
     }
 
-    saveRemoveWorkerDaysInf() {
-        // TODO: Morris, Waitting API
-        Dialog.success(
-            `Waitting API, removeWorkerDays: ${this.inputFormData.removeWorkerDays}`
-        );
-        console.log();
-    }
-
-    saveLoginBackground() {
-        // TODO: Morris, Waitting API
-        Dialog.success(`Waitting API for Login background`);
+    async saveRemoveWorkerDaysInf() {
+        let param: any = {
+            days: this.inputFormData.removeWorkerDays
+        };
+        await this.$server
+            .R("/flow1/crms/remove_worker_data_days")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(
+                        this._(
+                            "w_GeneralSettings_RemoveWorkerDaysUpdateSuccess"
+                        )
+                    );
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     removeWorkerDaysInf() {
@@ -158,15 +105,6 @@ export default class GeneralSettings extends Vue {
                  * @uiAttrs - { min: 0 }
                  */
                 removeWorkerDays?: number;
-            }
-        `;
-    }
-
-    loginBackgroundInf() {
-        return `
-            interface {
-                imageBase64?: any;
-                imageSrc?: any;
             }
         `;
     }
