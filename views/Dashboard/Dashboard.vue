@@ -88,6 +88,7 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import { chart } from "highcharts";
+import ResponseFilter from '@/services/ResponseFilter';
 
 enum EChartMode {
     chartByHours,
@@ -117,8 +118,8 @@ export default class Dashboard extends Vue {
     };
 
     inputFilterData = {
-        startTime: Datetime.WeekStart(new Date()),
-        endTime: Datetime.WeekEnd(new Date())
+        startDate: new Date(),
+        endDate: new Date()
     };
 
     visible: boolean = true;
@@ -206,6 +207,18 @@ export default class Dashboard extends Vue {
         // TODO waiting for api
         this.initdata();
         this.visible = false;
+
+        await this.$server
+            .C("/flow1/crms/dashboard")
+            .then((response: any) => {
+                console.log('response ~ ', response)
+                ResponseFilter.successCheck(this, response, (response: any) => {
+
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     IFilterConditionForm() {
@@ -218,14 +231,14 @@ export default class Dashboard extends Vue {
                  * @uiColumnGroup - timeGroup
                  * @uiType - iv-form-date
                  */
-                startTime?: Date;
+                startDate?: Date;
 
                   /**
                  * @uiLabel - ${this._("w_Enddate")}
                  * @uiColumnGroup - timeGroup
                  * @uiType - iv-form-date
                  */
-                endTime?: Date;
+                endDate?: Date;
             }
         `;
     }

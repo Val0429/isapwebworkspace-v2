@@ -9,6 +9,7 @@ interface RestfulRequest extends ApisRequestBase {
         // crms
         '/flow1/crms': [any, any, true];
         '/flow1/crms/tenant': [any, any, true];
+        '/flow1/crms/dashboard': [any, any, true];
     };
 
     Get: {
