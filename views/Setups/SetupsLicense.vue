@@ -23,10 +23,6 @@
                     :interface="IList()"
                     :server="{ path: '/license' }"
                 >
-                    <template #licenseKey="{$attrs}">
-                        {{ showTableData($attrs) }}
-                    </template>
-
                 </iv-table>
 
             </iv-card>
@@ -203,190 +199,184 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 
-    // Transition
-    import Transition from "@/services/Transition";
-    import { ITransition } from "@/services/Transition";
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
-    interface ISelectItem {
-        mac: object[];
+interface ISelectItem {
+    mac: object[];
+}
+
+interface ILicenseInputDataMac {
+    key: string;
+    mac: string;
+}
+
+interface ILicenseInputDataOffline {
+    keyOrData: any;
+    mac: string;
+}
+
+@Component({
+    components: {}
+})
+export default class SetupsLicense extends Vue {
+    macSelectItem: any = {};
+
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
+    licenseInputDataMac: ILicenseInputDataMac = {
+        key: "",
+        mac: ""
+    };
+
+    licenseInputDataOffline: ILicenseInputDataOffline = {
+        keyOrData: "",
+        mac: ""
+    };
+
+    mounted() {}
+
+    async initMacSelectItem() {
+        await this.$server
+            .R("/mac")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        this.macSelectItem[returnValue] = returnValue;
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
-    interface ILicenseInputDataMac {
-        key: string;
-        mac: string;
-    }
-
-    interface ILicenseInputDataOffline {
-        keyOrData: any;
-        mac: string;
-    }
-
-    @Component({
-        components: {}
-    })
-    export default class SetupsLicense extends Vue {
-        macSelectItem: any = {};
-
-        transition: ITransition = {
-            type: Transition.type,
-            prevStep: 1,
-            step: 1
-        };
-
-        licenseInputDataMac: ILicenseInputDataMac = {
+    clearInputData() {
+        this.licenseInputDataMac = {
             key: "",
             mac: ""
         };
 
-        licenseInputDataOffline: ILicenseInputDataOffline = {
+        this.licenseInputDataOffline = {
             keyOrData: "",
             mac: ""
         };
+    }
 
-        mounted() {}
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+    }
 
-        showTableData(value) {
-            console.log(' ~ ', value)
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.clearInputData();
+    }
+
+    async pageToAddByMac() {
+        this.clearInputData();
+        await this.initMacSelectItem();
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+    }
+
+    async pageToAddByOffline() {
+        this.clearInputData();
+        await this.initMacSelectItem();
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
+    }
+
+    transitionStepBackward() {
+        this.clearInputData();
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+    }
+
+    loadTextFromFile(e: any) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            this.licenseInputDataOffline.keyOrData = e.target.result;
+        };
+        reader.readAsText(file);
+    }
+
+    updateOffline(data) {
+        if (data.key === "mac") {
+            this.licenseInputDataOffline.mac = data.value;
         }
+    }
 
-        async initMacSelectItem() {
-            await this.$server
-                .R("/mac")
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response) {
-                            this.macSelectItem[returnValue] = returnValue;
-                        }
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
+    async saveAddLicenseMac(data) {
+        const licenseParam: {
+            keyOrData: string;
+            mac: string;
+        } = {
+            keyOrData: data.key,
+            mac: data.mac
+        };
+        Loading.show();
+        await this.$server
+            .C("/license", licenseParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_License_Setting_Success"));
+                    this.pageToList();
                 });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_License_Setting_Fail")
+                );
+            });
+    }
 
-        }
+    async saveAddLicenseOffLine(data) {
+        const licenseParam: {
+            keyOrData: string;
+            mac: string;
+        } = {
+            keyOrData: data.keyOrData,
+            mac: data.mac
+        };
 
-        clearInputData() {
-            this.licenseInputDataMac = {
-                key: "",
-                mac: ""
-            };
-
-            this.licenseInputDataOffline = {
-                keyOrData: "",
-                mac: ''
-            };
-        }
-
-        pageToList() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 1;
-        }
-
-        pageToAdd() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 2;
-            this.clearInputData();
-        }
-
-        async pageToAddByMac() {
-            this.clearInputData();
-            await this.initMacSelectItem();
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-        }
-
-        async pageToAddByOffline() {
-            this.clearInputData();
-            await this.initMacSelectItem();
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 4;
-        }
-
-        transitionStepBackward() {
-            this.clearInputData();
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 2;
-        }
-
-        loadTextFromFile(e: any) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (e: any) => {
-                this.licenseInputDataOffline.keyOrData = e.target.result;
-            };
-            reader.readAsText(file);
-        }
-
-        updateOffline(data) {
-            if (data.key === 'mac') {
-                this.licenseInputDataOffline.mac = data.value;
-            }
-        }
-
-        async saveAddLicenseMac(data) {
-            const licenseParam: {
-                keyOrData: string;
-                mac: string;
-            } = {
-                keyOrData: data.key,
-                mac: data.mac
-            };
-            Loading.show();
-            await this.$server
-                .C("/license", licenseParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        Dialog.success(this._("w_License_Setting_Success"));
-                        this.pageToList();
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_License_Setting_Fail")
-                    );
+        Loading.show();
+        await this.$server
+            .C("/license", licenseParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_License_Setting_Success"));
+                    this.pageToList();
                 });
-        }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_License_Setting_Fail")
+                );
+            });
+    }
 
-        async saveAddLicenseOffLine(data) {
-            const licenseParam: {
-                keyOrData: string;
-                mac: string;
-            } = {
-                keyOrData: data.keyOrData,
-                mac: data.mac
-            };
-
-            console.log('licenseParam ~ ', licenseParam)
-            Loading.show();
-            await this.$server
-                .C("/license", licenseParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        Dialog.success(this._("w_License_Setting_Success"));
-                        this.pageToList();
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_License_Setting_Fail")
-                    );
-                });
-        }
-
-        IList() {
-            return `
+    IList() {
+        return `
             interface {
 
                 /**
@@ -428,26 +418,26 @@
 
             }
             `;
-        }
+    }
 
-        IAddFromSelect() {
-            return `
+    IAddFromSelect() {
+        return `
             interface {
                 licensemac: any;
                 offline: any;
             }
          `;
-        }
+    }
 
-        IAddFromMac() {
-            return `
+    IAddFromMac() {
+        return `
             interface {
 
                 /**
                  * @uiLabel - ${this._("w_License_License_Key")}
                  * @uiPlaceHolder - ${this._(
-                "w_License_License_KeyPlaceholder"
-            )}
+                     "w_License_License_KeyPlaceholder"
+                 )}
                  * @uiAttrs - { maxlength: 29}
                  * @uiType - iv-form-license
                  */
@@ -461,10 +451,10 @@
                 mac: ${toEnumInterface(this.macSelectItem as any)};
             }
         `;
-        }
+    }
 
-        IAddFromOffline() {
-            return `
+    IAddFromOffline() {
+        return `
             interface {
 
                 /**
@@ -485,15 +475,15 @@
 
             }
         `;
-        }
     }
+}
 </script>
 
 
 <style lang="scss" scoped>
-    .upload_file {
-        margin-left: 20px;
-        width: 97%;
-    }
+.upload_file {
+    margin-left: 20px;
+    width: 97%;
+}
 </style>
 
