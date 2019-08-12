@@ -29,9 +29,7 @@
                 >
                     <template #toolbox>
 
-                        <iv-toolbox-edit
-                            @click="pageToView"
-                        />
+                        <iv-toolbox-edit @click="pageToView" />
                         <iv-toolbox-divider />
 
                         <iv-toolbox-export-excel @click="downloadPageExcel" />
@@ -43,7 +41,7 @@
                         ref="listTable"
                         :interface="ITableList()"
                         :multiple="tableMultiple"
-                        :server="{ path: '/crms' }"
+                        :server="{ path: '/flow1/crms' }"
                         @selected="selectedItem($event)"
                     >
 
@@ -53,7 +51,7 @@
 
                         <template #Actions="{$attrs, $listeners}">
 
-                            <iv-toolbox-more >
+                            <iv-toolbox-more>
                                 <iv-toolbox-edit @click="pageToView" />
                             </iv-toolbox-more>
                         </template>
@@ -89,21 +87,21 @@
                 ></status-new-view>
 
                 <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
-<!--                <status-approve-not-expire-date-edit-->
-<!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
-<!--                    :selectedDetail="selectedDetail"-->
-<!--                    @view-done="editPtwBackToList">-->
-<!--                    -->
-<!--                </status-approve-not-expire-date-edit>-->
+                <!--                <status-approve-not-expire-date-edit-->
+                <!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
+                <!--                    :selectedDetail="selectedDetail"-->
+                <!--                    @view-done="editPtwBackToList">-->
+                <!--                    -->
+                <!--                </status-approve-not-expire-date-edit>-->
 
                 <!-- status-reject-view ， 還需要 加上 Approve到期後的條件 -->
-<!--                <status-reject-approve-expire-date-view-->
-<!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
-<!--                    :selectedDetail="selectedDetail"-->
-<!--                    @view-done="editPtwBackToList"-->
-<!--                >-->
+                <!--                <status-reject-approve-expire-date-view-->
+                <!--                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 4"-->
+                <!--                    :selectedDetail="selectedDetail"-->
+                <!--                    @view-done="editPtwBackToList"-->
+                <!--                >-->
 
-<!--                </status-reject-approve-expire-date-view>-->
+                <!--                </status-reject-approve-expire-date-view>-->
 
             </div>
 
@@ -135,7 +133,14 @@ import Datetime from "@/services/Datetime";
 import toExcel from "@/services/Excel/json2excel";
 
 @Component({
-    components: { SearchCondition, AddPTW, EditPTW, StatusNewView, StatusRejectOrApproveExpireDateView, StatusApproveNotExpireDate }
+    components: {
+        SearchCondition,
+        AddPTW,
+        EditPTW,
+        StatusNewView,
+        StatusRejectOrApproveExpireDateView,
+        StatusApproveNotExpireDate
+    }
 })
 export default class Invitation extends Vue {
     transition: ITransition = {
@@ -160,7 +165,6 @@ export default class Invitation extends Vue {
         workCategory: ""
     };
 
-
     created() {}
 
     mounted() {}
@@ -177,12 +181,12 @@ export default class Invitation extends Vue {
         // data.length === 0 || !!data ?  : ;
 
         if (!data) {
-            this.selectedDetail = {}
+            this.selectedDetail = {};
         } else {
-            this.selectedDetail = data
+            this.selectedDetail = data;
         }
 
-        console.log(' ~ ', this.selectedDetail)
+        console.log(" ~ ", this.selectedDetail);
     }
 
     pageToList() {
@@ -226,7 +230,6 @@ export default class Invitation extends Vue {
 
     editPtwBackToList() {
         this.pageToList();
-
     }
 
     downloadExcel() {
@@ -269,19 +272,19 @@ export default class Invitation extends Vue {
     }
 
     tableShowStatus(status: number): string {
-        let result = '';
+        let result = "";
         switch (status) {
             case 1:
-                result = this._('w_Invitation_New') ;
+                result = this._("w_Invitation_New");
                 break;
             case 2:
-                result = this._('w_Invitation_PendingApproved') ;
+                result = this._("w_Invitation_PendingApproved");
                 break;
             case 3:
-                result = this._('w_Invitation_Approved') ;
+                result = this._("w_Invitation_Approved");
                 break;
             case 4:
-                result = this._('w_Invitation_Rejected') ;
+                result = this._("w_Invitation_Rejected");
                 break;
         }
 
