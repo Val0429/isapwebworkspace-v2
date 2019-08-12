@@ -1,24 +1,164 @@
 <template>
-     <div key="main">
+   <div>
+    <ivc-filter-form
+            :inf="filterInterface()"
+            :visible="filterVisible"
+            v-on:input="onFilterSubmit($event)"
+        />
+    <ivc-form-quick v-on:viewChange="viewChange($event)"
+            :canAdd="canAdd"
+            :canEdit="canEdit"
+            :canDelete="canDelete"
+            :allowEdit="allowEdit">    
+        <!-- 5) custom view templates with <template #view.* /> -->
+        <template #view.system="{$attrs, $listeners}">
+            {{$attrs.value== system.SIPASS ? "SIPASS" : $attrs.value==system.CCURE ? "CCURE" : 'UNKNOWN'}}
+        </template>
+        <template #view.reader="{$attrs, $listeners}">
+            {{ $attrs.value ? $attrs.value.length : 0 }}
+        </template>
+        <template #view.elevatorgroup="{$attrs, $listeners}">
+            {{getInfo($attrs.row).map(x=>x.groupname).join(", ")}}
+        </template>
+        <!-- 6) custom edit / add template with <template #add.* /> -->
+        <template #add.reader="{$attrs, $listeners}">
+            <ivc-multi-selections 
+            v-bind="$attrs" 
+            v-on="$listeners" 
+            :options="floorOptions" 
+            />
+        </template>
         
-           <ElevatorForm/>
-    </div>
+    </ivc-form-quick>
+   </div>
 </template>
 
-
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { RegisterRouter } from '@/../core/router';
-import { toEnumInterface } from '@/../core';
-import ElevatorForm from "./ElevatorForm.vue";
+import { Vue, Component, iSAPServerBase, MetaParser, createDecorator, Observe, toEnumInterface } from "@/../core";
+import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vue.ts';
+import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts'
+import { System } from '@/config/default/api/interfaces';
+import { BasicFormQuick } from './basic-form-quick';
+import { PermissionName} from '@/../src/constants/permissions';
+@Component
+/// 1) class name
+export default class Elevator extends BasicFormQuick implements IFormQuick2 {
 
-@Component({
-    components: { ElevatorForm }
-})
-export default class Elevator extends Vue {
-    private isMounted: boolean = false;
-    private doMounted() {
-        this.isMounted = true;
+    system = System;
+    /// 2) cgi path
+    path: string = "/acs/elevator";
+    /// 3) i18n - view / edit / add
+    tView: string = "w_Elevator";
+    tAdd: string = "w_ElevatorAdd";
+    tEdit: string = "w_ElevatorEdit";
+    
+    
+    /// 4) interfaces - view / edit / add
+    inf(type: EFormQuick) {
+        switch (type) {
+            case EFormQuick.View:
+                return `
+                interface {
+                /**
+                * @uiLabel - ${this._("system")}
+                */    
+                system:string;
+                /**
+                * @uiLabel - ${this._("w_ElevatorGroup")}
+                */
+                elevatorgroup:string;
+                    /**
+                    * @uiLabel - ${this._("name")}
+                    */
+                    elevatorname: string;
+                    /**
+                    * @uiLabel - ${this._("w_Reader_Count")}
+                    */
+                    reader:string;                    
+                    
+                    
+                }
+                `;
+            case EFormQuick.Add:
+            case EFormQuick.Edit:
+                return `
+                interface {
+                    /**
+                    * @uiLabel - ${this._("system")}
+                    * @uiType - ivc-system-selection
+                    */
+                    system:number;
+                    /**
+                    * @uiLabel - ${this._("name")}
+                    */
+                    elevatorname: string;
+                    /**
+                    * @uiLabel - ${this._("reader")}
+                    */
+                    reader:string;                                        
+                }
+                `;
+        }
+    }
+    /// 7) pre-add 新增欄位的default值
+    preAdd() {
+        return;
+    }
+    /// 8) post-add 寫入新增前要做甚麼調整
+    postAdd(row) {
+        return;
+    }
+    /// 9) pre-edit 送去修改表單前要做甚麼調整
+    preEdit(row) {
+        return;
+    }
+    /// 10) post-edit 寫入修改前要做甚麼調整
+    postEdit(row) {
+        return;
+    }
+    /// Done
+    floorOptions=[];
+    elevatorGroups =[];
+    async created(){
+        this.permissionName = PermissionName.elevator;
+        await Promise.all([this.getFloorOptions(),this.getElevatorGroups()]);
+    }
+    private async getFloorOptions() {
+        let resp: any =await this.$server.R("/acs/floor" as any,{"paging.all":"true"});    
+        
+        this.floorOptions = resp.results.map(item=>{return { key: item.objectId,value: item.floorname }});
+        
+        console.log("floorOptions",this.floorOptions);
+    }
+    private async getElevatorGroups(){
+        let resp: any=await this.$server.R("/acs/elevatorgroup" as any,{ "paging.all": "true" });
+        this.elevatorGroups=resp.results;
+        console.log("elevatorGroups", this.elevatorGroups)    
+    }
+     getInfo(elevator:any){
+        let group = this.elevatorGroups.filter(x=>x.elevators && x.elevators.length>0 && x.elevators.find(y=>y.objectId==elevator.objectId));
+        return group;
+    }
+    filterInterface(){
+        return `
+            interface {
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_ElevatorGroup")}
+              */
+             groupname?:string;
+             /**
+               * @uiColumnGroup - row2
+              * @uiLabel - ${this._("w_Elevator")}
+              */
+             name?:string;
+            }
+        `;
     }
 }
 </script>
+
+
+<style lang="scss" scoped>
+</style>
+

@@ -22,7 +22,6 @@ import DoorGroup from './components/acs/DoorGroup.vue';
 import PermissionTable from './components/acs/PermissionTable.vue';
 import Reader from './components/acs/Reader.vue';
 import SyncReceiver from './components/acs/SyncReceiver.vue';
-import AccessLevel from './components/acs/AccessLevel.vue';
 import Floor from './components/acs/Floor.vue';
 import FloorGroup from './components/acs/FloorGroup.vue';
 import ElevatorGroup from './components/acs/ElevatorGroup.vue';
@@ -78,14 +77,11 @@ $({ path: '/member', name: "_('w_Member')" })(Member);
 $({ path: '/user', name: "_('w_User')" })(User);
 $({ path: '/reader', name: "_('w_Reader')"})(Reader);
 $({ path: '/syncreceiver', name: "_('w_SyncReceiver')"})(SyncReceiver);
-$({ path: '/accesslevel', name: "_('w_AccessLevel')"})(AccessLevel);
 
 $({ path: '/member', name: "_('w_Member')" })(Member);
 $({ path: '/user', name: "_('w_User')" })(User);
 $({ path: '/reader', name: "_('w_Reader')"})(Reader);
 $({ path: '/syncreceiver', name: "_('w_SyncReceiver')"})(SyncReceiver);
-$({ path: '/accesslevel', name: "_('w_AccessLevel')"})(AccessLevel);
-
 $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
 
 $({ path: '/components/forms', name: 'Forms', icon: 'fa-facebook', permission: '/announcements' })(Forms);
