@@ -209,12 +209,18 @@ export default class DoorForm extends BasicFormQuick implements IFormQuick2 {
         if(door.readerin)readers.push(...door.readerin);
         if(door.readerout)readers.push(...door.readerout);
         let systemname= "UNKNOWN";
+        let isSipass=false;
+        let isCCURE=false;
         if(readers.length>0){
-            systemname= "CCURE"; 
-            //if(readers.find(x=>x.readername.length>=2 && x.system==System.SIPASS && x.readername.substring(0,2)=="A_"))systemname= "CCURE";        
-            if(readers.find(x=>x.readername.length>=2 && x.system==System.CCURE && x.readername.substring(0,2)=="D_"))systemname= "SIPASS";
+            //systemname= "CCURE"; 
+            if(readers.find(x=>x.readername.length>=2 && (x.system==System.CCURE && x.readername.substring(0,2)!="D_") || (x.system==System.SIPASS && x.readername.substring(0,2)!="A_")))isSipass= true;
+            if(readers.find(x=>x.readername.length>=2 && (x.system==System.SIPASS && x.readername.substring(0,2)!="A_" || (x.system==System.CCURE && x.readername.substring(0,2)!="D_") )))isCCURE=true;
         }
-        
+        if(isCCURE){
+            systemname="CCURE";
+        }else if(isSipass){
+            systemname="SIPASS";
+        }
         return systemname;
 
     }
