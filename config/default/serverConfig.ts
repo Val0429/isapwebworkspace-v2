@@ -12,5 +12,6 @@ var config: Config = {
     ssl: false,
 
     serverFrameworkVersionGreaterThan: '1.06.00',
+    hideDefaultServerErrorModal: true,
 };
 export default config;

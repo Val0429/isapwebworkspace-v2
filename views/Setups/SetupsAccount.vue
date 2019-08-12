@@ -16,16 +16,21 @@
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-                    <iv-toolbox-edit
-                        :disabled="selectedDetail.length !== 1"
-                        @click="pageToEdit()"
-                    />
-                    <iv-toolbox-delete
-                        :disabled="selectedDetail.length === 0"
-                        @click="doDelete"
-                    />
+                    <iv-permission :allow="['SystemAdministrator', 'Administrator']">
+                        <iv-toolbox-edit
+                            :disabled="selectedDetail.length !== 1"
+                            @click="pageToEdit()"
+                        />
+                        <iv-toolbox-delete
+                            :disabled="selectedDetail.length === 0"
+                            @click="doDelete"
+                        />
+                    </iv-permission>
+
                     <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToAdd()" />
+                    <iv-permission :allow="['SystemAdministrator', 'Administrator']">
+                        <iv-toolbox-add @click="pageToAdd()" />
+                    </iv-permission>
                 </template>
 
                 <iv-table
@@ -42,8 +47,11 @@
                             :disabled="selectedDetail.length !== 1"
                         >
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit" />
-                            <iv-toolbox-delete @click="doDelete" />
+                            <iv-permission :allow="['SystemAdministrator', 'Administrator']">
+                                <iv-toolbox-edit @click="pageToEdit" />
+                                <iv-toolbox-delete @click="doDelete" />
+                            </iv-permission>
+
                         </iv-toolbox-more>
                     </template>
 
