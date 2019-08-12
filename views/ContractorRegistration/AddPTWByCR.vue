@@ -335,7 +335,7 @@ export class AddPTWByCR extends Vue {
                         this.selectedDetail.tenant = response.company.name;
                     }
 
-                    if (response.company && response.workCategory.objectId) {
+                    if (response.workCategory && response.workCategory.objectId) {
                         this.selectedDetail.workCategory = response.workCategory.name;
                     }
 
@@ -457,11 +457,11 @@ export class AddPTWByCR extends Vue {
         //     !this.inputFormData.tenant ||
         //     !this.inputFormData.workCategory ||
         //     !this.inputFormData.applicantName ||
-        //     !this.inputFormData.companyName ||
-        //     !this.inputFormData.companyAddress ||
-        //     !this.inputFormData.companyEmail ||
-        //     !this.inputFormData.companyContactPhone ||
-        //     !this.inputFormData.companyFax
+        //     !this.inputFormData.contractorCompanyName ||
+        //     !this.inputFormData.contractorCompanyAddress ||
+        //     !this.inputFormData.contractorCompanyEmail ||
+        //     !this.inputFormData.contractorCompanyContactPhone ||
+        //     !this.inputFormData.contractorCompanyFax
         // ) {
         //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
         //     stepRef.currentStep = 1;

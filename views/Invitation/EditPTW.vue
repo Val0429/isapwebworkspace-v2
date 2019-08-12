@@ -355,8 +355,6 @@ export class EditPTW extends Vue {
     }
 
     mounted() {
-        // console.log('selectedDetail ~ ', this.selectedDetail)
-        console.log('this.inputFormData ~ ', this.inputFormData)
     }
 
     pageToList() {
@@ -370,7 +368,7 @@ export class EditPTW extends Vue {
         //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
-    stepTo2() {
+    async stepTo2() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -379,6 +377,7 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 0;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep1() {
@@ -412,7 +411,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    stepTo3() {
+    async stepTo3() {
         let stepRef: any = this.$refs.step;
 
         // TODO: wait下拉選單 和 全部step OK
@@ -421,16 +420,17 @@ export class EditPTW extends Vue {
         //     !this.inputFormData.tenant ||
         //     !this.inputFormData.workCategory ||
         //     !this.inputFormData.applicantName ||
-        //     !this.inputFormData.companyName ||
-        //     !this.inputFormData.companyAddress ||
-        //     !this.inputFormData.companyEmail ||
-        //     !this.inputFormData.companyContactPhone ||
-        //     !this.inputFormData.companyFax
+        //     !this.inputFormData.contractorCompanyName ||
+        //     !this.inputFormData.contractorCompanyAddress ||
+        //     !this.inputFormData.contractorCompanyEmail ||
+        //     !this.inputFormData.contractorCompanyContactPhone ||
+        //     !this.inputFormData.contractorCompanyFax
         // ) {
         //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
         //     stepRef.currentStep = 1;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep2() {
@@ -467,7 +467,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    stepTo4() {
+    async stepTo4() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -486,6 +486,7 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 2;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep3() {
@@ -522,7 +523,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    stepTo5() {
+    async stepTo5() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -541,6 +542,7 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 3;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep4() {
@@ -565,7 +567,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    putStep5File(files) {
+    async putStep5File(files) {
         for (let file of files) {
             if (file) {
                 ImageBase64.fileToBase64(file, (base64 = "") => {
@@ -582,9 +584,10 @@ export class EditPTW extends Vue {
             }
         }
         this.isChange = true;
+        await this.tempSave();
     }
 
-    stepTo6() {
+    async stepTo6() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -593,6 +596,7 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 4;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep5() {
@@ -611,7 +615,7 @@ export class EditPTW extends Vue {
         this.inputFormData.termsAccepted = step6Date;
     }
 
-    stepTo7() {
+    async stepTo7() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -620,6 +624,7 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 5;
         //     return false;
         // }
+        await this.tempSave();
     }
 
     IStep6() {
@@ -642,7 +647,7 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    stepTo8() {
+    async stepTo8() {
         let stepRef: any = this.$refs.step;
 
         // TODO: 全部step OK
@@ -651,6 +656,8 @@ export class EditPTW extends Vue {
         //     stepRef.currentStep = 6;
         //     return false;
         // }
+
+        await this.tempSave();
     }
 
     IStep7() {
@@ -772,6 +779,9 @@ export class EditPTW extends Vue {
     }
 
     async doSubmit() {
+
+
+
         if (this.isChange) {
             Dialog.confirm(
                 this._("w_Save_Checked"),
