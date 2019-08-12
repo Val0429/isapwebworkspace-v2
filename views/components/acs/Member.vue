@@ -328,7 +328,9 @@ export default class Member extends Vue {
   inputFormData: any = {};
   defaultFormData:any = {
     cardCertificate: "2",
-    cardNumber:""
+    cardNumber:"",
+    endDate:"",
+    startDate:""
   };
 
   clearInputData() {    
@@ -573,9 +575,18 @@ export default class Member extends Vue {
       });
     }
   }
-  
+  testDate(date){
+      try{    
+       let dt = new Date(date);
+       return dt.toISOString().split("T")[0];
+    }catch (err){
+        return;
+    }
+  }
   async saveAddOrEdit() {
-    
+
+    let dob = this.testDate(this.inputFormData.birthday);
+    console.log("dob", dob);
     let tempPersonalDetails: any = {
           Address: "",
           ContactDetails: {
@@ -586,7 +597,7 @@ export default class Member extends Vue {
               PagerServiceProviderId: "0",
               PhoneNumber: this.inputFormData.phone || "",
               },
-              DateOfBirth: this.inputFormData.birthday || "",
+              DateOfBirth: dob || "",
               PayrollNumber: "",
               Title: "",
               UserDetails: {
@@ -612,8 +623,12 @@ export default class Member extends Vue {
     
 
     let tempCustomFieldsList: any = [];
-    for(let field of CustomFields){      
-      tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});      
+    for(let field of CustomFields){             
+      if(field.date) {
+          let dt = this.testDate(this.inputFormData[field.name]);
+          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: dt ? moment(dt).format("YYYY-MM-DD"): ""});      
+      }
+      else tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});      
     }
     let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType || "1"));
     let member = {        
