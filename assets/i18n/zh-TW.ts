@@ -179,9 +179,9 @@ export default class LangObject implements ILang {
     ////////////////// License //////////////////
     w_License_List = 'License List';
     w_License_Add = 'Add License';
-    w_License_LicenseKey = 'LicenseKey';
+    w_License_LicenseKey = 'License Key';
     w_License_Mac = 'Mac';
-    w_License_productName = 'ProductName';
+    w_License_productName = 'Product Name';
     w_License_Quantity = 'Quantity';
     w_License_Trial = 'Trial';
     w_License_RegisterDate = 'Register Date';
