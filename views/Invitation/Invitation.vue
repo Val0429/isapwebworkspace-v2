@@ -207,6 +207,7 @@ export default class Invitation extends Vue {
         } else {
             this.selectedDetail = data;
         }
+        console.log('Inva selectedItem ~ ', this.selectedDetail)
     }
 
     async initWorkDescriptionSelectItem() {

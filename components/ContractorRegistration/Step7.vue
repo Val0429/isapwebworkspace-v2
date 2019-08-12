@@ -189,7 +189,13 @@ export class Step7 extends Vue {
     }
 
     initInputFormData() {
-        this.personTable.tableDataFromApi = this.selectedDetail.persons;
+
+        if (this.selectedDetail.persons) {
+            this.personTable.tableDataFromApi = this.selectedDetail.persons;
+        } else {
+            this.personTable.tableDataFromApi = [];
+        }
+
     }
 
     initData() {
@@ -270,6 +276,7 @@ export class Step7 extends Vue {
     }
 
     doSubmit(data) {
+
         let personObject: any = {
             name: data.name,
             phone: data.phone,
@@ -285,8 +292,6 @@ export class Step7 extends Vue {
             Dialog.error(this._("w_ViewPTW_Step7_NRICFIN_PlaceHolder"));
             return;
         }
-
-        console.log('personObject ~ ', personObject)
 
         this.personTable.tableDataFromApi.push(personObject);
         this.pageStep = EPageStep.list;

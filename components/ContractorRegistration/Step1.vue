@@ -15,7 +15,6 @@
             </b-form-checkbox>
         </div>
 
-
     </div>
 </template>
 
@@ -38,7 +37,9 @@ export class Step1 extends Vue {
     created() {
     }
 
-    mounted() {}
+    mounted() {
+        console.log('Step1', this.selectedDetail)
+    }
 
     @Watch("selectedDetail", { deep: true })
     private ptwIdChanged(newVal, oldVal) {
@@ -47,8 +48,8 @@ export class Step1 extends Vue {
 
     initInputFormData() {
         this.pdpaAccepted = this.selectedDetail.pdpaAccepted;
+        console.log('Step1', this.pdpaAccepted)
     }
-
 
     changeStatus() {
         this.$emit('step1', this.pdpaAccepted)
