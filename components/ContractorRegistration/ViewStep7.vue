@@ -146,7 +146,7 @@ export class ViewStep7 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     @Prop({
         type: Boolean,
@@ -181,6 +181,7 @@ export class ViewStep7 extends Vue {
 
     mounted() {
         this.initData();
+        this.personTable.tableDataFromApi = this.selectedDetail.persons;
     }
 
     initData() {

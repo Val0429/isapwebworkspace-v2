@@ -200,7 +200,7 @@ export class ViewStep4 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     options: any = [];
 
@@ -232,6 +232,24 @@ export class ViewStep4 extends Vue {
 
     mounted() {
         this.initSelectItem();
+
+        this.inputFormData.checklist1 = this.selectedDetail.checklist1;
+        this.inputFormData.checklist2 = this.selectedDetail.checklist2;
+        this.inputFormData.checklist3 = this.selectedDetail.checklist3;
+        this.inputFormData.checklist4 = this.selectedDetail.checklist4;
+        this.inputFormData.checklist5 = this.selectedDetail.checklist5;
+        this.inputFormData.checklist6 = this.selectedDetail.checklist6;
+        this.inputFormData.checklist7 = this.selectedDetail.checklist7;
+        this.inputFormData.checklist8 = this.selectedDetail.checklist8;
+        this.inputFormData.checklist9 = this.selectedDetail.checklist9;
+
+        this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark2 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark3 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark4 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark5 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark6 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark7 = this.selectedDetail.checklistRemark;
     }
 
     initSelectItem() {

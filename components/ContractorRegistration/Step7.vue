@@ -182,7 +182,6 @@ export class Step7 extends Vue {
     mounted() {
         this.initData();
         this.personTable.tableDataFromApi = this.selectedDetail.persons;
-
     }
 
     initData() {
