@@ -163,7 +163,7 @@ export class Step7 extends Vue {
 
     personTable: any = {
         title: [],
-        tableDataFromApi: []
+        tableDataFromApi: this.selectedDetail.persons ? this.selectedDetail.persons : []
     };
 // this.personTable.tableDataFromApi ? this.personTable.tableDataFromApi :
 

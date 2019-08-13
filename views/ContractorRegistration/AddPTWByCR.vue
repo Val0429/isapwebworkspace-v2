@@ -616,9 +616,6 @@ export class AddPTWByCR extends Vue {
         let stepRef: any = this.$refs.step;
 
         if (
-            !this.inputFormData.ptwId ||
-            !this.inputFormData.tenant ||
-            !this.inputFormData.workCategory ||
             !this.inputFormData.applicantName ||
             !this.inputFormData.contractorCompanyName ||
             !this.inputFormData.contractorCompanyAddress ||
@@ -674,9 +671,10 @@ export class AddPTWByCR extends Vue {
             !this.inputFormData.workPremisesUnit ||
             !this.inputFormData.workLocation ||
             !this.inputFormData.workDescription ||
-            this.inputFormData.step3TypeOfWork.length === 0 ||
             !this.inputFormData.workStartDate ||
-            !this.inputFormData.step3EndDate ||
+            !this.inputFormData.workStartTime ||
+            !this.inputFormData.workEndTime ||
+            !this.inputFormData.workEndTime ||
             !this.inputFormData.workContact ||
             !this.inputFormData.workContactPhone
         ) {
@@ -1036,7 +1034,7 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
     position: absolute;
 }
 .ptw-result-content{
-    text-align: center; 
+    text-align: center;
     font-size: 3rem;
 }
 </style>

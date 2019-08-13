@@ -53,9 +53,9 @@ export class Step8 extends Vue {
 
     inputFormData: any = {
         workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-        workStartTime: new Date(this.selectedDetail.workStartTime) ? new Date(this.selectedDetail.workStartTime) : new Date(),
+        workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
         workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        workEndTime: new Date(this.selectedDetail.workEndTime) ? new Date(this.selectedDetail.workEndTime) : new Date(),
+        workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         accessGroups: [],
         accessGroupsForm: [],
         approval: false
@@ -67,7 +67,7 @@ export class Step8 extends Vue {
     ptwText: string = "";
 
     created() {
-        this.initInputFormData()
+        this.initInputFormData();
     }
 
     mounted() {
@@ -83,9 +83,9 @@ export class Step8 extends Vue {
     initInputFormData() {
 
         this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
+        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartDate);
         this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
+        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndDate);
 
         if (this.selectedDetail.accessGroups) {
             for (const detail in this.accessGroupSelectItem) {
@@ -110,13 +110,13 @@ export class Step8 extends Vue {
     }
 
     async initAccessGroupSelectItem() {
+
         this.accessGroupSelectItem = {};
         let tempAccessGroupSelectItem = {};
 
         await this.$server
             .R("/flow1/crms/access-group")
             .then((response: any) => {
-                console.log('response ~ ', response);
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
                         tempAccessGroupSelectItem[returnValue.doorId] =

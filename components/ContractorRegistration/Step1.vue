@@ -38,7 +38,6 @@ export class Step1 extends Vue {
     }
 
     mounted() {
-        console.log('Step1', this.selectedDetail)
     }
 
     @Watch("selectedDetail", { deep: true })
