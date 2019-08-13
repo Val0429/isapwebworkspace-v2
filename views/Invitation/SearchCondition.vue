@@ -90,7 +90,7 @@ export class SearchCondition extends Vue {
 
     initSelectItem() {
         this.ptwStatusSelectItem = {
-            name: this._("w_Invitation_New"),
+            new: this._("w_Invitation_New"),
             approve: this._("w_Invitation_Approved"),
             pendding: this._("w_Invitation_PendingApproved"),
             reject: this._("w_Invitation_Rejected")
@@ -121,42 +121,34 @@ export class SearchCondition extends Vue {
         this.workCategorySelectItem = {};
         let tempWorkCategorySelectItem = {};
 
-        // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempWorkCategorySelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.workCategorySelectItem = tempWorkCategorySelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .R("/flow1/purposes")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response.results) {
+                        tempWorkCategorySelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.workCategorySelectItem = tempWorkCategorySelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
-    async initWorkTypeSelectItem() {
-        this.workTypeSelectItem = {};
-        let tempWorkTypeSelectItem = {};
 
-        // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempWorkTypeSelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.workTypeSelectItem = tempWorkTypeSelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+    async initWorkTypeSelectItem() {
+        this.workTypeSelectItem = {
+            1: this._('w_ViewPTW_Step3_TypesOfWorkInvolved1'),
+            2: this._('w_ViewPTW_Step3_TypesOfWorkInvolved2'),
+            3: this._('w_ViewPTW_Step3_TypesOfWorkInvolved3'),
+            4: this._('w_ViewPTW_Step3_TypesOfWorkInvolved4'),
+            5: this._('w_ViewPTW_Step3_TypesOfWorkInvolved5'),
+            6: this._('w_ViewPTW_Step3_TypesOfWorkInvolved6'),
+            7: this._('w_ViewPTW_Step3_TypesOfWorkInvolved7'),
+            8: this._('w_ViewPTW_Step3_TypesOfWorkInvolved8'),
+        };
     }
 
     async doSubmit(data) {
@@ -165,15 +157,15 @@ export class SearchCondition extends Vue {
             startDate: Date;
             endDate: Date;
             status: string;
-            ptwId: "";
-            contactEmail: "";
-            companyId: "";
-            workCategoryId: "";
-            workType: "";
-            workPremisesUnit: "";
-            personName: "";
-            workContact: "";
-            contractorCompanyName: "";
+            ptwId: string;
+            contactEmail: string;
+            companyId: string;
+            workCategoryId: string;
+            workType: number;
+            workPremisesUnit: string;
+            personName: string;
+            workContact: string;
+            contractorCompanyName: string;
         } = {
             paging: {
                 pageSize: 10,
