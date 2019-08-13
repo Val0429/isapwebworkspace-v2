@@ -114,7 +114,6 @@
                                     class="close"
                                     @click="deleteStep5File(file.base64)"
                                 ></span>
-
                                 <img
                                     v-if="file.type != 'application/pdf'"
                                     class="step5Imgs"
@@ -442,7 +441,12 @@
             // attachments
             for (let attachment of this.selectedDetail.attachments) {
                 ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
-                    item.attachments.push(base64);
+                    let tempAttachment = {
+                        name: attachment.name,
+                        type: attachment.type,
+                        base64: base64
+                    };
+                    item.attachments.push(tempAttachment);
                 })
             }
 
@@ -837,7 +841,7 @@
 
                 // step5
                 // TODO: 問 Min  attachments?: Parse.File[];
-                attachments: this.inputFormData.attachments,
+                attachments: [],
 
                 // step6
                 termsAccepted: this.inputFormData.termsAccepted,
@@ -848,6 +852,10 @@
                 // step8
                 accessGroups: this.inputFormData.accessGroups
             };
+
+            for (let attachment of this.inputFormData.attachments) {
+                updateParam.attachments.push(attachment.base64);
+            }
 
             await this.$server
                 .U("/flow1/crms", updateParam)
@@ -901,11 +909,7 @@
                         );
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Dialog_ErrorTitle")
-                        );
+                        return ResponseFilter.catchError(this, e);
                     });
 
                 this.$emit("submit-data", doSubmitParam);
@@ -924,11 +928,7 @@
                         );
                     })
                     .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Dialog_ErrorTitle")
-                        );
+                        return ResponseFilter.catchError(this,e);
                     });
 
                 this.$emit("submit-data", doSubmitParam);
@@ -952,11 +952,9 @@
 <style lang="scss" scoped>
     .step5Imgs {
         width: 100%;
-        height: 100%;
     }
     .step5Div {
-        height: 100px;
-        width: 100px;
+        width: 20%;
         border: 1px solid black;
         position: relative;
         margin: 10px;
