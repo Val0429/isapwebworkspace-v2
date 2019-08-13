@@ -1,7 +1,11 @@
 <template>
     <div class="animated fadeIn">
 
-        <iv-auto-card :label="_('w_ViewPTW_StepTitle') ">
+        <iv-auto-card
+            v-show="transition.step == 1"
+            :label="_('w_ViewPTW_StepTitle') "
+        >
+
             <iv-step-progress
                 ref="step"
                 @mounted="doMounted"
@@ -183,6 +187,13 @@
 
         </iv-auto-card>
 
+        <iv-card
+            v-show="transition.step == 2"
+            :label="_('w_ViewPTW_ResultTitle')"
+        >
+            <div class="ptw-result-content">{{ resultText }}</div>
+        </iv-card>
+
     </div>
 </template>
 
@@ -198,6 +209,10 @@ import Step7 from "@/components/ContractorRegistration/Step7.vue";
 import Step8 from "@/components/ContractorRegistration/Step8.vue";
 import Step2AddUse from "@/components/ContractorRegistration/Step2AddUse.vue";
 
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
 // Service
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
@@ -205,7 +220,17 @@ import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
 
 @Component({
-    components: { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step2AddUse }
+    components: {
+        Step1,
+        Step2,
+        Step3,
+        Step4,
+        Step5,
+        Step6,
+        Step7,
+        Step8,
+        Step2AddUse
+    }
 })
 export class AddPTWByCR extends Vue {
     // @Prop({
@@ -213,6 +238,14 @@ export class AddPTWByCR extends Vue {
     //     default: () => {}
     // })
     // selectedDetail: string;
+
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
+
+    resultText = "";
 
     imageBase64 = ImageBase64;
 
@@ -224,9 +257,8 @@ export class AddPTWByCR extends Vue {
     }
 
     inputFormData: any = {
-
         //
-        verify: '',
+        verify: "",
 
         // step1
         pdpaAccepted: "",
@@ -242,8 +274,8 @@ export class AddPTWByCR extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -262,7 +294,7 @@ export class AddPTWByCR extends Vue {
         workEndDate: new Date(),
         workEndTime: new Date(),
         workContact: "",
-        workContactPhone: '',
+        workContactPhone: "",
 
         // step4
         checklist1: false,
@@ -296,29 +328,27 @@ export class AddPTWByCR extends Vue {
     };
 
     selectedDetail: any = {
-        ptwId: '',
-        tenant: '',
-        workCategory: '',
+        ptwId: "",
+        tenant: "",
+        workCategory: ""
     };
 
     async created() {
+        this.resultText = this._("w_ViewPTW_ResultSuccessContent");
         await this.initTenant();
-
         if (this.selectedDetail.length) {
             this.inputFormData = this.selectedDetail as any;
         }
-
     }
 
     mounted() {
     }
 
-   async initTenant() {
-
+    async initTenant() {
         if (this.$route.query.id !== undefined) {
             this.inputFormData.verify = this.$route.query.id;
         }
-       console.log('initTenant verify', this.inputFormData.verify);
+        console.log("initTenant verify", this.inputFormData.verify);
 
         const readParam: {
             verify: string;
@@ -329,27 +359,37 @@ export class AddPTWByCR extends Vue {
         await this.$server
             .R("/flow1/crms/tenant", readParam)
             .then((response: any) => {
-                console.log('response ~ ', response);
+                console.log("response ~ ", response);
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (response.company && response.company.objectId) {
                         this.selectedDetail.tenant = response.company.name;
                     }
 
-                    if (response.workCategory && response.workCategory.objectId) {
-                        this.selectedDetail.workCategory = response.workCategory.name;
+                    if (
+                        response.workCategory &&
+                        response.workCategory.objectId
+                    ) {
+                        this.selectedDetail.workCategory =
+                            response.workCategory.name;
                     }
 
                     this.selectedDetail.ptwId = response.ptwId;
 
                     this.selectedDetail.pdpaAccepted = response.pdpaAccepted;
                     this.selectedDetail.applicantName = response.applicantName;
-                    this.selectedDetail.contractorCompanyName = response.contractorCompanyName;
-                    this.selectedDetail.contractorCompanyAddress = response.contractorCompanyAddress;
-                    this.selectedDetail.contractorCompanyEmail = response.contractorCompanyEmail;
-                    this.selectedDetail.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
-                    this.selectedDetail.contractorCompanyFax = response.contractorCompanyFax;
+                    this.selectedDetail.contractorCompanyName =
+                        response.contractorCompanyName;
+                    this.selectedDetail.contractorCompanyAddress =
+                        response.contractorCompanyAddress;
+                    this.selectedDetail.contractorCompanyEmail =
+                        response.contractorCompanyEmail;
+                    this.selectedDetail.contractorCompanyContactPhone =
+                        response.contractorCompanyContactPhone;
+                    this.selectedDetail.contractorCompanyFax =
+                        response.contractorCompanyFax;
                     this.selectedDetail.workLocation = response.workLocation;
-                    this.selectedDetail.workDescription = response.workDescription;
+                    this.selectedDetail.workDescription =
+                        response.workDescription;
                     this.selectedDetail.workType1 = response.workType1;
                     this.selectedDetail.workType2 = response.workType2;
                     this.selectedDetail.workType3 = response.workType3;
@@ -358,35 +398,49 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.workType6 = response.workType6;
                     this.selectedDetail.workType7 = response.workType7;
                     this.selectedDetail.workType8 = response.workType8;
-                    this.selectedDetail.workStartDate = response.workStartDate ? response.workStartDate : new Date();
-                    this.selectedDetail.workStartTime = response.workStartTime ? response.workStartTime : new Date();
-                    this.selectedDetail.workEndDate = response.workEndDate ? response.workEndDate : new Date();
-                    this.selectedDetail.workEndTime = response.workEndTime? response.workEndTime : new Date();
+                    this.selectedDetail.workStartDate = response.workStartDate
+                        ? response.workStartDate
+                        : new Date();
+                    this.selectedDetail.workStartTime = response.workStartTime
+                        ? response.workStartTime
+                        : new Date();
+                    this.selectedDetail.workEndDate = response.workEndDate
+                        ? response.workEndDate
+                        : new Date();
+                    this.selectedDetail.workEndTime = response.workEndTime
+                        ? response.workEndTime
+                        : new Date();
                     this.selectedDetail.workContact = response.workContact;
-                    this.selectedDetail.workContactPhone = response.workContactPhone;
+                    this.selectedDetail.workContactPhone =
+                        response.workContactPhone;
 
                     this.selectedDetail.checklist1 = response.checklist1;
-                    this.selectedDetail.checklistRemark1 = response.checklistRemark1;
+                    this.selectedDetail.checklistRemark1 =
+                        response.checklistRemark1;
                     this.selectedDetail.checklist2 = response.checklist2;
-                    this.selectedDetail.checklistRemark2 = response.checklistRemark2;
+                    this.selectedDetail.checklistRemark2 =
+                        response.checklistRemark2;
                     this.selectedDetail.checklist3 = response.checklist3;
-                    this.selectedDetail.checklistRemark3 = response.checklistRemark3;
+                    this.selectedDetail.checklistRemark3 =
+                        response.checklistRemark3;
                     this.selectedDetail.checklist4 = response.checklist4;
-                    this.selectedDetail.checklistRemark4 = response.checklistRemark4;
+                    this.selectedDetail.checklistRemark4 =
+                        response.checklistRemark4;
                     this.selectedDetail.checklist5 = response.checklist5;
-                    this.selectedDetail.checklistRemark5 = response.checklistRemark5;
+                    this.selectedDetail.checklistRemark5 =
+                        response.checklistRemark5;
                     this.selectedDetail.checklist6 = response.checklist6;
-                    this.selectedDetail.checklistRemark6 = response.checklistRemark6;
+                    this.selectedDetail.checklistRemark6 =
+                        response.checklistRemark6;
                     this.selectedDetail.checklist7 = response.checklist7;
-                    this.selectedDetail.checklistRemark7 = response.checklistRemark7;
+                    this.selectedDetail.checklistRemark7 =
+                        response.checklistRemark7;
                     this.selectedDetail.checklist8 = response.checklist8;
                     this.selectedDetail.checklist9 = response.checklist9;
-
 
                     this.selectedDetail.attachments = response.attachments;
                     this.selectedDetail.termsAccepted = response.termsAccepted;
                     this.selectedDetail.persons = response.persons;
-
 
                     /////// inputFormData
 
@@ -394,21 +448,31 @@ export class AddPTWByCR extends Vue {
                         this.inputFormData.tenant = response.company.name;
                     }
 
-                    if (response.workCategory && response.workCategory.objectId) {
-                        this.inputFormData.workCategory = response.workCategory.name;
+                    if (
+                        response.workCategory &&
+                        response.workCategory.objectId
+                    ) {
+                        this.inputFormData.workCategory =
+                            response.workCategory.name;
                     }
 
                     this.inputFormData.ptwId = response.ptwId;
 
                     this.inputFormData.pdpaAccepted = response.pdpaAccepted;
                     this.inputFormData.applicantName = response.applicantName;
-                    this.inputFormData.contractorCompanyName = response.contractorCompanyName;
-                    this.inputFormData.contractorCompanyAddress = response.contractorCompanyAddress;
-                    this.inputFormData.contractorCompanyEmail = response.contractorCompanyEmail;
-                    this.inputFormData.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
-                    this.inputFormData.contractorCompanyFax = response.contractorCompanyFax;
+                    this.inputFormData.contractorCompanyName =
+                        response.contractorCompanyName;
+                    this.inputFormData.contractorCompanyAddress =
+                        response.contractorCompanyAddress;
+                    this.inputFormData.contractorCompanyEmail =
+                        response.contractorCompanyEmail;
+                    this.inputFormData.contractorCompanyContactPhone =
+                        response.contractorCompanyContactPhone;
+                    this.inputFormData.contractorCompanyFax =
+                        response.contractorCompanyFax;
                     this.inputFormData.workLocation = response.workLocation;
-                    this.inputFormData.workDescription = response.workDescription;
+                    this.inputFormData.workDescription =
+                        response.workDescription;
                     this.inputFormData.workType1 = response.workType1;
                     this.inputFormData.workType2 = response.workType2;
                     this.inputFormData.workType3 = response.workType3;
@@ -417,39 +481,54 @@ export class AddPTWByCR extends Vue {
                     this.inputFormData.workType6 = response.workType6;
                     this.inputFormData.workType7 = response.workType7;
                     this.inputFormData.workType8 = response.workType8;
-                    this.inputFormData.workStartDate = response.workStartDate ? response.workStartDate : new Date();
-                    this.inputFormData.workStartTime = response.workStartTime ? response.workStartTime : new Date();
-                    this.inputFormData.workEndDate = response.workEndDate ? response.workEndDate : new Date();
-                    this.inputFormData.workEndTime = response.workEndTime? response.workEndTime : new Date();
+                    this.inputFormData.workStartDate = response.workStartDate
+                        ? response.workStartDate
+                        : new Date();
+                    this.inputFormData.workStartTime = response.workStartTime
+                        ? response.workStartTime
+                        : new Date();
+                    this.inputFormData.workEndDate = response.workEndDate
+                        ? response.workEndDate
+                        : new Date();
+                    this.inputFormData.workEndTime = response.workEndTime
+                        ? response.workEndTime
+                        : new Date();
                     this.inputFormData.workContact = response.workContact;
-                    this.inputFormData.workContactPhone = response.workContactPhone;
+                    this.inputFormData.workContactPhone =
+                        response.workContactPhone;
 
                     this.inputFormData.checklist1 = response.checklist1;
-                    this.inputFormData.checklistRemark1 = response.checklistRemark1;
+                    this.inputFormData.checklistRemark1 =
+                        response.checklistRemark1;
                     this.inputFormData.checklist2 = response.checklist2;
-                    this.inputFormData.checklistRemark2 = response.checklistRemark2;
+                    this.inputFormData.checklistRemark2 =
+                        response.checklistRemark2;
                     this.inputFormData.checklist3 = response.checklist3;
-                    this.inputFormData.checklistRemark3 = response.checklistRemark3;
+                    this.inputFormData.checklistRemark3 =
+                        response.checklistRemark3;
                     this.inputFormData.checklist4 = response.checklist4;
-                    this.inputFormData.checklistRemark4 = response.checklistRemark4;
+                    this.inputFormData.checklistRemark4 =
+                        response.checklistRemark4;
                     this.inputFormData.checklist5 = response.checklist5;
-                    this.inputFormData.checklistRemark5 = response.checklistRemark5;
+                    this.inputFormData.checklistRemark5 =
+                        response.checklistRemark5;
                     this.inputFormData.checklist6 = response.checklist6;
-                    this.inputFormData.checklistRemark6 = response.checklistRemark6;
+                    this.inputFormData.checklistRemark6 =
+                        response.checklistRemark6;
                     this.inputFormData.checklist7 = response.checklist7;
-                    this.inputFormData.checklistRemark7 = response.checklistRemark7;
+                    this.inputFormData.checklistRemark7 =
+                        response.checklistRemark7;
                     this.inputFormData.checklist8 = response.checklist8;
                     this.inputFormData.checklist9 = response.checklist9;
-
 
                     this.inputFormData.attachments = response.attachments;
                     this.inputFormData.termsAccepted = response.termsAccepted;
                     this.inputFormData.persons = response.persons;
-
                 });
             })
             .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
+                Loading.hide();
+                this.transition.step = 2;
             });
     }
 
@@ -484,7 +563,6 @@ export class AddPTWByCR extends Vue {
     ////////////////////////////// step 2  //////////////////////////////
 
     receiveStep2Data(step2Data) {
-
         // PTW Data
         this.inputFormData.ptwId = step2Data.ptwId;
         this.inputFormData.tenant = step2Data.tenant;
@@ -494,11 +572,16 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.applicantName = step2Data.applicantName;
 
         // Company
-        this.inputFormData.contractorCompanyName = step2Data.contractorCompanyName;
-        this.inputFormData.contractorCompanyAddress = step2Data.contractorCompanyAddress;
-        this.inputFormData.contractorCompanyEmail = step2Data.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = step2Data.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = step2Data.contractorCompanyFax;
+        this.inputFormData.contractorCompanyName =
+            step2Data.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress =
+            step2Data.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail =
+            step2Data.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone =
+            step2Data.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax =
+            step2Data.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
     }
@@ -608,8 +691,6 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.checklistRemark5 = step4Date.checklistRemark5;
         this.inputFormData.checklistRemark6 = step4Date.checklistRemark6;
         this.inputFormData.checklistRemark7 = step4Date.checklistRemark7;
-
-        console.log(" ~ ", this.inputFormData);
     }
 
     async stepTo5() {
@@ -632,7 +713,6 @@ export class AddPTWByCR extends Vue {
         }
 
         await this.tempSave();
-
     }
 
     IStep4() {
@@ -759,18 +839,14 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.workEndDate = step8Date.endDate;
         this.inputFormData.workEndTime = step8Date.endTime;
         this.inputFormData.accessGroups = step8Date.accessGroup;
-
-        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     async doSubmit() {
-
         await this.tempSave();
 
         const doSubmitParam = {
-            verify: this.inputFormData.verify,
+            verify: this.inputFormData.verify
         };
-
 
         Loading.show();
         await this.$server
@@ -781,16 +857,14 @@ export class AddPTWByCR extends Vue {
                     response,
                     (response: any) => {
                         Dialog.success(this._("w_Dialog_SuccessTitle"));
+                        this.transition.step = 2;
                     },
                     this._("w_Dialog_ErrorTitle")
                 );
             })
             .catch((e: any) => {
-                return ResponseFilter.catchError(
-                    this,
-                    e,
-                    this._("w_Dialog_ErrorTitle")
-                );
+                Loading.hide();
+                this.transition.step = 2;
             });
 
         this.$emit("submit-data", doSubmitParam);
@@ -804,7 +878,6 @@ export class AddPTWByCR extends Vue {
     }
 
     ////////////////////////////// step 8  //////////////////////////////
-
 
     async tempSave() {
         this.isChange = false;
@@ -823,9 +896,11 @@ export class AddPTWByCR extends Vue {
 
             // Company
             contractorCompanyName: this.inputFormData.contractorCompanyName,
-            contractorCompanyAddress: this.inputFormData.contractorCompanyAddress,
+            contractorCompanyAddress: this.inputFormData
+                .contractorCompanyAddress,
             contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-            contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
+            contractorCompanyContactPhone: this.inputFormData
+                .contractorCompanyContactPhone,
             contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
             // step3
@@ -868,21 +943,25 @@ export class AddPTWByCR extends Vue {
 
             // step5
             // TODO: 問 Min  attachments?: Parse.File[];
-            attachments: this.inputFormData.attachments ? this.inputFormData.attachments.map(item => item.base64) : [],
+            attachments: this.inputFormData.attachments
+                ? this.inputFormData.attachments.map(item => item.base64)
+                : [],
 
             // step6
             termsAccepted: this.inputFormData.termsAccepted,
 
             // step7
-            persons: this.inputFormData.persons,
-
+            persons: this.inputFormData.persons
         };
 
         await this.$server
             .U("/flow1/crms/tenant", updateParam)
             .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                });
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {}
+                );
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
@@ -929,6 +1008,10 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
     top: -10px;
     right: -10px;
     position: absolute;
+}
+.ptw-result-content{
+    text-align: center; 
+    font-size: 3rem;
 }
 </style>
 

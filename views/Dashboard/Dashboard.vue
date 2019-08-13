@@ -7,10 +7,10 @@
         >
 
             <iv-card
-                :label="_('w_Dashboard_FilterCondition')"
-                key="transition_0"
                 v-show="transition.step === 1"
+                key="transition_0"
                 :visible="visible"
+                :label="_('w_Dashboard_FilterCondition')"
             >
                 <iv-form
                     :interface="IFilterConditionForm()"
@@ -34,10 +34,10 @@
             </iv-card>
 
             <iv-card
-                :label="_('w_Dashboard_Dashboard')"
-                key="transition_1"
                 v-show="transition.step === 1"
+                key="transition_1"
                 :visible="!visible"
+                :label="_('w_Dashboard_Dashboard')"
             >
                 <div class="row">
                     <div class="col-lg-6">
@@ -64,14 +64,6 @@
                 </div>
             </iv-card>
 
-            <div
-                key="transition_2"
-                v-show="transition.step === 2"
-                :label="'Empty 2'"
-            >
-                Dashboard 2
-            </div>
-
         </iv-auto-transition>
 
     </div>
@@ -84,10 +76,12 @@ import { Vue, Component } from "vue-property-decorator";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
+// Highcharts
+import { chart } from "highcharts";
+
 // Service
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
-import { chart } from "highcharts";
 import ResponseFilter from "@/services/ResponseFilter";
 
 enum EChartMode {
