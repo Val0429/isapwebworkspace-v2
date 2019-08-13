@@ -319,6 +319,7 @@ export default class Invitation extends Vue {
     }
 
     exportExcelByApi(tableData) {
+        console.log("exportExcelByApi");
         let tableTh = document.getElementById("DataTables_Table_0") as any;
 
         let th = [];
@@ -355,6 +356,7 @@ export default class Invitation extends Vue {
     }
 
     exportExcel() {
+        console.log("exportExcel");
         //let reportTable: any = this.$refs.listTable;
         let tableData = document.getElementById("DataTables_Table_0") as any;
 
