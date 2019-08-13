@@ -110,11 +110,6 @@
                                 v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
-                                <span
-                                    class="close"
-                                    @click="deleteStep5File(file.base64)"
-                                ></span>
-
                                 <img
                                     v-if="file.type != 'application/pdf'"
                                     class="step5Imgs"
@@ -125,11 +120,8 @@
                                     class="step5Imgs"
                                     :src="imageBase64.pdfEmpty"
                                 >
-                                <a
-                                    :href="file.base64"
-                                    :download="file.name"
-                                    target="_blank"
-                                >{{file.name}}</a>
+                                <span
+                                >{{file.name}}</span>
                             </div>
 
                         </template>
@@ -877,11 +869,9 @@ Vue.component("status-approve-not-expire-date-edit", StatusApproveNotExpireDate)
 <style lang="scss" scoped>
 .step5Imgs {
     width: 100%;
-    height: 100%;
 }
 .step5Div {
-    height: 100px;
-    width: 100px;
+    width: 20%;
     border: 1px solid black;
     position: relative;
     margin: 10px;

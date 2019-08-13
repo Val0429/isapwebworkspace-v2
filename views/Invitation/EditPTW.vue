@@ -740,7 +740,7 @@
         async stepTo8() {
             let stepRef: any = this.$refs.step;
 
-            if (this.inputFormData.persons.length === 0 || !this.inputFormData.persons) {
+            if (!this.inputFormData.persons) {
                 Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
                 stepRef.currentStep = 6;
                 return false;
