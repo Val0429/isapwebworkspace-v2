@@ -357,7 +357,6 @@
         }
 
         created() {
-            console.log("selectedDetail ~ ", this.selectedDetail);
         }
 
         mounted() {
@@ -450,8 +449,6 @@
                     item.attachments.push(tempAttachment);
                 })
             }
-
-            console.log("this.inputFormData ~ ", this.inputFormData);
         }
 
         ////////////////////////////// step 1  //////////////////////////////

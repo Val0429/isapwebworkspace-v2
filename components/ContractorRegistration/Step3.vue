@@ -148,7 +148,6 @@ export class Step3 extends Vue {
 
     mounted() {
         this.initSelectItem();
-        console.log('this.inputFormData ~ ', this.inputFormData)
     }
 
     @Watch("selectedDetail", { deep: true })
