@@ -661,11 +661,7 @@
                 if (file) {
                     ImageBase64.fileToBase64(file, (base64 = "") => {
                         if (base64 != "") {
-                            this.inputFormData.attachments.push({
-                                name: file.name,
-                                type: file.type,
-                                base64: base64
-                            });
+                            this.inputFormData.attachments.push(base64);
                         } else {
                             Dialog.error(this._("w_Error_FileToLarge"));
                         }
