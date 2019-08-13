@@ -378,7 +378,7 @@
             }
 
             if (
-                this.selectedDetail.workCategoryId &&
+                this.selectedDetail.workCategory &&
                 this.selectedDetail.workCategory.objectId
             ) {
                 this.inputFormData.workCategoryId = this.selectedDetail.workCategory.objectId;
@@ -393,6 +393,7 @@
             this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
             this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
             this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
+            this.inputFormData.workPremisesUnit = this.selectedDetail.workPremisesUnit;
             this.inputFormData.workLocation = this.selectedDetail.workLocation;
             this.inputFormData.workDescription = this.selectedDetail.workDescription;
             this.inputFormData.workType1 = this.selectedDetail.workType1;
@@ -497,12 +498,14 @@
         }
 
         async stepTo3() {
+
+            // console.log('stepTo3', this.inputFormData)
+
             let stepRef: any = this.$refs.step;
 
             if (
-                !this.inputFormData.ptwId ||
                 !this.inputFormData.tenant ||
-                !this.inputFormData.workCategory ||
+                !this.inputFormData.workCategoryId ||
                 !this.inputFormData.applicantName ||
                 !this.inputFormData.contractorCompanyName ||
                 !this.inputFormData.contractorCompanyAddress ||

@@ -137,9 +137,9 @@ export class Step3 extends Vue {
         workType7: this.selectedDetail.workType7 ? this.selectedDetail.workType7 :false,
         workType8: this.selectedDetail.workType8 ? this.selectedDetail.workType8 :false,
         workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-        workStartTime: new Date(this.selectedDetail.workStartTime) ? new Date(this.selectedDetail.workStartTime) : new Date(),
+        workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
         workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        workEndTime: new Date(this.selectedDetail.workEndTime) ? new Date(this.selectedDetail.workEndTime) : new Date(),
+        workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workContact: this.selectedDetail.workContact ? this.selectedDetail.workContact : "",
         workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : ''
     };
@@ -168,9 +168,9 @@ export class Step3 extends Vue {
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
         this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
+        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartDate);
         this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
+        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndDate);
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
     }
