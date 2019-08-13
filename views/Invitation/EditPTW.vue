@@ -452,12 +452,11 @@
         async stepTo2() {
             let stepRef: any = this.$refs.step;
 
-            // TODO: 全部step OK
-            // if (!this.inputFormData.pdpaAccepted) {
-            //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-            //     stepRef.currentStep = 0;
-            //     return false;
-            // }
+            if (!this.inputFormData.pdpaAccepted) {
+                Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+                stepRef.currentStep = 0;
+                return false;
+            }
             await this.tempSave();
         }
 
@@ -500,22 +499,21 @@
         async stepTo3() {
             let stepRef: any = this.$refs.step;
 
-            // TODO: wait下拉選單 和 全部step OK
-            // if (
-            //     !this.inputFormData.ptwId ||
-            //     !this.inputFormData.tenant ||
-            //     !this.inputFormData.workCategory ||
-            //     !this.inputFormData.applicantName ||
-            //     !this.inputFormData.contractorCompanyName ||
-            //     !this.inputFormData.contractorCompanyAddress ||
-            //     !this.inputFormData.contractorCompanyEmail ||
-            //     !this.inputFormData.contractorCompanyContactPhone ||
-            //     !this.inputFormData.contractorCompanyFax
-            // ) {
-            //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
-            //     stepRef.currentStep = 1;
-            //     return false;
-            // }
+            if (
+                !this.inputFormData.ptwId ||
+                !this.inputFormData.tenant ||
+                !this.inputFormData.workCategory ||
+                !this.inputFormData.applicantName ||
+                !this.inputFormData.contractorCompanyName ||
+                !this.inputFormData.contractorCompanyAddress ||
+                !this.inputFormData.contractorCompanyEmail ||
+                !this.inputFormData.contractorCompanyContactPhone ||
+                !this.inputFormData.contractorCompanyFax
+            ) {
+                Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
+                stepRef.currentStep = 1;
+                return false;
+            }
             await this.tempSave();
         }
 
@@ -556,22 +554,21 @@
         async stepTo4() {
             let stepRef: any = this.$refs.step;
 
-            // TODO: 全部step OK
-            // if (
-            //     !this.inputFormData.workPremisesUnit ||
-            //     !this.inputFormData.workLocation ||
-            //     !this.inputFormData.workDescription ||
-            //     !this.inputFormData.workStartDate ||
-            //     !this.inputFormData.workStartTime ||
-            //     !this.inputFormData.workEndDate ||
-            //     !this.inputFormData.workEndTime ||
-            //     !this.inputFormData.workContact ||
-            //     !this.inputFormData.workContactPhone
-            // ) {
-            //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
-            //     stepRef.currentStep = 2;
-            //     return false;
-            // }
+            if (
+                !this.inputFormData.workPremisesUnit ||
+                !this.inputFormData.workLocation ||
+                !this.inputFormData.workDescription ||
+                !this.inputFormData.workStartDate ||
+                !this.inputFormData.workStartTime ||
+                !this.inputFormData.workEndDate ||
+                !this.inputFormData.workEndTime ||
+                !this.inputFormData.workContact ||
+                !this.inputFormData.workContactPhone
+            ) {
+                Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
+                stepRef.currentStep = 2;
+                return false;
+            }
             await this.tempSave();
         }
 
@@ -612,22 +609,21 @@
         async stepTo5() {
             let stepRef: any = this.$refs.step;
 
-            // TODO: 全部step OK
-            // if (
-            //     !this.inputFormData.checklist1 ||
-            //     !this.inputFormData.checklist2 ||
-            //     !this.inputFormData.checklist3 ||
-            //     !this.inputFormData.checklist4 ||
-            //     !this.inputFormData.checklist5 ||
-            //     !this.inputFormData.checklist6 ||
-            //     !this.inputFormData.checklist7 ||
-            //     !this.inputFormData.checklist8 ||
-            //     !this.inputFormData.checklist9
-            // ) {
-            //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipYes"));
-            //     stepRef.currentStep = 3;
-            //     return false;
-            // }
+            if (
+                !this.inputFormData.checklist1 ||
+                !this.inputFormData.checklist2 ||
+                !this.inputFormData.checklist3 ||
+                !this.inputFormData.checklist4 ||
+                !this.inputFormData.checklist5 ||
+                !this.inputFormData.checklist6 ||
+                !this.inputFormData.checklist7 ||
+                !this.inputFormData.checklist8 ||
+                !this.inputFormData.checklist9
+            ) {
+                Dialog.error(this._("w_ViewPTW_Step_ErrorTipYes"));
+                stepRef.currentStep = 3;
+                return false;
+            }
             await this.tempSave();
         }
 
@@ -676,12 +672,11 @@
         async stepTo6() {
             let stepRef: any = this.$refs.step;
 
-            // TODO: 全部step OK
-            // if (!this.inputFormData.attachments) {
-            //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-            //     stepRef.currentStep = 4;
-            //     return false;
-            // }
+            if (!this.inputFormData.attachments) {
+                Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+                stepRef.currentStep = 4;
+                return false;
+            }
             await this.tempSave();
         }
 
@@ -704,12 +699,11 @@
         async stepTo7() {
             let stepRef: any = this.$refs.step;
 
-            // TODO: 全部step OK
-            // if (!this.inputFormData.termsAccepted) {
-            //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-            //     stepRef.currentStep = 5;
-            //     return false;
-            // }
+            if (!this.inputFormData.termsAccepted) {
+                Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
+                stepRef.currentStep = 5;
+                return false;
+            }
             await this.tempSave();
         }
 
@@ -736,12 +730,11 @@
         async stepTo8() {
             let stepRef: any = this.$refs.step;
 
-            // TODO: 全部step OK
-            // if (this.inputFormData.persons === 0) {
-            //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
-            //     stepRef.currentStep = 6;
-            //     return false;
-            // }
+            if (this.inputFormData.persons.length === 0 || !this.inputFormData.persons) {
+                Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
+                stepRef.currentStep = 6;
+                return false;
+            }
 
             await this.tempSave();
         }

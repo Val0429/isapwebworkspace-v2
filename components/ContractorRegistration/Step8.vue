@@ -47,7 +47,7 @@ export class Step8 extends Vue {
     })
     selectedDetail: any;
 
-    accessGroupSelectItem: any = [];
+    accessGroupSelectItem: any = {};
 
     options: any = [];
 
@@ -113,7 +113,6 @@ export class Step8 extends Vue {
         this.accessGroupSelectItem = {};
         let tempAccessGroupSelectItem = {};
 
-        // TODO: wait api
         await this.$server
             .R("/flow1/crms/access-group")
             .then((response: any) => {
@@ -142,19 +141,23 @@ export class Step8 extends Vue {
                 this.inputFormData.endTime = data.value;
                 break;
             case "accessGroupsForm":
-                for (const detail in this.accessGroupSelectItem) {
-                    for (const id of data.value) {
-                        if (detail === id) {
-                            let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
-                            this.inputFormData.accessGroups.push(door);
-                        }
-                    }
-                }
+                this.inputFormData.accessGroupsForm = data.value;
                 break;
         }
+
     }
 
     changeApproval() {
+
+        for (const detail in this.accessGroupSelectItem) {
+            for (const id of this.inputFormData.accessGroupsForm) {
+                if (detail === id) {
+                    let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
+                    this.inputFormData.accessGroups.push(door);
+                }
+            }
+        }
+
         this.$emit("step8", this.inputFormData);
     }
 
