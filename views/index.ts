@@ -51,6 +51,6 @@ $({ path: '/setups/visitor_card', name: "_('w_Navigation_Setups_VisitorCard')", 
 import TenantsInvitation from './Tenants/TenantsInvitation.vue';
 import TenantsVisitor from './Tenants/TenantsVisitor.vue';
 
-$({ path: '/tenants', name: "_('w_Navigation_Tenants')", icon: 'fa-check', redirect: '/tenants/invitation' })();
-$({ path: '/tenants/invitation', name: "_('w_Navigation_Tenants_Invitation')", icon: 'fa-check' })(TenantsInvitation);
-$({ path: '/tenants/visitor', name: "_('w_Navigation_Tenants_Visitor')", icon: 'fa-check' })(TenantsVisitor);
+$({ path: '/tenants', name: "_('w_Navigation_Tenants')", icon: 'fa-users', redirect: '/tenants/invitation' })();
+$({ path: '/tenants/invitation', name: "_('w_Navigation_Tenants_Invitation')", icon: 'fa-eye' })(TenantsInvitation);
+$({ path: '/tenants/visitor', name: "_('w_Navigation_Tenants_Visitor')", icon: 'fa-user' })(TenantsVisitor);
