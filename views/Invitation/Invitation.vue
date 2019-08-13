@@ -42,11 +42,6 @@
                         :params="flow1Params"
                         @selected="selectedItem($event)"
                     >
-
-                        <!--                        <template #status="{$attrs, $listeners}">-->
-                        <!--                            {{ tableShowStatus($attrs.value) }}-->
-                        <!--                        </template>-->
-
                         <template #workStartDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
@@ -186,8 +181,7 @@ export default class Invitation extends Vue {
         objectId: "",
         contact: "",
         contactEmail: "",
-        companyId: "",
-        workCategoryId: ""
+        companyId: ""
     };
 
     created() {
@@ -406,18 +400,6 @@ export default class Invitation extends Vue {
         return result;
     }
 
-    tableShowWorkCategory(workCategoryId: string): string {
-        let result = "";
-
-        for (const id in this.workDescriptionSelectItem) {
-            if (workCategoryId === id) {
-                result = this.workDescriptionSelectItem[id];
-            }
-        }
-
-        return result;
-    }
-
     CheckObjectIfEmpty(obj: object): boolean {
         const result = Object.keys(obj);
         return result.length === 0;
@@ -472,12 +454,12 @@ export default class Invitation extends Vue {
 
 
 
-                workCategory: interface {
-                    /**
+                workCategory:interface  {
+                /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
-                 */
+                */
                 name: string;
-                }
+                };
 
 
                 /**
@@ -547,7 +529,7 @@ export default class Invitation extends Vue {
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
                 name: string;
-                }
+                };
 
 
                 /**
