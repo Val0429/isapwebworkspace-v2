@@ -17,10 +17,7 @@
                 v-show="transition.step === 1"
             >
 
-                <search-condition
-                    @submit-data="receiveSearchConditionData"
-                    @excel="downloadExcel"
-                ></search-condition>
+                <search-condition @submit-data="receiveSearchConditionData"></search-condition>
 
                 <iv-card
                     key="transition_1"
@@ -42,6 +39,7 @@
                         :interface="ITableList()"
                         :multiple="tableMultiple"
                         :server="{ path: '/flow1/crms' }"
+                        :params="flow1Params"
                         @selected="selectedItem($event)"
                     >
 
@@ -176,6 +174,7 @@ export default class Invitation extends Vue {
 
     // api 回來資料
     responseData: any = {};
+    flow1Params: any = {};
 
     workDescriptionSelectItem: any = {};
 
@@ -247,7 +246,7 @@ export default class Invitation extends Vue {
     }
 
     async receiveSearchConditionData(searchConditionData: any) {
-        let param = JSON.parse(JSON.stringify(searchConditionData));
+        this.flow1Params = JSON.parse(JSON.stringify(searchConditionData));
 
         // TODO: wait api
         // Loading.show();
@@ -272,14 +271,87 @@ export default class Invitation extends Vue {
         this.pageToList();
     }
 
-    downloadExcel() {
-        console.log("downloadExcel");
-        //TODO wait API
+    downloadPageExcel() {
+        let abc;
+        Dialog.prompt(
+            this._("w_ExportExcel"),
+            this._("w_HowToExportExcel"),
+            [
+                this._("w_Invitation_ExportCurrentPage"),
+                this._("w_Invitation_ExportAllData")
+            ],
+            index => {
+                switch (index) {
+                    case 0:
+                        this.exportExcel();
+                        break;
+                    case 1:
+                        this.exportAllExcel();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        );
     }
 
-    downloadPageExcel() {
-        console.log("downloadPageExcel");
-        this.exportExcel();
+    async exportAllExcel() {
+        let parms: any = {
+            paging: Object
+        };
+        parms.paging.pageSize = 100000;
+        parms.paging.page = 1;
+
+        await this.$server
+            .R("/flow1/crms", parms)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.exportExcelByApi(response.results);
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Dialog_ErrorTitle")
+                );
+            });
+    }
+
+    exportExcelByApi(tableData) {
+        let tableTh = document.getElementById("DataTables_Table_0") as any;
+
+        let th = [];
+        for (var i = 0; i < tableTh.rows.length; i++) {
+            if (i == 0) {
+                for (let title of tableTh.rows[i].cells) {
+                    if (title.innerText.trim().length > 0) {
+                        th.push(title.innerText);
+                    }
+                }
+            }
+        }
+
+        let data = [];
+        for (var i = 0; i < tableData.length; i++) {
+            if (i != 0) {
+                let td = [];
+                td.push(i + 1);
+                td.push(tableData[i].ptwId);
+                td.push(tableData[i].status);
+                td.push(tableData[i].contactEmail);
+                td.push(tableData[i].company.name);
+
+                data.push(td);
+            }
+        }
+
+        let [fileName, fileType, sheetName] = [
+            this._("w_Navigation_Invitation"),
+            "xlsx",
+            "Sheet 1"
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
     }
 
     exportExcel() {
@@ -312,7 +384,6 @@ export default class Invitation extends Vue {
             "xlsx",
             "Sheet 1"
         ];
-        console.log("execel", th, data);
         toExcel({ th, data, fileName, fileType, sheetName });
     }
 
