@@ -378,6 +378,7 @@ export class AddPTWByCR extends Vue {
 
                     this.selectedDetail.pdpaAccepted = response.pdpaAccepted;
                     this.selectedDetail.applicantName = response.applicantName;
+                    this.selectedDetail.workPremisesUnit = response.workPremisesUnit;
                     this.selectedDetail.contractorCompanyName =
                         response.contractorCompanyName;
                     this.selectedDetail.contractorCompanyAddress =
@@ -456,7 +457,7 @@ export class AddPTWByCR extends Vue {
                             item.attachments.push(tempAttachment);
                         })
                     }
-                    
+
                     /////// inputFormData
 
                     if (response.company && response.company.objectId) {
@@ -475,6 +476,7 @@ export class AddPTWByCR extends Vue {
 
                     this.inputFormData.pdpaAccepted = response.pdpaAccepted;
                     this.inputFormData.applicantName = response.applicantName;
+                    this.inputFormData.workPremisesUnit = response.workPremisesUnit;
                     this.inputFormData.contractorCompanyName =
                         response.contractorCompanyName;
                     this.inputFormData.contractorCompanyAddress =
@@ -838,15 +840,6 @@ export class AddPTWByCR extends Vue {
     }
 
     async stepTo8() {
-        let stepRef: any = this.$refs.step;
-
-        if (this.inputFormData.persons.length === 0 || !this.inputFormData.persons) {
-            Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
-            stepRef.currentStep = 6;
-            return false;
-        }
-
-        await this.tempSave();
     }
 
     IStep7() {
@@ -869,6 +862,17 @@ export class AddPTWByCR extends Vue {
     }
 
     async doSubmit() {
+
+        let stepRef: any = this.$refs.step;
+
+        console.log('this.inputFormData.persons ~ ', this.inputFormData.persons);
+
+        if (!this.inputFormData.persons) {
+            Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
+            stepRef.currentStep = 7;
+            return false;
+        }
+
         await this.tempSave();
 
         const doSubmitParam = {

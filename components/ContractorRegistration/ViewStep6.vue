@@ -40,7 +40,7 @@ export class ViewStep6 extends Vue {
     })
     selectedDetail: any;
 
-    termsAccepted: boolean = false;
+    termsAccepted: boolean = this.selectedDetail.termsAccepted ? this.selectedDetail.termsAccepted : false;
 
     created() {}
 

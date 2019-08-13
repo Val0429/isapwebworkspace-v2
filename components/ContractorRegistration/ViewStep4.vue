@@ -243,13 +243,13 @@ export class ViewStep4 extends Vue {
         this.inputFormData.checklist8 = this.selectedDetail.checklist8;
         this.inputFormData.checklist9 = this.selectedDetail.checklist9;
 
-        this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark2 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark3 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark4 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark5 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark6 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark7 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark1;
+        this.inputFormData.checklistRemark2 = this.selectedDetail.checklistRemark2;
+        this.inputFormData.checklistRemark3 = this.selectedDetail.checklistRemark3;
+        this.inputFormData.checklistRemark4 = this.selectedDetail.checklistRemark4;
+        this.inputFormData.checklistRemark5 = this.selectedDetail.checklistRemark5;
+        this.inputFormData.checklistRemark6 = this.selectedDetail.checklistRemark6;
+        this.inputFormData.checklistRemark7 = this.selectedDetail.checklistRemark7;
     }
 
     initSelectItem() {
