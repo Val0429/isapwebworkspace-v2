@@ -432,16 +432,9 @@ export default class Invitation extends Vue {
         return result.length === 0;
     }
 
-    DateToZero(value: Date): Date {
-        let date = new Date(value.getTime());
-        date.setHours(0, 0, 0, 0);
-        return date;
-    }
-
     CheckDate(today: Date, endDate: Date) {
         return (
-            this.DateToZero(endDate).getTime() >=
-            this.DateToZero(today).getTime()
+            endDate.getTime() >= today.getTime()
         );
     }
 

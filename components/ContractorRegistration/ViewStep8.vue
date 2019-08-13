@@ -196,8 +196,6 @@
 
                 qrCode?: any;
 
-                approval?: any;
-
             }
         `;
         }

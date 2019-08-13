@@ -11,8 +11,9 @@
                     <img
                         :src="qrCode"
                         alt=""
+                        class="col-md-12"
                     >
-                    <p class="mt-3">{{ ptwText }}</p>
+                    <p class="mt-0 ml-3 col-md-12">{{ _('w_Invitation_PTWID') }} : {{ ptwText }}</p>
                 </div>
             </template>
 
@@ -63,8 +64,8 @@
 
         // TODO: wait api
         // qrCode: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QRcode_image.svg/220px-QRcode_image.svg.png';
-        qrCode: string = "";
-        ptwText: string = "";
+        qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
+        ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
 
         async created() {
             this.initInputFormData();

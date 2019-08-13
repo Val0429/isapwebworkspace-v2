@@ -59,8 +59,7 @@ export class Step5 extends Vue {
 
     inputFormData: any = {
         file: this.selectedDetail.attachments ? this.selectedDetail.attachments : null,
-
-};
+    };
 
     created() {}
 

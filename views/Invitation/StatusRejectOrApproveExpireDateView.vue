@@ -110,11 +110,6 @@
                                 v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
-                                <span
-                                    class="close"
-                                    @click="deleteStep5File(file.base64)"
-                                ></span>
-
                                 <img
                                     v-if="file.type != 'application/pdf'"
                                     class="step5Imgs"
@@ -125,11 +120,8 @@
                                     class="step5Imgs"
                                     :src="imageBase64.pdfEmpty"
                                 >
-                                <a
-                                    :href="file.base64"
-                                    :download="file.name"
-                                    target="_blank"
-                                >{{file.name}}</a>
+                                <span
+                                >{{file.name}}</span>
                             </div>
 
                         </template>
@@ -352,7 +344,93 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
     }
 
     mounted() {
-        // console.log('selectedDetail ~ ', this.selectedDetail)
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
+        if (
+            this.selectedDetail.company &&
+            this.selectedDetail.company.objectId
+        ) {
+            this.inputFormData.tenant = this.selectedDetail.company.objectId;
+        }
+
+        if (
+            this.selectedDetail.workCategory &&
+            this.selectedDetail.workCategory.objectId
+        ) {
+            this.inputFormData.workCategoryId = this.selectedDetail.workCategory.objectId;
+        }
+
+        this.inputFormData.ptwId = this.selectedDetail.ptwId;
+
+        this.inputFormData.pdpaAccepted = this.selectedDetail.pdpaAccepted;
+        this.inputFormData.applicantName = this.selectedDetail.applicantName;
+        this.inputFormData.contractorCompanyName = this.selectedDetail.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = this.selectedDetail.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
+        this.inputFormData.workPremisesUnit = this.selectedDetail.workPremisesUnit;
+        this.inputFormData.workLocation = this.selectedDetail.workLocation;
+        this.inputFormData.workDescription = this.selectedDetail.workDescription;
+        this.inputFormData.workType1 = this.selectedDetail.workType1;
+        this.inputFormData.workType2 = this.selectedDetail.workType2;
+        this.inputFormData.workType3 = this.selectedDetail.workType3;
+        this.inputFormData.workType4 = this.selectedDetail.workType4;
+        this.inputFormData.workType5 = this.selectedDetail.workType5;
+        this.inputFormData.workType6 = this.selectedDetail.workType6;
+        this.inputFormData.workType7 = this.selectedDetail.workType7;
+        this.inputFormData.workType8 = this.selectedDetail.workType8;
+        this.inputFormData.workStartDate = this.selectedDetail.workStartDate
+            ? this.selectedDetail.workStartDate
+            : new Date();
+        this.inputFormData.workStartTime = this.selectedDetail.workStartDate
+            ? this.selectedDetail.workStartDate
+            : new Date();
+        this.inputFormData.workEndDate = this.selectedDetail.workEndDate
+            ? this.selectedDetail.workEndDate
+            : new Date();
+        this.inputFormData.workEndTime = this.selectedDetail.workEndDate
+            ? this.selectedDetail.workEndDate
+            : new Date();
+        this.inputFormData.workContact = this.selectedDetail.workContact;
+        this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
+
+        this.inputFormData.checklist1 = this.selectedDetail.checklist1;
+        this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark1;
+        this.inputFormData.checklist2 = this.selectedDetail.checklist2;
+        this.inputFormData.checklistRemark2 = this.selectedDetail.checklistRemark2;
+        this.inputFormData.checklist3 = this.selectedDetail.checklist3;
+        this.inputFormData.checklistRemark3 = this.selectedDetail.checklistRemark3;
+        this.inputFormData.checklist4 = this.selectedDetail.checklist4;
+        this.inputFormData.checklistRemark4 = this.selectedDetail.checklistRemark4;
+        this.inputFormData.checklist5 = this.selectedDetail.checklist5;
+        this.inputFormData.checklistRemark5 = this.selectedDetail.checklistRemark5;
+        this.inputFormData.checklist6 = this.selectedDetail.checklist6;
+        this.inputFormData.checklistRemark6 = this.selectedDetail.checklistRemark6;
+        this.inputFormData.checklist7 = this.selectedDetail.checklist7;
+        this.inputFormData.checklistRemark7 = this.selectedDetail.checklistRemark7;
+        this.inputFormData.checklist8 = this.selectedDetail.checklist8;
+        this.inputFormData.checklist9 = this.selectedDetail.checklist9;
+
+        this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
+        this.inputFormData.persons = this.selectedDetail.persons;
+
+        // attachments
+        this.inputFormData.attachments = [];
+        for (let attachment of this.selectedDetail.attachments) {
+            ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
+                let tempAttachment = {
+                    name: attachment.name,
+                    type: attachment.type,
+                    base64: base64
+                };
+                item.attachments.push(tempAttachment);
+            })
+        }
+
+        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     pageToList() {
@@ -766,17 +844,8 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
     }
 
     async doSubmit() {
-        if (this.isChange) {
-            Dialog.confirm(
-                this._("w_Save_Checked"),
-                this._("w_Save_Checked"),
-                () => {
-                    this.doSubmitApi();
-                }
-            );
-        } else {
-            this.doSubmitApi();
-        }
+        this.$emit("view-done");
+
     }
 
     async doSubmitApi() {
@@ -808,7 +877,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         //         );
         //     });
 
-        this.$emit("view-done", doSubmitParam);
     }
 
     IStep8() {
@@ -828,11 +896,9 @@ Vue.component("status-reject-approve-expire-date-view", StatusRejectOrApproveExp
 <style lang="scss" scoped>
 .step5Imgs {
     width: 100%;
-    height: 100%;
 }
 .step5Div {
-    height: 100px;
-    width: 100px;
+    width: 20%;
     border: 1px solid black;
     position: relative;
     margin: 10px;
