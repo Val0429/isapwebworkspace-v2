@@ -111,9 +111,8 @@
                                     class="close"
                                     @click="deleteStep5File(file.base64)"
                                 ></span>
-
                                 <img
-                                    v-if="file.type.indexOf('pdf') == 0"
+                                    v-if="file.type.indexOf('pdf') >= 0"
                                     class="step5Imgs"
                                     :src="imageBase64.pdfEmpty"
                                 >
