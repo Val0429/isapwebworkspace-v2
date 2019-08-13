@@ -2,6 +2,20 @@ export class ImageBase64 {
     constructor() {}
     fileLimit = 7500000;
 
+    async urlToBase64(vue: any, url: string, callback: Function) {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                callback(vue, reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    }
+
     async fileToBase64(file: any, callback: Function) {
         if (file && file.size && file.size < this.fileLimit) {
             await this.getBase64(file)
