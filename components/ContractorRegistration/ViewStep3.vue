@@ -144,9 +144,9 @@ export class ViewStep3 extends Vue {
         workType6: false,
         workType7: false,
         workType8: false,
-        workStartDate: null,
+        workStartDate: new Date(),
         workStartTime: new Date(),
-        workEndDate: null,
+        workEndDate: new Date(),
         workEndTime: new Date(),
         workContact: "",
         workContactPhone: ""
@@ -172,13 +172,13 @@ export class ViewStep3 extends Vue {
             this.selectedDetail.workStartDate
         );
         this.inputFormData.workStartTime = new Date(
-            this.selectedDetail.workStartTime
+            this.selectedDetail.workStartDate
         );
         this.inputFormData.workEndDate = new Date(
             this.selectedDetail.workEndDate
         );
         this.inputFormData.workEndTime = new Date(
-            this.selectedDetail.workEndTime
+            this.selectedDetail.workEndDate
         );
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
