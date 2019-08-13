@@ -14,7 +14,7 @@ export class DialogPrompt extends Vue {
     options: string[];
 
     @Emit('update:visible')
-    doUpdateVisible(value: any) {
+    doUpdateVisible(value: boolean) {
         return value;
     }
 
@@ -22,7 +22,7 @@ export class DialogPrompt extends Vue {
 
     clickConfirm(index: any) {
         this.callback(index);
-        this.doUpdateVisible(index);
+        this.doUpdateVisible(false);
     }
 }
 export default DialogPrompt;

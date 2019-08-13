@@ -47,11 +47,11 @@
                         <!--                            {{ tableShowStatus($attrs.value) }}-->
                         <!--                        </template>-->
 
-                        <template #startDate="{$attrs}">
+                        <template #workStartDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
 
-                        <template #endDate="{$attrs}">
+                        <template #workEndDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
 
@@ -87,6 +87,7 @@
                     v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'pendding'"
                     :selectedDetail="selectedDetail"
                     @edit-ptw-back-to-list="editPtwBackToList"
+                    @done-submit="editPtwBackToList"
                 ></edit-ptw>
 
                 <!-- status-new-view -->
@@ -99,18 +100,20 @@
 
                 <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
                 <status-approve-not-expire-date-edit
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && CheckDate(selectedDetail.endDate, new Date())"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && CheckDate(new Date(), new Date(selectedDetail.workEndDate))"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
+                    @edit-ptw-back-to-list="editPtwBackToList"
                 >
 
                 </status-approve-not-expire-date-edit>
 
                 <!-- status-reject-view ，只看，還需要 加上 Approve到期後的條件 -->
                 <status-reject-approve-expire-date-view
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'reject' || !CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && !CheckDate(selectedDetail.endDate, new Date())"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'reject' || (!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && !CheckDate(new Date(), new Date(selectedDetail.workEndDate)))"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
+                    @edit-ptw-back-to-list="editPtwBackToList"
                 >
                 </status-reject-approve-expire-date-view>
 
@@ -206,7 +209,6 @@ export default class Invitation extends Vue {
         } else {
             this.selectedDetail = data;
         }
-        console.log("Inva selectedItem ~ ", this.selectedDetail);
     }
 
     async initWorkDescriptionSelectItem() {
@@ -319,6 +321,7 @@ export default class Invitation extends Vue {
     }
 
     exportExcelByApi(tableData) {
+        console.log("exportExcelByApi");
         let tableTh = document.getElementById("DataTables_Table_0") as any;
 
         let th = [];
@@ -355,6 +358,7 @@ export default class Invitation extends Vue {
     }
 
     exportExcel() {
+        console.log("exportExcel");
         //let reportTable: any = this.$refs.listTable;
         let tableData = document.getElementById("DataTables_Table_0") as any;
 
@@ -482,31 +486,35 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_Unit")}
                  */
-                unit: string;
+                workPremisesUnit: string;
 
 
-                /**
+
+                workCategory: interface {
+                    /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
-                 */
-                workCategoryId: string;
+                     */
+                    name: string;
+
+                };
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_StartDate")}
                  */
-                startDate: string;
+                workStartDate: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_EndDate")}
                  */
-                endDate: string;
+                workEndDate: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_ContractorCompany")}
                  */
-                contractor: string;
+                contractorCompanyName: string;
 
                 Actions: any
 

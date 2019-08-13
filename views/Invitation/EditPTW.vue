@@ -758,10 +758,10 @@
         ////////////////////////////// step 8  //////////////////////////////
 
         receiveStep8Data(step8Date) {
-            this.inputFormData.workStartDate = step8Date.startDate;
-            this.inputFormData.workStartTime = step8Date.startTime;
-            this.inputFormData.workEndDate = step8Date.endDate;
-            this.inputFormData.workEndTime = step8Date.endTime;
+            this.inputFormData.workStartDate = step8Date.workStartDate;
+            this.inputFormData.workStartTime = step8Date.workStartTime;
+            this.inputFormData.workEndDate = step8Date.workEndDate;
+            this.inputFormData.workEndTime = step8Date.workEndTime;
             this.inputFormData.accessGroups = step8Date.accessGroups;
 
             this.isApproval = step8Date.approval;
@@ -889,7 +889,6 @@
         }
 
         async doSubmitApi() {
-            // TODO: wait api
             const doSubmitParam = {
                 objectId: this.selectedDetail.objectId
             };
@@ -912,7 +911,7 @@
                         return ResponseFilter.catchError(this, e);
                     });
 
-                this.$emit("submit-data", doSubmitParam);
+                this.$emit("done-submit", doSubmitParam);
             } else {
                 Loading.show();
                 await this.$server
@@ -931,7 +930,7 @@
                         return ResponseFilter.catchError(this,e);
                     });
 
-                this.$emit("submit-data", doSubmitParam);
+                this.$emit("done-submit");
             }
         }
 
