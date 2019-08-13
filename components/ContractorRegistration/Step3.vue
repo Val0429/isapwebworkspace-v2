@@ -125,23 +125,23 @@ export class Step3 extends Vue {
     typeOfWorkSelectItem: any = [];
 
     inputFormData: IStep3 = {
-        workPremisesUnit: "",
-        workLocation: "",
-        workDescription: "",
-        workType1: false,
-        workType2: false,
-        workType3: false,
-        workType4: false,
-        workType5: false,
-        workType6: false,
-        workType7: false,
-        workType8: false,
-        workStartDate: new Date(),
-        workStartTime: new Date(),
-        workEndDate: new Date(),
-        workEndTime: new Date(),
-        workContact: "",
-        workContactPhone: ''
+        workPremisesUnit: this.selectedDetail.workPremisesUnit ? this.selectedDetail.workPremisesUnit : "",
+        workLocation: this.selectedDetail.workLocation ? this.selectedDetail.workLocation : "",
+        workDescription: this.selectedDetail.workDescription ? this.selectedDetail.workDescription : "",
+        workType1: this.selectedDetail.workType1 ? this.selectedDetail.workType1 :false,
+        workType2: this.selectedDetail.workType2 ? this.selectedDetail.workType2 :false,
+        workType3: this.selectedDetail.workType3 ? this.selectedDetail.workType3 :false,
+        workType4: this.selectedDetail.workType4 ? this.selectedDetail.workType4 :false,
+        workType5: this.selectedDetail.workType5 ? this.selectedDetail.workType5 :false,
+        workType6: this.selectedDetail.workType6 ? this.selectedDetail.workType6 :false,
+        workType7: this.selectedDetail.workType7 ? this.selectedDetail.workType7 :false,
+        workType8: this.selectedDetail.workType8 ? this.selectedDetail.workType8 :false,
+        workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
+        workStartTime: new Date(this.selectedDetail.workStartTime) ? new Date(this.selectedDetail.workStartTime) : new Date(),
+        workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
+        workEndTime: new Date(this.selectedDetail.workEndTime) ? new Date(this.selectedDetail.workEndTime) : new Date(),
+        workContact: this.selectedDetail.workContact ? this.selectedDetail.workContact : "",
+        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : ''
     };
 
     created() {}

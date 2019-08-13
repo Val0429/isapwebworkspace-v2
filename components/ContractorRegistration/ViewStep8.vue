@@ -21,7 +21,6 @@
                     v-model="inputFormData.approval"
                     :options="options"
                     name="approval"
-                    :disabled="true"
                     class="col-md-2 mb-2 mt-2"
                     @input="changeApproval"
                 ></b-form-radio-group>
@@ -32,102 +31,135 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { toEnumInterface } from "@/../core";
+    import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
+    import { toEnumInterface } from "@/../core";
+    import { IWorkPermitAccessGroup } from '.';
+    import ResponseFilter from '@/services/ResponseFilter';
 
-@Component({
-    components: {}
-})
-export class ViewStep8 extends Vue {
-    // Prop
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: () => {}
+    @Component({
+        components: {}
     })
-    selectedDetail: any;
+    export class ViewStep8 extends Vue {
+        // Prop
+        @Prop({
+            type: Object, // Boolean, Number, String, Array, Object
+            default: () => {}
+        })
+        selectedDetail: any;
 
-    accessGroupSelectItem: any = {};
+        accessGroupSelectItem: any = [];
 
-    options: any = [];
+        options: any = [];
 
-    inputFormData: any = {
-        startDate: null,
-        startTime: null,
-        endDate: null,
-        endTime: null,
-        accessGroups: "",
-        approval: false
-    };
-
-    // TODO: wait api
-    // qrCode: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QRcode_image.svg/220px-QRcode_image.svg.png';
-    qrCode: string = "";
-    ptwText: string = "";
-
-    created() {}
-
-    mounted() {
-        this.initSelectItem();
-        this.initAccessGroupSelectItem();
-
-        this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
-        this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
-        this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
-        this.inputFormData.approval = this.selectedDetail.approval;
-    }
-
-    initSelectItem() {
-        this.options = [
-            { value: true, text: this._("w_Invitation_Approve") },
-            { value: false, text: this._("w_Invitation_Reject") }
-        ];
-    }
-
-    async initAccessGroupSelectItem() {
-        this.accessGroupSelectItem = {};
-        let tempAccessGroupSelectItem = {};
+        inputFormData: any = {
+            workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
+            workStartTime: new Date(this.selectedDetail.workStartTime) ? new Date(this.selectedDetail.workStartTime) : new Date(),
+            workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
+            workEndTime: new Date(this.selectedDetail.workEndTime) ? new Date(this.selectedDetail.workEndTime) : new Date(),
+            accessGroups: [],
+            accessGroupsForm: [],
+            approval: false
+        };
 
         // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempAccessGroupSelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.accessGroupSelectItem = tempAccessGroupSelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
-    }
+        // qrCode: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QRcode_image.svg/220px-QRcode_image.svg.png';
+        qrCode: string = "";
+        ptwText: string = "";
 
-    updateInputFormData(data) {
-        switch (data.key) {
-            case "startDate":
-                this.inputFormData.startDate = data.value;
-                this.inputFormData.startTime = data.value;
-                break;
-            case "endDate":
-                this.inputFormData.endDate = data.value;
-                this.inputFormData.endTime = data.value;
-                break;
-            case "accessGroups":
-                this.inputFormData.accessGroups = data.value;
-                break;
+        created() {
+            this.initInputFormData()
         }
-    }
 
-    changeApproval() {
-        this.$emit("step8", this.inputFormData);
-    }
+        mounted() {
+            this.initSelectItem();
+            this.initAccessGroupSelectItem();
+        }
 
-    IAddForm() {
-        return `
+        @Watch("selectedDetail", { deep: true })
+        private ptwIdChanged(newVal, oldVal) {
+            this.initInputFormData();
+        }
+
+        initInputFormData() {
+
+            this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
+            this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
+            this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
+            this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
+
+            if (this.selectedDetail.accessGroups) {
+                for (const detail in this.accessGroupSelectItem) {
+                    for (const id of this.selectedDetail.accessGroups) {
+                        if (detail === id) {
+                            // let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
+                            this.inputFormData.accessGroupsForm.push(id.doorId);
+                        }
+                    }
+                }
+            }
+
+            // this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
+            this.inputFormData.approval = this.selectedDetail.approval;
+        }
+
+        initSelectItem() {
+            this.options = [
+                { value: true, text: this._("w_Invitation_Approve") },
+                { value: false, text: this._("w_Invitation_Reject") }
+            ];
+        }
+
+        async initAccessGroupSelectItem() {
+            this.accessGroupSelectItem = {};
+            let tempAccessGroupSelectItem = {};
+
+            // TODO: wait api
+            await this.$server
+                .R("/flow1/crms/access-group")
+                .then((response: any) => {
+                    console.log('response ~ ', response);
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response) {
+                            tempAccessGroupSelectItem[returnValue.doorId] =
+                                returnValue.doorName;
+                        }
+                        this.accessGroupSelectItem = tempAccessGroupSelectItem;
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        }
+
+        updateInputFormData(data) {
+            switch (data.key) {
+                case "startDate":
+                    this.inputFormData.startDate = data.value;
+                    this.inputFormData.startTime = data.value;
+                    break;
+                case "endDate":
+                    this.inputFormData.endDate = data.value;
+                    this.inputFormData.endTime = data.value;
+                    break;
+                case "accessGroupsForm":
+                    for (const detail in this.accessGroupSelectItem) {
+                        for (const id of data.value) {
+                            if (detail === id) {
+                                let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
+                                this.inputFormData.accessGroups.push(door);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        changeApproval() {
+            this.$emit("step8", this.inputFormData);
+        }
+
+        IAddForm() {
+            return `
             interface {
 
                 /**
@@ -136,7 +168,7 @@ export class ViewStep8 extends Vue {
                  * @uiColumnGroup - date
                  * @uiDisabled - true
                  */
-                startDate?: string;
+                workStartDate?: string;
 
 
                 /**
@@ -145,14 +177,14 @@ export class ViewStep8 extends Vue {
                  * @uiColumnGroup - date
                  * @uiDisabled - true
                  */
-                endDate?: string;
+                workEndDate?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
-                 * @uiType - iv-form-label
+                 * @uiDisabled - true
                  */
-                accessGroups?:  ${toEnumInterface(
+                accessGroupsForm?:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,
                     true
                 )};
@@ -164,15 +196,15 @@ export class ViewStep8 extends Vue {
 
             }
         `;
+        }
     }
-}
 
-export default ViewStep8;
-Vue.component("view-step8", ViewStep8);
+    export default ViewStep8;
+    Vue.component("view-step8", ViewStep8);
 </script>
 
 <style lang="scss" scoped>
-.font-red {
-    color: red;
-}
+    .font-red {
+        color: red;
+    }
 </style>

@@ -189,23 +189,23 @@ export class Step4 extends Vue {
     options: any = [];
 
     inputFormData: IStep4 = {
-        checklist1: false,
-        checklist2: false,
-        checklist3: false,
-        checklist4: false,
-        checklist5: false,
-        checklist6: false,
-        checklist7: false,
-        checklist8: false,
-        checklist9: false,
+        checklist1: this.selectedDetail.checklist1 ? this.selectedDetail.checklist1 : false,
+        checklist2: this.selectedDetail.checklist2 ? this.selectedDetail.checklist2 : false,
+        checklist3: this.selectedDetail.checklist3 ? this.selectedDetail.checklist3 : false,
+        checklist4: this.selectedDetail.checklist4 ? this.selectedDetail.checklist4 : false,
+        checklist5: this.selectedDetail.checklist5 ? this.selectedDetail.checklist5 : false,
+        checklist6: this.selectedDetail.checklist6 ? this.selectedDetail.checklist6 : false,
+        checklist7: this.selectedDetail.checklist7 ? this.selectedDetail.checklist7 : false,
+        checklist8: this.selectedDetail.checklist8 ? this.selectedDetail.checklist8 : false,
+        checklist9: this.selectedDetail.checklist9 ? this.selectedDetail.checklist9 : false,
 
-        checklistRemark1: "",
-        checklistRemark2: "",
-        checklistRemark3: "",
-        checklistRemark4: "",
-        checklistRemark5: "",
-        checklistRemark6: "",
-        checklistRemark7: ""
+        checklistRemark1: this.selectedDetail.checklistRemark1 ?  this.selectedDetail.checklistRemark1: "",
+        checklistRemark2: this.selectedDetail.checklistRemark2 ?  this.selectedDetail.checklistRemark2: "",
+        checklistRemark3: this.selectedDetail.checklistRemark3 ?  this.selectedDetail.checklistRemark3: "",
+        checklistRemark4: this.selectedDetail.checklistRemark4 ?  this.selectedDetail.checklistRemark4: "",
+        checklistRemark5: this.selectedDetail.checklistRemark5 ?  this.selectedDetail.checklistRemark5: "",
+        checklistRemark6: this.selectedDetail.checklistRemark6 ?  this.selectedDetail.checklistRemark6: "",
+        checklistRemark7: this.selectedDetail.checklistRemark7 ?  this.selectedDetail.checklistRemark7: "",
     };
 
     // TODO: wait api
@@ -236,13 +236,13 @@ export class Step4 extends Vue {
         this.inputFormData.checklist8 = this.selectedDetail.checklist8;
         this.inputFormData.checklist9 = this.selectedDetail.checklist9;
 
-        this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark2 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark3 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark4 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark5 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark6 = this.selectedDetail.checklistRemark;
-        this.inputFormData.checklistRemark7 = this.selectedDetail.checklistRemark;
+        this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark1;
+        this.inputFormData.checklistRemark2 = this.selectedDetail.checklistRemark2;
+        this.inputFormData.checklistRemark3 = this.selectedDetail.checklistRemark3;
+        this.inputFormData.checklistRemark4 = this.selectedDetail.checklistRemark4;
+        this.inputFormData.checklistRemark5 = this.selectedDetail.checklistRemark5;
+        this.inputFormData.checklistRemark6 = this.selectedDetail.checklistRemark6;
+        this.inputFormData.checklistRemark7 = this.selectedDetail.checklistRemark7;
     }
 
     initSelectItem() {

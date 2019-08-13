@@ -165,6 +165,7 @@ export class Step7 extends Vue {
         title: [],
         tableDataFromApi: []
     };
+// this.personTable.tableDataFromApi ? this.personTable.tableDataFromApi :
 
     inputFormData: IWorkPermitPerson = {
         name: "",

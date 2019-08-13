@@ -32,7 +32,7 @@ export class Step1 extends Vue {
     })
     selectedDetail: any;
 
-    pdpaAccepted: boolean = false;
+    pdpaAccepted: boolean = this.selectedDetail.pdpaAccepted ? this.selectedDetail.pdpaAccepted : false;
 
     created() {
     }
