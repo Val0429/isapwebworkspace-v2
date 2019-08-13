@@ -1,8 +1,8 @@
 {
-    "name": "vms-server",
-    "version": "1.0.0",
-    "flow": "flow1",
-    "description": "CMS",
+    "name": "Contractor Mangement System",
+    "version": "1.00.00",
+    "flow": "/flow1",
+    "description": "Contractor Mangement System",
     "scripts": {
         "start": "npm run start --prefix ../",
         "build": "npm run build --prefix ../",

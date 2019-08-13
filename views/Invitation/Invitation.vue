@@ -26,7 +26,10 @@
                 >
                     <template #toolbox>
 
-                        <iv-toolbox-edit @click="pageToEdit" />
+                        <iv-toolbox-edit
+                            @click="pageToEdit"
+                            :disabled="isSelected.length == 0"
+                        />
                         <iv-toolbox-divider />
 
                         <iv-toolbox-export-excel @click="downloadPageExcel" />
@@ -42,11 +45,6 @@
                         :params="flow1Params"
                         @selected="selectedItem($event)"
                     >
-
-                        <!--                        <template #status="{$attrs, $listeners}">-->
-                        <!--                            {{ tableShowStatus($attrs.value) }}-->
-                        <!--                        </template>-->
-
                         <template #workStartDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
@@ -55,13 +53,9 @@
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
 
-                        <template #workCategoryId="{$attrs, $listeners}">
-                            {{ tableShowWorkCategory($attrs.value) }}
-                        </template>
-
                         <template #Actions="{$attrs, $listeners}">
 
-                            <iv-toolbox-more>
+                            <iv-toolbox-more :disabled="isSelected.length == 0">
                                 <iv-toolbox-edit @click="pageToEdit" />
                             </iv-toolbox-more>
                         </template>
@@ -174,10 +168,16 @@ export default class Invitation extends Vue {
     path: string = "";
     tableMultiple: boolean = false;
     selectedDetail: any = {};
+    isSelected: any = [];
 
     // api 回來資料
     responseData: any = {};
-    flow1Params: any = {};
+    flow1Params: any = {
+        paging: {
+            pageSize: 10,
+            page: 1
+        }
+    };
 
     workDescriptionSelectItem: any = {};
 
@@ -185,8 +185,7 @@ export default class Invitation extends Vue {
         objectId: "",
         contact: "",
         contactEmail: "",
-        companyId: "",
-        workCategoryId: ""
+        companyId: ""
     };
 
     created() {
@@ -205,8 +204,10 @@ export default class Invitation extends Vue {
 
     selectedItem(data) {
         if (!data) {
+            this.isSelected = [];
             this.selectedDetail = {};
         } else {
+            this.isSelected = data;
             this.selectedDetail = data;
         }
     }
@@ -249,19 +250,6 @@ export default class Invitation extends Vue {
 
     async receiveSearchConditionData(searchConditionData: any) {
         this.flow1Params = JSON.parse(JSON.stringify(searchConditionData));
-
-        // TODO: wait api
-        // Loading.show();
-        // await this.$server
-        //     .R("/", param)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.responseData = response;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
     }
 
     async addPTWToList(addPTWParam: object) {
@@ -298,11 +286,12 @@ export default class Invitation extends Vue {
     }
 
     async exportAllExcel() {
-        let parms: any = {
-            paging: Object
+        let parms = JSON.parse(JSON.stringify(this.flow1Params));
+        let paging = {
+            pageSize: 100000,
+            page: 1
         };
-        parms.paging.pageSize = 100000;
-        parms.paging.page = 1;
+        parms.paging = paging;
 
         await this.$server
             .R("/flow1/crms", parms)
@@ -321,7 +310,6 @@ export default class Invitation extends Vue {
     }
 
     exportExcelByApi(tableData) {
-        console.log("exportExcelByApi");
         let tableTh = document.getElementById("DataTables_Table_0") as any;
 
         let th = [];
@@ -337,16 +325,19 @@ export default class Invitation extends Vue {
 
         let data = [];
         for (var i = 0; i < tableData.length; i++) {
-            if (i != 0) {
-                let td = [];
-                td.push(i + 1);
-                td.push(tableData[i].ptwId);
-                td.push(tableData[i].status);
-                td.push(tableData[i].contactEmail);
-                td.push(tableData[i].company.name);
+            let td = [];
+            td.push(i + 1);
+            td.push(tableData[i].ptwId);
+            td.push(tableData[i].status);
+            td.push(tableData[i].contactEmail);
+            td.push(tableData[i].company.name);
+            td.push(tableData[i].workPremisesUnit);
+            td.push(tableData[i].workCategory.name);
+            td.push(new Date(tableData[i].workStartDate));
+            td.push(new Date(tableData[i].workEndDate));
+            td.push(tableData[i].contractorCompanyName);
 
-                data.push(td);
-            }
+            data.push(td);
         }
 
         let [fileName, fileType, sheetName] = [
@@ -358,8 +349,6 @@ export default class Invitation extends Vue {
     }
 
     exportExcel() {
-        console.log("exportExcel");
-        //let reportTable: any = this.$refs.listTable;
         let tableData = document.getElementById("DataTables_Table_0") as any;
 
         //data
@@ -415,27 +404,13 @@ export default class Invitation extends Vue {
         return result;
     }
 
-    tableShowWorkCategory(workCategoryId: string): string {
-        let result = "";
-
-        for (const id in this.workDescriptionSelectItem) {
-            if (workCategoryId === id) {
-                result = this.workDescriptionSelectItem[id];
-            }
-        }
-
-        return result;
-    }
-
     CheckObjectIfEmpty(obj: object): boolean {
         const result = Object.keys(obj);
         return result.length === 0;
     }
 
     CheckDate(today: Date, endDate: Date) {
-        return (
-            endDate.getTime() >= today.getTime()
-        );
+        return endDate.getTime() >= today.getTime();
     }
 
     ITableList() {
@@ -483,25 +458,24 @@ export default class Invitation extends Vue {
 
 
 
-                workCategory: interface {
-                    /**
+                workCategory:interface  {
+                /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
-                     */
-                    name: string;
-
+                */
+                name: string;
                 };
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_StartDate")}
                  */
-                workStartDate: string;
+                workStartDate: Date;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_EndDate")}
                  */
-                workEndDate: string;
+                workEndDate: Date;
 
 
                 /**
@@ -552,31 +526,32 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_Unit")}
                  */
-                unit: string;
+                workPremisesUnit: string;
 
-
+                workCategory: interface {
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
-                workCategoryId: string;
+                name: string;
+                };
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_StartDate")}
                  */
-                startDate: string;
+                workStartDate: Date;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_EndDate")}
                  */
-                endDate: string;
+                workEndDate: Date;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_ContractorCompany")}
                  */
-                contractor: string;
+                contractorCompanyName: string;
 
                 Actions: any
 

@@ -43,9 +43,15 @@ import Dialog from "@/services/Dialog";
 import ResponseFilter from "@/services/ResponseFilter";
 
 enum EPTWStatus {
-    approved = "approved",
-    pendingApproved = "pendingApproved",
-    rejected = "rejected"
+    new = "new",
+    approve = "approve",
+    pendding = "pendding",
+    reject = "reject"
+}
+
+interface IPaging {
+    pageSize: number;
+    page: number;
 }
 
 @Component({
@@ -84,10 +90,10 @@ export class SearchCondition extends Vue {
 
     initSelectItem() {
         this.ptwStatusSelectItem = {
-            new: this._("w_Invitation_New"),
-            approved: this._("w_Invitation_Approved"),
-            pendingApproved: this._("w_Invitation_PendingApproved"),
-            rejected: this._("w_Invitation_Rejected")
+            name: this._("w_Invitation_New"),
+            approve: this._("w_Invitation_Approved"),
+            pendding: this._("w_Invitation_PendingApproved"),
+            reject: this._("w_Invitation_Rejected")
         };
     }
 
@@ -155,31 +161,36 @@ export class SearchCondition extends Vue {
 
     async doSubmit(data) {
         const doSubmitParam: {
+            paging: IPaging;
             startDate: Date;
             endDate: Date;
-            ptwStatus: string;
+            status: string;
             ptwId: "";
-            email: "";
-            tenant: "";
-            workCategory: "";
+            contactEmail: "";
+            companyId: "";
+            workCategoryId: "";
             workType: "";
-            unit: "";
-            contactPerson: "";
-            contractor: "";
-            workersName: "";
+            workPremisesUnit: "";
+            personName: "";
+            workContact: "";
+            contractorCompanyName: "";
         } = {
-            startDate: new Date(),
-            endDate: new Date(),
-            ptwStatus: data.ptwStatus,
+            paging: {
+                pageSize: 10,
+                page: 1
+            },
+            startDate: data.startDate,
+            endDate: data.endDate,
+            status: data.ptwStatus,
             ptwId: data.ptwId,
-            email: data.email,
-            tenant: data.tenant,
-            workCategory: data.workCategory,
+            contactEmail: data.email,
+            companyId: data.tenant,
+            workCategoryId: data.workCategory,
             workType: data.workType,
-            unit: data.unit,
-            contactPerson: data.contactPerson,
-            contractor: data.contractor,
-            workersName: data.workersName
+            workPremisesUnit: data.unit,
+            personName: data.contactPerson,
+            workContact: data.contractor,
+            contractorCompanyName: data.workersName
         };
 
         if (!Datetime.CheckDate(data.startDate, data.endDate)) {
