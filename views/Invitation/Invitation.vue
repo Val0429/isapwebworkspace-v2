@@ -343,8 +343,6 @@ export default class Invitation extends Vue {
     }
 
     exportExcel() {
-        console.log("exportExcel");
-        //let reportTable: any = this.$refs.listTable;
         let tableData = document.getElementById("DataTables_Table_0") as any;
 
         //data
