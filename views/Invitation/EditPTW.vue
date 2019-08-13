@@ -248,6 +248,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
+import Datetime from "@/services/Datetime";
 
 interface IStep
     extends IStep1,
@@ -367,7 +368,6 @@ export class EditPTW extends Vue {
     pageToList() {
         this.$emit("edit-ptw-back-to-list");
     }
-
     initInputFormData() {
         if (
             this.selectedDetail.company &&
@@ -438,11 +438,45 @@ export class EditPTW extends Vue {
         this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
         this.inputFormData.persons = this.selectedDetail.persons;
 
-        console.log("attachments");
+        // Work Date time
+        let tempStartDate = new Date();
+        let tempEndDate = new Date();
+        if (
+            this.selectedDetail.workStartDate &&
+            this.selectedDetail.workStartTime
+        ) {
+            tempStartDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartTime),
+                    "HH:mm:ss"
+                )}`
+            );
+        }
+        if (
+            this.selectedDetail.workEndDate &&
+            this.selectedDetail.workEndTime
+        ) {
+            tempEndDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndTime),
+                    "HH:mm:ss"
+                )}`
+            );
+        }
+        this.inputFormData.workStartDate = tempStartDate;
+        this.inputFormData.workStartTime = tempStartDate;
+        this.inputFormData.workEndDate = tempEndDate;
+        this.inputFormData.workEndTime = tempEndDate;
+
         // attachments
         this.inputFormData.attachments = [];
         for (let attachment of this.selectedDetail.attachments) {
-            console.log("attachment", attachment);
             ImageBase64.urlToBase64(
                 this.inputFormData,
                 attachment.url,
@@ -744,7 +778,6 @@ export class EditPTW extends Vue {
 
     async stepTo8() {
         let stepRef: any = this.$refs.step;
-
         if (
             this.inputFormData.persons.length === 0 ||
             !this.inputFormData.persons

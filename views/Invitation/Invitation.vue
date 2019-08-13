@@ -28,7 +28,7 @@
 
                         <iv-toolbox-edit
                             @click="pageToEdit"
-                            :disabled="isSelected.length == 0"
+                            :disabled="selectedDetail.objectId == undefined"
                         />
                         <iv-toolbox-divider />
 
@@ -55,7 +55,7 @@
 
                         <template #Actions="{$attrs, $listeners}">
 
-                            <iv-toolbox-more :disabled="isSelected.length == 0">
+                            <iv-toolbox-more :disabled="selectedDetail.objectId == undefined">
                                 <iv-toolbox-edit @click="pageToEdit" />
                             </iv-toolbox-more>
                         </template>
@@ -204,10 +204,21 @@ export default class Invitation extends Vue {
 
     selectedItem(data) {
         if (!data) {
-            this.isSelected = [];
             this.selectedDetail = {};
         } else {
-            this.isSelected = data;
+            // Work Date time
+            let tempStartDate = new Date();
+            let tempEndDate = new Date();
+            if (data.workStartDate && data.workStartTime) {
+                tempStartDate = new Date(`${Datetime.DateTime2String(new Date(data.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(data.workStartTime), "HH:mm:ss")}`);
+            }
+            if (data.workEndDate && data.workEndTime) {
+                tempEndDate = new Date(`${Datetime.DateTime2String(new Date(data.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(data.workEndTime), "HH:mm:ss")}`);
+            }
+            data.workStartDate = tempStartDate;
+            data.workStartTime = tempStartDate;
+            data.workEndDate = tempEndDate;
+            data.workEndTime = tempEndDate;
             this.selectedDetail = data;
         }
     }

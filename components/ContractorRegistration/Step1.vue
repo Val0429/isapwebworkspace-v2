@@ -47,7 +47,6 @@ export class Step1 extends Vue {
 
     initInputFormData() {
         this.pdpaAccepted = this.selectedDetail.pdpaAccepted;
-        console.log('Step1', this.pdpaAccepted)
     }
 
     changeStatus() {

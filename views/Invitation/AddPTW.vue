@@ -176,8 +176,6 @@ export class AddPTW extends Vue {
                 );
             });
 
-        console.log("doSubmitParam ~ ", doSubmitParam);
-
         this.$emit("submit-data", doSubmitParam);
 
         this.clearInputData();

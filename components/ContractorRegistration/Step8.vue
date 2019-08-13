@@ -61,14 +61,11 @@ export class Step8 extends Vue {
         approval: false
     };
 
-    // TODO: wait api
-    // qrCode: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QRcode_image.svg/220px-QRcode_image.svg.png';
     qrCode: string = "";
     ptwText: string = "";
 
     async created() {
         this.initInputFormData();
-        console.log('accessGroups ~ ', this.inputFormData.accessGroups)
     }
 
     mounted() {
