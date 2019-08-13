@@ -53,9 +53,9 @@
 
         inputFormData: any = {
             workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-            workStartTime: new Date(this.selectedDetail.workStartTime) ? new Date(this.selectedDetail.workStartTime) : new Date(),
+            workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
             workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-            workEndTime: new Date(this.selectedDetail.workEndTime) ? new Date(this.selectedDetail.workEndTime) : new Date(),
+            workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
             accessGroups: [],
             accessGroupsForm: [],
             approval: false
@@ -83,9 +83,9 @@
         initInputFormData() {
 
             this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-            this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
+            this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartDate);
             this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-            this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
+            this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndDate);
 
             if (this.selectedDetail.accessGroups) {
                 for (const detail in this.accessGroupSelectItem) {
@@ -110,14 +110,13 @@
         }
 
         async initAccessGroupSelectItem() {
+
             this.accessGroupSelectItem = {};
             let tempAccessGroupSelectItem = {};
 
-            // TODO: wait api
             await this.$server
                 .R("/flow1/crms/access-group")
                 .then((response: any) => {
-                    console.log('response ~ ', response);
                     ResponseFilter.successCheck(this, response, (response: any) => {
                         for (const returnValue of response) {
                             tempAccessGroupSelectItem[returnValue.doorId] =
@@ -133,30 +132,35 @@
 
         updateInputFormData(data) {
             switch (data.key) {
-                case "startDate":
-                    this.inputFormData.startDate = data.value;
-                    this.inputFormData.startTime = data.value;
+                case "workStartDate":
+                    this.inputFormData.workStartDate = data.value;
+                    this.inputFormData.workStartTime = data.value;
                     break;
-                case "endDate":
-                    this.inputFormData.endDate = data.value;
-                    this.inputFormData.endTime = data.value;
+                case "workEndDate":
+                    this.inputFormData.workEndDate = data.value;
+                    this.inputFormData.workEndTime = data.value;
                     break;
                 case "accessGroupsForm":
-                    for (const detail in this.accessGroupSelectItem) {
-                        for (const id of data.value) {
-                            if (detail === id) {
-                                let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
-                                this.inputFormData.accessGroups.push(door);
-                            }
-                        }
-                    }
+                    this.inputFormData.accessGroupsForm = data.value;
                     break;
             }
+
         }
 
         changeApproval() {
+
+            for (const detail in this.accessGroupSelectItem) {
+                for (const id of this.inputFormData.accessGroupsForm) {
+                    if (detail === id) {
+                        let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
+                        this.inputFormData.accessGroups.push(door);
+                    }
+                }
+            }
+
             this.$emit("step8", this.inputFormData);
         }
+
 
         IAddForm() {
             return `
