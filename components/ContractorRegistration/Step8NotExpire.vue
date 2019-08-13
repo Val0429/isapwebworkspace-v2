@@ -57,7 +57,7 @@
             workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
             workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
             workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-            accessGroups: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups : [] ,
+            accessGroups: this.selectedDetail.accessGroups != undefined ? this.selectedDetail.accessGroups : [] ,
             accessGroupsForm: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups.map(item => item.doorId) : [],
             approval: false
         };

@@ -801,16 +801,16 @@ export class EditPTW extends Vue {
 
     ////////////////////////////// step 8  //////////////////////////////
 
-    receiveStep8Data(step8Date) {
+    receiveStep8Data(step8Date, approval) {
         this.inputFormData.workStartDate = step8Date.workStartDate;
         this.inputFormData.workStartTime = step8Date.workStartTime;
         this.inputFormData.workEndDate = step8Date.workEndDate;
         this.inputFormData.workEndTime = step8Date.workEndTime;
         this.inputFormData.accessGroups = step8Date.accessGroups;
 
-        this.isApproval = step8Date.approval;
+        this.isApproval = approval;
 
-        console.log("this.inputFormData ~ ", this.inputFormData);
+        // console.log("this.inputFormData ~ ", this.inputFormData, this.isApproval);
         this.isChange = true;
     }
 
@@ -931,6 +931,8 @@ export class EditPTW extends Vue {
     }
 
     async doSubmitApi() {
+
+
         const doSubmitParam = {
             objectId: this.selectedDetail.objectId
         };
