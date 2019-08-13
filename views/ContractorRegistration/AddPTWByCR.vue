@@ -919,6 +919,7 @@ export class AddPTWByCR extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
+                this.resultText = this._("w_ViewPTW_ResultFailedContent");
                 this.transition.step = 2;
             });
 
@@ -1005,7 +1006,7 @@ export class AddPTWByCR extends Vue {
             // step7
             persons: this.inputFormData.persons
         };
-        
+
         for (let attachment of this.inputFormData.attachments) {
             updateParam.attachments.push(attachment.base64);
         }
