@@ -407,14 +407,14 @@
             this.inputFormData.workStartDate = this.selectedDetail.workStartDate
                 ? this.selectedDetail.workStartDate
                 : new Date();
-            this.inputFormData.workStartTime = this.selectedDetail.workStartTime
-                ? this.selectedDetail.workStartTime
+            this.inputFormData.workStartTime = this.selectedDetail.workStartDate
+                ? this.selectedDetail.workStartDate
                 : new Date();
             this.inputFormData.workEndDate = this.selectedDetail.workEndDate
                 ? this.selectedDetail.workEndDate
                 : new Date();
-            this.inputFormData.workEndTime = this.selectedDetail.workEndTime
-                ? this.selectedDetail.workEndTime
+            this.inputFormData.workEndTime = this.selectedDetail.workEndDate
+                ? this.selectedDetail.workEndDate
                 : new Date();
             this.inputFormData.workContact = this.selectedDetail.workContact;
             this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;

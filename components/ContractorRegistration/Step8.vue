@@ -66,7 +66,7 @@ export class Step8 extends Vue {
     qrCode: string = "";
     ptwText: string = "";
 
-    created() {
+    async created() {
         this.initInputFormData();
     }
 
@@ -132,13 +132,13 @@ export class Step8 extends Vue {
 
     updateInputFormData(data) {
         switch (data.key) {
-            case "startDate":
-                this.inputFormData.startDate = data.value;
-                this.inputFormData.startTime = data.value;
+            case "workStartDate":
+                this.inputFormData.workStartDate = data.value;
+                this.inputFormData.workStartTime = data.value;
                 break;
-            case "endDate":
-                this.inputFormData.endDate = data.value;
-                this.inputFormData.endTime = data.value;
+            case "workEndDate":
+                this.inputFormData.workEndDate = data.value;
+                this.inputFormData.workEndTime = data.value;
                 break;
             case "accessGroupsForm":
                 this.inputFormData.accessGroupsForm = data.value;
