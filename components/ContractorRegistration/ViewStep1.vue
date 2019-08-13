@@ -32,9 +32,9 @@ export class ViewStep1 extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
-    pdpaAccepted: boolean = false;
+    pdpaAccepted: boolean = this.selectedDetail.pdpaAccepted ? this.selectedDetail.pdpaAccepted : false;
 
     created() {
     }
