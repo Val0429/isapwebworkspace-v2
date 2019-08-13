@@ -34,6 +34,7 @@
 import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { IWorkPermitAccessGroup } from '.';
+import ResponseFilter from '@/services/ResponseFilter';
 
 @Component({
     components: {}
@@ -51,11 +52,12 @@ export class Step8NotExpire extends Vue {
     options: any = [];
 
     inputFormData: any = {
-        startDate: new Date(),
-        startTime: new Date(),
-        endDate: new Date(),
-        endTime: new Date(),
+        workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
+        workStartTime: new Date(this.selectedDetail.workStartTime) ? new Date(this.selectedDetail.workStartTime) : new Date(),
+        workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
+        workEndTime: new Date(this.selectedDetail.workEndTime) ? new Date(this.selectedDetail.workEndTime) : new Date(),
         accessGroups: [],
+        accessGroupsForm: [],
         approval: false
     };
 
@@ -64,7 +66,9 @@ export class Step8NotExpire extends Vue {
     qrCode: string = "";
     ptwText: string = "";
 
-    created() {}
+    created() {
+        this.initInputFormData()
+    }
 
     mounted() {
         this.initSelectItem();
@@ -83,7 +87,19 @@ export class Step8NotExpire extends Vue {
         this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartTime);
         this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
         this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndTime);
-        this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
+
+        if (this.selectedDetail.accessGroups) {
+            for (const detail in this.accessGroupSelectItem) {
+                for (const id of this.selectedDetail.accessGroups) {
+                    if (detail === id) {
+                        // let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
+                        this.inputFormData.accessGroupsForm.push(id.doorId);
+                    }
+                }
+            }
+        }
+
+        // this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
         this.inputFormData.approval = this.selectedDetail.approval;
     }
 
@@ -99,20 +115,21 @@ export class Step8NotExpire extends Vue {
         let tempAccessGroupSelectItem = {};
 
         // TODO: wait api
-        // await this.$server
-        //     .R("/")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 tempAccessGroupSelectItem[returnValue.objectId] =
-        //                     returnValue.name;
-        //             }
-        //             this.accessGroupSelectItem = tempAccessGroupSelectItem;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .R("/flow1/crms/access-group")
+            .then((response: any) => {
+                console.log('response ~ ', response);
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        tempAccessGroupSelectItem[returnValue.doorId] =
+                            returnValue.doorName;
+                    }
+                    this.accessGroupSelectItem = tempAccessGroupSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     updateInputFormData(data) {
@@ -125,11 +142,19 @@ export class Step8NotExpire extends Vue {
                 this.inputFormData.endDate = data.value;
                 this.inputFormData.endTime = data.value;
                 break;
-            case "accessGroups":
-                this.inputFormData.accessGroups = data.value;
+            case "accessGroupsForm":
+                for (const detail in this.accessGroupSelectItem) {
+                    for (const id of data.value) {
+                        if (detail === id) {
+                            let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
+                            this.inputFormData.accessGroups.push(door);
+                        }
+                    }
+                }
                 break;
         }
     }
+
 
     changeApproval() {
         this.$emit("step8", this.inputFormData);
@@ -144,7 +169,7 @@ export class Step8NotExpire extends Vue {
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
                  */
-                startDate?: string;
+                workStartDate?: string;
 
 
                 /**
@@ -152,13 +177,13 @@ export class Step8NotExpire extends Vue {
                  * @uiType - iv-form-datetime
                  * @uiColumnGroup - date
                  */
-                endDate?: string;
+                workEndDate?: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
                  */
-                accessGroups?:  ${toEnumInterface(
+                accessGroupsForm?:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,
                     true
                 )};
