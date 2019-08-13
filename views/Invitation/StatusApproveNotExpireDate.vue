@@ -111,14 +111,14 @@
                                 class="step5Div"
                             >
                                 <img
-                                    v-if="file.type != 'application/pdf'"
+                                    v-if="file.type.indexOf('pdf') == 0"
                                     class="step5Imgs"
-                                    :src="file.base64"
+                                    :src="imageBase64.pdfEmpty"
                                 >
                                 <img
                                     v-else
                                     class="step5Imgs"
-                                    :src="imageBase64.pdfEmpty"
+                                    :src="file.base64"
                                 >
                                 <span
                                 >{{file.name}}</span>
@@ -236,6 +236,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
+import Datetime from '@/services/Datetime';
 
 interface IStep
     extends IStep1,
@@ -248,10 +249,19 @@ interface IStep
         IStep8 {}
 
 @Component({
-    components: { ViewStep1, ViewStep2, ViewStep3, ViewStep4, ViewStep5, ViewStep6, ViewStep7, Step8, Step8NotExpire }
+    components: {
+        ViewStep1,
+        ViewStep2,
+        ViewStep3,
+        ViewStep4,
+        ViewStep5,
+        ViewStep6,
+        ViewStep7,
+        Step8,
+        Step8NotExpire
+    }
 })
 export class StatusApproveNotExpireDate extends Vue {
-
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
@@ -284,8 +294,8 @@ export class StatusApproveNotExpireDate extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -338,10 +348,7 @@ export class StatusApproveNotExpireDate extends Vue {
         accessGroups: []
     };
 
-    created() {
-
-    }
-
+    created() {}
 
     mounted() {
         this.initInputFormData();
@@ -382,18 +389,6 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
-        this.inputFormData.workStartDate = this.selectedDetail.workStartDate
-            ? this.selectedDetail.workStartDate
-            : new Date();
-        this.inputFormData.workStartTime = this.selectedDetail.workStartDate
-            ? this.selectedDetail.workStartDate
-            : new Date();
-        this.inputFormData.workEndDate = this.selectedDetail.workEndDate
-            ? this.selectedDetail.workEndDate
-            : new Date();
-        this.inputFormData.workEndTime = this.selectedDetail.workEndDate
-            ? this.selectedDetail.workEndDate
-            : new Date();
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
 
@@ -417,24 +412,40 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
         this.inputFormData.persons = this.selectedDetail.persons;
 
+        // Work Date time
+        let tempStartDate = new Date();
+        let tempEndDate = new Date();
+        if (this.selectedDetail.workStartDate && this.selectedDetail.workStartTime) {
+            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workStartTime), "HH:mm:ss")}`);
+        }
+        if (this.selectedDetail.workEndDate && this.selectedDetail.workEndTime) {
+            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workEndTime), "HH:mm:ss")}`);
+        }
+        this.inputFormData.workStartDate = tempStartDate;
+        this.inputFormData.workStartTime = tempStartDate;
+        this.inputFormData.workEndDate = tempEndDate;
+        this.inputFormData.workEndTime = tempEndDate;
+
         // attachments
         this.inputFormData.attachments = [];
         for (let attachment of this.selectedDetail.attachments) {
-            ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
-                let tempAttachment = {
-                    name: attachment.name,
-                    type: attachment.type,
-                    base64: base64
-                };
-                item.attachments.push(tempAttachment);
-            })
+            ImageBase64.urlToBase64(
+                this.inputFormData,
+                attachment.url,
+                (item: any, base64: any) => {
+                    let tempAttachment = {
+                        name: attachment.name,
+                        type: attachment.type,
+                        base64: base64
+                    };
+                    item.attachments.push(tempAttachment);
+                }
+            );
         }
-
-        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     pageToList() {
-        this.$emit('edit-ptw-back-to-list');
+        this.$emit("edit-ptw-back-to-list");
     }
 
     ////////////////////////////// step 1  //////////////////////////////
@@ -476,11 +487,16 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
-        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
-        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
+        this.inputFormData.contractorCompanyName =
+            step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress =
+            step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail =
+            step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone =
+            step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax =
+            step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
@@ -764,7 +780,7 @@ export class StatusApproveNotExpireDate extends Vue {
         await this.tempSave();
 
         const doSubmitParam = {
-            objectId: this.selectedDetail.objectId,
+            objectId: this.selectedDetail.objectId
         };
 
         Loading.show();
@@ -845,7 +861,6 @@ export class StatusApproveNotExpireDate extends Vue {
 
             // step8
             accessGroups: this.inputFormData.accessGroups
-
         };
 
         await this.$server
@@ -853,7 +868,6 @@ export class StatusApproveNotExpireDate extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_SaveSuccess"));
-
                 });
             })
             .catch((e: any) => {
@@ -863,7 +877,10 @@ export class StatusApproveNotExpireDate extends Vue {
 }
 
 export default StatusApproveNotExpireDate;
-Vue.component("status-approve-not-expire-date-edit", StatusApproveNotExpireDate);
+Vue.component(
+    "status-approve-not-expire-date-edit",
+    StatusApproveNotExpireDate
+);
 </script>
 
 <style lang="scss" scoped>

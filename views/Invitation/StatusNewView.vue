@@ -116,14 +116,14 @@
                                 ></span>
 
                                 <img
-                                    v-if="file.type != 'application/pdf'"
+                                    v-if="file.type.indexOf('pdf') == 0"
                                     class="step5Imgs"
-                                    :src="file.base64"
+                                    :src="imageBase64.pdfEmpty"
                                 >
                                 <img
                                     v-else
                                     class="step5Imgs"
-                                    :src="imageBase64.pdfEmpty"
+                                    :src="file.base64"
                                 >
                                 <a
                                     :href="file.base64"
@@ -177,24 +177,24 @@
                     </iv-form>
                 </template>
 
-<!--                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>-->
-<!--                <template #8>-->
+                <!--                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>-->
+                <!--                <template #8>-->
 
-<!--                    <iv-form-->
-<!--                        :interface="IStep8()"-->
-<!--                        :value="inputFormData"-->
-<!--                        @submit="doSubmit($event)"-->
-<!--                    >-->
-<!--                        <template #step8>-->
-<!--                            <view-step8-->
-<!--                                :selectedDetail="selectedDetail"-->
-<!--                                class="col-md-12"-->
-<!--                                @step8="receiveStep8Data"-->
-<!--                            ></view-step8>-->
-<!--                        </template>-->
+                <!--                    <iv-form-->
+                <!--                        :interface="IStep8()"-->
+                <!--                        :value="inputFormData"-->
+                <!--                        @submit="doSubmit($event)"-->
+                <!--                    >-->
+                <!--                        <template #step8>-->
+                <!--                            <view-step8-->
+                <!--                                :selectedDetail="selectedDetail"-->
+                <!--                                class="col-md-12"-->
+                <!--                                @step8="receiveStep8Data"-->
+                <!--                            ></view-step8>-->
+                <!--                        </template>-->
 
-<!--                    </iv-form>-->
-<!--                </template>-->
+                <!--                    </iv-form>-->
+                <!--                </template>-->
 
             </iv-step-progress>
 
@@ -300,8 +300,8 @@ export class StatusNewView extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -354,9 +354,7 @@ export class StatusNewView extends Vue {
         accessGroups: []
     };
 
-    created() {
-        
-    }
+    created() {}
 
     mounted() {
         this.initSelectedData();
@@ -365,16 +363,38 @@ export class StatusNewView extends Vue {
     pageToList() {
         this.$emit("edit-ptw-back-to-list");
     }
-    
-    initSelectedData(){
+
+    initSelectedData() {
         // Work Date time
         let tempStartDate = new Date();
         let tempEndDate = new Date();
-        if (this.selectedDetail.workStartDate && this.selectedDetail.workStartTime) {
-            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workStartTime), "HH:mm:ss")}`);
+        if (
+            this.selectedDetail.workStartDate &&
+            this.selectedDetail.workStartTime
+        ) {
+            tempStartDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
-        if (this.selectedDetail.workEndDate && this.selectedDetail.workEndTime) {
-            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workEndTime), "HH:mm:ss")}`);
+        if (
+            this.selectedDetail.workEndDate &&
+            this.selectedDetail.workEndTime
+        ) {
+            tempEndDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
         this.inputFormData.workStartDate = tempStartDate;
         this.inputFormData.workStartTime = tempStartDate;
@@ -491,10 +511,26 @@ export class StatusNewView extends Vue {
         let tempStartDate = new Date();
         let tempEndDate = new Date();
         if (step3Date.workStartDate && step3Date.workStartTime) {
-            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(step3Date.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step3Date.workStartTime), "HH:mm:ss")}`);
+            tempStartDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(step3Date.workStartDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(step3Date.workStartTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
         if (step3Date.workEndDate && step3Date.workEndTime) {
-            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(step3Date.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step3Date.workEndTime), "HH:mm:ss")}`);
+            tempEndDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(step3Date.workEndDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(step3Date.workEndTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
         this.inputFormData.workStartDate = tempStartDate;
         this.inputFormData.workStartTime = tempStartDate;
@@ -707,10 +743,26 @@ export class StatusNewView extends Vue {
         let tempStartDate = new Date();
         let tempEndDate = new Date();
         if (step8Date.workStartDate && step8Date.workStartTime) {
-            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(step8Date.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step8Date.workStartTime), "HH:mm:ss")}`);
+            tempStartDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(step8Date.workStartDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(step8Date.workStartTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
         if (step8Date.workEndDate && step8Date.workEndTime) {
-            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(step8Date.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step8Date.workEndTime), "HH:mm:ss")}`);
+            tempEndDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(step8Date.workEndDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(step8Date.workEndTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
         this.inputFormData.workStartDate = tempStartDate;
         this.inputFormData.workStartTime = tempStartDate;

@@ -102,7 +102,6 @@
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>
-
                             <div
                                 v-if="inputFormData.attachments"
                                 v-for="file in  inputFormData.attachments"
@@ -114,14 +113,14 @@
                                 ></span>
 
                                 <img
-                                    v-if="file.type != 'application/pdf'"
+                                    v-if="file.type.indexOf('pdf') == 0"
                                     class="step5Imgs"
-                                    :src="file.base64"
+                                    :src="imageBase64.pdfEmpty"
                                 >
                                 <img
                                     v-else
                                     class="step5Imgs"
-                                    :src="imageBase64.pdfEmpty"
+                                    :src="file.base64"
                                 >
                                 <a
                                     :href="file.base64"
@@ -342,8 +341,7 @@ export class AddPTWByCR extends Vue {
         }
     }
 
-    mounted() {
-    }
+    mounted() {}
 
     async initTenant() {
         if (this.$route.query.id !== undefined) {
@@ -378,7 +376,8 @@ export class AddPTWByCR extends Vue {
 
                     this.selectedDetail.pdpaAccepted = response.pdpaAccepted;
                     this.selectedDetail.applicantName = response.applicantName;
-                    this.selectedDetail.workPremisesUnit = response.workPremisesUnit;
+                    this.selectedDetail.workPremisesUnit =
+                        response.workPremisesUnit;
                     this.selectedDetail.contractorCompanyName =
                         response.contractorCompanyName;
                     this.selectedDetail.contractorCompanyAddress =
@@ -435,10 +434,26 @@ export class AddPTWByCR extends Vue {
                     let tempStartDate = new Date();
                     let tempEndDate = new Date();
                     if (response.workStartDate && response.workStartTime) {
-                        tempStartDate = new Date(`${Datetime.DateTime2String(new Date(response.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(response.workStartTime), "HH:mm:ss")}`);
+                        tempStartDate = new Date(
+                            `${Datetime.DateTime2String(
+                                new Date(response.workStartDate),
+                                "YYYY-MM-DD"
+                            )} ${Datetime.DateTime2String(
+                                new Date(response.workStartTime),
+                                "HH:mm:ss"
+                            )}`
+                        );
                     }
                     if (response.workEndDate && response.workEndTime) {
-                        tempEndDate = new Date(`${Datetime.DateTime2String(new Date(response.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(response.workEndTime), "HH:mm:ss")}`);
+                        tempEndDate = new Date(
+                            `${Datetime.DateTime2String(
+                                new Date(response.workEndDate),
+                                "YYYY-MM-DD"
+                            )} ${Datetime.DateTime2String(
+                                new Date(response.workEndTime),
+                                "HH:mm:ss"
+                            )}`
+                        );
                     }
                     this.selectedDetail.workStartDate = tempStartDate;
                     this.selectedDetail.workStartTime = tempStartDate;
@@ -448,14 +463,18 @@ export class AddPTWByCR extends Vue {
                     // attachments
                     this.selectedDetail.attachments = [];
                     for (let attachment of response.attachments) {
-                        ImageBase64.urlToBase64(this.selectedDetail, attachment.url, (item: any, base64: any)=> {
-                            let tempAttachment = {
-                                name: attachment.name,
-                                type: attachment.type,
-                                base64: base64
-                            };
-                            item.attachments.push(tempAttachment);
-                        })
+                        ImageBase64.urlToBase64(
+                            this.selectedDetail,
+                            attachment.url,
+                            (item: any, base64: any) => {
+                                let tempAttachment = {
+                                    name: attachment.name,
+                                    type: attachment.type,
+                                    base64: base64
+                                };
+                                item.attachments.push(tempAttachment);
+                            }
+                        );
                     }
 
                     /////// inputFormData
@@ -476,7 +495,8 @@ export class AddPTWByCR extends Vue {
 
                     this.inputFormData.pdpaAccepted = response.pdpaAccepted;
                     this.inputFormData.applicantName = response.applicantName;
-                    this.inputFormData.workPremisesUnit = response.workPremisesUnit;
+                    this.inputFormData.workPremisesUnit =
+                        response.workPremisesUnit;
                     this.inputFormData.contractorCompanyName =
                         response.contractorCompanyName;
                     this.inputFormData.contractorCompanyAddress =
@@ -544,17 +564,20 @@ export class AddPTWByCR extends Vue {
                     // attachments
                     this.inputFormData.attachments = [];
                     for (let attachment of response.attachments) {
-                        ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
-                            let tempAttachment = {
-                                name: attachment.name,
-                                type: attachment.type,
-                                base64: base64
-                            };
-                            item.attachments.push(tempAttachment);
-                            console.log(item);
-                        })
+                        ImageBase64.urlToBase64(
+                            this.inputFormData,
+                            attachment.url,
+                            (item: any, base64: any) => {
+                                let tempAttachment = {
+                                    name: attachment.name,
+                                    type: attachment.type,
+                                    base64: base64
+                                };
+                                item.attachments.push(tempAttachment);
+                                console.log(item);
+                            }
+                        );
                     }
-
                 });
             })
             .catch((e: any) => {
@@ -839,8 +862,7 @@ export class AddPTWByCR extends Vue {
         );
     }
 
-    async stepTo8() {
-    }
+    async stepTo8() {}
 
     IStep7() {
         return `
@@ -862,10 +884,12 @@ export class AddPTWByCR extends Vue {
     }
 
     async doSubmit() {
-
         let stepRef: any = this.$refs.step;
 
-        console.log('this.inputFormData.persons ~ ', this.inputFormData.persons);
+        console.log(
+            "this.inputFormData.persons ~ ",
+            this.inputFormData.persons
+        );
 
         if (!this.inputFormData.persons) {
             Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
@@ -1039,7 +1063,7 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
     right: -10px;
     position: absolute;
 }
-.ptw-result-content{
+.ptw-result-content {
     text-align: center;
     font-size: 3rem;
 }
