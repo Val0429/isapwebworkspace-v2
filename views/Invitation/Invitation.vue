@@ -26,7 +26,10 @@
                 >
                     <template #toolbox>
 
-                        <iv-toolbox-edit @click="pageToEdit" />
+                        <iv-toolbox-edit
+                            @click="pageToEdit"
+                            :disabled="isSelected.length == 0"
+                        />
                         <iv-toolbox-divider />
 
                         <iv-toolbox-export-excel @click="downloadPageExcel" />
@@ -52,7 +55,7 @@
 
                         <template #Actions="{$attrs, $listeners}">
 
-                            <iv-toolbox-more>
+                            <iv-toolbox-more :disabled="isSelected.length == 0">
                                 <iv-toolbox-edit @click="pageToEdit" />
                             </iv-toolbox-more>
                         </template>
@@ -165,6 +168,7 @@ export default class Invitation extends Vue {
     path: string = "";
     tableMultiple: boolean = false;
     selectedDetail: any = {};
+    isSelected: any = [];
 
     // api 回來資料
     responseData: any = {};
@@ -200,8 +204,10 @@ export default class Invitation extends Vue {
 
     selectedItem(data) {
         if (!data) {
+            this.isSelected = [];
             this.selectedDetail = {};
         } else {
+            this.isSelected = data;
             this.selectedDetail = data;
         }
     }
