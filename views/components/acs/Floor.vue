@@ -171,12 +171,12 @@ export default class Floor extends BasicFormQuick implements IFormQuick2 {
     } 
     
     onFilterSubmit($event?: any): void {
-        
+        console.log("$event", $event);
       if(!$event)this.floorsystem="";
-
+        delete($event.system);
        let params = $event || {};
        if(this.floorsystem) params.system=this.floorsystem;
-       
+       console.log("params", params);
        this.setParams(params);
     }
     private async getElevators(){

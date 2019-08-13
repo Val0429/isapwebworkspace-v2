@@ -239,11 +239,14 @@ export default class Reader extends BasicFormQuick implements IFormQuick2 {
           }`;
     } 
     onFilterSubmit($event?: any): void {
-      if(!$event){this.readersystem="";this.readerIO="";}
-
+      console.log("event", $event, this.readersystem, this.readerIO);
+       if(!$event){this.readersystem="";this.readerIO="";}
+        delete($event.system);
+        delete($event.readerIO);
        let params = $event || {};
        if(this.readersystem) params.system=this.readersystem;
        if(this.readerIO) params.readerIO=this.readerIO;
+       console.log("params", params);
        this.setParams(params);
        
     }
