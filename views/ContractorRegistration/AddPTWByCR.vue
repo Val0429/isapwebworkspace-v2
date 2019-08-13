@@ -218,6 +218,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
+import Datetime from "@/services/Datetime";
 
 @Component({
     components: {
@@ -398,22 +399,10 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.workType6 = response.workType6;
                     this.selectedDetail.workType7 = response.workType7;
                     this.selectedDetail.workType8 = response.workType8;
-                    this.selectedDetail.workStartDate = response.workStartDate
-                        ? response.workStartDate
-                        : new Date();
-                    this.selectedDetail.workStartTime = response.workStartTime
-                        ? response.workStartTime
-                        : new Date();
-                    this.selectedDetail.workEndDate = response.workEndDate
-                        ? response.workEndDate
-                        : new Date();
-                    this.selectedDetail.workEndTime = response.workEndTime
-                        ? response.workEndTime
-                        : new Date();
+
                     this.selectedDetail.workContact = response.workContact;
                     this.selectedDetail.workContactPhone =
                         response.workContactPhone;
-
                     this.selectedDetail.checklist1 = response.checklist1;
                     this.selectedDetail.checklistRemark1 =
                         response.checklistRemark1;
@@ -440,6 +429,20 @@ export class AddPTWByCR extends Vue {
 
                     this.selectedDetail.termsAccepted = response.termsAccepted;
                     this.selectedDetail.persons = response.persons;
+
+                    // Work Date time
+                    let tempStartDate = new Date();
+                    let tempEndDate = new Date();
+                    if (response.workStartDate && response.workStartTime) {
+                        tempStartDate = new Date(`${Datetime.DateTime2String(new Date(response.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(response.workStartTime), "HH:mm:ss")}`);
+                    }
+                    if (response.workEndDate && response.workEndTime) {
+                        tempEndDate = new Date(`${Datetime.DateTime2String(new Date(response.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(response.workEndTime), "HH:mm:ss")}`);
+                    }
+                    this.selectedDetail.workStartDate = tempStartDate;
+                    this.selectedDetail.workStartTime = tempStartDate;
+                    this.selectedDetail.workEndDate = tempEndDate;
+                    this.selectedDetail.workEndTime = tempEndDate;
 
                     // attachments
                     this.selectedDetail.attachments = [];

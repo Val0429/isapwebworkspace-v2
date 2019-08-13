@@ -243,6 +243,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
+import Datetime from "@/services/Datetime";
 
 interface IStep
     extends IStep1,
@@ -271,7 +272,7 @@ export class StatusNewView extends Vue {
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
     })
-    selectedDetail: object;
+    selectedDetail: any;
 
     // step 相關
     isMounted: boolean = false;
@@ -354,13 +355,31 @@ export class StatusNewView extends Vue {
     };
 
     created() {
+        
     }
 
     mounted() {
+        this.initSelectedData();
     }
 
     pageToList() {
         this.$emit("edit-ptw-back-to-list");
+    }
+    
+    initSelectedData(){
+        // Work Date time
+        let tempStartDate = new Date();
+        let tempEndDate = new Date();
+        if (this.selectedDetail.workStartDate && this.selectedDetail.workStartTime) {
+            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workStartTime), "HH:mm:ss")}`);
+        }
+        if (this.selectedDetail.workEndDate && this.selectedDetail.workEndTime) {
+            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workEndTime), "HH:mm:ss")}`);
+        }
+        this.inputFormData.workStartDate = tempStartDate;
+        this.inputFormData.workStartTime = tempStartDate;
+        this.inputFormData.workEndDate = tempEndDate;
+        this.inputFormData.workEndTime = tempEndDate;
     }
 
     ////////////////////////////// step 1  //////////////////////////////
@@ -465,12 +484,22 @@ export class StatusNewView extends Vue {
         this.inputFormData.workType6 = step3Date.workType6;
         this.inputFormData.workType7 = step3Date.workType7;
         this.inputFormData.workType8 = step3Date.workType8;
-        this.inputFormData.workStartDate = step3Date.workStartDate;
-        this.inputFormData.workStartTime = step3Date.workStartTime;
-        this.inputFormData.workEndDate = step3Date.workEndDate;
-        this.inputFormData.workEndTime = step3Date.workEndTime;
         this.inputFormData.workContact = step3Date.workContact;
         this.inputFormData.workContactPhone = step3Date.workContactPhone;
+
+        // Work Date time
+        let tempStartDate = new Date();
+        let tempEndDate = new Date();
+        if (step3Date.workStartDate && step3Date.workStartTime) {
+            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(step3Date.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step3Date.workStartTime), "HH:mm:ss")}`);
+        }
+        if (step3Date.workEndDate && step3Date.workEndTime) {
+            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(step3Date.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step3Date.workEndTime), "HH:mm:ss")}`);
+        }
+        this.inputFormData.workStartDate = tempStartDate;
+        this.inputFormData.workStartTime = tempStartDate;
+        this.inputFormData.workEndDate = tempEndDate;
+        this.inputFormData.workEndTime = tempEndDate;
 
         this.isChange = true;
     }
@@ -672,11 +701,21 @@ export class StatusNewView extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 
     receiveStep8Data(step8Date) {
-        this.inputFormData.workStartDate = step8Date.startDate;
-        this.inputFormData.workStartTime = step8Date.startTime;
-        this.inputFormData.workEndDate = step8Date.endDate;
-        this.inputFormData.workEndTime = step8Date.endTime;
         this.inputFormData.accessGroups = step8Date.accessGroup;
+
+        // Work Date time
+        let tempStartDate = new Date();
+        let tempEndDate = new Date();
+        if (step8Date.workStartDate && step8Date.workStartTime) {
+            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(step8Date.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step8Date.workStartTime), "HH:mm:ss")}`);
+        }
+        if (step8Date.workEndDate && step8Date.workEndTime) {
+            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(step8Date.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(step8Date.workEndTime), "HH:mm:ss")}`);
+        }
+        this.inputFormData.workStartDate = tempStartDate;
+        this.inputFormData.workStartTime = tempStartDate;
+        this.inputFormData.workEndDate = tempEndDate;
+        this.inputFormData.workEndTime = tempEndDate;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
         this.isChange = true;
