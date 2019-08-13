@@ -441,11 +441,12 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.termsAccepted = response.termsAccepted;
                     this.selectedDetail.persons = response.persons;
 
+                    // attachments
                     this.selectedDetail.attachments = [];
                     for (let attachment of response.attachments) {
                         ImageBase64.urlToBase64(this.selectedDetail, attachment.url, (item: any, base64: any)=> {
                             let tempAttachment = {
-                                name: attachment.anme,
+                                name: attachment.name,
                                 type: attachment.type,
                                 base64: base64
                             };
@@ -535,11 +536,12 @@ export class AddPTWByCR extends Vue {
                     this.inputFormData.termsAccepted = response.termsAccepted;
                     this.inputFormData.persons = response.persons;
 
+                    // attachments
                     this.inputFormData.attachments = [];
                     for (let attachment of response.attachments) {
                         ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
                             let tempAttachment = {
-                                name: attachment.anme,
+                                name: attachment.name,
                                 type: attachment.type,
                                 base64: base64
                             };

@@ -435,9 +435,15 @@
             this.inputFormData.checklist8 = this.selectedDetail.checklist8;
             this.inputFormData.checklist9 = this.selectedDetail.checklist9;
 
-            this.inputFormData.attachments = this.selectedDetail.attachments;
             this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
             this.inputFormData.persons = this.selectedDetail.persons;
+
+            // attachments
+            for (let attachment of this.selectedDetail.attachments) {
+                ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
+                    item.attachments.push(base64);
+                })
+            }
 
             console.log("this.inputFormData ~ ", this.inputFormData);
         }
@@ -601,8 +607,6 @@
             this.inputFormData.checklistRemark5 = step4Date.checklistRemark5;
             this.inputFormData.checklistRemark6 = step4Date.checklistRemark6;
             this.inputFormData.checklistRemark7 = step4Date.checklistRemark7;
-
-            console.log(" ~ ", this.inputFormData);
             this.isChange = true;
         }
 
