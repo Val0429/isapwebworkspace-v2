@@ -814,94 +814,91 @@ export class EditPTW extends Vue {
         this.isChange = true;
     }
 
-    async tempSave() {
-        this.isChange = false;
+        async tempSave() {
+            this.isChange = false;
 
-        const updateParam = {
-            // add PTW的參數
-            objectId: this.selectedDetail.objectId,
+            const updateParam = {
+                // add PTW的參數
+                objectId: this.selectedDetail.objectId,
 
-            // step2可更改的部份
-            companyId: this.inputFormData.tenant,
-            workCategoryId: this.inputFormData.workCategoryId,
+                // step2可更改的部份
+                companyId: this.inputFormData.tenant,
+                workCategoryId: this.inputFormData.workCategoryId,
 
-            contact: this.inputFormData.contact,
+                contact: this.inputFormData.contact,
 
-            contactEmail: this.inputFormData.contactEmail,
+                contactEmail: this.inputFormData.contactEmail,
 
-            // Step 1
-            pdpaAccepted: this.inputFormData.pdpaAccepted,
+                // Step 1
+                pdpaAccepted: this.inputFormData.pdpaAccepted,
 
-            // step2
-            // Contractor Information
-            applicantName: this.inputFormData.applicantName,
+                // step2
+                // Contractor Information
+                applicantName: this.inputFormData.applicantName,
 
-            // Company
-            contractorCompanyName: this.inputFormData.contractorCompanyName,
-            contractorCompanyAddress: this.inputFormData
-                .contractorCompanyAddress,
-            contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-            contractorCompanyContactPhone: this.inputFormData
-                .contractorCompanyContactPhone,
-            contractorCompanyFax: this.inputFormData.contractorCompanyFax,
+                // Company
+                contractorCompanyName: this.inputFormData.contractorCompanyName,
+                contractorCompanyAddress: this.inputFormData
+                    .contractorCompanyAddress,
+                contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
+                contractorCompanyContactPhone: this.inputFormData
+                    .contractorCompanyContactPhone,
+                contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
-            // step3
-            workPremisesUnit: this.inputFormData.workPremisesUnit,
-            workLocation: this.inputFormData.workLocation,
-            workDescription: this.inputFormData.workDescription,
-            workType1: this.inputFormData.workType1,
-            workType2: this.inputFormData.workType2,
-            workType3: this.inputFormData.workType3,
-            workType4: this.inputFormData.workType4,
-            workType5: this.inputFormData.workType5,
-            workType6: this.inputFormData.workType6,
-            workType7: this.inputFormData.workType7,
-            workType8: this.inputFormData.workType8,
-            workStartDate: this.inputFormData.workStartDate,
-            workStartTime: this.inputFormData.workStartTime,
-            workEndDate: this.inputFormData.workEndDate,
-            workEndTime: this.inputFormData.workEndTime,
-            workContact: this.inputFormData.workContact,
-            workContactPhone: this.inputFormData.workContactPhone,
+                // step3
+                workPremisesUnit: this.inputFormData.workPremisesUnit,
+                workLocation: this.inputFormData.workLocation,
+                workDescription: this.inputFormData.workDescription,
+                workType1: this.inputFormData.workType1,
+                workType2: this.inputFormData.workType2,
+                workType3: this.inputFormData.workType3,
+                workType4: this.inputFormData.workType4,
+                workType5: this.inputFormData.workType5,
+                workType6: this.inputFormData.workType6,
+                workType7: this.inputFormData.workType7,
+                workType8: this.inputFormData.workType8,
+                workStartDate: this.inputFormData.workStartDate,
+                workStartTime: this.inputFormData.workStartTime,
+                workEndDate: this.inputFormData.workEndDate,
+                workEndTime: this.inputFormData.workEndTime,
+                workContact: this.inputFormData.workContact,
+                workContactPhone: this.inputFormData.workContactPhone,
 
-            // step4
-            checklist1: this.inputFormData.checklist1,
-            checklist2: this.inputFormData.checklist2,
-            checklist3: this.inputFormData.checklist3,
-            checklist4: this.inputFormData.checklist4,
-            checklist5: this.inputFormData.checklist5,
-            checklist6: this.inputFormData.checklist6,
-            checklist7: this.inputFormData.checklist7,
-            checklist8: this.inputFormData.checklist8,
-            checklist9: this.inputFormData.checklist9,
+                // step4
+                checklist1: this.inputFormData.checklist1,
+                checklist2: this.inputFormData.checklist2,
+                checklist3: this.inputFormData.checklist3,
+                checklist4: this.inputFormData.checklist4,
+                checklist5: this.inputFormData.checklist5,
+                checklist6: this.inputFormData.checklist6,
+                checklist7: this.inputFormData.checklist7,
+                checklist8: this.inputFormData.checklist8,
+                checklist9: this.inputFormData.checklist9,
 
-            checklistRemark1: this.inputFormData.checklistRemark1,
-            checklistRemark2: this.inputFormData.checklistRemark2,
-            checklistRemark3: this.inputFormData.checklistRemark3,
-            checklistRemark4: this.inputFormData.checklistRemark4,
-            checklistRemark5: this.inputFormData.checklistRemark5,
-            checklistRemark6: this.inputFormData.checklistRemark6,
-            checklistRemark7: this.inputFormData.checklistRemark7,
+                checklistRemark1: this.inputFormData.checklistRemark1,
+                checklistRemark2: this.inputFormData.checklistRemark2,
+                checklistRemark3: this.inputFormData.checklistRemark3,
+                checklistRemark4: this.inputFormData.checklistRemark4,
+                checklistRemark5: this.inputFormData.checklistRemark5,
+                checklistRemark6: this.inputFormData.checklistRemark6,
+                checklistRemark7: this.inputFormData.checklistRemark7,
 
-            // step5
-            // TODO: 問 Min  attachments?: Parse.File[];
-            attachments: this.inputFormData.attachments
-                ? this.inputFormData.attachments.map(item => item.base64)
-                : [],
+                // step5
+                attachments: [],
 
-            // step6
-            termsAccepted: this.inputFormData.termsAccepted,
+                // step6
+                termsAccepted: this.inputFormData.termsAccepted,
 
-            // step7
-            persons: this.inputFormData.persons,
+                // step7
+                persons: this.inputFormData.persons,
 
-            // step8
-            accessGroups: this.inputFormData.accessGroups
-        };
+                // step8
+                accessGroups: this.inputFormData.accessGroups
+            };
 
-        for (let attachment of this.inputFormData.attachments) {
-            updateParam.attachments.push(attachment.base64);
-        }
+            for (let attachment of this.inputFormData.attachments) {
+                updateParam.attachments.push(attachment.base64);
+            }
 
         await this.$server
             .U("/flow1/crms", updateParam)

@@ -996,10 +996,7 @@ export class AddPTWByCR extends Vue {
             checklistRemark7: this.inputFormData.checklistRemark7,
 
             // step5
-            // TODO: 問 Min  attachments?: Parse.File[];
-            attachments: this.inputFormData.attachments
-                ? this.inputFormData.attachments.map(item => item.base64)
-                : [],
+            attachments: [],
 
             // step6
             termsAccepted: this.inputFormData.termsAccepted,
@@ -1007,6 +1004,10 @@ export class AddPTWByCR extends Vue {
             // step7
             persons: this.inputFormData.persons
         };
+        
+        for (let attachment of this.inputFormData.attachments) {
+            updateParam.attachments.push(attachment.base64);
+        }
 
         await this.$server
             .U("/flow1/crms/tenant", updateParam)
