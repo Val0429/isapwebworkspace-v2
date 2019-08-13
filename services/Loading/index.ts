@@ -10,7 +10,7 @@ export class Loading {
         let self: any = Vue;
         this.loader = self.$loading.show({
             // Optional parameters
-            canCancel: true,
+            // canCancel: true,
         });
     }
     hide() {

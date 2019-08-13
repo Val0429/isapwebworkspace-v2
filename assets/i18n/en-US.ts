@@ -250,6 +250,10 @@ export default class LangObject {
     w_Invitation_Approve = 'Approve';
     w_Invitation_Reject = 'Reject';
 
+    w_ViewPTW_ResultTitle = "Registration Result";
+    w_ViewPTW_ResultSuccessContent = "Registration Success";
+    w_ViewPTW_ResultFailedContent = "Registration Failed";
+
     /////////////////////// General Settings //////////////////////
 
     w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
