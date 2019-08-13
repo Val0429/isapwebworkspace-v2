@@ -56,8 +56,8 @@ export class Step8 extends Vue {
         workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
         workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        accessGroups: [],
-        accessGroupsForm: [],
+        accessGroups: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups : [] ,
+        accessGroupsForm: this.selectedDetail.accessGroupsForm ? this.selectedDetail.accessGroupsForm.map(item => item.doorId) : [],
         approval: false
     };
 
@@ -68,6 +68,7 @@ export class Step8 extends Vue {
 
     async created() {
         this.initInputFormData();
+        console.log('accessGroups ~ ', this.inputFormData.accessGroups)
     }
 
     mounted() {
@@ -86,19 +87,14 @@ export class Step8 extends Vue {
         this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartDate);
         this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
         this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndDate);
+        this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
 
         if (this.selectedDetail.accessGroups) {
-            for (const detail in this.accessGroupSelectItem) {
-                for (const id of this.selectedDetail.accessGroups) {
-                    if (detail === id) {
-                        // let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
-                        this.inputFormData.accessGroupsForm.push(id.doorId);
-                    }
-                }
+            for (const detail in this.selectedDetail.accessGroups) {
+                this.inputFormData.accessGroupsForm.push(detail);
             }
         }
 
-        // this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
         this.inputFormData.approval = this.selectedDetail.approval;
     }
 

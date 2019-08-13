@@ -6,21 +6,21 @@
             @update:file="putFile($event)"
         >
             <template #file="{$attrs, $listeners}">
-                <ul >
-                    <span>{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>
-                    　<li>{{_('w_ViewPTW_Step5_RiskAssessment')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_MethodOfStatement')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_SafeWorkProcedure')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_AnyRelevantLicensesOrPasses')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_BizsafeCertificate')}}</li>
-                    　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
-                </ul>
-<!--                <ul :hidden="!permission">-->
-<!--                    <span>{{_('w_ViewPTW_Step5_SupportingDocument')}}</span>-->
-<!--                    　<li>{{_('w_ViewPTW_Step5_Forms')}}</li>-->
-<!--                    　<li>{{_('w_ViewPTW_Step5_License')}}</li>-->
+<!--                <ul >-->
+<!--                    <span>{{_('w_ViewPTW_Step5_SupportingDocuments')}}</span>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_RiskAssessment')}}</li>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_MethodOfStatement')}}</li>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_SafeWorkProcedure')}}</li>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_AnyRelevantLicensesOrPasses')}}</li>-->
+<!--                    　<li>{{_('w_ViewPTW_Step5_BizsafeCertificate')}}</li>-->
 <!--                    　<li>{{_('w_ViewPTW_Step5_Others')}}</li>-->
 <!--                </ul>-->
+                <ul :hidden="!permission">
+                    <span>{{_('w_ViewPTW_Step5_SupportingDocument')}}</span>
+                    　<li>{{_('w_ViewPTW_Step5_Forms')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_License')}}</li>
+                    　<li>{{_('w_ViewPTW_Step5_Others')}}</li>
+                </ul>
                 <iv-form-file
                     v-bind="$attrs"
                     v-on="$listeners"

@@ -439,6 +439,7 @@
             this.inputFormData.persons = this.selectedDetail.persons;
 
             // attachments
+            this.inputFormData.attachments = [];
             for (let attachment of this.selectedDetail.attachments) {
                 ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
                     let tempAttachment = {
@@ -660,20 +661,22 @@
             this.isChange = true;
         }
 
-        async putStep5File(files) {
+        putStep5File(files) {
             for (let file of files) {
                 if (file) {
                     ImageBase64.fileToBase64(file, (base64 = "") => {
                         if (base64 != "") {
-                            this.inputFormData.attachments.push(base64);
+                            this.inputFormData.attachments.push({
+                                name: file.name,
+                                type: file.type,
+                                base64: base64
+                            });
                         } else {
                             Dialog.error(this._("w_Error_FileToLarge"));
                         }
                     });
                 }
             }
-            this.isChange = true;
-            await this.tempSave();
         }
 
         async stepTo6() {
@@ -758,10 +761,10 @@
         ////////////////////////////// step 8  //////////////////////////////
 
         receiveStep8Data(step8Date) {
-            this.inputFormData.workStartDate = step8Date.startDate;
-            this.inputFormData.workStartTime = step8Date.startTime;
-            this.inputFormData.workEndDate = step8Date.endDate;
-            this.inputFormData.workEndTime = step8Date.endTime;
+            this.inputFormData.workStartDate = step8Date.workStartDate;
+            this.inputFormData.workStartTime = step8Date.workStartTime;
+            this.inputFormData.workEndDate = step8Date.workEndDate;
+            this.inputFormData.workEndTime = step8Date.workEndTime;
             this.inputFormData.accessGroups = step8Date.accessGroups;
 
             this.isApproval = step8Date.approval;
@@ -841,7 +844,9 @@
 
                 // step5
                 // TODO: 問 Min  attachments?: Parse.File[];
-                attachments: [],
+                attachments: this.inputFormData.attachments
+                    ? this.inputFormData.attachments.map(item => item.base64)
+                    : [],
 
                 // step6
                 termsAccepted: this.inputFormData.termsAccepted,
@@ -889,7 +894,6 @@
         }
 
         async doSubmitApi() {
-            // TODO: wait api
             const doSubmitParam = {
                 objectId: this.selectedDetail.objectId
             };
@@ -912,7 +916,7 @@
                         return ResponseFilter.catchError(this, e);
                     });
 
-                this.$emit("submit-data", doSubmitParam);
+                this.$emit("done-submit", doSubmitParam);
             } else {
                 Loading.show();
                 await this.$server
@@ -931,7 +935,7 @@
                         return ResponseFilter.catchError(this,e);
                     });
 
-                this.$emit("submit-data", doSubmitParam);
+                this.$emit("done-submit");
             }
         }
 

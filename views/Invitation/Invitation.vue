@@ -47,16 +47,12 @@
                         <!--                            {{ tableShowStatus($attrs.value) }}-->
                         <!--                        </template>-->
 
-                        <template #startDate="{$attrs}">
+                        <template #workStartDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
 
-                        <template #endDate="{$attrs}">
+                        <template #workEndDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
-                        </template>
-
-                        <template #workCategory="{$attrs, $listeners}">
-                            {{$attrs.row.workCategory.name }}
                         </template>
 
                         <template #Actions="{$attrs, $listeners}">
@@ -87,6 +83,7 @@
                     v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'pendding'"
                     :selectedDetail="selectedDetail"
                     @edit-ptw-back-to-list="editPtwBackToList"
+                    @done-submit="editPtwBackToList"
                 ></edit-ptw>
 
                 <!-- status-new-view -->
@@ -99,18 +96,20 @@
 
                 <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
                 <status-approve-not-expire-date-edit
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && CheckDate(new Date(),selectedDetail.workEndDate)"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && CheckDate(new Date(), new Date(selectedDetail.workEndDate))"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
+                    @edit-ptw-back-to-list="editPtwBackToList"
                 >
 
                 </status-approve-not-expire-date-edit>
 
                 <!-- status-reject-view ，只看，還需要 加上 Approve到期後的條件 -->
                 <status-reject-approve-expire-date-view
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'reject' || !CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && !CheckDate(new Date(),selectedDetail.workEndDate)"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'reject' || (!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && !CheckDate(new Date(), new Date(selectedDetail.workEndDate)))"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
+                    @edit-ptw-back-to-list="editPtwBackToList"
                 >
                 </status-reject-approve-expire-date-view>
 
@@ -213,7 +212,6 @@ export default class Invitation extends Vue {
         } else {
             this.selectedDetail = data;
         }
-        console.log("Inva selectedItem ~ ", this.selectedDetail);
     }
 
     async initWorkDescriptionSelectItem() {
@@ -341,7 +339,7 @@ export default class Invitation extends Vue {
             td.push(tableData[i].workCategory.name);
             td.push(new Date(tableData[i].workStartDate));
             td.push(new Date(tableData[i].workEndDate));
-            td.push(tableData[i].workContact);
+            td.push(tableData[i].contractorCompanyName);
 
             data.push(td);
         }
@@ -429,17 +427,8 @@ export default class Invitation extends Vue {
         return result.length === 0;
     }
 
-    DateToZero(value: Date): Date {
-        let date = new Date(value.getTime());
-        date.setHours(0, 0, 0, 0);
-        return date;
-    }
-
     CheckDate(today: Date, endDate: Date) {
-        return (
-            this.DateToZero(new Date(endDate)).getTime() >=
-            this.DateToZero(today).getTime()
-        );
+        return endDate.getTime() >= today.getTime();
     }
 
     ITableList() {
@@ -486,10 +475,13 @@ export default class Invitation extends Vue {
                 workPremisesUnit: string;
 
 
-                /**
+
+                workCategory: interface {
+                    /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
-                workCategory: string;
+                name: string;
+                }
 
 
                 /**
@@ -507,7 +499,7 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_ContractorCompany")}
                  */
-                workContact: string;
+                contractorCompanyName: string;
 
                 Actions: any
 
@@ -554,11 +546,12 @@ export default class Invitation extends Vue {
                  */
                 workPremisesUnit: string;
 
-
+                workCategory: interface {
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
-                workCategory: string;
+                name: string;
+                }
 
 
                 /**
@@ -576,7 +569,7 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_ContractorCompany")}
                  */
-                workContact: string;
+                contractorCompanyName: string;
 
                 Actions: any
 

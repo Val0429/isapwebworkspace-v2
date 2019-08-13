@@ -260,9 +260,6 @@ interface IStep
 })
 export class StatusApproveNotExpireDate extends Vue {
 
-    // TODO: 要問 Min 需要的 參數要如何帶入
-
-
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
@@ -295,8 +292,8 @@ export class StatusApproveNotExpireDate extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: 0,
-        contractorCompanyFax: 0,
+        contractorCompanyContactPhone: '',
+        contractorCompanyFax: '',
 
         // step3
         workPremisesUnit: "",
@@ -350,13 +347,98 @@ export class StatusApproveNotExpireDate extends Vue {
     };
 
     created() {
-        console.log('step1 ~ ', )
-        console.log('selectedDetail ~ ', this.selectedDetail)
 
     }
 
+
     mounted() {
-        // console.log('selectedDetail ~ ', this.selectedDetail)
+        this.initInputFormData();
+    }
+
+    initInputFormData() {
+        if (
+            this.selectedDetail.company &&
+            this.selectedDetail.company.objectId
+        ) {
+            this.inputFormData.tenant = this.selectedDetail.company.objectId;
+        }
+
+        if (
+            this.selectedDetail.workCategory &&
+            this.selectedDetail.workCategory.objectId
+        ) {
+            this.inputFormData.workCategoryId = this.selectedDetail.workCategory.objectId;
+        }
+
+        this.inputFormData.ptwId = this.selectedDetail.ptwId;
+
+        this.inputFormData.pdpaAccepted = this.selectedDetail.pdpaAccepted;
+        this.inputFormData.applicantName = this.selectedDetail.applicantName;
+        this.inputFormData.contractorCompanyName = this.selectedDetail.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress = this.selectedDetail.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
+        this.inputFormData.workPremisesUnit = this.selectedDetail.workPremisesUnit;
+        this.inputFormData.workLocation = this.selectedDetail.workLocation;
+        this.inputFormData.workDescription = this.selectedDetail.workDescription;
+        this.inputFormData.workType1 = this.selectedDetail.workType1;
+        this.inputFormData.workType2 = this.selectedDetail.workType2;
+        this.inputFormData.workType3 = this.selectedDetail.workType3;
+        this.inputFormData.workType4 = this.selectedDetail.workType4;
+        this.inputFormData.workType5 = this.selectedDetail.workType5;
+        this.inputFormData.workType6 = this.selectedDetail.workType6;
+        this.inputFormData.workType7 = this.selectedDetail.workType7;
+        this.inputFormData.workType8 = this.selectedDetail.workType8;
+        this.inputFormData.workStartDate = this.selectedDetail.workStartDate
+            ? this.selectedDetail.workStartDate
+            : new Date();
+        this.inputFormData.workStartTime = this.selectedDetail.workStartDate
+            ? this.selectedDetail.workStartDate
+            : new Date();
+        this.inputFormData.workEndDate = this.selectedDetail.workEndDate
+            ? this.selectedDetail.workEndDate
+            : new Date();
+        this.inputFormData.workEndTime = this.selectedDetail.workEndDate
+            ? this.selectedDetail.workEndDate
+            : new Date();
+        this.inputFormData.workContact = this.selectedDetail.workContact;
+        this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
+
+        this.inputFormData.checklist1 = this.selectedDetail.checklist1;
+        this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark1;
+        this.inputFormData.checklist2 = this.selectedDetail.checklist2;
+        this.inputFormData.checklistRemark2 = this.selectedDetail.checklistRemark2;
+        this.inputFormData.checklist3 = this.selectedDetail.checklist3;
+        this.inputFormData.checklistRemark3 = this.selectedDetail.checklistRemark3;
+        this.inputFormData.checklist4 = this.selectedDetail.checklist4;
+        this.inputFormData.checklistRemark4 = this.selectedDetail.checklistRemark4;
+        this.inputFormData.checklist5 = this.selectedDetail.checklist5;
+        this.inputFormData.checklistRemark5 = this.selectedDetail.checklistRemark5;
+        this.inputFormData.checklist6 = this.selectedDetail.checklist6;
+        this.inputFormData.checklistRemark6 = this.selectedDetail.checklistRemark6;
+        this.inputFormData.checklist7 = this.selectedDetail.checklist7;
+        this.inputFormData.checklistRemark7 = this.selectedDetail.checklistRemark7;
+        this.inputFormData.checklist8 = this.selectedDetail.checklist8;
+        this.inputFormData.checklist9 = this.selectedDetail.checklist9;
+
+        this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
+        this.inputFormData.persons = this.selectedDetail.persons;
+
+        // attachments
+        this.inputFormData.attachments = [];
+        for (let attachment of this.selectedDetail.attachments) {
+            ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
+                let tempAttachment = {
+                    name: attachment.name,
+                    type: attachment.type,
+                    base64: base64
+                };
+                item.attachments.push(tempAttachment);
+            })
+        }
+
+        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     pageToList() {
@@ -518,7 +600,6 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.checklistRemark6 = step4Date.checklistRemark6;
         this.inputFormData.checklistRemark7 = step4Date.checklistRemark7;
 
-        console.log(" ~ ", this.inputFormData);
         this.isChange = true;
     }
 
@@ -665,10 +746,10 @@ export class StatusApproveNotExpireDate extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 
     receiveStep8Data(step8Date) {
-        this.inputFormData.workStartDate = step8Date.startDate;
-        this.inputFormData.workStartTime = step8Date.startTime;
-        this.inputFormData.workEndDate = step8Date.endDate;
-        this.inputFormData.workEndTime = step8Date.endTime;
+        this.inputFormData.workStartDate = step8Date.workStartDate;
+        this.inputFormData.workStartTime = step8Date.workStartTime;
+        this.inputFormData.workEndDate = step8Date.workEndDate;
+        this.inputFormData.workEndTime = step8Date.workEndTime;
         this.inputFormData.accessGroups = step8Date.accessGroups;
 
         console.log("this.inputFormData ~ ", this.inputFormData);
@@ -715,7 +796,7 @@ export class StatusApproveNotExpireDate extends Vue {
                 );
             });
 
-        this.$emit("submit-data", doSubmitParam);
+        this.$emit("edit-ptw-back-to-list");
     }
 
     async doSubmitApi() {
@@ -763,78 +844,12 @@ export class StatusApproveNotExpireDate extends Vue {
         this.isChange = false;
 
         const updateParam = {
-            // add PTW的參數
             objectId: this.selectedDetail.objectId,
 
-            // step2可更改的部份
-            companyId: this.inputFormData.tenant,
-            workCategory: this.inputFormData.workCategory,
-
-            contact: this.inputFormData.contact,
-
-            contactEmail: this.inputFormData.contactEmail,
-
-            // Step 1
-            pdpaAccepted: this.inputFormData.pdpaAccepted,
-
-            // step2
-            // Contractor Information
-            applicantName: this.inputFormData.applicantName,
-
-            // Company
-            contractorCompanyName: this.inputFormData.contractorCompanyName,
-            contractorCompanyAddress: this.inputFormData.contractorCompanyAddress,
-            contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-            contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
-            contractorCompanyFax: this.inputFormData.contractorCompanyFax,
-
-            // step3
-            workPremisesUnit: this.inputFormData.workPremisesUnit,
-            workLocation: this.inputFormData.workLocation,
-            workDescription: this.inputFormData.workDescription,
-            workType1: this.inputFormData.workType1,
-            workType2: this.inputFormData.workType2,
-            workType3: this.inputFormData.workType3,
-            workType4: this.inputFormData.workType4,
-            workType5: this.inputFormData.workType5,
-            workType6: this.inputFormData.workType6,
-            workType7: this.inputFormData.workType7,
-            workType8: this.inputFormData.workType8,
             workStartDate: this.inputFormData.workStartDate,
             workStartTime: this.inputFormData.workStartTime,
             workEndDate: this.inputFormData.workEndDate,
             workEndTime: this.inputFormData.workEndTime,
-            workContact: this.inputFormData.workContact,
-            workContactPhone: this.inputFormData.workContactPhone,
-
-            // step4
-            checklist1: this.inputFormData.checklist1,
-            checklist2: this.inputFormData.checklist2,
-            checklist3: this.inputFormData.checklist3,
-            checklist4: this.inputFormData.checklist4,
-            checklist5: this.inputFormData.checklist5,
-            checklist6: this.inputFormData.checklist6,
-            checklist7: this.inputFormData.checklist7,
-            checklist8: this.inputFormData.checklist8,
-            checklist9: this.inputFormData.checklist9,
-
-            checklistRemark1: this.inputFormData.checklistRemark1,
-            checklistRemark2: this.inputFormData.checklistRemark2,
-            checklistRemark3: this.inputFormData.checklistRemark3,
-            checklistRemark4: this.inputFormData.checklistRemark4,
-            checklistRemark5: this.inputFormData.checklistRemark5,
-            checklistRemark6: this.inputFormData.checklistRemark6,
-            checklistRemark7: this.inputFormData.checklistRemark7,
-
-            // step5
-            // TODO: 問 Min  attachments?: Parse.File[];
-            attachments: this.inputFormData.attachments,
-
-            // step6
-            termsAccepted: this.inputFormData.termsAccepted,
-
-            // step7
-            persons: this.inputFormData.persons,
 
             // step8
             accessGroups: this.inputFormData.accessGroups
