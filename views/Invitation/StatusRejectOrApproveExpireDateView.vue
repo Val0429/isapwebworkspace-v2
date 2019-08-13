@@ -104,24 +104,22 @@
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></view-step5>
-
                             <div
                                 v-if="inputFormData.attachments"
                                 v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
                                 <img
-                                    v-if="file.type != 'application/pdf'"
+                                    v-if="file.type.indexOf('pdf') == 0"
                                     class="step5Imgs"
-                                    :src="file.base64"
+                                    :src="imageBase64.pdfEmpty"
                                 >
                                 <img
                                     v-else
                                     class="step5Imgs"
-                                    :src="imageBase64.pdfEmpty"
+                                    :src="file.base64"
                                 >
-                                <span
-                                >{{file.name}}</span>
+                                <span>{{file.name}}</span>
                             </div>
 
                         </template>
@@ -247,12 +245,19 @@ interface IStep
         IStep8 {}
 
 @Component({
-    components: { ViewStep1, ViewStep2, ViewStep3, ViewStep4, ViewStep5, ViewStep6, ViewStep7, ViewStep8 }
+    components: {
+        ViewStep1,
+        ViewStep2,
+        ViewStep3,
+        ViewStep4,
+        ViewStep5,
+        ViewStep6,
+        ViewStep7,
+        ViewStep8
+    }
 })
 export class StatusRejectOrApproveExpireDateView extends Vue {
-
     // TODO: 要問 Min 需要的 參數要如何帶入
-
 
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
@@ -286,8 +291,8 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -340,8 +345,7 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         accessGroups: []
     };
 
-    created() {
-    }
+    created() {}
 
     mounted() {
         this.initInputFormData();
@@ -420,21 +424,25 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         // attachments
         this.inputFormData.attachments = [];
         for (let attachment of this.selectedDetail.attachments) {
-            ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
-                let tempAttachment = {
-                    name: attachment.name,
-                    type: attachment.type,
-                    base64: base64
-                };
-                item.attachments.push(tempAttachment);
-            })
+            ImageBase64.urlToBase64(
+                this.inputFormData,
+                attachment.url,
+                (item: any, base64: any) => {
+                    let tempAttachment = {
+                        name: attachment.name,
+                        type: attachment.type,
+                        base64: base64
+                    };
+                    item.attachments.push(tempAttachment);
+                }
+            );
         }
 
         console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     pageToList() {
-        this.$emit('edit-ptw-back-to-list');
+        this.$emit("edit-ptw-back-to-list");
     }
 
     ////////////////////////////// step 1  //////////////////////////////
@@ -541,7 +549,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
             });
     }
 
-
     stepTo2() {
         let stepRef: any = this.$refs.step;
 
@@ -574,11 +581,16 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
-        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
-        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
+        this.inputFormData.contractorCompanyName =
+            step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress =
+            step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail =
+            step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone =
+            step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax =
+            step2Date.contractorCompanyFax;
 
         this.isChange = true;
     }
@@ -845,7 +857,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     async doSubmit() {
         this.$emit("view-done");
-
     }
 
     async doSubmitApi() {
@@ -876,7 +887,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         //             this._("w_Dialog_ErrorTitle")
         //         );
         //     });
-
     }
 
     IStep8() {
@@ -890,7 +900,10 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 }
 
 export default StatusRejectOrApproveExpireDateView;
-Vue.component("status-reject-approve-expire-date-view", StatusRejectOrApproveExpireDateView);
+Vue.component(
+    "status-reject-approve-expire-date-view",
+    StatusRejectOrApproveExpireDateView
+);
 </script>
 
 <style lang="scss" scoped>

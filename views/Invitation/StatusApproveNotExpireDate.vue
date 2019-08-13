@@ -116,14 +116,14 @@
                                 ></span>
 
                                 <img
-                                    v-if="file.type != 'application/pdf'"
+                                    v-if="file.type.indexOf('pdf') == 0"
                                     class="step5Imgs"
-                                    :src="file.base64"
+                                    :src="imageBase64.pdfEmpty"
                                 >
                                 <img
                                     v-else
                                     class="step5Imgs"
-                                    :src="imageBase64.pdfEmpty"
+                                    :src="file.base64"
                                 >
                                 <a
                                     :href="file.base64"
@@ -256,10 +256,19 @@ interface IStep
         IStep8 {}
 
 @Component({
-    components: { ViewStep1, ViewStep2, ViewStep3, ViewStep4, ViewStep5, ViewStep6, ViewStep7, Step8, Step8NotExpire }
+    components: {
+        ViewStep1,
+        ViewStep2,
+        ViewStep3,
+        ViewStep4,
+        ViewStep5,
+        ViewStep6,
+        ViewStep7,
+        Step8,
+        Step8NotExpire
+    }
 })
 export class StatusApproveNotExpireDate extends Vue {
-
     @Prop({
         type: Object, // Boolean, Number, String, Array, Object
         default: () => {}
@@ -292,8 +301,8 @@ export class StatusApproveNotExpireDate extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -346,10 +355,7 @@ export class StatusApproveNotExpireDate extends Vue {
         accessGroups: []
     };
 
-    created() {
-
-    }
-
+    created() {}
 
     mounted() {
         this.initInputFormData();
@@ -428,21 +434,25 @@ export class StatusApproveNotExpireDate extends Vue {
         // attachments
         this.inputFormData.attachments = [];
         for (let attachment of this.selectedDetail.attachments) {
-            ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
-                let tempAttachment = {
-                    name: attachment.name,
-                    type: attachment.type,
-                    base64: base64
-                };
-                item.attachments.push(tempAttachment);
-            })
+            ImageBase64.urlToBase64(
+                this.inputFormData,
+                attachment.url,
+                (item: any, base64: any) => {
+                    let tempAttachment = {
+                        name: attachment.name,
+                        type: attachment.type,
+                        base64: base64
+                    };
+                    item.attachments.push(tempAttachment);
+                }
+            );
         }
 
         console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     pageToList() {
-        this.$emit('edit-ptw-back-to-list');
+        this.$emit("edit-ptw-back-to-list");
     }
 
     ////////////////////////////// step 1  //////////////////////////////
@@ -484,11 +494,16 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.applicantName = step2Date.applicantName;
 
         // Company
-        this.inputFormData.contractorCompanyName = step2Date.contractorCompanyName;
-        this.inputFormData.contractorCompanyAddress = step2Date.contractorCompanyAddress;
-        this.inputFormData.contractorCompanyEmail = step2Date.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = step2Date.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = step2Date.contractorCompanyFax;
+        this.inputFormData.contractorCompanyName =
+            step2Date.contractorCompanyName;
+        this.inputFormData.contractorCompanyAddress =
+            step2Date.contractorCompanyAddress;
+        this.inputFormData.contractorCompanyEmail =
+            step2Date.contractorCompanyEmail;
+        this.inputFormData.contractorCompanyContactPhone =
+            step2Date.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax =
+            step2Date.contractorCompanyFax;
 
         console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
@@ -772,7 +787,7 @@ export class StatusApproveNotExpireDate extends Vue {
         await this.tempSave();
 
         const doSubmitParam = {
-            objectId: this.selectedDetail.objectId,
+            objectId: this.selectedDetail.objectId
         };
 
         Loading.show();
@@ -853,7 +868,6 @@ export class StatusApproveNotExpireDate extends Vue {
 
             // step8
             accessGroups: this.inputFormData.accessGroups
-
         };
 
         await this.$server
@@ -861,7 +875,6 @@ export class StatusApproveNotExpireDate extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_SaveSuccess"));
-
                 });
             })
             .catch((e: any) => {
@@ -871,7 +884,10 @@ export class StatusApproveNotExpireDate extends Vue {
 }
 
 export default StatusApproveNotExpireDate;
-Vue.component("status-approve-not-expire-date-edit", StatusApproveNotExpireDate);
+Vue.component(
+    "status-approve-not-expire-date-edit",
+    StatusApproveNotExpireDate
+);
 </script>
 
 <style lang="scss" scoped>

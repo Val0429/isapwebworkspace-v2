@@ -116,14 +116,14 @@
                                 ></span>
 
                                 <img
-                                    v-if="file.type != 'application/pdf'"
+                                    v-if="file.type.indexOf('pdf') == 0"
                                     class="step5Imgs"
-                                    :src="file.base64"
+                                    :src="imageBase64.pdfEmpty"
                                 >
                                 <img
                                     v-else
                                     class="step5Imgs"
-                                    :src="imageBase64.pdfEmpty"
+                                    :src="file.base64"
                                 >
                                 <a
                                     :href="file.base64"
@@ -177,24 +177,24 @@
                     </iv-form>
                 </template>
 
-<!--                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>-->
-<!--                <template #8>-->
+                <!--                <template #8-title>{{ _('w_ViewPTW_Step8_Title') }}</template>-->
+                <!--                <template #8>-->
 
-<!--                    <iv-form-->
-<!--                        :interface="IStep8()"-->
-<!--                        :value="inputFormData"-->
-<!--                        @submit="doSubmit($event)"-->
-<!--                    >-->
-<!--                        <template #step8>-->
-<!--                            <view-step8-->
-<!--                                :selectedDetail="selectedDetail"-->
-<!--                                class="col-md-12"-->
-<!--                                @step8="receiveStep8Data"-->
-<!--                            ></view-step8>-->
-<!--                        </template>-->
+                <!--                    <iv-form-->
+                <!--                        :interface="IStep8()"-->
+                <!--                        :value="inputFormData"-->
+                <!--                        @submit="doSubmit($event)"-->
+                <!--                    >-->
+                <!--                        <template #step8>-->
+                <!--                            <view-step8-->
+                <!--                                :selectedDetail="selectedDetail"-->
+                <!--                                class="col-md-12"-->
+                <!--                                @step8="receiveStep8Data"-->
+                <!--                            ></view-step8>-->
+                <!--                        </template>-->
 
-<!--                    </iv-form>-->
-<!--                </template>-->
+                <!--                    </iv-form>-->
+                <!--                </template>-->
 
             </iv-step-progress>
 
@@ -299,8 +299,8 @@ export class StatusNewView extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -353,11 +353,9 @@ export class StatusNewView extends Vue {
         accessGroups: []
     };
 
-    created() {
-    }
+    created() {}
 
-    mounted() {
-    }
+    mounted() {}
 
     pageToList() {
         this.$emit("edit-ptw-back-to-list");
