@@ -210,10 +210,26 @@ export default class Invitation extends Vue {
             let tempStartDate = new Date();
             let tempEndDate = new Date();
             if (data.workStartDate && data.workStartTime) {
-                tempStartDate = new Date(`${Datetime.DateTime2String(new Date(data.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(data.workStartTime), "HH:mm:ss")}`);
+                tempStartDate = new Date(
+                    `${Datetime.DateTime2String(
+                        new Date(data.workStartDate),
+                        "YYYY-MM-DD"
+                    )} ${Datetime.DateTime2String(
+                        new Date(data.workStartTime),
+                        "HH:mm:ss"
+                    )}`
+                );
             }
             if (data.workEndDate && data.workEndTime) {
-                tempEndDate = new Date(`${Datetime.DateTime2String(new Date(data.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(data.workEndTime), "HH:mm:ss")}`);
+                tempEndDate = new Date(
+                    `${Datetime.DateTime2String(
+                        new Date(data.workEndDate),
+                        "YYYY-MM-DD"
+                    )} ${Datetime.DateTime2String(
+                        new Date(data.workEndTime),
+                        "HH:mm:ss"
+                    )}`
+                );
             }
             data.workStartDate = tempStartDate;
             data.workStartTime = tempStartDate;
@@ -275,8 +291,9 @@ export default class Invitation extends Vue {
     downloadPageExcel() {
         let abc;
         Dialog.prompt(
-            this._("w_ExportExcel"),
             this._("w_HowToExportExcel"),
+            this._("w_ExportExcel"),
+
             [
                 this._("w_Invitation_ExportCurrentPage"),
                 this._("w_Invitation_ExportAllData")
