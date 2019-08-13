@@ -55,8 +55,8 @@
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
 
-                        <template #workCategoryId="{$attrs, $listeners}">
-                            {{ tableShowWorkCategory($attrs.value) }}
+                        <template #workCategory="{$attrs, $listeners}">
+                            {{$attrs.row.workCategory.name }}
                         </template>
 
                         <template #Actions="{$attrs, $listeners}">
@@ -99,7 +99,7 @@
 
                 <!-- status-approve-edit， 可編輯， 須加上 Approve未期後的條件 -->
                 <status-approve-not-expire-date-edit
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && CheckDate(selectedDetail.endDate, new Date())"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && CheckDate(new Date(),selectedDetail.workEndDate)"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
                 >
@@ -108,7 +108,7 @@
 
                 <!-- status-reject-view ，只看，還需要 加上 Approve到期後的條件 -->
                 <status-reject-approve-expire-date-view
-                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'reject' || !CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && !CheckDate(selectedDetail.endDate, new Date())"
+                    v-if="!CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'reject' || !CheckObjectIfEmpty(selectedDetail) && selectedDetail.status === 'approve' && !CheckDate(new Date(),selectedDetail.workEndDate)"
                     :selectedDetail="selectedDetail"
                     @view-done="editPtwBackToList"
                 >
@@ -174,7 +174,14 @@ export default class Invitation extends Vue {
 
     // api 回來資料
     responseData: any = {};
-    flow1Params: any = {};
+    flow1Params: any = {
+        startDate: new Date(),
+        paging: {
+            pageSize: 10,
+            page: 1
+        },
+        endDate: new Date()
+    };
 
     workDescriptionSelectItem: any = {};
 
@@ -247,19 +254,6 @@ export default class Invitation extends Vue {
 
     async receiveSearchConditionData(searchConditionData: any) {
         this.flow1Params = JSON.parse(JSON.stringify(searchConditionData));
-
-        // TODO: wait api
-        // Loading.show();
-        // await this.$server
-        //     .R("/", param)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.responseData = response;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
     }
 
     async addPTWToList(addPTWParam: object) {
@@ -296,11 +290,13 @@ export default class Invitation extends Vue {
     }
 
     async exportAllExcel() {
-        let parms: any = {
-            paging: Object
+        console.log("exportAllExcel", this.flow1Params);
+        let parms = JSON.parse(JSON.stringify(this.flow1Params));
+        let paging = {
+            pageSize: 100000,
+            page: 1
         };
-        parms.paging.pageSize = 100000;
-        parms.paging.page = 1;
+        parms.paging = paging;
 
         await this.$server
             .R("/flow1/crms", parms)
@@ -335,16 +331,19 @@ export default class Invitation extends Vue {
 
         let data = [];
         for (var i = 0; i < tableData.length; i++) {
-            if (i != 0) {
-                let td = [];
-                td.push(i + 1);
-                td.push(tableData[i].ptwId);
-                td.push(tableData[i].status);
-                td.push(tableData[i].contactEmail);
-                td.push(tableData[i].company.name);
+            let td = [];
+            td.push(i + 1);
+            td.push(tableData[i].ptwId);
+            td.push(tableData[i].status);
+            td.push(tableData[i].contactEmail);
+            td.push(tableData[i].company.name);
+            td.push(tableData[i].workPremisesUnit);
+            td.push(tableData[i].workCategory.name);
+            td.push(new Date(tableData[i].workStartDate));
+            td.push(new Date(tableData[i].workEndDate));
+            td.push(tableData[i].workContact);
 
-                data.push(td);
-            }
+            data.push(td);
         }
 
         let [fileName, fileType, sheetName] = [
@@ -438,7 +437,7 @@ export default class Invitation extends Vue {
 
     CheckDate(today: Date, endDate: Date) {
         return (
-            this.DateToZero(endDate).getTime() >=
+            this.DateToZero(new Date(endDate)).getTime() >=
             this.DateToZero(today).getTime()
         );
     }
@@ -484,31 +483,31 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_Unit")}
                  */
-                unit: string;
+                workPremisesUnit: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
-                workCategoryId: string;
+                workCategory: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_StartDate")}
                  */
-                startDate: string;
+                workStartDate: Date;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_EndDate")}
                  */
-                endDate: string;
+                workEndDate: Date;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_ContractorCompany")}
                  */
-                contractor: string;
+                workContact: string;
 
                 Actions: any
 
@@ -553,31 +552,31 @@ export default class Invitation extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Invitation_Unit")}
                  */
-                unit: string;
+                workPremisesUnit: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_WorkCategory")}
                  */
-                workCategoryId: string;
+                workCategory: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_StartDate")}
                  */
-                startDate: string;
+                workStartDate: Date;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_EndDate")}
                  */
-                endDate: string;
+                workEndDate: Date;
 
 
                 /**
                  * @uiLabel - ${this._("w_Invitation_ContractorCompany")}
                  */
-                contractor: string;
+                workContact: string;
 
                 Actions: any
 
