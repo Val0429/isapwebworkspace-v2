@@ -293,11 +293,6 @@ export default class SetupsAccount extends Vue {
                 await this.initSelectItemCompany();
                 haveRequest.company = true;
             }
-
-            if (!haveRequest.floor) {
-                await this.initSelectItemFloor();
-                haveRequest.floor = true;
-            }
         }
 
         if (RoleService.haveAdministrator(this)) {
