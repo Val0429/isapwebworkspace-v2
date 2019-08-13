@@ -172,12 +172,7 @@ export default class Invitation extends Vue {
 
     // api 回來資料
     responseData: any = {};
-    flow1Params: any = {
-        paging: {
-            pageSize: 10,
-            page: 1
-        }
-    };
+    flow1Params: any = {};
 
     workDescriptionSelectItem: any = {};
 
