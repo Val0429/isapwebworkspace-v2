@@ -174,12 +174,10 @@ export default class Invitation extends Vue {
     // api 回來資料
     responseData: any = {};
     flow1Params: any = {
-        startDate: new Date(),
         paging: {
             pageSize: 10,
             page: 1
-        },
-        endDate: new Date()
+        }
     };
 
     workDescriptionSelectItem: any = {};
@@ -288,7 +286,6 @@ export default class Invitation extends Vue {
     }
 
     async exportAllExcel() {
-        console.log("exportAllExcel", this.flow1Params);
         let parms = JSON.parse(JSON.stringify(this.flow1Params));
         let paging = {
             pageSize: 100000,
@@ -313,7 +310,6 @@ export default class Invitation extends Vue {
     }
 
     exportExcelByApi(tableData) {
-        console.log("exportExcelByApi");
         let tableTh = document.getElementById("DataTables_Table_0") as any;
 
         let th = [];
