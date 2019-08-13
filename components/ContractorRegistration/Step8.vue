@@ -18,7 +18,7 @@
 
             <template #approval>
                 <b-form-radio-group
-                    v-model="inputFormData.approval"
+                    v-model="approval"
                     :options="options"
                     name="approval"
                     class="col-md-2 mb-2 mt-2"
@@ -56,10 +56,12 @@ export class Step8 extends Vue {
         workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
         workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        accessGroups: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups : [] ,
-        accessGroupsForm: this.selectedDetail.accessGroupsForm ? this.selectedDetail.accessGroupsForm.map(item => item.doorId) : [],
+        accessGroups: this.selectedDetail.accessGroups != undefined ? this.selectedDetail.accessGroups : [] ,
+        accessGroupsForm: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups.map(item => item.doorId) : [],
         approval: false
     };
+
+    approval: boolean = true;
 
     qrCode: string = "";
     ptwText: string = "";
@@ -151,7 +153,7 @@ export class Step8 extends Vue {
             }
         }
 
-        this.$emit("step8", this.inputFormData);
+        this.$emit("step8", this.inputFormData, this.approval);
     }
 
     IAddForm() {
