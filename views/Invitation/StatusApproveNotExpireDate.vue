@@ -111,7 +111,7 @@
                                 class="step5Div"
                             >
                                 <img
-                                    v-if="file.type.indexOf('pdf') == 0"
+                                    v-if="file.type.indexOf('pdf') >= 0"
                                     class="step5Imgs"
                                     :src="imageBase64.pdfEmpty"
                                 >
@@ -120,8 +120,7 @@
                                     class="step5Imgs"
                                     :src="file.base64"
                                 >
-                                <span
-                                >{{file.name}}</span>
+                                <span>{{file.name}}</span>
                             </div>
 
                         </template>
@@ -236,7 +235,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
-import Datetime from '@/services/Datetime';
+import Datetime from "@/services/Datetime";
 
 interface IStep
     extends IStep1,
@@ -415,11 +414,33 @@ export class StatusApproveNotExpireDate extends Vue {
         // Work Date time
         let tempStartDate = new Date();
         let tempEndDate = new Date();
-        if (this.selectedDetail.workStartDate && this.selectedDetail.workStartTime) {
-            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workStartTime), "HH:mm:ss")}`);
+        if (
+            this.selectedDetail.workStartDate &&
+            this.selectedDetail.workStartTime
+        ) {
+            tempStartDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
-        if (this.selectedDetail.workEndDate && this.selectedDetail.workEndTime) {
-            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workEndTime), "HH:mm:ss")}`);
+        if (
+            this.selectedDetail.workEndDate &&
+            this.selectedDetail.workEndTime
+        ) {
+            tempEndDate = new Date(
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndDate),
+                    "YYYY-MM-DD"
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndTime),
+                    "HH:mm:ss"
+                )}`
+            );
         }
         this.inputFormData.workStartDate = tempStartDate;
         this.inputFormData.workStartTime = tempStartDate;

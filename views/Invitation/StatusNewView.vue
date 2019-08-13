@@ -112,7 +112,7 @@
                                 class="step5Div"
                             >
                                 <img
-                                    v-if="file.type.indexOf('pdf') == 0"
+                                    v-if="file.type.indexOf('pdf') >= 0"
                                     class="step5Imgs"
                                     :src="imageBase64.pdfEmpty"
                                 >
