@@ -236,6 +236,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
+import Datetime from '@/services/Datetime';
 
 interface IStep
     extends IStep1,
@@ -388,18 +389,6 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
-        this.inputFormData.workStartDate = this.selectedDetail.workStartDate
-            ? this.selectedDetail.workStartDate
-            : new Date();
-        this.inputFormData.workStartTime = this.selectedDetail.workStartDate
-            ? this.selectedDetail.workStartDate
-            : new Date();
-        this.inputFormData.workEndDate = this.selectedDetail.workEndDate
-            ? this.selectedDetail.workEndDate
-            : new Date();
-        this.inputFormData.workEndTime = this.selectedDetail.workEndDate
-            ? this.selectedDetail.workEndDate
-            : new Date();
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
 
@@ -423,6 +412,20 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
         this.inputFormData.persons = this.selectedDetail.persons;
 
+        // Work Date time
+        let tempStartDate = new Date();
+        let tempEndDate = new Date();
+        if (this.selectedDetail.workStartDate && this.selectedDetail.workStartTime) {
+            tempStartDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workStartDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workStartTime), "HH:mm:ss")}`);
+        }
+        if (this.selectedDetail.workEndDate && this.selectedDetail.workEndTime) {
+            tempEndDate = new Date(`${Datetime.DateTime2String(new Date(this.selectedDetail.workEndDate), "YYYY-MM-DD")} ${Datetime.DateTime2String(new Date(this.selectedDetail.workEndTime), "HH:mm:ss")}`);
+        }
+        this.inputFormData.workStartDate = tempStartDate;
+        this.inputFormData.workStartTime = tempStartDate;
+        this.inputFormData.workEndDate = tempEndDate;
+        this.inputFormData.workEndTime = tempEndDate;
+
         // attachments
         this.inputFormData.attachments = [];
         for (let attachment of this.selectedDetail.attachments) {
@@ -439,8 +442,6 @@ export class StatusApproveNotExpireDate extends Vue {
                 }
             );
         }
-
-        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     pageToList() {
