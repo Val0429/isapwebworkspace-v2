@@ -12,6 +12,7 @@ export default class LangObject {
     w_Multi = 'Multi';
     w_Upload = 'Upload';
     w_ExportExcel = 'Export Excel';
+    w_HowToExportExcel = 'How To Export Excel?';
 
     w_Username = 'User name';
     w_Roles = 'Role';
@@ -115,6 +116,8 @@ export default class LangObject {
     w_Invitation_CompanyAddPTW = 'Add PTW';
     w_Invitation_CompanyEmail = 'Company Email';
     w_Invitation_WorkDescription = 'Work Description';
+    w_Invitation_ExportCurrentPage = 'Export Current Page';
+    w_Invitation_ExportAllData = 'Export All Data';
 
     // ViewPTW
     w_ViewPTW_StepTitle = 'Permit To Work Request Form';
@@ -250,9 +253,9 @@ export default class LangObject {
     w_Invitation_Approve = 'Approve';
     w_Invitation_Reject = 'Reject';
 
-    w_ViewPTW_ResultTitle = "Registration Result";
-    w_ViewPTW_ResultSuccessContent = "Registration Success";
-    w_ViewPTW_ResultFailedContent = "Registration Failed";
+    w_ViewPTW_ResultTitle = 'Registration Result';
+    w_ViewPTW_ResultSuccessContent = 'Registration Success';
+    w_ViewPTW_ResultFailedContent = 'Registration Failed';
 
     /////////////////////// General Settings //////////////////////
 

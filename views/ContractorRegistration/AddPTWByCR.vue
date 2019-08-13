@@ -1000,11 +1000,9 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
 <style lang="scss" scoped>
 .step5Imgs {
     width: 100%;
-    height: 100%;
 }
 .step5Div {
-    height: 100px;
-    width: 100px;
+    width: 20%;
     border: 1px solid black;
     position: relative;
     margin: 10px;

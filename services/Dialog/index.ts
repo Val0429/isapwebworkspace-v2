@@ -1,6 +1,7 @@
 import Alert from './Alert.vue';
 import Confirm from './Confirm.vue';
 import Success from './Success.vue';
+import Prompt from './Prompt.vue';
 import Error from './Error.vue';
 
 export class Dialog {
@@ -17,6 +18,19 @@ export class Dialog {
         new Confirm({
             propsData: {
                 label: label,
+                content: content,
+            },
+            methods: {
+                callback: callback,
+            },
+        }).$modal();
+    }
+
+    prompt(content: string, label: string, options: string[], callback: any) {
+        new Prompt({
+            propsData: {
+                label: label,
+                options: options,
                 content: content,
             },
             methods: {
