@@ -110,6 +110,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { IStep3 } from '.';
+import Dialog from '@/services/Dialog';
 
 @Component({
     components: {}
@@ -225,8 +226,12 @@ export class Step3 extends Vue {
                 this.inputFormData.workStartTime = data.value;
                 break;
             case "workEndDate":
-                this.inputFormData.workEndDate = data.value;
-                this.inputFormData.workEndTime = data.value;
+                if (data.value.getTime() > new Date().getTime()) {
+                    this.inputFormData.workEndDate = data.value;
+                    this.inputFormData.workEndTime = data.value;
+                } else {
+                    Dialog.error(this._("w_Invitation_DateError"));
+                }
                 break;
             case "workContact":
                 this.inputFormData.workContact = data.value;
