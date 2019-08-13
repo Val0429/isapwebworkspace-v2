@@ -164,8 +164,6 @@ export default class Dashboard extends Vue {
         dayStart.setDate(dayStart.getDate() - 2);
         dayEnd.setDate(dayEnd.getDate() - 1);
 
-        console.log(dayStart);
-
         this.startTimeByHours = Datetime.DateStart(new Date());
         this.endTimeByHours = Datetime.DateEnd(new Date());
         this.startTimeByDays = dayStart;
