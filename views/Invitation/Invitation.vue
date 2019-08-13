@@ -207,7 +207,7 @@ export default class Invitation extends Vue {
         } else {
             this.selectedDetail = data;
         }
-        console.log('Inva selectedItem ~ ', this.selectedDetail)
+        console.log("Inva selectedItem ~ ", this.selectedDetail);
     }
 
     async initWorkDescriptionSelectItem() {
@@ -283,26 +283,36 @@ export default class Invitation extends Vue {
     }
 
     exportExcel() {
-        let reportTable: any = this.$refs.listTable;
-        let tableData = reportTable.tableToArray();
-
-        //th
-        let th = [];
-        for (let title of tableData[0]) {
-            th.push(title);
-        }
+        //let reportTable: any = this.$refs.listTable;
+        let tableData = document.getElementById("DataTables_Table_0") as any;
 
         //data
+        let th = [];
         let data = [];
-        for (let bodys of tableData) {
-            if (tableData.indexOf(bodys) == 0) continue;
-            data.push(bodys);
+        for (var i = 0; i < tableData.rows.length; i++) {
+            if (i == 0) {
+                for (let title of tableData.rows[i].cells) {
+                    if (title.innerText.trim().length > 0) {
+                        th.push(title.innerText);
+                    }
+                }
+            } else {
+                let td = [];
+                for (let body of tableData.rows[i].cells) {
+                    if (body.innerText.trim().length > 0) {
+                        td.push(body.innerText);
+                    }
+                }
+                data.push(td);
+            }
         }
+
         let [fileName, fileType, sheetName] = [
             this._("w_Navigation_Invitation"),
             "xlsx",
             "Sheet 1"
         ];
+        console.log("execel", th, data);
         toExcel({ th, data, fileName, fileType, sheetName });
     }
 
