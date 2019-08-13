@@ -843,10 +843,7 @@
                 checklistRemark7: this.inputFormData.checklistRemark7,
 
                 // step5
-                // TODO: 問 Min  attachments?: Parse.File[];
-                attachments: this.inputFormData.attachments
-                    ? this.inputFormData.attachments.map(item => item.base64)
-                    : [],
+                attachments: [],
 
                 // step6
                 termsAccepted: this.inputFormData.termsAccepted,
