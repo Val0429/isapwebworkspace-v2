@@ -28,7 +28,7 @@
 
                         <iv-toolbox-edit
                             @click="pageToEdit"
-                            :disabled="selectedDetail.objectId != undefined"
+                            :disabled="selectedDetail.objectId == undefined"
                         />
                         <iv-toolbox-divider />
 
@@ -55,7 +55,7 @@
 
                         <template #Actions="{$attrs, $listeners}">
 
-                            <iv-toolbox-more :disabled="selectedDetail.objectId != undefined">
+                            <iv-toolbox-more :disabled="selectedDetail.objectId == undefined">
                                 <iv-toolbox-edit @click="pageToEdit" />
                             </iv-toolbox-more>
                         </template>
