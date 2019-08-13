@@ -11,13 +11,6 @@
             </iv-form>
 
             <template #footer-before>
-                <b-button
-                    variant="secondary"
-                    size="lg"
-                    @click="doExportData"
-                >
-                    {{ _('w_Invitation_ExportData') }}
-                </b-button>
 
                 <!--                    <b-button-->
                 <!--                        class="submit"-->
