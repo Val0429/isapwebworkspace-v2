@@ -438,10 +438,21 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.checklist8 = response.checklist8;
                     this.selectedDetail.checklist9 = response.checklist9;
 
-                    this.selectedDetail.attachments = response.attachments;
                     this.selectedDetail.termsAccepted = response.termsAccepted;
                     this.selectedDetail.persons = response.persons;
 
+                    this.selectedDetail.attachments = [];
+                    for (let attachment of response.attachments) {
+                        ImageBase64.urlToBase64(this.selectedDetail, attachment.url, (item: any, base64: any)=> {
+                            let tempAttachment = {
+                                name: attachment.anme,
+                                type: attachment.type,
+                                base64: base64
+                            };
+                            item.attachments.push(tempAttachment);
+                        })
+                    }
+                    
                     /////// inputFormData
 
                     if (response.company && response.company.objectId) {
@@ -521,9 +532,22 @@ export class AddPTWByCR extends Vue {
                     this.inputFormData.checklist8 = response.checklist8;
                     this.inputFormData.checklist9 = response.checklist9;
 
-                    this.inputFormData.attachments = response.attachments;
                     this.inputFormData.termsAccepted = response.termsAccepted;
                     this.inputFormData.persons = response.persons;
+
+                    this.inputFormData.attachments = [];
+                    for (let attachment of response.attachments) {
+                        ImageBase64.urlToBase64(this.inputFormData, attachment.url, (item: any, base64: any)=> {
+                            let tempAttachment = {
+                                name: attachment.anme,
+                                type: attachment.type,
+                                base64: base64
+                            };
+                            item.attachments.push(tempAttachment);
+                            console.log(item);
+                        })
+                    }
+
                 });
             })
             .catch((e: any) => {
