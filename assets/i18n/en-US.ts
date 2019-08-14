@@ -48,6 +48,8 @@ export default class LangObject {
     w_Error_FileToLarge = 'File to large';
     w_Save_Checked = 'You have made changes to this PTW .  Do you want to save them ?';
     w_Error_EmailServerError = 'Email server not set, please setup email server';
+    w_Error_EmailServerErrorEnable = 'Email server must enable';
+    w_Error_EmailSettingError = 'Email server setting error';
 
     /////////////////////////////////////////////
 
