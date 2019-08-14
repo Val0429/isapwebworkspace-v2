@@ -35,6 +35,7 @@ import { toEnumInterface } from "@/../core";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
 import ResponseFilter from "@/services/ResponseFilter";
+import Loading from "@/services/Loading";
 
 enum EPTWStatus {
     new = "new",
@@ -155,6 +156,7 @@ export class AddPTW extends Vue {
         //      return false;
         //  }
 
+        Loading.show();
         await this.$server
             .C("/flow1/crms", doSubmitParam)
             .then((response: any) => {
