@@ -16,11 +16,11 @@ var config: Config = {
     // Tina server
     // ip: '172.16.10.136',
 
-    port: process.env.NODE_ENV == 'production' ? 6061 : 6060,
+    port: 6060,
     ssl: false,
 
+    prodPort: 6060,
     serverFrameworkVersionGreaterThan: '1.06.00',
-
     hideDefaultServerErrorModal: true,
 };
 export default config;
