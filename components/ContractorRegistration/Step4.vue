@@ -208,8 +208,6 @@ export class Step4 extends Vue {
         checklistRemark7: this.selectedDetail.checklistRemark7 ?  this.selectedDetail.checklistRemark7: "",
     };
 
-    // TODO: wait api
-    // path: string = require('@/assets/pdf/Briefing_Of_HSE_ORL_CLM.pdf');
     path: string = "";
 
     created() {}
