@@ -420,23 +420,24 @@ export default class Member extends Vue {
      var sheet_name_list = workbook.SheetNames;
      console.log(sheet_name_list[0]);
     let rawJson = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-    console.log("rawJson", rawJson)
+    console.log("rawJson", rawJson.splice(0,1))
     let records = [];
     for(let record of rawJson){
         let newRecord:any={};
-        let i=0;
+        
         for(const key of Object.keys(record)){
-          if(i==0){
+          if(key=="permissionTable"){
             let accessRules=[];
             let permTables = record[key].split(",");
             for(let permTable of permTables){
+                if(!permTable)continue;
                 let exist = storedPermissionOptions.find(x=>x.text == permTable);
-                accessRules.push(exist ? exist.value : "0");
+                accessRules.push(exist ? exist.value : permTable);
             }
-            newRecord[fieldOptions[i].value]=accessRules;
+            newRecord[key]=accessRules;
           }
-          else newRecord[fieldOptions[i].value]=record[key];
-          i++;
+          else newRecord[key]=record[key];
+          
         }
         records.push(newRecord);
     }
@@ -466,10 +467,12 @@ export default class Member extends Vue {
         let members:any = await this.$server.R("/acs/member", Object.assign({"paging.all":"true"}, this.getParams));
         let exportList =[];
         let headers=[];
+        let extraHeader:any={};
         for(let field of this.fieldSelected){
-          headers.push(this._(field as any));
+          headers.push(field);
+          extraHeader[field]=this._(field as any);
         }
-        
+        exportList.push(extraHeader)
         for (let member of members.results){
           let newMember:any = {};
           for(let field of  this.fieldSelected){
