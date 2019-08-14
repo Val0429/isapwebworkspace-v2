@@ -16,7 +16,7 @@ var config: Config = {
     // Tina server
     // ip: '172.16.10.136',
 
-    port: 6060,
+    port: 6061,
     ssl: false,
 
     serverFrameworkVersionGreaterThan: '1.06.00',
