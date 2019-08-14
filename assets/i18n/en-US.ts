@@ -103,6 +103,7 @@ export default class LangObject {
     w_Navigation_Setups_SMS = 'SMS Setting';
     w_Navigation_Setups_SMSOnline = 'Online SMS Provider (SG only)';
     w_Navigation_Setups_VisitorCard = 'Visitor Card';
+    w_Navigation_Setups_Purposes = 'Purposes';
 
     w_Navigation_Tenants = 'Tenant';
     w_Navigation_Tenants_Invitation = 'Invitation';

@@ -47,7 +47,7 @@ $({ path: '/setups/email', name: "_('w_Navigation_Setups_Email')", icon: 'fa-inb
 $({ path: '/setups/sms', name: "_('w_Navigation_Setups_SMS')", icon: 'fa-envelope' })(SetupsSMS);
 $({ path: '/setups/sms_online', name: "_('w_Navigation_Setups_SMSOnline')", icon: 'fa-cloud' })(SetupsSMSOnline);
 $({ path: '/setups/visitor_card', name: "_('w_Navigation_Setups_VisitorCard')", icon: 'fa-id-card' })(SetupsVisitorCard);
-$({ path: '/setups/purposes', name: "_('w_Navigation_Setups_VisitorCard')", icon: 'fa-id-card' })(SetupsPurposes);
+$({ path: '/setups/purposes', name: "_('w_Navigation_Setups_Purposes')", icon: 'fa-tag' })(SetupsPurposes);
 
 // Tenants
 import TenantsInvitation from './Tenants/TenantsInvitation.vue';
